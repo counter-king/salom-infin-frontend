@@ -1,13 +1,164 @@
 <script setup>
-
+// Core
+import { ref } from "vue"
+import Toolbar from "primevue/toolbar"
+// Components
+import AppIcon from "@/components/UI/Icon/index.vue"
+// Store
+import { useNavigation } from "@/stores/navigation.store"
+// Composable
+const navigationStore = useNavigation()
+// Reactive
+const menus = ref([
+  // Дашбоард
+  {
+    title: "Дашбоард",
+    icon: "HomeAngleIcon",
+    link: "DashboardIndex",
+    children: [],
+    value: "dashboard"
+  },
+  // Календарь
+  {
+    title: "Календарь",
+    icon: "CalendarIcon",
+    link: "DashboardIndex",
+    children: [],
+    value: "calendar"
+  },
+  // Документ
+  {
+    title: "Документ",
+    icon: "FolderWithFilesIcon",
+    link: null,
+    children: [
+      {
+        title: "Документ",
+        prefix: true
+      },
+      // Ящики
+      {
+        title: "Ящики",
+        icon: null,
+        children: [
+          // Исходящие
+          {
+            title: "Исходящие",
+            icon: null,
+            children: []
+          },
+          // Входящие
+          {
+            title: "Входящие",
+            icon: null,
+            children: []
+          },
+          // На рассмотрении
+          {
+            title: "На рассмотрении",
+            icon: null,
+            children: []
+          },
+          // На подпись
+          {
+            title: "На подпись",
+            icon: null,
+            children: []
+          },
+          // На согласовании
+          {
+            title: "На согласовании",
+            icon: null,
+            children: []
+          },
+          // На контроль
+          {
+            title: "На контроль",
+            icon: null,
+            children: []
+          },
+        ]
+      },
+      // Отправка документов
+      {
+        title: "Отправка документов",
+        icon: null,
+        children: []
+      },
+      // Регистрация
+      {
+        title: "Регистрация",
+        icon: null,
+        children: []
+      },
+    ],
+    value: "documents"
+  },
+  // Kanban
+  {
+    title: "Kanban",
+    icon: "ChatSquareIcon",
+    link: "DashboardIndex",
+    children: [],
+    value: "kanban"
+  },
+  // Чат
+  {
+    title: "Чат",
+    icon: "ChatLineIcon",
+    link: "DashboardIndex",
+    children: [],
+    value: "chat"
+  },
+])
+// Methods
+const openSidebar = (menu) => {
+  navigationStore.actionCurrentMenu(menu)
+}
 </script>
 
 <template>
 	<header class="app-toolbar-view">
-		Toolbar
+		<toolbar
+      :pt="{
+        root: {
+          class: ['py-5 px-10 bg-primary-dark border-none rounded-none']
+        }
+      }"
+    >
+      <template #start>
+        <router-link to="/" class="flex items-center mr-6">
+          <img src="/images/logo.svg" alt="Logo" />
+          <img src="/images/logo-text.svg" alt="Logo text" class="ml-2" />
+        </router-link>
+
+        <template v-for="menu in menus">
+          <!-- Если нет подразделы -->
+          <template v-if="menu.link">
+            <router-link
+              :to="{ name: menu.link }"
+              class="navigation-link group flex items-center text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full mr-3 transition hover:bg-white/10 hover:text-white"
+              @click="openSidebar(menu)"
+            >
+              <app-icon v-if="menu.icon" :name="menu.icon" class="text-gray-2 group-hover:text-white mr-2" />
+              {{ menu.title }}
+            </router-link>
+          </template>
+
+          <template v-else>
+            <a @click="openSidebar(menu)" class="navigation-link group flex items-center text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full cursor-pointer mr-3 transition hover:bg-white/10 hover:text-white">
+              <app-icon v-if="menu.icon" :name="menu.icon" class="text-gray-2 group-hover:text-white mr-2" />
+              {{ menu.title }}
+            </a>
+          </template>
+        </template>
+      </template>
+    </toolbar>
 	</header>
 </template>
 
-<style scoped>
+<style>
+.navigation-link {
 
+}
 </style>
