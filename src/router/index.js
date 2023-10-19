@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+// Modules
+import Playground from "../modules/Playground/routes"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,7 +9,11 @@ const router = createRouter({
     {
       path: "/",
       name: "MainLayout",
-      component: () => import("@/layout/MainLayout.vue")
+      component: () => import("@/layout/MainLayout.vue"),
+      children: [
+        // Icons
+        ...Playground
+      ]
     },
     // /MainLayout
 

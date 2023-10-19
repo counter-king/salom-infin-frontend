@@ -5,6 +5,12 @@ export default {
     "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
   theme: {
+    fontFamily: {
+      regular: ["SFProDisplay-Regular"],
+      medium: ["SFProDisplay-Medium"],
+      semibold: ["SFProDisplay-Semibold"],
+      bold: ["SFProDisplay-Bold"],
+    },
     extend: {},
   },
   plugins: [],
