@@ -2,8 +2,6 @@
 // Core
 import { ref } from "vue"
 import Toolbar from "primevue/toolbar"
-// Components
-import AppIcon from "@/components/UI/Icon/index.vue"
 // Store
 import { useNavigation } from "@/stores/navigation.store"
 // Composable
@@ -140,14 +138,14 @@ const openSidebar = (menu) => {
               class="navigation-link group flex items-center text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full mr-3 transition hover:bg-white/10 hover:text-white"
               @click="openSidebar(menu)"
             >
-              <app-icon v-if="menu.icon" :name="menu.icon" class="text-gray-2 group-hover:text-white mr-2" />
+              <base-icon v-if="menu.icon" :name="menu.icon" class="text-gray-2 group-hover:text-white mr-2" />
               {{ menu.title }}
             </router-link>
           </template>
 
           <template v-else>
             <a @click="openSidebar(menu)" class="navigation-link group flex items-center text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full cursor-pointer mr-3 transition hover:bg-white/10 hover:text-white">
-              <app-icon v-if="menu.icon" :name="menu.icon" class="text-gray-2 group-hover:text-white mr-2" />
+              <base-icon v-if="menu.icon" :name="menu.icon" class="text-gray-2 group-hover:text-white mr-2" />
               {{ menu.title }}
             </a>
           </template>

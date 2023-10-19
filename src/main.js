@@ -10,8 +10,10 @@ import "primevue/resources/themes/lara-light-indigo/theme.css"
 import router from './router'
 // Components
 import App from './App.vue'
+import { registerComponents } from "./components/UI/register"
 
 const app = createApp(App)
+await registerComponents(app)
 app.use(createPinia())
 app.use(router)
 app.use(PrimeVue)

@@ -1,6 +1,5 @@
 <script setup>
 // Components
-import AppSpinner from "@/components/UI/Spinner/index.vue"
 import TheToolbar from "@/components/TheToolbar.vue"
 import TheSidebar from "@/components/TheSidebar.vue"
 // Store
@@ -15,7 +14,7 @@ const navigationStore = useNavigation()
 
 		<div class="main-layout-content flex">
       <template v-if="navigationStore.currentMenuLoading">
-        <app-spinner content />
+        <base-spinner content />
       </template>
 
       <template v-else>
