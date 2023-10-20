@@ -1,4 +1,6 @@
 <script setup>
+// Core
+import { onMounted } from "vue"
 // Components
 import TheToolbar from "@/components/TheToolbar.vue"
 import TheSidebar from "@/components/TheSidebar.vue"
@@ -6,6 +8,10 @@ import TheSidebar from "@/components/TheSidebar.vue"
 import { useNavigation } from "@/stores/navigation.store"
 // Composable
 const navigationStore = useNavigation()
+// Hooks
+onMounted(() => {
+  navigationStore.actionCurrentMenuSet()
+})
 </script>
 
 <template>
@@ -18,11 +24,13 @@ const navigationStore = useNavigation()
       </template>
 
       <template v-else>
-        <the-sidebar />
-
-        <div class="flex-1 overflow-y-auto py-8 px-6">
-          <router-view />
-        </div>
+        <the-sidebar>
+          <template #content>
+            <div class="flex-1 overflow-y-auto py-8 px-6">
+              <router-view />
+            </div>
+          </template>
+        </the-sidebar>
       </template>
 		</div>
 	</div>

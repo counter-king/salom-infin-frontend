@@ -1,10 +1,12 @@
 <script setup>
 // Core
 import { ref } from "vue"
+import { useRoute } from "vue-router"
 import Toolbar from "primevue/toolbar"
 // Store
 import { useNavigation } from "@/stores/navigation.store"
 // Composable
+const route = useRoute()
 const navigationStore = useNavigation()
 // Reactive
 const menus = ref([
@@ -28,7 +30,7 @@ const menus = ref([
   {
     title: "Документ",
     icon: "FolderWithFilesIcon",
-    link: null,
+    link: "DocumentsIndex",
     children: [
       {
         title: "Документ",
@@ -38,41 +40,48 @@ const menus = ref([
       {
         title: "Ящики",
         icon: null,
+        link: "BoxesIndex",
         children: [
-          // Исходящие
-          {
-            title: "Исходящие",
-            icon: null,
-            children: []
-          },
           // Входящие
           {
             title: "Входящие",
             icon: null,
+            link: "IncomingIndex",
+            children: []
+          },
+          // Исходящие
+          {
+            title: "Исходящие",
+            icon: null,
+            link: "OutgoingIndex",
             children: []
           },
           // На рассмотрении
           {
             title: "На рассмотрении",
             icon: null,
+            link: "ReviewIndex",
             children: []
           },
           // На подпись
           {
             title: "На подпись",
             icon: null,
+            link: "SignIndex",
             children: []
           },
           // На согласовании
           {
             title: "На согласовании",
             icon: null,
+            link: "ApprovalIndex",
             children: []
           },
           // На контроль
           {
             title: "На контроль",
             icon: null,
+            link: "ControlIndex",
             children: []
           },
         ]
@@ -81,14 +90,31 @@ const menus = ref([
       {
         title: "Отправка документов",
         icon: null,
-        children: []
+        link: "SendDocumentsIndex",
+        children: [
+          // Внутренний
+          {
+            title: "Внутренний",
+            icon: null,
+            link: "SendDocumentsInnerIndex",
+            children: []
+          },
+          // Рапорт
+          {
+            title: "Рапорт",
+            icon: null,
+            link: "SendDocumentsNoticeIndex",
+            children: []
+          },
+        ]
       },
       // Регистрация
-      {
-        title: "Регистрация",
-        icon: null,
-        children: []
-      },
+      // {
+      //   title: "Регистрация",
+      //   icon: null,
+      //   link: "/",
+      //   children: []
+      // },
     ],
     value: "documents"
   },
