@@ -13,10 +13,11 @@ import App from './App.vue'
 import { registerComponents } from "./components/UI/register"
 
 const app = createApp(App)
-registerComponents(app)
-app.use(createPinia())
-app.use(router)
-app.use(PrimeVue)
-app.use(setupI18n())
+registerComponents(app).then(() => {
+  app.use(createPinia())
+  app.use(router)
+  app.use(PrimeVue)
+  app.use(setupI18n())
 
-app.mount('#app')
+  app.mount('#app')
+})
