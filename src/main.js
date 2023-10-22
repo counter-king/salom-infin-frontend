@@ -13,7 +13,7 @@ import App from './App.vue'
 import { registerComponents } from "./components/UI/register"
 
 const app = createApp(App)
-await registerComponents(app)
+registerComponents(app)
 app.use(createPinia())
 app.use(router)
 app.use(PrimeVue)

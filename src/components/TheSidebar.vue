@@ -1,12 +1,11 @@
 <script setup>
 // Core
 import { ref, computed, onMounted } from "vue"
-import { useRoute, useRouter } from "vue-router"
+import { useRoute } from "vue-router"
 // Store
 import { useNavigation } from "@/stores/navigation.store"
 // Composable
 const route = useRoute()
-const router = useRouter()
 const navigationStore = useNavigation()
 // Reactive
 const collapseMenus = ref([])
