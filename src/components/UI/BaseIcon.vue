@@ -34,7 +34,8 @@ const icon = defineAsyncComponent(() =>
 </template>
 
 <style>
-.app-icon path {
+.app-icon path,
+.app-icon circle {
   stroke: currentColor;
 }
 </style>

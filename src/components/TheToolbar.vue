@@ -39,48 +39,48 @@ const menus = ref([
       // Ящики
       {
         title: "Ящики",
-        icon: null,
+        icon: "InboxUnreadIcon",
         link: "BoxesIndex",
         children: [
           // Входящие
           {
             title: "Входящие",
-            icon: null,
+            icon: "ArrowRightUpIcon",
             link: "IncomingIndex",
             children: []
           },
           // Исходящие
           {
             title: "Исходящие",
-            icon: null,
+            icon: "ArrowRightDownIcon",
             link: "OutgoingIndex",
             children: []
           },
           // На рассмотрении
           {
             title: "На рассмотрении",
-            icon: null,
+            icon: "TimeHistoryIcon",
             link: "ReviewIndex",
             children: []
           },
           // На подпись
           {
             title: "На подпись",
-            icon: null,
+            icon: "PenIcon",
             link: "SignIndex",
             children: []
           },
           // На согласовании
           {
             title: "На согласовании",
-            icon: null,
+            icon: "EyeIcon",
             link: "ApprovalIndex",
             children: []
           },
           // На контроль
           {
             title: "На контроль",
-            icon: null,
+            icon: "CheckCircleIcon",
             link: "ControlIndex",
             children: []
           },
@@ -89,7 +89,7 @@ const menus = ref([
       // Отправка документов
       {
         title: "Отправка документов",
-        icon: null,
+        icon: "ArchiveUpIcon",
         link: "SendDocumentsIndex",
         children: [
           // Внутренний
@@ -109,12 +109,12 @@ const menus = ref([
         ]
       },
       // Регистрация
-      // {
-      //   title: "Регистрация",
-      //   icon: null,
-      //   link: "/",
-      //   children: []
-      // },
+      {
+        title: "Регистрация",
+        icon: "ClipboardUpIcon",
+        link: "SendDocumentsIndex",
+        children: []
+      },
     ],
     value: "documents"
   },
@@ -161,16 +161,16 @@ const openSidebar = (menu) => {
           <template v-if="menu.link">
             <router-link
               :to="{ name: menu.link }"
-              class="navigation-link group flex items-center text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full mr-3 transition hover:bg-white/10 hover:text-white"
+              class="header-link group flex items-center text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full mr-3 transition-all duration-[400ms] hover:bg-primary-800 hover:text-white"
               @click="openSidebar(menu)"
             >
-              <base-icon v-if="menu.icon" :name="menu.icon" class="text-gray-2 group-hover:text-white mr-2" />
+              <base-icon v-if="menu.icon" :name="menu.icon" class="text-gray-2 transition-all duration-[400ms] group-hover:text-white mr-2" />
               {{ menu.title }}
             </router-link>
           </template>
 
           <template v-else>
-            <a @click="openSidebar(menu)" class="navigation-link group flex items-center text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full cursor-pointer mr-3 transition hover:bg-white/10 hover:text-white">
+            <a @click="openSidebar(menu)" class="navigation-link group flex items-center text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full cursor-pointer mr-3 transition hover:bg-primary-800 hover:text-white">
               <base-icon v-if="menu.icon" :name="menu.icon" class="text-gray-2 group-hover:text-white mr-2" />
               {{ menu.title }}
             </a>
@@ -182,7 +182,12 @@ const openSidebar = (menu) => {
 </template>
 
 <style>
-.navigation-link {
+.header-link.router-link-active {
+  background-color: var(--primary-800);
+  color: #fff;
+}
 
+.header-link.router-link-active svg {
+  color: #fff;
 }
 </style>
