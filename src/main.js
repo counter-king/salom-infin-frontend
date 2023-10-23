@@ -5,6 +5,7 @@ import { createPinia } from 'pinia'
 import { setupI18n } from "@/i18n"
 // Plugins
 import PrimeVue from 'primevue/config'
+import BadgeDirective from 'primevue/badgedirective'
 import "primevue/resources/themes/lara-light-indigo/theme.css"
 import 'primeicons/primeicons.css'
 // Router
@@ -20,5 +21,6 @@ registerComponents(app).then(() => {
   app.use(PrimeVue)
   app.use(setupI18n())
 
+  app.directive('badge', BadgeDirective)
   app.mount('#app')
 })
