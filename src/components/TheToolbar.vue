@@ -45,17 +45,17 @@ const menus = ref([
           // Входящие
           {
             title: "Входящие",
-            icon: "ArrowRightUpIcon",
+            icon: "ArrowRightDownIcon",
             link: "IncomingIndex",
             children: []
           },
           // Исходящие
-          {
-            title: "Исходящие",
-            icon: "ArrowRightDownIcon",
-            link: "OutgoingIndex",
-            children: []
-          },
+          // {
+          //   title: "Исходящие",
+          //   icon: "ArrowRightDownIcon",
+          //   link: "OutgoingIndex",
+          //   children: []
+          // },
           // На рассмотрении
           {
             title: "На рассмотрении",
