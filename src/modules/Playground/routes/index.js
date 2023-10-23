@@ -8,5 +8,4 @@ const Playground = [
     component: () => import("../views/Icons/index.vue"),
   }
 ]
-
 export default Playground

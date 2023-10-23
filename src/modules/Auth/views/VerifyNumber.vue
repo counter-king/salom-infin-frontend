@@ -1,0 +1,40 @@
+<script setup>
+import { ref } from 'vue'
+import Button from 'primevue/button';
+import OTPCode from "../components/otpcode.vue";
+
+const otpValue = ref('')
+
+// const message = useMessage()
+// const resendMessage = () => {
+//   message.success("Код отправлен повторно")
+// }
+</script>
+
+<template>
+  <div class="sign-in-view">
+    <div class="text-center mb-3">
+      <!-- icon -->
+    </div>
+
+    <h1  class="text-2xl decoration-zinc-950  font-bold mb-1 text-center">Verification step</h1>
+    <p class="font-light text-sm text-color-3 text-center mb-7">Мы отправили код подтверждения на ваш телефон. Введите код из письма в поле ниже.</p>
+
+    <div class="w-[390px] m-auto">
+      <OTPCode
+        :digit-count="4"
+        class="mb-8"
+        @emit:up="(value) => otpValue = value"
+      />
+
+      <router-link type="primary" :to="{ name: 'SetCredensials' }" class="text-indigo-700">
+        <Button class="w-full" type="submit" severity="success" label="Подтвердить номер" />
+      </router-link>
+
+      <div class="text-center mt-4 text-xs">
+        Не получили код ?
+        <Button  class="text-xs p-0 font-thin text-indigo-700" text type="submit" severity="success" label=" Отправить повторно" />
+      </div>
+    </div>
+  </div>
+</template>
