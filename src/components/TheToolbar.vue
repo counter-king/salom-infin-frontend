@@ -190,7 +190,7 @@ const openSidebar = (menu) => {
 
           <div class="flex gap-2">
             <base-button
-              color="bg-greyscale-800"
+              color="bg-greyscale-800 hover:bg-greyscale-900"
               border-color="border-greyscale-800"
               icon-left="MagniferIcon"
               only-icon
@@ -198,7 +198,7 @@ const openSidebar = (menu) => {
             />
 
             <base-button
-              color="bg-greyscale-800"
+              color="bg-greyscale-800 hover:bg-greyscale-900"
               border-color="border-greyscale-800"
               icon-left="SettingsIcon"
               only-icon
@@ -206,7 +206,7 @@ const openSidebar = (menu) => {
             />
 
             <base-button
-              color="bg-greyscale-800"
+              color="bg-greyscale-800 hover:bg-greyscale-900"
               border-color="border-greyscale-800"
               icon-left="BellIcon"
               only-icon

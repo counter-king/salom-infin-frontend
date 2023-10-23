@@ -67,9 +67,9 @@ const rootClasses = computed(() => {
     },
     // Size
     {
-      'py-[7px] px-3 text-xs': props.size === 'small',
-      'py-[9px] px-4': props.size === null || props.size === "normal",
-      'py-[11px] px-4': props.size === 'large'
+      'py-[7px] px-3 text-xs': !props.onlyIcon && props.size === 'small',
+      'py-[9px] px-4': !props.onlyIcon && (props.size === null || props.size === "normal"),
+      'py-[11px] px-4': !props.onlyIcon && props.size === 'large'
     },
     // onlyIcon
     {
