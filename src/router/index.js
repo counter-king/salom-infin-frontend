@@ -18,8 +18,6 @@ const router = createRouter({
         ...Dashboard,
         // Documents
         ...Documents,
-        // Playground
-        ...Playground
       ]
     },
     // /MainLayout
@@ -29,8 +27,11 @@ const router = createRouter({
       path: "/auth",
       name: "AuthLayout",
       component: () => import("@/layout/AuthLayout.vue")
-    }
+    },
     // /AuthLayout
+
+    // Playground
+    ...Playground
   ]
 })
 

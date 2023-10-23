@@ -6,6 +6,7 @@ import { setupI18n } from "@/i18n"
 // Plugins
 import PrimeVue from 'primevue/config'
 import "primevue/resources/themes/lara-light-indigo/theme.css"
+import 'primeicons/primeicons.css'
 // Router
 import router from './router'
 // Components

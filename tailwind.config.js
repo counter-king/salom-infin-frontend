@@ -67,6 +67,9 @@ export default {
         "gray-2": "#757994",
         "gray-3": "#E2E8F0",
         "gray-4": "#ADB7C2",
+      },
+      boxShadow: {
+        'button': '0 1px 1px 0 rgba(95, 110, 169, 0.03), 0 2px 4px 0 rgba(47, 61, 87, 0.03)'
       }
     },
   },
