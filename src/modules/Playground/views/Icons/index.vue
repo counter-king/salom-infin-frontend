@@ -20,7 +20,7 @@ const transformIcons = Object.entries(icons).map(([name, svg]) => {
 
     <div class="grid flex-wrap grid-cols-5 gap-5">
       <template v-for="icon in transformIcons">
-        <div class="icons-card flex flex-col items-center justify-center border-[1px] h-[150px] rounded-md p-3">
+        <div class="icons-card flex flex-col items-center justify-center border-[1px] h-[150px] rounded-md p-3 bg-light-1">
           <div v-html="icon.svg" class="mb-3"></div>
 
           <h1 class="font-medium">{{ icon.name }}</h1>
@@ -29,10 +29,3 @@ const transformIcons = Object.entries(icons).map(([name, svg]) => {
     </div>
   </div>
 </template>
-
-<style>
-.icons-card svg {
-  width: 28px;
-  height: 28px;
-}
-</style>

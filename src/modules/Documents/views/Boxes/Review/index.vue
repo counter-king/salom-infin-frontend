@@ -1,9 +1,11 @@
 <script setup>
-import Button from "primevue/button"
+
 </script>
 
 <template>
-  <Button label="Submit" />
+  <div class="review-view">
+    Review view
+  </div>
 </template>
 
 <style scoped>
