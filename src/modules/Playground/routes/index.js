@@ -24,5 +24,4 @@ const Playground = [
     component: () => import("../views/Avatar/index.vue"),
   }
 ]
-
 export default Playground
