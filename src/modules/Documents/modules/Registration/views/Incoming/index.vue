@@ -4,7 +4,9 @@
 
 <template>
   <div class="registration-incoming-view">
-    Registration incoming
+    <div class="flex">
+      <h1 class="text-2xl font-bold text-primary-900">Входящие</h1>
+    </div>
   </div>
 </template>
 
