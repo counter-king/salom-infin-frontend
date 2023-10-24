@@ -1,5 +1,5 @@
-import Boxes from "./Boxes.route"
-import SendDocuments from "./SendDocuments.route"
+import Boxes from "../modules/Boxes/routes"
+import SendDocuments from "../modules/SendDocuments/routes"
 
 const Documents = [
   {

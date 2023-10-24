@@ -5,7 +5,7 @@ const SendDocuments = [
     meta: {
       isAuthRequired: true
     },
-    component: () => import("../views/SendDocuments/index.vue"),
+    component: () => import("../views/index.vue"),
     redirect: { name: "SendDocumentsInnerIndex" },
     children: [
       // Внутренний
@@ -15,7 +15,7 @@ const SendDocuments = [
         meta: {
           isAuthRequired: true
         },
-        component: () => import("../views/SendDocuments/Inner/index.vue"),
+        component: () => import("../views/Inner/index.vue"),
       },
       // /Внутренний
 
@@ -26,7 +26,7 @@ const SendDocuments = [
         meta: {
           isAuthRequired: true
         },
-        component: () => import("../views/SendDocuments/Notice/index.vue"),
+        component: () => import("../views/Notice/index.vue"),
       },
       // /Рапорт
     ]
