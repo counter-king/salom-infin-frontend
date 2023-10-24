@@ -44,6 +44,14 @@ const props = defineProps({
       return ['small', 'normal', 'large'].includes(value)
     }
   },
+  iconWidth: {
+    type: [Number, String],
+    default: 20
+  },
+  iconHeight: {
+    type: [Number, String],
+    default: 20
+  },
 })
 // Classes
 const rootClasses = computed(() => {
@@ -95,12 +103,12 @@ const rootClasses = computed(() => {
           <base-icon
             :name="props.iconLeft"
             :color="props.iconColor"
+            :width="props.iconWidth"
+            :height="props.iconHeight"
             :class="{
               'mr-2': !props.onlyIcon,
               'text-greyscale-500': props.outlined
             }"
-            width="20"
-            height="20"
           />
         </template>
 
@@ -112,12 +120,12 @@ const rootClasses = computed(() => {
           <base-icon
             :name="props.iconRight"
             :color="props.iconColor"
+            :width="props.iconWidth"
+            :height="props.iconHeight"
             :class="{
               'ml-2': !props.onlyIcon,
               'text-greyscale-500': props.outlined
             }"
-            width="20"
-            height="20"
           />
         </template>
       </div>

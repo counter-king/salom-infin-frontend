@@ -1,25 +1,28 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from "vue-router"
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
 import InputText from 'primevue/inputtext';
-import Button from 'primevue/button';
 import Dropdown from 'primevue/dropdown';
+// import { useVuelidate } from '@vuelidate/core'
+// import { required } from "@vuelidate/validators"
+
 
 // Store
 import { useAuthStore } from "../stores/index"
+// Components
+import BaseButton from "@/components/UI/BaseButton.vue"
 const authStore = useAuthStore()
+const router = useRouter()
 
+const loading = ref(false)
+const selectedCity = ref();
 const model = ref({
   username: "test",
   password: "test2023"
 })
-const formRef = ref(null)
-const loading = ref(false)
-const selectedCity = ref();
 const cities = ref([
-    // { name: 'New York', code: 'NY' },
-    // { name: 'Rome', code: 'RM' }
     {
       name: "Everybody's Got Something to Hide Except Me and My Monkey",
       value: 'song0',
@@ -29,7 +32,6 @@ const cities = ref([
       value: 'song1'
     },
 ]);
-
 const rules = {
   username: [
     {
@@ -46,6 +48,7 @@ const rules = {
     }
   ]
 }
+
 
 const logIn = async () => {
   // formRef.value?.validate(async (errors) => {
@@ -72,41 +75,53 @@ const logIn = async () => {
 
     <TabView>
       <TabPanel>
-        <template #header>
-            <span class="w-full text-center">Логин</span>
+        <template #header class="">
+            <span class="w-full flex items-center justify-center">
+              <base-icon name="UserIcon" class="duration-[400ms] inline group-hover:text-white  mr-2" />
+              Логин
+            </span>
         </template>
         <p>
-          <form :model="model"  @submit.prevent="logIn" ref="formRef">
+          <form  ref="formRef" :model="model" :rules="rules"  @submit.prevent="logIn">
               <div class="w-full mb-3">
                 <label class="w-full" for="login">Текст</label>
                 <InputText class="w-full"  id="login" v-model="model.username"  placeholder="Введите логин" />
-                <small class="p-error" id="text-username">Username is required</small>
+                <!-- <small class="p-error" id="text-username">Username is required</small> -->
               </div>
 
               <div class="w-full mb-3">
                 <label class="w-full" for="parol">Текст</label>
                 <InputText class="w-full"  type="password" id="parol" v-model="model.password"  placeholder="Введите пароль" />
-                <small class="p-error" id="text-password">Username is required</small>
+                <!-- <small class="p-error" id="text-password">Username is required</small> -->
+
               </div>
 
-              <div class="mb-3 -mt-4 text-right">
+              <div class="mb-3 mt-2 text-right">
                 <RouterLink :to="{ name: 'ForgetPassword' }" class="text-indigo-700 text-sm">
                   Забыли пароль
                 </RouterLink>
               </div>
 
-              <Button
+              <base-button
                 class="w-full"
+                label=" Войти в систему"
+                size="large"
+                shadow
                 type="submit"
-                label="Войти в систему"
+                rounded
+                icon-left="LockKeyholeUnlockedIcon"
                 :loading="loading"
-                />
+              ></base-button>
           </form>
         </p>
       </TabPanel>
+
       <TabPanel>
         <template #header>
-            <span class="w-full text-center">ЭЦП</span>
+            <span class="w-full flex items-center justify-center">
+              <base-icon name="KeyMinimalisticIcon" class="duration-[400ms] inline group-hover:text-white  mr-2" />
+                ЭЦП
+            </span>
         </template>
         <p>
           <div class="card flex justify-content-center">

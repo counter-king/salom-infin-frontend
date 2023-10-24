@@ -14,7 +14,17 @@ const otpValue = ref('')
 <template>
   <div class="sign-in-view">
     <div class="text-center mb-3">
-      <!-- icon -->
+      <base-button
+          class="w-[100px] h-[100px]"
+          color="bg-indigo-700"
+          border-color="border-indigo-100"
+          only-icon
+          rounded
+          icon-left="LetterIcon"
+          iconWidth="50"
+          iconHeight="50"
+        >
+        </base-button>
     </div>
 
     <h1  class="text-2xl decoration-zinc-950  font-bold mb-1 text-center">Verification step</h1>
@@ -28,7 +38,17 @@ const otpValue = ref('')
       />
 
       <router-link type="primary" :to="{ name: 'SetCredensials' }" class="text-indigo-700">
-        <Button class="w-full" type="submit" severity="success" label="Подтвердить номер" />
+        <base-button
+          class="w-full text-indigo-700"
+          color="bg-indigo-100"
+          border-color="border-indigo-100"
+          label="Подтвердить номер"
+          size="large"
+          shadow
+          type="submit"
+          rounded
+          :loading="loading"
+        ></base-button>
       </router-link>
 
       <div class="text-center mt-4 text-xs">
