@@ -56,7 +56,7 @@ const logIn = async () => {
       await authStore.actionUserLogin(model.value)
       await authStore.actionUserProfile()
       await router.push({
-        name: "MainLayout"
+        name: "DashboardIndex"
       })
     } catch (error) {
       // message.error(error.message)
