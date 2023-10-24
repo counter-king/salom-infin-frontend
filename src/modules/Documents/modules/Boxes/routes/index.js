@@ -5,7 +5,7 @@ const Boxes = [
     meta: {
       isAuthRequired: true
     },
-    component: () => import("../views/Boxes/index.vue"),
+    component: () => import("../views/index.vue"),
     redirect: { name: "IncomingIndex" },
     children: [
       // Входящие
@@ -15,7 +15,7 @@ const Boxes = [
         meta: {
           isAuthRequired: true
         },
-        component: () => import("../views/Boxes/Incoming/index.vue"),
+        component: () => import("../views/Incoming/index.vue"),
       },
       // Исходящие
       {
@@ -24,7 +24,7 @@ const Boxes = [
         meta: {
           isAuthRequired: true
         },
-        component: () => import("../views/Boxes/Outgoing/index.vue"),
+        component: () => import("../views/Outgoing/index.vue"),
       },
       // На рассмотрении
       {
@@ -33,7 +33,7 @@ const Boxes = [
         meta: {
           isAuthRequired: true
         },
-        component: () => import("../views/Boxes/Review/index.vue"),
+        component: () => import("../views/Review/index.vue"),
       },
       // На подпись
       {
@@ -42,7 +42,7 @@ const Boxes = [
         meta: {
           isAuthRequired: true
         },
-        component: () => import("../views/Boxes/Sign/index.vue"),
+        component: () => import("../views/Sign/index.vue"),
       },
       // На согласовании
       {
@@ -51,7 +51,7 @@ const Boxes = [
         meta: {
           isAuthRequired: true
         },
-        component: () => import("../views/Boxes/Approval/index.vue"),
+        component: () => import("../views/Approval/index.vue"),
       },
       // На контроль
       {
@@ -60,7 +60,7 @@ const Boxes = [
         meta: {
           isAuthRequired: true
         },
-        component: () => import("../views/Boxes/Control/index.vue"),
+        component: () => import("../views/Control/index.vue"),
       },
     ]
   }

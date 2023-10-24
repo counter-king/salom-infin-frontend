@@ -112,8 +112,23 @@ const menus = ref([
       {
         title: "Регистрация",
         icon: "ClipboardUpIcon",
-        link: "SendDocumentsIndex",
-        children: []
+        link: "RegistrationIndex",
+        children: [
+          // Входящие
+          {
+            title: "Входящие",
+            icon: null,
+            link: "RegistrationIncomingIndex",
+            children: []
+          },
+          // Внутренний
+          {
+            title: "Внутренний",
+            icon: null,
+            link: "RegistrationInnerIndex",
+            children: []
+          },
+        ]
       },
     ],
     value: "documents"
