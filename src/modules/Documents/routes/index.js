@@ -1,5 +1,6 @@
 import Boxes from "../modules/Boxes/routes"
 import SendDocuments from "../modules/SendDocuments/routes"
+import Registration from "../modules/Registration/routes"
 
 const Documents = [
   {
@@ -14,7 +15,9 @@ const Documents = [
       // Ящики
       ...Boxes,
       // Отправка документов
-      ...SendDocuments
+      ...SendDocuments,
+      // Регистрация
+      ...Registration
     ]
   }
 ]
