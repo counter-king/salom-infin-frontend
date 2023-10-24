@@ -23,7 +23,6 @@ const props = defineProps({
     <template v-for="header in headers" :key="header.field">
       <Column
         :field="header.field"
-        :header="header.header"
       >
         <template #header>
           {{ t(header.header) }}
