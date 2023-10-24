@@ -46,7 +46,6 @@ const rules = {
     }
   ]
 }
-
 const logIn = async () => {
   // formRef.value?.validate(async (errors) => {
     // if (errors) return message.error("Invalid")
