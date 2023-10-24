@@ -20,9 +20,8 @@ const props = defineProps({
 
 <template>
   <DataTable :value="props.value">
-    <template v-for="header in headers">
+    <template v-for="header in headers" :key="header.field">
       <Column
-        :key="header.field"
         :field="header.field"
         :header="header.header"
       >
