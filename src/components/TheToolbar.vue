@@ -177,6 +177,59 @@ const openSidebar = (menu) => {
           </template>
         </template>
       </template>
+
+      <template #end>
+        <div class="flex items-center gap-4">
+          <base-button
+            label="create"
+            icon-right="AddCircleIcon"
+            rounded
+          />
+
+          <div class="bg-greyscale-800 w-[1px] h-[28px]"></div>
+
+          <div class="flex gap-2">
+            <base-button
+              color="bg-greyscale-800 hover:bg-greyscale-900"
+              border-color="border-greyscale-800"
+              icon-left="MagniferIcon"
+              only-icon
+              rounded
+            />
+
+            <base-button
+              color="bg-greyscale-800 hover:bg-greyscale-900"
+              border-color="border-greyscale-800"
+              icon-left="SettingsIcon"
+              only-icon
+              rounded
+            />
+
+            <base-button
+              color="bg-greyscale-800 hover:bg-greyscale-900"
+              border-color="border-greyscale-800"
+              icon-left="BellIcon"
+              only-icon
+              rounded
+            />
+          </div>
+
+          <div class="bg-greyscale-800 w-[1px] h-[28px]"></div>
+
+          <div class="flex items-center">
+            <base-avatar
+              image="/images/avatars/1.jpg"
+              shape="circle"
+              avatar-classes="w-10 h-10"
+            />
+
+            <div class="ml-3">
+              <h1 class="text-white text-sm font-semibold mb-1">Odinayev M.</h1>
+              <span class="block text-greyscale-500 text-xs">Админ</span>
+            </div>
+          </div>
+        </div>
+      </template>
     </toolbar>
 	</header>
 </template>

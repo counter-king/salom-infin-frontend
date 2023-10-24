@@ -14,6 +14,14 @@ const Playground = [
       isAuthRequired: true
     },
     component: () => import("../views/Button/index.vue"),
+  },
+  {
+    path: "/avatar",
+    name: "AvatarIndex",
+    meta: {
+      isAuthRequired: true
+    },
+    component: () => import("../views/Avatar/index.vue"),
   }
 ]
 
