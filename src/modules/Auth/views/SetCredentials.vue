@@ -37,7 +37,6 @@ const logIn = async () => {
   loading.value = false
 }
 
-
 </script>
 <template>
   <div class="sign-in-view">
@@ -68,7 +67,6 @@ const logIn = async () => {
           type="text" id="parol"
           placeholder="Введите пароль"
           v-model="v.password.$model"
-          @input="handlePasswordInput"
           :class="{ 'p-invalid':  v.password.$error}"
           :error="v.password.$errors"
         />
