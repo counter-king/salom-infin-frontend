@@ -32,7 +32,8 @@ const logIn = async () => {
   if (!valid) {
     return
   }
-  console.log('salom');
+
+
   loading.value = false
 }
 
