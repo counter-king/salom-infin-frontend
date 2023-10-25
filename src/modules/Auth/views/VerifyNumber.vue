@@ -2,7 +2,8 @@
 import { ref } from 'vue'
 import Button from 'primevue/button';
 import OTPCode from "../components/otpcode.vue";
-
+// Components
+import BaseButton from "@/components/UI/BaseButton.vue"
 const otpValue = ref('')
 
 // const message = useMessage()
@@ -15,20 +16,21 @@ const otpValue = ref('')
   <div class="sign-in-view">
     <div class="text-center mb-3">
       <base-button
-          class="w-[100px] h-[100px]"
-          color="bg-indigo-700"
-          border-color="border-indigo-100"
-          only-icon
-          rounded
-          icon-left="LetterIcon"
-          iconWidth="50"
-          iconHeight="50"
+        color="bg-indigo-700"
+        border-color="border-indigo-100"
+        only-icon
+        rounded
+        icon-left="LetterIcon"
+        iconWidth="50"
+        iconHeight="50"
         >
         </base-button>
     </div>
 
     <h1  class="text-2xl decoration-zinc-950  font-bold mb-1 text-center">Verification step</h1>
-    <p class="font-light text-sm text-color-3 text-center mb-7">Мы отправили код подтверждения на ваш телефон. Введите код из письма в поле ниже.</p>
+    <p class="font-light text-sm text-color-3 text-center mb-7">
+      Мы отправили код подтверждения на ваш телефон. Введите код из письма в поле ниже.
+    </p>
 
     <div class="w-[390px] m-auto">
       <OTPCode
@@ -36,7 +38,6 @@ const otpValue = ref('')
         class="mb-8"
         @emit:up="(value) => otpValue = value"
       />
-
       <router-link type="primary" :to="{ name: 'SetCredensials' }" class="text-indigo-700">
         <base-button
           class="w-full text-indigo-700"

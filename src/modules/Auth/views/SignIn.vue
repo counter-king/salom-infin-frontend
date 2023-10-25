@@ -43,7 +43,7 @@ const rules = {
 
 const v = useVuelidate(rules, formModel)
 const logIn = async () => {
-const valid = await v.value.$validate()
+  const valid = await v.value.$validate()
   if (!valid) {
     return
   }
