@@ -13,7 +13,6 @@ const transformIcons = Object.entries(icons).map(([name, svg]) => {
   }
 })
 </script>
-
 <template>
   <div class="icons-view p-5">
     <h1 class="text-26 font-bold mb-4">Icons list</h1>
