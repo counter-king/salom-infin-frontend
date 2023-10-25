@@ -1,72 +1,67 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { useRouter } from "vue-router"
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
-// import { useVuelidate } from '@vuelidate/core'
-// import { required } from "@vuelidate/validators"
-
-
+import useVuelidate from '@vuelidate/core'
+import { helpers, minLength, required } from '@vuelidate/validators'
 // Store
 import { useAuthStore } from "../stores/index"
 // Components
 import BaseButton from "@/components/UI/BaseButton.vue"
 const authStore = useAuthStore()
 const router = useRouter()
-
 const loading = ref(false)
 const selectedCity = ref();
-const model = ref({
-  username: "test",
-  password: "test2023"
-})
 const cities = ref([
-    {
-      name: "Everybody's Got Something to Hide Except Me and My Monkey",
-      value: 'song0',
-    },
-    {
-      name: 'Drive My Car',
-      value: 'song1'
-    },
+  {
+    name: "Everybody's Got Something to Hide Except Me and My Monkey",
+    value: 'song0',
+  },
+  {
+    name: 'Drive My Car',
+    value: 'song1'
+  },
 ]);
+
+const formModel = reactive({
+  username: null,
+  password: null
+})
+
 const rules = {
-  username: [
-    {
-      required: true,
-      trigger: ["input", "blur"],
-      message: "Username is required"
-    }
-  ],
-  password: [
-    {
-      required: true,
-      trigger: ["input", "blur"],
-      message: "Password is required"
-    }
-  ]
+  username: {
+    required: helpers.withMessage(`Username is required`, required)
+  },
+  password: {
+    required: helpers.withMessage(`Password is required`, required),
+    minLength: helpers.withMessage(`Минимальная длина: 6 символа`, minLength(6))
+  },
 }
 
-
+const v = useVuelidate(rules, formModel)
 const logIn = async () => {
-  // formRef.value?.validate(async (errors) => {
-    // if (errors) return message.error("Invalid")
+const valid = await v.value.$validate()
+  if (!valid) {
+    return
+  }
 
-    try {
-      loading.value = true
-      await authStore.actionUserLogin(model.value)
-      await authStore.actionUserProfile()
-      await router.push({
-        name: "DashboardIndex"
-      })
-    } catch (error) {
-      // message.error(error.message)
-    }
-    loading.value = false
-  // })
+  try {
+    loading.value = true
+    await authStore.actionUserLogin(formModel)
+    await authStore.actionUserProfile()
+    await router.push({
+      name: "DashboardIndex"
+    })
+  } catch (error) {
+    // message.error(error.message)
+  }
+
+  loading.value = false
 }
+
 </script>
 <template>
   <div class="sign-in-view">
@@ -76,57 +71,69 @@ const logIn = async () => {
     <TabView>
       <TabPanel>
         <template #header class="">
-            <span class="w-full flex items-center justify-center">
-              <base-icon name="UserIcon" class="duration-[400ms] inline group-hover:text-white  mr-2" />
-              Логин
-            </span>
+          <span class="w-full flex items-center justify-center">
+            <base-icon name="UserIcon" class="duration-[400ms] inline group-hover:text-white  mr-2" />
+            Логин
+          </span>
         </template>
         <p>
-          <form  ref="formRef" :model="model" :rules="rules"  @submit.prevent="logIn">
-              <div class="w-full mb-3">
-                <label class="w-full" for="login">Текст</label>
-                <InputText class="w-full"  id="login" v-model="model.username"  placeholder="Введите логин" />
-                <!-- <small class="p-error" id="text-username">Username is required</small> -->
-              </div>
+        <form   @submit.prevent="logIn">
+          <div class="w-full mb-3">
+            <label class="w-full" for="login">Текст</label>
+            <InputText class="w-full" id="login"
+                v-model="v.username.$model"
+                placeholder="Введите логин"
+                :class="{ 'p-invalid':  v.username.$error}"
+                :error="v.username.$errors" />
+             <small
+              class="p-error"
+              v-for="element of v.username.$errors"
+              :key="element.$uid">
+              <div class="form-error__message">{{element.$message}}</div>
+            </small>
+          </div>
 
-              <div class="w-full mb-3">
-                <label class="w-full" for="parol">Текст</label>
-                <InputText class="w-full"  type="password" id="parol" v-model="model.password"  placeholder="Введите пароль" />
-                <!-- <small class="p-error" id="text-password">Username is required</small> -->
+          <div class="w-full mb-3">
+            <label class="w-full" for="parol">Текст</label>
+            <InputText
+              class="w-full"
+              type="password" id="parol"
+              v-model="v.password.$model"
+              :class="{ 'p-invalid':  v.password.$error}"
+              :error="v.password.$errors"
+              placeholder="Введите пароль"
+            />
+            <small
+              class="p-error"
+              v-for="element of v.password.$errors"
+              :key="element.$uid">
+              <div class="form-error__message">{{element.$message}}</div>
+            </small>
+          </div>
 
-              </div>
+          <div class="mb-3 mt-2 text-right">
+            <RouterLink :to="{ name: 'ForgetPassword' }" class="text-indigo-700 text-sm">
+              Забыли пароль
+            </RouterLink>
+          </div>
 
-              <div class="mb-3 mt-2 text-right">
-                <RouterLink :to="{ name: 'ForgetPassword' }" class="text-indigo-700 text-sm">
-                  Забыли пароль
-                </RouterLink>
-              </div>
-
-              <base-button
-                class="w-full"
-                label=" Войти в систему"
-                size="large"
-                shadow
-                type="submit"
-                rounded
-                icon-left="LockKeyholeUnlockedIcon"
-                :loading="loading"
-              ></base-button>
-          </form>
+          <base-button class="w-full" label=" Войти в систему" size="large" shadow type="submit" rounded
+            icon-left="LockKeyholeUnlockedIcon" :loading="loading"></base-button>
+        </form>
         </p>
       </TabPanel>
 
       <TabPanel>
         <template #header>
-            <span class="w-full flex items-center justify-center">
-              <base-icon name="KeyMinimalisticIcon" class="duration-[400ms] inline group-hover:text-white  mr-2" />
-                ЭЦП
-            </span>
+          <span class="w-full flex items-center justify-center">
+            <base-icon name="KeyMinimalisticIcon" class="duration-[400ms] inline group-hover:text-white  mr-2" />
+            ЭЦП
+          </span>
         </template>
         <p>
-          <div class="card flex justify-content-center">
-            <Dropdown class="w-full" v-model="selectedCity" :options="cities" optionLabel="name" placeholder="Выбрать" />
-          </div>
+        <div class="card flex justify-content-center">
+          <Dropdown class="w-full" v-model="selectedCity" :options="cities" optionLabel="name" placeholder="Выбрать" />
+        </div>
         </p>
       </TabPanel>
     </TabView>
@@ -141,11 +148,10 @@ const logIn = async () => {
 </template>
 
 <style>
-.sign-in-view .p-tabview-panels{
-  padding: 20px  0 0;
+.sign-in-view .p-tabview-panels {
+  padding: 20px 0 0;
 }
-.sign-in-view .p-tabview-header
-{
+.sign-in-view .p-tabview-header {
   width: 50%;
 }
 </style>
