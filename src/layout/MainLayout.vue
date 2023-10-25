@@ -26,7 +26,7 @@ onMounted(() => {
       <template v-else>
         <the-sidebar>
           <template #content>
-            <div class="flex-1 overflow-y-auto py-8 px-6">
+            <div class="flex-1 overflow-y-auto py-7 px-6">
               <router-view />
             </div>
           </template>
