@@ -44,7 +44,7 @@ const logIn = async () => {
     <p class="font-light text-sm text-color-3 text-center mb-7">Welcome back, you’ve been missed!</p>
 
     <form  @submit.prevent="logIn">
-      <div class="w-full mb-3">
+      <div class="w-full mb-4">
         <label class="w-full" for="login">Логин</label>
         <InputText class="w-full" id="login"
           v-model="v.phone_number.$model"
@@ -60,15 +60,15 @@ const logIn = async () => {
         </small>
       </div>
 
-      <div class="w-full mb-3">
-        <label class="w-full" for="parol">Пароль</label>
-        <InputText
-          class="w-full"
-          type="text" id="parol"
+      <div class="w_password_full w-full mb-4">
+        <label class="w-full">Пароль</label>
+        <Password
+          toggleMask
           placeholder="Введите пароль"
           v-model="v.password.$model"
           :class="{ 'p-invalid':  v.password.$error}"
           :error="v.password.$errors"
+          class="w-full"
         />
         <small
           class="p-error"
@@ -78,11 +78,11 @@ const logIn = async () => {
         </small>
       </div>
 
-      <div class="w-full mb-3">
+      <div class="w_password_full w-full mb-4">
         <label class="w-full" for="parol">Пароль</label>
-        <InputText
+        <Password
           class="w-full"
-          type="text" id="parol"
+          toggleMask
           placeholder="Введите пароль"
           v-model="v.reenteredPassword.$model"
           :class="{ 'p-invalid':  v.reenteredPassword.$error}"
@@ -107,7 +107,7 @@ const logIn = async () => {
 </template>
 
 <style lang="scss">
-.input--Password input{
+.w_password_full input{
   width: 100%;
 }
 </style>

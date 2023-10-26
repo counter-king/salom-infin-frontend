@@ -1,0 +1,87 @@
+export const CORRESPONDENT = {
+  ALL: "all",
+  LEGAL: "legal",
+  PHYSICAL: "physical",
+}
+export const JOURNAL = {
+  INCOMING: 1,           // Входящий
+  INNER: 2,              // Внутренние
+  OUTGOING: 3,           // Исходящие
+  APPEALS: 4,            // Обращение
+  ORDERS_PROTOCOLS: 5,   // Приказы и распоряжения
+  APPLICATION: 7,        // Заявления
+}
+export const COLOR_TYPES = {
+  PRIMARY: "primary",
+  WARNING: "warning",
+  ERROR: "error",
+  SUCCESS: "success"
+}
+export const SIZE_TYPES = {
+  XL: "xl",
+  LG: "lg",
+  MD: "md",
+  SM: "sm",
+  XS: "xs"
+}
+export const PRIORITY_TYPES = {
+  HIGH: 4,    // Высокий
+  MIDDLE: 5,  // Средний
+  LOW: 6      // Низкий
+}
+export const PRIORITY_COLORS = {
+  HIGH: COLOR_TYPES.ERROR,        // Высокий
+  MIDDLE: COLOR_TYPES.WARNING,    // Средний
+  LOW: COLOR_TYPES.SUCCESS        // Низкий
+}
+export const STATUS_TYPES = {
+  TODO: 8,
+  IN_PROGRESS: 9,
+  ON_HOLD: 10,
+  FOR_SIGNATURE: 11,
+  ON_REVIEW: 12,
+  DONE: 13,
+  CANCEL: 14,
+}
+export const STATUS_COLORS = {
+  TODO: COLOR_TYPES.PRIMARY,            // TO DO
+  IN_PROGRESS: COLOR_TYPES.WARNING,     // IN PROGRESS
+  ON_HOLD: COLOR_TYPES.WARNING,         // ON HOLD
+  FOR_SIGNATURE: COLOR_TYPES.WARNING,   // FOR SIGNATURE
+  ON_REVIEW: COLOR_TYPES.WARNING,       // ON REVIEW
+  DONE: COLOR_TYPES.SUCCESS,            // DONE
+  CANCEL: COLOR_TYPES.ERROR,            // CANCEL
+}
+export const COMMENT_ACTIONS = {
+  EDIT: "edit",
+  REPLY: "reply",
+}
+export const CONTENT_TYPES = {
+  DOC_FLOW: 6
+}
+export const RESOLUTION_TYPES = {
+  ASSIGNMENT: "assignment",
+  CONTROL: "control",
+  FOR_NOTICE: "for_notice"
+}
+export const RESOLUTION_CREATE_TYPES = {
+  REVIEW: "REVIEW",         // На рассмотрение
+  ASSIGNMENT: "ASSIGNMENT"  // Входящий
+}
+export const PERFORMERS_TYPES = {
+  CONTROL: "controller",       // Контролирующий
+  RESPONSIBLE: "responsible",  // Ответ. исп.
+  EXECUTOR: "executor"         // Исполнитель
+}
+export const METHODS = {
+  GET :    "GET",
+  POST:    "POST",
+  PUT:     "PUT",
+  DELETE:  "DELETE",
+  HEAD:    "HEAD",
+  OPTIONS: "OPTIONS",
+  PATCH:   "PATCH"
+}
+export const API_LIST = {
+  PROJECT_PERMISIIONS: "project-permissions"
+}
