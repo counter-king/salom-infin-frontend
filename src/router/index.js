@@ -19,8 +19,6 @@ const router = createRouter({
         ...Dashboard,
         // Documents
         ...Documents,
-        // Playground
-        ...Playground
       ]
     },
     // /MainLayout
@@ -36,6 +34,9 @@ const router = createRouter({
       ]
     }
     // /AuthLayout
+
+    // Playground
+    ...Playground
   ]
 })
 
