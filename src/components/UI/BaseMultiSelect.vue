@@ -54,7 +54,7 @@ const cities = ref([
 // Computed
 const rootClasses = computed(() => {
   return [
-    'group w-80 bg-greyscale-50 rounded-xl hover:border-primary-500',
+    'group w-full bg-greyscale-50 rounded-xl hover:border-primary-500',
     // Border
     props.borderColor,
     {
@@ -93,7 +93,7 @@ const rootClasses = computed(() => {
           {
             'size-small py-[2px] pr-2 pl-4': props.size === 'x-small',
             'size-small py-[5px] pr-2 pl-4': props.size === 'small',
-            'size-normal py-[11px] pr-2 pl-4': props.size === null || props.size === 'normal',
+            'size-normal py-3 pr-2 pl-4': props.size === null || props.size === 'normal',
           },
         ]
       },

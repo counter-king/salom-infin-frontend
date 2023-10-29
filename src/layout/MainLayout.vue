@@ -2,7 +2,7 @@
 // Core
 import { onMounted } from "vue"
 // Components
-import TheToolbar from "@/components/TheToolbar.vue"
+import TheToolbar from "@/components/Toolbar/TheToolbar.vue"
 import TheSidebar from "@/components/TheSidebar.vue"
 // Store
 import { useNavigation } from "@/stores/navigation.store"

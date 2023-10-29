@@ -10,6 +10,10 @@ const props = defineProps({
     type: String,
     default: 'name'
   },
+  label: {
+    type: String,
+    default: null
+  },
   placeholder: {
     type: String,
     default: 'create'
@@ -35,20 +39,24 @@ const props = defineProps({
 </script>
 
 <template>
-  <base-multi-select
-    v-bind="props"
-    :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
-  >
-    <template #chip="{ value }">
-      <div>
-        {{ value.name }}
-      </div>
-    </template>
+  <div class="app-input">
+    <base-label :label="props.label" />
 
-    <template #removetokenicon="{ click }">
-      <base-icon name="XIcon" width="16" height="16" class="ml-[6px] hover:text-critic-500" />
-    </template>
-  </base-multi-select>
+    <base-multi-select
+      v-bind="props"
+      :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
+    >
+      <template #chip="{ value }">
+        <div>
+          {{ value.name }}
+        </div>
+      </template>
+
+      <template #removetokenicon="{ click }">
+        <base-icon name="XIcon" width="16" height="16" class="ml-[6px] hover:text-critic-500" />
+      </template>
+    </base-multi-select>
+  </div>
 </template>
 
 <style scoped>

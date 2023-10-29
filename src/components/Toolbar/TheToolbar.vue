@@ -1,12 +1,12 @@
 <script setup>
 // Core
-import { ref } from "vue"
-import { useRoute } from "vue-router"
-import Toolbar from "primevue/toolbar"
+import { ref } from 'vue'
+import Toolbar from 'primevue/toolbar'
 // Store
-import { useNavigation } from "@/stores/navigation.store"
+import { useNavigation } from '@/stores/navigation.store'
+// Components
+import CreateActionDropdown from './CreateActionDropdown.vue'
 // Composable
-const route = useRoute()
 const navigationStore = useNavigation()
 // Reactive
 const menus = ref([
@@ -195,11 +195,7 @@ const openSidebar = (menu) => {
 
       <template #end>
         <div class="flex items-center gap-4">
-          <base-button
-            label="create"
-            icon-right="AddCircleIcon"
-            rounded
-          />
+          <create-action-dropdown />
 
           <div class="bg-greyscale-800 w-[1px] h-[28px]"></div>
 
