@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from 'vue'
 import InputText from 'primevue/inputtext';
-import Button from 'primevue/button';
 import Password from 'primevue/password';
 
 const props = defineProps({
@@ -103,7 +102,17 @@ const handlePasswordInput = () => {
         <small class="p-error" id="text-password">Username is required</small>
       </div>
 
-      <Button class="w-full" type="submit" severity="success" label=" Войти в систему" />
+      <base-button
+          class="w-full text-indigo-700"
+          color="bg-indigo-100"
+          border-color="border-indigo-100"
+          label="Войти в систему"
+          size="large"
+          shadow
+          type="submit"
+          rounded
+          :loading="loading"
+        ></base-button>
     </form>
 
   </div>

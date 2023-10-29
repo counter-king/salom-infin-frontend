@@ -29,3 +29,8 @@ const transformIcons = Object.entries(icons).map(([name, svg]) => {
     </div>
   </div>
 </template>
+<style>
+.icons-card div svg {
+  width: 40px ;
+}
+</style>

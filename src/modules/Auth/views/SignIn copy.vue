@@ -7,29 +7,10 @@ import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
 import { useVuelidate } from '@vuelidate/core'
 import { helpers, minLength, required } from '@vuelidate/validators'
-// Store
-import { useAuthStore } from "../stores/index"
-// Components
-import BaseButton from "@/components/UI/BaseButton.vue"
-const authStore = useAuthStore()
-const router = useRouter()
-
-const loading = ref(false)
-const selectedCity = ref();
-const cities = ref([
-  {
-    name: "Everybody's Got Something to Hide Except Me and My Monkey",
-    value: 'song0',
-  },
-  {
-    name: 'Drive My Car',
-    value: 'song1'
-  },
-]);
-
 
 const username = ref('')
 const password = ref('')
+
 const rules = computed(() => ({
   username: {
     required,
@@ -42,20 +23,18 @@ const rules = computed(() => ({
 }))
 
 const v = useVuelidate(rules, { username, password })
-
+const model = ref({
+  username: "test",
+  password: "test2023"
+})
 const logIn = async () => {
+
   v.value.$touch()
 
-  if (!v.value.$error) {
-    console.log("salom");
-
+  if (v.value.$error) {
     try {
       loading.value = true
-      await authStore.actionUserLogin(
-        {
-          username: username.value,
-          password: password.value
-        })
+      await authStore.actionUserLogin(model.value)
       await authStore.actionUserProfile()
       await router.push({
         name: "DashboardIndex"
@@ -64,10 +43,70 @@ const logIn = async () => {
       // message.error(error.message)
     }
   }
-
   loading.value = false
+
+  alert('Form submitted')
 }
 
+
+// Store
+import { useAuthStore } from "../stores/index"
+// Components
+import BaseButton from "@/components/UI/BaseButton.vue"
+const authStore = useAuthStore()
+const router = useRouter()
+
+const loading = ref(false)
+const selectedCity = ref();
+// const model = ref({
+//   username: "test",
+//   password: "test2023"
+// })
+const cities = ref([
+  {
+    name: "Everybody's Got Something to Hide Except Me and My Monkey",
+    value: 'song0',
+  },
+  {
+    name: 'Drive My Car',
+    value: 'song1'
+  },
+]);
+// const rules = {
+//   username: [
+//     {
+//       required: true,
+//       trigger: ["input", "blur"],
+//       message: "Username is required"
+//     }
+//   ],
+//   password: [
+//     {
+//       required: true,
+//       trigger: ["input", "blur"],
+//       message: "Password is required"
+//     }
+//   ]
+// }
+
+
+const logIn2 = async () => {
+  // formRef.value?.validate(async (errors) => {
+  // if (errors) return message.error("Invalid")
+
+  try {
+    loading.value = true
+    await authStore.actionUserLogin(model.value)
+    await authStore.actionUserProfile()
+    await router.push({
+      name: "DashboardIndex"
+    })
+  } catch (error) {
+    // message.error(error.message)
+  }
+  // loading.value = false
+  // })
+}
 </script>
 <template>
   <div class="sign-in-view">
@@ -83,34 +122,19 @@ const logIn = async () => {
           </span>
         </template>
         <p>
-        <form   @submit.prevent="logIn">
+        <form ref="formRef" :model="model" :rules="rules" @submit.prevent="logIn">
           <div class="w-full mb-3">
             <label class="w-full" for="login">Текст</label>
-            <InputText class="w-full" id="login"
-                v-model:value="v.username.$model"
-                placeholder="Введите логин"
-                :error="v.username.$errors" />
+            <InputText class="w-full" id="login" v-model:value="v.username.$model" placeholder="Введите логин" />
             <!-- <small class="p-error" id="text-username">Username is required</small> -->
-             <div
-              class="form-error"
-              v-for="element of v.username.$errors"
-              :key="element.$uid">
-              <div class="form-error__message">{{element.$message}}</div>
-              <pre>
-                {{ v.username.$errors }}
-              </pre>
-            </div>
           </div>
 
           <div class="w-full mb-3">
             <label class="w-full" for="parol">Текст</label>
-            <InputText
-             class="w-full"
-             type="password" id="parol"
-             v-model:value="v.password.$model"
-             :error="v.password.$errors"
+            <InputText class="w-full" type="password" id="parol" v-model:value="v.password.$model"
               placeholder="Введите пароль" />
             <!-- <small class="p-error" id="text-password">Username is required</small> -->
+
           </div>
 
           <div class="mb-3 mt-2 text-right">

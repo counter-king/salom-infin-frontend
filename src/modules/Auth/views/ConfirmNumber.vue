@@ -1,7 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import InputText from 'primevue/inputtext';
-import Button from 'primevue/button';
+// Components
+import BaseButton from "@/components/UI/BaseButton.vue"
 
 const props = defineProps({
   title: {
@@ -37,13 +38,26 @@ const model = ref({
       </div>
 
       <router-link type="primary" :to="{ name: 'VerifyNumber' }">
-        <Button class="w-full" type="submit" severity="success" label=" Войти в систему" />
+        <base-button
+          class="w-full text-indigo-700"
+          color="bg-indigo-100"
+          border-color="border-indigo-100"
+          label="Отправить номер"
+          size="large"
+          shadow
+          type="submit"
+          rounded
+          :loading="loading"
+        ></base-button>
       </router-link>
     </form>
 
 
-      <router-link type="primary" :to="{ name: 'Login' }" class="flex items-center justify-center mt-4 text-indigo-700">
-        Back to Sign In
+      <router-link type="primary" :to="{ name: 'Login' }" class="flex items-center justify-center text-sm mt-4 text-indigo-700">
+        <base-icon
+          name="AltArrowLeftIcon"
+          class="w-3.5 duration-[400ms]
+          inline "  /> Back to Sign In
       </router-link>
   </div>
 </template>
