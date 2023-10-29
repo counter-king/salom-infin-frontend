@@ -22,6 +22,14 @@ const Playground = [
       isAuthRequired: true
     },
     component: () => import("../views/Avatar/index.vue"),
+  },
+  {
+    path: "/multi-select",
+    name: "MultiSelectIndex",
+    meta: {
+      isAuthRequired: true
+    },
+    component: () => import("../views/BaseMultiSelect.vue"),
   }
 ]
 export default Playground
