@@ -6,7 +6,7 @@ import InputText from 'primevue/inputtext'
 // Macros
 const props = defineProps({
   modelValue: {
-    type: Boolean
+    type: [String],
   },
   label: {
     type: String,
@@ -15,6 +15,9 @@ const props = defineProps({
   placeholder: {
     type: String,
     default: "enter-reg-number"
+  },
+  errorClass: {
+    type: [String, Boolean ],
   }
 })
 // Composable
@@ -33,7 +36,13 @@ const { t } = useI18n()
       :placeholder="t(props.placeholder)"
       :pt="{
         root: {
-          class: ['w-full rounded-xl bg-greyscale-50 border-transparent']
+          class: [
+            'w-full rounded-xl bg-greyscale-50 ',
+            {
+              'p-invalid': props.errorClass,
+              'border-transparent': !props.errorClass,
+            }
+          ]
         }
       }"
     />
