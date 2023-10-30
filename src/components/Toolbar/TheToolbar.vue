@@ -1,13 +1,18 @@
 <script setup>
 // Core
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import Toolbar from 'primevue/toolbar'
 // Store
 import { useNavigation } from '@/stores/navigation.store'
+import { useAuthStore } from "../../modules/Auth/stores/index"
 // Components
 import CreateActionDropdown from './CreateActionDropdown.vue'
 // Composable
 const navigationStore = useNavigation()
+const authStore = useAuthStore()
+
+const userProfile = computed(() => authStore.getCurrentUser)
+
 // Reactive
 const menus = ref([
   // Дашбоард
@@ -235,8 +240,8 @@ const openSidebar = (menu) => {
             />
 
             <div class="ml-3">
-              <h1 class="text-white text-sm font-semibold mb-1">Odinayev M.</h1>
-              <span class="block text-greyscale-500 text-xs">Админ</span>
+              <h1 class="text-white text-sm font-semibold mb-1">{{ userProfile.last_name }} {{ userProfile.first_name[0] }}.</h1>
+              <span class="block text-greyscale-500 text-xs">{{ userProfile.username }}</span>
             </div>
           </div>
         </div>
