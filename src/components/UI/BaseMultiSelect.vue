@@ -1,20 +1,31 @@
 <script setup>
 // Core
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MultiSelect from 'primevue/multiselect'
-import BaseButton from "@/components/UI/BaseButton.vue";
-import BaseIcon from "@/components/UI/BaseIcon.vue";
+import axiosConfig from "@/services/axios.config"
 // Composable
 const { t } = useI18n()
 // Macros
 const props = defineProps({
-  border: {
-    type: Boolean
+  apiUrl: {
+    type: String,
+    default: null
+  },
+  apiParams: {
+    type: Object,
+    default: () => {}
+  },
+  options: {
+    type: Array,
+    default: () => []
   },
   optionLabel: {
     type: String,
     default: 'name'
+  },
+  border: {
+    type: Boolean
   },
   placeholder: {
     type: String,
@@ -43,14 +54,12 @@ const props = defineProps({
   },
 })
 // Reactive
+const list = ref([])
 const selectedCities = ref(null)
-const cities = ref([
-  { name: 'New York', code: 'NY' },
-  { name: 'Rome', code: 'RM' },
-  { name: 'London', code: 'LDN' },
-  { name: 'Istanbul', code: 'IST' },
-  { name: 'Paris', code: 'PRS' }
-])
+const options = computed(() => props.options.length
+  ? props.options
+  : list.value
+)
 // Computed
 const rootClasses = computed(() => {
   return [
@@ -67,12 +76,24 @@ const rootClasses = computed(() => {
     },
   ]
 })
+// Methods
+const loadList = async (params) => {
+  let { data } = await axiosConfig.get(`${props.apiUrl}/`, params)
+  list.value = data.results
+}
+// Hooks
+onMounted(() => {
+  // Если не переданы props.options
+  if(!props.options.length) {
+    loadList(props.apiParams)
+  }
+})
 </script>
 
 <template>
   <MultiSelect
     v-model="selectedCities"
-    :options="cities"
+    :options="options"
     :optionLabel="props.optionLabel"
     :placeholder="t(props.placeholder)"
     :display="props.display"
@@ -142,6 +163,10 @@ const rootClasses = computed(() => {
 
     <template #chip="{ value }">
       <slot name="chip" :value="value" />
+    </template>
+
+    <template #option="{ option }">
+      <slot name="option" :value="option" />
     </template>
 
     <template #removetokenicon="{ onClick }">
