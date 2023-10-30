@@ -3,12 +3,14 @@ import { ref, reactive, computed } from 'vue'
 import { useRouter } from "vue-router"
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
-import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
+import Toast from 'primevue/toast';
+import { useToast } from 'primevue/usetoast';
 import useVuelidate from '@vuelidate/core'
 import { helpers, minLength, required } from '@vuelidate/validators'
 // Store
 import { useAuthStore } from "../stores/index"
+
 // Components
 import BaseButton from "@/components/UI/BaseButton.vue"
 const authStore = useAuthStore()
@@ -41,6 +43,7 @@ const rules = {
   },
 }
 
+const toast = useToast();
 const v = useVuelidate(rules, formModel)
 const logIn = async () => {
   const valid = await v.value.$validate()
@@ -56,7 +59,7 @@ const logIn = async () => {
       name: "DashboardIndex"
     })
   } catch (error) {
-    // message.error(error.message)
+      toast.add({ severity: 'error', summary: 'Xatolik bor', detail: "Login yoki parol noto'g'ri qayta urinib ko'ring", life: 3000 });
   }
 
   loading.value = false
@@ -77,49 +80,60 @@ const logIn = async () => {
           </span>
         </template>
         <p>
-        <form   @submit.prevent="logIn">
-          <div class="w-full mb-3">
-            <label class="w-full" for="login">Текст</label>
-            <InputText class="w-full" id="login"
-                v-model="v.username.$model"
-                placeholder="Введите логин"
-                :class="{ 'p-invalid':  v.username.$error}"
-                :error="v.username.$errors" />
-             <small
-              class="p-error"
-              v-for="element of v.username.$errors"
-              :key="element.$uid">
-              <div class="form-error__message">{{element.$message}}</div>
-            </small>
-          </div>
+          <form   @submit.prevent="logIn">
+            <div class="w-full mb-3">
+              <!-- <InputText class="w-full" id="login"
+                  v-model="v.username.$model"
+                  placeholder="Введите логин"
+                  :class="{ 'p-invalid':  v.username.$error}"
+                  :error="v.username.$errors" /> -->
 
-          <div class="w-full mb-3">
-            <label class="w-full" for="parol">Текст</label>
-            <InputText
-              class="w-full"
-              type="password" id="parol"
-              v-model="v.password.$model"
-              :class="{ 'p-invalid':  v.password.$error}"
-              :error="v.password.$errors"
-              placeholder="Введите пароль"
-            />
-            <small
-              class="p-error"
-              v-for="element of v.password.$errors"
-              :key="element.$uid">
-              <div class="form-error__message">{{element.$message}}</div>
-            </small>
-          </div>
+                <base-col col-class="w-1/1">
+                  <base-input
+                    v-model="v.username.$model"
+                    label="Логин"
+                    :errorClass="v.username.$error"
+                    placeholder="Введите логин"
+                  />
+                  <small
+                    class="p-error"
+                    v-for="element of v.username.$errors"
+                    :key="element.$uid">
+                    <div class="form-error__message">{{element.$message}}</div>
+                  </small>
+                </base-col>
+            </div>
 
-          <div class="mb-3 mt-2 text-right">
-            <RouterLink :to="{ name: 'ForgetPassword' }" class="text-indigo-700 text-sm">
-              Забыли пароль
-            </RouterLink>
-          </div>
+            <div class="w-full mb-3">
+              <base-col col-class="w-1/1">
+                <base-input
+                  v-model="v.password.$model"
+                  label="Пароль"
+                  :errorClass="v.password.$error"
+                  placeholder="Введите пароль"
+                />
+                <small
+                  class="p-error"
+                  v-for="element of v.password.$errors"
+                  :key="element.$uid">
+                  <div class="form-error__message">{{element.$message}}</div>
+                </small>
+              </base-col>
+            </div>
 
-          <base-button class="w-full" label=" Войти в систему" size="large" shadow type="submit" rounded
-            icon-left="LockKeyholeUnlockedIcon" :loading="loading"></base-button>
-        </form>
+            <div class="mb-3 mt-2 text-right">
+              <RouterLink :to="{ name: 'ForgetPassword' }" class="text-indigo-700 text-sm">
+                Забыли пароль
+              </RouterLink>
+            </div>
+
+            <base-button class="w-full"  label=" Войти в систему" size="large" shadow type="submit" rounded
+              icon-left="LockKeyholeUnlockedIcon" :loading="loading">
+            </base-button>
+          </form>
+
+          <Toast />
+
         </p>
       </TabPanel>
 
