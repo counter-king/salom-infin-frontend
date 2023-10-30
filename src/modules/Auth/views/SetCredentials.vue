@@ -1,7 +1,5 @@
 <script setup>
 import { ref, reactive } from 'vue'
-import InputText from 'primevue/inputtext';
-import Password from 'primevue/password';
 import useVuelidate from '@vuelidate/core'
 import { helpers, sameAs,  minLength, required} from '@vuelidate/validators'
 
@@ -44,13 +42,12 @@ const logIn = async () => {
     <p class="font-light text-sm text-color-3 text-center mb-7">Welcome back, you’ve been missed!</p>
 
     <form  @submit.prevent="logIn">
-      <div class="w-full mb-4">
-        <label class="w-full" for="login">Логин</label>
-        <InputText class="w-full" id="login"
+      <base-col col-class="w-1/1 pb-5">
+        <base-input
           v-model="v.phone_number.$model"
+          label="Логин"
+          :errorClass="v.phone_number.$error"
           placeholder="Введите логин"
-          :class="{ 'p-invalid':  v.phone_number.$error}"
-          :error="v.phone_number.$errors"
         />
         <small
           class="p-error"
@@ -58,17 +55,14 @@ const logIn = async () => {
           :key="element.$uid">
           <div class="form-error__message">{{element.$message}}</div>
         </small>
-      </div>
+      </base-col>
 
-      <div class="w_password_full w-full mb-4">
-        <label class="w-full">Пароль</label>
-        <Password
-          toggleMask
-          placeholder="Введите пароль"
+      <base-col col-class="w-1/1 pb-5">
+        <base-input
           v-model="v.password.$model"
-          :class="{ 'p-invalid':  v.password.$error}"
-          :error="v.password.$errors"
-          class="w-full"
+          label="Пароль"
+          :errorClass="v.password.$error"
+          placeholder="Введите пароль"
         />
         <small
           class="p-error"
@@ -76,18 +70,15 @@ const logIn = async () => {
           :key="element.$uid">
           <div class="form-error__message">{{element.$message}}</div>
         </small>
-      </div>
+      </base-col>
 
-      <div class="w_password_full w-full mb-4">
-        <label class="w-full" for="parol">Пароль</label>
-        <Password
-          class="w-full"
-          toggleMask
-          placeholder="Введите пароль"
+      <base-col col-class="w-1/1 pb-5">
+        <base-input
           v-model="v.reenteredPassword.$model"
-          :class="{ 'p-invalid':  v.reenteredPassword.$error}"
-          :error="v.reenteredPassword.$errors"
-          :disabled="!v.password.$model"
+          label="Пароль"
+          type="password"
+          :errorClass="v.reenteredPassword.$error"
+          placeholder="Введите пароль"
         />
         <small
           class="p-error"
@@ -95,7 +86,7 @@ const logIn = async () => {
           :key="element.$uid">
           <div class="form-error__message">{{element.$message}}</div>
         </small>
-      </div>
+      </base-col>
 
       <base-button class="w-full" label="Войти в систему" size="large" shadow type="submit" rounded
         icon-left="LockKeyholeUnlockedIcon" :loading="loading"></base-button>

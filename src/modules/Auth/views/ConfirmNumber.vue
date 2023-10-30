@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from 'vue'
-import InputText from 'primevue/inputtext';
 import useVuelidate from '@vuelidate/core'
 import { helpers, minLength, required } from '@vuelidate/validators'
 // Components
@@ -31,13 +30,12 @@ const v = useVuelidate(rules, formModel)
     <p class="font-light text-sm text-color-3 text-center mb-7">Введите номер, чтобы получить подтверждающее сообщение</p>
 
     <form @submit="onSubmit">
-      <div class="w-full mb-3">
-        <label class="w-full" for="login">Текст</label>
-        <InputText class="w-full mb-3" id="login"
+      <base-col col-class="w-1/1 pb-5">
+        <base-input
           v-model="v.phone_number.$model"
+          label="Телефона"
+          :errorClass="v.phone_number.$error"
           placeholder="Введите номер телефона"
-          :class="{ 'p-invalid':  v.phone_number.$error}"
-          :error="v.phone_number.$errors"
         />
         <small
           class="p-error"
@@ -45,8 +43,7 @@ const v = useVuelidate(rules, formModel)
           :key="element.$uid">
           <div class="form-error__message">{{element.$message}}</div>
         </small>
-      </div>
-
+      </base-col>
 
       <router-link  :to="{ name: 'VerifyNumber' }">
         <base-button
@@ -63,16 +60,11 @@ const v = useVuelidate(rules, formModel)
       </router-link>
     </form>
 
-
-      <router-link type="primary" :to="{ name: 'Login' }" class="flex items-center justify-center text-sm mt-4 text-indigo-700">
-        <base-icon
-          name="AltArrowLeftIcon"
-          class="w-3.5 duration-[400ms]
-          inline "  /> Back to Sign In
-      </router-link>
+    <router-link type="primary" :to="{ name: 'Login' }" class="flex items-center justify-center text-sm mt-4 text-indigo-700">
+      <base-icon
+        name="AltArrowLeftIcon"
+        class="w-3.5 duration-[400ms]
+        inline "  /> Back to Sign In
+    </router-link>
   </div>
 </template>
-
-<style>
-
-</style>

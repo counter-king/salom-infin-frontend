@@ -82,12 +82,6 @@ const logIn = async () => {
         <p>
           <form   @submit.prevent="logIn">
             <div class="w-full mb-3">
-              <!-- <InputText class="w-full" id="login"
-                  v-model="v.username.$model"
-                  placeholder="Введите логин"
-                  :class="{ 'p-invalid':  v.username.$error}"
-                  :error="v.username.$errors" /> -->
-
                 <base-col col-class="w-1/1">
                   <base-input
                     v-model="v.username.$model"
