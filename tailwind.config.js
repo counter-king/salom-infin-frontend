@@ -70,7 +70,7 @@ export default {
       },
       boxShadow: {
         'button': '0 1px 1px 0 rgba(95, 110, 169, 0.03), 0 2px 4px 0 rgba(47, 61, 87, 0.03)',
-        'menu': '0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 2px 60px 0 rgba(0, 0, 0, 0.1)'
+        'menu': '0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 2px 60px 0 rgba(0, 0, 0, 0.1)',
       }
     },
   },

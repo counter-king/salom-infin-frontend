@@ -2,7 +2,7 @@
 // Core
 import { ref, onMounted } from "vue"
 // Components
-import TheToolbar from "@/components/TheToolbar.vue"
+import TheToolbar from "@/components/Toolbar/TheToolbar.vue"
 import TheSidebar from "@/components/TheSidebar.vue"
 
 import { useCommonStore } from "@/stores/common"

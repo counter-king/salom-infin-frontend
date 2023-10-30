@@ -34,9 +34,10 @@
   "document-type": "Тип документа",
   "enter-document-type": "Введите тип документа",
   "priority": "Приоритет",
+  "priority-document": "Приоритет документа",
   "enter-priority": "Введите приоритет",
-  "language": "Язык",
-  "enter-language": "Введите язык",
+  "language-document": "Язык документа",
+  "enter-language-document": "Введите язык документа",
   "code": "Код",
   "enter-code": "Введите код",
   "reg-number": "Рег. номер",
@@ -52,6 +53,7 @@
   "reviewers": "На рассмотрение",
   "enter-reviewers": "Введите на рассмотрение",
   "content": "Содержание",
+  "content-sheet": "Содержание письма",
   "enter-content": "Введите содержание",
   "cancel": "Отменить",
   "create-document": "Создать документ",
@@ -129,5 +131,7 @@
   "url-permission": "Ссылка разрешение",
   "method-permission": "Метод разрешение",
   "parent-permission": "Родитель разрешение",
-  "choose-one": "Выберите один из списка"
+  "choose-one": "Выберите один из списка",
+  "clear": "Очистить",
+  "number-sheets": "Количество листов"
 }
