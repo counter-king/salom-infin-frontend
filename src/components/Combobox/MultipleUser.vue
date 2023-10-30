@@ -1,10 +1,14 @@
 <script setup>
-// State
-import { useUsersStore } from "@/stores/users.store"
+// Core
+import { useModel } from 'vue'
 // Composable
-const userStore = useUsersStore()
+const modelValue = useModel(props, 'modelValue')
 // Macros
 const props = defineProps({
+  modelValue: {
+    type: Array,
+    default: () => []
+  },
   border: {
     type: Boolean
   },
@@ -45,6 +49,7 @@ const props = defineProps({
     <base-label :label="props.label" />
 
     <base-multi-select
+      v-model="modelValue"
       v-bind="props"
       api-url="users"
       :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
@@ -73,7 +78,7 @@ const props = defineProps({
         </div>
       </template>
 
-      <template #removetokenicon="{ click }">
+      <template #removetokenicon="{ item }">
         <base-icon name="XIcon" width="16" height="16" class="ml-[6px] hover:text-critic-500" />
       </template>
     </base-multi-select>

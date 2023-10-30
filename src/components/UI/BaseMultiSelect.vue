@@ -1,13 +1,18 @@
 <script setup>
 // Core
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, useModel } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MultiSelect from 'primevue/multiselect'
 import axiosConfig from "@/services/axios.config"
 // Composable
+const modelValue = useModel(props, 'modelValue')
 const { t } = useI18n()
 // Macros
 const props = defineProps({
+  modelValue: {
+    type: Array,
+    default: () => []
+  },
   apiUrl: {
     type: String,
     default: null
@@ -55,7 +60,6 @@ const props = defineProps({
 })
 // Reactive
 const list = ref([])
-const selectedCities = ref(null)
 const options = computed(() => props.options.length
   ? props.options
   : list.value
@@ -81,6 +85,10 @@ const loadList = async (params) => {
   let { data } = await axiosConfig.get(`${props.apiUrl}/`, params)
   list.value = data.results
 }
+const removeItem = (event, value) => {
+  event.stopImmediatePropagation()
+  modelValue.value = modelValue.value.filter(item => item.id !== value.id)
+}
 // Hooks
 onMounted(() => {
   // Если не переданы props.options
@@ -92,7 +100,7 @@ onMounted(() => {
 
 <template>
   <MultiSelect
-    v-model="selectedCities"
+    v-model="modelValue"
     :options="options"
     :optionLabel="props.optionLabel"
     :placeholder="t(props.placeholder)"
@@ -119,7 +127,7 @@ onMounted(() => {
         ]
       },
       dropdownIcon: {
-        class: ['w-3 h-3']
+        class: ['w-4 h-4']
       },
       panel: {
         class: ['translate-y-[8px] shadow-menu rounded-2xl overflow-hidden']
@@ -169,12 +177,16 @@ onMounted(() => {
       <slot name="option" :value="option" />
     </template>
 
-    <template #removetokenicon="{ onClick }">
-      <slot name="removetokenicon" :click="onClick" />
+    <template #removetokenicon="{ item }">
+      <div @click="(event) => removeItem(event, item)">
+        <slot name="removetokenicon" :item="item" />
+      </div>
     </template>
   </MultiSelect>
 </template>
 
-<style scoped>
-
+<style>
+.p-multiselect-panel .p-multiselect-items .p-multiselect-item.p-highlight {
+  background: #EEF2FF !important;
+}
 </style>
