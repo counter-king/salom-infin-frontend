@@ -77,7 +77,7 @@ const toggle = (event) => {
               <h1 class="text-sm font-semibold">{{ item.label }}</h1>
               <span class="text-xs font-medium text-greyscale-500">{{ item.subTitle }}</span>
             </div>
-            <div class="w-8 h-8 flex items-center justify-center  rounded-full bg-gray-100  group-hover:bg-primary-500 ">
+            <div class="base-menu-logout-icons w-8 h-8 flex items-center border-b-2 justify-center  rounded-full  group-hover:bg-primary-500 group-hover:border-b-0">
               <base-icon  width="16"  height="16" :name="item.icon" class="text-gray-2 transition-all duration-[400ms] group-hover:text-white" />
             </div>
           </div>
@@ -85,4 +85,10 @@ const toggle = (event) => {
       </base-menu>
     </div>
 </template>
-
+<style>
+.base-menu-logout-icons {
+  background-color: var(--primary-50);
+  color: var(--primary-500);
+  border-color: var(--greyscale-200);
+}
+</style>
