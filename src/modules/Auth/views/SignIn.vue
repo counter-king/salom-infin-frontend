@@ -1,11 +1,20 @@
 <script setup>
+<<<<<<< HEAD
 import { ref, computed } from 'vue'
+=======
+import { ref, reactive } from 'vue'
+>>>>>>> 90db9076ef1d652521eb7e863c74f5c8d593e8c6
 import { useRouter } from "vue-router"
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
-import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
+<<<<<<< HEAD
 import { useVuelidate } from '@vuelidate/core'
+=======
+import Toast from 'primevue/toast';
+import { useToast } from 'primevue/usetoast';
+import useVuelidate from '@vuelidate/core'
+>>>>>>> 90db9076ef1d652521eb7e863c74f5c8d593e8c6
 import { helpers, minLength, required } from '@vuelidate/validators'
 // Store
 import { useAuthStore } from "../stores/index"
@@ -13,9 +22,12 @@ import { useAuthStore } from "../stores/index"
 import BaseButton from "@/components/UI/BaseButton.vue"
 const authStore = useAuthStore()
 const router = useRouter()
-
 const loading = ref(false)
 const selectedCity = ref();
+<<<<<<< HEAD
+=======
+const toast = useToast();
+>>>>>>> 90db9076ef1d652521eb7e863c74f5c8d593e8c6
 const cities = ref([
   {
     name: "Everybody's Got Something to Hide Except Me and My Monkey",
@@ -26,6 +38,7 @@ const cities = ref([
     value: 'song1'
   },
 ]);
+<<<<<<< HEAD
 
 
 const username = ref('')
@@ -63,6 +76,38 @@ const logIn = async () => {
     } catch (error) {
       // message.error(error.message)
     }
+=======
+const formModel = reactive({
+  username: null,
+  password: null
+})
+const rules = {
+  username: {
+    required: helpers.withMessage(`Необходим логин`, required)
+  },
+  password: {
+    required: helpers.withMessage(`Необходим пароль`, required),
+    minLength: helpers.withMessage(`Минимальная длина: 6 символа`, minLength(6))
+  },
+}
+// Methods
+const v = useVuelidate(rules, formModel)
+const logIn = async () => {
+  const valid = await v.value.$validate()
+  if (!valid) {
+    return
+  }
+
+  try {
+    loading.value = true
+    await authStore.actionUserLogin(formModel)
+    await authStore.actionUserProfile()
+    await router.push({
+      name: "DashboardIndex"
+    })
+  } catch (error) {
+      toast.add({ severity: 'error', summary: 'Есть ошибка', detail: "Неверный логин или пароль. Попробуйте еще раз.", life: 3000 });
+>>>>>>> 90db9076ef1d652521eb7e863c74f5c8d593e8c6
   }
 
   loading.value = false
@@ -71,8 +116,8 @@ const logIn = async () => {
 </script>
 <template>
   <div class="sign-in-view">
-    <h1 class="text-2xl decoration-zinc-950  font-bold mb-1 text-center">Sign In</h1>
-    <p class="font-light text-sm text-color-3 text-center mb-7">Welcome back, you’ve been missed!</p>
+    <h1 class="text-2xl decoration-zinc-950  font-bold mb-1 text-center">Войти</h1>
+    <p class="font-light text-sm text-color-3 text-center mb-7">С возвращением, вас скучали!</p>
 
     <TabView>
       <TabPanel>
@@ -82,6 +127,7 @@ const logIn = async () => {
             Логин
           </span>
         </template>
+<<<<<<< HEAD
         <p>
         <form   @submit.prevent="logIn">
           <div class="w-full mb-3">
@@ -123,6 +169,55 @@ const logIn = async () => {
             icon-left="LockKeyholeUnlockedIcon" :loading="loading"></base-button>
         </form>
         </p>
+=======
+
+        <form   @submit.prevent="logIn">
+          <base-col col-class="w-1/1">
+            <base-input
+              v-model="v.username.$model"
+              label="Логин"
+              :errorClass="v.username.$error"
+              placeholder="Введите логин"
+            />
+            <small
+              class="p-error"
+              v-for="element of v.username.$errors"
+              :key="element.$uid">
+              <div class="form-error__message">{{element.$message}}</div>
+            </small>
+          </base-col>
+
+          <base-col col-class="w-1/1">
+            <base-password
+              v-model="v.password.$model"
+              label="Пароль"
+              :errorClass="v.password.$error"
+              placeholder="Введите пароль"
+            />
+            <small
+              class="p-error"
+              v-for="element of v.password.$errors"
+              :key="element.$uid">
+              <div class="form-error__message">{{element.$message}}</div>
+            </small>
+          </base-col>
+
+          <RouterLink :to="{ name: 'ForgetPassword' }" class="text-indigo-700 text-sm mb-3 mt-2 float-right">
+            Забыли пароль
+          </RouterLink>
+
+          <base-button
+            class="w-full"
+            label=" Войти в систему"
+            size="large"
+            shadow
+            type="submit"
+            rounded
+            icon-left="LockKeyholeUnlockedIcon" :loading="loading">
+          </base-button>
+        </form>
+        <Toast />
+>>>>>>> 90db9076ef1d652521eb7e863c74f5c8d593e8c6
       </TabPanel>
 
       <TabPanel>
@@ -148,12 +243,14 @@ const logIn = async () => {
     </div>
   </div>
 </template>
-
 <style>
 .sign-in-view .p-tabview-panels {
   padding: 20px 0 0;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 90db9076ef1d652521eb7e863c74f5c8d593e8c6
 .sign-in-view .p-tabview-header {
   width: 50%;
 }

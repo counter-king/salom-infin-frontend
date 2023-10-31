@@ -1,13 +1,15 @@
 <script setup>
 // Core
-import { ref } from "vue"
-import { useRoute } from "vue-router"
-import Toolbar from "primevue/toolbar"
+import { ref } from 'vue'
+import Toolbar from 'primevue/toolbar'
 // Store
-import { useNavigation } from "@/stores/navigation.store"
+import { useNavigation } from '@/stores/navigation.store'
+// Components
+import CreateActionDropdown from './CreateActionDropdown.vue'
+import UserDropdown from './UserDropdown.vue'
 // Composable
-const route = useRoute()
 const navigationStore = useNavigation()
+
 // Reactive
 const menus = ref([
   // Дашбоард
@@ -195,11 +197,7 @@ const openSidebar = (menu) => {
 
       <template #end>
         <div class="flex items-center gap-4">
-          <base-button
-            label="create"
-            icon-right="AddCircleIcon"
-            rounded
-          />
+          <create-action-dropdown />
 
           <div class="bg-greyscale-800 w-[1px] h-[28px]"></div>
 
@@ -231,18 +229,7 @@ const openSidebar = (menu) => {
 
           <div class="bg-greyscale-800 w-[1px] h-[28px]"></div>
 
-          <div class="flex items-center">
-            <base-avatar
-              image="/images/avatars/1.jpg"
-              shape="circle"
-              avatar-classes="w-10 h-10"
-            />
-
-            <div class="ml-3">
-              <h1 class="text-white text-sm font-semibold mb-1">Odinayev M.</h1>
-              <span class="block text-greyscale-500 text-xs">Админ</span>
-            </div>
-          </div>
+          <UserDropdown></UserDropdown>
         </div>
       </template>
     </toolbar>

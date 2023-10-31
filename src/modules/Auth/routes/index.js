@@ -2,7 +2,7 @@ const Auth = [
   {
     path: "login",
     name: "Login",
-    component: () => import("../views/Signin.vue")
+    component: () => import("../views/SignIn.vue")
   },
   // Confirm number
   {

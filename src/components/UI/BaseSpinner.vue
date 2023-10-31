@@ -6,7 +6,7 @@ import ProgressSpinner from "primevue/progressspinner"
 const props = defineProps({
   content: {
     type: Boolean,
-    default: false
+    default: true
   },
   screen: {
     type: Boolean,

@@ -1,12 +1,38 @@
 <script setup>
 // Core
-import { onMounted } from "vue"
+import { ref, onMounted } from "vue"
 // Components
-import TheToolbar from "@/components/TheToolbar.vue"
+import TheToolbar from "@/components/Toolbar/TheToolbar.vue"
 import TheSidebar from "@/components/TheSidebar.vue"
+
+import { useCommonStore } from "@/stores/common"
+import { useAuthStore } from "../modules/Auth/stores/index"
+import { getStorageItem } from "@/utils/storage"
+import { ACCESS } from "@/constants/storage"
+
 // Store
 import { useNavigation } from "@/stores/navigation.store"
 // Composable
+
+const commonStore = useCommonStore()
+const authStore = useAuthStore()
+// TODO: false
+const appVisible = ref(false)
+
+onMounted(async () => {
+  // TODO: uncomment
+  await getCurrentUser()
+  await commonStore.init()
+  appVisible.value = true
+})
+// Methods
+const getCurrentUser = async () => {
+  // Предотвратить повторной запрос для получения профиля
+  if(!authStore.getCurrentUser) {
+    getStorageItem(ACCESS) && await authStore.actionUserProfile()
+  }
+}
+
 const navigationStore = useNavigation()
 // Hooks
 onMounted(() => {
@@ -15,7 +41,7 @@ onMounted(() => {
 </script>
 
 <template>
-	<div class="main-layout-view h-screen">
+	<div  v-if="appVisible" class="main-layout-view h-screen">
 		<the-toolbar />
 
 		<div class="main-layout-content flex">
