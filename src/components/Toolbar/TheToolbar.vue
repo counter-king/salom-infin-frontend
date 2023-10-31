@@ -1,17 +1,14 @@
 <script setup>
 // Core
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import Toolbar from 'primevue/toolbar'
 // Store
 import { useNavigation } from '@/stores/navigation.store'
-import { useAuthStore } from "../../modules/Auth/stores/index"
 // Components
 import CreateActionDropdown from './CreateActionDropdown.vue'
+import UserDropdown from './UserDropdown.vue'
 // Composable
 const navigationStore = useNavigation()
-const authStore = useAuthStore()
-
-const userProfile = computed(() => authStore.getCurrentUser)
 
 // Reactive
 const menus = ref([
@@ -232,18 +229,7 @@ const openSidebar = (menu) => {
 
           <div class="bg-greyscale-800 w-[1px] h-[28px]"></div>
 
-          <div class="flex items-center">
-            <base-avatar
-              image="/images/avatars/1.jpg"
-              shape="circle"
-              avatar-classes="w-10 h-10"
-            />
-
-            <div class="ml-3">
-              <h1 class="text-white text-sm font-semibold mb-1">{{ userProfile.last_name }} {{ userProfile.first_name[0] }}.</h1>
-              <span class="block text-greyscale-500 text-xs">{{ userProfile.username }}</span>
-            </div>
-          </div>
+          <UserDropdown></UserDropdown>
         </div>
       </template>
     </toolbar>
