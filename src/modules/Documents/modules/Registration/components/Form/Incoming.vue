@@ -69,7 +69,7 @@ const cities = ref([
       </base-col>
 
       <base-col col-class="w-full">
-        <base-input label="content" placeholder="enter-content" />
+        <base-textarea label="content" />
       </base-col>
     </base-row>
   </div>
