@@ -50,7 +50,7 @@ const toggle = (event) => {
 }
 </script>
 <template>
-    <div class="flex items-center" @click="toggle">
+    <div class="flex items-center cursor-pointer" @click="toggle">
       <base-avatar
         image="/images/avatars/1.jpg"
         shape="circle"
