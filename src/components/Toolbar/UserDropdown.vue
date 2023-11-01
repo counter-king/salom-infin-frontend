@@ -4,6 +4,7 @@ import { ref,unref, computed } from 'vue'
 import { useRouter } from "vue-router"
 // Store
 import { useAuthStore } from "../../modules/Auth/stores/index"
+import { resetAllPiniaStores } from '@/stores/plugins/resetStores'
 // Utils
 import { removeStorageItem } from "@/utils/storage"
 import { ACCESS, EXPIRES, REFRESH, CURRENT_ROUTE } from "@/constants/storage"
@@ -12,12 +13,13 @@ const authStore = useAuthStore()
 const router = useRouter()
 const userProfile = computed(() => authStore.getCurrentUser)
 
-const handleMenu = () => {
+const handleMenu = async () => {
   removeStorageItem(ACCESS)
   removeStorageItem(REFRESH)
   removeStorageItem(EXPIRES)
   removeStorageItem(CURRENT_ROUTE)
-  router.push({ name: "Login" })
+  await router.push({ name: "Login" })
+  resetAllPiniaStores()
 }
 const menuRef = ref(null)
 const items = ref([

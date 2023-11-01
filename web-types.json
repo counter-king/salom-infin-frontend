@@ -1,0 +1,781 @@
+{
+  "framework": "vue",
+  "name": "new-side-project",
+  "version": "0.0.0",
+  "contributions": {
+    "html": {
+      "description-markup": "markdown",
+      "types-syntax": "typescript",
+      "tags": [
+        {
+          "name": "BaseAvatar",
+          "description": "",
+          "attributes": [
+            {
+              "name": "image",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "size",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "'normal'"
+            },
+            {
+              "name": "shape",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "'square'"
+            },
+            {
+              "name": "avatarClasses",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            }
+          ],
+          "source": {
+            "module": "./src/components/UI/BaseAvatar.vue",
+            "symbol": "default"
+          }
+        },
+        {
+          "name": "BaseButton",
+          "description": "",
+          "attributes": [
+            {
+              "name": "label",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "color",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "borderColor",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "iconLeft",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "iconRight",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "iconColor",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "onlyIcon",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "shadow",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "rounded",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "outlined",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "size",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "'normal'"
+            },
+            {
+              "name": "iconWidth",
+              "value": {
+                "kind": "expression",
+                "type": "number|string"
+              },
+              "default": "20"
+            },
+            {
+              "name": "iconHeight",
+              "value": {
+                "kind": "expression",
+                "type": "number|string"
+              },
+              "default": "20"
+            }
+          ],
+          "source": {
+            "module": "./src/components/UI/BaseButton.vue",
+            "symbol": "default"
+          }
+        },
+        {
+          "name": "BaseCalendar",
+          "description": "",
+          "attributes": [
+            {
+              "name": "modelValue",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "null"
+            },
+            {
+              "name": "label",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "null"
+            },
+            {
+              "name": "placeholder",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "\"enter-reg-number\""
+            },
+            {
+              "name": "borderColor",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "size",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "'normal'"
+            }
+          ],
+          "source": {
+            "module": "./src/components/UI/BaseCalendar.vue",
+            "symbol": "default"
+          }
+        },
+        {
+          "name": "BaseCol",
+          "description": "",
+          "attributes": [
+            {
+              "name": "colClass",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            }
+          ],
+          "slots": [
+            {
+              "name": "default"
+            }
+          ],
+          "source": {
+            "module": "./src/components/UI/BaseCol.vue",
+            "symbol": "default"
+          }
+        },
+        {
+          "name": "BaseDataTable",
+          "description": "",
+          "attributes": [
+            {
+              "name": "value",
+              "value": {
+                "kind": "expression",
+                "type": "array"
+              },
+              "default": "[]"
+            },
+            {
+              "name": "headers",
+              "value": {
+                "kind": "expression",
+                "type": "array"
+              },
+              "default": "[]"
+            }
+          ],
+          "source": {
+            "module": "./src/components/UI/BaseDataTable.vue",
+            "symbol": "default"
+          }
+        },
+        {
+          "name": "BaseDialog",
+          "description": "",
+          "attributes": [
+            {
+              "name": "modelValue",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "maxWidth",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "'max-w-[1130px]'"
+            }
+          ],
+          "slots": [
+            {
+              "name": "header"
+            },
+            {
+              "name": "footer"
+            },
+            {
+              "name": "content"
+            }
+          ],
+          "source": {
+            "module": "./src/components/UI/BaseDialog.vue",
+            "symbol": "default"
+          }
+        },
+        {
+          "name": "BaseDropdown",
+          "description": "",
+          "attributes": [
+            {
+              "name": "modelValue",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              },
+              "default": "() => {}"
+            },
+            {
+              "name": "options",
+              "value": {
+                "kind": "expression",
+                "type": "array"
+              },
+              "default": "[]"
+            },
+            {
+              "name": "optionLabel",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "'name'"
+            },
+            {
+              "name": "label",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "null"
+            },
+            {
+              "name": "placeholder",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "'choose-one'"
+            },
+            {
+              "name": "borderColor",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "size",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "'normal'"
+            }
+          ],
+          "source": {
+            "module": "./src/components/UI/BaseDropdown.vue",
+            "symbol": "default"
+          }
+        },
+        {
+          "name": "BaseIcon",
+          "description": "",
+          "attributes": [
+            {
+              "name": "icon",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "name",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "width",
+              "value": {
+                "kind": "expression",
+                "type": "number|string"
+              },
+              "default": "20"
+            },
+            {
+              "name": "height",
+              "value": {
+                "kind": "expression",
+                "type": "number|string"
+              },
+              "default": "20"
+            }
+          ],
+          "source": {
+            "module": "./src/components/UI/BaseIcon.vue",
+            "symbol": "default"
+          }
+        },
+        {
+          "name": "BaseInput",
+          "description": "",
+          "attributes": [
+            {
+              "name": "modelValue",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "label",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "null"
+            },
+            {
+              "name": "placeholder",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "\"enter-reg-number\""
+            },
+            {
+              "name": "errorClass",
+              "value": {
+                "kind": "expression",
+                "type": "string|boolean"
+              }
+            }
+          ],
+          "source": {
+            "module": "./src/components/UI/BaseInput.vue",
+            "symbol": "default"
+          }
+        },
+        {
+          "name": "BaseLabel",
+          "description": "",
+          "attributes": [
+            {
+              "name": "label",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "null"
+            }
+          ],
+          "source": {
+            "module": "./src/components/UI/BaseLabel.vue",
+            "symbol": "default"
+          }
+        },
+        {
+          "name": "BaseMenu",
+          "description": "",
+          "attributes": [
+            {
+              "name": "items",
+              "value": {
+                "kind": "expression",
+                "type": "array"
+              },
+              "default": "[]"
+            },
+            {
+              "name": "width",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "'w-[145px]'"
+            },
+            {
+              "name": "actionSizeClass",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "'min-h-[32px]'"
+            },
+            {
+              "name": "labelClass",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "'text-primary-900'"
+            }
+          ],
+          "source": {
+            "module": "./src/components/UI/BaseMenu.vue",
+            "symbol": "default"
+          }
+        },
+        {
+          "name": "BaseMultiSelect",
+          "description": "",
+          "attributes": [
+            {
+              "name": "modelValue",
+              "value": {
+                "kind": "expression",
+                "type": "array"
+              },
+              "default": "[]"
+            },
+            {
+              "name": "apiUrl",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "null"
+            },
+            {
+              "name": "apiParams",
+              "value": {
+                "kind": "expression",
+                "type": "object"
+              },
+              "default": "() => {}"
+            },
+            {
+              "name": "options",
+              "value": {
+                "kind": "expression",
+                "type": "array"
+              },
+              "default": "[]"
+            },
+            {
+              "name": "optionLabel",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "'name'"
+            },
+            {
+              "name": "border",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "placeholder",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "'create'"
+            },
+            {
+              "name": "borderColor",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "tokenClass",
+              "value": {
+                "kind": "expression",
+                "type": "array"
+              },
+              "default": "[]"
+            },
+            {
+              "name": "display",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "'comma'"
+            },
+            {
+              "name": "size",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "'normal'"
+            }
+          ],
+          "slots": [
+            {
+              "name": "chip"
+            },
+            {
+              "name": "option"
+            },
+            {
+              "name": "removetokenicon"
+            }
+          ],
+          "source": {
+            "module": "./src/components/UI/BaseMultiSelect.vue",
+            "symbol": "default"
+          }
+        },
+        {
+          "name": "BaseRow",
+          "description": "",
+          "slots": [
+            {
+              "name": "default"
+            }
+          ],
+          "source": {
+            "module": "./src/components/UI/BaseRow.vue"
+          }
+        },
+        {
+          "name": "BaseSpinner",
+          "description": "",
+          "attributes": [
+            {
+              "name": "content",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              },
+              "default": "true"
+            },
+            {
+              "name": "screen",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              },
+              "default": "false"
+            }
+          ],
+          "source": {
+            "module": "./src/components/UI/BaseSpinner.vue",
+            "symbol": "default"
+          }
+        },
+        {
+          "name": "BaseTextarea",
+          "description": "",
+          "attributes": [
+            {
+              "name": "modelValue",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "label",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "null"
+            },
+            {
+              "name": "placeholder",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "\"enter-content\""
+            },
+            {
+              "name": "errorClass",
+              "value": {
+                "kind": "expression",
+                "type": "string|boolean"
+              }
+            }
+          ],
+          "source": {
+            "module": "./src/components/UI/BaseTextarea.vue",
+            "symbol": "default"
+          }
+        },
+        {
+          "name": "CreateActionDropdown",
+          "description": "",
+          "source": {
+            "module": "./src/components/Toolbar/CreateActionDropdown.vue",
+            "symbol": "default"
+          }
+        },
+        {
+          "name": "MultipleUser",
+          "description": "",
+          "attributes": [
+            {
+              "name": "modelValue",
+              "value": {
+                "kind": "expression",
+                "type": "array"
+              },
+              "default": "[]"
+            },
+            {
+              "name": "border",
+              "value": {
+                "kind": "expression",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "optionLabel",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "'name'"
+            },
+            {
+              "name": "label",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "null"
+            },
+            {
+              "name": "placeholder",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "'create'"
+            },
+            {
+              "name": "borderColor",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              }
+            },
+            {
+              "name": "display",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "'comma'"
+            },
+            {
+              "name": "size",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "default": "'normal'"
+            }
+          ],
+          "source": {
+            "module": "./src/components/Combobox/MultipleUser.vue",
+            "symbol": "default"
+          }
+        },
+        {
+          "name": "TheSidebar",
+          "description": "",
+          "slots": [
+            {
+              "name": "content"
+            }
+          ],
+          "source": {
+            "module": "./src/components/TheSidebar.vue",
+            "symbol": "default"
+          }
+        },
+        {
+          "name": "TheToolbar",
+          "description": "",
+          "source": {
+            "module": "./src/components/Toolbar/TheToolbar.vue",
+            "symbol": "default"
+          }
+        }
+      ]
+    }
+  }
+}
