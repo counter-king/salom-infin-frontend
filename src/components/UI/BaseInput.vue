@@ -6,7 +6,7 @@ import InputText from 'primevue/inputtext'
 // Macros
 const props = defineProps({
   modelValue: {
-    type: [String],
+    type: [Number, String],
   },
   label: {
     type: String,

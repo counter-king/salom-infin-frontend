@@ -29,6 +29,9 @@ const props = defineProps({
     type: String,
     default: 'name'
   },
+  optionValue: {
+    type: [Number, String]
+  },
   border: {
     type: Boolean
   },
@@ -102,7 +105,8 @@ onMounted(() => {
   <MultiSelect
     v-model="modelValue"
     :options="options"
-    :optionLabel="props.optionLabel"
+    :option-label="props.optionLabel"
+    :option-value="props.optionValue"
     :placeholder="t(props.placeholder)"
     :display="props.display"
     filter
