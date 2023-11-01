@@ -74,11 +74,11 @@ const toggle = (event) => {
         <template #item="{ item }">
           <div class="flex items-center justify-between px-3 py-3 rounded-xl bg-white cursor-pointer  ">
             <div>
-              <h1 class="text-sm font-semibold">{{ item.label }}</h1>
+              <h1 class="text-sm font-semibold text-primary-900">{{ item.label }}</h1>
               <span class="text-xs font-medium text-greyscale-500">{{ item.subTitle }}</span>
             </div>
             <div class="base-menu-logout-icons w-8 h-8 flex items-center border-b-2 justify-center  rounded-full  group-hover:bg-primary-500 group-hover:border-b-0">
-              <base-icon  width="16"  height="16" :name="item.icon" class="text-gray-2 transition-all duration-[400ms] group-hover:text-white" />
+              <base-icon  width="16"  height="16" :name="item.icon" class="text-primary-900 transition-all duration-[400ms] group-hover:text-white" />
             </div>
           </div>
         </template>
