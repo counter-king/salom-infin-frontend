@@ -41,7 +41,7 @@ onMounted(() => {
 </script>
 
 <template>
-	<div  v-if="appVisible" class="main-layout-view h-screen">
+	<div v-if="appVisible" class="main-layout-view h-screen">
 		<the-toolbar />
 
 		<div class="main-layout-content flex">

@@ -14,17 +14,14 @@ import 'primeicons/primeicons.css'
 import router from './router'
 // Components
 import App from './App.vue'
-import { registerComponents } from "./components/UI/register"
 
 const app = createApp(App)
-registerComponents(app).then(() => {
-  app.use(createPinia())
-  app.use(router)
-  app.use(ToastService)
-  app.use(PrimeVue)
-  app.use(setupI18n())
+app.use(createPinia())
+app.use(router)
+app.use(ToastService)
+app.use(PrimeVue)
+app.use(setupI18n())
 
-  app.directive('badge', BadgeDirective)
-  app.directive('tooltip', Tooltip)
-  app.mount('#app')
-})
+app.directive('badge', BadgeDirective)
+app.directive('tooltip', Tooltip)
+app.mount('#app')

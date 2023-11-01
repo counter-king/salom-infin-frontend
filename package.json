@@ -8,8 +8,10 @@
     "preview": "vite preview",
     "test:unit": "vitest",
     "test:e2e": "start-server-and-test preview http://localhost:4173 'cypress run --e2e'",
-    "test:e2e:dev": "start-server-and-test 'vite dev --port 4173' http://localhost:4173 'cypress open --e2e'"
+    "test:e2e:dev": "start-server-and-test 'vite dev --port 4173' http://localhost:4173 'cypress open --e2e'",
+    "update-web-types": "vue-docgen-web-types"
   },
+  "web-types": "./web-types.json",
   "dependencies": {
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
@@ -36,7 +38,9 @@
     "sass": "^1.69.4",
     "start-server-and-test": "^2.0.0",
     "tailwindcss": "^3.3.3",
+    "unplugin-vue-components": "^0.25.2",
     "vite": "^4.4.9",
-    "vitest": "^0.34.4"
+    "vitest": "^0.34.4",
+    "vue-docgen-web-types": "^0.1.8"
   }
 }
