@@ -27,8 +27,14 @@ const props = defineProps({
     type: String,
     default: 'text-primary-900'
   },
-  contentBgColor: {
+  contentClass: {
     type: String,
+  },
+  hasAngle: {
+    type: Boolean
+  },
+  hasOverlay: {
+    type: Boolean
   }
 })
 defineExpose({
@@ -37,10 +43,14 @@ defineExpose({
 // Computed
 const rootClasses = computed(() => {
   return [
-    'translate-y-1 rounded-xl overflow-hidden shadow-menu px-1 pb-0',
+    'translate-y-1 rounded-xl shadow-menu px-1 pb-0',
     // Width
     props.width,
     props.menuClass,
+    // hasAngle
+    {
+      'after:content-[""]': props.hasAngle
+    }
   ]
 })
 </script>
@@ -55,10 +65,10 @@ const rootClasses = computed(() => {
         class: rootClasses
       },
       menuitem: {
-        class: 'group mb-1 '
+        class: 'group mb-1'
       },
       content: {
-        class: ['rounded-lg', props.contentBgColor]
+        class: ['rounded-lg', props.contentClass]
       },
       action: {
         class: ['py-[6px] pl-2 pl-3', props.actionSizeClass]
@@ -68,6 +78,12 @@ const rootClasses = computed(() => {
       }
     }"
   >
+    <template #start>
+      <Teleport v-if="props.hasOverlay" to="body">
+        <div class="modal-layer fixed bottom-0 w-full transition-all duration-[400ms]"></div>
+      </Teleport>
+    </template>
+
     <template #item="{ item }" v-if="slots.item">
       <slot name="item" :item="item" />
     </template>
@@ -83,3 +99,22 @@ const rootClasses = computed(() => {
     </template>
   </Menu>
 </template>
+
+<style>
+.modal-layer {
+  height: calc(100vh - 80px);
+  background: rgba(0, 8, 28, 0.45);
+}
+
+.p-menu::after {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 12px 10px 12px;
+  border-color: transparent transparent #F2F3F8 transparent;
+  transform: rotate(0deg);
+  position: absolute;
+  top: -8px;
+  right: 50px;
+}
+</style>
