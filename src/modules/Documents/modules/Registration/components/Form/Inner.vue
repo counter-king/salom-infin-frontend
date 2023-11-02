@@ -1,43 +1,78 @@
 <script setup>
 // Core
 import { watch } from 'vue'
+import { useVuelidate } from '@vuelidate/core'
+import { helpers, required } from '@vuelidate/validators'
 // Stores
 import { useCommonStore } from '@/stores/common'
-import { useCorrespondentStore } from '@/stores/correspondent'
 import { useRegInner } from '../../stores/inner.store'
 // Components
 import MultipleUser from '@/components/Combobox/MultipleUser.vue'
+// Non-reactive
+const rules = {
+  register_number: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  outgoing_date: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  document_type: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  deadline: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  __department: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  author: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  __signers: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  __reviewers: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  description: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  }
+}
 // Composable
 const commonStore = useCommonStore()
-const correspondentStore = useCorrespondentStore()
 const innerStore = useRegInner()
-// Watch
-// watch(
-//   (value) => {
-//     innerStore.detailModel.reviewers = value.map(item => ({ user: item.id }))
-//   }
-// )
+const $v = useVuelidate(rules, innerStore.detailModel)
+// Composable
+defineExpose({ $v })
+
 </script>
 
 <template>
+
   <div class="incoming-form-view">
     <base-row>
       <base-col col-class="w-1/2">
         <base-input
-          v-model="innerStore.detailModel.register_number"
+          required
+          v-model="$v.register_number.$model"
+          :error="$v.register_number"
           label="reg-number" />
       </base-col>
 
       <base-col col-class="w-1/2">
         <base-calendar
-          v-model="innerStore.detailModel.outgoing_date"
+          required
+          v-model="$v.outgoing_date.$model"
+          :error="$v.outgoing_date"
           label="registration-date"
           placeholder="registration-date" />
       </base-col>
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          v-model="innerStore.detailModel.document_type"
+          required
+          v-model="$v.document_type.$model"
+          :error="$v.document_type"
           :options="commonStore.documentTypesList"
           option-value="id"
           label="document_type"
@@ -46,14 +81,18 @@ const innerStore = useRegInner()
 
       <base-col col-class="w-1/2">
         <base-calendar
-          v-model="innerStore.detailModel.deadline"
+          required
+          v-model="$v.deadline.$model"
+          :error="$v.deadline"
           label="deadline"
           placeholder="deadline" />
       </base-col>
 
-      <base-col col-class="w-1/2">
+     <base-col col-class="w-1/2">
         <base-dropdown
-          v-model="innerStore.detailModel.__department"
+          required
+          v-model="$v.__department.$model"
+          :error="$v.__department"
           :options="commonStore.departmentList"
           option-value="id"
           label="department"
@@ -62,7 +101,9 @@ const innerStore = useRegInner()
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          v-model="innerStore.detailModel.author"
+          required
+          v-model="$v.author.$model"
+          :error="$v.author"
           :options="commonStore.author"
           option-value="id"
           label="author"
@@ -71,7 +112,9 @@ const innerStore = useRegInner()
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          v-model="innerStore.detailModel.__signers"
+          required
+          v-model="$v.__signers.$model"
+          :error="$v.__signers"
           :options="commonStore.usersList"
           option-value="id"
           label="signers"
@@ -80,7 +123,9 @@ const innerStore = useRegInner()
 
       <base-col col-class="w-1/2">
         <multiple-user
-          v-model="innerStore.detailModel.__reviewers"
+          required
+          v-model="$v.__reviewers.$model"
+          :error="$v.__reviewers"
           display="chip"
           label="reviewers"
           placeholder="enter-reviewers"
@@ -89,10 +134,11 @@ const innerStore = useRegInner()
 
       <base-col col-class="w-full">
         <base-textarea
-          v-model="innerStore.detailModel.description"
+          required
+          v-model="$v.description.$model"
+          :error="$v.description"
           label="content" />
       </base-col>
-
     </base-row>
   </div>
 </template>

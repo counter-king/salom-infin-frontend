@@ -70,6 +70,13 @@ const clearDocument = () => {
       clearModel(regIncoming.detailModel, ['grif', 'journal'])
       break;
     case 'Inner':
+      clearModel(Inner.detailModel, ['grif', 'journal'])
+      break;
+    case 'IncomingBranches':
+      clearModel(IncomingBranches.detailModel, ['grif', 'journal'])
+      break;
+    case 'Statement':
+      clearModel(Statement.detailModel, ['grif', 'journal'])
       break;
     default:
   }
