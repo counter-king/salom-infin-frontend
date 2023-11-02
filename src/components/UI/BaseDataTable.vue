@@ -19,19 +19,43 @@ const props = defineProps({
 </script>
 
 <template>
-  <DataTable :value="props.value">
-    <template v-for="header in headers" :key="header.field">
+  <DataTable
+    :value="props.value"
+    scrollable
+    scrollHeight="700px"
+    :pt="{
+        table: { class: ['border-separate', 'border-spacing-y-0.5', 'mt-[-2px]'] },
+        thead: { class: ['bg-white'] }
+    }"
+  >
+    <template
+      v-for="header in headers"
+      :key="header.field">
       <Column
+        :header="t(header.header)"
         :field="header.field"
+        :pt="{
+          headerCell: { class: ['bg-inherit', 'h-[56px]'] },
+          headerContent: { class: ['text-sm', 'font-semibold', 'text-greyscale-500'] },
+          bodyCell: { class: ['text-xs', 'py-0', 'h-[64px]'] }
+        }"
       >
-        <template #header>
-          {{ t(header.header) }}
+        <template #body="{ field, data }">
+          <slot :name="field" :data="data">
+            <span class="text-sm font-medium text-greyscale-500">{{ data[field] }}</span>
+          </slot>
         </template>
       </Column>
     </template>
   </DataTable>
 </template>
 
-<style scoped>
+<style>
+th:first-child, td:first-child {
+  border-radius: 12px 0 0 12px!important;
+}
 
+th:last-child, td:last-child {
+  border-radius: 0 12px 12px 0!important;
+}
 </style>

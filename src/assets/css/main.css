@@ -29,6 +29,10 @@ body {
   font-family: var(--font-regular);
 }
 
+.border-test {
+  border: 1px solid red!important;
+}
+
 @layer tailwind-base, primevue, tailwind-utilities;
 
 @layer tailwind-base {
