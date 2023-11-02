@@ -1,20 +1,39 @@
 <script setup>
 // Core
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, useModel } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MultiSelect from 'primevue/multiselect'
-import BaseButton from "@/components/UI/BaseButton.vue";
-import BaseIcon from "@/components/UI/BaseIcon.vue";
+import axiosConfig from "@/services/axios.config"
 // Composable
+const modelValue = useModel(props, 'modelValue')
 const { t } = useI18n()
 // Macros
 const props = defineProps({
-  border: {
-    type: Boolean
+  modelValue: {
+    type: Array,
+    default: () => []
+  },
+  apiUrl: {
+    type: String,
+    default: null
+  },
+  apiParams: {
+    type: Object,
+    default: () => {}
+  },
+  options: {
+    type: Array,
+    default: () => []
   },
   optionLabel: {
     type: String,
     default: 'name'
+  },
+  optionValue: {
+    type: [Number, String]
+  },
+  border: {
+    type: Boolean
   },
   placeholder: {
     type: String,
@@ -43,14 +62,11 @@ const props = defineProps({
   },
 })
 // Reactive
-const selectedCities = ref(null)
-const cities = ref([
-  { name: 'New York', code: 'NY' },
-  { name: 'Rome', code: 'RM' },
-  { name: 'London', code: 'LDN' },
-  { name: 'Istanbul', code: 'IST' },
-  { name: 'Paris', code: 'PRS' }
-])
+const list = ref([])
+const options = computed(() => props.options.length
+  ? props.options
+  : list.value
+)
 // Computed
 const rootClasses = computed(() => {
   return [
@@ -67,13 +83,30 @@ const rootClasses = computed(() => {
     },
   ]
 })
+// Methods
+const loadList = async (params) => {
+  let { data } = await axiosConfig.get(`${props.apiUrl}/`, params)
+  list.value = data.results
+}
+const removeItem = (event, value) => {
+  event.stopImmediatePropagation()
+  modelValue.value = modelValue.value.filter(item => item.id !== value.id)
+}
+// Hooks
+onMounted(() => {
+  // Если не переданы props.options
+  if(!props.options.length) {
+    loadList(props.apiParams)
+  }
+})
 </script>
 
 <template>
   <MultiSelect
-    v-model="selectedCities"
-    :options="cities"
-    :optionLabel="props.optionLabel"
+    v-model="modelValue"
+    :options="options"
+    :option-label="props.optionLabel"
+    :option-value="props.optionValue"
     :placeholder="t(props.placeholder)"
     :display="props.display"
     filter
@@ -98,7 +131,7 @@ const rootClasses = computed(() => {
         ]
       },
       dropdownIcon: {
-        class: ['w-3 h-3']
+        class: ['w-4 h-4']
       },
       panel: {
         class: ['translate-y-[8px] shadow-menu rounded-2xl overflow-hidden']
@@ -144,12 +177,20 @@ const rootClasses = computed(() => {
       <slot name="chip" :value="value" />
     </template>
 
-    <template #removetokenicon="{ onClick }">
-      <slot name="removetokenicon" :click="onClick" />
+    <template #option="{ option }">
+      <slot name="option" :value="option" />
+    </template>
+
+    <template #removetokenicon="{ item }">
+      <div @click="(event) => removeItem(event, item)">
+        <slot name="removetokenicon" :item="item" />
+      </div>
     </template>
   </MultiSelect>
 </template>
 
-<style scoped>
-
+<style>
+.p-multiselect-panel .p-multiselect-items .p-multiselect-item.p-highlight {
+  background: #EEF2FF !important;
+}
 </style>

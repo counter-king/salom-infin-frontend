@@ -32,7 +32,8 @@ const toggle = (event) => {
 <template>
   <base-button
     label="create"
-    icon-left="AddCircleIcon"
+    icon-left="AddIcon"
+    icon-right="AltArrowDownIcon"
     rounded
     type="button"
     aria-haspopup="true"

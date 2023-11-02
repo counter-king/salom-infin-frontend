@@ -32,5 +32,4 @@ const Playground = [
     component: () => import("../views/BaseMultiSelect.vue"),
   }
 ]
-
 export default Playground

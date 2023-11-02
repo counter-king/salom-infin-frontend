@@ -133,5 +133,6 @@
   "parent-permission": "Родитель разрешение",
   "choose-one": "Выберите один из списка",
   "clear": "Очистить",
-  "number-sheets": "Количество листов"
+  "number-sheets": "Количество листов",
+  "document-created": "Документ создан"
 }
