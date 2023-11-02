@@ -16,6 +16,9 @@ const props = defineProps({
     type: String,
     default: 'name'
   },
+  optionValue: {
+    type: [Number, String]
+  },
   label: {
     type: String,
     default: null
