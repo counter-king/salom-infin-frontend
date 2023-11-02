@@ -2,17 +2,67 @@
 // Core
 import { watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { useVuelidate } from '@vuelidate/core'
+import { helpers, required } from '@vuelidate/validators'
 // Stores
 import { useCommonStore } from '@/stores/common'
 import { useCorrespondentStore } from '@/stores/correspondent'
 import { useRegIncoming } from '../../stores/incoming.store'
 // Components
 import MultipleUser from '@/components/Combobox/MultipleUser.vue'
+// Non-reactive
+const rules = {
+  register_number: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  outgoing_number: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  grif: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  language: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  number_of_papers: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  register_date: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  outgoing_date: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  correspondent: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  document_type: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  delivery_type: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  priority: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  title: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  __reviewers: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  description: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  }
+}
 // Composable
 const route = useRoute()
 const commonStore = useCommonStore()
 const correspondentStore = useCorrespondentStore()
 const incomingStore = useRegIncoming()
+const $v = useVuelidate(rules, incomingStore.detailModel)
+// Composable
+defineExpose({ $v })
 // Watch
 watch(
   () => incomingStore.detailModel.__reviewers,
@@ -27,14 +77,18 @@ watch(
     <base-row>
       <base-col col-class="w-1/2">
         <base-input
-          v-model="incomingStore.detailModel.register_number"
+          v-model="$v.register_number.$model"
+          :error="$v.register_number"
+          required
           label="reg-number"
         />
       </base-col>
 
       <base-col col-class="w-1/2">
         <base-input
-          v-model="incomingStore.detailModel.outgoing_number"
+          v-model="$v.outgoing_number.$model"
+          :error="$v.outgoing_number"
+          required
           label="out-number"
           placeholder="enter-out-number"
         />
@@ -42,15 +96,19 @@ watch(
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          v-model="incomingStore.detailModel.grif"
+          v-model="$v.grif.$model"
+          :error="$v.grif"
+          required
           label="grif"
         />
       </base-col>
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          v-model="incomingStore.detailModel.language"
+          v-model="$v.language.$model"
+          :error="$v.language"
           :options="commonStore.languagesList"
+          required
           option-value="id"
           option-label="name"
           label="language-document"
@@ -60,7 +118,9 @@ watch(
 
       <base-col col-class="w-1/2">
         <base-input
-          v-model.number="incomingStore.detailModel.number_of_papers"
+          v-model.number="$v.number_of_papers.$model"
+          :error="$v.number_of_papers"
+          required
           label="number-sheets"
           placeholder="number-sheets"
         />
@@ -68,7 +128,9 @@ watch(
 
       <base-col col-class="w-1/2">
         <base-calendar
-          v-model="incomingStore.detailModel.register_date"
+          v-model="$v.register_date.$model"
+          :error="$v.register_date"
+          required
           label="reg-date"
           placeholder="enter-reg-date"
         />
@@ -76,7 +138,9 @@ watch(
 
       <base-col col-class="w-1/2">
         <base-calendar
-          v-model="incomingStore.detailModel.outgoing_date"
+          v-model="$v.outgoing_date.$model"
+          :error="$v.outgoing_date"
+          required
           label="out-date"
           placeholder="enter-out-date"
         />
@@ -84,8 +148,10 @@ watch(
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          v-model="incomingStore.detailModel.correspondent"
+          v-model="$v.correspondent.$model"
+          :error="$v.correspondent"
           :options="correspondentStore.allList"
+          required
           option-value="id"
           label="correspondent"
           placeholder="enter-correspondent"
@@ -94,8 +160,10 @@ watch(
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          v-model="incomingStore.detailModel.document_type"
+          v-model="$v.document_type.$model"
+          :error="$v.document_type"
           :options="commonStore.documentTypesList"
+          required
           option-value="id"
           label="document-type"
           placeholder="enter-deliver-type"
@@ -104,8 +172,10 @@ watch(
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          v-model="incomingStore.detailModel.delivery_type"
+          v-model="$v.delivery_type.$model"
+          :error="$v.delivery_type"
           :options="commonStore.deliveryTypeList"
+          required
           option-value="id"
           label="deliver-type"
           placeholder="enter-document-type"
@@ -114,8 +184,10 @@ watch(
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          v-model="incomingStore.detailModel.priority"
+          v-model="$v.priority.$model"
+          :error="$v.priority"
           :options="commonStore.prioryList"
+          required
           option-value="id"
           label="priority-document"
           placeholder="enter-priority"
@@ -124,7 +196,9 @@ watch(
 
       <base-col col-class="w-1/2">
         <base-input
-          v-model="incomingStore.detailModel.title"
+          v-model="$v.title.$model"
+          :error="$v.title"
+          required
           label="naming"
           placeholder="naming"
         />
@@ -132,7 +206,9 @@ watch(
 
       <base-col col-class="w-1/2">
         <multiple-user
-          v-model="incomingStore.detailModel.__reviewers"
+          v-model="$v.__reviewers.$model"
+          :error="$v.__reviewers"
+          required
           display="chip"
           label="reviewers"
           placeholder="enter-reviewers"
@@ -141,10 +217,14 @@ watch(
 
       <base-col col-class="w-full">
         <base-textarea
-          v-model="incomingStore.detailModel.description"
+          v-model="$v.description.$model"
+          :error="$v.description"
+          required
           label="content"
         />
       </base-col>
     </base-row>
+
+    <pre>{{ incomingStore.detailModel }}</pre>
   </div>
 </template>

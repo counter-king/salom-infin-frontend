@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref, useModel, shallowRef, watch, defineAsyncComponent } from 'vue'
+import { ref, useModel, shallowRef, watch, defineAsyncComponent, unref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 // Stores
@@ -24,6 +24,7 @@ const props = defineProps({
   },
 })
 // Reactive
+const documentTypeRef = ref(null)
 const documentMenuType = ref('Incoming')
 const documentTypeComponent = shallowRef(null)
 const buttonLoading = ref(false)
@@ -37,7 +38,12 @@ watch(documentMenuType, (value) => {
 }, { immediate: true })
 // Methods
 const createDocument = async () => {
+  const _documentTypeRef = unref(documentTypeRef)
+  const valid = await _documentTypeRef.$v.$validate()
+
+  if(!valid) return
   buttonLoading.value = true
+
   switch(documentMenuType.value) {
     case 'Incoming':
       await docFlowStore.actionCreateDocument(regIncoming.detailModel)
@@ -67,7 +73,7 @@ const clearDocument = () => {
     </template>
 
     <template #content>
-      <component :is="documentTypeComponent" />
+      <component :is="documentTypeComponent" ref="documentTypeRef" />
     </template>
 
     <template #footer>
