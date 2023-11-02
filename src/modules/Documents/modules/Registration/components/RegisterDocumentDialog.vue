@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref, useModel, shallowRef, watch, defineAsyncComponent } from 'vue'
+import { ref, useModel, shallowRef, watch, defineAsyncComponent, unref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 // Stores
@@ -24,8 +24,10 @@ const props = defineProps({
   },
 })
 // Reactive
+const documentTypeRef = ref(null)
 const documentMenuType = ref('Incoming')
 const documentTypeComponent = shallowRef(null)
+const buttonLoading = ref(false)
 // Watch
 watch(documentMenuType, (value) => {
   documentTypeComponent.value = defineAsyncComponent({
@@ -36,17 +38,38 @@ watch(documentMenuType, (value) => {
 }, { immediate: true })
 // Methods
 const createDocument = async () => {
-  switch (documentMenuType.value) {
+  const _documentTypeRef = unref(documentTypeRef)
+  const valid = await _documentTypeRef.$v.$validate()
+
+  if(!valid) return
+  buttonLoading.value = true
+
+  switch(documentMenuType.value) {
     case 'Incoming':
       await docFlowStore.actionCreateDocument(regIncoming.detailModel)
       break;
     case 'Inner':
+      await docFlowStore.actionCreateDocument(Inner.detailModel)
       break;
     case 'Outgoing':
+      await docFlowStore.actionCreateDocument(Outgoing.detailModel)
       break;
     case 'IncomingBranches':
+      await docFlowStore.actionCreateDocument(IncomingBranches.detailModel)
       break;
     case 'Statement':
+      await docFlowStore.actionCreateDocument(Statement.detailModel)
+      break;
+    default:
+  }
+  buttonLoading.value = false
+}
+const clearDocument = () => {
+  switch(documentMenuType.value) {
+    case 'Incoming':
+      clearModel(regIncoming.detailModel, ['grif', 'journal'])
+      break;
+    case 'Inner':
       break;
     default:
   }
@@ -60,13 +83,27 @@ const createDocument = async () => {
     </template>
 
     <template #content>
-      <component :is="documentTypeComponent" />
+      <component :is="documentTypeComponent" ref="documentTypeRef" />
     </template>
 
     <template #footer>
-      <base-button label="clear" rounded outlined shadow color="text-primary-900" border-color="border-transparent" />
+      <base-button
+        label="clear"
+        rounded
+        outlined
+        shadow
+        color="text-primary-900"
+        border-color="border-transparent"
+        @click="clearDocument"
+      />
 
-      <base-button label="create" rounded @click="createDocument" />
+      <base-button
+        :loading="buttonLoading"
+        label="create"
+        rounded
+        @click="createDocument"
+      />
     </template>
   </base-dialog>
 </template>
+

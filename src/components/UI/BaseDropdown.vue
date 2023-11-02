@@ -30,8 +30,21 @@ const props = defineProps({
     type: String,
     default: 'choose-one'
   },
+  required: {
+    type: Boolean
+  },
+  border: {
+    type: Boolean
+  },
   borderColor: {
     type: String
+  },
+  error: {
+    type: Object,
+    default: () => ({
+      $error: false,
+      $errors: []
+    })
   },
   size: {
     type: String,
@@ -44,11 +57,12 @@ const props = defineProps({
 // Computed
 const rootClasses = computed(() => {
   return [
-    'group w-full bg-greyscale-50 rounded-xl hover:border-primary-500',
+    'group w-full bg-greyscale-50 rounded-xl border-greyscale-50 focus:border-primary-500',
     // Border
     props.borderColor,
+    // Validation
     {
-      'border-transparent': !props.border
+      'p-invalid !shadow-none': props.error.$error,
     },
     // Size
     {
@@ -61,7 +75,7 @@ const rootClasses = computed(() => {
 
 <template>
   <div class="app-input">
-    <base-label :label="props.label" />
+    <base-label :label="props.label" :required="props.required" />
 
     <Dropdown
       v-model="modelValue"
@@ -97,5 +111,25 @@ const rootClasses = computed(() => {
         }
       }"
     />
+
+    <template v-if="props.error.$errors.length">
+      <div
+        v-for="element of props.error.$errors"
+        :key="element.$uid"
+        class="mt-1"
+      >
+        <span class="block text-sm font-medium text-red-500">{{ element.$message }}</span>
+      </div>
+    </template>
   </div>
 </template>
+
+<style>
+.p-dropdown.p-focus {
+  border-color: rgb(99 90 255 / 1);
+}
+
+.p-dropdown.p-invalid.p-component {
+  border-color: #e24c4c !important;
+}
+</style>

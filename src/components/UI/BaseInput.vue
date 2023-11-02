@@ -16,8 +16,15 @@ const props = defineProps({
     type: String,
     default: "enter-reg-number"
   },
-  errorClass: {
-    type: [String, Boolean ],
+  required: {
+    type: Boolean
+  },
+  error: {
+    type: Object,
+    default: () => ({
+      $error: false,
+      $errors: []
+    })
   }
 })
 // Composable
@@ -27,7 +34,7 @@ const { t } = useI18n()
 
 <template>
   <div class="app-input">
-    <base-label :label="props.label" />
+    <base-label :label="props.label" :required="props.required" />
 
     <InputText
       v-model="modelValue"
@@ -37,14 +44,30 @@ const { t } = useI18n()
       :pt="{
         root: {
           class: [
-            'w-full rounded-xl bg-greyscale-50 ',
+            'w-full rounded-xl bg-greyscale-50 border-greyscale-50 focus:border-primary-500',
             {
-              'p-invalid': props.errorClass,
-              'border-transparent': !props.errorClass,
+              'p-invalid !shadow-none': props.error.$error
             }
           ]
         }
       }"
     />
+
+    <div class="mt-1">
+      <template v-if="props.error.$errors.length">
+        <div
+          v-for="element of props.error.$errors"
+          :key="element.$uid"
+        >
+          <span class="block text-sm font-medium text-red-500">{{ element.$message }}</span>
+        </div>
+      </template>
+    </div>
   </div>
 </template>
+
+<style>
+.p-inputtext.p-invalid.p-component {
+  border-color: #e24c4c !important;
+}
+</style>

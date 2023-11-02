@@ -46,6 +46,13 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
+  error: {
+    type: Object,
+    default: () => ({
+      $error: false,
+      $errors: []
+    })
+  },
   display: {
     type: String,
     default: 'comma',
@@ -70,11 +77,12 @@ const options = computed(() => props.options.length
 // Computed
 const rootClasses = computed(() => {
   return [
-    'group w-full bg-greyscale-50 rounded-xl hover:border-primary-500',
+    'group w-full bg-greyscale-50 rounded-xl border-greyscale-50 focus:border-primary-500',
     // Border
     props.borderColor,
+    // Validation
     {
-      'border-transparent': !props.border
+      'p-invalid !shadow-none': props.error.$error,
     },
     // Size
     {
@@ -187,10 +195,28 @@ onMounted(() => {
       </div>
     </template>
   </MultiSelect>
+
+  <template v-if="props.error.$errors.length">
+    <div
+      v-for="element of props.error.$errors"
+      :key="element.$uid"
+      class="mt-1"
+    >
+      <span class="block text-sm font-medium text-red-500">{{ element.$message }}</span>
+    </div>
+  </template>
 </template>
 
 <style>
 .p-multiselect-panel .p-multiselect-items .p-multiselect-item.p-highlight {
   background: #EEF2FF !important;
+}
+
+.p-multiselect.p-focus {
+  border-color: rgb(99 90 255 / 1);
+}
+
+.p-multiselect.p-invalid.p-component {
+  border-color: #e24c4c !important;
 }
 </style>

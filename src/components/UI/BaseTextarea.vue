@@ -16,8 +16,15 @@ const props = defineProps({
     type: String,
     default: "enter-content"
   },
-  errorClass: {
-    type: [String, Boolean ],
+  required: {
+    type: Boolean
+  },
+  error: {
+    type: Object,
+    default: () => ({
+      $error: false,
+      $errors: []
+    })
   }
 })
 // Composable
@@ -27,7 +34,7 @@ const { t } = useI18n()
 
 <template>
   <div class="app-input">
-    <base-label :label="props.label" />
+    <base-label :label="props.label" :required="props.required" />
 
     <Textarea
       v-model="modelValue"
@@ -38,14 +45,23 @@ const { t } = useI18n()
       :pt="{
         root: {
           class: [
-            'w-full rounded-xl bg-greyscale-50 text-sm',
+            'w-full rounded-xl bg-greyscale-50 text-sm border-greyscale-50 focus:border-primary-500',
             {
-              'p-invalid': props.errorClass,
-              'border-transparent': !props.errorClass,
+              'p-invalid !shadow-none': props.error.$error
             }
           ]
         }
       }"
     />
+
+    <template v-if="props.error.$errors.length">
+      <div
+        v-for="element of props.error.$errors"
+        :key="element.$uid"
+        class="mt-1"
+      >
+        <span class="block text-sm font-medium text-red-500">{{ element.$message }}</span>
+      </div>
+    </template>
   </div>
 </template>
