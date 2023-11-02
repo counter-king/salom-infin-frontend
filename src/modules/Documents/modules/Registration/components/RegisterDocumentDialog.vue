@@ -26,6 +26,7 @@ const props = defineProps({
 // Reactive
 const documentMenuType = ref('Incoming')
 const documentTypeComponent = shallowRef(null)
+const buttonLoading = ref(false)
 // Watch
 watch(documentMenuType, (value) => {
   documentTypeComponent.value = defineAsyncComponent({
@@ -36,9 +37,21 @@ watch(documentMenuType, (value) => {
 }, { immediate: true })
 // Methods
 const createDocument = async () => {
+  buttonLoading.value = true
   switch(documentMenuType.value) {
     case 'Incoming':
       await docFlowStore.actionCreateDocument(regIncoming.detailModel)
+      break;
+    case 'Inner':
+      break;
+    default:
+  }
+  buttonLoading.value = false
+}
+const clearDocument = () => {
+  switch(documentMenuType.value) {
+    case 'Incoming':
+      clearModel(regIncoming.detailModel, ['grif', 'journal'])
       break;
     case 'Inner':
       break;
@@ -65,9 +78,11 @@ const createDocument = async () => {
         shadow
         color="text-primary-900"
         border-color="border-transparent"
+        @click="clearDocument"
       />
 
       <base-button
+        :loading="buttonLoading"
         label="create"
         rounded
         @click="createDocument"

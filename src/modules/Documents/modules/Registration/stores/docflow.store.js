@@ -1,10 +1,11 @@
 // Core
 import { defineStore } from "pinia"
-import { notify } from '@kyvg/vue3-notification'
 // Services
 import { fetchCreateDocument, fetchGetDocumentById, fetchUpdateDocument, fetchGetTree } from "../services/docflow.service"
 // Utils
 import { clearModel } from '@/utils'
+import { dispatchNotify } from '@/utils/notify'
+import { COLOR_TYPES } from '@/enums'
 export const useDocFlowStore = defineStore("docFlowStore", {
   state: () => ({
     tree: null
@@ -17,19 +18,10 @@ export const useDocFlowStore = defineStore("docFlowStore", {
       try {
         let { data } = await fetchCreateDocument(payload)
         await clearModel(payload)
-        notify({
-          title: "Документ создан",
-          text: "Документ создан",
-          type: 'success'
-        })
-        return Promise.resolve(data)
+        dispatchNotify('Документ создан', 'Документ создан', COLOR_TYPES.SUCCESS)
       }
       catch (error) {
-        notify({
-          title: "Ошибка",
-          text: "Ошибка создание документа",
-          type: 'error'
-        })
+        dispatchNotify('Ошибка', 'Ошибка создание документа', COLOR_TYPES.ERROR)
       }
     },
     /**
