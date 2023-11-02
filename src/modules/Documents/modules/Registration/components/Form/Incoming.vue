@@ -1,76 +1,230 @@
 <script setup>
 // Core
-import { ref } from 'vue'
+import { watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { useVuelidate } from '@vuelidate/core'
+import { helpers, required } from '@vuelidate/validators'
+// Stores
+import { useCommonStore } from '@/stores/common'
+import { useCorrespondentStore } from '@/stores/correspondent'
+import { useRegIncoming } from '../../stores/incoming.store'
 // Components
 import MultipleUser from '@/components/Combobox/MultipleUser.vue'
-// Reactive
-const cities = ref([
-  { name: 'New York', code: 'NY' },
-  { name: 'Rome', code: 'RM' },
-  { name: 'London', code: 'LDN' },
-  { name: 'Istanbul', code: 'IST' },
-  { name: 'Paris', code: 'PRS' }
-])
+// Non-reactive
+const rules = {
+  register_number: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  outgoing_number: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  grif: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  language: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  number_of_papers: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  register_date: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  outgoing_date: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  correspondent: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  document_type: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  delivery_type: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  priority: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  title: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  __reviewers: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  description: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  }
+}
+// Composable
+const route = useRoute()
+const commonStore = useCommonStore()
+const correspondentStore = useCorrespondentStore()
+const incomingStore = useRegIncoming()
+const $v = useVuelidate(rules, incomingStore.detailModel)
+// Composable
+defineExpose({ $v })
+// Watch
+watch(
+  () => incomingStore.detailModel.__reviewers,
+  (value) => {
+    incomingStore.detailModel.reviewers = value.map(item => ({ user: item.id }))
+  }
+)
 </script>
 
 <template>
   <div class="incoming-form-view">
     <base-row>
       <base-col col-class="w-1/2">
-        <base-input label="reg-number" />
+        <base-input
+          v-model="$v.register_number.$model"
+          :error="$v.register_number"
+          required
+          label="reg-number"
+        />
       </base-col>
 
       <base-col col-class="w-1/2">
-        <base-input label="out-number" placeholder="enter-out-number" />
+        <base-input
+          v-model="$v.outgoing_number.$model"
+          :error="$v.outgoing_number"
+          required
+          label="out-number"
+          placeholder="enter-out-number"
+        />
       </base-col>
 
       <base-col col-class="w-1/2">
-        <base-dropdown :options="cities" label="grif" />
+        <base-dropdown
+          v-model="$v.grif.$model"
+          :error="$v.grif"
+          required
+          label="grif"
+        />
       </base-col>
 
       <base-col col-class="w-1/2">
-        <base-dropdown :options="cities" label="language-document" placeholder="enter-language-document" />
+        <base-dropdown
+          v-model="$v.language.$model"
+          :error="$v.language"
+          :options="commonStore.languagesList"
+          required
+          option-value="id"
+          option-label="name"
+          label="language-document"
+          placeholder="enter-language-document"
+        />
       </base-col>
 
       <base-col col-class="w-1/2">
-        <base-dropdown :options="cities" label="number-sheets" placeholder="number-sheets" />
+        <base-input
+          v-model.number="$v.number_of_papers.$model"
+          :error="$v.number_of_papers"
+          required
+          label="number-sheets"
+          placeholder="number-sheets"
+        />
       </base-col>
 
       <base-col col-class="w-1/2">
-        <base-dropdown :options="cities" label="content-sheet" placeholder="content-sheet" />
+        <base-calendar
+          v-model="$v.register_date.$model"
+          :error="$v.register_date"
+          required
+          label="reg-date"
+          placeholder="enter-reg-date"
+        />
       </base-col>
 
       <base-col col-class="w-1/2">
-        <base-calendar label="reg-date" placeholder="enter-reg-date" />
+        <base-calendar
+          v-model="$v.outgoing_date.$model"
+          :error="$v.outgoing_date"
+          required
+          label="out-date"
+          placeholder="enter-out-date"
+        />
       </base-col>
 
       <base-col col-class="w-1/2">
-        <base-calendar label="out-date" placeholder="enter-out-date" />
+        <base-dropdown
+          v-model="$v.correspondent.$model"
+          :error="$v.correspondent"
+          :options="correspondentStore.allList"
+          required
+          option-value="id"
+          label="correspondent"
+          placeholder="enter-correspondent"
+        />
       </base-col>
 
       <base-col col-class="w-1/2">
-        <base-dropdown :options="cities" label="correspondent" placeholder="enter-correspondent" />
+        <base-dropdown
+          v-model="$v.document_type.$model"
+          :error="$v.document_type"
+          :options="commonStore.documentTypesList"
+          required
+          option-value="id"
+          label="document-type"
+          placeholder="enter-deliver-type"
+        />
       </base-col>
 
       <base-col col-class="w-1/2">
-        <base-dropdown :options="cities" label="document-type" placeholder="enter-document-type" />
+        <base-dropdown
+          v-model="$v.delivery_type.$model"
+          :error="$v.delivery_type"
+          :options="commonStore.deliveryTypeList"
+          required
+          option-value="id"
+          label="deliver-type"
+          placeholder="enter-document-type"
+        />
       </base-col>
 
       <base-col col-class="w-1/2">
-        <base-dropdown :options="cities" label="priority-document" placeholder="enter-priority" />
+        <base-dropdown
+          v-model="$v.priority.$model"
+          :error="$v.priority"
+          :options="commonStore.prioryList"
+          required
+          option-value="id"
+          label="priority-document"
+          placeholder="enter-priority"
+        />
       </base-col>
 
       <base-col col-class="w-1/2">
-        <base-input label="naming" placeholder="naming" />
+        <base-input
+          v-model="$v.title.$model"
+          :error="$v.title"
+          required
+          label="naming"
+          placeholder="naming"
+        />
       </base-col>
 
       <base-col col-class="w-1/2">
-        <multiple-user display="chip" label="reviewers" placeholder="enter-reviewers" />
+        <multiple-user
+          v-model="$v.__reviewers.$model"
+          :error="$v.__reviewers"
+          required
+          display="chip"
+          label="reviewers"
+          placeholder="enter-reviewers"
+        />
       </base-col>
 
       <base-col col-class="w-full">
-        <base-textarea label="content" />
+        <base-textarea
+          v-model="$v.description.$model"
+          :error="$v.description"
+          required
+          label="content"
+        />
       </base-col>
     </base-row>
+
+    <pre>{{ incomingStore.detailModel }}</pre>
   </div>
 </template>

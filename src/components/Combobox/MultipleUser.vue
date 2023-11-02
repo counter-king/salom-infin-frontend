@@ -16,6 +16,9 @@ const props = defineProps({
     type: String,
     default: 'name'
   },
+  optionValue: {
+    type: [Number, String]
+  },
   label: {
     type: String,
     default: null
@@ -24,8 +27,18 @@ const props = defineProps({
     type: String,
     default: 'create'
   },
+  required: {
+    type: Boolean
+  },
   borderColor: {
     type: String
+  },
+  error: {
+    type: Object,
+    default: () => ({
+      $error: false,
+      $errors: []
+    })
   },
   display: {
     type: String,
@@ -46,7 +59,7 @@ const props = defineProps({
 
 <template>
   <div class="app-input">
-    <base-label :label="props.label" />
+    <base-label :label="props.label" :required="props.required" />
 
     <base-multi-select
       v-model="modelValue"

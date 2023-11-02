@@ -37,6 +37,9 @@ const props = defineProps({
   outlined: {
     type: Boolean
   },
+  loading: {
+    type: Boolean
+  },
   size: {
     type: String,
     default: 'normal',
@@ -91,6 +94,7 @@ const rootClasses = computed(() => {
 
 <template>
   <Button
+    :loading="props.loading"
     :pt="{
       root: {
         class: rootClasses
@@ -127,6 +131,15 @@ const rootClasses = computed(() => {
               'text-greyscale-500': props.outlined
             }"
           />
+        </template>
+
+        <template v-if="props.loading">
+          <div
+            class="absolute top-0 left-0 flex items-center justify-center w-full h-full"
+            :class="props.color ? props.color : 'bg-primary-500'"
+          >
+            <base-spinner root-classes="!w-6 !h-6" />
+          </div>
         </template>
       </div>
     </template>

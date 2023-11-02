@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref,unref, computed } from 'vue'
+import { ref, unref, computed } from 'vue'
 import { useRouter } from "vue-router"
 // Store
 import { useAuthStore } from "../../modules/Auth/stores/index"
@@ -52,40 +52,31 @@ const toggle = (event) => {
 }
 </script>
 <template>
-    <div class="flex items-center cursor-pointer" @click="toggle">
-      <base-avatar
-        image="/images/avatars/1.jpg"
-        shape="circle"
-        avatar-classes="w-10 h-10"
-      />
+  <div class="flex items-center cursor-pointer" @click="toggle">
+    <base-avatar image="/images/avatars/1.jpg" shape="circle" avatar-classes="w-10 h-10" />
 
-      <div class="ml-3">
-        <h1  class="text-white text-sm font-semibold mb-1">{{ userProfile.last_name }} {{ userProfile.first_name[0] }}.</h1>
-        <span class="block text-greyscale-500 text-xs">{{ userProfile.username }}</span>
-      </div>
-
-      <base-menu
-        menuitem="mt-20"
-        width="w-64"
-        ref="menuRef"
-        id="overlay_menu"
-        :items="items"
-        menuClass="bg-zinc-200 px-2.5 py-2.5 pb-1.5 mt-5"
-        class="group"
-      >
-        <template #item="{ item }">
-          <div class="flex items-center justify-between px-3 py-3 rounded-xl bg-white cursor-pointer  ">
-            <div>
-              <h1 class="text-sm font-semibold text-primary-900">{{ item.label }}</h1>
-              <span class="text-xs font-medium text-greyscale-500">{{ item.subTitle }}</span>
-            </div>
-            <div class="base-menu-logout-icons w-8 h-8 flex items-center border-b-2 justify-center  rounded-full  group-hover:bg-primary-500 group-hover:border-b-0">
-              <base-icon  width="16"  height="16" :name="item.icon" class="text-primary-900 transition-all duration-[400ms] group-hover:text-white" />
-            </div>
-          </div>
-        </template>
-      </base-menu>
+    <div class="ml-3">
+      <h1 class="text-white text-sm font-semibold mb-1">{{ userProfile.last_name }} {{ userProfile.first_name[0] }}.</h1>
+      <span class="block text-greyscale-500 text-xs">{{ userProfile.username }}</span>
     </div>
+
+    <base-menu menuitem="mt-20" width="w-64" ref="menuRef" id="overlay_menu" :items="items"
+      menuClass="bg-zinc-200 px-2.5 py-2.5 pb-1.5 mt-5" class="group">
+      <template #item="{ item }">
+        <div class="flex items-center justify-between px-3 py-3 rounded-xl bg-white cursor-pointer  ">
+          <div>
+            <h1 class="text-sm font-semibold text-primary-900">{{ item.label }}</h1>
+            <span class="text-xs font-medium text-greyscale-500">{{ item.subTitle }}</span>
+          </div>
+          <div
+            class="base-menu-logout-icons w-8 h-8 flex items-center border-b-2 justify-center  rounded-full  group-hover:bg-primary-500 group-hover:border-b-0">
+            <base-icon width="16" height="16" :name="item.icon"
+              class="text-primary-900 transition-all duration-[400ms] group-hover:text-white" />
+          </div>
+        </div>
+      </template>
+    </base-menu>
+  </div>
 </template>
 <style>
 .base-menu-logout-icons {

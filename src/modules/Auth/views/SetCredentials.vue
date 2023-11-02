@@ -43,45 +43,27 @@ const logIn = async () => {
         <base-input
           v-model="v.phone_number.$model"
           label="Логин"
-          :errorClass="v.phone_number.$error"
+          :error="v.phone_number"
           placeholder="Введите логин"
         />
-        <small
-          class="p-error"
-          v-for="element of v.phone_number.$errors"
-          :key="element.$uid">
-          <div class="form-error__message">{{element.$message}}</div>
-        </small>
       </base-col>
 
       <base-col col-class="w-1/1 pb-4">
         <base-password
           v-model="v.password.$model"
           label="Пароль"
-          :errorClass="v.password.$error"
+          :error="v.password"
           placeholder="Введите пароль"
         />
-        <small
-          class="p-error"
-          v-for="element of v.password.$errors"
-          :key="element.$uid">
-          <div class="form-error__message">{{element.$message}}</div>
-        </small>
       </base-col>
 
       <base-col col-class="w-1/1 pb-4">
         <base-password
           v-model="v.reenteredPassword.$model"
           label="Пароль"
-          :errorClass="v.reenteredPassword.$error"
+          :error="v.reenteredPassword"
           placeholder="Введите пароль"
         />
-        <small
-          class="p-error"
-          v-for="element of v.reenteredPassword.$errors"
-          :key="element.$uid">
-          <div class="form-error__message">{{element.$message}}</div>
-        </small>
       </base-col>
 
       <base-button class="w-full mt-2" label="Войти в систему" size="large" shadow type="submit" rounded

@@ -33,15 +33,9 @@ const v = useVuelidate(rules, formModel)
         <base-input
           v-model="v.phone_number.$model"
           label="Телефона"
-          :errorClass="v.phone_number.$error"
+          :error="v.phone_number"
           placeholder="Введите номер телефона"
         />
-        <small
-          class="p-error"
-          v-for="element of v.phone_number.$errors"
-          :key="element.$uid">
-          <div class="form-error__message">{{element.$message}}</div>
-        </small>
       </base-col>
 
       <router-link  :to="{ name: 'VerifyNumber' }">

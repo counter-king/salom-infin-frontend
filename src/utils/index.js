@@ -11,6 +11,24 @@ export function isModelEmpty(model, exclude) {
 	.filter(([key]) => !exclude.includes(key))
 	.every(([_key, _value]) => !!_value)
 }
+/**
+* Очистит все ключи объекта
+* @param model Объект модель
+* @param exclude Ключи которые не будет проверятся
+* */
+export function clearModel(model, exclude = []) {
+  Object.entries(model)
+  // Исключаем ключи, которые не будет проверятся
+  .filter(([key]) => !exclude.includes(key))
+  .forEach(([_key, value]) => {
+    if(Array.isArray(value)) {
+      model[_key] = []
+      return;
+    }
+
+    model[_key] = null
+  })
+}
 /*
 *
 * */

@@ -13,13 +13,13 @@ export const fetchCreateDocument = (body) => {
 /**
  * Получить документ по id
  * */
- export const fetchGetDocumentById = (id) => {
+export const fetchGetDocumentById = (id) => {
   return axiosConfig.get(`${URLS.docflow}/${id}/`)
 }
 /**
  * Изменить документ по id
  * */
- export const fetchUpdateDocument = (payload) => {
+export const fetchUpdateDocument = (payload) => {
   return axiosConfig.put(`${URLS.docflow}/${payload.id}/`, payload.body)
 }
 /**

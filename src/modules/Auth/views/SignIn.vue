@@ -76,35 +76,23 @@ const logIn = async () => {
           </span>
         </template>
 
-        <form   @submit.prevent="logIn">
+        <form @submit.prevent="logIn">
           <base-col col-class="w-1/1">
             <base-input
               v-model="v.username.$model"
               label="Логин"
-              :errorClass="v.username.$error"
+              :error="v.username"
               placeholder="Введите логин"
             />
-            <small
-              class="p-error"
-              v-for="element of v.username.$errors"
-              :key="element.$uid">
-              <div class="form-error__message">{{element.$message}}</div>
-            </small>
           </base-col>
 
           <base-col col-class="w-1/1">
             <base-password
               v-model="v.password.$model"
               label="Пароль"
-              :errorClass="v.password.$error"
+              :error="v.password"
               placeholder="Введите пароль"
             />
-            <small
-              class="p-error"
-              v-for="element of v.password.$errors"
-              :key="element.$uid">
-              <div class="form-error__message">{{element.$message}}</div>
-            </small>
           </base-col>
 
           <RouterLink :to="{ name: 'ForgetPassword' }" class="text-indigo-700 text-sm mb-3 mt-2 float-right">

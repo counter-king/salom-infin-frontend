@@ -1,7 +1,12 @@
+// Core
 import { defineStore } from "pinia"
-import { fetchCreateDocument, fetchGetDocumentById, fetchUpdateDocument, fetchGetTree } from "../services/common.service"
-
-export const useDocflowRegistrationStore = defineStore("docflowRegistrationStore", {
+// Services
+import { fetchCreateDocument, fetchGetDocumentById, fetchUpdateDocument, fetchGetTree } from "../services/docflow.service"
+// Utils
+import { clearModel } from '@/utils'
+import { dispatchNotify } from '@/utils/notify'
+import { COLOR_TYPES } from '@/enums'
+export const useDocFlowStore = defineStore("docFlowStore", {
   state: () => ({
     tree: null
   }),
@@ -10,9 +15,14 @@ export const useDocflowRegistrationStore = defineStore("docflowRegistrationStore
      * Создает новый документ
      * */
     async actionCreateDocument(payload) {
-      await fetchCreateDocument(payload).then(({ data }) => {
-        console.log(data);
-      })
+      try {
+        let { data } = await fetchCreateDocument(payload)
+        await clearModel(payload)
+        dispatchNotify('Документ создан', 'Документ создан', COLOR_TYPES.SUCCESS)
+      }
+      catch (error) {
+        dispatchNotify('Ошибка', 'Ошибка создание документа', COLOR_TYPES.ERROR)
+      }
     },
     /**
      * Получить документ по id
