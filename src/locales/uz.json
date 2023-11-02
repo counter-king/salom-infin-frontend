@@ -134,5 +134,10 @@
   "choose-one": "Выберите один из списка",
   "clear": "Очистить",
   "number-sheets": "Количество листов",
-  "document-created": "Документ создан"
+  "document-created": "Документ создан",
+  "registration-date": "Регистрационная дата",
+  "document_type": "Вид документа",
+  "department":"Департмент",
+  "branch":"Филиал",
+  "enter-branch":"Выберите филиал"
 }

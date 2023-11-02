@@ -4,17 +4,15 @@ import { watch } from 'vue'
 // Stores
 import { useCommonStore } from '@/stores/common'
 import { useCorrespondentStore } from '@/stores/correspondent'
-import { useRegInner } from '../../stores/inner.store'
-// Components
-import MultipleUser from '@/components/Combobox/MultipleUser.vue'
+import { useRegOutgoing } from '../../stores/outgoing.store'
 // Composable
 const commonStore = useCommonStore()
 const correspondentStore = useCorrespondentStore()
-const innerStore = useRegInner()
+const innerOutgoing = useRegOutgoing()
 // Watch
 // watch(
 //   (value) => {
-//     innerStore.detailModel.reviewers = value.map(item => ({ user: item.id }))
+//     innerOutgoing.detailModel.reviewers = value.map(item => ({ user: item.id }))
 //   }
 // )
 </script>
@@ -24,20 +22,20 @@ const innerStore = useRegInner()
     <base-row>
       <base-col col-class="w-1/2">
         <base-input
-          v-model="innerStore.detailModel.register_number"
+          v-model="innerOutgoing.detailModel.register_number"
           label="reg-number" />
       </base-col>
 
       <base-col col-class="w-1/2">
         <base-calendar
-          v-model="innerStore.detailModel.outgoing_date"
+          v-model="innerOutgoing.detailModel.outgoing_date"
           label="registration-date"
           placeholder="registration-date" />
       </base-col>
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          v-model="innerStore.detailModel.document_type"
+          v-model="innerOutgoing.detailModel.document_type"
           :options="commonStore.documentTypesList"
           option-value="id"
           label="document_type"
@@ -45,24 +43,17 @@ const innerStore = useRegInner()
       </base-col>
 
       <base-col col-class="w-1/2">
-        <base-calendar
-          v-model="innerStore.detailModel.deadline"
-          label="deadline"
-          placeholder="deadline" />
-      </base-col>
-
-      <base-col col-class="w-1/2">
         <base-dropdown
-          v-model="innerStore.detailModel.__department"
+          v-model="innerOutgoing.detailModel.__department"
           :options="commonStore.departmentList"
           option-value="id"
-          label="department"
-          placeholder="department" />
+          label="enter-department"
+          placeholder="enter-department" />
       </base-col>
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          v-model="innerStore.detailModel.author"
+          v-model="innerOutgoing.detailModel.author"
           :options="commonStore.author"
           option-value="id"
           label="author"
@@ -71,7 +62,7 @@ const innerStore = useRegInner()
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          v-model="innerStore.detailModel.__signers"
+          v-model="innerOutgoing.detailModel.__signers"
           :options="commonStore.usersList"
           option-value="id"
           label="signers"
@@ -79,17 +70,17 @@ const innerStore = useRegInner()
       </base-col>
 
       <base-col col-class="w-1/2">
-        <multiple-user
-          v-model="innerStore.detailModel.__reviewers"
-          display="chip"
-          label="reviewers"
-          placeholder="enter-reviewers"
-        />
+        <base-dropdown
+          v-model="innerOutgoing.detailModel.correspondent"
+          :options="correspondentStore.allList"
+          option-value="id"
+          label="correspondent"
+          placeholder="enter-correspondent" />
       </base-col>
 
       <base-col col-class="w-full">
         <base-textarea
-          v-model="innerStore.detailModel.description"
+          v-model="innerOutgoing.detailModel.description"
           label="content" />
       </base-col>
 

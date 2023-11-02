@@ -17,18 +17,21 @@ const items = ref([
   },
   {
     label: 'Исходящие',
+    command: () => documentType('Outgoing', 'Исходящий документ')
   },
   {
     label: 'Обращения',
   },
   {
     label: 'Входящие от филиалов',
+    command: () => documentType('IncomingBranches', 'Входящие от филиалов')
   },
   {
     label: 'Приказы и распоряжения',
   },
   {
     label: 'Заявления',
+    command: () => documentType('Statement', 'Заявлений документ')
   }
 ])
 // Methods
@@ -43,21 +46,12 @@ const documentType = (type, text) => {
 </script>
 
 <template>
-  <button
-    class="flex items-center gap-2 outline-none bg-transparent"
-    aria-haspopup="true"
-    aria-controls="overlay_menu2"
-    @click="toggle"
-  >
+  <button class="flex items-center gap-2 outline-none bg-transparent" aria-haspopup="true" aria-controls="overlay_menu2"
+    @click="toggle">
     <h1 class="text-xl font-bold text-primary-900">{{ menuActiveText }}</h1>
     <base-icon name="AltArrowLeftIcon" class="-rotate-90 mt-1 text-gray-2" />
   </button>
 
-  <base-menu
-    ref="menuRef"
-    id="overlay_menu2"
-    :items="items"
-    action-size-class="min-h-[40px]"
-    label-class="text-greyscale-500 group-hover:text-primary-500"
-  ></base-menu>
+  <base-menu ref="menuRef" id="overlay_menu2" :items="items" action-size-class="min-h-[40px]"
+    label-class="text-greyscale-500 group-hover:text-primary-500"></base-menu>
 </template>

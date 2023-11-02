@@ -36,11 +36,17 @@ watch(documentMenuType, (value) => {
 }, { immediate: true })
 // Methods
 const createDocument = async () => {
-  switch(documentMenuType.value) {
+  switch (documentMenuType.value) {
     case 'Incoming':
       await docFlowStore.actionCreateDocument(regIncoming.detailModel)
       break;
     case 'Inner':
+      break;
+    case 'Outgoing':
+      break;
+    case 'IncomingBranches':
+      break;
+    case 'Statement':
       break;
     default:
   }
@@ -58,20 +64,9 @@ const createDocument = async () => {
     </template>
 
     <template #footer>
-      <base-button
-        label="clear"
-        rounded
-        outlined
-        shadow
-        color="text-primary-900"
-        border-color="border-transparent"
-      />
+      <base-button label="clear" rounded outlined shadow color="text-primary-900" border-color="border-transparent" />
 
-      <base-button
-        label="create"
-        rounded
-        @click="createDocument"
-      />
+      <base-button label="create" rounded @click="createDocument" />
     </template>
   </base-dialog>
 </template>
