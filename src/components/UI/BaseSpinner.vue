@@ -4,9 +4,16 @@ import { computed } from "vue"
 import ProgressSpinner from "primevue/progressspinner"
 // Macros
 const props = defineProps({
+  rootClasses: {
+    type: String
+  },
   content: {
     type: Boolean,
     default: true
+  },
+  absolute: {
+    type: Boolean,
+    default: false
   },
   screen: {
     type: Boolean,
@@ -27,7 +34,7 @@ const classes = computed(() => {
     <ProgressSpinner
       :pt="{
         root: {
-          class: ['w-[40px] h-[40px]']
+          class: ['w-[40px] h-[40px]', props.rootClasses]
         },
         spinner: '',
         circle: 'stroke-[4px]'
