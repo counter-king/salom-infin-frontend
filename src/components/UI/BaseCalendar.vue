@@ -1,16 +1,15 @@
 <script setup>
 // Core
-import { useModel, computed } from 'vue'
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Calendar from 'primevue/calendar'
 // Composable
-const modelValue = useModel(props, 'modelValue')
 const { t } = useI18n()
 // Macros
 const props = defineProps({
   modelValue: {
-    type: String,
-    default: null
+    type: [String],
+    default: ""
   },
   label: {
     type: String,
@@ -31,6 +30,7 @@ const props = defineProps({
     }
   },
 })
+const emit = defineEmits(['update:modelValue'])
 // Computed
 const rootClasses = computed(() => {
   return [
@@ -52,6 +52,14 @@ const inputClasses = computed(() => {
     },
   ]
 })
+const modelValue = computed({
+  get() {
+    return props.modelValue
+  },
+  set(value) {
+    emit('update:modelValue', value.toISOString().replace(/T.*$/, ''))
+  }
+})
 </script>
 
 <template>
@@ -62,6 +70,7 @@ const inputClasses = computed(() => {
       v-model="modelValue"
       :placeholder="t(props.placeholder)"
       show-icon
+      date-format="yy-mm-dd"
       :pt="{
         root: {
           class: rootClasses

@@ -9,8 +9,7 @@ const { t } = useI18n()
 // Macros
 const props = defineProps({
   modelValue: {
-    type: Object,
-    default: () => {}
+    type: [Number, String, Object]
   },
   options: {
     type: Array,
@@ -19,6 +18,9 @@ const props = defineProps({
   optionLabel: {
     type: String,
     default: 'name'
+  },
+  optionValue: {
+    type: [Number, String]
   },
   label: {
     type: String,
@@ -64,7 +66,8 @@ const rootClasses = computed(() => {
     <Dropdown
       v-model="modelValue"
       :options="props.options"
-      :optionLabel="props.optionLabel"
+      :option-label="props.optionLabel"
+      :option-value="props.optionValue"
       :placeholder="t(props.placeholder)"
       :pt="{
         root: {
