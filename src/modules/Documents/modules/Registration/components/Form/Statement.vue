@@ -8,7 +8,7 @@ import { useCommonStore } from '@/stores/common'
 import { useCorrespondentStore } from '@/stores/correspondent'
 import { useRegStatement } from '../../stores/statement.store'
 // Components
-import MultipleUser from '@/components/Combobox/MultipleUser.vue'
+import { SelectMultiple } from '@/components/Select'
 // Non-reactive
 const rules = {
   outgoing_date: {
@@ -76,7 +76,7 @@ watch(
       </base-col>
 
       <base-col col-class="w-1/2">
-        <multiple-user
+        <select-multiple
         required
           v-model="$v.__reviewers.$model"
           :error="$v.__reviewers"

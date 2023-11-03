@@ -1,6 +1,6 @@
 <script setup>
 // Components
-import { MultipleUserCombobox } from '@/components/Combobox'
+import { MultipleUserCombobox } from 'src/components/Select'
 </script>
 
 <template>
