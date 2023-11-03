@@ -13,6 +13,8 @@ export const useRegInner = defineStore("reg-incoming", {
       document_type: null,
       __department: [],
       __signers: [],
+      reviewers: [],
+      __reviewers: [],
       correspondent: null,
       author: null,
       journal: JOURNAL.INNER,

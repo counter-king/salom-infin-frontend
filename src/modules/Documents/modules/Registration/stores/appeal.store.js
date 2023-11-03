@@ -5,14 +5,22 @@ import { fetchCreateDocument } from '../services/docflow.service'
 // Utils
 import { JOURNAL } from '@/enums'
 // Utils
-export const useRegIncomingBranches = defineStore("reg-incoming", {
+export const useRegAppeal = defineStore("reg-incoming", {
   state: () => ({
     detailModel: {
-      documentTypesList: null,
-      register_number: null,
+      outgoing_number: null,
       outgoing_date: null,
-      author: null,
-      branch: null,
+      correspondent: null,
+      applicant: null,
+      region:null,
+      area:null,
+      full_name_applicant: null,
+      address: null,
+      phone_number: null,
+      submission_form: null,
+      type_complaint:null,
+      reviewers: [],
+      __reviewers: [],
       journal: JOURNAL.INNER,
     },
   }),

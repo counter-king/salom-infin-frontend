@@ -21,6 +21,7 @@ const items = ref([
   },
   {
     label: 'Обращения',
+    command: () => documentType('Appeal', 'Обращение')
   },
   {
     label: 'Входящие от филиалов',

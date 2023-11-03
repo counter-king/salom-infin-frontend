@@ -41,7 +41,13 @@ const orderInstructionStore = useRegOrderInstruction()
 const $v = useVuelidate(rules, orderInstructionStore.detailModel)
 // Composable
 defineExpose({ $v })
-
+// Watch
+watch(
+  () => orderInstructionStore.detailModel.__reviewers,
+  (value) => {
+    orderInstructionStore.detailModel.reviewers = value.map(item => ({ user: item.id }))
+  }
+)
 </script>
 
 <template>

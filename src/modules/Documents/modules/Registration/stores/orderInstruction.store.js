@@ -14,6 +14,7 @@ export const useRegOrderInstruction = defineStore("reg-incoming", {
       magazine: null,
       __department: [],
       document_type: null,
+      reviewers: [],
       __reviewers: [],
       description: null,
       journal: JOURNAL.INNER,

@@ -143,5 +143,22 @@
   "title-document":"Наименование документа",
   "enter-document":"Написать наименование",
   "magazine":"Журнал",
-  "enter-magazine":"Выберите журнал"
+  "enter-magazine":"Выберите журнал",
+  "outgoing-number":"Исходящая  номер",
+  "document-number":"Номер документа",
+  "outgoing-date":"Исходящая дата",
+  "region":"Регион",
+  "enter-region":"Выберите регион",
+  "area":"Район",
+  "enter-area":"Выберите район",
+  "applicant":"Апликант",
+  "enter-applicant":"Выберите апликант",
+  "full-name-applicant":"ФИО заявителя",
+  "enter-full-name":"Написать  ФИО",
+  "address":"Адрес",
+  "enter-address":"Выберите адрес",
+  "submission-form":"Форма предоставления",
+  "enter-submission-form":"Выберите форма",
+  "type-complaint": "Вид подачи  жалобы",
+  "enter-type-complaint": "Выберите вид"
 }

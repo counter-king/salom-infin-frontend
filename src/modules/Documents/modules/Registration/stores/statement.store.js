@@ -11,8 +11,8 @@ export const useRegStatement = defineStore("reg-incoming", {
       outgoing_date: null,
       correspondent: null,
       author: null,
+      reviewers: [],
       __reviewers: [],
-
       journal: JOURNAL.INNER,
     },
   }),
