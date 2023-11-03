@@ -66,8 +66,4 @@ onMounted(() => {
 .main-layout-content {
   height: calc(100vh - 80px);
 }
-
-.main-layout-router {
-  height: calc(100vh - 137px);
-}
 </style>
