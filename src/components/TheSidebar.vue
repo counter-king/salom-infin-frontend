@@ -68,7 +68,7 @@ const collapseBar = () => {
       </template>
     </div>
 
-    <div class="flex-1 relative">
+    <div class="flex-1 relative bg-greyscale-50">
       <template v-if="isCollapsed">
         <div
           class="bg-primary-50 flex items-center justify-center border border-l-0 border-greyscale-200 rounded-r-lg w-5 h-8 cursor-pointer absolute top-[12px] left-0"
@@ -79,7 +79,7 @@ const collapseBar = () => {
       </template>
 
       <template v-if="collapseMenus.length">
-        <div class="border-b border-greyscale-200 py-2 px-6">
+        <div class="bg-white border-b border-greyscale-200 py-2 px-6">
           <div class="flex items-center">
             <template v-for="menu in collapseMenus">
               <router-link

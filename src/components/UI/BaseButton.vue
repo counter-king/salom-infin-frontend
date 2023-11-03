@@ -10,6 +10,9 @@ const props = defineProps({
   label: {
     type: String
   },
+  buttonClass: {
+    type: String
+  },
   color: {
     type: String
   },
@@ -60,6 +63,7 @@ const props = defineProps({
 const rootClasses = computed(() => {
   return [
     'font-semibold text-sm rounded-xl',
+    props.buttonClass,
     // Color
     props.color,
     // Border color
