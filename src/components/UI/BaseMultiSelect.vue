@@ -110,15 +110,16 @@ onMounted(() => {
 </script>
 
 <template>
-  <MultiSelect
-    v-model="modelValue"
-    :options="options"
-    :option-label="props.optionLabel"
-    :option-value="props.optionValue"
-    :placeholder="t(props.placeholder)"
-    :display="props.display"
-    filter
-    :pt="{
+  <div class="app-multiselect">
+    <MultiSelect
+      v-model="modelValue"
+      :options="options"
+      :option-label="props.optionLabel"
+      :option-value="props.optionValue"
+      :placeholder="t(props.placeholder)"
+      :display="props.display"
+      filter
+      :pt="{
       root: {
         class: rootClasses
       },
@@ -160,51 +161,52 @@ onMounted(() => {
         class: ['text-sm font-medium text-primary-900']
       }
     }"
-  >
-    <template #header="{ value, options }">
-      <div class="flex items-center border-b border-greyscale-200">
-        <input
-          type="text"
-          placeholder="Введите имя..."
-          class="flex-1 p-3 block outline-none font-medium text-sm text-gray-1"
-        />
-        <button
-          v-tooltip.left="{
+    >
+      <template #header="{ value, options }">
+        <div class="flex items-center border-b border-greyscale-200">
+          <input
+            type="text"
+            placeholder="Введите имя..."
+            class="flex-1 p-3 block outline-none font-medium text-sm text-gray-1"
+          />
+          <button
+            v-tooltip.left="{
             value: `<h4 class='text-xs text-white -my-1'>Очистить</h4>`,
             escape: true,
             autoHide: false
           }"
-          class="text-grey-500 ml-auto mr-3"
-        >
-          <base-icon name="XIcon" width="18" height="18" />
-        </button>
+            class="text-grey-500 ml-auto mr-3"
+          >
+            <base-icon name="XIcon" width="18" height="18" />
+          </button>
+        </div>
+      </template>
+
+      <template #chip="{ value }">
+        <slot name="chip" :value="value" />
+      </template>
+
+      <template #option="{ option }">
+        <slot name="option" :value="option" />
+      </template>
+
+      <template #removetokenicon="{ item }">
+        <div @click="(event) => removeItem(event, item)">
+          <slot name="removetokenicon" :item="item" />
+        </div>
+      </template>
+    </MultiSelect>
+
+    <template v-if="props.error.$errors.length">
+      <div
+        v-for="element of props.error.$errors"
+        :key="element.$uid"
+        class="mt-1"
+      >
+        <span class="block text-sm font-medium text-red-500">{{ element.$message }}</span>
       </div>
     </template>
-
-    <template #chip="{ value }">
-      <slot name="chip" :value="value" />
-    </template>
-
-    <template #option="{ option }">
-      <slot name="option" :value="option" />
-    </template>
-
-    <template #removetokenicon="{ item }">
-      <div @click="(event) => removeItem(event, item)">
-        <slot name="removetokenicon" :item="item" />
-      </div>
-    </template>
-  </MultiSelect>
-
-  <template v-if="props.error.$errors.length">
-    <div
-      v-for="element of props.error.$errors"
-      :key="element.$uid"
-      class="mt-1"
-    >
-      <span class="block text-sm font-medium text-red-500">{{ element.$message }}</span>
-    </div>
-  </template>
+  </div>
 </template>
 
 <style>

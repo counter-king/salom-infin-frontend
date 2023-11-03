@@ -1,13 +1,13 @@
 <script setup>
 // Components
-import { MultipleUserCombobox } from '@/components/Combobox'
+import { SelectMultiple } from '@/components/Select'
 </script>
 
 <template>
   <div class="flex gap-10 p-10">
-    <base-multi-select display="chip" />
+    <select-multiple display="chip" />
 
-    <multiple-user-combobox
+    <select-multiple
       display="chip"
     />
   </div>

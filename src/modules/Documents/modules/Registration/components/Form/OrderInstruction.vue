@@ -7,7 +7,7 @@ import { helpers, required } from '@vuelidate/validators'
 import { useCommonStore } from '@/stores/common'
 import { useRegOrderInstruction } from '../../stores/orderInstruction.store'
 // Components
-import MultipleUser from '@/components/Combobox/MultipleUser.vue'
+import { SelectMultiple } from '@/components/Select'
 // Non-reactive
 const rules = {
   name_document: {
@@ -125,7 +125,7 @@ watch(
       </base-col>
 
       <base-col col-class="w-1/2">
-        <multiple-user
+        <select-multiple
           required
           v-model="$v.__reviewers.$model"
           :error="$v.__reviewers"
