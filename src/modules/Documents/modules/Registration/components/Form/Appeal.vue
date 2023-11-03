@@ -210,6 +210,30 @@ watch(
         />
       </base-col>
 
+      <base-col col-class="w-1/2">
+        <base-label label="Состаяние" />
+
+        <base-row>
+          <base-col col-class="w-1/3">
+            <base-switch
+              v-model="appealStore.detailModel.duplicateSwitch"
+              label="duplicate"
+              classBody="flex items-center"
+              classLabel="order-2"
+            />
+          </base-col>
+
+          <base-col col-class="w-1/2">
+            <base-switch
+              v-model="appealStore.detailModel.repeated_application"
+              label="repeated-application"
+              classBody="flex items-center"
+              classLabel="order-2"
+            />
+          </base-col>
+        </base-row>
+      </base-col>
+
       <base-col col-class="w-full">
         <base-textarea
           required
@@ -217,7 +241,6 @@ watch(
           :error="$v.description"
           label="content" />
       </base-col>
-
     </base-row>
   </div>
 </template>

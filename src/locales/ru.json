@@ -160,5 +160,8 @@
   "submission-form":"Форма предоставления",
   "enter-submission-form":"Выберите форма",
   "type-complaint": "Вид подачи  жалобы",
-  "enter-type-complaint": "Выберите вид"
+  "enter-type-complaint": "Выберите вид",
+  "duplicate": "Дубликат",
+  "repeated-application": "Повторная заявка"
+
 }

@@ -5,7 +5,7 @@ import { fetchCreateDocument } from '../services/docflow.service'
 // Utils
 import { JOURNAL } from '@/enums'
 // Utils
-export const useRegStatement = defineStore("reg-incoming", {
+export const useRegStatement = defineStore("reg-statement", {
   state: () => ({
     detailModel: {
       outgoing_date: null,

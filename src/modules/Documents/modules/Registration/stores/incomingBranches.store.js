@@ -5,7 +5,7 @@ import { fetchCreateDocument } from '../services/docflow.service'
 // Utils
 import { JOURNAL } from '@/enums'
 // Utils
-export const useRegIncomingBranches = defineStore("reg-incoming", {
+export const useRegIncomingBranches = defineStore("reg-incoming-branches", {
   state: () => ({
     detailModel: {
       documentTypesList: null,

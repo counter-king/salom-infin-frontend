@@ -5,7 +5,7 @@ import { fetchCreateDocument } from '../services/docflow.service'
 // Utils
 import { JOURNAL } from '@/enums'
 // Utils
-export const useRegOutgoing = defineStore("reg-incoming", {
+export const useRegOutgoing = defineStore("reg-outgoing", {
   state: () => ({
     detailModel: {
       register_number: null,

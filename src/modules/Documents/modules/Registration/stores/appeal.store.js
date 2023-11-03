@@ -5,7 +5,7 @@ import { fetchCreateDocument } from '../services/docflow.service'
 // Utils
 import { JOURNAL } from '@/enums'
 // Utils
-export const useRegAppeal = defineStore("reg-incoming", {
+export const useRegAppeal = defineStore("reg-appeal", {
   state: () => ({
     detailModel: {
       outgoing_number: null,
@@ -21,6 +21,9 @@ export const useRegAppeal = defineStore("reg-incoming", {
       type_complaint:null,
       reviewers: [],
       __reviewers: [],
+      duplicateSwitch: false,
+      repeated_application: true,
+      description: null,
       journal: JOURNAL.INNER,
     },
   }),
