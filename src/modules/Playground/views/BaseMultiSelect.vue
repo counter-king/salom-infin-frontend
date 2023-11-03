@@ -5,7 +5,7 @@ import { SelectMultiple } from 'src/components/Select'
 
 <template>
   <div class="flex gap-10 p-10">
-    <base-multi-select display="chip" />
+    <select-multiple display="chip" />
 
     <select-multiple
       display="chip"
