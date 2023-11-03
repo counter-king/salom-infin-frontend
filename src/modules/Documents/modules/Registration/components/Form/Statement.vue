@@ -37,6 +37,9 @@ defineExpose({ $v })
 // Watch
 watch(
   () => statementStore.detailModel.__reviewers,
+  (value) => {
+    statementStore.detailModel.reviewers = value.map(item => ({ user: item.id }))
+  }
 )
 </script>
 
@@ -63,7 +66,6 @@ watch(
           placeholder="enter-correspondent" />
       </base-col>
 
-
       <base-col col-class="w-1/2">
         <base-dropdown
           required
@@ -77,7 +79,7 @@ watch(
 
       <base-col col-class="w-1/2">
         <select-multiple
-        required
+          required
           v-model="$v.__reviewers.$model"
           :error="$v.__reviewers"
           display="chip"
@@ -93,7 +95,6 @@ watch(
           :error="$v.description"
           label="content" />
       </base-col>
-
     </base-row>
   </div>
 </template>

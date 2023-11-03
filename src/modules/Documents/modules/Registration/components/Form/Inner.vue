@@ -44,11 +44,16 @@ const innerStore = useRegInner()
 const $v = useVuelidate(rules, innerStore.detailModel)
 // Composable
 defineExpose({ $v })
-
+// Watch
+watch(
+  () => innerStore.detailModel.__reviewers,
+  (value) => {
+    innerStore.detailModel.reviewers = value.map(item => ({ user: item.id }))
+  }
+)
 </script>
 
 <template>
-
   <div class="incoming-form-view">
     <base-row>
       <base-col col-class="w-1/2">
@@ -88,7 +93,7 @@ defineExpose({ $v })
           placeholder="deadline" />
       </base-col>
 
-     <base-col col-class="w-1/2">
+      <base-col col-class="w-1/2">
         <base-dropdown
           required
           v-model="$v.__department.$model"

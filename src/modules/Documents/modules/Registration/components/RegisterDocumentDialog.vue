@@ -8,6 +8,7 @@ import { useDocFlowStore } from '../stores/docflow.store'
 import { useRegIncoming } from '../stores/incoming.store'
 import { useRegInner } from '../stores/inner.store'
 import { useRegOutgoing } from '../stores/outgoing.store'
+import { useRegAppeal } from '../stores/appeal.store'
 import { useRegIncomingBranches } from '../stores/incomingBranches.store'
 import { useRegOrderInstruction } from '../stores/orderInstruction.store'
 import { useRegStatement } from '../stores/statement.store'
@@ -24,6 +25,7 @@ const docFlowStore = useDocFlowStore()
 const regIncoming = useRegIncoming()
 const regInner = useRegInner()
 const regOutgoing = useRegOutgoing()
+const regAppeal = useRegAppeal()
 const regIncomingBranches = useRegIncomingBranches()
 const regOrderInstruction = useRegOrderInstruction()
 const regStatement = useRegStatement()
@@ -64,6 +66,9 @@ const createDocument = async () => {
     case 'Outgoing':
       await docFlowStore.actionCreateDocument(regOutgoing.detailModel)
       break;
+    case 'Appeal':
+      await docFlowStore.actionCreateDocument(regAppeal.detailModel)
+      break;
     case 'IncomingBranches':
       await docFlowStore.actionCreateDocument(regIncomingBranches.detailModel)
       break;
@@ -85,8 +90,11 @@ const clearDocument = () => {
     case 'Inner':
       clearModel(regInner.detailModel, ['grif', 'journal'])
       break;
-    case 'Inner':
+    case 'Outgoing':
       clearModel(regOutgoing.detailModel, ['grif', 'journal'])
+      break;
+    case 'Appeal':
+      clearModel(regAppeal.detailModel, ['grif', 'journal'])
       break;
     case 'IncomingBranches':
       clearModel(regIncomingBranches.detailModel, ['grif', 'journal'])
