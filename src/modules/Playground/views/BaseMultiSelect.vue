@@ -1,6 +1,6 @@
 <script setup>
 // Components
-import { SelectMultiple } from 'src/components/Select'
+import { SelectMultiple } from '@/components/Select'
 </script>
 
 <template>
