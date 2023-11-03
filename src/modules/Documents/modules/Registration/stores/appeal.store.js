@@ -5,16 +5,24 @@ import { fetchCreateDocument } from '../services/docflow.service'
 // Utils
 import { JOURNAL } from '@/enums'
 // Utils
-export const useRegOutgoing = defineStore("reg-outgoing", {
+export const useRegAppeal = defineStore("reg-appeal", {
   state: () => ({
     detailModel: {
-      register_number: null,
+      outgoing_number: null,
       outgoing_date: null,
-      document_type: null,
-      __department: [],
-      __signers: [],
       correspondent: null,
-      author: null,
+      applicant: null,
+      region:null,
+      area:null,
+      full_name_applicant: null,
+      address: null,
+      phone_number: null,
+      submission_form: null,
+      type_complaint:null,
+      reviewers: [],
+      __reviewers: [],
+      duplicateSwitch: false,
+      repeated_application: true,
       description: null,
       journal: JOURNAL.INNER,
     },
@@ -25,7 +33,6 @@ export const useRegOutgoing = defineStore("reg-outgoing", {
     * */
     async actionCreateIncomingDocument(payload) {
       let { data } = await fetchCreateDocument(payload)
-
       console.log(data);
     }
   }

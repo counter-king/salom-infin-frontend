@@ -21,6 +21,7 @@ const items = ref([
   },
   {
     label: 'Обращения',
+    command: () => documentType('Appeal', 'Обращение')
   },
   {
     label: 'Входящие от филиалов',
@@ -28,6 +29,7 @@ const items = ref([
   },
   {
     label: 'Приказы и распоряжения',
+    command: () => documentType('OrderInstruction', 'Приказы и распоряжения')
   },
   {
     label: 'Заявления',

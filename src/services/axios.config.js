@@ -2,7 +2,7 @@
 import axios from "axios"
 // Utils
 import { getStorageItem, removeStorageItem } from "@/utils/storage"
-import { LANG, ACCESS, REFRESH, EXPIRES } from "@/constants/storage"
+import { LANG, ACCESS, REFRESH, EXPIRES, CURRENT_ROUTE } from "@/constants/storage"
 
 const axiosParams = {
 	baseURL: import.meta.env.VITE_BASE_URL
@@ -46,6 +46,7 @@ axiosInstance.interceptors.response.use(
       removeStorageItem(ACCESS)
       removeStorageItem(REFRESH)
       removeStorageItem(EXPIRES)
+      removeStorageItem(CURRENT_ROUTE)
     }
 
     if(typeof response.data.message === "string") {

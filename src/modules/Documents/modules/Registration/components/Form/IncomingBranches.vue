@@ -37,10 +37,6 @@ const incomingBranchesStore = useRegIncomingBranches()
 const $v = useVuelidate(rules, incomingBranchesStore.detailModel)
 // Composable
 defineExpose({ $v })
-// Watch
-watch(
-  () => incomingBranchesStore.detailModel.__reviewers,
-)
 </script>
 
 <template>
@@ -87,7 +83,6 @@ watch(
           placeholder="enter-branch" />
       </base-col>
 
-
       <base-col col-class="w-1/2">
         <base-dropdown
           required
@@ -106,7 +101,6 @@ watch(
           :error="$v.description"
           label="content" />
       </base-col>
-
     </base-row>
   </div>
 </template>

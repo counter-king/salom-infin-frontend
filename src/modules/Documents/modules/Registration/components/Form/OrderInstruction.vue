@@ -1,46 +1,53 @@
 <script setup>
 // Core
+import { watch } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { helpers, required } from '@vuelidate/validators'
 // Stores
 import { useCommonStore } from '@/stores/common'
-import { useCorrespondentStore } from '@/stores/correspondent'
-import { useRegOutgoing } from '../../stores/outgoing.store'
+import { useRegOrderInstruction } from '../../stores/orderInstruction.store'
+// Components
+import { SelectMultiple } from '@/components/Select'
 // Non-reactive
 const rules = {
+  name_document: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
   register_number: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   outgoing_date: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
-  document_type: {
+  magazine:{
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   __department: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
-  __signers: {
+  document_type: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
-  correspondent: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
-  author: {
+  __reviewers: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   description: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  }
+  },
 }
 // Composable
 const commonStore = useCommonStore()
-const correspondentStore = useCorrespondentStore()
-const innerOutgoing = useRegOutgoing()
-const $v = useVuelidate(rules, innerOutgoing.detailModel)
+const orderInstructionStore = useRegOrderInstruction()
+const $v = useVuelidate(rules, orderInstructionStore.detailModel)
 // Composable
 defineExpose({ $v })
-
+// Watch
+watch(
+  () => orderInstructionStore.detailModel.__reviewers,
+  (value) => {
+    orderInstructionStore.detailModel.reviewers = value.map(item => ({ user: item.id }))
+  }
+)
 </script>
 
 <template>
@@ -49,9 +56,19 @@ defineExpose({ $v })
       <base-col col-class="w-1/2">
         <base-input
           required
+          v-model="$v.name_document.$model"
+          :error="$v.name_document"
+          label="title-document"
+          placeholder="enter-document" />
+      </base-col>
+
+      <base-col col-class="w-1/2">
+        <base-input
+          required
           v-model="$v.register_number.$model"
           :error="$v.register_number"
-          label="reg-number" />
+          label="reg-number"
+          placeholder="reg-number" />
       </base-col>
 
       <base-col col-class="w-1/2">
@@ -66,12 +83,23 @@ defineExpose({ $v })
       <base-col col-class="w-1/2">
         <base-dropdown
           required
-          v-model="$v.document_type.$model"
-          :error="$v.document_type"
-          :options="commonStore.documentTypesList"
+          v-model="$v.magazine.$model"
+          :error="$v.magazine"
+          :options="commonStore.magazineList"
           option-value="id"
-          label="document_type"
-          placeholder="document_type" />
+          label="magazine"
+          placeholder="enter-magazine" />
+      </base-col>
+
+      <base-col col-class="w-1/2">
+        <base-dropdown
+          required
+          v-model="$v.magazine.$model"
+          :error="$v.magazine"
+          :options="commonStore.magazineList"
+          option-value="id"
+          label="magazine"
+          placeholder="enter-magazine" />
       </base-col>
 
       <base-col col-class="w-1/2">
@@ -81,41 +109,30 @@ defineExpose({ $v })
           :error="$v.__department"
           :options="commonStore.departmentList"
           option-value="id"
-          label="enter-department"
-          placeholder="enter-department" />
+          label="department"
+          placeholder="department" />
       </base-col>
 
       <base-col col-class="w-1/2">
         <base-dropdown
           required
-          v-model="$v.author.$model"
-          :error="$v.author"
-          :options="commonStore.author"
+          v-model="$v.document_type.$model"
+          :error="$v.document_type"
+          :options="commonStore.documentTypesList"
           option-value="id"
-          label="author"
-          placeholder="author" />
+          label="document_type"
+          placeholder="document_type" />
       </base-col>
 
       <base-col col-class="w-1/2">
-        <base-dropdown
+        <select-multiple
           required
-          v-model="$v.__signers.$model"
-          :error="$v.__signers"
-          :options="commonStore.usersList"
-          option-value="id"
-          label="signers"
-          placeholder="signers" />
-      </base-col>
-
-      <base-col col-class="w-1/2">
-        <base-dropdown
-          required
-          v-model="$v.correspondent.$model"
-          :error="$v.correspondent"
-          :options="correspondentStore.allList"
-          option-value="id"
-          label="correspondent"
-          placeholder="enter-correspondent" />
+          v-model="$v.__reviewers.$model"
+          :error="$v.__reviewers"
+          display="chip"
+          label="reviewers"
+          placeholder="enter-reviewers"
+        />
       </base-col>
 
       <base-col col-class="w-full">
@@ -125,7 +142,6 @@ defineExpose({ $v })
           :error="$v.description"
           label="content" />
       </base-col>
-
     </base-row>
   </div>
 </template>

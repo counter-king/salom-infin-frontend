@@ -9,7 +9,7 @@ import { useCommonStore } from '@/stores/common'
 import { useCorrespondentStore } from '@/stores/correspondent'
 import { useRegIncoming } from '../../stores/incoming.store'
 // Components
-import MultipleUser from '@/components/Combobox/MultipleUser.vue'
+import { SelectMultiple } from '@/components/Select'
 // Non-reactive
 const rules = {
   register_number: {
@@ -205,7 +205,7 @@ watch(
       </base-col>
 
       <base-col col-class="w-1/2">
-        <multiple-user
+        <select-multiple
           v-model="$v.__reviewers.$model"
           :error="$v.__reviewers"
           required
@@ -224,7 +224,5 @@ watch(
         />
       </base-col>
     </base-row>
-
-    <pre>{{ incomingStore.detailModel }}</pre>
   </div>
 </template>
