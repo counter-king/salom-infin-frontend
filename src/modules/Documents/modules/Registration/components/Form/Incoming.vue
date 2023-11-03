@@ -224,7 +224,5 @@ watch(
         />
       </base-col>
     </base-row>
-
-    <pre>{{ incomingStore.detailModel }}</pre>
   </div>
 </template>

@@ -5,30 +5,27 @@ import { useVuelidate } from '@vuelidate/core'
 import { helpers, required } from '@vuelidate/validators'
 // Stores
 import { useCommonStore } from '@/stores/common'
-import { useRegInner } from '../../stores/inner.store'
+import { useRegOrderInstruction } from '../../stores/orderInstruction.store'
 // Components
 import MultipleUser from '@/components/Combobox/MultipleUser.vue'
 // Non-reactive
 const rules = {
+  name_document: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
   register_number: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   outgoing_date: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
-  document_type: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
-  deadline: {
+  magazine:{
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   __department: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
-  author: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
-  __signers: {
+  document_type: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   __reviewers: {
@@ -36,12 +33,12 @@ const rules = {
   },
   description: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  }
+  },
 }
 // Composable
 const commonStore = useCommonStore()
-const innerStore = useRegInner()
-const $v = useVuelidate(rules, innerStore.detailModel)
+const orderInstructionStore = useRegOrderInstruction()
+const $v = useVuelidate(rules, orderInstructionStore.detailModel)
 // Composable
 defineExpose({ $v })
 
@@ -54,9 +51,19 @@ defineExpose({ $v })
       <base-col col-class="w-1/2">
         <base-input
           required
+          v-model="$v.name_document.$model"
+          :error="$v.name_document"
+          label="title-document"
+          placeholder="enter-document" />
+      </base-col>
+
+      <base-col col-class="w-1/2">
+        <base-input
+          required
           v-model="$v.register_number.$model"
           :error="$v.register_number"
-          label="reg-number" />
+          label="reg-number"
+          placeholder="reg-number" />
       </base-col>
 
       <base-col col-class="w-1/2">
@@ -71,24 +78,26 @@ defineExpose({ $v })
       <base-col col-class="w-1/2">
         <base-dropdown
           required
-          v-model="$v.document_type.$model"
-          :error="$v.document_type"
-          :options="commonStore.documentTypesList"
+          v-model="$v.magazine.$model"
+          :error="$v.magazine"
+          :options="commonStore.magazineList"
           option-value="id"
-          label="document_type"
-          placeholder="document_type" />
+          label="magazine"
+          placeholder="enter-magazine" />
       </base-col>
 
       <base-col col-class="w-1/2">
-        <base-calendar
+        <base-dropdown
           required
-          v-model="$v.deadline.$model"
-          :error="$v.deadline"
-          label="deadline"
-          placeholder="deadline" />
+          v-model="$v.magazine.$model"
+          :error="$v.magazine"
+          :options="commonStore.magazineList"
+          option-value="id"
+          label="magazine"
+          placeholder="enter-magazine" />
       </base-col>
 
-     <base-col col-class="w-1/2">
+      <base-col col-class="w-1/2">
         <base-dropdown
           required
           v-model="$v.__department.$model"
@@ -102,23 +111,12 @@ defineExpose({ $v })
       <base-col col-class="w-1/2">
         <base-dropdown
           required
-          v-model="$v.author.$model"
-          :error="$v.author"
-          :options="commonStore.author"
+          v-model="$v.document_type.$model"
+          :error="$v.document_type"
+          :options="commonStore.documentTypesList"
           option-value="id"
-          label="author"
-          placeholder="author" />
-      </base-col>
-
-      <base-col col-class="w-1/2">
-        <base-dropdown
-          required
-          v-model="$v.__signers.$model"
-          :error="$v.__signers"
-          :options="commonStore.usersList"
-          option-value="id"
-          label="signers"
-          placeholder="signers" />
+          label="document_type"
+          placeholder="document_type" />
       </base-col>
 
       <base-col col-class="w-1/2">

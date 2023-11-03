@@ -1,33 +1,19 @@
 <script setup>
 import { ref } from 'vue'
+// Components
 import Button from 'primevue/button';
 import OTPCode from "../components/otpcode.vue";
-// Components
 import BaseButton from "@/components/UI/BaseButton.vue"
 const otpValue = ref('')
-
-// const message = useMessage()
-// const resendMessage = () => {
-//   message.success("Код отправлен повторно")
-// }
 </script>
-
 <template>
   <div class="sign-in-view">
-    <div class="text-center mb-3">
-      <base-button
-        color="bg-indigo-700"
-        border-color="border-indigo-100"
-        only-icon
-        rounded
-        icon-left="LetterIcon"
-        iconWidth="50"
-        iconHeight="50"
-        >
-        </base-button>
+    <div class="flex justify-center items-center w-20 h-20 rounded-full text-center text-indigo-700 bg-indigo-100 m-auto mb-4">
+      <base-icon
+        name="LetterIcon"
+        class="w-20  inline "/>
     </div>
-
-    <h1  class="text-2xl decoration-zinc-950  font-bold mb-1 text-center">Verification step</h1>
+    <h1  class="text-2xl decoration-zinc-950  font-bold mb-1 text-center text-indigo-700"> Шаг проверки </h1>
     <p class="font-light text-sm text-color-3 text-center mb-7">
       Мы отправили код подтверждения на ваш телефон. Введите код из письма в поле ниже.
     </p>
@@ -48,7 +34,6 @@ const otpValue = ref('')
           shadow
           type="submit"
           rounded
-          :loading="loading"
         ></base-button>
       </router-link>
 

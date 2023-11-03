@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive } from 'vue'
 import { useRouter } from "vue-router"
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
@@ -10,13 +10,13 @@ import useVuelidate from '@vuelidate/core'
 import { helpers, minLength, required } from '@vuelidate/validators'
 // Store
 import { useAuthStore } from "../stores/index"
-
 // Components
 import BaseButton from "@/components/UI/BaseButton.vue"
 const authStore = useAuthStore()
 const router = useRouter()
 const loading = ref(false)
 const selectedCity = ref();
+const toast = useToast();
 const cities = ref([
   {
     name: "Everybody's Got Something to Hide Except Me and My Monkey",
@@ -27,23 +27,20 @@ const cities = ref([
     value: 'song1'
   },
 ]);
-
 const formModel = reactive({
   username: null,
   password: null
 })
-
 const rules = {
   username: {
-    required: helpers.withMessage(`Username is required`, required)
+    required: helpers.withMessage(`Необходим логин`, required)
   },
   password: {
-    required: helpers.withMessage(`Password is required`, required),
+    required: helpers.withMessage(`Необходим пароль`, required),
     minLength: helpers.withMessage(`Минимальная длина: 6 символа`, minLength(6))
   },
 }
-
-const toast = useToast();
+// Methods
 const v = useVuelidate(rules, formModel)
 const logIn = async () => {
   const valid = await v.value.$validate()
@@ -59,17 +56,16 @@ const logIn = async () => {
       name: "DashboardIndex"
     })
   } catch (error) {
-      toast.add({ severity: 'error', summary: 'Xatolik bor', detail: "Login yoki parol noto'g'ri qayta urinib ko'ring", life: 3000 });
+      toast.add({ severity: 'error', summary: 'Есть ошибка', detail: "Неверный логин или пароль. Попробуйте еще раз.", life: 3000 });
   }
 
   loading.value = false
 }
-
 </script>
 <template>
   <div class="sign-in-view">
-    <h1 class="text-2xl decoration-zinc-950  font-bold mb-1 text-center">Sign In</h1>
-    <p class="font-light text-sm text-color-3 text-center mb-7">Welcome back, you’ve been missed!</p>
+    <h1 class="text-2xl decoration-zinc-950  font-bold mb-1 text-center">Войти</h1>
+    <p class="font-light text-sm text-color-3 text-center mb-7">С возвращением, вас скучали!</p>
 
     <TabView>
       <TabPanel>
@@ -79,56 +75,41 @@ const logIn = async () => {
             Логин
           </span>
         </template>
-        <p>
-          <form   @submit.prevent="logIn">
-            <div class="w-full mb-3">
-                <base-col col-class="w-1/1">
-                  <base-input
-                    v-model="v.username.$model"
-                    label="Логин"
-                    :errorClass="v.username.$error"
-                    placeholder="Введите логин"
-                  />
-                  <small
-                    class="p-error"
-                    v-for="element of v.username.$errors"
-                    :key="element.$uid">
-                    <div class="form-error__message">{{element.$message}}</div>
-                  </small>
-                </base-col>
-            </div>
 
-            <div class="w-full mb-3">
-              <base-col col-class="w-1/1">
-                <base-input
-                  v-model="v.password.$model"
-                  label="Пароль"
-                  :errorClass="v.password.$error"
-                  placeholder="Введите пароль"
-                />
-                <small
-                  class="p-error"
-                  v-for="element of v.password.$errors"
-                  :key="element.$uid">
-                  <div class="form-error__message">{{element.$message}}</div>
-                </small>
-              </base-col>
-            </div>
+        <form @submit.prevent="logIn">
+          <base-col col-class="w-1/1">
+            <base-input
+              v-model="v.username.$model"
+              label="Логин"
+              :error="v.username"
+              placeholder="Введите логин"
+            />
+          </base-col>
 
-            <div class="mb-3 mt-2 text-right">
-              <RouterLink :to="{ name: 'ForgetPassword' }" class="text-indigo-700 text-sm">
-                Забыли пароль
-              </RouterLink>
-            </div>
+          <base-col col-class="w-1/1">
+            <base-password
+              v-model="v.password.$model"
+              label="Пароль"
+              :error="v.password"
+              placeholder="Введите пароль"
+            />
+          </base-col>
 
-            <base-button class="w-full"  label=" Войти в систему" size="large" shadow type="submit" rounded
-              icon-left="LockKeyholeUnlockedIcon" :loading="loading">
-            </base-button>
-          </form>
+          <RouterLink :to="{ name: 'ForgetPassword' }" class="text-indigo-700 text-sm mb-3 mt-2 float-right">
+            Забыли пароль
+          </RouterLink>
 
-          <Toast />
-
-        </p>
+          <base-button
+            class="w-full"
+            label=" Войти в систему"
+            size="large"
+            shadow
+            type="submit"
+            rounded
+            icon-left="LockKeyholeUnlockedIcon" :loading="loading">
+          </base-button>
+        </form>
+        <Toast />
       </TabPanel>
 
       <TabPanel>
@@ -154,7 +135,6 @@ const logIn = async () => {
     </div>
   </div>
 </template>
-
 <style>
 .sign-in-view .p-tabview-panels {
   padding: 20px 0 0;

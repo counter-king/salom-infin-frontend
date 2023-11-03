@@ -8,7 +8,7 @@ const loading = ref(false)
 const props = defineProps({
   title: {
     type: String,
-    default: "Confirm number"
+    default: "Забыть пароль"
   }
 })
 
@@ -17,13 +17,12 @@ const formModel = ref({
 })
 const rules = {
   phone_number: {
-    required: helpers.withMessage(`Phone number is required`, required),
+    required: helpers.withMessage(`Требуется номер телефона`, required),
     minLength: helpers.withMessage(`Минимальная длина: 8 символа`, minLength(8))
   },
 }
 const v = useVuelidate(rules, formModel)
 </script>
-
 <template>
   <div class="sign-in-view">
     <h1  class="text-2xl decoration-zinc-950  font-bold mb-1 text-center">{{ props.title }}</h1>
@@ -34,15 +33,9 @@ const v = useVuelidate(rules, formModel)
         <base-input
           v-model="v.phone_number.$model"
           label="Телефона"
-          :errorClass="v.phone_number.$error"
+          :error="v.phone_number"
           placeholder="Введите номер телефона"
         />
-        <small
-          class="p-error"
-          v-for="element of v.phone_number.$errors"
-          :key="element.$uid">
-          <div class="form-error__message">{{element.$message}}</div>
-        </small>
       </base-col>
 
       <router-link  :to="{ name: 'VerifyNumber' }">
@@ -63,8 +56,8 @@ const v = useVuelidate(rules, formModel)
     <router-link type="primary" :to="{ name: 'Login' }" class="flex items-center justify-center text-sm mt-4 text-indigo-700">
       <base-icon
         name="AltArrowLeftIcon"
-        class="w-3.5 duration-[400ms]
-        inline "  /> Back to Sign In
+        class="w-3.5 duration-[400ms] inline "/>
+      Вернуться к входу
     </router-link>
   </div>
 </template>

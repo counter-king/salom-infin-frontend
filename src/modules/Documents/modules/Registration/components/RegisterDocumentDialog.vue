@@ -6,6 +6,11 @@ import { useToast } from 'primevue/usetoast'
 // Stores
 import { useDocFlowStore } from '../stores/docflow.store'
 import { useRegIncoming } from '../stores/incoming.store'
+import { useRegInner } from '../stores/inner.store'
+import { useRegOutgoing } from '../stores/outgoing.store'
+import { useRegIncomingBranches } from '../stores/incomingBranches.store'
+import { useRegOrderInstruction } from '../stores/orderInstruction.store'
+import { useRegStatement } from '../stores/statement.store'
 // Components
 import RegisterDocumentMenu from './RegisterDocumentMenu.vue'
 import BaseSpinner from '@/components/UI/BaseSpinner.vue'
@@ -17,6 +22,11 @@ const { t } = useI18n()
 const toast = useToast()
 const docFlowStore = useDocFlowStore()
 const regIncoming = useRegIncoming()
+const regInner = useRegInner()
+const regOutgoing = useRegOutgoing()
+const regIncomingBranches = useRegIncomingBranches()
+const regOrderInstruction = useRegOrderInstruction()
+const regStatement = useRegStatement()
 // Macros
 const props = defineProps({
   modelValue: {
@@ -49,6 +59,19 @@ const createDocument = async () => {
       await docFlowStore.actionCreateDocument(regIncoming.detailModel)
       break;
     case 'Inner':
+      await docFlowStore.actionCreateDocument(regInner.detailModel)
+      break;
+    case 'Outgoing':
+      await docFlowStore.actionCreateDocument(regOutgoing.detailModel)
+      break;
+    case 'IncomingBranches':
+      await docFlowStore.actionCreateDocument(regIncomingBranches.detailModel)
+      break;
+    case 'OrderInstruction':
+      await docFlowStore.actionCreateDocument(regOrderInstruction.detailModel)
+      break;
+    case 'Statement':
+      await docFlowStore.actionCreateDocument(regStatement.detailModel)
       break;
     default:
   }
@@ -60,6 +83,19 @@ const clearDocument = () => {
       clearModel(regIncoming.detailModel, ['grif', 'journal'])
       break;
     case 'Inner':
+      clearModel(regInner.detailModel, ['grif', 'journal'])
+      break;
+    case 'Inner':
+      clearModel(regOutgoing.detailModel, ['grif', 'journal'])
+      break;
+    case 'IncomingBranches':
+      clearModel(regIncomingBranches.detailModel, ['grif', 'journal'])
+      break;
+    case 'OrderInstruction':
+      clearModel(regOrderInstruction.detailModel, ['grif', 'journal'])
+      break;
+    case 'Statement':
+      clearModel(regStatement.detailModel, ['grif', 'journal'])
       break;
     default:
   }
@@ -96,3 +132,4 @@ const clearDocument = () => {
     </template>
   </base-dialog>
 </template>
+

@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref,unref, computed } from 'vue'
+import { ref, unref, computed } from 'vue'
 import { useRouter } from "vue-router"
 // Store
 import { useAuthStore } from "../../modules/Auth/stores/index"
@@ -92,4 +92,10 @@ const toggle = (event) => {
     </base-menu>
   </div>
 </template>
-
+<style>
+.base-menu-logout-icons {
+  background-color: var(--primary-50);
+  color: var(--primary-500);
+  border-color: var(--greyscale-200);
+}
+</style>

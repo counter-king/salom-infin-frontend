@@ -5,30 +5,19 @@ import { useVuelidate } from '@vuelidate/core'
 import { helpers, required } from '@vuelidate/validators'
 // Stores
 import { useCommonStore } from '@/stores/common'
-import { useRegInner } from '../../stores/inner.store'
+import { useCorrespondentStore } from '@/stores/correspondent'
+import { useRegStatement } from '../../stores/statement.store'
 // Components
 import MultipleUser from '@/components/Combobox/MultipleUser.vue'
 // Non-reactive
 const rules = {
-  register_number: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
   outgoing_date: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
-  document_type: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
-  deadline: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
-  __department: {
+  correspondent: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   author: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
-  __signers: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   __reviewers: {
@@ -40,25 +29,20 @@ const rules = {
 }
 // Composable
 const commonStore = useCommonStore()
-const innerStore = useRegInner()
-const $v = useVuelidate(rules, innerStore.detailModel)
+const correspondentStore = useCorrespondentStore()
+const statementStore = useRegStatement()
+const $v = useVuelidate(rules, statementStore.detailModel)
 // Composable
 defineExpose({ $v })
-
+// Watch
+watch(
+  () => statementStore.detailModel.__reviewers,
+)
 </script>
 
 <template>
-
   <div class="incoming-form-view">
     <base-row>
-      <base-col col-class="w-1/2">
-        <base-input
-          required
-          v-model="$v.register_number.$model"
-          :error="$v.register_number"
-          label="reg-number" />
-      </base-col>
-
       <base-col col-class="w-1/2">
         <base-calendar
           required
@@ -71,33 +55,14 @@ defineExpose({ $v })
       <base-col col-class="w-1/2">
         <base-dropdown
           required
-          v-model="$v.document_type.$model"
-          :error="$v.document_type"
-          :options="commonStore.documentTypesList"
+          v-model="$v.correspondent.$model"
+          :error="$v.correspondent"
+          :options="correspondentStore.allList"
           option-value="id"
-          label="document_type"
-          placeholder="document_type" />
+          label="correspondent"
+          placeholder="enter-correspondent" />
       </base-col>
 
-      <base-col col-class="w-1/2">
-        <base-calendar
-          required
-          v-model="$v.deadline.$model"
-          :error="$v.deadline"
-          label="deadline"
-          placeholder="deadline" />
-      </base-col>
-
-     <base-col col-class="w-1/2">
-        <base-dropdown
-          required
-          v-model="$v.__department.$model"
-          :error="$v.__department"
-          :options="commonStore.departmentList"
-          option-value="id"
-          label="department"
-          placeholder="department" />
-      </base-col>
 
       <base-col col-class="w-1/2">
         <base-dropdown
@@ -111,19 +76,8 @@ defineExpose({ $v })
       </base-col>
 
       <base-col col-class="w-1/2">
-        <base-dropdown
-          required
-          v-model="$v.__signers.$model"
-          :error="$v.__signers"
-          :options="commonStore.usersList"
-          option-value="id"
-          label="signers"
-          placeholder="signers" />
-      </base-col>
-
-      <base-col col-class="w-1/2">
         <multiple-user
-          required
+        required
           v-model="$v.__reviewers.$model"
           :error="$v.__reviewers"
           display="chip"
@@ -139,6 +93,7 @@ defineExpose({ $v })
           :error="$v.description"
           label="content" />
       </base-col>
+
     </base-row>
   </div>
 </template>
