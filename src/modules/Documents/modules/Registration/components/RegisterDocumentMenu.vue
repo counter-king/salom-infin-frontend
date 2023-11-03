@@ -28,6 +28,7 @@ const items = ref([
   },
   {
     label: 'Приказы и распоряжения',
+    command: () => documentType('OrderInstruction', 'Приказы и распоряжения')
   },
   {
     label: 'Заявления',

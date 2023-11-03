@@ -139,5 +139,9 @@
   "document_type": "Вид документа",
   "department":"Департмент",
   "branch":"Филиал",
-  "enter-branch":"Выберите филиал"
+  "enter-branch":"Выберите филиал",
+  "title-document":"Наименование документа",
+  "enter-document":"Написать наименование",
+  "magazine":"Журнал",
+  "enter-magazine":"Выберите журнал"
 }
