@@ -1,6 +1,5 @@
 <script setup>
 // Core
-import { watch } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { helpers, required } from '@vuelidate/validators'
 // Stores
@@ -41,7 +40,7 @@ const innerOutgoing = useRegOutgoing()
 const $v = useVuelidate(rules, innerOutgoing.detailModel)
 // Composable
 defineExpose({ $v })
-// Watch
+
 </script>
 
 <template>

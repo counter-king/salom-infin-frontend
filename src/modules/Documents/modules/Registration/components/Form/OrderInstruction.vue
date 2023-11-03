@@ -51,7 +51,6 @@ watch(
 </script>
 
 <template>
-
   <div class="incoming-form-view">
     <base-row>
       <base-col col-class="w-1/2">

@@ -79,7 +79,7 @@ watch(
 
       <base-col col-class="w-1/2">
         <multiple-user
-        required
+          required
           v-model="$v.__reviewers.$model"
           :error="$v.__reviewers"
           display="chip"
