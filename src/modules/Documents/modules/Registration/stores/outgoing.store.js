@@ -16,7 +16,7 @@ export const useRegOutgoing = defineStore("reg-outgoing", {
       correspondent: null,
       author: null,
       description: null,
-      journal: JOURNAL.INNER,
+      journal: JOURNAL.OUTGOING,
     },
   }),
   actions: {

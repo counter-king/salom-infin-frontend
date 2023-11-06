@@ -13,7 +13,7 @@ export const useRegStatement = defineStore("reg-statement", {
       author: null,
       reviewers: [],
       __reviewers: [],
-      journal: JOURNAL.INNER,
+      journal: JOURNAL.APPLICATION,
     },
   }),
   actions: {
