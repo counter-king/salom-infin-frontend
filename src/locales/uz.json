@@ -63,6 +63,7 @@
   "approvers": "Соглашатели",
   "enter-approvers": "Введите соглашателей",
   "preview": "Просмотр документа",
+  "save": "Сохранить",
   "save-as-draft": "Сохранить как черновик",
   "update": "Изменить",
   "send": "Отправить",
@@ -162,5 +163,6 @@
   "type-complaint": "Вид подачи  жалобы",
   "enter-type-complaint": "Выберите вид",
   "duplicate": "Дубликат",
-  "repeated-application": "Повторная заявка"
+  "repeated-application": "Повторная заявка",
+  "renew":"Обновить"
 }
