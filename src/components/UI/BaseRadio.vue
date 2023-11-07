@@ -17,10 +17,6 @@ const props = defineProps({
   inputId: {
     type: [Number, String]
   },
-  classRadio: {
-    type: String,
-    default: null
-  },
   bgRadio: {
     type: String,
     default: null
@@ -54,22 +50,8 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <div class="app-input">
-
-    <div :class="props.classBody">
+  <div class="app-radio">
       <base-label :label="props.label" :class="props.classLabel" :required="props.required" />
-      <!-- <InputSwitch
-        v-model="modelValue"
-        :name="name"
-        :pt="{
-          root: {
-            class: ['mr-4']
-          },
-          slider: ({ props }) => ({
-            class: props.modelValue ? 'bg-green-500' : 'bg-greyscale-100',
-          }),
-        }"
-      /> -->
 
       <RadioButton
         v-model="modelValue"
@@ -78,17 +60,16 @@ const { t } = useI18n()
         :value="props.value"
         :pt="{
           root: {
-            class: ['mr-2 text-sm/[3px]', props.classRadio, props.bgRadio]
+            class: ['mr-2 text-sm/[3px] rounded-full', props.bgRadio]
           },
           input: {
             class: ['border-none', props.bgRadio]
           },
           icon: {
-            class: ['text-white my_icon pt-0.5 pl-0.5', props.iconRadio, props.bgRadio]
+            class: ['text-white my_icon pt-0.5 pl-0.5 pi pi-check', props.iconRadio, props.bgRadio]
           }
         }"
       />
-    </div>
 
     <div class="mt-1">
       <template v-if="props.error.$errors.length">
@@ -111,4 +92,5 @@ const { t } = useI18n()
   font-size: 8px !important;
   display: block;
 }
+
 </style>
