@@ -3,6 +3,8 @@
 import { useI18n } from 'vue-i18n'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
+import {computed} from "vue";
+import {formatDateHour} from "../../utils/formatDate";
 // Composable
 const { t } = useI18n()
 // Macros
@@ -16,16 +18,26 @@ const props = defineProps({
     default: () => []
   }
 })
+
+const valueComputed = computed(() => {
+  return props.value.map((item, index) => {
+    return {
+      index: index + 1,
+      ...item
+    }
+  })
+})
 </script>
 
 <template>
   <DataTable
-    :value="props.value"
+    :value="valueComputed"
     scrollable
     scrollHeight="700px"
     :pt="{
         table: { class: ['border-separate', 'border-spacing-y-0.5', 'mt-[-2px]'] },
-        thead: { class: ['bg-white'] }
+        thead: { class: ['bg-white'] },
+        bodyRow: { class: ['cursor-pointer'] }
     }"
   >
     <template
@@ -37,12 +49,13 @@ const props = defineProps({
         :pt="{
           headerCell: { class: ['bg-inherit', 'h-[56px]'] },
           headerContent: { class: ['text-sm', 'font-semibold', 'text-greyscale-500'] },
-          bodyCell: { class: ['text-xs', 'py-0', 'h-[64px]'] }
+          bodyCell: { class: ['text-xs', 'py-0', 'h-[56px]'] }
         }"
       >
         <template #body="{ field, data }">
           <slot :name="field" :data="data">
-            <span class="text-sm font-medium text-greyscale-500">{{ data[field] }}</span>
+            <span v-if="['created_date', 'modified_date'].includes(field)" class="text-sm font-medium text-greyscale-500">{{ formatDateHour(data[field]) }}</span>
+            <span v-else class="text-sm font-medium text-greyscale-500">{{ data[field] }}</span>
           </slot>
         </template>
       </Column>

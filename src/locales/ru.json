@@ -162,6 +162,6 @@
   "type-complaint": "Вид подачи  жалобы",
   "enter-type-complaint": "Выберите вид",
   "duplicate": "Дубликат",
-  "repeated-application": "Повторная заявка"
-
+  "repeated-application": "Повторная заявка",
+  "service_letter": "Служебное письмо"
 }
