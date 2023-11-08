@@ -30,6 +30,14 @@ const Playground = [
       isAuthRequired: true
     },
     component: () => import("../views/BaseMultiSelect.vue"),
+  },
+  {
+    path: "/sidebar",
+    name: "SidebarIndex",
+    meta: {
+      isAuthRequired: true
+    },
+    component: () => import("../views/Sidebar.vue"),
   }
 ]
 export default Playground
