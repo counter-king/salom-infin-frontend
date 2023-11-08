@@ -16,6 +16,11 @@ const props = defineProps({
   headers: {
     type: Array,
     default: () => []
+  },
+  filterState: {
+    type: Object,
+    default: () => {},
+    required: true
   }
 })
 
@@ -32,13 +37,36 @@ const valueComputed = computed(() => {
 <template>
   <DataTable
     :value="valueComputed"
+    :page-link-size="5"
+    paginator
+    paginator-position="bottom"
+    paginatorTemplate="RowsPerPageDropdown CurrentPageReport PrevPageLink PageLinks NextPageLink"
+    row-hover
+    :rows-per-page-options="[10, 15, 30]"
+    :rows="props.filterState.page_size"
+    :currentPageReportTemplate="`${'1-8'} из ${'50'}`"
     scrollable
-    scrollHeight="700px"
+    scroll-height="700px"
     :pt="{
-        table: { class: ['border-separate', 'border-spacing-y-0.5', 'mt-[-2px]'] },
+        table: { class: ['border-separate', 'border-spacing-y-1', '-mt-1'] },
         thead: { class: ['bg-white'] },
-        bodyRow: { class: ['cursor-pointer'] }
+        bodyRow: { class: ['cursor-pointer', 'hover:bg-greyscale-50'] },
+        paginator: {
+          rowPerPageDropdown: {
+            root: { class: ['h-[24px]', 'w-[60px]', 'rounded-[8px]'] },
+            input: { class: ['flex', 'items-center', 'text-xs', 'font-semibold'] },
+            dropdownicon: { class: ['w-[12px]', 'h-[12px]'] },
+            trigger: { class: ['w-[30px]'] },
+            item: { class: ['h-8', 'text-xs', 'flex', 'items-center'] },
+            list: { class: ['p-0'] },
+            previousPageButton: { class: 'bg-primary-500' }
+          },
+          current: { class: ['text-xs', 'text-greyscale-300'] },
+          previousPageButton: { class: 'bg-primary-500' }
+        }
     }"
+    class="base-data-table"
+    @row-click="event => console.log('Row clicked')"
   >
     <template
       v-for="header in headers"
@@ -72,4 +100,25 @@ th:first-child, td:first-child {
 th:last-child, td:last-child {
   border-radius: 0 12px 12px 0!important;
 }
+
+/*.base-data-table .p-paginator {
+  height: 56px!important;
+}
+
+.base-data-table .p-inputwrapper {
+  height: 30px!important;
+}
+
+.base-data-table .p-dropdown-label {
+  display: flex;
+  align-items: center;
+}
+.base-data-table .p-inputtext {
+  font-size: 14px;
+  font-weight: 500;
+}
+.base-data-table .p-icon {
+  width: 14px !important;
+  height: 14px !important;
+}*/
 </style>

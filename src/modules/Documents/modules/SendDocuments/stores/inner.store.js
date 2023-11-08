@@ -6,6 +6,10 @@ import {fetchGetDocumentList} from "../services/inner.service";
 export const useSDInner = defineStore("sd-inner", {
   state: () => ({
     documentList: [],
+    filterState: {
+      page: 1,
+      page_size: 15
+    },
     headers: [
       {
         header: "№",

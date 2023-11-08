@@ -24,13 +24,14 @@ onMounted(async () => {
     <base-data-table
       :headers="innerStore.headers"
       :value="innerStore.documentList"
+      :filter-state="innerStore.filterState"
     >
       <template #type="{ data }">
         <doc-type :type="data.type"/>
       </template>
 
-      <template #status>
-        <status />
+      <template #status="{ data }">
+        <status :status="data.status"/>
       </template>
 
       <template #signers="{ data }">
