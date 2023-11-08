@@ -30,7 +30,8 @@ const props = defineProps({
   >
     <template
       v-for="header in headers"
-      :key="header.field">
+      :key="header.field"
+    >
       <Column
         :header="t(header.header)"
         :field="header.field"
@@ -40,8 +41,8 @@ const props = defineProps({
           bodyCell: { class: ['text-xs', 'py-0', 'h-[64px]'] }
         }"
       >
-        <template #body="{ field, data }">
-          <slot :name="field" :data="data">
+        <template #body="{ field, data, column }">
+          <slot :name="field" :data="{ value: data[field], data }">
             <span class="text-sm font-medium text-greyscale-500">{{ data[field] }}</span>
           </slot>
         </template>

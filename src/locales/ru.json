@@ -159,9 +159,9 @@
   "enter-address":"Выберите адрес",
   "submission-form":"Форма предоставления",
   "enter-submission-form":"Выберите форма",
-  "type-complaint": "Вид подачи  жалобы",
+  "type-complaint": "Вид подачи жалобы",
   "enter-type-complaint": "Выберите вид",
   "duplicate": "Дубликат",
-  "repeated-application": "Повторная заявка"
-
+  "repeated-application": "Повторная заявка",
+  "status": "Статус"
 }
