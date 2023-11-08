@@ -42,7 +42,8 @@ const valueComputed = computed(() => {
   >
     <template
       v-for="header in headers"
-      :key="header.field">
+      :key="header.field"
+    >
       <Column
         :header="t(header.header)"
         :field="header.field"
@@ -53,7 +54,7 @@ const valueComputed = computed(() => {
         }"
       >
         <template #body="{ field, data }">
-          <slot :name="field" :data="data">
+          <slot :name="field" :data="{ value: data[field], data }">
             <span v-if="['created_date', 'modified_date'].includes(field)" class="text-sm font-medium text-greyscale-500">{{ formatDateHour(data[field]) }}</span>
             <span v-else class="text-sm font-medium text-greyscale-500">{{ data[field] }}</span>
           </slot>

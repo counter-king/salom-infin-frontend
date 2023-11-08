@@ -163,5 +163,6 @@
   "enter-type-complaint": "Выберите вид",
   "duplicate": "Дубликат",
   "repeated-application": "Повторная заявка",
+  "status": "Status",
   "service_letter": "Служебное письмо"
 }

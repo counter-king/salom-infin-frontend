@@ -4,7 +4,7 @@
 
 <template>
   <div class="layout-preview-view">
-    Preview view
+    asd
   </div>
 </template>
 

@@ -47,11 +47,11 @@ export function getValueByPath(obj, path) {
 export function combineKeys(cols, model) {
 	return cols
 	.filter(col => col.hasOwnProperty("detail"))
-	.sort((prevCol, nextCol) => prevCol.detail.order - nextCol.detail.order)
+	// .sort((prevCol, nextCol) => prevCol.detail.order - nextCol.detail.order)
 	.map(item => {
 		return {
-			key: item.title,
-			value : getValueByPath(model, item.key),
+      header: item.header,
+      field : getValueByPath(model, item.field),
 			detail: item.detail
 		}
 	})
