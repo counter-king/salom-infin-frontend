@@ -1,5 +1,4 @@
 {
-  "save": "Сохранить",
   "create": "Создать",
   "naming": "Наименование",
   "naming-organization": "Наименование организации",
@@ -167,5 +166,10 @@
   "repeated-application": "Повторная заявка",
   "status": "Статус",
   "service_letter": "Служебное письмо",
-  "renew":"Обновить"
+  "renew":"Обновить",
+  "customize-columns": "Настроить столбцы",
+  "inner": "Внутренний",
+  "filter": "Фильтр",
+  "date": "Дата",
+  "export": "Экспорт"
 }
