@@ -5,6 +5,12 @@ const URLS = {
   resolutionTree: "resolution-tree"
 }
 /**
+ * Получить список документов
+ * */
+export const fetchGetDocumentList = (params) => {
+  return axiosConfig.get(`${URLS.docflow}/`, params)
+}
+/**
  * Создает новый документ
  * */
 export const fetchCreateDocument = (body) => {

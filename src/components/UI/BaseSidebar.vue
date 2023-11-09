@@ -1,0 +1,88 @@
+<script setup>
+// Core
+import { useModel } from 'vue'
+import { useI18n } from 'vue-i18n'
+import Sidebar from 'primevue/sidebar'
+// Composable
+const modelValue = useModel(props, 'modelValue')
+const { t } = useI18n()
+// Macros
+const props = defineProps({
+  modelValue: {
+    type: Boolean
+  },
+  title: {
+    type: String,
+    default: 'create'
+  },
+  successText: {
+    type: String,
+    default: 'save'
+  },
+  cancelText: {
+    type: String,
+    default: 'cancel'
+  },
+  position: {
+    type: String,
+    default: 'right',
+    validator(value) {
+      return ['left', 'right', 'top', 'bottom', 'full'].includes(value)
+    }
+  },
+  rootClass: {
+    type: String
+  }
+})
+</script>
+
+<template>
+  <Sidebar
+    v-model:visible="modelValue"
+    :position="props.position"
+    :pt="{
+      root: {
+        class: ['w-[675px]', props.rootClass]
+      },
+      header: {
+        class: 'bg-greyscale-50 p-6'
+      },
+      headerContent: {
+        class: 'mr-auto'
+      },
+      closeButton: {
+        class: 'w-9 h-9 bg-white rounded-full shadow-button'
+      },
+      content: {
+        class: 'p-0'
+      }
+    }"
+  >
+    <template #header>
+      <span class="text-xl font-semibold text-primary-900">{{ t(props.title) }}</span>
+    </template>
+
+    <div class="flex flex-col h-full">
+      <div class="flex-1 p-6 overflow-y-auto">
+        <slot name="content" />
+      </div>
+
+      <div class="flex justify-end gap-3 bg-greyscale-50 px-6 py-5">
+        <base-button
+          :label="t(props.cancelText)"
+          size="large"
+          border-color="border-transparent"
+          outlined
+          rounded
+          shadow
+        />
+
+        <base-button
+          :label="t(props.successText)"
+          size="large"
+          rounded
+        />
+      </div>
+    </div>
+  </Sidebar>
+</template>

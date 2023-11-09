@@ -1,4 +1,5 @@
 {
+  "save": "Сохранить",
   "create": "Yaratish",
   "naming": "Nom",
   "naming-organization": "Organizatsiya nomi",
@@ -164,5 +165,7 @@
   "enter-type-complaint": "Выберите вид",
   "duplicate": "Дубликат",
   "repeated-application": "Повторная заявка",
+  "status": "Status",
+  "service_letter": "Служебное письмо",
   "renew":"Обновить"
 }
