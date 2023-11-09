@@ -17,7 +17,7 @@ export const useRegOrderInstruction = defineStore("reg-order-instruction", {
       reviewers: [],
       __reviewers: [],
       description: null,
-      journal: JOURNAL.INNER,
+      journal: JOURNAL.ORDERS_PROTOCOLS,
     },
   }),
   actions: {

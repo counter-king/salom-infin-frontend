@@ -21,12 +21,14 @@ const rules = {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   __signers: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
-  correspondent: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+    required: false
+    // required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   author: {
+    required: false
+    // required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  correspondent: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   description: {
@@ -87,7 +89,6 @@ defineExpose({ $v })
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          required
           v-model="$v.author.$model"
           :error="$v.author"
           :options="commonStore.author"
@@ -98,7 +99,6 @@ defineExpose({ $v })
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          required
           v-model="$v.__signers.$model"
           :error="$v.__signers"
           :options="commonStore.usersList"
@@ -125,7 +125,6 @@ defineExpose({ $v })
           :error="$v.description"
           label="content" />
       </base-col>
-
     </base-row>
   </div>
 </template>

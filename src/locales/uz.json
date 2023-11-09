@@ -64,6 +64,7 @@
   "approvers": "Соглашатели",
   "enter-approvers": "Введите соглашателей",
   "preview": "Просмотр документа",
+  "save": "Сохранить",
   "save-as-draft": "Сохранить как черновик",
   "update": "Изменить",
   "send": "Отправить",
@@ -165,5 +166,6 @@
   "duplicate": "Дубликат",
   "repeated-application": "Повторная заявка",
   "status": "Status",
-  "service_letter": "Служебное письмо"
+  "service_letter": "Служебное письмо",
+  "renew":"Обновить"
 }

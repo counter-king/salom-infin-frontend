@@ -7,6 +7,7 @@ import { useNavigation } from '@/stores/navigation.store'
 // Components
 import CreateActionDropdown from './CreateActionDropdown.vue'
 import UserDropdown from './UserDropdown.vue'
+import SettingDropdown from './SettingDropdown.vue'
 // Composable
 const navigationStore = useNavigation()
 
@@ -210,13 +211,7 @@ const openSidebar = (menu) => {
               rounded
             />
 
-            <base-button
-              color="bg-greyscale-800 hover:bg-greyscale-900"
-              border-color="border-greyscale-800"
-              icon-left="SettingsIcon"
-              only-icon
-              rounded
-            />
+            <setting-dropdown></setting-dropdown>
 
             <base-button
               color="bg-greyscale-800 hover:bg-greyscale-900"

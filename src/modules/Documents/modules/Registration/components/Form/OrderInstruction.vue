@@ -20,7 +20,8 @@ const rules = {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   magazine:{
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+    required: false
+    // required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   __department: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
@@ -82,7 +83,6 @@ watch(
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          required
           v-model="$v.magazine.$model"
           :error="$v.magazine"
           :options="commonStore.magazineList"
@@ -93,7 +93,6 @@ watch(
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          required
           v-model="$v.magazine.$model"
           :error="$v.magazine"
           :options="commonStore.magazineList"
