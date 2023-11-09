@@ -10,6 +10,7 @@ export const useSDInner = defineStore("sd-inner", {
       page: 1,
       page_size: 15
     },
+    totalCount: 0,
     headers: [
       {
         header: "№",
@@ -43,13 +44,21 @@ export const useSDInner = defineStore("sd-inner", {
         header: "Действие",
         field: "action"
       }
-    ]
+    ],
+    list: []
   }),
   actions: {
     async actionGetDocumentList(params){
       const { data } = await fetchGetDocumentList(params);
 
       this.documentList = data.results;
+      for (let i = 0; i < 30; i++) {
+        this.list.push({
+          ...data.results[0],
+          id: data.results[0].id
+        })
+      }
+      this.totalCount = data.count;
 
       return Promise.resolve(data);
     }

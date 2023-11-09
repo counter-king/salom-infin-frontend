@@ -164,5 +164,10 @@
   "duplicate": "Дубликат",
   "repeated-application": "Повторная заявка",
   "status": "Статус",
-  "service_letter": "Служебное письмо"
+  "service_letter": "Служебное письмо",
+  "customize-columns": "Настроить столбцы",
+  "inner": "Внутренний",
+  "filter": "Фильтр",
+  "date": "Дата",
+  "export": "Экспорт"
 }
