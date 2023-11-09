@@ -14,9 +14,6 @@ const toggle = (event) => {
   const _opRef = unref(opRef)
   _opRef.opRef.toggle(event)
 }
-// const toggle = (event) => {
-//   opRef.value.toggle(event);
-// }
 </script>
 <template>
   <div>
@@ -124,42 +121,42 @@ const toggle = (event) => {
               <base-radio
                 v-model="colorRadio"
                 inputId="colorSelection1"
-                name="colorSelection"
+                name="colorSelection1"
                 value="colorSelection1"
                 bgRadio="bg-pink-600"
               />
               <base-radio
                 v-model="colorRadio"
                 inputId="colorSelection2"
-                name="colorSelection"
+                name="colorSelection2"
                 value="colorSelection2"
                 bgRadio="bg-lime-500"
               />
               <base-radio
                 v-model="colorRadio"
                 inputId="colorSelection3"
-                name="colorSelection"
+                name="colorSelection3"
                 value="colorSelection3"
                 bgRadio="bg-cyan-500"
               />
               <base-radio
                 v-model="colorRadio"
                 inputId="colorSelection4"
-                name="colorSelection"
+                name="colorSelection4"
                 value="colorSelection4"
                 bgRadio="bg-primary-600"
               />
               <base-radio
                 v-model="colorRadio"
                 inputId="colorSelection5"
-                name="colorSelection"
+                name="colorSelection5"
                 value="colorSelection5"
                 bgRadio="bg-yellow-400"
               />
               <base-radio
                 v-model="colorRadio"
                 inputId="colorSelection6"
-                name="colorSelection"
+                name="colorSelection6"
                 value="colorSelection6"
                 bgRadio="bg-blue-800"
               />
@@ -167,7 +164,7 @@ const toggle = (event) => {
               <base-radio
                 v-model="colorRadio"
                 inputId="colorSelection7"
-                name="colorSelection"
+                name="colorSelection7"
                 value="colorSelection7"
                 bgRadio="bg-teal-600"
               />

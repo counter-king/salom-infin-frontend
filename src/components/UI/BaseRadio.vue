@@ -6,16 +6,16 @@ import RadioButton from 'primevue/radiobutton';
 // Macros
 const props = defineProps({
   modelValue: {
-    type: Array,
+    type: [String, Array],
   },
   name: {
-    type: [Number, String]
+    type: [Boolean, Number, String]
   },
   value: {
-    type: [Number, String]
+    type: [Boolean, Number, String]
   },
   inputId: {
-    type: [Number, String]
+    type: [Boolean, Number, String]
   },
   bgRadio: {
     type: String,
@@ -60,7 +60,7 @@ const { t } = useI18n()
         :value="props.value"
         :pt="{
           root: {
-            class: ['mr-2 text-sm/[3px] rounded-full', props.bgRadio]
+            class: ['mr-2 text-sm/[3px] rounded-full',  props.bgRadio]
           },
           input: {
             class: ['border-none', props.bgRadio]
@@ -92,5 +92,4 @@ const { t } = useI18n()
   font-size: 8px !important;
   display: block;
 }
-
 </style>
