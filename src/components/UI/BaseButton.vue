@@ -35,7 +35,7 @@ const props = defineProps({
     type: Boolean
   },
   rounded: {
-    type: Boolean
+    type: [String, Boolean]
   },
   outlined: {
     type: Boolean

@@ -1,28 +1,40 @@
 <script setup>
 // Core
 import { useModel } from 'vue'
-import InputSwitch from 'primevue/inputswitch';
+import { useI18n } from 'vue-i18n'
+import RadioButton from 'primevue/radiobutton';
 // Macros
 const props = defineProps({
   modelValue: {
-    type: [Array, Boolean],
+    type: [String, Array],
   },
   name: {
-    type: [Number, String]
+    type: [Boolean, Number, String]
+  },
+  value: {
+    type: [Boolean, Number, String]
+  },
+  inputId: {
+    type: [Boolean, Number, String]
+  },
+  bgRadio: {
+    type: String,
+    default: null
+  },
+  iconRadio: {
+    type: String,
+    default: null
+  },
+  inputRadio: {
+    type: String,
+    default: null
   },
   label: {
     type: String,
     default: null
   },
-  classLabel: {
-    type: String,
-    default: null
-  },
   required: {
     type: Boolean
-  },
-  classBody: {
-    type: String,
   },
   error: {
     type: Object,
@@ -34,26 +46,30 @@ const props = defineProps({
 })
 // Composable
 const modelValue = useModel(props, 'modelValue')
+const { t } = useI18n()
 </script>
 
 <template>
-  <div class="app-input">
-
-    <div :class="props.classBody">
+  <div class="app-radio">
       <base-label :label="props.label" :class="props.classLabel" :required="props.required" />
-      <InputSwitch
+
+      <RadioButton
         v-model="modelValue"
-        :name="name"
+        :inputId="props.inputId"
+        :name="props.name"
+        :value="props.value"
         :pt="{
           root: {
-            class: ['mr-4']
+            class: ['mr-2 text-sm/[3px] rounded-full',  props.bgRadio]
           },
-          slider: ({ props }) => ({
-            class: props.modelValue ? 'bg-green-500' : 'bg-greyscale-100',
-          }),
+          input: {
+            class: ['border-none', props.bgRadio]
+          },
+          icon: {
+            class: ['text-white my_icon pt-0.5 pl-0.5 pi pi-check', props.iconRadio, props.bgRadio]
+          }
         }"
       />
-    </div>
 
     <div class="mt-1">
       <template v-if="props.error.$errors.length">
@@ -71,5 +87,9 @@ const modelValue = useModel(props, 'modelValue')
 <style>
 .p-inputtext.p-invalid.p-component {
   border-color: #e24c4c !important;
+}
+.my_icon::before{
+  font-size: 8px !important;
+  display: block;
 }
 </style>

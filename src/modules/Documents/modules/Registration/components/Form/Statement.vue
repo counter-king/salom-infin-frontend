@@ -18,7 +18,8 @@ const rules = {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   author: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+    required: false
+    // required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   __reviewers: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
@@ -68,7 +69,6 @@ watch(
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          required
           v-model="$v.author.$model"
           :error="$v.author"
           :options="commonStore.author"

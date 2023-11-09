@@ -24,7 +24,7 @@ export const useRegAppeal = defineStore("reg-appeal", {
       duplicateSwitch: false,
       repeated_application: true,
       description: null,
-      journal: JOURNAL.INNER,
+      journal: JOURNAL.APPEALS,
     },
   }),
   actions: {

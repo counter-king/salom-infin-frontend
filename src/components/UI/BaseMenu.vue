@@ -104,6 +104,7 @@ const rootClasses = computed(() => {
 .modal-layer {
   height: calc(100vh - 80px);
   background: rgba(0, 8, 28, 0.45);
+  z-index: 9;
 }
 
 .p-menu::after {
