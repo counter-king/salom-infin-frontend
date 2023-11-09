@@ -38,7 +38,6 @@ const rootClasses = computed(() => {
 <template>
   <OverlayPanel
     ref="opRef"
-    :model="props.items"
     :pt="{
       root: {
         class: rootClasses
