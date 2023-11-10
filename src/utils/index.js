@@ -29,6 +29,22 @@ export function clearModel(model, exclude = []) {
     model[_key] = null
   })
 }
+/**
+ * @param model Объект модель
+ * @param source Объект с данными
+ * */
+export function setValuesToKeys(model, source) {
+  Object.entries(source)
+  .forEach(([key, value]) => {
+    if(!value) return
+
+    if(Object.prototype.toString.call(value) === '[object Object]') {
+      model[key] = value.id
+    } else {
+      model[key] = value
+    }
+  })
+}
 /*
 *
 * */
