@@ -17,10 +17,17 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
-  filterState: {
-    type: Object,
-    default: () => {},
-    required: true
+  pageSize: {
+    type: [String, Number],
+    default: () => 15
+  },
+  totalCount: {
+    type: [String, Number],
+    default: 0,
+  },
+  scrollHeight: {
+    type: String,
+    default: () => `calc(100vh - 310px)`
   }
 })
 
@@ -40,29 +47,37 @@ const valueComputed = computed(() => {
     :page-link-size="5"
     paginator
     paginator-position="bottom"
-    paginatorTemplate="RowsPerPageDropdown CurrentPageReport PrevPageLink PageLinks NextPageLink"
+    paginatorTemplate="RowsPerPageDropdown CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
     row-hover
     :rows-per-page-options="[10, 15, 30]"
-    :rows="props.filterState.page_size"
-    :currentPageReportTemplate="`${'1-8'} из ${'50'}`"
+    :rows="props.pageSize"
+    currentPageReportTemplate="{first}-{last} из {totalRecords}"
+    :scroll-height="props.scrollHeight"
     scrollable
-    scroll-height="700px"
     :pt="{
         table: { class: ['border-separate', 'border-spacing-y-1', '-mt-1'] },
         thead: { class: ['bg-white'] },
         bodyRow: { class: ['cursor-pointer', 'hover:bg-greyscale-50'] },
         paginator: {
           rowPerPageDropdown: {
-            root: { class: ['h-[24px]', 'w-[60px]', 'rounded-[8px]'] },
+            root: { class: ['h-6', 'rounded-2'] },
+            paginatorWrapper: ['flex', 'justify-between', 'border', 'border-solid'],
             input: { class: ['flex', 'items-center', 'text-xs', 'font-semibold'] },
-            dropdownicon: { class: ['w-[12px]', 'h-[12px]'] },
+            dropdownicon: { class: ['w-3', 'h-3'] },
             trigger: { class: ['w-[30px]'] },
             item: { class: ['h-8', 'text-xs', 'flex', 'items-center'] },
             list: { class: ['p-0'] },
-            previousPageButton: { class: 'bg-primary-500' }
           },
-          current: { class: ['text-xs', 'text-greyscale-300'] },
-          previousPageButton: { class: 'bg-primary-500' }
+          root: { class: ['h-14', 'rounded-3'] },
+          paginatorWrapper: { class: ['h-14', 'rounded-3'] },
+          current: { class: ['text-xs', 'text-greyscale-300', 'mr-auto', 'h-full'] },
+          firstPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
+          lastPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
+          previousPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
+          pageButton: ({ props, state, context }) => ({
+              class:  [ context.active ? ['bg-primary-500', 'text-primary-0'] : undefined, 'rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'text-xs']
+          }),
+          nextPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] }
         }
     }"
     class="base-data-table"
@@ -100,25 +115,4 @@ th:first-child, td:first-child {
 th:last-child, td:last-child {
   border-radius: 0 12px 12px 0!important;
 }
-
-/*.base-data-table .p-paginator {
-  height: 56px!important;
-}
-
-.base-data-table .p-inputwrapper {
-  height: 30px!important;
-}
-
-.base-data-table .p-dropdown-label {
-  display: flex;
-  align-items: center;
-}
-.base-data-table .p-inputtext {
-  font-size: 14px;
-  font-weight: 500;
-}
-.base-data-table .p-icon {
-  width: 14px !important;
-  height: 14px !important;
-}*/
 </style>

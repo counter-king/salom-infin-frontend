@@ -1,12 +1,14 @@
 <script setup>
 // Core
 import { useModel } from 'vue'
-import { useI18n } from 'vue-i18n'
 import InputSwitch from 'primevue/inputswitch';
 // Macros
 const props = defineProps({
   modelValue: {
-    type: Array,
+    type: [Array, Boolean],
+  },
+  name: {
+    type: [Number, String]
   },
   label: {
     type: String,
@@ -32,7 +34,6 @@ const props = defineProps({
 })
 // Composable
 const modelValue = useModel(props, 'modelValue')
-const { t } = useI18n()
 </script>
 
 <template>
