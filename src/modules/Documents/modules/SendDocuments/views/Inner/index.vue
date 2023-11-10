@@ -21,6 +21,7 @@ onMounted(async () => {
 
     <action-toolbar
       title="inner"
+      :column-menu-items="innerStore.headers"
     >
       <template #end>
         <base-button

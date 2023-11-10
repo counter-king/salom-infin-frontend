@@ -10,6 +10,10 @@ const props = defineProps({
   title: {
     type: String,
     default: 'create'
+  },
+  columnMenuItems: {
+    type: Array,
+    default: () => []
   }
 })
 </script>
@@ -26,7 +30,7 @@ const props = defineProps({
 
       <filter-menu />
 
-      <column-menu />
+      <column-menu :items="props.columnMenuItems" />
 
       <slot name="end"/>
     </div>

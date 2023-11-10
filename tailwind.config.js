@@ -68,6 +68,7 @@ export default {
         "gray-2": "#757994",
         "gray-3": "#E2E8F0",
         "gray-4": "#ADB7C2",
+        "gray-5": "#F9F9F9",
         "border-1": "#F1F5F9",
       },
       boxShadow: {
