@@ -8,7 +8,7 @@ const { t } = useI18n()
 const opRef = ref(null)
 const darkSwitch = ref(false);
 const sidePanelSwitch = ref(false);
-const colorRadio = ref('colorSelection4');
+const colorRadio = ref('bgPrimaryRadioValue');
 // Methods
 const toggle = (event) => {
   const _opRef = unref(opRef)
@@ -66,7 +66,7 @@ const toggle = (event) => {
 
           <base-button
             :label="t('renew')"
-            rounded="rounded-full"
+            rounded
             class="text-sm px-2 py-1.5"
           >
           </base-button>
@@ -120,52 +120,52 @@ const toggle = (event) => {
             <div class="flex">
               <base-radio
                 v-model="colorRadio"
-                inputId="colorSelection1"
-                name="colorSelection1"
-                value="colorSelection1"
+                inputId="bgPinkRadioId"
+                name="bgPinkRadioName"
+                value="bgPinkRadioValue"
                 bgRadio="bg-pink-600"
               />
               <base-radio
                 v-model="colorRadio"
-                inputId="colorSelection2"
-                name="colorSelection2"
-                value="colorSelection2"
+                inputId="bgLimeRadioId"
+                name="bgLimeRadioName"
+                value="bgLimeRadioValue"
                 bgRadio="bg-lime-500"
               />
               <base-radio
                 v-model="colorRadio"
-                inputId="colorSelection3"
-                name="colorSelection3"
-                value="colorSelection3"
+                inputId="bgCyanRadioId"
+                name="bgCyanRadioName"
+                value="bgCyanRadioValue"
                 bgRadio="bg-cyan-500"
               />
               <base-radio
                 v-model="colorRadio"
-                inputId="colorSelection4"
-                name="colorSelection4"
-                value="colorSelection4"
+                inputId="bgPrimaryRadioId"
+                name="bgPrimaryRadioName"
+                value="bgPrimaryRadioValue"
                 bgRadio="bg-primary-600"
               />
               <base-radio
                 v-model="colorRadio"
-                inputId="colorSelection5"
-                name="colorSelection5"
-                value="colorSelection5"
+                inputId="bgYellowRadioId"
+                name="bgYellowRadioName"
+                value="bgYellowRadioValue"
                 bgRadio="bg-yellow-400"
               />
               <base-radio
                 v-model="colorRadio"
-                inputId="colorSelection6"
-                name="colorSelection6"
-                value="colorSelection6"
+                inputId="bgBlueRadioId"
+                name="bgBlueRadioName"
+                value="bgBlueRadioValue"
                 bgRadio="bg-blue-800"
               />
 
               <base-radio
                 v-model="colorRadio"
-                inputId="colorSelection7"
-                name="colorSelection7"
-                value="colorSelection7"
+                inputId="bgTealRadioId"
+                name="bgTealRadioName"
+                value="bgTealRadioValue"
                 bgRadio="bg-teal-600"
               />
             </div>

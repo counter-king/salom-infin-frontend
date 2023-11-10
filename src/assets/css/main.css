@@ -29,10 +29,6 @@ body {
   font-family: var(--font-regular);
 }
 
-.border-test {
-  border: 1px solid red!important;
-}
-
 @layer tailwind-base, primevue, tailwind-utilities;
 
 @layer tailwind-base {
@@ -58,6 +54,10 @@ body {
   background-color: #cdcbcb;
 }
 
-::-webkit-scrollbar-thumb:hover{
+::-webkit-scrollbar-thumb:hover {
   background-color: var(--primary-500);
+}
+
+.app-input {
+  margin-bottom: 8px;
 }

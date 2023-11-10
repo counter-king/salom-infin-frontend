@@ -47,6 +47,10 @@ const props = defineProps({
         component: "Files"
       }
     ]
+  },
+  previewDetail: {
+    type: Array,
+    default: () => []
   }
 })
 // Reactive
@@ -104,12 +108,16 @@ watch(activeTabMenu, (value) => {
           <slot :name="activeTabMenu.slot">
             <div class="flex-1 overflow-y-auto">
               <div class="h-[1px]">
-                <component :is="activeTabComponent" />
+                <component :is="activeTabComponent" :preview-detail="props.previewDetail">
+                  <template #preview-actions>
+                    <slot name="preview-actions" />
+                  </template>
+                </component>
               </div>
             </div>
           </slot>
 
-          <div class="max-w-[566px] w-full ml-auto">
+          <div class="max-w-[566px] w-full ml-auto border-l">
             resolution
           </div>
         </div>

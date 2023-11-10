@@ -1,9 +1,11 @@
 // Core
 import { defineStore } from 'pinia'
 // Services
-import { fetchGetDocumentList, fetchGetDocumentById } from '../services/docflow.service'
+import { fetchGetDocumentList, fetchGetDocumentById, fetchUpdateDocument } from '../services/docflow.service'
 // Utils
-import { JOURNAL } from '@/enums'
+import { setValuesToKeys, combineKeys } from '@/utils'
+import { dispatchNotify } from '@/utils/notify'
+import { COLOR_TYPES, JOURNAL } from '@/enums'
 // Utils
 export const useRegIncoming = defineStore("reg-incoming", {
   state: () => ({
@@ -12,7 +14,7 @@ export const useRegIncoming = defineStore("reg-incoming", {
         header: "priority",
         field: "priority",
         detail: {
-          component: 'base-priority',
+          component: 'priority-chip',
           colClass: '',
         }
       },
@@ -132,15 +134,20 @@ export const useRegIncoming = defineStore("reg-incoming", {
     list: [],
     detailModel: {
       code: null,
+      content_type: 6,
       correspondent: null,
+      created_by: null,
+      created_date: null,
       delivery_type: null,
       description: null,
       document_type: null,
       files: [],
       // TODO: Временно 1 для создания документа (Входящий)
       grif: 1,
+      id: null,
       journal: JOURNAL.INCOMING,
       language: null,
+      modified_date: null,
       number_of_papers: null,
       outgoing_date: null,
       outgoing_number: null,
@@ -149,7 +156,9 @@ export const useRegIncoming = defineStore("reg-incoming", {
       register_number: null,
       reviewers: [],
       __reviewers: [],
+      status: null,
       title: null,
+      __copy_prototype: null
     },
   }),
   actions: {
@@ -167,7 +176,30 @@ export const useRegIncoming = defineStore("reg-incoming", {
     async actionGetById({ id }) {
       let { data } = await fetchGetDocumentById(id)
 
-      this.detailModel = data
+      this.detailModel.__copy_prototype = combineKeys(this.headers, data)
+      setValuesToKeys(this.detailModel, data)
+      this.detailModel.__reviewers = this.detailModel.reviewers = data.reviewers.map(item => {
+        return {
+          full_name: item.user.full_name,
+          id: item.id,
+          user: item.user.id,
+          document: 18
+        }
+      })
+    },
+    /*
+    * Изменить документ
+    * */
+    async actionUpdateDocument() {
+      try {
+        await fetchUpdateDocument({ id: this.detailModel.id, body: this.detailModel })
+        await this.actionGetById({ id: this.detailModel.id })
+        dispatchNotify('Документ создан', 'Документ изменен', COLOR_TYPES.SUCCESS)
+      }
+      catch (error) {
+        dispatchNotify('Ошибка', 'Ошибка изменение документа', COLOR_TYPES.ERROR)
+        return Promise.reject()
+      }
     }
   }
 })

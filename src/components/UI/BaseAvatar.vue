@@ -3,8 +3,22 @@
 import Avatar from 'primevue/avatar'
 // Macros
 const props = defineProps({
+  label: {
+    type: String,
+    default: ''
+  },
+  color: {
+    type: String
+  },
   image: {
     type: String
+  },
+  type: {
+    type: String,
+    default: 'single',
+    validator(value) {
+      return ['single', 'group'].includes(value)
+    }
   },
   size: {
     type: String,
@@ -15,7 +29,7 @@ const props = defineProps({
   },
   shape: {
     type: String,
-    default: 'square',
+    default: 'circle',
     validator(value) {
       return ['square', 'circle'].includes(value)
     }
@@ -31,15 +45,24 @@ const props = defineProps({
     :image="props.image"
     :size="props.size"
     :shape="props.shape"
+    :label="props.label[0]"
     :pt="{
       root: {
-        class: props.avatarClasses
+        style: `${props.color}px`,
+        class: [
+          { '-ml-2': props.type === 'group' }, props.avatarClasses
+        ]
+      },
+      label: {
+        class: 'text-sm leading-none font-semibold text-primary-900'
       },
       image: {
         class: 'object-cover'
       }
     }"
-  />
+  >
+    <slot />
+  </Avatar>
 </template>
 
 <style scoped>
