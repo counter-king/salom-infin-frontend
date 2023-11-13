@@ -52,7 +52,7 @@ const modelValue = useModel(props, 'modelValue')
 </script>
 
 <template>
-  <div class="app-input">
+  <div class="app-switch">
 
     <div :class="props.classBody">
       <base-label :label="props.label" :class="props.classLabel" :required="props.required"/>

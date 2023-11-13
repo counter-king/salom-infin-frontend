@@ -1,10 +1,13 @@
 <script setup>
 // Core
+import {computed, onMounted} from "vue";
 import { useI18n } from 'vue-i18n'
+// Components
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
-import {computed} from "vue";
-import {formatDateHour} from "../../utils/formatDate";
+// Utils
+import { formatDateHour } from "../../utils/formatDate";
+import { getStorageItem } from "../../utils/storage";
 // Composable
 const { t } = useI18n()
 // Macros
@@ -28,7 +31,18 @@ const props = defineProps({
   scrollHeight: {
     type: String,
     default: () => `calc(100vh - 310px)`
+  },
+  storageColumnsName: {
+    type: String,
+    default: "",
+    required: true
   }
+})
+
+const emit = defineEmits(['emit:setStoreHeaders']);
+
+const headersComputed = computed(() => {
+  return props.headers.filter(header => header.active);
 })
 
 const valueComputed = computed(() => {
@@ -39,6 +53,14 @@ const valueComputed = computed(() => {
     }
   })
 })
+
+onMounted(() => {
+  if (getStorageItem(props.storageColumnsName)){
+    emit('emit:setStoreHeaders', JSON.parse(getStorageItem(props.storageColumnsName)))
+  }
+})
+
+
 </script>
 
 <template>
@@ -84,7 +106,7 @@ const valueComputed = computed(() => {
     @row-click="event => console.log('Row clicked')"
   >
     <template
-      v-for="header in headers"
+      v-for="header in headersComputed"
       :key="header.field"
     >
       <Column

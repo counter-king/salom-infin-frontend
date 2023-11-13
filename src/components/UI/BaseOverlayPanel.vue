@@ -48,6 +48,10 @@ const rootClasses = computed(() => {
     }"
   >
     <template #default>
+      <div v-if="slots.header" class="bg-greyscale-50 p-2 border-b">
+        <slot name="header" />
+      </div>
+
       <Teleport v-if="props.hasOverlay" to="body">
         <div class="modal-layer fixed bottom-0 w-full transition-all duration-[400ms]"></div>
       </Teleport>

@@ -2,23 +2,46 @@
 // Core
 import {ref, unref} from "vue";
 import {useI18n} from "vue-i18n";
+// Utils
+import {removeStorageItem, saveStorageItem} from "../../utils/storage";
+import {useToast} from "primevue/usetoast";
+
+const toast = useToast();
 
 const props = defineProps({
   items: {
     type: Array,
     default: () => []
+  },
+  storageColumnsName: {
+    type: String,
+    default: () => "",
+    required: true
   }
 })
 
 const opRef = ref(null);
 const { t } = useI18n();
 
-const darkSwitch = ref(false)
-
 const toggle = (event) => {
   const _opRef = unref(opRef)
   _opRef.opRef.toggle(event)
 }
+
+const resetStorageColumns = () => {
+  removeStorageItem(props.storageColumnsName);
+  toast.add({ severity: 'success', summary: t('headers-reset'), life: 3000 });
+  toggle();
+  emits('emit:resetHeaders');
+}
+
+const saveColumnsToStorage = () => {
+  saveStorageItem(props.storageColumnsName, JSON.stringify(props.items));
+  toast.add({ severity: 'success', summary: t('headers-saved'), life: 3000 });
+  toggle();
+}
+
+const emits = defineEmits(['emit:resetHeaders']);
 </script>
 
 <template>
@@ -61,6 +84,7 @@ const toggle = (event) => {
           shadow
           type="button"
           size="small"
+          @click="resetStorageColumns"
         />
 
         <base-button
@@ -70,6 +94,7 @@ const toggle = (event) => {
           shadow
           type="button"
           size="small"
+          @click="saveColumnsToStorage"
         />
       </div>
     </template>

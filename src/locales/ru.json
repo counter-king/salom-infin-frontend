@@ -172,5 +172,16 @@
   "filter": "Фильтр",
   "date": "Дата",
   "export": "Экспорт",
-  "reset": "Сбросить"
+  "reset": "Сбросить",
+  "headers-saved": "Столбцы сохранены!",
+  "headers-reset": "Столбцы сброшены",
+  "today": "Сегодня",
+  "yesterday": "Вчера",
+  "last-seven-days": "Последние 7 дней",
+  "last-two-weeks": "Последние 2 недели",
+  "this-month": "Этот месяц",
+  "last-month": "Прошлый месяц",
+  "select-date": "Выберите дату",
+  "templates": "Шаблоны",
+  "select": "Выбрать"
 }

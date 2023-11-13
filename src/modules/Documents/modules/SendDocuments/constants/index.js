@@ -1,0 +1,1 @@
+export const SD_INNER_COLUMNS = 'SD_INNER_COLUMNS'
