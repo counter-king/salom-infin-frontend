@@ -27,7 +27,7 @@ defineExpose({
 // Computed
 const rootClasses = computed(() => {
   return [
-    'translate-y-1 rounded-xl shadow-menu after_none',
+    'translate-y-1 rounded-xl shadow-menu after_none overflow-hidden',
     // Width
     props.width,
     props.menuClass,
@@ -51,7 +51,13 @@ const rootClasses = computed(() => {
       <Teleport v-if="props.hasOverlay" to="body">
         <div class="modal-layer fixed bottom-0 w-full transition-all duration-[400ms]"></div>
       </Teleport>
-      <slot></slot>
+      <div class="p-2">
+        <slot name="default" />
+      </div>
+
+      <div v-if="slots.actions" class="bg-greyscale-50 p-2 border-t">
+        <slot name="actions" />
+      </div>
     </template>
   </OverlayPanel>
 </template>

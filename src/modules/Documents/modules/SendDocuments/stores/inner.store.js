@@ -14,35 +14,43 @@ export const useSDInner = defineStore("sd-inner", {
     headers: [
       {
         header: "№",
-        field: "index"
+        field: "index",
+        active: true
       },
       {
         header: "Тип письма",
-        field: "type"
+        field: "type",
+        active: true
       },
       {
         header: "Дата создание",
-        field: "created_date"
+        field: "created_date",
+        active: true
       },
       {
         header: "Дата изменения",
-        field: "modified_date"
+        field: "modified_date",
+        active: true
       },
       {
         header: "Рег. номер",
-        field: "register_number"
+        field: "register_number",
+        active: true
       },
       {
         header: "Подписант",
-        field: "signers"
+        field: "signers",
+        active: true
       },
       {
         header: "Состояние",
-        field: "status"
+        field: "status",
+        active: true
       },
       {
         header: "Действие",
-        field: "action"
+        field: "action",
+        active: false
       }
     ],
     list: []

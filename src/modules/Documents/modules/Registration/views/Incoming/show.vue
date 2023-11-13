@@ -6,8 +6,7 @@ import { useRoute } from 'vue-router'
 import { useRegIncoming } from '../../stores/incoming.store'
 // Components
 import { LayoutWithTabs } from '@/components/DetailLayout'
-// Utils
-import { combineKeys } from '@/utils'
+import ChangeDocument from "./components/ChangeDocument.vue"
 // Composable
 const route = useRoute()
 const incomingStore = useRegIncoming()
@@ -18,7 +17,6 @@ const previewDetail = ref([])
 onMounted(async () => {
   loading.value = true
   await incomingStore.actionGetById({ id: route.params.id })
-  previewDetail.value = combineKeys(incomingStore.headers, incomingStore.detailModel)
   setTimeout(() => {
     loading.value = false
   }, 500)
@@ -32,8 +30,13 @@ onMounted(async () => {
     </template>
 
     <template v-else>
-      <pre>{{ previewDetail }}</pre>
-<!--      <layout-with-tabs />-->
+      <layout-with-tabs :preview-detail="incomingStore.detailModel.__copy_prototype">
+        <template #preview-actions>
+          <div class="mt-5">
+            <change-document />
+          </div>
+        </template>
+      </layout-with-tabs>
     </template>
   </div>
 </template>
