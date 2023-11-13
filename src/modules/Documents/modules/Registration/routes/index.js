@@ -44,6 +44,24 @@ const Registration = [
         component: () => import("../views/Inner/show.vue"),
       },
       // /Внутренний
+      // Исходящие
+      {
+        path: "outgoing",
+        name: "RegistrationOutgoingIndex",
+        meta: {
+          isAuthRequired: true
+        },
+        component: () => import("../views/Outgoing/index.vue"),
+      },
+      {
+        path: "outgoing/show/:id",
+        name: "RegistrationOutgoingIndexShow",
+        meta: {
+          isAuthRequired: true
+        },
+        component: () => import("../views/Outgoing/show.vue"),
+      },
+      // /Исходящие
     ]
   }
 ]

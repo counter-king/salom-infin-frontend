@@ -131,6 +131,13 @@ const menus = ref([
             link: "RegistrationInnerIndex",
             children: []
           },
+          // Исходящие
+          {
+            title: "Исходящие",
+            icon: null,
+            link: "RegistrationOutgoingIndex",
+            children: []
+          },
         ]
       },
     ],
