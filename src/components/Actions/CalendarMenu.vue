@@ -4,11 +4,13 @@ import {ref, unref, watch} from "vue";
 import {useI18n} from "vue-i18n";
 // Enums
 import { TEMPLATE_OPTIONS } from "../../enums";
+import BaseSeparateCalendar from "../UI/BaseSeparateCalendar.vue";
 
 const opRef = ref(null);
 const { t } = useI18n();
 
-const patternVisible = ref(false);
+const patternVisible = ref(true);
+const tempDate= ref(null)
 
 
 const toggle = (event) => {
@@ -71,7 +73,7 @@ watch(patternVisible, (val) =>  {
       </div>
 
       <div class="flex flex-1">
-        dsdasdasd
+        <base-separate-calendar />
       </div>
     </div>
 
