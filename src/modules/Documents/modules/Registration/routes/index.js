@@ -62,6 +62,24 @@ const Registration = [
         component: () => import("../views/Outgoing/show.vue"),
       },
       // /Исходящие
+      // Обращения
+      {
+        path: "appeal",
+        name: "RegistrationAppealIndex",
+        meta: {
+          isAuthRequired: true
+        },
+        component: () => import("../views/Appeal/index.vue"),
+      },
+      {
+        path: "appeal/show/:id",
+        name: "RegistrationAppealIndexShow",
+        meta: {
+          isAuthRequired: true
+        },
+        component: () => import("../views/Appeal/show.vue"),
+      },
+      // /Обращения
     ]
   }
 ]

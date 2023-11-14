@@ -2,24 +2,24 @@
 // Core
 import { onMounted } from 'vue'
 // Store
-import { useRegOutgoing } from "../../stores/outgoing.store"
+import { useRegAppeal } from "../../stores/appeal.store"
 // Composable
-const regOutgoing = useRegOutgoing()
+const regAppeal = useRegAppeal()
 // Hooks
 onMounted(async () => {
-  await regOutgoing.actionGetList()
+  await regAppeal.actionGetList()
 })
 </script>
 
 <template>
   <div class="registration-incoming-view">
     <div class="flex mb-5">
-      <h1 class="text-2xl font-bold text-primary-900">Исходящие</h1>
+      <h1 class="text-2xl font-bold text-primary-900">Обращения</h1>
     </div>
 
     <base-data-table
-      :headers="regOutgoing.headers"
-      :value="regOutgoing.list"
+      :headers="regAppeal.headers"
+      :value="regAppeal.list"
     >
     </base-data-table>
   </div>

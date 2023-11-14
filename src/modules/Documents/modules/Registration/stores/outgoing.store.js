@@ -26,6 +26,14 @@ export const useRegOutgoing = defineStore("reg-outgoing", {
         }
       },
       {
+        header: "status",
+        field: "status",
+        detail: {
+          component: 'base-status',
+          colClass: '',
+        }
+      },
+      {
         header: "document-type",
         field: "document_type",
         detail: {
@@ -34,10 +42,18 @@ export const useRegOutgoing = defineStore("reg-outgoing", {
         }
       },
       {
-        header: "reviewers",
-        field: "reviewers",
+        header: "reg-date",
+        field: "register_date",
         detail: {
-          component: 'base-avatar-group',
+          component: null,
+          colClass: '',
+        }
+      },
+      {
+        header: "description",
+        field: "description",
+        detail: {
+          component: null,
           colClass: '',
         }
       },
@@ -52,7 +68,9 @@ export const useRegOutgoing = defineStore("reg-outgoing", {
       correspondent: null,
       author: null,
       description: null,
+      status: null,
       journal: JOURNAL.OUTGOING,
+      grif: 3,
     },
   }),
   actions: {
@@ -77,7 +95,7 @@ export const useRegOutgoing = defineStore("reg-outgoing", {
           full_name: item.user.full_name,
           id: item.id,
           user: item.user.id,
-          document: 26
+          document: 36
         }
       })
     },

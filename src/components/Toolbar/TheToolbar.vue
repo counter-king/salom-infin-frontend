@@ -138,6 +138,13 @@ const menus = ref([
             link: "RegistrationOutgoingIndex",
             children: []
           },
+          // Обращения
+          {
+            title: "Обращения",
+            icon: null,
+            link: "RegistrationAppealIndex",
+            children: []
+          },
         ]
       },
     ],
