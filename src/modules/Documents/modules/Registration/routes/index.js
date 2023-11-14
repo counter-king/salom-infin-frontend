@@ -80,6 +80,42 @@ const Registration = [
         component: () => import("../views/Appeal/show.vue"),
       },
       // /Обращения
+      // Приказы и распоряжения
+      {
+        path: "orderInstruction",
+        name: "RegistrationOrderInstructionIndex",
+        meta: {
+          isAuthRequired: true
+        },
+        component: () => import("../views/OrderInstruction/index.vue"),
+      },
+      {
+        path: "orderInstruction/show/:id",
+        name: "RegistrationOrderInstructionIndexShow",
+        meta: {
+          isAuthRequired: true
+        },
+        component: () => import("../views/OrderInstruction/show.vue"),
+      },
+      // /Приказы и распоряжения
+      // Заявления
+      {
+        path: "statement",
+        name: "RegistrationStatementIndex",
+        meta: {
+          isAuthRequired: true
+        },
+        component: () => import("../views/Statement/index.vue"),
+      },
+      {
+        path: "statement/show/:id",
+        name: "RegistrationStatementIndexShow",
+        meta: {
+          isAuthRequired: true
+        },
+        component: () => import("../views/Statement/show.vue"),
+      },
+      // /Заявления
     ]
   }
 ]

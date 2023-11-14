@@ -145,6 +145,20 @@ const menus = ref([
             link: "RegistrationAppealIndex",
             children: []
           },
+          // Приказы и распоряжения
+          {
+            title: "Приказы и распоряжения",
+            icon: null,
+            link: "RegistrationOrderInstructionIndex",
+            children: []
+          },
+          // Заявления
+          {
+            title: "Заявления",
+            icon: null,
+            link: "RegistrationStatementIndex",
+            children: []
+          },
         ]
       },
     ],
