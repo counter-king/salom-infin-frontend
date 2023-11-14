@@ -15,23 +15,17 @@ export const useRegOrderInstruction = defineStore("reg-order-instruction", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: true
       },
-      // {
-      //   header: "name_document",
-      //   field: "name_document",
-      //   detail: {
-      //     component: null,
-      //     colClass: '',
-      //   }
-      // },
       {
         header: "document-type",
         field: "document_type",
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "reg-date",
@@ -39,7 +33,8 @@ export const useRegOrderInstruction = defineStore("reg-order-instruction", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "description",
@@ -47,7 +42,8 @@ export const useRegOrderInstruction = defineStore("reg-order-instruction", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "status",
@@ -55,7 +51,8 @@ export const useRegOrderInstruction = defineStore("reg-order-instruction", {
         detail: {
           component: 'base-status',
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "reviewers",
@@ -63,8 +60,14 @@ export const useRegOrderInstruction = defineStore("reg-order-instruction", {
         detail: {
           component: 'base-avatar-group',
           colClass: '',
-        }
+        },
+        active: true
       },
+      {
+        header: "Действие",
+        field: "action",
+        active: true
+      }
     ],
     list: [],
     detailModel: {

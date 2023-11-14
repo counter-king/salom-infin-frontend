@@ -120,42 +120,42 @@ const menus = ref([
           // Входящие
           {
             title: "Входящие",
-            icon: null,
+            icon: "ArrowRightDownIcon",
             link: "RegistrationIncomingIndex",
             children: []
           },
           // Внутренний
           {
             title: "Внутренний",
-            icon: null,
+            icon: "ArrowDownIcon",
             link: "RegistrationInnerIndex",
             children: []
           },
           // Исходящие
           {
             title: "Исходящие",
-            icon: null,
+            icon: "RoundAltArrowDownIcon",
             link: "RegistrationOutgoingIndex",
             children: []
           },
           // Обращения
           {
             title: "Обращения",
-            icon: null,
+            icon: "DocumentTextIcon",
             link: "RegistrationAppealIndex",
             children: []
           },
           // Приказы и распоряжения
           {
             title: "Приказы и распоряжения",
-            icon: null,
+            icon: "NotebookIcon",
             link: "RegistrationOrderInstructionIndex",
             children: []
           },
           // Заявления
           {
             title: "Заявления",
-            icon: null,
+            icon: "NotesIcon",
             link: "RegistrationStatementIndex",
             children: []
           },

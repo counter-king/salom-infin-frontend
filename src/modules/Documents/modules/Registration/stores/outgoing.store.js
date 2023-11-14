@@ -15,7 +15,8 @@ export const useRegOutgoing = defineStore("reg-outgoing", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "correspondent",
@@ -23,7 +24,8 @@ export const useRegOutgoing = defineStore("reg-outgoing", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "status",
@@ -31,7 +33,8 @@ export const useRegOutgoing = defineStore("reg-outgoing", {
         detail: {
           component: 'base-status',
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "document-type",
@@ -39,7 +42,8 @@ export const useRegOutgoing = defineStore("reg-outgoing", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "reg-date",
@@ -47,7 +51,8 @@ export const useRegOutgoing = defineStore("reg-outgoing", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "description",
@@ -55,8 +60,14 @@ export const useRegOutgoing = defineStore("reg-outgoing", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: true
       },
+      {
+        header: "Действие",
+        field: "action",
+        active: true
+      }
     ],
     list: [],
     detailModel: {

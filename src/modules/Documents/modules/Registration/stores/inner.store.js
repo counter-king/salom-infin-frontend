@@ -16,7 +16,8 @@ export const useRegInner = defineStore("reg-inner", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "document-type",
@@ -24,7 +25,8 @@ export const useRegInner = defineStore("reg-inner", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "reg-date",
@@ -32,7 +34,8 @@ export const useRegInner = defineStore("reg-inner", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "description",
@@ -40,7 +43,8 @@ export const useRegInner = defineStore("reg-inner", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "reviewers",
@@ -48,8 +52,14 @@ export const useRegInner = defineStore("reg-inner", {
         detail: {
           component: 'base-avatar-group',
           colClass: '',
-        }
+        },
+        active: true
       },
+      {
+        header: "Действие",
+        field: "action",
+        active: true
+      }
     ],
     list: [],
     detailModel: {
