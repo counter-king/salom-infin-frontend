@@ -13,23 +13,27 @@ const rules = {
   register_number: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
-  outgoing_date: {
+  register_date: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   document_type: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   deadline: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+    required: false
+    // required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   __department: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+    required: false
+    // required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   author: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+    required: false
+    // required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   __signers: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+    required: false
+    // required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   __reviewers: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
@@ -67,26 +71,26 @@ watch(
       <base-col col-class="w-1/2">
         <base-calendar
           required
-          v-model="$v.outgoing_date.$model"
-          :error="$v.outgoing_date"
-          label="registration-date"
+          v-model="$v.register_date.$model"
+          :error="$v.register_date"
+          label="reg-date"
           placeholder="registration-date" />
       </base-col>
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          required
           v-model="$v.document_type.$model"
           :error="$v.document_type"
           :options="commonStore.documentTypesList"
+          required
           option-value="id"
-          label="document_type"
-          placeholder="document_type" />
+          label="document-type"
+          placeholder="enter-deliver-type"
+          />
       </base-col>
 
       <base-col col-class="w-1/2">
         <base-calendar
-          required
           v-model="$v.deadline.$model"
           :error="$v.deadline"
           label="deadline"
@@ -95,7 +99,6 @@ watch(
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          required
           v-model="$v.__department.$model"
           :error="$v.__department"
           :options="commonStore.departmentList"
@@ -106,7 +109,6 @@ watch(
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          required
           v-model="$v.author.$model"
           :error="$v.author"
           :options="commonStore.author"
@@ -117,7 +119,6 @@ watch(
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          required
           v-model="$v.__signers.$model"
           :error="$v.__signers"
           :options="commonStore.usersList"

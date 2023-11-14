@@ -2,24 +2,24 @@
 // Core
 import { onMounted } from 'vue'
 // Store
-import { useRegInner } from "../../stores/inner.store"
+import { useRegStatement } from "../../stores/statement.store"
 // Composable
-const regStore = useRegInner()
+const regStatement = useRegStatement()
 // Hooks
 onMounted(async () => {
-  await regStore.actionGetList()
+  await regStatement.actionGetList()
 })
 </script>
 
 <template>
   <div class="registration-incoming-view">
     <div class="flex mb-5">
-      <h1 class="text-2xl font-bold text-primary-900">Внутренний</h1>
+      <h1 class="text-2xl font-bold text-primary-900">Заявления</h1>
     </div>
 
     <base-data-table
-      :headers="regStore.headers"
-      :value="regStore.list"
+      :headers="regStatement.headers"
+      :value="regStatement.list"
     >
     </base-data-table>
   </div>

@@ -131,6 +131,34 @@ const menus = ref([
             link: "RegistrationInnerIndex",
             children: []
           },
+          // Исходящие
+          {
+            title: "Исходящие",
+            icon: null,
+            link: "RegistrationOutgoingIndex",
+            children: []
+          },
+          // Обращения
+          {
+            title: "Обращения",
+            icon: null,
+            link: "RegistrationAppealIndex",
+            children: []
+          },
+          // Приказы и распоряжения
+          {
+            title: "Приказы и распоряжения",
+            icon: null,
+            link: "RegistrationOrderInstructionIndex",
+            children: []
+          },
+          // Заявления
+          {
+            title: "Заявления",
+            icon: null,
+            link: "RegistrationStatementIndex",
+            children: []
+          },
         ]
       },
     ],
