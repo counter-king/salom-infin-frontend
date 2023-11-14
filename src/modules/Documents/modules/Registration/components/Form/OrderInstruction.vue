@@ -77,7 +77,7 @@ watch(
           required
           v-model="$v.outgoing_date.$model"
           :error="$v.outgoing_date"
-          label="registration-date"
+          label="reg-date"
           placeholder="registration-date" />
       </base-col>
 

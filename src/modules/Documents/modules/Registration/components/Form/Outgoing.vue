@@ -11,7 +11,7 @@ const rules = {
   register_number: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
-  outgoing_date: {
+  register_date: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   document_type: {
@@ -59,9 +59,9 @@ defineExpose({ $v })
       <base-col col-class="w-1/2">
         <base-calendar
           required
-          v-model="$v.outgoing_date.$model"
-          :error="$v.outgoing_date"
-          label="registration-date"
+          v-model="$v.register_date.$model"
+          :error="$v.register_date"
+          label="reg-date"
           placeholder="registration-date" />
       </base-col>
 

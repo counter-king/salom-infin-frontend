@@ -24,6 +24,9 @@ const rules = {
   __reviewers: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
+  document_type: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
   description: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   }
@@ -85,6 +88,18 @@ watch(
           display="chip"
           label="reviewers"
           placeholder="enter-reviewers"
+        />
+      </base-col>
+
+      <base-col col-class="w-1/2">
+        <base-dropdown
+          v-model="$v.document_type.$model"
+          :error="$v.document_type"
+          :options="commonStore.documentTypesList"
+          required
+          option-value="id"
+          label="document-type"
+          placeholder="enter-deliver-type"
         />
       </base-col>
 
