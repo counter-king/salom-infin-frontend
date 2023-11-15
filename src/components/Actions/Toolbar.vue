@@ -14,8 +14,15 @@ const props = defineProps({
   columnMenuItems: {
     type: Array,
     default: () => []
+  },
+  storageColumnsName: {
+    type: String,
+    default: () => "",
+    required: true
   }
 })
+
+const emits = defineEmits(['emit:resetHeaders']);
 </script>
 
 <template>
@@ -30,7 +37,11 @@ const props = defineProps({
 
       <filter-menu />
 
-      <column-menu :items="props.columnMenuItems" />
+      <column-menu
+        :items="props.columnMenuItems"
+        :storage-columns-name="props.storageColumnsName"
+        @emit:reset-headers="emits('emit:resetHeaders')"
+      />
 
       <slot name="end"/>
     </div>

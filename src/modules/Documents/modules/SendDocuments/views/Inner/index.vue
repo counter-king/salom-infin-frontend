@@ -3,6 +3,8 @@
 import {onMounted} from "vue";
 // Store
 import { useSDInner } from "../../stores/inner.store";
+// Constants
+import { SD_INNER_COLUMNS } from "../../constants";
 // Components
 import DocType from "../../../../../../components/Chips/DocType.vue";
 import Status from "../../../../../../components/Chips/Status.vue";
@@ -22,6 +24,8 @@ onMounted(async () => {
     <action-toolbar
       title="inner"
       :column-menu-items="innerStore.headers"
+      :storage-columns-name="SD_INNER_COLUMNS"
+      @emit:reset-headers="innerStore.resetHeaders"
     >
       <template #end>
         <base-button
@@ -38,6 +42,8 @@ onMounted(async () => {
       :value="innerStore.list"
       :page-size="innerStore.filterState.page_size"
       :total-count="innerStore.totalCount"
+      :storage-columns-name="SD_INNER_COLUMNS"
+      @emit:set-store-headers="(val) => innerStore.headers = val"
     >
       <template #type="{ data }">
         <doc-type :type="data.type"/>
