@@ -4,7 +4,7 @@ import { onMounted } from 'vue'
 // Store
 import { useRegIncoming } from "../../stores/incoming.store"
 // Components
-import { DocTypeChip, StatusChip,  } from '@/components/Chips'
+import { DocTypeChip, StatusChip, PriorityChip } from '@/components/Chips'
 // Composable
 const regStore = useRegIncoming()
 // Hooks
@@ -24,7 +24,7 @@ onMounted(async () => {
       :value="regStore.list"
     >
       <template  #priority="{ data }">
-        {{data.priority.name}}
+        <priority-chip :id="data.priority.id" />
       </template>
 
       <template  #delivery_type="{ data }">
@@ -48,8 +48,8 @@ onMounted(async () => {
       </template>
 
       <template #reviewers="{ data }">
-        <base-avatar
-          image="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D"
+        <base-avatar-group
+          :items="data.reviewers"
           shape="circle"
           avatar-classes="w-8 h-8"
         />
