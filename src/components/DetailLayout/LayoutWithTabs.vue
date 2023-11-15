@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref, shallowRef, watch, defineAsyncComponent } from 'vue'
+import { ref, shallowRef, watch, defineAsyncComponent, computed } from 'vue'
 import { useRouter } from 'vue-router'
 // Components
 import BaseSpinner from "@/components/UI/BaseSpinner.vue"
@@ -12,11 +12,11 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
-  tabView: {
+  tabItems: {
     type: Array,
     default: () => [
       {
-        title: "Просмотр",
+        label: "Просмотр",
         name: "Preview",
         icon: "EyeIcon",
         slot: "preview",
@@ -24,7 +24,7 @@ const props = defineProps({
         count: null
       },
       {
-        title: "История",
+        label: "История",
         name: "History",
         icon: "ClockCircleIcon",
         slot: "history",
@@ -32,7 +32,7 @@ const props = defineProps({
         count: null
       },
       {
-        title: "Комментарии",
+        label: "Комментарии",
         name: "Comments",
         icon: "ChatLineIcon",
         slot: "comments",
@@ -40,20 +40,27 @@ const props = defineProps({
         count: 2
       },
       {
-        title: "Файлы",
+        label: "Файлы",
         name: "Files",
         icon: "FileTextIcon",
         slot: "files",
         component: "Files"
       }
     ]
+  },
+  previewDetail: {
+    type: Array,
+    default: () => []
   }
 })
 // Reactive
-const activeTab = ref(props.tabView[0])
+const activeTabMenuIndex = ref(0)
+const activeTab = ref(props.tabItems[0])
 const activeTabComponent = shallowRef(null)
+// Computed
+const activeTabMenu = computed(() => props.tabItems[activeTabMenuIndex.value])
 // Watch
-watch(activeTab, (value) => {
+watch(activeTabMenu, (value) => {
   activeTabComponent.value = defineAsyncComponent({
     loader: () => import(`./components/${value?.component}.vue`),
     loadingComponent: BaseSpinner,
@@ -93,18 +100,27 @@ watch(activeTab, (value) => {
       </div>
     </template>
 
-    <div class="detail-layout-content flex-1 bg-white shadow-button rounded-2xl overflow-y-auto">
+    <div class="detail-layout-content flex flex-col flex-1 bg-white overflow-hidden shadow-button rounded-2xl">
       <slot name="content">
-        <base-tab-view
-          :tab-view="props.tabView"
-          @emit:tab-click="(value) => activeTab = value"
-        >
-          <template v-for="pane in props.tabView" #[pane.slot]>
-            <slot :name="pane.slot">
-              <component :is="activeTabComponent" />
-            </slot>
-          </template>
-        </base-tab-view>
+        <base-tab-menu v-model="activeTabMenuIndex" :tab-items="props.tabItems" />
+
+        <div class="flex flex-1">
+          <slot :name="activeTabMenu.slot">
+            <div class="flex-1 overflow-y-auto">
+              <div class="h-[1px]">
+                <component :is="activeTabComponent" :preview-detail="props.previewDetail">
+                  <template #preview-actions>
+                    <slot name="preview-actions" />
+                  </template>
+                </component>
+              </div>
+            </div>
+          </slot>
+
+          <div class="max-w-[566px] w-full ml-auto border-l">
+            resolution
+          </div>
+        </div>
       </slot>
     </div>
   </div>

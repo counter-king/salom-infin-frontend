@@ -7,6 +7,7 @@ import { useNavigation } from '@/stores/navigation.store'
 // Components
 import CreateActionDropdown from './CreateActionDropdown.vue'
 import UserDropdown from './UserDropdown.vue'
+import SettingDropdown from './SettingDropdown.vue'
 // Composable
 const navigationStore = useNavigation()
 
@@ -119,15 +120,43 @@ const menus = ref([
           // Входящие
           {
             title: "Входящие",
-            icon: null,
+            icon: "ArrowRightDownIcon",
             link: "RegistrationIncomingIndex",
             children: []
           },
           // Внутренний
           {
             title: "Внутренний",
-            icon: null,
+            icon: "ArrowDownIcon",
             link: "RegistrationInnerIndex",
+            children: []
+          },
+          // Исходящие
+          {
+            title: "Исходящие",
+            icon: "RoundAltArrowDownIcon",
+            link: "RegistrationOutgoingIndex",
+            children: []
+          },
+          // Обращения
+          {
+            title: "Обращения",
+            icon: "DocumentTextIcon",
+            link: "RegistrationAppealIndex",
+            children: []
+          },
+          // Приказы и распоряжения
+          {
+            title: "Приказы и распоряжения",
+            icon: "NotebookIcon",
+            link: "RegistrationOrderInstructionIndex",
+            children: []
+          },
+          // Заявления
+          {
+            title: "Заявления",
+            icon: "NotesIcon",
+            link: "RegistrationStatementIndex",
             children: []
           },
         ]
@@ -210,13 +239,7 @@ const openSidebar = (menu) => {
               rounded
             />
 
-            <base-button
-              color="bg-greyscale-800 hover:bg-greyscale-900"
-              border-color="border-greyscale-800"
-              icon-left="SettingsIcon"
-              only-icon
-              rounded
-            />
+            <setting-dropdown></setting-dropdown>
 
             <base-button
               color="bg-greyscale-800 hover:bg-greyscale-900"

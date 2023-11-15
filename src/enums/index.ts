@@ -83,5 +83,27 @@ export const METHODS = {
   PATCH:   "PATCH"
 }
 export const API_LIST = {
-  PROJECT_PERMISIIONS: "project-permissions"
+  PROJECT_PERMISSIONS: "project-permissions"
 }
+
+export const TEMPLATE_OPTIONS = [
+  {
+    label: "today"
+  },
+  {
+    label: "yesterday"
+  },
+  {
+    label: "last-seven-days"
+  },
+  {
+    label: "last-two-weeks"
+  },
+  {
+    label: "this-month"
+  },
+  {
+    label: "last-month"
+  }
+]
+

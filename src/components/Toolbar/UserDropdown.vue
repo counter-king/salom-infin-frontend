@@ -81,11 +81,11 @@ const toggle = (event) => {
           :class="item"
         >
           <div>
-            <h1 class="text-sm font-semibold">{{ item.label }}</h1>
+            <h1 class="text-sm font-semibold text-primary-900">{{ item.label }}</h1>
             <span class="text-xs font-medium text-greyscale-500">{{ item.subTitle }}</span>
           </div>
           <div class="w-8 h-8 flex items-center justify-center  rounded-full bg-gray-100  group-hover:bg-primary-500 ">
-            <base-icon  width="16"  height="16" :name="item.icon" class="text-gray-2 transition-all duration-[400ms] group-hover:text-white" />
+            <base-icon  width="16"  height="16" :name="item.icon" class="text-primary-900 transition-all duration-[400ms] group-hover:text-white" />
           </div>
         </div>
       </template>

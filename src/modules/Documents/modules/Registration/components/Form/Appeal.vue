@@ -24,13 +24,16 @@ const rules = {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   applicant: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+    required: false
+    // required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   region: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+    required: false
+    // required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   area: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+    required: false
+    // required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   full_name_applicant: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
@@ -42,10 +45,12 @@ const rules = {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   submission_form: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+    required: false
+    // required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   type_complaint: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+    required: false
+    // required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   __reviewers: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
@@ -116,7 +121,6 @@ watch(
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          required
           v-model="$v.applicant.$model"
           :error="$v.applicant"
           :options="commonStore.applicantList"
@@ -127,7 +131,6 @@ watch(
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          required
           v-model="$v.region.$model"
           :error="$v.region"
           :options="commonStore.regionList"
@@ -138,7 +141,6 @@ watch(
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          required
           v-model="$v.area.$model"
           :error="$v.area"
           :options="commonStore.areaList"
@@ -179,7 +181,6 @@ watch(
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          required
           v-model="$v.submission_form.$model"
           :error="$v.submission_form"
           :options="commonStore.submissionFormList"
@@ -190,7 +191,6 @@ watch(
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          required
           v-model="$v.type_complaint.$model"
           :error="$v.type_complaint"
           :options="commonStore.typeComplaintList"

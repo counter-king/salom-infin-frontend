@@ -18,9 +18,13 @@ const rules = {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   author: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+    required: false
+    // required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   __reviewers: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  document_type: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   description: {
@@ -68,7 +72,6 @@ watch(
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          required
           v-model="$v.author.$model"
           :error="$v.author"
           :options="commonStore.author"
@@ -85,6 +88,18 @@ watch(
           display="chip"
           label="reviewers"
           placeholder="enter-reviewers"
+        />
+      </base-col>
+
+      <base-col col-class="w-1/2">
+        <base-dropdown
+          v-model="$v.document_type.$model"
+          :error="$v.document_type"
+          :options="commonStore.documentTypesList"
+          required
+          option-value="id"
+          label="document-type"
+          placeholder="enter-deliver-type"
         />
       </base-col>
 

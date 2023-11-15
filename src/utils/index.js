@@ -29,6 +29,22 @@ export function clearModel(model, exclude = []) {
     model[_key] = null
   })
 }
+/**
+ * @param model Объект модель
+ * @param source Объект с данными
+ * */
+export function setValuesToKeys(model, source) {
+  Object.entries(source)
+  .forEach(([key, value]) => {
+    if(!value) return
+
+    if(Object.prototype.toString.call(value) === '[object Object]') {
+      model[key] = value.id
+    } else {
+      model[key] = value
+    }
+  })
+}
 /*
 *
 * */
@@ -47,11 +63,11 @@ export function getValueByPath(obj, path) {
 export function combineKeys(cols, model) {
 	return cols
 	.filter(col => col.hasOwnProperty("detail"))
-	.sort((prevCol, nextCol) => prevCol.detail.order - nextCol.detail.order)
+	// .sort((prevCol, nextCol) => prevCol.detail.order - nextCol.detail.order)
 	.map(item => {
 		return {
-			key: item.title,
-			value : getValueByPath(model, item.key),
+      header: item.header,
+      field : getValueByPath(model, item.field),
 			detail: item.detail
 		}
 	})

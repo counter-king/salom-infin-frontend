@@ -1,12 +1,14 @@
 <script setup>
 // Core
-import { useModel } from 'vue'
-import { useI18n } from 'vue-i18n'
+import {useModel} from 'vue'
 import InputSwitch from 'primevue/inputswitch';
 // Macros
 const props = defineProps({
   modelValue: {
-    type: Array,
+    type: [Array, Boolean],
+  },
+  name: {
+    type: [Number, String]
   },
   label: {
     type: String,
@@ -16,11 +18,26 @@ const props = defineProps({
     type: String,
     default: null
   },
+  classSwitchRoot: {
+    type: String,
+    default: 'mr-4'
+  },
+  classSwitchSlider: {
+    type: String,
+    default: ''
+  },
   required: {
     type: Boolean
   },
   classBody: {
     type: String,
+  },
+  size: {
+    type: String,
+    default: 'normal',
+    validator(value) {
+      return ['x-small', 'small', 'normal', 'large'].includes(value)
+    }
   },
   error: {
     type: Object,
@@ -32,37 +49,44 @@ const props = defineProps({
 })
 // Composable
 const modelValue = useModel(props, 'modelValue')
-const { t } = useI18n()
 </script>
 
 <template>
-  <div class="app-input">
+  <div class="app-switch">
 
     <div :class="props.classBody">
-      <base-label :label="props.label" :class="props.classLabel" :required="props.required" />
+      <base-label :label="props.label" :class="props.classLabel" :required="props.required"/>
+
       <InputSwitch
         v-model="modelValue"
         :name="name"
         :pt="{
           root: {
-            class: ['mr-4']
+            class: [
+              props.classSwitchRoot,
+             { 'h-5 w-8' : props.size === 'small' }
+             ]
           },
-          slider: ({ props }) => ({
-            class: props.modelValue ? 'bg-green-500' : 'bg-greyscale-100',
+          slider: ({ context }) => ({
+            class: [
+              props.modelValue ? 'bg-green-500' : 'bg-greyscale-100',
+              props.classSwitchSlider,
+              { 'before:h-4 before:w-4 before:-mt-2' : props.size === 'small' },
+              { 'before:translate-x-2' : props.size === 'small' && props.modelValue },
+              props.size === 'small' && props.modelValue ? 'before:left-[6px]' : 'before:left-[1px]'
+              ]
           }),
         }"
       />
     </div>
 
-    <div class="mt-1">
-      <template v-if="props.error.$errors.length">
-        <div
-          v-for="element of props.error.$errors"
-          :key="element.$uid"
-        >
-          <span class="block text-sm font-medium text-red-500">{{ element.$message }}</span>
-        </div>
-      </template>
+    <div v-if="props.error.$errors.length" class="mt-1">
+      <div
+        v-for="element of props.error.$errors"
+        :key="element.$uid"
+      >
+        <span class="block text-sm font-medium text-red-500">{{ element.$message }}</span>
+      </div>
     </div>
   </div>
 </template>

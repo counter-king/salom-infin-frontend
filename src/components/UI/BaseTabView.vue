@@ -13,7 +13,7 @@ const emit = defineEmits(['emit:tab-click'])
 // Methods
 const panelClass = (props, parent, index) => {
   return {
-    'text-primary-900 font-semibold': parent.state.d_activeIndex === index
+    'text-primary-900 font-semibold !border-primary-500': parent.state.d_activeIndex === index
   }
 }
 </script>
@@ -26,7 +26,7 @@ const panelClass = (props, parent, index) => {
         class: 'flex flex-col h-full'
       },
       nav: {
-        class: 'px-2 border-greyscale-200'
+        class: 'px-2 border-b border-greyscale-200'
       },
       panelContainer: {
         class: 'flex-1 p-0 overflow-hidden'
@@ -40,7 +40,7 @@ const panelClass = (props, parent, index) => {
             class: 'flex flex-col h-full'
           },
           headerAction: ({ props, parent }) => ({
-            class: [panelClass(props, parent, index), 'text-greyscale-500 font-medium py-4 px-0 mx-4']
+            class: [panelClass(props, parent, index), 'm-0 border-transparent text-greyscale-500 font-medium py-4 px-0 mx-4']
           })
         }"
       >
