@@ -3,8 +3,11 @@
 import { onMounted } from 'vue'
 // Store
 import { useRegOrderInstruction } from "../../stores/orderInstruction.store"
+// Constants
+import { R_ORDERINSTRUCTION_COLUMNS } from "../../constants";
 // Components
 import { DocTypeChip, StatusChip } from '@/components/Chips'
+import { ActionToolbar } from "@/components/Actions";
 // Composable
 const regOrderInstruction = useRegOrderInstruction()
 // Hooks
@@ -15,13 +18,26 @@ onMounted(async () => {
 
 <template>
   <div class="registration-incoming-view">
-    <div class="flex mb-5">
-      <h1 class="text-2xl font-bold text-primary-900">Приказы и распоряжения</h1>
-    </div>
+    <action-toolbar
+      title="orderInstruction"
+      :column-menu-items="regOrderInstruction.headers"
+      :storage-columns-name="R_ORDERINSTRUCTION_COLUMNS"
+      @emit:reset-headers="regOrderInstruction.resetHeaders"
+    >
+      <template #end>
+        <base-button
+          label="create"
+          icon-left="AddIcon"
+          rounded
+          type="button"
+        />
+      </template>
+    </action-toolbar>
 
     <base-data-table
       :headers="regOrderInstruction.headers"
       :value="regOrderInstruction.list"
+      :storage-columns-name="R_ORDERINSTRUCTION_COLUMNS"
     >
 
       <template #document_type="{ data }">

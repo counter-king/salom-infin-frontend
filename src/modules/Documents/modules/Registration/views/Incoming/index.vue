@@ -3,8 +3,11 @@
 import { onMounted } from 'vue'
 // Store
 import { useRegIncoming } from "../../stores/incoming.store"
+// Constants
+import { R_INCOMING_COLUMNS } from "../../constants";
 // Components
 import { DocTypeChip, StatusChip, PriorityChip } from '@/components/Chips'
+import { ActionToolbar } from "@/components/Actions";
 // Composable
 const regStore = useRegIncoming()
 // Hooks
@@ -15,13 +18,26 @@ onMounted(async () => {
 
 <template>
   <div class="registration-incoming-view">
-    <div class="flex mb-5">
-      <h1 class="text-2xl font-bold text-primary-900">Входящие</h1>
-    </div>
+    <action-toolbar
+      title="incoming"
+      :column-menu-items="regStore.headers"
+      :storage-columns-name="R_INCOMING_COLUMNS"
+      @emit:reset-headers="regStore.resetHeaders"
+    >
+      <template #end>
+        <base-button
+          label="create"
+          icon-left="AddIcon"
+          rounded
+          type="button"
+        />
+      </template>
+    </action-toolbar>
 
     <base-data-table
       :headers="regStore.headers"
       :value="regStore.list"
+      :storage-columns-name="R_INCOMING_COLUMNS"
     >
       <template  #priority="{ data }">
         <priority-chip :id="data.priority.id" />

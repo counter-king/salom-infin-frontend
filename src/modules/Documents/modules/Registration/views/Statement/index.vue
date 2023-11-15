@@ -3,8 +3,11 @@
 import { onMounted } from 'vue'
 // Store
 import { useRegStatement } from "../../stores/statement.store"
+// Constants
+import { R_STATEMENT_COLUMNS } from "../../constants";
 // Components
 import { DocTypeChip } from '@/components/Chips'
+import { ActionToolbar } from "@/components/Actions";
 // Composable
 const regStatement = useRegStatement()
 // Hooks
@@ -15,13 +18,26 @@ onMounted(async () => {
 
 <template>
   <div class="registration-incoming-view">
-    <div class="flex mb-5">
-      <h1 class="text-2xl font-bold text-primary-900">Заявления</h1>
-    </div>
+    <action-toolbar
+      title="statement"
+      :column-menu-items="regStatement.headers"
+      :storage-columns-name="R_STATEMENT_COLUMNS"
+      @emit:reset-headers="regStatement.resetHeaders"
+    >
+      <template #end>
+        <base-button
+          label="create"
+          icon-left="AddIcon"
+          rounded
+          type="button"
+        />
+      </template>
+    </action-toolbar>
 
     <base-data-table
       :headers="regStatement.headers"
       :value="regStatement.list"
+      :storage-columns-name="R_STATEMENT_COLUMNS"
     >
       <template #correspondent="{ data }">
         {{data.correspondent.name}}
