@@ -55,7 +55,7 @@ const rootClasses = computed(() => {
       <Teleport v-if="props.hasOverlay" to="body">
         <div class="modal-layer fixed bottom-0 w-full transition-all duration-[400ms]"></div>
       </Teleport>
-      <div class="p-2">
+      <div>
         <slot name="default" />
       </div>
 

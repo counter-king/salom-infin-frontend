@@ -62,17 +62,19 @@ const emits = defineEmits(['emit:resetHeaders']);
     width="w-60"
     menu-class="bg-white  mt-1"
   >
-    <template v-for="item in items">
-      <div class="rounded-2 w-full h-10 p-3 flex items-center gap-3 hover:bg-gray-5 justify-between">
-        <span class="text-primary-900 text-sm font-semibold">{{ t(item.header) }}</span>
-        <base-switch
-          v-model="item.active"
-          class-switch-root="mr-0"
-          class-body="flex"
-          size="small"
-        />
-      </div>
-    </template>
+    <div class="p-2">
+      <template v-for="item in items">
+        <div class="rounded-2 w-full h-10 p-3 flex items-center gap-3 hover:bg-gray-5 justify-between">
+          <span class="text-primary-900 text-sm font-semibold">{{ t(item.header) }}</span>
+          <base-switch
+            v-model="item.active"
+            class-switch-root="mr-0"
+            class-body="flex"
+            size="small"
+          />
+        </div>
+      </template>
+    </div>
 
     <template #actions>
       <div class="flex justify-end gap-2 py-2">

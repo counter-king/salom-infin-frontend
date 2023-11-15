@@ -182,5 +182,12 @@
   "this-month": "Этот месяц",
   "last-month": "Прошлый месяц",
   "select-date": "Выберите дату",
-  "templates": "Шаблоны"
+  "templates": "Шаблоны",
+  "mo": "Du",
+  "tu": "Se",
+  "we": "Ch",
+  "th": "Pa",
+  "fr": "Ju",
+  "sa": "Sh",
+  "su": "Ya"
 }

@@ -5,6 +5,7 @@
  * @param exclude Ключи которые не будет проверятся
  * @returns Boolean
  * */
+import dayjs from "dayjs";
 export function isModelEmpty(model, exclude) {
 	return Object.entries(model)
 	// Исключаем ключи, которые не будет проверятся
@@ -89,4 +90,26 @@ export function resetModel(model){
 			}
 		}
 	}
+}
+export const getDateRange = (value) => {
+  if (!['today', 'yesterday', 'last-seven-days', 'last-two-weeks', 'this-month', 'last-month'].includes(value)){
+    alert('Please provide required value!');
+    throw new Error('Please provide required value!');
+  }
+  switch (value) {
+    case "today":
+      return [dayjs().format('YYYY-MM-DD'), dayjs().format('YYYY-MM-DD')];
+    case "yesterday":
+      return [dayjs().subtract(1, 'day').format('YYYY-MM-DD'), dayjs().subtract(1, 'day').format('YYYY-MM-DD')];
+    case "last-seven-days":
+      return [dayjs().subtract(7, 'day').format('YYYY-MM-DD'), dayjs().format('YYYY-MM-DD')];
+    case "last-two-weeks":
+      return [dayjs().subtract(14, 'day').format('YYYY-MM-DD'), dayjs().format('YYYY-MM-DD')];
+    case "this-month":
+      return [dayjs().set('date', 1).format('YYYY-MM-DD'), dayjs().format('YYYY-MM-DD')];
+    case "last-month":
+      return [dayjs().subtract(1, 'month').set('date', 1).format('YYYY-MM-DD'), dayjs().set('date', 0).format('YYYY-MM-DD')];
+    default:
+      return [];
+  }
 }
