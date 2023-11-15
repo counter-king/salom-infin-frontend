@@ -120,9 +120,11 @@ const rootClasses = computed(() => {
           />
         </template>
 
-        <template v-if="props.label">
-          {{ t(props.label) }}
-        </template>
+        <slot name="label">
+          <template v-if="props.label">
+            {{ t(props.label) }}
+          </template>
+        </slot>
 
         <template v-if="props.iconRight">
           <base-icon

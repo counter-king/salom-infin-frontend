@@ -9,8 +9,17 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
-  border: {
-    type: Boolean
+  apiUrl: {
+    type: String,
+    default: null
+  },
+  apiParams: {
+    type: Object,
+    default: () => {}
+  },
+  options: {
+    type: Array,
+    default: () => []
   },
   optionLabel: {
     type: String,
@@ -19,19 +28,19 @@ const props = defineProps({
   optionValue: {
     type: [Number, String]
   },
-  label: {
-    type: String,
-    default: null
+  border: {
+    type: Boolean
   },
   placeholder: {
     type: String,
     default: 'create'
   },
-  required: {
-    type: Boolean
-  },
   borderColor: {
     type: String
+  },
+  tokenClass: {
+    type: Array,
+    default: () => []
   },
   error: {
     type: Object,
