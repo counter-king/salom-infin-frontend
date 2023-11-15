@@ -56,6 +56,50 @@ export const useSDInner = defineStore("sd-inner", {
     list: []
   }),
   actions: {
+    resetHeaders() {
+      this.headers = [
+        {
+          header: "№",
+          field: "index",
+          active: true
+        },
+        {
+          header: "Тип письма",
+          field: "type",
+          active: true
+        },
+        {
+          header: "Дата создание",
+          field: "created_date",
+          active: true
+        },
+        {
+          header: "Дата изменения",
+          field: "modified_date",
+          active: true
+        },
+        {
+          header: "Рег. номер",
+          field: "register_number",
+          active: true
+        },
+        {
+          header: "Подписант",
+          field: "signers",
+          active: true
+        },
+        {
+          header: "Состояние",
+          field: "status",
+          active: true
+        },
+        {
+          header: "Действие",
+          field: "action",
+          active: false
+        }
+      ]
+    },
     async actionGetDocumentList(params){
       const { data } = await fetchGetDocumentList(params);
 
