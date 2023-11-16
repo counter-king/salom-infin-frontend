@@ -27,7 +27,7 @@ defineExpose({
 // Computed
 const rootClasses = computed(() => {
   return [
-    'translate-y-1 rounded-xl shadow-menu after_none overflow-hidden',
+    'translate-y-1 rounded-xl shadow-menu after_none',
     // Width
     props.width,
     props.menuClass,

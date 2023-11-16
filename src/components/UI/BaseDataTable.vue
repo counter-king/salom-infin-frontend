@@ -6,8 +6,9 @@ import { useI18n } from 'vue-i18n'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 // Utils
-import { formatDateHour } from "../../utils/formatDate";
-import { getStorageItem } from "../../utils/storage";
+import { formatDateHour } from "@/utils/formatDate";
+import { getStorageItem } from "@/utils/storage";
+import BaseSkeleton from "@/components/UI/BaseSkeleton.vue";
 // Composable
 const { t } = useI18n()
 // Macros
@@ -36,10 +37,14 @@ const props = defineProps({
     type: String,
     default: "",
     required: true
+  },
+  loading: {
+    type: Boolean,
+    default: false
   }
 })
 
-const emit = defineEmits(['emit:setStoreHeaders']);
+const emit = defineEmits(['emit:setStoreHeaders', 'emit:rowClick']);
 
 const headersComputed = computed(() => {
   return props.headers.filter(header => header.active);
@@ -76,10 +81,13 @@ onMounted(() => {
     currentPageReportTemplate="{first}-{last} из {totalRecords}"
     :scroll-height="props.scrollHeight"
     scrollable
+    :loading="props.loading"
     :pt="{
         table: { class: ['border-separate', 'border-spacing-y-1', '-mt-1'] },
         thead: { class: ['bg-white'] },
         bodyRow: { class: ['cursor-pointer', 'hover:bg-greyscale-50'] },
+        loadingoverlay: { class: ['bg-transparent', 'h-[90%]'] },
+        emptymessagecell: { class: ['bg-white', '!rounded-xl'] },
         paginator: {
           rowPerPageDropdown: {
             root: { class: ['h-6', 'rounded-2'] },
@@ -96,14 +104,14 @@ onMounted(() => {
           firstPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
           lastPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
           previousPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
-          pageButton: ({ props, state, context }) => ({
+          pageButton: ({ context }) => ({
               class:  [ context.active ? ['bg-primary-500', 'text-primary-0'] : undefined, 'rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'text-xs']
           }),
           nextPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] }
         }
     }"
     class="base-data-table"
-    @row-click="event => console.log('Row clicked')"
+    @row-click="event => emit('emit:rowClick', event.data)"
   >
     <template
       v-for="header in headersComputed"
@@ -125,6 +133,21 @@ onMounted(() => {
           </slot>
         </template>
       </Column>
+    </template>
+
+    <template #loading>
+      <base-skeleton
+        :columns="props.headers"
+      />
+    </template>
+
+    <template #empty>
+      <div
+        class="w-full flex justify-center items-center rounded-lg"
+        style="height: calc(100vh - 420px)"
+      >
+        <img class="w-[200px] h-[170px]" src="@/assets/img/empty-img-gray.png" alt="EmptyFolder">
+      </div>
     </template>
   </DataTable>
 </template>

@@ -6,6 +6,7 @@ import {fetchGetDocumentList} from "../services/inner.service";
 export const useSDInner = defineStore("sd-inner", {
   state: () => ({
     documentList: [],
+    listLoading: false,
     filterState: {
       page: 1,
       page_size: 15
@@ -101,6 +102,7 @@ export const useSDInner = defineStore("sd-inner", {
       ]
     },
     async actionGetDocumentList(params){
+      this.listLoading = true;
       const { data } = await fetchGetDocumentList(params);
 
       this.documentList = data.results;
@@ -111,6 +113,8 @@ export const useSDInner = defineStore("sd-inner", {
         })
       }
       this.totalCount = data.count;
+
+      this.listLoading = false;
 
       return Promise.resolve(data);
     }

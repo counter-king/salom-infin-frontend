@@ -12,6 +12,13 @@ import { ActionToolbar } from "../../../../../../components/Actions";
 
 const innerStore = useSDInner();
 
+const onRowClick = (data) => {
+  console.log(data);
+}
+const onRowDelete = (data) => {
+  console.log(data)
+}
+
 // Hooks
 onMounted(async () => {
   await innerStore.actionGetDocumentList({ page_size: innerStore.filterState.page_size });
@@ -39,11 +46,13 @@ onMounted(async () => {
 
     <base-data-table
       :headers="innerStore.headers"
-      :value="innerStore.list"
+      :value="innerStore.documentList"
       :page-size="innerStore.filterState.page_size"
       :total-count="innerStore.totalCount"
       :storage-columns-name="SD_INNER_COLUMNS"
+      :loading="innerStore.listLoading"
       @emit:set-store-headers="(val) => innerStore.headers = val"
+      @emit:row-click="onRowClick"
     >
       <template #type="{ data }">
         <doc-type :type="data.type"/>
@@ -68,6 +77,7 @@ onMounted(async () => {
           only-icon
           text
           rounded
+          @click="onRowDelete(data)"
         />
       </template>
     </base-data-table>
