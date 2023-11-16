@@ -2,11 +2,9 @@
 // Core
 import {ref, unref} from "vue";
 import {useI18n} from "vue-i18n";
-// Utils
-import {removeStorageItem, saveStorageItem} from "../../utils/storage";
 import {useToast} from "primevue/usetoast";
-
-const toast = useToast();
+// Utils
+import {removeStorageItem, saveStorageItem} from "@/utils/storage";
 
 const props = defineProps({
   items: {
@@ -22,6 +20,7 @@ const props = defineProps({
 
 const opRef = ref(null);
 const { t } = useI18n();
+const toast = useToast();
 
 const toggle = (event) => {
   const _opRef = unref(opRef)

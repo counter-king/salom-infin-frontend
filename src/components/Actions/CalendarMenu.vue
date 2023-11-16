@@ -3,8 +3,10 @@
 import {ref, unref, watch} from "vue";
 import {useI18n} from "vue-i18n";
 // Enums
-import { TEMPLATE_OPTIONS } from "../../enums";
+import { TEMPLATE_OPTIONS } from "@/enums";
+// Components
 import BaseSeparateCalendar from "../UI/BaseSeparateCalendar.vue";
+// Utils
 import {getDateRange} from "@/utils";
 
 const opRef = ref(null);
