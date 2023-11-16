@@ -88,22 +88,28 @@ export const API_LIST = {
 
 export const TEMPLATE_OPTIONS = [
   {
-    label: "today"
+    label: "today",
+    active: false
   },
   {
-    label: "yesterday"
+    label: "yesterday",
+    active: false
   },
   {
-    label: "last-seven-days"
+    label: "last-seven-days",
+    active: false
   },
   {
-    label: "last-two-weeks"
+    label: "last-two-weeks",
+    active: false
   },
   {
-    label: "this-month"
+    label: "this-month",
+    active: false
   },
   {
-    label: "last-month"
+    label: "last-month",
+    active: false
   }
 ]
 

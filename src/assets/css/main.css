@@ -23,6 +23,19 @@
   --greyscale-500: #767994;
   --greyscale-800: #2B2D4C;
   --greyscale-900: #191F3F;
+
+  --dp-cell-size: 35px!important;
+  --dp-font-size: 12px!important;
+  --dp-cell-border-radius: 200px!important;
+
+}
+
+/** Calendar Date Picker **/
+.dp__theme_light {
+  --dp-range-between-dates-background-color: var(--primary-50)!important;
+  --dp-border-color: var(--greyscale-200)!important;
+  --dp-primary-color: var(--primary-500)!important;
+  --dp-row-margin: 4px 0!important;
 }
 
 body {
