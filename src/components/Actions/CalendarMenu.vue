@@ -67,7 +67,7 @@ watch(patternVisible, (val) =>  {
   <base-overlay-panel
     ref="opRef"
     :width="patternVisible ? 'w-[784px]' : 'w-[582px]'"
-    menu-class="bg-white  mt-1"
+    menu-class="bg-white mt-1 overflow-hidden"
   >
     <template #header>
       <div class="flex items-center justify-between h-14 px-4">

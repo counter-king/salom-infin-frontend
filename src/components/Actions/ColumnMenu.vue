@@ -59,7 +59,7 @@ const emits = defineEmits(['emit:resetHeaders']);
   <base-overlay-panel
     ref="opRef"
     width="w-60"
-    menu-class="bg-white  mt-1"
+    menu-class="bg-white mt-1 overflow-hidden"
   >
     <div class="p-2">
       <template v-for="item in items">
