@@ -3,8 +3,10 @@
 import {ref, unref, watch} from "vue";
 import {useI18n} from "vue-i18n";
 // Enums
-import { TEMPLATE_OPTIONS } from "../../enums";
+import { TEMPLATE_OPTIONS } from "@/enums";
+// Components
 import BaseSeparateCalendar from "../UI/BaseSeparateCalendar.vue";
+// Utils
 import {getDateRange} from "@/utils";
 
 const opRef = ref(null);
@@ -65,7 +67,7 @@ watch(patternVisible, (val) =>  {
   <base-overlay-panel
     ref="opRef"
     :width="patternVisible ? 'w-[784px]' : 'w-[582px]'"
-    menu-class="bg-white  mt-1"
+    menu-class="bg-white mt-1 overflow-hidden"
   >
     <template #header>
       <div class="flex items-center justify-between h-14 px-4">
