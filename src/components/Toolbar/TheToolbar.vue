@@ -8,6 +8,7 @@ import { useNavigation } from '@/stores/navigation.store'
 import CreateActionDropdown from './CreateActionDropdown.vue'
 import UserDropdown from './UserDropdown.vue'
 import SettingDropdown from './SettingDropdown.vue'
+import LanguageDropdown from './LanguageDropdown.vue'
 // Composable
 const navigationStore = useNavigation()
 
@@ -248,6 +249,8 @@ const openSidebar = (menu) => {
               only-icon
               rounded
             />
+
+            <language-dropdown></language-dropdown>
           </div>
 
           <div class="bg-greyscale-800 w-[1px] h-[28px]"></div>
