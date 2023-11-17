@@ -94,22 +94,7 @@ const menus = ref([
         title: "Отправка документов",
         icon: "ArchiveUpIcon",
         link: "SendDocumentsIndex",
-        children: [
-          // Внутренний
-          {
-            title: "Внутренний",
-            icon: null,
-            link: "SendDocumentsInnerIndex",
-            children: []
-          },
-          // Рапорт
-          {
-            title: "Рапорт",
-            icon: null,
-            link: "SendDocumentsNoticeIndex",
-            children: []
-          },
-        ]
+        children: []
       },
       // Регистрация
       {
