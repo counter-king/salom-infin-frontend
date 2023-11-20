@@ -1,27 +1,50 @@
 <script setup>
 // Core
-import { onMounted } from 'vue'
+import {ref, onMounted, unref } from 'vue'
 // Store
 import { useRegInner } from "../../stores/inner.store"
+import { useDocFlowStore } from '../../stores/docflow.store'
+
 // Constants
 import { R_INNER_COLUMNS } from "../../constants";
+import InnerForm from '../../components/Form/Inner.vue'
 // Components
 import { DocTypeChip } from '@/components/Chips'
 import { ActionToolbar } from "@/components/Actions";
 // Composable
+const docFlowStore = useDocFlowStore()
 const regStore = useRegInner()
+// Reactive
+const formRef = ref(null)
+const sidebarRef = ref(null)
+const sidebar = ref(false)
 // Hooks
 onMounted(async () => {
   await regStore.actionGetList()
 })
+// Methods
+const createDocument = async () => {
+  const _sidebarRef = unref(sidebarRef)
+  const _formRef = unref(formRef)
+  const valid = await _formRef.$v.$validate()
+
+  if(!valid) return
+
+  try {
+    _sidebarRef.successButtonLoading = true
+    await docFlowStore.actionCreateDocument(regInner.detailModel)
+    _sidebarRef.successButtonLoading = false
+    sidebar.value = false
+    await regStatement.actionGetList()
+  }
+  catch (error) {
+    _sidebarRef.successButtonLoading = false
+  }
+}
 </script>
 
 <template>
   <div class="registration-incoming-view">
-    <!-- <div class="flex mb-5">
-      <h1 class="text-2xl font-bold text-primary-900">Внутренний</h1>
-    </div> -->
-
     <action-toolbar
       title="inner"
       :column-menu-items="regStore.headers"
@@ -34,6 +57,7 @@ onMounted(async () => {
           icon-left="AddIcon"
           rounded
           type="button"
+          @click="sidebar = !sidebar"
         />
       </template>
     </action-toolbar>
@@ -66,6 +90,18 @@ onMounted(async () => {
         />
       </template>
     </base-data-table>
+
+    <base-sidebar
+      ref="sidebarRef"
+      v-model="sidebar"
+      title="create-document"
+      @emit:cancel-button="(value) => sidebar = value"
+      @emit:success-button="createDocument"
+    >
+      <template #content>
+        <inner-form ref="formRef" />
+      </template>
+    </base-sidebar>
   </div>
 </template>
 
