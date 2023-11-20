@@ -24,7 +24,8 @@ export const useRegStatement = defineStore("reg-statement", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "document_type",
@@ -32,7 +33,8 @@ export const useRegStatement = defineStore("reg-statement", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "description",
@@ -40,7 +42,8 @@ export const useRegStatement = defineStore("reg-statement", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "reviewers",
@@ -48,8 +51,14 @@ export const useRegStatement = defineStore("reg-statement", {
         detail: {
           component: 'base-avatar-group',
           colClass: '',
-        }
+        },
+        active: true
       },
+      {
+        header: "Действие",
+        field: "action",
+        active: true
+      }
     ],
     list: [],
     detailModel: {

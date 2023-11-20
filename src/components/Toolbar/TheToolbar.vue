@@ -8,6 +8,7 @@ import { useNavigation } from '@/stores/navigation.store'
 import CreateActionDropdown from './CreateActionDropdown.vue'
 import UserDropdown from './UserDropdown.vue'
 import SettingDropdown from './SettingDropdown.vue'
+import LanguageDropdown from './LanguageDropdown.vue'
 // Composable
 const navigationStore = useNavigation()
 
@@ -105,42 +106,42 @@ const menus = ref([
           // Входящие
           {
             title: "Входящие",
-            icon: null,
+            icon: "ArrowRightDownIcon",
             link: "RegistrationIncomingIndex",
             children: []
           },
           // Внутренний
           {
             title: "Внутренний",
-            icon: null,
+            icon: "ArrowDownIcon",
             link: "RegistrationInnerIndex",
             children: []
           },
           // Исходящие
           {
             title: "Исходящие",
-            icon: null,
+            icon: "RoundAltArrowDownIcon",
             link: "RegistrationOutgoingIndex",
             children: []
           },
           // Обращения
           {
             title: "Обращения",
-            icon: null,
+            icon: "DocumentTextIcon",
             link: "RegistrationAppealIndex",
             children: []
           },
           // Приказы и распоряжения
           {
             title: "Приказы и распоряжения",
-            icon: null,
+            icon: "NotebookIcon",
             link: "RegistrationOrderInstructionIndex",
             children: []
           },
           // Заявления
           {
             title: "Заявления",
-            icon: null,
+            icon: "NotesIcon",
             link: "RegistrationStatementIndex",
             children: []
           },
@@ -233,6 +234,8 @@ const openSidebar = (menu) => {
               only-icon
               rounded
             />
+
+            <language-dropdown></language-dropdown>
           </div>
 
           <div class="bg-greyscale-800 w-[1px] h-[28px]"></div>

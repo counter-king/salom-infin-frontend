@@ -15,7 +15,8 @@ export const useRegAppeal = defineStore("reg-appeal", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "outgoing-date",
@@ -23,7 +24,8 @@ export const useRegAppeal = defineStore("reg-appeal", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "correspondent",
@@ -31,7 +33,8 @@ export const useRegAppeal = defineStore("reg-appeal", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "document-type",
@@ -39,7 +42,8 @@ export const useRegAppeal = defineStore("reg-appeal", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "description",
@@ -47,7 +51,8 @@ export const useRegAppeal = defineStore("reg-appeal", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "status",
@@ -55,7 +60,8 @@ export const useRegAppeal = defineStore("reg-appeal", {
         detail: {
           component: 'base-status',
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "reviewers",
@@ -63,8 +69,14 @@ export const useRegAppeal = defineStore("reg-appeal", {
         detail: {
           component: 'base-avatar-group',
           colClass: '',
-        }
+        },
+        active: true
       },
+      {
+        header: "Действие",
+        field: "action",
+        active: true
+      }
     ],
     list: [],
     detailModel: {

@@ -3,6 +3,11 @@
 import { onMounted } from 'vue'
 // Store
 import { useRegInner } from "../../stores/inner.store"
+// Constants
+import { R_INNER_COLUMNS } from "../../constants";
+// Components
+import { DocTypeChip } from '@/components/Chips'
+import { ActionToolbar } from "@/components/Actions";
 // Composable
 const regStore = useRegInner()
 // Hooks
@@ -13,18 +18,56 @@ onMounted(async () => {
 
 <template>
   <div class="registration-incoming-view">
-    <div class="flex mb-5">
+    <!-- <div class="flex mb-5">
       <h1 class="text-2xl font-bold text-primary-900">Внутренний</h1>
-    </div>
+    </div> -->
+
+    <action-toolbar
+      title="inner"
+      :column-menu-items="regStore.headers"
+      :storage-columns-name="R_INNER_COLUMNS"
+      @emit:reset-headers="regStore.resetHeaders"
+    >
+      <template #end>
+        <base-button
+          label="create"
+          icon-left="AddIcon"
+          rounded
+          type="button"
+        />
+      </template>
+    </action-toolbar>
 
     <base-data-table
       :headers="regStore.headers"
       :value="regStore.list"
+      :storage-columns-name="R_INNER_COLUMNS"
     >
+
+      <template #document_type="{ data }">
+        <doc-type-chip :type="data.document_type.name"/>
+      </template>
+
+      <template #reviewers="{ data }">
+        <base-avatar-group
+          :items="data.reviewers"
+          shape="circle"
+          avatar-classes="w-8 h-8"
+        />
+      </template>
+
+      <template #action="{ data }">
+        <base-button
+          color="text-critic-500"
+          icon-left="TrashIcon"
+          only-icon
+          text
+          rounded
+        />
+      </template>
     </base-data-table>
   </div>
 </template>
 
 <style scoped>
-
 </style>

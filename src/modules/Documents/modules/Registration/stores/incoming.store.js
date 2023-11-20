@@ -16,7 +16,8 @@ export const useRegIncoming = defineStore("reg-incoming", {
         detail: {
           component: 'priority-chip',
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "naming",
@@ -24,7 +25,8 @@ export const useRegIncoming = defineStore("reg-incoming", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "document-type",
@@ -32,23 +34,8 @@ export const useRegIncoming = defineStore("reg-incoming", {
         detail: {
           component: null,
           colClass: '',
-        }
-      },
-      {
-        header: "status",
-        field: "status",
-        detail: {
-          component: 'base-status',
-          colClass: '',
-        }
-      },
-      {
-        header: "correspondent",
-        field: "correspondent",
-        detail: {
-          component: null,
-          colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "deliver-type",
@@ -56,7 +43,8 @@ export const useRegIncoming = defineStore("reg-incoming", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: false
       },
       {
         header: "description",
@@ -64,7 +52,8 @@ export const useRegIncoming = defineStore("reg-incoming", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: false
       },
       {
         header: "magazine",
@@ -72,7 +61,8 @@ export const useRegIncoming = defineStore("reg-incoming", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: false
       },
       {
         header: "language-document",
@@ -80,7 +70,8 @@ export const useRegIncoming = defineStore("reg-incoming", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: false
       },
       {
         header: "number-sheets",
@@ -88,7 +79,8 @@ export const useRegIncoming = defineStore("reg-incoming", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: false
       },
       {
         header: "outgoing-date",
@@ -96,7 +88,8 @@ export const useRegIncoming = defineStore("reg-incoming", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: false
       },
       {
         header: "outgoing-number",
@@ -104,7 +97,8 @@ export const useRegIncoming = defineStore("reg-incoming", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: false
       },
       {
         header: "reg-number",
@@ -112,7 +106,8 @@ export const useRegIncoming = defineStore("reg-incoming", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "reg-date",
@@ -120,7 +115,8 @@ export const useRegIncoming = defineStore("reg-incoming", {
         detail: {
           component: null,
           colClass: '',
-        }
+        },
+        active: true
       },
       {
         header: "reviewers",
@@ -128,8 +124,32 @@ export const useRegIncoming = defineStore("reg-incoming", {
         detail: {
           component: 'base-avatar-group',
           colClass: '',
-        }
+        },
+        active: true
       },
+      {
+        header: "status",
+        field: "status",
+        detail: {
+          component: 'base-status',
+          colClass: '',
+        },
+        active: true
+      },
+      {
+        header: "correspondent",
+        field: "correspondent",
+        detail: {
+          component: null,
+          colClass: '',
+        },
+        active: true
+      },
+      {
+        header: "",
+        field: "action",
+        active: true
+      }
     ],
     list: [],
     detailModel: {
