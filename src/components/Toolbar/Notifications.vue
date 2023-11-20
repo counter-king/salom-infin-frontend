@@ -2,7 +2,6 @@
 // Core
 import { ref } from 'vue'
 
-const sidebarRef = ref(null)
 const sidebar = ref(false)
 </script>
 <template>
@@ -17,7 +16,6 @@ const sidebar = ref(false)
     />
 
     <base-sidebar
-      ref="sidebarRef"
       v-model="sidebar"
       title="notifications"
       closeButtonClass="hidden"
