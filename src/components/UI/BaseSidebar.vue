@@ -25,6 +25,12 @@ const props = defineProps({
     type: String,
     default: 'cancel'
   },
+  closeButtonClass:{
+    type: String,
+  },
+  headerClass: {
+    type: String,
+  },
   position: {
     type: String,
     default: 'right',
@@ -52,10 +58,10 @@ defineExpose({ successButtonLoading })
         class: 'bg-greyscale-50 p-6'
       },
       headerContent: {
-        class: 'mr-auto'
+        class: ['mr-auto', props.headerClass]
       },
       closeButton: {
-        class: 'w-9 h-9 bg-white rounded-full shadow-button'
+        class: ['w-9 h-9 bg-white rounded-full shadow-button', props.closeButtonClass]
       },
       content: {
         class: 'p-0'
@@ -63,7 +69,10 @@ defineExpose({ successButtonLoading })
     }"
   >
     <template #header>
-      <span class="text-xl font-semibold text-primary-900">{{ t(props.title) }}</span>
+      <div class="flex w-full">
+        <span class="text-xl font-semibold text-primary-900 flex-1">{{ t(props.title) }}</span>
+        <slot name="headerCloseIcons" />
+      </div>
     </template>
 
     <div class="flex flex-col h-full">
@@ -71,25 +80,27 @@ defineExpose({ successButtonLoading })
         <slot name="content" />
       </div>
 
-      <div class="flex justify-end gap-3 bg-greyscale-50 px-6 py-5 border-t">
-        <base-button
-          :label="t(props.cancelText)"
-          size="large"
-          border-color="border-transparent"
-          outlined
-          rounded
-          shadow
-          @click="$emit('emit:cancel-button', false)"
-        />
+      <slot name="footer">
+        <div class="flex justify-end gap-3 bg-greyscale-50 px-6 py-5 border-t">
+          <base-button
+            :label="t(props.cancelText)"
+            size="large"
+            border-color="border-transparent"
+            outlined
+            rounded
+            shadow
+            @click="$emit('emit:cancel-button', false)"
+          />
 
-        <base-button
-          :label="t(props.successText)"
-          :loading="successButtonLoading"
-          size="large"
-          rounded
-          @click="$emit('emit:success-button')"
-        />
-      </div>
+          <base-button
+            :label="t(props.successText)"
+            :loading="successButtonLoading"
+            size="large"
+            rounded
+            @click="$emit('emit:success-button')"
+          />
+        </div>
+      </slot>
     </div>
   </Sidebar>
 </template>
