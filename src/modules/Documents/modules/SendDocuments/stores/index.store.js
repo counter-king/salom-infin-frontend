@@ -1,10 +1,25 @@
 // Core
 import {defineStore} from 'pinia'
-// Services
-import {fetchGetDocumentList} from "../services/inner.service";
+import { fetchGetDocumentList } from "@/modules/Documents/modules/SendDocuments/services/index.service";
 
-export const useSDInner = defineStore("sd-inner", {
+export const useSDStore = defineStore("sd-store", {
   state: () => ({
+    SD_TOOLBAR_MENU_LIST: [
+      // Внутренний
+      {
+        label: "inner",
+        icon: "ArrowDownIcon",
+        sub_type: "inner",
+        active: true
+      },
+      // Рапорт
+      {
+        label: "notice",
+        icon: "NotesIcon",
+        sub_type: "notice",
+        active: false
+      },
+    ],
     documentList: [],
     listLoading: false,
     filterState: {
