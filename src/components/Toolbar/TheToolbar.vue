@@ -9,6 +9,7 @@ import CreateActionDropdown from './CreateActionDropdown.vue'
 import UserDropdown from './UserDropdown.vue'
 import SettingDropdown from './SettingDropdown.vue'
 import LanguageDropdown from './LanguageDropdown.vue'
+import Notifications from './Notifications.vue'
 // Composable
 const navigationStore = useNavigation()
 
@@ -227,13 +228,7 @@ const openSidebar = (menu) => {
 
             <setting-dropdown></setting-dropdown>
 
-            <base-button
-              color="bg-greyscale-800 hover:bg-greyscale-900"
-              border-color="border-greyscale-800"
-              icon-left="BellIcon"
-              only-icon
-              rounded
-            />
+            <notifications></notifications>
 
             <language-dropdown></language-dropdown>
           </div>
