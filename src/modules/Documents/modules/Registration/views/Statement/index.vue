@@ -31,7 +31,6 @@ const createDocument = async () => {
 
   try {
     _sidebarRef.successButtonLoading = true
-    // await regStatement.actionUpdateDocument()
     await docFlowStore.actionCreateDocument(regStatement.detailModel)
     _sidebarRef.successButtonLoading = false
     sidebar.value = false

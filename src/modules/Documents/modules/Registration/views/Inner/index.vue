@@ -13,14 +13,14 @@ import { DocTypeChip } from '@/components/Chips'
 import { ActionToolbar } from "@/components/Actions";
 // Composable
 const docFlowStore = useDocFlowStore()
-const regStore = useRegInner()
+const regInner = useRegInner()
 // Reactive
 const formRef = ref(null)
 const sidebarRef = ref(null)
 const sidebar = ref(false)
 // Hooks
 onMounted(async () => {
-  await regStore.actionGetList()
+  await regInner.actionGetList()
 })
 // Methods
 const createDocument = async () => {
@@ -35,7 +35,7 @@ const createDocument = async () => {
     await docFlowStore.actionCreateDocument(regInner.detailModel)
     _sidebarRef.successButtonLoading = false
     sidebar.value = false
-    await regStatement.actionGetList()
+    await regInner.actionGetList()
   }
   catch (error) {
     _sidebarRef.successButtonLoading = false
@@ -47,9 +47,9 @@ const createDocument = async () => {
   <div class="registration-incoming-view">
     <action-toolbar
       title="inner"
-      :column-menu-items="regStore.headers"
+      :column-menu-items="regInner.headers"
       :storage-columns-name="R_INNER_COLUMNS"
-      @emit:reset-headers="regStore.resetHeaders"
+      @emit:reset-headers="regInner.resetHeaders"
     >
       <template #end>
         <base-button
@@ -63,11 +63,10 @@ const createDocument = async () => {
     </action-toolbar>
 
     <base-data-table
-      :headers="regStore.headers"
-      :value="regStore.list"
+      :headers="regInner.headers"
+      :value="regInner.list"
       :storage-columns-name="R_INNER_COLUMNS"
     >
-
       <template #document_type="{ data }">
         <doc-type-chip :type="data.document_type.name"/>
       </template>
