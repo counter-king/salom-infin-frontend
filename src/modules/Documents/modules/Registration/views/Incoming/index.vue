@@ -1,28 +1,55 @@
 <script setup>
 // Core
-import { onMounted } from 'vue'
+import {ref, onMounted, unref } from 'vue'
 // Store
 import { useRegIncoming } from "../../stores/incoming.store"
+import { useDocFlowStore } from '../../stores/docflow.store'
 // Constants
 import { R_INCOMING_COLUMNS } from "../../constants";
+import IncomingForm from '../../components/Form/Incoming.vue'
+
 // Components
 import { DocTypeChip, StatusChip, PriorityChip } from '@/components/Chips'
 import { ActionToolbar } from "@/components/Actions";
 // Composable
-const regStore = useRegIncoming()
+const docFlowStore = useDocFlowStore()
+const regIncoming = useRegIncoming()
+// Reactive
+const formRef = ref(null)
+const sidebarRef = ref(null)
+const sidebar = ref(false)
 // Hooks
 onMounted(async () => {
-  await regStore.actionGetList()
+  await regIncoming.actionGetList()
 })
+// Methods
+const createDocument = async () => {
+  const _sidebarRef = unref(sidebarRef)
+  const _formRef = unref(formRef)
+  const valid = await _formRef.$v.$validate()
+
+  if(!valid) return
+
+  try {
+    _sidebarRef.successButtonLoading = true
+    await docFlowStore.actionCreateDocument(regIncoming.detailModel)
+    _sidebarRef.successButtonLoading = false
+    sidebar.value = false
+    await regIncoming.actionGetList()
+  }
+  catch (error) {
+    _sidebarRef.successButtonLoading = false
+  }
+}
 </script>
 
 <template>
   <div class="registration-incoming-view">
     <action-toolbar
       title="incoming"
-      :column-menu-items="regStore.headers"
+      :column-menu-items="regIncoming.headers"
       :storage-columns-name="R_INCOMING_COLUMNS"
-      @emit:reset-headers="regStore.resetHeaders"
+      @emit:reset-headers="regIncoming.resetHeaders"
     >
       <template #end>
         <base-button
@@ -30,13 +57,14 @@ onMounted(async () => {
           icon-left="AddIcon"
           rounded
           type="button"
+          @click="sidebar = !sidebar"
         />
       </template>
     </action-toolbar>
 
     <base-data-table
-      :headers="regStore.headers"
-      :value="regStore.list"
+      :headers="regIncoming.headers"
+      :value="regIncoming.list"
       :storage-columns-name="R_INCOMING_COLUMNS"
     >
       <template  #priority="{ data }">
@@ -85,6 +113,18 @@ onMounted(async () => {
         />
       </template>
     </base-data-table>
+
+    <base-sidebar
+      ref="sidebarRef"
+      v-model="sidebar"
+      title="create-document"
+      @emit:cancel-button="(value) => sidebar = value"
+      @emit:success-button="createDocument"
+    >
+      <template #content>
+        <incoming-form ref="formRef" />
+      </template>
+    </base-sidebar>
   </div>
 </template>
 
