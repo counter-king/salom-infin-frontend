@@ -19,6 +19,34 @@ export const useSDStore = defineStore("sd-store", {
         sub_type: "notice",
         active: false
       },
+      // Рапорт для ротации
+      // {
+      //   label: "hr-rotation",
+      //   icon: "RefreshIcon",
+      //   sub_type: "hr_rotation",
+      //   active: false
+      // },
+      // Заключение
+      // {
+      //   label: "summary",
+      //   icon: "NotesPenIcon",
+      //   sub_type: "summary",
+      //   active: false
+      // },
+      // Исходящий
+      {
+        label: "outgoing",
+        icon: "RoundArrowDownIcon",
+        sub_type: "outgoing",
+        active: false
+      },
+      // Распоряжения
+      {
+        label: "decree",
+        icon: "RoundArrowDownIcon",
+        sub_type: "decree",
+        active: false
+      },
     ],
     documentList: [],
     listLoading: false,

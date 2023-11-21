@@ -1,6 +1,7 @@
 <script setup>
 // Core
-import {onMounted} from "vue";
+import {computed, onMounted} from "vue";
+import {useRoute} from "vue-router";
 // Store
 import { useSDStore } from "../stores/index.store";
 // Constants
@@ -12,11 +13,16 @@ import { ActionToolbar } from "../../../../../components/Actions";
 import { ToolbarMenu } from "../components/index"
 
 const sdStore = useSDStore();
+const route = useRoute();
 
-const onRowClick = (data) => {
+const title = computed(() => {
+  return route.query?.sub_type ? sdStore.SD_TOOLBAR_MENU_LIST.find(item => item.sub_type === route.query?.sub_type).label : 'inner';
+})
+
+const onClickRow = (data) => {
   console.log(data);
 }
-const onRowDelete = (data) => {
+const onDeleteRow = (data) => {
   console.log(data)
 }
 const onChangeDocType = (menu) => {
@@ -37,7 +43,7 @@ onMounted(async () => {
     />
 
     <action-toolbar
-      title="inner"
+      :title="title"
       :column-menu-items="sdStore.headers"
       :storage-columns-name="SD_INNER_COLUMNS"
       @emit:reset-headers="sdStore.resetHeaders"
@@ -60,7 +66,7 @@ onMounted(async () => {
       :storage-columns-name="SD_INNER_COLUMNS"
       :loading="sdStore.listLoading"
       @emit:set-store-headers="(val) => sdStore.headers = val"
-      @emit:row-click="onRowClick"
+      @emit:row-click="onClickRow"
     >
       <template #type="{ data }">
         <doc-type :type="data.type"/>
@@ -85,7 +91,7 @@ onMounted(async () => {
           only-icon
           text
           rounded
-          @click="onRowDelete(data)"
+          @click="onDeleteRow(data)"
         />
       </template>
     </base-data-table>

@@ -27,7 +27,7 @@ const onChangeDocType = (menu) => {
 </script>
 
 <template>
-  <div class="bg-white border-b border-greyscale-200 py-2 px-6 -mt-7 -mx-6 mb-6">
+  <div class="bg-white border-b border-greyscale-200 py-2 px-6 -mt-7 -mx-6 mb-7">
     <div class="flex items-center">
       <template v-for="menu in sdStore.SD_TOOLBAR_MENU_LIST">
         <div
