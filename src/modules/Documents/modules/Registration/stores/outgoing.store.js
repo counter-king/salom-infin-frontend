@@ -69,6 +69,7 @@ export const useRegOutgoing = defineStore("reg-outgoing", {
         active: true
       }
     ],
+    listLoading: false,
     list: [],
     detailModel: {
       register_number: null,
@@ -89,9 +90,11 @@ export const useRegOutgoing = defineStore("reg-outgoing", {
     * Получить список
     * */
     async actionGetList() {
+      this.listLoading = true;
       let { data } = await fetchGetDocumentList({ journal_id: JOURNAL.OUTGOING })
 
       this.list = data.results
+      this.listLoading = false;
     },
     /*
     * Получить документ по id

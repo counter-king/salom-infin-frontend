@@ -65,6 +65,7 @@ const createDocument = async () => {
     <base-data-table
       :headers="regInner.headers"
       :value="regInner.list"
+      :loading="regInner.listLoading"
       :storage-columns-name="R_INNER_COLUMNS"
     >
       <template #document_type="{ data }">
