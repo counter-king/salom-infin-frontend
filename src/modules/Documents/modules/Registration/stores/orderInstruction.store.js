@@ -70,6 +70,7 @@ export const useRegOrderInstruction = defineStore("reg-order-instruction", {
       }
     ],
     list: [],
+    listLoading: false,
     detailModel: {
       name_document: null,
       register_number: null,
@@ -88,9 +89,11 @@ export const useRegOrderInstruction = defineStore("reg-order-instruction", {
     * Получить список
     * */
     async actionGetList() {
+      this.listLoading = true;
       let { data } = await fetchGetDocumentList({ journal_id: JOURNAL.ORDERS_PROTOCOLS })
 
       this.list = data.results
+      this.listLoading = false
     },
     /*
     * Получить документ по id
