@@ -79,6 +79,7 @@ export const useRegAppeal = defineStore("reg-appeal", {
       }
     ],
     list: [],
+    listLoading: false,
     detailModel: {
       outgoing_number: null,
       outgoing_date: null,
@@ -106,9 +107,11 @@ export const useRegAppeal = defineStore("reg-appeal", {
     * Получить список
     * */
     async actionGetList() {
+      this.listLoading = true;
       let { data } = await fetchGetDocumentList({ journal_id: JOURNAL.APPEALS })
 
       this.list = data.results
+      this.listLoading = false;
     },
     /*
     * Получить документ по id

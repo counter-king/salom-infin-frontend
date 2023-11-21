@@ -66,6 +66,7 @@ const createDocument = async () => {
     <base-data-table
       :headers="regOutgoing.headers"
       :value="regOutgoing.list"
+      :loading="regOutgoing.listLoading"
       :storage-columns-name="R_OUTGOING_COLUMNS"
     >
       <template #correspondent="{ data }">

@@ -62,6 +62,7 @@ export const useRegInner = defineStore("reg-inner", {
       }
     ],
     list: [],
+    listLoading: false,
     detailModel: {
       register_number: null,
       register_date: null,
@@ -83,9 +84,11 @@ export const useRegInner = defineStore("reg-inner", {
     * Получить список
     * */
       async actionGetList() {
-      let { data } = await fetchGetDocumentList({ journal_id: JOURNAL.INNER })
+        this.listLoading = true;
+        let { data } = await fetchGetDocumentList({ journal_id: JOURNAL.INNER })
 
-      this.list = data.results
+        this.list = data.results
+        this.listLoading = false;
     },
     /*
     * Получить документ по id
