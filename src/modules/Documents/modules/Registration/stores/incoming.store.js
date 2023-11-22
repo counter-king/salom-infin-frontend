@@ -201,14 +201,7 @@ export const useRegIncoming = defineStore("reg-incoming", {
 
       this.detailModel.__copy_prototype = combineKeys(this.headers, data)
       setValuesToKeys(this.detailModel, data)
-      this.detailModel.__reviewers = this.detailModel.reviewers = data.reviewers.map(item => {
-        return {
-          full_name: item.user.full_name,
-          id: item.id,
-          user: item.user.id,
-          document: 18
-        }
-      })
+      this.detailModel.__reviewers = this.detailModel.reviewers
     },
     /*
     * Изменить документ

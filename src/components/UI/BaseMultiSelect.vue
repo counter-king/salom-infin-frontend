@@ -10,6 +10,7 @@ import { isObject } from '@/utils'
 const modelValue = useModel(props, 'modelValue')
 const { t } = useI18n()
 // Macros
+const emit = defineEmits(['update:modelValue', 'emit:select-item'])
 const props = defineProps({
   modelValue: {
     type: Array,
@@ -115,9 +116,6 @@ const loadList = async (params) => {
   let { data } = await axiosConfig.get(`${props.apiUrl}/`, params)
   list.value = data.results
 }
-const selectItem = (value) => {
-
-}
 const removeItem = (event, value) => {
   event.stopImmediatePropagation()
   modelValue.value = modelValue.value.filter(item => isObject(value.user)
@@ -126,6 +124,11 @@ const removeItem = (event, value) => {
       ? item.user.id !== value.id
       : item.id !== value.id
   )
+}
+const selectItem = (event, value) => {
+  // console.log('value', value)
+  // console.log('modelValueCopy', modelValueCopy)
+  emit('emit:select-item', value)
 }
 const toggle = (event) => {
   const _menuRef = unref(menuRef)
@@ -155,7 +158,10 @@ onMounted(async () => {
           class: rootClasses
         },
         token: {
-          class: props.tokenClass
+          class: [
+            props.tokenClass,
+            'chip-hover shadow-button bg-white cursor-pointer'
+          ]
         },
         tokenLabel: {
           class: ['text-sm font-medium']
@@ -202,7 +208,6 @@ onMounted(async () => {
           class: ['text-sm font-medium text-primary-900']
         }
       }"
-      @update:modelValue="selectItem"
     >
       <template #header="{ value, options }">
         <div class="flex items-center border-b border-greyscale-200">
@@ -229,6 +234,10 @@ onMounted(async () => {
       </template>
 
       <template #option="{ option }">
+        <div
+          class="absolute top-0 left-0 w-full h-full"
+          @click="(event) => selectItem(event, option)"
+        ></div>
         <slot name="option" :value="option" />
       </template>
 
@@ -241,7 +250,7 @@ onMounted(async () => {
       </template>
     </MultiSelect>
 
-    <div class="flex items-center gap-2">
+    <div v-if="modelValue.length !== 0" class="flex items-center gap-2">
       <div class="flex items-center flex-1 gap-2 py-2 truncate">
         <template v-for="user in modelValue">
           <slot name="hint" :value="user" />
