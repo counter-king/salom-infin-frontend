@@ -41,7 +41,9 @@ const collapseBar = () => {
 
         <template v-else>
           <router-link
-            :to="{ name: menu.link }" class="sidebar-link group flex items-center text-sm font-medium text-gray-1 rounded-xl p-3 pr-4 mb-1 border-b-2 border-transparent transition-all duration-[400ms] hover:text-primary-500 hover:border-gray-3 hover:bg-primary-50"
+            :to="{ name: menu.link }"
+            class="sidebar-link group flex items-center text-sm font-medium text-gray-1 rounded-xl p-3 pr-4 mb-1 border-b-2 border-transparent transition-all duration-[400ms] hover:text-primary-500 hover:border-gray-3 hover:bg-primary-50"
+            :class="{ 'pointer-events-none' : menu.link === route.name }"
             v-tooltip="isCollapsed
               ? {
                   value: `<h4 class='text-xs text-white -my-1'>${menu.title}</h4>`,

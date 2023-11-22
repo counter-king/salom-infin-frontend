@@ -24,6 +24,7 @@ const props = defineProps({
 defineExpose({
   opRef
 })
+const emit = defineEmits(['emit:changeState'])
 // Computed
 const rootClasses = computed(() => {
   return [
@@ -46,6 +47,8 @@ const rootClasses = computed(() => {
           class: ['p-0', props.content  ]
       },
     }"
+    @hide="emit('emit:changeState', false)"
+    @show="emit('emit:changeState', true)"
   >
     <template #default>
       <div v-if="slots.header" class="bg-greyscale-50 p-2 border-b">

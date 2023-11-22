@@ -199,5 +199,18 @@
   "notice": "Рапорт",
   "hr-rotation": "Рапорт для ротации",
   "summary": "Заключение",
-  "notifications":"Уведомления"
+  "notifications":"Уведомления",
+  "decree": "Распоряжения",
+  "more": "Еще",
+  "customize-menu": "Настроить меню",
+  "active-menu": "Активные меню",
+  "available=menu": "Доступные меню",
+  "menu-saved": "Меню сохранено!",
+  "menu-reset": "Меню сбросилось!",
+  "board-protocol": "Протокол правления",
+  "committee-protocol": "Протокол комитета",
+  "organization-letter": "В другие организации",
+  "hr-order": "Созданные приказы",
+  "create-sd-inner": "Создать служебное письмо",
+  "update-sd-inner": "Изменить служебное письмо"
 }

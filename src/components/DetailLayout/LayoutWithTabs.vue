@@ -2,12 +2,17 @@
 // Core
 import { ref, shallowRef, watch, defineAsyncComponent, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import {useI18n} from "vue-i18n";
 // Components
 import BaseSpinner from "@/components/UI/BaseSpinner.vue"
 // Composable
 const router = useRouter()
 // Macros
 const props = defineProps({
+  title: {
+    type: String,
+    default: ""
+  },
   toolbar: {
     type: Boolean,
     default: true
@@ -53,6 +58,7 @@ const props = defineProps({
     default: () => []
   }
 })
+const { t } = useI18n();
 // Reactive
 const activeTabMenuIndex = ref(0)
 const activeTab = ref(props.tabItems[0])
@@ -91,7 +97,7 @@ watch(activeTabMenu, (value) => {
             @click="router.go(-1)"
           />
 
-          <h1 class="font-bold text-xl text-primary-900">Управление сотрудниками</h1>
+          <h1 class="font-bold text-xl text-primary-900">{{ t(props.title) }}</h1>
         </div>
 
         <div class="flex items-center">

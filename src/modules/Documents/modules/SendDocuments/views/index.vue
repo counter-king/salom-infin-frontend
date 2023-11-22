@@ -1,22 +1,23 @@
 <script setup>
 // Core
 import {computed, onMounted} from "vue";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 // Store
 import { useSDStore } from "../stores/index.store";
 // Constants
-import {SD_INNER_COLUMNS} from "../constants";
+import {SD_INNER_COLUMNS, SD_SUB_TYPE_INNER} from "../constants";
 // Components
 import DocType from "../../../../../components/Chips/DocType.vue";
 import Status from "../../../../../components/Chips/Status.vue";
 import { ActionToolbar } from "../../../../../components/Actions";
-import { ToolbarMenu } from "../components/index"
+import { ToolbarMenu } from "../components/index";
 
 const sdStore = useSDStore();
 const route = useRoute();
+const router = useRouter();
 
 const title = computed(() => {
-  return route.query?.sub_type ? sdStore.SD_TOOLBAR_MENU_LIST.find(item => item.sub_type === route.query?.sub_type).label : 'inner';
+  return route.query?.sub_type ? sdStore.SD_TOOLBAR_MENU_LIST.find(item => item.sub_type === route.query?.sub_type).label : SD_SUB_TYPE_INNER;
 })
 
 const onClickRow = (data) => {
@@ -28,10 +29,32 @@ const onDeleteRow = (data) => {
 const onChangeDocType = (menu) => {
   console.log(menu)
 }
+const manageRoute = () => {
+  if (!(route.query && route.query.sub_type)){
+    router.replace({
+      query: {
+        ...route.query,
+        sub_type: SD_SUB_TYPE_INNER
+      }
+    });
+    sdStore.SD_TOOLBAR_MENU_LIST.forEach(menu => {
+      menu.active = menu.sub_type === SD_SUB_TYPE_INNER;
+    })
+  }
+}
+const create = () => {
+  router.push({
+    name: "SendDocumentsCreate",
+    params: {
+      sub_type: route.query.sub_type
+    }
+  })
+}
 
 // Hooks
 onMounted(async () => {
-  await sdStore.actionGetDocumentList({ page_size: sdStore.filterState.page_size });
+  manageRoute();
+  await sdStore.actionGetDocumentList({ sub_type: route.query.sub_type ? route.query.sub_type : SD_SUB_TYPE_INNER, page_size: sdStore.filterState.page_size });
 })
 </script>
 
@@ -54,6 +77,7 @@ onMounted(async () => {
           icon-left="AddIcon"
           rounded
           type="button"
+          @click="create"
         />
       </template>
     </action-toolbar>
@@ -77,8 +101,8 @@ onMounted(async () => {
       </template>
 
       <template #signers="{ data }">
-        <base-avatar
-          image="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D"
+        <base-avatar-group
+          :items="data.signers"
           shape="circle"
           avatar-classes="w-8 h-8"
         />

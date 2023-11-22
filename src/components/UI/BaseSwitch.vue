@@ -39,6 +39,10 @@ const props = defineProps({
       return ['x-small', 'small', 'normal', 'large'].includes(value)
     }
   },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
   error: {
     type: Object,
     default: () => ({
@@ -60,11 +64,12 @@ const modelValue = useModel(props, 'modelValue')
       <InputSwitch
         v-model="modelValue"
         :name="name"
+        :disabled="props.disabled"
         :pt="{
           root: {
             class: [
               props.classSwitchRoot,
-             { 'h-5 w-8' : props.size === 'small' }
+              props.size === 'small' ? 'h-5 w-8' : 'h-6 w-10'
              ]
           },
           slider: ({ context }) => ({
@@ -73,6 +78,7 @@ const modelValue = useModel(props, 'modelValue')
               props.classSwitchSlider,
               { 'before:h-4 before:w-4 before:-mt-2' : props.size === 'small' },
               { 'before:translate-x-2' : props.size === 'small' && props.modelValue },
+              { 'before:translate-x-4' : props.size === 'normal' && props.modelValue },
               props.size === 'small' && props.modelValue ? 'before:left-[6px]' : 'before:left-[1px]'
               ]
           }),
