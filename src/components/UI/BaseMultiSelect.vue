@@ -4,6 +4,8 @@ import { ref, computed, onMounted, useModel, unref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MultiSelect from 'primevue/multiselect'
 import axiosConfig from "@/services/axios.config"
+// Utils
+import { isObject } from '@/utils'
 // Composable
 const modelValue = useModel(props, 'modelValue')
 const { t } = useI18n()
@@ -39,12 +41,19 @@ const props = defineProps({
     type: String,
     default: 'create'
   },
+  menuPlaceholder: {
+    type: String,
+    default: 'create'
+  },
   borderColor: {
     type: String
   },
   tokenClass: {
     type: Array,
     default: () => []
+  },
+  selectable: {
+    type: Boolean
   },
   error: {
     type: Object,
@@ -71,17 +80,20 @@ const props = defineProps({
 // Reactive
 const menuRef = ref(null)
 const list = ref([])
+// Non-reactive
+const modelValueCopy = modelValue.value
+// Computed
 const options = computed(() => props.options.length
   ? props.options
   : list.value
 )
 const optionsRest = computed(() => modelValue.value.map(option => {
   return {
-    id: option.id,
-    label: option.full_name
+    id: isObject(option.user) ? option.user.id : option.id,
+    label: isObject(option.user) ? option.user.full_name : option.full_name,
+    image: isObject(option.user) ? option.user.image : option.image
   }
 }))
-// Computed
 const rootClasses = computed(() => {
   return [
     'group w-full bg-greyscale-50 rounded-xl border-greyscale-50 focus:border-primary-500',
@@ -103,9 +115,17 @@ const loadList = async (params) => {
   let { data } = await axiosConfig.get(`${props.apiUrl}/`, params)
   list.value = data.results
 }
+const selectItem = (value) => {
+
+}
 const removeItem = (event, value) => {
   event.stopImmediatePropagation()
-  modelValue.value = modelValue.value.filter(item => item.id !== value.id)
+  modelValue.value = modelValue.value.filter(item => isObject(value.user)
+    ? item.user.id !== value.user.id
+    : isObject(item.user)
+      ? item.user.id !== value.id
+      : item.id !== value.id
+  )
 }
 const toggle = (event) => {
   const _menuRef = unref(menuRef)
@@ -131,53 +151,64 @@ onMounted(async () => {
       :display="props.display"
       filter
       :pt="{
-      root: {
-        class: rootClasses
-      },
-      token: {
-        class: props.tokenClass
-      },
-      tokenLabel: {
-        class: ['text-sm font-medium']
-      },
-      label: {
-        class: [
-          'text-sm font-medium text-greyscale-500',
-          {
-            'size-small py-[2px] pr-2 pl-4': props.size === 'x-small',
-            'size-small py-[5px] pr-2 pl-4': props.size === 'small',
-            'size-normal py-3 pr-2 pl-4': props.size === null || props.size === 'normal',
-          },
-        ]
-      },
-      dropdownIcon: {
-        class: ['w-4 h-4']
-      },
-      panel: {
-        class: ['translate-y-[8px] shadow-menu rounded-2xl overflow-hidden']
-      },
-      header: {
-        class: ['bg-white hidden']
-      },
-      list: {
-        class: ['py-0']
-      },
-      checkboxContainer: {
-        class: ['hidden']
-      },
-      item: {
-        class: ['py-[6px] px-3 transition-all hover:bg-greyscale-50']
-      },
-      option: {
-        class: ['text-sm font-medium text-primary-900']
-      }
-    }"
+        root: {
+          class: rootClasses
+        },
+        token: {
+          class: props.tokenClass
+        },
+        tokenLabel: {
+          class: ['text-sm font-medium']
+        },
+        label: {
+          class: [
+            'text-sm font-medium text-greyscale-500',
+            {
+              'size-small py-[2px] pr-2 pl-4': props.size === 'x-small',
+              'size-small py-[5px] pr-2 pl-4': props.size === 'small',
+              'size-normal py-3 pr-2 pl-4': props.size === null || props.size === 'normal',
+            },
+          ]
+        },
+        dropdownIcon: {
+          class: ['w-4 h-4']
+        },
+        panel: {
+          class: ['translate-y-[8px] shadow-menu rounded-2xl overflow-hidden']
+        },
+        header: {
+          class: ['bg-white hidden']
+        },
+        list: {
+          class: [
+            'py-0',
+            {
+              'py-1 px-2': props.selectable
+            }
+          ]
+        },
+        checkboxContainer: {
+          class: 'hidden'
+        },
+        item: {
+          class: [
+            'py-[6px] px-3 transition-all hover:bg-greyscale-50',
+            {
+              'item-selectable border border-solid border-transparent rounded-xl mb-1': props.selectable
+            }
+          ]
+        },
+        option: {
+          class: ['text-sm font-medium text-primary-900']
+        }
+      }"
+      @update:modelValue="selectItem"
     >
       <template #header="{ value, options }">
         <div class="flex items-center border-b border-greyscale-200">
           <input
             type="text"
-            placeholder="Введите имя..."
+            :placeholder="t(props.menuPlaceholder)"
             class="flex-1 p-3 block outline-none font-medium text-sm text-gray-1"
           />
           <button
@@ -203,7 +234,9 @@ onMounted(async () => {
 
       <template #removetokenicon="{ item }">
         <div @click="(event) => removeItem(event, item)">
-          <slot name="removetokenicon" :item="item" />
+          <slot name="removetokenicon" :item="item">
+            <base-icon name="XIcon" width="16" height="16" class="ml-[6px] hover:text-critic-500" />
+          </slot>
         </div>
       </template>
     </MultiSelect>
@@ -213,8 +246,6 @@ onMounted(async () => {
         <template v-for="user in modelValue">
           <slot name="hint" :value="user" />
         </template>
-
-        <div></div>
       </div>
 
       <template v-if="modelValue.length >= 2">
@@ -243,6 +274,7 @@ onMounted(async () => {
           <template #item="{ item }">
             <div class="flex items-center gap-2 cursor-pointer py-[0.375rem] px-2">
               <base-avatar
+                v-if="item.image"
                 image="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D"
                 shape="circle"
                 avatar-classes="w-5 h-5"
@@ -252,10 +284,10 @@ onMounted(async () => {
 
               <button
                 v-tooltip.right="{
-                  value: `<h4 class='text-xs text-white -my-1'>Удалить</h4>`,
-                  escape: true,
-                  autoHide: false
-                }"
+                value: `<h4 class='text-xs text-white -my-1'>Удалить</h4>`,
+                escape: true,
+                autoHide: false
+              }"
                 @click="(event) => removeItem(event, item)"
               >
                 <base-icon name="TrashIcon" width="16" class="text-critic-500" />
@@ -283,11 +315,16 @@ onMounted(async () => {
   background: #EEF2FF !important;
 }
 
-.p-multiselect.p-focus {
+.p-multiselect.p-focus,
+.p-multiselect-item.p-highlight.item-selectable {
   border-color: rgb(99 90 255 / 1);
 }
 
 .p-multiselect.p-invalid.p-component {
   border-color: #e24c4c !important;
+}
+
+.p-multiselect-panel .p-multiselect-items .p-multiselect-item.p-highlight.item-selectable {
+  background: transparent !important;
 }
 </style>
