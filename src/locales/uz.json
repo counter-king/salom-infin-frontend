@@ -175,6 +175,8 @@
   "orderInstruction": "Приказы и распоряжения",
   "statement": "Заявления",
   "filter": "Фильтр",
+  "filtration":"Фильтрация",
+  "search":"Поиск",
   "date": "Дата",
   "export": "Экспорт",
   "reset": "Сбросить",

@@ -4,6 +4,7 @@ import Playground from "../modules/Playground/routes"
 import Auth from "../modules/Auth/routes"
 import Dashboard from "../modules/Dashboard/routes"
 import Documents from "../modules/Documents/routes"
+import Search from "../modules/Search/routes"
 
 import { getStorageItem } from "@/utils/storage"
 import { ACCESS } from "@/constants/storage"
@@ -23,6 +24,9 @@ const router = createRouter({
         ...Dashboard,
         // Documents
         ...Documents,
+        // Search
+        ...Search,
+
       ]
     },
     // /MainLayout
