@@ -19,6 +19,9 @@ const props = defineProps({
   required: {
     type: Boolean
   },
+  inputClass:{
+    type: String,
+  },
   error: {
     type: Object,
     default: () => ({
@@ -35,6 +38,9 @@ const { t } = useI18n()
 <template>
   <div class="app-input">
     <base-label :label="props.label" :required="props.required" />
+    <slot name="input-icon-left" />
+
+    <slot name="input-icon-right" />
 
     <InputText
       v-model="modelValue"
@@ -47,15 +53,16 @@ const { t } = useI18n()
             'w-full rounded-xl bg-greyscale-50 border-greyscale-50 focus:border-primary-500',
             {
               'p-invalid !shadow-none': props.error.$error
-            }
+            },
+            props.inputClass
           ]
         }
       }"
     />
 
-    <div class="mt-1">
+    <div>
       <template v-if="props.error.$errors.length">
-        <div
+        <div  class="mt-1"
           v-for="element of props.error.$errors"
           :key="element.$uid"
         >

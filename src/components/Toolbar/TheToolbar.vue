@@ -4,15 +4,16 @@ import { ref } from 'vue'
 import Toolbar from 'primevue/toolbar'
 // Store
 import { useNavigation } from '@/stores/navigation.store'
+import { onClickOutside } from '@vueuse/core'
 // Components
 import CreateActionDropdown from './CreateActionDropdown.vue'
-import UserDropdown from './UserDropdown.vue'
+import Search from './Search.vue'
 import SettingDropdown from './SettingDropdown.vue'
-import LanguageDropdown from './LanguageDropdown.vue'
 import Notifications from './Notifications.vue'
+import LanguageDropdown from './LanguageDropdown.vue'
+import UserDropdown from './UserDropdown.vue'
 // Composable
 const navigationStore = useNavigation()
-
 // Reactive
 const menus = ref([
   // Дашбоард
@@ -168,10 +169,19 @@ const menus = ref([
     value: "chat"
   },
 ])
+const modal = ref(true)
+const modalRef = ref(null)
 // Methods
 const openSidebar = (menu) => {
   navigationStore.actionCurrentMenu(menu)
 }
+onClickOutside(
+    modalRef,
+    (event) => {
+      console.log(event)
+      modal.value = true
+    },
+  )
 </script>
 
 <template>
@@ -183,13 +193,13 @@ const openSidebar = (menu) => {
         }
       }"
     >
-      <template #start>
+      <template #start >
         <router-link to="/" class="flex items-center mr-6">
           <img src="/images/logo.svg" alt="Logo" />
           <img src="/images/logo-text.svg" alt="Logo text" class="ml-2" />
         </router-link>
 
-        <template v-for="menu in menus">
+        <template v-for="menu in menus" v-if="modal">
           <!-- Если нет подразделы -->
           <template v-if="menu.link">
             <router-link
@@ -213,18 +223,22 @@ const openSidebar = (menu) => {
 
       <template #end>
         <div class="flex items-center gap-4">
-          <create-action-dropdown />
+          <create-action-dropdown   v-if="modal"/>
 
-          <div class="bg-greyscale-800 w-[1px] h-[28px]"></div>
+          <div class="bg-greyscale-800 w-[1px] h-[28px]"  v-if="modal"></div>
 
           <div class="flex gap-2">
             <base-button
+              v-if="modal"
               color="bg-greyscale-800 hover:bg-greyscale-900"
               border-color="border-greyscale-800"
               icon-left="MagniferIcon"
               only-icon
               rounded
+              @click="modal = false"
             />
+
+            <search v-else="modal" ref="modalRef"></search>
 
             <setting-dropdown></setting-dropdown>
 
@@ -240,6 +254,10 @@ const openSidebar = (menu) => {
       </template>
     </toolbar>
 	</header>
+
+  <Teleport v-if="!modal" to="body">
+    <div class="modal-layer fixed bottom-0 w-full transition-all duration-[400ms]"></div>
+  </Teleport>
 </template>
 
 <style>
