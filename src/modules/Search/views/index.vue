@@ -26,7 +26,7 @@ onMounted(async () => {
     <div class="bg-white !rounded-xl p-5 mb-5">
       <div class="flex w-full h-12  rounded-full bg-greyscale-50 border-greyscale-50 focus:border-primary-500">
         <base-input
-          class="!mb-0 flex-1 p-input-icon-left p-input-icon-right search_input"
+          class="!mb-0 flex-1 p-input-icon-right search_input"
           inputClass="h-12 bg-inherit border-transparent
           !focus:outline-none focus:ring-0  focus:border-inherit focus-visible:border-inherit"
           v-model="model"
