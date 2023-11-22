@@ -61,6 +61,7 @@ export const useRegStatement = defineStore("reg-statement", {
       }
     ],
     list: [],
+    listLoading: false,
     detailModel: {
       outgoing_date: null,
       correspondent: null,
@@ -77,9 +78,11 @@ export const useRegStatement = defineStore("reg-statement", {
     * Получить список
     * */
     async actionGetList() {
+      this.listLoading = true;
       let { data } = await fetchGetDocumentList({ journal_id: JOURNAL.APPLICATION })
 
       this.list = data.results
+      this.listLoading = false;
     },
     /*
     * Получить документ по id

@@ -152,6 +152,7 @@ export const useRegIncoming = defineStore("reg-incoming", {
       }
     ],
     list: [],
+    listLoading: false,
     detailModel: {
       code: null,
       content_type: 6,
@@ -186,9 +187,11 @@ export const useRegIncoming = defineStore("reg-incoming", {
     * Получить список
     * */
     async actionGetList() {
+      this.listLoading = true;
       let { data } = await fetchGetDocumentList({ journal_id: JOURNAL.INCOMING })
 
       this.list = data.results
+      this.listLoading = false;
     },
     /*
     * Получить документ по id
@@ -198,14 +201,7 @@ export const useRegIncoming = defineStore("reg-incoming", {
 
       this.detailModel.__copy_prototype = combineKeys(this.headers, data)
       setValuesToKeys(this.detailModel, data)
-      this.detailModel.__reviewers = this.detailModel.reviewers = data.reviewers.map(item => {
-        return {
-          full_name: item.user.full_name,
-          id: item.id,
-          user: item.user.id,
-          document: 18
-        }
-      })
+      this.detailModel.__reviewers = this.detailModel.reviewers
     },
     /*
     * Изменить документ

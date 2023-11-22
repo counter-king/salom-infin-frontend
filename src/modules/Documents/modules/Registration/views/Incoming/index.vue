@@ -65,7 +65,9 @@ const createDocument = async () => {
     <base-data-table
       :headers="regIncoming.headers"
       :value="regIncoming.list"
+      :loading="regIncoming.listLoading"
       :storage-columns-name="R_INCOMING_COLUMNS"
+
     >
       <template  #priority="{ data }">
         <priority-chip :id="data.priority.id" />

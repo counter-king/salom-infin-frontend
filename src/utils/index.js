@@ -46,6 +46,12 @@ export function setValuesToKeys(model, source) {
     }
   })
 }
+/**
+* Является ли ключ объектом
+* @param key
+* @return boolean
+* */
+export const isObject = (key) => Object.prototype.toString.call(key) === '[object Object]'
 /*
 *
 * */
