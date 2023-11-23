@@ -2,6 +2,7 @@
 // Core
 import { useModel, useSlots, computed } from 'vue'
 import Dialog from 'primevue/dialog'
+import {useI18n} from "vue-i18n";
 // Macros
 const props = defineProps({
   modelValue: {
@@ -10,8 +11,17 @@ const props = defineProps({
   maxWidth: {
     type: String,
     default: 'max-w-[1130px]'
+  },
+  label: {
+    type: String,
+    default: 'Входящий документ'
+  },
+  contentClasses: {
+    type: String,
+    default: 'py-6 px-8'
   }
 })
+const { t } = useI18n();
 // Composable
 const modelValue = useModel(props, 'modelValue')
 const slots = useSlots()
@@ -28,7 +38,7 @@ const rootClasses = computed(() => {
   <Dialog
     v-model:visible="modelValue"
     modal
-    header="Входящий документ"
+    :header="t(props.label)"
     :pt="{
       root: {
         class: rootClasses
@@ -43,7 +53,7 @@ const rootClasses = computed(() => {
         class: ['w-3 h-3']
       },
       content: {
-        class: ['py-6 px-8', { 'rounded-b-2xl' : !slots.footer }]
+        class: [props.contentClasses, { 'rounded-b-2xl' : !slots.footer }]
       },
       footer: {
         class: ['rounded-b-2xl bg-greyscale-50 border border-solid border-t-greyscale-200 py-5 pl-6 pr-4']
@@ -58,7 +68,7 @@ const rootClasses = computed(() => {
       <slot name="footer" />
     </template>
 
-    <div class="dialog-content">
+    <div class="dialog-content h-full">
       <slot name="content" />
     </div>
   </Dialog>

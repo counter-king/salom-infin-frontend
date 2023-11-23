@@ -7,6 +7,10 @@ import { UserWithLabel, UserWithRadio } from '@/components/Users'
 // Reactive
 const select = ref([])
 const select2 = ref([])
+// Methods
+const selectItem = (value) => {
+  console.log(value);
+}
 </script>
 
 <template>
@@ -19,6 +23,7 @@ const select2 = ref([])
         api-url="users"
         :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
         display="chip"
+        @emit:select-item="selectItem"
       >
         <template #chip="{ value }">
           <user-with-label

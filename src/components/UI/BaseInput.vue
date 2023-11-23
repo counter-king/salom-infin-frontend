@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { useModel } from 'vue'
+import { useModel, useSlots } from 'vue'
 import { useI18n } from 'vue-i18n'
 import InputText from 'primevue/inputtext'
 // Macros
@@ -22,6 +22,10 @@ const props = defineProps({
   inputClass:{
     type: String,
   },
+  iconLeft: {
+    type: String,
+    default: null
+  },
   error: {
     type: Object,
     default: () => ({
@@ -32,15 +36,19 @@ const props = defineProps({
 })
 // Composable
 const modelValue = useModel(props, 'modelValue')
+const slots = useSlots()
 const { t } = useI18n()
 </script>
 
 <template>
   <div class="app-input">
     <base-label :label="props.label" :required="props.required" />
-    <slot name="input-icon-left" />
 
-    <slot name="input-icon-right" />
+    <div v-if="slots['input-icon-left'] || props.iconLeft" class="asdasdasdasd">
+      <slot name="input-icon-left">
+        <base-icon :name="props.iconLeft" />
+      </slot>
+    </div>
 
     <InputText
       v-model="modelValue"
@@ -60,9 +68,11 @@ const { t } = useI18n()
       }"
     />
 
+    <slot name="input-icon-right" />
+
     <div>
       <template v-if="props.error.$errors.length">
-        <div  class="mt-1"
+        <div class="mt-1"
           v-for="element of props.error.$errors"
           :key="element.$uid"
         >
