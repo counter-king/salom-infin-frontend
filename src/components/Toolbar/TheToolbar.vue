@@ -169,7 +169,7 @@ const menus = ref([
     value: "chat"
   },
 ])
-const modal = ref(true)
+const openModal = ref(true)
 const modalRef = ref(null)
 // Methods
 const openSidebar = (menu) => {
@@ -178,8 +178,7 @@ const openSidebar = (menu) => {
 onClickOutside(
     modalRef,
     (event) => {
-      console.log(event)
-      modal.value = true
+      openModal.value = true
     },
   )
 </script>
@@ -199,7 +198,7 @@ onClickOutside(
           <img src="/images/logo-text.svg" alt="Logo text" class="ml-2" />
         </router-link>
 
-        <template v-for="menu in menus" v-if="modal">
+        <template v-for="menu in menus" v-if="openModal">
           <!-- Если нет подразделы -->
           <template v-if="menu.link">
             <router-link
@@ -223,22 +222,22 @@ onClickOutside(
 
       <template #end>
         <div class="flex items-center gap-4">
-          <create-action-dropdown   v-if="modal"/>
+          <create-action-dropdown   v-if="openModal"/>
 
-          <div class="bg-greyscale-800 w-[1px] h-[28px]"  v-if="modal"></div>
+          <div class="bg-greyscale-800 w-[1px] h-[28px]"  v-if="openModal"></div>
 
           <div class="flex gap-2">
             <base-button
-              v-if="modal"
+              v-if="openModal"
               color="bg-greyscale-800 hover:bg-greyscale-900"
               border-color="border-greyscale-800"
               icon-left="MagniferIcon"
               only-icon
               rounded
-              @click="modal = false"
+              @click="openModal = false"
             />
 
-            <search v-else="modal" ref="modalRef"></search>
+            <search v-else="openModal" ref="modalRef"></search>
 
             <setting-dropdown></setting-dropdown>
 
@@ -255,7 +254,7 @@ onClickOutside(
     </toolbar>
 	</header>
 
-  <Teleport v-if="!modal" to="body">
+  <Teleport v-if="!openModal" to="body">
     <div class="modal-layer fixed bottom-0 w-full transition-all duration-[400ms]"></div>
   </Teleport>
 </template>

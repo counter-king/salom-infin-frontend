@@ -26,6 +26,18 @@ const props = defineProps({
     type: String,
     default: null
   },
+  iconLeftClass:{
+    type: String,
+    default: null
+  },
+  iconRight: {
+    type: String,
+    default: null
+  },
+  iconRightClass:{
+    type: String,
+    default: null
+  },
   error: {
     type: Object,
     default: () => ({
@@ -44,11 +56,9 @@ const { t } = useI18n()
   <div class="app-input">
     <base-label :label="props.label" :required="props.required" />
 
-    <div v-if="slots['input-icon-left'] || props.iconLeft" class="asdasdasdasd">
-      <slot name="input-icon-left">
-        <base-icon :name="props.iconLeft" />
-      </slot>
-    </div>
+    <slot name="input-icon-left" v-if="slots['input-icon-left'] || props.iconLeft">
+      <base-icon :name="props.iconLeft" width="16" height="16" :class="props.iconLeftClass" />
+    </slot>
 
     <InputText
       v-model="modelValue"
@@ -68,7 +78,9 @@ const { t } = useI18n()
       }"
     />
 
-    <slot name="input-icon-right" />
+    <slot name="input-icon-right" v-if="slots['input-icon-right'] || props.iconRight">
+      <base-icon :name="props.iconRight" width="16" height="16" :class="props.iconRightClass" />
+    </slot>
 
     <div>
       <template v-if="props.error.$errors.length">
