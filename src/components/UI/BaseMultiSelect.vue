@@ -16,6 +16,13 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
+  label: {
+    type: String,
+    default: null
+  },
+  required: {
+    type: Boolean
+  },
   apiUrl: {
     type: String,
     default: null
@@ -141,10 +148,16 @@ onMounted(async () => {
     await loadList(props.apiParams)
   }
 })
+
+const testFunc = (value) => {
+  console.log(value);
+}
 </script>
 
 <template>
   <div class="app-multiselect">
+    <base-label :label="props.label" :required="props.required" />
+
     <MultiSelect
       v-model="modelValue"
       :options="options"
@@ -208,6 +221,7 @@ onMounted(async () => {
           class: ['text-sm font-medium text-primary-900']
         }
       }"
+      @change="testFunc"
     >
       <template #header="{ value, options }">
         <div class="flex items-center border-b border-greyscale-200">

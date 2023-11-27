@@ -1,6 +1,5 @@
 <script setup>
 // Core
-import { watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useVuelidate } from '@vuelidate/core'
 import { helpers, required } from '@vuelidate/validators'
@@ -65,13 +64,6 @@ const incomingStore = useRegIncoming()
 const $v = useVuelidate(rules, incomingStore.detailModel)
 // Composable
 defineExpose({ $v })
-// Watch
-watch(
-  () => incomingStore.detailModel.__reviewers,
-  (value) => {
-    incomingStore.detailModel.reviewers = value.map(item => ({ user: item.id }))
-  }
-)
 </script>
 
 <template>
@@ -211,7 +203,9 @@ watch(
           v-model="$v.__reviewers.$model"
           :error="$v.__reviewers"
           api-url="users"
+          label="reviewers"
           display="chip"
+          required
         >
           <template #chip="{ value }">
             <user-with-label
@@ -240,14 +234,6 @@ watch(
             />
           </template>
         </base-multi-select>
-<!--        <select-multiple-->
-<!--          v-model="$v.__reviewers.$model"-->
-<!--          :error="$v.__reviewers"-->
-<!--          required-->
-<!--          display="chip"-->
-<!--          label="reviewers"-->
-<!--          placeholder="enter-reviewers"-->
-<!--        />-->
       </base-col>
 
       <base-col col-class="w-full">
