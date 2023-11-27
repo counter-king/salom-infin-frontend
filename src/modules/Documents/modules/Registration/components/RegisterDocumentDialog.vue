@@ -1,8 +1,8 @@
 <script setup>
 // Core
 import { ref, useModel, shallowRef, watch, defineAsyncComponent, unref } from 'vue'
+import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useToast } from 'primevue/usetoast'
 // Stores
 import { useDocFlowStore } from '../stores/docflow.store'
 import { useRegIncoming } from '../stores/incoming.store'
@@ -19,10 +19,10 @@ import BaseSpinner from '@/components/UI/BaseSpinner.vue'
 import { clearModel } from '@/utils'
 // Composable
 const modelValue = useModel(props, 'modelValue')
+const router = useRouter()
 const { t } = useI18n()
-const toast = useToast()
 const docFlowStore = useDocFlowStore()
-const regIncoming = useRegIncoming()
+const incomingStore = useRegIncoming()
 const regInner = useRegInner()
 const regOutgoing = useRegOutgoing()
 const regAppeal = useRegAppeal()
@@ -58,34 +58,49 @@ const createDocument = async () => {
 
   switch(documentMenuType.value) {
     case 'Incoming':
-      await docFlowStore.actionCreateDocument(regIncoming.detailModel)
+      let model = {
+        ...incomingStore.detailModel,
+        reviewers: incomingStore.detailModel.__reviewers.map(item => ({ user: item.id }))
+      }
+      await docFlowStore.actionCreateDocument(model)
+      modelValue.value = false
       break;
     case 'Inner':
       await docFlowStore.actionCreateDocument(regInner.detailModel)
+      modelValue.value = false
       break;
     case 'Outgoing':
       await docFlowStore.actionCreateDocument(regOutgoing.detailModel)
+      modelValue.value = false
       break;
     case 'Appeal':
       await docFlowStore.actionCreateDocument(regAppeal.detailModel)
+      modelValue.value = false
       break;
     case 'IncomingBranches':
       await docFlowStore.actionCreateDocument(regIncomingBranches.detailModel)
+      modelValue.value = false
       break;
     case 'OrderInstruction':
       await docFlowStore.actionCreateDocument(regOrderInstruction.detailModel)
+      modelValue.value = false
       break;
     case 'Statement':
       await docFlowStore.actionCreateDocument(regStatement.detailModel)
+      modelValue.value = false
       break;
     default:
   }
   buttonLoading.value = false
+  setTimeout(async () => {
+    clearDocument()
+    await redirectRoute()
+  }, 500)
 }
 const clearDocument = () => {
   switch(documentMenuType.value) {
     case 'Incoming':
-      clearModel(regIncoming.detailModel, ['grif', 'journal'])
+      clearModel(incomingStore.detailModel, ['grif', 'journal'])
       break;
     case 'Inner':
       clearModel(regInner.detailModel, ['grif', 'journal'])
@@ -104,6 +119,32 @@ const clearDocument = () => {
       break;
     case 'Statement':
       clearModel(regStatement.detailModel, ['grif', 'journal'])
+      break;
+    default:
+  }
+}
+const redirectRoute = async () => {
+  switch(documentMenuType.value) {
+    case 'Incoming':
+      await router.replace({ name: 'RegistrationIncomingIndex' })
+      break;
+    case 'Inner':
+      await router.replace({ name: 'RegistrationInnerIndex' })
+      break;
+    case 'Outgoing':
+      await router.replace({ name: 'RegistrationOutgoingIndex' })
+      break;
+    case 'Appeal':
+      await router.replace({ name: 'RegistrationAppealIndex' })
+      break;
+    // case 'IncomingBranches':
+    //   await router.replace({ name: 'RegistrationOrderInstructionIndex' })
+    //   break;
+    case 'OrderInstruction':
+      await router.replace({ name: 'RegistrationOrderInstructionIndex' })
+      break;
+    case 'Statement':
+      await router.replace({ name: 'RegistrationStatementIndex' })
       break;
     default:
   }
