@@ -30,7 +30,7 @@ onMounted(async () => {
     </template>
 
     <template v-else>
-      <layout-with-tabs :preview-detail="innerStore.detailModel.__copy_prototype">
+      <layout-with-tabs :title="innerStore.detailModel.title"  :preview-detail="innerStore.detailModel.__copy_prototype">
         <template #preview-actions>
           <div class="mt-5">
             <change-document />

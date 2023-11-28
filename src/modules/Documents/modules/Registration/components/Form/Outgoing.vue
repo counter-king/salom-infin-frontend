@@ -42,7 +42,6 @@ const innerOutgoing = useRegOutgoing()
 const $v = useVuelidate(rules, innerOutgoing.detailModel)
 // Composable
 defineExpose({ $v })
-
 </script>
 
 <template>
