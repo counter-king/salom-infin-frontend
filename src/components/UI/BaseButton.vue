@@ -10,6 +10,9 @@ const props = defineProps({
   label: {
     type: String
   },
+  severity: {
+    type: String
+  },
   buttonClass: {
     type: String
   },
@@ -98,6 +101,7 @@ const rootClasses = computed(() => {
 
 <template>
   <Button
+    :severity="props.severity"
     :loading="props.loading"
     :pt="{
       root: {
