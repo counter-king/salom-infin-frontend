@@ -168,15 +168,17 @@ const menus = ref([
     children: [],
     value: "chat"
   },
+  // Настройки
   {
     title: "Настройки",
     icon: "SettingsIcon",
     link: "SettingsIndex",
     children: [
       {
-        title: "settings",
+        title: "Настройки",
         prefix: true
       },
+      // Документ оборот
       {
         title: "Документ оборот",
         icon: "FolderWithFilesIcon",
@@ -184,92 +186,99 @@ const menus = ref([
         children: [
           {
             title: "Тип документа",
-            icon: "SettingsIcon",
+            icon: "ClipboardCheckIcon",
             link: "DocumentTypeIndex",
             children: []
           },
           {
             title: "Вид документа",
-            icon: "SettingsIcon",
+            icon: "DocumentTextIcon",
             link: "DocumentViewIndex",
             children: []
           },
           {
             title: "Журнал",
-            icon: "SettingsIcon",
+            icon: "NotebookIcon",
             link: "MagazineIndex",
             children: []
           }
         ]
       },
+      // Корреспонденты
       {
         title: "Корреспонденты",
-        icon: "SettingsIcon",
+        icon: "BuildingsIcon",
         link: "CorrespondentsIndex",
         children: [
           {
             title: "Индивидулны",
-            icon: "SettingsIcon",
-            link: "EmployeesIndex",
+            icon: "UserCheckRoundedIcon",
+            link: "IndividualIndex",
             children: []
           },
           {
             title: "Организации",
-            icon: "SettingsIcon",
+            icon: "BuildingsIcon",
             link: "OrganizationsIndex",
             children: []
           }
         ]
       },
+      // Пользователи
       {
         title: "Пользователи",
-        icon: "UsersGroupRoundedIcon",
+        icon: "UsersGroupTwoRoundedIcon",
         link: "UsersIndex",
         children: [
         {
             title: "Сотрудники",
-            icon: "SettingsIcon",
+            icon: "UserCheckRoundedIcon",
             link: "EmployeesIndex",
             children: []
           },
           {
             title: "Помощники",
-            icon: "SettingsIcon",
+            icon: "UsersGroupRoundedIcon",
             link: "AssistantsIndex",
             children: []
           },
           {
             title: "Топ подписантов",
-            icon: "SettingsIcon",
+            icon: "UserSpeakIcon",
             link: "TopSignersIndex",
             children: []
           }
         ]
       },
+      // Профиль
       {
         title: "Профиль",
         icon: "UserIcon",
         link: "ProfileIndex",
         children: []
       },
+      // Мои устройства
       {
-        title: "Пользователи",
-        icon: "SettingsIcon",
+        title: "Мои устройства",
+        icon: "LaptopMinimalisticIcon",
         link: "MyDevicesIndex",
         children: []
       },
+      // Уведомления
       {
         title: "Уведомления",
         icon: "BellIcon",
         link: "NotificationsIndex",
         children: []
       },
+      // Техника и оборудования
       {
         title: "Техника и оборудования",
-        icon: "SettingsIcon",
+        icon: "MouseIcon",
         link: "MachineryEquipmentIndex",
         children: []
       },
+      // Общие настройки
       {
         title: "Общие настройки",
         icon: "SettingsMinimalisticIcon",
