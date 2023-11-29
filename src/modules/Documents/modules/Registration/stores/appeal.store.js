@@ -121,12 +121,10 @@ export const useRegAppeal = defineStore("reg-appeal", {
 
       this.detailModel.__copy_prototype = combineKeys(this.headers, data)
       setValuesToKeys(this.detailModel, data)
-      this.detailModel.__reviewers = this.detailModel.reviewers = data.reviewers.map(item => {
+      this.detailModel.__reviewers = data.reviewers.map(item => {
         return {
-          full_name: item.user.full_name,
-          id: item.id,
-          user: item.user.id,
-          document: 28
+          ...item,
+          __userId: item.user.id
         }
       })
     },
@@ -134,6 +132,24 @@ export const useRegAppeal = defineStore("reg-appeal", {
     * Изменить документ
     * */
     async actionUpdateDocument() {
+      let model = {
+        ...this.detailModel,
+        reviewers: this.detailModel.__reviewers.map(item => {
+          if(item.__userId) {
+            return {
+              id: item.id,
+              user: item.__userId,
+              document: item.document
+            }
+          }
+          else {
+            return {
+              user: item.id,
+            }
+          }
+        })
+      }
+
       try {
         await fetchUpdateDocument({ id: this.detailModel.id, body: this.detailModel })
         await this.actionGetById({ id: this.detailModel.id })

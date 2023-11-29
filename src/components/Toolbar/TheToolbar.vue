@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref } from 'vue'
+import { ref, provide } from 'vue'
 import Toolbar from 'primevue/toolbar'
 // Store
 import { useNavigation } from '@/stores/navigation.store'
@@ -176,11 +176,12 @@ const openSidebar = (menu) => {
   navigationStore.actionCurrentMenu(menu)
 }
 onClickOutside(
-    modalRef,
-    (event) => {
-      openModal.value = true
-    },
-  )
+  modalRef,
+  (event) => {
+    openModal.value = true
+  },
+)
+provide('openModal', openModal);
 </script>
 
 <template>
