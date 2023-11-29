@@ -168,6 +168,85 @@ const menus = ref([
     children: [],
     value: "chat"
   },
+  {
+    title: "settings",
+    icon: "SettingsIcon",
+    link: "SettingsIndex",
+    children: [
+      {
+        title: "settings",
+        prefix: true
+      },
+      {
+        title: "document-turnover",
+        icon: "FolderWithFilesIcon",
+        link: "DocumentTurnoverIndex",
+        children: [
+          {
+            title: "document-type",
+            icon: "SettingsIcon",
+            link: "DocumentTypeIndex",
+            children: []
+          },
+          {
+            title: "document_type",
+            icon: "SettingsIcon",
+            link: "DocumentViewIndex",
+            children: []
+          },
+          {
+            title: "magazine",
+            icon: "SettingsIcon",
+            link: "MagazineIndex",
+            children: []
+          }
+        ]
+      },
+      {
+        title: "correspondents",
+        icon: "SettingsIcon",
+        link: "BoxesIndex",
+        children: []
+      },
+      {
+        title: "users",
+        icon: "UsersGroupRoundedIcon",
+        link: "BoxesIndex",
+        children: []
+      },
+      {
+        title: "profile",
+        icon: "UserIcon",
+        link: "ProfileIndex",
+        children: []
+      },
+      {
+        title: "my-devices",
+        icon: "SettingsIcon",
+        link: "MyDevicesIndex",
+        children: []
+      },
+      {
+        title: "notifications",
+        icon: "BellIcon",
+        link: "NotificationsIndex",
+        children: []
+      },
+      {
+        title: "machinery-equipment",
+        icon: "SettingsIcon",
+        link: "MachineryEquipmentIndex",
+        children: []
+      },
+      {
+        title: "general-settings",
+        icon: "SettingsMinimalisticIcon",
+        link: "GeneralSettingsIndex",
+        children: []
+      },
+    ],
+    value: "settings"
+  },
 ])
 const openModal = ref(true)
 const modalRef = ref(null)
