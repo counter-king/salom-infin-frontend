@@ -168,6 +168,117 @@ const menus = ref([
     children: [],
     value: "chat"
   },
+  {
+    title: "Настройки",
+    icon: "SettingsIcon",
+    link: "SettingsIndex",
+    children: [
+      {
+        title: "settings",
+        prefix: true
+      },
+      {
+        title: "Документ оборот",
+        icon: "FolderWithFilesIcon",
+        link: "DocumentTurnoverIndex",
+        children: [
+          {
+            title: "Тип документа",
+            icon: "SettingsIcon",
+            link: "DocumentTypeIndex",
+            children: []
+          },
+          {
+            title: "Вид документа",
+            icon: "SettingsIcon",
+            link: "DocumentViewIndex",
+            children: []
+          },
+          {
+            title: "Журнал",
+            icon: "SettingsIcon",
+            link: "MagazineIndex",
+            children: []
+          }
+        ]
+      },
+      {
+        title: "Корреспонденты",
+        icon: "SettingsIcon",
+        link: "CorrespondentsIndex",
+        children: [
+          {
+            title: "Индивидулны",
+            icon: "SettingsIcon",
+            link: "EmployeesIndex",
+            children: []
+          },
+          {
+            title: "Организации",
+            icon: "SettingsIcon",
+            link: "OrganizationsIndex",
+            children: []
+          }
+        ]
+      },
+      {
+        title: "Пользователи",
+        icon: "UsersGroupRoundedIcon",
+        link: "UsersIndex",
+        children: [
+        {
+            title: "Сотрудники",
+            icon: "SettingsIcon",
+            link: "EmployeesIndex",
+            children: []
+          },
+          {
+            title: "Помощники",
+            icon: "SettingsIcon",
+            link: "AssistantsIndex",
+            children: []
+          },
+          {
+            title: "Топ подписантов",
+            icon: "SettingsIcon",
+            link: "TopSignersIndex",
+            children: []
+          }
+        ]
+      },
+      {
+        title: "Профиль",
+        icon: "UserIcon",
+        link: "ProfileIndex",
+        children: []
+      },
+      {
+        title: "Пользователи",
+        icon: "SettingsIcon",
+        link: "MyDevicesIndex",
+        children: []
+      },
+      {
+        title: "Уведомления",
+        icon: "BellIcon",
+        link: "NotificationsIndex",
+        children: []
+      },
+      {
+        title: "Техника и оборудования",
+        icon: "SettingsIcon",
+        link: "MachineryEquipmentIndex",
+        children: []
+      },
+      {
+        title: "Общие настройки",
+        icon: "SettingsMinimalisticIcon",
+        link: "GeneralSettingsIndex",
+        children: []
+      },
+    ],
+    value: "settings"
+  },
 ])
 const openModal = ref(true)
 const modalRef = ref(null)
