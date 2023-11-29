@@ -13,12 +13,16 @@ const props = defineProps({
   tabItems: {
     type: Array,
     default: () => []
+  },
+  segment: {
+    type: Boolean,
   }
 })
 // Methods
 const panelClass = (props, state, context) => {
   return {
-    'text-primary-900 font-semibold !border-primary-500': context.index === state.d_activeIndex
+    'border-hidden': context.index === state.d_activeIndex === !props.segment,
+    'text-primary-900 font-semibold !border-primary-500': context.index === state.d_activeIndex,
   }
 }
 </script>
@@ -32,7 +36,12 @@ const panelClass = (props, state, context) => {
         class: 'flex flex-col'
       },
       menu: {
-        class: 'px-2 border-b border-greyscale-200'
+        class:[
+          {
+          'px-2 border-b border-greyscale-200': !props.segment,
+          'bg-primary-50 rounded-xl border-hidden': props.segment
+          }
+        ]
       },
       panelContainer: {
         class: 'flex-1 p-0 overflow-hidden'
