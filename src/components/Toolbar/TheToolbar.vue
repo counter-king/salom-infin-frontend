@@ -169,7 +169,7 @@ const menus = ref([
     value: "chat"
   },
   {
-    title: "settings",
+    title: "Настройки",
     icon: "SettingsIcon",
     link: "SettingsIndex",
     children: [
@@ -178,24 +178,24 @@ const menus = ref([
         prefix: true
       },
       {
-        title: "document-turnover",
+        title: "Документ оборот",
         icon: "FolderWithFilesIcon",
         link: "DocumentTurnoverIndex",
         children: [
           {
-            title: "document-type",
+            title: "Тип документа",
             icon: "SettingsIcon",
             link: "DocumentTypeIndex",
             children: []
           },
           {
-            title: "document_type",
+            title: "Вид документа",
             icon: "SettingsIcon",
             link: "DocumentViewIndex",
             children: []
           },
           {
-            title: "magazine",
+            title: "Журнал",
             icon: "SettingsIcon",
             link: "MagazineIndex",
             children: []
@@ -203,43 +203,75 @@ const menus = ref([
         ]
       },
       {
-        title: "correspondents",
+        title: "Корреспонденты",
         icon: "SettingsIcon",
-        link: "BoxesIndex",
-        children: []
+        link: "CorrespondentsIndex",
+        children: [
+          {
+            title: "Индивидулны",
+            icon: "SettingsIcon",
+            link: "EmployeesIndex",
+            children: []
+          },
+          {
+            title: "Организации",
+            icon: "SettingsIcon",
+            link: "OrganizationsIndex",
+            children: []
+          }
+        ]
       },
       {
-        title: "users",
+        title: "Пользователи",
         icon: "UsersGroupRoundedIcon",
-        link: "BoxesIndex",
-        children: []
+        link: "UsersIndex",
+        children: [
+        {
+            title: "Сотрудники",
+            icon: "SettingsIcon",
+            link: "EmployeesIndex",
+            children: []
+          },
+          {
+            title: "Помощники",
+            icon: "SettingsIcon",
+            link: "AssistantsIndex",
+            children: []
+          },
+          {
+            title: "Топ подписантов",
+            icon: "SettingsIcon",
+            link: "TopSignersIndex",
+            children: []
+          }
+        ]
       },
       {
-        title: "profile",
+        title: "Профиль",
         icon: "UserIcon",
         link: "ProfileIndex",
         children: []
       },
       {
-        title: "my-devices",
+        title: "Пользователи",
         icon: "SettingsIcon",
         link: "MyDevicesIndex",
         children: []
       },
       {
-        title: "notifications",
+        title: "Уведомления",
         icon: "BellIcon",
         link: "NotificationsIndex",
         children: []
       },
       {
-        title: "machinery-equipment",
+        title: "Техника и оборудования",
         icon: "SettingsIcon",
         link: "MachineryEquipmentIndex",
         children: []
       },
       {
-        title: "general-settings",
+        title: "Общие настройки",
         icon: "SettingsMinimalisticIcon",
         link: "GeneralSettingsIndex",
         children: []

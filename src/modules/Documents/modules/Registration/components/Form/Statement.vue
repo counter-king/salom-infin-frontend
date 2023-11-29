@@ -76,6 +76,18 @@ defineExpose({ $v })
       </base-col>
 
       <base-col col-class="w-1/2">
+        <base-dropdown
+          v-model="$v.document_type.$model"
+          :error="$v.document_type"
+          :options="commonStore.documentTypesList"
+          required
+          option-value="id"
+          label="document-type"
+          placeholder="enter-deliver-type"
+        />
+      </base-col>
+
+      <base-col col-class="w-1/2">
         <base-multi-select
           v-model="$v.__reviewers.$model"
           :error="$v.__reviewers"
@@ -111,18 +123,6 @@ defineExpose({ $v })
             />
           </template>
         </base-multi-select>
-      </base-col>
-
-      <base-col col-class="w-1/2">
-        <base-dropdown
-          v-model="$v.document_type.$model"
-          :error="$v.document_type"
-          :options="commonStore.documentTypesList"
-          required
-          option-value="id"
-          label="document-type"
-          placeholder="enter-deliver-type"
-        />
       </base-col>
 
       <base-col col-class="w-full">

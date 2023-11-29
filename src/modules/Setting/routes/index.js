@@ -26,7 +26,7 @@ const Settings = [
         meta: {
           isAuthRequired: true
         },
-        component: () => import("../views/index.vue"),
+        component: () => import("../views/DocumentTurnover/index.vue"),
         redirect: { name: "DocumentTypeIndex" },
         children: [
           // Тип документа
@@ -55,6 +55,75 @@ const Settings = [
               isAuthRequired: true
             },
             component: () => import("../views/DocumentTurnover/Magazine/index.vue"),
+          },
+        ]
+      },
+      // Корреспонденты
+      {
+        path: "correspondents",
+        name: "CorrespondentsIndex",
+        meta: {
+          isAuthRequired: true
+        },
+        component: () => import("../views/Correspondents/index.vue"),
+        redirect: { name: "IndividualIndex" },
+        children: [
+          // Индивидулны
+          {
+            path: "individual",
+            name: "IndividualIndex",
+            meta: {
+              isAuthRequired: true
+            },
+            component: () => import("../views/Correspondents/Individual/index.vue"),
+          },
+          // Организации
+          {
+            path: "organizations",
+            name: "OrganizationsIndex",
+            meta: {
+              isAuthRequired: true
+            },
+            component: () => import("../views/Correspondents/Organizations/index.vue"),
+          },
+        ]
+      },
+      // Пользователи
+      {
+        path: "users",
+        name: "UsersIndex",
+        meta: {
+          isAuthRequired: true
+        },
+        component: () => import("../views/Users/index.vue"),
+        redirect: { name: "EmployeesIndex" },
+        children: [
+          // Сотрудники
+          {
+            path: "employees",
+            name: "EmployeesIndex",
+            meta: {
+              isAuthRequired: true
+            },
+            component: () => import("../views/Users/Employees/index.vue"),
+          },
+          // Помощники
+          {
+            path: "assistants",
+            name: "AssistantsIndex",
+            meta: {
+              isAuthRequired: true
+            },
+            component: () => import("../views/Users/Assistants/index.vue"),
+          },
+          // Топ подписантов
+          {
+            path: "top-signers",
+            name: "TopSignersIndex",
+            meta: {
+              isAuthRequired: true
+            },
+            component: () => import("../views/Users/TopSigners/index.vue"),
           },
         ]
       },

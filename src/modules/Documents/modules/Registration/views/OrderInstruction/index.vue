@@ -32,7 +32,11 @@ const createDocument = async () => {
 
   try {
     _sidebarRef.successButtonLoading = true
-    await docFlowStore.actionCreateDocument(regOrderInstruction.detailModel)
+    let orderInstructionModel = {
+      ...regOrderInstruction.detailModel,
+      reviewers: regOrderInstruction.detailModel.__reviewers.map(item => ({ user: item.id }))
+    }
+    await docFlowStore.actionCreateDocument(orderInstructionModel)
     _sidebarRef.successButtonLoading = false
     sidebar.value = false
     await regOrderInstruction.actionGetList()

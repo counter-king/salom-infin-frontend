@@ -66,7 +66,11 @@ const createDocument = async () => {
       modelValue.value = false
       break;
     case 'Inner':
-      await docFlowStore.actionCreateDocument(regInner.detailModel)
+      let innerModel = {
+        ...regInner.detailModel,
+        reviewers: regInner.detailModel.__reviewers.map(item => ({ user: item.id }))
+      }
+      await docFlowStore.actionCreateDocument(innerModel)
       modelValue.value = false
       break;
     case 'Outgoing':
@@ -74,7 +78,11 @@ const createDocument = async () => {
       modelValue.value = false
       break;
     case 'Appeal':
-      await docFlowStore.actionCreateDocument(regAppeal.detailModel)
+      let appealModel = {
+        ...regAppeal.detailModel,
+        reviewers: regAppeal.detailModel.__reviewers.map(item => ({ user: item.id }))
+      }
+      await docFlowStore.actionCreateDocument(appealModel)
       modelValue.value = false
       break;
     case 'IncomingBranches':
@@ -82,11 +90,19 @@ const createDocument = async () => {
       modelValue.value = false
       break;
     case 'OrderInstruction':
-      await docFlowStore.actionCreateDocument(regOrderInstruction.detailModel)
+      let orderInstructionModel = {
+        ...regOrderInstruction.detailModel,
+        reviewers: regOrderInstruction.detailModel.__reviewers.map(item => ({ user: item.id }))
+      }
+      await docFlowStore.actionCreateDocument(orderInstructionModel)
       modelValue.value = false
       break;
     case 'Statement':
-      await docFlowStore.actionCreateDocument(regStatement.detailModel)
+      let statementnModel = {
+        ...regStatement.detailModel,
+        reviewers: regStatement.detailModel.__reviewers.map(item => ({ user: item.id }))
+      }
+      await docFlowStore.actionCreateDocument(statementnModel)
       modelValue.value = false
       break;
     default:
