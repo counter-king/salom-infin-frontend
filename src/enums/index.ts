@@ -3,6 +3,12 @@ export const CORRESPONDENT = {
   LEGAL: "legal",
   PHYSICAL: "physical",
 }
+export const FILE_ACTIONS = {
+  UPLOADED: 'uploaded',  // Файл загружен
+  DELETED:  'deleted',   // Файл удален
+  FORWARD:  'forward',   // Документ перенаправлен
+  DONE:     'done',      // Пользаватель выполнил
+}
 export const JOURNAL = {
   INCOMING: 1,           // Входящий
   INNER: 2,              // Внутренние

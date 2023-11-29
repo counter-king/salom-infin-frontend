@@ -10,6 +10,9 @@ const props = defineProps({
   label: {
     type: String
   },
+  severity: {
+    type: String
+  },
   buttonClass: {
     type: String
   },
@@ -88,7 +91,7 @@ const rootClasses = computed(() => {
     },
     // onlyIcon
     {
-      'py-[7px] px-0 text-xs w-[32px]': props.onlyIcon && props.size === 'small',
+      'py-[7px] px-0 text-xs w-[32px] h-[32px]': props.onlyIcon && props.size === 'small',
       'py-[9px] px-0 w-[40px]': props.onlyIcon && (props.size === null || props.size === "normal"),
       'py-[11px] px-0 w-[44px]': props.onlyIcon && props.size === 'large',
     }
@@ -98,6 +101,7 @@ const rootClasses = computed(() => {
 
 <template>
   <Button
+    :severity="props.severity"
     :loading="props.loading"
     :pt="{
       root: {

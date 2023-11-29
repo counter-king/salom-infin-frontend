@@ -1,6 +1,7 @@
 <script setup>
 // Core
 import Avatar from 'primevue/avatar'
+import { ActionChip } from '@/components/Chips'
 // Macros
 const props = defineProps({
   label: {
@@ -36,33 +37,42 @@ const props = defineProps({
   },
   avatarClasses: {
     type: String
+  },
+  actionChipType: {
+    type: String
   }
 })
 </script>
 
 <template>
-  <Avatar
-    :image="props.image"
-    :size="props.size"
-    :shape="props.shape"
-    :label="props.label[0]"
-    :pt="{
-      root: {
-        style: `${props.color}px`,
-        class: [
-          { '-ml-2': props.type === 'group' }, props.avatarClasses
-        ]
-      },
-      label: {
-        class: 'text-sm leading-none font-semibold text-primary-900'
-      },
-      image: {
-        class: 'object-cover'
-      }
-    }"
-  >
-    <slot />
-  </Avatar>
+  <div class="app-avatar relative">
+    <Avatar
+      :image="props.image"
+      :size="props.size"
+      :shape="props.shape"
+      :label="props.label[0]"
+      :pt="{
+        root: {
+          style: `${props.color}px`,
+          class: [
+            { '-ml-2': props.type === 'group' }, props.avatarClasses
+          ]
+        },
+        label: {
+          class: 'text-sm leading-none font-semibold text-primary-900'
+        },
+        image: {
+          class: 'object-cover'
+        }
+      }"
+    >
+      <slot />
+    </Avatar>
+
+    <template v-if="props.actionChipType">
+      <action-chip :type="props.actionChipType" />
+    </template>
+  </div>
 </template>
 
 <style scoped>
