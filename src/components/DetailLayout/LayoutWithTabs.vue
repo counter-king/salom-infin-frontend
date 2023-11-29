@@ -4,7 +4,8 @@ import { ref, shallowRef, watch, defineAsyncComponent, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import {useI18n} from "vue-i18n";
 // Components
-import BaseSpinner from "@/components/UI/BaseSpinner.vue"
+import BaseSpinner from '@/components/UI/BaseSpinner.vue'
+import FileTabs from './components/FileTabs.vue'
 // Composable
 const router = useRouter()
 // Macros
@@ -61,7 +62,6 @@ const props = defineProps({
 const { t } = useI18n();
 // Reactive
 const activeTabMenuIndex = ref(0)
-const activeTab = ref(props.tabItems[0])
 const activeTabComponent = shallowRef(null)
 // Computed
 const activeTabMenu = computed(() => props.tabItems[activeTabMenuIndex.value])
@@ -124,7 +124,7 @@ watch(activeTabMenu, (value) => {
           </slot>
 
           <div class="max-w-[566px] w-full ml-auto border-l">
-            resolution
+            <file-tabs />
           </div>
         </div>
       </slot>

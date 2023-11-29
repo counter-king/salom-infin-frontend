@@ -49,7 +49,7 @@ const searchStore = useSearchStore();
   </div>
 </template>
 <style>
-.search_block .btn_fliter{
+.search_block .btn_fliter {
   height: 40px;
 }
 </style>

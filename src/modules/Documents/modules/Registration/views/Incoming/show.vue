@@ -12,7 +12,6 @@ const route = useRoute()
 const incomingStore = useRegIncoming()
 // Reactive
 const loading = ref(true)
-const previewDetail = ref([])
 // Hooks
 onMounted(async () => {
   loading.value = true

@@ -1,32 +1,79 @@
 <script setup>
 // Core
+import { ref } from 'vue'
 import TabView from 'primevue/tabview'
 import TabPanel from 'primevue/tabpanel'
+// Components
+import { FilePreview } from '@/components/Files'
 // Macros
 const props = defineProps({
   tabView: {
     type: Array,
     default: () => []
+  },
+  scrollable: {
+    type: Boolean
+  },
+  truncate: {
+    type: Boolean
+  },
+  segment: {
+    type: Boolean
+  },
+  actions: {
+    type: Boolean
+  },
+  navContainerClass: {
+    type: String
   }
 })
 const emit = defineEmits(['emit:tab-click'])
+// Reactive
+const zoomDialog = ref(false)
+const currentFile = ref(null)
 // Methods
-const panelClass = (props, parent, index) => {
-  return {
-    'text-primary-900 font-semibold !border-primary-500': parent.state.d_activeIndex === index
-  }
+const panelClass = (_, parent, index) => {
+  return [
+    'font-semibold',
+    {
+      'text-primary-900 ': parent.state.d_activeIndex === index && !props.segment
+    },
+    {
+      'text-primary-500 ': parent.state.d_activeIndex === index && props.segment
+    }
+  ]
+}
+const zoomFile = (event, pane) => {
+  event.stopImmediatePropagation()
+  zoomDialog.value = true
+  currentFile.value = pane
 }
 </script>
 
 <template>
   <TabView
+    :scrollable="props.scrollable"
     @update:activeIndex="(index) => emit('emit:tab-click', props.tabView[index])"
     :pt="{
       root: {
         class: 'flex flex-col h-full'
       },
       nav: {
-        class: 'px-2 border-b border-greyscale-200'
+        class: [
+          {
+            'px-2 border-b border-greyscale-200': !props.segment,
+            'border-none': props.segment
+          }
+        ]
+      },
+      previousButton: {
+        class: ['shadow-none w-6 justify-start']
+      },
+      nextButton: {
+        class: ['shadow-none w-6 justify-end']
+      },
+      navContainer: {
+        class: [props.navContainerClass]
       },
       panelContainer: {
         class: 'flex-1 p-0 overflow-hidden'
@@ -39,13 +86,28 @@ const panelClass = (props, parent, index) => {
           content: {
             class: 'flex flex-col h-full'
           },
-          headerAction: ({ props, parent }) => ({
-            class: [panelClass(props, parent, index), 'm-0 border-transparent text-greyscale-500 font-medium py-4 px-0 mx-4']
+          header: {
+            class: [
+              {
+                'flex-none': props.segment
+              }
+            ]
+          },
+          headerAction: ({ _, parent }) => ({
+            class: [
+              'font-medium !border-transparent text-greyscale-500',
+              panelClass(_, parent, index),
+              {
+                'm-0 py-4 px-0 mx-4': !props.segment,
+                'max-w-[200px] truncate': props.truncate,
+                'py-2 px-3 rounded-[6px] !bg-greyscale-50 font-semibold mr-2': props.segment
+              }
+            ]
           })
         }"
       >
         <template #header>
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2 overflow-hidden">
             <base-icon
               v-if="pane.icon"
               :name="pane.icon"
@@ -53,14 +115,67 @@ const panelClass = (props, parent, index) => {
               height="18"
             />
 
-            <p class="text-[15px]">{{ pane.title }}</p>
+            <p
+              class="text-[15px]"
+              :class="{ 'truncate': props.truncate }"
+              v-tooltip.top="{
+                value: props.truncate ? `<h4 class='text-xs text-white -my-1'>${pane.title}</h4>` : null,
+                escape: true,
+                autoHide: false
+              }"
+            >
+              {{ pane.title }}
+            </p>
+
+            <template v-if="props.actions && pane.slot !== 'resolution'">
+              <div class="flex gap-2">
+                <button
+                  type="button"
+                  v-tooltip.top="{
+                    value: `<h4 class='text-xs text-white -my-1'>Просмотр</h4>`,
+                    escape: true,
+                    autoHide: false
+                  }"
+                  class="hover:text-warning-500"
+                  @click="zoomFile($event, pane)"
+                >
+                  <base-icon name="EyeIcon" width="18" />
+                </button>
+
+                <button
+                  type="button"
+                  v-tooltip.top="{
+                    value: `<h4 class='text-xs text-white -my-1'>Скачать</h4>`,
+                    escape: true,
+                    autoHide: false
+                  }"
+                  class="hover:text-primary-500"
+                >
+                  <base-icon name="DownloadMinimalisticIcon" width="18" />
+                </button>
+              </div>
+            </template>
           </div>
         </template>
 
-        <slot :name="pane.slot" />
+        <slot :name="pane.slot" :value="pane" />
       </TabPanel>
     </template>
   </TabView>
+
+  <base-dialog v-model="zoomDialog" max-width="max-w-[820px]">
+    <template #header>
+      <div class="flex-1 truncate mr-2">
+        <h1 class="text-xl font-semibold truncate">{{ currentFile.title }} {{ currentFile.title }}</h1>
+      </div>
+    </template>
+
+    <template #content>
+      <div class="-my-6 -mx-8 h-[80vh]">
+        <file-preview :file="currentFile" />
+      </div>
+    </template>
+  </base-dialog>
 </template>
 
 <style scoped>
