@@ -33,7 +33,6 @@ const searchStore = useSearchStore();
           iconRight="XIcon"
           iconRightClass="bg-slate-300 rounded-full w-5 h-5 p-0.5"
           >
-
         </base-input>
 
         <search-filter></search-filter>
@@ -43,9 +42,12 @@ const searchStore = useSearchStore();
     <card-table
       :value="searchStore.list"
       :headers="searchStore.headers"
+      theadClass="hidden"
     >
+      <template #code="{ data }">
+        {{data.code}}
+      </template>
     </card-table>
-
   </div>
 </template>
 <style>

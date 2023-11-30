@@ -39,6 +39,7 @@ const list = ref([
       tableClass="border-spacing-y-2"
       body-cell-class="bg-greyscale-50"
       paginator-root-class="bg-greyscale-50"
+      theadClass="hidden"
     >
       <template #user="{ data }">
         <div class="flex">
