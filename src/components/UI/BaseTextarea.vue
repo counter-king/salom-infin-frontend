@@ -16,8 +16,18 @@ const props = defineProps({
     type: String,
     default: "enter-content"
   },
+  rows: {
+    type: [Number, String],
+    default: 5
+  },
   required: {
     type: Boolean
+  },
+  loading: {
+    type: Boolean
+  },
+  rootClass: {
+    type: String
   },
   error: {
     type: Object,
@@ -36,23 +46,32 @@ const { t } = useI18n()
   <div class="app-input">
     <base-label :label="props.label" :required="props.required" />
 
-    <Textarea
-      v-model="modelValue"
-      autoResize
-      rows="5"
-      cols="30"
-      :placeholder="t(props.placeholder)"
-      :pt="{
+    <div class="relative">
+      <Textarea
+        v-model="modelValue"
+        autoResize
+        :rows="props.rows"
+        cols="30"
+        :placeholder="t(props.placeholder)"
+        :pt="{
         root: {
           class: [
-            'w-full rounded-xl bg-greyscale-50 text-sm border-greyscale-50 focus:border-primary-500',
+            'flex w-full rounded-xl bg-greyscale-50 text-sm border-greyscale-50 focus:border-primary-500',
+            props.rootClass,
             {
               'p-invalid !shadow-none': props.error.$error
             }
           ]
         }
       }"
-    />
+      />
+
+      <template v-if="props.loading">
+        <div class="absolute top-[10px] right-[10px]">
+          <base-spinner root-classes="!w-6 !h-6" />
+        </div>
+      </template>
+    </div>
 
     <template v-if="props.error.$errors.length">
       <div

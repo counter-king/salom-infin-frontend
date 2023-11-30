@@ -53,13 +53,15 @@ const props = defineProps({
       :label="props.label[0]"
       :pt="{
         root: {
-          style: `${props.color}px`,
+          style: {
+            backgroundColor: `${props.color}`
+          },
           class: [
             { '-ml-2': props.type === 'group' }, props.avatarClasses
           ]
         },
         label: {
-          class: 'text-sm leading-none font-semibold text-primary-900'
+          class: 'text-sm leading-none text-white'
         },
         image: {
           class: 'object-cover'

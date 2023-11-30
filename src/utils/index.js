@@ -52,6 +52,13 @@ export function setValuesToKeys(model, source) {
 * @return boolean
 * */
 export const isObject = (key) => Object.prototype.toString.call(key) === '[object Object]'
+/**
+* Удалит все пробелы из текста
+* и нормализует текст
+* @param value Текст
+* @return string
+* */
+export const normalizeText = (value) => value.split('\n').join('<br>').replace(/\s+/g, ' ').trim()
 /*
 *
 * */

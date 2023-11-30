@@ -43,6 +43,10 @@ const props = defineProps({
   tableClass: {
     type: String,
     default: null
+  },
+  wrapperClass: {
+    type: String,
+    default: null
   }
 })
 </script>
@@ -67,6 +71,9 @@ const props = defineProps({
         bodyRow: { class: ['cursor-pointer bg-transparent rounded-xl', { 'shadow-button': props.shadow }] },
         loadingoverlay: { class: ['bg-transparent', 'h-[90%]'] },
         emptymessagecell: { class: ['bg-white', '!rounded-xl'] },
+        wrapper: {
+          class: [props.wrapperClass]
+        },
         paginator: {
           rowPerPageDropdown: {
             root: { class: ['h-6'] },

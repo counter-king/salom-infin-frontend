@@ -57,6 +57,9 @@ const props = defineProps({
   previewDetail: {
     type: Array,
     default: () => []
+  },
+  objectId: {
+    type: Number
   }
 })
 const { t } = useI18n();
@@ -114,7 +117,11 @@ watch(activeTabMenu, (value) => {
           <slot :name="activeTabMenu.slot">
             <div class="flex-1 overflow-y-auto">
               <div class="h-[1px]">
-                <component :is="activeTabComponent" :preview-detail="props.previewDetail">
+                <component
+                  :is="activeTabComponent"
+                  :preview-detail="props.previewDetail"
+                  :object-id="props.objectId"
+                >
                   <template #preview-actions>
                     <slot name="preview-actions" />
                   </template>

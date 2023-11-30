@@ -23,6 +23,18 @@ const current = computed(() => {
   }
 
   switch(props.type) {
+    case FILE_ACTIONS.CREATED: // Файл создан
+      return {
+        icon: 'DownloadMinimalistic',
+        color: 'bg-primary-500',
+        text: 'Файл создан'
+      }
+    case FILE_ACTIONS.UPDATED: // Файл изменен
+      return {
+        icon: 'DownloadMinimalistic',
+        color: 'bg-warning-500',
+        text: 'Файл изменен' 
+      }
     case FILE_ACTIONS.UPLOADED: // Файл загружен
       return {
         icon: 'DownloadMinimalistic',
@@ -41,11 +53,11 @@ const current = computed(() => {
         color: 'bg-primary-500',
         text: 'Документ перенаправлен'
       }
-    default: // Пользаватель выполнил
+    default: // Пользователь выполнил
       return {
         icon: 'UserIcon',
         color: 'bg-success-500',
-        text: 'Пользаватель выполнил'
+        text: 'Пользователь выполнил'
       }
   }
 })

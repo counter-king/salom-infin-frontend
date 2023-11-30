@@ -1,13 +1,22 @@
 <script setup>
-
+// Components
+import { CommentContainer } from '@/components/Comment'
+// Macros
+const props = defineProps({
+  objectId: {
+    type: Number
+  }
+})
 </script>
 
 <template>
   <div class="layout-comments-view">
-    Comments view
+    <comment-container :object-id="props.objectId" />
   </div>
 </template>
 
-<style scoped>
-
+<style>
+.layout-comments-view {
+  height: calc(100vh - 306px);
+}
 </style>

@@ -166,7 +166,7 @@ const zoomFile = (event, pane) => {
   <base-dialog v-model="zoomDialog" max-width="max-w-[820px]">
     <template #header>
       <div class="flex-1 truncate mr-2">
-        <h1 class="text-xl font-semibold truncate">{{ currentFile.title }} {{ currentFile.title }}</h1>
+        <h1 class="text-xl font-semibold truncate">{{ currentFile.title }}</h1>
       </div>
     </template>
 

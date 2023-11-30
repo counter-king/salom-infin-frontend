@@ -4,10 +4,12 @@ export const CORRESPONDENT = {
   PHYSICAL: "physical",
 }
 export const FILE_ACTIONS = {
+  CREATED:  'created',    // Файл создан
+  UPDATED:  'updated',    // Файл изменен
   UPLOADED: 'uploaded',  // Файл загружен
   DELETED:  'deleted',   // Файл удален
   FORWARD:  'forward',   // Документ перенаправлен
-  DONE:     'done',      // Пользаватель выполнил
+  DONE:     'done',      // Пользователь выполнил
 }
 export const JOURNAL = {
   INCOMING: 1,           // Входящий
