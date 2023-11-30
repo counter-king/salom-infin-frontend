@@ -50,6 +50,7 @@ onMounted(async () => {
       wrapper-class="h-[calc(100vh-362px)] p-6 pt-4"
       body-cell-class="bg-greyscale-50"
       paginator-root-class="bg-greyscale-50 !rounded-none border-t"
+      theadClass="hidden"
     >
       <template #action="{ data }">
         <div class="flex gap-4 py-3">

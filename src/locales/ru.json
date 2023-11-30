@@ -214,5 +214,16 @@
   "organization-letter": "В другие организации",
   "hr-order": "Созданные приказы",
   "create-sd-inner": "Создать служебное письмо",
-  "update-sd-inner": "Изменить служебное письмо"
+  "update-sd-inner": "Изменить служебное письмо",
+  "settings":"Настройки",
+  "document-turnover":"Документ оборот",
+  "correspondents": "Корреспонденты",
+  "users":"Пользователи",
+  "profile":"Профиль",
+  "my-devices":"Мои устройства",
+  "machinery-equipment":"Техника и оборудования",
+  "general-settings":"Общие настройки",
+  "complete":"Завершить"
+
+
 }

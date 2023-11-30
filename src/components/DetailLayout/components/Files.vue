@@ -63,6 +63,7 @@ const zoomFile = (event, file) => {
       wrapper-class="h-[calc(100vh-362px)] p-6 pt-4"
       body-cell-class="bg-greyscale-50"
       paginator-root-class="bg-greyscale-50 !rounded-none border-t"
+      theadClass="hidden"
     >
       <template #title="{ data }">
         <div class="flex items-center gap-4">

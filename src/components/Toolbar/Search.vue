@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref } from 'vue'
+import { ref,  inject  } from 'vue'
 import { useRouter } from 'vue-router'
 // Components
 import SearchFilter from './SearchFilter.vue'
@@ -8,8 +8,10 @@ import SearchFilter from './SearchFilter.vue'
 const router = useRouter();
 // Reactive
 const search = ref();
+const openModal = inject('openModal', ref(false));
 const navigateToRouter = () => {
   router.push({ path: "/search" });
+  openModal.value = !openModal.value;
 };
 </script>
 <template>

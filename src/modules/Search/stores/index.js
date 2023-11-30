@@ -41,13 +41,9 @@ export const useSearchStore = defineStore("search-store", {
     ],
     headers:[
         {
+          header: 'Code',
           field: 'code',
-          header: 'Code'
         },
-        {
-          field: 'text',
-          header: 'text'
-        }
     ],
   }),
   actions: {

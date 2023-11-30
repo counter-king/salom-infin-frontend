@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref } from 'vue'
+import { ref, provide } from 'vue'
 import Toolbar from 'primevue/toolbar'
 // Store
 import { useNavigation } from '@/stores/navigation.store'
@@ -168,6 +168,126 @@ const menus = ref([
     children: [],
     value: "chat"
   },
+  // Настройки
+  {
+    title: "Настройки",
+    icon: "SettingsIcon",
+    link: "SettingsIndex",
+    children: [
+      {
+        title: "Настройки",
+        prefix: true
+      },
+      // Документ оборот
+      {
+        title: "Документ оборот",
+        icon: "FolderWithFilesIcon",
+        link: "DocumentTurnoverIndex",
+        children: [
+          {
+            title: "Тип документа",
+            icon: "ClipboardCheckIcon",
+            link: "DocumentTypeIndex",
+            children: []
+          },
+          {
+            title: "Вид документа",
+            icon: "DocumentTextIcon",
+            link: "DocumentViewIndex",
+            children: []
+          },
+          {
+            title: "Журнал",
+            icon: "NotebookIcon",
+            link: "MagazineIndex",
+            children: []
+          }
+        ]
+      },
+      // Корреспонденты
+      {
+        title: "Корреспонденты",
+        icon: "BuildingsIcon",
+        link: "CorrespondentsIndex",
+        children: [
+          {
+            title: "Индивидулны",
+            icon: "UserCheckRoundedIcon",
+            link: "IndividualIndex",
+            children: []
+          },
+          {
+            title: "Организации",
+            icon: "BuildingsIcon",
+            link: "OrganizationsIndex",
+            children: []
+          }
+        ]
+      },
+      // Пользователи
+      {
+        title: "Пользователи",
+        icon: "UsersGroupTwoRoundedIcon",
+        link: "UsersIndex",
+        children: [
+        {
+            title: "Сотрудники",
+            icon: "UserCheckRoundedIcon",
+            link: "EmployeesIndex",
+            children: []
+          },
+          {
+            title: "Помощники",
+            icon: "UsersGroupRoundedIcon",
+            link: "AssistantsIndex",
+            children: []
+          },
+          {
+            title: "Топ подписантов",
+            icon: "UserSpeakIcon",
+            link: "TopSignersIndex",
+            children: []
+          }
+        ]
+      },
+      // Профиль
+      {
+        title: "Профиль",
+        icon: "UserIcon",
+        link: "ProfileIndex",
+        children: []
+      },
+      // Мои устройства
+      {
+        title: "Мои устройства",
+        icon: "LaptopMinimalisticIcon",
+        link: "MyDevicesIndex",
+        children: []
+      },
+      // Уведомления
+      {
+        title: "Уведомления",
+        icon: "BellIcon",
+        link: "NotificationsIndex",
+        children: []
+      },
+      // Техника и оборудования
+      {
+        title: "Техника и оборудования",
+        icon: "MouseIcon",
+        link: "MachineryEquipmentIndex",
+        children: []
+      },
+      // Общие настройки
+      {
+        title: "Общие настройки",
+        icon: "SettingsMinimalisticIcon",
+        link: "GeneralSettingsIndex",
+        children: []
+      },
+    ],
+    value: "settings"
+  },
 ])
 const openModal = ref(true)
 const modalRef = ref(null)
@@ -176,11 +296,12 @@ const openSidebar = (menu) => {
   navigationStore.actionCurrentMenu(menu)
 }
 onClickOutside(
-    modalRef,
-    (event) => {
-      openModal.value = true
-    },
-  )
+  modalRef,
+  (event) => {
+    openModal.value = true
+  },
+)
+provide('openModal', openModal);
 </script>
 
 <template>

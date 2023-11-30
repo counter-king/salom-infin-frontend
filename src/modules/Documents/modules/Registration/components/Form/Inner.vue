@@ -7,7 +7,9 @@ import { helpers, required } from '@vuelidate/validators'
 import { useCommonStore } from '@/stores/common'
 import { useRegInner } from '../../stores/inner.store'
 // Components
-import { SelectMultiple } from '@/components/Select'
+import { UserWithLabel } from '@/components/Users'
+// Utils
+import { isObject } from '@/utils'
 // Non-reactive
 const rules = {
   register_number: {
@@ -48,13 +50,6 @@ const innerStore = useRegInner()
 const $v = useVuelidate(rules, innerStore.detailModel)
 // Composable
 defineExpose({ $v })
-// Watch
-watch(
-  () => innerStore.detailModel.__reviewers,
-  (value) => {
-    innerStore.detailModel.reviewers = value.map(item => ({ user: item.id }))
-  }
-)
 </script>
 
 <template>
@@ -128,14 +123,41 @@ watch(
       </base-col>
 
       <base-col col-class="w-1/2">
-        <select-multiple
-          required
+        <base-multi-select
           v-model="$v.__reviewers.$model"
           :error="$v.__reviewers"
-          display="chip"
+          api-url="users"
           label="reviewers"
-          placeholder="enter-reviewers"
-        />
+          display="chip"
+          required
+        >
+          <template #chip="{ value }">
+            <user-with-label
+              :compact="true"
+              :title="isObject(value?.user) ? value?.user.full_name : value?.full_name"
+              image="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D"
+              avatar-classes="w-5 h-5"
+            />
+          </template>
+
+          <template #option="{ value }">
+            <user-with-label
+              :compact="true"
+              :title="isObject(value?.user) ? value?.user.full_name : value?.full_name"
+              image="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D"
+              avatar-classes="w-6 h-6"
+            />
+          </template>
+
+          <template #hint="{ value }">
+            <user-with-label
+              :title="isObject(value?.user) ? value?.user.full_name : value?.full_name"
+              shadow
+              image="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D"
+              avatar-classes="w-5 h-5"
+            />
+          </template>
+        </base-multi-select>
       </base-col>
 
       <base-col col-class="w-full">
