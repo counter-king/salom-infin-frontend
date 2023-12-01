@@ -9,65 +9,48 @@ export const useSearchStore = defineStore("search-store", {
     },
     list:[
       {
-        number: '1',
-        nameTechnique:'Монитор Avtech 27',
-        id: '468234590',
-        inb: '44DB135SSN2690',
-        dateEntered:'26.08.2023'
+        nameRu:'Приказы и расспоражения',
+        nameUZ: 'Buyruq va farmoyishlar',
+        creatData: '20.11.2023'
       },
       {
-        number: '2',
-        nameTechnique:'Macbook - Apple M1',
-        id: '468234590',
-        inb: '44DB135SSN2690',
-        dateEntered:'26.08.2023'
+        nameRu:'Приказы и расспоражения',
+        nameUZ: 'Buyruq va farmoyishlar',
+        creatData: '20.11.2023'
       },
       {
-        number: '3',
-        nameTechnique:'Компютер - Lenovo P330',
-        id: '468234590',
-        inb: '44DB135SSN2690',
-        dateEntered:'26.08.2023'
+        nameRu:'Компютер - Lenovo P330',
+        nameUZ: 'Buyruq va farmoyishlar',
+        creatData: '20.11.2023'
       },
       {
-        number: '4',
-        nameTechnique:'Macbook - Apple M1',
-        id: '468234590',
-        inb: '44DB135SSN2690',
-        dateEntered:'26.08.2023'
+        nameRu:'Приказы и расспоражения',
+        nameUZ: 'Buyruq va farmoyishlar',
+        creatData: '20.11.2023'
       },
       {
-        number: '5',
-        nameTechnique:'Монитор Avtech 27',
-        id: '468234590',
-        inb: '44DB135SSN2690',
-        dateEntered:'26.08.2023'
+        nameRu:'Приказы и расспоражения',
+        nameUZ: 'Buyruq va farmoyishlar',
+        creatData: '20.11.2023'
       },
       {
-        number: '6',
-        nameTechnique:'Монитор Avtech 27',
-        id: '468234590',
-        inb: '44DB135SSN2690',
-        dateEntered:'26.08.2023'
+        nameRu:'Приказы и расспоражения',
+        nameUZ: 'Buyruq va farmoyishlar',
+        creatData: '20.11.2023',
       },
     ],
     headers:[
         {
-          header: '№',
-          field: 'number',
-
+          header: "Наименование (RU)",
+          field: "nameRu",
         },
         {
-          header: "Название техники",
-          field: "nameTechnique",
+          header: 'Наименование (UZ)',
+          field: 'nameUZ',
         },
         {
-          header: 'ID',
-          field: 'id',
-        },
-        {
-          header: 'ИНВ',
-          field: 'inb',
+          header: 'Создано',
+          field: 'creatData',
         },
         {
           header: 'Действия',

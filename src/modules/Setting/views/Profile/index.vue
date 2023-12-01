@@ -4,12 +4,11 @@ import { ref } from 'vue';
 // Components
 import Personal from "./components/Personal.vue";
 import Worker from "./components/Worker.vue";
-
+// Composable
 const tabItems = ref([
     { label: 'Персональный' },
     { label: 'Рабочий'}
 ]);
-
 const profileTab = ref(0);
 </script>
 <template>

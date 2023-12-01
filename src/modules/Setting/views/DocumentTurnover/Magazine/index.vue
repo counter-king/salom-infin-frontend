@@ -28,20 +28,16 @@ const searchStore = useSearchStore();
       :value="searchStore.list"
       :headers="searchStore.headers"
     >
-      <template #number="{ data }">
-        {{data.number}}
+      <template #nameRu="{ data }">
+        {{data.nameRu}}
       </template>
 
-      <template #nameTechnique="{ data }">
-        {{data.nameTechnique}}
+      <template #nameUZ="{ data }">
+        {{data.nameUZ}}
       </template>
 
-      <template #id="{ data }">
-        {{data.id}}
-      </template>
-
-      <template #inb="{ data }">
-        {{data.inb}}
+      <template #creatData="{ data }">
+        {{data.creatData}}
       </template>
 
       <template #action>

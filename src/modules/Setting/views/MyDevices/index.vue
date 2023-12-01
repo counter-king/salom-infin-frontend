@@ -1,9 +1,8 @@
 
 <script setup>
 import { ref } from 'vue';
-
+// Composable
 const visible = ref(false);
-
 const items = ref([
   {
     nameDevices: "Samsung SM-J510FN MSM8916",
