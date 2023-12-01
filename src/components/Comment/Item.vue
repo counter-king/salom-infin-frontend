@@ -7,6 +7,7 @@ import { CommentItem } from '@/components/Comment'
 import { useAuthStore } from '@/modules/Auth/stores'
 import { useCommentStore } from '@/stores/comments.store'
 // Utils
+import { formatDateHour } from '@/utils/formatDate'
 import { COMMENT_ACTIONS } from '@/enums'
 // Composable
 const authStore = useAuthStore()
@@ -34,7 +35,11 @@ const props = defineProps({
 
     <div class="flex-1">
       <div class="bg-white shadow-button py-3 px-4 rounded-2xl rounded-tl-none">
-        <h1 class="text-xs text-primary-500 font-semibold mb-1">{{ props.item.created_by.full_name }}</h1>
+        <div class="flex items-center justify-between text-xs mb-1">
+          <h1 class="text-primary-500 font-semibold">{{ props.item.created_by.full_name }}</h1>
+          <span class="text-primary-900 font-medium">{{ formatDateHour(props.item.created_date) }}</span>
+        </div>
+
         <p class="text-sm font-semibold text-primary-900" v-html="props.item.description"></p>
       </div>
 
@@ -69,16 +74,6 @@ const props = defineProps({
         </template>
       </div>
 
-      <template v-if="props.item.replies && props.item.replies.length">
-        <template v-for="reply in props.item.replies">
-          <comment-item
-            :item="reply"
-            :object-id="props.objectId"
-            class="mt-3"
-          />
-        </template>
-      </template>
-
       <!-- Ответить комментарий -->
       <template v-if="props.item[COMMENT_ACTIONS.REPLY]">
         <comment-edit
@@ -97,6 +92,16 @@ const props = defineProps({
         />
       </template>
       <!-- /Изменить комментарий -->
+
+      <template v-if="props.item.replies && props.item.replies.length">
+        <template v-for="reply in props.item.replies">
+          <comment-item
+            :item="reply"
+            :object-id="props.objectId"
+            class="mt-3"
+          />
+        </template>
+      </template>
     </div>
   </div>
 </template>

@@ -8,6 +8,7 @@ import {
   fetchReplyComment,
   fetchDeleteComment
 } from '@/services/comment.service'
+import { COMMENT_ACTIONS } from "@/enums";
 
 export const useCommentStore = defineStore("comments", {
   state: () => ({
@@ -30,51 +31,31 @@ export const useCommentStore = defineStore("comments", {
       let { data } = await fetchCommentsList({ object_id })
       this.commentsList = data.results
     },
-    /**
-     * Добавить комментарий
-     * */
-    async actionSendComment(payload) {
-      if(this.disableMoreClicks) {
-        return
-      }
-
-      try {
-        await this.actionPrevent(true)
-        await fetchSendComment(payload)
-        await this.actionCommentsList({ object_id: payload.object_id })
-      } finally {
-        await this.actionPrevent(false)
-      }
-    },
-    /**
-		* Изменить комментарий
-		* */
-    async actionUpdateComment(payload) {
-      if(this.disableMoreClicks) {
-        return
-      }
-
-      try {
-        await this.actionUpdatePrevent(true)
-        await fetchUpdateComment({ id: payload.id, data: payload })
-        await this.actionCommentsList({ object_id: payload.object_id })
-      } finally {
-        await this.actionUpdatePrevent(false)
-      }
-    },
-    /**
-    * Ответить комментарий
+    /*
+    * CRUD комментарий
     * */
-    async actionReplyComment(payload) {
+    async actionCrudComment(payload) {
       if(this.disableMoreClicks) {
         return
       }
 
       try {
-        await this.actionUpdatePrevent(true)
-        await fetchReplyComment(payload)
-        await this.actionCommentsList({ object_id: payload.object_id })
+        switch(payload.type) {
+          case COMMENT_ACTIONS.CREATE: // CREATE
+            await this.actionPrevent(true)
+            await fetchSendComment(payload)
+            break;
+          case COMMENT_ACTIONS.EDIT: // EDIT
+            await this.actionUpdatePrevent(true)
+            await fetchUpdateComment({ id: payload.id, data: payload })
+            break;
+          default: // REPLY
+            await this.actionUpdatePrevent(true)
+            await fetchReplyComment(payload)
+        }
       } finally {
+        await this.actionCommentsList({ object_id: payload.object_id })
+        await this.actionPrevent(false)
         await this.actionUpdatePrevent(false)
       }
     },
@@ -83,7 +64,6 @@ export const useCommentStore = defineStore("comments", {
     * */
     async actionDeleteComment(id) {
       await fetchDeleteComment(id)
-      await this.actionCommentsList()
     },
     /**
 		* Загрузить файлы
@@ -103,12 +83,6 @@ export const useCommentStore = defineStore("comments", {
 		* */
     closeEditOrReplyArea({ item, action }) {
       item[action] = false
-    },
-    /**
-		*
-		* */
-    async clearModel(model) {
-      Object.keys(model).forEach(key => model[key] = null)
     },
     /*
     *

@@ -64,12 +64,16 @@ const sendMessage = async (event) => {
 
       switch(props.type) {
         case COMMENT_ACTIONS.EDIT: // Edit
-          await commentStore.actionUpdateComment(model)
+          await commentStore.actionCrudComment({
+            ...model,
+            type: COMMENT_ACTIONS.EDIT
+          })
           break;
         default: // Reply
-          await commentStore.actionReplyComment({
+          await commentStore.actionCrudComment({
             ...model,
-            replied_to: props.item.id
+            replied_to: props.item.id,
+            type: COMMENT_ACTIONS.REPLY
           })
       }
       message.value = ''

@@ -5,7 +5,7 @@ import { ref } from 'vue'
 import { useCommentStore } from '@/stores/comments.store'
 // Utils
 import { normalizeText } from '@/utils'
-import { CONTENT_TYPES } from '@/enums'
+import { COMMENT_ACTIONS, CONTENT_TYPES } from '@/enums'
 // Composable
 const commentStore = useCommentStore()
 // Macros
@@ -31,11 +31,12 @@ const sendMessage = async (event) => {
     }
 
     try {
-      await commentStore.actionSendComment({
+      await commentStore.actionCrudComment({
         object_id: props.objectId,
         content_type: CONTENT_TYPES.DOC_FLOW,
         description: normalizeText(message.value),
-        file: null
+        file: null,
+        type: COMMENT_ACTIONS.CREATE
       })
       message.value = ''
     } catch (error) {

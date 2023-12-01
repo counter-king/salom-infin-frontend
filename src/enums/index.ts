@@ -61,6 +61,7 @@ export const STATUS_COLORS = {
   CANCEL: COLOR_TYPES.ERROR,            // CANCEL
 }
 export const COMMENT_ACTIONS = {
+  CREATE: 'create',
   EDIT: "edit",
   REPLY: "reply",
 }
