@@ -71,9 +71,9 @@ const createDocument = async () => {
       :value="regIncoming.list"
       :loading="regIncoming.listLoading"
       :storage-columns-name="R_INCOMING_COLUMNS"
-
+      expandable
     >
-      <template  #priority="{ data }">
+      <template #priority="{ data }">
         <priority-chip :id="data.priority.id" />
       </template>
 
@@ -107,16 +107,6 @@ const createDocument = async () => {
 
       <template #correspondent="{ data }">
         {{data.correspondent.name}}
-      </template>
-
-      <template #action="{ data }">
-        <base-button
-          color="text-primary-900"
-          icon-left="AltArrowDownIcon"
-          only-icon
-          text
-          rounded
-        />
       </template>
     </base-data-table>
 

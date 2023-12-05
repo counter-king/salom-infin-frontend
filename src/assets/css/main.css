@@ -74,3 +74,23 @@ body {
 .app-input {
   margin-bottom: 8px;
 }
+
+.expander-cell {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.expander-cell .p-row-toggler {
+  display: flex;
+  margin: auto;
+}
+
+.expander-cell .p-row-toggler[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+.expander-cell svg {
+  width: 0.75rem;
+  height: 0.75rem;
+  transform: rotate(90deg);
+}

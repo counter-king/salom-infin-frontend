@@ -145,11 +145,6 @@ export const useRegIncoming = defineStore("reg-incoming", {
         },
         active: true
       },
-      {
-        header: "",
-        field: "action",
-        active: true
-      }
     ],
     list: [],
     listLoading: false,
