@@ -145,6 +145,7 @@ export const useRegAppeal = defineStore("reg-appeal", {
           else {
             return {
               user: item.id,
+              document: this.detailModel.id
             }
           }
         })

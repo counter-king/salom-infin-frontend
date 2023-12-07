@@ -126,6 +126,7 @@ export const useRegInner = defineStore("reg-inner", {
           else {
             return {
               user: item.id,
+              document: this.detailModel.id
             }
           }
         })

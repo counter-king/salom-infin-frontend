@@ -128,6 +128,7 @@ export const useRegOutgoing = defineStore("reg-outgoing", {
           else {
             return {
               user: item.id,
+              document: this.detailModel.id
             }
           }
         })

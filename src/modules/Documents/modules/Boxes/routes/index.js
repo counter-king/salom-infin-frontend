@@ -6,7 +6,7 @@ const Boxes = [
       isAuthRequired: true
     },
     component: () => import("../views/index.vue"),
-    redirect: { name: "IncomingIndex" },
+    redirect: { name: "ReviewIndex" },
     children: [
       // Входящие
       {

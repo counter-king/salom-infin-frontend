@@ -1,5 +1,7 @@
 <script setup>
+// Components
 import { PriorityChip } from "@/components/Chips"
+import { TreeUsers } from '@/components/Tree'
 // Macros
 const props = defineProps({
   previewDetail: {
@@ -10,7 +12,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="layout-preview-view p-4">
+  <div v-if="props.previewDetail" class="layout-preview-view p-4">
     <base-row>
       <template v-for="item in previewDetail">
         <base-col col-class="w-1/3">
@@ -38,6 +40,8 @@ const props = defineProps({
     </base-row>
 
     <slot name="preview-actions"></slot>
+
+    <tree-users />
   </div>
 </template>
 

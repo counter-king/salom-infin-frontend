@@ -9,204 +9,152 @@ import {
   fetchChangeReviewer,
   fetchSignOrCancel,
   fetchAcquaintDocument
-} from "@/api/Incoming/review.service"
+} from "../services/review.service.js"
 // Utils
 export const useReviewStore = defineStore("review", {
   state: () => ({
-    reviewList: [],
-    reviewColumns: [
+    list: [],
+    headers: [
       {
-        id: 1,
-        type: "selection",
-        active: true
-      },
-      {
-        id: 2,
-        title: "Корреспондент",
-        key: "document.correspondent.name",
+        header: "correspondent",
+        field: "document.correspondent.name",
+        detail: {
+          component: null,
+          colClass: ''
+        },
         active: true,
-        detail: {
-          show: true,
-          span: "3",
-          component: null,
-          order: 14
-        }
       },
-      {
-        id: 3,
-        title: "Рег. номер",
-        key: "document.register_number",
-        active: true,
-        detail: {
-          show: true,
-          span: "960:2 1240:1",
-          component: null,
-          order: 5
-        }
-      },
-      {
-        id: 4,
-        title: "Тип документа",
-        key: "document.document_type.name",
-        active: true,
-        detail: {
-          show: true,
-          span: "960:2 1441:1",
-          component: null,
-          order: 2
-        }
-      },
-      {
-        id: 6,
-        title: "Код",
-        key: "document.code",
-        active: false
-      },
-      {
-        id: 7,
-        title: "Вид подачи",
-        key: "document.delivery_type.name",
-        active: false,
-        detail: {
-          show: true,
-          span: "960:2 1441:1",
-          component: null,
-          order: 7
-        }
-      },
-      {
-        id: 8,
-        title: "Исх. номер",
-        key: "document.outgoing_number",
-        active: false,
-        detail: {
-          show: true,
-          span: "960:2 1441:1",
-          component: null,
-          order: 8
-        }
-      },
-      {
-        id: 9,
-        title: "Приоритет",
-        key: "document.priority.id",
-        active: false,
-        detail: {
-          show: true,
-          span: "960:2 1441:1",
-          component: "priority",
-          order: 3
-        }
-      },
-      {
-        id: 10,
-        title: "Рег. дата",
-        key: "document.register_date",
-        active: false,
-        detail: {
-          show: true,
-          span: "960:2 1441:1",
-          component: null,
-          order: 6
-        }
-      },
-      {
-        id: 11,
-        title: "Наименование",
-        key: "document.title",
-        active: false,
-        detail: {
-          show: true,
-          span: "3",
-          component: null,
-          order: 1
-        }
-      },
-      {
-        id: 12,
-        title: "Статус",
-        key: "document.status.id",
-        active: false,
-        detail: {
-          show: true,
-          span: "960:2 1441:1",
-          component: "status",
-          order: 4
-        }
-      },
-      {
-        id: 13,
-        title: "Исх. дата",
-        key: "document.outgoing_date",
-        active: false,
-        detail: {
-          show: true,
-          span: "960:2 1441:1",
-          component: null,
-          order: 9
-        }
-      },
-      {
-        id: 14,
-        title: "Язык",
-        key: "document.language.name",
-        active: false,
-        detail: {
-          show: true,
-          span: "960:2 1441:1",
-          component: null,
-          order: 10
-        }
-      },
-      {
-        id: 15,
-        title: "Гриф",
-        key: "document.grif",
-        active: false,
-        detail: {
-          show: true,
-          span: "960:2 1441:1",
-          component: null,
-          order: 11
-        }
-      },
-      {
-        id: 16,
-        title: "Гриф",
-        key: "document.code",
-        active: false,
-        detail: {
-          show: true,
-          span: "960:2 1441:1",
-          component: null,
-          order: 12
-        }
-      },
-      {
-        id: 17,
-        title: "Описание",
-        key: "document.description",
-        active: false,
-        ellipsis: true,
-        detail: {
-          show: true,
-          span: "3",
-          component: null,
-          order: 15
-        }
-      },
-      {
-        id: 18,
-        title: "На рассмотрение",
-        key: "reviewers",
-        active: false,
-        detail: {
-          show: true,
-          span: "960:2 1441:1",
-          component: "avatar-group",
-          order: 13
-        }
-      }
+      // {
+      //   header: "Рег. номер",
+      //   field: "document.register_number",
+      //   detail: {
+      //     component: null,
+      //     colClass: ''
+      //   },
+      //   active: true,
+      // },
+      // {
+      //   header: "Тип документа",
+      //   field: "document.document_type.name",
+      //   active: true,
+      //   detail: {
+      //     component: null,
+      //     colClass: ''
+      //   }
+      // },
+      // {
+      //   header: "Код",
+      //   field: "document.code",
+      //   active: false
+      // },
+      // {
+      //   header: "Вид подачи",
+      //   field: "document.delivery_type.name",
+      //   detail: {
+      //     component: null,
+      //     colClass: ''
+      //   },
+      //   active: false,
+      // },
+      // {
+      //   header: "Исх. номер",
+      //   field: "document.outgoing_number",
+      //   detail: {
+      //     component: null,
+      //     colClass: ''
+      //   },
+      //   active: false,
+      // },
+      // {
+      //   header: "Приоритет",
+      //   field: "document.priority.id",
+      //   detail: {
+      //     component: 'priority-chip',
+      //     colClass: ''
+      //   },
+      //   active: false,
+      // },
+      // {
+      //   header: "Рег. дата",
+      //   field: "document.register_date",
+      //   detail: {
+      //     component: null,
+      //     colClass: ''
+      //   },
+      //   active: false,
+      // },
+      // {
+      //   header: "Наименование",
+      //   field: "document.title",
+      //   detail: {
+      //     component: null,
+      //     colClass: ''
+      //   },
+      //   active: false,
+      // },
+      // {
+      //   header: "Статус",
+      //   field: "document.status.id",
+      //   detail: {
+      //     component: null,
+      //     colClass: 'base-status'
+      //   },
+      //   active: false,
+      // },
+      // {
+      //   header: "Исх. дата",
+      //   field: "document.outgoing_date",
+      //   detail: {
+      //     component: null,
+      //     colClass: ''
+      //   },
+      //   active: false,
+      // },
+      // {
+      //   header: "Язык",
+      //   field: "document.language.name",
+      //   detail: {
+      //     component: null,
+      //     colClass: ''
+      //   },
+      //   active: false,
+      // },
+      // {
+      //   header: "Гриф",
+      //   field: "document.grif",
+      //   detail: {
+      //     component: null,
+      //     colClass: ''
+      //   },
+      //   active: false,
+      // },
+      // {
+      //   header: "Гриф",
+      //   field: "document.code",
+      //   detail: {
+      //     component: null,
+      //     colClass: ''
+      //   },
+      //   active: false,
+      // },
+      // {
+      //   header: "Описание",
+      //   field: "document.description",
+      //   detail: {
+      //     component: null,
+      //     colClass: ''
+      //   },
+      //   active: false,
+      // },
+      // {
+      //   header: "На рассмотрение",
+      //   field: "reviewers",
+      //   detail: {
+      //     component: 'base-avatar-group',
+      //     colClass: ''
+      //   },
+      //   active: false,
+      // }
     ],
     detailModel: {
       assignments: [],
@@ -217,7 +165,8 @@ export const useReviewStore = defineStore("review", {
       },
       has_resolution: false,
       is_read: false
-    }
+    },
+    listLoading: false
   }),
   getters: {
     isReviewSigned: state => state.detailModel.assignments.length
@@ -237,8 +186,11 @@ export const useReviewStore = defineStore("review", {
     * Получить список на рассмотрение
     * */
     async actionReviewList() {
+      this.listLoading = true
       let { data } = await fetchReviewList()
-      this.reviewList = data.results
+
+      this.list = data.results
+      this.listLoading = false
     },
     /**
     * Получить на рассмотрение по id

@@ -48,6 +48,13 @@ const menus = ref([
         icon: "InboxUnreadIcon",
         link: "BoxesIndex",
         children: [
+          // На рассмотрении
+          {
+            title: "На рассмотрении",
+            icon: "TimeHistoryIcon",
+            link: "ReviewIndex",
+            children: []
+          },
           // Входящие
           {
             title: "Входящие",
@@ -62,13 +69,6 @@ const menus = ref([
           //   link: "OutgoingIndex",
           //   children: []
           // },
-          // На рассмотрении
-          {
-            title: "На рассмотрении",
-            icon: "TimeHistoryIcon",
-            link: "ReviewIndex",
-            children: []
-          },
           // На подпись
           {
             title: "На подпись",
