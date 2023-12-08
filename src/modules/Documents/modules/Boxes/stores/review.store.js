@@ -11,150 +11,167 @@ import {
   fetchAcquaintDocument
 } from "../services/review.service.js"
 // Utils
+import { setValuesToKeys, combineKeys } from '@/utils'
+import { dispatchNotify } from '@/utils/notify'
+import { COLOR_TYPES, JOURNAL } from '@/enums'
+
 export const useReviewStore = defineStore("review", {
   state: () => ({
     list: [],
     headers: [
       {
+        header: "priority",
+        field: "document.priority.id",
+        detail: {
+          component: 'priority-chip',
+          colClass: null
+        },
+        active: true
+      },
+      {
+        header: "naming",
+        field: "document.title",
+        detail: {
+          component: null,
+          colClass: null
+        },
+        active: true
+      },
+      {
+        header: "document-type",
+        field: "document.document_type.name",
+        detail: {
+          component: null,
+          colClass: null
+        },
+        active: true
+      },
+      {
+        header: "deliver-type",
+        field: "document.delivery_type.name",
+        detail: {
+          component: null,
+          colClass: null
+        },
+        active: false
+      },
+      {
+        header: "description",
+        field: "document.description",
+        detail: {
+          component: null,
+          colClass: null
+        },
+        active: false,
+      },
+      {
+        header: "magazine",
+        field: "document.journal.name",
+        detail: {
+          component: null,
+          colClass: null
+        },
+        active: false
+      },
+      {
+        header: "language-document",
+        field: "document.language.name",
+        detail: {
+          component: null,
+          colClass: null
+        },
+        active: false
+      },
+      {
+        header: "number-sheets",
+        field: "document.number_of_papers",
+        detail: {
+          component: null,
+          colClass: null
+        },
+        active: false
+      },
+      {
+        header: "outgoing-date",
+        field: "document.outgoing_date",
+        detail: {
+          component: null,
+          colClass: null
+        },
+        active: false
+      },
+      {
+        header: "outgoing-number",
+        field: "document.outgoing_number",
+        detail: {
+          component: null,
+          colClass: null
+        },
+        active: false
+      },
+      {
+        header: "reg-number",
+        field: "document.register_number",
+        detail: {
+          component: null,
+          colClass: null
+        },
+        active: true
+      },
+      {
+        header: "reg-date",
+        field: "document.register_date",
+        detail: {
+          component: null,
+          colClass: null
+        },
+        active: true
+      },
+      {
+        header: "reviewers",
+        field: "document.reviewers",
+        detail: {
+          component: 'base-avatar-group',
+          colClass: null
+        },
+        active: true
+      },
+      {
+        header: "status",
+        field: "document.status.id",
+        detail: {
+          component: 'base-status',
+          colClass: null
+        },
+        active: true
+      },
+      {
         header: "correspondent",
         field: "document.correspondent.name",
         detail: {
           component: null,
-          colClass: ''
+          colClass: null
         },
-        active: true,
+        active: true
       },
-      // {
-      //   header: "Рег. номер",
-      //   field: "document.register_number",
-      //   detail: {
-      //     component: null,
-      //     colClass: ''
-      //   },
-      //   active: true,
-      // },
-      // {
-      //   header: "Тип документа",
-      //   field: "document.document_type.name",
-      //   active: true,
-      //   detail: {
-      //     component: null,
-      //     colClass: ''
-      //   }
-      // },
-      // {
-      //   header: "Код",
-      //   field: "document.code",
-      //   active: false
-      // },
-      // {
-      //   header: "Вид подачи",
-      //   field: "document.delivery_type.name",
-      //   detail: {
-      //     component: null,
-      //     colClass: ''
-      //   },
-      //   active: false,
-      // },
-      // {
-      //   header: "Исх. номер",
-      //   field: "document.outgoing_number",
-      //   detail: {
-      //     component: null,
-      //     colClass: ''
-      //   },
-      //   active: false,
-      // },
-      // {
-      //   header: "Приоритет",
-      //   field: "document.priority.id",
-      //   detail: {
-      //     component: 'priority-chip',
-      //     colClass: ''
-      //   },
-      //   active: false,
-      // },
-      // {
-      //   header: "Рег. дата",
-      //   field: "document.register_date",
-      //   detail: {
-      //     component: null,
-      //     colClass: ''
-      //   },
-      //   active: false,
-      // },
-      // {
-      //   header: "Наименование",
-      //   field: "document.title",
-      //   detail: {
-      //     component: null,
-      //     colClass: ''
-      //   },
-      //   active: false,
-      // },
-      // {
-      //   header: "Статус",
-      //   field: "document.status.id",
-      //   detail: {
-      //     component: null,
-      //     colClass: 'base-status'
-      //   },
-      //   active: false,
-      // },
-      // {
-      //   header: "Исх. дата",
-      //   field: "document.outgoing_date",
-      //   detail: {
-      //     component: null,
-      //     colClass: ''
-      //   },
-      //   active: false,
-      // },
-      // {
-      //   header: "Язык",
-      //   field: "document.language.name",
-      //   detail: {
-      //     component: null,
-      //     colClass: ''
-      //   },
-      //   active: false,
-      // },
-      // {
-      //   header: "Гриф",
-      //   field: "document.grif",
-      //   detail: {
-      //     component: null,
-      //     colClass: ''
-      //   },
-      //   active: false,
-      // },
-      // {
-      //   header: "Гриф",
-      //   field: "document.code",
-      //   detail: {
-      //     component: null,
-      //     colClass: ''
-      //   },
-      //   active: false,
-      // },
-      // {
-      //   header: "Описание",
-      //   field: "document.description",
-      //   detail: {
-      //     component: null,
-      //     colClass: ''
-      //   },
-      //   active: false,
-      // },
-      // {
-      //   header: "На рассмотрение",
-      //   field: "reviewers",
-      //   detail: {
-      //     component: 'base-avatar-group',
-      //     colClass: ''
-      //   },
-      //   active: false,
-      // }
+      {
+        header: "code",
+        field: "document.code",
+        detail: {
+          component: null,
+          colClass: null
+        },
+        active: false
+      },
+      {
+        header: "grif",
+        field: "document.grif",
+        detail: {
+          component: null,
+          colClass: null
+        },
+        active: false,
+      },
     ],
     detailModel: {
       assignments: [],
@@ -164,7 +181,8 @@ export const useReviewStore = defineStore("review", {
         title: null
       },
       has_resolution: false,
-      is_read: false
+      is_read: false,
+      __copy_prototype: null
     },
     listLoading: false
   }),
@@ -197,7 +215,15 @@ export const useReviewStore = defineStore("review", {
     * */
     async actionReviewById(payload) {
       let { data } = await fetchReviewById({ id: payload.id })
-      this.detailModel = data
+
+      this.detailModel.__copy_prototype = combineKeys(this.headers, data)
+      setValuesToKeys(this.detailModel, data)
+      // this.detailModel.__reviewers = data.reviewers.map(item => {
+      //   return {
+      //     ...item,
+      //     __userId: item.user.id
+      //   }
+      // })
     },
     /**
     * Создать резолюцию (на рассмотрение)

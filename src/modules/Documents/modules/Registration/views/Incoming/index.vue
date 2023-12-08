@@ -2,15 +2,15 @@
 // Core
 import {ref, onMounted, unref } from 'vue'
 // Store
-import { useRegIncoming } from "../../stores/incoming.store"
+import { useRegIncoming } from '../../stores/incoming.store'
 import { useDocFlowStore } from '../../stores/docflow.store'
 // Constants
-import { R_INCOMING_COLUMNS } from "../../constants";
+import { R_INCOMING_COLUMNS } from '../../constants'
 import IncomingForm from '../../components/Form/Incoming.vue'
 
 // Components
 import { DocTypeChip, StatusChip, PriorityChip } from '@/components/Chips'
-import { ActionToolbar } from "@/components/Actions";
+import { ActionToolbar } from '@/components/Actions'
 // Composable
 const docFlowStore = useDocFlowStore()
 const regIncoming = useRegIncoming()
@@ -77,16 +77,16 @@ const createDocument = async () => {
         <priority-chip :id="data.priority.id" />
       </template>
 
-      <template  #delivery_type="{ data }">
-        {{data.delivery_type.name}}
+      <template #delivery_type="{ data }">
+        {{ data.delivery_type.name }}
       </template>
 
-      <template  #journal="{ data }">
-        {{data.journal.name}}
+      <template #journal="{ data }">
+        {{ data.journal.name }}
       </template>
 
-      <template  #language="{ data }">
-        {{data.language.name}}
+      <template #language="{ data }">
+        {{ data.language.name }}
       </template>
 
       <template #document_type="{ data }">
@@ -106,7 +106,7 @@ const createDocument = async () => {
       </template>
 
       <template #correspondent="{ data }">
-        {{data.correspondent.name}}
+        {{ data.correspondent.name }}
       </template>
     </base-data-table>
 

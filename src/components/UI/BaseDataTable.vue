@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n'
 // Components
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
+import FieldGroups from '@/components/FieldGroups.vue'
 // Utils
 import { formatDateHour } from "@/utils/formatDate";
 import { getStorageItem } from "@/utils/storage";
@@ -114,6 +115,9 @@ onMounted(() => {
             class:  [ context.active ? ['bg-primary-500', 'text-primary-0'] : undefined, 'rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'text-xs']
         }),
         nextPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] }
+      },
+      rowExpansionCell: {
+        class: '!bg-white !rounded-xl'
       }
     }"
     class="base-data-table"
@@ -151,7 +155,13 @@ onMounted(() => {
       v-if="props.expandable"
       #expansion="{ data }"
     >
-      <slot name="expansion" :data="data" />
+      <slot name="expansion" :data="data">
+        <field-groups :headers="props.headers" :data="data">
+          <template #preview-actions>
+            <slot name="preview-actions" />
+          </template>
+        </field-groups>
+      </slot>
     </template>
 
     <template #loading>
@@ -173,10 +183,10 @@ onMounted(() => {
 
 <style>
 th:first-child, td:first-child {
-  border-radius: 12px 0 0 12px!important;
+  border-radius: 12px 0 0 12px;
 }
 
 th:last-child, td:last-child {
-  border-radius: 0 12px 12px 0!important;
+  border-radius: 0 12px 12px 0;
 }
 </style>

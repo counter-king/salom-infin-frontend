@@ -7,7 +7,7 @@ import { useDocFlowStore } from '../../stores/docflow.store'
 import { useRegIncoming } from '../../stores/incoming.store'
 // Components
 import { LayoutWithTabs } from '@/components/DetailLayout'
-import ChangeDocument from "./components/ChangeDocument.vue"
+import ChangeDocument from './components/ChangeDocument.vue'
 // Composable
 const route = useRoute()
 const docflowStore = useDocFlowStore()
@@ -36,6 +36,7 @@ onMounted(async () => {
         :title="incomingStore.detailModel.title"
         :preview-detail="incomingStore.detailModel.__copy_prototype"
         :object-id="incomingStore.detailModel.id"
+        :headers="incomingStore.headers"
       >
         <template #preview-actions>
           <div class="mt-5">

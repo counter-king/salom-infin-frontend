@@ -2,26 +2,26 @@
 // Core
 import { ref, unref, onMounted } from 'vue'
 // Store
-import { useReviewStore } from '../../stores/review.store'
+import { useAssignmentStore } from '../../stores/assignment.store'
 // Components
 import { DocTypeChip, StatusChip, PriorityChip } from '@/components/Chips'
 // Utils
-import { BOXES_INCOMING_COLUMNS } from '../../constants'
+import { BOXES_ASSIGNMENT_COLUMNS } from '../../constants'
 // Composable
-const reviewStore = useReviewStore()
+const assignmentStore = useAssignmentStore()
 // Hooks
 onMounted(async () => {
-  await reviewStore.actionReviewList()
+  await assignmentStore.actionAssignmentList()
 })
 </script>
 
 <template>
-  <div class="review-view">
+  <div class="incoming-view">
     <base-data-table
-      :headers="reviewStore.headers"
-      :value="reviewStore.list"
-      :loading="reviewStore.listLoading"
-      :storage-columns-name="BOXES_INCOMING_COLUMNS"
+      :headers="assignmentStore.headers"
+      :value="assignmentStore.list"
+      :loading="assignmentStore.listLoading"
+      :storage-columns-name="BOXES_ASSIGNMENT_COLUMNS"
       expandable
     >
       <template #document.priority.id="{ data }">
@@ -80,8 +80,8 @@ onMounted(async () => {
         />
       </template>
 
-      <template #document.status.id="{ data }">
-        <status-chip :status="data.document.status"/>
+      <template #status="{ data }">
+        <status-chip :status="data.status"/>
       </template>
 
       <template #document.correspondent.name="{ data }">

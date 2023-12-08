@@ -55,11 +55,11 @@ const menus = ref([
             link: "ReviewIndex",
             children: []
           },
-          // Входящие
+          // Мои поручение
           {
-            title: "Входящие",
+            title: "Мои поручение",
             icon: "ArrowRightDownIcon",
-            link: "IncomingIndex",
+            link: "AssignmentIndex",
             children: []
           },
           // Исходящие

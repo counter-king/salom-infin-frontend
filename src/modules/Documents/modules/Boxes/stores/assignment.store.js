@@ -2,192 +2,170 @@
 import { defineStore } from "pinia"
 // Store
 import { useInnerStore } from "./common.store"
-import { useDocflowRegistrationStore } from "../../Registration/stores/common.store"
+import { useDocFlowStore } from "../../Registration/stores/docflow.store"
 // Service
 import { fetchAssignmentList, fetchAssignmentById, fetchAcquaintDocument, fetchPerformDocument } from "../services/assignment.service"
+// Utils
+import { setValuesToKeys, combineKeys } from '@/utils'
+import { dispatchNotify } from '@/utils/notify'
+import { COLOR_TYPES, JOURNAL } from '@/enums'
+
 export const useAssignmentStore = defineStore("assignment", {
   state: () => ({
     list: [],
-    columns: [
+    headers: [
       {
-        id: 1,
-        type: "selection",
-        active: true
-      },
-      {
-        id: 2,
-        title: "Корреспондент",
-        key: "document.correspondent.name",
-        active: true,
+        header: "priority",
+        field: "document.priority.id",
         detail: {
-          show: true,
-          span: "3",
-          component: null,
-          order: 14
-        }
-      },
-      {
-        id: 3,
-        title: "Рег. номер",
-        key: "document.register_number",
-        active: true,
-        detail: {
-          show: true,
-          span: "1",
-          component: null,
-          order: 5
-        }
-      },
-      {
-        id: 4,
-        title: "Тип документа",
-        key: "document.document_type.name",
-        active: true,
-        detail: {
-          show: true,
-          span: "1",
-          component: null,
-          order: 2
-        }
-      },
-      {
-        id: 6,
-        title: "Код",
-        key: "document.code",
+          component: "priority-chip",
+          colClass: null
+        },
         active: false
       },
       {
-        id: 7,
-        title: "Вид подачи",
-        key: "document.delivery_type.name",
-        active: false,
+        header: "naming",
+        field: "document.title",
         detail: {
-          show: true,
-          span: "1",
           component: null,
-          order: 7
-        }
+          colClass: null
+        },
+        active: true
       },
       {
-        id: 8,
-        title: "Исх. номер",
-        key: "document.outgoing_number",
-        active: false,
+        header: "document-type",
+        field: "document.document_type.name",
         detail: {
-          show: true,
-          span: "1",
           component: null,
-          order: 8
-        }
+          colClass: null
+        },
+        active: true
       },
       {
-        id: 9,
-        title: "Приоритет",
-        key: "document.priority.id",
-        active: false,
+        header: "deliver-type",
+        field: "document.delivery_type.name",
         detail: {
-          show: true,
-          span: "1",
-          component: "priority",
-          order: 3
-        }
-      },
-      {
-        id: 10,
-        title: "Рег. дата",
-        key: "document.register_date",
-        active: false,
-        detail: {
-          show: true,
-          span: "1",
           component: null,
-          order: 6
-        }
+          colClass: null
+        },
+        active: false
       },
       {
-        id: 11,
-        title: "Наименование",
-        key: "document.title",
-        active: false,
+        header: "description",
+        field: "document.description",
         detail: {
-          show: true,
-          span: "3",
           component: null,
-          order: 1
-        }
+          colClass: null
+        },
+        active: false
       },
       {
-        id: 12,
-        title: "Статус",
-        key: "document.status",
-        active: false,
+        header: "magazine",
+        field: "document.journal.name",
         detail: {
-          show: true,
-          span: "1",
-          component: "status",
-          order: 4
-        }
-      },
-      {
-        id: 13,
-        title: "Исх. дата",
-        key: "document.outgoing_date",
-        active: false,
-        detail: {
-          show: true,
-          span: "1",
           component: null,
-          order: 9
-        }
+          colClass: null
+        },
+        active: false
       },
       {
-        id: 14,
-        title: "Язык",
-        key: "document.language.name",
-        active: false,
+        header: "language-document",
+        field: "document.language.name",
         detail: {
-          show: true,
-          span: "1",
           component: null,
-          order: 10
-        }
+          colClass: null
+        },
+        active: false
       },
       {
-        id: 15,
-        title: "Гриф",
-        key: "document.grif",
-        active: false,
+        header: "number-sheets",
+        field: "document.number_of_papers",
         detail: {
-          show: true,
-          span: "1",
           component: null,
-          order: 11
-        }
+          colClass: null
+        },
+        active: false
       },
       {
-        id: 16,
-        title: "Гриф",
-        key: "document.code",
-        active: false,
+        header: "outgoing-date",
+        field: "document.outgoing_date",
         detail: {
-          show: true,
-          span: "1",
           component: null,
-          order: 12
-        }
+          colClass: null
+        },
+        active: false
       },
       {
-        id: 17,
-        title: "Описание",
-        key: "document.description",
-        active: false,
-        ellipsis: true,
+        header: "outgoing-number",
+        field: "document.outgoing_number",
         detail: {
-          show: true,
-          span: "3",
           component: null,
-          order: 15
-        }
+          colClass: null
+        },
+        active: false
+      },
+      {
+        header: "reg-number",
+        field: "document.register_number",
+        detail: {
+          component: null,
+          colClass: null
+        },
+        active: true
+      },
+      {
+        header: "reg-date",
+        field: "document.register_date",
+        detail: {
+          component: null,
+          colClass: null
+        },
+        active: true
+      },
+      {
+        header: "reviewers",
+        field: "document.reviewers",
+        detail: {
+          component: 'base-avatar-group',
+          colClass: null
+        },
+        active: true
+      },
+      {
+        header: "status",
+        field: "status",
+        detail: {
+          component: "base-status",
+          colClass: null
+        },
+        active: true
+      },
+      {
+        header: "correspondent",
+        field: "document.correspondent.name",
+        detail: {
+          component: null,
+          colClass: null
+        },
+        active: true
+      },
+      {
+        header: "code",
+        field: "document.code",
+        detail: {
+          component: null,
+          colClass: null
+        },
+        active: false
+      },
+      {
+        header: "grif",
+        field: "document.grif",
+        detail: {
+          component: null,
+          colClass: null
+        },
+        active: false,
       }
     ],
     detailModel: {
@@ -202,12 +180,14 @@ export const useAssignmentStore = defineStore("assignment", {
         id: null,
         title: null
       },
-      is_read: false
+      is_read: false,
+      __copy_prototype: null
     },
     performModel: {
       content: null,
       files: []
-    }
+    },
+    listLoading: false
   }),
   getters: {
     /*
@@ -220,8 +200,11 @@ export const useAssignmentStore = defineStore("assignment", {
     * Список поручение
     * */
     async actionAssignmentList() {
+      this.listLoading = true
       let { data } = await fetchAssignmentList()
+
       this.list = data.results
+      this.listLoading = false
     },
     /**
      * Получить поручение по id
@@ -250,7 +233,7 @@ export const useAssignmentStore = defineStore("assignment", {
     * Ознакомиться с документом
     * */
     async actionAcquaintDocument({ id }) {
-      const docflowStore = useDocflowRegistrationStore()
+      const docflowStore = useDocFlowStore()
       await fetchAcquaintDocument({ id })
       await this.actionAssignmentById(this.detailModel)
       await docflowStore.actionGetTree(this.detailModel.document.id)
@@ -259,7 +242,7 @@ export const useAssignmentStore = defineStore("assignment", {
     * Выполнить документ
     * */
     async actionPerformDocument({ id }) {
-      const docflowStore = useDocflowRegistrationStore()
+      const docflowStore = useDocFlowStore()
       await fetchPerformDocument({ id, model: this.performModel })
       await this.actionAssignmentById(this.detailModel)
       await docflowStore.actionGetTree(this.detailModel.document.id)
