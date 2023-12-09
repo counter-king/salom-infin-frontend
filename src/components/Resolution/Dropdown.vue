@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n'
 // Store
 import { useBoxesCommonStore } from '@/modules/Documents/modules/Boxes/stores/common.store'
 // Components
+import { ModalComment } from '@/components/Modal'
 import ResolutionForm from './components/Form.vue'
 // Utils
 import { clearModel } from '@/utils'
@@ -45,6 +46,8 @@ const menuRef = ref(null)
 const createResolutionDialog = ref(false)
 const createButtonLoading = ref(false)
 const resolutionActionTypes = ref(FORM_TYPE_CREATE)
+const deleteResolutionDialog = ref(false)
+const deleteResolutionItem = ref(null)
 const items = ref([
   {
     label: 'resolution',
@@ -99,6 +102,22 @@ const getResolutionById = async (item) => {
   resolutionActionTypes.value = FORM_TYPE_UPDATE
   createResolutionDialog.value = true
 }
+const showCommentModal = (item) => {
+  deleteResolutionDialog.value = true
+  deleteResolutionItem.value = item
+}
+const deleteResolution = async (text) => {
+  try {
+    await boxesCommonStore.actionDeleteGetByIdResolution({
+      id: deleteResolutionItem.value.resolution.id,
+      resolutionListId: props.resolutionListId,
+      comment: text
+    })
+    deleteResolutionDialog.value = false
+  } catch (error) {
+
+  }
+}
 </script>
 
 <template>
@@ -107,7 +126,10 @@ const getResolutionById = async (item) => {
       label="resolution"
       icon-right="AltArrowDownIcon"
       rounded
+      outlined
+      shadow
       type="button"
+      border-color="border-transparent"
       @click="toggle"
     />
 
@@ -143,6 +165,7 @@ const getResolutionById = async (item) => {
                   autoHide: false
                 }"
                 class="w-5 h-5"
+                @click="showCommentModal(item)"
               >
                 <base-icon name="TrashIcon" width="16" class="text-critic-500" />
               </button>
@@ -182,6 +205,13 @@ const getResolutionById = async (item) => {
       </template>
     </base-dialog>
     <!-- /Create resolution modal -->
+
+    <!-- Delete resolution modal -->
+    <modal-comment
+      v-model="deleteResolutionDialog"
+      @emit:up="deleteResolution"
+    />
+    <!-- /Delete resolution modal -->
   </div>
 </template>
 

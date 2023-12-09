@@ -156,8 +156,16 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
     /*
     * Удалить созданную резолюцию
     * */
-    async actionDeleteGetByIdResolution({ id, comment }) {
-      await fetchDeleteResolutionById({ id, comment })
+    async actionDeleteGetByIdResolution({ id, resolutionListId, comment }) {
+      try {
+        await fetchDeleteResolutionById({ id, comment })
+        dispatchNotify('Резолюция удален', null, COLOR_TYPES.SUCCESS)
+        await this.actionResolutionsList({ id: resolutionListId })
+        return Promise.resolve()
+      } catch(error) {
+        dispatchNotify('Ошибка', 'Ошибка удаление резолюции', COLOR_TYPES.ERROR)
+        return Promise.reject()
+      }
     }
   }
 })
