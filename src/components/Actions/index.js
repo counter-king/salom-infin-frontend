@@ -1,3 +1,4 @@
+export { default as ActionAnswerMenu } from './AnswerMenu.vue'
 export { default as ActionToolbar } from "./Toolbar.vue"
 export { default as ColumnMenu } from "./ColumnMenu.vue"
 export { default as FilterMenu } from "./FilterMenu.vue"

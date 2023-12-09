@@ -16,10 +16,6 @@ const props = defineProps({
   contentClasses: {
     type: String,
     default: 'py-6 px-8'
-  },
-  createFn: {
-    type: Function,
-    default: () => void 0
   }
 })
 const emit = defineEmits(['emit:up'])
@@ -51,7 +47,6 @@ const create = async () => {
     <template #footer>
       <base-button
         :label="props.label"
-        severity="danger"
         rounded
         @click="create"
       />

@@ -107,7 +107,7 @@ watch(activeTabMenu, (value) => {
           <h1 class="font-bold text-xl text-primary-900">{{ t(props.title) }}</h1>
         </div>
 
-        <div class="flex items-center">
+        <div class="flex items-center gap-2">
           <slot name="header-end" />
         </div>
       </div>

@@ -7,8 +7,10 @@ import { useDocFlowStore } from '../../../Registration/stores/docflow.store'
 import { useBoxesCommonStore } from '../../stores/common.store'
 import { useReviewStore } from '../../stores/review.store'
 // Components
+import { ActionAnswerMenu } from '@/components/Actions'
 import { LayoutWithTabs } from '@/components/DetailLayout'
 import { ResolutionDropdown } from '@/components/Resolution'
+import { ModalForwardDocument, ModalDoneDocument } from '@/components/Modal'
 // Composable
 const route = useRoute()
 const docflowStore = useDocFlowStore()
@@ -41,11 +43,21 @@ onMounted(async () => {
         :headers="reviewStore.headers"
       >
         <template #header-end>
+          <action-answer-menu />
+
           <resolution-dropdown
             :review-id="reviewStore.detailModel.id"
             :parent-id="null"
             :resolution-list-id="reviewStore.detailModel.document.id"
           />
+
+          <modal-forward-document />
+        </template>
+
+        <template #preview-actions>
+          <div class="mt-5">
+            <modal-done-document />
+          </div>
         </template>
       </layout-with-tabs>
     </template>
