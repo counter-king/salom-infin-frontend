@@ -1,7 +1,7 @@
 // Core
 import { defineStore } from "pinia"
 // Store
-import { useInnerStore } from "./common.store"
+import { useBoxesCommonStore } from "./common.store"
 import { useDocFlowStore } from "../../Registration/stores/docflow.store"
 // Service
 import { fetchAssignmentList, fetchAssignmentById, fetchAcquaintDocument, fetchPerformDocument } from "../services/assignment.service"
@@ -218,7 +218,7 @@ export const useAssignmentStore = defineStore("assignment", {
      * Создать резолюцию (поручение)
      * */
     async actionCreateAssignmentResolution({ reviewId, parentId, resolutionCreateType }) {
-      const innerStore = useInnerStore()
+      const innerStore = useBoxesCommonStore()
       await innerStore.actionCreateResolution({ reviewId, parentId, resolutionCreateType })
       await innerStore.actionResolutionsList({ id: this.detailModel.document.id })
     },
@@ -226,7 +226,7 @@ export const useAssignmentStore = defineStore("assignment", {
     * Изменить созданную резолюцию по id
     * */
     async actionUpdateAssignmentResolutionById(payload) {
-      const innerStore = useInnerStore()
+      const innerStore = useBoxesCommonStore()
       await innerStore.actionUpdateByIdResolution(payload)
     },
     /*

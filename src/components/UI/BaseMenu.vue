@@ -1,9 +1,11 @@
 <script setup>
 // Core
-import { ref, computed, useSlots, onMounted } from 'vue'
+import { ref, computed, useSlots } from 'vue'
+import { useI18n } from 'vue-i18n'
 import Menu from 'primevue/menu'
 // Composable
 const slots = useSlots()
+const { t } = useI18n()
 // Reactive
 const menuRef = ref(null)
 // Macros
@@ -71,10 +73,13 @@ const rootClasses = computed(() => {
         class: ['rounded-lg', props.contentClass]
       },
       action: {
-        class: ['py-[6px] pl-2 pl-3', props.actionSizeClass]
+        class: ['py-[6px] pl-3', props.actionSizeClass]
       },
       label: {
         class: ['text-sm font-medium', props.labelClass]
+      },
+      submenuHeader: {
+        class: 'py-[6px] pl-3 text-sm font-semibold text-primary-500'
       }
     }"
   >
@@ -82,6 +87,10 @@ const rootClasses = computed(() => {
       <Teleport v-if="props.hasOverlay" to="body">
         <div class="modal-layer fixed bottom-0 w-full transition-all duration-[400ms]"></div>
       </Teleport>
+    </template>
+
+    <template #submenuheader="{ item }">
+      {{ t(item.label) }}
     </template>
 
     <template #item="{ item }" v-if="slots.item">

@@ -1,7 +1,7 @@
 // Core
 import { defineStore } from "pinia"
 // Store
-import { useInnerStore } from "./common.store"
+import { useBoxesCommonStore } from "./common.store"
 // Service
 import {
   fetchReviewList,
@@ -11,7 +11,6 @@ import {
   fetchAcquaintDocument
 } from "../services/review.service.js"
 // Utils
-import { setValuesToKeys, combineKeys } from '@/utils'
 import { dispatchNotify } from '@/utils/notify'
 import { COLOR_TYPES, JOURNAL } from '@/enums'
 
@@ -21,7 +20,7 @@ export const useReviewStore = defineStore("review", {
     headers: [
       {
         header: "priority",
-        field: "document.priority.id",
+        field: "document.priority",
         detail: {
           component: 'priority-chip',
           colClass: null
@@ -138,7 +137,7 @@ export const useReviewStore = defineStore("review", {
       },
       {
         header: "status",
-        field: "document.status.id",
+        field: "status",
         detail: {
           component: 'base-status',
           colClass: null
@@ -174,15 +173,27 @@ export const useReviewStore = defineStore("review", {
       },
     ],
     detailModel: {
-      assignments: [],
       id: null,
       document: {
-        id: null,
+        code: null,
+        correspondent: null,
+        delivery_type: null,
+        description: null,
+        document_type: null,
+        grif: null,
+        journal: null,
+        language: null,
+        number_of_papers: null,
+        outgoing_date: null,
+        outgoing_number: null,
+        priority: null,
+        register_date: null,
+        register_number: null,
         title: null
       },
       has_resolution: false,
-      is_read: false,
-      __copy_prototype: null
+      read_time: null,
+      user: null,
     },
     listLoading: false
   }),
@@ -216,20 +227,13 @@ export const useReviewStore = defineStore("review", {
     async actionReviewById(payload) {
       let { data } = await fetchReviewById({ id: payload.id })
 
-      this.detailModel.__copy_prototype = combineKeys(this.headers, data)
-      setValuesToKeys(this.detailModel, data)
-      // this.detailModel.__reviewers = data.reviewers.map(item => {
-      //   return {
-      //     ...item,
-      //     __userId: item.user.id
-      //   }
-      // })
+      this.detailModel = data
     },
     /**
     * Создать резолюцию (на рассмотрение)
     * */
     async actionCreateReviewResolution({ reviewId, parentId, resolutionCreateType }) {
-      const innerStore = useInnerStore()
+      const innerStore = useBoxesCommonStore()
       await innerStore.actionCreateResolution({ reviewId, parentId, resolutionCreateType })
       await innerStore.actionResolutionsList({ id: this.detailModel.document.id })
     },
@@ -237,7 +241,7 @@ export const useReviewStore = defineStore("review", {
     * Изменить созданную резолюцию по id
     * */
     async actionUpdateReviewResolutionById(payload) {
-      const innerStore = useInnerStore()
+      const innerStore = useBoxesCommonStore()
       await innerStore.actionUpdateByIdResolution(payload)
     },
     /*
@@ -250,7 +254,7 @@ export const useReviewStore = defineStore("review", {
     * Подписать или удалить подпись
     * */
     async actionSignOrCancel(body) {
-      const innerStore = useInnerStore()
+      const innerStore = useBoxesCommonStore()
       const resolutionIds = innerStore.resolutionsList.map(r => r.id)
       let model = Object.assign(body, { assignment_ids: resolutionIds })
 

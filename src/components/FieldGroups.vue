@@ -2,7 +2,7 @@
 // Core
 import { computed } from 'vue'
 // Components
-import { PriorityChip } from '@/components/Chips'
+import { PriorityChip, StatusChip } from '@/components/Chips'
 // Utils
 import { combineKeys } from '@/utils'
 // Macros
@@ -29,6 +29,10 @@ const value = computed(() => combineKeys(props.headers, props.data))
         <template v-if="item.detail.component">
           <template v-if="item.detail.component === 'priority-chip'">
             <priority-chip :id="item.field?.id" />
+          </template>
+
+          <template v-if="item.detail.component === 'base-status'">
+            <status-chip :status="item.field" />
           </template>
 
           <template v-if="item.detail.component === 'base-avatar-group'">

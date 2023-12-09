@@ -24,7 +24,7 @@ onMounted(async () => {
       :storage-columns-name="BOXES_INCOMING_COLUMNS"
       expandable
     >
-      <template #document.priority.id="{ data }">
+      <template #document.priority="{ data }">
         <priority-chip :id="data.document.priority?.id" />
       </template>
 
@@ -80,8 +80,8 @@ onMounted(async () => {
         />
       </template>
 
-      <template #document.status.id="{ data }">
-        <status-chip :status="data.document.status"/>
+      <template #status="{ data }">
+        <status-chip :status="data.status"/>
       </template>
 
       <template #document.correspondent.name="{ data }">

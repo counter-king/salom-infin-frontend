@@ -45,7 +45,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="app-avatar relative">
+  <div class="app-avatar flex relative">
     <Avatar
       :image="props.image"
       :size="props.size"
