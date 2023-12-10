@@ -1,7 +1,6 @@
 // Core
 import { defineStore } from "pinia"
 // Store
-import { useBoxesCommonStore } from "./common.store"
 import { useDocFlowStore } from "../../Registration/stores/docflow.store"
 // Service
 import { fetchAssignmentList, fetchAssignmentById, fetchAcquaintDocument, fetchPerformDocument } from "../services/assignment.service"
@@ -16,7 +15,7 @@ export const useAssignmentStore = defineStore("assignment", {
     headers: [
       {
         header: "priority",
-        field: "document.priority.id",
+        field: "document.priority",
         detail: {
           component: "priority-chip",
           colClass: null
@@ -170,18 +169,34 @@ export const useAssignmentStore = defineStore("assignment", {
     ],
     detailModel: {
       id: null,
-      assignment: {
-        id: null,
-        reviewer: {
-          id: null
-        }
-      },
+      assignment: [],
+      content: null,
+      created_date: null,
       document: {
-        id: null,
+        code: null,
+        correspondent: null,
+        delivery_type: null,
+        description: null,
+        document_type: null,
+        grif: null,
+        journal: null,
+        language: null,
+        number_of_papers: null,
+        outgoing_date: null,
+        outgoing_number: null,
+        priority: null,
+        register_date: null,
+        register_number: null,
         title: null
       },
-      is_read: false,
-      __copy_prototype: null
+      is_controller: null,
+      is_performed: null,
+      is_read: null,
+      is_responsible: null,
+      performed_date: null,
+      read_time: null,
+      status: null,
+      perfuserormed_date: null
     },
     performModel: {
       content: null,
@@ -213,21 +228,6 @@ export const useAssignmentStore = defineStore("assignment", {
       let { data } = await fetchAssignmentById({ id: payload.id })
       this.detailModel = data
       this.performModel.content = data.content
-    },
-    /**
-     * Создать резолюцию (поручение)
-     * */
-    async actionCreateAssignmentResolution({ reviewId, parentId, resolutionCreateType }) {
-      const innerStore = useBoxesCommonStore()
-      await innerStore.actionCreateResolution({ reviewId, parentId, resolutionCreateType })
-      await innerStore.actionResolutionsList({ id: this.detailModel.document.id })
-    },
-    /*
-    * Изменить созданную резолюцию по id
-    * */
-    async actionUpdateAssignmentResolutionById(payload) {
-      const innerStore = useBoxesCommonStore()
-      await innerStore.actionUpdateByIdResolution(payload)
     },
     /*
     * Ознакомиться с документом

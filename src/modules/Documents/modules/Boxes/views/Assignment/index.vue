@@ -24,7 +24,7 @@ onMounted(async () => {
       :storage-columns-name="BOXES_ASSIGNMENT_COLUMNS"
       expandable
     >
-      <template #document.priority.id="{ data }">
+      <template #document.priority="{ data }">
         <priority-chip :id="data.document.priority?.id" />
       </template>
 

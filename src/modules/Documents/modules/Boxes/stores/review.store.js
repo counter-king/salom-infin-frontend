@@ -229,21 +229,6 @@ export const useReviewStore = defineStore("review", {
 
       this.detailModel = data
     },
-    /**
-    * Создать резолюцию (на рассмотрение)
-    * */
-    async actionCreateReviewResolution({ reviewId, parentId, resolutionCreateType }) {
-      const innerStore = useBoxesCommonStore()
-      await innerStore.actionCreateResolution({ reviewId, parentId, resolutionCreateType })
-      await innerStore.actionResolutionsList({ id: this.detailModel.document.id })
-    },
-    /*
-    * Изменить созданную резолюцию по id
-    * */
-    async actionUpdateReviewResolutionById(payload) {
-      const innerStore = useBoxesCommonStore()
-      await innerStore.actionUpdateByIdResolution(payload)
-    },
     /*
     * Перенаправить документ
     * */
