@@ -56,7 +56,7 @@ onMounted(async () => {
         <div class="flex gap-4 py-3">
           <div>
             <base-avatar
-              :action-chip-type="data?.action"
+              :action-chip-type="data"
               :label="data?.created_by.first_name"
               :color="data?.created_by.color"
               shape="circle"

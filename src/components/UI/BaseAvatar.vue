@@ -39,7 +39,8 @@ const props = defineProps({
     type: String
   },
   actionChipType: {
-    type: String
+    type: Object,
+    default: () => {}
   }
 })
 </script>
