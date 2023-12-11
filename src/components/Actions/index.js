@@ -1,6 +1,7 @@
 export { default as ActionAnswerMenu } from './AnswerMenu.vue'
 export { default as ActionToolbar } from "./Toolbar.vue"
 export { default as ColumnMenu } from "./ColumnMenu.vue"
+export { default as EriKeysMenu } from './EriKeysMenu.vue'
 export { default as FilterMenu } from "./FilterMenu.vue"
 export { default as CalendarMenu } from "./CalendarMenu.vue"
 export { default as ExportButton } from "./ExportButton.vue"

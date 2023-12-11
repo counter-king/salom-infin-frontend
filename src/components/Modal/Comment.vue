@@ -16,6 +16,13 @@ const props = defineProps({
   contentClasses: {
     type: String,
     default: 'py-6 px-8'
+  },
+  createButtonLoading: {
+    type: Boolean
+  },
+  createButtonColor: {
+    type: String,
+    default: 'primary'
   }
 })
 const emit = defineEmits(['emit:up'])
@@ -46,6 +53,8 @@ const create = async () => {
 
     <template #footer>
       <base-button
+        :severity="props.createButtonColor"
+        :loading="props.createButtonLoading"
         :label="props.label"
         rounded
         @click="create"

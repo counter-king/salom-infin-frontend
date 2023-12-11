@@ -7,10 +7,10 @@ import { useDocFlowStore } from '../../../Registration/stores/docflow.store'
 import { useBoxesCommonStore } from '../../stores/common.store'
 import { useReviewStore } from '../../stores/review.store'
 // Components
-import { ActionAnswerMenu } from '@/components/Actions'
+import { ActionAnswerMenu, EriKeysMenu } from '@/components/Actions'
 import { LayoutWithTabs } from '@/components/DetailLayout'
 import { ResolutionDropdown } from '@/components/Resolution'
-import { ModalForwardDocument, ModalDoneDocument } from '@/components/Modal'
+import { ModalForwardDocument, ModalDoneDocument, ModalCancelSign } from '@/components/Modal'
 // Composable
 const route = useRoute()
 const docflowStore = useDocFlowStore()
@@ -27,6 +27,20 @@ onMounted(async () => {
     loading.value = false
   }, 500)
 })
+// Methods
+const signDocument = async () => {
+  await reviewStore.actionSignOrCancel({
+    is_verified: true,
+    pkcs7: null
+  })
+}
+const cancelSign = async (text) => {
+  await reviewStore.actionSignOrCancel({
+    is_verified: false,
+    pkcs7: null,
+    comment: text
+  })
+}
 </script>
 
 <template>
@@ -52,6 +66,10 @@ onMounted(async () => {
           />
 
           <modal-forward-document />
+
+          <eri-keys-menu @emit:sign="signDocument" />
+
+          <modal-cancel-sign :create-button-fn="cancelSign" />
         </template>
 
         <template #preview-actions>

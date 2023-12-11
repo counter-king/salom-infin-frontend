@@ -30,8 +30,7 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
       type: RESOLUTION_TYPES.ASSIGNMENT,
       __assignees: [],
       __controllers: [],
-    },
-    resolutionsList: []
+    }
   }),
   actions: {
     /**
@@ -78,7 +77,7 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
     async actionResolutionsList({ id, params }) {
       let { data } = await fetchResolutionList({ document_id: id, params })
       this.createdResolutionsList.items = data.results.map((item, index) => ({
-        label: `resolution #${ index + 1 }`,
+        label: `Резолюция #${ index + 1 }`,
         icon: 'DocumentTextIcon',
         resolution: item
       }))

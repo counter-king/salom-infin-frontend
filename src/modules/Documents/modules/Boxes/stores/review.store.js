@@ -12,8 +12,7 @@ import {
 } from "../services/review.service.js"
 // Utils
 import { dispatchNotify } from '@/utils/notify'
-import { COLOR_TYPES, JOURNAL } from '@/enums'
-
+import { COLOR_TYPES } from '@/enums'
 export const useReviewStore = defineStore("review", {
   state: () => ({
     list: [],
@@ -247,12 +246,29 @@ export const useReviewStore = defineStore("review", {
     * Подписать или удалить подпись
     * */
     async actionSignOrCancel(body) {
-      const innerStore = useBoxesCommonStore()
-      const resolutionIds = innerStore.resolutionsList.map(r => r.id)
+      const commonStore = useBoxesCommonStore()
+      const resolutionIds = commonStore.createdResolutionsList.items.map(({ resolution }) => resolution.id)
       let model = Object.assign(body, { assignment_ids: resolutionIds })
 
-      await fetchSignOrCancel(model)
-      await this.actionReviewById(this.detailModel)
+      try {
+        await fetchSignOrCancel(model)
+        await this.actionReviewById(this.detailModel)
+        // Если идет подпись
+        if(body.is_verified) {
+          dispatchNotify('Резолюция подписан', null, COLOR_TYPES.SUCCESS)
+        } else {
+          dispatchNotify('Подпись удален из резолюции', null, COLOR_TYPES.SUCCESS)
+        }
+        return Promise.resolve()
+      } catch (error) {
+        // Если идет подпись
+        if(body.is_verified) {
+          dispatchNotify('Ошибка', 'Ошибка подписание резолюции', COLOR_TYPES.ERROR)
+        } else {
+          dispatchNotify('Ошибка', 'Ошибка удаление подписа', COLOR_TYPES.ERROR)
+        }
+        return Promise.reject()
+      }
     },
     /*
     * Ознакомиться с документом
