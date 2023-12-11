@@ -72,10 +72,7 @@ const types = [
           </template>
 
           <template #option="{ value }">
-            <user-with-selectable
-              :label="value.full_name"
-              :color="value.color"
-            />
+            <user-with-selectable :items="[value]" />
           </template>
 
           <template #hint="{ value }">
@@ -89,16 +86,13 @@ const types = [
           </template>
         </base-multi-select>
 
-        <template v-for="item in boxesCommonStore.resolutionModel.__assignees">
-          <div class="mt-2">
-            <user-with-selectable
-              :label="isObject(item.user) ? item?.user.full_name : item.full_name"
-              :color="isObject(item.user) ? item?.user.color : item.color"
-              :multiple="false"
-              selectable
-            />
-          </div>
-        </template>
+        <div class="mt-2">
+          <user-with-selectable
+            :items="boxesCommonStore.resolutionModel.__assignees"
+            :multiple="false"
+            selectable
+          />
+        </div>
       </base-col>
 
       <base-col col-class="w-full">

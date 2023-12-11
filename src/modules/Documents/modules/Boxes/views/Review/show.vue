@@ -22,7 +22,7 @@ const loading = ref(true)
 onMounted(async () => {
   loading.value = true
   await reviewStore.actionReviewById({ id: route.params.id })
-  await docflowStore.actionGetTree(reviewStore.detailModel.id)
+  await docflowStore.actionGetTree(reviewStore.detailModel.document.id)
   setTimeout(() => {
     loading.value = false
   }, 500)
@@ -39,7 +39,7 @@ onMounted(async () => {
       <layout-with-tabs
         :title="reviewStore.detailModel.document?.title"
         :preview-detail="reviewStore.detailModel"
-        :object-id="reviewStore.detailModel.id"
+        :object-id="reviewStore.detailModel.document.id"
         :headers="reviewStore.headers"
       >
         <template #header-end>

@@ -1,13 +1,20 @@
 <script setup>
 // Core
 import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import Divider from 'primevue/divider'
+import { useVuelidate } from '@vuelidate/core'
+import { helpers, required } from '@vuelidate/validators'
 // Store
 import { useUsersStore } from '@/stores/users.store'
+import { useReviewStore } from '@/modules/Documents/modules/Boxes/stores/review.store'
 // Components
 import { UserWithSelectable } from '@/components/Users'
 // Composable
+const route = useRoute()
+const router = useRouter()
 const userStore = useUsersStore()
+const reviewStore = useReviewStore()
 // Macros
 const props = defineProps({
   modelValue: {
@@ -17,6 +24,40 @@ const props = defineProps({
 const emit = defineEmits(['emit:up'])
 // Reactive
 const modal = ref(false)
+const buttonLoading = ref(false)
+const model = ref({
+  document: reviewStore.detailModel.document.id,
+  user: null,
+  comment: null
+})
+// Non-reactive
+const rules = {
+  comment: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  }
+}
+// Composable
+const $v = useVuelidate(rules, model)
+// Methods
+const send = async () => {
+  const valid = await $v.value.$validate()
+
+  if(!valid) {
+    return
+  }
+
+  try {
+    buttonLoading.value = true
+    await reviewStore.actionChangeReviewer({
+      id: Number(route.params.id),
+      body: model.value
+    })
+    await router.replace({ name: 'ReviewIndex' })
+  }
+  finally {
+    buttonLoading.value = false
+  }
+}
 </script>
 
 <template>
@@ -45,21 +86,25 @@ const modal = ref(false)
           class="p-input-icon-left w-full !mb-3"
         />
 
-        <template v-for="user in userStore.usersList">
-          <user-with-selectable
-            :label="user.full_name"
-            :color="user.color"
-            :multiple="false"
-            selectable
-          />
-        </template>
+        <user-with-selectable
+          :items="userStore.usersList"
+          :multiple="false"
+          selectable
+          @emit:selected="(value) => model.user = value"
+        />
       </div>
 
       <Divider />
 
       <div class="p-6 pt-0">
-        <base-textarea label="enter-content" />
+        <base-textarea
+          v-model="$v.comment.$model"
+          :error="$v.comment"
+          label="enter-content"
+        />
       </div>
+
+      <pre>{{ model }}</pre>
     </template>
 
     <template #footer>
@@ -74,8 +119,10 @@ const modal = ref(false)
       />
 
       <base-button
+        :loading="buttonLoading"
         label="send"
         rounded
+        @click="send"
       />
     </template>
   </base-dialog>

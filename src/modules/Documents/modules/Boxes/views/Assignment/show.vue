@@ -37,7 +37,7 @@ onMounted(async () => {
       <layout-with-tabs
         :title="assignmentStore.detailModel.document?.title"
         :preview-detail="assignmentStore.detailModel"
-        :object-id="assignmentStore.detailModel.id"
+        :object-id="assignmentStore.detailModel.document.id"
         :headers="assignmentStore.headers"
       >
         <template #header-end>

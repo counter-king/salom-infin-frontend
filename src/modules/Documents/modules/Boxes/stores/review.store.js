@@ -175,6 +175,7 @@ export const useReviewStore = defineStore("review", {
     detailModel: {
       id: null,
       document: {
+        id: null,
         code: null,
         correspondent: null,
         delivery_type: null,
@@ -233,7 +234,14 @@ export const useReviewStore = defineStore("review", {
     * Перенаправить документ
     * */
     async actionChangeReviewer({ id, body }) {
-      await fetchChangeReviewer({ id, body })
+      try {
+        await fetchChangeReviewer({ id, body })
+        dispatchNotify('Документ перенаправлен к пользователю', null, COLOR_TYPES.SUCCESS)
+        return Promise.resolve()
+      } catch (error) {
+        dispatchNotify('Ошибка', 'Ошибка перенаправить документ', COLOR_TYPES.ERROR)
+        return Promise.reject()
+      }
     },
     /*
     * Подписать или удалить подпись

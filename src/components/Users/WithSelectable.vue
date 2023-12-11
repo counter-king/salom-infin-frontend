@@ -3,6 +3,8 @@
 import { ref, computed } from 'vue'
 // Props
 import avatarProps from './props'
+// Utils
+import { isObject } from '@/utils'
 // Macros
 const props = defineProps({
   ...avatarProps,
@@ -12,8 +14,13 @@ const props = defineProps({
   multiple: {
     type: Boolean,
     default: true
+  },
+  items: {
+    type: Array,
+    default: () => []
   }
 })
+const emit = defineEmits(['emit:selected'])
 // Reactive
 const userCheckbox = ref('')
 // Computed
@@ -22,14 +29,27 @@ const rootClass = computed(() => {
     'bg-greyscale-50 rounded-xl mb-2 py-[10px] px-4': props.selectable
   }
 })
+// Methods
+const handleSelect = (item) => {
+  userCheckbox.value = isObject(item.user) ? item.user.id : item.id
+  emit('emit:selected', userCheckbox.value)
+}
 </script>
 
 <template>
-  <div class="flex items-center gap-3 w-full" :class="rootClass">
+  <div
+    v-for="item in props.items"
+    class="flex items-center gap-3 w-full border border-transparent cursor-pointer"
+    :class="[
+      rootClass,
+      { '!border-primary-500 bg-primary-100/50': isObject(item.user) ? item.user?.id : item.id === userCheckbox }
+    ]"
+    @click="handleSelect(item)"
+  >
     <base-avatar
-      :label="props.label"
-      :color="props.color"
-      :image="props.image"
+      :label="isObject(item.user) ? item.user?.full_name : item.full_name"
+      :color="isObject(item.user) ? item.user?.color : item.color"
+      :image="isObject(item.user) ? item.user?.image : item.image"
       :type="props.type"
       :size="props.size"
       :shape="props.shape"
@@ -37,7 +57,7 @@ const rootClass = computed(() => {
     />
 
     <div class="flex-1 font-medium">
-      <h1 class="text-sm text-primary-900">{{ props.label }}</h1>
+      <h1 class="text-sm text-primary-900">{{ isObject(item.user) ? item.user?.full_name : item.full_name }}</h1>
 
       <div class="flex items-center gap-2 text-xs">
         <p class="text-warning-500">Командировка</p>
@@ -54,8 +74,8 @@ const rootClass = computed(() => {
       <template v-else>
         <RadioButton
           v-model="userCheckbox"
-          :value="props.label"
-          :inputId="props.label"
+          :value="isObject(item.user) ? item.user?.id : item.id"
+          :inputId="isObject(item.user) ? item.user?.full_name : item.full_name"
           name="users"
           v-tooltip.top="{
             value: `<h4 class='text-xs text-white text-center -my-1'>Сделать ответственный исполнитель</h4>`,
