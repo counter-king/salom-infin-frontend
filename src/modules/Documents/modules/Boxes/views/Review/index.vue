@@ -72,9 +72,9 @@ onMounted(async () => {
         {{ data.document.register_date }}
       </template>
 
-      <template #document.reviewers="{ data }">
+      <template #reviewers="{ data }">
         <base-avatar-group
-          :items="data.document.reviewers"
+          :items="data?.reviewers"
           shape="circle"
           avatar-classes="w-8 h-8"
         />

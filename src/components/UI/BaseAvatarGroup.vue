@@ -2,6 +2,8 @@
 // Core
 import { computed } from 'vue'
 import AvatarGroup from 'primevue/avatargroup'
+// Utils
+import { isObject } from '@/utils'
 // Macros
 const props = defineProps({
   label: {
@@ -42,14 +44,14 @@ const rest = computed(() => props.items.slice(props.max))
   <AvatarGroup>
     <template v-for="avatar in list">
       <base-avatar
-        :label="avatar.user.full_name"
+        :label="isObject(avatar.user) ? avatar.user.full_name : avatar.full_name"
         :color="avatar.color"
         :image="avatar.image"
         :size="props.size"
         :shape="props.shape"
         :avatar-classes="props.avatarClasses"
         v-tooltip.top="{
-          value: `<h4 class='text-xs text-white -my-1'>${avatar.user.full_name}</h4>`,
+          value: `<h4 class='text-xs text-white -my-1'>${ isObject(avatar.user) ? avatar.user.full_name : avatar.full_name }</h4>`,
           escape: true,
           autoHide: false
         }"

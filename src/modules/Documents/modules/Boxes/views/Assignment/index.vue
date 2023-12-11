@@ -72,14 +72,6 @@ onMounted(async () => {
         {{ data.document.register_date }}
       </template>
 
-      <template #document.reviewers="{ data }">
-        <base-avatar-group
-          :items="data.document.reviewers"
-          shape="circle"
-          avatar-classes="w-8 h-8"
-        />
-      </template>
-
       <template #status="{ data }">
         <status-chip :status="data.status"/>
       </template>

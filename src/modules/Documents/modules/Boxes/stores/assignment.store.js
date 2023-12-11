@@ -122,15 +122,6 @@ export const useAssignmentStore = defineStore("assignment", {
         active: true
       },
       {
-        header: "reviewers",
-        field: "document.reviewers",
-        detail: {
-          component: 'base-avatar-group',
-          colClass: null
-        },
-        active: true
-      },
-      {
         header: "status",
         field: "status",
         detail: {
