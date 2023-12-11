@@ -44,7 +44,7 @@ const cancelSign = async (text) => {
 </script>
 
 <template>
-  <div class="review-show-vuew h-full">
+  <div class="review-show-view h-full">
     <template v-if="loading">
       <base-spinner />
     </template>

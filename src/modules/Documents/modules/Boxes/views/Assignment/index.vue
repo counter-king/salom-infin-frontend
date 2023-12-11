@@ -1,10 +1,11 @@
 <script setup>
 // Core
-import { ref, unref, onMounted } from 'vue'
+import { onMounted } from 'vue'
 // Store
 import { useAssignmentStore } from '../../stores/assignment.store'
 // Components
-import { DocTypeChip, StatusChip, PriorityChip } from '@/components/Chips'
+import { StatusChip, PriorityChip } from '@/components/Chips'
+import { LinkableCell } from '@/components/Table'
 // Utils
 import { BOXES_ASSIGNMENT_COLUMNS } from '../../constants'
 // Composable
@@ -13,6 +14,10 @@ const assignmentStore = useAssignmentStore()
 onMounted(async () => {
   await assignmentStore.actionAssignmentList()
 })
+// Methods
+const link = (data) => {
+  return { name: 'AssignmentShow', params: { id: data.id } }
+}
 </script>
 
 <template>
@@ -25,67 +30,99 @@ onMounted(async () => {
       expandable
     >
       <template #document.priority="{ data }">
-        <priority-chip :id="data.document.priority?.id" />
+        <linkable-cell :to="link(data)">
+          <priority-chip :id="data.document.priority?.id" />
+        </linkable-cell>
       </template>
 
       <template #document.title="{ data }">
-        {{ data.document.title }}
+        <linkable-cell :to="link(data)">
+          {{ data.document.title }}
+        </linkable-cell>
       </template>
 
       <template #document.document_type.name="{ data }">
-        {{ data.document.document_type?.name }}
+        <linkable-cell :to="link(data)">
+          {{ data.document.document_type?.name }}
+        </linkable-cell>
       </template>
 
       <template #document.delivery_type.name="{ data }">
-        {{ data.document.delivery_type?.name }}
+        <linkable-cell :to="link(data)">
+          {{ data.document.delivery_type?.name }}
+        </linkable-cell>
       </template>
 
       <template #document.description="{ data }">
-        {{ data.document.description }}
+        <linkable-cell :to="link(data)">
+          {{ data.document.description }}
+        </linkable-cell>
       </template>
 
       <template #document.journal.name="{ data }">
-        {{ data.document.journal?.name }}
+        <linkable-cell :to="link(data)">
+          {{ data.document.journal?.name }}
+        </linkable-cell>
       </template>
 
       <template #document.language.name="{ data }">
-        {{ data.document.language?.name }}
+        <linkable-cell :to="link(data)">
+          {{ data.document.language?.name }}
+        </linkable-cell>
       </template>
 
       <template #document.number_of_papers="{ data }">
-        {{ data.document.number_of_papers }}
+        <linkable-cell :to="link(data)">
+          {{ data.document.number_of_papers }}
+        </linkable-cell>
       </template>
 
       <template #document.outgoing_date="{ data }">
-        {{ data.document.outgoing_date }}
+        <linkable-cell :to="link(data)">
+          {{ data.document.outgoing_date }}
+        </linkable-cell>
       </template>
 
       <template #document.outgoing_number="{ data }">
-        {{ data.document.outgoing_number }}
+        <linkable-cell :to="link(data)">
+          {{ data.document.outgoing_number }}
+        </linkable-cell>
       </template>
 
       <template #document.register_number="{ data }">
-        {{ data.document.register_number }}
+        <linkable-cell :to="link(data)">
+          {{ data.document.register_number }}
+        </linkable-cell>
       </template>
 
       <template #document.register_date="{ data }">
-        {{ data.document.register_date }}
+        <linkable-cell :to="link(data)">
+          {{ data.document.register_date }}
+        </linkable-cell>
       </template>
 
       <template #status="{ data }">
-        <status-chip :status="data.status"/>
+        <linkable-cell :to="link(data)">
+          <status-chip :status="data.status"/>
+        </linkable-cell>
       </template>
 
       <template #document.correspondent.name="{ data }">
-        {{ data.document.correspondent?.name }}
+        <linkable-cell :to="link(data)">
+          {{ data.document.correspondent?.name }}
+        </linkable-cell>
       </template>
 
       <template #document.code="{ data }">
-        {{ data.document.code }}
+        <linkable-cell :to="link(data)">
+          {{ data.document.code }}
+        </linkable-cell>
       </template>
 
       <template #document.grif="{ data }">
-        {{ data.document.grif }}
+        <linkable-cell :to="link(data)">
+          {{ data.document.grif }}
+        </linkable-cell>
       </template>
     </base-data-table>
   </div>

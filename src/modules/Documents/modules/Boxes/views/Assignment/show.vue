@@ -28,7 +28,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="incoming-show-view">
+  <div class="incoming-show-view h-full">
     <template v-if="loading">
       <base-spinner />
     </template>

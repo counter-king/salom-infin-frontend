@@ -1,16 +1,16 @@
 <script setup>
 // Core
-import {ref, onMounted, unref } from 'vue'
+import { ref, onMounted, unref } from 'vue'
 // Store
 import { useRegIncoming } from '../../stores/incoming.store'
 import { useDocFlowStore } from '../../stores/docflow.store'
-// Constants
-import { R_INCOMING_COLUMNS } from '../../constants'
-import IncomingForm from '../../components/Form/Incoming.vue'
-
 // Components
 import { DocTypeChip, StatusChip, PriorityChip } from '@/components/Chips'
 import { ActionToolbar } from '@/components/Actions'
+import { LinkableCell } from '@/components/Table'
+import IncomingForm from '../../components/Form/Incoming.vue'
+// Constants
+import { R_INCOMING_COLUMNS } from '../../constants'
 // Composable
 const docFlowStore = useDocFlowStore()
 const regIncoming = useRegIncoming()
@@ -45,6 +45,9 @@ const createDocument = async () => {
     _sidebarRef.successButtonLoading = false
   }
 }
+const link = (data) => {
+  return { name: 'RegistrationIncomingShow', params: { id: data.id } }
+}
 </script>
 
 <template>
@@ -74,39 +77,55 @@ const createDocument = async () => {
       expandable
     >
       <template #priority="{ data }">
-        <priority-chip :id="data.priority.id" />
+        <linkable-cell :to="link(data)">
+          <priority-chip :id="data.priority.id" />
+        </linkable-cell>
       </template>
 
       <template #delivery_type="{ data }">
-        {{ data.delivery_type.name }}
+        <linkable-cell :to="link(data)">
+          {{ data.delivery_type.name }}
+        </linkable-cell>
       </template>
 
       <template #journal="{ data }">
-        {{ data.journal.name }}
+        <linkable-cell :to="link(data)">
+          {{ data.journal.name }}
+        </linkable-cell>
       </template>
 
       <template #language="{ data }">
-        {{ data.language.name }}
+        <linkable-cell :to="link(data)">
+          {{ data.language.name }}
+        </linkable-cell>
       </template>
 
       <template #document_type="{ data }">
-        <doc-type-chip :type="data.document_type.name"/>
+        <linkable-cell :to="link(data)">
+          <doc-type-chip :type="data.document_type.name"/>
+        </linkable-cell>
       </template>
 
       <template #status="{ data }">
-        <status-chip :status="data.status"/>
+        <linkable-cell :to="link(data)">
+          <status-chip :status="data.status"/>
+        </linkable-cell>
       </template>
 
       <template #reviewers="{ data }">
-        <base-avatar-group
-          :items="data.reviewers"
-          shape="circle"
-          avatar-classes="w-8 h-8"
-        />
+        <linkable-cell :to="link(data)">
+          <base-avatar-group
+            :items="data.reviewers"
+            shape="circle"
+            avatar-classes="w-8 h-8"
+          />
+        </linkable-cell>
       </template>
 
       <template #correspondent="{ data }">
-        {{ data.correspondent.name }}
+        <linkable-cell :to="link(data)">
+          {{ data.correspondent.name }}
+        </linkable-cell>
       </template>
     </base-data-table>
 
