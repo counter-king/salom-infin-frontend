@@ -1,7 +1,8 @@
 <script setup>
 // Core
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useDebounce } from '@vueuse/core'
 import Divider from 'primevue/divider'
 import { useVuelidate } from '@vuelidate/core'
 import { helpers, required } from '@vuelidate/validators'
@@ -30,6 +31,7 @@ const model = ref({
   user: null,
   comment: null
 })
+const search = ref(null)
 // Non-reactive
 const rules = {
   comment: {
@@ -38,6 +40,7 @@ const rules = {
 }
 // Composable
 const $v = useVuelidate(rules, model)
+const debounced = useDebounce(search, 750)
 // Methods
 const send = async () => {
   const valid = await $v.value.$validate()
@@ -58,6 +61,10 @@ const send = async () => {
     buttonLoading.value = false
   }
 }
+// Watch
+watch(debounced, async () => {
+  await userStore.actionUsersList({ params: { search: search.value } })
+})
 </script>
 
 <template>
@@ -81,6 +88,7 @@ const send = async () => {
     <template #content>
       <div class="p-6 pb-0">
         <base-input
+          v-model="search"
           icon-left="MagniferIcon"
           placeholder="search-users"
           class="p-input-icon-left w-full !mb-3"
@@ -103,8 +111,6 @@ const send = async () => {
           label="enter-content"
         />
       </div>
-
-      <pre>{{ model }}</pre>
     </template>
 
     <template #footer>
