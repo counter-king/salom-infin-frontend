@@ -209,6 +209,7 @@ const deleteResolution = async (text) => {
     <!-- Delete resolution modal -->
     <modal-comment
       v-model="deleteResolutionDialog"
+      create-button-color="danger"
       @emit:up="deleteResolution"
     />
     <!-- /Delete resolution modal -->

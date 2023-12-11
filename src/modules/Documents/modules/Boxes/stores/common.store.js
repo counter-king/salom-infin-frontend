@@ -44,11 +44,9 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
         : []
       /*
       * is_project_resolution должен быть true в разделе на рассмотрение
-      * должен быть false в разделе входящие
+      * должен быть false в разделе мои поручение
       * */
-      if(RESOLUTION_CREATE_TYPES.ASSIGNMENT === resolutionCreateType) {
-        this.resolutionModel.is_project_resolution = false
-      }
+      this.resolutionModel.is_project_resolution = RESOLUTION_CREATE_TYPES.ASSIGNMENT !== resolutionCreateType
 
       if(this.resolutionModel.type === RESOLUTION_TYPES.CONTROL) {
         this.resolutionModel.assignees = [...assignees, ...controllers]
@@ -135,12 +133,11 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
 
       this.resolutionModel.assignees = [...controllers, ...assignees]
 
-      // * is_project_resolution должен быть true в разделе на рассмотрение
-      // * должен быть false в разделе входящие
-      // * */
-      if(RESOLUTION_CREATE_TYPES.ASSIGNMENT === resolutionCreateType) {
-        this.resolutionModel.is_project_resolution = false
-      }
+      /*
+      * is_project_resolution должен быть true в разделе на рассмотрение
+      * должен быть false в разделе мои поручение
+      * */
+      this.resolutionModel.is_project_resolution = RESOLUTION_CREATE_TYPES.ASSIGNMENT !== resolutionCreateType
 
       try {
         await fetchUpdateResolutionById({ id: this.resolutionModel.id, body: this.resolutionModel })
