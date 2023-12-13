@@ -16,6 +16,9 @@ const props = defineProps({
     type: String,
     default: 'Входящий документ'
   },
+  headerClasses: {
+    type: String,
+  },
   contentClasses: {
     type: String,
     default: 'py-6 px-8'
@@ -44,7 +47,7 @@ const rootClasses = computed(() => {
         class: rootClasses
       },
       header: {
-        class: ['rounded-t-2xl bg-greyscale-50 border border-solid border-b-greyscale-200']
+        class: ['rounded-t-2xl bg-greyscale-50 border border-solid border-b-greyscale-200', props.headerClasses]
       },
       closeButton: {
         class: ['w-9 h-9 shadow-button bg-white']
