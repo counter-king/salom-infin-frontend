@@ -2,9 +2,13 @@
 // Core
 import { ref } from 'vue'
 // Components
-import ModalComment from './Comment.vue'
+import { ModalComment } from '@/components/Modal'
 // Reactive
 const modal = ref(false)
+// Methods
+const send = async () => {
+  console.log('1111')
+}
 </script>
 
 <template>
@@ -20,5 +24,6 @@ const modal = ref(false)
   <modal-comment
     v-model="modal"
     label="execute-document"
+    @emit:up="send"
   />
 </template>

@@ -30,8 +30,21 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
       type: RESOLUTION_TYPES.ASSIGNMENT,
       __assignees: [],
       __controllers: [],
+    },
+    resolution: {
+      signed: false,
+      receipt_date: null,
+      deadline: null,
+      content: null,
+      assignees: []
     }
   }),
+  getters: {
+    /*
+    *
+    * */
+    getCreatedResolutionsList: state => !!state.createdResolutionsList.items.length
+  },
   actions: {
     /**
      * Создать резолюцию
@@ -162,6 +175,12 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
         dispatchNotify('Ошибка', 'Ошибка удаление резолюции', COLOR_TYPES.ERROR)
         return Promise.reject()
       }
+    },
+    /*
+    *
+    * */
+    async actionSetActiveResolution({ signed, receipt_date, deadline, content, assignees }) {
+      Object.assign(this.resolution, { signed, receipt_date, deadline, content, assignees })
     }
   }
 })

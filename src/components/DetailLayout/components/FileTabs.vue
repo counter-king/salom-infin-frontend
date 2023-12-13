@@ -1,8 +1,20 @@
 <script setup>
 // Core
 import { ref, unref } from 'vue'
+import { useI18n } from 'vue-i18n'
+// Utils
+import { formatDate, formatDateHour } from '@/utils/formatDate'
+// Composable
+const { t } = useI18n()
 // Components
 import { FilePreview } from '@/components/Files'
+// Macros
+const { resolution } = defineProps({
+  resolution: {
+    type: Object,
+    default: () => {}
+  }
+})
 // Reactive
 const menuRef = ref(null)
 const items = ref([
@@ -90,7 +102,7 @@ const toggle = (event) => {
       nav-container-class="m-5 mb-0"
     >
       <template #resolution="{ value }">
-        <div class="h-[595px] overflow-y-auto px-8 py-5">
+        <div class="h-[588px] overflow-y-auto px-8 py-5">
           <div class="flex mb-4">
             <div class="flex items-center flex-1">
               <img src="/images/logo.svg" alt="Logo" />
@@ -105,13 +117,22 @@ const toggle = (event) => {
 
           <div class="border-t-[1px]"></div>
 
-          <div class="flex items-center gap-2 bg-critic-100 border border-critic-500 rounded-full p-[6px] mt-4">
+          <div
+            class="flex items-center gap-2 border rounded-full p-[6px] mt-4"
+            :class="[ resolution.signed ? 'bg-primary-100 border-primary-500' : 'bg-critic-100 border-critic-500' ]"
+          >
             <base-icon
-              name="TriangleDangerIcon"
+              :name="resolution.signed ? 'CheckCircleIcon' : 'TriangleDangerIcon'"
               class="text-critic-500 ml-2"
+              :class="[ resolution.signed ? 'text-primary-500' : 'text-critic-500' ]"
             />
 
-            <span class="flex-1 text-sm font-medium text-critic-500">Документ еще не подписан</span>
+            <span
+              class="flex-1 text-sm font-medium "
+              :class="[ resolution.signed ? 'text-primary-500' : 'text-critic-500' ]"
+            >
+              {{ resolution.signed ? t('document-signed') : t('document-not-signed') }}
+            </span>
 
             <base-button
               label="Загрузить фишку"
@@ -183,22 +204,22 @@ const toggle = (event) => {
           <ul class="text-greyscale-500 text-sm mt-3">
             <li class="flex font-semibold mb-1">
               <p class="text-primary-900 mr-1">Рег. номер:</p>
-              <span>014048</span>
+              <span>{{ resolution.register_number }}</span>
             </li>
             <li class="flex font-semibold mb-1">
               <p class="text-primary-900 mr-1">Рег. дата:</p>
-              <span>29.10.2023</span>
+              <span>{{ formatDate(resolution.register_date) }}</span>
             </li>
             <li class="flex font-semibold">
               <p class="text-primary-900 mr-1">Дата. подписания:</p>
-              <span>29.10.2023, 22:19</span>
+              <span>{{ formatDateHour(resolution.receipt_date) }}</span>
             </li>
           </ul>
         </div>
       </template>
 
       <template #file="{ value }">
-        <div class="h-[575px] mt-5">
+        <div class="h-[569px] mt-5">
           <template v-if="value">
             <file-preview :file="value" />
           </template>

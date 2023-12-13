@@ -51,5 +51,7 @@ const value = computed(() => combineKeys(props.headers, props.data))
     </template>
   </base-row>
 
-  <slot name="preview-actions"></slot>
+  <div class="flex items-center gap-2 mt-5">
+    <slot name="preview-actions"></slot>
+  </div>
 </template>

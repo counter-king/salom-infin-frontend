@@ -2,6 +2,7 @@
 import { defineStore } from "pinia"
 // Store
 import { useBoxesCommonStore } from "./common.store"
+import { useDocFlowStore } from '@/modules/Documents/modules/Registration/stores/docflow.store'
 // Service
 import {
   fetchReviewList,
@@ -225,9 +226,23 @@ export const useReviewStore = defineStore("review", {
     * Получить на рассмотрение по id
     * */
     async actionReviewById(payload) {
+      const commonStore = useBoxesCommonStore()
       let { data } = await fetchReviewById({ id: payload.id })
 
       this.detailModel = data
+
+      // Если созданная резолюция
+      if(data.assignments) {
+        let resolution = data.assignments[0]
+
+        await commonStore.actionSetActiveResolution({
+          signed: resolution.is_verified,
+          receipt_date: resolution.receipt_date,
+          deadline: resolution.deadline,
+          content: resolution.content,
+          assignees: resolution.assignees,
+        })
+      }
     },
     /*
     * Перенаправить документ
@@ -274,8 +289,15 @@ export const useReviewStore = defineStore("review", {
     * Ознакомиться с документом
     * */
     async actionAcquaintDocument({ id }) {
-      await fetchAcquaintDocument({ id })
-      await this.actionReviewById(this.detailModel)
+      try {
+        const docflowStore = useDocFlowStore()
+        await fetchAcquaintDocument({ id })
+        await this.actionReviewById(this.detailModel)
+        await docflowStore.actionGetTree(this.detailModel.document.id)
+        dispatchNotify('Документ ознакомлен', null, COLOR_TYPES.SUCCESS)
+      } catch (error) {
+        dispatchNotify('Ошибка', 'Ошибка ознакомление документа', COLOR_TYPES.ERROR)
+      }
     }
   }
 })

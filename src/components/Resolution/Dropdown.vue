@@ -29,6 +29,9 @@ const props = defineProps({
   parentId: {
     type: Number
   },
+  isResolutionSigned: {
+    type: Boolean
+  },
   resolutionCreateType: {
     type: String,
     default: RESOLUTION_CREATE_TYPES.REVIEW
@@ -41,6 +44,7 @@ const props = defineProps({
     type: Number
   },
 })
+const emit = defineEmits(['emit:created', 'emit:updated'])
 // Reactive
 const menuRef = ref(null)
 const createResolutionDialog = ref(false)
@@ -145,7 +149,11 @@ const deleteResolution = async (text) => {
           <span class="flex-1 text-sm font-medium text-primary-900">{{ t(item.label) }}</span>
 
           <template v-if="item.hasOwnProperty('resolution')">
-            <div class="flex items-center gap-1 pr-1">
+            <!-- Если резолюция подписан -->
+            <div
+              v-if="!props.isResolutionSigned"
+              class="flex items-center gap-1 pr-1"
+            >
               <button
                 v-tooltip.top="{
                   value: `<h4 class='text-xs text-white -my-1'>Изменить</h4>`,

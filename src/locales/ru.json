@@ -230,7 +230,7 @@
   "my-devices":"Мои устройства",
   "machinery-equipment":"Техника и оборудования",
   "general-settings":"Общие настройки",
-  "complete":"Завершить"
-
-
+  "complete":"Завершить",
+  "document-signed": "Документ подписан",
+  "document-not-signed": "Документ еще не подписан"
 }

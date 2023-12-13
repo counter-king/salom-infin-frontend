@@ -7,7 +7,7 @@ import { useDocFlowStore } from '../../../Registration/stores/docflow.store'
 import { useBoxesCommonStore } from '../../stores/common.store'
 import { useReviewStore } from '../../stores/review.store'
 // Components
-import { ActionAnswerMenu, EriKeysMenu } from '@/components/Actions'
+import { ActionAnswerMenu, EriKeysMenu, AcquaintButton } from '@/components/Actions'
 import { LayoutWithTabs } from '@/components/DetailLayout'
 import { ResolutionDropdown } from '@/components/Resolution'
 import { ModalForwardDocument, ModalDoneDocument, ModalCancelSign } from '@/components/Modal'
@@ -41,6 +41,9 @@ const cancelSign = async (text) => {
     comment: text
   })
 }
+const acquaintDocument = async () => {
+  await reviewStore.actionAcquaintDocument({ id: route.params.id })
+}
 </script>
 
 <template>
@@ -55,27 +58,53 @@ const cancelSign = async (text) => {
         :preview-detail="reviewStore.detailModel"
         :object-id="reviewStore.detailModel.document.id"
         :headers="reviewStore.headers"
+        :resolution="{
+          ...boxesCommonStore.resolution,
+          register_date: reviewStore.detailModel.document.register_date,
+          register_number: reviewStore.detailModel.document.register_number
+        }"
       >
         <template #header-end>
           <action-answer-menu />
 
-          <resolution-dropdown
-            :review-id="reviewStore.detailModel.id"
-            :parent-id="null"
-            :resolution-list-id="reviewStore.detailModel.document.id"
-          />
+          <!-- Если документ еще не ознакомлен -->
+          <template v-if="!reviewStore.isDocumentAcquainted">
+            <modal-forward-document />
+          </template>
 
-          <modal-forward-document />
+          <!-- Если документ ознакомлен -->
+          <template v-if="reviewStore.isDocumentAcquainted">
+            <resolution-dropdown
+              :review-id="reviewStore.detailModel.id"
+              :parent-id="null"
+              :resolution-list-id="reviewStore.detailModel.document.id"
+              :is-resolution-signed="reviewStore.isReviewSigned"
+            />
 
-          <eri-keys-menu @emit:sign="signDocument" />
+            <!-- Если есть созданные резолюция -->
+            <template v-if="boxesCommonStore.getCreatedResolutionsList">
+              <!-- Если резолюция не подписан -->
+              <template v-if="!reviewStore.isReviewSigned">
+                <eri-keys-menu @emit:sign="signDocument" />
+              </template>
 
-          <modal-cancel-sign :create-button-fn="cancelSign" />
+              <!-- Если резолюция подписан -->
+              <template v-if="reviewStore.isReviewSigned">
+                <modal-cancel-sign :create-button-fn="cancelSign" />
+              </template>
+            </template>
+          </template>
         </template>
 
         <template #preview-actions>
-          <div class="mt-5">
+          <!-- Если документ ознакомлен -->
+          <template v-if="reviewStore.isDocumentAcquainted">
             <modal-done-document />
-          </div>
+          </template>
+
+          <template v-else>
+            <acquaint-button :acquaint-fn="acquaintDocument" />
+          </template>
         </template>
       </layout-with-tabs>
     </template>

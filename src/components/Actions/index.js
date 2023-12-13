@@ -1,3 +1,4 @@
+export { default as AcquaintButton } from './AcquaintButton.vue'
 export { default as ActionAnswerMenu } from './AnswerMenu.vue'
 export { default as ActionToolbar } from "./Toolbar.vue"
 export { default as ColumnMenu } from "./ColumnMenu.vue"

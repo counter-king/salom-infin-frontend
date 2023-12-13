@@ -64,6 +64,10 @@ const props = defineProps({
   headers: {
     type: Array,
     default: () => []
+  },
+  resolution: {
+    type: Object,
+    default: () => {}
   }
 })
 const { t } = useI18n();
@@ -136,7 +140,7 @@ watch(activeTabMenu, (value) => {
           </slot>
 
           <div class="max-w-[566px] w-full ml-auto border-l">
-            <file-tabs />
+            <file-tabs :resolution="props.resolution" />
           </div>
         </div>
       </slot>
