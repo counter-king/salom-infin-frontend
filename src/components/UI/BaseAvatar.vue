@@ -39,13 +39,14 @@ const props = defineProps({
     type: String
   },
   actionChipType: {
-    type: String
+    type: Object,
+    default: () => {}
   }
 })
 </script>
 
 <template>
-  <div class="app-avatar relative">
+  <div class="app-avatar flex relative">
     <Avatar
       :image="props.image"
       :size="props.size"
@@ -53,13 +54,15 @@ const props = defineProps({
       :label="props.label[0]"
       :pt="{
         root: {
-          style: `${props.color}px`,
+          style: {
+            backgroundColor: `${props.color}`
+          },
           class: [
             { '-ml-2': props.type === 'group' }, props.avatarClasses
           ]
         },
         label: {
-          class: 'text-sm leading-none font-semibold text-primary-900'
+          class: 'text-sm leading-none text-white'
         },
         image: {
           class: 'object-cover'

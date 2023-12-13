@@ -71,6 +71,7 @@ const createDocument = async () => {
       :value="regInner.list"
       :loading="regInner.listLoading"
       :storage-columns-name="R_INNER_COLUMNS"
+      expandable
     >
       <template #document_type="{ data }">
         <doc-type-chip :type="data.document_type.name"/>

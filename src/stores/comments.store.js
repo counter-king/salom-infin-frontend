@@ -1,81 +1,69 @@
-import { defineStore } from "pinia"
+// Core
+import { defineStore } from 'pinia'
+// Service
 import {
   fetchCommentsList,
   fetchSendComment,
   fetchUpdateComment,
   fetchReplyComment,
   fetchDeleteComment
-} from "@/services/comment.service"
+} from '@/services/comment.service'
+import { COMMENT_ACTIONS } from "@/enums";
 
 export const useCommentStore = defineStore("comments", {
   state: () => ({
     commentsList: [],
+    // content_type: null
+    // replied_to: null
     commentModel: {
-      content_type: null,
       description: null,
-      file: null,
-      object_id: null
+      file: null
     },
-    editCommentModel: {
-      content_type: null,
-      description: null,
-      file: null,
-      object_id: null
-    },
-    replyCommentModel: {
-      content_type: null,
-      description: null,
-      file: null,
-      object_id: null,
-      replied_to: null
-    }
+    commentSendLoading: false,
+    commentUpdateLoading: false,
+    disableMoreClicks: false
   }),
   actions: {
     /**
     * Получить список комментариев
     * */
-    async actionCommentsList() {
-      const { content_type, object_id } = this.commentModel
-
-      let { data } = await fetchCommentsList({ content_type, object_id })
+    async actionCommentsList({ object_id }) {
+      let { data } = await fetchCommentsList({ object_id })
       this.commentsList = data.results
     },
-    /**
-     * Добавить комментарий
-     * */
-    async actionSendComment() {
-      this.commentModel.description = this.commentModel.description.trim()
-
-      await fetchSendComment(this.commentModel)
-      await this.actionCommentsList()
-      await this.clearModel(this.commentModel)
-    },
-    /**
-		* Изменить комментарий
-		* */
-    async actionUpdateComment({ id }) {
-      this.editCommentModel.description = this.editCommentModel.description.trim()
-
-      await fetchUpdateComment({ id, data: this.editCommentModel })
-      await this.actionCommentsList()
-      await this.clearModel(this.editCommentModel)
-    },
-    /**
-    * Ответить комментарий
+    /*
+    * CRUD комментарий
     * */
-    async actionReplyComment() {
-      this.replyCommentModel.description = this.replyCommentModel.description.trim()
+    async actionCrudComment(payload) {
+      if(this.disableMoreClicks) {
+        return
+      }
 
-      await fetchReplyComment(this.replyCommentModel)
-      await this.actionCommentsList()
-      await this.clearModel(this.replyCommentModel)
+      try {
+        switch(payload.type) {
+          case COMMENT_ACTIONS.CREATE: // CREATE
+            await this.actionPrevent(true)
+            await fetchSendComment(payload)
+            break;
+          case COMMENT_ACTIONS.EDIT: // EDIT
+            await this.actionUpdatePrevent(true)
+            await fetchUpdateComment({ id: payload.id, data: payload })
+            break;
+          default: // REPLY
+            await this.actionUpdatePrevent(true)
+            await fetchReplyComment(payload)
+        }
+      } finally {
+        await this.actionCommentsList({ object_id: payload.object_id })
+        await this.actionPrevent(false)
+        await this.actionUpdatePrevent(false)
+      }
     },
     /*
     * Удалить комментарий
     * */
     async actionDeleteComment(id) {
       await fetchDeleteComment(id)
-      await this.actionCommentsList()
     },
     /**
 		* Загрузить файлы
@@ -96,11 +84,19 @@ export const useCommentStore = defineStore("comments", {
     closeEditOrReplyArea({ item, action }) {
       item[action] = false
     },
-    /**
-		*
-		* */
-    async clearModel(model) {
-      Object.keys(model).forEach(key => model[key] = null)
+    /*
+    *
+    * */
+    async actionPrevent(payload) {
+      this.commentSendLoading = payload
+      this.disableMoreClicks = payload
+    },
+    /*
+    *
+    * */
+    async actionUpdatePrevent(payload) {
+      this.commentUpdateLoading = payload
+      this.disableMoreClicks = payload
     }
   }
 })

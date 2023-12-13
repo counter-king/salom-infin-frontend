@@ -70,6 +70,7 @@ const createDocument = async () => {
       :value="regStatement.list"
       :loading="regStatement.listLoading"
       :storage-columns-name="R_STATEMENT_COLUMNS"
+      expandable
     >
       <template #correspondent="{ data }">
         {{data.correspondent.name}}

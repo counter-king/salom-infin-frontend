@@ -71,6 +71,7 @@ const createDocument = async () => {
       :value="regOrderInstruction.list"
       :loading="regOrderInstruction.listLoading"
       :storage-columns-name="R_ORDERINSTRUCTION_COLUMNS"
+      expandable
     >
 
       <template #document_type="{ data }">

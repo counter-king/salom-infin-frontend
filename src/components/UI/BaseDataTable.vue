@@ -1,10 +1,11 @@
 <script setup>
 // Core
-import {computed, onMounted} from "vue";
+import {computed, onMounted, ref} from "vue";
 import { useI18n } from 'vue-i18n'
 // Components
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
+import FieldGroups from '@/components/FieldGroups.vue'
 // Utils
 import { formatDateHour } from "@/utils/formatDate";
 import { getStorageItem } from "@/utils/storage";
@@ -41,8 +42,13 @@ const props = defineProps({
   loading: {
     type: Boolean,
     default: false
+  },
+  expandable: {
+    type: Boolean
   }
 })
+
+const expandedRowGroups = ref()
 
 const emit = defineEmits(['emit:setStoreHeaders', 'emit:rowClick']);
 
@@ -70,6 +76,7 @@ onMounted(() => {
 
 <template>
   <DataTable
+    v-model:expanded-rows="expandedRowGroups"
     :value="valueComputed"
     :page-link-size="5"
     paginator
@@ -83,32 +90,35 @@ onMounted(() => {
     scrollable
     :loading="props.loading"
     :pt="{
-        table: { class: ['border-separate', 'border-spacing-y-1', '-mt-1'] },
-        thead: { class: ['bg-white'] },
-        bodyRow: { class: ['cursor-pointer', 'hover:bg-greyscale-50'] },
-        loadingoverlay: { class: ['bg-transparent', 'h-[90%]'] },
-        emptymessagecell: { class: ['bg-white', '!rounded-xl'] },
-        paginator: {
-          rowPerPageDropdown: {
-            root: { class: ['h-6', 'rounded-2'] },
-            paginatorWrapper: ['flex', 'justify-between', 'border', 'border-solid'],
-            input: { class: ['flex', 'items-center', 'text-xs', 'font-semibold'] },
-            dropdownicon: { class: ['w-3', 'h-3'] },
-            trigger: { class: ['w-[30px]'] },
-            item: { class: ['h-8', 'text-xs', 'flex', 'items-center'] },
-            list: { class: ['p-0'] },
-          },
-          root: { class: ['h-14', 'rounded-3'] },
-          paginatorWrapper: { class: ['h-14', 'rounded-3'] },
-          current: { class: ['text-xs', 'text-greyscale-300', 'mr-auto', 'h-full'] },
-          firstPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
-          lastPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
-          previousPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
-          pageButton: ({ context }) => ({
-              class:  [ context.active ? ['bg-primary-500', 'text-primary-0'] : undefined, 'rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'text-xs']
-          }),
-          nextPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] }
-        }
+      table: { class: ['border-separate', 'border-spacing-y-1', '-mt-1'] },
+      thead: { class: ['bg-white'] },
+      bodyRow: { class: ['cursor-pointer', 'hover:bg-greyscale-50'] },
+      loadingoverlay: { class: ['bg-transparent', 'h-[90%]'] },
+      emptymessagecell: { class: ['bg-white', '!rounded-xl'] },
+      paginator: {
+        rowPerPageDropdown: {
+          root: { class: ['h-6', 'rounded-2'] },
+          paginatorWrapper: ['flex', 'justify-between', 'border', 'border-solid'],
+          input: { class: ['flex', 'items-center', 'text-xs', 'font-semibold'] },
+          dropdownicon: { class: ['w-3', 'h-3'] },
+          trigger: { class: ['w-[30px]'] },
+          item: { class: ['h-8', 'text-xs', 'flex', 'items-center'] },
+          list: { class: ['p-0'] },
+        },
+        root: { class: ['h-14', 'rounded-3'] },
+        paginatorWrapper: { class: ['h-14', 'rounded-3'] },
+        current: { class: ['text-xs', 'text-greyscale-300', 'mr-auto', 'h-full'] },
+        firstPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
+        lastPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
+        previousPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
+        pageButton: ({ context }) => ({
+            class:  [ context.active ? ['bg-primary-500', 'text-primary-0'] : undefined, 'rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'text-xs']
+        }),
+        nextPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] }
+      },
+      rowExpansionCell: {
+        class: '!bg-white !rounded-xl'
+      }
     }"
     class="base-data-table"
     @row-click="event => emit('emit:rowClick', event.data)"
@@ -135,6 +145,25 @@ onMounted(() => {
       </Column>
     </template>
 
+    <Column
+      v-if="props.expandable"
+      expander
+      class="expander-cell bg-inherit w-4"
+    />
+
+    <template
+      v-if="props.expandable"
+      #expansion="{ data }"
+    >
+      <slot name="expansion" :data="data">
+        <field-groups :headers="props.headers" :data="data">
+          <template #preview-actions>
+            <slot name="preview-actions" />
+          </template>
+        </field-groups>
+      </slot>
+    </template>
+
     <template #loading>
       <base-skeleton
         :columns="props.headers"
@@ -154,10 +183,10 @@ onMounted(() => {
 
 <style>
 th:first-child, td:first-child {
-  border-radius: 12px 0 0 12px!important;
+  border-radius: 12px 0 0 12px;
 }
 
 th:last-child, td:last-child {
-  border-radius: 0 12px 12px 0!important;
+  border-radius: 0 12px 12px 0;
 }
 </style>

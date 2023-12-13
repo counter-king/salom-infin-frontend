@@ -43,6 +43,14 @@ const props = defineProps({
   tableClass: {
     type: String,
     default: null
+  },
+  wrapperClass: {
+    type: String,
+    default: null
+  },
+  theadClass:{
+    type: String,
+    default: null
   }
 })
 </script>
@@ -63,10 +71,13 @@ const props = defineProps({
       scrollable
       :pt="{
         table: { class: ['border-separate', 'border-spacing-y-1', '-mt-1', props.tableClass] },
-        thead: { class: ['bg-white hidden'] },
+        thead: { class: ['bg-white', props.theadClass ] },
         bodyRow: { class: ['cursor-pointer bg-transparent rounded-xl', { 'shadow-button': props.shadow }] },
         loadingoverlay: { class: ['bg-transparent', 'h-[90%]'] },
         emptymessagecell: { class: ['bg-white', '!rounded-xl'] },
+        wrapper: {
+          class: [props.wrapperClass]
+        },
         paginator: {
           rowPerPageDropdown: {
             root: { class: ['h-6'] },
@@ -98,7 +109,7 @@ const props = defineProps({
         :header="col.header"
         :style="{width: col.width}"
         :pt="{
-          headerCell: { class: ['bg-inherit', 'h-[56px]', 'hidden'] },
+          headerCell: { class: ['bg-inherit', 'h-[56px]',  props.theadClass] },
           headerContent: { class: ['text-sm', 'font-semibold', 'text-greyscale-500'] },
           bodyCell: { class: [props.bodyCellClass, 'text-base', 'py-0', 'h-[56px]', 'font-medium', 'text-primary-900', 'border-hidden', 'hover:text-primary-500', ] }
         }"
@@ -112,11 +123,13 @@ const props = defineProps({
 </template>
 
 <style>
+.table-card tr th:first-child,
 .table-card tr td:first-child {
   border-top-left-radius: 12px;
   border-bottom-left-radius: 12px;
 }
 
+.table-card tr th:last-child,
 .table-card tr td:last-child {
   border-top-right-radius: 12px;
   border-bottom-right-radius: 12px;

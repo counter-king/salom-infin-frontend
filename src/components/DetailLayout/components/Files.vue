@@ -3,126 +3,141 @@
 import { ref } from 'vue'
 // Components
 import { CardTable } from '@/components/Table'
+import { FilePreview } from "@/components/Files";
 // Reactive
 const header = ref([
   {
-    field: 'user',
-    width: '50px'
-  },
-  {
-    field: 'data',
-  },
-  {
-    field: 'action',
-    width: '100px'
-  },
+    field: 'title'
+  }
 ])
 const list = ref([
   {
-    user: 'uploaded',
-    data: {
-      title: '984-qaror.pdf',
-      date: '21.08.2023',
-      size: '9.3 MB'
-    }
+    title: 'Фото Doclines 2',
+    slot: 'file',
+    name: "CM00506.pdf",
+    document: {
+      id: 115508,
+      name: "CM00506.pdf",
+      url: "https://portal-drive.asakabank.uz/media/CM21320.pdf",
+    },
   },
   {
-    user: 'deleted',
-    data: {
-      title: '984-qaror.pdf',
-      date: '21.08.2023',
-      size: '9.3 MB'
-    }
+    title: 'Фото Doclines 3',
+    slot: 'file',
+    name: "CM00506.jpg",
+    document: {
+      id: 115508,
+      name: "CM00506.jpg",
+      url: "https://portal-drive.asakabank.uz/media/avatar_DHZyvvz.jpg",
+    },
   },
   {
-    user: 'forward',
-    data: {
-      title: '984-qaror.pdf',
-      date: '21.08.2023',
-      size: '9.3 MB'
-    }
-  },
-  {
-    user: 'done',
-    data: {
-      title: '984-qaror.pdf',
-      date: '21.08.2023',
-      size: '9.3 MB'
-    }
+    title: 'Фото Doclines 4',
+    slot: 'file',
+    name: "CM00506.xlsx",
+    document: {
+      id: 115508,
+      name: "CM00506.xlsx",
+      url: "https://portal-drive.asakabank.uz/media/6_____ilova-Jarima_tHOhZmK_R0cJNfc.xlsx",
+    },
   },
 ])
+const zoomDialog = ref(false)
+const currentFile = ref({})
+// Methods
+const zoomFile = (event, file) => {
+  event.stopImmediatePropagation()
+  zoomDialog.value = true
+  currentFile.value = file
+}
 </script>
 
 <template>
-  <div class="layout-history-view p-6 pt-4">
+  <div class="layout-files-view">
     <card-table
       :headers="header"
       :value="list"
       :shadow="false"
-      tableClass="border-spacing-y-2"
+      scroll-height="calc(100vh - 362px)"
+      table-class="border-spacing-y-2"
+      wrapper-class="h-[calc(100vh-362px)] p-6 pt-4"
       body-cell-class="bg-greyscale-50"
-      paginator-root-class="bg-greyscale-50"
+      paginator-root-class="bg-greyscale-50 !rounded-none border-t"
+      theadClass="hidden"
     >
-      <template #user>
-        <div class="flex items-center justify-center w-10 h-10 bg-[#E8F1FF] p-1 rounded-[10px]">
-          <base-icon name="FileTextIconFilled" color="transparent" />
-        </div>
-      </template>
+      <template #title="{ data }">
+        <div class="flex items-center gap-4">
+          <div class="flex items-center justify-center w-10 h-10 bg-[#E8F1FF] p-1 rounded-[10px]">
+            <base-icon name="FileTextIconFilled" color="transparent" />
+          </div>
 
-      <template #data="{ data }">
-        <div class="-ml-4">
-          <h1 class="text-sm text-primary-900">{{ data.data.title }}</h1>
+          <div class="flex-1">
+            <h1 class="text-sm text-primary-900">{{ data.title }}</h1>
 
-          <div class="flex items-center gap-2">
-            <span class="text-xs text-greyscale-500 font-medium">9.3 MB</span>
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-greyscale-500 font-medium">9.3 MB</span>
 
-            <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-full"></div>
+              <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-full"></div>
 
-            <div class="flex items-center gap-1 text-xs">
-              <h1 class="text-primary-900">Загружено</h1>
-              <p class="text-greyscale-500">21.08.2023</p>
+              <div class="flex items-center gap-1 text-xs">
+                <h1 class="text-primary-900">Загружено</h1>
+                <p class="text-greyscale-500">21.08.2023</p>
+              </div>
             </div>
           </div>
-        </div>
-      </template>
 
-      <template #action="{ data }">
-        <div class="flex justify-end gap-2">
-          <base-button
-            size="small"
-            icon-left="DownloadMinimalistic"
-            only-icon
-            rounded
-            text
-            icon-width="18"
-            icon-height="18"
-            v-tooltip.top="{
-              value: `<h4 class='text-xs text-white -my-1'>Скачать файл</h4>`,
-              escape: true,
-              autoHide: false
-            }"
-            class="group bg-white text-greyscale-500 hover:text-primary-500"
-          />
+          <div class="flex justify-end gap-2">
+            <base-button
+              size="small"
+              icon-left="DownloadMinimalistic"
+              only-icon
+              rounded
+              text
+              icon-width="18"
+              icon-height="18"
+              v-tooltip.top="{
+                value: `<h4 class='text-xs text-white -my-1'>Скачать файл</h4>`,
+                escape: true,
+                autoHide: false
+              }"
+              class="group bg-white text-greyscale-500 hover:text-primary-500"
+            />
 
-          <base-button
-            size="small"
-            icon-left="EyeIcon"
-            only-icon
-            rounded
-            text
-            icon-width="18"
-            icon-height="18"
-            v-tooltip.top="{
-              value: `<h4 class='text-xs text-white -my-1'>Просмотр файла</h4>`,
-              escape: true,
-              autoHide: false
-            }"
-            class="group bg-white text-greyscale-500 hover:text-warning-500"
-          />
+            <base-button
+              size="small"
+              icon-left="EyeIcon"
+              only-icon
+              rounded
+              text
+              icon-width="18"
+              icon-height="18"
+              v-tooltip.top="{
+                value: `<h4 class='text-xs text-white -my-1'>Просмотр файла</h4>`,
+                escape: true,
+                autoHide: false
+              }"
+              class="group bg-white text-greyscale-500 hover:text-warning-500"
+              @click="zoomFile($event, data)"
+            />
+          </div>
         </div>
       </template>
     </card-table>
   </div>
+
+  <base-dialog v-model="zoomDialog" max-width="max-w-[820px]">
+    <template #header>
+      <div class="flex-1 truncate mr-2">
+        <h1 class="text-xl font-semibold truncate">{{ currentFile.title }}</h1>
+      </div>
+    </template>
+
+    <template #content>
+      <div class="-my-6 -mx-8 h-[80vh]">
+        <file-preview :file="currentFile" />
+      </div>
+    </template>
+  </base-dialog>
 </template>
 
 <style scoped>

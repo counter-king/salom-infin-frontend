@@ -13,13 +13,21 @@ const props = defineProps({
   tabItems: {
     type: Array,
     default: () => []
-  }
+  },
+  segment: {
+    type: Boolean
+  },
 })
 // Methods
-const panelClass = (props, state, context) => {
-  return {
-    'text-primary-900 font-semibold !border-primary-500': context.index === state.d_activeIndex
-  }
+const panelClass = (_, state, context) => {
+  return [
+    {
+      'text-primary-900 font-semibold border-primary-500': context.index === state.d_activeIndex && !props.segment
+    },
+    {
+      'border-hidden bg-white shadow-md': context.index === state.d_activeIndex && props.segment
+    }
+  ]
 }
 </script>
 
@@ -32,13 +40,23 @@ const panelClass = (props, state, context) => {
         class: 'flex flex-col'
       },
       menu: {
-        class: 'px-2 border-b border-greyscale-200'
+        class:[
+          {
+          'px-2 border-b border-greyscale-200': !props.segment,
+          'bg-primary-50 rounded-xl border-hidden': props.segment
+          }
+        ]
       },
       panelContainer: {
         class: 'flex-1 p-0 overflow-hidden'
       },
-      action: ({ props, state, context }) => ({
-        class: [panelClass(props, state, context), 'm-0 border-transparent text-greyscale-500 font-medium py-4 px-0 mx-4']
+      action: ({ _, state, context }) => ({
+        class: [panelClass(_, state, context),
+          {
+            'm-0 border-transparent text-greyscale-500 font-medium py-4 px-0 mx-4': !props.segment,
+            'm-0 border-transparent bg-inherit font-medium py-2 m-1 mb-[2px] w-32 text-center rounded-lg flex justify-center': props.segment
+          }
+        ]
       }),
       label: {
         class: 'text-[15px]'

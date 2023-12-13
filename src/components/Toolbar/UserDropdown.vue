@@ -57,6 +57,7 @@ const toggle = (event) => {
       image="/images/avatars/1.jpg"
       shape="circle"
       avatar-classes="w-10 h-10"
+      class="flex"
     />
 
     <div class="ml-3">

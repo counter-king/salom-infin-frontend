@@ -116,6 +116,7 @@ export const useRegStatement = defineStore("reg-statement", {
           else {
             return {
               user: item.id,
+              document: this.detailModel.id
             }
           }
         })

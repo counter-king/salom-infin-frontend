@@ -6,7 +6,6 @@ import { fetchGetDocumentList, fetchGetDocumentById, fetchUpdateDocument } from 
 import { setValuesToKeys, combineKeys } from '@/utils'
 import { dispatchNotify } from '@/utils/notify'
 import { COLOR_TYPES, JOURNAL } from '@/enums'
-// Utils
 export const useRegIncoming = defineStore("reg-incoming", {
   state: () => ({
     headers: [
@@ -145,11 +144,6 @@ export const useRegIncoming = defineStore("reg-incoming", {
         },
         active: true
       },
-      {
-        header: "",
-        field: "action",
-        active: true
-      }
     ],
     list: [],
     listLoading: false,
@@ -199,7 +193,8 @@ export const useRegIncoming = defineStore("reg-incoming", {
     async actionGetById({ id }) {
       let { data } = await fetchGetDocumentById(id)
 
-      this.detailModel.__copy_prototype = combineKeys(this.headers, data)
+      this.detailModel.__copy_prototype = data
+      // this.detailModel.__copy_prototype = combineKeys(this.headers, data)
       setValuesToKeys(this.detailModel, data)
       this.detailModel.__reviewers = data.reviewers.map(item => {
         return {
@@ -225,6 +220,7 @@ export const useRegIncoming = defineStore("reg-incoming", {
           else {
             return {
               user: item.id,
+              document: this.detailModel.id
             }
           }
         })

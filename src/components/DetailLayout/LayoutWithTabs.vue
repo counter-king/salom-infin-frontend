@@ -55,6 +55,13 @@ const props = defineProps({
     ]
   },
   previewDetail: {
+    type: Object,
+    default: () => {}
+  },
+  objectId: {
+    type: Number
+  },
+  headers: {
     type: Array,
     default: () => []
   }
@@ -100,7 +107,7 @@ watch(activeTabMenu, (value) => {
           <h1 class="font-bold text-xl text-primary-900">{{ t(props.title) }}</h1>
         </div>
 
-        <div class="flex items-center">
+        <div class="flex items-center gap-2">
           <slot name="header-end" />
         </div>
       </div>
@@ -114,7 +121,12 @@ watch(activeTabMenu, (value) => {
           <slot :name="activeTabMenu.slot">
             <div class="flex-1 overflow-y-auto">
               <div class="h-[1px]">
-                <component :is="activeTabComponent" :preview-detail="props.previewDetail">
+                <component
+                  :is="activeTabComponent"
+                  :preview-detail="props.previewDetail"
+                  :object-id="props.objectId"
+                  :headers="props.headers"
+                >
                   <template #preview-actions>
                     <slot name="preview-actions" />
                   </template>

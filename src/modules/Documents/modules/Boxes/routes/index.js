@@ -6,16 +6,41 @@ const Boxes = [
       isAuthRequired: true
     },
     component: () => import("../views/index.vue"),
-    redirect: { name: "IncomingIndex" },
+    redirect: { name: "ReviewIndex" },
     children: [
-      // Входящие
+      // На рассмотрении
       {
-        path: "incoming",
-        name: "IncomingIndex",
+        path: "review",
+        name: "ReviewIndex",
         meta: {
           isAuthRequired: true
         },
-        component: () => import("../views/Incoming/index.vue"),
+        component: () => import("../views/Review/index.vue"),
+      },
+      {
+        path: "review/show/:id",
+        name: "ReviewShow",
+        meta: {
+          isAuthRequired: true
+        },
+        component: () => import("../views/Review/show.vue"),
+      },
+      // Входящие
+      {
+        path: "assignment",
+        name: "AssignmentIndex",
+        meta: {
+          isAuthRequired: true
+        },
+        component: () => import("../views/Assignment/index.vue"),
+      },
+      {
+        path: "assignment/show/:id",
+        name: "AssignmentShow",
+        meta: {
+          isAuthRequired: true
+        },
+        component: () => import("../views/Assignment/show.vue"),
       },
       // Исходящие
       {
@@ -25,15 +50,6 @@ const Boxes = [
           isAuthRequired: true
         },
         component: () => import("../views/Outgoing/index.vue"),
-      },
-      // На рассмотрении
-      {
-        path: "review",
-        name: "ReviewIndex",
-        meta: {
-          isAuthRequired: true
-        },
-        component: () => import("../views/Review/index.vue"),
       },
       // На подпись
       {

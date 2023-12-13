@@ -71,6 +71,7 @@ const createDocument = async () => {
       :value="regAppeal.list"
       :storage-columns-name="R_APPEAL_COLUMNS"
       :loading="regAppeal.listLoading"
+      expandable
     >
       <template #correspondent="{ data }">
         {{data.correspondent.name}}

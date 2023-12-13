@@ -10,7 +10,6 @@ export const useSearchStore = defineStore("search-store", {
     list:[
       {
         code: 'Рапорт - 42-77/1631',
-        // signers: 'Рапорт - 42-77/1631',
       },
       {
         code: 'Рапорт - 42-77/1632',
@@ -43,11 +42,7 @@ export const useSearchStore = defineStore("search-store", {
     headers:[
         {
           header: 'Code',
-          field: 'code'
-        },
-        {
-          header: "Подписант",
-          field: "signers"
+          field: 'code',
         },
     ],
   }),

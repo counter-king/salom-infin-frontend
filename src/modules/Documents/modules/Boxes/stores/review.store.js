@@ -1,7 +1,7 @@
 // Core
 import { defineStore } from "pinia"
 // Store
-import { useInnerStore } from "./common.store"
+import { useBoxesCommonStore } from "./common.store"
 // Service
 import {
   fetchReviewList,
@@ -9,215 +9,193 @@ import {
   fetchChangeReviewer,
   fetchSignOrCancel,
   fetchAcquaintDocument
-} from "@/api/Incoming/review.service"
+} from "../services/review.service.js"
 // Utils
+import { dispatchNotify } from '@/utils/notify'
+import { COLOR_TYPES } from '@/enums'
 export const useReviewStore = defineStore("review", {
   state: () => ({
-    reviewList: [],
-    reviewColumns: [
+    list: [],
+    headers: [
       {
-        id: 1,
-        type: "selection",
+        header: "priority",
+        field: "document.priority",
+        detail: {
+          component: 'priority-chip',
+          colClass: null
+        },
         active: true
       },
       {
-        id: 2,
-        title: "Корреспондент",
-        key: "document.correspondent.name",
-        active: true,
+        header: "naming",
+        field: "document.title",
         detail: {
-          show: true,
-          span: "3",
           component: null,
-          order: 14
-        }
+          colClass: null
+        },
+        active: true
       },
       {
-        id: 3,
-        title: "Рег. номер",
-        key: "document.register_number",
-        active: true,
+        header: "document-type",
+        field: "document.document_type.name",
         detail: {
-          show: true,
-          span: "960:2 1240:1",
           component: null,
-          order: 5
-        }
+          colClass: null
+        },
+        active: true
       },
       {
-        id: 4,
-        title: "Тип документа",
-        key: "document.document_type.name",
-        active: true,
+        header: "deliver-type",
+        field: "document.delivery_type.name",
         detail: {
-          show: true,
-          span: "960:2 1441:1",
           component: null,
-          order: 2
-        }
-      },
-      {
-        id: 6,
-        title: "Код",
-        key: "document.code",
+          colClass: null
+        },
         active: false
       },
       {
-        id: 7,
-        title: "Вид подачи",
-        key: "document.delivery_type.name",
-        active: false,
+        header: "description",
+        field: "document.description",
         detail: {
-          show: true,
-          span: "960:2 1441:1",
           component: null,
-          order: 7
-        }
+          colClass: null
+        },
+        active: false,
       },
       {
-        id: 8,
-        title: "Исх. номер",
-        key: "document.outgoing_number",
-        active: false,
+        header: "magazine",
+        field: "document.journal.name",
         detail: {
-          show: true,
-          span: "960:2 1441:1",
           component: null,
-          order: 8
-        }
+          colClass: null
+        },
+        active: false
       },
       {
-        id: 9,
-        title: "Приоритет",
-        key: "document.priority.id",
-        active: false,
+        header: "language-document",
+        field: "document.language.name",
         detail: {
-          show: true,
-          span: "960:2 1441:1",
-          component: "priority",
-          order: 3
-        }
-      },
-      {
-        id: 10,
-        title: "Рег. дата",
-        key: "document.register_date",
-        active: false,
-        detail: {
-          show: true,
-          span: "960:2 1441:1",
           component: null,
-          order: 6
-        }
+          colClass: null
+        },
+        active: false
       },
       {
-        id: 11,
-        title: "Наименование",
-        key: "document.title",
-        active: false,
+        header: "number-sheets",
+        field: "document.number_of_papers",
         detail: {
-          show: true,
-          span: "3",
           component: null,
-          order: 1
-        }
+          colClass: null
+        },
+        active: false
       },
       {
-        id: 12,
-        title: "Статус",
-        key: "document.status.id",
-        active: false,
+        header: "outgoing-date",
+        field: "document.outgoing_date",
         detail: {
-          show: true,
-          span: "960:2 1441:1",
-          component: "status",
-          order: 4
-        }
-      },
-      {
-        id: 13,
-        title: "Исх. дата",
-        key: "document.outgoing_date",
-        active: false,
-        detail: {
-          show: true,
-          span: "960:2 1441:1",
           component: null,
-          order: 9
-        }
+          colClass: null
+        },
+        active: false
       },
       {
-        id: 14,
-        title: "Язык",
-        key: "document.language.name",
-        active: false,
+        header: "outgoing-number",
+        field: "document.outgoing_number",
         detail: {
-          show: true,
-          span: "960:2 1441:1",
           component: null,
-          order: 10
-        }
+          colClass: null
+        },
+        active: false
       },
       {
-        id: 15,
-        title: "Гриф",
-        key: "document.grif",
-        active: false,
+        header: "reg-number",
+        field: "document.register_number",
         detail: {
-          show: true,
-          span: "960:2 1441:1",
           component: null,
-          order: 11
-        }
+          colClass: null
+        },
+        active: true
       },
       {
-        id: 16,
-        title: "Гриф",
-        key: "document.code",
-        active: false,
+        header: "reg-date",
+        field: "document.register_date",
         detail: {
-          show: true,
-          span: "960:2 1441:1",
           component: null,
-          order: 12
-        }
+          colClass: null
+        },
+        active: true
       },
       {
-        id: 17,
-        title: "Описание",
-        key: "document.description",
-        active: false,
-        ellipsis: true,
+        header: "reviewers",
+        field: "reviewers",
         detail: {
-          show: true,
-          span: "3",
+          component: 'base-avatar-group',
+          colClass: null
+        },
+        active: true
+      },
+      {
+        header: "status",
+        field: "status",
+        detail: {
+          component: 'base-status',
+          colClass: null
+        },
+        active: true
+      },
+      {
+        header: "correspondent",
+        field: "document.correspondent.name",
+        detail: {
           component: null,
-          order: 15
-        }
+          colClass: null
+        },
+        active: true
       },
       {
-        id: 18,
-        title: "На рассмотрение",
-        key: "reviewers",
-        active: false,
+        header: "code",
+        field: "document.code",
         detail: {
-          show: true,
-          span: "960:2 1441:1",
-          component: "avatar-group",
-          order: 13
-        }
-      }
+          component: null,
+          colClass: null
+        },
+        active: false
+      },
+      {
+        header: "grif",
+        field: "document.grif",
+        detail: {
+          component: null,
+          colClass: null
+        },
+        active: false,
+      },
     ],
     detailModel: {
-      assignments: [],
       id: null,
       document: {
         id: null,
+        code: null,
+        correspondent: null,
+        delivery_type: null,
+        description: null,
+        document_type: null,
+        grif: null,
+        journal: null,
+        language: null,
+        number_of_papers: null,
+        outgoing_date: null,
+        outgoing_number: null,
+        priority: null,
+        register_date: null,
+        register_number: null,
         title: null
       },
       has_resolution: false,
-      is_read: false
-    }
+      read_time: null,
+      user: null,
+    },
+    listLoading: false
   }),
   getters: {
     isReviewSigned: state => state.detailModel.assignments.length
@@ -237,47 +215,60 @@ export const useReviewStore = defineStore("review", {
     * Получить список на рассмотрение
     * */
     async actionReviewList() {
+      this.listLoading = true
       let { data } = await fetchReviewList()
-      this.reviewList = data.results
+
+      this.list = data.results
+      this.listLoading = false
     },
     /**
     * Получить на рассмотрение по id
     * */
     async actionReviewById(payload) {
       let { data } = await fetchReviewById({ id: payload.id })
+
       this.detailModel = data
-    },
-    /**
-    * Создать резолюцию (на рассмотрение)
-    * */
-    async actionCreateReviewResolution({ reviewId, parentId, resolutionCreateType }) {
-      const innerStore = useInnerStore()
-      await innerStore.actionCreateResolution({ reviewId, parentId, resolutionCreateType })
-      await innerStore.actionResolutionsList({ id: this.detailModel.document.id })
-    },
-    /*
-    * Изменить созданную резолюцию по id
-    * */
-    async actionUpdateReviewResolutionById(payload) {
-      const innerStore = useInnerStore()
-      await innerStore.actionUpdateByIdResolution(payload)
     },
     /*
     * Перенаправить документ
     * */
     async actionChangeReviewer({ id, body }) {
-      await fetchChangeReviewer({ id, body })
+      try {
+        await fetchChangeReviewer({ id, body })
+        dispatchNotify('Документ перенаправлен к пользователю', null, COLOR_TYPES.SUCCESS)
+        return Promise.resolve()
+      } catch (error) {
+        dispatchNotify('Ошибка', 'Ошибка перенаправить документ', COLOR_TYPES.ERROR)
+        return Promise.reject()
+      }
     },
     /*
     * Подписать или удалить подпись
     * */
     async actionSignOrCancel(body) {
-      const innerStore = useInnerStore()
-      const resolutionIds = innerStore.resolutionsList.map(r => r.id)
+      const commonStore = useBoxesCommonStore()
+      const resolutionIds = commonStore.createdResolutionsList.items.map(({ resolution }) => resolution.id)
       let model = Object.assign(body, { assignment_ids: resolutionIds })
 
-      await fetchSignOrCancel(model)
-      await this.actionReviewById(this.detailModel)
+      try {
+        await fetchSignOrCancel(model)
+        await this.actionReviewById(this.detailModel)
+        // Если идет подпись
+        if(body.is_verified) {
+          dispatchNotify('Резолюция подписан', null, COLOR_TYPES.SUCCESS)
+        } else {
+          dispatchNotify('Подпись удален из резолюции', null, COLOR_TYPES.SUCCESS)
+        }
+        return Promise.resolve()
+      } catch (error) {
+        // Если идет подпись
+        if(body.is_verified) {
+          dispatchNotify('Ошибка', 'Ошибка подписание резолюции', COLOR_TYPES.ERROR)
+        } else {
+          dispatchNotify('Ошибка', 'Ошибка удаление подписа', COLOR_TYPES.ERROR)
+        }
+        return Promise.reject()
+      }
     },
     /*
     * Ознакомиться с документом

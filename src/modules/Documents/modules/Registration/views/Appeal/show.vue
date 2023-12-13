@@ -30,7 +30,12 @@ onMounted(async () => {
     </template>
 
     <template v-else>
-      <layout-with-tabs :title="regAppeal.detailModel.outgoing_number" :preview-detail="regAppeal.detailModel.__copy_prototype">
+      <layout-with-tabs
+        :title="regAppeal.detailModel.outgoing_number"
+        :preview-detail="regAppeal.detailModel.__copy_prototype"
+        :object-id="regAppeal.detailModel.id"
+        :headers="regAppeal.headers"
+      >
         <template #preview-actions>
           <div class="mt-5">
             <change-document />

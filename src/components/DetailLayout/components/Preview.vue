@@ -1,8 +1,14 @@
 <script setup>
-import { PriorityChip } from "@/components/Chips"
+// Components
+import { TreeUsers } from '@/components/Tree'
+import FieldGroups from '../../FieldGroups.vue'
 // Macros
 const props = defineProps({
   previewDetail: {
+    type: Object,
+    default: () => {}
+  },
+  headers: {
     type: Array,
     default: () => []
   }
@@ -10,34 +16,14 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="layout-preview-view p-4">
-    <base-row>
-      <template v-for="item in previewDetail">
-        <base-col col-class="w-1/3">
-          <base-label :label="item.header" />
-
-          <template v-if="item.detail.component">
-            <template v-if="item.detail.component === 'priority-chip'">
-              <priority-chip :id="item.field.id" />
-            </template>
-
-            <template v-if="item.detail.component === 'base-avatar-group'">
-              <base-avatar-group :items="item.field" />
-            </template>
-          </template>
-
-          <template v-if="item.field.hasOwnProperty('name') && !item.detail.component">
-            <span class="text-base font-semibold text-primary-900">{{ item.field.name }}</span>
-          </template>
-
-          <template v-if="!item.field.hasOwnProperty('name') && !item.detail.component">
-            <span class="text-base font-semibold text-primary-900">{{ item.field }}</span>
-          </template>
-        </base-col>
+  <div v-if="props.previewDetail" class="layout-preview-view p-4">
+    <field-groups :headers="props.headers" :data="props.previewDetail">
+      <template #preview-actions>
+        <slot name="preview-actions" />
       </template>
-    </base-row>
+    </field-groups>
 
-    <slot name="preview-actions"></slot>
+    <tree-users />
   </div>
 </template>
 

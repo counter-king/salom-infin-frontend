@@ -127,6 +127,7 @@ export const useRegOrderInstruction = defineStore("reg-order-instruction", {
           else {
             return {
               user: item.id,
+              document: this.detailModel.id
             }
           }
         })

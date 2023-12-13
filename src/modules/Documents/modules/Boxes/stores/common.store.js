@@ -9,10 +9,16 @@ import {
   fetchDeleteResolutionById
 } from "../services/common.service"
 // Utils
-import { RESOLUTION_TYPES, RESOLUTION_CREATE_TYPES } from "@/enums"
-export const useInnerStore = defineStore("inner", {
+import { clearModel, setValuesToKeys } from '@/utils'
+import { dispatchNotify } from '@/utils/notify'
+import { RESOLUTION_TYPES, RESOLUTION_CREATE_TYPES, COLOR_TYPES } from "@/enums"
+
+export const useBoxesCommonStore = defineStore("boxes-common", {
   state: () => ({
-    resolutionMenuOptions: [],
+    createdResolutionsList: {
+      label: 'created-resolutions',
+      items: []
+    },
     resolutionModel: {
       id: null,
       assignees: [],
@@ -23,157 +29,139 @@ export const useInnerStore = defineStore("inner", {
       is_project_resolution: true,
       type: RESOLUTION_TYPES.ASSIGNMENT,
       __assignees: [],
-      __assignees_source: [],
-      __assignees_copy: [],
       __controllers: [],
-      __controllers_source: [],
-      __controllers_copy: []
-    },
-    resolutionsList: []
+    }
   }),
   actions: {
     /**
      * Создать резолюцию
      * */
-    async actionCreateResolution({ reviewId, parentId, resolutionCreateType }) {
-      let { __assignees_source, __controllers_source } = this.resolutionModel
-      this.resolutionModel.assignees = [...__controllers_source, ...__assignees_source]
-      this.resolutionModel.reviewer = reviewId
-      this.resolutionModel.parent = parentId
+    async actionCreateResolution({ resolutionListId, reviewId, parentId, resolutionCreateType }) {
+      let { __assignees, __controllers } = this.resolutionModel
+      let assignees = __assignees.map(item => ({ user: item.id, is_responsible: false }))
+      let controllers = __controllers.length
+        ? __controllers.map(item => ({ user: item.id, is_controller: true }))
+        : []
       /*
       * is_project_resolution должен быть true в разделе на рассмотрение
-      * должен быть false в разделе входящие
+      * должен быть false в разделе мои поручение
       * */
-      if(RESOLUTION_CREATE_TYPES.ASSIGNMENT === resolutionCreateType) {
-        this.resolutionModel.is_project_resolution = false
+      this.resolutionModel.is_project_resolution = RESOLUTION_CREATE_TYPES.ASSIGNMENT !== resolutionCreateType
+
+      if(this.resolutionModel.type === RESOLUTION_TYPES.CONTROL) {
+        this.resolutionModel.assignees = [...assignees, ...controllers]
+      }
+      else {
+        this.resolutionModel.assignees = assignees
       }
 
-      await fetchCreateResolution(this.resolutionModel)
+      this.resolutionModel.reviewer = reviewId
+      this.resolutionModel.parent = parentId
+
+      try {
+        await fetchCreateResolution(this.resolutionModel)
+        await this.actionResolutionsList({ id: resolutionListId })
+        dispatchNotify('Резолюция создано', null, COLOR_TYPES.SUCCESS)
+        clearModel(this.resolutionModel, ['type'])
+        return Promise.resolve()
+      } catch (error) {
+        dispatchNotify('Ошибка', 'Ошибка создание резолюции', COLOR_TYPES.ERROR)
+        return Promise.reject()
+      }
     },
     /*
     * Получает список созданных резолюции
     * */
     async actionResolutionsList({ id, params }) {
       let { data } = await fetchResolutionList({ document_id: id, params })
-      this.resolutionsList = data.results
+      this.createdResolutionsList.items = data.results.map((item, index) => ({
+        label: `Резолюция #${ index + 1 }`,
+        icon: 'DocumentTextIcon',
+        resolution: item
+      }))
     },
     /*
     * Получить созданную резолюцию по id
     * */
     async actionGetByIdResolution({ id }) {
       let { data } = await fetchResolutionById({ id })
-      this.resolutionModel.id = data.id
-      this.resolutionModel.assignees = data.assignees
-      this.resolutionModel.content = data.content
-      this.resolutionModel.deadline = data.deadline
-      this.resolutionModel.reviewer = data.reviewer
-      this.resolutionModel.parent = data.parent
-      this.resolutionModel.is_project_resolution = data.is_project_resolution
-      this.resolutionModel.type = data.type
+      setValuesToKeys(this.resolutionModel, data)
 
       let assignees = data.assignees.filter(item => !item.is_controller)
-
-      this.resolutionModel.__assignees = assignees.map(({ user }) => user.id)
-      this.resolutionModel.__assignees_source = this.resolutionModel.__assignees_copy = assignees.map(item => {
-        return {
-          ...item,
-          first_name: item.user.first_name,
-          full_name: item.user.full_name,
-          color: item.user.color,
-          user: item.user.id
-        }
-      })
+      this.resolutionModel.__assignees = assignees.map(item => ({ ...item, __userId: item.user.id }))
 
       let controllers = data.assignees.filter(item => item.is_controller)
-
-      if(controllers.length) {
-        this.resolutionModel.__controllers = controllers.map(({ user }) => user.id)
-        this.resolutionModel.__controllers_source = this.resolutionModel.__controllers_copy = controllers.map(item => {
-          return {
-            ...item,
-            first_name: item.user.first_name,
-            full_name: item.user.full_name,
-            color: item.user.color,
-            user: item.user.id
-          }
-        })
-      }
+      this.resolutionModel.__controllers = controllers.length
+        ? controllers.map(item => ({ ...item, __userId: item.user.id }))
+        : []
     },
     /*
     * Изменить созданную резолюцию по id
     * */
     async actionUpdateByIdResolution({ resolutionCreateType }) {
-      let { __assignees_source, __controllers_source } = this.resolutionModel
-      let controllers = []
-      let assignees = __assignees_source.map(assigner => {
-        if(assigner.hasOwnProperty("id")) {
+      let { __assignees, __controllers } = this.resolutionModel
+      let assignees = __assignees.map(assigner => {
+        if(assigner.hasOwnProperty("__userId")) {
           return {
             id: assigner.id,
-            user: assigner.user,
-            is_responsible: assigner.is_responsible,
+            user: assigner.__userId,
+            is_responsible: assigner.is_responsible
           }
         } else {
           return {
             user: assigner.id,
-            is_responsible: assigner.is_responsible,
+            is_responsible: false
           }
         }
       })
-      /*
-      * is_project_resolution должен быть true в разделе на рассмотрение
-      * должен быть false в разделе входящие
-      * */
-      if(RESOLUTION_CREATE_TYPES.ASSIGNMENT === resolutionCreateType) {
-        this.resolutionModel.is_project_resolution = false
-      }
-
-      if(__controllers_source && __controllers_source.length) {
-        controllers = __controllers_source.map(assigner => {
+      let controllers = __controllers.length
+        ? __controllers.map(assigner => {
           if(assigner.hasOwnProperty("id")) {
             return {
               id: assigner.id,
-              user: assigner.user,
-              is_controller: assigner.is_controller,
+              user: assigner.__userId,
+              is_controller: assigner.is_controller
             }
           } else {
             return {
               user: assigner.id,
-              is_controller: assigner.is_controller,
+              is_controller: false
             }
           }
         })
-      }
+      : []
 
       this.resolutionModel.assignees = [...controllers, ...assignees]
 
-      await fetchUpdateResolutionById({ id: this.resolutionModel.id, body: this.resolutionModel })
-    },
-    /*
-    * Очистить модель созданную резолюцию по id
-    * */
-    actionClearResolutionModel() {
-      this.resolutionModel = {
-        id: null,
-        assignees: [],
-        content: null,
-        deadline: null,
-        reviewer: null,
-        parent: null,
-        is_project_resolution: true,
-        type: RESOLUTION_TYPES.ASSIGNMENT,
-        __assignees: [],
-        __assignees_source: [],
-        __assignees_copy: [],
-        __controllers: [],
-        __controllers_source: [],
-        __controllers_copy: []
+      /*
+      * is_project_resolution должен быть true в разделе на рассмотрение
+      * должен быть false в разделе мои поручение
+      * */
+      this.resolutionModel.is_project_resolution = RESOLUTION_CREATE_TYPES.ASSIGNMENT !== resolutionCreateType
+
+      try {
+        await fetchUpdateResolutionById({ id: this.resolutionModel.id, body: this.resolutionModel })
+        dispatchNotify('Резолюция изменен', null, COLOR_TYPES.SUCCESS)
+        clearModel(this.resolutionModel, ['type'])
+        return Promise.resolve()
+      } catch (error) {
+        dispatchNotify('Ошибка', 'Ошибка изменение резолюции', COLOR_TYPES.ERROR)
+        return Promise.reject()
       }
     },
     /*
     * Удалить созданную резолюцию
     * */
-    async actionDeleteGetByIdResolution({ id, comment }) {
-      await fetchDeleteResolutionById({ id, comment })
+    async actionDeleteGetByIdResolution({ id, resolutionListId, comment }) {
+      try {
+        await fetchDeleteResolutionById({ id, comment })
+        dispatchNotify('Резолюция удален', null, COLOR_TYPES.SUCCESS)
+        await this.actionResolutionsList({ id: resolutionListId })
+        return Promise.resolve()
+      } catch(error) {
+        dispatchNotify('Ошибка', 'Ошибка удаление резолюции', COLOR_TYPES.ERROR)
+        return Promise.reject()
+      }
     }
   }
 })
