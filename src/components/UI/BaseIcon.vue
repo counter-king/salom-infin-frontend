@@ -17,6 +17,10 @@ const props = defineProps({
     type: [Number, String],
     default: 20
   },
+  stroke: {
+    type: Boolean,
+    default: true
+  }
 })
 // Methods
 const icon = defineAsyncComponent(() =>
@@ -29,13 +33,18 @@ const icon = defineAsyncComponent(() =>
     :is="icon"
     :width="props.width"
     :height="props.height"
-    class="app-icon"
+    :class="props.stroke ? 'app-stroke-icon' : 'app-filled-icon'"
   />
 </template>
 
 <style>
-.app-icon path,
-.app-icon circle {
+.app-stroke-icon path,
+.app-stroke-icon circle {
   stroke: currentColor;
+}
+
+.app-filled-icon path,
+.app-filled-icon circle {
+  fill: currentColor;
 }
 </style>

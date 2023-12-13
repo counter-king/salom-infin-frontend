@@ -84,6 +84,13 @@ const props = defineProps({
       return ['x-small', 'small', 'normal', 'large'].includes(value)
     }
   },
+  type: {
+    type: String,
+    default: 'user',
+    validator(value) {
+      return ['user', 'department'].includes(value)
+    }
+  }
 })
 // Reactive
 const menuRef = ref(null)
@@ -96,10 +103,18 @@ const options = computed(() => props.options.length
   : list.value
 )
 const optionsRest = computed(() => modelValue.value.map(option => {
-  return {
-    id: isObject(option.user) ? option.user.id : option.id,
-    label: isObject(option.user) ? option.user.full_name : option.full_name,
-    image: isObject(option.user) ? option.user.image : option.image
+  if (props.type === 'user') {
+    return {
+      id: isObject(option.user) ? option.user.id : option.id,
+      label: isObject(option.user) ? option.user.full_name : option.full_name,
+      image: isObject(option.user) ? option.user.image : option.image
+    }
+  } else if (props.type === 'department') {
+    return {
+      id: option.id,
+      label: option.name,
+      image: null
+    }
   }
 }))
 const rootClasses = computed(() => {
@@ -186,7 +201,7 @@ const testFunc = (value) => {
               'size-small py-[2px] pr-2 pl-4': props.size === 'x-small',
               'size-small py-[5px] pr-2 pl-4': props.size === 'small',
               'size-normal py-3 pr-2 pl-4': props.size === null || props.size === 'normal',
-            },
+            }
           ]
         },
         dropdownIcon: {

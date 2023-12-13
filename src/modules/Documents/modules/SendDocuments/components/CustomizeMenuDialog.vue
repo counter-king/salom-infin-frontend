@@ -57,7 +57,7 @@ const resetToolbarMenu = () => {
   <base-dialog
     v-model="modelValue"
     label="customize-menu"
-    max-width="w-[672px]"
+    max-width="max-w-[672px]"
     :draggable="false"
     content-classes="p-0 h-[448px]"
   >
