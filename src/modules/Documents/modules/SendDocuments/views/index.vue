@@ -5,19 +5,20 @@ import {useRoute, useRouter} from "vue-router";
 // Store
 import { useSDStore } from "../stores/index.store";
 // Constants
-import {SD_INNER_COLUMNS, SD_SUB_TYPE_INNER} from "../constants";
+import {SD_INNER_COLUMNS, SD_SD_TYPE_INNER} from "../constants";
 // Components
 import DocType from "../../../../../components/Chips/DocType.vue";
 import Status from "../../../../../components/Chips/Status.vue";
 import { ActionToolbar } from "../../../../../components/Actions";
 import { ToolbarMenu } from "../components/index";
+import CreateButton from "@/modules/Documents/modules/SendDocuments/components/CreateButton.vue";
 
 const sdStore = useSDStore();
 const route = useRoute();
 const router = useRouter();
 
 const title = computed(() => {
-  return route.query?.sub_type ? sdStore.SD_TOOLBAR_MENU_LIST.find(item => item.sub_type === route.query?.sub_type).label : SD_SUB_TYPE_INNER;
+  return route.query?.type ? sdStore.SD_TOOLBAR_MENU_LIST.find(item => item.type === route.query?.type).label : SD_SD_TYPE_INNER;
 })
 
 const onClickRow = (data) => {
@@ -30,15 +31,15 @@ const onChangeDocType = (menu) => {
   console.log(menu)
 }
 const manageRoute = () => {
-  if (!(route.query && route.query.sub_type)){
+  if (!(route.query && route.query.type)){
     router.replace({
       query: {
         ...route.query,
-        sub_type: SD_SUB_TYPE_INNER
+        type: SD_SD_TYPE_INNER
       }
     });
     sdStore.SD_TOOLBAR_MENU_LIST.forEach(menu => {
-      menu.active = menu.sub_type === SD_SUB_TYPE_INNER;
+      menu.active = menu.type === SD_SD_TYPE_INNER;
     })
   }
 }
@@ -46,7 +47,7 @@ const create = () => {
   router.push({
     name: "SendDocumentsCreate",
     params: {
-      sub_type: route.query.sub_type
+      type: route.query.type
     }
   })
 }
@@ -54,7 +55,7 @@ const create = () => {
 // Hooks
 onMounted(async () => {
   manageRoute();
-  await sdStore.actionGetDocumentList({ sub_type: route.query.sub_type ? route.query.sub_type : SD_SUB_TYPE_INNER, page_size: sdStore.filterState.page_size });
+  await sdStore.actionGetDocumentList({ type: route.query.type ? route.query.type : SD_SD_TYPE_INNER, page_size: sdStore.filterState.page_size });
 })
 </script>
 
@@ -72,13 +73,7 @@ onMounted(async () => {
       @emit:reset-headers="sdStore.resetHeaders"
     >
       <template #end>
-        <base-button
-          label="create"
-          icon-left="AddIcon"
-          rounded
-          type="button"
-          @click="create"
-        />
+        <create-button />
       </template>
     </action-toolbar>
 

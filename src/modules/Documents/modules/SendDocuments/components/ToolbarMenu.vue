@@ -39,10 +39,10 @@ const onChangeDocType = (menu) => {
   });
   router.replace({
     query: {
-      sub_type: menu.sub_type
+      type: menu.type
     }
   });
-  sdStore.actionGetDocumentList({ ...route.query, sub_type: menu.sub_type });
+  sdStore.actionGetDocumentList({ ...route.query, type: menu.type });
   saveStorageItem(SD_TOOLBAR_MENU_STORAGE_NAME, JSON.stringify(sdStore.SD_TOOLBAR_MENU_LIST));
   emit('emit:changeDocType', menu);
 }

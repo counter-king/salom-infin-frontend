@@ -9,6 +9,7 @@ export const useSDStore = defineStore("sd-store", {
       {
         label: "inner",
         icon: "ArrowDownIcon",
+        type: "inner",
         sub_type: "inner",
         active: true,
         selected: true,
@@ -18,6 +19,7 @@ export const useSDStore = defineStore("sd-store", {
       {
         label: "notice",
         icon: "NotesIcon",
+        type: "notice",
         sub_type: "notice",
         active: false,
         selected: true,
@@ -27,6 +29,7 @@ export const useSDStore = defineStore("sd-store", {
       {
         label: "hr-rotation",
         icon: "RefreshIcon",
+        type: "hr_rotation",
         sub_type: "hr_rotation",
         active: false,
         selected: false,
@@ -36,6 +39,7 @@ export const useSDStore = defineStore("sd-store", {
       {
         label: "summary",
         icon: "NotesPenIcon",
+        type: "summary",
         sub_type: "summary",
         active: false,
         selected: false,
@@ -45,6 +49,7 @@ export const useSDStore = defineStore("sd-store", {
       {
         label: "outgoing",
         icon: "RoundArrowDownIcon",
+        type: "outgoing",
         sub_type: "outgoing",
         active: false,
         selected: true,
@@ -54,6 +59,7 @@ export const useSDStore = defineStore("sd-store", {
       {
         label: "decree",
         icon: "CheckCircleIcon",
+        type: "decree",
         sub_type: "decree",
         active: false,
         selected: true,
@@ -63,6 +69,7 @@ export const useSDStore = defineStore("sd-store", {
       {
         label: "board-protocol",
         icon: "NotebookIcon",
+        type: "board_protocol",
         sub_type: "board_protocol",
         active: false,
         selected: true,
@@ -72,6 +79,7 @@ export const useSDStore = defineStore("sd-store", {
       {
         label: "committee-protocol",
         icon: "NotesIcon",
+        type: "committee_protocol",
         sub_type: "committee_protocol",
         active: false,
         selected: true,
@@ -81,6 +89,7 @@ export const useSDStore = defineStore("sd-store", {
       {
         label: "hr-order",
         icon: "DocumentMedicineIcon",
+        type: "hr_order",
         sub_type: "hr_order",
         active: false,
         selected: true,
@@ -90,6 +99,7 @@ export const useSDStore = defineStore("sd-store", {
       {
         label: "organization-letter",
         icon: "BuildingsIcon",
+        type: "organization_letter",
         sub_type: "organization_letter",
         active: false,
         selected: true,
@@ -198,6 +208,7 @@ export const useSDStore = defineStore("sd-store", {
         {
           label: "inner",
           icon: "ArrowDownIcon",
+          type: "inner",
           sub_type: "inner",
           active: true,
           selected: true,
@@ -207,6 +218,7 @@ export const useSDStore = defineStore("sd-store", {
         {
           label: "notice",
           icon: "NotesIcon",
+          type: "notice",
           sub_type: "notice",
           active: false,
           selected: true,
@@ -216,6 +228,7 @@ export const useSDStore = defineStore("sd-store", {
         {
           label: "hr-rotation",
           icon: "RefreshIcon",
+          type: "hr_rotation",
           sub_type: "hr_rotation",
           active: false,
           selected: false,
@@ -225,6 +238,7 @@ export const useSDStore = defineStore("sd-store", {
         {
           label: "summary",
           icon: "NotesPenIcon",
+          type: "summary",
           sub_type: "summary",
           active: false,
           selected: false,
@@ -234,6 +248,7 @@ export const useSDStore = defineStore("sd-store", {
         {
           label: "outgoing",
           icon: "RoundArrowDownIcon",
+          type: "outgoing",
           sub_type: "outgoing",
           active: false,
           selected: true,
@@ -243,6 +258,7 @@ export const useSDStore = defineStore("sd-store", {
         {
           label: "decree",
           icon: "CheckCircleIcon",
+          type: "decree",
           sub_type: "decree",
           active: false,
           selected: true,
@@ -252,6 +268,7 @@ export const useSDStore = defineStore("sd-store", {
         {
           label: "board-protocol",
           icon: "NotebookIcon",
+          type: "board_protocol",
           sub_type: "board_protocol",
           active: false,
           selected: true,
@@ -261,6 +278,7 @@ export const useSDStore = defineStore("sd-store", {
         {
           label: "committee-protocol",
           icon: "NotesIcon",
+          type: "committee_protocol",
           sub_type: "committee_protocol",
           active: false,
           selected: true,
@@ -270,6 +288,7 @@ export const useSDStore = defineStore("sd-store", {
         {
           label: "hr-order",
           icon: "DocumentMedicineIcon",
+          type: "hr_order",
           sub_type: "hr_order",
           active: false,
           selected: true,
@@ -279,6 +298,7 @@ export const useSDStore = defineStore("sd-store", {
         {
           label: "organization-letter",
           icon: "BuildingsIcon",
+          type: "organization_letter",
           sub_type: "organization_letter",
           active: false,
           selected: true,

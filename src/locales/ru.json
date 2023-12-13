@@ -143,7 +143,7 @@
   "document-created": "Документ создан",
   "registration-date": "Регистрационная дата",
   "document_type": "Вид документа",
-  "department":"Департмент",
+  "department":"Департамент",
   "branch":"Филиал",
   "enter-branch":"Выберите филиал",
   "title-document":"Наименование документа",
@@ -230,7 +230,7 @@
   "my-devices":"Мои устройства",
   "machinery-equipment":"Техника и оборудования",
   "general-settings":"Общие настройки",
-  "complete":"Завершить"
-
-
+  "text": "Текст",
+  "file": "Файл",
+  "clear-form": "Очистить форму"
 }
