@@ -12,17 +12,6 @@ const props = defineProps({
 })
 // Reactive
 const modal = ref(false)
-const createButtonLoading = ref(false)
-// Methods
-const cancelSign = async (text) => {
-  try {
-    createButtonLoading.value = true
-    await props.createButtonFn(text)
-    modal.value = false
-  } finally {
-    createButtonLoading.value = false
-  }
-}
 </script>
 
 <template>
@@ -37,10 +26,9 @@ const cancelSign = async (text) => {
 
   <modal-comment
     v-model="modal"
-    :create-button-loading="createButtonLoading"
     label="cancel-sign"
     create-button-color="danger"
-    @emit:up="cancelSign"
+    :create-button-fn="props.createButtonFn"
   />
 </template>
 

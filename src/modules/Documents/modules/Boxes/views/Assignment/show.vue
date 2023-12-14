@@ -4,15 +4,17 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 // Store
 import { useDocFlowStore } from '../../../Registration/stores/docflow.store'
+import { useBoxesCommonStore } from '../../stores/common.store'
 import { useAssignmentStore } from '../../stores/assignment.store'
 // Components
-import { ActionAnswerMenu } from '@/components/Actions'
+import { AcquaintButton, ActionAnswerMenu } from '@/components/Actions'
 import { LayoutWithTabs } from '@/components/DetailLayout'
 import { ResolutionDropdown } from '@/components/Resolution'
 import { ModalDoneDocument } from '@/components/Modal'
 // Composable
 const route = useRoute()
 const docflowStore = useDocFlowStore()
+const boxesCommonStore = useBoxesCommonStore()
 const assignmentStore = useAssignmentStore()
 // Reactive
 const loading = ref(true)
@@ -25,6 +27,16 @@ onMounted(async () => {
     loading.value = false
   }, 500)
 })
+// Methods
+const acquaintDocument = async () => {
+  await assignmentStore.actionAcquaintDocument({ id: +route.params.id })
+}
+const doneDocument = async () => {
+  await assignmentStore.actionPerformDocument({ id: +route.params.id })
+}
+const updateDocument = async () => {
+  await assignmentStore.actionPerformDocument({ id: +route.params.id })
+}
 </script>
 
 <template>
@@ -39,21 +51,50 @@ onMounted(async () => {
         :preview-detail="assignmentStore.detailModel"
         :object-id="assignmentStore.detailModel.document.id"
         :headers="assignmentStore.headers"
+        :resolution="{
+          ...boxesCommonStore.resolution,
+          register_date: assignmentStore.detailModel.document.register_date,
+          register_number: assignmentStore.detailModel.document.register_number
+        }"
       >
         <template #header-end>
           <action-answer-menu />
 
-          <resolution-dropdown
-            :review-id="assignmentStore.detailModel.id"
-            :parent-id="null"
-            :resolution-list-id="assignmentStore.detailModel.document.id"
-          />
+          <!-- Если документ ознакомлен -->
+          <template v-if="assignmentStore.isDocumentAcquainted">
+            <resolution-dropdown
+              :review-id="assignmentStore.detailModel.assignment.reviewer.id"
+              :parent-id="assignmentStore.detailModel.assignment.id"
+              :resolution-list-id="assignmentStore.detailModel.document.id"
+            />
+          </template>
         </template>
 
         <template #preview-actions>
-          <div class="mt-5">
-            <modal-done-document />
-          </div>
+          <!-- Если документ ознакомлен -->
+          <template v-if="assignmentStore.isDocumentAcquainted">
+            <!-- Если еще не выполнен документ -->
+            <template v-if="!assignmentStore.performModel.is_performed">
+              <modal-done-document
+                v-model:content="assignmentStore.performModel.content"
+                v-model:files="assignmentStore.performModel.files"
+                :create-button-fn="doneDocument"
+              />
+            </template>
+
+            <template v-else>
+              <modal-done-document
+                v-model:content="assignmentStore.performModel.content"
+                v-model:files="assignmentStore.performModel.files"
+                :is-done-document="assignmentStore.performModel.is_performed"
+                :create-button-fn="updateDocument"
+              />
+            </template>
+          </template>
+
+          <template v-else>
+            <acquaint-button :acquaint-fn="acquaintDocument" />
+          </template>
         </template>
       </layout-with-tabs>
     </template>

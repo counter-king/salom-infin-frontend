@@ -1,9 +1,11 @@
 // Core
 import { defineStore } from "pinia"
 // Store
-import { useDocFlowStore } from "../../Registration/stores/docflow.store"
+import { useBoxesCommonStore } from './common.store'
+import { useDocFlowStore } from '../../Registration/stores/docflow.store'
 // Service
 import { fetchAssignmentList, fetchAssignmentById, fetchAcquaintDocument, fetchPerformDocument } from "../services/assignment.service"
+import { fetchPerformList } from '../services/review.service'
 // Utils
 import { setValuesToKeys, combineKeys } from '@/utils'
 import { dispatchNotify } from '@/utils/notify'
@@ -191,7 +193,8 @@ export const useAssignmentStore = defineStore("assignment", {
     },
     performModel: {
       content: null,
-      files: []
+      files: [],
+      is_performed: false
     },
     listLoading: false
   }),
@@ -216,27 +219,73 @@ export const useAssignmentStore = defineStore("assignment", {
      * Получить поручение по id
      * */
     async actionAssignmentById(payload) {
+      const commonStore = useBoxesCommonStore()
       let { data } = await fetchAssignmentById({ id: payload.id })
+      let { data: performers } = await fetchPerformList({ id: data.assignment.id })
+
       this.detailModel = data
-      this.performModel.content = data.content
+      this.actionSetPerform({
+        content: data.content,
+        is_performed: data.is_performed
+      })
+
+      await commonStore.actionSetActiveResolution({
+        signed: data.assignment.is_verified,
+        receipt_date: data.assignment.receipt_date,
+        deadline: data.assignment.deadline,
+        content: data.assignment.content,
+        assignees: performers.performers,
+      })
+      // this.performModel.content = data.content
     },
     /*
     * Ознакомиться с документом
     * */
     async actionAcquaintDocument({ id }) {
-      const docflowStore = useDocFlowStore()
-      await fetchAcquaintDocument({ id })
-      await this.actionAssignmentById(this.detailModel)
-      await docflowStore.actionGetTree(this.detailModel.document.id)
+      try {
+        const docflowStore = useDocFlowStore()
+        await fetchAcquaintDocument({ id })
+        await this.actionAssignmentById(this.detailModel)
+        await docflowStore.actionGetTree(this.detailModel.document.id)
+        dispatchNotify('Документ ознакомлен', null, COLOR_TYPES.SUCCESS)
+      } catch (error) {
+        dispatchNotify('Ошибка', 'Ошибка ознакомление документа', COLOR_TYPES.ERROR)
+      }
     },
     /*
     * Выполнить документ
     * */
     async actionPerformDocument({ id }) {
-      const docflowStore = useDocFlowStore()
-      await fetchPerformDocument({ id, model: this.performModel })
-      await this.actionAssignmentById(this.detailModel)
-      await docflowStore.actionGetTree(this.detailModel.document.id)
+      try {
+        const docflowStore = useDocFlowStore()
+        await fetchPerformDocument({ id, model: this.performModel })
+        await this.actionAssignmentById(this.detailModel)
+        await docflowStore.actionGetTree(this.detailModel.document.id)
+        // Если идет выполнения документа
+        if(!this.performModel.is_performed) {
+          dispatchNotify('Документ выполнен', null, COLOR_TYPES.SUCCESS)
+        }
+        else {
+          dispatchNotify('Исполнения изменено', null, COLOR_TYPES.SUCCESS)
+        }
+        return Promise.resolve()
+      }
+      catch (error) {
+        // Если идет выполнения документа
+        if(!this.performModel.is_performed) {
+          dispatchNotify('Ошибка', 'Ошибка выполнение документа', COLOR_TYPES.ERROR)
+        }
+        else {
+          dispatchNotify('Ошибка', 'Ошибка исполнение документа', COLOR_TYPES.ERROR)
+        }
+        return Promise.reject()
+      }
+    },
+    /*
+    *
+    * */
+    actionSetPerform({ content, files, is_performed }) {
+      Object.assign(this.performModel, { content, files, is_performed })
     }
   }
 })

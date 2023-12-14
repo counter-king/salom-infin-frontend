@@ -231,8 +231,8 @@ export const useReviewStore = defineStore("review", {
 
       this.detailModel = data
 
-      // Если созданная резолюция
-      if(data.assignments) {
+      // Есть ли созданная резолюция
+      if(data.assignments && data.assignments.length) {
         let resolution = data.assignments[0]
 
         await commonStore.actionSetActiveResolution({

@@ -15,7 +15,6 @@ const noChildRoute = computed(() => navigationStore.currentMenu.children.length 
 // Hooks
 onMounted(() => {
   const currentParentRoute = route.matched[2]
-  console.log(route.matched)
   collapseMenus.value = noChildRoute.value
     ? []
     : navigationStore.currentMenu.children.find(menu => menu.link === currentParentRoute.name).children
