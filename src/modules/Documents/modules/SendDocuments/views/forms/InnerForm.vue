@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import {ref} from "vue";
+import {ref, unref} from "vue";
 import {useVuelidate} from "@vuelidate/core";
 // Components
 import DepartmentMultiSelect from "@/components/Select/DepartmentMultiSelect.vue";
@@ -14,6 +14,7 @@ import {useSDStoreInner} from "@/modules/Documents/modules/SendDocuments/stores/
 // Constants
 import {FORM_TYPE_CREATE} from "@/constants/constants";
 import PreviewDialog from "@/modules/Documents/modules/SendDocuments/components/PreviewDialog.vue";
+import InnerLetterTemplate from "@/components/Templates/InnerLetterTemplate.vue";
 
 const props = defineProps({
   formType: {
@@ -24,12 +25,19 @@ const props = defineProps({
 const SDStoreInner = useSDStoreInner();
 const commonStore = useCommonStore();
 const dialog = ref(false);
+const formRef = ref(null);
 
 const $v = useVuelidate(SDStoreInner.rules, SDStoreInner.model);
 
 // Methods
-const preview = () => {
+const preview = async () => {
+  const valid = await $v.value.$validate();
+
+  if(!valid) return;
+
   dialog.value = true;
+
+
 }
 const manage = () => {
   if (props.formType === FORM_TYPE_CREATE) {
@@ -143,7 +151,7 @@ const clearForm = () => {
       @emit:send="manage"
     >
       <template #content>
-
+        <inner-letter-template />
       </template>
     </preview-dialog>
   <!-- /PREVIEW -->
