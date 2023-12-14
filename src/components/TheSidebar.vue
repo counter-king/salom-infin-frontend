@@ -13,13 +13,13 @@ const collapseMenus = ref([])
 // Computed
 const noChildRoute = computed(() => navigationStore.currentMenu.children.length === 0)
 // Hooks
-// onMounted(() => {
-//   const currentParentRoute = route.matched[2]
-//   console.log(noChildRoute.value)
-//   collapseMenus.value = noChildRoute.value
-//     ? []
-//     : navigationStore.currentMenu.children.find(menu => menu.link === currentParentRoute.name).children
-// })
+onMounted(() => {
+  const currentParentRoute = route.matched[2]
+  console.log(route.matched)
+  collapseMenus.value = noChildRoute.value
+    ? []
+    : navigationStore.currentMenu.children.find(menu => menu.link === currentParentRoute.name).children
+})
 // Methods
 const openCollapseMenus = (menu) => {
   collapseMenus.value = menu
