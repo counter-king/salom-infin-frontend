@@ -2,6 +2,8 @@
 // Core
 import {ref, unref} from "vue";
 import {useVuelidate} from "@vuelidate/core";
+import {useI18n} from "vue-i18n";
+import {useRouter} from "vue-router";
 // Components
 import DepartmentMultiSelect from "@/components/Select/DepartmentMultiSelect.vue";
 import EditorWithTabs from "@/components/Composed/EditorWithTabs.vue";
@@ -11,10 +13,14 @@ import UserMultiSelect from "@/components/Select/UserMultiSelect.vue";
 // Store
 import {useCommonStore} from "@/stores/common";
 import {useSDStoreInner} from "@/modules/Documents/modules/SendDocuments/stores/inner.store";
+// Utils
+import {dispatchNotify} from "@/utils/notify";
 // Constants
 import {FORM_TYPE_CREATE} from "@/constants/constants";
 import PreviewDialog from "@/modules/Documents/modules/SendDocuments/components/PreviewDialog.vue";
 import InnerLetterTemplate from "@/components/Templates/InnerLetterTemplate.vue";
+import {COLOR_TYPES} from "@/enums";
+import {ROUTE_SD_LIST, SD_TYPE_INNER} from "@/modules/Documents/modules/SendDocuments/constants";
 
 const props = defineProps({
   formType: {
@@ -26,6 +32,8 @@ const SDStoreInner = useSDStoreInner();
 const commonStore = useCommonStore();
 const dialog = ref(false);
 const formRef = ref(null);
+const { t } = useI18n();
+const router = useRouter();
 
 const $v = useVuelidate(SDStoreInner.rules, SDStoreInner.model);
 
@@ -36,8 +44,22 @@ const preview = async () => {
   if(!valid) return;
 
   dialog.value = true;
+  SDStoreInner.model.approvers = [];
+  SDStoreInner.model.signers = [];
+  SDStoreInner.model.departments = [];
 
+  // TEMP
+  SDStoreInner.model.sender = 1
 
+  if (props.formType === FORM_TYPE_CREATE){
+    SDStoreInner.model.departments = SDStoreInner.model.__departments.map(item => item.id);
+    SDStoreInner.model.approvers = SDStoreInner.model.__approvers.map(item => {
+      return {user: item.id}
+    });
+    SDStoreInner.model.signers = SDStoreInner.model.__signers.map(item => {
+      return {user: item.id}
+    });
+  }
 }
 const manage = () => {
   if (props.formType === FORM_TYPE_CREATE) {
@@ -46,8 +68,20 @@ const manage = () => {
     update();
   }
 }
-const create = () => {
-  console.log("CREATED!")
+const create = async () => {
+  const response = await SDStoreInner.actionCreateDocument(SDStoreInner.model);
+  if (response) {
+    dialog.value = false;
+    dispatchNotify(t('document-sent'), null, COLOR_TYPES.SUCCESS);
+    await router.replace({
+      name: ROUTE_SD_LIST,
+      query: {
+        type: SD_TYPE_INNER
+      }
+    });
+  }else {
+    dispatchNotify(t('error-occurred'), null, COLOR_TYPES.ERROR);
+  }
 }
 const update = () => {
 
@@ -129,7 +163,7 @@ const clearForm = () => {
               required
               option-value="id"
               label="document-type"
-              placeholder="enter-deliver-type"
+              placeholder="enter-document-type"
             />
           </base-col>
 
@@ -140,7 +174,6 @@ const clearForm = () => {
             />
           </base-col>
         </base-row>
-        <pre>{{ SDStoreInner.model }}</pre>
       </form-container>
     </template>
   </layout-with-tabs>
@@ -148,6 +181,7 @@ const clearForm = () => {
   <!-- PREVIEW -->
     <preview-dialog
       v-model="dialog"
+      :send-button-loading="SDStoreInner.buttonLoading"
       @emit:send="manage"
     >
       <template #content>

@@ -236,5 +236,7 @@
   "clear-form": "Очистить форму",
   "complete":"Завершить",
   "document-signed": "Документ подписан",
-  "document-not-signed": "Документ еще не подписан"
+  "document-not-signed": "Документ еще не подписан",
+  "document-sent": "Документ отправлен!",
+  "error-occurred": "Произошла ошибка!"
 }

@@ -5,9 +5,13 @@ import {useI18n} from "vue-i18n";
 
 const props = defineProps({
   modelValue: {
-    type: [Boolean],
+    type: Boolean,
     default: false
   },
+  sendButtonLoading: {
+    type: Boolean,
+    default: false
+  }
 });
 const modelValue = useModel(props, 'modelValue');
 const { t } = useI18n();
@@ -45,6 +49,7 @@ const emit = defineEmits(['update:modelValue', 'emit:send']);
         shadow
         border-color="border-transparent"
         class="ml-2"
+        :loading="sendButtonLoading"
         @click="emit('emit:send')"
       />
     </template>

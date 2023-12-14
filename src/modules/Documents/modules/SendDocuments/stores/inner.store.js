@@ -1,9 +1,15 @@
 // Core
 import { defineStore } from 'pinia';
+// Utils
 import {helpers, required} from "@vuelidate/validators";
+import {withAsync} from "@/utils/withAsync";
+// Services
+import {fetchCreateDocument} from "@/modules/Documents/modules/SendDocuments/services/index.service";
+import {SD_TYPE_INNER} from "@/modules/Documents/modules/SendDocuments/constants";
 
 export const useSDStoreInner = defineStore("sd-store-inner", {
   state: () => ({
+    buttonLoading: false,
     model: {
       content: null,
       document_type: null,
@@ -13,6 +19,9 @@ export const useSDStoreInner = defineStore("sd-store-inner", {
       approvers: [],
       departments: [],
       signers: [],
+      type: SD_TYPE_INNER,
+      sub_type: SD_TYPE_INNER,
+      sender: null,
       __approvers: [],
       __approvers_copy: [],
       __departments: [],
@@ -45,5 +54,17 @@ export const useSDStoreInner = defineStore("sd-store-inner", {
         required: helpers.withMessage(`Поле не должен быть пустым`, required)
       },
     }
-  })
+  }),
+  actions: {
+    async actionCreateDocument(body) {
+      this.buttonLoading = true;
+      const { response, error } = await withAsync(fetchCreateDocument, body);
+      if (response){
+        this.buttonLoading = false;
+        return Promise.resolve(response);
+      } else {
+        return Promise.reject(error);
+      }
+    }
+  }
 })

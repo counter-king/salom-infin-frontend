@@ -5,7 +5,7 @@ import {useRoute, useRouter} from "vue-router";
 // Store
 import { useSDStore } from "../stores/index.store";
 // Constants
-import {SD_INNER_COLUMNS, SD_SD_TYPE_INNER} from "../constants";
+import {SD_INNER_COLUMNS, SD_TYPE_INNER} from "../constants";
 // Components
 import DocType from "../../../../../components/Chips/DocType.vue";
 import Status from "../../../../../components/Chips/Status.vue";
@@ -18,7 +18,7 @@ const route = useRoute();
 const router = useRouter();
 
 const title = computed(() => {
-  return route.query?.type ? sdStore.SD_TOOLBAR_MENU_LIST.find(item => item.type === route.query?.type).label : SD_SD_TYPE_INNER;
+  return route.query?.type ? sdStore.SD_TOOLBAR_MENU_LIST.find(item => item.type === route.query?.type).label : SD_TYPE_INNER;
 })
 
 const onClickRow = (data) => {
@@ -35,11 +35,11 @@ const manageRoute = () => {
     router.replace({
       query: {
         ...route.query,
-        type: SD_SD_TYPE_INNER
+        type: SD_TYPE_INNER
       }
     });
     sdStore.SD_TOOLBAR_MENU_LIST.forEach(menu => {
-      menu.active = menu.type === SD_SD_TYPE_INNER;
+      menu.active = menu.type === SD_TYPE_INNER;
     })
   }
 }
@@ -55,7 +55,7 @@ const create = () => {
 // Hooks
 onMounted(async () => {
   manageRoute();
-  await sdStore.actionGetDocumentList({ type: route.query.type ? route.query.type : SD_SD_TYPE_INNER, page_size: sdStore.filterState.page_size });
+  await sdStore.actionGetDocumentList({ type: route.query.type ? route.query.type : SD_TYPE_INNER, page_size: sdStore.filterState.page_size });
 })
 </script>
 

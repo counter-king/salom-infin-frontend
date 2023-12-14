@@ -6,3 +6,6 @@ const URLS = {
 export const fetchGetDocumentList = (params) => {
   return axiosConfig.get(`${URLS.compose}/`, params);
 }
+export const fetchCreateDocument = (body) => {
+  return axiosConfig.post(`${URLS.compose}/`, body);
+}
