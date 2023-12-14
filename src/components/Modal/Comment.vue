@@ -17,24 +17,34 @@ const props = defineProps({
     type: String,
     default: 'py-6 px-8'
   },
-  createButtonLoading: {
-    type: Boolean
-  },
   createButtonColor: {
     type: String,
     default: 'primary'
+  },
+  createButtonFn: {
+    type: Function,
+    default: () => void 0
   }
 })
-const emit = defineEmits(['emit:up'])
+const emit = defineEmits(['update:modelValue'])
 // Composable
 const modelValue = useModel(props, 'modelValue')
 // Reactive
 const text = ref(null)
+const loading = ref(false)
 // Methods
 const create = async () => {
-  if(!text.value.trim()) return
+  if(!(text.value && text.value.trim())) return
 
-  emit('emit:up', text.value)
+  try {
+    loading.value = true
+    await props.createButtonFn(text.value)
+    text.value = null
+    emit('update:modelValue', false)
+  }
+  finally {
+    loading.value = false
+  }
 }
 </script>
 
@@ -54,7 +64,7 @@ const create = async () => {
     <template #footer>
       <base-button
         :severity="props.createButtonColor"
-        :loading="props.createButtonLoading"
+        :loading="loading"
         :label="props.label"
         rounded
         @click="create"
