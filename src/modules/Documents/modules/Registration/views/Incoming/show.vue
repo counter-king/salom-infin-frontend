@@ -39,9 +39,7 @@ onMounted(async () => {
         :headers="incomingStore.headers"
       >
         <template #preview-actions>
-          <div class="mt-5">
-            <change-document />
-          </div>
+          <change-document />
         </template>
       </layout-with-tabs>
     </template>

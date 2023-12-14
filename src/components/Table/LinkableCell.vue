@@ -11,7 +11,7 @@ const { to } = defineProps({
 <template>
   <router-link
     :to="to"
-    class="flex items-center w-full h-full"
+    class="flex items-center w-full h-full text-sm font-medium text-greyscale-500"
   >
     <slot />
   </router-link>
