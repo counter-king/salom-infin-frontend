@@ -38,11 +38,10 @@ const props = defineProps({
 })
 // Reactive
 const documentTypeRef = ref(null)
-const documentMenuType = ref('Incoming')
 const documentTypeComponent = shallowRef(null)
 const buttonLoading = ref(false)
 // Watch
-watch(documentMenuType, (value) => {
+watch(() => docFlowStore.documentMenuType, (value) => {
   documentTypeComponent.value = defineAsyncComponent({
     loader: () => import(`./Form/${value}.vue`),
     loadingComponent: BaseSpinner,
@@ -57,7 +56,7 @@ const createDocument = async () => {
   if(!valid) return
   buttonLoading.value = true
 
-  switch(documentMenuType.value) {
+  switch(docFlowStore.documentMenuType) {
     case 'Incoming':
       let model = {
         ...incomingStore.detailModel,
@@ -115,7 +114,7 @@ const createDocument = async () => {
   }, 500)
 }
 const clearDocument = () => {
-  switch(documentMenuType.value) {
+  switch(docFlowStore.documentMenuType) {
     case 'Incoming':
       clearModel(incomingStore.detailModel, ['grif', 'journal'])
       break;
@@ -141,7 +140,7 @@ const clearDocument = () => {
   }
 }
 const redirectRoute = async () => {
-  switch(documentMenuType.value) {
+  switch(docFlowStore.documentMenuType) {
     case 'Incoming':
       if(route.name === 'RegistrationIncomingIndex') {
         await incomingStore.actionGetList()
@@ -196,12 +195,18 @@ const redirectRoute = async () => {
     default:
   }
 }
+const afterHide = () => {
+  docFlowStore.actionLoadFormCreateDocument('Incoming')
+}
 </script>
 
 <template>
-  <base-dialog v-model="modelValue">
+  <base-dialog
+    v-model="modelValue"
+    @emit:after-hide="afterHide"
+  >
     <template #header>
-      <register-document-menu @emit:up="(value) => documentMenuType = value" />
+      <register-document-menu @emit:up="(value) => docFlowStore.actionLoadFormCreateDocument(value)" />
     </template>
 
     <template #content>

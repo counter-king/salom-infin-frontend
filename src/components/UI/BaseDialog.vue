@@ -24,6 +24,7 @@ const props = defineProps({
     default: 'py-6 px-8'
   }
 })
+const emit = defineEmits(['update:modelValue', 'emit:after-hide'])
 const { t } = useI18n();
 // Composable
 const modelValue = useModel(props, 'modelValue')
@@ -62,6 +63,7 @@ const rootClasses = computed(() => {
         class: ['rounded-b-2xl bg-greyscale-50 border border-solid border-t-greyscale-200 py-5 pl-6 pr-4']
       }
     }"
+    @after-hide="emit('emit:after-hide')"
   >
     <template #header>
       <slot name="header" />

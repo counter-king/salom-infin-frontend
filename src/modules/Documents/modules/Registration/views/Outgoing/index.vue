@@ -1,46 +1,25 @@
 <script setup>
 // Core
-import { ref, onMounted, unref } from 'vue'
+import { onMounted } from 'vue'
 // Store
-import { useRegOutgoing } from "../../stores/outgoing.store"
+import { useRegOutgoing } from '../../stores/outgoing.store'
 import { useDocFlowStore } from '../../stores/docflow.store'
-// Constants
-import { R_OUTGOING_COLUMNS } from "../../constants";
-import OutgoingForm from '../../components/Form/Outgoing.vue'
-
-
 // Components
 import { DocTypeChip, StatusChip } from '@/components/Chips'
-import { ActionToolbar } from "@/components/Actions";
+import { ActionToolbar } from '@/components/Actions'
+// Constants
+import { R_OUTGOING_COLUMNS } from '../../constants'
 // Composable
 const docFlowStore = useDocFlowStore()
 const regOutgoing = useRegOutgoing()
-// Reactive
-const formRef = ref(null)
-const sidebarRef = ref(null)
-const sidebar = ref(false)
 // Hooks
 onMounted(async () => {
   await regOutgoing.actionGetList()
 })
 // Methods
-const createDocument = async () => {
-  const _sidebarRef = unref(sidebarRef)
-  const _formRef = unref(formRef)
-  const valid = await _formRef.$v.$validate()
-
-  if(!valid) return
-
-  try {
-    _sidebarRef.successButtonLoading = true
-    await docFlowStore.actionCreateDocument(regOutgoing.detailModel)
-    _sidebarRef.successButtonLoading = false
-    sidebar.value = false
-    await regOutgoing.actionGetList()
-  }
-  catch (error) {
-    _sidebarRef.successButtonLoading = false
-  }
+const openModal = () => {
+  docFlowStore.actionLoadFormCreateDocument('Outgoing')
+  docFlowStore.actionToggleModalCreateDocument(true)
 }
 </script>
 
@@ -58,7 +37,7 @@ const createDocument = async () => {
           icon-left="AddIcon"
           rounded
           type="button"
-          @click="sidebar = !sidebar"
+          @click="openModal"
         />
       </template>
     </action-toolbar>
@@ -92,18 +71,6 @@ const createDocument = async () => {
         />
       </template>
     </base-data-table>
-
-    <base-sidebar
-      ref="sidebarRef"
-      v-model="sidebar"
-      title="create-document"
-      @emit:cancel-button="(value) => sidebar = value"
-      @emit:success-button="createDocument"
-    >
-      <template #content>
-        <outgoing-form ref="formRef" />
-      </template>
-    </base-sidebar>
   </div>
 </template>
 

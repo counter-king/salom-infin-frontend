@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref, onMounted, unref } from 'vue'
+import { onMounted } from 'vue'
 // Store
 import { useRegIncoming } from '../../stores/incoming.store'
 import { useDocFlowStore } from '../../stores/docflow.store'
@@ -8,7 +8,6 @@ import { useDocFlowStore } from '../../stores/docflow.store'
 import { DocTypeChip, StatusChip, PriorityChip } from '@/components/Chips'
 import { ActionToolbar } from '@/components/Actions'
 import { LinkableCell } from '@/components/Table'
-import IncomingForm from '../../components/Form/Incoming.vue'
 // Constants
 import { R_INCOMING_COLUMNS } from '../../constants'
 // Utils
@@ -16,36 +15,14 @@ import { formatDate } from '@/utils/formatDate'
 // Composable
 const docFlowStore = useDocFlowStore()
 const regIncoming = useRegIncoming()
-// Reactive
-const formRef = ref(null)
-const sidebarRef = ref(null)
-const sidebar = ref(false)
 // Hooks
 onMounted(async () => {
   await regIncoming.actionGetList()
 })
 // Methods
-const createDocument = async () => {
-  const _sidebarRef = unref(sidebarRef)
-  const _formRef = unref(formRef)
-  const valid = await _formRef.$v.$validate()
-
-  if(!valid) return
-
-  try {
-    _sidebarRef.successButtonLoading = true
-    let model = {
-      ...regIncoming.detailModel,
-      reviewers: regIncoming.detailModel.__reviewers.map(item => ({ user: item.id }))
-    }
-    await docFlowStore.actionCreateDocument(model)
-    _sidebarRef.successButtonLoading = false
-    sidebar.value = false
-    await regIncoming.actionGetList()
-  }
-  catch (error) {
-    _sidebarRef.successButtonLoading = false
-  }
+const openModal = () => {
+  docFlowStore.actionLoadFormCreateDocument('Incoming')
+  docFlowStore.actionToggleModalCreateDocument(true)
 }
 const link = (data) => {
   return { name: 'RegistrationIncomingShow', params: { id: data.id } }
@@ -66,7 +43,7 @@ const link = (data) => {
           icon-left="AddIcon"
           rounded
           type="button"
-          @click="sidebar = !sidebar"
+          @click="openModal"
         />
       </template>
     </action-toolbar>
@@ -172,18 +149,6 @@ const link = (data) => {
         </linkable-cell>
       </template>
     </base-data-table>
-
-    <base-sidebar
-      ref="sidebarRef"
-      v-model="sidebar"
-      title="create-document"
-      @emit:cancel-button="(value) => sidebar = value"
-      @emit:success-button="createDocument"
-    >
-      <template #content>
-        <incoming-form ref="formRef" />
-      </template>
-    </base-sidebar>
   </div>
 </template>
 

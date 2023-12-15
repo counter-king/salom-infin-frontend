@@ -1,27 +1,25 @@
 <script setup>
 // Core
 import { ref, unref } from 'vue'
+// Store
+import { useDocFlowStore } from '@/modules/Documents/modules/Registration/stores/docflow.store'
 // Components
 import RegisterDocumentDialog from '@/modules/Documents/modules/Registration/components/RegisterDocumentDialog.vue'
-// Methods
-const openCreateDocumentDialog = () => {
-  documentDialog.value = !documentDialog.value
-}
+// Composable
+const docFlowStore = useDocFlowStore()
 // Reactive
 const menuRef = ref(null)
 const items = ref([
   {
-
     label: 'Задача',
     icon: 'CheckCircleIcon',
-    command: openCreateDocumentDialog
+    command: () => docFlowStore.actionToggleModalCreateDocument(true)
   },
   {
     label: 'Документ',
     icon: 'ClipboardCheckIcon'
   }
 ])
-const documentDialog = ref(false)
 // Methods
 const toggle = (event) => {
   const _menuRef = unref(menuRef)
@@ -48,6 +46,6 @@ const toggle = (event) => {
   />
 
   <!-- RegisterDocumentDialog -->
-  <register-document-dialog v-model="documentDialog" />
+  <register-document-dialog v-model="docFlowStore.documentMenuModal" />
   <!-- /RegisterDocumentDialog -->
 </template>

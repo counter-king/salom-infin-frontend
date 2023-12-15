@@ -8,7 +8,9 @@ import { dispatchNotify } from '@/utils/notify'
 import { COLOR_TYPES } from '@/enums'
 export const useDocFlowStore = defineStore("docFlowStore", {
   state: () => ({
-    tree: null
+    tree: null,
+    documentMenuModal: false,
+    documentMenuType: 'Incoming'
   }),
   actions: {
     /**
@@ -44,6 +46,18 @@ export const useDocFlowStore = defineStore("docFlowStore", {
     async actionGetTree(payload) {
       let { data } = await fetchGetTree(payload)
       this.tree = data
+    },
+    /*
+    *
+    * */
+    actionToggleModalCreateDocument(payload) {
+      this.documentMenuModal = payload
+    },
+    /*
+    * Зогрузить форму для создание документа
+    * */
+    actionLoadFormCreateDocument(payload) {
+      this.documentMenuType = payload
     }
   }
 })
