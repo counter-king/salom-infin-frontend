@@ -5,7 +5,7 @@ import {useRoute, useRouter} from "vue-router";
 // Store
 import { useSDStore } from "../stores/index.store";
 // Constants
-import {SD_INNER_COLUMNS, SD_TYPE_INNER} from "../constants";
+import { ROUTE_SD_DETAIL, SD_INNER_COLUMNS, SD_TYPE_INNER} from "../constants";
 // Components
 import DocType from "../../../../../components/Chips/DocType.vue";
 import Status from "../../../../../components/Chips/Status.vue";
@@ -22,7 +22,13 @@ const title = computed(() => {
 })
 
 const onClickRow = (data) => {
-  console.log(data);
+  router.push({
+    name: ROUTE_SD_DETAIL,
+    params: {
+      id: data.id,
+      subType: data.sub_type
+    }
+  })
 }
 const onDeleteRow = (data) => {
   console.log(data)

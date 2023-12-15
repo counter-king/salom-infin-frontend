@@ -23,6 +23,14 @@ const SendDocuments = [
           isAuthRequired: true
         },
         component: () => import("../views/Create.vue"),
+      },
+      {
+        path: "detail/:id/:subType",
+        name: "SendDocumentsDetail",
+        meta: {
+          isAuthRequired: true
+        },
+        component: () => import("../views/Detail.vue"),
       }
     ]
   }
