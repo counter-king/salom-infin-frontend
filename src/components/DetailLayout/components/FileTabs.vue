@@ -131,8 +131,8 @@ const toggle = (event) => {
               class="flex-1 text-sm font-medium "
               :class="[ resolution.signed ? 'text-primary-500' : 'text-critic-500' ]"
             >
-              {{ resolution.signed ? t('document-signed') : t('document-not-signed') }}
-            </span>
+            {{ resolution.signed ? t('document-signed') : t('document-not-signed') }}
+          </span>
 
             <base-button
               label="Загрузить фишку"
