@@ -1,7 +1,7 @@
 <script setup>
 // Core
 import { ref, useModel, shallowRef, watch, defineAsyncComponent, unref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 // Stores
 import { useDocFlowStore } from '../stores/docflow.store'
@@ -19,6 +19,7 @@ import BaseSpinner from '@/components/UI/BaseSpinner.vue'
 import { clearModel } from '@/utils'
 // Composable
 const modelValue = useModel(props, 'modelValue')
+const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 const docFlowStore = useDocFlowStore()
@@ -142,25 +143,55 @@ const clearDocument = () => {
 const redirectRoute = async () => {
   switch(documentMenuType.value) {
     case 'Incoming':
-      await router.replace({ name: 'RegistrationIncomingIndex' })
+      if(route.name === 'RegistrationIncomingIndex') {
+        await incomingStore.actionGetList()
+      }
+      else {
+        await router.replace({ name: 'RegistrationIncomingIndex' })
+      }
       break;
     case 'Inner':
-      await router.replace({ name: 'RegistrationInnerIndex' })
+      if(route.name === 'RegistrationInnerIndex') {
+        await regInner.actionGetList()
+      }
+      else {
+        await router.replace({ name: 'RegistrationInnerIndex' })
+      }
       break;
     case 'Outgoing':
-      await router.replace({ name: 'RegistrationOutgoingIndex' })
+      if(route.name === 'RegistrationOutgoingIndex') {
+        await regOutgoing.actionGetList()
+      }
+      else {
+        await router.replace({ name: 'RegistrationOutgoingIndex' })
+      }
       break;
     case 'Appeal':
-      await router.replace({ name: 'RegistrationAppealIndex' })
+      if(route.name === 'RegistrationAppealIndex') {
+        await regAppeal.actionGetList()
+      }
+      else {
+        await router.replace({ name: 'RegistrationAppealIndex' })
+      }
       break;
     // case 'IncomingBranches':
     //   await router.replace({ name: 'RegistrationOrderInstructionIndex' })
     //   break;
     case 'OrderInstruction':
-      await router.replace({ name: 'RegistrationOrderInstructionIndex' })
+      if(route.name === 'RegistrationOrderInstructionIndex') {
+        await regOrderInstruction.actionGetList()
+      }
+      else {
+        await router.replace({ name: 'RegistrationOrderInstructionIndex' })
+      }
       break;
     case 'Statement':
-      await router.replace({ name: 'RegistrationStatementIndex' })
+      if(route.name === 'RegistrationStatementIndex') {
+        await regStatement.actionGetList()
+      }
+      else {
+        await router.replace({ name: 'RegistrationStatementIndex' })
+      }
       break;
     default:
   }

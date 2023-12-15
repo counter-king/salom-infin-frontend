@@ -38,6 +38,10 @@ onMounted(async () => {
         :object-id="incomingStore.detailModel.id"
         :headers="incomingStore.headers"
       >
+        <template #template>
+          template
+        </template>
+
         <template #preview-actions>
           <change-document />
         </template>
