@@ -11,6 +11,8 @@ import { LinkableCell } from '@/components/Table'
 import IncomingForm from '../../components/Form/Incoming.vue'
 // Constants
 import { R_INCOMING_COLUMNS } from '../../constants'
+// Utils
+import { formatDate } from '@/utils/formatDate'
 // Composable
 const docFlowStore = useDocFlowStore()
 const regIncoming = useRegIncoming()
@@ -82,9 +84,27 @@ const link = (data) => {
         </linkable-cell>
       </template>
 
+      <template #title="{ data }">
+        <linkable-cell :to="link(data)">
+          {{ data.title }}
+        </linkable-cell>
+      </template>
+
+      <template #document_type="{ data }">
+        <linkable-cell :to="link(data)">
+          <doc-type-chip :type="data.document_type.name"/>
+        </linkable-cell>
+      </template>
+
       <template #delivery_type="{ data }">
         <linkable-cell :to="link(data)">
           {{ data.delivery_type.name }}
+        </linkable-cell>
+      </template>
+
+      <template #description="{ data }">
+        <linkable-cell :to="link(data)">
+          {{ data.description }}
         </linkable-cell>
       </template>
 
@@ -100,15 +120,33 @@ const link = (data) => {
         </linkable-cell>
       </template>
 
-      <template #document_type="{ data }">
+      <template #number_of_papers="{ data }">
         <linkable-cell :to="link(data)">
-          <doc-type-chip :type="data.document_type.name"/>
+          {{ data.number_of_papers }}
         </linkable-cell>
       </template>
 
-      <template #status="{ data }">
+      <template #outgoing_date="{ data }">
         <linkable-cell :to="link(data)">
-          <status-chip :status="data.status"/>
+          {{ formatDate(data.outgoing_date) }}
+        </linkable-cell>
+      </template>
+
+      <template #outgoing_number="{ data }">
+        <linkable-cell :to="link(data)">
+          {{ data.outgoing_number }}
+        </linkable-cell>
+      </template>
+
+      <template #register_number="{ data }">
+        <linkable-cell :to="link(data)">
+          {{ data.register_number }}
+        </linkable-cell>
+      </template>
+
+      <template #register_date="{ data }">
+        <linkable-cell :to="link(data)">
+          {{ formatDate(data.register_date) }}
         </linkable-cell>
       </template>
 
@@ -119,6 +157,12 @@ const link = (data) => {
             shape="circle"
             avatar-classes="w-8 h-8"
           />
+        </linkable-cell>
+      </template>
+
+      <template #status="{ data }">
+        <linkable-cell :to="link(data)">
+          <status-chip :status="data.status"/>
         </linkable-cell>
       </template>
 
