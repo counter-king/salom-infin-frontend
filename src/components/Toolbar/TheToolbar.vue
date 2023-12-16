@@ -1,10 +1,8 @@
 <script setup>
 // Core
 import { ref, provide } from 'vue'
-import Toolbar from 'primevue/toolbar'
-// Store
-import { useNavigation } from '@/stores/navigation.store'
 import { onClickOutside } from '@vueuse/core'
+import Toolbar from 'primevue/toolbar'
 // Components
 import CreateActionDropdown from './CreateActionDropdown.vue'
 import Search from './Search.vue'
@@ -12,8 +10,6 @@ import SettingDropdown from './SettingDropdown.vue'
 import Notifications from './Notifications.vue'
 import LanguageDropdown from './LanguageDropdown.vue'
 import UserDropdown from './UserDropdown.vue'
-// Composable
-const navigationStore = useNavigation()
 // Reactive
 const menus = ref([
   // Дашбоард
@@ -37,119 +33,6 @@ const menus = ref([
     title: "Документ",
     icon: "FolderWithFilesIcon",
     link: "DocumentsIndex",
-    children: [
-      {
-        title: "Документ",
-        prefix: true
-      },
-      // Ящики
-      {
-        title: "Ящики",
-        icon: "InboxUnreadIcon",
-        link: "BoxesIndex",
-        children: [
-          // На рассмотрении
-          {
-            title: "На рассмотрении",
-            icon: "TimeHistoryIcon",
-            link: "ReviewIndex",
-            children: []
-          },
-          // Мои поручение
-          {
-            title: "Мои поручение",
-            icon: "ArrowRightDownIcon",
-            link: "AssignmentIndex",
-            children: []
-          },
-          // Исходящие
-          // {
-          //   title: "Исходящие",
-          //   icon: "ArrowRightDownIcon",
-          //   link: "OutgoingIndex",
-          //   children: []
-          // },
-          // На подпись
-          {
-            title: "На подпись",
-            icon: "PenIcon",
-            link: "SignIndex",
-            children: []
-          },
-          // На согласовании
-          {
-            title: "На согласовании",
-            icon: "EyeIcon",
-            link: "ApprovalIndex",
-            children: []
-          },
-          // На контроль
-          {
-            title: "На контроль",
-            icon: "CheckCircleIcon",
-            link: "ControlIndex",
-            children: []
-          },
-        ]
-      },
-      // Отправка документов
-      {
-        title: "Отправка документов",
-        icon: "ArchiveUpIcon",
-        link: "SendDocumentsIndex",
-        children: []
-      },
-      // Регистрация
-      {
-        title: "Регистрация",
-        icon: "ClipboardUpIcon",
-        link: "RegistrationIndex",
-        children: [
-          // Входящие
-          {
-            title: "Входящие",
-            icon: "ArrowRightDownIcon",
-            link: "RegistrationIncomingIndex",
-            children: []
-          },
-          // Внутренний
-          {
-            title: "Внутренний",
-            icon: "ArrowDownIcon",
-            link: "RegistrationInnerIndex",
-            children: []
-          },
-          // Исходящие
-          {
-            title: "Исходящие",
-            icon: "RoundAltArrowDownIcon",
-            link: "RegistrationOutgoingIndex",
-            children: []
-          },
-          // Обращения
-          {
-            title: "Обращения",
-            icon: "DocumentTextIcon",
-            link: "RegistrationAppealIndex",
-            children: []
-          },
-          // Приказы и распоряжения
-          {
-            title: "Приказы и распоряжения",
-            icon: "NotebookIcon",
-            link: "RegistrationOrderInstructionIndex",
-            children: []
-          },
-          // Заявления
-          {
-            title: "Заявления",
-            icon: "NotesIcon",
-            link: "RegistrationStatementIndex",
-            children: []
-          },
-        ]
-      },
-    ],
     value: "documents"
   },
   // Kanban
@@ -292,16 +175,14 @@ const menus = ref([
 const openModal = ref(true)
 const modalRef = ref(null)
 // Methods
-const openSidebar = (menu) => {
-  navigationStore.actionCurrentMenu(menu)
-}
 onClickOutside(
   modalRef,
   (event) => {
     openModal.value = true
   },
 )
-provide('openModal', openModal);
+// Provide
+provide('openModal', openModal)
 </script>
 
 <template>
@@ -320,32 +201,21 @@ provide('openModal', openModal);
         </router-link>
 
         <template v-for="menu in menus" v-if="openModal">
-          <!-- Если нет подразделы -->
-          <template v-if="menu.link">
-            <router-link
-              :to="{ name: menu.link }"
-              class="header-link group flex items-center text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full mr-3 transition-all duration-[400ms] hover:bg-primary-800 hover:text-white"
-              @click="openSidebar(menu)"
-            >
-              <base-icon v-if="menu.icon" :name="menu.icon" class="text-gray-2 transition-all duration-[400ms] group-hover:text-white mr-2" />
-              {{ menu.title }}
-            </router-link>
-          </template>
-
-          <template v-else>
-            <a @click="openSidebar(menu)" class="navigation-link group flex items-center text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full cursor-pointer mr-3 transition hover:bg-primary-800 hover:text-white">
-              <base-icon v-if="menu.icon" :name="menu.icon" class="text-gray-2 group-hover:text-white mr-2" />
-              {{ menu.title }}
-            </a>
-          </template>
+          <router-link
+            :to="{ name: menu.link }"
+            class="header-link group flex items-center text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full mr-3 transition-all duration-[400ms] hover:bg-primary-800 hover:text-white"
+          >
+            <base-icon v-if="menu.icon" :name="menu.icon" class="text-gray-2 transition-all duration-[400ms] group-hover:text-white mr-2" />
+            {{ menu.title }}
+          </router-link>
         </template>
       </template>
 
       <template #end>
         <div class="flex items-center gap-4">
-          <create-action-dropdown   v-if="openModal"/>
+          <create-action-dropdown v-if="openModal "/>
 
-          <div class="bg-greyscale-800 w-[1px] h-[28px]"  v-if="openModal"></div>
+          <div v-if="openModal" class="bg-greyscale-800 w-[1px] h-[28px]"></div>
 
           <div class="flex gap-2">
             <base-button
@@ -358,7 +228,7 @@ provide('openModal', openModal);
               @click="openModal = false"
             />
 
-            <search v-else="openModal" ref="modalRef"></search>
+            <search v-else ref="modalRef"></search>
 
             <setting-dropdown></setting-dropdown>
 
