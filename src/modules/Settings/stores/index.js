@@ -1,6 +1,5 @@
 // Core
-import {defineStore} from 'pinia'
-
+import { defineStore } from 'pinia'
 export const useSearchStore = defineStore("search-store", {
   state: () => ({
     filterState: {
