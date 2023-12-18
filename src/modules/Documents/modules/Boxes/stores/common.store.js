@@ -12,9 +12,57 @@ import {
 import { clearModel, setValuesToKeys } from '@/utils'
 import { dispatchNotify } from '@/utils/notify'
 import { RESOLUTION_TYPES, RESOLUTION_CREATE_TYPES, COLOR_TYPES } from "@/enums"
-
 export const useBoxesCommonStore = defineStore("boxes-common", {
   state: () => ({
+    routes: {
+      title: "Ящики",
+      icon: "InboxUnreadIcon",
+      link: "BoxesIndex",
+      children: [
+        // На рассмотрении
+        {
+          title: "На рассмотрении",
+          icon: "TimeHistoryIcon",
+          link: "ReviewIndex",
+          children: []
+        },
+        // Мои поручение
+        {
+          title: "Мои поручение",
+          icon: "ArrowRightDownIcon",
+          link: "AssignmentIndex",
+          children: []
+        },
+        // Исходящие
+        // {
+        //   title: "Исходящие",
+        //   icon: "ArrowRightDownIcon",
+        //   link: "OutgoingIndex",
+        //   children: []
+        // },
+        // На подпись
+        {
+          title: "На подпись",
+          icon: "PenIcon",
+          link: "SignIndex",
+          children: []
+        },
+        // На согласовании
+        {
+          title: "На согласовании",
+          icon: "EyeIcon",
+          link: "ApprovalIndex",
+          children: []
+        },
+        // На контроль
+        {
+          title: "На контроль",
+          icon: "CheckCircleIcon",
+          link: "ControlIndex",
+          children: []
+        },
+      ]
+    },
     createdResolutionsList: {
       label: 'created-resolutions',
       items: []

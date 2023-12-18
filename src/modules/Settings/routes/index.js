@@ -21,12 +21,13 @@ const Settings = [
       },
       // Документ оборот
       {
-        path: "document-turnover",
-        name: "DocumentTurnoverIndex",
+        path: "document-flow",
+        name: "DocumentFlowIndex",
         meta: {
-          isAuthRequired: true
+          isAuthRequired: true,
+          navigation: true
         },
-        component: () => import("../views/DocumentTurnover/index.vue"),
+        component: () => import("../views/DocumentFlow/index.vue"),
         redirect: { name: "DocumentTypeIndex" },
         children: [
           // Тип документа
@@ -34,18 +35,20 @@ const Settings = [
             path: "document-type",
             name: "DocumentTypeIndex",
             meta: {
-              isAuthRequired: true
+              isAuthRequired: true,
+              navigation: true
             },
-            component: () => import("../views/DocumentTurnover/DocumentType/index.vue"),
+            component: () => import("../views/DocumentFlow/DocumentType/index.vue"),
           },
           // Вид документа
           {
             path: "document-view",
             name: "DocumentViewIndex",
             meta: {
-              isAuthRequired: true
+              isAuthRequired: true,
+              navigation: true
             },
-            component: () => import("../views/DocumentTurnover/DocumentView/index.vue"),
+            component: () => import("../views/DocumentFlow/DocumentView/index.vue"),
           },
           // Журнал
           {
@@ -54,7 +57,7 @@ const Settings = [
             meta: {
               isAuthRequired: true
             },
-            component: () => import("../views/DocumentTurnover/Magazine/index.vue"),
+            component: () => import("../views/DocumentFlow/Magazine/index.vue"),
           },
         ]
       },

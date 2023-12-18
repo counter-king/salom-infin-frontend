@@ -112,7 +112,10 @@ const link = (data) => {
       </template>
 
       <template #status="{ data }">
-        <linkable-cell :to="link(data)">
+        <linkable-cell
+          v-if="data.status"
+          :to="link(data)"
+        >
           <status-chip :status="data.status"/>
         </linkable-cell>
       </template>

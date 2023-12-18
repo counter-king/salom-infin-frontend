@@ -13,7 +13,8 @@ const Boxes = [
         path: "review",
         name: "ReviewIndex",
         meta: {
-          isAuthRequired: true
+          isAuthRequired: true,
+          navigation: true
         },
         component: () => import("../views/Review/index.vue"),
       },
@@ -30,7 +31,8 @@ const Boxes = [
         path: "assignment",
         name: "AssignmentIndex",
         meta: {
-          isAuthRequired: true
+          isAuthRequired: true,
+          navigation: true
         },
         component: () => import("../views/Assignment/index.vue"),
       },
@@ -47,7 +49,8 @@ const Boxes = [
         path: "outgoing",
         name: "OutgoingIndex",
         meta: {
-          isAuthRequired: true
+          isAuthRequired: true,
+          navigation: true
         },
         component: () => import("../views/Outgoing/index.vue"),
       },
@@ -56,7 +59,8 @@ const Boxes = [
         path: "sign",
         name: "SignIndex",
         meta: {
-          isAuthRequired: true
+          isAuthRequired: true,
+          navigation: true
         },
         component: () => import("../views/Sign/index.vue"),
       },
@@ -65,7 +69,8 @@ const Boxes = [
         path: "approval",
         name: "ApprovalIndex",
         meta: {
-          isAuthRequired: true
+          isAuthRequired: true,
+          navigation: true
         },
         component: () => import("../views/Approval/index.vue"),
       },
@@ -74,7 +79,8 @@ const Boxes = [
         path: "control",
         name: "ControlIndex",
         meta: {
-          isAuthRequired: true
+          isAuthRequired: true,
+          navigation: true
         },
         component: () => import("../views/Control/index.vue"),
       },

@@ -8,6 +8,55 @@ import { dispatchNotify } from '@/utils/notify'
 import { COLOR_TYPES } from '@/enums'
 export const useDocFlowStore = defineStore("docFlowStore", {
   state: () => ({
+    routes: {
+      title: "Регистрация",
+      icon: "ClipboardUpIcon",
+      link: "RegistrationIndex",
+      children: [
+        // Входящие
+        {
+          title: "Входящие",
+          icon: "ArrowRightDownIcon",
+          link: "RegistrationIncomingIndex",
+          children: []
+        },
+        // Внутренний
+        {
+          title: "Внутренний",
+          icon: "ArrowDownIcon",
+          link: "RegistrationInnerIndex",
+          children: []
+        },
+        // Исходящие
+        {
+          title: "Исходящие",
+          icon: "RoundAltArrowDownIcon",
+          link: "RegistrationOutgoingIndex",
+          children: []
+        },
+        // Обращения
+        {
+          title: "Обращения",
+          icon: "DocumentTextIcon",
+          link: "RegistrationAppealIndex",
+          children: []
+        },
+        // Приказы и распоряжения
+        {
+          title: "Приказы и распоряжения",
+          icon: "NotebookIcon",
+          link: "RegistrationOrderInstructionIndex",
+          children: []
+        },
+        // Заявления
+        {
+          title: "Заявления",
+          icon: "NotesIcon",
+          link: "RegistrationStatementIndex",
+          children: []
+        },
+      ]
+    },
     tree: null,
     documentMenuModal: false,
     documentMenuType: 'Incoming'
