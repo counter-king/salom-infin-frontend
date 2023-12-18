@@ -218,6 +218,7 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
         await fetchDeleteResolutionById({ id, comment })
         dispatchNotify('Резолюция удален', null, COLOR_TYPES.SUCCESS)
         await this.actionResolutionsList({ id: resolutionListId })
+        clearModel(this.resolutionModel, ['type'])
         return Promise.resolve()
       } catch(error) {
         dispatchNotify('Ошибка', 'Ошибка удаление резолюции', COLOR_TYPES.ERROR)

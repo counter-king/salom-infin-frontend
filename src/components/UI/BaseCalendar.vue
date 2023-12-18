@@ -103,6 +103,9 @@ const modelValue = computed({
               },
             ]
           }
+        },
+        panel: {
+          class: '!min-w-[425px]'
         }
       }"
     >

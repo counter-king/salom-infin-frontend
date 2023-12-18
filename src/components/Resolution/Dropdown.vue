@@ -9,7 +9,8 @@ import { ModalComment } from '@/components/Modal'
 import ResolutionForm from './components/Form.vue'
 // Utils
 import { clearModel } from '@/utils'
-import { RESOLUTION_CREATE_TYPES } from '@/enums'
+import { dispatchNotify } from '@/utils/notify'
+import { COLOR_TYPES, RESOLUTION_CREATE_TYPES } from '@/enums'
 import { FORM_TYPE_CREATE, FORM_TYPE_UPDATE } from '@/constants/constants'
 // Composable
 const { t } = useI18n()
@@ -59,7 +60,9 @@ const items = ref([
       {
         label: 'create-resolutions',
         icon: 'AddCircleIcon',
-        command: () => createResolutionDialog.value = true
+        command: () => props.isResolutionSigned
+          ? dispatchNotify('Сначало отмените подпись', null, COLOR_TYPES.SUCCESS)
+          : createResolutionDialog.value = true
       }
     ]
   },
@@ -78,7 +81,7 @@ const toggle = (event) => {
   _menuRef.menuRef.toggle(event)
 }
 const clearDocument = () => {
-  // clearModel()
+  clearModel(boxesCommonStore.resolutionModel, ['type'])
 }
 const createResolution = async () => {
   try {
@@ -118,6 +121,7 @@ const deleteResolution = async (text) => {
       comment: text
     })
     deleteResolutionDialog.value = false
+    resolutionActionTypes.value = FORM_TYPE_CREATE
   } catch (error) {
 
   }
@@ -194,15 +198,17 @@ const deleteResolution = async (text) => {
       </template>
 
       <template #footer>
-        <base-button
-          label="clear"
-          rounded
-          outlined
-          shadow
-          color="text-primary-900"
-          border-color="border-transparent"
-          @click="clearDocument"
-        />
+        <template v-if="resolutionActionTypes === FORM_TYPE_CREATE">
+          <base-button
+            label="clear"
+            rounded
+            outlined
+            shadow
+            color="text-primary-900"
+            border-color="border-transparent"
+            @click="clearDocument"
+          />
+        </template>
 
         <base-button
           :loading="createButtonLoading"
@@ -217,8 +223,8 @@ const deleteResolution = async (text) => {
     <!-- Delete resolution modal -->
     <modal-comment
       v-model="deleteResolutionDialog"
+      :create-button-fn="deleteResolution"
       create-button-color="danger"
-      @emit:up="deleteResolution"
     />
     <!-- /Delete resolution modal -->
   </div>
