@@ -1,6 +1,7 @@
 <script setup>
 // Core
-import { ref, computed, onMounted, useModel, unref } from 'vue'
+import { ref, computed, onMounted, useModel, unref, watch } from 'vue'
+import { useDebounce } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
 import MultiSelect from 'primevue/multiselect'
 import axiosConfig from "@/services/axios.config"
@@ -95,8 +96,11 @@ const props = defineProps({
 // Reactive
 const menuRef = ref(null)
 const list = ref([])
+const search = ref(null)
 // Non-reactive
 const modelValueCopy = modelValue.value
+// Composable
+const debounced = useDebounce(search, 750)
 // Computed
 const options = computed(() => props.options.length
   ? props.options
@@ -148,8 +152,6 @@ const removeItem = (event, value) => {
   )
 }
 const selectItem = (event, value) => {
-  // console.log('value', value)
-  // console.log('modelValueCopy', modelValueCopy)
   emit('emit:select-item', value)
 }
 const toggle = (event) => {
@@ -163,7 +165,19 @@ onMounted(async () => {
     await loadList(props.apiParams)
   }
 })
-
+// Watch
+watch(debounced, async () => {
+  // Если не переданы props.options
+  if(!props.options.length) {
+    await loadList({
+      ...props.apiParams,
+      search: search.value
+    })
+  }
+  else {
+    console.log('filter is not done for props options :)')
+  }
+})
 const testFunc = (value) => {
   console.log(value);
 }
@@ -241,6 +255,7 @@ const testFunc = (value) => {
       <template #header="{ value, options }">
         <div class="flex items-center border-b border-greyscale-200">
           <input
+            v-model="search"
             type="text"
             :placeholder="t(props.menuPlaceholder)"
             class="flex-1 p-3 block outline-none font-medium text-sm text-gray-1"

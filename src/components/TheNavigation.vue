@@ -32,16 +32,7 @@ const checkRouteMeta = () => {
     v-if="visible"
     class="flex flex-col flex-1 relative -m-6 mb-6"
   >
-    <template v-if="navigationStore.sidebarCollapse">
-      <div
-        class="bg-primary-50 flex items-center justify-center border border-l-0 border-greyscale-200 rounded-r-lg w-5 h-8 cursor-pointer absolute top-[12px] left-0"
-        @click="navigationStore.actionSidebarCollapse(false)"
-      >
-        <base-icon name="AltArrowLeftIcon" width="16" height="16" class="-scale-x-100 text-greyscale-500" />
-      </div>
-    </template>
-
-    <div class="bg-white border-b border-greyscale-200 py-2 px-6">
+    <div class="bg-white border-b border-greyscale-200 py-2 px-7">
       <div class="flex items-center">
         <template v-for="menu in props.navs" :key="menu.link">
           <router-link
