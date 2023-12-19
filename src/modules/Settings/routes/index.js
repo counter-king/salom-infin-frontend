@@ -133,7 +133,10 @@ const Settings = [
             path: "top-signers",
             name: "TopSignersIndex",
             navigation: true,
-            meta: { isAuthRequired: true },
+            meta: {
+              isAuthRequired: true,
+              navigation: true,
+            },
             component: () => import("../views/Users/TopSigners/index.vue"),
           },
         ]

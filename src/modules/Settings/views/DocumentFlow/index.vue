@@ -10,19 +10,16 @@ const changeLanguage = () => {
       title: "Тип документа",
       icon: "ClipboardCheckIcon",
       link: "DocumentTypeIndex",
-      children: []
     },
     {
       title: "Вид документа",
       icon: "DocumentTextIcon",
       link: "DocumentViewIndex",
-      children: []
     },
     {
       title: "Журнал",
       icon: "NotebookIcon",
       link: "MagazineIndex",
-      children: []
     }
   ];
 };
