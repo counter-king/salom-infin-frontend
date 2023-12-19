@@ -1,11 +1,7 @@
 <script setup>
-// Core
 import { useI18n } from 'vue-i18n'
-// Store
 import { useSearchStore } from "./stores/index";
-// Components
 import { CardTable} from "../../../../components/Table/index";
-// Composable
 const { t } = useI18n()
 const searchStore = useSearchStore();
 </script>
@@ -14,7 +10,6 @@ const searchStore = useSearchStore();
     <div class="flex mb-5 justify-between items-center">
       <h1 class="text-2xl font-bold text-primary-900">Техника и оборудования</h1>
     </div>
-
     <div class="bg-white flex flex-col h-full rounded-2xl p-6">
       <card-table
         class="m-e-table"
@@ -24,19 +19,15 @@ const searchStore = useSearchStore();
         <template #number="{ data }">
           {{data.number}}
         </template>
-
         <template #nameTechnique="{ data }">
           {{data.nameTechnique}}
         </template>
-
         <template #id="{ data }">
           {{data.id}}
         </template>
-
         <template #inb="{ data }">
           {{data.inb}}
         </template>
-
         <template #dateEntered="{ data }">
           {{data.dateEntered}}
         </template>
@@ -44,7 +35,6 @@ const searchStore = useSearchStore();
     </div>
   </div>
 </template>
-
 <style>
 .table-card.m-e-table tr td:first-child {
   border-top-left-radius: 0px;
@@ -76,4 +66,3 @@ const searchStore = useSearchStore();
   border-bottom-right-radius: 12px;
 }
 </style>
-

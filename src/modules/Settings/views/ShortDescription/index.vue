@@ -1,8 +1,6 @@
 <script setup>
 </script>
 <template>
-  <div>
-    Organizations Page
-  </div>
+   <div>Short Description Page</div>
 </template>
 <style></style>

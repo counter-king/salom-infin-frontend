@@ -1,11 +1,8 @@
 <script setup>
-
 </script>
 <template>
   <div>
-    Salom General SettingsIndex
+    General Settings Page
   </div>
 </template>
-<style>
-
-</style>
+<style></style>

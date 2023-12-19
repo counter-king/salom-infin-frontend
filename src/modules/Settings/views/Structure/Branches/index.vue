@@ -1,7 +1,5 @@
 <script setup></script>
 <template>
-  <div>
-    Assistants Page
-  </div>
+   <div>Branches Page</div>
 </template>
 <style></style>

@@ -13,7 +13,7 @@ const pageSize = filter.page_size;
 const page = filter.page;
 onMounted(() => {
   loading.value = true;
-  filter = defaultFilter;
+  filter.value = defaultFilter;
   axiosConfig
     .get('users/')
     .then(response => {
@@ -138,6 +138,4 @@ onMounted(() => {
     </Dialog>
   </div>
 </template>
-<style>
-
-</style>
+<style></style>

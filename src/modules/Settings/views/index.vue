@@ -1,34 +1,79 @@
 <script setup>
-// Core
-import { ref } from 'vue'
-// Stores
-import { useSettingsDocFlow } from '../stores/docflow.store'
-// Components
-import TheSidebar from '@/components/TheSidebar.vue'
-// Composable
-const settingsDocFLow = useSettingsDocFlow()
-// Reactive
-const menus = ref([
-  {
-    title: "Настройки",
-    prefix: true
-  },
-  // Документ оборот
-  settingsDocFLow.routes
-])
+import { ref, watch, onMounted } from 'vue';
+import { useI18n } from "vue-i18n";
+import TheSidebar from '@/components/TheSidebar.vue';
+const { locale } = useI18n();
+const menus = ref([]);
+const changeLanguage = () => {
+  menus.value = [
+    {
+      title: 'Настройки',
+      prefix: true
+    },
+    {
+      icon: 'FolderWithFilesIcon',
+      link: 'DocumentFlowIndex',
+      title: 'Документ оборот',
+    },
+    {
+      icon: 'BuildingsIcon',
+      link: 'CorrespondentsIndex',
+      title: 'Корреспонденты',
+    },
+    {
+      icon: 'BoxIcon',
+      link: 'StructureIndex',
+      title: 'Структура',
+    },
+    {
+      icon: 'UsersGroupTwoRoundedIcon',
+      link: 'UsersIndex',
+      title: 'Пользователи',
+    },
+    {
+      icon: 'DocumentTextIcon',
+      link: 'ShortDescriptionIndex',
+      title: 'Краткое описание',
+    },
+    {
+      icon: 'UserIcon',
+      link: 'ProfileIndex',
+      title: 'Профиль',
+    },
+    {
+      icon: 'LaptopMinimalisticIcon',
+      link: 'DevicesIndex',
+      title: 'Мои устройства',
+    },
+    {
+      icon: 'BellIcon',
+      link: 'NotificationsIndex',
+      title: 'Уведомления',
+    },
+    {
+      icon: 'MouseIcon',
+      link: 'EquipmentsIndex',
+      title: 'Техника и оборудования',
+    },
+    {
+      icon: 'SettingsMinimalisticIcon',
+      link: 'GeneralSettingsIndex',
+      title: 'Общие настройки',
+    }
+  ];
+};
+watch(locale, () => {
+  changeLanguage();
+});
+onMounted(() => {
+  changeLanguage();
+});
 </script>
-
 <template>
   <div class="settings-view flex w-full">
     <the-sidebar :menus="menus" />
-
     <div class="flex-1 overflow-y-auto p-6">
       <router-view />
     </div>
   </div>
 </template>
-
-<style scoped>
-
-</style>
-

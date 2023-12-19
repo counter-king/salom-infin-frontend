@@ -1,11 +1,8 @@
 <script setup>
-
 </script>
 <template>
   <div>
-    Salom Document View
+    Document View Page
   </div>
 </template>
-<style>
-
-</style>
+<style></style>

@@ -1,11 +1,8 @@
 <script setup>
-
 </script>
 <template>
   <div>
-    Salom Document Type
+    Document Type Page
   </div>
 </template>
-<style>
-
-</style>
+<style></style>

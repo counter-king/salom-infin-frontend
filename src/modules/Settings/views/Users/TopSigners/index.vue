@@ -1,11 +1,7 @@
-<script setup>
-
-</script>
+<script setup></script>
 <template>
   <div>
-    Salom Top signers
+    Top Signers Page
   </div>
 </template>
-<style>
-
-</style>
+<style></style>

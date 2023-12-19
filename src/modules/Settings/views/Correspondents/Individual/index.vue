@@ -1,11 +1,8 @@
 <script setup>
-
 </script>
 <template>
   <div>
-    Salom Individual
+    Individual Page
   </div>
 </template>
-<style>
-
-</style>
+<style></style>
