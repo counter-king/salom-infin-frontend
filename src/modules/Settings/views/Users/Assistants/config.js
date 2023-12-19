@@ -42,3 +42,11 @@ export const dialogConfig = {
    header: { class: ['rounded-t-2xl bg-greyscale-50 border border-solid border-b-greyscale-200'] },
    root: { class: ['p-dialog rounded-2xl'] },
 };
+export const menuConfig = {
+   action: { class: ['py-[6px] pl-3 min-h-[32px]'] },
+   content: { class: ['rounded-lg'] },
+   label: { class: ['text-sm font-medium text-primary-900'] },
+   menuitem: { class: 'group mb-1' },
+   root: { class: 'translate-y-1 rounded-xl shadow-menu px-1 pb-0' },
+   submenuHeader: { class: 'py-[6px] pl-3 text-sm font-semibold text-primary-500' }
+}
