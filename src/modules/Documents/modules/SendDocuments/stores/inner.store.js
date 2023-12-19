@@ -4,12 +4,17 @@ import { defineStore } from 'pinia';
 import {helpers, required} from "@vuelidate/validators";
 import {withAsync} from "@/utils/withAsync";
 // Services
-import {fetchCreateDocument} from "@/modules/Documents/modules/SendDocuments/services/index.service";
+import {
+  fetchCreateDocument,
+  fetchGetDocumentDetail
+} from "@/modules/Documents/modules/SendDocuments/services/index.service";
 import {SD_TYPE_INNER} from "@/modules/Documents/modules/SendDocuments/constants";
+import logger from "quill/core/logger";
 
 export const useSDStoreInner = defineStore("sd-store-inner", {
   state: () => ({
     buttonLoading: false,
+    detailLoading: false,
     model: {
       content: null,
       document_type: null,
@@ -65,6 +70,14 @@ export const useSDStoreInner = defineStore("sd-store-inner", {
       } else {
         return Promise.reject(error);
       }
-    }
+    },
+    /** **/
+    // async actionGetDocumentDetail(id){
+    //   this.detailLoading = true;
+    //   const { response, error } = await withAsync(fetchGetDocumentDetail, id);
+    //   if (response){
+    //     console.log(response)
+    //   }
+    // }
   }
 })

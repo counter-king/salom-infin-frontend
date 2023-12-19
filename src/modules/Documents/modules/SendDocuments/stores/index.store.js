@@ -1,6 +1,10 @@
 // Core
 import {defineStore} from 'pinia'
-import { fetchGetDocumentList } from "@/modules/Documents/modules/SendDocuments/services/index.service";
+import {
+  fetchGetDocumentDetail,
+  fetchGetDocumentList
+} from "@/modules/Documents/modules/SendDocuments/services/index.service";
+import {withAsync} from "@/utils/withAsync";
 
 export const useSDStore = defineStore("sd-store", {
   state: () => ({
@@ -107,7 +111,9 @@ export const useSDStore = defineStore("sd-store", {
       },
     ],
     documentList: [],
+    detailModel: {},
     listLoading: false,
+    detailLoading: false,
     filterState: {
       page: 1,
       page_size: 15
@@ -322,6 +328,14 @@ export const useSDStore = defineStore("sd-store", {
       this.listLoading = false;
 
       return Promise.resolve(data);
+    },
+    /** **/
+    async actionGetDocumentDetail(id){
+      const { response, error } = await withAsync(fetchGetDocumentDetail, id);
+      if (response){
+        this.detailModel = response.data;
+        return Promise.resolve(response);
+      }
     }
   }
 })

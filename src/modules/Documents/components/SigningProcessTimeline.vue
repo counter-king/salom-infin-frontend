@@ -1,0 +1,123 @@
+<script setup>
+// Core
+import {computed, ref} from "vue";
+import {useI18n} from "vue-i18n";
+import Timeline from 'primevue/timeline';
+import {formatDateHour} from "../../../utils/formatDate";
+
+const properties = defineProps({
+  composeModel: {
+    type: Object,
+    default: () => {},
+    required: true
+  }
+})
+
+const { t } = useI18n();
+
+const signingProcessComputed = computed(() => {
+  if (!(properties.composeModel && properties.composeModel.approvers && properties.composeModel.signers)) {
+    return [];
+  }
+  const author = { user: properties.composeModel.author, type: "author" };
+  const approvers = properties.composeModel.approvers.map(item => ({ ...item, type: "approvers" }));
+  const signers = properties.composeModel.signers.map(item => ({ ...item, type: "signers" }));
+
+  return [author, ...approvers, ...signers];
+});
+
+// Methods
+const returnConnectorClasses = (props, context) => {
+  return props.value[context.index].type === "author" ? 'bg-success-500' : ''
+}
+const returnItemIcon = (item) => {
+  return item.type === 'author' ? 'PenIcon' : item.type === 'signers' ? 'CheckCircleIcon' : 'FileCheckIcon'
+}
+const returnItemRole = (item) => {
+  return item.type === 'author' ? t('author') : item.type === 'signers' ? t('signer') : t('approver')
+}
+const returnItemActionTime = (item) => {
+  if (item.type === 'author') {
+    return formatDateHour(properties.composeModel.created_date)
+  } else {
+    return item.action_date ? formatDateHour(item.action_date) : null
+  }
+}
+const returnItemActionValue = (item) => {
+  return item.type === 'author' ? t('author')
+    : (item.type === 'approvers' && item.is_approved === true) ? t('agree')
+      : (item.type === 'approvers' && item.is_approved === false) ? t('not-agree')
+        : (item.type === 'approvers' && item.is_approved === null) ? t('not-checked')
+          : (item.type === 'signers' && item.is_signed === true) ? t('signed')
+            : (item.type === 'signers' && item.is_signed === false) ? t('rejected')
+              : t('not-checked');
+}
+</script>
+
+<template>
+  <div class="signing-process bg-greyscale-50 rounded-xl p-6 overflow-y-auto" style="max-height: calc(100vh - 300px)">
+    <Timeline
+      v-if="properties.composeModel"
+      :value="signingProcessComputed"
+      :pt="{
+        opposite: { class: [ 'hidden' ] },
+        connector: ({ props, context }) => (
+          { class: [returnConnectorClasses(props, context)] }
+        )
+      }"
+    >
+      <template #marker="{ item }">
+        <base-icon
+          :name="item.type === 'author' ? 'CheckCircleBgIcon' : 'Circle'"
+          width="29"
+          height="29"
+          :stroke="false"
+          :class="item.type === 'author' ? 'text-success-500' : 'text-white'"
+        />
+      </template>
+
+      <template #content="{ item }">
+        <div class="flex p-5 rounded-xl bg-white mb-3">
+          <div class="user-avatar">
+            <base-avatar
+              :label="item?.user.first_name"
+              :color="item?.user.color"
+              shape="circle"
+              avatar-classes="w-10 h-10"
+            />
+          </div>
+
+          <div class="flex flex-col ml-3 w-full">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <base-icon
+                  :name="returnItemIcon(item)"
+                  width="16"
+                  height="16"
+                  class="text-greyscale-500"
+                  :stroke="item.type !== 'approvers'"
+                />
+                <span class="text-sm font-semibold text-primary-500 mx-2">{{ returnItemRole(item) }}</span>
+                <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-lg"></div>
+                <span class="text-sm font-medium text-greyscale-300 block ml-2">{{ returnItemActionTime(item) }}</span>
+              </div>
+
+              <div class="text-xs font-semibold text-success-500 bg-success-50 px-2 py-[2px] rounded-2xl border-success-100 border">
+                {{ returnItemActionValue(item) }}
+              </div>
+            </div>
+
+            <div class="text-sm font-semibold text-greyscale-900 mt-1">
+              {{ item?.user.full_name }}
+            </div>
+          </div>
+        </div>
+<!--        <pre>{{ item }}</pre>-->
+      </template>
+    </Timeline>
+  </div>
+</template>
+
+<style scoped>
+
+</style>
