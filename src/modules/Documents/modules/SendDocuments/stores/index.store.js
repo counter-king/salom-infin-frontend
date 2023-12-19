@@ -111,6 +111,7 @@ export const useSDStore = defineStore("sd-store", {
       },
     ],
     documentList: [],
+    detailModel: {},
     listLoading: false,
     detailLoading: false,
     filterState: {
@@ -330,10 +331,10 @@ export const useSDStore = defineStore("sd-store", {
     },
     /** **/
     async actionGetDocumentDetail(id){
-      this.detailLoading = true;
       const { response, error } = await withAsync(fetchGetDocumentDetail, id);
       if (response){
-        console.log(response);
+        this.detailModel = response.data;
+        return Promise.resolve(response);
       }
     }
   }

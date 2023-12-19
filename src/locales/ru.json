@@ -238,5 +238,8 @@
   "document-signed": "Документ подписан",
   "document-not-signed": "Документ еще не подписан",
   "document-sent": "Документ отправлен!",
-  "error-occurred": "Произошла ошибка!"
+  "error-occurred": "Произошла ошибка!",
+  "approver": "Согласующий",
+  "signer": "Подписант",
+  "not-checked": "Не проверенный"
 }
