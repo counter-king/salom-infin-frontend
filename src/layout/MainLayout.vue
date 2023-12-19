@@ -1,29 +1,28 @@
 <script setup>
 // Core
-import { ref, onMounted } from "vue"
-// Components
-import TheToolbar from "@/components/Toolbar/TheToolbar.vue"
-import TheSidebar from "@/components/TheSidebar.vue"
-
-import { useCommonStore } from "@/stores/common"
-import { useAuthStore } from "../modules/Auth/stores/index"
-import { getStorageItem } from "@/utils/storage"
-import { ACCESS } from "@/constants/storage"
-
+import { ref, onMounted } from 'vue'
 // Store
-import { useNavigation } from "@/stores/navigation.store"
+import { useCommonStore } from '@/stores/common'
+import { useAuthStore } from '../modules/Auth/stores/index'
+// Components
+import TheToolbar from '@/components/Toolbar/TheToolbar.vue'
+// Utils
+import { getStorageItem } from '@/utils/storage'
+import { ACCESS } from '@/constants/storage'
 // Composable
-
 const commonStore = useCommonStore()
 const authStore = useAuthStore()
+// Reactive
 // TODO: false
-const appVisible = ref(false)
-
+const appLoading = ref(true)
+// Hooks
 onMounted(async () => {
   // TODO: uncomment
   await getCurrentUser()
   await commonStore.init()
-  appVisible.value = true
+  setTimeout(() => {
+    appLoading.value = false
+  }, 500)
 })
 // Methods
 const getCurrentUser = async () => {
@@ -32,32 +31,23 @@ const getCurrentUser = async () => {
     getStorageItem(ACCESS) && await authStore.actionUserProfile()
   }
 }
-
-const navigationStore = useNavigation()
-// Hooks
-onMounted(() => {
-  navigationStore.actionCurrentMenuSet()
-})
 </script>
 
 <template>
-	<div v-if="appVisible" class="main-layout-view h-screen">
+  <template v-if="appLoading">
+    <div class="h-screen">
+      <base-spinner content />
+    </div>
+  </template>
+
+	<div
+    v-else
+    class="main-layout-view h-screen"
+  >
 		<the-toolbar />
 
 		<div class="main-layout-content flex overflow-hidden">
-      <template v-if="navigationStore.currentMenuLoading">
-        <base-spinner content />
-      </template>
-
-      <template v-else>
-        <the-sidebar>
-          <template #content>
-            <div class="main-layout-router flex-1 overflow-y-auto py-7 px-6">
-              <router-view />
-            </div>
-          </template>
-        </the-sidebar>
-      </template>
+      <router-view class="bg-primary-50" />
 		</div>
 	</div>
 </template>

@@ -2,13 +2,13 @@
 // Components
 import TheNavigation from '@/components/TheNavigation.vue'
 // Stores
-import { useBoxesCommonStore } from '../stores/common.store'
+import { useSettingsDocFlow } from '../../stores/docflow.store'
 // Composable
-const boxesStore = useBoxesCommonStore()
+const settingsDocFlow = useSettingsDocFlow()
 </script>
 
 <template>
-  <the-navigation :navs="boxesStore.routes.children" />
+  <the-navigation :navs="settingsDocFlow.routes.children" />
 
   <router-view />
 </template>
@@ -16,3 +16,4 @@ const boxesStore = useBoxesCommonStore()
 <style scoped>
 
 </style>
+

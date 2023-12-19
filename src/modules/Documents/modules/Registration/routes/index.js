@@ -13,7 +13,8 @@ const Registration = [
         path: "incoming",
         name: "RegistrationIncomingIndex",
         meta: {
-          isAuthRequired: true
+          isAuthRequired: true,
+          navigation: true
         },
         component: () => import("../views/Incoming/index.vue"),
       },
@@ -31,7 +32,8 @@ const Registration = [
         path: "inner",
         name: "RegistrationInnerIndex",
         meta: {
-          isAuthRequired: true
+          isAuthRequired: true,
+          navigation: true
         },
         component: () => import("../views/Inner/index.vue"),
       },
@@ -49,7 +51,8 @@ const Registration = [
         path: "outgoing",
         name: "RegistrationOutgoingIndex",
         meta: {
-          isAuthRequired: true
+          isAuthRequired: true,
+          navigation: true
         },
         component: () => import("../views/Outgoing/index.vue"),
       },
@@ -67,7 +70,8 @@ const Registration = [
         path: "appeal",
         name: "RegistrationAppealIndex",
         meta: {
-          isAuthRequired: true
+          isAuthRequired: true,
+          navigation: true
         },
         component: () => import("../views/Appeal/index.vue"),
       },
@@ -85,7 +89,8 @@ const Registration = [
         path: "orderInstruction",
         name: "RegistrationOrderInstructionIndex",
         meta: {
-          isAuthRequired: true
+          isAuthRequired: true,
+          navigation: true
         },
         component: () => import("../views/OrderInstruction/index.vue"),
       },
@@ -103,7 +108,8 @@ const Registration = [
         path: "statement",
         name: "RegistrationStatementIndex",
         meta: {
-          isAuthRequired: true
+          isAuthRequired: true,
+          navigation: true
         },
         component: () => import("../views/Statement/index.vue"),
       },

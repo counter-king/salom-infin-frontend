@@ -4,7 +4,7 @@ import Playground from "../modules/Playground/routes"
 import Auth from "../modules/Auth/routes"
 import Dashboard from "../modules/Dashboard/routes"
 import Documents from "../modules/Documents/routes"
-import Settings from "../modules/Setting/routes"
+import Settings from "../modules/Settings/routes"
 import Search from "../modules/Search/routes"
 
 import { getStorageItem } from "@/utils/storage"

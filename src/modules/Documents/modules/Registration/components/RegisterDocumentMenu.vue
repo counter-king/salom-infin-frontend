@@ -1,48 +1,59 @@
 <script setup>
 // Core
-import { ref, unref } from 'vue'
+import { ref, unref, computed } from 'vue'
+// Store
+import { useDocFlowStore } from '../stores/docflow.store'
+// Composable
+const docFlowStore = useDocFlowStore()
 // Macros
 const emit = defineEmits(['emit:up'])
 // Reactive
 const menuRef = ref(null)
-const menuActiveText = ref('Входящий документ')
 const items = ref([
   {
-    label: 'Входящие',
-    command: () => documentType('Incoming', 'Входящий документ')
+    label: 'Входящий документ',
+    component: 'Incoming',
+    command: () => documentType('Incoming')
   },
   {
-    label: 'Внутренние',
-    command: () => documentType('Inner', 'Внутренний документ')
+    label: 'Внутренний документ',
+    component: 'Inner',
+    command: () => documentType('Inner')
   },
   {
-    label: 'Исходящие',
-    command: () => documentType('Outgoing', 'Исходящий документ')
+    label: 'Исходящий документ',
+    component: 'Outgoing',
+    command: () => documentType('Outgoing')
   },
   {
     label: 'Обращения',
-    command: () => documentType('Appeal', 'Обращение')
+    component: 'Appeal',
+    command: () => documentType('Appeal')
   },
   {
     label: 'Входящие от филиалов',
-    command: () => documentType('IncomingBranches', 'Входящие от филиалов')
+    component: 'IncomingBranches',
+    command: () => documentType('IncomingBranches')
   },
   {
     label: 'Приказы и распоряжения',
-    command: () => documentType('OrderInstruction', 'Приказы и распоряжения')
+    component: 'OrderInstruction',
+    command: () => documentType('OrderInstruction')
   },
   {
     label: 'Заявления',
-    command: () => documentType('Statement', 'Заявлений документ')
+    component: 'Statement',
+    command: () => documentType('Statement')
   }
 ])
+// Computed
+const menuActiveText = computed(() => items.value.find(menu => menu.component === docFlowStore.documentMenuType))
 // Methods
 const toggle = (event) => {
   const _menuRef = unref(menuRef)
   _menuRef.menuRef.toggle(event)
 }
-const documentType = (type, text) => {
-  menuActiveText.value = text
+const documentType = (type) => {
   emit('emit:up', type)
 }
 </script>
@@ -50,10 +61,16 @@ const documentType = (type, text) => {
 <template>
   <button class="flex items-center gap-2 outline-none bg-transparent" aria-haspopup="true" aria-controls="overlay_menu2"
     @click="toggle">
-    <h1 class="text-xl font-bold text-primary-900">{{ menuActiveText }}</h1>
+    <h1 class="text-xl font-bold text-primary-900">{{ menuActiveText.label }}</h1>
     <base-icon name="AltArrowLeftIcon" class="-rotate-90 mt-1 text-gray-2" />
   </button>
 
-  <base-menu ref="menuRef" id="overlay_menu2" :items="items" action-size-class="min-h-[40px]"
-    label-class="text-greyscale-500 group-hover:text-primary-500"></base-menu>
+  <base-menu
+    :items="items"
+    width="w-[225px]"
+    action-size-class="min-h-[40px]"
+    label-class="text-greyscale-500 group-hover:text-primary-500"
+    ref="menuRef"
+    id="overlay_menu2"
+  ></base-menu>
 </template>
