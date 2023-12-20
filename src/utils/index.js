@@ -143,7 +143,7 @@ export const adjustUsersToArray = (tempArray) => {
       }
     } else {
       return {
-        id: item.id
+        user: item.id
       }
     }
   });
