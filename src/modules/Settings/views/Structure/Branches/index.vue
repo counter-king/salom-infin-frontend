@@ -1,7 +1,5 @@
 <script setup></script>
 <template>
-  <div>
-    Top Signers Page
-  </div>
+   <div>Branches Page</div>
 </template>
 <style></style>

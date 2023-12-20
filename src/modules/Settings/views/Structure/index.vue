@@ -1,7 +1,5 @@
 <script setup></script>
 <template>
-  <div>
-    Top Signers Page
-  </div>
+  <router-view />
 </template>
 <style></style>

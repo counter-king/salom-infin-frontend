@@ -1,8 +1,8 @@
 
 <script setup>
 import { ref } from 'vue';
-// Composable
 const visible = ref(false);
+const deleteDevice = ref({});
 const items = ref([
   {
     nameDevices: "Samsung SM-J510FN MSM8916",
@@ -31,13 +31,11 @@ const items = ref([
   },
 ]);
 </script>
-
 <template>
   <div class="flex flex-col h-full">
     <div class="flex mb-5 justify-between items-center">
       <h1 class="text-2xl font-bold text-primary-900">Мои устройства</h1>
     </div>
-
     <div  class="flex-col h-full detail-layout-content  bg-white overflow-hidden shadow-button rounded-2xl p-6">
       <div
         v-for="item in items" :key="item.nameDevices"
@@ -52,7 +50,6 @@ const items = ref([
       </div>
     </div>
   </div>
-
   <base-dialog
     v-model:visible="visible"
     headerClasses="!hidden"
@@ -66,7 +63,6 @@ const items = ref([
       <div class="text-primary-900 text-base font-semibold text-center">Завершить этот сеанс?</div>
       <p class="text-sm font-medium text-greyscale-500 text-center px-8">Вы хотите завершить сеанс на этом устройстве?</p>
     </template>
-
     <template #footer>
       <div class="flex items-center justify-center  w-full">
         <base-button
@@ -79,7 +75,6 @@ const items = ref([
           border-color="border-transparent"
           @click="visible = false"
         />
-
         <base-button
           class="w-full"
           label="complete"
@@ -90,7 +85,6 @@ const items = ref([
     </template>
   </base-dialog>
 </template>
-
 <style lang="scss" scoped>
 .my-devices:nth-child(even) {
   background: initial;

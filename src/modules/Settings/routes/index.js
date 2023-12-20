@@ -1,25 +1,12 @@
-// import Profile from "../modules/Profile/routes"
-
 const Settings = [
   {
     path: "settings",
     name: "SettingsIndex",
-    meta: {
-      isAuthRequired: true
-    },
+    meta: { isAuthRequired: true },
     component: () => import("../views/index.vue"),
     redirect: { name: "ProfileIndex" },
     children: [
-      // Профиль
-      {
-        path: "profile",
-        name: "ProfileIndex",
-        meta: {
-          isAuthRequired: true
-        },
-        component: () => import("../views/Profile/index.vue"),
-      },
-      // Документ оборот
+      // DocumentFlow
       {
         path: "document-flow",
         name: "DocumentFlowIndex",
@@ -30,144 +17,173 @@ const Settings = [
         component: () => import("../views/DocumentFlow/index.vue"),
         redirect: { name: "DocumentTypeIndex" },
         children: [
-          // Тип документа
           {
             path: "document-type",
             name: "DocumentTypeIndex",
             meta: {
               isAuthRequired: true,
-              navigation: true
+              navigation: true,
             },
             component: () => import("../views/DocumentFlow/DocumentType/index.vue"),
           },
-          // Вид документа
           {
             path: "document-view",
             name: "DocumentViewIndex",
             meta: {
               isAuthRequired: true,
-              navigation: true
+              navigation: true,
             },
             component: () => import("../views/DocumentFlow/DocumentView/index.vue"),
           },
-          // Журнал
           {
             path: "magazine",
             name: "MagazineIndex",
-            meta: {
-              isAuthRequired: true
-            },
+            meta: { isAuthRequired: true },
             component: () => import("../views/DocumentFlow/Magazine/index.vue"),
           },
         ]
       },
-      // Корреспонденты
+      // Correspondents
       {
         path: "correspondents",
         name: "CorrespondentsIndex",
-        meta: {
-          isAuthRequired: true
-        },
+        meta: { isAuthRequired: true },
         component: () => import("../views/Correspondents/index.vue"),
         redirect: { name: "IndividualIndex" },
         children: [
-          // Индивидулны
           {
             path: "individual",
             name: "IndividualIndex",
             meta: {
-              isAuthRequired: true
+              isAuthRequired: true,
+              navigation: true
             },
             component: () => import("../views/Correspondents/Individual/index.vue"),
           },
-          // Организации
           {
             path: "organizations",
             name: "OrganizationsIndex",
             meta: {
-              isAuthRequired: true
+              isAuthRequired: true,
+              navigation: true
             },
             component: () => import("../views/Correspondents/Organizations/index.vue"),
           },
         ]
       },
-      // Пользователи
+      // Structure
+      {
+        path: 'structure',
+        name: 'StructureIndex',
+        redirect: { name: "DepartmentsIndex" },
+        meta: { isAuthRequired: true },
+        component: () => import("../views/Structure/index.vue"),
+        children: [
+          {
+            path: 'departments',
+            name: 'DepartmentsIndex',
+            meta: {
+              isAuthRequired: true,
+              navigation: true,
+            },
+            component: () => import("../views/Structure/Departments/index.vue"),
+            children: []
+          },
+          {
+            path: 'branches',
+            name: 'BranchesIndex',
+            meta: {
+              isAuthRequired: true,
+              navigation: true,
+            },
+            component: () => import("../views/Structure/Branches/index.vue"),
+            children: []
+          }
+        ]
+      },
+      // Users
       {
         path: "users",
         name: "UsersIndex",
-        meta: {
-          isAuthRequired: true
-        },
+        meta: { isAuthRequired: true },
         component: () => import("../views/Users/index.vue"),
         redirect: { name: "EmployeesIndex" },
         children: [
-          // Сотрудники
           {
             path: "employees",
             name: "EmployeesIndex",
+            navigation: true,
             meta: {
-              isAuthRequired: true
+              isAuthRequired: true,
+              navigation: true,
             },
             component: () => import("../views/Users/Employees/index.vue"),
           },
-          // Помощники
           {
             path: "assistants",
             name: "AssistantsIndex",
+            navigation: true,
             meta: {
-              isAuthRequired: true
+              isAuthRequired: true,
+              navigation: true,
             },
             component: () => import("../views/Users/Assistants/index.vue"),
           },
-          // Топ подписантов
           {
             path: "top-signers",
             name: "TopSignersIndex",
+            navigation: true,
             meta: {
-              isAuthRequired: true
+              isAuthRequired: true,
+              navigation: true,
             },
             component: () => import("../views/Users/TopSigners/index.vue"),
           },
         ]
       },
-      // Мои устройства
+      // ShortDescription
       {
-        path: "my-devices",
-        name: "MyDevicesIndex",
-        meta: {
-          isAuthRequired: true
-        },
-        component: () => import("../views/MyDevices/index.vue"),
+        path: "short-description",
+        name: "ShortDescriptionIndex",
+        meta: { isAuthRequired: true },
+        component: () => import("../views/ShortDescription/index.vue"),
       },
-      // Уведомления
+      // Profile
+      {
+        path: "profile",
+        name: "ProfileIndex",
+        meta: { isAuthRequired: true },
+        component: () => import("../views/Profile/index.vue"),
+      },
+      // Devices
+      {
+        path: "devices",
+        name: "DevicesIndex",
+        meta: { isAuthRequired: true },
+        component: () => import("../views/Devices/index.vue"),
+      },
+      // Notifications
       {
         path: "notifications",
         name: "NotificationsIndex",
-        meta: {
-          isAuthRequired: true
-        },
+        meta: { isAuthRequired: true },
         component: () => import("../views/Notifications/index.vue"),
       },
-      // Техника и оборудованияw
+      // Equipments
       {
-        path: "machinery-equipment",
-        name: "MachineryEquipmentIndex",
-        meta: {
-          isAuthRequired: true
-        },
-        component: () => import("../views/MachineryEquipment/index.vue"),
+        path: "equipments",
+        name: "EquipmentsIndex",
+        meta: { isAuthRequired: true },
+        component: () => import("../views/Equipments/index.vue"),
       },
-      // Общие настройки
+      // General Settings
       {
         path: "general-settings",
         name: "GeneralSettingsIndex",
-        meta: {
-          isAuthRequired: true
-        },
+        meta: { isAuthRequired: true },
         component: () => import("../views/GeneralSettings/index.vue"),
       }
     ]
   }
-]
-
-export default Settings
+];
+export default Settings;
