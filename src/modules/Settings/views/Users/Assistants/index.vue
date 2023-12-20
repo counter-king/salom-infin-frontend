@@ -16,6 +16,8 @@ const loading = ref(false);
 const pageSize = ref(filter).value.page_size;
 const assistants = ref([]);
 const visible = ref(false);
+const page = ref(filter).value.page;
+const totalRecords = ref(1);
 const getAssistants = (newFilter = {}) => {
   loading.value = true;
   filter.value = newFilter;
@@ -25,6 +27,9 @@ const getAssistants = (newFilter = {}) => {
     .get(`user-assistants/${params}`)
     .then(response => {
       const results = response?.data?.results;
+      const count = response?.data?.count;
+      console.log(count, page_size, page)
+      totalRecords.value = count;
       const newUsers = (Array.isArray(results) ? results: []).map(user => ({...user, position: user?.position?.name}));
       assistants.value = newUsers;
     })
@@ -100,17 +105,20 @@ onMounted(() => {
   <div class="employees-table">
     <DataTable
       :loading="loading"
-      :page-link-size="5"
+      :pageLinkSize="5"
       :pt="tableConfig"
-      :rows-per-page-options="[10, 15, 30]"
+      :page="page"
+      :totalRecords="totalRecords"
       :rows="pageSize"
+      :rowsPerPageOptions="[10, 15, 20, 30]"
       :value="assistants"
       @page="onChangePage"
       paginator
       paginator-position="bottom"
       paginatorTemplate="RowsPerPageDropdown CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
       row-hover
-      scrollable>
+      scrollable
+      >
       <Column
         :columnKey="item.columnKey"
         :field="item.field"
@@ -121,7 +129,7 @@ onMounted(() => {
       >
         <template #body="{ field, data }">
           <slot :name="field" :data="data">
-            <assistant :index="index" :data="data" :field="field" :assistants="assistants" :setAssistants="setAssistants"/>
+            <assistant :data="data" :field="field" :assistants="assistants" :setAssistants="setAssistants"/>
           </slot>
         </template>
       </Column>

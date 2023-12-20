@@ -7,6 +7,7 @@ import Button from 'primevue/button';
 import { dispatchNotify } from '@/utils/notify';
 import DownIcon from './DownIcon.vue';
 import CheckedIcon from './CheckedIcon.vue';
+import DeleteSymbolIcon from './DeleteSymbolIcon.vue';
 import axiosConfig from "@/services/axios.config";
 import ProgressSpinner from 'primevue/progressspinner';
 import { dialogConfig, menuConfig } from './config';
@@ -25,7 +26,6 @@ const props = defineProps({
    assistants: Array,
    data: Object,
    field: String,
-   index: Number,
    setAssistants: Function,
 });
 const toggle = event => {
@@ -33,7 +33,7 @@ const toggle = event => {
 };
 const updateStatus = value => {
    statusLoading.value = true;
-   const sendingData = { is_active: !!value?.value, assistant: props?.data?.assistant?.id, user: props?.data?.user?.id }
+   const sendingData = { is_active: !!value?.value, assistant: props?.data?.assistant?.id, user: props?.data?.user?.id };
    axiosConfig
       .put(`user-assistants/${props?.data?.id}/`, sendingData)
       .then(response => {
@@ -48,20 +48,35 @@ const updateStatus = value => {
                }
             });
             props.setAssistants(newAssistants);
-            dispatchNotify('Состояние обновлено', '', 'success')
+            dispatchNotify('Состояние обновлено', '', 'success');
          } else {
-            dispatchNotify('Состояние не обновлено', '', 'error')
+            dispatchNotify('Состояние не обновлено', '', 'error');
          }
       })
       .catch(() => {
-         dispatchNotify('Состояние не обновлено', '', 'error')
+         dispatchNotify('Состояние не обновлено', '', 'error');
       })
       .finally(() => {
          statusLoading.value = false;
-      })
+      });
 };
 const assistantDelete = () => {
    deleteLoading.value = true;
+   const deleteId = props?.data?.id;
+   axiosConfig
+      .delete(`user-assistants/${deleteId}/`)
+      .then(response => {
+         if(response?.status === 204) {
+            const newAssistants = props.assistants.filter(assistant => assistant?.id !== deleteId);
+            props.setAssistants(newAssistants);
+            dispatchNotify('Помощник удален', '', 'success');
+         } else {
+            dispatchNotify('Помощник не удален', '', 'error');
+         }
+      })
+      .catch(() => {
+         dispatchNotify('Помощник не удален', '', 'error');
+      });
 };
 const assistantEdit = () => {
    editLoading.value = true;
@@ -176,10 +191,15 @@ onMounted(() => {
       header="Удалить помощник"
       modal
       v-model:visible="deleteVisible">
-      <p>
-         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-         Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      </p>
+      <div class="flex flex-col items-center py-8">
+         <div>
+            <DeleteSymbolIcon />
+         </div>
+         <h2 class="text-center font-semibold text-3xl text-gray-900 p-0 mt-6">Удалить помощник?</h2>
+         <p class="text-center py-0 px-6 mt-2 text-gray-400">
+            Вы уверены, что хотите удалить этого помощника
+         </p>
+      </div>
       <template #footer>
          <div style="justify-content: flex-end; display: flex">
             <template v-if="deleteLoading">
