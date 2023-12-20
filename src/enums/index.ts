@@ -66,7 +66,8 @@ export const COMMENT_ACTIONS = {
   REPLY: "reply",
 }
 export const CONTENT_TYPES = {
-  DOC_FLOW: 6
+  DOC_FLOW: 6,
+  SEND_DOCUMENT: 32
 }
 export const RESOLUTION_TYPES = {
   ASSIGNMENT: "assignment",

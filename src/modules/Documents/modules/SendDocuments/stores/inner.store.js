@@ -6,10 +6,11 @@ import {withAsync} from "@/utils/withAsync";
 // Services
 import {
   fetchCreateDocument,
-  fetchGetDocumentDetail
+  fetchGetDocumentDetail, fetchUpdateDocument
 } from "@/modules/Documents/modules/SendDocuments/services/index.service";
 import {SD_TYPE_INNER} from "@/modules/Documents/modules/SendDocuments/constants";
 import logger from "quill/core/logger";
+import {setValuesToKeys} from "@/utils";
 
 export const useSDStoreInner = defineStore("sd-store-inner", {
   state: () => ({
@@ -72,12 +73,34 @@ export const useSDStoreInner = defineStore("sd-store-inner", {
       }
     },
     /** **/
-    // async actionGetDocumentDetail(id){
-    //   this.detailLoading = true;
-    //   const { response, error } = await withAsync(fetchGetDocumentDetail, id);
-    //   if (response){
-    //     console.log(response)
-    //   }
-    // }
+    async actionUpdateDocument({ id, body }) {
+      try {
+        this.buttonLoading = true;
+        const { data } = await fetchUpdateDocument({ id, body });
+        return Promise.resolve(data);
+      } catch (err) {
+
+      } finally {
+        this.buttonLoading = false;
+      }
+    },
+    /** **/
+    async actionGetDocumentDetailForUpdate(id){
+      try {
+        this.detailLoading = true;
+        const { data } = await fetchGetDocumentDetail(id);
+        setValuesToKeys(this.model, data);
+        this.model.__departments = data.receiver.departments;
+        this.model.__signers = data.signers;
+        this.model.__approvers = data.approvers;
+        console.log(this.model)
+      }
+      catch (error) {
+
+      }
+      finally {
+        this.detailLoading = false;
+      }
+    }
   }
 })

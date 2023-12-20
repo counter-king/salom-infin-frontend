@@ -6,6 +6,7 @@
  * @returns Boolean
  * */
 import dayjs from "dayjs";
+
 export function isModelEmpty(model, exclude) {
 	return Object.entries(model)
 	// Исключаем ключи, которые не будет проверятся
@@ -125,4 +126,25 @@ export const getDateRange = (value) => {
     default:
       return [];
   }
+}
+export const formatUserFullName = (item) => {
+  if (item && item.hasOwnProperty('user')){
+    return `${item.user.first_name[0]}. ${item.user.father_name ? item.user.father_name[0] + '. ' : ''} ${item.user.last_name}`
+  } else {
+    return `${item.first_name[0]}. ${item.father_name ? item.father_name[0] + '. ' : ''} ${item.last_name}`
+  }
+}
+export const adjustUsersToArray = (tempArray) => {
+  return tempArray.map(item => {
+    if (item.hasOwnProperty('user')) {
+      return {
+        id: item.id,
+        user: item.user.id
+      }
+    } else {
+      return {
+        id: item.id
+      }
+    }
+  });
 }

@@ -13,6 +13,10 @@ import { CONTENT_TYPES } from '@/enums'
 const props = defineProps({
   objectId: {
     type: Number
+  },
+  contentType: {
+    type: Number,
+    default: CONTENT_TYPES.DOC_FLOW
   }
 })
 // Reactive
@@ -26,7 +30,7 @@ const list = ref([])
 const loadList = async () => {
   let { data } = await axiosConfig.get(`activity-logs/`, {
     object_id: props.objectId,
-    content_type: CONTENT_TYPES.DOC_FLOW
+    content_type: props.contentType
   })
 
   list.value = data.results

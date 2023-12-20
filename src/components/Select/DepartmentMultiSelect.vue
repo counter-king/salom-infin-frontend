@@ -3,7 +3,8 @@
 import {useModel} from "vue";
 // Components
 import BaseMultiSelect from '@/components/UI/BaseMultiSelect.vue';
-import {UserWithRadio} from "@/components/Users";
+import {UserWithLabel, UserWithRadio} from "@/components/Users";
+import {isObject} from "@/utils";
 
 const props = defineProps({
   modelValue: {
@@ -27,6 +28,10 @@ const emit = defineEmits(['update:modelValue'])
     required
     type="department"
   >
+    <template #chip="{ value }">
+      {{ value.name }}
+    </template>
+
     <template #option="{ value }">
       <user-with-radio
         :title="value.name"
