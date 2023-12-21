@@ -6,6 +6,7 @@ import Avatar from 'primevue/avatar';
 import EditIcon from './EditIcon.vue';
 import Dialog from 'primevue/dialog';
 import ClearIcon from './ClearIcon.vue';
+import Skeleton from 'primevue/skeleton';
 import Button from 'primevue/button';
 import SearchIcon from './SearchIcon.vue';
 import { dispatchNotify } from '@/utils/notify';
@@ -193,7 +194,7 @@ onMounted(() => {
    </template>
    <template v-else-if="field === 'is_active'">
       <template v-if="statusLoading">
-         <skeleton height="16px" />
+         <Skeleton height="16px" />
       </template>
       <template v-else>
          <span @click="toggle" style="display: inline-flex; justify-content: center; align-items: center" :style="{ background: data.is_active ? '#EEFFE7' : '#F7F7F9', color: data.is_active ? '#63BA3D' : '#767994' }" class="pr-2 pl-3 py-1 font-medium rounded-[80px] text-sm text-greyscale-500 cursor-pointer">
@@ -205,7 +206,7 @@ onMounted(() => {
                <div @click="() => { updateStatus(item) }" class="flex justify-between py-[6px] pr-2 pl-3 cursor-pointer">
                   <span class="text-sm font-medium text-primary-900">{{ item.label }}</span>
                   <span class="ml-2" v-if="item.value === data.is_active">
-                     <checked-icon/>
+                     <CheckedIcon/>
                   </span>
                </div>
             </template>

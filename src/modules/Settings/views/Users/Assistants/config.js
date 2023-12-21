@@ -51,7 +51,7 @@ export const paginationConfig = {
    pageButton: ({ context }) => ({ class:  [ context.active ? ['bg-primary-500', 'text-primary-0'] : undefined, 'rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'text-xs'] }),
    paginatorWrapper: { class: ['w-[100%]'] },
    previousPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
-   root: { class: ['h-14', 'rounded-4 w-full'] },
+   root: { class: ['h-14', 'rounded-4 w-full rounded-[12px]'] },
    start: { class: ['m-0'] }
 };
 export const dropdownConfig = {
