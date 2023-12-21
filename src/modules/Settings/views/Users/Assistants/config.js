@@ -60,7 +60,7 @@ export const autocompleteConfig = {
    list: { class: ['py-0'] },
    option: { class: ['text-xs font-medium text-primary-900'] },
    panel: { class: ['translate-y-[8px] shadow-menu rounded-2xl p-2 user-search-autocomplete'] },
-   root: { class: ['w-[500px] group w-full bg-greyscale-50 rounded-2xl border-greyscale-50 focus:border-primary-500 h-[44px]'] },
+   root: { class: ['w-[500px] group bg-greyscale-50 rounded-2xl border-greyscale-50 focus:border-primary-500 h-[44px]'] },
    token: { class: ['chip-hover shadow-button bg-white cursor-pointer'] },
    tokenLabel: { class: ['text-sm font-medium'] },
 }

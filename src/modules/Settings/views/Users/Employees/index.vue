@@ -6,6 +6,8 @@ import DeleteIcon from './DeleteIcon.vue';
 import Dialog from 'primevue/dialog';
 import EditIcon from './EditIcon.vue';
 import InputText from 'primevue/inputtext';
+import Loading from './Loading.vue';
+import NoData from './NoData.vue';
 import axiosConfig from "@/services/axios.config";
 import { onMounted, ref, watch } from 'vue';
 import { tableConfig, columnConfig, dialogConfig } from './config';
@@ -99,17 +101,13 @@ onMounted(() => {
       <span class="p-input-icon-left">
         <i class="pi pi-search pl-1" />
         <InputText
+          :pt="{ root: { class: ['w-full rounded-3xl bg-white border-greyscale-50 focus:border-primary-500'] } }"
           :style="{ padding: '9px 9px 9px 40px', fontSize: 12 }"
           @input="searchUsers"
           placeholder="Поиск"
           size="small"
           type="text"
-          v-model="filter.search"
-          :pt="{
-            root: {
-              class: ['w-full rounded-3xl bg-white border-greyscale-50 focus:border-primary-500']
-            }
-          }" />
+          v-model="filter.search" />
       </span>
       <Button
         @click="createVisible = true"
@@ -175,21 +173,10 @@ onMounted(() => {
         </template>
       </Column>
       <template #loading>
-        <div class="py-1 mt-[114px] bg-greyscale-50 h-full w-full">
-          <div v-for="(item, index) in 10" :key="index" class="bg-white px-5 h-14 rounded-lg flex flex-col justify-center items-center mb-2">
-            <div class="w-full h-full flex items-center justify-center gap-4">
-              <skeleton v-for="(item, index) in 5" :key="index" height="16px" />
-            </div>
-          </div>
-        </div>
+        <Loading />
       </template>
       <template #empty>
-        <div
-          class="w-full flex justify-center items-center rounded-lg"
-          style="height: calc(100vh - 420px)"
-        >
-          <img class="w-[200px] h-[170px]" src="@/assets/img/empty-img-gray.png" alt="EmptyFolder">
-        </div>
+        <NoData />
       </template>
     </DataTable>
   </div>
