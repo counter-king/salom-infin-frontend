@@ -6,27 +6,6 @@ export const tableConfig = {
    rowStyle: { borderRadius: '4px' },
    table: { class: ['border-separate', 'border-spacing-y-1', '-mt-1'] },
    thead: { class: ['bg-white'] },
-   paginator: {
-      current: { class: ['text-xs', 'text-greyscale-300', 'mr-auto', 'h-full'] },
-      firstPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
-      lastPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
-      nextPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
-      paginatorWrapper: { class: ['h-14', 'rounded-3'] },
-      previousPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
-      root: { class: ['h-14', 'rounded-3'] },
-      rowPerPageDropdown: {
-         dropdownicon: { class: ['w-3', 'h-3'] },
-         input: { class: ['flex', 'items-center', 'text-xs', 'font-semibold'] },
-         item: { class: ['h-8', 'text-xs', 'flex', 'items-center'] },
-         list: { class: ['p-0'] },
-         paginatorWrapper: ['flex', 'justify-between', 'border', 'border-solid'],
-         root: { class: ['h-6', 'rounded-2'] },
-         trigger: { class: ['w-[30px]'] },
-      },
-      pageButton: ({ context }) => ({
-         class:  [ context.active ? ['bg-primary-500', 'text-primary-0'] : undefined, 'rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'text-xs']
-      })
-   },
 };
 export const columnConfig = {
    bodyCell: { class: ['text-xs', 'py-0', 'h-[56px]'] },
@@ -63,4 +42,24 @@ export const autocompleteConfig = {
    root: { class: ['w-[500px] group bg-greyscale-50 rounded-2xl border-greyscale-50 focus:border-primary-500 h-[44px]'] },
    token: { class: ['chip-hover shadow-button bg-white cursor-pointer'] },
    tokenLabel: { class: ['text-sm font-medium'] },
-}
+};
+export const paginationConfig = {
+   current: { class: ['text-xs', 'text-greyscale-300', 'mr-auto', 'h-full'] },
+   firstPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
+   lastPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
+   nextPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
+   pageButton: ({ context }) => ({ class:  [ context.active ? ['bg-primary-500', 'text-primary-0'] : undefined, 'rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'text-xs'] }),
+   paginatorWrapper: { class: ['w-[100%]'] },
+   previousPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
+   root: { class: ['h-14', 'rounded-4 w-full'] },
+   start: { class: ['m-0'] }
+};
+export const dropdownConfig = {
+   dropdownicon: { class: ['w-3', 'h-3'] },
+   input: { class: ['flex', 'items-center', 'text-xs', 'font-semibold'] },
+   item: { class: ['h-8', 'text-xs', 'flex', 'items-center'] },
+   list: { class: ['p-0'] },
+   paginatorWrapper: ['flex', 'justify-between', 'border', 'border-solid'],
+   root: { class: ['h-7', 'rounded-2',  'm-0'] },
+   trigger: { class: ['w-[30px]'] },
+};

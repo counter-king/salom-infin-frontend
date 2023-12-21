@@ -196,7 +196,7 @@ onMounted(() => {
          <skeleton height="16px" />
       </template>
       <template v-else>
-         <span @click="toggle" style="display: inline-flex; justify-content: center; align-items: center" :style="{ background: data.is_active ? '#EEFFE7' : '#FFEEF2', color: data.is_active ? '#63BA3D' : '#F3335C' }" class="pr-2 pl-3 py-1 font-medium rounded-[80px] text-sm text-greyscale-500 cursor-pointer">
+         <span @click="toggle" style="display: inline-flex; justify-content: center; align-items: center" :style="{ background: data.is_active ? '#EEFFE7' : '#F7F7F9', color: data.is_active ? '#63BA3D' : '#767994' }" class="pr-2 pl-3 py-1 font-medium rounded-[80px] text-sm text-greyscale-500 cursor-pointer">
             <span class="mr-1">{{ data.is_active ? 'Активный' : 'Неактивный' }}</span>
             <DownIcon />
          </span>
@@ -220,9 +220,8 @@ onMounted(() => {
             assistant = data?.assistant;
             supervisor = data?.user;
          }"
-         class="py-[7px] px-2 text-xs bg-greyscale-50 mr-2"
+         class="py-[7px] px-2 text-xs bg-greyscale-50 rounded-[8px] mr-2"
          icon
-         rounded
          severity="secondary"
          style="box-shadow: none"
          text>
@@ -233,9 +232,8 @@ onMounted(() => {
             deleteUser = data;
             deleteVisible = true;
          }"
-         class="py-[7px] px-2 text-xs bg-greyscale-50"
+         class="py-[7px] px-2 text-xs bg-greyscale-50 rounded-[8px]"
          icon
-         rounded
          severity="danger"
          style="box-shadow: none"
          text>
@@ -377,7 +375,7 @@ onMounted(() => {
          </p>
       </div>
       <template #footer>
-         <div style="justify-content: flex-end; display: flex">
+         <div class="flex" style="justify-content: flex-end">
             <template v-if="deleteLoading">
                <ProgressSpinner class="m-0" animationDuration=".5s" style="width: 40px; height: 40px" strokeWidth="4" />
             </template>

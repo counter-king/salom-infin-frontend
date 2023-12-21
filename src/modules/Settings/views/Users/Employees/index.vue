@@ -3,28 +3,36 @@ import Button from 'primevue/button';
 import Column from 'primevue/column';
 import DataTable from 'primevue/datatable';
 import DeleteIcon from './DeleteIcon.vue';
+import DeleteSymbolIcon from './DeleteSymbolIcon.vue';
 import Dialog from 'primevue/dialog';
+import Dropdown from 'primevue/dropdown';
 import EditIcon from './EditIcon.vue';
 import InputText from 'primevue/inputtext';
 import Loading from './Loading.vue';
 import NoData from './NoData.vue';
+import Paginator from 'primevue/paginator';
+import ProgressSpinner from 'primevue/progressspinner';
 import axiosConfig from "@/services/axios.config";
 import { onMounted, ref, watch } from 'vue';
-import { tableConfig, columnConfig, dialogConfig } from './config';
+import { tableConfig, columnConfig, dialogConfig, dropdownConfig, paginationConfig } from './config';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
+const defaultFilter = { page: 1, page_size: 10, search: '' };
+const count = ref(1);
 const createUser = ref({});
 const createVisible = ref(false);
+const deleteLoading = ref(false);
 const deleteUser = ref({});
 const deleteVisible = ref(false);
 const editUser = ref({});
 const editVisible = ref(false);
-const filter = ref({ page: 1, page_size: 10, search: '' });
+const filter = ref(defaultFilter);
 const headers = ref([]);
 const loading = ref(false);
-const pageSize = ref(filter).value.page_size;
 const users = ref([]);
-const userDelete = () => {};
+const userDelete = () => {
+  deleteLoading.value = true;
+};
 const userEdit = () => {};
 const userCreate = () => {};
 const getUsers = (newFilter = {}) => {
@@ -36,8 +44,10 @@ const getUsers = (newFilter = {}) => {
     .get(`users/${params}`)
     .then(response => {
       const results = response?.data?.results;
+      const newCount = response?.data?.count;
       const newUsers = (Array.isArray(results) ? results: []).map(user => ({...user, position: user?.position?.name}));
       users.value = newUsers;
+      count.value = newCount;
     })
     .catch(() => {
       users.value = [];
@@ -51,10 +61,12 @@ const searchUsers = e => {
   const newFilter = { ...filter.value, page: 1, search };
   getUsers(newFilter);
 };
-const onChangePage = e => {
-  const page = e?.page + 1;
-  const page_size = e?.rows;
-  const newFilter = { ...filter.value, page, page_size };
+const onChangePage = ({ page }) => {
+  const newFilter = { ...filter.value, page: page + 1 };
+  getUsers(newFilter);
+};
+const onChangePageSize = ({ value }) => {
+  const newFilter = { ...filter.value, page: 1, page_size: value };
   getUsers(newFilter);
 };
 const changeLanguage = () => {
@@ -91,7 +103,7 @@ watch(locale, () => {
 });
 onMounted(() => {
   changeLanguage();
-  getUsers({ page: 1, page_size: 10, search: '' });
+  getUsers(defaultFilter);
 });
 </script>
 <template>
@@ -123,17 +135,12 @@ onMounted(() => {
   <div class="employees-table">
     <DataTable
       :loading="loading"
-      :page-link-size="5"
       :pt="tableConfig"
-      :rows-per-page-options="[10, 15, 30]"
-      :rows="pageSize"
       :value="users"
       @page="onChangePage"
-      paginator
-      paginator-position="bottom"
-      paginatorTemplate="RowsPerPageDropdown CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
       row-hover
-      scrollable>
+      scrollable
+      >
       <Column
         :columnKey="item.columnKey"
         :field="item.field"
@@ -143,33 +150,31 @@ onMounted(() => {
         v-for="(item, index) in headers"
       >
         <template #body="{ field, data }">
-          <slot :name="field" :data="data">
-            <template v-if="field === 'status'">
-              <span class="text-sm font-medium text-greyscale-500" style="text-transform: uppercase;">
-                <template v-if="data[field] && data[field].name">
-                  <span :style="{ background: data.is_active ? '#EEFFE7' : '#FFEEF2', color: data.is_active ? '#63BA3D' : '#F3335C' }" class="px-2 py-1 text-xs font-semibold rounded-[80px]">{{ data[field] && data[field].name }}</span>
-                </template>
-              </span>
-            </template>
-            <template v-else-if="field === 'action'">
-              <Button
-                @click="() => {
-                  editUser = data;
-                  editVisible = true;
-                }" icon class="py-[7px] px-2 text-xs bg-greyscale-50 mr-2" severity="secondary" text rounded>
-                <EditIcon />
-              </Button>
-              <Button @click="() => {
-                deleteUser = data;
-                deleteVisible = true;
-              }" icon class="py-[7px] px-2 text-xs bg-greyscale-50" severity="danger" text rounded>
-                <DeleteIcon />
-              </Button>
-            </template>
-            <template v-else>
-              <span class="text-sm font-medium text-greyscale-500">{{ data[field] }}</span>
-            </template>
-          </slot>
+          <template v-if="field === 'status'">
+            <span class="text-sm font-medium text-greyscale-500" style="text-transform: uppercase;">
+              <template v-if="data[field] && data[field].name">
+                <span :style="{ background: data.is_active ? '#EEFFE7' : '#F7F7F9', color: data.is_active ? '#63BA3D' : '#767994' }" class="px-2 py-1 text-xs font-semibold rounded-[80px]">{{ data[field] && data[field].name }}</span>
+              </template>
+            </span>
+          </template>
+          <template v-else-if="field === 'action'">
+            <Button
+              @click="() => {
+                editUser = data;
+                editVisible = true;
+              }" icon class="py-[7px] px-2 text-xs bg-greyscale-50 mr-2 rounded-[8px]" severity="secondary" text style="box-shadow: none">
+              <EditIcon />
+            </Button>
+            <Button @click="() => {
+              deleteUser = data;
+              deleteVisible = true;
+            }" icon class="py-[7px] px-2 text-xs bg-greyscale-50 rounded-[8px]" severity="danger" text style="box-shadow: none">
+              <DeleteIcon />
+            </Button>
+          </template>
+          <template v-else>
+            <span class="text-sm font-medium text-greyscale-500">{{ data[field] }}</span>
+          </template>
         </template>
       </Column>
       <template #loading>
@@ -179,6 +184,32 @@ onMounted(() => {
         <NoData />
       </template>
     </DataTable>
+    <div class="flex">
+      <Paginator
+        :pt="paginationConfig"
+        :rows="filter.page_size"
+        :totalRecords="count"
+        @page="onChangePage"
+        currentPageReportTemplate="{first}-{last} из {totalRecords}"
+        template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+        >
+        <template #start>
+          <Dropdown
+            :pt="dropdownConfig"
+            @change="onChangePageSize"
+            optionLabel="name"
+            optionValue="page_size"
+            v-model="filter.page_size"
+            :options="[
+              { name: '10', page_size: 10 },
+              { name: '15', page_size: 15 },
+              { name: '20', page_size: 20 },
+              { name: '30', page_size: 30 }
+            ]"
+            />
+        </template>
+      </Paginator>
+    </div>
   </div>
   <Dialog
     :pt="dialogConfig"
@@ -186,10 +217,15 @@ onMounted(() => {
     header="Создать сотрудник"
     modal
     v-model:visible="createVisible">
-    <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </p>
+    <div class="flex flex-col items-center pb-10 pt-4">
+      <div>
+        <DeleteSymbolIcon />
+      </div>
+      <h2 class="text-center font-semibold text-3xl text-gray-900 p-0 mt-6">Удалить помощник?</h2>
+      <p class="text-center py-0 px-6 mt-2 text-gray-400">
+        Вы уверены, что хотите удалить этого помощника
+      </p>
+    </div>
     <template #footer>
       <div>
         <Button
@@ -228,23 +264,40 @@ onMounted(() => {
   <Dialog
     :pt="dialogConfig"
     dismissableMask
-    header="Delete"
+    header="Удалить сотрудник"
     modal
     v-model:visible="deleteVisible">
-    <h1>delete</h1>
-    <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </p>
-    <template #footer>
+    <div class="flex flex-col items-center pb-10 pt-4">
       <div>
-        <Button
-          @click="deleteVisible = false"
-          class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4"
-          icon-left="AddIcon"
-          rounded
-          type="button"
-        >Delete</Button>
+        <DeleteSymbolIcon />
+      </div>
+      <h2 class="text-center font-semibold text-3xl text-gray-900 p-0 mt-6">Удалить сотрудник?</h2>
+      <p class="text-center py-0 px-6 mt-2 text-gray-400">
+        Вы уверены, что хотите удалить этого сотрудник
+      </p>
+    </div>
+    <template #footer>
+      <div class="flex" style="justify-content: flex-end">
+        <template v-if="deleteLoading">
+          <ProgressSpinner class="m-0" animationDuration=".5s" style="width: 40px; height: 40px" strokeWidth="4" />
+        </template>
+        <template v-else>
+          <Button
+            @click="deleteVisible = false"
+            class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+            rounded
+            style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
+            type="button">
+            Отмена
+          </Button>
+          <Button
+            @click="userDelete"
+            class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4"
+            icon-left="AddIcon"
+            rounded
+            type="button"
+          >Удалить</Button>
+        </template>
       </div>
     </template>
   </Dialog>
