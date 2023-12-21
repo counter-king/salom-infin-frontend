@@ -1,10 +1,29 @@
 <script setup>
-import InnerForm from "@/modules/Documents/modules/SendDocuments/views/forms/InnerForm.vue";
+// Core
+import {computed} from "vue";
+import {useRoute} from "vue-router";
+// Components
+import {InnerForm, OutgoingForm} from "@/modules/Documents/modules/SendDocuments/views/forms/index";
+// Constants
 import {FORM_TYPE_UPDATE} from "@/constants/constants";
+import {SD_TYPE_INNER, SD_SD_TYPE_OUTGOING} from "@/modules/Documents/modules/SendDocuments/constants";
+
+const route = useRoute();
+const formValues  = {
+  [SD_TYPE_INNER]: InnerForm,
+  [SD_SD_TYPE_OUTGOING]: OutgoingForm
+}
+const selectedComponent = computed(
+  () => {
+    return formValues[route.params.type] || InnerForm
+  })
 </script>
 
 <template>
-  <inner-form :form-type="FORM_TYPE_UPDATE"/>
+  <component
+    :is="selectedComponent"
+    :formType="FORM_TYPE_UPDATE"
+  />
 </template>
 
 <style scoped>

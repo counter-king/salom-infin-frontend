@@ -6,6 +6,8 @@ import {useI18n} from "vue-i18n";
 // Components
 import BaseSpinner from '@/components/UI/BaseSpinner.vue'
 import FileTabs from './components/FileTabs.vue'
+// Enums
+import {CONTENT_TYPES} from "@/enums";
 // Composable
 const router = useRouter()
 // Macros
@@ -68,6 +70,10 @@ const props = defineProps({
   resolution: {
     type: Object,
     default: () => {}
+  },
+  contentType: {
+    type: Number,
+    default: CONTENT_TYPES.DOC_FLOW
   }
 })
 const { t } = useI18n();
@@ -130,6 +136,7 @@ watch(activeTabMenu, (value) => {
                   :preview-detail="props.previewDetail"
                   :object-id="props.objectId"
                   :headers="props.headers"
+                  :content-type="props.contentType"
                 >
                   <template #preview-actions>
                     <slot name="preview-actions" />

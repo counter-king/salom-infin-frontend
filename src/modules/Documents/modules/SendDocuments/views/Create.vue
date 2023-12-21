@@ -22,6 +22,7 @@ const selectedComponent = computed(
 <template>
   <component
     :is="selectedComponent"
+    :formType="FORM_TYPE_CREATE"
   />
 </template>
 

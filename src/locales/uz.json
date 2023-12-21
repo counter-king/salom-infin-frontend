@@ -241,5 +241,6 @@
   "error-occurred": "Произошла ошибка!",
   "approver": "Согласующий",
   "signer": "Подписант",
-  "not-checked": "Не проверенный"
+  "not-checked": "Не проверенный",
+  "watch-process": "Просмотр процесс"
 }
