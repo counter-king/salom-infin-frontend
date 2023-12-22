@@ -1,30 +1,36 @@
 <script setup>
+import Assistant from './Assistant.vue';
 import Button from 'primevue/button';
 import Column from 'primevue/column';
-import DataTable from 'primevue/datatable';
-import Assistant from './Assistant.vue';
 import CreateAssistant from './CreateAssistant.vue';
+import DataTable from 'primevue/datatable';
+import Dropdown from 'primevue/dropdown';
+import Paginator from 'primevue/paginator';
+import EmptyTable from '../../../components/EmptyTable.vue';
+import LoadingTable from '../../../components/LoadingTable.vue';
 import axiosConfig from "@/services/axios.config";
 import { onMounted, ref, watch } from 'vue';
-import { tableConfig, columnConfig } from './config';
+import { tableConfig, columnConfig, paginationConfig, dropdownConfig, dropdownOptions } from './config';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
 const defaultFilter = { page: 1, page_size: 10 };
+const assistants = ref([]);
+const count = ref(1);
 const filter = ref(defaultFilter);
 const headers = ref([]);
 const loading = ref(false);
-const pageSize = ref(filter).value.page_size;
-const assistants = ref([]);
 const visible = ref(false);
 const getAssistants = (newFilter = {}) => {
   loading.value = true;
   filter.value = newFilter;
-  const { page, page_size, search } = newFilter;
-  const params = `?page=${page}${page_size ? '&page_size=' + page_size : ''}${search ? '&search=' + search : ''}`;
+  const { page, page_size } = newFilter;
+  const params = `?page=${page}${page_size ? '&page_size=' + page_size : ''}`;
   axiosConfig
     .get(`user-assistants/${params}`)
     .then(response => {
       const results = response?.data?.results;
+      const newCount = response?.data?.count;
+      count.value = newCount;
       const newUsers = (Array.isArray(results) ? results: []).map(user => ({...user, position: user?.position?.name}));
       assistants.value = newUsers;
     })
@@ -35,10 +41,12 @@ const getAssistants = (newFilter = {}) => {
       loading.value = false;
     });
 };
-const onChangePage = e => {
-  const page = e?.page + 1;
-  const page_size = e?.rows;
-  const newFilter = { page, page_size };
+const onChangePage = ({ page }) => {
+  const newFilter = { ...filter.value, page: page + 1 };
+  getAssistants(newFilter);
+};
+const onChangePageSize = ({ value }) => {
+  const newFilter = { ...filter.value, page: 1, page_size: value };
   getAssistants(newFilter);
 };
 const changeLanguage = () => {
@@ -97,20 +105,15 @@ onMounted(() => {
     </Button>
     </div>
   </div>
-  <div class="employees-table">
+  <div class="assistants-table">
     <DataTable
       :loading="loading"
-      :page-link-size="5"
       :pt="tableConfig"
-      :rows-per-page-options="[10, 15, 30]"
-      :rows="pageSize"
       :value="assistants"
       @page="onChangePage"
-      paginator
-      paginator-position="bottom"
-      paginatorTemplate="RowsPerPageDropdown CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
       row-hover
-      scrollable>
+      scrollable
+      >
       <Column
         :columnKey="item.columnKey"
         :field="item.field"
@@ -120,29 +123,37 @@ onMounted(() => {
         v-for="(item, index) in headers"
       >
         <template #body="{ field, data }">
-          <slot :name="field" :data="data">
-            <assistant :index="index" :data="data" :field="field" :assistants="assistants" :setAssistants="setAssistants"/>
-          </slot>
+          <assistant :data="data" :field="field" :assistants="assistants" :setAssistants="setAssistants" :get-first-page-assistants="getFirstPageAssistants"/>
         </template>
       </Column>
       <template #loading>
-        <div class="py-1 mt-[114px] bg-greyscale-50 h-full w-full">
-          <div v-for="(item, index) in 10" :key="index" class="bg-white px-5 h-14 rounded-lg flex flex-col justify-center items-center mb-2">
-            <div class="w-full h-full flex items-center justify-center gap-4">
-              <skeleton v-for="(item, index) in 5" :key="index" height="16px" />
-            </div>
-          </div>
-        </div>
+        <LoadingTable />
       </template>
       <template #empty>
-        <div
-          class="w-full flex justify-center items-center rounded-lg"
-          style="height: calc(100vh - 420px)"
-        >
-          <img class="w-[200px] h-[170px]" src="@/assets/img/empty-img-gray.png" alt="EmptyFolder">
-        </div>
+        <EmptyTable />
       </template>
     </DataTable>
+    <div class="flex">
+      <Paginator
+        :pt="paginationConfig"
+        :rows="filter.page_size"
+        :totalRecords="count"
+        @page="onChangePage"
+        currentPageReportTemplate="{first}-{last} из {totalRecords}"
+        template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+        >
+        <template #start>
+          <Dropdown
+            :options="dropdownOptions"
+            :pt="dropdownConfig"
+            @change="onChangePageSize"
+            optionLabel="name"
+            optionValue="page_size"
+            v-model="filter.page_size"
+            />
+        </template>
+      </Paginator>
+    </div>
   </div>
   <CreateAssistant
     :get-first-page-assistants="getFirstPageAssistants"
@@ -150,10 +161,10 @@ onMounted(() => {
     :visible="visible"/>
 </template>
 <style>
-.employees-table th:first-child, td:first-child {
+.assistants-table th:first-child, td:first-child {
   border-radius: 12px 0 0 12px;
 }
-.employees-table th:last-child, td:last-child {
+.assistants-table th:last-child, td:last-child {
   border-radius: 0 12px 12px 0;
 }
 </style>

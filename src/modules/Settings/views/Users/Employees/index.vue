@@ -1,31 +1,40 @@
 <script setup>
 import Button from 'primevue/button';
 import Column from 'primevue/column';
+import CreateEmployee from './CreateEmployee.vue';
 import DataTable from 'primevue/datatable';
-import DeleteIcon from './DeleteIcon.vue';
-import Dialog from 'primevue/dialog';
-import EditIcon from './EditIcon.vue';
+import Dropdown from 'primevue/dropdown';
+import Employee from './Employee.vue';
 import InputText from 'primevue/inputtext';
+import Paginator from 'primevue/paginator';
 import axiosConfig from "@/services/axios.config";
+import { EmptyTable, LoadingTable } from '../../../components';
 import { onMounted, ref, watch } from 'vue';
-import { tableConfig, columnConfig, dialogConfig } from './config';
+import { tableConfig, columnConfig, dropdownConfig, paginationConfig, dropdownOptions } from './config';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
+const defaultFilter = { page: 1, page_size: 10, search: '' };
+const count = ref(1);
 const createUser = ref({});
-const createVisible = ref(false);
+const visible = ref(false);
+const deleteLoading = ref(false);
 const deleteUser = ref({});
 const deleteVisible = ref(false);
 const editUser = ref({});
 const editVisible = ref(false);
-const filter = ref({ page: 1, page_size: 10, search: '' });
+const filter = ref(defaultFilter);
 const headers = ref([]);
 const loading = ref(false);
-const pageSize = ref(filter).value.page_size;
-const users = ref([]);
-const userDelete = () => {};
+const employees = ref([]);
+const userDelete = () => {
+  deleteLoading.value = true;
+};
 const userEdit = () => {};
 const userCreate = () => {};
-const getUsers = (newFilter = {}) => {
+const setVisible = newVisible => {
+  visible.value = newVisible;
+};
+const getEmployees = (newFilter = {}) => {
   loading.value = true;
   filter.value = newFilter;
   const { page, page_size, search } = newFilter;
@@ -34,27 +43,48 @@ const getUsers = (newFilter = {}) => {
     .get(`users/${params}`)
     .then(response => {
       const results = response?.data?.results;
-      const newUsers = (Array.isArray(results) ? results: []).map(user => ({...user, position: user?.position?.name}));
-      users.value = newUsers;
+      const newCount = response?.data?.count;
+      const newEmployees = (Array.isArray(results) ? results: []).map(user => ({...user, position: user?.position?.name}));
+      employees.value = newEmployees;
+      count.value = newCount;
     })
     .catch(() => {
-      users.value = [];
+      employees.value = [];
     })
     .finally(() => {
       loading.value = false;
     });
 };
+const getDepartments = () => {
+  axiosConfig
+    .get(`departments/top-level-departments/`)
+    .then(response => {
+      const results = response?.data?.results;
+      console.log(results);
+    })
+    .catch(() => {
+      console.log('error')
+    });
+};
 const searchUsers = e => {
   const search = e.target.value;
   const newFilter = { ...filter.value, page: 1, search };
-  getUsers(newFilter);
+  getEmployees(newFilter);
 };
-const onChangePage = e => {
-  const page = e?.page + 1;
-  const page_size = e?.rows;
-  const newFilter = { ...filter.value, page, page_size };
-  getUsers(newFilter);
+const onChangePage = ({ page }) => {
+  const newFilter = { ...filter.value, page: page + 1 };
+  getEmployees(newFilter);
 };
+const onChangePageSize = ({ value }) => {
+  const newFilter = { ...filter.value, page: 1, page_size: value };
+  getEmployees(newFilter);
+};
+const getFirstPageEmployees = () => {
+  getEmployees(defaultFilter);
+};
+const setEmployees = newEmployees => {
+  employees.value = newEmployees;
+}
 const changeLanguage = () => {
   headers.value = [
     {
@@ -89,7 +119,8 @@ watch(locale, () => {
 });
 onMounted(() => {
   changeLanguage();
-  getUsers({ page: 1, page_size: 10, search: '' });
+  getFirstPageEmployees();
+  getDepartments();
 });
 </script>
 <template>
@@ -99,43 +130,34 @@ onMounted(() => {
       <span class="p-input-icon-left">
         <i class="pi pi-search pl-1" />
         <InputText
-          :style="{ padding: '9px 9px 9px 40px', fontSize: 12 }"
+          :pt="{ root: { class: ['w-full rounded-3xl bg-white border-greyscale-50 font-xs focus:border-primary-500'] } }"
           @input="searchUsers"
           placeholder="Поиск"
           size="small"
           type="text"
           v-model="filter.search"
-          :pt="{
-            root: {
-              class: ['w-full rounded-3xl bg-white border-greyscale-50 focus:border-primary-500']
-            }
-          }" />
+          />
       </span>
       <Button
-        @click="createVisible = true"
+        @click="visible = true"
         class="p-button p-component font-medium text-sm rounded-xl !rounded-full py-[9px] px-4"
         rounded
         type="button"
       >
-      <base-icon class="mr-2" height="20" name="AddIcon" width="20"/>
-      <span>Создать</span>
-    </Button>
+        <base-icon class="mr-2" height="20" name="AddIcon" width="20"/>
+        <span>Создать</span>
+      </Button>
     </div>
   </div>
   <div class="employees-table">
     <DataTable
       :loading="loading"
-      :page-link-size="5"
       :pt="tableConfig"
-      :rows-per-page-options="[10, 15, 30]"
-      :rows="pageSize"
-      :value="users"
+      :value="employees"
       @page="onChangePage"
-      paginator
-      paginator-position="bottom"
-      paginatorTemplate="RowsPerPageDropdown CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
       row-hover
-      scrollable>
+      scrollable
+      >
       <Column
         :columnKey="item.columnKey"
         :field="item.field"
@@ -145,122 +167,49 @@ onMounted(() => {
         v-for="(item, index) in headers"
       >
         <template #body="{ field, data }">
-          <slot :name="field" :data="data">
-            <template v-if="field === 'status'">
-              <span class="text-sm font-medium text-greyscale-500" style="text-transform: uppercase;">
-                <template v-if="data[field] && data[field].name">
-                  <span :style="{ background: data.is_active ? '#EEFFE7' : '#FFEEF2', color: data.is_active ? '#63BA3D' : '#F3335C' }" class="px-2 py-1 text-xs font-semibold rounded-[80px]">{{ data[field] && data[field].name }}</span>
-                </template>
-              </span>
-            </template>
-            <template v-else-if="field === 'action'">
-              <Button
-                @click="() => {
-                  editUser = data;
-                  editVisible = true;
-                }" icon class="py-[7px] px-2 text-xs bg-greyscale-50 mr-2" severity="secondary" text rounded>
-                <EditIcon />
-              </Button>
-              <Button @click="() => {
-                deleteUser = data;
-                deleteVisible = true;
-              }" icon class="py-[7px] px-2 text-xs bg-greyscale-50" severity="danger" text rounded>
-                <DeleteIcon />
-              </Button>
-            </template>
-            <template v-else>
-              <span class="text-sm font-medium text-greyscale-500">{{ data[field] }}</span>
-            </template>
-          </slot>
+          <Employee
+            :data="data"
+            :employees="employees"
+            :field="field"
+            :getFirstPageEmployees="getFirstPageEmployees"
+            :setEmployees="setEmployees"
+            />
         </template>
       </Column>
       <template #loading>
-        <div class="py-1 mt-[114px] bg-greyscale-50 h-full w-full">
-          <div v-for="(item, index) in 10" :key="index" class="bg-white px-5 h-14 rounded-lg flex flex-col justify-center items-center mb-2">
-            <div class="w-full h-full flex items-center justify-center gap-4">
-              <skeleton v-for="(item, index) in 5" :key="index" height="16px" />
-            </div>
-          </div>
-        </div>
+        <LoadingTable />
       </template>
       <template #empty>
-        <div
-          class="w-full flex justify-center items-center rounded-lg"
-          style="height: calc(100vh - 420px)"
-        >
-          <img class="w-[200px] h-[170px]" src="@/assets/img/empty-img-gray.png" alt="EmptyFolder">
-        </div>
+        <EmptyTable />
       </template>
     </DataTable>
+    <div class="flex">
+      <Paginator
+        :pt="paginationConfig"
+        :rows="filter.page_size"
+        :totalRecords="count"
+        @page="onChangePage"
+        currentPageReportTemplate="{first}-{last} из {totalRecords}"
+        template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+        >
+        <template #start>
+          <Dropdown
+            :options="dropdownOptions"
+            :pt="dropdownConfig"
+            @change="onChangePageSize"
+            optionLabel="name"
+            optionValue="page_size"
+            v-model="filter.page_size"
+            />
+        </template>
+      </Paginator>
+    </div>
   </div>
-  <Dialog
-    :pt="dialogConfig"
-    dismissableMask
-    header="Создать сотрудник"
-    modal
-    v-model:visible="createVisible">
-    <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </p>
-    <template #footer>
-      <div>
-        <Button
-          @click="createVisible = false"
-          class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4"
-          icon-left="AddIcon"
-          rounded
-          type="button"
-        >Создать</Button>
-      </div>
-    </template>
-  </Dialog>
-  <Dialog
-    :pt="dialogConfig"
-    dismissableMask
-    header="Edit"
-    modal
-    v-model:visible="editVisible">
-    <h1>Edit</h1>
-    <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </p>
-    <template #footer>
-      <div>
-        <Button
-          @click="editVisible = false"
-          class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4"
-          icon-left="AddIcon"
-          rounded
-          type="button"
-        >Edit</Button>
-      </div>
-    </template>
-  </Dialog>
-  <Dialog
-    :pt="dialogConfig"
-    dismissableMask
-    header="Delete"
-    modal
-    v-model:visible="deleteVisible">
-    <h1>delete</h1>
-    <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </p>
-    <template #footer>
-      <div>
-        <Button
-          @click="deleteVisible = false"
-          class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4"
-          icon-left="AddIcon"
-          rounded
-          type="button"
-        >Delete</Button>
-      </div>
-    </template>
-  </Dialog>
+  <CreateEmployee
+    :getFirstPageEmployees="getFirstPageEmployees"
+    :setVisible="setVisible"
+    :visible="visible"
+    />
 </template>
 <style>
 .employees-table th:first-child, td:first-child {

@@ -1,17 +1,92 @@
 <script setup>
-import { ref } from 'vue';
 import Button from 'primevue/button';
-import { dialogConfig } from './config';
 import ProgressSpinner from 'primevue/progressspinner';
-const createAssistant = ref({});
-const createLoading = ref(false);
+import axiosConfig from "@/services/axios.config";
+import { AutoComplete } from '../../../components';
+import { dialogConfig } from './config';
+import { dispatchNotify } from '@/utils/notify';
+import { ref } from 'vue';
+import { useAuthStore } from '../../../../Auth/stores';
+const assistant = ref('');
+const assistantLoading = ref(false);
+const assistants = ref([]);
+const authStore = useAuthStore();
+const loading = ref(false);
+const supervisor = ref('');
+const supervisorLoading = ref(false);
+const supervisors = ref([]);
+const currentUserCompany = authStore.currentUser.company;
 const props = defineProps({
    getFirstPageAssistants: Function,
    setVisible: Function,
    visible: Boolean,
 });
+const searchAssistants = e => {
+   const value = e.target.value
+   assistant.value = value;
+   assistantLoading.value = true;
+   axiosConfig
+      .get(`users/?search=${value}&company=${currentUserCompany}`)
+      .then(response => {
+         const results = response?.data?.results;
+         const newAssistants = (Array.isArray(results) ? results: []).map(user => ({...user, position: user?.position?.name, optionDisabled: !user.is_active}));
+         assistants.value = newAssistants;
+      })
+      .catch(() => {
+         assistants.value = [];
+      })
+      .finally(() => {
+         assistantLoading.value = false;
+      });
+};
+const searchSupervisors = e => {
+   const value = e.target.value
+   supervisor.value = value;
+   supervisorLoading.value = true;
+   axiosConfig
+      .get(`users/?search=${value}&company=${currentUserCompany}`)
+      .then(response => {
+         const results = response?.data?.results;
+         const newSupervisors = (Array.isArray(results) ? results: []).map(user => ({...user, position: user?.position?.name, optionDisabled: !user.is_active}));
+         supervisors.value = newSupervisors;
+      })
+      .catch(() => {
+         supervisors.value = [];
+      })
+      .finally(() => {
+         supervisorLoading.value = false;
+      });
+};
 const assistantCreate = () => {
-   createLoading.value = true;
+   const supervisorId = supervisor?.value?.id;
+   const assistantId = assistant?.value?.id;
+   const sendingData = { is_active: true, user: supervisorId, assistant: assistantId };
+   if(supervisorId && assistantId) {
+      loading.value = true;
+      axiosConfig
+         .post('/user-assistants/', sendingData)
+         .then(response => {
+            if(response?.status === 201) {
+               assistant.value = '';
+               dispatchNotify('Помощник создан', '', 'success');
+               props.getFirstPageAssistants();
+               props.setVisible(false);
+               supervisor.value = '';
+            } else {
+               dispatchNotify('Помощник не создан', '', 'error');
+            }
+         })
+         .catch(() => {
+            dispatchNotify('Помощник не создан', '', 'error');
+         })
+         .finally(() => {
+            loading.value = false;
+         });
+   } else if(!supervisorId) {
+      dispatchNotify('Выберите руководитель', '', 'error');
+   } else {
+      dispatchNotify('Выберите помощника', '', 'error');
+   }
 };
 </script>
 <template>
@@ -21,23 +96,42 @@ const assistantCreate = () => {
       dismissableMask
       header="Создать помощник"
       modal
-      @update:visible="() => {
-         setVisible(!visible);
-         createAssistant = {};
-      }">
-      <p>
-         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-         Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      </p>
+      @update:visible="() => { setVisible(!visible); assistant = ''; supervisor = ''; loading = false }">
+      <div class="flex flex-col">
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Руководитель<span class="text-red-500 ml-1">*</span></p>
+         <AutoComplete
+            :hasValue="supervisor"
+            :loading="supervisorLoading"
+            :options="supervisors"
+            @onChange="({ value }) => { supervisor = value }"
+            @onClear="() => { supervisor = '' }"
+            @onInputChange="searchSupervisors"
+            v-model="supervisor"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mt-6 mb-1">Помощник<span class="text-red-500 ml-1">*</span></p>
+         <div class="pb-8">
+            <AutoComplete
+               :hasValue="assistant"
+               :loading="assistantLoading"
+               :options="assistants"
+               @onChange="({ value }) => { assistant = value }"
+               @onClear="() => { assistant = '' }"
+               @onInputChange="searchAssistants"
+               v-model="assistant"
+               />
+         </div>
+      </div>
       <template #footer>
-         <div style="justify-content: flex-end; display: flex">
-            <template v-if="createLoading">
-               <ProgressSpinner class="m-0" animationDuration=".5s" style="width: 40px; height: 40px" strokeWidth="4" />
+         <div class="flex justify-end">
+            <template v-if="loading">
+               <ProgressSpinner class="m-0 w-10 h-10" animationDuration=".5s" strokeWidth="4" />
             </template>
             <template v-else>
                <Button
                   @click="() => {
+                     assistant = '';
                      setVisible(!visible);
+                     supervisor = '';
                   }"
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
@@ -47,9 +141,8 @@ const assistantCreate = () => {
                </Button>
                <Button
                   @click="assistantCreate"
-                  class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 mx-0"
+                  class="shadow-none p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 mx-0"
                   rounded
-                  style="box-shadow: none"
                   type="button">
                   Создать</Button>
             </template>
@@ -57,4 +150,12 @@ const assistantCreate = () => {
       </template>
    </Dialog>
 </template>
-<style></style>
+<style>
+.user-search-autocomplete .p-autocomplete-item {
+   transition: background 0s outline 0s !important;
+}
+.user-search-autocomplete .p-autocomplete-item.p-focus {
+   outline: 1px solid var(--primary) !important;
+   background: var(--greyscale-50);
+}
+</style>
