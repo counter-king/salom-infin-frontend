@@ -63,8 +63,13 @@ export const useSDStoreInner = defineStore("sd-store-inner", {
   }),
   actions: {
     async actionCreateDocument(body) {
+      let model = {
+        ...body,
+        type: SD_TYPE_INNER,
+        sub_type: SD_TYPE_INNER
+      }
       this.buttonLoading = true;
-      const { response, error } = await withAsync(fetchCreateDocument, body);
+      const { response, error } = await withAsync(fetchCreateDocument, model);
       if (response){
         this.buttonLoading = false;
         return Promise.resolve(response);

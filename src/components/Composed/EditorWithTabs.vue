@@ -3,10 +3,15 @@
 import {ref, useModel} from "vue";
 import BaseBrickTab from "@/components/UI/BaseBrickTab.vue";
 import BaseEditor from "@/components/UI/BaseEditor.vue";
+import BaseFileUpload from "@/components/UI/BaseFileUpload.vue";
 
 const props = defineProps({
   modelValue: {
     type: String,
+  },
+  fileUploadContainerClasses: {
+    type: String,
+    default: ""
   }
 })
 
@@ -38,7 +43,11 @@ const tabPanelList = ref([
     </template>
 
     <template #file>
-      File
+      <div
+        :class="props.fileUploadContainerClasses"
+      >
+        <base-file-upload />
+      </div>
     </template>
   </base-brick-tab>
 </template>

@@ -317,13 +317,17 @@ export const useSDStore = defineStore("sd-store", {
       const { data } = await fetchGetDocumentList(params);
 
       this.documentList = data.results;
-      for (let i = 0; i < 30; i++) {
-        this.list.push({
-          ...data.results[0],
-          id: data.results[0].id
-        })
+
+      if (data.results && data.results.length){
+        for (let i = 0; i < 30; i++) {
+          this.list.push({
+            ...data.results[0],
+            id: data.results[0].id
+          })
+        }
       }
       this.totalCount = data.count;
+
 
       this.listLoading = false;
 

@@ -31,7 +31,10 @@ const returnConnectorClasses = (props, context) => {
   return props.value[context.index].type === "author"
     || (props.value[context.index].type === "approvers" && props.value[context.index].is_approved === true)
       || (props.value[context.index].type === "signers" && props.value[context.index].is_signed === true)
-        ? 'bg-success-500' : ''
+        ? 'bg-success-500' :
+          (props.value[context.index].type === "approvers" && props.value[context.index].is_approved === false)
+            || (props.value[context.index].type === "signers" && props.value[context.index].is_signed === false)
+             ? 'bg-critic-500' : ''
 }
 const returnItemIcon = (item) => {
   return item.type === 'author' ? 'PenIcon' : item.type === 'signers' ? 'CheckCircleIcon' : 'FileCheckIcon'
@@ -62,19 +65,36 @@ const returnItemActionClass = (item) => {
          ? 'text-success-500 bg-success-50 border-success-100' :
           (item.type === 'approvers' && item.is_approved === false)
             || (item.type === 'signers' && item.is_signed === false)
-              ? 'text-critic-500 bg-critic-50 border-critic-100' : ''
+              ? 'text-critic-500 bg-critic-50 border-critic-100'
+                : 'text-greyscale-500 bg-greyscale-50 border-greyscale-100'
+}
+const returnItemClass = (item) => {
+  return item.type === 'author'
+    || (item.type === 'approvers' && item.is_approved === true)
+      || (item.type === 'signers' && item.is_signed === true)
+        ? 'border-success-100' :
+          (item.type === 'approvers' && item.is_approved === false)
+            || (item.type === 'signers' && item.is_signed === false)
+              ? 'border-critic-100'
+                : 'border-greyscale-100'
 }
 const returnItemIconName = (item) => {
   return item.type === 'author'
     || (item.type === 'approvers' && item.is_approved === true)
       || (item.type === 'signers' && item.is_signed === true)
-        ? 'CheckCircleBgIcon' : 'Circle'
+       ? 'CheckCircleBgIcon' :
+        (item.type === 'approvers' && item.is_approved === false)
+          || (item.type === 'signers' && item.is_signed === false)
+           ? 'CloseCircleFilledIcon' : 'Circle'
 }
 const returnItemIconClass = (item) => {
   return item.type === 'author'
     || (item.type === 'approvers' && item.is_approved === true)
       || (item.type === 'signers' && item.is_signed === true)
-        ? 'text-success-500' : 'text-white'
+        ? 'text-success-500' :
+          (item.type === 'approvers' && item.is_approved === false)
+          || (item.type === 'signers' && item.is_signed === false)
+            ? 'text-critic-500' : 'text-white'
 }
 </script>
 
@@ -101,14 +121,28 @@ const returnItemIconClass = (item) => {
       </template>
 
       <template #content="{ item }">
-        <div class="flex p-5 rounded-xl bg-white mb-3">
-          <div class="user-avatar">
+        <div
+          class="flex p-5 rounded-xl bg-white mb-3 border"
+          :class="returnItemClass(item)"
+        >
+          <div class="user-avatar relative">
             <base-avatar
               :label="item?.user.first_name"
               :color="item?.user.color"
               shape="circle"
               avatar-classes="w-10 h-10"
             />
+            <div
+              class="absolute left-6 top-6 border-2 rounded-3xl border-white p-1"
+              :class="item.type === 'signers' && !item.is_all_approved ? 'bg-greyscale-300' : 'bg-success-500'"
+            >
+              <base-icon
+                :name="item.type === 'signers' && !item.is_all_approved ? 'EyeHideIcon' : 'EyeIcon'"
+                width="12"
+                height="12"
+                class="text-white"
+              />
+            </div>
           </div>
 
           <div class="flex flex-col ml-3 w-full">

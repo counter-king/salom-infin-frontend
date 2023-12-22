@@ -196,6 +196,7 @@ onUnmounted(() => {
               <editor-with-tabs
                 v-model="$v.content.$model"
                 :error="$v.content"
+                file-upload-container-classes="w-1/2 pr-2"
               />
             </base-col>
           </base-row>
