@@ -5,12 +5,12 @@ import Column from 'primevue/column';
 import CreateAssistant from './CreateAssistant.vue';
 import DataTable from 'primevue/datatable';
 import Dropdown from 'primevue/dropdown';
-import Loading from './Loading.vue';
-import NoData from './NoData.vue';
 import Paginator from 'primevue/paginator';
+import EmptyTable from '../../../components/EmptyTable.vue';
+import LoadingTable from '../../../components/LoadingTable.vue';
 import axiosConfig from "@/services/axios.config";
 import { onMounted, ref, watch } from 'vue';
-import { tableConfig, columnConfig, paginationConfig, dropdownConfig } from './config';
+import { tableConfig, columnConfig, paginationConfig, dropdownConfig, dropdownOptions } from './config';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
 const defaultFilter = { page: 1, page_size: 10 };
@@ -127,10 +127,10 @@ onMounted(() => {
         </template>
       </Column>
       <template #loading>
-        <Loading />
+        <LoadingTable />
       </template>
       <template #empty>
-        <NoData />
+        <EmptyTable />
       </template>
     </DataTable>
     <div class="flex">
@@ -144,17 +144,12 @@ onMounted(() => {
         >
         <template #start>
           <Dropdown
+            :options="dropdownOptions"
             :pt="dropdownConfig"
             @change="onChangePageSize"
             optionLabel="name"
             optionValue="page_size"
             v-model="filter.page_size"
-            :options="[
-              { name: '10', page_size: 10 },
-              { name: '15', page_size: 15 },
-              { name: '20', page_size: 20 },
-              { name: '30', page_size: 30 }
-            ]"
             />
         </template>
       </Paginator>

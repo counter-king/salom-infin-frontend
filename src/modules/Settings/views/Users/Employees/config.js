@@ -41,3 +41,9 @@ export const dropdownConfig = {
    root: { class: ['h-7', 'rounded-2',  'm-0'] },
    trigger: { class: ['w-[30px]'] },
 };
+export const dropdownOptions = [
+   { name: '10', page_size: 10 },
+   { name: '15', page_size: 15 },
+   { name: '20', page_size: 20 },
+   { name: '30', page_size: 30 },
+];

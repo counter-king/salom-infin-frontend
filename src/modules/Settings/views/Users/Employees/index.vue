@@ -1,17 +1,17 @@
 <script setup>
 import Button from 'primevue/button';
 import Column from 'primevue/column';
+import CreateEmployee from './CreateEmployee.vue';
 import DataTable from 'primevue/datatable';
 import Dropdown from 'primevue/dropdown';
-import InputText from 'primevue/inputtext';
-import Loading from './Loading.vue';
-import NoData from './NoData.vue';
-import CreateEmployee from './CreateEmployee.vue';
-import Paginator from 'primevue/paginator';
 import Employee from './Employee.vue';
+import EmptyTable from '../../../components/EmptyTable.vue';
+import InputText from 'primevue/inputtext';
+import LoadingTable from '../../../components/LoadingTable.vue';
+import Paginator from 'primevue/paginator';
 import axiosConfig from "@/services/axios.config";
 import { onMounted, ref, watch } from 'vue';
-import { tableConfig, columnConfig, dropdownConfig, paginationConfig } from './config';
+import { tableConfig, columnConfig, dropdownConfig, paginationConfig, dropdownOptions } from './config';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
 const defaultFilter = { page: 1, page_size: 10, search: '' };
@@ -54,6 +54,17 @@ const getEmployees = (newFilter = {}) => {
     })
     .finally(() => {
       loading.value = false;
+    });
+};
+const getDepartments = () => {
+  axiosConfig
+    .get(`departments/top-level-departments/`)
+    .then(response => {
+      const results = response?.data?.results;
+      console.log(results);
+    })
+    .catch(() => {
+      console.log('error')
     });
 };
 const searchUsers = e => {
@@ -110,6 +121,7 @@ watch(locale, () => {
 onMounted(() => {
   changeLanguage();
   getFirstPageEmployees();
+  getDepartments();
 });
 </script>
 <template>
@@ -119,13 +131,13 @@ onMounted(() => {
       <span class="p-input-icon-left">
         <i class="pi pi-search pl-1" />
         <InputText
-          :pt="{ root: { class: ['w-full rounded-3xl bg-white border-greyscale-50 focus:border-primary-500'] } }"
-          :style="{ padding: '9px 9px 9px 40px', fontSize: 12 }"
+          :pt="{ root: { class: ['w-full rounded-3xl bg-white border-greyscale-50 font-xs focus:border-primary-500'] } }"
           @input="searchUsers"
           placeholder="Поиск"
           size="small"
           type="text"
-          v-model="filter.search" />
+          v-model="filter.search"
+          />
       </span>
       <Button
         @click="visible = true"
@@ -166,10 +178,10 @@ onMounted(() => {
         </template>
       </Column>
       <template #loading>
-        <Loading />
+        <LoadingTable />
       </template>
       <template #empty>
-        <NoData />
+        <EmptyTable />
       </template>
     </DataTable>
     <div class="flex">
@@ -183,24 +195,19 @@ onMounted(() => {
         >
         <template #start>
           <Dropdown
+            :options="dropdownOptions"
             :pt="dropdownConfig"
             @change="onChangePageSize"
             optionLabel="name"
             optionValue="page_size"
             v-model="filter.page_size"
-            :options="[
-              { name: '10', page_size: 10 },
-              { name: '15', page_size: 15 },
-              { name: '20', page_size: 20 },
-              { name: '30', page_size: 30 }
-            ]"
             />
         </template>
       </Paginator>
     </div>
   </div>
   <CreateEmployee
-    :getFirstPageEmployees="getFirstPageAssistants"
+    :getFirstPageEmployees="getFirstPageEmployees"
     :setVisible="setVisible"
     :visible="visible"
     />

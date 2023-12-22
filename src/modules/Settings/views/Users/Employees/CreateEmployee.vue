@@ -1,16 +1,16 @@
 <script setup>
-import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
-import { dialogConfig } from './config';
-import ProgressSpinner from 'primevue/progressspinner';
-import InputText from 'primevue/inputtext';
-import { ref } from 'vue';
-import InputNumber from 'primevue/inputnumber';
+import Dialog from 'primevue/dialog';
 import InputMask from 'primevue/inputmask';
+import InputNumber from 'primevue/inputnumber';
+import InputText from 'primevue/inputtext';
+import ProgressSpinner from 'primevue/progressspinner';
+import { dialogConfig } from './config';
+import { ref } from 'vue';
 const employee = ref({});
 const loading = ref(false);
 const props = defineProps({
-   getFirstPageAssistants: Function,
+   getFirstPageEmployees: Function,
    setVisible: Function,
    visible: Boolean,
 });
@@ -29,14 +29,14 @@ const createUser = () => {
       >
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">ФИО Сотрудники<span class="text-red-500 ml-1">*</span></p>
-         <InputText style="font-size: 14px;" :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] mb-6']}}" size="small" placeholder="Выберите ФИО" type="text" />
+         <InputText style="font-size: 14px;" :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] mb-6']}}" placeholder="Выберите ФИО" type="text" />
          <p class="text-sm text-greyscale-500 font-medium mb-1">ПИНФЛ<span class="text-red-500 ml-1">*</span></p>
-         <InputMask slotChar=" " style="font-size: 14px;" :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] mb-6']}}" size="small" mask="99999999999999" placeholder="Выберите ПИНФЛ" />
+         <InputMask slotChar=" " style="font-size: 14px;" :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] mb-6']}}" mask="99999999999999" placeholder="Выберите ПИНФЛ" />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Номер телефона<span class="text-red-500 ml-1">*</span></p>
-         <InputMask slotChar=" " style="font-size: 14px;" :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] mb-6']}}" size="small" mask="+999 99 999 99 99" placeholder="Выберите номер телефона" />
+         <InputMask slotChar=" " style="font-size: 14px;" :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] mb-6']}}" mask="+999 99 999 99 99" placeholder="Выберите номер телефона" />
       </div>
       <template #footer>
-         <div style="justify-content: flex-end; display: flex">
+         <div class="flex justify-end">
             <template v-if="loading">
                <ProgressSpinner class="m-0" animationDuration=".5s" style="width: 40px; height: 40px" strokeWidth="4" />
             </template>

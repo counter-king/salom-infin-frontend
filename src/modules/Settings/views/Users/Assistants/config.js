@@ -29,20 +29,6 @@ export const menuConfig = {
    root: { class: 'translate-y-1 rounded-xl shadow-menu px-1 pb-0' },
    submenuHeader: { class: 'py-[6px] pl-3 text-sm font-semibold text-primary-500' }
 };
-export const autocompleteConfig = {
-   checkboxContainer: { class: 'hidden' },
-   dropdownIcon: { class: ['w-4 h-4'] },
-   header: { class: ['bg-white hidden'] },
-   input: { class: ['w-full px-11'] },
-   item: { class: [ 'p-0 transition-all hover:bg-greyscale-50 rounded-2xl focus:bg-greyscale-50 mt-[1px]'] },
-   label: { class: [ 'text-sm font-medium text-greyscale-500' ] },
-   list: { class: ['py-0'] },
-   option: { class: ['text-xs font-medium text-primary-900'] },
-   panel: { class: ['translate-y-[8px] shadow-menu rounded-2xl p-2 user-search-autocomplete'] },
-   root: { class: ['w-[500px] group bg-greyscale-50 rounded-2xl border-greyscale-50 focus:border-primary-500 h-[44px]'] },
-   token: { class: ['chip-hover shadow-button bg-white cursor-pointer'] },
-   tokenLabel: { class: ['text-sm font-medium'] },
-};
 export const paginationConfig = {
    current: { class: ['text-xs', 'text-greyscale-300', 'mr-auto', 'h-full'] },
    firstPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
@@ -63,3 +49,9 @@ export const dropdownConfig = {
    root: { class: ['h-7', 'rounded-2',  'm-0'] },
    trigger: { class: ['w-[30px]'] },
 };
+export const dropdownOptions = [
+   { name: '10', page_size: 10 },
+   { name: '15', page_size: 15 },
+   { name: '20', page_size: 20 },
+   { name: '30', page_size: 30 },
+];
