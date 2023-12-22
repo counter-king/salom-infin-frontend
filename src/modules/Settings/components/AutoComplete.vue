@@ -5,7 +5,7 @@ import Button from 'primevue/button';
 import ProgressSpinner from 'primevue/progressspinner';
 const emit = defineEmits(['onInputChange', 'onChange', 'onClear']);
 const props = defineProps({
-   isClear: [String, Boolean, Object],
+   hasValue: [String, Boolean, Object],
    loading: Boolean,
    options: Array,
    value: [String, Boolean, Object],
@@ -48,31 +48,30 @@ const autocompleteConfig = {
       <template #option="{ option }">
          <div class="items-center flex w-[100%] px-3 py-2 text-m font-medium text-primary-900">
             <div class="mr-3">
-               <Avatar :label="option.full_name.slice(0, 1)" :style="{'background-color': option.color}" style="color: white; width: 40px; height: 40px;" shape="circle" />
+               <Avatar style="color: #ffffff" :label="option.full_name.slice(0, 1)" :style="{'background-color': option.color}" class="w-10 h-10" shape="circle" />
             </div>
             <div class="flex flex-col">
-               <div style="font-size: 16px;">{{ option.full_name }}</div>
+               <div class="text-base">{{ option.full_name }}</div>
                <div class="flex items-center">
-                  <span style="font-size: 14px; font-weight: 600;" :style="{'color': option.optionDisabled ? '#F3335C' : '#63BA3D'}">{{ option.status && option.status.name }}</span>
-                  <span class="mx-2 w-[4px] h-[4px] rounded-full" style="background-color: #79889B; display: inline-block;"></span>
-                  <span style="color: #767994; font-weight: 500; font-size: 14px;">{{ option.position }}</span>
+                  <span class="text-sm font-semibold" :style="{'color': option.optionDisabled ? '#F3335C' : '#63BA3D'}">{{ option.status && option.status.name }}</span>
+                  <span class="mx-2 w-[4px] h-[4px] rounded-full" style="background-color: #79889B"></span>
+                  <span class="text-sm font-medium" style="color: #767994">{{ option.position }}</span>
                </div>
             </div>
          </div>
       </template>
       <template #loadingicon>
          <template v-if="loading">
-            <div style="right: 6px; top: 6px" class="absolute flex align-center justify-center w-[36px] h-[36px]">
+            <div class="right-1.5 left-1.5 absolute flex align-center justify-center w-[36px] h-[36px]">
                <ProgressSpinner class="m-0 w-[32px] h-[32px]" animationDuration=".5s" strokeWidth="3" />
             </div>
          </template>
          <template v-else>
-            <template v-if="isClear">
+            <template v-if="hasValue">
                <Button
                   @click="emit('onClear')"
-                  class="absolute bg-greyscale-50 rounded-3xl cursor-pointer w-[32px] h-[32px] flex justify-center items-center p-button p-component font-semibold text-sm rounded-xl !rounded-full p-0 m-0 border-none"
+                  class="right-1.5 left-1.5 absolute bg-greyscale-50 rounded-3xl cursor-pointer w-[32px] h-[32px] flex justify-center items-center p-button p-component font-semibold text-sm rounded-xl !rounded-full p-0 m-0 border-none"
                   rounded
-                  style="right: 6px; top: 6px"
                   type="button"
                   >
                   <svg width="18" height="18" viewBox="0 0 16 16" fill="none">

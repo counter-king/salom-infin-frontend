@@ -1,8 +1,8 @@
 <script setup>
-import AutoComplete from '../../../components/AutoComplete.vue';
 import Button from 'primevue/button';
 import ProgressSpinner from 'primevue/progressspinner';
 import axiosConfig from "@/services/axios.config";
+import { AutoComplete } from '../../../components';
 import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
@@ -100,7 +100,7 @@ const assistantCreate = () => {
       <div class="flex flex-col">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Руководитель<span class="text-red-500 ml-1">*</span></p>
          <AutoComplete
-            :isClear="supervisor"
+            :hasValue="supervisor"
             :loading="supervisorLoading"
             :options="supervisors"
             @onChange="({ value }) => { supervisor = value }"
@@ -111,7 +111,7 @@ const assistantCreate = () => {
          <p class="text-sm text-greyscale-500 font-medium mt-6 mb-1">Помощник<span class="text-red-500 ml-1">*</span></p>
          <div class="pb-8">
             <AutoComplete
-               :isClear="assistant"
+               :hasValue="assistant"
                :loading="assistantLoading"
                :options="assistants"
                @onChange="({ value }) => { assistant = value }"
@@ -124,7 +124,7 @@ const assistantCreate = () => {
       <template #footer>
          <div class="flex justify-end">
             <template v-if="loading">
-               <ProgressSpinner class="m-0" animationDuration=".5s" style="width: 40px; height: 40px" strokeWidth="4" />
+               <ProgressSpinner class="m-0 w-10 h-10" animationDuration=".5s" strokeWidth="4" />
             </template>
             <template v-else>
                <Button

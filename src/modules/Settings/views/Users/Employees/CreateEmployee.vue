@@ -21,11 +21,11 @@ const createUser = () => {
 <template>
    <Dialog
       :pt="dialogConfig"
+      :visible="visible"
+      @update:visible="() => { setVisible(!visible) }"
       dismissableMask
       header="Создать сотрудник"
       modal
-      :visible="visible"
-      @update:visible="() => { setVisible(!visible) }"
       >
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">ФИО Сотрудники<span class="text-red-500 ml-1">*</span></p>
@@ -38,7 +38,7 @@ const createUser = () => {
       <template #footer>
          <div class="flex justify-end">
             <template v-if="loading">
-               <ProgressSpinner class="m-0" animationDuration=".5s" style="width: 40px; height: 40px" strokeWidth="4" />
+               <ProgressSpinner class="m-0 w-10 h-10" animationDuration=".5s" strokeWidth="4" />
             </template>
             <template v-else>
                <Button

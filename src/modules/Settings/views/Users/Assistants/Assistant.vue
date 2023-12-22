@@ -1,32 +1,32 @@
 <script setup>
-import AutoComplete from '../../../components/AutoComplete.vue';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import ProgressSpinner from 'primevue/progressspinner';
 import Skeleton from 'primevue/skeleton';
 import axiosConfig from "@/services/axios.config";
+import { AutoComplete } from '../../../components';
 import { dialogConfig, menuConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref, watch, onMounted } from 'vue';
 import { useAuthStore } from '../../../../Auth/stores';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
+const authStore = useAuthStore();
 const assistant = ref('');
 const assistantLoading = ref(false);
 const assistants = ref([]);
-const authStore = useAuthStore();
-const supervisor = ref('');
-const supervisorLoading = ref(false);
-const supervisors = ref([]);
 const currentUserCompany = authStore.currentUser.company;
+const deleteLoading = ref(false);
 const deleteUser = ref({});
 const deleteVisible = ref(false);
-const deleteLoading = ref(false);
 const editLoading = ref(false);
 const editUser = ref({});
 const editVisible = ref(false);
 const items = ref([]);
 const menu = ref(null);
+const supervisor = ref('');
+const supervisorLoading = ref(false);
+const supervisors = ref([]);
 const statusLoading = ref(false);
 const props = defineProps({
    assistants: Array,
@@ -256,7 +256,7 @@ onMounted(() => {
       <div class="flex flex-col">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Руководитель<span class="text-red-500 ml-1">*</span></p>
          <AutoComplete
-            :isClear="supervisor"
+            :hasValue="supervisor"
             :loading="supervisorLoading"
             :options="supervisors"
             @onChange="({ value }) => { supervisor = value }"
@@ -267,7 +267,7 @@ onMounted(() => {
          <p class="text-sm text-greyscale-500 font-medium mt-6 mb-1">Помощник<span class="text-red-500 ml-1">*</span></p>
          <div class="pb-8">
             <AutoComplete
-               :isClear="assistant"
+               :hasValue="assistant"
                :loading="assistantLoading"
                :options="assistants"
                @onChange="({ value }) => { assistant = value }"
@@ -280,7 +280,7 @@ onMounted(() => {
       <template #footer>
          <div class="flex justify-end">
             <template v-if="editLoading">
-               <ProgressSpinner class="m-0" animationDuration=".5s" style="width: 40px; height: 40px" strokeWidth="4" />
+               <ProgressSpinner class="m-0 w-10 h-10" animationDuration=".5s" strokeWidth="4" />
             </template>
             <template v-else>
                <Button
@@ -323,7 +323,7 @@ onMounted(() => {
       <template #footer>
          <div class="flex justify-end">
             <template v-if="deleteLoading">
-               <ProgressSpinner class="m-0" animationDuration=".5s" style="width: 40px; height: 40px" strokeWidth="4" />
+               <ProgressSpinner class="m-0 w-10 h-10" animationDuration=".5s" strokeWidth="4" />
             </template>
             <template v-else>
                <Button

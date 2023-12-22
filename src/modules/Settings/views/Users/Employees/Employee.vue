@@ -100,7 +100,7 @@ const employeeEdit = () => {};
       <template #footer>
          <div class="flex justify-end">
             <template v-if="editLoading">
-               <ProgressSpinner class="m-0" animationDuration=".5s" style="width: 40px; height: 40px" strokeWidth="4" />
+               <ProgressSpinner class="m-0 w-10 h-10" animationDuration=".5s" strokeWidth="4" />
             </template>
             <template>
                <Button
@@ -143,7 +143,7 @@ const employeeEdit = () => {};
       <template #footer>
          <div class="flex justify-end">
             <template v-if="deleteLoading">
-               <ProgressSpinner class="m-0" animationDuration=".5s" style="width: 40px; height: 40px" strokeWidth="4" />
+               <ProgressSpinner class="m-0 w-10 h-10" animationDuration=".5s" strokeWidth="4" />
             </template>
             <template v-else>
                <Button
