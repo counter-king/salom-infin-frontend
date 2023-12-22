@@ -102,7 +102,7 @@ const toggle = (event) => {
       nav-container-class="m-5 mb-0"
     >
       <template #resolution="{ value }">
-        <div class="h-[588px] overflow-y-auto px-8 py-5">
+        <div class="h-[650px] overflow-y-auto px-8 py-5">
           <div class="flex mb-4">
             <div class="flex items-center flex-1">
               <img src="/images/logo.svg" alt="Logo" />
@@ -219,7 +219,7 @@ const toggle = (event) => {
       </template>
 
       <template #file="{ value }">
-        <div class="h-[569px] mt-5">
+        <div class="h-[632px] mt-5">
           <template v-if="value">
             <file-preview :file="value" />
           </template>

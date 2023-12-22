@@ -17,6 +17,6 @@ const props = defineProps({
 
 <style>
 .layout-comments-view {
-  height: calc(100vh - 306px);
+  height: calc(100vh - 242px);
 }
 </style>

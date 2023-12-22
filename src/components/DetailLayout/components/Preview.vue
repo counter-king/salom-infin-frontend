@@ -11,6 +11,10 @@ const props = defineProps({
   headers: {
     type: Array,
     default: () => []
+  },
+  treeItems: {
+    type: Object,
+    default: () => {}
   }
 })
 </script>
@@ -23,7 +27,7 @@ const props = defineProps({
       </template>
     </field-groups>
 
-    <tree-users />
+    <tree-users :tree-items="props.treeItems" />
   </div>
 </template>
 

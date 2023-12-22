@@ -58,6 +58,7 @@ const acquaintDocument = async () => {
         :preview-detail="reviewStore.detailModel"
         :object-id="reviewStore.detailModel.document.id"
         :headers="reviewStore.headers"
+        :tree-items="docflowStore.tree"
         :resolution="{
           ...boxesCommonStore.resolution,
           register_date: reviewStore.detailModel.document.register_date,

@@ -7,7 +7,7 @@ import {useI18n} from "vue-i18n";
 import BaseSpinner from '@/components/UI/BaseSpinner.vue'
 import FileTabs from './components/FileTabs.vue'
 // Enums
-import {CONTENT_TYPES} from "@/enums";
+import { CONTENT_TYPES } from '@/enums'
 // Composable
 const router = useRouter()
 // Macros
@@ -68,6 +68,10 @@ const props = defineProps({
     default: () => []
   },
   resolution: {
+    type: Object,
+    default: () => {}
+  },
+  treeItems: {
     type: Object,
     default: () => {}
   },
@@ -136,6 +140,7 @@ watch(activeTabMenu, (value) => {
                   :preview-detail="props.previewDetail"
                   :object-id="props.objectId"
                   :headers="props.headers"
+                  :tree-items="props.treeItems"
                   :content-type="props.contentType"
                 >
                   <template #preview-actions>

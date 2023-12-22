@@ -51,6 +51,7 @@ const updateDocument = async () => {
         :preview-detail="assignmentStore.detailModel"
         :object-id="assignmentStore.detailModel.document.id"
         :headers="assignmentStore.headers"
+        :tree-items="docflowStore.tree"
         :resolution="{
           ...boxesCommonStore.resolution,
           register_date: assignmentStore.detailModel.document.register_date,
