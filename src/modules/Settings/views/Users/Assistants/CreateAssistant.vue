@@ -2,7 +2,6 @@
 import Button from 'primevue/button';
 import ProgressSpinner from 'primevue/progressspinner';
 import axiosConfig from "@/services/axios.config";
-import { AutoComplete } from '../../../components';
 import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
@@ -99,18 +98,35 @@ const assistantCreate = () => {
       @update:visible="() => { setVisible(!visible); assistant = ''; supervisor = ''; loading = false }">
       <div class="flex flex-col">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Руководитель<span class="text-red-500 ml-1">*</span></p>
-         <AutoComplete
+         <base-auto-complete
             :hasValue="supervisor"
             :loading="supervisorLoading"
             :options="supervisors"
             @onChange="({ value }) => { supervisor = value }"
             @onClear="() => { supervisor = '' }"
             @onInputChange="searchSupervisors"
+            noOptionMessage="Сотрудник не найден"
             v-model="supervisor"
-            />
+            >
+            <template #option="{option}">
+               <div class="items-center flex w-[100%] px-3 py-2 text-m font-medium text-primary-900">
+                  <div class="mr-3">
+                     <Avatar style="color: #ffffff" :label="option.full_name.slice(0, 1)" :style="{'background-color': option.color}" class="w-10 h-10" shape="circle" />
+                  </div>
+                  <div class="flex flex-col">
+                     <div class="text-base">{{ option.full_name }}</div>
+                     <div class="flex items-center">
+                        <span class="text-sm font-semibold" :style="{'color': option.optionDisabled ? '#F3335C' : '#63BA3D'}">{{ option.status && option.status.name }}</span>
+                        <span class="mx-2 w-[4px] h-[4px] rounded-full" style="background-color: #79889B"></span>
+                        <span class="text-sm font-medium" style="color: #767994">{{ option.position }}</span>
+                     </div>
+                  </div>
+               </div>
+            </template>
+         </base-auto-complete>
          <p class="text-sm text-greyscale-500 font-medium mt-6 mb-1">Помощник<span class="text-red-500 ml-1">*</span></p>
          <div class="pb-8">
-            <AutoComplete
+            <base-auto-complete
                :hasValue="assistant"
                :loading="assistantLoading"
                :options="assistants"
@@ -118,7 +134,24 @@ const assistantCreate = () => {
                @onClear="() => { assistant = '' }"
                @onInputChange="searchAssistants"
                v-model="assistant"
-               />
+               noOptionMessage="Сотрудник не найден"
+               >
+               <template #option="{option}">
+                  <div class="items-center flex w-[100%] px-3 py-2 text-m font-medium text-primary-900">
+                     <div class="mr-3">
+                        <Avatar style="color: #ffffff" :label="option.full_name.slice(0, 1)" :style="{'background-color': option.color}" class="w-10 h-10" shape="circle" />
+                     </div>
+                     <div class="flex flex-col">
+                        <div class="text-base">{{ option.full_name }}</div>
+                        <div class="flex items-center">
+                           <span class="text-sm font-semibold" :style="{'color': option.optionDisabled ? '#F3335C' : '#63BA3D'}">{{ option.status && option.status.name }}</span>
+                           <span class="mx-2 w-[4px] h-[4px] rounded-full" style="background-color: #79889B"></span>
+                           <span class="text-sm font-medium" style="color: #767994">{{ option.position }}</span>
+                        </div>
+                     </div>
+                  </div>
+               </template>
+            </base-auto-complete>
          </div>
       </div>
       <template #footer>

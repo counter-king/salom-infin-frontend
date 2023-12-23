@@ -98,6 +98,16 @@ const Settings = [
             },
             component: () => import("../views/Structure/Branches/index.vue"),
             children: []
+          },
+          {
+            path: 'positions',
+            name: 'PositionsIndex',
+            meta: {
+              isAuthRequired: true,
+              navigation: true,
+            },
+            component: () => import("../views/Structure/Positions/index.vue"),
+            children: []
           }
         ]
       },

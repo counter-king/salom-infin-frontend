@@ -1,14 +1,16 @@
 <script setup>
 import AutoComplete from 'primevue/autocomplete';
-import Avatar from 'primevue/avatar';
 import Button from 'primevue/button';
 import ProgressSpinner from 'primevue/progressspinner';
+import { useSlots } from 'vue';
+const slot = useSlots();
 const emit = defineEmits(['onInputChange', 'onChange', 'onClear']);
 const props = defineProps({
    hasValue: [String, Boolean, Object],
    loading: Boolean,
    options: Array,
    value: [String, Boolean, Object],
+   noOptionMessage: String,
 });
 const autocompleteConfig = {
    checkboxContainer: { class: 'hidden' },
@@ -46,23 +48,11 @@ const autocompleteConfig = {
       selectionMessage="full_name"
       >
       <template #option="{ option }">
-         <div class="items-center flex w-[100%] px-3 py-2 text-m font-medium text-primary-900">
-            <div class="mr-3">
-               <Avatar style="color: #ffffff" :label="option.full_name.slice(0, 1)" :style="{'background-color': option.color}" class="w-10 h-10" shape="circle" />
-            </div>
-            <div class="flex flex-col">
-               <div class="text-base">{{ option.full_name }}</div>
-               <div class="flex items-center">
-                  <span class="text-sm font-semibold" :style="{'color': option.optionDisabled ? '#F3335C' : '#63BA3D'}">{{ option.status && option.status.name }}</span>
-                  <span class="mx-2 w-[4px] h-[4px] rounded-full" style="background-color: #79889B"></span>
-                  <span class="text-sm font-medium" style="color: #767994">{{ option.position }}</span>
-               </div>
-            </div>
-         </div>
+         <slot name="option" :option="option" />
       </template>
       <template #loadingicon>
          <template v-if="loading">
-            <div class="right-1.5 left-1.5 absolute flex align-center justify-center w-[36px] h-[36px]">
+            <div class="right-1.5 top-1.5 absolute flex align-center justify-center w-[36px] h-[36px]">
                <ProgressSpinner class="m-0 w-[32px] h-[32px]" animationDuration=".5s" strokeWidth="3" />
             </div>
          </template>
@@ -70,7 +60,7 @@ const autocompleteConfig = {
             <template v-if="hasValue">
                <Button
                   @click="emit('onClear')"
-                  class="right-1.5 left-1.5 absolute bg-greyscale-50 rounded-3xl cursor-pointer w-[32px] h-[32px] flex justify-center items-center p-button p-component font-semibold text-sm rounded-xl !rounded-full p-0 m-0 border-none"
+                  class="right-1.5 top-1.5 absolute bg-greyscale-50 rounded-3xl cursor-pointer w-[32px] h-[32px] flex justify-center items-center p-button p-component font-semibold text-sm rounded-xl !rounded-full p-0 m-0 border-none"
                   rounded
                   type="button"
                   >
@@ -87,7 +77,7 @@ const autocompleteConfig = {
       </template>
       <template #empty>
          <div class="flex items-center justify-center w-[100%] h-[40px] text-m font-medium text-primary-900">
-            Сотрудник не найден
+            {{noOptionMessage}}
          </div>
       </template>
       <template #dropdownicon>

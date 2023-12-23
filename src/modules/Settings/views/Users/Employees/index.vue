@@ -8,7 +8,6 @@ import Employee from './Employee.vue';
 import InputText from 'primevue/inputtext';
 import Paginator from 'primevue/paginator';
 import axiosConfig from "@/services/axios.config";
-import { EmptyTable, LoadingTable } from '../../../components';
 import { onMounted, ref, watch } from 'vue';
 import { tableConfig, columnConfig, dropdownConfig, paginationConfig, dropdownOptions } from './config';
 import { useI18n } from "vue-i18n";
@@ -177,10 +176,18 @@ onMounted(() => {
         </template>
       </Column>
       <template #loading>
-        <LoadingTable />
+        <div class="bg-primary-50 w-full h-full overflow-hidden absolute left-0 top-0">
+          <div v-for="(_, index) in 10" :key="index" class="bg-white px-5 h-14 rounded-xl flex flex-col justify-center items-center mb-1">
+            <div class="w-full h-full flex items-center justify-center gap-4">
+              <skeleton v-for="(_, index) in 5" :key="index" height="16px" />
+            </div>
+          </div>
+        </div>
       </template>
       <template #empty>
-        <EmptyTable />
+        <div class="w-full flex justify-center items-center rounded-lg h-[450px]">
+          <img class="w-[200px] h-[170px]" src="@/assets/img/empty-img-gray.png" alt="EmptyFolder">
+        </div>
       </template>
     </DataTable>
     <div class="flex">

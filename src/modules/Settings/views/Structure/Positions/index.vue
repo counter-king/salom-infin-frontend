@@ -32,6 +32,6 @@ onMounted(() => {
 </script>
 <template>
    <the-navigation :navs="navs"/>
-   <div>Branches Page</div>
+   <div>Positions Page</div>
 </template>
 <style></style>

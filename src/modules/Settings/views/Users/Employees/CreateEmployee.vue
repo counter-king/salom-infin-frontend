@@ -29,11 +29,11 @@ const createUser = () => {
       >
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">ФИО Сотрудники<span class="text-red-500 ml-1">*</span></p>
-         <InputText style="font-size: 14px;" :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] mb-6']}}" placeholder="Выберите ФИО" type="text" />
+         <InputText :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] mb-6 text-sm']}}" placeholder="Выберите ФИО" type="text" />
          <p class="text-sm text-greyscale-500 font-medium mb-1">ПИНФЛ<span class="text-red-500 ml-1">*</span></p>
-         <InputMask slotChar=" " style="font-size: 14px;" :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] mb-6']}}" mask="99999999999999" placeholder="Выберите ПИНФЛ" />
+         <InputMask slotChar=" " :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] mb-6 text-sm']}}" mask="99999999999999" placeholder="Выберите ПИНФЛ" />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Номер телефона<span class="text-red-500 ml-1">*</span></p>
-         <InputMask slotChar=" " style="font-size: 14px;" :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] mb-6']}}" mask="+999 99 999 99 99" placeholder="Выберите номер телефона" />
+         <InputMask slotChar=" " :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] mb-6 text-sm']}}" mask="+999 99 999 99 99" placeholder="Выберите номер телефона" />
       </div>
       <template #footer>
          <div class="flex justify-end">
