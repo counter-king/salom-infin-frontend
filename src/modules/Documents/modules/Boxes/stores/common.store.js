@@ -9,7 +9,7 @@ import {
   fetchDeleteResolutionById
 } from "../services/common.service"
 // Utils
-import { clearModel, setValuesToKeys } from '@/utils'
+import { clearModel, isObject, setValuesToKeys } from '@/utils'
 import { dispatchNotify } from '@/utils/notify'
 import { RESOLUTION_TYPES, RESOLUTION_CREATE_TYPES, COLOR_TYPES } from "@/enums"
 export const useBoxesCommonStore = defineStore("boxes-common", {
@@ -79,6 +79,7 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
       __assignees: [],
       __controllers: [],
     },
+    responsibleIndex: 0,
     resolution: {
       signed: false,
       receipt_date: null,
@@ -99,7 +100,15 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
      * */
     async actionCreateResolution({ resolutionListId, reviewId, parentId, resolutionCreateType }) {
       let { __assignees, __controllers } = this.resolutionModel
-      let assignees = __assignees.map(item => ({ user: item.id, is_responsible: false }))
+      let assignees = __assignees.map((item, index) => {
+        return {
+          user: item.id,
+          is_responsible: this.responsibleIndex === index
+            ? true :
+            item.id === this.responsibleIndex
+        }
+      })
+
       let controllers = __controllers.length
         ? __controllers.map(item => ({ user: item.id, is_controller: true }))
         : []
@@ -124,6 +133,8 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
         await this.actionResolutionsList({ id: resolutionListId })
         dispatchNotify('Резолюция создано', null, COLOR_TYPES.SUCCESS)
         clearModel(this.resolutionModel, ['type'])
+        // Сбросим нумерацию
+        this.actionSetResponsibleIndex(0)
         return Promise.resolve()
       } catch (error) {
         dispatchNotify('Ошибка', 'Ошибка создание резолюции', COLOR_TYPES.ERROR)
@@ -155,6 +166,9 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
       this.resolutionModel.__controllers = controllers.length
         ? controllers.map(item => ({ ...item, __userId: item.user.id }))
         : []
+
+      let responsibleUser = assignees.find(item => item.is_responsible)
+      this.actionSetResponsibleIndex(responsibleUser)
     },
     /*
     * Изменить созданную резолюцию по id
@@ -166,7 +180,7 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
           return {
             id: assigner.id,
             user: assigner.__userId,
-            is_responsible: assigner.is_responsible
+            is_responsible: assigner.__userId === this.responsibleIndex
           }
         } else {
           return {
@@ -219,10 +233,29 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
         dispatchNotify('Резолюция удален', null, COLOR_TYPES.SUCCESS)
         await this.actionResolutionsList({ id: resolutionListId })
         clearModel(this.resolutionModel, ['type'])
+        // Сбросим нумерацию
+        this.actionSetResponsibleIndex(0)
         return Promise.resolve()
       } catch(error) {
         dispatchNotify('Ошибка', 'Ошибка удаление резолюции', COLOR_TYPES.ERROR)
         return Promise.reject()
+      }
+    },
+    /*
+    * Назначить полтзователья отв.исполнителем
+    * */
+    actionSetResponsibleIndex(payload) {
+      if(payload === null || payload === undefined) {
+        dispatchNotify('Ошибка в базе данных', 'Ответственный исполнитель не найден', COLOR_TYPES.ERROR)
+
+        return
+      }
+
+      if(isObject(payload.user)) {
+        this.responsibleIndex = payload.user.id
+      }
+      else {
+        this.responsibleIndex = payload
       }
     },
     /*

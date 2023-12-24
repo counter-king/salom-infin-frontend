@@ -1,6 +1,8 @@
 <script setup>
 // Core
 import { useI18n } from 'vue-i18n'
+import { useVuelidate } from '@vuelidate/core'
+import { helpers, required, requiredIf } from '@vuelidate/validators'
 // Store
 import { useBoxesCommonStore } from '@/modules/Documents/modules/Boxes/stores/common.store'
 // Components
@@ -11,6 +13,34 @@ import { RESOLUTION_TYPES } from '@/enums'
 // Composable
 const { t } = useI18n()
 const boxesCommonStore = useBoxesCommonStore()
+// Non-reactive
+const rules = {
+  deadline: {
+    requiredIf: helpers.withMessage(
+      `Поле не должен быть пустым`,
+      requiredIf(function () {
+        return boxesCommonStore.resolutionModel.type === RESOLUTION_TYPES.CONTROL
+      })
+    )
+  },
+  __controllers: {
+    requiredIf: helpers.withMessage(
+      `Поле не должен быть пустым`,
+      requiredIf(function () {
+        return boxesCommonStore.resolutionModel.type === RESOLUTION_TYPES.CONTROL
+      })
+    )
+  },
+  __assignees: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  content: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  }
+}
+const $v = useVuelidate(rules, boxesCommonStore.resolutionModel)
+// Macros
+defineExpose({ $v })
 // Reactive
 const types = [
   {
@@ -44,15 +74,66 @@ const types = [
 
       <base-col col-class="w-full">
         <base-calendar
-          v-model="boxesCommonStore.resolutionModel.deadline"
+          v-model="$v.deadline.$model"
+          :error="$v.deadline"
           label="deadline"
           placeholder="choose-date"
         />
       </base-col>
 
+      <template v-if="boxesCommonStore.resolutionModel.type === RESOLUTION_TYPES.CONTROL">
+        <base-col col-class="w-full">
+          <base-multi-select
+            v-model="$v.__controllers.$model"
+            :error="$v.__controllers"
+            label="controlling"
+            placeholder="choose-controllers"
+            menu-placeholder="search-users"
+            api-url="users"
+            display="chip"
+            selectable
+            :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
+          >
+            <template #chip="{ value }">
+              <user-with-label
+                :label="isObject(value?.user) ? value?.user.full_name : value?.full_name"
+                :color="isObject(value?.user) ? value?.user.color : value?.color"
+                :title="isObject(value?.user) ? value?.user.full_name : value?.full_name"
+                :compact="true"
+                avatar-classes="w-5 h-5"
+              >
+              </user-with-label>
+            </template>
+
+            <template #option="{ value }">
+              <user-with-selectable :items="[value]" />
+            </template>
+
+            <template #hint="{ value }">
+              <user-with-label
+                :label="isObject(value?.user) ? value?.user.full_name : value?.full_name"
+                :color="isObject(value?.user) ? value?.user.color : value?.color"
+                :title="isObject(value?.user) ? value?.user.full_name : value?.full_name"
+                shadow
+                avatar-classes="w-5 h-5"
+              >
+              </user-with-label>
+            </template>
+          </base-multi-select>
+
+          <div class="mt-2">
+            <user-with-selectable
+              :items="boxesCommonStore.resolutionModel.__controllers"
+              selectable
+            />
+          </div>
+        </base-col>
+      </template>
+
       <base-col col-class="w-full">
         <base-multi-select
-          v-model="boxesCommonStore.resolutionModel.__assignees"
+          v-model="$v.__assignees.$model"
+          :error="$v.__assignees"
           label="performers"
           placeholder="choose-performers"
           menu-placeholder="search-users"
@@ -63,9 +144,10 @@ const types = [
         >
           <template #chip="{ value }">
             <user-with-label
-              :compact="true"
+              :label="isObject(value?.user) ? value?.user.full_name : value?.full_name"
+              :color="isObject(value?.user) ? value?.user.color : value?.color"
               :title="isObject(value?.user) ? value?.user.full_name : value?.full_name"
-              image="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D"
+              :compact="true"
               avatar-classes="w-5 h-5"
             >
             </user-with-label>
@@ -77,9 +159,10 @@ const types = [
 
           <template #hint="{ value }">
             <user-with-label
+              :label="isObject(value?.user) ? value?.user.full_name : value?.full_name"
+              :color="isObject(value?.user) ? value?.user.color : value?.color"
               :title="isObject(value?.user) ? value?.user.full_name : value?.full_name"
               shadow
-              image="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D"
               avatar-classes="w-5 h-5"
             >
             </user-with-label>
@@ -88,6 +171,7 @@ const types = [
 
         <div class="mt-2">
           <user-with-selectable
+            v-model:checkbox-index="boxesCommonStore.responsibleIndex"
             :items="boxesCommonStore.resolutionModel.__assignees"
             :multiple="false"
             selectable
@@ -97,7 +181,8 @@ const types = [
 
       <base-col col-class="w-full">
         <base-textarea
-          v-model="boxesCommonStore.resolutionModel.content"
+          v-model="$v.content.$model"
+          :error="$v.content"
           label="enter-content"
         />
       </base-col>
