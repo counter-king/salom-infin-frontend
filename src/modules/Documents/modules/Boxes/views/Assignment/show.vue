@@ -30,12 +30,15 @@ onMounted(async () => {
 // Methods
 const acquaintDocument = async () => {
   await assignmentStore.actionAcquaintDocument({ id: +route.params.id })
+  boxesCommonStore.actionRerenderComponent()
 }
 const doneDocument = async () => {
   await assignmentStore.actionPerformDocument({ id: +route.params.id })
+  boxesCommonStore.actionRerenderComponent()
 }
 const updateDocument = async () => {
   await assignmentStore.actionPerformDocument({ id: +route.params.id })
+  boxesCommonStore.actionRerenderComponent()
 }
 </script>
 

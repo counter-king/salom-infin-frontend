@@ -99,11 +99,14 @@ const createResolution = async () => {
         parentId: props.parentId,
         resolutionCreateType: props.resolutionCreateType
       })
+      boxesCommonStore.actionRerenderComponent()
     }
     else {
       await boxesCommonStore.actionUpdateByIdResolution({
+        resolutionListId: props.resolutionListId,
         resolutionCreateType: props.resolutionCreateType
       })
+      boxesCommonStore.actionRerenderComponent()
     }
     createResolutionDialog.value = false
   } finally {

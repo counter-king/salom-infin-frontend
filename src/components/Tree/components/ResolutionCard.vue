@@ -5,12 +5,16 @@ import Accordion from 'primevue/accordion'
 import AccordionTab from 'primevue/accordiontab'
 // Components
 import { UserWithCollapse } from '@/components/Users'
+import { StatusChip } from '@/components/Chips'
+// Stores
+import { useBoxesCommonStore } from '@/modules/Documents/modules/Boxes/stores/common.store'
 // Props
 import avatarProps from '../../Users/props'
 // Enums
-import { RESOLUTION_TYPES } from '@/enums'
+import { RESOLUTION_TYPES, STATUS_TYPES } from '@/enums'
 // Composable
 const { t } = useI18n()
+const boxesStore = useBoxesCommonStore()
 // Macros
 const props = defineProps({
   ...avatarProps,
@@ -44,11 +48,24 @@ const resolutionTypes = (type) => {
             />
           </div>
 
-          <div>
+          <div class="flex-1">
             <div class="flex items-center gap-2 text-sm">
-              <h1 class="font-semibold text-primary-500">
+              <h1 class="flex-1 font-semibold text-primary-500">
                 {{ resolutionTypes(item.type) }}
               </h1>
+
+              <!-- Резолюция неподписана -->
+              <template v-if="!item.is_verified">
+                <status-chip :status="{}">
+                  Резолюция неподписана
+                </status-chip>
+              </template>
+
+              <template v-else>
+                <status-chip :status="{ id: STATUS_TYPES.DONE }">
+                  Резолюция подписана
+                </status-chip>
+              </template>
             </div>
 
             <div class="flex items-center gap-2 text-sm leading-[20px]">
@@ -56,9 +73,19 @@ const resolutionTypes = (type) => {
 
               <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-full"></div>
 
-              <h1 class="font-medium text-greyscale-500">{{ item.deadline }}, 18:00</h1>
+              <template v-if="item.deadline">
+                <h1 class="font-medium text-greyscale-500">{{ item.deadline }}, 18:00</h1>
+              </template>
+
+              <template v-else>
+                <h1 class="font-medium text-greyscale-500">Без срока исполнений</h1>
+              </template>
             </div>
           </div>
+
+<!--          <div class="text-sm font-medium text-critic-500">-->
+<!--            Документ еще не подписан-->
+<!--          </div>-->
         </div>
       </div>
 
@@ -68,7 +95,7 @@ const resolutionTypes = (type) => {
     </div>
 
     <!-- Collapse -->
-    <Accordion>
+    <Accordion :key="boxesStore.componentKey" :active-index="0">
       <AccordionTab
         :pt="{
         root: {

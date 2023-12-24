@@ -261,6 +261,7 @@ export const useReviewStore = defineStore("review", {
     * Подписать или удалить подпись
     * */
     async actionSignOrCancel(body) {
+      const docflowStore = useDocFlowStore()
       const commonStore = useBoxesCommonStore()
       const resolutionIds = commonStore.createdResolutionsList.items.map(({ resolution }) => resolution.id)
       let model = Object.assign(body, { assignment_ids: resolutionIds })
@@ -268,6 +269,7 @@ export const useReviewStore = defineStore("review", {
       try {
         await fetchSignOrCancel(model)
         await this.actionReviewById(this.detailModel)
+        await docflowStore.actionGetTree(this.detailModel.document.id)
         // Если идет подпись
         if(body.is_verified) {
           dispatchNotify('Резолюция подписан', null, COLOR_TYPES.SUCCESS)
