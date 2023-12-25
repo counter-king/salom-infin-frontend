@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 // Props
 import avatarProps from './props'
 // Utils
@@ -18,21 +18,29 @@ const props = defineProps({
   items: {
     type: Array,
     default: () => []
+  },
+  checkboxIndex: {
+    type: Number
   }
 })
-const emit = defineEmits(['emit:selected'])
-// Reactive
-const userCheckbox = ref('')
+const emit = defineEmits(['emit:selected', 'update:checkbox-index'])
 // Computed
 const rootClass = computed(() => {
   return {
     'bg-greyscale-50 rounded-xl mb-2 py-[10px] px-4': props.selectable
   }
 })
+const checkboxIndex = computed({
+  get() {
+    return props.checkboxIndex
+  },
+  set(value) {
+    emit('update:checkbox-index', value)
+  }
+})
 // Methods
 const handleSelect = (item) => {
-  userCheckbox.value = isObject(item.user) ? item.user.id : item.id
-  emit('emit:selected', userCheckbox.value)
+  checkboxIndex.value = isObject(item.user) ? item.user.id : item.id
 }
 </script>
 
@@ -42,7 +50,10 @@ const handleSelect = (item) => {
     class="flex items-center gap-3 w-full border border-transparent cursor-pointer"
     :class="[
       rootClass,
-      { '!border-primary-500 bg-primary-100/50': isObject(item.user) ? item.user?.id : item.id === userCheckbox }
+      { 'p-highlight !border-primary-500 bg-primary-100/50': isObject(item.user)
+        ? item.user?.id === checkboxIndex
+        : item.id === checkboxIndex
+      }
     ]"
     @click="handleSelect(item)"
   >
@@ -73,7 +84,7 @@ const handleSelect = (item) => {
 
       <template v-else>
         <RadioButton
-          v-model="userCheckbox"
+          v-model="checkboxIndex"
           :value="isObject(item.user) ? item.user?.id : item.id"
           :inputId="isObject(item.user) ? item.user?.full_name : item.full_name"
           name="users"

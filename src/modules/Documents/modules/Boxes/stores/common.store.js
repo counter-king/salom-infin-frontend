@@ -1,5 +1,7 @@
 // Core
 import { defineStore } from "pinia"
+// Store
+import { useDocFlowStore } from '../../Registration/stores/docflow.store'
 // Service
 import {
   fetchCreateResolution,
@@ -9,7 +11,7 @@ import {
   fetchDeleteResolutionById
 } from "../services/common.service"
 // Utils
-import { clearModel, setValuesToKeys } from '@/utils'
+import { clearModel, isObject, setValuesToKeys } from '@/utils'
 import { dispatchNotify } from '@/utils/notify'
 import { RESOLUTION_TYPES, RESOLUTION_CREATE_TYPES, COLOR_TYPES } from "@/enums"
 export const useBoxesCommonStore = defineStore("boxes-common", {
@@ -79,13 +81,15 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
       __assignees: [],
       __controllers: [],
     },
+    responsibleIndex: 0,
     resolution: {
       signed: false,
       receipt_date: null,
       deadline: null,
       content: null,
       assignees: []
-    }
+    },
+    componentKey: 0
   }),
   getters: {
     /*
@@ -98,8 +102,17 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
      * Создать резолюцию
      * */
     async actionCreateResolution({ resolutionListId, reviewId, parentId, resolutionCreateType }) {
+      const docFlowStore = useDocFlowStore()
       let { __assignees, __controllers } = this.resolutionModel
-      let assignees = __assignees.map(item => ({ user: item.id, is_responsible: false }))
+      let assignees = __assignees.map((item, index) => {
+        return {
+          user: item.id,
+          is_responsible: this.responsibleIndex === index
+            ? true :
+            item.id === this.responsibleIndex
+        }
+      })
+
       let controllers = __controllers.length
         ? __controllers.map(item => ({ user: item.id, is_controller: true }))
         : []
@@ -122,8 +135,11 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
       try {
         await fetchCreateResolution(this.resolutionModel)
         await this.actionResolutionsList({ id: resolutionListId })
+        await docFlowStore.actionGetTree(resolutionListId)
         dispatchNotify('Резолюция создано', null, COLOR_TYPES.SUCCESS)
         clearModel(this.resolutionModel, ['type'])
+        // Сбросим нумерацию
+        this.actionSetResponsibleIndex(0)
         return Promise.resolve()
       } catch (error) {
         dispatchNotify('Ошибка', 'Ошибка создание резолюции', COLOR_TYPES.ERROR)
@@ -155,18 +171,23 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
       this.resolutionModel.__controllers = controllers.length
         ? controllers.map(item => ({ ...item, __userId: item.user.id }))
         : []
+
+      let responsibleUser = assignees.find(item => item.is_responsible)
+      this.actionSetResponsibleIndex(responsibleUser)
     },
     /*
     * Изменить созданную резолюцию по id
     * */
-    async actionUpdateByIdResolution({ resolutionCreateType }) {
+    async actionUpdateByIdResolution({ resolutionListId, resolutionCreateType }) {
+      const docFlowStore = useDocFlowStore()
+
       let { __assignees, __controllers } = this.resolutionModel
       let assignees = __assignees.map(assigner => {
         if(assigner.hasOwnProperty("__userId")) {
           return {
             id: assigner.id,
             user: assigner.__userId,
-            is_responsible: assigner.is_responsible
+            is_responsible: assigner.__userId === this.responsibleIndex
           }
         } else {
           return {
@@ -202,6 +223,7 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
 
       try {
         await fetchUpdateResolutionById({ id: this.resolutionModel.id, body: this.resolutionModel })
+        await docFlowStore.actionGetTree(resolutionListId)
         dispatchNotify('Резолюция изменен', null, COLOR_TYPES.SUCCESS)
         clearModel(this.resolutionModel, ['type'])
         return Promise.resolve()
@@ -214,11 +236,16 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
     * Удалить созданную резолюцию
     * */
     async actionDeleteGetByIdResolution({ id, resolutionListId, comment }) {
+      const docFlowStore = useDocFlowStore()
+
       try {
         await fetchDeleteResolutionById({ id, comment })
         dispatchNotify('Резолюция удален', null, COLOR_TYPES.SUCCESS)
         await this.actionResolutionsList({ id: resolutionListId })
+        await docFlowStore.actionGetTree(resolutionListId)
         clearModel(this.resolutionModel, ['type'])
+        // Сбросим нумерацию
+        this.actionSetResponsibleIndex(0)
         return Promise.resolve()
       } catch(error) {
         dispatchNotify('Ошибка', 'Ошибка удаление резолюции', COLOR_TYPES.ERROR)
@@ -226,10 +253,33 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
       }
     },
     /*
+    * Назначить полтзователья отв.исполнителем
+    * */
+    actionSetResponsibleIndex(payload) {
+      if(payload === null || payload === undefined) {
+        dispatchNotify('Ошибка в базе данных', 'Ответственный исполнитель не найден', COLOR_TYPES.ERROR)
+
+        return
+      }
+
+      if(isObject(payload.user)) {
+        this.responsibleIndex = payload.user.id
+      }
+      else {
+        this.responsibleIndex = payload
+      }
+    },
+    /*
     *
     * */
     async actionSetActiveResolution({ signed, receipt_date, deadline, content, assignees }) {
       Object.assign(this.resolution, { signed, receipt_date, deadline, content, assignees })
+    },
+    /*
+    *
+    * */
+    actionRerenderComponent() {
+      this.componentKey += 1
     }
   }
 })

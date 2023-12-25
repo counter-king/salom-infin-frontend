@@ -33,6 +33,7 @@ const signDocument = async () => {
     is_verified: true,
     pkcs7: null
   })
+  boxesCommonStore.actionRerenderComponent()
 }
 const cancelSign = async (text) => {
   await reviewStore.actionSignOrCancel({
@@ -40,6 +41,7 @@ const cancelSign = async (text) => {
     pkcs7: null,
     comment: text
   })
+  boxesCommonStore.actionRerenderComponent()
 }
 const acquaintDocument = async () => {
   await reviewStore.actionAcquaintDocument({ id: route.params.id })

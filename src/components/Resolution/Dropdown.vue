@@ -48,6 +48,7 @@ const props = defineProps({
 const emit = defineEmits(['emit:created', 'emit:updated'])
 // Reactive
 const menuRef = ref(null)
+const formRef = ref(null)
 const createResolutionDialog = ref(false)
 const createButtonLoading = ref(false)
 const resolutionActionTypes = ref(FORM_TYPE_CREATE)
@@ -84,6 +85,11 @@ const clearDocument = () => {
   clearModel(boxesCommonStore.resolutionModel, ['type'])
 }
 const createResolution = async () => {
+  const _formRef = unref(formRef)
+  const valid = await _formRef.$v.$validate()
+
+  if(!valid) return
+
   try {
     createButtonLoading.value = true
     if(resolutionActionTypes.value === FORM_TYPE_CREATE) {
@@ -93,11 +99,14 @@ const createResolution = async () => {
         parentId: props.parentId,
         resolutionCreateType: props.resolutionCreateType
       })
+      boxesCommonStore.actionRerenderComponent()
     }
     else {
       await boxesCommonStore.actionUpdateByIdResolution({
+        resolutionListId: props.resolutionListId,
         resolutionCreateType: props.resolutionCreateType
       })
+      boxesCommonStore.actionRerenderComponent()
     }
     createResolutionDialog.value = false
   } finally {
@@ -192,9 +201,10 @@ const deleteResolution = async (text) => {
       v-model="createResolutionDialog"
       :label="resolutionActionTypes === FORM_TYPE_CREATE ? 'create-resolutions' : 'update-resolutions'"
       max-width="max-w-[610px]"
+      @emit:after-hide="clearDocument"
     >
       <template #content>
-        <resolution-form />
+        <resolution-form ref="formRef" />
       </template>
 
       <template #footer>

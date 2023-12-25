@@ -1,30 +1,67 @@
 <script setup>
-import {computed} from "vue";
-
+// Core
+import { computed } from 'vue'
+// Store
+import { useCommonStore } from '@/stores/common'
+// Utils
+import { STATUS_TYPES } from '@/enums'
+// Composable
+const commonStore = useCommonStore()
+// Macros
 const props = defineProps({
   status: {
     type: Object,
     default: () => {},
     required: true
+  },
+  border: {
+    type: Boolean
+  },
+  circle: {
+    type: Boolean
   }
 })
-
-const classes = computed(() => {
-  switch (props.status.id){
-    case 1:
-      return "bg-warning-50 text-warning-500"
-    default:
-      return "bg-success-50 text-success-500"
+// Computed
+const statement = computed(() => {
+  switch (props.status.id) {
+    case STATUS_TYPES.TODO:                                               // TODO
+      return "bg-primary-50 text-primary-500 border-primary-500"
+    case STATUS_TYPES.IN_PROGRESS:                                        // IN_PROGRESS
+    case STATUS_TYPES.ON_HOLD:                                            // ON_HOLD
+    case STATUS_TYPES.FOR_SIGNATURE:                                      // FOR_SIGNATURE
+    case STATUS_TYPES.ON_REVIEW:                                          // ON_REVIEW
+      return "bg-warning-50 text-warning-500 border-warning-500"
+    case STATUS_TYPES.DONE:                                               // DONE
+      return "bg-success-50 text-success-500 border-success-500"
+    default:                                                              // CANCEL
+      return "bg-critic-50 text-critic-500 border-critic-500"
   }
+})
+const name = computed(() => {
+  const active = commonStore.statusList.find(status => status.id === props.status?.id)
+
+  if(!active) {
+    return 'Не известный статус'
+  }
+
+  return props.status.name
 })
 </script>
 
 <template>
   <span
-    class="px-2 py-1 text-xs font-semibold rounded-[80px]"
-    :class="classes"
+    class="px-2 py-1 text-xs font-semibold rounded-lg"
+    :class="[
+      statement,
+      {
+        'border': props.border,
+        'rounded-[80px]': props.circle
+      }
+    ]"
   >
-    {{ props.status.name }}
+    <slot>
+      {{ name }}
+    </slot>
   </span>
 </template>
 
