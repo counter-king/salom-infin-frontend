@@ -179,10 +179,10 @@ onMounted(() => {
 </script>
 <template>
    <template v-if="field === 'assistant'">
-      <span class="text-sm font-medium text-greyscale-500">{{ data[field] && data[field].full_name }}</span>
+      <span class="text-sm font-medium">{{ data[field] && data[field].full_name }}</span>
    </template>
    <template v-else-if="field === 'user'">
-      <span class="text-sm font-medium text-greyscale-500">{{ data[field] && data[field].full_name }}</span>
+      <span class="text-sm font-medium">{{ data[field] && data[field].full_name }}</span>
    </template>
    <template v-else-if="field === 'is_active'">
       <template v-if="statusLoading">

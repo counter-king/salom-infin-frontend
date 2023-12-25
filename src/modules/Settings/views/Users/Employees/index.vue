@@ -54,17 +54,6 @@ const getEmployees = (newFilter = {}) => {
       loading.value = false;
     });
 };
-const getDepartments = () => {
-  axiosConfig
-    .get(`departments/top-level-departments/`)
-    .then(response => {
-      const results = response?.data?.results;
-      console.log(results);
-    })
-    .catch(() => {
-      console.log('error')
-    });
-};
 const searchUsers = e => {
   const search = e.target.value;
   const newFilter = { ...filter.value, page: 1, search };
@@ -102,8 +91,8 @@ const changeLanguage = () => {
       header: 'Телефон',
     },
     {
-      columnKey: 'status',
-      field: 'status',
+      columnKey: 'is_user_active',
+      field: 'is_user_active',
       header: 'Состояние',
     },
     {
@@ -119,7 +108,6 @@ watch(locale, () => {
 onMounted(() => {
   changeLanguage();
   getFirstPageEmployees();
-  getDepartments();
 });
 </script>
 <template>

@@ -2,10 +2,13 @@
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import ProgressSpinner from 'primevue/progressspinner';
+import Skeleton from 'primevue/skeleton';
 import axiosConfig from "@/services/axios.config";
-import { dialogConfig } from './config';
+import { dialogConfig, menuConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
-import { ref } from 'vue';
+import { ref, onMounted, watch } from 'vue';
+import { useI18n } from "vue-i18n";
+const { locale } = useI18n();
 const props = defineProps({
    data: Object,
    employees: Array,
@@ -19,6 +22,42 @@ const deleteVisible = ref(false);
 const editEmployee = ref({});
 const editLoading = ref(false);
 const editVisible = ref(false);
+const statusLoading = ref(false);
+const items = ref([]);
+const menu = ref(null);
+const toggle = event => {
+   menu.value.toggle(event);
+};
+const updateStatus = value => {
+   statusLoading.value = true;
+   const sendingData = { is_user_active: !!value?.value };
+   const employeeId = props?.data?.id;
+   axiosConfig
+      .patch(`users/${employeeId}/`, sendingData)
+      .then(response => {
+         const data = response?.data;
+         const status = response?.status;
+         if(status === 200) {
+            const newEmployees = props?.employees.map(employee => {
+               if(employee?.id === employeeId) {
+                  return { ...data, position: data?.position?.name };
+               } else {
+                  return employee;
+               }
+            });
+            props.setEmployees(newEmployees);
+            dispatchNotify('Состояние обновлено', '', 'success');
+         } else {
+            dispatchNotify('Состояние не обновлено', '', 'error');
+         }
+      })
+      .catch(() => {
+         dispatchNotify('Состояние не обновлено', '', 'error');
+      })
+      .finally(() => {
+         statusLoading.value = false;
+      });
+};
 const employeeDelete = () => {
    deleteLoading.value = true;
    axiosConfig
@@ -40,14 +79,47 @@ const employeeDelete = () => {
       });
 };
 const employeeEdit = () => {};
+const changeLanguage = () => {
+   items.value = [
+      { label: 'Активный', value: true, },
+      { label: 'Неактивный', value: false }
+   ];
+};
+watch(locale, () => {
+   changeLanguage();
+});
+onMounted(() => {
+   changeLanguage();
+});
 </script>
 <template>
-   <template v-if="field === 'status'">
-      <span class="text-sm font-medium text-greyscale-500" style="text-transform: uppercase;">
-         <template v-if="data[field] && data[field].name">
-            <span :style="{ background: data.is_active ? '#EEFFE7' : '#F7F7F9', color: data.is_active ? '#63BA3D' : '#767994' }" class="px-2 py-1 text-xs font-semibold rounded-[80px]">{{ data[field] && data[field].name }}</span>
-         </template>
-      </span>
+   <template v-if="field === 'is_user_active'">
+      <template v-if="statusLoading">
+         <Skeleton height="16px" />
+      </template>
+      <template v-else>
+         <span
+            @click="toggle"
+            :style="{ background: data.is_user_active ? '#EEFFE7' : '#F7F7F9', color: data.is_user_active ? '#63BA3D' : '#767994' }"
+            class="inline-flex items-center justify-center pr-2 pl-3 py-1 font-medium rounded-[80px] text-sm text-greyscale-500 cursor-pointer">
+            <span class="mr-1">{{ data.is_user_active ? 'Активный' : 'Неактивный' }}</span>
+            <svg width="16" height="16" viewBox="0 0 12 12" fill="none">
+               <path d="M9 4.5L6 7.5L3 4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+         </span>
+         <Menu ref="menu" :model="items" style="width: initial !important" :popup="true" :pt="menuConfig">
+            <template #item="{ item }">
+               <div @click="() => { updateStatus(item) }" class="flex justify-between py-[6px] pr-2 pl-3 cursor-pointer">
+                  <span class="text-sm font-medium text-primary-900">{{ item.label }}</span>
+                  <span class="ml-2" v-if="item.value === data.is_user_active">
+                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M18.3337 9.99935C18.3337 14.6017 14.6027 18.3327 10.0003 18.3327C5.39795 18.3327 1.66699 14.6017 1.66699 9.99935C1.66699 5.39698 5.39795 1.66602 10.0003 1.66602C14.6027 1.66602 18.3337 5.39698 18.3337 9.99935ZM13.3589 7.47407C13.603 7.71815 13.603 8.11388 13.3589 8.35796L9.19227 12.5246C8.94819 12.7687 8.55246 12.7687 8.30838 12.5246L6.64172 10.858C6.39764 10.6139 6.39764 10.2182 6.64172 9.97407C6.8858 9.73 7.28152 9.73 7.5256 9.97407L8.75033 11.1988L10.6127 9.33644L12.4751 7.47407C12.7191 7.23 13.1149 7.23 13.3589 7.47407Z" fill="#635AFF"/>
+                     </svg>
+                  </span>
+               </div>
+            </template>
+         </Menu>
+      </template>
    </template>
    <template v-else-if="field === 'action'">
       <Button
@@ -85,7 +157,7 @@ const employeeEdit = () => {};
       </Button>
    </template>
    <template v-else>
-      <span class="text-sm font-medium text-greyscale-500">{{ data[field] }}</span>
+      <span class="text-sm font-medium">{{ data[field] }}</span>
    </template>
    <Dialog
       :pt="dialogConfig"

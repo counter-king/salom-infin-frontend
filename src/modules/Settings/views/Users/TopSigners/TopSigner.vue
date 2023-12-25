@@ -3,7 +3,7 @@ import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import ProgressSpinner from 'primevue/progressspinner';
 import axiosConfig from "@/services/axios.config";
-import { dialogConfig, menuConfig } from './config';
+import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { useAuthStore } from '../../../../Auth/stores';
@@ -118,14 +118,14 @@ const topSignerDelete = () => {
       .then(response => {
          if(response?.status === 204) {
             deleteVisible.value = false;
-            dispatchNotify('Помощник удален', '', 'success');
+            dispatchNotify('Топ подписавший удален', '', 'success');
             props.getFirstPageTopSigners();
          } else {
-            dispatchNotify('Помощник не удален', '', 'error');
+            dispatchNotify('Топ подписавший не удален', '', 'error');
          }
       })
       .catch(() => {
-         dispatchNotify('Помощник не удален', '', 'error');
+         dispatchNotify('Топ подписавший не удален', '', 'error');
       })
       .finally(() => {
          deleteLoading.value = false;
@@ -134,10 +134,10 @@ const topSignerDelete = () => {
 </script>
 <template>
    <template v-if="field === 'user'">
-      <span class="text-sm font-medium text-greyscale-500">{{ data[field] && data[field].full_name }}</span>
+      <span class="text-sm font-medium">{{ data[field] && data[field].full_name }}</span>
    </template>
    <template v-else-if="field === 'doc_types'">
-      <span class="text-sm rounded-full px-3 bg-greyscale-50 font-normal h-[28px] inline-flex mr-2 items-center border-b-[1px] justify-center" v-for="(doc_type, index) in data.doc_types" :key="index">{{doc_type.name}}</span>
+      <span class="text-sm rounded-full px-3 bg-greyscale-50 font-medium h-[28px] inline-flex mr-2 items-center border-b-[1px] justify-center" v-for="(doc_type, index) in data.doc_types" :key="index">{{doc_type.name}}</span>
    </template>
    <template v-else>
       <Button

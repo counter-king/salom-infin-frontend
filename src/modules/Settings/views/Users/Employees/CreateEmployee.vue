@@ -5,35 +5,245 @@ import InputMask from 'primevue/inputmask';
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import ProgressSpinner from 'primevue/progressspinner';
+import axiosConfig from "@/services/axios.config";
 import { dialogConfig } from './config';
+import { dispatchNotify } from '@/utils/notify';
+import SubDepartment from './SubDepartment.vue';
 import { ref } from 'vue';
-const employee = ref({});
+const defaultEmployee = { full_name: '', phone: '', pinfl: '', top_level_department: '' };
+const companies = ref([]);
+const company = ref('');
+const companyLoading = ref(false);
+const topLevelDepartment = ref('');
+const topLevelDepartmentLoading = ref(false);
+const topLevelDepartments = ref([]);
+const employee = ref(defaultEmployee);
 const loading = ref(false);
-const props = defineProps({
-   getFirstPageEmployees: Function,
-   setVisible: Function,
-   visible: Boolean,
-});
+const position = ref('');
+const positionLoading = ref(false);
+const positions = ref([]);
+const status = ref('');
+const statusLoading = ref(false);
+const statuses = ref([]);
+const props = defineProps({ getFirstPageEmployees: Function, setVisible: Function, visible: Boolean });
 const createUser = () => {
-   loading.value = true;
+   const companyId = company.value?.id;
+   const departmentId = topLevelDepartment.value?.id;
+   const full_name = employee.value?.full_name;
+   const phone = employee.value?.phone.replace(/ /g, '').replace(/\+/g, '');
+   const pinfl = employee.value?.pinfl;
+   const positionId = position.value?.id;
+   const statusId = status.value?.id;
+   const top_level_department = employee?.value?.top_level_department;
+   console.log(top_level_department, topLevelDepartment);
+   // if(full_name && pinfl?.length === 14 && phone?.length === 12 && companyId && departmentId && positionId && statusId) {
+   //    loading.value = true;
+   //    const data = { phone, full_name, pinfl, company: companyId, top_level_department, department: departmentId, position: positionId, status: statusId };
+   //    axiosConfig
+   //       .post('users/', data)
+   //       .then(response => {
+   //          if(response?.status === 201) {
+   //             dispatchNotify('Сотрудник создан', '', 'success');
+   //             props.getFirstPageEmployees();
+   //             props.setVisible(false);
+   //          } else {
+   //             dispatchNotify('Сотрудник не создан', '', 'error');
+   //          }
+   //       })
+   //       .catch(() => {
+   //          dispatchNotify('Сотрудник не создан', '', 'error');
+   //       })
+   //       .finally(() => {
+   //          loading.value = false;
+   //       });
+   // } else if(!full_name) {
+   //    dispatchNotify('Введите имя и фамилию', '', 'error');
+   // } else if(pinfl?.length !== 14) {
+   //    dispatchNotify('Введите ПИНФЛ', '', 'error');
+   // } else if(phone?.length !== 12) {
+   //    dispatchNotify('Введите номер телефона', '', 'error');
+   // } else if(!companyId) {
+   //    dispatchNotify('Введите филиал', '', 'error');
+   // } else if(!departmentId) {
+   //    dispatchNotify('Введите департаментa', '', 'error');
+   // } else if(!positionId) {
+   //    dispatchNotify('Введите должность', '', 'error');
+   // } else if(!statusId) {
+   //    dispatchNotify('Введите статус', '', 'error');
+   // }
 };
+const searchCompanies = e => {
+   const search = e.target.value;
+   companyLoading.value = true;
+   axiosConfig
+      .get(`companies/?search=${search}`)
+      .then(response => {
+         const results = response?.data?.results;
+         const newCompanies = Array.isArray(results) ? results : [];
+         companies.value = newCompanies;
+      })
+      .catch(() => {
+         companies.value = [];
+      })
+      .finally(() => {
+         companyLoading.value = false;
+      });
+};
+const searchTopLevelDepartments = e => {
+   const search = e.target.value;
+   topLevelDepartmentLoading.value = true;
+   axiosConfig
+      .get(`departments/top-level-departments/?search=${search}`)
+      .then(response => {
+         const results = response?.data?.results;
+         const newTopLevelDepartments = Array.isArray(results) ? results : [];
+         topLevelDepartments.value = newTopLevelDepartments;
+      })
+      .catch(() => {
+         topLevelDepartments.value = [];
+      })
+      .finally(() => {
+         topLevelDepartmentLoading.value = false;
+      });
+};
+const searchPositions = e => {
+   const search = e.target.value;
+   positionLoading.value = true;
+   axiosConfig
+      .get(`positions/?search=${search}`)
+      .then(response => {
+         const results = response?.data?.results;
+         const newPositions = Array.isArray(results) ? results : [];
+         positions.value = newPositions;
+      })
+      .catch(() => {
+         positions.value = [];
+      })
+      .finally(() => {
+         positionLoading.value = false;
+      });
+};
+const searchStatuses = e => {
+   const search = e.target.value;
+   statusLoading.value = true;
+   axiosConfig
+      .get(`users/statuses/?search=${search}`)
+      .then(response => {
+         const results = response?.data;
+         // const results = response?.data?.results;
+         const newStatuses = Array.isArray(results) ? results : [];
+         statuses.value = newStatuses;
+      })
+      .catch(() => {
+         statuses.value = [];
+      })
+      .finally(() => {
+         statusLoading.value = false;
+      });
+};
+const updateVisible = () => {
+   companies.value = [];
+   company.value = '';
+   employee.value = defaultEmployee;
+   position.value = '';
+   positions.value = [];
+   props.setVisible(!props.visible);
+   status.value = '';
+   statuses.value = [];
+   topLevelDepartment.value = '';
+   topLevelDepartments.value = [];
+}
 </script>
 <template>
    <Dialog
       :pt="dialogConfig"
       :visible="visible"
-      @update:visible="() => { setVisible(!visible) }"
+      @update:visible="updateVisible"
       dismissableMask
       header="Создать сотрудник"
       modal
       >
       <div class="flex flex-col pb-10 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">ФИО Сотрудники<span class="text-red-500 ml-1">*</span></p>
-         <InputText :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] mb-6 text-sm']}}" placeholder="Выберите ФИО" type="text" />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">ФИО сотрудники<span class="text-red-500 ml-1">*</span></p>
+         <InputText v-model="employee.full_name" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" placeholder="Выберите ФИО" type="text" />
          <p class="text-sm text-greyscale-500 font-medium mb-1">ПИНФЛ<span class="text-red-500 ml-1">*</span></p>
-         <InputMask slotChar=" " :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] mb-6 text-sm']}}" mask="99999999999999" placeholder="Выберите ПИНФЛ" />
+         <InputMask v-model="employee.pinfl" slotChar="" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" mask="99999999999999" placeholder="Выберите ПИНФЛ" />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Номер телефона<span class="text-red-500 ml-1">*</span></p>
-         <InputMask slotChar=" " :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] mb-6 text-sm']}}" mask="+999 99 999 99 99" placeholder="Выберите номер телефона" />
+         <InputMask v-model="employee.phone" slotChar="" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" mask="+999 99 999 99 99" placeholder="Выберите номер телефона" />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Филиал<span class="text-red-500 ml-1">*</span></p>
+         <base-auto-complete
+            :hasValue="company"
+            :loading="companyLoading"
+            :options="companies"
+            :value="company"
+            @onChange="({ value }) => { company = value }"
+            @onClear="() => { company = '' }"
+            @onInputChange="searchCompanies"
+            field="name"
+            noOptionMessage="Филиал не найден"
+            v-model="company"
+            >
+            <template #option="{ option }">
+               <div class="flex items-center h-11 px-3 text-base">{{ option.name }}</div>
+            </template>
+         </base-auto-complete>
+         <p class="text-sm text-greyscale-500 font-medium mb-1 mt-6">Департамент<span class="text-red-500 ml-1">*</span></p>
+         <base-auto-complete
+            :hasValue="topLevelDepartment"
+            :loading="topLevelDepartmentLoading"
+            :options="topLevelDepartments"
+            :value="topLevelDepartment"
+            @onChange="({ value }) => { topLevelDepartment = value }"
+            @onClear="() => { topLevelDepartment = '' }"
+            @onInputChange="searchTopLevelDepartments"
+            field="name"
+            noOptionMessage="Департамент не найден"
+            v-model="topLevelDepartment"
+            :setDepartment="top_level_department => {
+               employee = { ...employee, top_level_department }
+            }"
+            >
+            <template #option="{ option }">
+               <div class="flex items-center h-11 px-3 text-base">{{ option.name }}</div>
+            </template>
+         </base-auto-complete>
+         <template v-if="topLevelDepartment?.id">
+            <SubDepartment :setTopLevelDepartment="top_level_department => { employee = { ...employee, top_level_department } }" :clearTopLevelDepartment="() => { employee = { ...employee, top_level_department: topLevelDepartment?.id } }" :department="topLevelDepartment" />
+         </template>
+         <p class="text-sm text-greyscale-500 font-medium mb-1 mt-6">Должность<span class="text-red-500 ml-1">*</span></p>
+         <base-auto-complete
+            :hasValue="position"
+            :loading="positionLoading"
+            :options="positions"
+            :value="position"
+            @onChange="({ value }) => { position = value }"
+            @onClear="() => { position = '' }"
+            @onInputChange="searchPositions"
+            field="name"
+            noOptionMessage="Должность не найден"
+            v-model="position"
+            >
+            <template #option="{ option }">
+               <div class="flex items-center h-11 px-3 text-base">{{ option.name }}</div>
+            </template>
+         </base-auto-complete>
+         <p class="text-sm text-greyscale-500 font-medium mb-1 mt-6">Статусь<span class="text-red-500 ml-1">*</span></p>
+         <base-auto-complete
+            :hasValue="status"
+            :loading="statusLoading"
+            :options="statuses"
+            :value="status"
+            @onChange="({ value }) => { status = value }"
+            @onClear="() => { status = '' }"
+            @onInputChange="searchStatuses"
+            field="name"
+            noOptionMessage="Статусь не найден"
+            v-model="status"
+            >
+            <template #option="{ option }">
+               <div class="flex items-center h-11 px-3 text-base">{{ option.name }}</div>
+            </template>
+         </base-auto-complete>
       </div>
       <template #footer>
          <div class="flex justify-end">

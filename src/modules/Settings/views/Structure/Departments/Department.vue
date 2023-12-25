@@ -65,7 +65,7 @@ const departmentEdit = () => {
 const departmentDelete = () => {
    deleteLoading.value = true;
    axiosConfig
-      .delete(`departments/${props?.data?.id}`)
+      .delete(`departments/${props?.data?.id}/`)
       .then(response => {
          if(response?.status === 204) {
             deleteVisible.value = false;
@@ -192,7 +192,7 @@ onMounted(() => {
       </Button>
    </template>
    <template v-else>
-      <span class="text-sm font-medium text-greyscale-500">{{ data[field] }}</span>
+      <span class="text-sm font-medium">{{ data[field] }}</span>
    </template>
    <Dialog
       :pt="dialogConfig"
@@ -202,9 +202,9 @@ onMounted(() => {
       v-model:visible="editVisible">
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название департамент (UZ)<span class="text-red-500 ml-1">*</span></p>
-         <InputText v-model="editDepartment.name_uz" :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] mb-6 text-sm']}}" placeholder="Выберите название" type="text" />
+         <InputText v-model="editDepartment.name_uz" :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}" placeholder="Выберите название" type="text" />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название департамент (РУ) <span class="text-red-500 ml-1">*</span></p>
-         <InputText v-model="editDepartment.name_ru" :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] mb-6 text-sm']}}" placeholder="Выберите название" type="text" />
+         <InputText v-model="editDepartment.name_ru" :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}" placeholder="Выберите название" type="text" />
       </div>
       <template #footer>
          <div class="flex justify-end">

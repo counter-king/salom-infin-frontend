@@ -47,3 +47,11 @@ export const dropdownOptions = [
    { name: '20', page_size: 20 },
    { name: '30', page_size: 30 },
 ];
+export const menuConfig = {
+   action: { class: ['py-[6px] pl-3 min-h-[32px]'] },
+   content: { class: ['rounded-lg'] },
+   label: { class: ['text-sm font-medium text-primary-900'] },
+   menuitem: { class: 'group mb-1' },
+   root: { class: 'translate-y-1 rounded-xl shadow-menu px-1 pb-0' },
+   submenuHeader: { class: 'py-[6px] pl-3 text-sm font-semibold text-primary-500' }
+};

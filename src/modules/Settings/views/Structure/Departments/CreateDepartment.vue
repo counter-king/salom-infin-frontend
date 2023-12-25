@@ -54,9 +54,9 @@ const createDepartment = () => {
       >
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название департамент (UZ)<span class="text-red-500 ml-1">*</span></p>
-         <InputText v-model="department.name_uz" :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] mb-6 text-sm']}}" placeholder="Выберите название" type="text" />
+         <InputText v-model="department.name_uz" :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}" placeholder="Выберите название" type="text" />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название департамент (РУ) <span class="text-red-500 ml-1">*</span></p>
-         <InputText v-model="department.name_ru" :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] mb-6 text-sm']}}" placeholder="Выберите название" type="text" />
+         <InputText v-model="department.name_ru" :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}" placeholder="Выберите название" type="text" />
       </div>
       <template #footer>
          <div class="flex justify-end">

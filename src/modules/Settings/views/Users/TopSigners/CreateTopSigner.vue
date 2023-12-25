@@ -4,7 +4,7 @@ import ProgressSpinner from 'primevue/progressspinner';
 import axiosConfig from "@/services/axios.config";
 import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import { useAuthStore } from '../../../../Auth/stores';
 import Avatar from 'primevue/avatar';
 const topSigner = ref('');
