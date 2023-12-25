@@ -105,6 +105,7 @@ const assistantCreate = () => {
             @onChange="({ value }) => { supervisor = value }"
             @onClear="() => { supervisor = '' }"
             @onInputChange="searchSupervisors"
+            field="full_name"
             noOptionMessage="Сотрудник не найден"
             v-model="supervisor"
             >
@@ -133,8 +134,9 @@ const assistantCreate = () => {
                @onChange="({ value }) => { assistant = value }"
                @onClear="() => { assistant = '' }"
                @onInputChange="searchAssistants"
-               v-model="assistant"
+               field="full_name"
                noOptionMessage="Сотрудник не найден"
+               v-model="assistant"
                >
                <template #option="{option}">
                   <div class="items-center flex w-[100%] px-3 py-2 text-m font-medium text-primary-900">

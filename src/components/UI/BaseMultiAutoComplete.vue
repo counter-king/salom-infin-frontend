@@ -4,10 +4,9 @@ import Button from 'primevue/button';
 import ProgressSpinner from 'primevue/progressspinner';
 import { useSlots } from 'vue';
 const slot = useSlots();
-const emit = defineEmits(['onInputChange', 'onChange', 'onClear']);
+const emit = defineEmits(['onInputChange', 'onClear', 'removeOption']);
 const props = defineProps({
    field: String,
-   hasValue: [String, Boolean, Object],
    loading: Boolean,
    noOptionMessage: String,
    options: Array,
@@ -15,15 +14,16 @@ const props = defineProps({
 });
 const autocompleteConfig = {
    checkboxContainer: { class: 'hidden' },
+   container: { class: ['w-[500px] group bg-transparent px-11 py-1 rounded-xl focus:border-primary-500 border-primary min-h-[44px]'] },
    dropdownIcon: { class: ['w-4 h-4 bg-transparent'] },
    header: { class: ['bg-white hidden'] },
-   input: { class: ['w-full px-11 bg-transparent focus:border-primary'] },
-   item: { class: [ 'p-0 transition-all hover:bg-greyscale-50 rounded-2xl focus:bg-greyscale-50 mt-[1px]'] },
+   input: { class: ['w-full px-1 w-full rounded-xl'] },
+   item: { class: [ 'p-0 transition-all hover:bg-greyscale-50 rounded-xl focus:bg-greyscale-50 mt-[1px]'] },
    label: { class: [ 'text-sm font-medium text-greyscale-500' ] },
    list: { class: ['py-0'] },
    option: { class: ['text-xs font-medium text-primary-900'] },
    panel: { class: ['translate-y-[8px] shadow-menu rounded-2xl p-2 user-search-autocomplete'] },
-   root: { class: ['w-[500px] group bg-greyscale-50 rounded-2xl border-transparent focus:border-primary-500 h-[44px]'] },
+   root: { class: ['w-[500px] group bg-greyscale-50 rounded-2xl border-greyscale-50 focus:border-primary-500 min-h-[44px]'] },
    token: { class: ['chip-hover shadow-button bg-white cursor-pointer'] },
    tokenLabel: { class: ['text-sm font-medium'] },
 };
@@ -35,21 +35,28 @@ const autocompleteConfig = {
       :pt="autocompleteConfig"
       :suggestions="options"
       @input="e => emit('onInputChange', e)"
-      @item-select="e => emit('onChange', e)"
       completeOnFocus
       dataKey="id"
       dropdown
       dropdownClass="bg-transparent border-0 shadow-none absolute w-[42px] h-[42px] left-[1px] top-[1px] rounded-xl"
       forceSelection
-      inputClass="w-full rounded-xl"
       loading
       :optionLabel="field"
       scrollHeight="258px"
       :searchMessage="field"
       :selectionMessage="field"
+      multiple
       >
       <template #option="{ option }">
          <slot name="option" :option="option" />
+      </template>
+      <template #removetokenicon="{ index }">
+         <div @click="() => { emit('removeOption', value.filter((_, order) => order !== index)) }" class="flex justify-center items-center w-[20px] h-[20px] ml-1">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+               <path d="M12 4L4 12" stroke="#757994" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+               <path d="M4 4L12 12" stroke="#757994" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+         </div>
       </template>
       <template #loadingicon>
          <template v-if="loading">
@@ -58,7 +65,7 @@ const autocompleteConfig = {
             </div>
          </template>
          <template v-else>
-            <template v-if="hasValue">
+            <template v-if="value && value?.length">
                <Button
                   @click="emit('onClear')"
                   class="right-1.5 top-1.5 absolute bg-greyscale-50 rounded-3xl cursor-pointer w-[32px] h-[32px] flex justify-center items-center p-button p-component font-semibold text-sm rounded-xl !rounded-full p-0 m-0 border-none"
@@ -78,7 +85,7 @@ const autocompleteConfig = {
       </template>
       <template #empty>
          <div class="flex items-center justify-center w-[100%] h-[40px] text-m font-medium text-primary-900">
-            {{noOptionMessage}}
+            {{ noOptionMessage }}
          </div>
       </template>
       <template #dropdownicon>

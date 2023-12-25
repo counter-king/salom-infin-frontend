@@ -1,82 +1,125 @@
 <script setup>
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
-import Menu from 'primevue/menu';
 import ProgressSpinner from 'primevue/progressspinner';
-import Skeleton from 'primevue/skeleton';
 import axiosConfig from "@/services/axios.config";
 import { dialogConfig, menuConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
-import { ref, watch, onMounted } from 'vue';
+import { ref } from 'vue';
 import { useAuthStore } from '../../../../Auth/stores';
-import { useI18n } from "vue-i18n";
-const { locale } = useI18n();
 const authStore = useAuthStore();
-const assistant = ref('');
-const assistantLoading = ref(false);
-const assistants = ref([]);
+const topSigner = ref('');
+const topSignerLoading = ref(false);
+const topSigners = ref([]);
+const docType = ref('');
+const docTypeLoading = ref(false);
+const docTypes = ref([]);
 const currentUserCompany = authStore.currentUser.company;
 const deleteLoading = ref(false);
-const deleteUser = ref({});
+const deleteTopSigner = ref({});
 const deleteVisible = ref(false);
 const editLoading = ref(false);
-const editUser = ref({});
+const editTopSigner = ref({});
 const editVisible = ref(false);
-const items = ref([]);
-const menu = ref(null);
-const supervisor = ref('');
-const supervisorLoading = ref(false);
-const supervisors = ref([]);
-const statusLoading = ref(false);
 const props = defineProps({
-   assistants: Array,
+   topSigners: Array,
    data: Object,
    field: String,
-   getFirstPageAssistants: Function,
-   setAssistants: Function,
+   getFirstPageTopSigners: Function,
+   setTopSigners: Function,
 });
-const toggle = event => {
-   menu.value.toggle(event);
-};
-const updateStatus = value => {
-   statusLoading.value = true;
-   const sendingData = { is_active: !!value?.value, assistant: props?.data?.assistant?.id, user: props?.data?.user?.id };
-   const assistantId = props?.data?.id;
+const searchTopSigners = e => {
+   const value = e.target.value
+   topSigner.value = value;
+   topSignerLoading.value = true;
    axiosConfig
-      .put(`user-assistants/${assistantId}/`, sendingData)
+      .get(`users/?search=${value}&comapany=${currentUserCompany}`)
       .then(response => {
-         const data = response?.data;
-         const status = response?.status;
-         if(status === 200) {
-            const newAssistants = props?.assistants.map(assistant => {
-               if(assistant?.id === assistantId) {
-                  return data;
-               } else {
-                  return assistant;
-               }
-            });
-            props.setAssistants(newAssistants);
-            dispatchNotify('Состояние обновлено', '', 'success');
-         } else {
-            dispatchNotify('Состояние не обновлено', '', 'error');
-         }
+         const results = response?.data?.results;
+         const newTopSigners = (Array.isArray(results) ? results: []).map(user => ({...user, position: user?.position?.name, optionDisabled: !user.is_active}));
+         topSigners.value = newTopSigners;
       })
       .catch(() => {
-         dispatchNotify('Состояние не обновлено', '', 'error');
+         topSigners.value = [];
       })
       .finally(() => {
-         statusLoading.value = false;
+         topSignerLoading.value = false;
       });
 };
-const assistantDelete = () => {
+const searchDocTypes = e => {
+   const value = e.target.value
+   docTypeLoading.value = true;
+   axiosConfig
+      .get(`document-types/?search=${value}`)
+      .then(response => {
+         const results = response?.data?.results;
+         const documentTypes = Array.isArray(results) ? results: [];
+         docTypes.value = documentTypes;
+      })
+      .catch(() => {
+         docTypes.value = [];
+      })
+      .finally(() => {
+         docTypeLoading.value = false;
+      });
+};
+const topSignerEdit = () => {
+   const user = topSigner.value?.id;
+   const docTypes = docType.value;
+   const topSignerId = editTopSigner?.value?.id;
+   if(docTypes?.length && user) {
+      const doc_types = [];
+      docTypes.forEach(docType => {
+         const hasDocType = doc_types.find(doc_type => doc_type?.id === docType?.id);
+         if(!hasDocType) {
+            doc_types.push(docType);
+         }
+      });
+      const sendingData = { user, doc_types };
+      editLoading.value = true;
+      axiosConfig
+         .patch(`/top-signers/${topSignerId}/`, sendingData)
+         .then(response => {
+            const status = response?.status;
+            const data = response?.data;
+            if(status === 200) {
+               const topSigners = props.topSigners.map(topSigner => {
+                  if(topSigner?.id === topSignerId) {
+                     return data;
+                  } else {
+                     return topSigner;
+                  }
+               });
+               dispatchNotify('Топ подписавший обновлено', '', 'success');
+               docType.value = '';
+               editVisible.value = false;
+               props.setTopSigners(topSigners);
+               topSigner.value = '';
+            } else {
+               dispatchNotify('Топ подписавший не обновлено', '', 'error');
+            }
+         })
+         .catch(() => {
+            dispatchNotify('Топ подписавший не обновлено', '', 'error');
+         })
+         .finally(() => {
+            editLoading.value = false;
+         });
+   } else if(!user) {
+      dispatchNotify('Выберите топ подписавший', '', 'error');
+   } else {
+      dispatchNotify('Выберите тип документа', '', 'error');
+   }
+};
+const topSignerDelete = () => {
    deleteLoading.value = true;
    axiosConfig
-      .delete(`user-assistants/${props?.data?.id}/`)
+      .delete(`top-signers/${props?.data?.id}/`)
       .then(response => {
          if(response?.status === 204) {
             deleteVisible.value = false;
             dispatchNotify('Помощник удален', '', 'success');
-            props.getFirstPageAssistants();
+            props.getFirstPageTopSigners();
          } else {
             dispatchNotify('Помощник не удален', '', 'error');
          }
@@ -88,137 +131,21 @@ const assistantDelete = () => {
          deleteLoading.value = false;
       });
 };
-const searchAssistants = e => {
-   const value = e.target.value
-   assistant.value = value;
-   assistantLoading.value = true;
-   axiosConfig
-      .get(`users/?search=${value}&company=${currentUserCompany}`)
-      .then(response => {
-         const results = response?.data?.results;
-         const newAssistants = (Array.isArray(results) ? results: []).map(user => ({...user, position: user?.position?.name, optionDisabled: !user.is_active}));
-         assistants.value = newAssistants;
-      })
-      .catch(() => {
-         assistants.value = [];
-      })
-      .finally(() => {
-         assistantLoading.value = false;
-      });
-};
-const searchSupervisors = e => {
-   const value = e.target.value
-   supervisor.value = value;
-   supervisorLoading.value = true;
-   axiosConfig
-      .get(`users/?search=${value}&company=${currentUserCompany}`)
-      .then(response => {
-         const results = response?.data?.results;
-         const newSupervisors = (Array.isArray(results) ? results: []).map(user => ({...user, position: user?.position?.name, optionDisabled: !user.is_active}));
-         supervisors.value = newSupervisors;
-      })
-      .catch(() => {
-         supervisors.value = [];
-      })
-      .finally(() => {
-         supervisorLoading.value = false;
-      });
-};
-const assistantEdit = () => {
-   const supervisorId = supervisor?.value?.id;
-   const assistantId = assistant?.value?.id;
-   const id = editUser?.value?.id;
-   const is_active = editUser?.value?.is_active;
-   const sendingData = { is_active, user: supervisorId, assistant: assistantId };
-   if(supervisorId && assistantId) {
-      editLoading.value = true;
-      axiosConfig
-         .put(`/user-assistants/${id}/`, sendingData)
-         .then(response => {
-            const status = response?.status;
-            const data = response?.data;
-            if(status === 200) {
-               dispatchNotify('Помощник изменен', '', 'success');
-               editVisible.value = false;
-               const newAssistants = props.assistants.map(assistant => {
-                  if(assistant?.id === id) {
-                     return data;
-                  } else {
-                     return assistant
-                  }
-               });
-               props.setAssistants(newAssistants);
-            } else {
-               dispatchNotify('Помощник не изменен', '', 'error');
-            }
-         })
-         .catch(() => {
-            dispatchNotify('Помощник не изменен', '', 'error');
-         })
-         .finally(() => {
-            editLoading.value = false;
-         });
-   } else if(!supervisorId) {
-      dispatchNotify('Выберите руководитель', '', 'error');
-   } else {
-      dispatchNotify('Выберите помощника', '', 'error');
-   }
-};
-const changeLanguage = () => {
-   items.value = [
-      { label: 'Активный', value: true, },
-      { label: 'Неактивный', value: false }
-   ];
-};
-watch(locale, () => {
-   changeLanguage();
-});
-onMounted(() => {
-   changeLanguage();
-});
 </script>
 <template>
-   <template v-if="field === 'assistant'">
+   <template v-if="field === 'user'">
       <span class="text-sm font-medium text-greyscale-500">{{ data[field] && data[field].full_name }}</span>
    </template>
-   <template v-else-if="field === 'user'">
-      <span class="text-sm font-medium text-greyscale-500">{{ data[field] && data[field].full_name }}</span>
-   </template>
-   <template v-else-if="field === 'is_active'">
-      <template v-if="statusLoading">
-         <Skeleton height="16px" />
-      </template>
-      <template v-else>
-         <span
-            @click="toggle"
-            :style="{ background: data.is_active ? '#EEFFE7' : '#F7F7F9', color: data.is_active ? '#63BA3D' : '#767994' }"
-            class="inline-flex items-center justify-center pr-2 pl-3 py-1 font-medium rounded-[80px] text-sm text-greyscale-500 cursor-pointer">
-            <span class="mr-1">{{ data.is_active ? 'Активный' : 'Неактивный' }}</span>
-            <svg width="16" height="16" viewBox="0 0 12 12" fill="none">
-               <path d="M9 4.5L6 7.5L3 4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-         </span>
-         <Menu ref="menu" :model="items" style="width: initial !important" :popup="true" :pt="menuConfig">
-            <template #item="{ item }">
-               <div @click="() => { updateStatus(item) }" class="flex justify-between py-[6px] pr-2 pl-3 cursor-pointer">
-                  <span class="text-sm font-medium text-primary-900">{{ item.label }}</span>
-                  <span class="ml-2" v-if="item.value === data.is_active">
-                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M18.3337 9.99935C18.3337 14.6017 14.6027 18.3327 10.0003 18.3327C5.39795 18.3327 1.66699 14.6017 1.66699 9.99935C1.66699 5.39698 5.39795 1.66602 10.0003 1.66602C14.6027 1.66602 18.3337 5.39698 18.3337 9.99935ZM13.3589 7.47407C13.603 7.71815 13.603 8.11388 13.3589 8.35796L9.19227 12.5246C8.94819 12.7687 8.55246 12.7687 8.30838 12.5246L6.64172 10.858C6.39764 10.6139 6.39764 10.2182 6.64172 9.97407C6.8858 9.73 7.28152 9.73 7.5256 9.97407L8.75033 11.1988L10.6127 9.33644L12.4751 7.47407C12.7191 7.23 13.1149 7.23 13.3589 7.47407Z" fill="#635AFF"/>
-                     </svg>
-                  </span>
-               </div>
-            </template>
-         </Menu>
-      </template>
+   <template v-else-if="field === 'doc_types'">
+      <span class="text-sm rounded-full px-3 bg-greyscale-50 font-normal h-[28px] inline-flex mr-2 items-center border-b-[1px] justify-center" v-for="(doc_type, index) in data.doc_types" :key="index">{{doc_type.name}}</span>
    </template>
    <template v-else>
       <Button
          @click="() => {
-            editUser = data;
+            docType = data.doc_types;
+            editTopSigner = data;
             editVisible = true;
-            assistant = data?.assistant;
-            supervisor = data?.user;
+            topSigner = data.user;
          }"
          class="shadow-none py-[7px] px-2 text-xs bg-greyscale-50 rounded-[8px] mr-2"
          icon
@@ -231,7 +158,7 @@ onMounted(() => {
       </Button>
       <Button
          @click="() => {
-            deleteUser = data;
+            deleteTopSigner = data;
             deleteVisible = true;
          }"
          class="shadow-none py-[7px] px-2 text-xs bg-greyscale-50 rounded-[8px]"
@@ -256,17 +183,17 @@ onMounted(() => {
       <div class="flex flex-col">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Руководитель<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
-            :hasValue="supervisor"
-            :loading="supervisorLoading"
-            :options="supervisors"
-            @onChange="({ value }) => { supervisor = value }"
-            @onClear="() => { supervisor = '' }"
-            @onInputChange="searchSupervisors"
+            :hasValue="topSigner"
+            :loading="topSignerLoading"
+            :options="topSigners"
+            @onChange="({ value }) => { topSigner = value }"
+            @onClear="() => { topSigner = '' }"
+            @onInputChange="searchTopSigners"
             field="full_name"
             noOptionMessage="Сотрудник не найден"
-            v-model="supervisor"
+            v-model="topSigner"
          >
-            <template #option="{option}">
+            <template #option="{ option }">
                <div class="items-center flex w-[100%] px-3 py-2 text-m font-medium text-primary-900">
                   <div class="mr-3">
                      <Avatar style="color: #ffffff" :label="option.full_name.slice(0, 1)" :style="{'background-color': option.color}" class="w-10 h-10" shape="circle" />
@@ -284,33 +211,21 @@ onMounted(() => {
          </base-auto-complete>
          <p class="text-sm text-greyscale-500 font-medium mt-6 mb-1">Помощник<span class="text-red-500 ml-1">*</span></p>
          <div class="pb-8">
-            <base-auto-complete
-               :hasValue="assistant"
-               :loading="assistantLoading"
-               :options="assistants"
-               @onChange="({ value }) => { assistant = value }"
-               @onClear="() => { assistant = '' }"
-               @onInputChange="searchAssistants"
-               field="full_name"
-               noOptionMessage="Сотрудник не найден"
-               v-model="assistant"
+            <base-multi-auto-complete
+               :loading="docTypeLoading"
+               :options="docTypes"
+               :value="docType"
+               @onClear="() => { docType = '' }"
+               @onInputChange="searchDocTypes"
+               @removeOption="option => { docType = option }"
+               field="name"
+               noOptionMessage="Тип документа не найден"
+               v-model="docType"
                >
-               <template #option="{option}">
-                  <div class="items-center flex w-[100%] px-3 py-2 text-m font-medium text-primary-900">
-                     <div class="mr-3">
-                        <Avatar style="color: #ffffff" :label="option.full_name.slice(0, 1)" :style="{'background-color': option.color}" class="w-10 h-10" shape="circle" />
-                     </div>
-                     <div class="flex flex-col">
-                        <div class="text-base">{{ option.full_name }}</div>
-                        <div class="flex items-center">
-                           <span class="text-sm font-semibold" :style="{'color': option.optionDisabled ? '#F3335C' : '#63BA3D'}">{{ option.status && option.status.name }}</span>
-                           <span class="mx-2 w-[4px] h-[4px] rounded-full" style="background-color: #79889B"></span>
-                           <span class="text-sm font-medium" style="color: #767994">{{ option.position }}</span>
-                        </div>
-                     </div>
-                  </div>
+               <template #option="{ option }">
+                  <div class="flex items-center h-11 px-3 text-base">{{ option.name }}</div>
                </template>
-            </base-auto-complete>
+            </base-multi-auto-complete>
          </div>
       </div>
       <template #footer>
@@ -328,7 +243,7 @@ onMounted(() => {
                   Отмена
                </Button>
                <Button
-                  @click="assistantEdit"
+                  @click="topSignerEdit"
                   class="shadow-none p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 mx-0"
                   rounded
                   type="button">
@@ -340,7 +255,7 @@ onMounted(() => {
    <Dialog
       :pt="dialogConfig"
       dismissableMask
-      header="Удалить помощник"
+      header="Удалить топ подписавший"
       modal
       v-model:visible="deleteVisible">
       <div class="flex flex-col items-center pb-10 pt-4">
@@ -351,9 +266,9 @@ onMounted(() => {
                <path fill-rule="evenodd" clip-rule="evenodd" d="M39.4608 53.3327H40.5392C44.2495 53.3327 46.1046 53.3327 47.3108 52.1514C48.517 50.9702 48.6404 49.0326 48.8872 45.1574L49.2428 39.5735C49.3767 37.4708 49.4437 36.4195 48.8386 35.7533C48.2335 35.0871 47.2116 35.0871 45.1679 35.0871H34.8321C32.7884 35.0871 31.7665 35.0871 31.1614 35.7533C30.5563 36.4195 30.6233 37.4708 30.7572 39.5735L31.1128 45.1574C31.3596 49.0326 31.483 50.9702 32.6892 52.1514C33.8954 53.3327 35.7505 53.3327 39.4608 53.3327ZM37.6617 40.2507C37.6067 39.6722 37.1167 39.2501 36.5672 39.308C36.0176 39.3658 35.6167 39.8817 35.6716 40.4601L36.3383 47.4777C36.3932 48.0561 36.8833 48.4782 37.4328 48.4203C37.9824 48.3625 38.3833 47.8467 38.3284 47.2682L37.6617 40.2507ZM43.4328 39.308C43.9824 39.3658 44.3833 39.8817 44.3284 40.4601L43.6617 47.4777C43.6068 48.0561 43.1167 48.4782 42.5672 48.4203C42.0176 48.3625 41.6167 47.8467 41.6716 47.2682L42.3383 40.2507C42.3933 39.6722 42.8833 39.2501 43.4328 39.308Z" fill="#F3335C"/>
             </svg>
          </div>
-         <h2 class="text-center font-semibold text-3xl text-gray-900 p-0 mt-6">Удалить помощник?</h2>
+         <h2 class="text-center font-semibold text-3xl text-gray-900 p-0 mt-6">Удалить топ подписавший?</h2>
          <p class="text-center py-0 px-6 mt-2 text-gray-400">
-            Вы уверены, что хотите удалить этого помощника
+            Вы уверены, что хотите удалить этого топ подписавший
          </p>
       </div>
       <template #footer>
@@ -371,7 +286,7 @@ onMounted(() => {
                   Отмена
                </Button>
                <Button
-                  @click="assistantDelete"
+                  @click="topSignerDelete"
                   class="shadow-none p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 mx-0"
                   rounded
                   type="button">
