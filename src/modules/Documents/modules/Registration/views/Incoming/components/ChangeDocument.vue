@@ -47,7 +47,7 @@ const updateDocument = async () => {
       @emit:success-button="updateDocument"
     >
       <template #content>
-        <incoming-form ref="formRef" />
+        <incoming-form ref="formRef" :form-model="regIncoming.detailModel" />
       </template>
     </base-sidebar>
   </div>

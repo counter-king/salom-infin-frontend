@@ -1,13 +1,10 @@
 <script setup>
 // Core
-import { watch } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { helpers, required } from '@vuelidate/validators'
 // Stores
 import { useCommonStore } from '@/stores/common'
-import { useRegOrderInstruction } from '../../stores/orderInstruction.store'
 // Components
-// import { SelectMultiple } from '@/components/Select'
 import { UserWithLabel } from '@/components/Users'
 // Utils
 import { isObject } from '@/utils'
@@ -39,10 +36,26 @@ const rules = {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
 }
+// Macros
+const props = defineProps({
+  formModel: {
+    type: Object,
+    default: () => ({
+      name_document: null,
+      register_number: null,
+      outgoing_date: null,
+      magazine: null,
+      __department: [],
+      document_type: null,
+      reviewers: [],
+      __reviewers: [],
+      description: null,
+    })
+  }
+})
 // Composable
 const commonStore = useCommonStore()
-const orderInstructionStore = useRegOrderInstruction()
-const $v = useVuelidate(rules, orderInstructionStore.detailModel)
+const $v = useVuelidate(rules, props.formModel)
 // Composable
 defineExpose({ $v })
 </script>

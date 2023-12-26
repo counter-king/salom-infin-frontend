@@ -26,7 +26,7 @@ const props = defineProps({
 })
 // Computed
 const statement = computed(() => {
-  switch (props.status.id) {
+  switch (props.status?.id) {
     case STATUS_TYPES.TODO:                                               // TODO
       return "bg-primary-50 text-primary-500 border-primary-500"
     case STATUS_TYPES.IN_PROGRESS:                                        // IN_PROGRESS

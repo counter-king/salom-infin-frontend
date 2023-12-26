@@ -1,12 +1,10 @@
 <script setup>
 // Core
-import { useRoute } from 'vue-router'
 import { useVuelidate } from '@vuelidate/core'
 import { helpers, required } from '@vuelidate/validators'
 // Stores
 import { useCommonStore } from '@/stores/common'
 import { useCorrespondentStore } from '@/stores/correspondent'
-import { useRegIncoming } from '../../stores/incoming.store'
 // Components
 import { UserWithLabel } from '@/components/Users'
 // Utils
@@ -56,13 +54,34 @@ const rules = {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   }
 }
+// Macros
+const props = defineProps({
+  formModel: {
+    type: Object,
+    default: () => ({
+      correspondent: null,
+      delivery_type: null,
+      description: null,
+      document_type: null,
+      files: [],
+      language: null,
+      number_of_papers: null,
+      outgoing_date: null,
+      outgoing_number: null,
+      priority: null,
+      register_date: null,
+      register_number: null,
+      __reviewers: [],
+      status: null,
+      title: null,
+    })
+  }
+})
 // Composable
-const route = useRoute()
 const commonStore = useCommonStore()
 const correspondentStore = useCorrespondentStore()
-const incomingStore = useRegIncoming()
-const $v = useVuelidate(rules, incomingStore.detailModel)
-// Composable
+const $v = useVuelidate(rules, props.formModel)
+// Macros
 defineExpose({ $v })
 </script>
 

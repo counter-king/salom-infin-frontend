@@ -1,14 +1,11 @@
 <script setup>
 // Core
-import { watch } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { helpers, required } from '@vuelidate/validators'
 // Stores
 import { useCommonStore } from '@/stores/common'
 import { useCorrespondentStore } from '@/stores/correspondent'
-import { useRegAppeal } from '../../stores/appeal.store'
 // Components
-import { SelectMultiple } from '@/components/Select'
 import { UserWithLabel } from '@/components/Users'
 // Utils
 import { isObject } from '@/utils'
@@ -62,11 +59,36 @@ const rules = {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   }
 }
+// Macros
+const props = defineProps({
+  formModel: {
+    type: Object,
+    default: () => ({
+      outgoing_number: null,
+      outgoing_date: null,
+      correspondent: null,
+      applicant: null,
+      region:null,
+      area:null,
+      full_name_applicant: null,
+      address: null,
+      phone_number: null,
+      submission_form: null,
+      type_complaint:null,
+      reviewers: [],
+      __reviewers: [],
+      duplicateSwitch: false,
+      repeated_application: true,
+      description: null,
+      status: null,
+      grif: 4
+    })
+  }
+})
 // Composable
 const commonStore = useCommonStore()
 const correspondentStore = useCorrespondentStore()
-const appealStore = useRegAppeal()
-const $v = useVuelidate(rules, appealStore.detailModel)
+const $v = useVuelidate(rules, props.formModel)
 // Composable
 defineExpose({ $v })
 // Watch
@@ -240,7 +262,8 @@ defineExpose({ $v })
         <base-row>
           <base-col col-class="w-1/3">
             <base-switch
-              v-model="appealStore.detailModel.duplicateSwitch"
+              v-model="$v.duplicateSwitch.$model"
+              :error="$v.duplicateSwitch"
               label="duplicate"
               classBody="flex items-center"
               classLabel="order-2"
@@ -249,7 +272,8 @@ defineExpose({ $v })
 
           <base-col col-class="w-1/2">
             <base-switch
-              v-model="appealStore.detailModel.repeated_application"
+              v-model="$v.repeated_application.$model"
+              :error="$v.repeated_application"
               label="repeated-application"
               classBody="flex items-center"
               classLabel="order-2"

@@ -83,7 +83,21 @@ export const useRegOutgoing = defineStore("reg-outgoing", {
       status: null,
       journal: JOURNAL.OUTGOING,
       grif: 3,
+      __copy_prototype: null
     },
+    createFormModel: {
+      register_number: null,
+      outgoing_date: null,
+      document_type: null,
+      __department: [],
+      __signers: [],
+      correspondent: null,
+      author: null,
+      description: null,
+      status: null,
+      journal: JOURNAL.OUTGOING,
+      grif: 3
+    }
   }),
   actions: {
     /*

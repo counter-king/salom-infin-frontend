@@ -39,16 +39,35 @@ const props = defineProps({
 // Reactive
 const documentTypeRef = ref(null)
 const documentTypeComponent = shallowRef(null)
+const formModel = ref(null)
 const buttonLoading = ref(false)
-// Watch
-watch(() => docFlowStore.documentMenuType, (value) => {
-  documentTypeComponent.value = defineAsyncComponent({
-    loader: () => import(`./Form/${value}.vue`),
-    loadingComponent: BaseSpinner,
-    delay: 200
-  })
-}, { immediate: true })
 // Methods
+const generateModel = () => {
+  switch(docFlowStore.documentMenuType) {
+    case 'Incoming':
+      formModel.value = incomingStore.createFormModel
+      break;
+    case 'Inner':
+      formModel.value = regInner.createFormModel
+      break;
+    case 'Outgoing':
+      formModel.value = regOutgoing.createFormModel
+      break;
+    case 'Appeal':
+      formModel.value = regAppeal.createFormModel
+      break;
+    case 'IncomingBranches':
+      formModel.value = regIncomingBranches.createFormModel
+      break;
+    case 'OrderInstruction':
+      formModel.value = regOrderInstruction.createFormModel
+      break;
+    case 'Statement':
+      formModel.value = regStatement.createFormModel
+      break;
+    default:
+  }
+}
 const createDocument = async () => {
   const _documentTypeRef = unref(documentTypeRef)
   const valid = await _documentTypeRef.$v.$validate()
@@ -59,50 +78,50 @@ const createDocument = async () => {
   switch(docFlowStore.documentMenuType) {
     case 'Incoming':
       let model = {
-        ...incomingStore.detailModel,
-        reviewers: incomingStore.detailModel.__reviewers.map(item => ({ user: item.id }))
+        ...incomingStore.createFormModel,
+        reviewers: incomingStore.createFormModel.__reviewers.map(item => ({ user: item.id }))
       }
       await docFlowStore.actionCreateDocument(model)
       modelValue.value = false
       break;
     case 'Inner':
       let innerModel = {
-        ...regInner.detailModel,
-        reviewers: regInner.detailModel.__reviewers.map(item => ({ user: item.id }))
+        ...regInner.createFormModel,
+        reviewers: regInner.createFormModel.__reviewers.map(item => ({ user: item.id }))
       }
       await docFlowStore.actionCreateDocument(innerModel)
       modelValue.value = false
       break;
     case 'Outgoing':
-      await docFlowStore.actionCreateDocument(regOutgoing.detailModel)
+      await docFlowStore.actionCreateDocument(regOutgoing.createFormModel)
       modelValue.value = false
       break;
     case 'Appeal':
       let appealModel = {
-        ...regAppeal.detailModel,
-        reviewers: regAppeal.detailModel.__reviewers.map(item => ({ user: item.id }))
+        ...regAppeal.createFormModel,
+        reviewers: regAppeal.createFormModel.__reviewers.map(item => ({ user: item.id }))
       }
       await docFlowStore.actionCreateDocument(appealModel)
       modelValue.value = false
       break;
     case 'IncomingBranches':
-      await docFlowStore.actionCreateDocument(regIncomingBranches.detailModel)
+      await docFlowStore.actionCreateDocument(regIncomingBranches.createFormModel)
       modelValue.value = false
       break;
     case 'OrderInstruction':
       let orderInstructionModel = {
-        ...regOrderInstruction.detailModel,
-        reviewers: regOrderInstruction.detailModel.__reviewers.map(item => ({ user: item.id }))
+        ...regOrderInstruction.createFormModel,
+        reviewers: regOrderInstruction.createFormModel.__reviewers.map(item => ({ user: item.id }))
       }
       await docFlowStore.actionCreateDocument(orderInstructionModel)
       modelValue.value = false
       break;
     case 'Statement':
-      let statementnModel = {
-        ...regStatement.detailModel,
-        reviewers: regStatement.detailModel.__reviewers.map(item => ({ user: item.id }))
+      let statementModel = {
+        ...regStatement.createFormModel,
+        reviewers: regStatement.createFormModel.__reviewers.map(item => ({ user: item.id }))
       }
-      await docFlowStore.actionCreateDocument(statementnModel)
+      await docFlowStore.actionCreateDocument(statementModel)
       modelValue.value = false
       break;
     default:
@@ -116,25 +135,25 @@ const createDocument = async () => {
 const clearDocument = () => {
   switch(docFlowStore.documentMenuType) {
     case 'Incoming':
-      clearModel(incomingStore.detailModel, ['grif', 'journal'])
+      clearModel(incomingStore.createFormModel, ['grif', 'journal'])
       break;
     case 'Inner':
-      clearModel(regInner.detailModel, ['grif', 'journal'])
+      clearModel(regInner.createFormModel, ['grif', 'journal'])
       break;
     case 'Outgoing':
-      clearModel(regOutgoing.detailModel, ['grif', 'journal'])
+      clearModel(regOutgoing.createFormModel, ['grif', 'journal'])
       break;
     case 'Appeal':
-      clearModel(regAppeal.detailModel, ['grif', 'journal'])
+      clearModel(regAppeal.createFormModel, ['grif', 'journal'])
       break;
     case 'IncomingBranches':
-      clearModel(regIncomingBranches.detailModel, ['grif', 'journal'])
+      clearModel(regIncomingBranches.createFormModel, ['grif', 'journal'])
       break;
     case 'OrderInstruction':
-      clearModel(regOrderInstruction.detailModel, ['grif', 'journal'])
+      clearModel(regOrderInstruction.createFormModel, ['grif', 'journal'])
       break;
     case 'Statement':
-      clearModel(regStatement.detailModel, ['grif', 'journal'])
+      clearModel(regStatement.createFormModel, ['grif', 'journal'])
       break;
     default:
   }
@@ -198,6 +217,15 @@ const redirectRoute = async () => {
 const afterHide = () => {
   docFlowStore.actionLoadFormCreateDocument('Incoming')
 }
+// Watch
+watch(() => docFlowStore.documentMenuType, (value) => {
+  documentTypeComponent.value = defineAsyncComponent({
+    loader: () => import(`./Form/${value}.vue`),
+    loadingComponent: BaseSpinner,
+    delay: 200
+  })
+  generateModel()
+}, { immediate: true })
 </script>
 
 <template>
@@ -210,7 +238,11 @@ const afterHide = () => {
     </template>
 
     <template #content>
-      <component :is="documentTypeComponent" ref="documentTypeRef" />
+      <component
+        ref="documentTypeRef"
+        :is="documentTypeComponent"
+        :form-model="formModel"
+      />
     </template>
 
     <template #footer>
