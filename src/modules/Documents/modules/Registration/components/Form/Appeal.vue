@@ -235,7 +235,7 @@ defineExpose({ $v })
       </base-col>
 
       <base-col col-class="w-1/2">
-        <base-label label="Состаяние" />
+        <base-label label="Cостояние" />
 
         <base-row>
           <base-col col-class="w-1/3">
