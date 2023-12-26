@@ -2,10 +2,11 @@
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
-import axiosConfig from "@/services/axios.config";
 import ProgressSpinner from 'primevue/progressspinner';
+import axiosConfig from "@/services/axios.config";
 import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
+import { replaceSpecChars } from '@/utils/string';
 import { ref } from 'vue';
 const department = ref({ name_uz: '', name_ru: '' });
 const loading = ref(false);
@@ -54,9 +55,27 @@ const createDepartment = () => {
       >
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название департамент (UZ)<span class="text-red-500 ml-1">*</span></p>
-         <InputText v-model="department.name_uz" :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}" placeholder="Выберите название" type="text" />
+         <InputText
+            @input="e => {
+               const name_uz = replaceSpecChars(e.target.value);
+               department = { ...department, name_uz };
+            }"
+            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            placeholder="Выберите название"
+            type="text"
+            v-model="department.name_uz"
+            />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название департамент (РУ) <span class="text-red-500 ml-1">*</span></p>
-         <InputText v-model="department.name_ru" :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}" placeholder="Выберите название" type="text" />
+         <InputText
+            @input="e => {
+               const name_ru = replaceSpecChars(e.target.value);
+               department = { ...department, name_ru };
+            }"
+            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            placeholder="Выберите название"
+            type="text"
+            v-model="department.name_ru"
+            />
       </div>
       <template #footer>
          <div class="flex justify-end">

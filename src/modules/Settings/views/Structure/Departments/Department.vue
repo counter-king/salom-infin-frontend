@@ -9,6 +9,7 @@ import axiosConfig from "@/services/axios.config";
 import { dialogConfig, menuConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref, watch, onMounted } from 'vue';
+import { replaceSpecChars } from '@/utils/string';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
 const props = defineProps({
@@ -202,9 +203,27 @@ onMounted(() => {
       v-model:visible="editVisible">
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название департамент (UZ)<span class="text-red-500 ml-1">*</span></p>
-         <InputText v-model="editDepartment.name_uz" :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}" placeholder="Выберите название" type="text" />
+         <InputText
+            @input="e => {
+               const name_uz = replaceSpecChars(e.target.value);
+               editDepartment = { ...editDepartment, name_uz };
+            }"
+            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            placeholder="Выберите название"
+            type="text"
+            v-model="editDepartment.name_uz"
+            />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название департамент (РУ) <span class="text-red-500 ml-1">*</span></p>
-         <InputText v-model="editDepartment.name_ru" :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}" placeholder="Выберите название" type="text" />
+         <InputText
+            @input="e => {
+               const name_ru = replaceSpecChars(e.target.value);
+               editDepartment = { ...editDepartment, name_ru };
+            }"
+            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            placeholder="Выберите название"
+            type="text"
+            v-model="editDepartment.name_ru"
+            />
       </div>
       <template #footer>
          <div class="flex justify-end">
