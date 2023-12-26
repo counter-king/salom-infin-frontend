@@ -71,8 +71,12 @@ const handleSelect = (item) => {
       <h1 class="text-sm text-primary-900">{{ isObject(item.user) ? item.user?.full_name : item.full_name }}</h1>
 
       <div class="flex items-center gap-2 text-xs">
+        <slot name="chip-prepend" :item="item" />
+
         <p class="text-warning-500">Командировка</p>
+
         <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-full"></div>
+
         <p class="text-greyscale-500">Bosh mutaxasis</p>
       </div>
     </div>
@@ -89,7 +93,7 @@ const handleSelect = (item) => {
           :inputId="isObject(item.user) ? item.user?.full_name : item.full_name"
           name="users"
           v-tooltip.top="{
-            value: `<h4 class='text-xs text-white text-center -my-1'>Сделать ответственный исполнитель</h4>`,
+            value: `<h4 class='text-xs text-white text-center -my-1'>Назначить исполнителем</h4>`,
             escape: true,
             autoHide: false
           }"

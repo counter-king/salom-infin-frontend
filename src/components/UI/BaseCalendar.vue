@@ -11,6 +11,9 @@ const props = defineProps({
     type: [String],
     default: ""
   },
+  disabled: {
+    type: Boolean
+  },
   label: {
     type: String,
     default: null
@@ -82,6 +85,7 @@ const modelValue = computed({
 
     <Calendar
       v-model="modelValue"
+      :disabled="props.disabled"
       :placeholder="t(props.placeholder)"
       show-icon
       date-format="yy-mm-dd"

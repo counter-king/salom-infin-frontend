@@ -19,6 +19,9 @@ const props = defineProps({
   },
   circle: {
     type: Boolean
+  },
+  rootClass: {
+    type: String
   }
 })
 // Computed
@@ -56,7 +59,8 @@ const name = computed(() => {
       {
         'border': props.border,
         'rounded-[80px]': props.circle
-      }
+      },
+      props.rootClass
     ]"
   >
     <slot>

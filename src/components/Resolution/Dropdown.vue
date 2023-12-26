@@ -11,7 +11,7 @@ import ResolutionForm from './components/Form.vue'
 import { clearModel } from '@/utils'
 import { dispatchNotify } from '@/utils/notify'
 import { COLOR_TYPES, RESOLUTION_CREATE_TYPES } from '@/enums'
-import { FORM_TYPE_CREATE, FORM_TYPE_UPDATE } from '@/constants/constants'
+import { FORM_TYPE_CREATE, FORM_TYPE_READ, FORM_TYPE_UPDATE } from '@/constants/constants'
 // Composable
 const { t } = useI18n()
 const boxesCommonStore = useBoxesCommonStore()
@@ -113,9 +113,9 @@ const createResolution = async () => {
     createButtonLoading.value = false
   }
 }
-const getResolutionById = async (item) => {
+const getResolutionById = async (item, type) => {
   await boxesCommonStore.actionGetByIdResolution({ id: item.resolution.id })
-  resolutionActionTypes.value = FORM_TYPE_UPDATE
+  resolutionActionTypes.value = type
   createResolutionDialog.value = true
 }
 const showCommentModal = (item) => {
@@ -163,33 +163,46 @@ const deleteResolution = async (text) => {
 
           <template v-if="item.hasOwnProperty('resolution')">
             <!-- Если резолюция подписан -->
-            <div
-              v-if="!props.isResolutionSigned"
-              class="flex items-center gap-1 pr-1"
-            >
-              <button
-                v-tooltip.top="{
-                  value: `<h4 class='text-xs text-white -my-1'>Изменить</h4>`,
-                  escape: true,
-                  autoHide: false
-                }"
-                class="w-5 h-5"
-                @click="getResolutionById(item)"
-              >
-                <base-icon name="PenIcon" width="16" class="text-primary-500" />
-              </button>
+            <div class="flex items-center gap-1 pr-1">
+              <template v-if="!props.isResolutionSigned">
+                <button
+                  v-tooltip.top="{
+                    value: `<h4 class='text-xs text-white -my-1'>Изменить</h4>`,
+                    escape: true,
+                    autoHide: false
+                  }"
+                  class="w-5 h-5"
+                  @click="getResolutionById(item, FORM_TYPE_UPDATE)"
+                >
+                  <base-icon name="PenIcon" width="16" class="text-primary-500" />
+                </button>
 
-              <button
-                v-tooltip.top="{
-                  value: `<h4 class='text-xs text-white -my-1'>Удалить</h4>`,
-                  escape: true,
-                  autoHide: false
-                }"
-                class="w-5 h-5"
-                @click="showCommentModal(item)"
-              >
-                <base-icon name="TrashIcon" width="16" class="text-critic-500" />
-              </button>
+                <button
+                  v-tooltip.top="{
+                    value: `<h4 class='text-xs text-white -my-1'>Удалить</h4>`,
+                    escape: true,
+                    autoHide: false
+                  }"
+                  class="w-5 h-5"
+                  @click="showCommentModal(item)"
+                >
+                  <base-icon name="TrashIcon" width="16" class="text-critic-500" />
+                </button>
+              </template>
+
+              <template v-else>
+                <button
+                  v-tooltip.top="{
+                    value: `<h4 class='text-xs text-white -my-1'>Просмотр</h4>`,
+                    escape: true,
+                    autoHide: false
+                  }"
+                  class="w-5 h-5"
+                  @click="getResolutionById(item, FORM_TYPE_READ)"
+                >
+                  <base-icon name="EyeIcon" width="16" class="text-primary-500" />
+                </button>
+              </template>
             </div>
           </template>
         </div>
@@ -204,7 +217,7 @@ const deleteResolution = async (text) => {
       @emit:after-hide="clearDocument"
     >
       <template #content>
-        <resolution-form ref="formRef" />
+        <resolution-form ref="formRef" :form-type="resolutionActionTypes" />
       </template>
 
       <template #footer>
@@ -220,12 +233,23 @@ const deleteResolution = async (text) => {
           />
         </template>
 
-        <base-button
-          :loading="createButtonLoading"
-          :label="resolutionActionTypes === FORM_TYPE_CREATE ? 'create' : 'update'"
-          rounded
-          @click="createResolution"
-        />
+        <template v-if="resolutionActionTypes === FORM_TYPE_UPDATE">
+          <base-button
+            :loading="createButtonLoading"
+            :label="resolutionActionTypes === FORM_TYPE_CREATE ? 'create' : 'update'"
+            rounded
+            @click="createResolution"
+          />
+        </template>
+
+        <template v-if="resolutionActionTypes === FORM_TYPE_READ">
+          <base-button
+            :loading="createButtonLoading"
+            label="back"
+            rounded
+            @click="createResolutionDialog = !createResolutionDialog"
+          />
+        </template>
       </template>
     </base-dialog>
     <!-- /Create resolution modal -->
