@@ -8,6 +8,9 @@ const props = defineProps({
   modelValue: {
     type: [String],
   },
+  disabled: {
+    type: Boolean
+  },
   label: {
     type: String,
     default: null
@@ -49,10 +52,11 @@ const { t } = useI18n()
     <div class="relative">
       <Textarea
         v-model="modelValue"
-        autoResize
+        :disabled="props.disabled"
         :rows="props.rows"
         cols="30"
         :placeholder="t(props.placeholder)"
+        auto-resize
         :pt="{
         root: {
           class: [

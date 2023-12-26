@@ -1,5 +1,6 @@
 <script setup>
 // Core
+import { useI18n } from 'vue-i18n'
 import Accordion from 'primevue/accordion'
 import AccordionTab from 'primevue/accordiontab'
 // Components
@@ -11,7 +12,9 @@ import { useBoxesCommonStore } from '@/modules/Documents/modules/Boxes/stores/co
 import avatarProps from './props'
 // Utils
 import { formatDateHour } from '@/utils/formatDate'
+import { STATUS_TYPES } from '@/enums'
 // Composable
+const { t } = useI18n()
 const boxesStore = useBoxesCommonStore()
 // Macros
 const props = defineProps({
@@ -62,6 +65,28 @@ const findAssigneeChildren = (target, assignee) => {
                   </div>
 
                   <div class="flex items-center gap-2 text-sm leading-[20px]">
+                    <template v-if="assignee.is_controller">
+                      <status-chip :status="{ id: STATUS_TYPES.CANCEL }">
+                        {{ t('controller') }}
+                      </status-chip>
+                    </template>
+
+                    <template v-else>
+                      <template v-if="assignee.is_responsible">
+                        <status-chip :status="{ id: STATUS_TYPES.TODO }">
+                          {{ t('executor') }}
+                        </status-chip>
+                      </template>
+
+                      <template v-else>
+                        <status-chip :status="{ id: STATUS_TYPES.IN_PROGRESS }">
+                          {{ t('co-executor') }}
+                        </status-chip>
+                      </template>
+                    </template>
+
+                    <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-full"></div>
+
                     <h1 class="font-semibold text-primary-900">{{ assignee.user?.full_name }}</h1>
 
                     <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-full"></div>

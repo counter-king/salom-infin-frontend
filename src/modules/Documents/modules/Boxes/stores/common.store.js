@@ -123,7 +123,7 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
       this.resolutionModel.is_project_resolution = RESOLUTION_CREATE_TYPES.ASSIGNMENT !== resolutionCreateType
 
       if(this.resolutionModel.type === RESOLUTION_TYPES.CONTROL) {
-        this.resolutionModel.assignees = [...assignees, ...controllers]
+        this.resolutionModel.assignees = [...controllers, ...assignees]
       }
       else {
         this.resolutionModel.assignees = assignees
@@ -157,7 +157,7 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
         resolution: item
       }))
     },
-    /*
+    /*s
     * Получить созданную резолюцию по id
     * */
     async actionGetByIdResolution({ id }) {
@@ -198,7 +198,7 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
       })
       let controllers = __controllers.length
         ? __controllers.map(assigner => {
-          if(assigner.hasOwnProperty("id")) {
+          if(assigner.hasOwnProperty("__userId")) {
             return {
               id: assigner.id,
               user: assigner.__userId,
@@ -207,7 +207,7 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
           } else {
             return {
               user: assigner.id,
-              is_controller: false
+              is_controller: true
             }
           }
         })

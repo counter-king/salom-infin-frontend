@@ -17,6 +17,9 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
+  disabled: {
+    type: Boolean
+  },
   label: {
     type: String,
     default: null
@@ -194,6 +197,7 @@ const testFunc = (value) => {
       :option-value="props.optionValue"
       :placeholder="t(props.placeholder)"
       :display="props.display"
+      :disabled="props.disabled"
       filter
       :pt="{
         root: {
@@ -335,16 +339,18 @@ const testFunc = (value) => {
 
               <h1 class="flex-1 text-xs font-semibold text-primary-900 mr-auto">{{ item.label }}</h1>
 
-              <button
-                v-tooltip.right="{
-                value: `<h4 class='text-xs text-white -my-1'>Удалить</h4>`,
-                escape: true,
-                autoHide: false
-              }"
-                @click="(event) => removeItem(event, item)"
-              >
-                <base-icon name="TrashIcon" width="16" class="text-critic-500" />
-              </button>
+              <template v-if="!props.disabled">
+                <button
+                  v-tooltip.right="{
+                    value: `<h4 class='text-xs text-white -my-1'>Удалить</h4>`,
+                    escape: true,
+                    autoHide: false
+                  }"
+                  @click="(event) => removeItem(event, item)"
+                >
+                  <base-icon name="TrashIcon" width="16" class="text-critic-500" />
+                </button>
+              </template>
             </div>
           </template>
         </base-menu>

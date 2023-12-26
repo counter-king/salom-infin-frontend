@@ -22,6 +22,9 @@ const props = defineProps({
   optionValue: {
     type: [Number, String]
   },
+  disabled: {
+    type: Boolean
+  },
   label: {
     type: String,
     default: null
@@ -83,6 +86,7 @@ const rootClasses = computed(() => {
       :option-label="props.optionLabel"
       :option-value="props.optionValue"
       :placeholder="t(props.placeholder)"
+      :disabled="props.disabled"
       :pt="{
         root: {
           class: rootClasses
