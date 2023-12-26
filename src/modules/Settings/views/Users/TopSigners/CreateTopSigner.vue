@@ -82,8 +82,14 @@ const topSignerCreate = () => {
                dispatchNotify('Топ подписавший не создан', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Топ подписавший не создан', '', 'error');
+         .catch(e => {
+            const code = e?.data?.code;
+            const message = e?.data?.message
+            if(code === '619') {
+               dispatchNotify(message, '', 'error');
+            } else {
+               dispatchNotify('Топ подписавший не создан', '', 'error');
+            }
          })
          .finally(() => {
             loading.value = false;
