@@ -5,12 +5,13 @@ import InputMask from 'primevue/inputmask';
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import ProgressSpinner from 'primevue/progressspinner';
-import SubDepartment from './SubDepartment.vue';
 import Skeleton from 'primevue/skeleton';
+import SubDepartment from './SubDepartment.vue';
 import axiosConfig from "@/services/axios.config";
 import { dialogConfig, menuConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref, onMounted, watch } from 'vue';
+import { replaceSpecChars } from '@/utils/string';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
 const props = defineProps({
@@ -304,17 +305,43 @@ onMounted(() => {
    </template>
    <Dialog
       :pt="dialogConfig"
-      dismissableMask
       header="Изменить сотрудник"
       modal
       v-model:visible="editVisible">
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Имя<span class="text-red-500 ml-1">*</span></p>
-         <InputText v-model="editEmployee.first_name" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" placeholder="Выберите имя" type="text" />
+         <InputText
+            @input="e => {
+               const first_name = replaceSpecChars(e.target.value);
+               editEmployee = { ...editEmployee, first_name };
+            }"
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            placeholder="Выберите имя"
+            type="text"
+            v-model="editEmployee.first_name"
+            />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Фамилия<span class="text-red-500 ml-1">*</span></p>
-         <InputText v-model="editEmployee.last_name" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" placeholder="Выберите фамилия" type="text" />
+         <InputText
+            @input="e => {
+               const last_name = replaceSpecChars(e.target.value);
+               editEmployee = { ...editEmployee, last_name };
+            }"
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            placeholder="Выберите фамилия"
+            type="text"
+            v-model="editEmployee.last_name"
+            />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Имя отца<span class="text-red-500 ml-1">*</span></p>
-         <InputText v-model="editEmployee.father_name" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" placeholder="Выберите имя отца" type="text" />
+         <InputText
+            @input="e => {
+               const father_name = replaceSpecChars(e.target.value);
+               editEmployee = { ...editEmployee, father_name };
+            }"
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            placeholder="Выберите имя отца"
+            type="text"
+            v-model="editEmployee.father_name"
+            />
          <p class="text-sm text-greyscale-500 font-medium mb-1">ПИНФЛ<span class="text-red-500 ml-1">*</span></p>
          <InputMask v-model="editEmployee.pinfl" slotChar="" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" mask="99999999999999" placeholder="Выберите ПИНФЛ" />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Номер телефона<span class="text-red-500 ml-1">*</span></p>
@@ -399,7 +426,7 @@ onMounted(() => {
             <template v-if="editLoading">
                <ProgressSpinner class="m-0 w-10 h-10" animationDuration=".5s" strokeWidth="4" />
             </template>
-            <template>
+            <template v-else>
                <Button
                   @click="editVisible = false"
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
@@ -420,7 +447,6 @@ onMounted(() => {
    </Dialog>
    <Dialog
       :pt="dialogConfig"
-      dismissableMask
       header="Удалить сотрудник"
       modal
       v-model:visible="deleteVisible">

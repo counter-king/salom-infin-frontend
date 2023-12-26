@@ -92,7 +92,6 @@ const assistantCreate = () => {
    <Dialog
       :pt="dialogConfig"
       :visible="visible"
-      dismissableMask
       header="Создать помощник"
       modal
       @update:visible="() => { setVisible(!visible); assistant = ''; supervisor = ''; loading = false }">

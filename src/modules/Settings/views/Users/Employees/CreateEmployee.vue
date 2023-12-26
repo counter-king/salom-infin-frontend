@@ -10,6 +10,7 @@ import axiosConfig from "@/services/axios.config";
 import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
+import { replaceSpecChars } from '@/utils/string';
 const defaultEmployee = { first_name: '', last_name: '', father_name: '', phone: '', pinfl: '', top_level_department: '' };
 const companies = ref([]);
 const company = ref('');
@@ -164,17 +165,43 @@ const updateVisible = () => {
       :pt="dialogConfig"
       :visible="visible"
       @update:visible="updateVisible"
-      dismissableMask
       header="Создать сотрудник"
       modal
       >
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Имя<span class="text-red-500 ml-1">*</span></p>
-         <InputText v-model="employee.first_name" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" placeholder="Выберите имя" type="text" />
+         <InputText
+            @input="e => {
+               const first_name = replaceSpecChars(e.target.value);
+               employee = { ...employee, first_name };
+            }"
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            placeholder="Выберите имя"
+            type="text"
+            v-model="employee.first_name"
+            />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Фамилия<span class="text-red-500 ml-1">*</span></p>
-         <InputText v-model="employee.last_name" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" placeholder="Выберите фамилия" type="text" />
+         <InputText
+            @input="e => {
+               const last_name = replaceSpecChars(e.target.value);
+               employee = { ...employee, last_name };
+            }"
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            placeholder="Выберите фамилия"
+            type="text"
+            v-model="employee.last_name"
+            />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Имя отца<span class="text-red-500 ml-1">*</span></p>
-         <InputText v-model="employee.father_name" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" placeholder="Выберите имя отца" type="text" />
+         <InputText
+            @input="e => {
+               const father_name = replaceSpecChars(e.target.value);
+               employee = { ...employee, father_name };
+            }"
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            placeholder="Выберите имя отца"
+            type="text"
+            v-model="employee.father_name"
+            />
          <p class="text-sm text-greyscale-500 font-medium mb-1">ПИНФЛ<span class="text-red-500 ml-1">*</span></p>
          <InputMask v-model="employee.pinfl" slotChar="" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" mask="99999999999999" placeholder="Выберите ПИНФЛ" />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Номер телефона<span class="text-red-500 ml-1">*</span></p>

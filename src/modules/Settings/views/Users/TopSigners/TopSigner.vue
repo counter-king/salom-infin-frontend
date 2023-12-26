@@ -176,7 +176,6 @@ const topSignerDelete = () => {
    </template>
    <Dialog
       :pt="dialogConfig"
-      dismissableMask
       header="Изменить помощник"
       modal
       v-model:visible="editVisible">
@@ -254,7 +253,6 @@ const topSignerDelete = () => {
    </Dialog>
    <Dialog
       :pt="dialogConfig"
-      dismissableMask
       header="Удалить топ подписавший"
       modal
       v-model:visible="deleteVisible">
