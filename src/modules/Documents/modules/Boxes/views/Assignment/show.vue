@@ -11,6 +11,8 @@ import { AcquaintButton, ActionAnswerMenu } from '@/components/Actions'
 import { LayoutWithTabs } from '@/components/DetailLayout'
 import { ResolutionDropdown } from '@/components/Resolution'
 import { ModalDoneDocument } from '@/components/Modal'
+// Utils
+import { RESOLUTION_CREATE_TYPES } from '@/enums'
 // Composable
 const route = useRoute()
 const docflowStore = useDocFlowStore()
@@ -70,6 +72,7 @@ const updateDocument = async () => {
               :review-id="assignmentStore.detailModel.assignment.reviewer.id"
               :parent-id="assignmentStore.detailModel.assignment.id"
               :resolution-list-id="assignmentStore.detailModel.document.id"
+              :resolution-create-type="RESOLUTION_CREATE_TYPES.ASSIGNMENT"
             />
           </template>
         </template>

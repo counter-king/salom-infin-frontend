@@ -221,7 +221,7 @@ const deleteResolution = async (text) => {
       </template>
 
       <template #footer>
-        <template v-if="resolutionActionTypes === FORM_TYPE_CREATE">
+        <template v-if="resolutionActionTypes !== FORM_TYPE_READ">
           <base-button
             label="clear"
             rounded
