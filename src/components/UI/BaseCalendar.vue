@@ -3,6 +3,8 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Calendar from 'primevue/calendar'
+// Utils
+import { formatDateReverse } from '@/utils/formatDate'
 // Composable
 const { t } = useI18n()
 // Macros
@@ -74,7 +76,7 @@ const modelValue = computed({
     return props.modelValue
   },
   set(value) {
-    emit('update:modelValue', value.toISOString().replace(/T.*$/, ''))
+    emit('update:modelValue', formatDateReverse(value))
   }
 })
 </script>

@@ -5,3 +5,7 @@ export function formatDateHour(date) {
 export function formatDate(date) {
   return date ? dayjs(date).format("DD.MM.YYYY") : "Не верный формат даты"
 }
+export function formatDateReverse(date, separate = '-') {
+  return date ? dayjs(date).format(`YYYY${separate}MM${separate}DD`) : "Не верный формат даты"
+}
+
