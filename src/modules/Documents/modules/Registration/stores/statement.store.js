@@ -71,7 +71,18 @@ export const useRegStatement = defineStore("reg-statement", {
       reviewers: [],
       __reviewers: [],
       journal: JOURNAL.APPLICATION,
+      __copy_prototype: null
     },
+    createFormModel: {
+      outgoing_date: null,
+      correspondent: null,
+      author: null,
+      description: null,
+      document_type: null,
+      reviewers: [],
+      __reviewers: [],
+      journal: JOURNAL.APPLICATION
+    }
   }),
   actions: {
     /*

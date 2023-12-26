@@ -8,13 +8,24 @@ import { JOURNAL } from '@/enums'
 export const useRegIncomingBranches = defineStore("reg-incoming-branches", {
   state: () => ({
     detailModel: {
-      documentTypesList: null,
+      document_type: null,
       register_number: null,
       outgoing_date: null,
       author: null,
       branch: null,
       journal: JOURNAL.INNER,
+      description: null,
+      __copy_prototype: null
     },
+    createFormModel: {
+      document_type: null,
+      register_number: null,
+      outgoing_date: null,
+      author: null,
+      branch: null,
+      description: null,
+      journal: JOURNAL.INNER,
+    }
   }),
   actions: {
     /*

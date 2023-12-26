@@ -221,7 +221,7 @@ const deleteResolution = async (text) => {
       </template>
 
       <template #footer>
-        <template v-if="resolutionActionTypes === FORM_TYPE_CREATE">
+        <template v-if="resolutionActionTypes !== FORM_TYPE_READ">
           <base-button
             label="clear"
             rounded
@@ -231,9 +231,7 @@ const deleteResolution = async (text) => {
             border-color="border-transparent"
             @click="clearDocument"
           />
-        </template>
 
-        <template v-if="resolutionActionTypes === FORM_TYPE_UPDATE">
           <base-button
             :loading="createButtonLoading"
             :label="resolutionActionTypes === FORM_TYPE_CREATE ? 'create' : 'update'"

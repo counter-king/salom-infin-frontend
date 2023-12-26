@@ -54,17 +54,19 @@ const resolutionTypes = (type) => {
                 {{ resolutionTypes(item.type) }}
               </h1>
 
-              <!-- Резолюция неподписана -->
-              <template v-if="!item.is_verified">
-                <status-chip :status="{}">
-                  Резолюция неподписана
-                </status-chip>
-              </template>
+              <template v-if="item.is_project_resolution">
+                <!-- Резолюция неподписанная -->
+                <template v-if="!item.is_verified">
+                  <status-chip :status="{}">
+                    Резолюция неподписанная
+                  </status-chip>
+                </template>
 
-              <template v-else>
-                <status-chip :status="{ id: STATUS_TYPES.DONE }">
-                  Резолюция подписана
-                </status-chip>
+                <template v-else>
+                  <status-chip :status="{ id: STATUS_TYPES.DONE }">
+                    Резолюция подписана
+                  </status-chip>
+                </template>
               </template>
             </div>
 

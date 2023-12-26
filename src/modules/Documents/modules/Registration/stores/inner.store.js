@@ -78,6 +78,20 @@ export const useRegInner = defineStore("reg-inner", {
       grif: 2,
       __copy_prototype: null
     },
+    createFormModel: {
+      register_number: null,
+      register_date: null,
+      document_type: null,
+      deadline: null,
+      __department: [],
+      __signers: [],
+      reviewers: [],
+      __reviewers: [],
+      author: null,
+      description: null,
+      journal: JOURNAL.INNER,
+      grif: 2
+    }
   }),
   actions: {
     /*

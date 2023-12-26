@@ -5,7 +5,6 @@ import { helpers, required } from '@vuelidate/validators'
 // Stores
 import { useCommonStore } from '@/stores/common'
 import { useCorrespondentStore } from '@/stores/correspondent'
-import { useRegOutgoing } from '../../stores/outgoing.store'
 // Non-reactive
 const rules = {
   register_number: {
@@ -35,11 +34,28 @@ const rules = {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   }
 }
+// Macros
+const props = defineProps({
+  formModel: {
+    type: Object,
+    default: () => ({
+      register_number: null,
+      outgoing_date: null,
+      document_type: null,
+      __department: [],
+      __signers: [],
+      correspondent: null,
+      author: null,
+      description: null,
+      status: null,
+      grif: 3
+    })
+  }
+})
 // Composable
 const commonStore = useCommonStore()
 const correspondentStore = useCorrespondentStore()
-const innerOutgoing = useRegOutgoing()
-const $v = useVuelidate(rules, innerOutgoing.detailModel)
+const $v = useVuelidate(rules, props.formModel)
 // Composable
 defineExpose({ $v })
 </script>

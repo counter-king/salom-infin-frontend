@@ -1,5 +1,7 @@
 // Core
 import { defineStore } from 'pinia'
+// Store
+import { useDocFlowStore } from '@/modules/Documents/modules/Registration/stores/docflow.store'
 // Services
 import { fetchGetDocumentList, fetchGetDocumentById, fetchUpdateDocument } from '../services/docflow.service'
 // Utils
@@ -175,6 +177,33 @@ export const useRegIncoming = defineStore("reg-incoming", {
       title: null,
       __copy_prototype: null
     },
+    createFormModel: {
+      code: null,
+      content_type: 6,
+      correspondent: null,
+      created_by: null,
+      created_date: null,
+      delivery_type: null,
+      description: null,
+      document_type: null,
+      files: [],
+      // TODO: Временно 1 для создания документа (Входящий)
+      grif: 1,
+      id: null,
+      journal: JOURNAL.INCOMING,
+      language: null,
+      modified_date: null,
+      number_of_papers: null,
+      outgoing_date: null,
+      outgoing_number: null,
+      priority: null,
+      register_date: null,
+      register_number: null,
+      reviewers: [],
+      __reviewers: [],
+      status: null,
+      title: null
+    },
   }),
   actions: {
     /*
@@ -207,6 +236,7 @@ export const useRegIncoming = defineStore("reg-incoming", {
     * Изменить документ
     * */
     async actionUpdateDocument() {
+      const docflowStore = useDocFlowStore()
       let model = {
         ...this.detailModel,
         reviewers: this.detailModel.__reviewers.map(item => {
@@ -229,6 +259,7 @@ export const useRegIncoming = defineStore("reg-incoming", {
       try {
         await fetchUpdateDocument({ id: this.detailModel.id, body: model })
         await this.actionGetById({ id: this.detailModel.id })
+        await docflowStore.actionGetTree(this.detailModel.id)
         dispatchNotify('Документ создан', 'Документ изменен', COLOR_TYPES.SUCCESS)
       }
       catch (error) {

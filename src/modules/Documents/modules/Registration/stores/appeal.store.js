@@ -100,7 +100,29 @@ export const useRegAppeal = defineStore("reg-appeal", {
       status: null,
       journal: JOURNAL.APPEALS,
       grif: 4,
+      __copy_prototype: null
     },
+    createFormModel: {
+      outgoing_number: null,
+      outgoing_date: null,
+      correspondent: null,
+      applicant: null,
+      region:null,
+      area:null,
+      full_name_applicant: null,
+      address: null,
+      phone_number: null,
+      submission_form: null,
+      type_complaint:null,
+      reviewers: [],
+      __reviewers: [],
+      duplicateSwitch: false,
+      repeated_application: true,
+      description: null,
+      status: null,
+      journal: JOURNAL.APPEALS,
+      grif: 4
+    }
   }),
   actions: {
     /*

@@ -1,14 +1,10 @@
 <script setup>
 // Core
-import { watch } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { helpers, required } from '@vuelidate/validators'
 // Stores
 import { useCommonStore } from '@/stores/common'
 import { useCorrespondentStore } from '@/stores/correspondent'
-import { useRegIncomingBranches } from '../../stores/incomingBranches.store'
-// Components
-// import MultipleUser from '@/components/Combobox/MultipleUser.vue'
 // Non-reactive
 const rules = {
   document_type: {
@@ -30,11 +26,23 @@ const rules = {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   }
 }
+// Macros
+const props = defineProps({
+  formModel: {
+    type: Object,
+    default: () => ({
+      document_type: null,
+      register_number: null,
+      outgoing_date: null,
+      author: null,
+      branch: null,
+    })
+  }
+})
 // Composable
 const commonStore = useCommonStore()
 const correspondentStore = useCorrespondentStore()
-const incomingBranchesStore = useRegIncomingBranches()
-const $v = useVuelidate(rules, incomingBranchesStore.detailModel)
+const $v = useVuelidate(rules, props.formModel)
 // Composable
 defineExpose({ $v })
 </script>

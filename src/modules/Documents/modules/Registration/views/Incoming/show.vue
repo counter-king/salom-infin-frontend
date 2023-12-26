@@ -37,6 +37,7 @@ onMounted(async () => {
         :preview-detail="incomingStore.detailModel.__copy_prototype"
         :object-id="incomingStore.detailModel.id"
         :headers="incomingStore.headers"
+        :tree-items="docflowStore.tree"
       >
         <template #template>
           template
