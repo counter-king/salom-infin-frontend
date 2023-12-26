@@ -165,7 +165,6 @@ const updateVisible = () => {
       :pt="dialogConfig"
       :visible="visible"
       @update:visible="updateVisible"
-      dismissableMask
       header="Создать сотрудник"
       modal
       >

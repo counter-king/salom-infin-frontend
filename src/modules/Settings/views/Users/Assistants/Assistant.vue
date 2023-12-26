@@ -249,7 +249,6 @@ onMounted(() => {
    </template>
    <Dialog
       :pt="dialogConfig"
-      dismissableMask
       header="Изменить помощник"
       modal
       v-model:visible="editVisible">
@@ -339,7 +338,6 @@ onMounted(() => {
    </Dialog>
    <Dialog
       :pt="dialogConfig"
-      dismissableMask
       header="Удалить помощник"
       modal
       v-model:visible="deleteVisible">

@@ -197,7 +197,6 @@ onMounted(() => {
    </template>
    <Dialog
       :pt="dialogConfig"
-      dismissableMask
       header="Изменить департамент"
       modal
       v-model:visible="editVisible">

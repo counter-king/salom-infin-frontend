@@ -49,7 +49,6 @@ const createDepartment = () => {
       }"
       :pt="dialogConfig"
       :visible="visible"
-      dismissableMask
       header="Создать департамент"
       modal
       >

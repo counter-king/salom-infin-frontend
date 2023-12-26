@@ -305,7 +305,6 @@ onMounted(() => {
    </template>
    <Dialog
       :pt="dialogConfig"
-      dismissableMask
       header="Изменить сотрудник"
       modal
       v-model:visible="editVisible">
@@ -427,7 +426,7 @@ onMounted(() => {
             <template v-if="editLoading">
                <ProgressSpinner class="m-0 w-10 h-10" animationDuration=".5s" strokeWidth="4" />
             </template>
-            <template>
+            <template v-else>
                <Button
                   @click="editVisible = false"
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
@@ -448,7 +447,6 @@ onMounted(() => {
    </Dialog>
    <Dialog
       :pt="dialogConfig"
-      dismissableMask
       header="Удалить сотрудник"
       modal
       v-model:visible="deleteVisible">

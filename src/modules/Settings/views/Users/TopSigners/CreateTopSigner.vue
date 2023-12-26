@@ -99,7 +99,6 @@ const topSignerCreate = () => {
    <Dialog
       :pt="dialogConfig"
       :visible="visible"
-      dismissableMask
       header="Создать топ подписантов"
       modal
       @update:visible="() => { setVisible(!visible); user = ''; docType = ''; loading = false }">
