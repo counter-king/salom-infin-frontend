@@ -5,12 +5,12 @@ import InputMask from 'primevue/inputmask';
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import ProgressSpinner from 'primevue/progressspinner';
+import SubDepartment from './SubDepartment.vue';
 import axiosConfig from "@/services/axios.config";
 import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
-import SubDepartment from './SubDepartment.vue';
 import { ref } from 'vue';
-const defaultEmployee = { full_name: '', phone: '', pinfl: '', top_level_department: '' };
+const defaultEmployee = { first_name: '', last_name: '', father_name: '', phone: '', pinfl: '', top_level_department: '' };
 const companies = ref([]);
 const company = ref('');
 const companyLoading = ref(false);
@@ -29,48 +29,53 @@ const props = defineProps({ getFirstPageEmployees: Function, setVisible: Functio
 const createUser = () => {
    const companyId = company.value?.id;
    const departmentId = topLevelDepartment.value?.id;
-   const full_name = employee.value?.full_name;
+   const father_name = employee.value?.father_name;
+   const first_name = employee.value?.first_name;
+   const last_name = employee.value?.last_name;
    const phone = employee.value?.phone.replace(/ /g, '').replace(/\+/g, '');
    const pinfl = employee.value?.pinfl;
    const positionId = position.value?.id;
    const statusId = status.value?.id;
    const top_level_department = employee?.value?.top_level_department;
-   console.log(top_level_department, topLevelDepartment);
-   // if(full_name && pinfl?.length === 14 && phone?.length === 12 && companyId && departmentId && positionId && statusId) {
-   //    loading.value = true;
-   //    const data = { phone, full_name, pinfl, company: companyId, top_level_department, department: departmentId, position: positionId, status: statusId };
-   //    axiosConfig
-   //       .post('users/', data)
-   //       .then(response => {
-   //          if(response?.status === 201) {
-   //             dispatchNotify('Сотрудник создан', '', 'success');
-   //             props.getFirstPageEmployees();
-   //             props.setVisible(false);
-   //          } else {
-   //             dispatchNotify('Сотрудник не создан', '', 'error');
-   //          }
-   //       })
-   //       .catch(() => {
-   //          dispatchNotify('Сотрудник не создан', '', 'error');
-   //       })
-   //       .finally(() => {
-   //          loading.value = false;
-   //       });
-   // } else if(!full_name) {
-   //    dispatchNotify('Введите имя и фамилию', '', 'error');
-   // } else if(pinfl?.length !== 14) {
-   //    dispatchNotify('Введите ПИНФЛ', '', 'error');
-   // } else if(phone?.length !== 12) {
-   //    dispatchNotify('Введите номер телефона', '', 'error');
-   // } else if(!companyId) {
-   //    dispatchNotify('Введите филиал', '', 'error');
-   // } else if(!departmentId) {
-   //    dispatchNotify('Введите департаментa', '', 'error');
-   // } else if(!positionId) {
-   //    dispatchNotify('Введите должность', '', 'error');
-   // } else if(!statusId) {
-   //    dispatchNotify('Введите статус', '', 'error');
-   // }
+   if(first_name && last_name && father_name && pinfl?.length === 14 && phone?.length === 12 && companyId && departmentId && positionId && statusId) {
+      loading.value = true;
+      const data = { phone, first_name, last_name, father_name, pinfl, company: companyId, top_level_department, department: departmentId, position: positionId, status: statusId };
+      axiosConfig
+         .post('users/', data)
+         .then(response => {
+            if(response?.status === 201) {
+               dispatchNotify('Сотрудник создан', '', 'success');
+               props.getFirstPageEmployees();
+               props.setVisible(false);
+            } else {
+               dispatchNotify('Сотрудник не создан', '', 'error');
+            }
+         })
+         .catch(() => {
+            dispatchNotify('Сотрудник не создан', '', 'error');
+         })
+         .finally(() => {
+            loading.value = false;
+         });
+   } else if(!first_name) {
+      dispatchNotify('Введите имя', '', 'error');
+   } else if(!last_name) {
+      dispatchNotify('Введите фамилия', '', 'error');
+   } else if(!father_name) {
+      dispatchNotify('Введите имя отца', '', 'error');
+   } else if(pinfl?.length !== 14) {
+      dispatchNotify('Введите ПИНФЛ', '', 'error');
+   } else if(phone?.length !== 12) {
+      dispatchNotify('Введите номер телефона', '', 'error');
+   } else if(!companyId) {
+      dispatchNotify('Введите филиал', '', 'error');
+   } else if(!departmentId) {
+      dispatchNotify('Введите департаментa', '', 'error');
+   } else if(!positionId) {
+      dispatchNotify('Введите должность', '', 'error');
+   } else if(!statusId) {
+      dispatchNotify('Введите статус', '', 'error');
+   }
 };
 const searchCompanies = e => {
    const search = e.target.value;
@@ -164,8 +169,12 @@ const updateVisible = () => {
       modal
       >
       <div class="flex flex-col pb-10 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">ФИО сотрудники<span class="text-red-500 ml-1">*</span></p>
-         <InputText v-model="employee.full_name" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" placeholder="Выберите ФИО" type="text" />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Имя<span class="text-red-500 ml-1">*</span></p>
+         <InputText v-model="employee.first_name" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" placeholder="Выберите имя" type="text" />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Фамилия<span class="text-red-500 ml-1">*</span></p>
+         <InputText v-model="employee.last_name" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" placeholder="Выберите фамилия" type="text" />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Имя отца<span class="text-red-500 ml-1">*</span></p>
+         <InputText v-model="employee.father_name" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" placeholder="Выберите имя отца" type="text" />
          <p class="text-sm text-greyscale-500 font-medium mb-1">ПИНФЛ<span class="text-red-500 ml-1">*</span></p>
          <InputMask v-model="employee.pinfl" slotChar="" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" mask="99999999999999" placeholder="Выберите ПИНФЛ" />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Номер телефона<span class="text-red-500 ml-1">*</span></p>
