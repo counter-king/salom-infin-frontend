@@ -152,7 +152,6 @@ const searchStatuses = e => {
       .get(`users/statuses/?search=${search}`)
       .then(response => {
          const results = response?.data;
-         // const results = response?.data?.results;
          const newStatuses = Array.isArray(results) ? results : [];
          statuses.value = newStatuses;
       })
@@ -316,7 +315,7 @@ onMounted(() => {
                editEmployee = { ...editEmployee, first_name };
             }"
             :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
-            placeholder="Выберите имя"
+            placeholder="Введите имя"
             type="text"
             v-model="editEmployee.first_name"
             />
@@ -327,7 +326,7 @@ onMounted(() => {
                editEmployee = { ...editEmployee, last_name };
             }"
             :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
-            placeholder="Выберите фамилия"
+            placeholder="Введите фамилия"
             type="text"
             v-model="editEmployee.last_name"
             />
@@ -338,14 +337,14 @@ onMounted(() => {
                editEmployee = { ...editEmployee, father_name };
             }"
             :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
-            placeholder="Выберите имя отца"
+            placeholder="Введите имя отца"
             type="text"
             v-model="editEmployee.father_name"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">ПИНФЛ<span class="text-red-500 ml-1">*</span></p>
-         <InputMask v-model="editEmployee.pinfl" slotChar="" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" mask="99999999999999" placeholder="Выберите ПИНФЛ" />
+         <InputMask v-model="editEmployee.pinfl" slotChar="" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" mask="99999999999999" placeholder="Введите ПИНФЛ" />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Номер телефона<span class="text-red-500 ml-1">*</span></p>
-         <InputMask v-model="editEmployee.phone" slotChar="" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" mask="+999 99 999 99 99" placeholder="Выберите номер телефона" />
+         <InputMask v-model="editEmployee.phone" slotChar="" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" mask="+999 99 999 99 99" placeholder="Введите номер телефона" />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Филиал<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
             :hasValue="company"

@@ -6,74 +6,75 @@ import ProgressSpinner from 'primevue/progressspinner';
 import axiosConfig from "@/services/axios.config";
 import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
-import { replaceSpecChars } from '@/utils/string';
 import { ref } from 'vue';
-const department = ref({ name_uz: '', name_ru: '' });
+import { replaceSpecChars } from '@/utils/string';
+const position = ref({ name_uz: '', name_ru: '' });
 const loading = ref(false);
 const props = defineProps({
-   getFirstPageDepartments: Function,
+   getFirstPagePositions: Function,
    setVisible: Function,
    visible: Boolean,
 });
-const createDepartment = () => {
-   const {name_ru, name_uz} = department.value;
+const createPosition = () => {
+   const { name_ru, name_uz } = position.value;
+   const code = new Date().toISOString();
    if(name_uz && name_ru) {
       loading.value = true;
       axiosConfig
-         .post('/departments/', { name_ru, name_uz, condition: 'A' })
+         .post('/positions/', { name_ru, name_uz, code })
          .then(response => {
             if(response?.status === 201) {
-               dispatchNotify('Департамент создан', '', 'success');
-               props.getFirstPageDepartments();
+               dispatchNotify('Должность создан', '', 'success');
+               props.getFirstPagePositions();
                props.setVisible(false);
             } else {
-               dispatchNotify('Департамент не создан', '', 'error');
+               dispatchNotify('Должность не создан', '', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Департамент не создан', '', 'error');
+            dispatchNotify('Должность не создан', '', 'error');
          })
          .finally(() => {
             loading.value = false;
          });
    } else {
-      dispatchNotify('Введите название департамент', '', 'error')
+      dispatchNotify('Введите название должность', '', 'error')
    }
 };
 </script>
 <template>
    <Dialog
       @update:visible="() => {
+         position = { name_uz: '', name_ru: '' };
          setVisible(!visible);
-         department = { name_uz: '', name_ru: '' };
       }"
       :pt="dialogConfig"
       :visible="visible"
-      header="Создать департамент"
+      header="Создать должность"
       modal
       >
       <div class="flex flex-col pb-10 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название департамент (UZ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Название должность (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
             @input="e => {
                const name_uz = replaceSpecChars(e.target.value);
-               department = { ...department, name_uz };
+               position = { ...position, name_uz };
             }"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название департамент"
+            placeholder="Введите название должность"
             type="text"
-            v-model="department.name_uz"
+            v-model="position.name_uz"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название департамент (РУ) <span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Название должность (РУ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
             @input="e => {
                const name_ru = replaceSpecChars(e.target.value);
-               department = { ...department, name_ru };
+               position = { ...position, name_ru };
             }"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название департамент"
+            placeholder="Введите название должность"
             type="text"
-            v-model="department.name_ru"
+            v-model="position.name_ru"
             />
       </div>
       <template #footer>
@@ -91,7 +92,7 @@ const createDepartment = () => {
                   Отмена
                </Button>
                <Button
-                  @click="createDepartment"
+                  @click="createPosition"
                   class="shadow-none p-button p-component font-semibold text-sm !rounded-full m-0 py-[9px] px-4"
                   rounded
                   type="button"

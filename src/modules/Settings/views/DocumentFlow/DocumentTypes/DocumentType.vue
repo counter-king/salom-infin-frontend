@@ -14,70 +14,71 @@ import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
 const props = defineProps({
    data: Object,
-   departments: Array,
+   documentTypes: Array,
    field: String,
-   getFirstPageDepartments: Function,
-   setDepartments: Function,
+   getFirstPageDocumentTypes: Function,
+   setDocumentTypes: Function,
 });
 const conditionLoading = ref(false);
 const conditions = ref([]);
-const deleteDepartment = ref({});
+const deleteDocumentType = ref({});
 const deleteLoading = ref(false);
 const deleteVisible = ref(false);
-const editDepartment = ref({});
+const editDocumentType = ref({});
 const editLoading = ref(false);
 const editVisible = ref(false);
 const menu = ref(null);
-const departmentEdit = () => {
-   const {name_ru, name_uz, condition} = editDepartment.value;
+const documentTypeEdit = () => {
+   const { name_ru, name_uz } = editDocumentType.value;
    if(name_uz && name_ru) {
       editLoading.value = true;
-      const departmentId = props?.data?.id;
+      const documentTypeId = props?.data?.id;
       axiosConfig
-         .patch(`/departments/${departmentId}/`, { name_ru, name_uz, condition })
+         .patch(`document-types/${documentTypeId}/`, { name_ru, name_uz })
          .then(response => {
             const data = response?.data;
             const status = response?.status;
             if(status === 200) {
-               const newDepartments = props?.departments.map(department => {
-                  if(department?.id === departmentId) {
+               const newDocumentTypes = props?.documentTypes.map(documentType => {
+                  if(documentType?.id === documentTypeId) {
                      return data;
                   } else {
-                     return department;
+                     return documentType;
                   }
                });
-               dispatchNotify('Департамент обновлено', '', 'success');
+               dispatchNotify('Тип документа обновлено', '', 'success');
                editVisible.value = false;
-               props.setDepartments(newDepartments);
+               props.setDocumentTypes(newDocumentTypes);
             } else {
-               dispatchNotify('Департамент не обновлено', '', 'error');
+               dispatchNotify('Тип документа не обновлено', '', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Департамент не обновлено', '', 'error');
+            dispatchNotify('Тип документа не обновлено', '', 'error');
          })
          .finally(() => {
             editLoading.value = false;
          });
    } else {
-      dispatchNotify('Введите название департамент', '', 'error')
+      dispatchNotify('Введите название тип документа', '', 'error')
    }
 };
-const departmentDelete = () => {
+const documentTypeDelete = () => {
    deleteLoading.value = true;
+   const documentTypeId = props?.data?.id;
    axiosConfig
-      .delete(`departments/${props?.data?.id}/`)
+      .delete(`document-types/${documentTypeId}/`)
       .then(response => {
          if(response?.status === 204) {
             deleteVisible.value = false;
-            dispatchNotify('Департамент удален', '', 'success')
-            props.getFirstPageDepartments();
+            dispatchNotify('Тип документа удален', '', 'success')
+            props.getFirstPageDocumentTypes();
          } else {
-            dispatchNotify('Департамент не удален', '', 'error')
+            dispatchNotify('Тип документа не удален', '', 'error')
          }
       })
       .catch(() => {
-         dispatchNotify('Департамент не удален', '', 'error')
+         dispatchNotify('Тип документа не удален', '', 'error')
       })
       .finally(() => {
          deleteLoading.value = false;
@@ -85,21 +86,21 @@ const departmentDelete = () => {
 };
 const updateCondition = value => {
    conditionLoading.value = true;
-   const departmentId = props?.data?.id;
+   const documentTypeId = props?.data?.id;
    axiosConfig
-      .patch(`departments/${departmentId}/`, { condition: value?.value })
+      .patch(`document-types/${documentTypeId}/`, { condition: value?.value })
       .then(response => {
          const data = response?.data;
          const status = response?.status;
          if(status === 200) {
-            const newDepartments = props?.departments.map(department => {
-               if(department?.id === departmentId) {
+            const newDocumentTypes = props?.documentTypes.map(documentType => {
+               if(documentType?.id === documentTypeId) {
                   return data;
                } else {
-                  return department;
+                  return documentType;
                }
             });
-            props.setDepartments(newDepartments);
+            props.setDocumentTypes(newDocumentTypes);
             dispatchNotify('Статус обновлено', '', 'success');
          } else {
             dispatchNotify('Статус не обновлено', '', 'error');
@@ -121,6 +122,16 @@ const changeLanguage = () => {
 const toggle = event => {
    menu.value.toggle(event);
 };
+const parseCreateDate = created_date => {
+   const parsingDate = new Date(created_date);
+   const date = parsingDate.getDate().toString().padStart(2, "0");
+   const hour = parsingDate.getHours().toString().padStart(2, "0");
+   const month = (parsingDate.getMonth() + 1).toString().padStart(2, "0");
+   const minute = parsingDate.getMinutes().toString().padStart(2, "0");
+   const year = parsingDate.getFullYear().toString();
+   const d = `${date}.${month}.${year} ${hour}:${minute}`;
+   return d;
+};
 watch(locale, () => {
    changeLanguage();
 });
@@ -129,7 +140,7 @@ onMounted(() => {
 });
 </script>
 <template>
-   <template v-if="field === 'condition'">
+   <template v-if="field === 'status'">
       <template v-if="conditionLoading">
          <Skeleton height="16px" />
       </template>
@@ -160,7 +171,7 @@ onMounted(() => {
    <template v-else-if="field === 'action'">
       <Button
          @click="() => {
-            editDepartment = data;
+            editDocumentType = data;
             editVisible = true;
          }"
          class="shadow-none py-[7px] px-2 text-xs bg-greyscale-50 mr-2 rounded-[8px]"
@@ -175,7 +186,7 @@ onMounted(() => {
       </Button>
       <Button
          @click="() => {
-            deleteDepartment = data;
+            deleteDocumentType = data;
             deleteVisible = true;
          }"
          class="shadow-none py-[7px] px-2 text-xs bg-greyscale-50 rounded-[8px]"
@@ -192,36 +203,40 @@ onMounted(() => {
          </svg>
       </Button>
    </template>
+   <template v-else-if="field === 'created_date'">
+      <span class="text-sm font-medium">{{ parseCreateDate(data[field]) }}</span>
+   </template>
    <template v-else>
       <span class="text-sm font-medium">{{ data[field] }}</span>
    </template>
    <Dialog
       :pt="dialogConfig"
-      header="Изменить департамент"
+      header="Изменить тип документа"
       modal
-      v-model:visible="editVisible">
+      v-model:visible="editVisible"
+      >
       <div class="flex flex-col pb-10 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название департамент (UZ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Название тип документа (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
             @input="e => {
                const name_uz = replaceSpecChars(e.target.value);
-               editDepartment = { ...editDepartment, name_uz };
+               editDocumentType = { ...editDocumentType, name_uz };
             }"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название департамент"
+            placeholder="Введите название тип документа"
             type="text"
-            v-model="editDepartment.name_uz"
+            v-model="editDocumentType.name_uz"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название департамент (РУ) <span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Название тип документа (РУ) <span class="text-red-500 ml-1">*</span></p>
          <InputText
             @input="e => {
                const name_ru = replaceSpecChars(e.target.value);
-               editDepartment = { ...editDepartment, name_ru };
+               editDocumentType = { ...editDocumentType, name_ru };
             }"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название департамент"
+            placeholder="Введите название тип документа"
             type="text"
-            v-model="editDepartment.name_ru"
+            v-model="editDocumentType.name_ru"
             />
       </div>
       <template #footer>
@@ -239,7 +254,7 @@ onMounted(() => {
                   Отмена
                </Button>
                <Button
-                  @click="departmentEdit"
+                  @click="documentTypeEdit"
                   class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"
@@ -251,7 +266,7 @@ onMounted(() => {
    <Dialog
       :pt="dialogConfig"
       dismissableMask
-      header="Удалить департамент"
+      header="Удалить тип документа"
       modal
       v-model:visible="deleteVisible">
       <div class="flex flex-col items-center pb-10 pt-4">
@@ -262,9 +277,9 @@ onMounted(() => {
                <path fill-rule="evenodd" clip-rule="evenodd" d="M39.4608 53.3327H40.5392C44.2495 53.3327 46.1046 53.3327 47.3108 52.1514C48.517 50.9702 48.6404 49.0326 48.8872 45.1574L49.2428 39.5735C49.3767 37.4708 49.4437 36.4195 48.8386 35.7533C48.2335 35.0871 47.2116 35.0871 45.1679 35.0871H34.8321C32.7884 35.0871 31.7665 35.0871 31.1614 35.7533C30.5563 36.4195 30.6233 37.4708 30.7572 39.5735L31.1128 45.1574C31.3596 49.0326 31.483 50.9702 32.6892 52.1514C33.8954 53.3327 35.7505 53.3327 39.4608 53.3327ZM37.6617 40.2507C37.6067 39.6722 37.1167 39.2501 36.5672 39.308C36.0176 39.3658 35.6167 39.8817 35.6716 40.4601L36.3383 47.4777C36.3932 48.0561 36.8833 48.4782 37.4328 48.4203C37.9824 48.3625 38.3833 47.8467 38.3284 47.2682L37.6617 40.2507ZM43.4328 39.308C43.9824 39.3658 44.3833 39.8817 44.3284 40.4601L43.6617 47.4777C43.6068 48.0561 43.1167 48.4782 42.5672 48.4203C42.0176 48.3625 41.6167 47.8467 41.6716 47.2682L42.3383 40.2507C42.3933 39.6722 42.8833 39.2501 43.4328 39.308Z" fill="#F3335C"/>
             </svg>
          </div>
-         <h2 class="text-center font-semibold text-3xl text-gray-900 p-0 mt-6">Удалить департамент?</h2>
+         <h2 class="text-center font-semibold text-3xl text-gray-900 p-0 mt-6">Удалить тип документа?</h2>
          <p class="text-center py-0 px-6 mt-2 text-gray-400">
-            Вы уверены, что хотите удалить этого департамент
+            Вы уверены, что хотите удалить этого тип документа
          </p>
       </div>
       <template #footer>
@@ -282,7 +297,7 @@ onMounted(() => {
                   Отмена
                </Button>
                <Button
-                  @click="departmentDelete"
+                  @click="documentTypeDelete"
                   class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"

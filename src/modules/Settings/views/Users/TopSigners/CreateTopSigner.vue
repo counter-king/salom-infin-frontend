@@ -95,9 +95,9 @@ const topSignerCreate = () => {
             loading.value = false;
          });
    } else if(!user) {
-      dispatchNotify('Выберите топ подписавший', '', 'error');
+      dispatchNotify('Введите топ подписавший', '', 'error');
    } else {
-      dispatchNotify('Выберите тип документа', '', 'error');
+      dispatchNotify('Введите тип документа', '', 'error');
    }
 };
 </script>

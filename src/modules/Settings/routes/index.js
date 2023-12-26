@@ -15,16 +15,16 @@ const Settings = [
           navigation: true
         },
         component: () => import("../views/DocumentFlow/index.vue"),
-        redirect: { name: "DocumentTypeIndex" },
+        redirect: { name: "DocumentTypesIndex" },
         children: [
           {
-            path: "document-type",
-            name: "DocumentTypeIndex",
+            path: "document-types",
+            name: "DocumentTypesIndex",
             meta: {
               isAuthRequired: true,
               navigation: true,
             },
-            component: () => import("../views/DocumentFlow/DocumentType/index.vue"),
+            component: () => import("../views/DocumentFlow/DocumentTypes/index.vue"),
           },
           {
             path: "document-view",

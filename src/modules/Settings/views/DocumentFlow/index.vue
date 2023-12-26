@@ -9,7 +9,7 @@ const changeLanguage = () => {
     {
       title: "Тип документа",
       icon: "ClipboardCheckIcon",
-      link: "DocumentTypeIndex",
+      link: "DocumentTypesIndex",
     },
     {
       title: "Вид документа",

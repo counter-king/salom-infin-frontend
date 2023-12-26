@@ -1,13 +1,12 @@
 <script setup>
 import Button from 'primevue/button';
-import CreateDepartment from './CreateDepartment.vue';
+import CreateDocumentType from './CreateDocumentType.vue';
 import DataTable from 'primevue/datatable';
-import Department from './Department.vue';
+import DocumentType from './DocumentType.vue';
 import Dropdown from 'primevue/dropdown';
 import InputText from 'primevue/inputtext';
 import Paginator from 'primevue/paginator';
 import Skeleton from 'primevue/skeleton';
-import TheNavigation from '@/components/TheNavigation.vue';
 import axiosConfig from "@/services/axios.config";
 import { ref, watch, onMounted } from 'vue';
 import { tableConfig, columnConfig, dropdownConfig, paginationConfig, dropdownOptions } from './config';
@@ -15,92 +14,74 @@ import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
 const defaultFilter = { page: 1, page_size: 10, search: '' };
 const count = ref(1);
-const departments = ref([]);
+const documentTypes = ref([]);
 const filter = ref(defaultFilter);
 const headers = ref([]);
 const loading = ref(false);
-const navs = ref([]);
 const visible = ref(false);
-const getDepartments = (newFilter = {}) => {
+const getDocumentTypes = (newFilter = {}) => {
   loading.value = true;
   filter.value = newFilter;
   const { page, page_size, search } = newFilter;
   const params = `?page=${page}${page_size ? '&page_size=' + page_size : ''}${search ? '&search=' + search : ''}`;
   axiosConfig
-    .get(`departments/top-level-departments/${params}`)
+    .get(`document-types/${params}`)
     .then(response => {
       const results = response?.data?.results;
       const newCount = response?.data?.count;
-      const newDepartments = (Array.isArray(results) ? results: []).map(user => ({...user, position: user?.position?.name}));
-      departments.value = newDepartments;
+      const newDocumentTypes = Array.isArray(results) ? results: [];
+      documentTypes.value = newDocumentTypes;
       count.value = newCount;
     })
     .catch(() => {
-      departments.value = [];
+      documentTypes.value = [];
     })
     .finally(() => {
       loading.value = false;
     });
 };
-const searchDepartments = e => {
+const searchDocumentTypes = e => {
   const search = e.target.value;
   const newFilter = { ...filter.value, page: 1, search };
-  getDepartments(newFilter);
+  getDocumentTypes(newFilter);
 };
 const onChangePage = ({ page }) => {
   const newFilter = { ...filter.value, page: page + 1 };
-  getDepartments(newFilter);
+  getDocumentTypes(newFilter);
 };
 const onChangePageSize = ({ value }) => {
   const newFilter = { ...filter.value, page: 1, page_size: value };
-  getDepartments(newFilter);
+  getDocumentTypes(newFilter);
 };
-const getFirstPageDepartments = () => {
-  getDepartments(defaultFilter);
+const getFirstPageDocumentTypes = () => {
+  getDocumentTypes(defaultFilter);
 };
-const setDepartments = newDepartments => {
-  departments.value = newDepartments;
+const setDocumentTypes = newDocumentTypes => {
+  documentTypes.value = newDocumentTypes;
 }
 const setVisible = newVisible => {
   visible.value = newVisible;
 };
 const changeLanguage = () => {
-  navs.value = [
-    {
-      title: "Департаменты",
-      icon: "BuildingsIcon",
-      link: "DepartmentsIndex",
-    },
-    {
-      title: "Региональные филиалы",
-      icon: "BuildingsIcon",
-      link: "BranchesIndex",
-    },
-    {
-      title: "Должность",
-      icon: "UserSpeakIcon",
-      link: "PositionsIndex",
-    }
-  ];
   headers.value = [
     {
-      columnKey: 'name',
-      field: 'name',
-      header: 'Название департамент',
+      columnKey: 'name_uz',
+      field: 'name_uz',
+      header: 'Название (UZ)',
     },
     {
-      columnKey: 'sub_department_count',
-      field: 'sub_department_count',
-      header: 'Субдепартамент',
+      columnKey: 'name_ru',
+      field: 'name_ru',
+      header: 'Название (РУ)',
     },
     {
-      columnKey: 'employee_count',
-      field: 'employee_count',
-      header: 'Сотрудники',
+      columnKey: 'created_date',
+      field: 'created_date',
+      header: 'Создано'
     },
     {
-      columnKey: 'condition',
-      field: 'condition',
+      columnKey: 'status',
+      field: 'status',
       header: 'Статус',
     },
     {
@@ -115,19 +96,18 @@ watch(locale, () => {
 });
 onMounted(() => {
   changeLanguage();
-  getFirstPageDepartments();
+  getFirstPageDocumentTypes();
 });
 </script>
 <template>
-  <the-navigation :navs="navs"/>
   <div class="flex mb-5 justify-between items-center">
-    <h1 class="text-2xl font-bold text-primary-900">Департаменты</h1>
+    <h1 class="text-2xl font-bold text-primary-900">Тип документа</h1>
     <div class="flex items-center gap-2">
       <span class="p-input-icon-left">
         <i class="pi pi-search pl-1" />
         <InputText
           :pt="{ root: { class: ['w-full rounded-3xl bg-white border-greyscale-50 font-xs focus:border-primary-500'] } }"
-          @input="searchDepartments"
+          @input="searchDocumentTypes"
           placeholder="Поиск"
           size="small"
           type="text"
@@ -139,17 +119,17 @@ onMounted(() => {
         class="p-button p-component font-medium text-sm rounded-xl !rounded-full py-[9px] px-4"
         rounded
         type="button"
-      >
+        >
         <base-icon class="mr-2" height="20" name="AddIcon" width="20"/>
         <span>Создать</span>
       </Button>
     </div>
   </div>
-  <div class="departments-table">
+  <div class="document-types-table">
     <DataTable
       :loading="loading"
       :pt="tableConfig"
-      :value="departments"
+      :value="documentTypes"
       @page="onChangePage"
       row-hover
       scrollable
@@ -161,14 +141,14 @@ onMounted(() => {
         :key="index"
         :pt="columnConfig"
         v-for="(item, index) in headers"
-      >
+        >
         <template #body="{ field, data }">
-          <Department
+          <DocumentType
             :data="data"
-            :departments="departments"
+            :documentTypes="documentTypes"
             :field="field"
-            :getFirstPageDepartments="getFirstPageDepartments"
-            :setDepartments="setDepartments"
+            :getFirstPageDocumentTypes="getFirstPageDocumentTypes"
+            :setDocumentTypes="setDocumentTypes"
             />
         </template>
       </Column>
@@ -209,17 +189,17 @@ onMounted(() => {
       </Paginator>
     </div>
   </div>
-  <CreateDepartment
-    :getFirstPageDepartments="getFirstPageDepartments"
+  <CreateDocumentType
+    :getFirstPageDocumentTypes="getFirstPageDocumentTypes"
     :setVisible="setVisible"
     :visible="visible"
     />
 </template>
 <style>
-.departments-table th:first-child, td:first-child {
+.document-types-table th:first-child, td:first-child {
   border-radius: 12px 0 0 12px;
 }
-.departments-table th:last-child, td:last-child {
+.document-types-table th:last-child, td:last-child {
   border-radius: 0 12px 12px 0;
 }
 </style>

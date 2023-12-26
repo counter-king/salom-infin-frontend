@@ -82,9 +82,9 @@ const assistantCreate = () => {
             loading.value = false;
          });
    } else if(!supervisorId) {
-      dispatchNotify('Выберите руководитель', '', 'error');
+      dispatchNotify('Введите руководитель', '', 'error');
    } else {
-      dispatchNotify('Выберите помощника', '', 'error');
+      dispatchNotify('Введите помощника', '', 'error');
    }
 };
 </script>
