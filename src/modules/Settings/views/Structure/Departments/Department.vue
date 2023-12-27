@@ -203,25 +203,23 @@ onMounted(() => {
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название департамент (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            @input="e => {
-               const name_uz = replaceSpecChars(e.target.value);
-               editDepartment = { ...editDepartment, name_uz };
-            }"
+            :modelValue="editDepartment.name_uz"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название департамент"
             type="text"
-            v-model="editDepartment.name_uz"
+            @update:modelValue="value => {
+               editDepartment = { ...editDepartment, name_uz: replaceSpecChars(value) };
+            }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название департамент (РУ) <span class="text-red-500 ml-1">*</span></p>
          <InputText
-            @input="e => {
-               const name_ru = replaceSpecChars(e.target.value);
-               editDepartment = { ...editDepartment, name_ru };
-            }"
+            :modelValue="editDepartment.name_ru"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название департамент"
             type="text"
-            v-model="editDepartment.name_ru"
+            @update:modelValue="value => {
+               editDepartment = { ...editDepartment, name_ru: replaceSpecChars(value) };
+            }"
             />
       </div>
       <template #footer>

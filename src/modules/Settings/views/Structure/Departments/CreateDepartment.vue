@@ -55,25 +55,23 @@ const createDepartment = () => {
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название департамент (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            @input="e => {
-               const name_uz = replaceSpecChars(e.target.value);
-               department = { ...department, name_uz };
-            }"
+            :modelValue="department.name_uz"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название департамент"
             type="text"
-            v-model="department.name_uz"
+            @update:modelValue="value => {
+               department = { ...department, name_uz: replaceSpecChars(value) };
+            }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название департамент (РУ) <span class="text-red-500 ml-1">*</span></p>
          <InputText
-            @input="e => {
-               const name_ru = replaceSpecChars(e.target.value);
-               department = { ...department, name_ru };
-            }"
+            :modelValue="department.name_ru"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название департамент"
             type="text"
-            v-model="department.name_ru"
+            @update:modelValue="value => {
+               department = { ...department, name_ru: replaceSpecChars(value) };
+            }"
             />
       </div>
       <template #footer>

@@ -170,41 +170,38 @@ const updateVisible = () => {
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Имя<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            @input="e => {
-               const first_name = replaceSpecChars(e.target.value);
-               employee = { ...employee, first_name };
-            }"
+            :modelValue="employee.first_name"
             :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
             placeholder="Введите имя"
             type="text"
-            v-model="employee.first_name"
+            @update:modelValue="value => {
+               employee = { ...employee, first_name: replaceSpecChars(value) };
+            }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Фамилия<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            @input="e => {
-               const last_name = replaceSpecChars(e.target.value);
-               employee = { ...employee, last_name };
+            @update:modelValue="value => {
+               employee = { ...employee, last_name: replaceSpecChars(value) };
             }"
+            :modelValue="employee.last_name"
             :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
             placeholder="Введите фамилия"
             type="text"
-            v-model="employee.last_name"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Имя отца<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            @input="e => {
-               const father_name = replaceSpecChars(e.target.value);
-               employee = { ...employee, father_name };
-            }"
+            :modelValue="employee.father_name"
             :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
             placeholder="Введите имя отца"
             type="text"
-            v-model="employee.father_name"
+            @update:modelValue="value => {
+               employee = { ...employee, father_name: replaceSpecChars(value) };
+            }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">ПИНФЛ<span class="text-red-500 ml-1">*</span></p>
-         <InputMask v-model="employee.pinfl" slotChar="" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" mask="99999999999999" placeholder="Введите ПИНФЛ" />
+         <InputMask :modelValue="employee.pinfl" slotChar="" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" mask="99999999999999" placeholder="Введите ПИНФЛ" />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Номер телефона<span class="text-red-500 ml-1">*</span></p>
-         <InputMask v-model="employee.phone" slotChar="" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" mask="+999 99 999 99 99" placeholder="Введите номер телефона" />
+         <InputMask :modelValue="employee.phone" slotChar="" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" mask="+999 99 999 99 99" placeholder="Введите номер телефона" />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Филиал<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
             :hasValue="company"

@@ -42,8 +42,7 @@ const getDepartments = (newFilter = {}) => {
       loading.value = false;
     });
 };
-const searchDepartments = e => {
-  const search = e.target.value;
+const searchDepartments = search => {
   const newFilter = { ...filter.value, page: 1, search };
   getDepartments(newFilter);
 };
@@ -126,12 +125,12 @@ onMounted(() => {
       <span class="p-input-icon-left">
         <i class="pi pi-search pl-1" />
         <InputText
+          :modelValue="filter.search"
           :pt="{ root: { class: ['w-full rounded-3xl bg-white border-greyscale-50 font-xs focus:border-primary-500'] } }"
-          @input="searchDepartments"
+          @update:modelValue="searchDepartments"
           placeholder="Поиск"
           size="small"
           type="text"
-          v-model="filter.search"
           />
       </span>
       <Button

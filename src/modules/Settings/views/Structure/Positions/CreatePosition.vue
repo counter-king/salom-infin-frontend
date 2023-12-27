@@ -56,25 +56,23 @@ const createPosition = () => {
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название должность (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            @input="e => {
-               const name_uz = replaceSpecChars(e.target.value);
-               position = { ...position, name_uz };
-            }"
+            :modelValue="position.name_uz"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название должность"
             type="text"
-            v-model="position.name_uz"
+            @update:modelValue="value => {
+               position = { ...position, name_uz: replaceSpecChars(value) };
+            }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название должность (РУ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            @input="e => {
-               const name_ru = replaceSpecChars(e.target.value);
-               position = { ...position, name_ru };
-            }"
+            :modelValue="position.name_ru"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название должность"
             type="text"
-            v-model="position.name_ru"
+            @update:modelValue="value => {
+               position = { ...position, name_ru: replaceSpecChars(value) };
+            }"
             />
       </div>
       <template #footer>

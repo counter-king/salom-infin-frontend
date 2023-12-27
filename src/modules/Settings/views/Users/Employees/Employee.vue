@@ -310,41 +310,38 @@ onMounted(() => {
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Имя<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            @input="e => {
-               const first_name = replaceSpecChars(e.target.value);
-               editEmployee = { ...editEmployee, first_name };
-            }"
+            :modelValue="editEmployee.first_name"
             :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
             placeholder="Введите имя"
             type="text"
-            v-model="editEmployee.first_name"
+            @update:modelValue="value => {
+               editEmployee = { ...editEmployee, first_name: replaceSpecChars(value) };
+            }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Фамилия<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            @input="e => {
-               const last_name = replaceSpecChars(e.target.value);
-               editEmployee = { ...editEmployee, last_name };
-            }"
+            :modelValue="editEmployee.last_name"
             :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
             placeholder="Введите фамилия"
             type="text"
-            v-model="editEmployee.last_name"
+            @update:modeValue="value => {
+               editEmployee = { ...editEmployee, last_name: replaceSpecChars(value) };
+            }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Имя отца<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            @input="e => {
-               const father_name = replaceSpecChars(e.target.value);
-               editEmployee = { ...editEmployee, father_name };
-            }"
+            :modelValue="editEmployee.father_name"
             :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
             placeholder="Введите имя отца"
             type="text"
-            v-model="editEmployee.father_name"
+            @update:modelValue="value => {
+               editEmployee = { ...editEmployee, father_name: replaceSpecChars(value) };
+            }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">ПИНФЛ<span class="text-red-500 ml-1">*</span></p>
-         <InputMask v-model="editEmployee.pinfl" slotChar="" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" mask="99999999999999" placeholder="Введите ПИНФЛ" />
+         <InputMask :modelValue="editEmployee.pinfl" slotChar="" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" mask="99999999999999" placeholder="Введите ПИНФЛ" />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Номер телефона<span class="text-red-500 ml-1">*</span></p>
-         <InputMask v-model="editEmployee.phone" slotChar="" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" mask="+999 99 999 99 99" placeholder="Введите номер телефона" />
+         <InputMask :modelValue="editEmployee.phone" slotChar="" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" mask="+999 99 999 99 99" placeholder="Введите номер телефона" />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Филиал<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
             :hasValue="company"

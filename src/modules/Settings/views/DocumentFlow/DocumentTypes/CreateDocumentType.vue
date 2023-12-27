@@ -55,25 +55,23 @@ const createDocumentType = () => {
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название тип документа (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            @input="e => {
-               const name_uz = replaceSpecChars(e.target.value);
-               documentType = { ...documentType, name_uz };
+            @update:modelValue="value => {
+               documentType = { ...documentType, name_uz: replaceSpecChars(value) };
             }"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название тип документа"
             type="text"
-            v-model="documentType.name_uz"
+            :modelValue="documentType.name_uz"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название тип документа (РУ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            @input="e => {
-               const name_ru = replaceSpecChars(e.target.value);
-               documentType = { ...documentType, name_ru };
+            @update:modelValue="value => {
+               documentType = { ...documentType, name_ru: replaceSpecChars(value) };
             }"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название тип документа"
             type="text"
-            v-model="documentType.name_ru"
+            :modelValue="documentType.name_ru"
             />
       </div>
       <template #footer>
