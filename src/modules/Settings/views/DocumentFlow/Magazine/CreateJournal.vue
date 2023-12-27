@@ -23,21 +23,21 @@ const createJournal = () => {
          .post('journals/', { name_ru, name_uz })
          .then(response => {
             if(response?.status === 201) {
-               dispatchNotify('Тип документа создан', '', 'success');
+               dispatchNotify('Журнал создан', '', 'success');
                props.getFirstPageJournals();
                props.setVisible(false);
             } else {
-               dispatchNotify('Тип документа не создан', '', 'error');
+               dispatchNotify('Журнал не создан', '', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Тип документа не создан', '', 'error');
+            dispatchNotify('Журнал не создан', '', 'error');
          })
          .finally(() => {
             loading.value = false;
          });
    } else {
-      dispatchNotify('Введите название тип документа', '', 'error')
+      dispatchNotify('Введите название журнал', '', 'error')
    }
 };
 </script>
@@ -49,29 +49,29 @@ const createJournal = () => {
       }"
       :pt="dialogConfig"
       :visible="visible"
-      header="Создать тип документа"
+      header="Создать журнал"
       modal
       >
       <div class="flex flex-col pb-10 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название тип документа (UZ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Название журнал (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
             @input="e => {
                const name_uz = replaceSpecChars(e.target.value);
                journal = { ...journal, name_uz };
             }"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название тип документа"
+            placeholder="Введите название журнал"
             type="text"
             v-model="journal.name_uz"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название тип документа (РУ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Название журнал (РУ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
             @input="e => {
                const name_ru = replaceSpecChars(e.target.value);
                journal = { ...journal, name_ru };
             }"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название тип документа"
+            placeholder="Введите название журнал"
             type="text"
             v-model="journal.name_ru"
             />
