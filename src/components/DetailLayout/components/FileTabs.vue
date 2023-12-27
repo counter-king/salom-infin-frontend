@@ -8,6 +8,8 @@ import { formatDate, formatDateHour } from '@/utils/formatDate'
 const { t } = useI18n()
 // Components
 import { FilePreview } from '@/components/Files'
+// Utils
+import { formatNameToShort } from '@/utils'
 // Macros
 const { resolution } = defineProps({
   resolution: {
@@ -108,11 +110,6 @@ const toggle = (event) => {
               <img src="/images/logo.svg" alt="Logo" />
               <img src="/images/logo-text.svg" alt="Logo text" class="invert ml-2" />
             </div>
-
-            <div class="text-right text-sm">
-              <h1 class="text-primary-900 font-semibold mb-1">Xodimlarni boshqarish departamenti</h1>
-              <p class="text-greyscale-500 font-medium">27.09.2023  № 18 - 1/74</p>
-            </div>
           </div>
 
           <div class="border-t-[1px]"></div>
@@ -149,54 +146,58 @@ const toggle = (event) => {
             />
           </div>
 
-          <div class="flex items-center justify-between text-sm font-semibold mt-4 mb-5">
-            <h1 class="text-greyscale-500">Boshqaruv Raisi:</h1>
-            <h1 class="text-primary-900">K. D. Tulyaganovga</h1>
-          </div>
-
-          <h1 class="text-lg font-bold text-primary-900 text-center">BILDIRISHNOMA</h1>
-
           <div class="text-sm font-semibold text-primary-900 mt-6 mb-5">
-            <div class="flex mb-2">
-              <h1 class="text-greyscale-500 mr-1">Mazmuni:</h1>
-              <p>Shtat birligi kiritish va nomzodni ishga qabul qilish masalasida</p>
-            </div>
-
-            <p class="indent-5">
-              Departament ish faoliyatini samaradorligini oshirish maqsadida quyidagi nomzodni ishga qabul qilinishiga hamda xodimga zaruriy texnik jihozlar (kompyuter va telefon qurilmasi v.b.) bilan ta'minlanishiga ruxsat berishingizni so'rayman.
-            </p>
-
             <ul class="mt-3">
-              <li class="flex font-semibold mb-2">
-                <p class="text-greyscale-500 mr-1">Nomzod:</p>
-                <span>Вася Васин принят Батькович</span>
-              </li>
-              <li class="flex font-semibold mb-2">
-                <p class="text-greyscale-500 mr-1">Taklif etilayotgan tashkiliy tuzilma:</p>
-                <span>Kadrlar bo'yicha ish yuritish boshqarmasi</span>
-              </li>
-              <li class="flex font-semibold mb-2">
-                <p class="text-greyscale-500 mr-1">Kiritilayotgan lavozim:</p>
-                <span>Agent</span>
-              </li>
-              <li class="flex font-semibold mb-2">
-                <p class="text-greyscale-500 mr-1">Ustama haqi miqdori:</p>
-                <span>5 rag'batlantirish koeffitsiyenti</span>
+              <template v-if="resolution.assignees && resolution.assignees.length">
+                <template v-for="item in resolution.assignees">
+                  <li class="flex gap-1 font-semibold mb-2">
+                    <span>{{ formatNameToShort(item.user.full_name) }}</span>
+
+                    <span class="text-greyscale-500">-</span>
+
+                    <p class="text-greyscale-500 mr-1">
+                      <template v-if="item.is_controller">
+                        Контролирующий
+                      </template>
+
+                      <template v-else>
+                        <template v-if="item.is_responsible">
+                          Исполнитель
+                        </template>
+
+                        <template v-else>
+                          Соисполнитель
+                        </template>
+                      </template>
+                    </p>
+                  </li>
+                </template>
+              </template>
+
+              <li class="flex font-semibold">
+                <p class="text-greyscale-500 mr-1">Срок исполнения:</p>
+                <span>{{ resolution.deadline ? resolution.deadline : 'Без срока исполнений' }}</span>
               </li>
             </ul>
+
+            <div class="text-center mt-5">
+              <p v-html="resolution.content"></p>
+            </div>
           </div>
 
           <div class="border-t-[1px]"></div>
 
           <div class="flex items-center my-4">
             <div class="flex-1 text-sm font-semibold">
-              <h1 class="text-greyscale-500">Boshqarma boshlig’i:</h1>
-              <p class="text-primary-900">N. R. Toshkenboyeva</p>
+              <h1 class="text-greyscale-500">{{ resolution.reviewer?.position?.name }}:</h1>
+              <p class="text-primary-900">{{ formatNameToShort(resolution.reviewer?.full_name) }}</p>
             </div>
 
-            <div class="w-[50px] h-[50px]">
-              <img src="/images/qr-code.svg" alt="Qr code" />
-            </div>
+            <template v-if="resolution.signed">
+              <div class="w-[50px] h-[50px]">
+                <img src="/images/qr-code.svg" alt="Qr code" />
+              </div>
+            </template>
           </div>
 
           <div class="border-t-[1px]"></div>
