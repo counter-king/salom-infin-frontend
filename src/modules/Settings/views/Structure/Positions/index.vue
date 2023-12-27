@@ -83,9 +83,14 @@ const changeLanguage = () => {
    ];
    headers.value = [
       {
-         columnKey: 'name',
-         field: 'name',
-         header: 'Название должность',
+         columnKey: 'name_uz',
+         field: 'name_uz',
+         header: 'Название (UZ)',
+      },
+      {
+         columnKey: 'name_ru',
+         field: 'name_ru',
+         header: 'Название (РУ)',
       },
       {
          columnKey: 'status',

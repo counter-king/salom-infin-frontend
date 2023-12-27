@@ -8,71 +8,69 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { replaceSpecChars } from '@/utils/string';
-const defaultPosition = { name_uz: '', name_ru: '' };
-const position = ref(defaultPosition);
+const journal = ref({ name_uz: '', name_ru: '' });
 const loading = ref(false);
 const props = defineProps({
-   getFirstPagePositions: Function,
+   getFirstPageJournals: Function,
    setVisible: Function,
    visible: Boolean,
 });
-const createPosition = () => {
-   const { name_ru, name_uz } = position.value;
-   const code = new Date().toISOString();
+const createJournal = () => {
+   const {name_ru, name_uz} = journal.value;
    if(name_uz && name_ru) {
       loading.value = true;
       axiosConfig
-         .post('/positions/', { name_ru, name_uz, code })
+         .post('journals/', { name_ru, name_uz })
          .then(response => {
             if(response?.status === 201) {
-               dispatchNotify('Должность создан', '', 'success');
-               props.getFirstPagePositions();
+               dispatchNotify('Журнал создан', '', 'success');
+               props.getFirstPageJournals();
                props.setVisible(false);
             } else {
-               dispatchNotify('Должность не создан', '', 'error');
+               dispatchNotify('Журнал не создан', '', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Должность не создан', '', 'error');
+            dispatchNotify('Журнал не создан', '', 'error');
          })
          .finally(() => {
             loading.value = false;
          });
    } else {
-      dispatchNotify('Введите название должность', '', 'error')
+      dispatchNotify('Введите название', '', 'error')
    }
 };
 </script>
 <template>
    <Dialog
       @update:visible="() => {
-         position = defaultPosition;
+         journal = { name_uz: '', name_ru: '' };
          setVisible(!visible);
       }"
       :pt="dialogConfig"
       :visible="visible"
-      header="Создать должность"
+      header="Создать журнал"
       modal
       >
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            :modelValue="position.name_uz"
+            :modelValue="journal.name_uz"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
             @update:modelValue="value => {
-               position = { ...position, name_uz: replaceSpecChars(value) };
+               journal = { ...journal, name_uz: replaceSpecChars(value) };
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            :modelValue="position.name_ru"
+            :modelValue="journal.name_ru"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
             @update:modelValue="value => {
-               position = { ...position, name_ru: replaceSpecChars(value) };
+               journal = { ...journal, name_ru: replaceSpecChars(value) };
             }"
             />
       </div>
@@ -91,7 +89,7 @@ const createPosition = () => {
                   Отмена
                </Button>
                <Button
-                  @click="createPosition"
+                  @click="createJournal"
                   class="shadow-none p-button p-component font-semibold text-sm !rounded-full m-0 py-[9px] px-4"
                   rounded
                   type="button"

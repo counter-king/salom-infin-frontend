@@ -7,70 +7,72 @@ import axiosConfig from "@/services/axios.config";
 import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
-import { replaceSpecChars } from '@/utils/string';
-const journal = ref({ name_uz: '', name_ru: '' });
+import { replaceSpecCharsBracket } from '@/utils/string';
+const defaultShortDescription = { description_uz: '', description_ru: '' };
+const shortDescription = ref(defaultShortDescription);
 const loading = ref(false);
 const props = defineProps({
-   getFirstPageJournals: Function,
+   getFirstPageShortDescriptions: Function,
    setVisible: Function,
    visible: Boolean,
 });
-const createJournal = () => {
-   const {name_ru, name_uz} = journal.value;
-   if(name_uz && name_ru) {
+const createShortDescription = () => {
+   const { description_ru, description_uz } = shortDescription.value;
+   if(description_uz && description_ru) {
       loading.value = true;
+      const data = { description_ru, description_uz };
       axiosConfig
-         .post('journals/', { name_ru, name_uz })
+         .post('short-descriptions/', data)
          .then(response => {
             if(response?.status === 201) {
-               dispatchNotify('Журнал создан', '', 'success');
-               props.getFirstPageJournals();
+               dispatchNotify('Краткое описание создан', '', 'success');
+               props.getFirstPageShortDescriptions();
                props.setVisible(false);
             } else {
-               dispatchNotify('Журнал не создан', '', 'error');
+               dispatchNotify('Краткое описание не создан', '', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Журнал не создан', '', 'error');
+            dispatchNotify('Краткое описание не создан', '', 'error');
          })
          .finally(() => {
             loading.value = false;
          });
    } else {
-      dispatchNotify('Введите название журнал', '', 'error')
+      dispatchNotify('Введите название', '', 'error');
    }
 };
 </script>
 <template>
    <Dialog
-      @update:visible="() => {
-         journal = { name_uz: '', name_ru: '' };
-         setVisible(!visible);
-      }"
       :pt="dialogConfig"
       :visible="visible"
-      header="Создать журнал"
+      header="Создать краткое описание"
       modal
+      @update:visible="() => {
+         shortDescription = defaultShortDescription;
+         setVisible(!visible);
+      }"
       >
       <div class="flex flex-col pb-10 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название журнал (UZ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Описание (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            :modelValue="journal.name_uz"
+            :modelValue="shortDescription.description_uz"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название журнал"
+            placeholder="Введите описание"
             type="text"
             @update:modelValue="value => {
-               journal = { ...journal, name_uz: replaceSpecChars(value) };
+               shortDescription = { ...shortDescription, description_uz: replaceSpecCharsBracket(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название журнал (РУ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Описание (РУ) <span class="text-red-500 ml-1">*</span></p>
          <InputText
-            :modelValue="journal.name_ru"
+            :modelValue="shortDescription.description_ru"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название журнал"
+            placeholder="Введите описание"
             type="text"
             @update:modelValue="value => {
-               journal = { ...journal, name_ru: replaceSpecChars(value) };
+               shortDescription = { ...shortDescription, description_ru: replaceSpecCharsBracket(value) };
             }"
             />
       </div>
@@ -89,7 +91,7 @@ const createJournal = () => {
                   Отмена
                </Button>
                <Button
-                  @click="createJournal"
+                  @click="createShortDescription"
                   class="shadow-none p-button p-component font-semibold text-sm !rounded-full m-0 py-[9px] px-4"
                   rounded
                   type="button"

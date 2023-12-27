@@ -21,7 +21,6 @@ const props = defineProps({
    getFirstPageEmployees: Function,
    setEmployees: Function,
 });
-const deleteEmployee = ref({});
 const deleteLoading = ref(false);
 const deleteVisible = ref(false);
 const statusEditLoading = ref(false);
@@ -281,10 +280,7 @@ onMounted(() => {
          </svg>
       </Button>
       <Button
-         @click="() => {
-            deleteEmployee = data;
-            deleteVisible = true;
-         }"
+         @click="() => { deleteVisible = true }"
          class="shadow-none py-[7px] px-2 text-xs bg-greyscale-50 rounded-[8px]"
          icon
          severity="danger"

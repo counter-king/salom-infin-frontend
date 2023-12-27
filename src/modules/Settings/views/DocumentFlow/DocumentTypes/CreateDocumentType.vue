@@ -37,7 +37,7 @@ const createDocumentType = () => {
             loading.value = false;
          });
    } else {
-      dispatchNotify('Введите название тип документа', '', 'error')
+      dispatchNotify('Введите название', '', 'error')
    }
 };
 </script>
@@ -53,23 +53,23 @@ const createDocumentType = () => {
       modal
       >
       <div class="flex flex-col pb-10 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название тип документа (UZ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
             @update:modelValue="value => {
                documentType = { ...documentType, name_uz: replaceSpecChars(value) };
             }"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название тип документа"
+            placeholder="Введите название"
             type="text"
             :modelValue="documentType.name_uz"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название тип документа (РУ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
             @update:modelValue="value => {
                documentType = { ...documentType, name_ru: replaceSpecChars(value) };
             }"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название тип документа"
+            placeholder="Введите название"
             type="text"
             :modelValue="documentType.name_ru"
             />

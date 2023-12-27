@@ -21,7 +21,6 @@ const props = defineProps({
 });
 const conditionLoading = ref(false);
 const conditions = ref([]);
-const deleteDepartment = ref({});
 const deleteLoading = ref(false);
 const deleteVisible = ref(false);
 const editDepartment = ref({});
@@ -60,7 +59,7 @@ const departmentEdit = () => {
             editLoading.value = false;
          });
    } else {
-      dispatchNotify('Введите название департамент', '', 'error')
+      dispatchNotify('Введите название', '', 'error')
    }
 };
 const departmentDelete = () => {
@@ -174,10 +173,7 @@ onMounted(() => {
          </svg>
       </Button>
       <Button
-         @click="() => {
-            deleteDepartment = data;
-            deleteVisible = true;
-         }"
+         @click="() => { deleteVisible = true }"
          class="shadow-none py-[7px] px-2 text-xs bg-greyscale-50 rounded-[8px]"
          icon
          severity="danger"
@@ -201,21 +197,21 @@ onMounted(() => {
       modal
       v-model:visible="editVisible">
       <div class="flex flex-col pb-10 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название департамент (UZ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editDepartment.name_uz"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название департамент"
+            placeholder="Введите название"
             type="text"
             @update:modelValue="value => {
                editDepartment = { ...editDepartment, name_uz: replaceSpecCharsBracket(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название департамент (РУ) <span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ) <span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editDepartment.name_ru"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название департамент"
+            placeholder="Введите название"
             type="text"
             @update:modelValue="value => {
                editDepartment = { ...editDepartment, name_ru: replaceSpecCharsBracket(value) };

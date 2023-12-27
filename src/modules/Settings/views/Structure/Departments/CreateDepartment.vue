@@ -8,7 +8,8 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { replaceSpecCharsBracket } from '@/utils/string';
 import { ref } from 'vue';
-const department = ref({ name_uz: '', name_ru: '' });
+const defaultDepartment = { name_uz: '', name_ru: '' };
+const department = ref(defaultDepartment);
 const loading = ref(false);
 const props = defineProps({
    getFirstPageDepartments: Function,
@@ -37,15 +38,15 @@ const createDepartment = () => {
             loading.value = false;
          });
    } else {
-      dispatchNotify('Введите название департамент', '', 'error')
+      dispatchNotify('Введите название', '', 'error')
    }
 };
 </script>
 <template>
    <Dialog
       @update:visible="() => {
+         department = defaultDepartment;
          setVisible(!visible);
-         department = { name_uz: '', name_ru: '' };
       }"
       :pt="dialogConfig"
       :visible="visible"
@@ -53,21 +54,21 @@ const createDepartment = () => {
       modal
       >
       <div class="flex flex-col pb-10 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название департамент (UZ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="department.name_uz"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название департамент"
+            placeholder="Введите название"
             type="text"
             @update:modelValue="value => {
                department = { ...department, name_uz: replaceSpecCharsBracket(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название департамент (РУ) <span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ) <span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="department.name_ru"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название департамент"
+            placeholder="Введите название"
             type="text"
             @update:modelValue="value => {
                department = { ...department, name_ru: replaceSpecCharsBracket(value) };

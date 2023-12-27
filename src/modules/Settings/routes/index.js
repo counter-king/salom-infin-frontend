@@ -27,10 +27,10 @@ const Settings = [
             component: () => import("../views/DocumentFlow/DocumentTypes/index.vue"),
           },
           {
-            path: "magazine",
-            name: "MagazineIndex",
+            path: "magazines",
+            name: "MagazinesIndex",
             meta: { isAuthRequired: true },
-            component: () => import("../views/DocumentFlow/Magazine/index.vue"),
+            component: () => import("../views/DocumentFlow/Magazines/index.vue"),
           },
         ]
       },
@@ -144,10 +144,10 @@ const Settings = [
       },
       // ShortDescription
       {
-        path: "short-description",
-        name: "ShortDescriptionIndex",
+        path: "short-descriptions",
+        name: "ShortDescriptionsIndex",
         meta: { isAuthRequired: true },
-        component: () => import("../views/ShortDescription/index.vue"),
+        component: () => import("../views/ShortDescriptions/index.vue"),
       },
       // Profile
       {

@@ -82,7 +82,7 @@ const menus = ref([
           {
             title: "Журнал",
             icon: "NotebookIcon",
-            link: "MagazineIndex",
+            link: "MagazinesIndex",
             children: []
           }
         ]

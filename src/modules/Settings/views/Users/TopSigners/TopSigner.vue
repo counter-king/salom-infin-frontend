@@ -16,7 +16,6 @@ const docTypeLoading = ref(false);
 const docTypes = ref([]);
 const currentUserCompany = authStore.currentUser.company;
 const deleteLoading = ref(false);
-const deleteTopSigner = ref({});
 const deleteVisible = ref(false);
 const editLoading = ref(false);
 const editTopSigner = ref({});
@@ -163,10 +162,7 @@ const topSignerDelete = () => {
          </svg>
       </Button>
       <Button
-         @click="() => {
-            deleteTopSigner = data;
-            deleteVisible = true;
-         }"
+         @click="() => { deleteVisible = true }"
          class="shadow-none py-[7px] px-2 text-xs bg-greyscale-50 rounded-[8px]"
          icon
          severity="danger"

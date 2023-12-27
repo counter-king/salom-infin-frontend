@@ -17,7 +17,6 @@ const assistantLoading = ref(false);
 const assistants = ref([]);
 const currentUserCompany = authStore.currentUser.company;
 const deleteLoading = ref(false);
-const deleteUser = ref({});
 const deleteVisible = ref(false);
 const editLoading = ref(false);
 const editUser = ref({});
@@ -230,10 +229,7 @@ onMounted(() => {
          </svg>
       </Button>
       <Button
-         @click="() => {
-            deleteUser = data;
-            deleteVisible = true;
-         }"
+         @click="() => { deleteVisible = true }"
          class="shadow-none py-[7px] px-2 text-xs bg-greyscale-50 rounded-[8px]"
          icon
          severity="danger"

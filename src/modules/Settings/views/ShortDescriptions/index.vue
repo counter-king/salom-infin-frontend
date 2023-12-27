@@ -1,13 +1,12 @@
 <script setup>
 import Button from 'primevue/button';
-import CreateDepartment from './CreateDepartment.vue';
+import CreateShortDescription from './CreateShortDescription.vue';
 import DataTable from 'primevue/datatable';
-import Department from './Department.vue';
 import Dropdown from 'primevue/dropdown';
 import InputText from 'primevue/inputtext';
 import Paginator from 'primevue/paginator';
+import ShortDescription from './ShortDescription.vue';
 import Skeleton from 'primevue/skeleton';
-import TheNavigation from '@/components/TheNavigation.vue';
 import axiosConfig from "@/services/axios.config";
 import { ref, watch, onMounted } from 'vue';
 import { tableConfig, columnConfig, dropdownConfig, paginationConfig, dropdownOptions } from './config';
@@ -15,97 +14,64 @@ import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
 const defaultFilter = { page: 1, page_size: 10, search: '' };
 const count = ref(1);
-const departments = ref([]);
 const filter = ref(defaultFilter);
 const headers = ref([]);
 const loading = ref(false);
-const navs = ref([]);
+const shortDescriptions = ref([]);
 const visible = ref(false);
-const getDepartments = (newFilter = {}) => {
+const getShortDescriptions = (newFilter = {}) => {
   loading.value = true;
   filter.value = newFilter;
   const { page, page_size, search } = newFilter;
   const params = `?page=${page}${page_size ? '&page_size=' + page_size : ''}${search ? '&search=' + search : ''}`;
   axiosConfig
-    .get(`departments/top-level-departments/${params}`)
+    .get(`short-descriptions/${params}`)
     .then(response => {
       const results = response?.data?.results;
       const newCount = response?.data?.count;
-      const newDepartments = (Array.isArray(results) ? results: []).map(user => ({...user, position: user?.position?.name}));
-      departments.value = newDepartments;
+      const newShortDescriptions = (Array.isArray(results) ? results: []).map(user => ({...user, position: user?.position?.name}));
+      shortDescriptions.value = newShortDescriptions;
       count.value = newCount;
     })
     .catch(() => {
-      departments.value = [];
+      shortDescriptions.value = [];
     })
     .finally(() => {
       loading.value = false;
     });
 };
-const searchDepartments = search => {
+const searchShortDescriptions = search => {
   const newFilter = { ...filter.value, page: 1, search };
-  getDepartments(newFilter);
+  getShortDescriptions(newFilter);
 };
 const onChangePage = ({ page }) => {
   const newFilter = { ...filter.value, page: page + 1 };
-  getDepartments(newFilter);
+  getShortDescriptions(newFilter);
 };
 const onChangePageSize = ({ value }) => {
   const newFilter = { ...filter.value, page: 1, page_size: value };
-  getDepartments(newFilter);
+  getShortDescriptions(newFilter);
 };
-const getFirstPageDepartments = () => {
-  getDepartments(defaultFilter);
+const getFirstPageShortDescriptions = () => {
+  getShortDescriptions(defaultFilter);
 };
-const setDepartments = newDepartments => {
-  departments.value = newDepartments;
+const setShortDescriptions = newShortDescriptions => {
+  shortDescriptions.value = newShortDescriptions;
 }
 const setVisible = newVisible => {
   visible.value = newVisible;
 };
 const changeLanguage = () => {
-  navs.value = [
-    {
-      title: "Департаменты",
-      icon: "BuildingsIcon",
-      link: "DepartmentsIndex",
-    },
-    {
-      title: "Филиалы",
-      icon: "BuildingsIcon",
-      link: "BranchesIndex",
-    },
-    {
-      title: "Должность",
-      icon: "UserSpeakIcon",
-      link: "PositionsIndex",
-    }
-  ];
   headers.value = [
     {
-      columnKey: 'name_uz',
-      field: 'name_uz',
-      header: 'Название (UZ)',
+      columnKey: 'description_uz',
+      field: 'description_uz',
+      header: 'Описание (UZ)',
     },
     {
-      columnKey: 'name_ru',
-      field: 'name_ru',
-      header: 'Название (РУ)',
-    },
-    {
-      columnKey: 'sub_department_count',
-      field: 'sub_department_count',
-      header: 'Субдепартамент',
-    },
-    {
-      columnKey: 'employee_count',
-      field: 'employee_count',
-      header: 'Сотрудники',
-    },
-    {
-      columnKey: 'condition',
-      field: 'condition',
-      header: 'Статус',
+      columnKey: 'description_ru',
+      field: 'description_ru',
+      header: 'Описание (РУ)',
     },
     {
       columnKey: 'action',
@@ -119,20 +85,19 @@ watch(locale, () => {
 });
 onMounted(() => {
   changeLanguage();
-  getFirstPageDepartments();
+  getFirstPageShortDescriptions();
 });
 </script>
 <template>
-  <the-navigation :navs="navs"/>
   <div class="flex mb-5 justify-between items-center">
-    <h1 class="text-2xl font-bold text-primary-900">Департаменты</h1>
+    <h1 class="text-2xl font-bold text-primary-900">Краткое описание</h1>
     <div class="flex items-center gap-2">
       <span class="p-input-icon-left">
         <i class="pi pi-search pl-1" />
         <InputText
           :modelValue="filter.search"
           :pt="{ root: { class: ['w-full rounded-3xl bg-white border-greyscale-50 font-xs focus:border-primary-500'] } }"
-          @update:modelValue="searchDepartments"
+          @update:modelValue="searchShortDescriptions"
           placeholder="Поиск"
           size="small"
           type="text"
@@ -149,11 +114,11 @@ onMounted(() => {
       </Button>
     </div>
   </div>
-  <div class="departments-table">
+  <div class="short-descriptions-table">
     <DataTable
       :loading="loading"
       :pt="tableConfig"
-      :value="departments"
+      :value="shortDescriptions"
       @page="onChangePage"
       row-hover
       scrollable
@@ -167,12 +132,12 @@ onMounted(() => {
         v-for="(item, index) in headers"
       >
         <template #body="{ field, data }">
-          <Department
+          <ShortDescription
             :data="data"
-            :departments="departments"
+            :shortDescriptions="shortDescriptions"
             :field="field"
-            :getFirstPageDepartments="getFirstPageDepartments"
-            :setDepartments="setDepartments"
+            :getFirstPageShortDescriptions="getFirstPageShortDescriptions"
+            :setShortDescriptions="setShortDescriptions"
             />
         </template>
       </Column>
@@ -213,17 +178,17 @@ onMounted(() => {
       </Paginator>
     </div>
   </div>
-  <CreateDepartment
-    :getFirstPageDepartments="getFirstPageDepartments"
+  <CreateShortDescription
+    :getFirstPageShortDescriptions="getFirstPageShortDescriptions"
     :setVisible="setVisible"
     :visible="visible"
     />
 </template>
 <style>
-.departments-table th:first-child, td:first-child {
+.short-descriptions-table th:first-child, td:first-child {
   border-radius: 12px 0 0 12px;
 }
-.departments-table th:last-child, td:last-child {
+.short-descriptions-table th:last-child, td:last-child {
   border-radius: 0 12px 12px 0;
 }
 </style>

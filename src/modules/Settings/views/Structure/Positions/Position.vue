@@ -22,7 +22,6 @@ const props = defineProps({
 const conditionLoading = ref(false);
 const conditions = ref([]);
 const deleteLoading = ref(false);
-const deletePosition = ref({});
 const deleteVisible = ref(false);
 const editLoading = ref(false);
 const editPosition = ref({});
@@ -61,7 +60,7 @@ const positionEdit = () => {
             editLoading.value = false;
          });
    } else {
-      dispatchNotify('Введите название должность', '', 'error')
+      dispatchNotify('Введите название', '', 'error')
    }
 };
 const positionDelete = () => {
@@ -176,10 +175,7 @@ onMounted(() => {
          </svg>
       </Button>
       <Button
-         @click="() => {
-            deletePosition = data;
-            deleteVisible = true;
-         }"
+         @click="() => { deleteVisible = true }"
          class="shadow-none py-[7px] px-2 text-xs bg-greyscale-50 rounded-[8px]"
          icon
          severity="danger"
@@ -203,21 +199,21 @@ onMounted(() => {
       modal
       v-model:visible="editVisible">
       <div class="flex flex-col pb-10 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название должность (UZ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editPosition.name_uz"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название должность"
+            placeholder="Введите название"
             type="text"
             @update:modelValue="value => {
                editPosition = { ...editPosition, name_uz: replaceSpecChars(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название должность (РУ) <span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ) <span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editPosition.name_ru"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название должность"
+            placeholder="Введите название"
             type="text"
             @update:modelValue="value => {
                editPosition = { ...editPosition, name_ru: replaceSpecChars(value) };

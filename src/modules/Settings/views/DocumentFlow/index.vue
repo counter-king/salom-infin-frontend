@@ -14,7 +14,7 @@ const changeLanguage = () => {
     {
       title: "Журнал",
       icon: "NotebookIcon",
-      link: "MagazineIndex",
+      link: "MagazinesIndex",
     }
   ];
 };

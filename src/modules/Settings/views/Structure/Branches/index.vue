@@ -85,12 +85,12 @@ const changeLanguage = () => {
     {
       columnKey: 'name_uz',
       field: 'name_uz',
-      header: 'Название департамент (UZ)',
+      header: 'Название (UZ)',
     },
     {
       columnKey: 'name_ru',
       field: 'name_ru',
-      header: 'Название департамент (РУ)',
+      header: 'Название (РУ)',
     },
     {
       columnKey: 'phone',

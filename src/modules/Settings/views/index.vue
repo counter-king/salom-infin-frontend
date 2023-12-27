@@ -32,7 +32,7 @@ const changeLanguage = () => {
     },
     {
       icon: 'DocumentTextIcon',
-      link: 'ShortDescriptionIndex',
+      link: 'ShortDescriptionsIndex',
       title: 'Краткое описание',
     },
     {

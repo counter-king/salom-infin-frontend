@@ -22,7 +22,7 @@ export const useSettingsDocFlow = defineStore("settingsDocFlow", {
         {
           title: "Журнал",
           icon: "NotebookIcon",
-          link: "MagazineIndex",
+          link: "MagazinesIndex",
           children: []
         }
       ]

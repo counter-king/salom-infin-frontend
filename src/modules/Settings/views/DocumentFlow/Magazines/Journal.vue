@@ -21,7 +21,6 @@ const props = defineProps({
 });
 const conditionLoading = ref(false);
 const conditions = ref([]);
-const deleteJournal = ref({});
 const deleteLoading = ref(false);
 const deleteVisible = ref(false);
 const editJournal = ref({});
@@ -60,7 +59,7 @@ const journalEdit = () => {
             editLoading.value = false;
          });
    } else {
-      dispatchNotify('Введите название журнал', '', 'error')
+      dispatchNotify('Введите название', '', 'error')
    }
 };
 const journalDelete = () => {
@@ -185,10 +184,7 @@ onMounted(() => {
          </svg>
       </Button>
       <Button
-         @click="() => {
-            deleteJournal = data;
-            deleteVisible = true;
-         }"
+         @click="() => { deleteVisible = true }"
          class="shadow-none py-[7px] px-2 text-xs bg-greyscale-50 rounded-[8px]"
          icon
          severity="danger"
@@ -216,21 +212,21 @@ onMounted(() => {
       v-model:visible="editVisible"
       >
       <div class="flex flex-col pb-10 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название журнал (UZ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editJournal.name_uz"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название журнал"
+            placeholder="Введите название"
             type="text"
             @update:modelValue="value => {
                editJournal = { ...editJournal, name_uz: replaceSpecChars(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название журнал (РУ) <span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ) <span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editJournal.name_ru"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название журнал"
+            placeholder="Введите название"
             type="text"
             @update:modelValue="e => {
                editJournal = { ...editJournal, name_ru: replaceSpecChars(value) };

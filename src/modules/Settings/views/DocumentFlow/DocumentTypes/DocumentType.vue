@@ -60,7 +60,7 @@ const documentTypeEdit = () => {
             editLoading.value = false;
          });
    } else {
-      dispatchNotify('Введите название тип документа', '', 'error')
+      dispatchNotify('Введите название', '', 'error')
    }
 };
 const documentTypeDelete = () => {
@@ -185,10 +185,7 @@ onMounted(() => {
          </svg>
       </Button>
       <Button
-         @click="() => {
-            deleteDocumentType = data;
-            deleteVisible = true;
-         }"
+         @click="() => { deleteVisible = true }"
          class="shadow-none py-[7px] px-2 text-xs bg-greyscale-50 rounded-[8px]"
          icon
          severity="danger"
@@ -216,21 +213,21 @@ onMounted(() => {
       v-model:visible="editVisible"
       >
       <div class="flex flex-col pb-10 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название тип документа (UZ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editDocumentType.name_uz"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название тип документа"
+            placeholder="Введите название"
             type="text"
             @update:modelValue="value => {
                editDocumentType = { ...editDocumentType, name_uz: replaceSpecChars(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название тип документа (РУ) <span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ) <span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editDocumentType.name_ru"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название тип документа"
+            placeholder="Введите название"
             type="text"
             @update:modelValue="value => {
                editDocumentType = { ...editDocumentType, name_ru: replaceSpecChars(value) };
