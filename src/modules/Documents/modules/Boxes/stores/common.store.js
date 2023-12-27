@@ -87,7 +87,8 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
       receipt_date: null,
       deadline: null,
       content: null,
-      assignees: []
+      assignees: [],
+      reviewer: null
     },
     componentKey: 0
   }),
@@ -272,8 +273,8 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
     /*
     *
     * */
-    async actionSetActiveResolution({ signed, receipt_date, deadline, content, assignees }) {
-      Object.assign(this.resolution, { signed, receipt_date, deadline, content, assignees })
+    async actionSetActiveResolution({ signed, receipt_date, deadline, content, assignees, reviewer }) {
+      Object.assign(this.resolution, { signed, receipt_date, deadline, content, assignees, reviewer })
     },
     /*
     *

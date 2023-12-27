@@ -241,6 +241,7 @@ export const useReviewStore = defineStore("review", {
           deadline: resolution.deadline,
           content: resolution.content,
           assignees: resolution.assignees,
+          reviewer: data.user
         })
       }
     },

@@ -60,6 +60,31 @@ export const isObject = (key) => Object.prototype.toString.call(key) === '[objec
 * @return string
 * */
 export const normalizeText = (value) => value.split('\n').join('<br>').replace(/\s+/g, ' ').trim()
+/**
+* Форматирует и сокращает имя
+ * @param { string } value
+ * @param { string } separate
+ * @return { string } Odinayev M.K.
+* */
+export const formatNameToShort = (value, separate = '.') => {
+  if(!value) return 'Текст не найден'
+
+  const [name, firstName, fatherName] = value.split(' ')
+  const nameChar = name.slice(0, 2).toLowerCase()
+  const fatherNameChar = fatherName?.slice(0, 2).toLowerCase()
+
+  if (
+    nameChar === `sh` || fatherNameChar === `sh` ||
+    nameChar === `ch` || fatherNameChar === `ch` ||
+    nameChar === `o'` || fatherNameChar === `o'` ||
+    nameChar === `g'` || fatherNameChar === `g'`
+  ) {
+    return `${ firstName } ${ name.slice(0, 2) + separate } ${ fatherName ? fatherName.slice(0, 2) + separate : '' }`
+  }
+  else {
+    return `${ firstName } ${ name.slice(0, 1) + separate } ${ fatherName ? fatherName.slice(0, 1) + separate : '' }`
+  }
+}
 /*
 *
 * */
