@@ -27,15 +27,6 @@ const Settings = [
             component: () => import("../views/DocumentFlow/DocumentTypes/index.vue"),
           },
           {
-            path: "document-view",
-            name: "DocumentViewIndex",
-            meta: {
-              isAuthRequired: true,
-              navigation: true,
-            },
-            component: () => import("../views/DocumentFlow/DocumentView/index.vue"),
-          },
-          {
             path: "magazine",
             name: "MagazineIndex",
             meta: { isAuthRequired: true },

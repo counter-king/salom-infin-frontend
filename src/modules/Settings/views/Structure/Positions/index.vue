@@ -71,7 +71,7 @@ const changeLanguage = () => {
          link: "DepartmentsIndex",
       },
       {
-         title: "Региональные филиалы",
+         title: "Филиалы",
          icon: "BuildingsIcon",
          link: "BranchesIndex",
       },

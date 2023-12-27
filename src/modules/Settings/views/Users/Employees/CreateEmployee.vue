@@ -11,7 +11,7 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { replaceSpecChars } from '@/utils/string';
-const defaultEmployee = { first_name: '', last_name: '', father_name: '', phone: '', pinfl: '', top_level_department: '' };
+const defaultEmployee = { first_name: '', last_name: '', father_name: '', phone: 8, pinfl: 0, top_level_department: '' };
 const companies = ref([]);
 const company = ref('');
 const companyLoading = ref(false);
@@ -199,9 +199,30 @@ const updateVisible = () => {
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">ПИНФЛ<span class="text-red-500 ml-1">*</span></p>
-         <InputMask :modelValue="employee.pinfl" slotChar="" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" mask="99999999999999" placeholder="Введите ПИНФЛ" />
+         <InputNumber
+            :maxFractionDigits="0"
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :useGrouping="false"
+            placeholder="Введите ПИНФЛ"
+            v-model="employee.pinfl"
+            @input="({ value }) => {
+               const pinfl = +value.toString().slice(0, 14)
+               employee = { ...employee, pinfl }
+            }"
+            />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Номер телефона<span class="text-red-500 ml-1">*</span></p>
-         <InputMask :modelValue="employee.phone" slotChar="" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" mask="+999 99 999 99 99" placeholder="Введите номер телефона" />
+         <InputNumber
+            :maxFractionDigits="0"
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :useGrouping="false"
+            placeholder="Введите номер телефона"
+            prefix="+99"
+            v-model="employee.phone"
+            @input="({ value }) => {
+               const phone = value && value > 7 ? +value.toString().slice(0, 10) : 8;
+               employee = { ...employee, phone }
+            }"
+            />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Филиал<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
             :hasValue="company"

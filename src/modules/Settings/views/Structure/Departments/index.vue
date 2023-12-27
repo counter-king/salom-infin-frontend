@@ -71,7 +71,7 @@ const changeLanguage = () => {
       link: "DepartmentsIndex",
     },
     {
-      title: "Региональные филиалы",
+      title: "Филиалы",
       icon: "BuildingsIcon",
       link: "BranchesIndex",
     },
@@ -83,9 +83,14 @@ const changeLanguage = () => {
   ];
   headers.value = [
     {
-      columnKey: 'name',
-      field: 'name',
-      header: 'Название департамент',
+      columnKey: 'name_uz',
+      field: 'name_uz',
+      header: 'Название департамент (UZ)',
+    },
+    {
+      columnKey: 'name_ru',
+      field: 'name_ru',
+      header: 'Название департамент (РУ)',
     },
     {
       columnKey: 'sub_department_count',

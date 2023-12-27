@@ -8,36 +8,36 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { replaceSpecCharsBracket } from '@/utils/string';
 import { ref } from 'vue';
-const department = ref({ name_uz: '', name_ru: '' });
+const branch = ref({ name_uz: '', name_ru: '' });
 const loading = ref(false);
 const props = defineProps({
-   getFirstPageDepartments: Function,
+   getFirstPageBranches: Function,
    setVisible: Function,
    visible: Boolean,
 });
-const createDepartment = () => {
-   const {name_ru, name_uz} = department.value;
+const createBranch = () => {
+   const {name_ru, name_uz} = branch.value;
    if(name_uz && name_ru) {
       loading.value = true;
       axiosConfig
-         .post('/departments/', { name_ru, name_uz, condition: 'A' })
+         .post('/companies/', { name_ru, name_uz, condition: 'A' })
          .then(response => {
             if(response?.status === 201) {
-               dispatchNotify('Департамент создан', '', 'success');
-               props.getFirstPageDepartments();
+               dispatchNotify('Филиал создан', '', 'success');
+               props.getFirstPageBranches();
                props.setVisible(false);
             } else {
-               dispatchNotify('Департамент не создан', '', 'error');
+               dispatchNotify('Филиал не создан', '', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Департамент не создан', '', 'error');
+            dispatchNotify('Филиал не создан', '', 'error');
          })
          .finally(() => {
             loading.value = false;
          });
    } else {
-      dispatchNotify('Введите название департамент', '', 'error')
+      dispatchNotify('Введите название филиал', '', 'error')
    }
 };
 </script>
@@ -45,32 +45,32 @@ const createDepartment = () => {
    <Dialog
       @update:visible="() => {
          setVisible(!visible);
-         department = { name_uz: '', name_ru: '' };
+         branch = { name_uz: '', name_ru: '' };
       }"
       :pt="dialogConfig"
       :visible="visible"
-      header="Создать департамент"
+      header="Создать филиал"
       modal
       >
       <div class="flex flex-col pb-10 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название департамент (UZ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Название филиал (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            :modelValue="department.name_uz"
+            :modelValue="branch.name_uz"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название департамент"
+            placeholder="Введите название филиал"
             type="text"
             @update:modelValue="value => {
-               department = { ...department, name_uz: replaceSpecCharsBracket(value) };
+               branch = { ...branch, name_uz: replaceSpecCharsBracket(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название департамент (РУ) <span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Название филиал (РУ) <span class="text-red-500 ml-1">*</span></p>
          <InputText
-            :modelValue="department.name_ru"
+            :modelValue="branch.name_ru"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название департамент"
+            placeholder="Введите название филиал"
             type="text"
             @update:modelValue="value => {
-               department = { ...department, name_ru: replaceSpecCharsBracket(value) };
+               branch = { ...branch, name_ru: replaceSpecCharsBracket(value) };
             }"
             />
       </div>
@@ -89,7 +89,7 @@ const createDepartment = () => {
                   Отмена
                </Button>
                <Button
-                  @click="createDepartment"
+                  @click="createBranch"
                   class="shadow-none p-button p-component font-semibold text-sm !rounded-full m-0 py-[9px] px-4"
                   rounded
                   type="button"

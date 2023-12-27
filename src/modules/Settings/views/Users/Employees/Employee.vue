@@ -339,9 +339,30 @@ onMounted(() => {
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">ПИНФЛ<span class="text-red-500 ml-1">*</span></p>
-         <InputMask :modelValue="editEmployee.pinfl" slotChar="" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" mask="99999999999999" placeholder="Введите ПИНФЛ" />
+         <InputNumber
+            :maxFractionDigits="0"
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :useGrouping="false"
+            placeholder="Введите ПИНФЛ"
+            v-model="editEmployee.pinfl"
+            @input="({ value }) => {
+               const pinfl = +value.toString().slice(0, 14)
+               editEmployee = { ...editEmployee, pinfl }
+            }"
+            />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Номер телефона<span class="text-red-500 ml-1">*</span></p>
-         <InputMask :modelValue="editEmployee.phone" slotChar="" :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }" mask="+999 99 999 99 99" placeholder="Введите номер телефона" />
+         <InputNumber
+            :maxFractionDigits="0"
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :useGrouping="false"
+            placeholder="Введите номер телефона"
+            prefix="+99"
+            v-model="editEmployee.phone"
+            @input="({ value }) => {
+               const phone = value && value > 7 ? +value.toString().slice(0, 10) : 8;
+               editEmployee = { ...editEmployee, phone }
+            }"
+            />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Филиал<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
             :hasValue="company"
