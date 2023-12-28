@@ -1,188 +1,185 @@
 const Settings = [
   {
-    path: "settings",
-    name: "SettingsIndex",
-    meta: { isAuthRequired: true },
     component: () => import("../views/index.vue"),
+    meta: { isAuthRequired: true },
+    name: "SettingsIndex",
+    path: "settings",
     redirect: { name: "ProfileIndex" },
     children: [
       // DocumentFlow
       {
-        path: "document-flow",
-        name: "DocumentFlowIndex",
-        meta: {
-          isAuthRequired: true,
-          navigation: true
-        },
         component: () => import("../views/DocumentFlow/index.vue"),
+        meta: { isAuthRequired: true, navigation: true },
+        name: "DocumentFlowIndex",
+        path: "document-flow",
         redirect: { name: "DocumentTypesIndex" },
         children: [
           {
-            path: "document-types",
-            name: "DocumentTypesIndex",
-            meta: {
-              isAuthRequired: true,
-              navigation: true,
-            },
             component: () => import("../views/DocumentFlow/DocumentTypes/index.vue"),
+            meta: { isAuthRequired: true },
+            name: "DocumentTypesIndex",
+            path: "document-types",
           },
           {
-            path: "magazines",
-            name: "MagazinesIndex",
+            component: () => import("../views/DocumentFlow/DeliveryTypes/index.vue"),
             meta: { isAuthRequired: true },
+            name: "DeliveryTypesIndex",
+            path: "delivery-types",
+          },
+          {
             component: () => import("../views/DocumentFlow/Magazines/index.vue"),
+            meta: { isAuthRequired: true },
+            name: "MagazinesIndex",
+            path: "magazines",
           },
         ]
       },
       // Correspondents
       {
-        path: "correspondents",
-        name: "CorrespondentsIndex",
-        meta: { isAuthRequired: true },
         component: () => import("../views/Correspondents/index.vue"),
+        meta: { isAuthRequired: true, navigation: true },
+        name: "CorrespondentsIndex",
+        path: "correspondents",
         redirect: { name: "IndividualIndex" },
         children: [
           {
-            path: "individual",
-            name: "IndividualIndex",
-            meta: {
-              isAuthRequired: true,
-              navigation: true
-            },
             component: () => import("../views/Correspondents/Individual/index.vue"),
+            meta: { isAuthRequired: true },
+            name: "IndividualIndex",
+            path: "individual",
           },
           {
-            path: "organizations",
-            name: "OrganizationsIndex",
-            meta: {
-              isAuthRequired: true,
-              navigation: true
-            },
             component: () => import("../views/Correspondents/Organizations/index.vue"),
+            meta: { isAuthRequired: true },
+            name: "OrganizationsIndex",
+            path: "organizations",
+          },
+          {
+            component: () => import("../views/Correspondents/Regions/index.vue"),
+            meta: { isAuthRequired: true },
+            name: "RegionsIndex",
+            path: "regions",
+          },
+          {
+            component: () => import("../views/Correspondents/Districts/index.vue"),
+            meta: { isAuthRequired: true },
+            name: "DistrictsIndex",
+            path: "districts",
           },
         ]
       },
       // Structure
       {
-        path: 'structure',
-        name: 'StructureIndex',
-        redirect: { name: "DepartmentsIndex" },
-        meta: { isAuthRequired: true },
         component: () => import("../views/Structure/index.vue"),
+        meta: { isAuthRequired: true },
+        name: 'StructureIndex',
+        path: 'structure',
+        redirect: { name: "DepartmentsIndex" },
         children: [
           {
-            path: 'departments',
-            name: 'DepartmentsIndex',
-            meta: {
-              isAuthRequired: true,
-              navigation: true,
-            },
+            children: [],
             component: () => import("../views/Structure/Departments/index.vue"),
-            children: []
-          },
-          {
-            path: 'branches',
-            name: 'BranchesIndex',
+            name: 'DepartmentsIndex',
+            path: 'departments',
             meta: {
               isAuthRequired: true,
               navigation: true,
             },
+          },
+          {
+            children: [],
             component: () => import("../views/Structure/Branches/index.vue"),
-            children: []
-          },
-          {
-            path: 'positions',
-            name: 'PositionsIndex',
+            name: 'BranchesIndex',
+            path: 'branches',
             meta: {
               isAuthRequired: true,
               navigation: true,
             },
+          },
+          {
+            children: [],
             component: () => import("../views/Structure/Positions/index.vue"),
-            children: []
+            name: 'PositionsIndex',
+            path: 'positions',
+            meta: {
+              isAuthRequired: true,
+              navigation: true,
+            },
           }
         ]
       },
       // Users
       {
-        path: "users",
-        name: "UsersIndex",
-        meta: { isAuthRequired: true },
         component: () => import("../views/Users/index.vue"),
+        meta: { isAuthRequired: true, navigation: true },
+        name: "UsersIndex",
+        path: "users",
         redirect: { name: "EmployeesIndex" },
         children: [
           {
-            path: "employees",
+            component: () => import("../views/Users/Employees/index.vue"),
+            meta: { isAuthRequired: true },
             name: "EmployeesIndex",
             navigation: true,
-            meta: {
-              isAuthRequired: true,
-              navigation: true,
-            },
-            component: () => import("../views/Users/Employees/index.vue"),
+            path: "employees",
           },
           {
-            path: "assistants",
+            component: () => import("../views/Users/Assistants/index.vue"),
+            meta: { isAuthRequired: true },
             name: "AssistantsIndex",
             navigation: true,
-            meta: {
-              isAuthRequired: true,
-              navigation: true,
-            },
-            component: () => import("../views/Users/Assistants/index.vue"),
+            path: "assistants",
           },
           {
-            path: "top-signers",
+            component: () => import("../views/Users/TopSigners/index.vue"),
+            meta: { isAuthRequired: true },
             name: "TopSignersIndex",
             navigation: true,
-            meta: {
-              isAuthRequired: true,
-              navigation: true,
-            },
-            component: () => import("../views/Users/TopSigners/index.vue"),
+            path: "top-signers",
           },
         ]
       },
       // ShortDescription
       {
-        path: "short-descriptions",
-        name: "ShortDescriptionsIndex",
-        meta: { isAuthRequired: true },
         component: () => import("../views/ShortDescriptions/index.vue"),
+        meta: { isAuthRequired: true },
+        name: "ShortDescriptionsIndex",
+        path: "short-descriptions",
       },
       // Profile
       {
-        path: "profile",
-        name: "ProfileIndex",
-        meta: { isAuthRequired: true },
         component: () => import("../views/Profile/index.vue"),
+        meta: { isAuthRequired: true },
+        name: "ProfileIndex",
+        path: "profile",
       },
       // Devices
       {
-        path: "devices",
-        name: "DevicesIndex",
-        meta: { isAuthRequired: true },
         component: () => import("../views/Devices/index.vue"),
+        meta: { isAuthRequired: true },
+        name: "DevicesIndex",
+        path: "devices",
       },
       // Notifications
       {
-        path: "notifications",
-        name: "NotificationsIndex",
-        meta: { isAuthRequired: true },
         component: () => import("../views/Notifications/index.vue"),
+        meta: { isAuthRequired: true },
+        name: "NotificationsIndex",
+        path: "notifications",
       },
       // Equipments
       {
-        path: "equipments",
-        name: "EquipmentsIndex",
-        meta: { isAuthRequired: true },
         component: () => import("../views/Equipments/index.vue"),
+        meta: { isAuthRequired: true },
+        name: "EquipmentsIndex",
+        path: "equipments",
       },
       // General Settings
       {
-        path: "general-settings",
-        name: "GeneralSettingsIndex",
-        meta: { isAuthRequired: true },
         component: () => import("../views/GeneralSettings/index.vue"),
+        meta: { isAuthRequired: true },
+        name: "GeneralSettingsIndex",
+        path: "general-settings",
       }
     ]
   }

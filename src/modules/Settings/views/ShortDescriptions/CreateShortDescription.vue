@@ -8,14 +8,10 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { replaceSpecCharsBracket } from '@/utils/string';
+const props = defineProps({ getFirstPageShortDescriptions: Function, setVisible: Function, visible: Boolean });
 const defaultShortDescription = { description_uz: '', description_ru: '' };
 const shortDescription = ref(defaultShortDescription);
 const loading = ref(false);
-const props = defineProps({
-   getFirstPageShortDescriptions: Function,
-   setVisible: Function,
-   visible: Boolean,
-});
 const createShortDescription = () => {
    const { description_ru, description_uz } = shortDescription.value;
    if(description_uz && description_ru) {
@@ -28,6 +24,7 @@ const createShortDescription = () => {
                dispatchNotify('Краткое описание создан', '', 'success');
                props.getFirstPageShortDescriptions();
                props.setVisible(false);
+               shortDescription.value = defaultShortDescription;
             } else {
                dispatchNotify('Краткое описание не создан', '', 'error');
             }
@@ -45,6 +42,7 @@ const createShortDescription = () => {
 </script>
 <template>
    <Dialog
+      :closable="!loading"
       :pt="dialogConfig"
       :visible="visible"
       header="Создать краткое описание"
@@ -83,7 +81,10 @@ const createShortDescription = () => {
             </template>
             <template v-else>
                <Button
-                  @click="() => { setVisible(!visible) }"
+                  @click="() => {
+                     shortDescription = defaultShortDescription;
+                     setVisible(!visible);
+                  }"
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"

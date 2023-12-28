@@ -8,13 +8,7 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { replaceSpecCharsBracket } from '@/utils/string';
-const props = defineProps({
-   data: Object,
-   field: String,
-   getFirstPageShortDescriptions: Function,
-   setShortDescriptions: Function,
-   shortDescriptions: Array,
-});
+const props = defineProps({ data: Object, field: String, getFirstPageShortDescriptions: Function, setShortDescriptions: Function, shortDescriptions: Array });
 const deleteLoading = ref(false);
 const deleteVisible = ref(false);
 const editShortDescription = ref({});
@@ -125,6 +119,7 @@ const shortDescriptionDelete = () => {
       <span class="text-sm font-medium">{{ data[field] }}</span>
    </template>
    <Dialog
+      :closable="!editLoading"
       :pt="dialogConfig"
       header="Изменить краткое описание"
       modal
@@ -176,6 +171,7 @@ const shortDescriptionDelete = () => {
       </template>
    </Dialog>
    <Dialog
+      :closable="!deleteLoading"
       :pt="dialogConfig"
       dismissableMask
       header="Удалить краткое описание"

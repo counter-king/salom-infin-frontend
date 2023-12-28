@@ -9,14 +9,10 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { replaceSpecCharsBracket } from '@/utils/string';
+const props = defineProps({ getFirstPageBranches: Function, setVisible: Function, visible: Boolean });
 const defaultBranch = { name_uz: '', name_ru: '', address_ru: '', address_uz: '', phone: 8 };
 const branch = ref(defaultBranch);
 const loading = ref(false);
-const props = defineProps({
-   getFirstPageBranches: Function,
-   setVisible: Function,
-   visible: Boolean,
-});
 const createBranch = () => {
    const { name_ru, name_uz, address_ru, address_uz, phone } = branch.value;
    const newPhone = '+99' + phone.toString();
@@ -27,6 +23,7 @@ const createBranch = () => {
          .post('/companies/', data)
          .then(response => {
             if(response?.status === 201) {
+               branch.value = defaultBranch;
                dispatchNotify('Филиал создан', '', 'success');
                props.getFirstPageBranches();
                props.setVisible(false);
@@ -51,6 +48,7 @@ const createBranch = () => {
 </script>
 <template>
    <Dialog
+      :closable="!loading"
       :pt="dialogConfig"
       :visible="visible"
       header="Создать филиал"
@@ -122,7 +120,10 @@ const createBranch = () => {
             </template>
             <template v-else>
                <Button
-                  @click="() => { setVisible(!visible) }"
+                  @click="() => {
+                     branch = defaultBranch;
+                     setVisible(!visible);
+                  }"
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"

@@ -8,28 +8,28 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { replaceSpecChars } from '@/utils/string';
-const props = defineProps({ getFirstPageJournals: Function, setVisible: Function, visible: Boolean });
-const defaultJournal = { name_uz: '', name_ru: '' };
-const journal = ref(defaultJournal);
+const props = defineProps({ getFirstPageDeliveryTypes: Function, setVisible: Function, visible: Boolean });
+const defaultDeliveryType = { name_uz: '', name_ru: '' };
+const deliveryType = ref(defaultDeliveryType);
 const loading = ref(false);
-const createJournal = () => {
-   const {name_ru, name_uz} = journal.value;
+const createDeliveryType = () => {
+   const {name_ru, name_uz} = deliveryType.value;
    if(name_uz && name_ru) {
       loading.value = true;
       axiosConfig
-         .post('journals/', { name_ru, name_uz })
+         .post('delivery-types/', { name_ru, name_uz })
          .then(response => {
             if(response?.status === 201) {
-               dispatchNotify('Журнал создан', '', 'success');
-               journal.value = defaultJournal
-               props.getFirstPageJournals();
+               deliveryType.value = defaultDeliveryType
+               dispatchNotify('Вид подачи создан', '', 'success');
+               props.getFirstPageDeliveryTypes();
                props.setVisible(false);
             } else {
-               dispatchNotify('Журнал не создан', '', 'error');
+               dispatchNotify('Вид подачи не создан', '', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Журнал не создан', '', 'error');
+            dispatchNotify('Вид подачи не создан', '', 'error');
          })
          .finally(() => {
             loading.value = false;
@@ -44,33 +44,33 @@ const createJournal = () => {
       :closable="!loading"
       :pt="dialogConfig"
       :visible="visible"
-      header="Создать журнал"
+      header="Создать вид подачи"
       modal
       @update:visible="() => {
-         journal = defaultJournal;
+         deliveryType = defaultDeliveryType;
          setVisible(!visible);
       }"
       >
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            :modelValue="journal.name_uz"
+            @update:modelValue="value => {
+               deliveryType = { ...deliveryType, name_uz: replaceSpecChars(value) };
+            }"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
-            @update:modelValue="value => {
-               journal = { ...journal, name_uz: replaceSpecChars(value) };
-            }"
+            :modelValue="deliveryType.name_uz"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            :modelValue="journal.name_ru"
+            @update:modelValue="value => {
+               deliveryType = { ...deliveryType, name_ru: replaceSpecChars(value) };
+            }"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
-            @update:modelValue="value => {
-               journal = { ...journal, name_ru: replaceSpecChars(value) };
-            }"
+            :modelValue="deliveryType.name_ru"
             />
       </div>
       <template #footer>
@@ -81,7 +81,7 @@ const createJournal = () => {
             <template v-else>
                <Button
                   @click="() => {
-                     journal = defaultJournal;
+                     deliveryType = defaultDeliveryType;
                      setVisible(!visible);
                   }"
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
@@ -91,7 +91,7 @@ const createJournal = () => {
                   Отмена
                </Button>
                <Button
-                  @click="createJournal"
+                  @click="createDeliveryType"
                   class="shadow-none p-button p-component font-semibold text-sm !rounded-full m-0 py-[9px] px-4"
                   rounded
                   type="button"

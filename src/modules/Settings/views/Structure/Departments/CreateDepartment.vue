@@ -8,14 +8,10 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { replaceSpecCharsBracket } from '@/utils/string';
 import { ref } from 'vue';
+const props = defineProps({ getFirstPageDepartments: Function, setVisible: Function, visible: Boolean });
 const defaultDepartment = { name_uz: '', name_ru: '' };
 const department = ref(defaultDepartment);
 const loading = ref(false);
-const props = defineProps({
-   getFirstPageDepartments: Function,
-   setVisible: Function,
-   visible: Boolean,
-});
 const createDepartment = () => {
    const {name_ru, name_uz} = department.value;
    if(name_uz && name_ru) {
@@ -24,6 +20,7 @@ const createDepartment = () => {
          .post('/departments/', { name_ru, name_uz, condition: 'A' })
          .then(response => {
             if(response?.status === 201) {
+               department.value = defaultDepartment;
                dispatchNotify('Департамент создан', '', 'success');
                props.getFirstPageDepartments();
                props.setVisible(false);
@@ -44,14 +41,15 @@ const createDepartment = () => {
 </script>
 <template>
    <Dialog
-      @update:visible="() => {
-         department = defaultDepartment;
-         setVisible(!visible);
-      }"
+      :closable="!loading"
       :pt="dialogConfig"
       :visible="visible"
       header="Создать департамент"
       modal
+      @update:visible="() => {
+         department = defaultDepartment;
+         setVisible(!visible);
+      }"
       >
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
@@ -82,7 +80,10 @@ const createDepartment = () => {
             </template>
             <template v-else>
                <Button
-                  @click="() => { setVisible(!visible) }"
+                  @click="() => {
+                     department = defaultDepartment;
+                     setVisible(!visible);
+                  }"
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"

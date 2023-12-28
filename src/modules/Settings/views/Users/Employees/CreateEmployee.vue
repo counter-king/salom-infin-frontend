@@ -1,7 +1,6 @@
 <script setup>
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
-import InputMask from 'primevue/inputmask';
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import ProgressSpinner from 'primevue/progressspinner';
@@ -11,6 +10,7 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { replaceSpecChars } from '@/utils/string';
+const props = defineProps({ getFirstPageEmployees: Function, setVisible: Function, visible: Boolean });
 const defaultEmployee = { first_name: '', last_name: '', father_name: '', phone: 8, pinfl: 0, top_level_department: '' };
 const companies = ref([]);
 const company = ref('');
@@ -26,7 +26,6 @@ const positions = ref([]);
 const status = ref('');
 const statusLoading = ref(false);
 const statuses = ref([]);
-const props = defineProps({ getFirstPageEmployees: Function, setVisible: Function, visible: Boolean });
 const createUser = () => {
    const companyId = company.value?.id;
    const departmentId = topLevelDepartment.value?.id;
@@ -161,6 +160,7 @@ const updateVisible = () => {
 </script>
 <template>
    <Dialog
+      :closable="!loading"
       :pt="dialogConfig"
       :visible="visible"
       @update:visible="updateVisible"

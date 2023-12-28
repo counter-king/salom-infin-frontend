@@ -7,6 +7,7 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { useAuthStore } from '../../../../Auth/stores';
+const props = defineProps({ topSigners: Array, data: Object, field: String, getFirstPageTopSigners: Function, setTopSigners: Function });
 const authStore = useAuthStore();
 const topSigner = ref('');
 const topSignerLoading = ref(false);
@@ -20,13 +21,6 @@ const deleteVisible = ref(false);
 const editLoading = ref(false);
 const editTopSigner = ref({});
 const editVisible = ref(false);
-const props = defineProps({
-   topSigners: Array,
-   data: Object,
-   field: String,
-   getFirstPageTopSigners: Function,
-   setTopSigners: Function,
-});
 const searchTopSigners = e => {
    const value = e.target.value
    topSigner.value = value;
@@ -189,6 +183,7 @@ const topSignerDelete = () => {
       </Button>
    </template>
    <Dialog
+      :closable="!editLoading"
       :pt="dialogConfig"
       header="Изменить помощник"
       modal
@@ -266,6 +261,7 @@ const topSignerDelete = () => {
       </template>
    </Dialog>
    <Dialog
+      :closable="!deleteLoading"
       :pt="dialogConfig"
       header="Удалить топ подписавший"
       modal

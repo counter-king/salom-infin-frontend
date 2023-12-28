@@ -6,6 +6,7 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { useAuthStore } from '../../../../Auth/stores';
+const props = defineProps({ getFirstPageAssistants: Function, setVisible: Function, visible: Boolean });
 const assistant = ref('');
 const assistantLoading = ref(false);
 const assistants = ref([]);
@@ -15,11 +16,6 @@ const supervisor = ref('');
 const supervisorLoading = ref(false);
 const supervisors = ref([]);
 const currentUserCompany = authStore.currentUser.company;
-const props = defineProps({
-   getFirstPageAssistants: Function,
-   setVisible: Function,
-   visible: Boolean,
-});
 const searchAssistants = e => {
    const value = e.target.value
    assistant.value = value;
@@ -90,11 +86,16 @@ const assistantCreate = () => {
 </script>
 <template>
    <Dialog
+      :closable="!loading"
       :pt="dialogConfig"
       :visible="visible"
       header="Создать помощник"
       modal
-      @update:visible="() => { setVisible(!visible); assistant = ''; supervisor = ''; loading = false }">
+      @update:visible="() => {
+         assistant = '';
+         setVisible(!visible);
+         supervisor = '';
+      }">
       <div class="flex flex-col">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Руководитель<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete

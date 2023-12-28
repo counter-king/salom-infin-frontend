@@ -8,13 +8,10 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { replaceSpecChars } from '@/utils/string';
-const documentType = ref({ name_uz: '', name_ru: '' });
+const props = defineProps({ getFirstPageDocumentTypes: Function, setVisible: Function, visible: Boolean });
+const defaultDocumentType = { name_uz: '', name_ru: '' }
+const documentType = ref(defaultDocumentType);
 const loading = ref(false);
-const props = defineProps({
-   getFirstPageDocumentTypes: Function,
-   setVisible: Function,
-   visible: Boolean,
-});
 const createDocumentType = () => {
    const {name_ru, name_uz} = documentType.value;
    if(name_uz && name_ru) {
@@ -24,6 +21,7 @@ const createDocumentType = () => {
          .then(response => {
             if(response?.status === 201) {
                dispatchNotify('Тип документа создан', '', 'success');
+               documentType.value = defaultDocumentType
                props.getFirstPageDocumentTypes();
                props.setVisible(false);
             } else {
@@ -43,14 +41,15 @@ const createDocumentType = () => {
 </script>
 <template>
    <Dialog
-      @update:visible="() => {
-         documentType = { name_uz: '', name_ru: '' };
-         setVisible(!visible);
-      }"
+      :closable="!loading"
       :pt="dialogConfig"
       :visible="visible"
       header="Создать тип документа"
       modal
+      @update:visible="() => {
+         documentType = defaultDocumentType;
+         setVisible(!visible);
+      }"
       >
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
@@ -81,7 +80,10 @@ const createDocumentType = () => {
             </template>
             <template v-else>
                <Button
-                  @click="() => { setVisible(!visible) }"
+                  @click="() => {
+                     documentType = defaultDocumentType;
+                     setVisible(!visible);
+                  }"
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"

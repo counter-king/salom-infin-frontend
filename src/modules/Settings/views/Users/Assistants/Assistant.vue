@@ -11,6 +11,7 @@ import { ref, watch, onMounted } from 'vue';
 import { useAuthStore } from '../../../../Auth/stores';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
+const props = defineProps({ assistants: Array, data: Object, field: String, getFirstPageAssistants: Function, setAssistants: Function });
 const authStore = useAuthStore();
 const assistant = ref('');
 const assistantLoading = ref(false);
@@ -27,13 +28,6 @@ const supervisor = ref('');
 const supervisorLoading = ref(false);
 const supervisors = ref([]);
 const statusLoading = ref(false);
-const props = defineProps({
-   assistants: Array,
-   data: Object,
-   field: String,
-   getFirstPageAssistants: Function,
-   setAssistants: Function,
-});
 const toggle = event => {
    menu.value.toggle(event);
 };
@@ -256,6 +250,7 @@ onMounted(() => {
       </Button>
    </template>
    <Dialog
+      :closable="!editLoading"
       :pt="dialogConfig"
       header="Изменить помощник"
       modal
@@ -345,6 +340,7 @@ onMounted(() => {
       </template>
    </Dialog>
    <Dialog
+      :closable="!deleteLoading"
       :pt="dialogConfig"
       header="Удалить помощник"
       modal
