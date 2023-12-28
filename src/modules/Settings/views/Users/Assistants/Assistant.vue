@@ -222,7 +222,13 @@ onMounted(() => {
          class="shadow-none py-[7px] px-2 text-xs bg-greyscale-50 rounded-[8px] mr-2"
          icon
          severity="secondary"
-         text>
+         text
+         v-tooltip.top="{
+            autoHide: false,
+            escape: true,
+            value: `<h4 class='text-xs text-white -my-1'>Изменить</h4>`,
+         }"
+         >
          <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
             <path d="M4 22H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             <path d="M13.8881 3.66293L14.6296 2.92142C15.8581 1.69286 17.85 1.69286 19.0786 2.92142C20.3071 4.14999 20.3071 6.14188 19.0786 7.37044L18.3371 8.11195M13.8881 3.66293C13.8881 3.66293 13.9807 5.23862 15.3711 6.62894C16.7614 8.01926 18.3371 8.11195 18.3371 8.11195M13.8881 3.66293L7.07106 10.4799C6.60933 10.9416 6.37846 11.1725 6.17992 11.4271C5.94571 11.7273 5.74491 12.0522 5.58107 12.396C5.44219 12.6874 5.33894 12.9972 5.13245 13.6167L4.25745 16.2417M18.3371 8.11195L11.5201 14.9289C11.0584 15.3907 10.8275 15.6215 10.5729 15.8201C10.2727 16.0543 9.94775 16.2551 9.60398 16.4189C9.31256 16.5578 9.00282 16.6611 8.38334 16.8675L5.75834 17.7426M5.75834 17.7426L5.11667 17.9564C4.81182 18.0581 4.47573 17.9787 4.2485 17.7515C4.02128 17.5243 3.94194 17.1882 4.04356 16.8833L4.25745 16.2417M5.75834 17.7426L4.25745 16.2417" stroke="currentColor" stroke-width="2"/>
@@ -233,7 +239,13 @@ onMounted(() => {
          class="shadow-none py-[7px] px-2 text-xs bg-greyscale-50 rounded-[8px]"
          icon
          severity="danger"
-         text>
+         text
+         v-tooltip.top="{
+            autoHide: false,
+            escape: true,
+            value: `<h4 class='text-xs text-white -my-1'>Удалить</h4>`,
+         }"
+         >
          <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
             <path d="M20.5001 6H3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             <path d="M18.8332 8.5L18.3732 15.3991C18.1962 18.054 18.1077 19.3815 17.2427 20.1907C16.3777 21 15.0473 21 12.3865 21H11.6132C8.95235 21 7.62195 21 6.75694 20.1907C5.89194 19.3815 5.80344 18.054 5.62644 15.3991L5.1665 8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>

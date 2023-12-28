@@ -178,6 +178,11 @@ onMounted(() => {
          icon
          severity="secondary"
          text
+         v-tooltip.top="{
+            autoHide: false,
+            escape: true,
+            value: `<h4 class='text-xs text-white -my-1'>Изменить</h4>`,
+         }"
          >
          <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
             <path d="M4 22H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -190,6 +195,11 @@ onMounted(() => {
          icon
          severity="danger"
          text
+         v-tooltip.top="{
+            autoHide: false,
+            escape: true,
+            value: `<h4 class='text-xs text-white -my-1'>Удалить</h4>`,
+         }"
          >
          <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
             <path d="M20.5001 6H3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
