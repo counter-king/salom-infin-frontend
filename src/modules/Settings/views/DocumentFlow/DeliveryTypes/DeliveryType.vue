@@ -7,65 +7,66 @@ import axiosConfig from "@/services/axios.config";
 import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
-import { replaceSpecCharsBracket } from '@/utils/string';
-const props = defineProps({ data: Object, field: String, getFirstPageShortDescriptions: Function, setShortDescriptions: Function, shortDescriptions: Array });
+import { replaceSpecChars } from '@/utils/string';
+import { useI18n } from "vue-i18n";
+const { locale } = useI18n();
+const props = defineProps({ data: Object, deliveryTypes: Array, field: String, getFirstPageDeliveryTypes: Function, setDeliveryTypes: Function });
 const deleteLoading = ref(false);
 const deleteVisible = ref(false);
-const editShortDescription = ref({});
+const editDeliveryType = ref({});
 const editLoading = ref(false);
 const editVisible = ref(false);
-const shortDescriptionEdit = () => {
-   const { description_ru, description_uz } = editShortDescription.value;
-   if(description_uz && description_ru) {
+const deliveryTypeEdit = () => {
+   const { name_ru, name_uz } = editDeliveryType.value;
+   if(name_uz && name_ru) {
       editLoading.value = true;
-      const shortDescriptionId = props?.data?.id;
-      const data = { description_ru, description_uz };
+      const deliveryTypeId = props?.data?.id;
       axiosConfig
-         .patch(`short-descriptions/${shortDescriptionId}/`, data)
+         .patch(`delivery-types/${deliveryTypeId}/`, { name_ru, name_uz })
          .then(response => {
             const data = response?.data;
             const status = response?.status;
             if(status === 200) {
-               const newShortDescriptions = props?.shortDescriptions.map(shortDescription => {
-                  if(shortDescription?.id === shortDescriptionId) {
+               const newDeliveryTypes = props?.deliveryTypes.map(deliveryType => {
+                  if(deliveryType?.id === deliveryTypeId) {
                      return data;
                   } else {
-                     return shortDescription;
+                     return deliveryType;
                   }
                });
-               dispatchNotify('Краткое описание обновлено', '', 'success');
+               dispatchNotify('Вид подачи обновлено', '', 'success');
                editVisible.value = false;
-               props.setShortDescriptions(newShortDescriptions);
+               props.setDeliveryTypes(newDeliveryTypes);
             } else {
-               dispatchNotify('Краткое описание не обновлено', '', 'error');
+               dispatchNotify('Вид подачи не обновлено', '', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Краткое описание не обновлено', '', 'error');
+            dispatchNotify('Вид подачи не обновлено', '', 'error');
          })
          .finally(() => {
             editLoading.value = false;
          });
    } else {
-      dispatchNotify('Введите описание', '', 'error');
+      dispatchNotify('Введите название', '', 'error')
    }
 };
-const shortDescriptionDelete = () => {
+const deliveryTypeDelete = () => {
    deleteLoading.value = true;
-   const shortDescriptionId = props?.data?.id;
+   const deliveryTypeId = props?.data?.id;
    axiosConfig
-      .delete(`short-descriptions/${shortDescriptionId}/`)
+      .delete(`delivery-types/${deliveryTypeId}/`)
       .then(response => {
          if(response?.status === 204) {
             deleteVisible.value = false;
-            dispatchNotify('Краткое описание удален', '', 'success')
-            props.getFirstPageShortDescriptions();
+            dispatchNotify('Вид подачи удален', '', 'success')
+            props.getFirstPageDeliveryTypes();
          } else {
-            dispatchNotify('Краткое описание не удален', '', 'error')
+            dispatchNotify('Вид подачи не удален', '', 'error')
          }
       })
       .catch(() => {
-         dispatchNotify('Краткое описание не удален', '', 'error')
+         dispatchNotify('Вид подачи не удален', '', 'error')
       })
       .finally(() => {
          deleteLoading.value = false;
@@ -76,7 +77,7 @@ const shortDescriptionDelete = () => {
    <template v-if="field === 'action'">
       <Button
          @click="() => {
-            editShortDescription = data;
+            editDeliveryType = data;
             editVisible = true;
          }"
          class="shadow-none py-[7px] px-2 text-xs bg-greyscale-50 mr-2 rounded-[8px]"
@@ -120,28 +121,29 @@ const shortDescriptionDelete = () => {
    </template>
    <Dialog
       :pt="dialogConfig"
-      header="Изменить краткое описание"
+      header="Изменить вид подачи"
       modal
-      v-model:visible="editVisible">
+      v-model:visible="editVisible"
+      >
       <div class="flex flex-col pb-10 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Описание (UZ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            :modelValue="editShortDescription.description_uz"
+            :modelValue="editDeliveryType.name_uz"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите описание"
+            placeholder="Введите название"
             type="text"
             @update:modelValue="value => {
-               editShortDescription = { ...editShortDescription, description_uz: replaceSpecCharsBracket(value) };
+               editDeliveryType = { ...editDeliveryType, name_uz: replaceSpecChars(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Описание (РУ) <span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ) <span class="text-red-500 ml-1">*</span></p>
          <InputText
-            :modelValue="editShortDescription.description_ru"
+            :modelValue="editDeliveryType.name_ru"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите описание"
+            placeholder="Введите название"
             type="text"
             @update:modelValue="value => {
-               editShortDescription = { ...editShortDescription, description_ru: replaceSpecCharsBracket(value) };
+               editDeliveryType = { ...editDeliveryType, name_ru: replaceSpecChars(value) };
             }"
             />
       </div>
@@ -160,7 +162,7 @@ const shortDescriptionDelete = () => {
                   Отмена
                </Button>
                <Button
-                  @click="shortDescriptionEdit"
+                  @click="deliveryTypeEdit"
                   class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"
@@ -172,7 +174,7 @@ const shortDescriptionDelete = () => {
    <Dialog
       :pt="dialogConfig"
       dismissableMask
-      header="Удалить краткое описание"
+      header="Удалить вид подачи"
       modal
       v-model:visible="deleteVisible">
       <div class="flex flex-col items-center pb-10 pt-4">
@@ -183,9 +185,9 @@ const shortDescriptionDelete = () => {
                <path fill-rule="evenodd" clip-rule="evenodd" d="M39.4608 53.3327H40.5392C44.2495 53.3327 46.1046 53.3327 47.3108 52.1514C48.517 50.9702 48.6404 49.0326 48.8872 45.1574L49.2428 39.5735C49.3767 37.4708 49.4437 36.4195 48.8386 35.7533C48.2335 35.0871 47.2116 35.0871 45.1679 35.0871H34.8321C32.7884 35.0871 31.7665 35.0871 31.1614 35.7533C30.5563 36.4195 30.6233 37.4708 30.7572 39.5735L31.1128 45.1574C31.3596 49.0326 31.483 50.9702 32.6892 52.1514C33.8954 53.3327 35.7505 53.3327 39.4608 53.3327ZM37.6617 40.2507C37.6067 39.6722 37.1167 39.2501 36.5672 39.308C36.0176 39.3658 35.6167 39.8817 35.6716 40.4601L36.3383 47.4777C36.3932 48.0561 36.8833 48.4782 37.4328 48.4203C37.9824 48.3625 38.3833 47.8467 38.3284 47.2682L37.6617 40.2507ZM43.4328 39.308C43.9824 39.3658 44.3833 39.8817 44.3284 40.4601L43.6617 47.4777C43.6068 48.0561 43.1167 48.4782 42.5672 48.4203C42.0176 48.3625 41.6167 47.8467 41.6716 47.2682L42.3383 40.2507C42.3933 39.6722 42.8833 39.2501 43.4328 39.308Z" fill="#F3335C"/>
             </svg>
          </div>
-         <h2 class="text-center font-semibold text-3xl text-gray-900 p-0 mt-6">Удалить краткое описание?</h2>
+         <h2 class="text-center font-semibold text-3xl text-gray-900 p-0 mt-6">Удалить вид подачи?</h2>
          <p class="text-center py-0 px-6 mt-2 text-gray-400">
-            Вы уверены, что хотите удалить этого краткое описание
+            Вы уверены, что хотите удалить этого вид подачи
          </p>
       </div>
       <template #footer>
@@ -203,7 +205,7 @@ const shortDescriptionDelete = () => {
                   Отмена
                </Button>
                <Button
-                  @click="shortDescriptionDelete"
+                  @click="deliveryTypeDelete"
                   class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"

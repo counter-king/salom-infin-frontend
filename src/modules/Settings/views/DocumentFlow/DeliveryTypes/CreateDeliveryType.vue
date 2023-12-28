@@ -8,69 +8,68 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { replaceSpecChars } from '@/utils/string';
-const props = defineProps({ getFirstPagePositions: Function, setVisible: Function, visible: Boolean });
-const defaultPosition = { name_uz: '', name_ru: '' };
-const position = ref(defaultPosition);
+const props = defineProps({ getFirstPageDeliveryTypes: Function, setVisible: Function, visible: Boolean });
+const defaultDeliveryType = { name_uz: '', name_ru: '' };
+const deliveryType = ref(defaultDeliveryType);
 const loading = ref(false);
-const createPosition = () => {
-   const { name_ru, name_uz } = position.value;
-   const code = new Date().toISOString();
+const createDeliveryType = () => {
+   const {name_ru, name_uz} = deliveryType.value;
    if(name_uz && name_ru) {
       loading.value = true;
       axiosConfig
-         .post('/positions/', { name_ru, name_uz, code })
+         .post('delivery-types/', { name_ru, name_uz })
          .then(response => {
             if(response?.status === 201) {
-               dispatchNotify('Должность создан', '', 'success');
-               position.value = defaultPosition;
-               props.getFirstPagePositions();
+               deliveryType.value = defaultDeliveryType
+               dispatchNotify('Вид подачи создан', '', 'success');
+               props.getFirstPageDeliveryTypes();
                props.setVisible(false);
             } else {
-               dispatchNotify('Должность не создан', '', 'error');
+               dispatchNotify('Вид подачи не создан', '', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Должность не создан', '', 'error');
+            dispatchNotify('Вид подачи не создан', '', 'error');
          })
          .finally(() => {
             loading.value = false;
          });
    } else {
-      dispatchNotify('Введите название должность', '', 'error')
+      dispatchNotify('Введите название', '', 'error')
    }
 };
 </script>
 <template>
    <Dialog
       @update:visible="() => {
-         position = defaultPosition;
+         deliveryType = defaultDeliveryType;
          setVisible(!visible);
       }"
       :pt="dialogConfig"
       :visible="visible"
-      header="Создать должность"
+      header="Создать вид подачи"
       modal
       >
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            :modelValue="position.name_uz"
+            @update:modelValue="value => {
+               deliveryType = { ...deliveryType, name_uz: replaceSpecChars(value) };
+            }"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
-            @update:modelValue="value => {
-               position = { ...position, name_uz: replaceSpecChars(value) };
-            }"
+            :modelValue="deliveryType.name_uz"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            :modelValue="position.name_ru"
+            @update:modelValue="value => {
+               deliveryType = { ...deliveryType, name_ru: replaceSpecChars(value) };
+            }"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
-            @update:modelValue="value => {
-               position = { ...position, name_ru: replaceSpecChars(value) };
-            }"
+            :modelValue="deliveryType.name_ru"
             />
       </div>
       <template #footer>
@@ -88,7 +87,7 @@ const createPosition = () => {
                   Отмена
                </Button>
                <Button
-                  @click="createPosition"
+                  @click="createDeliveryType"
                   class="shadow-none p-button p-component font-semibold text-sm !rounded-full m-0 py-[9px] px-4"
                   rounded
                   type="button"

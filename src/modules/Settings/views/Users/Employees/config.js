@@ -8,7 +8,7 @@ export const tableConfig = {
    thead: { class: ['bg-white'] },
 };
 export const columnConfig = {
-   bodyCell: { class: ['text-xs', 'py-0', 'h-[56px]'] },
+   bodyCell: { class: ['text-xs', 'py-0', 'h-[56px] min-w-[120px]'] },
    bodyCellContent: {class: ['text-sm', 'font-semibold', 'text-greyscale-500']},
    headerCell: { class: ['bg-inherit', 'h-[56px]'] },
    headerContent: { class: ['text-sm', 'font-semibold', 'text-greyscale-500'] },

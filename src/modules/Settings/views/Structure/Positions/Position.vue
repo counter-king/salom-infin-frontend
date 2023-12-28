@@ -11,14 +11,8 @@ import { dispatchNotify } from '@/utils/notify';
 import { ref, watch, onMounted } from 'vue';
 import { replaceSpecChars } from '@/utils/string';
 import { useI18n } from "vue-i18n";
+const props = defineProps({ data: Object, field: String, getFirstPagePositions: Function, positions: Array, setPositions: Function });
 const { locale } = useI18n();
-const props = defineProps({
-   data: Object,
-   field: String,
-   getFirstPagePositions: Function,
-   positions: Array,
-   setPositions: Function,
-});
 const conditionLoading = ref(false);
 const conditions = ref([]);
 const deleteLoading = ref(false);

@@ -8,14 +8,10 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { replaceSpecCharsBracket } from '@/utils/string';
+const props = defineProps({ getFirstPageShortDescriptions: Function, setVisible: Function, visible: Boolean });
 const defaultShortDescription = { description_uz: '', description_ru: '' };
 const shortDescription = ref(defaultShortDescription);
 const loading = ref(false);
-const props = defineProps({
-   getFirstPageShortDescriptions: Function,
-   setVisible: Function,
-   visible: Boolean,
-});
 const createShortDescription = () => {
    const { description_ru, description_uz } = shortDescription.value;
    if(description_uz && description_ru) {
@@ -28,6 +24,7 @@ const createShortDescription = () => {
                dispatchNotify('Краткое описание создан', '', 'success');
                props.getFirstPageShortDescriptions();
                props.setVisible(false);
+               shortDescription.value = defaultShortDescription;
             } else {
                dispatchNotify('Краткое описание не создан', '', 'error');
             }

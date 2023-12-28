@@ -7,6 +7,7 @@ import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { useAuthStore } from '../../../../Auth/stores';
 import Avatar from 'primevue/avatar';
+const props = defineProps({ getFirstPageTopSigners: Function, setVisible: Function, visible: Boolean });
 const topSigner = ref('');
 const topSignerLoading = ref(false);
 const topSigners = ref([]);
@@ -16,11 +17,6 @@ const docTypeLoading = ref(false);
 const docTypes = ref([]);
 const loading = ref(false);
 const currentUserCompany = authStore.currentUser.company;
-const props = defineProps({
-   getFirstPageTopSigners: Function,
-   setVisible: Function,
-   visible: Boolean,
-});
 const searchTopSigners = e => {
    const value = e.target.value
    topSigner.value = value;

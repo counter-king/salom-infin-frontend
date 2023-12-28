@@ -8,14 +8,10 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { replaceSpecCharsBracket } from '@/utils/string';
 import { ref } from 'vue';
+const props = defineProps({ getFirstPageDepartments: Function, setVisible: Function, visible: Boolean });
 const defaultDepartment = { name_uz: '', name_ru: '' };
 const department = ref(defaultDepartment);
 const loading = ref(false);
-const props = defineProps({
-   getFirstPageDepartments: Function,
-   setVisible: Function,
-   visible: Boolean,
-});
 const createDepartment = () => {
    const {name_ru, name_uz} = department.value;
    if(name_uz && name_ru) {
@@ -24,6 +20,7 @@ const createDepartment = () => {
          .post('/departments/', { name_ru, name_uz, condition: 'A' })
          .then(response => {
             if(response?.status === 201) {
+               department.value = defaultDepartment;
                dispatchNotify('Департамент создан', '', 'success');
                props.getFirstPageDepartments();
                props.setVisible(false);

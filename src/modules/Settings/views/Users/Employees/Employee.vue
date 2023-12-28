@@ -14,13 +14,7 @@ import { ref, onMounted, watch } from 'vue';
 import { replaceSpecChars } from '@/utils/string';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
-const props = defineProps({
-   data: Object,
-   employees: Array,
-   field: String,
-   getFirstPageEmployees: Function,
-   setEmployees: Function,
-});
+const props = defineProps({ data: Object, employees: Array, field: String, getFirstPageEmployees: Function, setEmployees: Function });
 const deleteLoading = ref(false);
 const deleteVisible = ref(false);
 const statusEditLoading = ref(false);

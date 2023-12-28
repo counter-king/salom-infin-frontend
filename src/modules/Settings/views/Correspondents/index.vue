@@ -10,13 +10,21 @@ const changeLanguage = () => {
       title: 'Индивидулны',
       icon: 'UserCheckRoundedIcon',
       link: 'IndividualIndex',
-      children: []
     },
     {
       title: 'Организации',
       icon: 'BuildingsIcon',
       link: 'OrganizationsIndex',
-      children: []
+    },
+    {
+      title: 'Регионы',
+      icon: 'BuildingsIcon',
+      link: 'RegionsIndex',
+    },
+    {
+      title: 'Районы',
+      icon: 'BuildingsIcon',
+      link: 'DistrictsIndex',
     }
   ];
 };

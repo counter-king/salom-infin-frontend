@@ -9,14 +9,10 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { replaceSpecCharsBracket } from '@/utils/string';
+const props = defineProps({ getFirstPageBranches: Function, setVisible: Function, visible: Boolean });
 const defaultBranch = { name_uz: '', name_ru: '', address_ru: '', address_uz: '', phone: 8 };
 const branch = ref(defaultBranch);
 const loading = ref(false);
-const props = defineProps({
-   getFirstPageBranches: Function,
-   setVisible: Function,
-   visible: Boolean,
-});
 const createBranch = () => {
    const { name_ru, name_uz, address_ru, address_uz, phone } = branch.value;
    const newPhone = '+99' + phone.toString();
@@ -27,6 +23,7 @@ const createBranch = () => {
          .post('/companies/', data)
          .then(response => {
             if(response?.status === 201) {
+               branch.value = defaultBranch;
                dispatchNotify('Филиал создан', '', 'success');
                props.getFirstPageBranches();
                props.setVisible(false);

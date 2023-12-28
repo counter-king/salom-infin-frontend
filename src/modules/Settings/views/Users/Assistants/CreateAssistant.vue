@@ -6,6 +6,7 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { useAuthStore } from '../../../../Auth/stores';
+const props = defineProps({ getFirstPageAssistants: Function, setVisible: Function, visible: Boolean });
 const assistant = ref('');
 const assistantLoading = ref(false);
 const assistants = ref([]);
@@ -15,11 +16,6 @@ const supervisor = ref('');
 const supervisorLoading = ref(false);
 const supervisors = ref([]);
 const currentUserCompany = authStore.currentUser.company;
-const props = defineProps({
-   getFirstPageAssistants: Function,
-   setVisible: Function,
-   visible: Boolean,
-});
 const searchAssistants = e => {
    const value = e.target.value
    assistant.value = value;

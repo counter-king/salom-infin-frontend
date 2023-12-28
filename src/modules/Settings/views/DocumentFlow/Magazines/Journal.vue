@@ -12,13 +12,7 @@ import { ref, watch, onMounted } from 'vue';
 import { replaceSpecChars } from '@/utils/string';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
-const props = defineProps({
-   data: Object,
-   field: String,
-   getFirstPageJournals: Function,
-   journals: Array,
-   setJournals: Function,
-});
+const props = defineProps({ data: Object, field: String, getFirstPageJournals: Function, journals: Array, setJournals: Function });
 const conditionLoading = ref(false);
 const conditions = ref([]);
 const deleteLoading = ref(false);

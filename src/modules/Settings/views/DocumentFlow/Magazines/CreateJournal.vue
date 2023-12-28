@@ -8,13 +8,10 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { replaceSpecChars } from '@/utils/string';
-const journal = ref({ name_uz: '', name_ru: '' });
+const props = defineProps({ getFirstPageJournals: Function, setVisible: Function, visible: Boolean });
+const defaultJournal = { name_uz: '', name_ru: '' };
+const journal = ref(defaultJournal);
 const loading = ref(false);
-const props = defineProps({
-   getFirstPageJournals: Function,
-   setVisible: Function,
-   visible: Boolean,
-});
 const createJournal = () => {
    const {name_ru, name_uz} = journal.value;
    if(name_uz && name_ru) {
@@ -24,6 +21,7 @@ const createJournal = () => {
          .then(response => {
             if(response?.status === 201) {
                dispatchNotify('Журнал создан', '', 'success');
+               journal.value = defaultJournal
                props.getFirstPageJournals();
                props.setVisible(false);
             } else {
@@ -44,7 +42,7 @@ const createJournal = () => {
 <template>
    <Dialog
       @update:visible="() => {
-         journal = { name_uz: '', name_ru: '' };
+         journal = defaultJournal;
          setVisible(!visible);
       }"
       :pt="dialogConfig"

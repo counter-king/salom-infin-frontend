@@ -12,13 +12,7 @@ import { ref, watch, onMounted } from 'vue';
 import { replaceSpecChars } from '@/utils/string';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
-const props = defineProps({
-   data: Object,
-   documentTypes: Array,
-   field: String,
-   getFirstPageDocumentTypes: Function,
-   setDocumentTypes: Function,
-});
+const props = defineProps({ data: Object, documentTypes: Array, field: String, getFirstPageDocumentTypes: Function, setDocumentTypes: Function });
 const conditionLoading = ref(false);
 const conditions = ref([]);
 const deleteDocumentType = ref({});

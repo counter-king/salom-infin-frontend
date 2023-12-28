@@ -12,6 +12,11 @@ const changeLanguage = () => {
       link: "DocumentTypesIndex",
     },
     {
+      title: "Вид подачи",
+      icon: "DocumentTextIcon",
+      link: "DeliveryTypesIndex",
+    },
+    {
       title: "Журнал",
       icon: "NotebookIcon",
       link: "MagazinesIndex",

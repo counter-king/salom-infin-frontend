@@ -12,14 +12,8 @@ import { dispatchNotify } from '@/utils/notify';
 import { ref, watch, onMounted } from 'vue';
 import { replaceSpecCharsBracket } from '@/utils/string';
 import { useI18n } from "vue-i18n";
+const props = defineProps({ data: Object, branches: Array, field: String, getFirstPageBranches: Function, setBranches: Function });
 const { locale } = useI18n();
-const props = defineProps({
-   data: Object,
-   branches: Array,
-   field: String,
-   getFirstPageBranches: Function,
-   setBranches: Function,
-});
 const conditionLoading = ref(false);
 const conditions = ref([]);
 const deleteLoading = ref(false);

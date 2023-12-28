@@ -8,13 +8,10 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { replaceSpecChars } from '@/utils/string';
-const documentType = ref({ name_uz: '', name_ru: '' });
+const props = defineProps({ getFirstPageDocumentTypes: Function, setVisible: Function, visible: Boolean });
+const defaultDocumentType = { name_uz: '', name_ru: '' }
+const documentType = ref(defaultDocumentType);
 const loading = ref(false);
-const props = defineProps({
-   getFirstPageDocumentTypes: Function,
-   setVisible: Function,
-   visible: Boolean,
-});
 const createDocumentType = () => {
    const {name_ru, name_uz} = documentType.value;
    if(name_uz && name_ru) {
@@ -24,6 +21,7 @@ const createDocumentType = () => {
          .then(response => {
             if(response?.status === 201) {
                dispatchNotify('Тип документа создан', '', 'success');
+               documentType.value = defaultDocumentType
                props.getFirstPageDocumentTypes();
                props.setVisible(false);
             } else {
@@ -44,7 +42,7 @@ const createDocumentType = () => {
 <template>
    <Dialog
       @update:visible="() => {
-         documentType = { name_uz: '', name_ru: '' };
+         documentType = defaultDocumentType;
          setVisible(!visible);
       }"
       :pt="dialogConfig"
