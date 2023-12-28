@@ -35,11 +35,11 @@ const acquaintDocument = async () => {
   boxesCommonStore.actionRerenderComponent()
 }
 const doneDocument = async () => {
-  await assignmentStore.actionPerformDocument({ id: +route.params.id })
+  await assignmentStore.actionPerformDocument({ id: +route.params.id, performed: true })
   boxesCommonStore.actionRerenderComponent()
 }
 const updateDocument = async () => {
-  await assignmentStore.actionPerformDocument({ id: +route.params.id })
+  await assignmentStore.actionPerformDocument({ id: +route.params.id, performed: false })
   boxesCommonStore.actionRerenderComponent()
 }
 </script>

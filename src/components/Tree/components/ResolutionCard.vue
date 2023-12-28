@@ -34,6 +34,18 @@ const resolutionTypes = (type) => {
       return t('for-notice')
   }
 }
+const watchResolution = async (event, item) => {
+  event.stopImmediatePropagation()
+
+  await boxesStore.actionSetActiveResolution({
+    signed: item.is_verified,
+    receipt_date: item.receipt_date,
+    deadline: item.deadline,
+    content: item.content,
+    assignees: item.assignees,
+    reviewer: item.user
+  })
+}
 </script>
 
 <template>
@@ -126,7 +138,10 @@ const resolutionTypes = (type) => {
 
             <base-icon name="EyeIcon" width="16" class="text-greyscale-500" />
 
-            <h1 class="text-sm font-semibold text-greyscale-500">Резолюция</h1>
+            <h1
+              class="text-sm font-semibold text-greyscale-500"
+              @click="watchResolution($event, item)"
+            >Просмотр резолюция</h1>
           </div>
         </template>
 

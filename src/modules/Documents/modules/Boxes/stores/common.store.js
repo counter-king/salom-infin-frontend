@@ -134,9 +134,17 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
       this.resolutionModel.parent = parentId
 
       try {
-        await fetchCreateResolution(this.resolutionModel)
+        let { data } = await fetchCreateResolution(this.resolutionModel)
         await this.actionResolutionsList({ id: resolutionListId })
         await docFlowStore.actionGetTree(resolutionListId)
+        await this.actionSetActiveResolution({
+          signed: false,
+          receipt_date: null,
+          deadline: data.deadline,
+          content: data.content,
+          assignees: data.assignees,
+          reviewer: data.reviewer.user
+        })
         dispatchNotify('Резолюция создано', null, COLOR_TYPES.SUCCESS)
         clearModel(this.resolutionModel, ['type'])
         // Сбросим нумерацию
@@ -244,6 +252,14 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
         dispatchNotify('Резолюция удален', null, COLOR_TYPES.SUCCESS)
         await this.actionResolutionsList({ id: resolutionListId })
         await docFlowStore.actionGetTree(resolutionListId)
+        await this.actionSetActiveResolution({
+          signed: false,
+          receipt_date: null,
+          deadline: null,
+          content: null,
+          assignees: [],
+          reviewer: null
+        })
         clearModel(this.resolutionModel, ['type'])
         // Сбросим нумерацию
         this.actionSetResponsibleIndex(0)

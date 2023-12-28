@@ -31,7 +31,7 @@ const props = defineProps({
 
           <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-full"></div>
 
-          <h1 class="font-medium text-greyscale-500">{{ formatDateHour(reviewer.read_time) }}</h1>
+          <h1 class="font-medium text-greyscale-500">{{ formatDateHour(reviewer.created_date) }}</h1>
         </div>
 
         <div
