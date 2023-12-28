@@ -198,6 +198,7 @@ onMounted(() => {
       <span class="text-sm font-medium">{{ data[field] }}</span>
    </template>
    <Dialog
+      :closable="!editLoading"
       :pt="dialogConfig"
       header="Изменить должность"
       modal
@@ -249,6 +250,7 @@ onMounted(() => {
       </template>
    </Dialog>
    <Dialog
+      :closable="!deleteLoading"
       :pt="dialogConfig"
       dismissableMask
       header="Удалить должность"

@@ -183,6 +183,7 @@ const topSignerDelete = () => {
       </Button>
    </template>
    <Dialog
+      :closable="!editLoading"
       :pt="dialogConfig"
       header="Изменить помощник"
       modal
@@ -260,6 +261,7 @@ const topSignerDelete = () => {
       </template>
    </Dialog>
    <Dialog
+      :closable="!deleteLoading"
       :pt="dialogConfig"
       header="Удалить топ подписавший"
       modal

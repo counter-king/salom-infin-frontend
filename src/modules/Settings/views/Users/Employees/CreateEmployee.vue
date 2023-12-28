@@ -1,7 +1,6 @@
 <script setup>
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
-import InputMask from 'primevue/inputmask';
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import ProgressSpinner from 'primevue/progressspinner';
@@ -161,6 +160,7 @@ const updateVisible = () => {
 </script>
 <template>
    <Dialog
+      :closable="!loading"
       :pt="dialogConfig"
       :visible="visible"
       @update:visible="updateVisible"

@@ -42,14 +42,15 @@ const createPosition = () => {
 </script>
 <template>
    <Dialog
-      @update:visible="() => {
-         position = defaultPosition;
-         setVisible(!visible);
-      }"
+      :closable="!loading"
       :pt="dialogConfig"
       :visible="visible"
       header="Создать должность"
       modal
+      @update:visible="() => {
+         position = defaultPosition;
+         setVisible(!visible);
+      }"
       >
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
@@ -80,7 +81,10 @@ const createPosition = () => {
             </template>
             <template v-else>
                <Button
-                  @click="() => { setVisible(!visible) }"
+                  @click="() => {
+                     position = defaultPosition;
+                     setVisible(!visible);
+                  }"
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"

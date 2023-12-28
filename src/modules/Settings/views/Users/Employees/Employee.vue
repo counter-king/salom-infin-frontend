@@ -1,7 +1,6 @@
 <script setup>
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
-import InputMask from 'primevue/inputmask';
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import ProgressSpinner from 'primevue/progressspinner';
@@ -303,6 +302,7 @@ onMounted(() => {
       <span class="text-sm font-medium">{{ data[field] }}</span>
    </template>
    <Dialog
+      :closable="!editLoading"
       :pt="dialogConfig"
       header="Изменить сотрудник"
       modal
@@ -463,6 +463,7 @@ onMounted(() => {
       </template>
    </Dialog>
    <Dialog
+      :closable="!deleteLoading"
       :pt="dialogConfig"
       header="Удалить сотрудник"
       modal

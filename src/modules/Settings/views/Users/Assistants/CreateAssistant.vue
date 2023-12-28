@@ -86,11 +86,16 @@ const assistantCreate = () => {
 </script>
 <template>
    <Dialog
+      :closable="!loading"
       :pt="dialogConfig"
       :visible="visible"
       header="Создать помощник"
       modal
-      @update:visible="() => { setVisible(!visible); assistant = ''; supervisor = ''; loading = false }">
+      @update:visible="() => {
+         assistant = '';
+         setVisible(!visible);
+         supervisor = '';
+      }">
       <div class="flex flex-col">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Руководитель<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete

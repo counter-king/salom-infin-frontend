@@ -99,11 +99,16 @@ const topSignerCreate = () => {
 </script>
 <template>
    <Dialog
+      :closable="!loading"
       :pt="dialogConfig"
       :visible="visible"
       header="Создать топ подписантов"
       modal
-      @update:visible="() => { setVisible(!visible); user = ''; docType = ''; loading = false }">
+      @update:visible="() => {
+         docType = '';
+         setVisible(!visible);
+         user = '';
+      }">
       <div class="flex flex-col">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Топ подписавший<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete

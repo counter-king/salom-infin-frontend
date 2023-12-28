@@ -210,6 +210,7 @@ onMounted(() => {
       <span class="text-sm font-medium">{{ data[field] }}</span>
    </template>
    <Dialog
+      :closable="!editLoading"
       :pt="dialogConfig"
       header="Изменить журнал"
       modal
@@ -232,7 +233,7 @@ onMounted(() => {
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
-            @update:modelValue="e => {
+            @update:modelValue="value => {
                editJournal = { ...editJournal, name_ru: replaceSpecChars(value) };
             }"
             />
@@ -262,6 +263,7 @@ onMounted(() => {
       </template>
    </Dialog>
    <Dialog
+      :closable="!deleteLoading"
       :pt="dialogConfig"
       dismissableMask
       header="Удалить журнал"
