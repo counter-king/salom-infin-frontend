@@ -7,11 +7,13 @@ import { useI18n } from 'vue-i18n'
 import { StatusChip } from '@/components/Chips'
 import ResolutionCard from '@/components/Tree/components/ResolutionCard.vue'
 // Stores
+import { useAuthStore } from '@/modules/Auth/stores'
 import { useBoxesCommonStore } from '@/modules/Documents/modules/Boxes/stores/common.store'
 // Utils
 import { formatDateHour } from '@/utils/formatDate'
 // Composable
 const { t } = useI18n()
+const authStore = useAuthStore()
 const boxesStore = useBoxesCommonStore()
 // Macros
 const props = defineProps({
@@ -36,7 +38,11 @@ const props = defineProps({
 
         <div
           class="bg-white rounded-t-2xl shadow-button"
-          :class="{ 'rounded-b-2xl': !(reviewer.assignments && reviewer.assignments.length) }"
+          :class="{
+            'rounded-b-2xl': !(reviewer.assignments && reviewer.assignments.length),
+            'border border-primary-500': authStore.currentUser.id === reviewer.user.id,
+            'border-b-0': (reviewer.assignments && reviewer.assignments.length) && authStore.currentUser.id === reviewer.user.id
+          }"
         >
           <div class="flex items-start p-2">
             <div class="flex flex-1 gap-3 p-2">
@@ -89,7 +95,12 @@ const props = defineProps({
               class: 'mb-0'
             },
             headerAction: {
-              class: 'bg-white border-0 rounded-b-2xl border-t border-t-greyscale-200 rounded-none py-2 px-4'
+              class: [
+                'bg-white border-0 rounded-b-2xl border-t border-t-greyscale-200 rounded-none py-2 px-4',
+                {
+                  '!border !border-primary-500 !border-t-greyscale-200': authStore.currentUser.id === reviewer.user.id
+                }
+              ]
             },
             content: {
               class: 'bg-transparent border-0 p-0'
@@ -109,7 +120,7 @@ const props = defineProps({
               </div>
             </template>
 
-            <div>
+            <div class="overflow-hidden">
               <template v-for="resolution in reviewer.assignments" :key="resolution.id">
                 <resolution-card :item="resolution" />
               </template>

@@ -49,7 +49,7 @@ const watchResolution = async (event, item) => {
 </script>
 
 <template>
-  <div class="mt-2 pl-10">
+  <div class="resolution-card relative mt-2 pl-10">
     <div class="bg-white rounded-t-2xl shadow-button">
       <div class="flex items-start p-2 pb-0">
         <div class="flex flex-1 gap-3 p-2">
@@ -96,10 +96,6 @@ const watchResolution = async (event, item) => {
               </template>
             </div>
           </div>
-
-<!--          <div class="text-sm font-medium text-critic-500">-->
-<!--            Документ еще не подписан-->
-<!--          </div>-->
         </div>
       </div>
 
@@ -119,7 +115,7 @@ const watchResolution = async (event, item) => {
           class: 'bg-white border-0 rounded-b-2xl border-t border-t-greyscale-200 rounded-none py-2 px-4'
         },
         content: {
-          class: 'bg-transparent border-0 p-0'
+          class: 'bg-transparent overflow-hidden border-0 p-0'
         },
         headerIcon: {
           class: 'w-3 h-3 text-greyscale-500'
@@ -152,6 +148,17 @@ const watchResolution = async (event, item) => {
   </div>
 </template>
 
-<style scoped>
-
+<style>
+.resolution-card::after {
+  content: "";
+  position: absolute;
+  left: 15px;
+  height: 3000px;
+  border: 1px solid #dedede;
+  top: -2970px;
+  width: 25px;
+  border-bottom-left-radius: 18px;
+  border-right: 0;
+  border-top: 0;
+}
 </style>

@@ -36,7 +36,7 @@ const findAssigneeChildren = (target, assignee) => {
   <div class="mt-2 pl-10">
     <template v-if="item.hasOwnProperty('assignees') && item.assignees.length > 0">
       <template v-for="assignee in item.assignees">
-        <div class="mt-2">
+        <div class="resolution-card relative after:!left-[-25px] mt-2">
           <div
             class="bg-white rounded-t-2xl shadow-button"
             :class="{
@@ -150,7 +150,7 @@ const findAssigneeChildren = (target, assignee) => {
                   ]
                 },
                 content: {
-                  class: 'bg-transparent border-0 p-0'
+                  class: 'bg-transparent overflow-hidden border-0 p-0'
                 },
                 headerIcon: {
                   class: 'w-3 h-3 text-greyscale-500'
@@ -173,7 +173,7 @@ const findAssigneeChildren = (target, assignee) => {
                   </div>
                 </template>
 
-                <div>
+                <div class="overflow-hidden">
                   <template v-if="item.children && item.children.length > 0">
                     <template v-for="child in findAssigneeChildren(item, assignee)">
                       <resolution-card :item="child" />
