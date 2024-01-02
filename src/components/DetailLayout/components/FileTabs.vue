@@ -146,9 +146,9 @@ const toggle = (event) => {
             />
           </div>
 
-          <div class="text-sm font-semibold text-primary-900 mt-6 mb-5">
-            <ul class="mt-3">
-              <template v-if="resolution.assignees && resolution.assignees.length">
+          <template v-if="resolution.assignees && resolution.assignees.length">
+            <div class="text-sm font-semibold text-primary-900 mt-6 mb-5">
+              <ul class="mt-3">
                 <template v-for="item in resolution.assignees">
                   <li class="flex gap-1 font-semibold mb-2">
                     <span>{{ formatNameToShort(item.user.full_name) }}</span>
@@ -172,35 +172,35 @@ const toggle = (event) => {
                     </p>
                   </li>
                 </template>
-              </template>
 
-              <li class="flex font-semibold">
-                <p class="text-greyscale-500 mr-1">Срок исполнения:</p>
-                <span>{{ resolution.deadline ? resolution.deadline : 'Без срока исполнений' }}</span>
-              </li>
-            </ul>
+                <li class="flex font-semibold">
+                  <p class="text-greyscale-500 mr-1">Срок исполнения:</p>
+                  <span>{{ resolution.deadline ? resolution.deadline : 'Без срока исполнений' }}</span>
+                </li>
+              </ul>
 
-            <div class="text-center mt-5">
-              <p v-html="resolution.content"></p>
-            </div>
-          </div>
-
-          <div class="border-t-[1px]"></div>
-
-          <div class="flex items-center my-4">
-            <div class="flex-1 text-sm font-semibold">
-              <h1 class="text-greyscale-500">{{ resolution.reviewer?.position?.name }}:</h1>
-              <p class="text-primary-900">{{ formatNameToShort(resolution.reviewer?.full_name) }}</p>
-            </div>
-
-            <template v-if="resolution.signed">
-              <div class="w-[50px] h-[50px]">
-                <img src="/images/qr-code.svg" alt="Qr code" />
+              <div class="text-center mt-5">
+                <p v-html="resolution.content"></p>
               </div>
-            </template>
-          </div>
+            </div>
 
-          <div class="border-t-[1px]"></div>
+            <div class="border-t-[1px]"></div>
+
+            <div class="flex items-center my-4">
+              <div class="flex-1 text-sm font-semibold">
+                <h1 class="text-greyscale-500">{{ resolution.reviewer?.position?.name }}:</h1>
+                <p class="text-primary-900">{{ formatNameToShort(resolution.reviewer?.full_name) }}</p>
+              </div>
+
+              <template v-if="resolution.signed">
+                <div class="w-[50px] h-[50px]">
+                  <img src="/images/qr-code.svg" alt="Qr code" />
+                </div>
+              </template>
+            </div>
+
+            <div class="border-t-[1px]"></div>
+          </template>
 
           <ul class="text-greyscale-500 text-sm mt-3">
             <li class="flex font-semibold mb-1">
@@ -213,7 +213,7 @@ const toggle = (event) => {
             </li>
             <li class="flex font-semibold">
               <p class="text-primary-900 mr-1">Дата. подписания:</p>
-              <span>{{ formatDateHour(resolution.receipt_date) }}</span>
+              <span>{{ resolution.receipt_date ? formatDateHour(resolution.receipt_date) : 'Еще не подписан' }}</span>
             </li>
           </ul>
         </div>

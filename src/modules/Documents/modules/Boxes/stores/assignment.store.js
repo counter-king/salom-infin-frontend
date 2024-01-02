@@ -230,13 +230,13 @@ export const useAssignmentStore = defineStore("assignment", {
       })
 
       await commonStore.actionSetActiveResolution({
-        signed: data.assignment.is_verified,
-        receipt_date: data.assignment.receipt_date,
-        deadline: data.assignment.deadline,
-        content: data.assignment.content,
+        signed: data.assignment?.is_verified,
+        receipt_date: data.assignment?.receipt_date,
+        deadline: data.assignment?.deadline,
+        content: data.assignment?.content,
         assignees: performers.performers,
+        reviewer: data.assignment?.reviewer.user
       })
-      // this.performModel.content = data.content
     },
     /*
     * Ознакомиться с документом
@@ -255,14 +255,20 @@ export const useAssignmentStore = defineStore("assignment", {
     /*
     * Выполнить документ
     * */
-    async actionPerformDocument({ id }) {
+    async actionPerformDocument({ id, performed }) {
       try {
         const docflowStore = useDocFlowStore()
-        await fetchPerformDocument({ id, model: this.performModel })
+        await fetchPerformDocument({
+          id,
+          model: {
+            ...this.performModel,
+            is_performed: performed
+          }
+        })
         await this.actionAssignmentById(this.detailModel)
         await docflowStore.actionGetTree(this.detailModel.document.id)
         // Если идет выполнения документа
-        if(!this.performModel.is_performed) {
+        if(this.performModel.is_performed) {
           dispatchNotify('Документ выполнен', null, COLOR_TYPES.SUCCESS)
         }
         else {
@@ -272,7 +278,7 @@ export const useAssignmentStore = defineStore("assignment", {
       }
       catch (error) {
         // Если идет выполнения документа
-        if(!this.performModel.is_performed) {
+        if(this.performModel.is_performed) {
           dispatchNotify('Ошибка', 'Ошибка выполнение документа', COLOR_TYPES.ERROR)
         }
         else {
