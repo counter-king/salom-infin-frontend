@@ -22,7 +22,7 @@ const regionEdit = () => {
       editLoading.value = true;
       const regionId = props?.data?.id;
       axiosConfig
-         .patch(`regions/${regionId}/`, { name_ru, name_uz })
+         .patch(`regions/${regionId}/`, { name_ru, name_uz, name: name_uz })
          .then(response => {
             const data = response?.data;
             const status = response?.status;

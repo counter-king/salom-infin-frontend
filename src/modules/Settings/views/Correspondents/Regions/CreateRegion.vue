@@ -17,7 +17,7 @@ const createRegion = () => {
    if(name_uz && name_ru) {
       loading.value = true;
       axiosConfig
-         .post('regions/', { name_ru, name_uz })
+         .post('regions/', { name_ru, name_uz, name: name_uz })
          .then(response => {
             if(response?.status === 201) {
                dispatchNotify('Регион создан', '', 'success');
