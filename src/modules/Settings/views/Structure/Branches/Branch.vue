@@ -122,6 +122,11 @@ const changeLanguage = () => {
 const toggle = event => {
    menu.value.toggle(event);
 };
+const openEditModal = () => {
+   const phone = +String(props.data?.phone || '').slice(3);
+   editBranch.value = { ...props?.data, phone };
+   editVisible.value = true;
+};
 watch(locale, () => {
    changeLanguage();
 });
@@ -160,10 +165,7 @@ onMounted(() => {
    </template>
    <template v-else-if="field === 'action'">
       <Button
-         @click="() => {
-            editBranch = data;
-            editVisible = true;
-         }"
+         @click="openEditModal"
          class="shadow-none py-[7px] px-2 text-xs bg-greyscale-50 mr-2 rounded-[8px]"
          icon
          severity="secondary"
