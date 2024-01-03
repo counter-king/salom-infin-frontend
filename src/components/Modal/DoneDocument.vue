@@ -1,6 +1,8 @@
 <script setup>
 // Core
 import { ref, computed } from 'vue'
+// Utils
+import { dispatchNotify } from '@/utils/notify'
 // Macros
 const props = defineProps({
   content: {
@@ -10,6 +12,12 @@ const props = defineProps({
   files: {
     type: Array,
     default: () => []
+  },
+  hasResolution: {
+    type: Boolean
+  },
+  isDocumentSigned: {
+    type: Boolean
   },
   isDoneDocument: {
     type: Boolean
@@ -41,6 +49,20 @@ const files = computed({
   }
 })
 // Methods
+const openModal = () => {
+  if(!props.hasResolution || !props.isDocumentSigned) {
+    dispatchNotify(
+      'Предупреждения',
+      !props.hasResolution
+        ? 'Сначала создайте резолюцию'
+        : 'Сначала подпишите резолюцию',
+      'warn'
+    )
+  }
+  else {
+    modal.value = true
+  }
+}
 const create = async () => {
   if(!(content.value && content.value.trim())) return
 
@@ -66,7 +88,7 @@ const create = async () => {
       :label="props.isDoneDocument ? 'change-performances' : 'execute-document'"
       rounded
       type="button"
-      @click="modal = true"
+      @click="openModal"
     />
   </div>
 

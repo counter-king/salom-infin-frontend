@@ -22,7 +22,7 @@ const props = defineProps({
 const panelClass = (_, state, context) => {
   return [
     {
-      'text-primary-900 font-semibold border-primary-500': context.index === state.d_activeIndex && !props.segment
+      'text-primary-900 font-semibold !border-primary-500': context.index === state.d_activeIndex && !props.segment
     },
     {
       'border-hidden bg-white shadow-md': context.index === state.d_activeIndex && props.segment
@@ -51,11 +51,12 @@ const panelClass = (_, state, context) => {
         class: 'flex-1 p-0 overflow-hidden'
       },
       action: ({ _, state, context }) => ({
-        class: [panelClass(_, state, context),
+        class: [
           {
             'm-0 border-transparent text-greyscale-500 font-medium py-4 px-0 mx-4': !props.segment,
             'm-0 border-transparent bg-inherit font-medium py-2 m-1 mb-[2px] w-32 text-center rounded-lg flex justify-center': props.segment
-          }
+          },
+          panelClass(_, state, context)
         ]
       }),
       label: {

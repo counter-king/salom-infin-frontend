@@ -1,7 +1,14 @@
 // Core
 import { defineStore } from "pinia"
+// Store
+import { useBoxesCommonStore } from '../../Boxes/stores/common.store'
 // Services
-import { fetchCreateDocument, fetchGetDocumentById, fetchUpdateDocument, fetchGetTree } from "../services/docflow.service"
+import {
+  fetchCreateDocument,
+  fetchGetDocumentById,
+  fetchUpdateDocument,
+  fetchGetTree
+} from "../services/docflow.service"
 // Utils
 import { clearModel } from '@/utils'
 import { dispatchNotify } from '@/utils/notify'
@@ -75,6 +82,35 @@ export const useDocFlowStore = defineStore("docFlowStore", {
         dispatchNotify('Ошибка', 'Ошибка создание документа', COLOR_TYPES.ERROR)
       }
     },
+    /*
+    * Выбираем первое резолюцию из списка в дереве
+    * */
+    async actionSetActiveResolution() {
+      const boxesStore = useBoxesCommonStore()
+
+      if(this.tree.reviewers?.length && this.tree.reviewers[0]?.assignments?.length) {
+        const resolution = this.tree.reviewers[0]?.assignments[0]
+
+        await boxesStore.actionSetActiveResolution({
+          signed: resolution.is_verified,
+          receipt_date: resolution.receipt_date,
+          deadline: resolution.deadline,
+          content: resolution.content,
+          assignees: resolution.assignees,
+          reviewer: resolution.user
+        })
+      }
+      else {
+        await boxesStore.actionSetActiveResolution({
+          signed: false,
+          receipt_date: null,
+          deadline: null,
+          content: null,
+          assignees: [],
+          reviewer: null
+        })
+      }
+    },
     /**
      * Получить документ по id
      * */
@@ -103,7 +139,7 @@ export const useDocFlowStore = defineStore("docFlowStore", {
       this.documentMenuModal = payload
     },
     /*
-    * Зогрузить форму для создание документа
+    * Загрузить форму для создания документа
     * */
     actionLoadFormCreateDocument(payload) {
       this.documentMenuType = payload
