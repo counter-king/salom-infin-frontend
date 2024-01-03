@@ -102,7 +102,10 @@ const acquaintDocument = async () => {
         <template #preview-actions>
           <!-- Если документ ознакомлен -->
           <template v-if="reviewStore.isDocumentAcquainted">
-            <modal-done-document />
+            <modal-done-document
+              :has-resolution="boxesCommonStore.getCreatedResolutionsList"
+              :is-document-signed="reviewStore.isReviewSigned"
+            />
           </template>
 
           <template v-else>

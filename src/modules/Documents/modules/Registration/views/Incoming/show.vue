@@ -5,6 +5,7 @@ import { useRoute } from 'vue-router'
 // Store
 import { useDocFlowStore } from '../../stores/docflow.store'
 import { useRegIncoming } from '../../stores/incoming.store'
+import { useBoxesCommonStore } from '../../../Boxes/stores/common.store'
 // Components
 import { LayoutWithTabs } from '@/components/DetailLayout'
 import ChangeDocument from './components/ChangeDocument.vue'
@@ -12,6 +13,7 @@ import ChangeDocument from './components/ChangeDocument.vue'
 const route = useRoute()
 const docflowStore = useDocFlowStore()
 const incomingStore = useRegIncoming()
+const boxesCommonStore = useBoxesCommonStore()
 // Reactive
 const loading = ref(true)
 // Hooks
@@ -19,6 +21,7 @@ onMounted(async () => {
   loading.value = true
   await incomingStore.actionGetById({ id: route.params.id })
   await docflowStore.actionGetTree(incomingStore.detailModel.id)
+  await docflowStore.actionSetActiveResolution()
   setTimeout(() => {
     loading.value = false
   }, 500)
@@ -38,11 +41,12 @@ onMounted(async () => {
         :object-id="incomingStore.detailModel.id"
         :headers="incomingStore.headers"
         :tree-items="docflowStore.tree"
+        :resolution="{
+          ...boxesCommonStore.resolution,
+          register_date: incomingStore.detailModel.register_date,
+          register_number: incomingStore.detailModel.register_number
+        }"
       >
-        <template #template>
-          template
-        </template>
-
         <template #preview-actions>
           <change-document />
         </template>

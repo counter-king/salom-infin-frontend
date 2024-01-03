@@ -16,7 +16,7 @@ const Auth = [
     name: "VerifyNumber",
     component: () => import("../views/VerifyNumber.vue")
   },
-  // Set credensials
+  // Set credentials
   {
     path: "set-credensials",
     name: "SetCredensials",

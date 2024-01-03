@@ -28,7 +28,7 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
           link: "ReviewIndex",
           children: []
         },
-        // Мои поручение
+        // Моё поручение
         {
           title: "Мои поручение",
           icon: "ArrowRightDownIcon",
@@ -270,7 +270,7 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
       }
     },
     /*
-    * Назначить полтзователья отв.исполнителем
+    * Назначить пользователя отв. исполнителем
     * */
     actionSetResponsibleIndex(payload) {
       if(payload === null || payload === undefined) {
