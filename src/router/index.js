@@ -52,14 +52,14 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  const paramsLocale = to.params.locale
-  const token = getStorageItem(ACCESS)
-
-  if (to.meta.isAuthRequired && !token) {
-    return next({ name: "AuthLayout", params: { locale: paramsLocale } });
-  }
-
-  next();
-})
+// router.beforeEach((to, from, next) => {
+//   const paramsLocale = to.params.locale
+//   const token = getStorageItem(ACCESS)
+//
+//   if (to.meta.isAuthRequired && !token) {
+//     return next({ name: "AuthLayout", params: { locale: paramsLocale } });
+//   }
+//
+//   next();
+// })
 export default router

@@ -77,9 +77,11 @@ export const useDocFlowStore = defineStore("docFlowStore", {
         let { data } = await fetchCreateDocument(payload)
         await clearModel(payload)
         dispatchNotify('Документ создан', 'Документ создан', COLOR_TYPES.SUCCESS)
+        return Promise.resolve()
       }
       catch (error) {
         dispatchNotify('Ошибка', 'Ошибка создание документа', COLOR_TYPES.ERROR)
+        return Promise.reject()
       }
     },
     /*

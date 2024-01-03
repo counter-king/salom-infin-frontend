@@ -1,5 +1,7 @@
 // Core
 import axios from "axios"
+// Stores
+import { useAuthStore } from '@/modules/Auth/stores'
 // Utils
 import { getStorageItem, removeStorageItem } from "@/utils/storage"
 import { LANG, ACCESS, REFRESH, EXPIRES, CURRENT_ROUTE } from "@/constants/storage"
@@ -33,12 +35,14 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
 	(response) => {
 		if (response.status === 200 || response.status === 201 || response.status === 204) {
-			return response
-		} else {
+      return response
+		}
+    else {
 			throw new Error(response.status.toString())
 		}
 	},
 	({ response, config }) => {
+    const authStore = useAuthStore()
     console.log("axios response", response, typeof response.data.message)
 
     // Если токена нет или время токена истек
@@ -47,6 +51,8 @@ axiosInstance.interceptors.response.use(
       removeStorageItem(REFRESH)
       removeStorageItem(EXPIRES)
       removeStorageItem(CURRENT_ROUTE)
+      authStore.actionSessionEnd(true)
+      // await router.push({ name: 'Login' })
     }
 
     if(typeof response.data.message === "string") {
