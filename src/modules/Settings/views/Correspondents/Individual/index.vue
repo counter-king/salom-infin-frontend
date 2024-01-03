@@ -1,10 +1,10 @@
 <script setup>
 import Button from 'primevue/button';
+import Correspondent from './Correspondent.vue';
 import CreateCorrespondent from './CreateCorrespondent.vue';
 import DataTable from 'primevue/datatable';
 import Dropdown from 'primevue/dropdown';
 import InputText from 'primevue/inputtext';
-import Correspondent from './Correspondent.vue';
 import Paginator from 'primevue/paginator';
 import Skeleton from 'primevue/skeleton';
 import axiosConfig from "@/services/axios.config";
@@ -134,7 +134,6 @@ onMounted(() => {
       :loading="loading"
       :pt="tableConfig"
       :value="correspondents"
-      @page="onChangePage"
       row-hover
       scrollable
       >
@@ -160,7 +159,7 @@ onMounted(() => {
         <div class="bg-primary-50 w-full h-full overflow-hidden absolute left-0 top-0">
           <div v-for="(_, index) in 10" :key="index" class="bg-white px-5 h-14 rounded-xl flex flex-col justify-center items-center mb-1">
             <div class="w-full h-full flex items-center justify-center gap-4">
-              <Skeleton v-for="(_, index) in 5" :key="index" height="16px" />
+              <Skeleton v-for="(_, index) in 6" :key="index" height="16px" />
             </div>
           </div>
         </div>
@@ -173,6 +172,7 @@ onMounted(() => {
     </DataTable>
     <div class="flex">
       <Paginator
+        :first="(filter.page - 1) * filter.page_size"
         :pt="paginationConfig"
         :rows="filter.page_size"
         :totalRecords="count"

@@ -25,7 +25,7 @@ const createCorrespondent = () => {
    const newPhone = '+99' + String(phone || '');
    if(first_name && last_name && father_name && gender.value && String(tin || '').length === 9 && checkpoint && newPhone.length === 13 && isValidEmail(email) && address) {
       loading.value = true;
-      const data = { address, first_name, last_name, father_name, tin, checkpoint, email, phone: newPhone, description, type: 'physical', gender: gender.value.value };
+      const data = { address, first_name, last_name, father_name, tin, checkpoint, email, phone: newPhone, description, type: 'legal', gender: gender.value.value };
       axiosConfig
          .post('correspondents/', data)
          .then(response => {

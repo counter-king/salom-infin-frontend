@@ -17,7 +17,7 @@ const createDeliveryType = () => {
    if(name_uz && name_ru) {
       loading.value = true;
       axiosConfig
-         .post('delivery-types/', { name_ru, name_uz })
+         .post('delivery-types/', { name_ru, name_uz, is_active: true })
          .then(response => {
             if(response?.status === 201) {
                deliveryType.value = defaultDeliveryType

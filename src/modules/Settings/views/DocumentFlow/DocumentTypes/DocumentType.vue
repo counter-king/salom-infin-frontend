@@ -81,7 +81,7 @@ const updateCondition = value => {
    conditionLoading.value = true;
    const documentTypeId = props?.data?.id;
    axiosConfig
-      .patch(`document-types/${documentTypeId}/`, { condition: value?.value })
+      .patch(`document-types/${documentTypeId}/`, { is_active: value?.value })
       .then(response => {
          const data = response?.data;
          const status = response?.status;
@@ -108,8 +108,8 @@ const updateCondition = value => {
 };
 const changeLanguage = () => {
    conditions.value = [
-      { label: 'Активный', value: 'A', },
-      { label: 'Неактивный', value: 'P' }
+      { label: 'Активный', value: true, },
+      { label: 'Неактивный', value: false }
    ];
 };
 const toggle = event => {
@@ -140,9 +140,9 @@ onMounted(() => {
       <template v-else>
          <span
             @click="toggle"
-            :style="{ background: data.condtion === 'A' ? '#EEFFE7' : '#F7F7F9', color: data.condition === 'A' ? '#63BA3D' : '#767994' }"
+            :style="{ background: data.is_active ? '#EEFFE7' : '#F7F7F9', color: data.is_active ? '#63BA3D' : '#767994' }"
             class="inline-flex items-center justify-center pr-2 pl-3 py-1 font-medium rounded-[80px] text-sm text-greyscale-500 cursor-pointer">
-            <span class="mr-1">{{ data.condition === 'A' ? 'Активный' : 'Неактивный' }}</span>
+            <span class="mr-1">{{ data.is_active ? 'Активный' : 'Неактивный' }}</span>
             <svg width="16" height="16" viewBox="0 0 12 12" fill="none">
                <path d="M9 4.5L6 7.5L3 4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -151,7 +151,7 @@ onMounted(() => {
             <template #item="{ item }">
                <div @click="() => { updateCondition(item) }" class="flex justify-between py-[6px] pr-2 pl-3 cursor-pointer">
                   <span class="text-sm font-medium text-primary-900">{{ item.label }}</span>
-                  <span class="ml-2" v-if="item.value === data.condition">
+                  <span class="ml-2" v-if="item.value === data.is_active">
                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M18.3337 9.99935C18.3337 14.6017 14.6027 18.3327 10.0003 18.3327C5.39795 18.3327 1.66699 14.6017 1.66699 9.99935C1.66699 5.39698 5.39795 1.66602 10.0003 1.66602C14.6027 1.66602 18.3337 5.39698 18.3337 9.99935ZM13.3589 7.47407C13.603 7.71815 13.603 8.11388 13.3589 8.35796L9.19227 12.5246C8.94819 12.7687 8.55246 12.7687 8.30838 12.5246L6.64172 10.858C6.39764 10.6139 6.39764 10.2182 6.64172 9.97407C6.8858 9.73 7.28152 9.73 7.5256 9.97407L8.75033 11.1988L10.6127 9.33644L12.4751 7.47407C12.7191 7.23 13.1149 7.23 13.3589 7.47407Z" fill="#635AFF"/>
                      </svg>

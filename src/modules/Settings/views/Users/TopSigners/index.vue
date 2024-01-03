@@ -104,7 +104,6 @@ onMounted(() => {
       :loading="loading"
       :pt="tableConfig"
       :value="topSigners"
-      @page="onChangePage"
       row-hover
       scrollable
       >
@@ -137,6 +136,7 @@ onMounted(() => {
     </DataTable>
     <div class="flex">
       <Paginator
+        :first="(filter.page - 1) * filter.page_size"
         :pt="paginationConfig"
         :rows="filter.page_size"
         :totalRecords="count"

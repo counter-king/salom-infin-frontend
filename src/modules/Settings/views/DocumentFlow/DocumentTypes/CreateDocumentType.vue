@@ -17,7 +17,7 @@ const createDocumentType = () => {
    if(name_uz && name_ru) {
       loading.value = true;
       axiosConfig
-         .post('document-types/', { name_ru, name_uz })
+         .post('document-types/', { name_ru, name_uz, is_active: true })
          .then(response => {
             if(response?.status === 201) {
                dispatchNotify('Тип документа создан', '', 'success');

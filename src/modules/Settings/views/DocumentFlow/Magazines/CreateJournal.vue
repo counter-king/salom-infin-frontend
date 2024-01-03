@@ -17,7 +17,7 @@ const createJournal = () => {
    if(name_uz && name_ru) {
       loading.value = true;
       axiosConfig
-         .post('journals/', { name_ru, name_uz })
+         .post('journals/', { name_ru, name_uz, is_active: true })
          .then(response => {
             if(response?.status === 201) {
                dispatchNotify('Журнал создан', '', 'success');

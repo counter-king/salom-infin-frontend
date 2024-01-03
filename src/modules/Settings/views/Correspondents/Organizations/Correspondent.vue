@@ -1,120 +1,114 @@
 <script setup>
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
+import Dropdown from 'primevue/dropdown';
+import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import ProgressSpinner from 'primevue/progressspinner';
-import Skeleton from 'primevue/skeleton';
-import Menu from 'primevue/menu';
+import Textarea from 'primevue/textarea';
 import axiosConfig from "@/services/axios.config";
-import { dialogConfig, menuConfig } from './config';
+import isValidEmail from '@/utils/isValidEmail';
+import { dialogConfig, selectConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref, watch, onMounted } from 'vue';
 import { replaceSpecChars } from '@/utils/string';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
-const props = defineProps({ data: Object, deliveryTypes: Array, field: String, getFirstPageDeliveryTypes: Function, setDeliveryTypes: Function });
+const props = defineProps({ data: Object, field: String, getFirstPageCorrespondents: Function, correspondents: Array, setCorrespondents: Function });
 const deleteLoading = ref(false);
 const deleteVisible = ref(false);
-const editDeliveryType = ref({});
+const editCorrespondent = ref({});
 const editLoading = ref(false);
 const editVisible = ref(false);
-const conditionLoading = ref(false);
-const menu = ref(null);
-const conditions = ref([]);
-const deliveryTypeEdit = () => {
-   const { name_ru, name_uz } = editDeliveryType.value;
-   if(name_uz && name_ru) {
+const gender = ref(null);
+const genders = ref([]);
+const correspondentEdit = () => {
+   const { first_name, last_name, father_name, tin, checkpoint, email, phone, description, address } = editCorrespondent.value;
+   const newPhone = '+99' + String(phone || '');
+   if( first_name && last_name && father_name && gender.value && String(tin || '').length === 9 && checkpoint && newPhone.length === 13 && isValidEmail(email) && address) {
       editLoading.value = true;
-      const deliveryTypeId = props?.data?.id;
+      const correspondentId = props.data?.id;
+      const data = { address, first_name, last_name, father_name, tin, checkpoint, email, phone: newPhone, description, type: 'legal', gender: gender.value.value };
       axiosConfig
-         .patch(`delivery-types/${deliveryTypeId}/`, { name_ru, name_uz })
+         .patch(`correspondents/${correspondentId}/`, data)
          .then(response => {
             const data = response?.data;
             const status = response?.status;
             if(status === 200) {
-               const newDeliveryTypes = props?.deliveryTypes.map(deliveryType => {
-                  if(deliveryType?.id === deliveryTypeId) {
+               const newCorrespondents = props.correspondents.map(correspondent => {
+                  if(correspondent?.id === correspondentId) {
                      return data;
                   } else {
-                     return deliveryType;
+                     return correspondent;
                   }
                });
-               dispatchNotify('Вид подачи обновлено', '', 'success');
+               dispatchNotify('Корреспондент обновлено', '', 'success');
                editVisible.value = false;
-               props.setDeliveryTypes(newDeliveryTypes);
+               props.setCorrespondents(newCorrespondents);
             } else {
-               dispatchNotify('Вид подачи не обновлено', '', 'error');
+               dispatchNotify('Корреспондент не обновлено', '', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Вид подачи не обновлено', '', 'error');
+            dispatchNotify('Корреспондент не обновлено', '', 'error');
          })
          .finally(() => {
             editLoading.value = false;
          });
+   } else if(!first_name) {
+      dispatchNotify('Введите имя', '', 'error')
+   } else if(!last_name) {
+      dispatchNotify('Введите фамилия', '', 'error')
+   } else if(!father_name) {
+      dispatchNotify('Введите имя отца', '', 'error')
+   } else if(!gender.value) {
+      dispatchNotify('Выберите пол', '', 'error')
+   } else if(String(tin || '').length !== 9) {
+      dispatchNotify('Введите правильный ИНН', '', 'error')
+   } else if(!checkpoint) {
+      dispatchNotify('Введите КПП', '', 'error')
+   } else if(newPhone.length !== 13) {
+      dispatchNotify('Введите свой номер телефона правильно', '', 'error')
+   } else if(!isValidEmail(email)) {
+      dispatchNotify('Введите свой адрес электронной почты правильно', '', 'error')
    } else {
-      dispatchNotify('Введите название', '', 'error')
+      dispatchNotify('Введите адрес', '', 'error')
    }
 };
-const deliveryTypeDelete = () => {
+const correspondentDelete = () => {
    deleteLoading.value = true;
-   const deliveryTypeId = props?.data?.id;
+   const correspondentId = props?.data?.id;
    axiosConfig
-      .delete(`delivery-types/${deliveryTypeId}/`)
+      .delete(`correspondents/${correspondentId}/`)
       .then(response => {
          if(response?.status === 204) {
             deleteVisible.value = false;
-            dispatchNotify('Вид подачи удален', '', 'success')
-            props.getFirstPageDeliveryTypes();
+            dispatchNotify('Корреспондент удален', '', 'success')
+            props.getFirstPageCorrespondents();
          } else {
-            dispatchNotify('Вид подачи не удален', '', 'error')
+            dispatchNotify('Корреспондент не удален', '', 'error')
          }
       })
       .catch(() => {
-         dispatchNotify('Вид подачи не удален', '', 'error')
+         dispatchNotify('Корреспондент не удален', '', 'error')
       })
       .finally(() => {
          deleteLoading.value = false;
       });
 };
-const updateCondition = value => {
-   conditionLoading.value = true;
-   const deliveryTypeId = props?.data?.id;
-   axiosConfig
-      .patch(`delivery-types/${deliveryTypeId}/`, { is_active: value?.value })
-      .then(response => {
-         const data = response?.data;
-         const status = response?.status;
-         if(status === 200) {
-            const newDeliveryTypes = props?.deliveryTypes.map(deliverType => {
-               if(deliverType?.id === deliveryTypeId) {
-                  return data;
-               } else {
-                  return deliverType;
-               }
-            });
-            props.setDeliveryTypes(newDeliveryTypes);
-            dispatchNotify('Статус обновлено', '', 'success');
-         } else {
-            dispatchNotify('Статус не обновлено', '', 'error');
-         }
-      })
-      .catch(() => {
-         dispatchNotify('Статус не обновлено', '', 'error');
-      })
-      .finally(() => {
-         conditionLoading.value = false;
-      });
-};
 const changeLanguage = () => {
-   conditions.value = [
-      { label: 'Активный', value: true, },
-      { label: 'Неактивный', value: false }
+   genders.value = [
+      { name: 'Мужчина', value: 'm' },
+      { name: 'Женщина', value: 'f' },
    ];
 };
-const toggle = event => {
-   menu.value.toggle(event);
-};
+const openEditModal = () => {
+   const phone = +String(props.data?.phone || '').slice(3);;
+   const newGender = genders.value.find(gender => gender?.value === props.data?.gender);
+   gender.value = newGender;
+   editCorrespondent.value = { ...props.data, phone };
+   editVisible.value = true;
+}
 watch(locale, () => {
    changeLanguage();
 });
@@ -125,10 +119,7 @@ onMounted(() => {
 <template>
    <template v-if="field === 'action'">
       <Button
-         @click="() => {
-            editDeliveryType = data;
-            editVisible = true;
-         }"
+         @click="openEditModal"
          class="shadow-none py-[7px] px-2 text-xs bg-greyscale-50 mr-2 rounded-[8px]"
          icon
          severity="secondary"
@@ -165,63 +156,113 @@ onMounted(() => {
          </svg>
       </Button>
    </template>
-   <template v-else-if="field === 'is_active'">
-      <template v-if="conditionLoading">
-         <Skeleton height="16px" />
-      </template>
-      <template v-else>
-         <span
-            @click="toggle"
-            :style="{ background: data.is_active ? '#EEFFE7' : '#F7F7F9', color: data.is_active ? '#63BA3D' : '#767994' }"
-            class="inline-flex items-center justify-center pr-2 pl-3 py-1 font-medium rounded-[80px] text-sm text-greyscale-500 cursor-pointer">
-            <span class="mr-1">{{ data.is_active ? 'Активный' : 'Неактивный' }}</span>
-            <svg width="16" height="16" viewBox="0 0 12 12" fill="none">
-               <path d="M9 4.5L6 7.5L3 4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-         </span>
-         <Menu ref="menu" :model="conditions" style="width: initial !important" :popup="true" :pt="menuConfig">
-            <template #item="{ item }">
-               <div @click="() => { updateCondition(item) }" class="flex justify-between py-[6px] pr-2 pl-3 cursor-pointer">
-                  <span class="text-sm font-medium text-primary-900">{{ item.label }}</span>
-                  <span class="ml-2" v-if="item.value === data.is_active">
-                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M18.3337 9.99935C18.3337 14.6017 14.6027 18.3327 10.0003 18.3327C5.39795 18.3327 1.66699 14.6017 1.66699 9.99935C1.66699 5.39698 5.39795 1.66602 10.0003 1.66602C14.6027 1.66602 18.3337 5.39698 18.3337 9.99935ZM13.3589 7.47407C13.603 7.71815 13.603 8.11388 13.3589 8.35796L9.19227 12.5246C8.94819 12.7687 8.55246 12.7687 8.30838 12.5246L6.64172 10.858C6.39764 10.6139 6.39764 10.2182 6.64172 9.97407C6.8858 9.73 7.28152 9.73 7.5256 9.97407L8.75033 11.1988L10.6127 9.33644L12.4751 7.47407C12.7191 7.23 13.1149 7.23 13.3589 7.47407Z" fill="#635AFF"/>
-                     </svg>
-                  </span>
-               </div>
-            </template>
-         </Menu>
-      </template>
-   </template>
    <template v-else>
       <span class="text-sm font-medium">{{ data[field] }}</span>
    </template>
    <Dialog
       :closable="!editLoading"
       :pt="dialogConfig"
-      header="Изменить вид подачи"
+      header="Изменить корреспондент"
       modal
       v-model:visible="editVisible"
       >
-      <div class="flex flex-col pb-10 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
+      <div class="flex flex-col pb-0 pt-4">
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Имя<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            :modelValue="editDeliveryType.name_uz"
+            :modelValue="editCorrespondent.first_name"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название"
+            placeholder="Введите имя"
             type="text"
             @update:modelValue="value => {
-               editDeliveryType = { ...editDeliveryType, name_uz: replaceSpecChars(value) };
+               editCorrespondent = { ...editCorrespondent, first_name: replaceSpecChars(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ) <span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Фамилия<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            :modelValue="editDeliveryType.name_ru"
+            :modelValue="editCorrespondent.last_name"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название"
+            placeholder="Введите фамилия"
             type="text"
             @update:modelValue="value => {
-               editDeliveryType = { ...editDeliveryType, name_ru: replaceSpecChars(value) };
+               editCorrespondent = { ...editCorrespondent, last_name: replaceSpecChars(value) };
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Имя отца<span class="text-red-500 ml-1">*</span></p>
+         <InputText
+            :modelValue="editCorrespondent.father_name"
+            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            placeholder="Введите имя отца"
+            type="text"
+            @update:modelValue="value => {
+               editCorrespondent = { ...editCorrespondent, father_name: replaceSpecChars(value) };
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Пол<span class="text-red-500 ml-1">*</span></p>
+         <Dropdown :pt="selectConfig" v-model="gender" :options="genders" showClear optionLabel="name" placeholder="Выберите пол" class="w-full md:w-14rem" />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">ИНН<span class="text-red-500 ml-1">*</span></p>
+         <InputNumber
+            :maxFractionDigits="0"
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :useGrouping="false"
+            placeholder="Введите ИНН"
+            v-model="editCorrespondent.tin"
+            @input="({ value }) => {
+               const tin = +String(value || '').slice(0, 9)
+               editCorrespondent = { ...editCorrespondent, tin }
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">КПП<span class="text-red-500 ml-1">*</span></p>
+         <InputText
+            :modelValue="editCorrespondent.checkpoint"
+            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            placeholder="Введите КПП"
+            type="text"
+            @update:modelValue="value => {
+               editCorrespondent = { ...editCorrespondent, checkpoint: value };
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Номер телефона<span class="text-red-500 ml-1">*</span></p>
+         <InputNumber
+            :maxFractionDigits="0"
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :useGrouping="false"
+            v-model="editCorrespondent.phone"
+            placeholder="Введите номер телефона"
+            prefix="+99"
+            @input="({value}) => {
+               const phone = value && value > 7 ? +String(value || '').slice(0, 10) : 8;
+               editCorrespondent = { ...editCorrespondent, phone }
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Электронная почта<span class="text-red-500 ml-1">*</span></p>
+         <InputText
+            :modelValue="editCorrespondent.email"
+            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            placeholder="Введите электронная почта"
+            type="text"
+            @update:modelValue="value => {
+               editCorrespondent = { ...editCorrespondent, email: value };
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Адрес<span class="text-red-500 ml-1">*</span></p>
+         <InputText
+            :modelValue="editCorrespondent.address"
+            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            placeholder="Введите адрес"
+            type="text"
+            @update:modelValue="value => {
+               editCorrespondent = { ...editCorrespondent, address: value };
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Содержание</p>
+         <Textarea
+            :modelValue="editCorrespondent.description"
+            :pt="{root: {class:['h-[100px] w-[500px] resize-none rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            cols="30"
+            placeholder="Введите содержание"
+            rows="5"
+            @update:modelValue="value => {
+               editCorrespondent = { ...editCorrespondent, description: value };
             }"
             />
       </div>
@@ -240,7 +281,7 @@ onMounted(() => {
                   Отмена
                </Button>
                <Button
-                  @click="deliveryTypeEdit"
+                  @click="correspondentEdit"
                   class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"
@@ -250,9 +291,10 @@ onMounted(() => {
       </template>
    </Dialog>
    <Dialog
+      :closable="!deleteLoading"
       :pt="dialogConfig"
       dismissableMask
-      header="Удалить вид подачи"
+      header="Удалить корреспондент"
       modal
       v-model:visible="deleteVisible">
       <div class="flex flex-col items-center pb-10 pt-4">
@@ -263,9 +305,9 @@ onMounted(() => {
                <path fill-rule="evenodd" clip-rule="evenodd" d="M39.4608 53.3327H40.5392C44.2495 53.3327 46.1046 53.3327 47.3108 52.1514C48.517 50.9702 48.6404 49.0326 48.8872 45.1574L49.2428 39.5735C49.3767 37.4708 49.4437 36.4195 48.8386 35.7533C48.2335 35.0871 47.2116 35.0871 45.1679 35.0871H34.8321C32.7884 35.0871 31.7665 35.0871 31.1614 35.7533C30.5563 36.4195 30.6233 37.4708 30.7572 39.5735L31.1128 45.1574C31.3596 49.0326 31.483 50.9702 32.6892 52.1514C33.8954 53.3327 35.7505 53.3327 39.4608 53.3327ZM37.6617 40.2507C37.6067 39.6722 37.1167 39.2501 36.5672 39.308C36.0176 39.3658 35.6167 39.8817 35.6716 40.4601L36.3383 47.4777C36.3932 48.0561 36.8833 48.4782 37.4328 48.4203C37.9824 48.3625 38.3833 47.8467 38.3284 47.2682L37.6617 40.2507ZM43.4328 39.308C43.9824 39.3658 44.3833 39.8817 44.3284 40.4601L43.6617 47.4777C43.6068 48.0561 43.1167 48.4782 42.5672 48.4203C42.0176 48.3625 41.6167 47.8467 41.6716 47.2682L42.3383 40.2507C42.3933 39.6722 42.8833 39.2501 43.4328 39.308Z" fill="#F3335C"/>
             </svg>
          </div>
-         <h2 class="text-center font-semibold text-3xl text-gray-900 p-0 mt-6">Удалить вид подачи?</h2>
+         <h2 class="text-center font-semibold text-3xl text-gray-900 p-0 mt-6">Удалить корреспондент?</h2>
          <p class="text-center py-0 px-6 mt-2 text-gray-400">
-            Вы уверены, что хотите удалить этого вид подачи
+            Вы уверены, что хотите удалить этого корреспондент
          </p>
       </div>
       <template #footer>
@@ -283,7 +325,7 @@ onMounted(() => {
                   Отмена
                </Button>
                <Button
-                  @click="deliveryTypeDelete"
+                  @click="correspondentDelete"
                   class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"

@@ -79,8 +79,8 @@ const changeLanguage = () => {
       header: 'Создано'
     },
     {
-      columnKey: 'status',
-      field: 'status',
+      columnKey: 'is_active',
+      field: 'is_active',
       header: 'Статус',
     },
     {
@@ -129,7 +129,6 @@ onMounted(() => {
       :loading="loading"
       :pt="tableConfig"
       :value="journals"
-      @page="onChangePage"
       row-hover
       scrollable
       >
@@ -168,6 +167,7 @@ onMounted(() => {
     </DataTable>
     <div class="flex">
       <Paginator
+        :first="(filter.page - 1) * filter.page_size"
         :pt="paginationConfig"
         :rows="filter.page_size"
         :totalRecords="count"
