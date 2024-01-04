@@ -1,5 +1,6 @@
 <script setup>
 // Core
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useVuelidate } from '@vuelidate/core'
 import { helpers, required, requiredIf } from '@vuelidate/validators'
@@ -193,7 +194,7 @@ const types = [
           <user-with-selectable
             v-model:checkbox-index="boxesCommonStore.responsibleIndex"
             :items="boxesCommonStore.resolutionModel.__assignees"
-            :multiple="false"
+            select-type="radio"
             selectable
           >
             <template #chip-prepend="{ item }">
