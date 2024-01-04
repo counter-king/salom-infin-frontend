@@ -1,29 +1,33 @@
 <script setup>
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
+import Dropdown from 'primevue/dropdown';
 import InputText from 'primevue/inputtext';
 import ProgressSpinner from 'primevue/progressspinner';
 import axiosConfig from "@/services/axios.config";
-import { dialogConfig } from './config';
+import { dialogConfig, selectConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { replaceSpecChars } from '@/utils/string';
-const props = defineProps({ getFirstPageDistricts: Function, setVisible: Function, visible: Boolean });
+const props = defineProps({ getFirstPageDistricts: Function, setVisible: Function, visible: Boolean, regions: Array });
 const defaultDistrict = { name_uz: '', name_ru: '' };
 const district = ref(defaultDistrict);
 const loading = ref(false);
+const region = ref(null);
 const createDistrict = () => {
    const {name_ru, name_uz} = district.value;
-   if(name_uz && name_ru) {
+   const regionId = region.value?.id;
+   if(name_uz && name_ru && regionId) {
       loading.value = true;
       axiosConfig
-         .post('districts/', { name_ru, name_uz })
+         .post('districts/', { name_ru, name_uz, name: name_uz, region: regionId, is_active: true })
          .then(response => {
             if(response?.status === 201) {
                dispatchNotify('Район создан', '', 'success');
                district.value = defaultDistrict;
                props.getFirstPageDistricts();
                props.setVisible(false);
+               region.value = null;
             } else {
                dispatchNotify('Район не создан', '', 'error');
             }
@@ -34,6 +38,8 @@ const createDistrict = () => {
          .finally(() => {
             loading.value = false;
          });
+   } else if(!regionId) {
+      dispatchNotify('Введите регион', '', 'error')
    } else {
       dispatchNotify('Введите название', '', 'error')
    }
@@ -52,6 +58,19 @@ const createDistrict = () => {
       modal
       >
       <div class="flex flex-col pb-10 pt-4">
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Регион<span class="text-red-500 ml-1">*</span></p>
+         <Dropdown
+            :modelValue="region"
+            :options="regions"
+            :pt="selectConfig"
+            class="w-full md:w-14rem"
+            optionLabel="name"
+            placeholder="Выберите регион"
+            showClear
+            @update:modelValue="value => {
+               region = value;
+            }"
+            />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="district.name_uz"

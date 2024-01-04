@@ -18,6 +18,7 @@ const districts = ref([]);
 const filter = ref(defaultFilter);
 const headers = ref([]);
 const loading = ref(false);
+const regions = ref([]);
 const visible = ref(false);
 const getDistricts = (newFilter = {}) => {
   loading.value = true;
@@ -38,6 +39,18 @@ const getDistricts = (newFilter = {}) => {
     })
     .finally(() => {
       loading.value = false;
+    });
+};
+const getRegions = () => {
+  axiosConfig
+    .get('regions/?page_size=100')
+    .then(response => {
+      const results = response?.data?.results;
+      const newRegions = (Array.isArray(results) ? results : []).map(region => ({ ...region, value: region?.id }));
+      regions.value = newRegions;
+    })
+    .catch(() => {
+      regions.value = [];
     });
 };
 const searchDistricts = search => {
@@ -74,6 +87,16 @@ const changeLanguage = () => {
       header: 'Название (РУ)',
     },
     {
+      columnKey: 'region',
+      field: 'region',
+      header: 'Регион',
+    },
+    {
+      columnKey: 'is_active',
+      field: 'is_active',
+      header: 'Статус',
+    },
+    {
       columnKey: 'action',
       field: 'action',
       header: 'Действия',
@@ -86,6 +109,7 @@ watch(locale, () => {
 onMounted(() => {
   changeLanguage();
   getFirstPageDistricts();
+  getRegions();
 });
 </script>
 <template>
@@ -118,7 +142,7 @@ onMounted(() => {
     <DataTable
       :loading="loading"
       :pt="tableConfig"
-      :value="journals"
+      :value="districts"
       row-hover
       scrollable
       >
@@ -136,6 +160,7 @@ onMounted(() => {
             :districts="districts"
             :field="field"
             :getFirstPageDistricts="getFirstPageDistricts"
+            :regions="regions"
             :setDistricts="setDistricts"
             />
         </template>
@@ -180,6 +205,7 @@ onMounted(() => {
   </div>
   <CreateDistrict
     :getFirstPageDistricts="getFirstPageDistricts"
+    :regions="regions"
     :setVisible="setVisible"
     :visible="visible"
     />
