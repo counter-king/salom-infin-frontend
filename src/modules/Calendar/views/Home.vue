@@ -3,8 +3,8 @@
 </script>
 
 <template>
-  <div class="dashboard-home flex w-full">
-    Dashboard home
+  <div class="calendar-home flex w-full">
+    Calendar home
   </div>
 </template>
 
