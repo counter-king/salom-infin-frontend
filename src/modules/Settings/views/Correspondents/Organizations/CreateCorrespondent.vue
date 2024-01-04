@@ -13,8 +13,6 @@ import { ref } from 'vue';
 import { replaceSpecChars } from '@/utils/string';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
-// checkpoint legal_address legal_name legal
-// father_name first_name last_name gender address, birth_date physical
 const props = defineProps({ getFirstPageCorrespondents: Function, setVisible: Function, visible: Boolean });
 const defaultCorrespondent = { legal_name: '', legal_address: '', tin: '', checkpoint: '', email: '', phone: 8, description: '' };
 const correspondent = ref(defaultCorrespondent);
