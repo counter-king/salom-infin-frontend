@@ -10,7 +10,7 @@ import ResolutionForm from './components/Form.vue'
 // Utils
 import { clearModel } from '@/utils'
 import { dispatchNotify } from '@/utils/notify'
-import { COLOR_TYPES, RESOLUTION_CREATE_TYPES } from '@/enums'
+import { COLOR_TYPES, RESOLUTION_CREATE_TYPES, RESOLUTION_TYPES } from '@/enums'
 import { FORM_TYPE_CREATE, FORM_TYPE_READ, FORM_TYPE_UPDATE } from '@/constants/constants'
 // Composable
 const { t } = useI18n()
@@ -83,6 +83,8 @@ const toggle = (event) => {
 }
 const clearDocument = () => {
   clearModel(boxesCommonStore.resolutionModel, ['type'])
+  resolutionActionTypes.value = FORM_TYPE_CREATE
+  boxesCommonStore.resolutionModel.type = RESOLUTION_TYPES.ASSIGNMENT
 }
 const createResolution = async () => {
   const _formRef = unref(formRef)
