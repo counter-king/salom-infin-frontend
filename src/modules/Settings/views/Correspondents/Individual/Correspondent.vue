@@ -23,12 +23,13 @@ const editVisible = ref(false);
 const gender = ref(null);
 const genders = ref([]);
 const correspondentEdit = () => {
-   const { first_name, last_name, father_name, tin, checkpoint, email, phone, description, address } = editCorrespondent.value;
+   const { first_name, last_name, father_name, tin, email, phone, description, address } = editCorrespondent.value;
    const newPhone = '+99' + String(phone || '');
-   if( first_name && last_name && father_name && gender.value && String(tin || '').length === 9 && checkpoint && newPhone.length === 13 && isValidEmail(email) && address) {
+   const name = `${last_name} ${first_name} ${father_name}`;
+   if( first_name && last_name && father_name && gender.value && String(tin || '').length === 9 && newPhone.length === 13 && isValidEmail(email) && address) {
       editLoading.value = true;
       const correspondentId = props.data?.id;
-      const data = { address, first_name, last_name, father_name, tin, checkpoint, email, phone: newPhone, description, type: 'physical', gender: gender.value.value };
+      const data = { address, first_name, last_name, father_name, tin, email, phone: newPhone, description, type: 'physical', gender: gender.value.value, name };
       axiosConfig
          .patch(`correspondents/${correspondentId}/`, data)
          .then(response => {
@@ -65,8 +66,6 @@ const correspondentEdit = () => {
       dispatchNotify('Выберите пол', '', 'error')
    } else if(String(tin || '').length !== 9) {
       dispatchNotify('Введите правильный ИНН', '', 'error')
-   } else if(!checkpoint) {
-      dispatchNotify('Введите КПП', '', 'error')
    } else if(newPhone.length !== 13) {
       dispatchNotify('Введите свой номер телефона правильно', '', 'error')
    } else if(!isValidEmail(email)) {
@@ -209,16 +208,6 @@ onMounted(() => {
             @input="({ value }) => {
                const tin = +String(value || '').slice(0, 9)
                editCorrespondent = { ...editCorrespondent, tin }
-            }"
-            />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">КПП<span class="text-red-500 ml-1">*</span></p>
-         <InputText
-            :modelValue="editCorrespondent.checkpoint"
-            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите КПП"
-            type="text"
-            @update:modelValue="value => {
-               editCorrespondent = { ...editCorrespondent, checkpoint: value };
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Номер телефона<span class="text-red-500 ml-1">*</span></p>

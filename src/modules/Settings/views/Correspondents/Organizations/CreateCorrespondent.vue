@@ -1,31 +1,32 @@
 <script setup>
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
-import Dropdown from 'primevue/dropdown';
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import ProgressSpinner from 'primevue/progressspinner';
 import Textarea from 'primevue/textarea';
 import axiosConfig from "@/services/axios.config";
 import isValidEmail from '@/utils/isValidEmail';
-import { dialogConfig, selectConfig } from './config';
+import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
-import { ref, watch, onMounted } from 'vue';
+import { ref } from 'vue';
 import { replaceSpecChars } from '@/utils/string';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
+// checkpoint legal_address legal_name legal
+// father_name first_name last_name gender address, birth_date physical
 const props = defineProps({ getFirstPageCorrespondents: Function, setVisible: Function, visible: Boolean });
-const defaultCorrespondent = { first_name: '', last_name: '', father_name: '', tin: '', checkpoint: '', email: '', phone: 8, description: '', address: '' };
+const defaultCorrespondent = { legal_name: '', legal_address: '', tin: '', checkpoint: '', email: '', phone: 8, description: '' };
 const correspondent = ref(defaultCorrespondent);
 const gender = ref(null);
 const genders = ref([]);
 const loading = ref(false);
 const createCorrespondent = () => {
-   const { first_name, last_name, father_name, tin, checkpoint, email, phone, description, address } = correspondent.value;
+   const { legal_name, legal_address, tin, checkpoint, email, phone, description } = correspondent.value;
    const newPhone = '+99' + String(phone || '');
-   if(first_name && last_name && father_name && gender.value && String(tin || '').length === 9 && checkpoint && newPhone.length === 13 && isValidEmail(email) && address) {
+   if(legal_name && legal_address && String(tin || '').length === 9 && checkpoint && newPhone.length === 13 && isValidEmail(email)) {
       loading.value = true;
-      const data = { address, first_name, last_name, father_name, tin, checkpoint, email, phone: newPhone, description, type: 'legal', gender: gender.value.value };
+      const data = { legal_address, legal_name, tin, checkpoint, email, phone: newPhone, description, type: 'legal', name: legal_name };
       axiosConfig
          .post('correspondents/', data)
          .then(response => {
@@ -45,38 +46,20 @@ const createCorrespondent = () => {
          .finally(() => {
             loading.value = false;
          });
-   } else if(!first_name) {
-      dispatchNotify('Введите имя', '', 'error')
-   } else if(!last_name) {
-      dispatchNotify('Введите фамилия', '', 'error')
-   } else if(!father_name) {
-      dispatchNotify('Введите имя отца', '', 'error')
-   } else if(!gender.value) {
-      dispatchNotify('Выберите пол', '', 'error')
+   } else if(!legal_name) {
+      dispatchNotify('Введите название', '', 'error')
+   } else if(!legal_address) {
+      dispatchNotify('Введите адрес', '', 'error')
    } else if(String(tin || '').length !== 9) {
       dispatchNotify('Введите правильный ИНН', '', 'error')
    } else if(!checkpoint) {
       dispatchNotify('Введите КПП', '', 'error')
    } else if(newPhone.length !== 13) {
       dispatchNotify('Введите свой номер телефона правильно', '', 'error')
-   } else if(!isValidEmail(email)) {
-      dispatchNotify('Введите свой адрес электронной почты правильно', '', 'error')
    } else {
-      dispatchNotify('Введите адрес', '', 'error')
+      dispatchNotify('Введите свой адрес электронной почты правильно', '', 'error')
    }
 };
-const changeLanguage = () => {
-   genders.value = [
-      { name: 'Мужчина', value: 'm' },
-      { name: 'Женщина', value: 'f' },
-   ];
-};
-watch(locale, () => {
-   changeLanguage();
-});
-onMounted(() => {
-   changeLanguage();
-});
 </script>
 <template>
    <Dialog
@@ -91,38 +74,26 @@ onMounted(() => {
       modal
       >
       <div class="flex flex-col pb-0 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Имя<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Название<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            :modelValue="correspondent.first_name"
+            :modelValue="correspondent.legal_name"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите имя"
+            placeholder="Введите название"
             type="text"
             @update:modelValue="value => {
-               correspondent = { ...correspondent, first_name: replaceSpecChars(value) };
+               correspondent = { ...correspondent, legal_name: replaceSpecChars(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Фамилия<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Адрес<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            :modelValue="correspondent.last_name"
+            :modelValue="correspondent.legal_address"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите фамилия"
+            placeholder="Введите адрес"
             type="text"
             @update:modelValue="value => {
-               correspondent = { ...correspondent, last_name: replaceSpecChars(value) };
+               correspondent = { ...correspondent, legal_address: replaceSpecChars(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Имя отца<span class="text-red-500 ml-1">*</span></p>
-         <InputText
-            :modelValue="correspondent.father_name"
-            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите имя отца"
-            type="text"
-            @update:modelValue="value => {
-               correspondent = { ...correspondent, father_name: replaceSpecChars(value) };
-            }"
-            />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Пол<span class="text-red-500 ml-1">*</span></p>
-         <Dropdown :pt="selectConfig" v-model="gender" :options="genders" showClear optionLabel="name" placeholder="Выберите пол" class="w-full md:w-14rem" />
          <p class="text-sm text-greyscale-500 font-medium mb-1">ИНН<span class="text-red-500 ml-1">*</span></p>
          <InputNumber
             :maxFractionDigits="0"
@@ -166,16 +137,6 @@ onMounted(() => {
             type="text"
             @update:modelValue="value => {
                correspondent = { ...correspondent, email: value };
-            }"
-            />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Адрес<span class="text-red-500 ml-1">*</span></p>
-         <InputText
-            :modelValue="correspondent.address"
-            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите адрес"
-            type="text"
-            @update:modelValue="value => {
-               correspondent = { ...correspondent, address: value };
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Содержание</p>

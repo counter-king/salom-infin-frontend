@@ -74,11 +74,6 @@ const changeLanguage = () => {
       header: 'ИНН'
     },
     {
-      columnKey: 'checkpoint',
-      field: 'checkpoint',
-      header: 'КПП'
-    },
-    {
       columnKey: 'phone',
       field: 'phone',
       header: 'Телефон'
