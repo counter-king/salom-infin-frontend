@@ -3,8 +3,8 @@
 </script>
 
 <template>
-  <div class="dashboard-home flex w-full">
-    Dashboard home
+  <div class="chat-home flex w-full">
+    Chat home
   </div>
 </template>
 

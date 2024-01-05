@@ -56,7 +56,7 @@ const logIn = async () => {
       name: "DashboardIndex"
     })
   } catch (error) {
-      toast.add({ severity: 'error', summary: 'Есть ошибка', detail: "Неверный логин или пароль. Попробуйте еще раз.", life: 3000 });
+
   }
 
   loading.value = false

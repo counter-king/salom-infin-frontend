@@ -3,8 +3,8 @@
 </script>
 
 <template>
-  <div class="dashboard-home flex w-full">
-    Dashboard home
+  <div class="kanban-home flex w-full">
+    Kanban home
   </div>
 </template>
 

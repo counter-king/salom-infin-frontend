@@ -24,7 +24,7 @@ const menus = ref([
   {
     title: "Календарь",
     icon: "CalendarIcon",
-    link: "DashboardIndex",
+    link: "CalendarIndex",
     children: [],
     value: "calendar"
   },
@@ -39,7 +39,7 @@ const menus = ref([
   {
     title: "Kanban",
     icon: "ChatSquareIcon",
-    link: "DashboardIndex",
+    link: "KanbanIndex",
     children: [],
     value: "kanban"
   },
@@ -47,7 +47,7 @@ const menus = ref([
   {
     title: "Чат",
     icon: "ChatLineIcon",
-    link: "DashboardIndex",
+    link: "ChatIndex",
     children: [],
     value: "chat"
   },

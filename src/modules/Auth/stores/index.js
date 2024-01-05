@@ -22,7 +22,7 @@ export const useAuthStore = defineStore("authStore", {
       if(error) return Promise.reject(error.data)
       saveStorageItem(ACCESS, response.data.access)
       saveStorageItem(REFRESH, response.data.refresh)
-      saveStorageItem(EXPIRES, response.data.expires)
+      saveStorageItem(EXPIRES, response.data.expires_in)
     },
     /*
     *
