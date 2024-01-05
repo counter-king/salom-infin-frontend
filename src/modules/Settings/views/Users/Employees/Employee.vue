@@ -71,7 +71,7 @@ const employeeEdit = () => {
    } else if(!last_name) {
       dispatchNotify('Введите фамилия', '', 'error');
    } else if(!father_name) {
-      dispatchNotify('Введите имя отца', '', 'error');
+      dispatchNotify('Введите отчество', '', 'error');
    } else if(pinfl?.length !== 14) {
       dispatchNotify('Введите ПИНФЛ', '', 'error');
    } else if(phone?.length !== 12) {
@@ -328,11 +328,11 @@ onMounted(() => {
                editEmployee = { ...editEmployee, last_name: replaceSpecChars(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Имя отца<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Отчество<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editEmployee.father_name"
             :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
-            placeholder="Введите имя отца"
+            placeholder="Введите отчество"
             type="text"
             @update:modelValue="value => {
                editEmployee = { ...editEmployee, father_name: replaceSpecChars(value) };

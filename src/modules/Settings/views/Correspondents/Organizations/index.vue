@@ -66,7 +66,7 @@ const changeLanguage = () => {
     {
       columnKey: 'name',
       field: 'name',
-      header: 'Название',
+      header: 'Наименование',
     },
     {
       columnKey: 'tin',

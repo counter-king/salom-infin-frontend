@@ -7,7 +7,6 @@ import axiosConfig from "@/services/axios.config";
 import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
-import { replaceSpecCharsBracket } from '@/utils/string';
 const props = defineProps({ getFirstPageShortDescriptions: Function, setVisible: Function, visible: Boolean });
 const defaultShortDescription = { description_uz: '', description_ru: '' };
 const shortDescription = ref(defaultShortDescription);
@@ -59,8 +58,8 @@ const createShortDescription = () => {
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите описание"
             type="text"
-            @update:modelValue="value => {
-               shortDescription = { ...shortDescription, description_uz: replaceSpecCharsBracket(value) };
+            @update:modelValue="description_uz => {
+               shortDescription = { ...shortDescription, description_uz };
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Описание (РУ) <span class="text-red-500 ml-1">*</span></p>
@@ -69,8 +68,8 @@ const createShortDescription = () => {
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите описание"
             type="text"
-            @update:modelValue="value => {
-               shortDescription = { ...shortDescription, description_ru: replaceSpecCharsBracket(value) };
+            @update:modelValue="description_ru => {
+               shortDescription = { ...shortDescription, description_ru };
             }"
             />
       </div>
