@@ -93,8 +93,8 @@ const changeLanguage = () => {
          header: 'Название (РУ)',
       },
       {
-         columnKey: 'status',
-         field: 'status',
+         columnKey: 'is_active',
+         field: 'is_active',
          header: 'Статус',
       },
       {
