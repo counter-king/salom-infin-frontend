@@ -55,3 +55,7 @@ export const menuConfig = {
    root: { class: 'translate-y-1 rounded-xl shadow-menu px-1 pb-0' },
    submenuHeader: { class: 'py-[6px] pl-3 text-sm font-semibold text-primary-500' }
 };
+export const overlayConfig = {
+   content: ['p-0'],
+   root: ['translate-y-0 rounded-2xl shadow-menu after_none bg-white mt-[6px] overflow-hidden'],
+};

@@ -65,3 +65,7 @@ export const dropdownOptions = [
    { name: '20', page_size: 20 },
    { name: '30', page_size: 30 },
 ];
+export const overlayConfig = {
+   content: ['p-0'],
+   root: ['translate-y-0 rounded-2xl shadow-menu after_none bg-white mt-[6px] overflow-hidden'],
+};

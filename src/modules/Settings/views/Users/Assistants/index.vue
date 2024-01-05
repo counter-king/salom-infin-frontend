@@ -8,17 +8,46 @@ import Dropdown from 'primevue/dropdown';
 import Paginator from 'primevue/paginator';
 import Skeleton from 'primevue/skeleton';
 import axiosConfig from "@/services/axios.config";
-import { onMounted, ref, watch } from 'vue';
-import { tableConfig, columnConfig, paginationConfig, dropdownConfig, dropdownOptions } from './config';
+import { onMounted, ref, computed } from 'vue';
+import OverlayPanel from 'primevue/overlaypanel';
+import InputSwitch from 'primevue/inputswitch';
+import { tableConfig, columnConfig, paginationConfig, dropdownConfig, dropdownOptions, overlayConfig } from './config';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
 const defaultFilter = { page: 1, page_size: 10 };
 const assistants = ref([]);
 const count = ref(1);
 const filter = ref(defaultFilter);
-const headers = ref([]);
+const headers = ref([
+  {
+    columnKey: 'assistant',
+    field: 'assistant',
+    header: 'Помощник',
+    is_active: true,
+  },
+  {
+    columnKey: 'user',
+    field: 'user',
+    header: 'Руководитель',
+    is_active: true,
+  },
+  {
+    columnKey: 'is_active',
+    field: 'is_active',
+    header: 'Состояние',
+    is_active: true,
+  },
+  {
+    columnKey: 'action',
+    field: 'action',
+    header: 'Действия',
+    is_active: true,
+  },
+]);
 const loading = ref(false);
 const visible = ref(false);
+const settingsOverlay = ref(null);
+const visibleHeaders = computed(() => headers.value.filter(header => header?.is_active));
 const getAssistants = (newFilter = {}) => {
   loading.value = true;
   filter.value = newFilter;
@@ -48,30 +77,6 @@ const onChangePageSize = ({ value }) => {
   const newFilter = { ...filter.value, page: 1, page_size: value };
   getAssistants(newFilter);
 };
-const changeLanguage = () => {
-  headers.value = [
-    {
-      columnKey: 'assistant',
-      field: 'assistant',
-      header: 'Помощник',
-    },
-    {
-      columnKey: 'user',
-      field: 'user',
-      header: 'Руководитель',
-    },
-    {
-      columnKey: 'is_active',
-      field: 'is_active',
-      header: 'Состояние',
-    },
-    {
-      columnKey: 'action',
-      field: 'action',
-      header: 'Действия',
-    },
-  ];
-};
 const setVisible = newVisible => {
   visible.value = newVisible;
 };
@@ -81,18 +86,55 @@ const setAssistants = newAssistants => {
 const getFirstPageAssistants = () => {
   getAssistants(defaultFilter);
 };
-watch(locale, () => {
-  changeLanguage();
-});
+const changeHeader = (is_active, order) => {
+  const newHeaders = headers.value.map((header, index) => {
+    if(index === order) {
+      return { ...header, is_active }
+    } else {
+      return header;
+    }
+  });
+  headers.value = newHeaders;
+};
+const toggle = e => {
+  settingsOverlay.value.toggle(e);
+};
+const saveChanges = e => {
+  const newHeaders = JSON.stringify(headers.value);
+  localStorage.setItem('settings-users-assistants', newHeaders);
+  settingsOverlay.value.toggle(e);
+};
+const resetHeaders = e => {
+  const newHeaders = headers.value.map(header => ({ ...header, is_active: true }));
+  headers.value = newHeaders;
+  localStorage.setItem('settings-users-assistants', JSON.stringify(newHeaders));
+  settingsOverlay.value.toggle(e);
+};
+const initHeaders = () => {
+  const list = JSON.parse(localStorage.getItem('settings-users-assistants'));
+  if(Array.isArray(list) && list?.length) {
+    const newHeaders = list;
+    headers.value = newHeaders;
+  }
+};
 onMounted(() => {
-  changeLanguage();
   getFirstPageAssistants();
+  initHeaders();
 });
 </script>
 <template>
   <div class="flex mb-5 justify-between items-center">
     <h1 class="text-2xl font-bold text-primary-900">Помощники</h1>
     <div class="flex items-center gap-2">
+      <Button
+        @click="toggle"
+        class="p-button p-component font-medium text-sm border-transparent bg-primary-0 hover:bg-greyscale-100 text-primary-dark shadow-button rounded-xl !rounded-full py-[9px] px-4"
+        rounded
+        type="button"
+        >
+        <base-icon class="mr-2" color="#767994" height="20" name="SettingsMinimalisticIcon" width="20"/>
+        <span>Настроить столбцы</span>
+      </Button>
       <Button
         @click="visible = true"
         class="p-button p-component font-medium text-sm rounded-xl !rounded-full py-[9px] px-4"
@@ -118,7 +160,7 @@ onMounted(() => {
         :header="item.header"
         :key="index"
         :pt="columnConfig"
-        v-for="(item, index) in headers"
+        v-for="(item, index) in visibleHeaders"
       >
         <template #body="{ field, data }">
           <assistant :data="data" :field="field" :assistants="assistants" :setAssistants="setAssistants" :get-first-page-assistants="getFirstPageAssistants"/>
@@ -128,7 +170,7 @@ onMounted(() => {
         <div class="bg-primary-50 w-full h-full overflow-hidden absolute left-0 top-0">
           <div v-for="(_, index) in 10" :key="index" class="bg-white px-5 h-14 rounded-xl flex flex-col justify-center items-center mb-1">
             <div class="w-full h-full flex items-center justify-center gap-4">
-              <Skeleton v-for="(_, index) in 5" :key="index" height="16px" />
+              <Skeleton v-for="(_, index) in visibleHeaders.length" :key="index" height="16px" />
             </div>
           </div>
         </div>
@@ -162,6 +204,34 @@ onMounted(() => {
       </Paginator>
     </div>
   </div>
+  <OverlayPanel ref="settingsOverlay" :pt="overlayConfig">
+    <div class="p-3">
+      <div v-for="(header, index) in headers" :key="index" class="w-full h-10 py-3 px-2 flex items-center gap-3 justify-between">
+        <span class="text-primary-900 text-sm font-medium">{{ header.header }}</span>
+        <InputSwitch
+          size="small"
+          :modelValue="header.is_active"
+          @update:modelValue="value => {
+            changeHeader(value, index)
+          }"
+          :pt="{
+            root: { class: ['h-[22px] w-[36px] shadow-none ml-6'] },
+            slider: () => ({
+              class: [
+                'before:h-[18px] before:w-[18px] before:-mt-[9px] shadow-none',
+                header?.is_active ? 'bg-green-500' : 'bg-greyscale-100',
+                header?.is_active ? 'before:translate-x-[10px]' : 'before:left-[2px]'
+              ]
+            }),
+          }"
+        />
+      </div>
+    </div>
+    <div class="flex justify-end border-t bg-greyscale-50 py-3 pr-5 pl-8">
+      <Button @click="resetHeaders" class="p-button p-component shadow-button font-medium flex justify-center shadow-none rounded-full text-[14px] py-[6px] px-4 bg-white text-primary-900 border-transparent">Сбросить</Button>
+      <Button @click="saveChanges" class="p-button p-component font-medium flex justify-center shadow-none rounded-full text-[14px] py-[6px] px-4 ml-2">Сохранить</Button>
+    </div>
+  </OverlayPanel>
   <CreateAssistant
     :get-first-page-assistants="getFirstPageAssistants"
     :setVisible="setVisible"
