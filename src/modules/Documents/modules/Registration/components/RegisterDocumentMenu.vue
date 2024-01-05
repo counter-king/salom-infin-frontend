@@ -59,8 +59,12 @@ const documentType = (type) => {
 </script>
 
 <template>
-  <button class="flex items-center gap-2 outline-none bg-transparent" aria-haspopup="true" aria-controls="overlay_menu2"
-    @click="toggle">
+  <button
+    aria-haspopup="true"
+    aria-controls="overlay_menu2"
+    class="flex items-center gap-2 outline-none bg-transparent"
+    @click="toggle"
+  >
     <h1 class="text-xl font-bold text-primary-900">{{ menuActiveText.label }}</h1>
     <base-icon name="AltArrowLeftIcon" class="-rotate-90 mt-1 text-gray-2" />
   </button>

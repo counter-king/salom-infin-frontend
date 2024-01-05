@@ -9,6 +9,7 @@ import { useCorrespondentStore } from '@/stores/correspondent'
 import { UserWithLabel } from '@/components/Users'
 // Utils
 import { isObject } from '@/utils'
+import { replaceWithNumbers } from '@/utils/regex'
 // Non-reactive
 const rules = {
   register_number: {
@@ -17,9 +18,9 @@ const rules = {
   outgoing_number: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
-  grif: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
+  // grif: {
+  //   required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  // },
   language: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
@@ -90,15 +91,6 @@ defineExpose({ $v })
     <base-row>
       <base-col col-class="w-1/2">
         <base-input
-          v-model="$v.register_number.$model"
-          :error="$v.register_number"
-          required
-          label="reg-number"
-        />
-      </base-col>
-
-      <base-col col-class="w-1/2">
-        <base-input
           v-model="$v.outgoing_number.$model"
           :error="$v.outgoing_number"
           required
@@ -108,13 +100,45 @@ defineExpose({ $v })
       </base-col>
 
       <base-col col-class="w-1/2">
-        <base-dropdown
-          v-model="$v.grif.$model"
-          :error="$v.grif"
+        <base-input
+          v-model="$v.register_number.$model"
+          :error="$v.register_number"
           required
-          label="grif"
+          label="reg-number"
         />
       </base-col>
+
+      <base-col col-class="w-1/2">
+        <base-calendar
+          v-model="$v.outgoing_date.$model"
+          :error="$v.outgoing_date"
+          :max-date="new Date()"
+          required
+          label="out-date"
+          placeholder="enter-out-date"
+          @update:modelValue="(value) => $v.register_date.$model = value"
+        />
+      </base-col>
+
+      <base-col col-class="w-1/2">
+        <base-calendar
+          v-model="$v.register_date.$model"
+          :error="$v.register_date"
+          :min-date="new Date($v.outgoing_date.$model)"
+          required
+          label="reg-date"
+          placeholder="enter-reg-date"
+        />
+      </base-col>
+
+<!--      <base-col col-class="w-1/2">-->
+<!--        <base-dropdown-->
+<!--          v-model="$v.grif.$model"-->
+<!--          :error="$v.grif"-->
+<!--          required-->
+<!--          label="grif"-->
+<!--        />-->
+<!--      </base-col>-->
 
       <base-col col-class="w-1/2">
         <base-dropdown
@@ -136,26 +160,7 @@ defineExpose({ $v })
           required
           label="number-sheets"
           placeholder="number-sheets"
-        />
-      </base-col>
-
-      <base-col col-class="w-1/2">
-        <base-calendar
-          v-model="$v.register_date.$model"
-          :error="$v.register_date"
-          required
-          label="reg-date"
-          placeholder="enter-reg-date"
-        />
-      </base-col>
-
-      <base-col col-class="w-1/2">
-        <base-calendar
-          v-model="$v.outgoing_date.$model"
-          :error="$v.outgoing_date"
-          required
-          label="out-date"
-          placeholder="enter-out-date"
+          @input="() => $v.number_of_papers.$model = replaceWithNumbers($v.number_of_papers.$model)"
         />
       </base-col>
 

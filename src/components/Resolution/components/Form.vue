@@ -1,6 +1,5 @@
 <script setup>
 // Core
-import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useVuelidate } from '@vuelidate/core'
 import { helpers, required, requiredIf } from '@vuelidate/validators'
@@ -47,6 +46,9 @@ const props = defineProps({
   formType: {
     type: String,
     default: FORM_TYPE_CREATE
+  },
+  registerDate: {
+    type: Date
   }
 })
 defineExpose({ $v })
@@ -85,6 +87,7 @@ const types = [
       <base-col col-class="w-full">
         <base-calendar
           v-model="$v.deadline.$model"
+          :min-date="props.registerDate"
           :error="$v.deadline"
           :disabled="props.formType === FORM_TYPE_READ"
           label="deadline"

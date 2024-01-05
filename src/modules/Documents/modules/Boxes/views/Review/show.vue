@@ -82,6 +82,7 @@ const acquaintDocument = async () => {
               :parent-id="null"
               :resolution-list-id="reviewStore.detailModel.document.id"
               :is-resolution-signed="reviewStore.isReviewSigned"
+              :register-date="new Date(reviewStore.detailModel.document.register_date)"
             />
 
             <!-- Если есть созданные резолюция -->

@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Calendar from 'primevue/calendar'
 // Utils
@@ -12,6 +12,12 @@ const props = defineProps({
   modelValue: {
     type: [String],
     default: ""
+  },
+  minDate: {
+    type: Date
+  },
+  maxDate: {
+    type: Date
   },
   disabled: {
     type: Boolean
@@ -87,6 +93,8 @@ const modelValue = computed({
 
     <Calendar
       v-model="modelValue"
+      :min-date="props.minDate"
+      :max-date="props.maxDate"
       :disabled="props.disabled"
       :placeholder="t(props.placeholder)"
       show-icon

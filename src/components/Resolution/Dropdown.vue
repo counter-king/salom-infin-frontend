@@ -44,6 +44,9 @@ const props = defineProps({
   resolutionListId: {
     type: Number
   },
+  registerDate: {
+    type: Date
+  }
 })
 const emit = defineEmits(['emit:created', 'emit:updated'])
 // Reactive
@@ -219,7 +222,11 @@ const deleteResolution = async (text) => {
       @emit:after-hide="clearDocument"
     >
       <template #content>
-        <resolution-form ref="formRef" :form-type="resolutionActionTypes" />
+        <resolution-form
+          ref="formRef"
+          :form-type="resolutionActionTypes"
+          :register-date="props.registerDate"
+        />
       </template>
 
       <template #footer>

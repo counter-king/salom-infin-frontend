@@ -73,6 +73,7 @@ const updateDocument = async () => {
               :parent-id="assignmentStore.detailModel.assignment.id"
               :resolution-list-id="assignmentStore.detailModel.document.id"
               :resolution-create-type="RESOLUTION_CREATE_TYPES.ASSIGNMENT"
+              :register-date="new Date(assignmentStore.detailModel.document.register_date)"
             />
           </template>
         </template>
