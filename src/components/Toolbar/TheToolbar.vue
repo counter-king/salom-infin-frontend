@@ -94,13 +94,13 @@ const menus = ref([
         link: "CorrespondentsIndex",
         children: [
           {
-            title: "Индивидулны",
+            title: "Физическое лицо",
             icon: "UserCheckRoundedIcon",
             link: "IndividualIndex",
             children: []
           },
           {
-            title: "Организации",
+            title: "Индивидуальный предприниматель",
             icon: "BuildingsIcon",
             link: "OrganizationsIndex",
             children: []

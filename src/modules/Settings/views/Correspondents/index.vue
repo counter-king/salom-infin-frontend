@@ -7,12 +7,12 @@ const navs = ref([]);
 const changeLanguage = () => {
   navs.value = [
     {
-      title: 'Индивидулны',
+      title: 'Физическое лицо',
       icon: 'UserCheckRoundedIcon',
       link: 'IndividualIndex',
     },
     {
-      title: 'Организации',
+      title: 'Индивидуальный предприниматель',
       icon: 'BuildingsIcon',
       link: 'OrganizationsIndex',
     },

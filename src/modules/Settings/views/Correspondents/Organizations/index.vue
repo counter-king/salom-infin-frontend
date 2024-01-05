@@ -105,7 +105,7 @@ onMounted(() => {
 </script>
 <template>
   <div class="flex mb-5 justify-between items-center">
-    <h1 class="text-2xl font-bold text-primary-900">Организации</h1>
+    <h1 class="text-2xl font-bold text-primary-900">Индивидуальный предприниматель</h1>
     <div class="flex items-center gap-2">
       <span class="p-input-icon-left">
         <i class="pi pi-search pl-1" />
