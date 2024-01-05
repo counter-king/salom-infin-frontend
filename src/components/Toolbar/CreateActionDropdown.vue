@@ -11,13 +11,13 @@ const docFlowStore = useDocFlowStore()
 const menuRef = ref(null)
 const items = ref([
   {
-    label: 'Задача',
-    icon: 'CheckCircleIcon',
+    label: 'Документ',
+    icon: 'ClipboardCheckIcon',
     command: () => docFlowStore.actionToggleModalCreateDocument(true)
   },
   {
-    label: 'Документ',
-    icon: 'ClipboardCheckIcon'
+    label: 'Задача',
+    icon: 'CheckCircleIcon'
   }
 ])
 // Methods
