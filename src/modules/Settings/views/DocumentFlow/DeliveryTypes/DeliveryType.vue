@@ -9,7 +9,6 @@ import axiosConfig from "@/services/axios.config";
 import { dialogConfig, menuConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref, watch, onMounted } from 'vue';
-import { replaceSpecChars } from '@/utils/string';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
 const props = defineProps({ data: Object, deliveryTypes: Array, field: String, getFirstPageDeliveryTypes: Function, setDeliveryTypes: Function });
@@ -210,8 +209,8 @@ onMounted(() => {
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
-            @update:modelValue="value => {
-               editDeliveryType = { ...editDeliveryType, name_uz: replaceSpecChars(value) };
+            @update:modelValue="name_uz => {
+               editDeliveryType = { ...editDeliveryType, name_uz };
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ) <span class="text-red-500 ml-1">*</span></p>
@@ -220,8 +219,8 @@ onMounted(() => {
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
-            @update:modelValue="value => {
-               editDeliveryType = { ...editDeliveryType, name_ru: replaceSpecChars(value) };
+            @update:modelValue="name_ru => {
+               editDeliveryType = { ...editDeliveryType, name_ru };
             }"
             />
       </div>

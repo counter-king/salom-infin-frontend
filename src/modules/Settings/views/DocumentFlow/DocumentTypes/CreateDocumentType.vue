@@ -7,7 +7,6 @@ import axiosConfig from "@/services/axios.config";
 import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
-import { replaceSpecChars } from '@/utils/string';
 const props = defineProps({ getFirstPageDocumentTypes: Function, setVisible: Function, visible: Boolean });
 const defaultDocumentType = { name_uz: '', name_ru: '' }
 const documentType = ref(defaultDocumentType);
@@ -54,8 +53,8 @@ const createDocumentType = () => {
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            @update:modelValue="value => {
-               documentType = { ...documentType, name_uz: replaceSpecChars(value) };
+            @update:modelValue="name_uz => {
+               documentType = { ...documentType, name_uz };
             }"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
@@ -64,8 +63,8 @@ const createDocumentType = () => {
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            @update:modelValue="value => {
-               documentType = { ...documentType, name_ru: replaceSpecChars(value) };
+            @update:modelValue="name_ru => {
+               documentType = { ...documentType, name_ru };
             }"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"

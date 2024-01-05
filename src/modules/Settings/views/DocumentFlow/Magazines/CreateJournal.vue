@@ -7,7 +7,6 @@ import axiosConfig from "@/services/axios.config";
 import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
-import { replaceSpecChars } from '@/utils/string';
 const props = defineProps({ getFirstPageJournals: Function, setVisible: Function, visible: Boolean });
 const defaultJournal = { name_uz: '', name_ru: '' };
 const journal = ref(defaultJournal);
@@ -58,8 +57,8 @@ const createJournal = () => {
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
-            @update:modelValue="value => {
-               journal = { ...journal, name_uz: replaceSpecChars(value) };
+            @update:modelValue="name_uz => {
+               journal = { ...journal, name_uz };
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ)<span class="text-red-500 ml-1">*</span></p>
@@ -68,8 +67,8 @@ const createJournal = () => {
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
-            @update:modelValue="value => {
-               journal = { ...journal, name_ru: replaceSpecChars(value) };
+            @update:modelValue="name_ru => {
+               journal = { ...journal, name_ru };
             }"
             />
       </div>
