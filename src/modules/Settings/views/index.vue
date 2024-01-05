@@ -13,7 +13,7 @@ const changeLanguage = () => {
     {
       icon: 'FolderWithFilesIcon',
       link: 'DocumentFlowIndex',
-      title: 'Документ оборот',
+      title: 'Документооборот',
     },
     {
       icon: 'BuildingsIcon',
