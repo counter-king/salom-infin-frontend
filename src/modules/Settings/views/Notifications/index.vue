@@ -43,7 +43,7 @@ onMounted(() => {
   axiosConfig
     .get('notification-types/')
     .then(response => {
-      console.log('response', response)
+      console.log(response)
     })
     .catch(() => {
       console.log('error')
