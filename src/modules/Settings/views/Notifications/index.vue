@@ -1,6 +1,7 @@
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import axiosConfig from "@/services/axios.config";
 const items = ref([
   {
     title: "Установить уведомления о платежах",
@@ -38,6 +39,16 @@ const items = ref([
     sidePanelSwitch: true
   }
 ]);
+onMounted(() => {
+  axiosConfig
+    .get('notification-types/')
+    .then(response => {
+      console.log(response)
+    })
+    .catch(() => {
+      console.log('error')
+    })
+})
 </script>
 <template>
   <div class="flex flex-col h-full">
