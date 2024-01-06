@@ -1,55 +1,46 @@
 <script setup>
 import Button from 'primevue/button';
-import CreateDepartment from './CreateDepartment.vue';
+import Correspondent from './Correspondent.vue';
+import CreateCorrespondent from './CreateCorrespondent.vue';
 import DataTable from 'primevue/datatable';
-import Department from './Department.vue';
 import Dropdown from 'primevue/dropdown';
 import InputText from 'primevue/inputtext';
 import Paginator from 'primevue/paginator';
-import Skeleton from 'primevue/skeleton';
 import OverlayPanel from 'primevue/overlaypanel';
-import TheNavigation from '@/components/TheNavigation.vue';
+import Skeleton from 'primevue/skeleton';
 import axiosConfig from "@/services/axios.config";
-import { ref, watch, onMounted, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import InputSwitch from 'primevue/inputswitch';
 import { tableConfig, columnConfig, dropdownConfig, paginationConfig, dropdownOptions, overlayConfig } from './config';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
 const defaultFilter = { page: 1, page_size: 10, search: '' };
 const count = ref(1);
-const departments = ref([]);
 const filter = ref(defaultFilter);
 const headers = ref([
   {
-    columnKey: 'name_uz',
+    columnKey: 'name',
     disabled: true,
-    field: 'name_uz',
-    header: 'Название (UZ)',
+    field: 'name',
+    header: 'Название',
     is_active: true,
   },
   {
-    columnKey: 'name_ru',
-    field: 'name_ru',
-    header: 'Название (РУ)',
+    columnKey: 'tin',
+    field: 'tin',
+    header: 'ИНН',
     is_active: true,
   },
   {
-    columnKey: 'sub_department_count',
-    field: 'sub_department_count',
-    header: 'Субдепартамент',
+    columnKey: 'phone',
+    field: 'phone',
+    header: 'Телефон',
     is_active: true,
   },
   {
-    columnKey: 'employee_count',
-    field: 'employee_count',
-    header: 'Сотрудники',
-    is_active: true,
-  },
-  {
-    columnKey: 'condition',
-    disabled: true,
-    field: 'condition',
-    header: 'Статус',
+    columnKey: 'email',
+    field: 'email',
+    header: 'Электронная почта',
     is_active: true,
   },
   {
@@ -60,71 +51,52 @@ const headers = ref([
   },
 ]);
 const loading = ref(false);
-const navs = ref([]);
+const correspondents = ref([]);
 const visible = ref(false);
 const settingsOverlay = ref(null);
 const visibleHeaders = computed(() => headers.value.filter(header => header?.is_active));
 const editableHeaders = computed(() => headers?.value.filter(header => !header?.disabled));
-const getDepartments = (newFilter = {}) => {
+const getCorrespondents = (newFilter = {}) => {
   loading.value = true;
   filter.value = newFilter;
   const { page, page_size, search } = newFilter;
-  const params = `?page=${page}${page_size ? '&page_size=' + page_size : ''}${search ? '&search=' + search : ''}`;
+  const params = `?type=physical&page=${page}${page_size ? '&page_size=' + page_size : ''}${search ? '&search=' + search : ''}`;
   axiosConfig
-    .get(`departments/top-level-departments/${params}`)
+    .get(`correspondents/${params}`)
     .then(response => {
       const results = response?.data?.results;
       const newCount = response?.data?.count;
-      const newDepartments = (Array.isArray(results) ? results: []).map(user => ({...user, position: user?.position?.name}));
-      departments.value = newDepartments;
+      const newCorrespondents = Array.isArray(results) ? results: [];
+      correspondents.value = newCorrespondents;
       count.value = newCount;
     })
     .catch(() => {
-      departments.value = [];
+      correspondents.value = [];
     })
     .finally(() => {
       loading.value = false;
     });
 };
-const searchDepartments = search => {
+const searchCorrespondents = search => {
   const newFilter = { ...filter.value, page: 1, search };
-  getDepartments(newFilter);
+  getCorrespondents(newFilter);
 };
 const onChangePage = ({ page }) => {
   const newFilter = { ...filter.value, page: page + 1 };
-  getDepartments(newFilter);
+  getCorrespondents(newFilter);
 };
 const onChangePageSize = ({ value }) => {
   const newFilter = { ...filter.value, page: 1, page_size: value };
-  getDepartments(newFilter);
+  getCorrespondents(newFilter);
 };
-const getFirstPageDepartments = () => {
-  getDepartments(defaultFilter);
+const getFirstPageCorrespondents = () => {
+  getCorrespondents(defaultFilter);
 };
-const setDepartments = newDepartments => {
-  departments.value = newDepartments;
+const setCorrespondents = newCorrespondents => {
+  correspondents.value = newCorrespondents;
 }
 const setVisible = newVisible => {
   visible.value = newVisible;
-};
-const changeLanguage = () => {
-  navs.value = [
-    {
-      title: "Департаменты",
-      icon: "BuildingsIcon",
-      link: "DepartmentsIndex",
-    },
-    {
-      title: "Филиалы",
-      icon: "BuildingsIcon",
-      link: "BranchesIndex",
-    },
-    {
-      title: "Должность",
-      icon: "UserSpeakIcon",
-      link: "PositionsIndex",
-    }
-  ];
 };
 const changeHeader = (is_active, field) => {
   const newHeaders = headers.value.map(header => {
@@ -141,42 +113,37 @@ const toggle = e => {
 };
 const saveChanges = e => {
   const newHeaders = JSON.stringify(headers.value);
-  localStorage.setItem('settings-structure-departments', newHeaders);
+  localStorage.setItem('settings-correspondents-physical', newHeaders);
   settingsOverlay.value.toggle(e);
 };
 const resetHeaders = e => {
   const newHeaders = headers.value.map(header => ({ ...header, is_active: true }));
   headers.value = newHeaders;
-  localStorage.setItem('settings-structure-departments', JSON.stringify(newHeaders));
+  localStorage.setItem('settings-correspondents-physical', JSON.stringify(newHeaders));
   settingsOverlay.value.toggle(e);
 };
 const initHeaders = () => {
-  const list = JSON.parse(localStorage.getItem('settings-structure-departments'));
+  const list = JSON.parse(localStorage.getItem('settings-correspondents-physical'));
   if(Array.isArray(list) && list?.length) {
     const newHeaders = list;
     headers.value = newHeaders;
   }
 };
-watch(locale, () => {
-  changeLanguage();
-});
 onMounted(() => {
-  changeLanguage();
-  getFirstPageDepartments();
+  getFirstPageCorrespondents();
   initHeaders();
 });
 </script>
 <template>
-  <the-navigation :navs="navs"/>
   <div class="flex mb-5 justify-between items-center">
-    <h1 class="text-2xl font-bold text-primary-900">Департаменты</h1>
+    <h1 class="text-2xl font-bold text-primary-900">Физическое лицо</h1>
     <div class="flex items-center gap-2">
       <span class="p-input-icon-left">
         <i class="pi pi-search pl-1" />
         <InputText
           :modelValue="filter.search"
           :pt="{ root: { class: ['w-full rounded-3xl h-[42px] bg-white border-greyscale-50 font-xs focus:border-primary-500'] } }"
-          @update:modelValue="searchDepartments"
+          @update:modelValue="searchCorrespondents"
           placeholder="Поиск"
           size="small"
           type="text"
@@ -196,17 +163,17 @@ onMounted(() => {
         class="p-button p-component font-medium text-sm rounded-xl !rounded-full py-[9px] px-4"
         rounded
         type="button"
-      >
+        >
         <base-icon class="mr-2" height="20" name="AddIcon" width="20"/>
         <span>Создать</span>
       </Button>
     </div>
   </div>
-  <div class="departments-table">
+  <div class="correspondents-table">
     <DataTable
       :loading="loading"
       :pt="tableConfig"
-      :value="departments"
+      :value="correspondents"
       row-hover
       scrollable
       >
@@ -217,14 +184,14 @@ onMounted(() => {
         :key="index"
         :pt="columnConfig"
         v-for="(item, index) in visibleHeaders"
-      >
+        >
         <template #body="{ field, data }">
-          <Department
+          <Correspondent
             :data="data"
-            :departments="departments"
             :field="field"
-            :getFirstPageDepartments="getFirstPageDepartments"
-            :setDepartments="setDepartments"
+            :getFirstPageCorrespondents="getFirstPageCorrespondents"
+            :correspondents="correspondents"
+            :setCorrespondents="setCorrespondents"
             />
         </template>
       </Column>
@@ -294,17 +261,17 @@ onMounted(() => {
       <Button @click="saveChanges" class="p-button p-component font-medium flex justify-center shadow-none rounded-full text-[14px] py-[6px] px-4 ml-2">Сохранить</Button>
     </div>
   </OverlayPanel>
-  <CreateDepartment
-    :getFirstPageDepartments="getFirstPageDepartments"
+  <CreateCorrespondent
+    :getFirstPageCorrespondents="getFirstPageCorrespondents"
     :setVisible="setVisible"
     :visible="visible"
     />
 </template>
 <style>
-.departments-table th:first-child, td:first-child {
+.correspondents-table th:first-child, td:first-child {
   border-radius: 12px 0 0 12px;
 }
-.departments-table th:last-child, td:last-child {
+.correspondents-table th:last-child, td:last-child {
   border-radius: 0 12px 12px 0;
 }
 </style>

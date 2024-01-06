@@ -9,12 +9,17 @@ const changeLanguage = () => {
     {
       title: 'Физическое лицо',
       icon: 'UserCheckRoundedIcon',
-      link: 'IndividualIndex',
+      link: 'PhysicalIndex',
+    },
+    {
+      title: 'Индивидуальный предприниматель',
+      icon: 'UserCheckRoundedIcon',
+      link: 'EntrepreneurIndex',
     },
     {
       title: 'Юридическое лицо',
       icon: 'BuildingsIcon',
-      link: 'OrganizationsIndex',
+      link: 'LegalIndex',
     },
     {
       title: 'Регионы',

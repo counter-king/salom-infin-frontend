@@ -21,6 +21,7 @@ const filter = ref(defaultFilter);
 const headers = ref([
    {
       columnKey: 'name_uz',
+      disabled: true,
       field: 'name_uz',
       header: 'Название (UZ)',
       is_active: true,
@@ -33,6 +34,7 @@ const headers = ref([
    },
    {
       columnKey: 'is_active',
+      disabled: true,
       field: 'is_active',
       header: 'Статус',
       is_active: true,
@@ -50,6 +52,7 @@ const positions = ref([]);
 const visible = ref(false);
 const settingsOverlay = ref(null);
 const visibleHeaders = computed(() => headers.value.filter(header => header?.is_active));
+const editableHeaders = computed(() => headers?.value.filter(header => !header?.disabled));
 const getPositions = (newFilter = {}) => {
    loading.value = true;
    filter.value = newFilter;
@@ -111,9 +114,9 @@ const changeLanguage = () => {
       }
    ];
 };
-const changeHeader = (is_active, order) => {
-   const newHeaders = headers.value.map((header, index) => {
-      if(index === order) {
+const changeHeader = (is_active, field) => {
+   const newHeaders = headers.value.map(header => {
+      if(header.field === field) {
          return { ...header, is_active }
       } else {
          return header;
@@ -253,13 +256,13 @@ onMounted(() => {
    </div>
    <OverlayPanel ref="settingsOverlay" :pt="overlayConfig">
       <div class="p-3">
-         <div v-for="(header, index) in headers" :key="index" class="w-full h-10 py-3 px-2 flex items-center gap-3 justify-between">
+         <div v-for="(header, index) in editableHeaders" :key="index" class="w-full h-10 py-3 px-2 flex items-center gap-3 justify-between">
             <span class="text-primary-900 text-sm font-medium">{{ header.header }}</span>
             <InputSwitch
                size="small"
                :modelValue="header.is_active"
                @update:modelValue="value => {
-                  changeHeader(value, index)
+                  changeHeader(value, header.field)
                }"
                :pt="{
                   root: { class: ['h-[22px] w-[36px] shadow-none ml-6'] },

@@ -129,7 +129,7 @@ onMounted(() => {
       <template v-else>
          <span
             @click="toggle"
-            :style="{ background: data.condtion === 'A' ? '#EEFFE7' : '#F7F7F9', color: data.condition === 'A' ? '#63BA3D' : '#767994' }"
+            :style="{ background: data.condition === 'A' ? '#EEFFE7' : '#F7F7F9', color: data.condition === 'A' ? '#63BA3D' : '#767994' }"
             class="inline-flex items-center justify-center pr-2 pl-3 py-1 font-medium rounded-[80px] text-sm text-greyscale-500 cursor-pointer">
             <span class="mr-1">{{ data.condition === 'A' ? 'Активный' : 'Неактивный' }}</span>
             <svg width="16" height="16" viewBox="0 0 12 12" fill="none">

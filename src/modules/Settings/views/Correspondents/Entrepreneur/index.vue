@@ -20,6 +20,7 @@ const filter = ref(defaultFilter);
 const headers = ref([
   {
     columnKey: 'name',
+    disabled: true,
     field: 'name',
     header: 'Наименование',
     is_active: true,
@@ -60,11 +61,12 @@ const correspondents = ref([]);
 const visible = ref(false);
 const settingsOverlay = ref(null);
 const visibleHeaders = computed(() => headers.value.filter(header => header?.is_active));
+const editableHeaders = computed(() => headers.value.filter(header => !header?.disabled));
 const getCorrespondents = (newFilter = {}) => {
   loading.value = true;
   filter.value = newFilter;
   const { page, page_size, search } = newFilter;
-  const params = `?type=legal&page=${page}${page_size ? '&page_size=' + page_size : ''}${search ? '&search=' + search : ''}`;
+  const params = `?type=entrepreneur&page=${page}${page_size ? '&page_size=' + page_size : ''}${search ? '&search=' + search : ''}`;
   axiosConfig
     .get(`correspondents/${params}`)
     .then(response => {
@@ -102,9 +104,9 @@ const setCorrespondents = newCorrespondents => {
 const setVisible = newVisible => {
   visible.value = newVisible;
 };
-const changeHeader = (is_active, order) => {
-  const newHeaders = headers.value.map((header, index) => {
-    if(index === order) {
+const changeHeader = (is_active, field) => {
+  const newHeaders = headers.value.map(header => {
+    if(header.field === field) {
       return { ...header, is_active }
     } else {
       return header;
@@ -117,17 +119,17 @@ const toggle = e => {
 };
 const saveChanges = e => {
   const newHeaders = JSON.stringify(headers.value);
-  localStorage.setItem('settings-correspondents-organizations', newHeaders);
+  localStorage.setItem('settings-correspondents-entrepreneur', newHeaders);
   settingsOverlay.value.toggle(e);
 };
 const resetHeaders = e => {
   const newHeaders = headers.value.map(header => ({ ...header, is_active: true }));
   headers.value = newHeaders;
-  localStorage.setItem('settings-correspondents-organizations', JSON.stringify(newHeaders));
+  localStorage.setItem('settings-correspondents-entrepreneur', JSON.stringify(newHeaders));
   settingsOverlay.value.toggle(e);
 };
 const initHeaders = () => {
-  const list = JSON.parse(localStorage.getItem('settings-correspondents-organizations'));
+  const list = JSON.parse(localStorage.getItem('settings-correspondents-entrepreneur'));
   if(Array.isArray(list) && list?.length) {
     const newHeaders = list;
     headers.value = newHeaders;
@@ -140,7 +142,7 @@ onMounted(() => {
 </script>
 <template>
   <div class="flex mb-5 justify-between items-center">
-    <h1 class="text-2xl font-bold text-primary-900">Юридическое лицо</h1>
+    <h1 class="text-2xl font-bold text-primary-900">Индивидуальный предприниматель</h1>
     <div class="flex items-center gap-2">
       <span class="p-input-icon-left">
         <i class="pi pi-search pl-1" />
@@ -239,13 +241,13 @@ onMounted(() => {
   </div>
   <OverlayPanel ref="settingsOverlay" :pt="overlayConfig">
     <div class="p-3">
-      <div v-for="(header, index) in headers" :key="index" class="w-full h-10 py-3 px-2 flex items-center gap-3 justify-between">
+      <div v-for="(header, index) in editableHeaders" :key="index" class="w-full h-10 py-3 px-2 flex items-center gap-3 justify-between">
         <span class="text-primary-900 text-sm font-medium">{{ header.header }}</span>
         <InputSwitch
           size="small"
           :modelValue="header.is_active"
           @update:modelValue="value => {
-            changeHeader(value, index)
+            changeHeader(value, header.field)
           }"
           :pt="{
             root: { class: ['h-[22px] w-[36px] shadow-none ml-6'] },

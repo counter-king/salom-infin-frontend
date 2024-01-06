@@ -154,8 +154,8 @@ const openEditModal = () => {
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите имя"
             type="text"
-            @update:modelValue="value => {
-               editCorrespondent = { ...editCorrespondent, legal_name: replaceSpecChars(value) };
+            @update:modelValue="legal_name => {
+               editCorrespondent = { ...editCorrespondent, legal_name };
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Адрес<span class="text-red-500 ml-1">*</span></p>
@@ -164,8 +164,8 @@ const openEditModal = () => {
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите адрес"
             type="text"
-            @update:modelValue="value => {
-               editCorrespondent = { ...editCorrespondent, legal_address: replaceSpecChars(value) };
+            @update:modelValue="legal_address => {
+               editCorrespondent = { ...editCorrespondent, legal_address };
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">ИНН<span class="text-red-500 ml-1">*</span></p>
