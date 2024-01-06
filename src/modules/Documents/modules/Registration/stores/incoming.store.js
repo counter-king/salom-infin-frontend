@@ -266,6 +266,148 @@ export const useRegIncoming = defineStore("reg-incoming", {
         dispatchNotify('Ошибка', 'Ошибка изменение документа', COLOR_TYPES.ERROR)
         return Promise.reject()
       }
+    },
+    /*
+    * Сбросит все колонки в изначальное состояние
+    * */
+    resetHeaders() {
+      this.headers = [
+        {
+          header: "priority",
+          field: "priority",
+          detail: {
+            component: 'priority-chip',
+            colClass: '',
+          },
+          active: true
+        },
+        {
+          header: "naming",
+          field: "title",
+          detail: {
+            component: null,
+            colClass: '',
+          },
+          active: true
+        },
+        {
+          header: "document-type",
+          field: "document_type",
+          detail: {
+            component: null,
+            colClass: '',
+          },
+          active: true
+        },
+        {
+          header: "deliver-type",
+          field: "delivery_type",
+          detail: {
+            component: null,
+            colClass: '',
+          },
+          active: false
+        },
+        {
+          header: "description",
+          field: "description",
+          detail: {
+            component: null,
+            colClass: '',
+          },
+          active: false
+        },
+        {
+          header: "magazine",
+          field: "journal",
+          detail: {
+            component: null,
+            colClass: '',
+          },
+          active: false
+        },
+        {
+          header: "language-document",
+          field: "language",
+          detail: {
+            component: null,
+            colClass: '',
+          },
+          active: false
+        },
+        {
+          header: "number-sheets",
+          field: "number_of_papers",
+          detail: {
+            component: null,
+            colClass: '',
+          },
+          active: false
+        },
+        {
+          header: "outgoing-date",
+          field: "outgoing_date",
+          detail: {
+            component: null,
+            colClass: '',
+          },
+          active: false
+        },
+        {
+          header: "outgoing-number",
+          field: "outgoing_number",
+          detail: {
+            component: null,
+            colClass: '',
+          },
+          active: false
+        },
+        {
+          header: "reg-number",
+          field: "register_number",
+          detail: {
+            component: null,
+            colClass: '',
+          },
+          active: true
+        },
+        {
+          header: "reg-date",
+          field: "register_date",
+          detail: {
+            component: null,
+            colClass: '',
+          },
+          active: true
+        },
+        {
+          header: "reviewers",
+          field: "reviewers",
+          detail: {
+            component: 'base-avatar-group',
+            colClass: '',
+          },
+          active: true
+        },
+        {
+          header: "status",
+          field: "status",
+          detail: {
+            component: 'base-status',
+            colClass: '',
+          },
+          active: true
+        },
+        {
+          header: "correspondent",
+          field: "correspondent",
+          detail: {
+            component: null,
+            colClass: '',
+          },
+          active: true
+        },
+      ]
     }
   }
 })

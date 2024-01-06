@@ -84,6 +84,14 @@ const Boxes = [
         },
         component: () => import("../views/Control/index.vue"),
       },
+      {
+        path: "control/show/:id",
+        name: "ControlShow",
+        meta: {
+          isAuthRequired: true
+        },
+        component: () => import("../views/Control/show.vue"),
+      },
     ]
   }
 ]

@@ -54,10 +54,11 @@ const link = (data) => {
       :loading="regIncoming.listLoading"
       :storage-columns-name="R_INCOMING_COLUMNS"
       expandable
+      @emit:set-store-headers="(val) => regIncoming.headers = val"
     >
       <template #priority="{ data }">
         <linkable-cell :to="link(data)">
-          <priority-chip :id="data.priority.id" />
+          <priority-chip :id="data.priority?.id" />
         </linkable-cell>
       </template>
 
@@ -69,13 +70,13 @@ const link = (data) => {
 
       <template #document_type="{ data }">
         <linkable-cell :to="link(data)">
-          <doc-type-chip :type="data.document_type.name"/>
+          <doc-type-chip :type="data.document_type?.name"/>
         </linkable-cell>
       </template>
 
       <template #delivery_type="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.delivery_type.name }}
+          {{ data.delivery_type?.name }}
         </linkable-cell>
       </template>
 
@@ -93,7 +94,7 @@ const link = (data) => {
 
       <template #language="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.language.name }}
+          {{ data.language?.name }}
         </linkable-cell>
       </template>
 
@@ -145,7 +146,7 @@ const link = (data) => {
 
       <template #correspondent="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.correspondent.name }}
+          {{ data.correspondent?.name }}
         </linkable-cell>
       </template>
     </base-data-table>
