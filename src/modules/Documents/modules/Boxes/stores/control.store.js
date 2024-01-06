@@ -4,13 +4,13 @@ import { defineStore } from "pinia"
 import { useBoxesCommonStore } from './common.store'
 import { useDocFlowStore } from '../../Registration/stores/docflow.store'
 // Service
-import { fetchAssignmentList, fetchAssignmentById, fetchAcquaintDocument, fetchPerformDocument } from "../services/assignment.service"
+import { fetchControlList, fetchControlById, fetchAcquaintDocument, fetchRemoveFromControl } from '../services/control.service'
 import { fetchPerformList } from '../services/review.service'
 // Utils
 import { dispatchNotify } from '@/utils/notify'
-import { COLOR_TYPES, JOURNAL } from '@/enums'
-
-export const useAssignmentStore = defineStore("assignment", {
+import { COLOR_TYPES } from '@/enums'
+import { FORM_TYPE_CREATE } from '@/constants/constants'
+export const useControlStore = defineStore("control", {
   state: () => ({
     list: [],
     headers: [
@@ -187,7 +187,7 @@ export const useAssignmentStore = defineStore("assignment", {
       is_responsible: null,
       performed_date: null,
       read_time: null,
-      status: null,
+      status: null
     },
     performModel: {
       content: null,
@@ -204,21 +204,21 @@ export const useAssignmentStore = defineStore("assignment", {
   },
   actions: {
     /*
-    * Список поручение
+    * Список на контроль
     * */
-    async actionAssignmentList() {
+    async actionControlList() {
       this.listLoading = true
-      let { data } = await fetchAssignmentList()
+      let { data } = await fetchControlList()
 
       this.list = data.results
       this.listLoading = false
     },
     /**
-     * Получить поручение по id
+     * Получить на контроль по id
      * */
-    async actionAssignmentById(payload) {
+    async actionControlById(payload) {
       const commonStore = useBoxesCommonStore()
-      let { data } = await fetchAssignmentById({ id: payload.id })
+      let { data } = await fetchControlById({ id: payload.id })
       let { data: performers } = await fetchPerformList({ id: data.assignment.id })
 
       this.detailModel = data
@@ -243,7 +243,7 @@ export const useAssignmentStore = defineStore("assignment", {
       try {
         const docflowStore = useDocFlowStore()
         await fetchAcquaintDocument({ id })
-        await this.actionAssignmentById(this.detailModel)
+        await this.actionControlById(this.detailModel)
         await docflowStore.actionGetTree(this.detailModel.document.id)
         dispatchNotify('Документ ознакомлен', null, COLOR_TYPES.SUCCESS)
       } catch (error) {
@@ -251,36 +251,35 @@ export const useAssignmentStore = defineStore("assignment", {
       }
     },
     /*
-    * Выполнить документ
+    * Снять с контроля (снять/изменить)
     * */
-    async actionPerformDocument({ id, performed }) {
+    async actionRemoveFromControl({ id, type }) {
       try {
         const docflowStore = useDocFlowStore()
-        await fetchPerformDocument({
+        await fetchRemoveFromControl({
           id,
           model: {
             ...this.performModel,
-            is_performed: performed
+            is_performed: true
           }
         })
-        await this.actionAssignmentById(this.detailModel)
+        await this.actionControlById(this.detailModel)
         await docflowStore.actionGetTree(this.detailModel.document.id)
         // Если идет выполнения документа
-        if(this.performModel.is_performed) {
-          dispatchNotify('Документ выполнен', null, COLOR_TYPES.SUCCESS)
+        if(type === FORM_TYPE_CREATE) {
+          dispatchNotify('Документ снят с контроля', null, COLOR_TYPES.SUCCESS)
         }
         else {
-          dispatchNotify('Исполнения изменено', null, COLOR_TYPES.SUCCESS)
+          dispatchNotify('Снятия с контроля изменено', null, COLOR_TYPES.SUCCESS)
         }
         return Promise.resolve()
       }
       catch (error) {
-        // Если идет выполнения документа
-        if(this.performModel.is_performed) {
-          dispatchNotify('Ошибка', 'Ошибка выполнение документа', COLOR_TYPES.ERROR)
+        if(type === FORM_TYPE_CREATE) {
+          dispatchNotify('Ошибка', 'Ошибка снятия с контроля', COLOR_TYPES.ERROR)
         }
         else {
-          dispatchNotify('Ошибка', 'Ошибка исполнение документа', COLOR_TYPES.ERROR)
+          dispatchNotify('Ошибка', 'Изменение снятия с контроля', COLOR_TYPES.ERROR)
         }
         return Promise.reject()
       }

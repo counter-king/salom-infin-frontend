@@ -68,9 +68,11 @@ const findAssigneeChildren = (target, assignee) => {
                       {{
                         assignee.is_read === true && assignee.is_performed === false
                           ? 'Ознакомлен'
-                          : assignee.is_read === true && assignee.is_performed === true
+                          : assignee.is_read === true && assignee.is_performed === true && assignee.is_controller === false
                             ? 'Выполнен'
-                            : 'Еще не ознакомлен'
+                            : assignee.is_read === true && assignee.is_performed === true && assignee.is_controller === true
+                              ? 'Снят с контроля'
+                              : 'Еще не ознакомлен'
                       }}
                     </h1>
 

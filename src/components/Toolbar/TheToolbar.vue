@@ -252,7 +252,7 @@ provide('openModal', openModal)
 
 <style>
 .header-link.router-link-active {
-  background-color: var(--primary-800);
+  background-color: var(--greyscale-800);
   color: #fff;
 }
 
