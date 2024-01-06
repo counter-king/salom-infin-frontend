@@ -1,6 +1,7 @@
 <script setup>
 // Core
 import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { onClickOutside } from '@vueuse/core'
 // Store
 import { useCommentStore } from '@/stores/comments.store'
@@ -8,6 +9,7 @@ import { useCommentStore } from '@/stores/comments.store'
 import { normalizeText } from '@/utils'
 import { COMMENT_ACTIONS, CONTENT_TYPES, CORRESPONDENT } from '@/enums'
 // Composable
+const { t } = useI18n()
 const commentStore = useCommentStore()
 // Macros
 const props = defineProps({
@@ -48,7 +50,7 @@ const sendMessage = async (event) => {
     return
   }
 
-  if(event.keyCode === 13 && !event.shiftKey) {
+  if((event.keyCode === 13 && !event.shiftKey) || event.which === 1) {
     event.preventDefault()
 
     if(!message.value.trim()) {
@@ -100,7 +102,17 @@ const sendMessage = async (event) => {
         rows="1"
         root-class="bg-white shadow-button"
         @keydown="sendMessage($event)"
-      />
+      >
+        <template #append>
+          <button
+            type="submit"
+            class="bg-primary-500 text-white text-xs font-medium rounded-2xl py-1.5 px-3 -mt-0.5"
+            @click="sendMessage($event)"
+          >
+            {{ props.type === COMMENT_ACTIONS.REPLY ? t('send') : t('edit') }}
+          </button>
+        </template>
+      </base-textarea>
     </div>
   </div>
 </template>
