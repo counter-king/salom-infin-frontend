@@ -12,18 +12,18 @@ const changeLanguage = () => {
       link: 'IndividualIndex',
     },
     {
-      title: 'Индивидуальный предприниматель',
+      title: 'Юридическое лицо',
       icon: 'BuildingsIcon',
       link: 'OrganizationsIndex',
     },
     {
       title: 'Регионы',
-      icon: 'BuildingsIcon',
+      icon: 'RegionIcon',
       link: 'RegionsIndex',
     },
     {
       title: 'Районы',
-      icon: 'BuildingsIcon',
+      icon: 'DistrictIcon',
       link: 'DistrictsIndex',
     }
   ];
