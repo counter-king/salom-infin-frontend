@@ -1,6 +1,9 @@
 <script setup>
 // Core
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+// Components
+import SessionEndMessageBar from '@/components/SessionEndMessageBar.vue'
 // Store
 import { useCommonStore } from '@/stores/common'
 import { useAuthStore } from '../modules/Auth/stores/index'
@@ -10,6 +13,7 @@ import TheToolbar from '@/components/Toolbar/TheToolbar.vue'
 import { getStorageItem } from '@/utils/storage'
 import { ACCESS } from '@/constants/storage'
 // Composable
+const router = useRouter()
 const commonStore = useCommonStore()
 const authStore = useAuthStore()
 // Reactive
@@ -17,12 +21,17 @@ const authStore = useAuthStore()
 const appLoading = ref(true)
 // Hooks
 onMounted(async () => {
-  // TODO: uncomment
-  await getCurrentUser()
-  await commonStore.init()
-  setTimeout(() => {
-    appLoading.value = false
-  }, 500)
+  if(!getStorageItem(ACCESS)) {
+    await router.push({ name: 'Login' })
+  }
+  else {
+    // TODO: uncomment
+    await getCurrentUser()
+    await commonStore.init()
+    setTimeout(() => {
+      appLoading.value = false
+    }, 500)
+  }
 })
 // Methods
 const getCurrentUser = async () => {
@@ -49,6 +58,8 @@ const getCurrentUser = async () => {
 		<div class="main-layout-content flex overflow-hidden">
       <router-view class="bg-primary-50" />
 		</div>
+
+    <session-end-message-bar />
 	</div>
 </template>
 

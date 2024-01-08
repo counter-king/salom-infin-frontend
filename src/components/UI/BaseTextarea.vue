@@ -58,23 +58,25 @@ const { t } = useI18n()
         :placeholder="t(props.placeholder)"
         auto-resize
         :pt="{
-        root: {
-          class: [
-            'flex w-full rounded-xl bg-greyscale-50 text-sm border-greyscale-50 focus:border-primary-500',
-            props.rootClass,
-            {
-              'p-invalid !shadow-none': props.error.$error
-            }
-          ]
-        }
-      }"
+          root: {
+            class: [
+              'flex w-full rounded-xl bg-greyscale-50 text-sm border-greyscale-50 focus:border-primary-500',
+              props.rootClass,
+              {
+                'p-invalid !shadow-none': props.error.$error
+              }
+            ]
+          }
+        }"
       />
 
-      <template v-if="props.loading">
-        <div class="absolute top-[10px] right-[10px]">
+      <div class="flex items-center gap-3 absolute top-[10px] right-[10px]">
+        <template v-if="props.loading">
           <base-spinner root-classes="!w-6 !h-6" />
-        </div>
-      </template>
+        </template>
+
+        <slot name="append" />
+      </div>
     </div>
 
     <template v-if="props.error.$errors.length">

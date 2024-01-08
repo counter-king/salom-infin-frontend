@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="dashboard-home">
+  <div class="dashboard-home flex w-full">
     Dashboard home
   </div>
 </template>

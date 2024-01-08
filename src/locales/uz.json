@@ -243,5 +243,7 @@
   "approver": "Согласующий",
   "signer": "Подписант",
   "not-checked": "Не проверенный",
-  "watch-process": "Просмотр процесс"
+  "watch-process": "Просмотр процесс",
+  "remove-from-control": "Снять с контроля",
+  "update-from-control": "Изменить снятия с контроля"
 }

@@ -31,97 +31,97 @@ const link = (data) => {
     >
       <template #document.priority="{ data }">
         <linkable-cell :to="link(data)">
-          <priority-chip :id="data.document.priority?.id" />
+          <priority-chip :id="data?.document.priority?.id" />
         </linkable-cell>
       </template>
 
       <template #document.title="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.document.title }}
+          {{ data?.document.title }}
         </linkable-cell>
       </template>
 
       <template #document.document_type.name="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.document.document_type?.name }}
+          {{ data?.document.document_type?.name }}
         </linkable-cell>
       </template>
 
       <template #document.delivery_type.name="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.document.delivery_type?.name }}
+          {{ data?.document.delivery_type?.name }}
         </linkable-cell>
       </template>
 
       <template #document.description="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.document.description }}
+          {{ data?.document.description }}
         </linkable-cell>
       </template>
 
       <template #document.journal.name="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.document.journal?.name }}
+          {{ data?.document.journal?.name }}
         </linkable-cell>
       </template>
 
       <template #document.language.name="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.document.language?.name }}
+          {{ data?.document.language?.name }}
         </linkable-cell>
       </template>
 
       <template #document.number_of_papers="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.document.number_of_papers }}
+          {{ data?.document.number_of_papers }}
         </linkable-cell>
       </template>
 
       <template #document.outgoing_date="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.document.outgoing_date }}
+          {{ data?.document.outgoing_date }}
         </linkable-cell>
       </template>
 
       <template #document.outgoing_number="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.document.outgoing_number }}
+          {{ data?.document.outgoing_number }}
         </linkable-cell>
       </template>
 
       <template #document.register_number="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.document.register_number }}
+          {{ data?.document.register_number }}
         </linkable-cell>
       </template>
 
       <template #document.register_date="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.document.register_date }}
+          {{ data?.document.register_date }}
         </linkable-cell>
       </template>
 
       <template #status="{ data }">
         <linkable-cell :to="link(data)">
-          <status-chip :status="data.status"/>
+          <status-chip :status="data?.status"/>
         </linkable-cell>
       </template>
 
       <template #document.correspondent.name="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.document.correspondent?.name }}
+          {{ data?.document.correspondent?.name }}
         </linkable-cell>
       </template>
 
       <template #document.code="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.document.code }}
+          {{ data?.document.code }}
         </linkable-cell>
       </template>
 
       <template #document.grif="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.document.grif }}
+          {{ data?.document.grif }}
         </linkable-cell>
       </template>
     </base-data-table>

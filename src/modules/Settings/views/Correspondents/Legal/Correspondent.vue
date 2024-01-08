@@ -1,9 +1,12 @@
 <script setup>
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
+import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import ProgressSpinner from 'primevue/progressspinner';
+import Textarea from 'primevue/textarea';
 import axiosConfig from "@/services/axios.config";
+import isValidEmail from '@/utils/isValidEmail';
 import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
@@ -13,42 +16,56 @@ const { locale } = useI18n();
 const props = defineProps({ data: Object, field: String, getFirstPageCorrespondents: Function, correspondents: Array, setCorrespondents: Function });
 const deleteLoading = ref(false);
 const deleteVisible = ref(false);
-const editLoading = ref(false);
 const editCorrespondent = ref({});
+const editLoading = ref(false);
 const editVisible = ref(false);
+const gender = ref(null);
+const genders = ref([]);
 const correspondentEdit = () => {
-   const { name_ru, name_uz } = editCorrespondent.value;
-   if(name_uz && name_ru) {
+   const { legal_name, legal_address, tin, checkpoint, email, phone, description } = editCorrespondent.value;
+   const newPhone = '+99' + String(phone || '');
+   if( legal_name && legal_address && String(tin || '').length === 9 && checkpoint && newPhone.length === 13 && isValidEmail(email)) {
       editLoading.value = true;
-      const correspondentId = props?.data?.id;
+      const correspondentId = props.data?.id;
+      const data = { legal_address, legal_name, tin, checkpoint, email, phone: newPhone, description, type: 'legal', name: legal_name };
       axiosConfig
-         .patch(`correspondents/${correspondentId}/`, { name_ru, name_uz, name: name_uz })
+         .patch(`correspondents/${correspondentId}/`, data)
          .then(response => {
             const data = response?.data;
             const status = response?.status;
             if(status === 200) {
-               const newCorrespondents = props?.correspondents.map(correspondent => {
+               const newCorrespondents = props.correspondents.map(correspondent => {
                   if(correspondent?.id === correspondentId) {
                      return data;
                   } else {
                      return correspondent;
                   }
                });
-               dispatchNotify('Регион обновлено', '', 'success');
+               dispatchNotify('Корреспондент обновлено', '', 'success');
                editVisible.value = false;
                props.setCorrespondents(newCorrespondents);
             } else {
-               dispatchNotify('Регион не обновлено', '', 'error');
+               dispatchNotify('Корреспондент не обновлено', '', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Регион не обновлено', '', 'error');
+            dispatchNotify('Корреспондент не обновлено', '', 'error');
          })
          .finally(() => {
             editLoading.value = false;
          });
-   } else {
+   } else if(!legal_name) {
       dispatchNotify('Введите название', '', 'error')
+   } else if(!legal_address) {
+      dispatchNotify('Введите адрес', '', 'error')
+   } else if(String(tin || '').length !== 9) {
+      dispatchNotify('Введите правильный ИНН', '', 'error')
+   } else if(!checkpoint) {
+      dispatchNotify('Введите КПП', '', 'error')
+   } else if(newPhone.length !== 13) {
+      dispatchNotify('Введите свой номер телефона правильно', '', 'error')
+   } else {
+      dispatchNotify('Введите свой адрес электронной почты правильно', '', 'error')
    }
 };
 const correspondentDelete = () => {
@@ -59,27 +76,31 @@ const correspondentDelete = () => {
       .then(response => {
          if(response?.status === 204) {
             deleteVisible.value = false;
-            dispatchNotify('Регион удален', '', 'success')
+            dispatchNotify('Корреспондент удален', '', 'success')
             props.getFirstPageCorrespondents();
          } else {
-            dispatchNotify('Регион не удален', '', 'error')
+            dispatchNotify('Корреспондент не удален', '', 'error')
          }
       })
       .catch(() => {
-         dispatchNotify('Регион не удален', '', 'error')
+         dispatchNotify('Корреспондент не удален', '', 'error')
       })
       .finally(() => {
          deleteLoading.value = false;
       });
 };
+const openEditModal = () => {
+   const phone = +String(props.data?.phone || '').slice(3);;
+   const newGender = genders.value.find(gender => gender?.value === props.data?.gender);
+   gender.value = newGender;
+   editCorrespondent.value = { ...props.data, phone };
+   editVisible.value = true;
+}
 </script>
 <template>
    <template v-if="field === 'action'">
       <Button
-         @click="() => {
-            editCorrespondent = data;
-            editVisible = true;
-         }"
+         @click="openEditModal"
          class="shadow-none py-[7px] px-2 text-xs bg-greyscale-50 mr-2 rounded-[8px]"
          icon
          severity="secondary"
@@ -122,29 +143,85 @@ const correspondentDelete = () => {
    <Dialog
       :closable="!editLoading"
       :pt="dialogConfig"
-      header="Изменить регион"
+      header="Изменить корреспондент"
       modal
       v-model:visible="editVisible"
       >
-      <div class="flex flex-col pb-10 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
+      <div class="flex flex-col pb-0 pt-4">
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Название<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            :modelValue="editCorrespondent.name_uz"
+            :modelValue="editCorrespondent.legal_name"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название"
+            placeholder="Введите имя"
             type="text"
-            @update:modelValue="value => {
-               editCorrespondent = { ...editCorrespondent, name_uz: replaceSpecChars(value) };
+            @update:modelValue="legal_name => {
+               editCorrespondent = { ...editCorrespondent, legal_name };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ) <span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Адрес<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            :modelValue="editCorrespondent.name_ru"
+            :modelValue="editCorrespondent.legal_address"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название"
+            placeholder="Введите адрес"
+            type="text"
+            @update:modelValue="legal_address => {
+               editCorrespondent = { ...editCorrespondent, legal_address };
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">ИНН<span class="text-red-500 ml-1">*</span></p>
+         <InputNumber
+            :maxFractionDigits="0"
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :useGrouping="false"
+            placeholder="Введите ИНН"
+            v-model="editCorrespondent.tin"
+            @input="({ value }) => {
+               const tin = +String(value || '').slice(0, 9)
+               editCorrespondent = { ...editCorrespondent, tin }
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">КПП<span class="text-red-500 ml-1">*</span></p>
+         <InputText
+            :modelValue="editCorrespondent.checkpoint"
+            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            placeholder="Введите КПП"
             type="text"
             @update:modelValue="value => {
-               editCorrespondent = { ...editCorrespondent, name_ru: replaceSpecChars(value) };
+               editCorrespondent = { ...editCorrespondent, checkpoint: value };
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Номер телефона<span class="text-red-500 ml-1">*</span></p>
+         <InputNumber
+            :maxFractionDigits="0"
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :useGrouping="false"
+            v-model="editCorrespondent.phone"
+            placeholder="Введите номер телефона"
+            prefix="+99"
+            @input="({value}) => {
+               const phone = value && value > 7 ? +String(value || '').slice(0, 10) : 8;
+               editCorrespondent = { ...editCorrespondent, phone }
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Электронная почта<span class="text-red-500 ml-1">*</span></p>
+         <InputText
+            :modelValue="editCorrespondent.email"
+            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            placeholder="Введите электронная почта"
+            type="text"
+            @update:modelValue="value => {
+               editCorrespondent = { ...editCorrespondent, email: value };
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Содержание</p>
+         <Textarea
+            :modelValue="editCorrespondent.description"
+            :pt="{root: {class:['h-[100px] w-[500px] resize-none rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            cols="30"
+            placeholder="Введите содержание"
+            rows="5"
+            @update:modelValue="value => {
+               editCorrespondent = { ...editCorrespondent, description: value };
             }"
             />
       </div>
@@ -176,7 +253,7 @@ const correspondentDelete = () => {
       :closable="!deleteLoading"
       :pt="dialogConfig"
       dismissableMask
-      header="Удалить регион"
+      header="Удалить корреспондент"
       modal
       v-model:visible="deleteVisible">
       <div class="flex flex-col items-center pb-10 pt-4">
@@ -187,9 +264,9 @@ const correspondentDelete = () => {
                <path fill-rule="evenodd" clip-rule="evenodd" d="M39.4608 53.3327H40.5392C44.2495 53.3327 46.1046 53.3327 47.3108 52.1514C48.517 50.9702 48.6404 49.0326 48.8872 45.1574L49.2428 39.5735C49.3767 37.4708 49.4437 36.4195 48.8386 35.7533C48.2335 35.0871 47.2116 35.0871 45.1679 35.0871H34.8321C32.7884 35.0871 31.7665 35.0871 31.1614 35.7533C30.5563 36.4195 30.6233 37.4708 30.7572 39.5735L31.1128 45.1574C31.3596 49.0326 31.483 50.9702 32.6892 52.1514C33.8954 53.3327 35.7505 53.3327 39.4608 53.3327ZM37.6617 40.2507C37.6067 39.6722 37.1167 39.2501 36.5672 39.308C36.0176 39.3658 35.6167 39.8817 35.6716 40.4601L36.3383 47.4777C36.3932 48.0561 36.8833 48.4782 37.4328 48.4203C37.9824 48.3625 38.3833 47.8467 38.3284 47.2682L37.6617 40.2507ZM43.4328 39.308C43.9824 39.3658 44.3833 39.8817 44.3284 40.4601L43.6617 47.4777C43.6068 48.0561 43.1167 48.4782 42.5672 48.4203C42.0176 48.3625 41.6167 47.8467 41.6716 47.2682L42.3383 40.2507C42.3933 39.6722 42.8833 39.2501 43.4328 39.308Z" fill="#F3335C"/>
             </svg>
          </div>
-         <h2 class="text-center font-semibold text-3xl text-gray-900 p-0 mt-6">Удалить регион?</h2>
+         <h2 class="text-center font-semibold text-3xl text-gray-900 p-0 mt-6">Удалить корреспондент?</h2>
          <p class="text-center py-0 px-6 mt-2 text-gray-400">
-            Вы уверены, что хотите удалить этого регион
+            Вы уверены, что хотите удалить этого корреспондент
          </p>
       </div>
       <template #footer>

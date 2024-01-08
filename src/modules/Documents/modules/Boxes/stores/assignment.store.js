@@ -7,7 +7,6 @@ import { useDocFlowStore } from '../../Registration/stores/docflow.store'
 import { fetchAssignmentList, fetchAssignmentById, fetchAcquaintDocument, fetchPerformDocument } from "../services/assignment.service"
 import { fetchPerformList } from '../services/review.service'
 // Utils
-import { setValuesToKeys, combineKeys } from '@/utils'
 import { dispatchNotify } from '@/utils/notify'
 import { COLOR_TYPES, JOURNAL } from '@/enums'
 
@@ -189,7 +188,6 @@ export const useAssignmentStore = defineStore("assignment", {
       performed_date: null,
       read_time: null,
       status: null,
-      perfuserormed_date: null
     },
     performModel: {
       content: null,

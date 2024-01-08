@@ -3,11 +3,12 @@ import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import ProgressSpinner from 'primevue/progressspinner';
+import Skeleton from 'primevue/skeleton';
+import Menu from 'primevue/menu';
 import axiosConfig from "@/services/axios.config";
-import { dialogConfig } from './config';
+import { dialogConfig, menuConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
-import { ref } from 'vue';
-import { replaceSpecChars } from '@/utils/string';
+import { ref, watch, onMounted } from 'vue';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
 const props = defineProps({ data: Object, deliveryTypes: Array, field: String, getFirstPageDeliveryTypes: Function, setDeliveryTypes: Function });
@@ -16,6 +17,9 @@ const deleteVisible = ref(false);
 const editDeliveryType = ref({});
 const editLoading = ref(false);
 const editVisible = ref(false);
+const conditionLoading = ref(false);
+const menu = ref(null);
+const conditions = ref([]);
 const deliveryTypeEdit = () => {
    const { name_ru, name_uz } = editDeliveryType.value;
    if(name_uz && name_ru) {
@@ -72,6 +76,50 @@ const deliveryTypeDelete = () => {
          deleteLoading.value = false;
       });
 };
+const updateCondition = value => {
+   conditionLoading.value = true;
+   const deliveryTypeId = props?.data?.id;
+   axiosConfig
+      .patch(`delivery-types/${deliveryTypeId}/`, { is_active: value?.value })
+      .then(response => {
+         const data = response?.data;
+         const status = response?.status;
+         if(status === 200) {
+            const newDeliveryTypes = props?.deliveryTypes.map(deliverType => {
+               if(deliverType?.id === deliveryTypeId) {
+                  return data;
+               } else {
+                  return deliverType;
+               }
+            });
+            props.setDeliveryTypes(newDeliveryTypes);
+            dispatchNotify('Статус обновлено', '', 'success');
+         } else {
+            dispatchNotify('Статус не обновлено', '', 'error');
+         }
+      })
+      .catch(() => {
+         dispatchNotify('Статус не обновлено', '', 'error');
+      })
+      .finally(() => {
+         conditionLoading.value = false;
+      });
+};
+const changeLanguage = () => {
+   conditions.value = [
+      { label: 'Активный', value: true, },
+      { label: 'Неактивный', value: false }
+   ];
+};
+const toggle = event => {
+   menu.value.toggle(event);
+};
+watch(locale, () => {
+   changeLanguage();
+});
+onMounted(() => {
+   changeLanguage();
+});
 </script>
 <template>
    <template v-if="field === 'action'">
@@ -116,6 +164,34 @@ const deliveryTypeDelete = () => {
          </svg>
       </Button>
    </template>
+   <template v-else-if="field === 'is_active'">
+      <template v-if="conditionLoading">
+         <Skeleton height="16px" />
+      </template>
+      <template v-else>
+         <span
+            @click="toggle"
+            :style="{ background: data.is_active ? '#EEFFE7' : '#F7F7F9', color: data.is_active ? '#63BA3D' : '#767994' }"
+            class="inline-flex items-center justify-center pr-2 pl-3 py-1 font-medium rounded-[80px] text-sm text-greyscale-500 cursor-pointer">
+            <span class="mr-1">{{ data.is_active ? 'Активный' : 'Неактивный' }}</span>
+            <svg width="16" height="16" viewBox="0 0 12 12" fill="none">
+               <path d="M9 4.5L6 7.5L3 4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+         </span>
+         <Menu ref="menu" :model="conditions" style="width: initial !important" :popup="true" :pt="menuConfig">
+            <template #item="{ item }">
+               <div @click="() => { updateCondition(item) }" class="flex justify-between py-[6px] pr-2 pl-3 cursor-pointer">
+                  <span class="text-sm font-medium text-primary-900">{{ item.label }}</span>
+                  <span class="ml-2" v-if="item.value === data.is_active">
+                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M18.3337 9.99935C18.3337 14.6017 14.6027 18.3327 10.0003 18.3327C5.39795 18.3327 1.66699 14.6017 1.66699 9.99935C1.66699 5.39698 5.39795 1.66602 10.0003 1.66602C14.6027 1.66602 18.3337 5.39698 18.3337 9.99935ZM13.3589 7.47407C13.603 7.71815 13.603 8.11388 13.3589 8.35796L9.19227 12.5246C8.94819 12.7687 8.55246 12.7687 8.30838 12.5246L6.64172 10.858C6.39764 10.6139 6.39764 10.2182 6.64172 9.97407C6.8858 9.73 7.28152 9.73 7.5256 9.97407L8.75033 11.1988L10.6127 9.33644L12.4751 7.47407C12.7191 7.23 13.1149 7.23 13.3589 7.47407Z" fill="#635AFF"/>
+                     </svg>
+                  </span>
+               </div>
+            </template>
+         </Menu>
+      </template>
+   </template>
    <template v-else>
       <span class="text-sm font-medium">{{ data[field] }}</span>
    </template>
@@ -133,8 +209,8 @@ const deliveryTypeDelete = () => {
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
-            @update:modelValue="value => {
-               editDeliveryType = { ...editDeliveryType, name_uz: replaceSpecChars(value) };
+            @update:modelValue="name_uz => {
+               editDeliveryType = { ...editDeliveryType, name_uz };
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ) <span class="text-red-500 ml-1">*</span></p>
@@ -143,8 +219,8 @@ const deliveryTypeDelete = () => {
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
-            @update:modelValue="value => {
-               editDeliveryType = { ...editDeliveryType, name_ru: replaceSpecChars(value) };
+            @update:modelValue="name_ru => {
+               editDeliveryType = { ...editDeliveryType, name_ru };
             }"
             />
       </div>

@@ -12,6 +12,8 @@ import { useBoxesCommonStore } from '@/modules/Documents/modules/Boxes/stores/co
 import avatarProps from '../../Users/props'
 // Enums
 import { RESOLUTION_TYPES, STATUS_TYPES } from '@/enums'
+// Utils
+import { formatDate } from '@/utils/formatDate'
 // Composable
 const { t } = useI18n()
 const boxesStore = useBoxesCommonStore()
@@ -88,7 +90,7 @@ const watchResolution = async (event, item) => {
               <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-full"></div>
 
               <template v-if="item.deadline">
-                <h1 class="font-medium text-greyscale-500">{{ item.deadline }}, 18:00</h1>
+                <h1 class="font-medium text-greyscale-500">{{ formatDate(item.deadline) }}, 18:00</h1>
               </template>
 
               <template v-else>

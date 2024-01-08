@@ -7,7 +7,6 @@ import axiosConfig from "@/services/axios.config";
 import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
-import { replaceSpecChars } from '@/utils/string';
 const props = defineProps({ getFirstPageDeliveryTypes: Function, setVisible: Function, visible: Boolean });
 const defaultDeliveryType = { name_uz: '', name_ru: '' };
 const deliveryType = ref(defaultDeliveryType);
@@ -17,7 +16,7 @@ const createDeliveryType = () => {
    if(name_uz && name_ru) {
       loading.value = true;
       axiosConfig
-         .post('delivery-types/', { name_ru, name_uz })
+         .post('delivery-types/', { name_ru, name_uz, is_active: true })
          .then(response => {
             if(response?.status === 201) {
                deliveryType.value = defaultDeliveryType
@@ -54,8 +53,8 @@ const createDeliveryType = () => {
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            @update:modelValue="value => {
-               deliveryType = { ...deliveryType, name_uz: replaceSpecChars(value) };
+            @update:modelValue="name_uz => {
+               deliveryType = { ...deliveryType, name_uz };
             }"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
@@ -64,8 +63,8 @@ const createDeliveryType = () => {
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            @update:modelValue="value => {
-               deliveryType = { ...deliveryType, name_ru: replaceSpecChars(value) };
+            @update:modelValue="name_ru => {
+               deliveryType = { ...deliveryType, name_ru };
             }"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"

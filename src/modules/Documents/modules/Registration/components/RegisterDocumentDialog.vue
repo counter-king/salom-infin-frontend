@@ -12,6 +12,7 @@ import { useRegAppeal } from '../stores/appeal.store'
 import { useRegIncomingBranches } from '../stores/incomingBranches.store'
 import { useRegOrderInstruction } from '../stores/orderInstruction.store'
 import { useRegStatement } from '../stores/statement.store'
+import { useAuthStore } from '@/modules/Auth/stores'
 // Components
 import RegisterDocumentMenu from './RegisterDocumentMenu.vue'
 import BaseSpinner from '@/components/UI/BaseSpinner.vue'
@@ -30,6 +31,7 @@ const regAppeal = useRegAppeal()
 const regIncomingBranches = useRegIncomingBranches()
 const regOrderInstruction = useRegOrderInstruction()
 const regStatement = useRegStatement()
+const authStore = useAuthStore()
 // Macros
 const props = defineProps({
   modelValue: {
@@ -81,8 +83,13 @@ const createDocument = async () => {
         ...incomingStore.createFormModel,
         reviewers: incomingStore.createFormModel.__reviewers.map(item => ({ user: item.id }))
       }
-      await docFlowStore.actionCreateDocument(model)
-      modelValue.value = false
+      try {
+        await docFlowStore.actionCreateDocument(model)
+        modelValue.value = false
+      }
+      catch (error) {
+
+      }
       break;
     case 'Inner':
       let innerModel = {
@@ -128,8 +135,10 @@ const createDocument = async () => {
   }
   buttonLoading.value = false
   setTimeout(async () => {
-    clearDocument()
-    await redirectRoute()
+    if(!authStore.sessionEnd) {
+      clearDocument()
+      await redirectRoute()
+    }
   }, 500)
 }
 const clearDocument = () => {

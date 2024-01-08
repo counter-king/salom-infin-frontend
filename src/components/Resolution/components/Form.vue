@@ -46,6 +46,9 @@ const props = defineProps({
   formType: {
     type: String,
     default: FORM_TYPE_CREATE
+  },
+  registerDate: {
+    type: Date
   }
 })
 defineExpose({ $v })
@@ -84,6 +87,7 @@ const types = [
       <base-col col-class="w-full">
         <base-calendar
           v-model="$v.deadline.$model"
+          :min-date="props.registerDate"
           :error="$v.deadline"
           :disabled="props.formType === FORM_TYPE_READ"
           label="deadline"
@@ -193,7 +197,7 @@ const types = [
           <user-with-selectable
             v-model:checkbox-index="boxesCommonStore.responsibleIndex"
             :items="boxesCommonStore.resolutionModel.__assignees"
-            :multiple="false"
+            select-type="radio"
             selectable
           >
             <template #chip-prepend="{ item }">

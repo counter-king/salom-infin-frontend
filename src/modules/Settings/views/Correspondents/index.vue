@@ -7,23 +7,28 @@ const navs = ref([]);
 const changeLanguage = () => {
   navs.value = [
     {
-      title: 'Индивидулны',
+      title: 'Физическое лицо',
       icon: 'UserCheckRoundedIcon',
-      link: 'IndividualIndex',
+      link: 'PhysicalIndex',
     },
     {
-      title: 'Организации',
+      title: 'Индивидуальный предприниматель',
+      icon: 'UserCheckRoundedIcon',
+      link: 'EntrepreneurIndex',
+    },
+    {
+      title: 'Юридическое лицо',
       icon: 'BuildingsIcon',
-      link: 'OrganizationsIndex',
+      link: 'LegalIndex',
     },
     {
       title: 'Регионы',
-      icon: 'BuildingsIcon',
+      icon: 'RegionIcon',
       link: 'RegionsIndex',
     },
     {
       title: 'Районы',
-      icon: 'BuildingsIcon',
+      icon: 'DistrictIcon',
       link: 'DistrictsIndex',
     }
   ];

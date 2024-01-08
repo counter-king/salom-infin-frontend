@@ -22,7 +22,7 @@ const sendMessage = async (event) => {
     return
   }
 
-  if(event.keyCode === 13 && !event.shiftKey) {
+  if((event.keyCode === 13 && !event.shiftKey) || event.which === 1) {
     event.preventDefault()
 
     if(!message.value.trim()) {

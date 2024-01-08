@@ -24,7 +24,7 @@ const menus = ref([
   {
     title: "Календарь",
     icon: "CalendarIcon",
-    link: "DashboardIndex",
+    link: "CalendarIndex",
     children: [],
     value: "calendar"
   },
@@ -39,7 +39,7 @@ const menus = ref([
   {
     title: "Kanban",
     icon: "ChatSquareIcon",
-    link: "DashboardIndex",
+    link: "KanbanIndex",
     children: [],
     value: "kanban"
   },
@@ -47,7 +47,7 @@ const menus = ref([
   {
     title: "Чат",
     icon: "ChatLineIcon",
-    link: "DashboardIndex",
+    link: "ChatIndex",
     children: [],
     value: "chat"
   },
@@ -94,13 +94,13 @@ const menus = ref([
         link: "CorrespondentsIndex",
         children: [
           {
-            title: "Индивидулны",
+            title: "Физическое лицо",
             icon: "UserCheckRoundedIcon",
             link: "IndividualIndex",
             children: []
           },
           {
-            title: "Организации",
+            title: "Индивидуальный предприниматель",
             icon: "BuildingsIcon",
             link: "OrganizationsIndex",
             children: []
@@ -252,7 +252,7 @@ provide('openModal', openModal)
 
 <style>
 .header-link.router-link-active {
-  background-color: var(--primary-800);
+  background-color: var(--greyscale-800);
   color: #fff;
 }
 

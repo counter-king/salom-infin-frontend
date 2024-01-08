@@ -18,7 +18,7 @@ const createPosition = () => {
    if(name_uz && name_ru) {
       loading.value = true;
       axiosConfig
-         .post('/positions/', { name_ru, name_uz, code })
+         .post('/positions/', { name_ru, name_uz, code, is_active: true })
          .then(response => {
             if(response?.status === 201) {
                dispatchNotify('Должность создан', '', 'success');

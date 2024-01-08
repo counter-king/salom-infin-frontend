@@ -5,6 +5,7 @@ import { computed } from 'vue'
 import { PriorityChip, StatusChip } from '@/components/Chips'
 // Utils
 import { combineKeys } from '@/utils'
+import { isDate, formatDate } from '@/utils/formatDate'
 // Macros
 const props = defineProps({
   headers: {
@@ -45,7 +46,9 @@ const value = computed(() => combineKeys(props.headers, props.data))
         </template>
 
         <template v-if="!item.field?.hasOwnProperty('name') && !item.detail.component">
-          <span class="text-base font-semibold text-primary-900">{{ item.field }}</span>
+          <span class="text-base font-semibold text-primary-900">
+            {{ isDate(item.field) ? formatDate(item.field) : item.field }}
+          </span>
         </template>
       </base-col>
     </template>

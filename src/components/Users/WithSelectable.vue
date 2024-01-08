@@ -11,16 +11,19 @@ const props = defineProps({
   selectable: {
     type: Boolean
   },
-  multiple: {
-    type: Boolean,
-    default: true
+  selectType: {
+    type: String,
+    default: 'checked',
+    validator(value) {
+      return ['checked', 'checkbox', 'radio'].includes(value)
+    }
   },
   items: {
     type: Array,
     default: () => []
   },
   checkboxIndex: {
-    type: Number
+    type: [Number, Array]
   }
 })
 const emit = defineEmits(['emit:selected', 'update:checkbox-index'])
@@ -40,7 +43,25 @@ const checkboxIndex = computed({
 })
 // Methods
 const handleSelect = (item) => {
-  checkboxIndex.value = isObject(item.user) ? item.user.id : item.id
+  let id = isObject(item.user) ? item.user.id : item.id
+
+  if(props.selectType === 'checkbox') {
+    let index = checkboxIndex.value.find(user => isObject(user.user)
+      ? user.user.id === id
+      : user === id
+    )
+    // Удаляем пользователя
+    if(checkboxIndex.value.includes(index)) {
+      checkboxIndex.value = checkboxIndex.value.filter(user => user !== index)
+    }
+    // Добавляем пользователя
+    else {
+      checkboxIndex.value.push(id)
+    }
+  }
+  else {
+    checkboxIndex.value = id
+  }
 }
 </script>
 
@@ -82,8 +103,20 @@ const handleSelect = (item) => {
     </div>
 
     <div class="w-[22px] h-[22px]">
-      <template v-if="props.multiple">
-        <base-icon name="CheckCircleBgIcon" class="icon-selected w-[22px] h-[22px] stroke-0 hidden" />
+      <template v-if="props.selectType === 'checked'">
+        <base-icon
+          name="CheckCircleBgIcon"
+          class="icon-selected w-[22px] h-[22px] stroke-0 hidden"
+        />
+      </template>
+
+      <template v-else-if="props.selectType === 'checkbox'">
+        <Checkbox
+          v-model="checkboxIndex"
+          :value="isObject(item.user) ? item.user?.id : item.id"
+          :inputId="isObject(item.user) ? item.user?.full_name : item.full_name"
+          name="users"
+        />
       </template>
 
       <template v-else>

@@ -40,19 +40,25 @@ const Settings = [
         meta: { isAuthRequired: true, navigation: true },
         name: "CorrespondentsIndex",
         path: "correspondents",
-        redirect: { name: "IndividualIndex" },
+        redirect: { name: "PhysicalIndex" },
         children: [
           {
-            component: () => import("../views/Correspondents/Individual/index.vue"),
+            component: () => import("../views/Correspondents/Physical/index.vue"),
             meta: { isAuthRequired: true },
-            name: "IndividualIndex",
-            path: "individual",
+            name: "PhysicalIndex",
+            path: "physical",
           },
           {
-            component: () => import("../views/Correspondents/Organizations/index.vue"),
+            component: () => import("../views/Correspondents/Entrepreneur/index.vue"),
             meta: { isAuthRequired: true },
-            name: "OrganizationsIndex",
-            path: "organizations",
+            name: "EntrepreneurIndex",
+            path: "entrepreneur",
+          },
+          {
+            component: () => import("../views/Correspondents/Legal/index.vue"),
+            meta: { isAuthRequired: true },
+            name: "LegalIndex",
+            path: "legal",
           },
           {
             component: () => import("../views/Correspondents/Regions/index.vue"),

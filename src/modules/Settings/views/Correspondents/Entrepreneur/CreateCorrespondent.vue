@@ -2,42 +2,60 @@
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputNumber from 'primevue/inputnumber';
-import Textarea from 'primevue/textarea';
 import InputText from 'primevue/inputtext';
 import ProgressSpinner from 'primevue/progressspinner';
+import Textarea from 'primevue/textarea';
 import axiosConfig from "@/services/axios.config";
+import isValidEmail from '@/utils/isValidEmail';
 import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { replaceSpecChars } from '@/utils/string';
+import { useI18n } from "vue-i18n";
+const { locale } = useI18n();
 const props = defineProps({ getFirstPageCorrespondents: Function, setVisible: Function, visible: Boolean });
-const defaultCorrespondent = { name: '', legal_name: '' };
-const loading = ref(false);
+const defaultCorrespondent = { legal_name: '', legal_address: '', tin: '', checkpoint: '', email: '', phone: 8, description: '' };
 const correspondent = ref(defaultCorrespondent);
+const gender = ref(null);
+const genders = ref([]);
+const loading = ref(false);
 const createCorrespondent = () => {
-   const {name, legal_name} = correspondent.value;
-   if(name && legal_name) {
+   const { legal_name, legal_address, tin, checkpoint, email, phone, description } = correspondent.value;
+   const newPhone = '+99' + String(phone || '');
+   if(legal_name && legal_address && String(tin || '').length === 9 && checkpoint && newPhone.length === 13 && isValidEmail(email)) {
       loading.value = true;
+      const data = { legal_address, legal_name, tin, checkpoint, email, phone: newPhone, description, type: 'entrepreneur', name: legal_name };
       axiosConfig
-         .post('correspondents/', { name, legal_name })
+         .post('correspondents/', data)
          .then(response => {
             if(response?.status === 201) {
-               dispatchNotify('Регион создан', '', 'success');
+               dispatchNotify('Корреспондент создан', '', 'success');
                correspondent.value = defaultCorrespondent;
+               gender.value = null;
                props.getFirstPageCorrespondents();
                props.setVisible(false);
             } else {
-               dispatchNotify('Регион не создан', '', 'error');
+               dispatchNotify('Корреспондент не создан', '', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Регион не создан', '', 'error');
+            dispatchNotify('Корреспондент не создан', '', 'error');
          })
          .finally(() => {
             loading.value = false;
          });
-   } else {
+   } else if(!legal_name) {
       dispatchNotify('Введите название', '', 'error')
+   } else if(!legal_address) {
+      dispatchNotify('Введите адрес', '', 'error')
+   } else if(String(tin || '').length !== 9) {
+      dispatchNotify('Введите правильный ИНН', '', 'error')
+   } else if(!checkpoint) {
+      dispatchNotify('Введите КПП', '', 'error')
+   } else if(newPhone.length !== 13) {
+      dispatchNotify('Введите свой номер телефона правильно', '', 'error')
+   } else {
+      dispatchNotify('Введите свой адрес электронной почты правильно', '', 'error')
    }
 };
 </script>
@@ -50,35 +68,25 @@ const createCorrespondent = () => {
       :closable="!loading"
       :pt="dialogConfig"
       :visible="visible"
-      header="Создать регион"
+      header="Создать корреспондент"
       modal
       >
       <div class="flex flex-col pb-0 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            :modelValue="correspondent.name"
-            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название"
-            type="text"
-            @update:modelValue="value => {
-               correspondent = { ...correspondent, name: replaceSpecChars(value) };
-            }"
-            />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Юридическое название<span class="text-red-500 ml-1">*</span></p>
-         <InputText
             :modelValue="correspondent.legal_name"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите юридическое название"
+            placeholder="Введите название"
             type="text"
             @update:modelValue="value => {
                correspondent = { ...correspondent, legal_name: replaceSpecChars(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Юридическое адрес<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Адрес<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="correspondent.legal_address"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите юридическое адрес"
+            placeholder="Введите адрес"
             type="text"
             @update:modelValue="value => {
                correspondent = { ...correspondent, legal_address: replaceSpecChars(value) };

@@ -1,8 +1,0 @@
-<script setup>
-</script>
-<template>
-  <div>
-    Organizations Page
-  </div>
-</template>
-<style></style>

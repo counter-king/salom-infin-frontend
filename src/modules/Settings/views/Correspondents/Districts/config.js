@@ -41,6 +41,16 @@ export const dropdownConfig = {
    root: { class: ['h-7', 'rounded-2',  'm-0'] },
    trigger: { class: ['w-[30px]'] },
 };
+export const selectConfig = {
+   dropdownicon: { class: ['w-[15px]', 'h-[15px]'] },
+   input: { class: ['flex', 'items-center', 'font-regular text-[15px]'] },
+   item: { class: ['h-12', 'flex', 'flex', 'items-center', 'font-regular text-[15px] px-4'] },
+   list: { class: ['p-0'] },
+   paginatorWrapper: ['flex', 'justify-between', 'border', 'border-solid'],
+   panel: { class: ['rounded-[12px] overflow-hidden'] },
+   root: { class: ['h-12', 'rounded-[12px] bg-greyscale-50',  'mb-6'] },
+   trigger: { class: ['w-11'] },
+};
 export const menuConfig = {
    action: { class: ['py-[6px] pl-3 min-h-[32px]'] },
    content: { class: ['rounded-lg'] },
@@ -55,3 +65,7 @@ export const dropdownOptions = [
    { name: '20', page_size: 20 },
    { name: '30', page_size: 30 },
 ];
+export const overlayConfig = {
+   content: ['p-0'],
+   root: ['translate-y-0 rounded-2xl shadow-menu after_none bg-white mt-[6px] overflow-hidden'],
+};

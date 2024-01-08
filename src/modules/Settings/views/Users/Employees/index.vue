@@ -9,8 +9,10 @@ import InputText from 'primevue/inputtext';
 import Paginator from 'primevue/paginator';
 import Skeleton from 'primevue/skeleton';
 import axiosConfig from "@/services/axios.config";
-import { onMounted, ref, watch } from 'vue';
-import { tableConfig, columnConfig, dropdownConfig, paginationConfig, dropdownOptions } from './config';
+import { onMounted, ref, computed } from 'vue';
+import OverlayPanel from 'primevue/overlaypanel';
+import InputSwitch from 'primevue/inputswitch';
+import { tableConfig, columnConfig, dropdownConfig, paginationConfig, dropdownOptions, overlayConfig } from './config';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
 const defaultFilter = { page: 1, page_size: 10, search: '' };
@@ -23,9 +25,44 @@ const deleteVisible = ref(false);
 const editUser = ref({});
 const editVisible = ref(false);
 const filter = ref(defaultFilter);
-const headers = ref([]);
+const headers = ref([
+  {
+    columnKey: 'full_name',
+    disabled: true,
+    field: 'full_name',
+    header: 'ФИО Сотрудника',
+    is_active: true,
+  },
+  {
+    columnKey: 'position',
+    field: 'position',
+    header: 'Должность',
+    is_active: true,
+  },
+  {
+    columnKey: 'phone',
+    field: 'phone',
+    header: 'Телефон',
+    is_active: true,
+  },
+  {
+    columnKey: 'is_user_active',
+    field: 'is_user_active',
+    header: 'Состояние',
+    is_active: true,
+  },
+  {
+    columnKey: 'action',
+    field: 'action',
+    header: 'Действия',
+    is_active: true,
+  },
+]);
 const loading = ref(false);
 const employees = ref([]);
+const settingsOverlay = ref(null);
+const visibleHeaders = computed(() => headers.value.filter(header => header?.is_active));
+const editableHeaders = computed(() => headers?.value.filter(header => !header?.disabled));
 const userDelete = () => {
   deleteLoading.value = true;
 };
@@ -73,41 +110,40 @@ const getFirstPageEmployees = () => {
 const setEmployees = newEmployees => {
   employees.value = newEmployees;
 }
-const changeLanguage = () => {
-  headers.value = [
-    {
-      columnKey: 'full_name',
-      field: 'full_name',
-      header: 'ФИО Сотрудника',
-    },
-    {
-      columnKey: 'position',
-      field: 'position',
-      header: 'Должность',
-    },
-    {
-      columnKey: 'phone',
-      field: 'phone',
-      header: 'Телефон',
-    },
-    {
-      columnKey: 'is_user_active',
-      field: 'is_user_active',
-      header: 'Состояние',
-    },
-    {
-      columnKey: 'action',
-      field: 'action',
-      header: 'Действия',
-    },
-  ];
+const changeHeader = (is_active, field) => {
+  const newHeaders = headers.value.map(header => {
+    if(header.field === field) {
+      return { ...header, is_active }
+    } else {
+      return header;
+    }
+  });
+  headers.value = newHeaders;
 };
-watch(locale, () => {
-  changeLanguage();
-});
+const toggle = e => {
+  settingsOverlay.value.toggle(e);
+};
+const saveChanges = e => {
+  const newHeaders = JSON.stringify(headers.value);
+  localStorage.setItem('settings-users-employees', newHeaders);
+  settingsOverlay.value.toggle(e);
+};
+const resetHeaders = e => {
+  const newHeaders = headers.value.map(header => ({ ...header, is_active: true }));
+  headers.value = newHeaders;
+  localStorage.setItem('settings-users-employees', JSON.stringify(newHeaders));
+  settingsOverlay.value.toggle(e);
+};
+const initHeaders = () => {
+  const list = JSON.parse(localStorage.getItem('settings-users-employees'));
+  if(Array.isArray(list) && list?.length) {
+    const newHeaders = list;
+    headers.value = newHeaders;
+  }
+};
 onMounted(() => {
-  changeLanguage();
   getFirstPageEmployees();
+  initHeaders();
 });
 </script>
 <template>
@@ -118,13 +154,22 @@ onMounted(() => {
         <i class="pi pi-search pl-1" />
         <InputText
           :modelValue="filter.search"
-          :pt="{ root: { class: ['w-full rounded-3xl bg-white border-greyscale-50 font-xs focus:border-primary-500'] } }"
+          :pt="{ root: { class: ['w-full rounded-3xl h-[42px] bg-white border-greyscale-50 font-xs focus:border-primary-500'] } }"
           @update:modelValue="searchUsers"
           placeholder="Поиск"
           size="small"
           type="text"
           />
       </span>
+      <Button
+        @click="toggle"
+        class="p-button p-component font-medium text-sm border-transparent bg-primary-0 hover:bg-greyscale-100 text-primary-dark shadow-button rounded-xl !rounded-full py-[9px] px-4"
+        rounded
+        type="button"
+        >
+        <base-icon class="mr-2" color="#767994" height="20" name="SettingsMinimalisticIcon" width="20"/>
+        <span>Настроить столбцы</span>
+      </Button>
       <Button
         @click="visible = true"
         class="p-button p-component font-medium text-sm rounded-xl !rounded-full py-[9px] px-4"
@@ -141,7 +186,6 @@ onMounted(() => {
       :loading="loading"
       :pt="tableConfig"
       :value="employees"
-      @page="onChangePage"
       row-hover
       scrollable
       >
@@ -151,7 +195,7 @@ onMounted(() => {
         :header="item.header"
         :key="index"
         :pt="columnConfig"
-        v-for="(item, index) in headers"
+        v-for="(item, index) in visibleHeaders"
       >
         <template #body="{ field, data }">
           <Employee
@@ -167,7 +211,7 @@ onMounted(() => {
         <div class="bg-primary-50 w-full h-full overflow-hidden absolute left-0 top-0">
           <div v-for="(_, index) in 10" :key="index" class="bg-white px-5 h-14 rounded-xl flex flex-col justify-center items-center mb-1">
             <div class="w-full h-full flex items-center justify-center gap-4">
-              <Skeleton v-for="(_, index) in 5" :key="index" height="16px" />
+              <Skeleton v-for="(_, index) in visibleHeaders.length" :key="index" height="16px" />
             </div>
           </div>
         </div>
@@ -180,6 +224,7 @@ onMounted(() => {
     </DataTable>
     <div class="flex">
       <Paginator
+        :first="(filter.page - 1) * filter.page_size"
         :pt="paginationConfig"
         :rows="filter.page_size"
         :totalRecords="count"
@@ -200,6 +245,34 @@ onMounted(() => {
       </Paginator>
     </div>
   </div>
+  <OverlayPanel ref="settingsOverlay" :pt="overlayConfig">
+    <div class="p-3">
+      <div v-for="(header, index) in editableHeaders" :key="index" class="w-full h-10 py-3 px-2 flex items-center gap-3 justify-between">
+        <span class="text-primary-900 text-sm font-medium">{{ header.header }}</span>
+        <InputSwitch
+          size="small"
+          :modelValue="header.is_active"
+          @update:modelValue="value => {
+            changeHeader(value, header.field)
+          }"
+          :pt="{
+            root: { class: ['h-[22px] w-[36px] shadow-none ml-6'] },
+            slider: () => ({
+              class: [
+                'before:h-[18px] before:w-[18px] before:-mt-[9px] shadow-none',
+                header?.is_active ? 'bg-green-500' : 'bg-greyscale-100',
+                header?.is_active ? 'before:translate-x-[10px]' : 'before:left-[2px]'
+              ]
+            }),
+          }"
+        />
+      </div>
+    </div>
+    <div class="flex justify-end border-t bg-greyscale-50 py-3 pr-5 pl-8">
+      <Button @click="resetHeaders" class="p-button p-component shadow-button font-medium flex justify-center shadow-none rounded-full text-[14px] py-[6px] px-4 bg-white text-primary-900 border-transparent">Сбросить</Button>
+      <Button @click="saveChanges" class="p-button p-component font-medium flex justify-center shadow-none rounded-full text-[14px] py-[6px] px-4 ml-2">Сохранить</Button>
+    </div>
+  </OverlayPanel>
   <CreateEmployee
     :getFirstPageEmployees="getFirstPageEmployees"
     :setVisible="setVisible"
