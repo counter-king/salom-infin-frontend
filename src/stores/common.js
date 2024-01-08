@@ -1,5 +1,6 @@
 import { defineStore } from "pinia"
 import {
+  fetchComposeStatusList,
   fetchDeliveryTypesList,
   fetchDepartmentList,
   fetchDistrictList,
@@ -27,6 +28,7 @@ export const useCommonStore = defineStore("common", {
     regionsList: [],
     shortDescriptionList: [],
     statusList: [],
+    composeStatusList: [],
 	}),
 	getters: {
 		getStatusList: (state) => state.statusList
@@ -49,6 +51,7 @@ export const useCommonStore = defineStore("common", {
       this.actionRegionsList()
       this.actionShortDescriptionList()
       this.actionStatusList()
+      this.actionComposeStatusList()
 		},
     /**
      * Возвращает список вид подачи
@@ -140,5 +143,14 @@ export const useCommonStore = defineStore("common", {
         this.statusList = data.results
       })
 		},
+    /**
+     * Возвращает список compose статусов
+     * @returns Array
+     * */
+    actionComposeStatusList() {
+      fetchComposeStatusList().then(({ data }) => {
+        this.composeStatusList = data
+      })
+    },
 	},
 })

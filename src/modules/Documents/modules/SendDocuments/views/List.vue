@@ -98,7 +98,7 @@ onMounted(async () => {
       </template>
 
       <template #status="{ data }">
-        <status :status="data.status"/>
+        <status :status="data.status" type="compose"/>
       </template>
 
       <template #signers="{ data }">

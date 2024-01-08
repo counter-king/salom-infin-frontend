@@ -12,6 +12,7 @@ const URLS = {
   regions: "regions/",
   shortDescription: "short-descriptions/",
   status: "status/",
+  composeStatus: "compose/1/statuses/",
 	users: "users/",
 }
 /**
@@ -83,4 +84,11 @@ export const fetchShortDescriptionList = () => {
  */
 export const fetchStatusList = () => {
   return axiosConfig.get(URLS.status)
+}
+/**
+ * Возвращает список compose статусов
+ * @returns [{Array}]
+ */
+export const fetchComposeStatusList = () => {
+  return axiosConfig.get(URLS.composeStatus)
 }
