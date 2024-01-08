@@ -47,7 +47,7 @@ const statement = computed(() => {
     }
   }else {
     switch (props.status?.id) {
-      case STATUS_TYPES.TODO:                                               // TODO
+      case STATUS_TYPES.TODO:                                               // TO DO
         return "bg-primary-50 text-primary-500 border-primary-500"
       case STATUS_TYPES.IN_PROGRESS:                                        // IN_PROGRESS
       case STATUS_TYPES.ON_HOLD:                                            // ON_HOLD
