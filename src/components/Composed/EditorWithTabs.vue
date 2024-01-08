@@ -12,11 +12,15 @@ const props = defineProps({
   fileUploadContainerClasses: {
     type: String,
     default: ""
+  },
+  files: {
+    type: Array,
+    default: []
   }
 })
 
 const modelValue = useModel(props, 'modelValue');
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'emit:fileUpload'])
 const tabPanelList = ref([
   {
     title: 'text',
@@ -28,7 +32,8 @@ const tabPanelList = ref([
     slot: 'file',
     icon: 'FileTextFilledIcon'
   },
-])
+]);
+
 </script>
 
 <template>
@@ -46,7 +51,10 @@ const tabPanelList = ref([
       <div
         :class="props.fileUploadContainerClasses"
       >
-        <base-file-upload />
+        <base-file-upload
+          :files="props.files"
+          @emit:file-upload="(val) => emit('emit:fileUpload', val)"
+        />
       </div>
     </template>
   </base-brick-tab>

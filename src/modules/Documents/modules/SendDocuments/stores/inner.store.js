@@ -28,6 +28,8 @@ export const useSDStoreInner = defineStore("sd-store-inner", {
       type: SD_TYPE_INNER,
       sub_type: SD_TYPE_INNER,
       sender: null,
+      files: [],
+      __files: [],
       __approvers: [],
       __approvers_copy: [],
       __departments: [],
@@ -98,6 +100,7 @@ export const useSDStoreInner = defineStore("sd-store-inner", {
         this.model.__departments = data.receiver.departments;
         this.model.__signers = data.signers;
         this.model.__approvers = data.approvers;
+        this.model.__files = data.files;
         console.log(this.model)
       }
       catch (error) {

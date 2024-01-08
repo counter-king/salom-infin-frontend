@@ -10,7 +10,7 @@ const { t } = useI18n()
 // Macros
 const props = defineProps({
   modelValue: {
-    type: [String],
+    type: [String, Date],
     default: ""
   },
   minDate: {
@@ -82,7 +82,7 @@ const modelValue = computed({
     return props.modelValue
   },
   set(value) {
-    emit('update:modelValue', formatDateReverse(value))
+    emit('update:modelValue', value)
   }
 })
 </script>
@@ -119,8 +119,57 @@ const modelValue = computed({
           }
         },
         panel: {
-          class: '!min-w-[425px]'
-        }
+          class: 'shadow-calendar !w-[288px] !min-w-[288px] !h-[288px] translate-y-2 border border-solid border-greyscale-200 rounded-xl p-0'
+        },
+        groupContainer: {
+          class: '!w-[288px] p-4'
+        },
+        group: {
+          class: '!w-full !h-full'
+        },
+        previousButton: {
+          class: 'w-5 h-5'
+        },
+        previousIcon: {
+          class: 'w-3 h-3'
+        },
+        nextButton: {
+          class: 'w-5 h-5'
+        },
+        nextIcon: {
+          class: 'w-3 h-3'
+        },
+        monthTitle: {
+          class: 'text-sm text-primary-900 hover:text-primary-500'
+        },
+        yearTitle: {
+          class: 'text-sm text-primary-900 hover:text-primary-500'
+        },
+        header: {
+          class: 'bg-greyscale-50 border-0 rounded-lg py-0 mb-1'
+        },
+        container: { class: ['w-full'] },
+        table: {
+          class: 'w-full border-separate border-spacing-y-1 m-0'
+        },
+        tableHeader: { class: ['w-full'] },
+        tableHeaderRow: { class: ['w-full'] },
+        weekLabel: { class: ['text-xs'] },
+        weekday: {
+          class: 'text-xs font-medium text-greyscale-300'
+        },
+        tableHeaderCell: {
+          class: 'w-8 h-8 border-b !rounded-none p-0 m-0'
+        },
+        day: { class: ['p-0'] },
+        dayLabel: ({ context }) => (
+          {
+            class: [
+              'w-8 h-8 text-xs font-medium text-primary-900',
+              { 'font-semibold bg-primary-500 text-white' : context.selected }
+            ]
+          }
+        )
       }"
     >
       <template #dropdownicon>

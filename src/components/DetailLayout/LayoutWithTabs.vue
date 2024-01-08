@@ -78,6 +78,10 @@ const props = defineProps({
   contentType: {
     type: Number,
     default: CONTENT_TYPES.DOC_FLOW
+  },
+  files: {
+    type: Array,
+    default: () => []
   }
 })
 const { t } = useI18n();
@@ -142,6 +146,7 @@ watch(activeTabMenu, (value) => {
                   :headers="props.headers"
                   :tree-items="props.treeItems"
                   :content-type="props.contentType"
+                  :files="props.files"
                 >
                   <template #preview-actions>
                     <slot name="preview-actions" />
