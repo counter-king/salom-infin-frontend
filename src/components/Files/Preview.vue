@@ -15,7 +15,7 @@ const extension = computed(() => props.file.name.split(".").pop())
   <div v-if="props.file" class="h-full">
     <template v-if="extension === 'pdf' || extension === 'PDF'">
       <object
-        :data="props.file?.document.url"
+        :data="props.file?.url"
         type="application/pdf"
         width="100%"
         height="100%"

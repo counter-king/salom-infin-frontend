@@ -1,54 +1,36 @@
 <script setup>
 // Core
 import { ref } from 'vue'
+import { saveAs } from  'file-saver'
 // Components
 import { CardTable } from '@/components/Table'
 import { FilePreview } from "@/components/Files";
+// Utils
+import { formatDate } from "../../../utils/formatDate";
+// Props
+const props = defineProps({
+  files: {
+    type: Array,
+    default: () => []
+  }
+})
 // Reactive
 const header = ref([
   {
     field: 'title'
   }
 ])
-const list = ref([
-  {
-    title: 'Фото Doclines 2',
-    slot: 'file',
-    name: "CM00506.pdf",
-    document: {
-      id: 115508,
-      name: "CM00506.pdf",
-      url: "https://portal-drive.asakabank.uz/media/CM21320.pdf",
-    },
-  },
-  {
-    title: 'Фото Doclines 3',
-    slot: 'file',
-    name: "CM00506.jpg",
-    document: {
-      id: 115508,
-      name: "CM00506.jpg",
-      url: "https://portal-drive.asakabank.uz/media/avatar_DHZyvvz.jpg",
-    },
-  },
-  {
-    title: 'Фото Doclines 4',
-    slot: 'file',
-    name: "CM00506.xlsx",
-    document: {
-      id: 115508,
-      name: "CM00506.xlsx",
-      url: "https://portal-drive.asakabank.uz/media/6_____ilova-Jarima_tHOhZmK_R0cJNfc.xlsx",
-    },
-  },
-])
 const zoomDialog = ref(false)
 const currentFile = ref({})
 // Methods
 const zoomFile = (event, file) => {
-  event.stopImmediatePropagation()
-  zoomDialog.value = true
-  currentFile.value = file
+  event.stopImmediatePropagation();
+  zoomDialog.value = true;
+  currentFile.value = { ...file, document: file };
+}
+const download = (event, data) => {
+  event.stopImmediatePropagation();
+  saveAs(data.url, data.name);
 }
 </script>
 
@@ -56,7 +38,7 @@ const zoomFile = (event, file) => {
   <div class="layout-files-view">
     <card-table
       :headers="header"
-      :value="list"
+      :value="props.files"
       :shadow="false"
       scroll-height="calc(100vh - 297px)"
       table-class="border-spacing-y-2"
@@ -72,16 +54,16 @@ const zoomFile = (event, file) => {
           </div>
 
           <div class="flex-1">
-            <h1 class="text-sm text-primary-900">{{ data.title }}</h1>
+            <h1 class="text-sm text-primary-900">{{ data.name }}</h1>
 
             <div class="flex items-center gap-2">
-              <span class="text-xs text-greyscale-500 font-medium">9.3 MB</span>
+              <span class="text-xs text-greyscale-500 font-medium">{{ data.file_size }} MB</span>
 
               <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-full"></div>
 
               <div class="flex items-center gap-1 text-xs">
                 <h1 class="text-primary-900">Загружено</h1>
-                <p class="text-greyscale-500">21.08.2023</p>
+                <p class="text-greyscale-500">{{ formatDate(data.created_date) }}</p>
               </div>
             </div>
           </div>
@@ -101,6 +83,7 @@ const zoomFile = (event, file) => {
                 autoHide: false
               }"
               class="group bg-white text-greyscale-500 hover:text-primary-500"
+              @click="download($event, data)"
             />
 
             <base-button

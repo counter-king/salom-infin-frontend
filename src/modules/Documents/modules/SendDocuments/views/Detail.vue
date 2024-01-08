@@ -44,6 +44,7 @@ onMounted(async () => {
       :title="SDStore.detailModel?.title"
       :object-id="SDStore.detailModel?.id"
       :content-type="CONTENT_TYPES.SEND_DOCUMENT"
+      :files="SDStore.detailModel?.files"
     >
       <template #header-end>
         <base-button

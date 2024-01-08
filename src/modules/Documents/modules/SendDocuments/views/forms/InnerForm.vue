@@ -51,6 +51,9 @@ const preview = async () => {
   SDStoreInner.model.departments = [];
   SDStoreInner.model.departments = SDStoreInner.model.__departments.map(item => item.id);
 
+  SDStoreInner.model.files = [];
+  SDStoreInner.model.files = SDStoreInner.model.__files.map(item => { return { id: item.id } });
+
   // TEMP
   SDStoreInner.model.sender = 1
 
@@ -97,6 +100,12 @@ const update = async () => {
 }
 const clearForm = () => {
   console.log("Clear Form")
+}
+const onFileUpload = (files) => {
+  SDStoreInner.model.__files = [];
+  files.forEach(file => {
+    SDStoreInner.model.__files.push(file);
+  });
 }
 
 onMounted(async () => {
@@ -197,12 +206,16 @@ onUnmounted(() => {
                 v-model="$v.content.$model"
                 :error="$v.content"
                 file-upload-container-classes="w-1/2 pr-2"
+                :files="SDStoreInner.model.__files"
+                @emit:file-upload="onFileUpload"
               />
             </base-col>
           </base-row>
         </form-container>
       </template>
     </layout-with-tabs>
+
+<!--    <pre>{{ SDStoreInner.model.__files }}</pre>-->
 
     <!-- PREVIEW -->
     <preview-dialog
