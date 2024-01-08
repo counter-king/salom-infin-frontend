@@ -6,11 +6,11 @@ import DataTable from 'primevue/datatable';
 import Dropdown from 'primevue/dropdown';
 import InputText from 'primevue/inputtext';
 import Paginator from 'primevue/paginator';
+import OverlayPanel from 'primevue/overlaypanel';
 import Skeleton from 'primevue/skeleton';
 import axiosConfig from "@/services/axios.config";
 import { ref, computed, onMounted } from 'vue';
 import InputSwitch from 'primevue/inputswitch';
-import OverlayPanel from 'primevue/overlaypanel';
 import { tableConfig, columnConfig, dropdownConfig, paginationConfig, dropdownOptions, overlayConfig } from './config';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
@@ -22,19 +22,13 @@ const headers = ref([
     columnKey: 'name',
     disabled: true,
     field: 'name',
-    header: 'Наименование',
+    header: 'Название',
     is_active: true,
   },
   {
-    columnKey: 'tin',
-    field: 'tin',
-    header: 'ИНН',
-    is_active: true,
-  },
-  {
-    columnKey: 'checkpoint',
-    field: 'checkpoint',
-    header: 'КПП',
+    columnKey: 'pinfl',
+    field: 'pinfl',
+    header: 'ПИНФЛ',
     is_active: true,
   },
   {

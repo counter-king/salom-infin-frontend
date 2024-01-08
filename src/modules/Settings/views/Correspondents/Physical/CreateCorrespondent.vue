@@ -15,18 +15,18 @@ import { replaceSpecChars } from '@/utils/string';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
 const props = defineProps({ getFirstPageCorrespondents: Function, setVisible: Function, visible: Boolean });
-const defaultCorrespondent = { first_name: '', last_name: '', father_name: '', tin: '', email: '', phone: 8, description: '', address: '' };
+const defaultCorrespondent = { first_name: '', last_name: '', father_name: '', email: '', phone: 8, description: '', address: '', pinfl: '' };
 const correspondent = ref(defaultCorrespondent);
 const gender = ref(null);
 const genders = ref([]);
 const loading = ref(false);
 const createCorrespondent = () => {
-   const { first_name, last_name, father_name, tin, email, phone, description, address } = correspondent.value;
+   const { first_name, last_name, father_name, email, pinfl, phone, description, address } = correspondent.value;
    const newPhone = '+99' + String(phone || '');
    const name = `${last_name} ${first_name} ${father_name}`;
-   if(first_name && last_name && father_name && gender.value && String(tin || '').length === 9 && newPhone.length === 13 && isValidEmail(email) && address) {
+   if(first_name && last_name && gender.value && String(pinfl || '').length === 14 && newPhone.length === 13 && (email?.length ? isValidEmail(email) : true) && address) {
       loading.value = true;
-      const data = { address, first_name, last_name, father_name, tin, email, phone: newPhone, description, type: 'physical', gender: gender.value.value, name };
+      const data = { address, first_name, last_name, father_name, email, phone: newPhone, description, type: 'physical', gender: gender.value.value, name, pinfl };
       axiosConfig
          .post('correspondents/', data)
          .then(response => {
@@ -50,15 +50,13 @@ const createCorrespondent = () => {
       dispatchNotify('Введите имя', '', 'error')
    } else if(!last_name) {
       dispatchNotify('Введите фамилия', '', 'error')
-   } else if(!father_name) {
-      dispatchNotify('Введите отчество', '', 'error')
    } else if(!gender.value) {
       dispatchNotify('Выберите пол', '', 'error')
-   } else if(String(tin || '').length !== 9) {
-      dispatchNotify('Введите правильный ИНН', '', 'error')
+   } else if(String(pinfl || '').length !== 14) {
+      dispatchNotify('Введите правильный ПИНФЛ', '', 'error')
    } else if(newPhone.length !== 13) {
       dispatchNotify('Введите свой номер телефона правильно', '', 'error')
-   } else if(!isValidEmail(email)) {
+   } else if((email?.length ? !isValidEmail(email) : false)) {
       dispatchNotify('Введите свой адрес электронной почты правильно', '', 'error')
    } else {
       dispatchNotify('Введите адрес', '', 'error')
@@ -110,7 +108,7 @@ onMounted(() => {
                correspondent = { ...correspondent, last_name: replaceSpecChars(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Отчество<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Отчество</p>
          <InputText
             :modelValue="correspondent.father_name"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
@@ -122,16 +120,16 @@ onMounted(() => {
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Пол<span class="text-red-500 ml-1">*</span></p>
          <Dropdown :pt="selectConfig" v-model="gender" :options="genders" showClear optionLabel="name" placeholder="Выберите пол" class="w-full md:w-14rem" />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">ИНН<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">ПИНФЛ<span class="text-red-500 ml-1">*</span></p>
          <InputNumber
             :maxFractionDigits="0"
             :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
             :useGrouping="false"
-            placeholder="Введите ИНН"
-            v-model="correspondent.tin"
+            placeholder="Введите ПИНФЛ"
+            v-model="correspondent.pinfl"
             @input="({ value }) => {
-               const tin = +String(value || '').slice(0, 9)
-               correspondent = { ...correspondent, tin }
+               const pinfl = +String(value || '').slice(0, 14)
+               correspondent = { ...correspondent, pinfl }
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Номер телефона<span class="text-red-500 ml-1">*</span></p>
@@ -142,19 +140,19 @@ onMounted(() => {
             v-model="correspondent.phone"
             placeholder="Введите номер телефона"
             prefix="+99"
-            @input="({value}) => {
+            @input="({ value }) => {
                const phone = value && value > 7 ? +String(value || '').slice(0, 10) : 8;
                correspondent = { ...correspondent, phone }
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Электронная почта<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Электронная почта</p>
          <InputText
             :modelValue="correspondent.email"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите электронная почта"
             type="text"
-            @update:modelValue="value => {
-               correspondent = { ...correspondent, email: value };
+            @update:modelValue="email => {
+               correspondent = { ...correspondent, email };
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Адрес<span class="text-red-500 ml-1">*</span></p>
@@ -163,8 +161,8 @@ onMounted(() => {
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите адрес"
             type="text"
-            @update:modelValue="value => {
-               correspondent = { ...correspondent, address: value };
+            @update:modelValue="address => {
+               correspondent = { ...correspondent, address };
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Содержание</p>
@@ -174,8 +172,8 @@ onMounted(() => {
             cols="30"
             placeholder="Введите содержание"
             rows="5"
-            @update:modelValue="value => {
-               correspondent = { ...correspondent, description: value };
+            @update:modelValue="description => {
+               correspondent = { ...correspondent, description };
             }"
             />
       </div>
