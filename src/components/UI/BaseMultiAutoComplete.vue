@@ -14,7 +14,7 @@ const props = defineProps({
 });
 const autocompleteConfig = {
    checkboxContainer: { class: 'hidden' },
-   container: { class: ['w-[500px] group bg-transparent px-11 py-1 rounded-xl focus:border-primary-500 border-primary min-h-[44px]'] },
+   container: { class: ['w-[500px] group bg-transparent px-11 py-1 rounded-xl border-transparent focus:border-primary-500 min-h-[44px]'] },
    dropdownIcon: { class: ['w-4 h-4 bg-transparent'] },
    header: { class: ['bg-white hidden'] },
    input: { class: ['w-full px-1 w-full rounded-xl'] },
@@ -23,7 +23,7 @@ const autocompleteConfig = {
    list: { class: ['py-0'] },
    option: { class: ['text-xs font-medium text-primary-900'] },
    panel: { class: ['translate-y-[8px] shadow-menu rounded-2xl p-2 user-search-autocomplete'] },
-   root: { class: ['w-[500px] group bg-greyscale-50 rounded-2xl border-greyscale-50 focus:border-primary-500 min-h-[44px]'] },
+   root: { class: ['w-[500px] group bg-greyscale-50 rounded-2xl min-h-[44px]'] },
    token: { class: ['chip-hover shadow-button bg-white cursor-pointer'] },
    tokenLabel: { class: ['text-sm font-medium'] },
 };

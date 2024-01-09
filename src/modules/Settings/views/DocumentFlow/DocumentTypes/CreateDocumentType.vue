@@ -56,7 +56,7 @@ const createDocumentType = () => {
             @update:modelValue="name_uz => {
                documentType = { ...documentType, name_uz };
             }"
-            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
             :modelValue="documentType.name_uz"
@@ -66,7 +66,7 @@ const createDocumentType = () => {
             @update:modelValue="name_ru => {
                documentType = { ...documentType, name_ru };
             }"
-            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
             :modelValue="documentType.name_ru"

@@ -56,7 +56,7 @@ const createDeliveryType = () => {
             @update:modelValue="name_uz => {
                deliveryType = { ...deliveryType, name_uz };
             }"
-            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
             :modelValue="deliveryType.name_uz"
@@ -66,7 +66,7 @@ const createDeliveryType = () => {
             @update:modelValue="name_ru => {
                deliveryType = { ...deliveryType, name_ru };
             }"
-            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
             :modelValue="deliveryType.name_ru"

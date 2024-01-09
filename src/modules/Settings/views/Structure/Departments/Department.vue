@@ -205,7 +205,7 @@ onMounted(() => {
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editDepartment.name_uz"
-            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
             @update:modelValue="value => {
@@ -215,7 +215,7 @@ onMounted(() => {
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ) <span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editDepartment.name_ru"
-            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
             @update:modelValue="value => {
