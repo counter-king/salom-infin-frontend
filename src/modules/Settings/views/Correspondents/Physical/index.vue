@@ -26,9 +26,9 @@ const headers = ref([
     is_active: true,
   },
   {
-    columnKey: 'tin',
-    field: 'tin',
-    header: 'ИНН',
+    columnKey: 'pinfl',
+    field: 'pinfl',
+    header: 'ПИНФЛ',
     is_active: true,
   },
   {

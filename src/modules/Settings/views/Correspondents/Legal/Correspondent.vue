@@ -10,7 +10,6 @@ import isValidEmail from '@/utils/isValidEmail';
 import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
-import { replaceSpecChars } from '@/utils/string';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
 const props = defineProps({ data: Object, field: String, getFirstPageCorrespondents: Function, correspondents: Array, setCorrespondents: Function });
@@ -24,7 +23,7 @@ const genders = ref([]);
 const correspondentEdit = () => {
    const { legal_name, legal_address, tin, checkpoint, email, phone, description } = editCorrespondent.value;
    const newPhone = '+99' + String(phone || '');
-   if( legal_name && legal_address && String(tin || '').length === 9 && checkpoint && newPhone.length === 13 && isValidEmail(email)) {
+   if( legal_name && legal_address && String(tin || '').length === 9 && newPhone.length === 13 && isValidEmail(email)) {
       editLoading.value = true;
       const correspondentId = props.data?.id;
       const data = { legal_address, legal_name, tin, checkpoint, email, phone: newPhone, description, type: 'legal', name: legal_name };
@@ -55,13 +54,11 @@ const correspondentEdit = () => {
             editLoading.value = false;
          });
    } else if(!legal_name) {
-      dispatchNotify('Введите название', '', 'error')
+      dispatchNotify('Введите наименование', '', 'error')
    } else if(!legal_address) {
       dispatchNotify('Введите адрес', '', 'error')
    } else if(String(tin || '').length !== 9) {
       dispatchNotify('Введите правильный ИНН', '', 'error')
-   } else if(!checkpoint) {
-      dispatchNotify('Введите КПП', '', 'error')
    } else if(newPhone.length !== 13) {
       dispatchNotify('Введите свой номер телефона правильно', '', 'error')
    } else {
@@ -148,11 +145,11 @@ const openEditModal = () => {
       v-model:visible="editVisible"
       >
       <div class="flex flex-col pb-0 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Наименование<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editCorrespondent.legal_name"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите имя"
+            placeholder="Введите наименование"
             type="text"
             @update:modelValue="legal_name => {
                editCorrespondent = { ...editCorrespondent, legal_name };
@@ -180,14 +177,14 @@ const openEditModal = () => {
                editCorrespondent = { ...editCorrespondent, tin }
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">КПП<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">КПП</p>
          <InputText
             :modelValue="editCorrespondent.checkpoint"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите КПП"
             type="text"
-            @update:modelValue="value => {
-               editCorrespondent = { ...editCorrespondent, checkpoint: value };
+            @update:modelValue="checkpoint => {
+               editCorrespondent = { ...editCorrespondent, checkpoint: checkpoint };
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Номер телефона<span class="text-red-500 ml-1">*</span></p>
@@ -198,7 +195,7 @@ const openEditModal = () => {
             v-model="editCorrespondent.phone"
             placeholder="Введите номер телефона"
             prefix="+99"
-            @input="({value}) => {
+            @input="({ value }) => {
                const phone = value && value > 7 ? +String(value || '').slice(0, 10) : 8;
                editCorrespondent = { ...editCorrespondent, phone }
             }"
@@ -209,8 +206,8 @@ const openEditModal = () => {
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите электронная почта"
             type="text"
-            @update:modelValue="value => {
-               editCorrespondent = { ...editCorrespondent, email: value };
+            @update:modelValue="email => {
+               editCorrespondent = { ...editCorrespondent, email };
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Содержание</p>
@@ -220,8 +217,8 @@ const openEditModal = () => {
             cols="30"
             placeholder="Введите содержание"
             rows="5"
-            @update:modelValue="value => {
-               editCorrespondent = { ...editCorrespondent, description: value };
+            @update:modelValue="description => {
+               editCorrespondent = { ...editCorrespondent, description };
             }"
             />
       </div>

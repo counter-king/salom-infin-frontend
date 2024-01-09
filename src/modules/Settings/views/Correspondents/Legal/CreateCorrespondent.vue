@@ -10,7 +10,6 @@ import isValidEmail from '@/utils/isValidEmail';
 import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
-import { replaceSpecChars } from '@/utils/string';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
 const props = defineProps({ getFirstPageCorrespondents: Function, setVisible: Function, visible: Boolean });
@@ -22,7 +21,7 @@ const loading = ref(false);
 const createCorrespondent = () => {
    const { legal_name, legal_address, tin, checkpoint, email, phone, description } = correspondent.value;
    const newPhone = '+99' + String(phone || '');
-   if(legal_name && legal_address && String(tin || '').length === 9 && checkpoint && newPhone.length === 13 && isValidEmail(email)) {
+   if(legal_name && legal_address && String(tin || '').length === 9 && newPhone.length === 13 && isValidEmail(email)) {
       loading.value = true;
       const data = { legal_address, legal_name, tin, checkpoint, email, phone: newPhone, description, type: 'legal', name: legal_name };
       axiosConfig
@@ -45,13 +44,11 @@ const createCorrespondent = () => {
             loading.value = false;
          });
    } else if(!legal_name) {
-      dispatchNotify('Введите название', '', 'error')
+      dispatchNotify('Введите наименование', '', 'error')
    } else if(!legal_address) {
       dispatchNotify('Введите адрес', '', 'error')
    } else if(String(tin || '').length !== 9) {
       dispatchNotify('Введите правильный ИНН', '', 'error')
-   } else if(!checkpoint) {
-      dispatchNotify('Введите КПП', '', 'error')
    } else if(newPhone.length !== 13) {
       dispatchNotify('Введите свой номер телефона правильно', '', 'error')
    } else {
@@ -72,11 +69,11 @@ const createCorrespondent = () => {
       modal
       >
       <div class="flex flex-col pb-0 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Наименование<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="correspondent.legal_name"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название"
+            placeholder="Введите наименование"
             type="text"
             @update:modelValue="legal_name => {
                correspondent = { ...correspondent, legal_name };
@@ -104,25 +101,25 @@ const createCorrespondent = () => {
                correspondent = { ...correspondent, tin }
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">КПП<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">КПП</p>
          <InputText
             :modelValue="correspondent.checkpoint"
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите КПП"
             type="text"
-            @update:modelValue="value => {
-               correspondent = { ...correspondent, checkpoint: value };
+            @update:modelValue="checkpoint => {
+               correspondent = { ...correspondent, checkpoint };
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Номер телефона<span class="text-red-500 ml-1">*</span></p>
          <InputNumber
             :maxFractionDigits="0"
-            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :pt="{ root: { class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm'] }, input: { class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm'] } }"
             :useGrouping="false"
             v-model="correspondent.phone"
             placeholder="Введите номер телефона"
             prefix="+99"
-            @input="({value}) => {
+            @input="({ value }) => {
                const phone = value && value > 7 ? +String(value || '').slice(0, 10) : 8;
                correspondent = { ...correspondent, phone }
             }"
@@ -133,8 +130,8 @@ const createCorrespondent = () => {
             :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите электронная почта"
             type="text"
-            @update:modelValue="value => {
-               correspondent = { ...correspondent, email: value };
+            @update:modelValue="email => {
+               correspondent = { ...correspondent, email };
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Содержание</p>
@@ -144,8 +141,8 @@ const createCorrespondent = () => {
             cols="30"
             placeholder="Введите содержание"
             rows="5"
-            @update:modelValue="value => {
-               correspondent = { ...correspondent, description: value };
+            @update:modelValue="description => {
+               correspondent = { ...correspondent, description };
             }"
             />
       </div>
