@@ -62,7 +62,9 @@ const statement = computed(() => {
   }
 })
 const name = computed(() => {
-  const active = commonStore.statusList.find(status => status.id === props.status?.id)
+  const active = props.type === 'compose' ?
+    commonStore.composeStatusList.find(status => status.id === props.status?.id) :
+    commonStore.statusList.find(status => status.id === props.status?.id)
 
   if(!active) {
     return 'Не известный статус'
@@ -71,15 +73,6 @@ const name = computed(() => {
   return props.status.name
 })
 
-const composeStatusName = computed(() => {
-  const active = commonStore.composeStatusList.find(status => status.id === props.status?.id)
-
-  if(!active) {
-    return 'Не известный статус'
-  }
-
-  return props.status.name
-})
 </script>
 
 <template>
@@ -95,7 +88,7 @@ const composeStatusName = computed(() => {
     ]"
   >
     <slot>
-      {{ props.type === 'compose' ? composeStatusName : name }}
+      {{ name }}
     </slot>
   </span>
 </template>

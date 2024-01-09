@@ -48,7 +48,7 @@ axiosInstance.interceptors.response.use(
     console.log("axios response", response, typeof response.data.message)
 
     // Если время токена истек
-    if(response.status_code === "401") {
+    if(response.data.status_code === "401") {
       removeStorageItem(ACCESS)
       removeStorageItem(REFRESH)
       removeStorageItem(EXPIRES)
