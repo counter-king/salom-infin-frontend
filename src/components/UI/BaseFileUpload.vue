@@ -117,7 +117,7 @@ onMounted(() => {
       >
         <div class="mt-3 max-h-[300px] overflow-y-auto">
           <div
-            class="flex rounded-xl h-16 relative overflow-hidden mb-2"
+            class="flex rounded-xl h-16 relative overflow-hidden"
             :class="file.uploaded === true ? 'bg-success-100' : file.uploaded === false ? 'bg-critic-50' : 'bg-greyscale-50'"
           >
             <div

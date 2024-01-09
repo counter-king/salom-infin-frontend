@@ -21,8 +21,8 @@ const props = defineProps({
       </div>
 
       <div class="flex flex-col items-end gap-y-2">
-        <span class="text-sm font-semibold block max-w-[300px] text-right">{{ props.composeModel.sender?.name }}</span>
-        <span class="text-sm font-medium text-greyscale-500">{{ props.composeModel.register_date && formatDate(props.composeModel.register_date) }}  № {{ props.composeModel.register_number }}</span>
+        <span class="text-sm font-semibold block max-w-[300px] text-right">{{ props.composeModel?.sender?.name }}</span>
+        <span class="text-sm font-medium text-greyscale-500">{{ props.composeModel?.register_date && formatDate(props.composeModel?.register_date) }}  № {{ props.composeModel?.register_number }}</span>
       </div>
     </div>
 
@@ -31,11 +31,11 @@ const props = defineProps({
     </div>
 
     <div class="flex text-sm font-semibold text-justify indent-4">
-      <span v-html="props.composeModel.content" />
+      <span v-html="props.composeModel?.content" />
     </div>
 
     <div class="mt-6 pb-2 border-b">
-      <template v-for="item in props.composeModel.signers" :key="item.id">
+      <template v-for="item in props.composeModel?.signers" :key="item.id">
         <div class="flex justify-between mb-2">
           <div class="flex flex-col">
             <span class="text-sm font-medium text-greyscale-500">{{ item.user ? item.user.position.name : item.position.name }}:</span>
@@ -51,7 +51,7 @@ const props = defineProps({
 
     <div class="flex flex-col my-4">
       <span class="text-sm font-medium text-greyscale-500">Ijrochi:</span>
-      <span class="text-sm font-semibold block max-w-[300px]">{{ props.composeModel.author && formatUserFullName(props.composeModel.author) }}</span>
+      <span class="text-sm font-semibold block max-w-[300px]">{{ props.composeModel?.author && formatUserFullName(props.composeModel?.author) }}</span>
     </div>
   </div>
 </template>

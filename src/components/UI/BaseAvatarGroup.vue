@@ -45,7 +45,7 @@ const rest = computed(() => props.items.slice(props.max))
     <template v-for="avatar in list">
       <base-avatar
         :label="isObject(avatar.user) ? avatar.user.full_name : avatar.full_name"
-        :color="avatar.color"
+        :color="isObject(avatar.user) ? avatar.user.color : avatar.color"
         :image="avatar.image"
         :size="props.size"
         :shape="props.shape"

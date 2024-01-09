@@ -64,6 +64,14 @@ const Boxes = [
         },
         component: () => import("../views/Sign/index.vue"),
       },
+      {
+        path: "sign/show/:id",
+        name: "SignShow",
+        meta: {
+          isAuthRequired: true
+        },
+        component: () => import("../views/Sign/show.vue"),
+      },
       // На согласовании
       {
         path: "approval",

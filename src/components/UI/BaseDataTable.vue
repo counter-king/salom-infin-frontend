@@ -133,7 +133,7 @@ onMounted(() => {
         :pt="{
           headerCell: { class: ['bg-inherit', 'h-[56px]'] },
           headerContent: { class: ['text-sm', 'font-semibold', 'text-greyscale-500'] },
-          bodyCell: { class: ['text-xs', 'py-0', 'h-[56px]'] }
+          bodyCell: { class: ['text-sm', 'py-0', 'h-[56px]'] }
         }"
       >
         <template #body="{ field, data }">
