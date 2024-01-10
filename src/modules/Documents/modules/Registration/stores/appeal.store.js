@@ -1,4 +1,6 @@
 import { defineStore } from 'pinia'
+// Stores
+import { useCollectRequestsStore } from '@/stores/collect-requests.store'
 // Services
 import { fetchGetDocumentList, fetchGetDocumentById, fetchUpdateDocument } from '../services/docflow.service'
 // Utils
@@ -128,17 +130,26 @@ export const useRegAppeal = defineStore("reg-appeal", {
     /*
     * Получить список
     * */
-    async actionGetList() {
-      this.listLoading = true;
+    async actionAppealGetList() {
+      const collectStore = useCollectRequestsStore()
+
+      this.listLoading = true
       let { data } = await fetchGetDocumentList({ journal_id: JOURNAL.APPEALS })
 
       this.list = data.results
-      this.listLoading = false;
+      this.listLoading = false
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionAppealGetList',
+        fn: this.actionAppealGetList,
+        params: null
+      })
     },
     /*
     * Получить документ по id
     * */
-    async actionGetById({ id }) {
+    async actionAppealGetById({ id }) {
+      const collectStore = useCollectRequestsStore()
       let { data } = await fetchGetDocumentById(id)
 
       this.detailModel.__copy_prototype = combineKeys(this.headers, data)
@@ -148,6 +159,12 @@ export const useRegAppeal = defineStore("reg-appeal", {
           ...item,
           __userId: item.user.id
         }
+      })
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionAppealGetById',
+        fn: this.actionAppealGetById,
+        params: { id }
       })
     },
     /*
@@ -175,7 +192,7 @@ export const useRegAppeal = defineStore("reg-appeal", {
 
       try {
         await fetchUpdateDocument({ id: this.detailModel.id, body: this.detailModel })
-        await this.actionGetById({ id: this.detailModel.id })
+        await this.actionAppealGetById({ id: this.detailModel.id })
         dispatchNotify('Документ создан', 'Документ изменен', COLOR_TYPES.SUCCESS)
       }
       catch (error) {

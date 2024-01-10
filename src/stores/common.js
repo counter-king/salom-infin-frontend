@@ -15,6 +15,7 @@ import {
 import { useCorrespondentStore } from "./correspondent"
 import { useUsersStore } from "./users.store"
 import { CORRESPONDENT } from "@/enums"
+import { useCollectRequestsStore } from "@/stores/collect-requests.store";
 
 export const useCommonStore = defineStore("common", {
 	state: () => ({
@@ -58,8 +59,16 @@ export const useCommonStore = defineStore("common", {
      * @returns Array
      * */
     actionDeliveryTypesList() {
+      const collectStore = useCollectRequestsStore()
+
       fetchDeliveryTypesList().then(({ data }) => {
         this.deliveryTypeList = data.results
+      })
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionDeliveryTypesList',
+        fn: this.actionDeliveryTypesList,
+        params: null
       })
     },
     /**
@@ -67,8 +76,16 @@ export const useCommonStore = defineStore("common", {
      * @returns Array
      * */
     actionDepartmentList() {
+      const collectStore = useCollectRequestsStore()
+
       fetchDepartmentList().then(({ data }) => {
         this.departmentList = data.results
+      })
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionDepartmentList',
+        fn: this.actionDepartmentList,
+        params: null
       })
     },
     /**
@@ -76,8 +93,16 @@ export const useCommonStore = defineStore("common", {
      * @returns Array
      * */
     actionDistrictList() {
+      const collectStore = useCollectRequestsStore()
+
       fetchDistrictList().then(({ data }) => {
         this.districtList = data.results
+      })
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionDistrictList',
+        fn: this.actionDistrictList,
+        params: null
       })
     },
     /**
@@ -85,8 +110,16 @@ export const useCommonStore = defineStore("common", {
      * @returns Array
      * */
     actionDocumentTypesList() {
+      const collectStore = useCollectRequestsStore()
+
       fetchDocumentTypesList().then(({ data }) => {
         this.documentTypesList = data.results
+      })
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionDocumentTypesList',
+        fn: this.actionDocumentTypesList,
+        params: null
       })
     },
     /**
@@ -94,8 +127,16 @@ export const useCommonStore = defineStore("common", {
      * @returns Array
      * */
     actionJournalsList() {
+      const collectStore = useCollectRequestsStore()
+
       fetchJournalsList().then(({ data }) => {
         this.journalsList = data.results
+      })
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionJournalsList',
+        fn: this.actionJournalsList,
+        params: null
       })
     },
     /**
@@ -103,17 +144,33 @@ export const useCommonStore = defineStore("common", {
      * @returns Array
      * */
      actionLanguagesList() {
-      fetchLanguagesList().then(({ data }) => {
-        this.languagesList = data.results
-      })
+       const collectStore = useCollectRequestsStore()
+
+        fetchLanguagesList().then(({ data }) => {
+          this.languagesList = data.results
+        })
+        // Добавляем запрос в коллекцию
+        collectStore.actionAddRequests({
+          id: 'actionLanguagesList',
+          fn: this.actionLanguagesList,
+          params: null
+        })
     },
     /**
      * Возвращает список приоритетов
      * @returns Array
      */
     actionPrioryList() {
+      const collectStore = useCollectRequestsStore()
+
       fetchPrioryList().then(({ data }) => {
         this.prioryList = data.results
+      })
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionPrioryList',
+        fn: this.actionPrioryList,
+        params: null
       })
     },
     /**
@@ -121,8 +178,16 @@ export const useCommonStore = defineStore("common", {
      * @returns Array
      */
     actionRegionsList() {
+      const collectStore = useCollectRequestsStore()
+
       fetchRegionsList().then(({ data }) => {
         this.regionsList = data.results
+      })
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionRegionsList',
+        fn: this.actionRegionsList,
+        params: null
       })
     },
     /**
@@ -130,8 +195,16 @@ export const useCommonStore = defineStore("common", {
      * @returns Array
      * */
     actionShortDescriptionList() {
+      const collectStore = useCollectRequestsStore()
+
       fetchShortDescriptionList().then(({ data }) => {
         this.shortDescriptionList = data.results
+      })
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionShortDescriptionList',
+        fn: this.actionShortDescriptionList,
+        params: null
       })
     },
     /**
@@ -139,8 +212,16 @@ export const useCommonStore = defineStore("common", {
      * @returns Array
      * */
     actionStatusList() {
+      const collectStore = useCollectRequestsStore()
+
       fetchStatusList().then(({ data }) => {
         this.statusList = data.results
+      })
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionStatusList',
+        fn: this.actionStatusList,
+        params: null
       })
 		},
     /**
@@ -148,8 +229,16 @@ export const useCommonStore = defineStore("common", {
      * @returns Array
      * */
     actionComposeStatusList() {
+      const collectStore = useCollectRequestsStore()
+
       fetchComposeStatusList().then(({ data }) => {
         this.composeStatusList = data
+      })
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionComposeStatusList',
+        fn: this.actionComposeStatusList,
+        params: null
       })
     },
 	},

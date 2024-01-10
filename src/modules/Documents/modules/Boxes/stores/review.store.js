@@ -3,6 +3,7 @@ import { defineStore } from "pinia"
 // Store
 import { useBoxesCommonStore } from "./common.store"
 import { useDocFlowStore } from '@/modules/Documents/modules/Registration/stores/docflow.store'
+import { useCollectRequestsStore } from '@/stores/collect-requests.store'
 // Service
 import {
   fetchReviewList,
@@ -216,16 +217,25 @@ export const useReviewStore = defineStore("review", {
     * Получить список на рассмотрение
     * */
     async actionReviewList() {
+      const collectStore = useCollectRequestsStore()
+
       this.listLoading = true
       let { data } = await fetchReviewList()
 
       this.list = data.results
       this.listLoading = false
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionReviewList',
+        fn: this.actionReviewList,
+        params: null
+      })
     },
     /**
     * Получить на рассмотрение по id
     * */
     async actionReviewById(payload) {
+      const collectStore = useCollectRequestsStore()
       const commonStore = useBoxesCommonStore()
       let { data } = await fetchReviewById({ id: payload.id })
 
@@ -244,6 +254,12 @@ export const useReviewStore = defineStore("review", {
           reviewer: data.user
         })
       }
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionReviewById',
+        fn: this.actionReviewById,
+        params: payload
+      })
     },
     /*
     * Перенаправить документ

@@ -14,7 +14,7 @@ const docFlowStore = useDocFlowStore()
 const regOrderInstruction = useRegOrderInstruction()
 // Hooks
 onMounted(async () => {
-  await regOrderInstruction.actionGetList()
+  await regOrderInstruction.actionOrderGetList()
 })
 // Methods
 const openModal = () => {
