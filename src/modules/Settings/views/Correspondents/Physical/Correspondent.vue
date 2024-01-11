@@ -167,7 +167,7 @@ onMounted(() => {
          <p class="text-sm text-greyscale-500 font-medium mb-1">Имя<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editCorrespondent.first_name"
-            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите имя"
             type="text"
             @update:modelValue="value => {
@@ -177,7 +177,7 @@ onMounted(() => {
          <p class="text-sm text-greyscale-500 font-medium mb-1">Фамилия<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editCorrespondent.last_name"
-            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите фамилия"
             type="text"
             @update:modelValue="value => {
@@ -187,7 +187,7 @@ onMounted(() => {
          <p class="text-sm text-greyscale-500 font-medium mb-1">Отчество</p>
          <InputText
             :modelValue="editCorrespondent.father_name"
-            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите отчество"
             type="text"
             @update:modelValue="value => {
@@ -195,11 +195,11 @@ onMounted(() => {
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Пол<span class="text-red-500 ml-1">*</span></p>
-         <Dropdown :pt="selectConfig" v-model="gender" :options="genders" showClear optionLabel="name" placeholder="Выберите пол" class="w-full md:w-14rem" />
+         <Dropdown :pt="selectConfig" v-model="gender" :options="genders" showClear optionLabel="name" placeholder="Выберите пол" class="w-full md:w-14rem border-transparent focus:border-primary-500" />
          <p class="text-sm text-greyscale-500 font-medium mb-1">ПИНФЛ<span class="text-red-500 ml-1">*</span></p>
          <InputNumber
             :maxFractionDigits="0"
-            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
             :useGrouping="false"
             placeholder="Введите ПИНФЛ"
             v-model="editCorrespondent.pinfl"
@@ -211,7 +211,7 @@ onMounted(() => {
          <p class="text-sm text-greyscale-500 font-medium mb-1">Номер телефона<span class="text-red-500 ml-1">*</span></p>
          <InputNumber
             :maxFractionDigits="0"
-            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :pt="{ root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
             :useGrouping="false"
             v-model="editCorrespondent.phone"
             placeholder="Введите номер телефона"
@@ -224,7 +224,7 @@ onMounted(() => {
          <p class="text-sm text-greyscale-500 font-medium mb-1">Электронная почта</p>
          <InputText
             :modelValue="editCorrespondent.email"
-            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите электронная почта"
             type="text"
             @update:modelValue="email => {
@@ -234,7 +234,7 @@ onMounted(() => {
          <p class="text-sm text-greyscale-500 font-medium mb-1">Адрес<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editCorrespondent.address"
-            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите адрес"
             type="text"
             @update:modelValue="address => {
@@ -244,7 +244,7 @@ onMounted(() => {
          <p class="text-sm text-greyscale-500 font-medium mb-1">Содержание</p>
          <Textarea
             :modelValue="editCorrespondent.description"
-            :pt="{root: {class:['h-[100px] w-[500px] resize-none rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            :pt="{root: {class:['h-[100px] w-[500px] border-transparent focus:border-primary-500 resize-none rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             cols="30"
             placeholder="Введите содержание"
             rows="5"

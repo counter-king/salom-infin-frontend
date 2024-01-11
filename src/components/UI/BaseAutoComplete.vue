@@ -41,7 +41,7 @@ const autocompleteConfig = {
       dropdown
       dropdownClass="bg-transparent border-0 shadow-none absolute w-[42px] h-[42px] left-[1px] top-[1px] rounded-xl"
       forceSelection
-      inputClass="w-full rounded-xl"
+      inputClass="w-full rounded-xl border-transparent focus:border-primary-500"
       loading
       :optionLabel="field"
       scrollHeight="258px"

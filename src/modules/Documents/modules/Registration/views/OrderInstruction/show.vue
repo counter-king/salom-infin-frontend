@@ -16,7 +16,7 @@ const previewDetail = ref([])
 // Hooks
 onMounted(async () => {
   loading.value = true
-  await orderInstructionStore.actionGetById({ id: route.params.id })
+  await orderInstructionStore.actionOrderGetById({ id: route.params.id })
   setTimeout(() => {
     loading.value = false
   }, 500)

@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia'
+// Stores
+import { useCollectRequestsStore } from '@/stores/collect-requests.store'
 // Services
 import { fetchGetDocumentList, fetchGetDocumentById, fetchUpdateDocument } from '../services/docflow.service'
 // Utils
 import { setValuesToKeys, combineKeys } from '@/utils'
 import { dispatchNotify } from '@/utils/notify'
 import { JOURNAL, COLOR_TYPES } from '@/enums'
-// Utils
 export const useRegOutgoing = defineStore("reg-outgoing", {
   state: () => ({
     headers: [
@@ -103,17 +104,26 @@ export const useRegOutgoing = defineStore("reg-outgoing", {
     /*
     * Получить список
     * */
-    async actionGetList() {
-      this.listLoading = true;
+    async actionOutgoingGetList() {
+      const collectStore = useCollectRequestsStore()
+
+      this.listLoading = true
       let { data } = await fetchGetDocumentList({ journal_id: JOURNAL.OUTGOING })
 
       this.list = data.results
-      this.listLoading = false;
+      this.listLoading = false
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionOutgoingGetList',
+        fn: this.actionOutgoingGetList,
+        params: null
+      })
     },
     /*
     * Получить документ по id
     * */
-    async actionGetById({ id }) {
+    async actionOutgoingGetById({ id }) {
+      const collectStore = useCollectRequestsStore()
       let { data } = await fetchGetDocumentById(id)
 
       this.detailModel.__copy_prototype = combineKeys(this.headers, data)
@@ -123,6 +133,12 @@ export const useRegOutgoing = defineStore("reg-outgoing", {
           ...item,
           __userId: item.user.id
         }
+      })
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionOutgoingGetById',
+        fn: this.actionOutgoingGetById,
+        params: { id }
       })
     },
     /*
@@ -150,7 +166,7 @@ export const useRegOutgoing = defineStore("reg-outgoing", {
 
       try {
         await fetchUpdateDocument({ id: this.detailModel.id, body: model })
-        await this.actionGetById({ id: this.detailModel.id })
+        await this.actionOutgoingGetById({ id: this.detailModel.id })
         dispatchNotify('Документ создан', 'Документ изменен', COLOR_TYPES.SUCCESS)
       }
       catch (error) {

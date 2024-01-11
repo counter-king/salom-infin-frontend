@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia'
 // Store
 import { useDocFlowStore } from '@/modules/Documents/modules/Registration/stores/docflow.store'
+import { useCollectRequestsStore } from '@/stores/collect-requests.store'
 // Services
 import { fetchGetDocumentList, fetchGetDocumentById, fetchUpdateDocument } from '../services/docflow.service'
 // Utils
@@ -210,16 +211,25 @@ export const useRegIncoming = defineStore("reg-incoming", {
     * Получить список
     * */
     async actionGetList() {
-      this.listLoading = true;
+      const collectStore = useCollectRequestsStore()
+
+      this.listLoading = true
       let { data } = await fetchGetDocumentList({ journal_id: JOURNAL.INCOMING })
 
       this.list = data.results
-      this.listLoading = false;
+      this.listLoading = false
+      // Добавляем запрос в коллекцию
+	    collectStore.actionAddRequests({
+        id: 'actionGetList',
+        fn: this.actionGetList,
+        params: null
+      })
     },
     /*
     * Получить документ по id
     * */
     async actionGetById({ id }) {
+      const collectStore = useCollectRequestsStore()
       let { data } = await fetchGetDocumentById(id)
 
       this.detailModel.__copy_prototype = data
@@ -230,6 +240,12 @@ export const useRegIncoming = defineStore("reg-incoming", {
           ...item,
           __userId: item.user.id
         }
+      })
+      // Добавляем запрос в коллекцию
+	    collectStore.actionAddRequests({
+        id: 'actionGetById',
+        fn: this.actionGetById,
+        params: { id }
       })
     },
     /*

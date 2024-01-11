@@ -148,7 +148,7 @@ const openEditModal = () => {
          <p class="text-sm text-greyscale-500 font-medium mb-1">Наименование<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editCorrespondent.legal_name"
-            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите наименование"
             type="text"
             @update:modelValue="legal_name => {
@@ -158,7 +158,7 @@ const openEditModal = () => {
          <p class="text-sm text-greyscale-500 font-medium mb-1">Адрес<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editCorrespondent.legal_address"
-            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите адрес"
             type="text"
             @update:modelValue="legal_address => {
@@ -168,7 +168,7 @@ const openEditModal = () => {
          <p class="text-sm text-greyscale-500 font-medium mb-1">ИНН<span class="text-red-500 ml-1">*</span></p>
          <InputNumber
             :maxFractionDigits="0"
-            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
             :useGrouping="false"
             placeholder="Введите ИНН"
             v-model="editCorrespondent.tin"
@@ -180,7 +180,7 @@ const openEditModal = () => {
          <p class="text-sm text-greyscale-500 font-medium mb-1">КПП</p>
          <InputText
             :modelValue="editCorrespondent.checkpoint"
-            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите КПП"
             type="text"
             @update:modelValue="checkpoint => {
@@ -190,7 +190,7 @@ const openEditModal = () => {
          <p class="text-sm text-greyscale-500 font-medium mb-1">Номер телефона<span class="text-red-500 ml-1">*</span></p>
          <InputNumber
             :maxFractionDigits="0"
-            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :pt="{ root: {class:['h-[44px] w-[500px]  rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
             :useGrouping="false"
             v-model="editCorrespondent.phone"
             placeholder="Введите номер телефона"
@@ -203,7 +203,7 @@ const openEditModal = () => {
          <p class="text-sm text-greyscale-500 font-medium mb-1">Электронная почта<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editCorrespondent.email"
-            :pt="{root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите электронная почта"
             type="text"
             @update:modelValue="email => {
@@ -213,7 +213,7 @@ const openEditModal = () => {
          <p class="text-sm text-greyscale-500 font-medium mb-1">Содержание</p>
          <Textarea
             :modelValue="editCorrespondent.description"
-            :pt="{root: {class:['h-[100px] w-[500px] resize-none rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            :pt="{root: {class:['h-[100px] w-[500px] border-transparent focus:border-primary-500 resize-none rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             cols="30"
             placeholder="Введите содержание"
             rows="5"

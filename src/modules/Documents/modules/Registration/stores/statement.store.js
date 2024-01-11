@@ -1,5 +1,7 @@
 // Core
 import { defineStore } from 'pinia'
+// Stores
+import { useCollectRequestsStore } from '@/stores/collect-requests.store'
 // Services
 import { fetchGetDocumentList, fetchGetDocumentById, fetchUpdateDocument } from '../services/docflow.service'
 // Utils
@@ -88,17 +90,26 @@ export const useRegStatement = defineStore("reg-statement", {
     /*
     * Получить список
     * */
-    async actionGetList() {
-      this.listLoading = true;
+    async actionStatementGetList() {
+      const collectStore = useCollectRequestsStore()
+
+      this.listLoading = true
       let { data } = await fetchGetDocumentList({ journal_id: JOURNAL.APPLICATION })
 
       this.list = data.results
-      this.listLoading = false;
+      this.listLoading = false
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionStatementGetList',
+        fn: this.actionStatementGetList,
+        params: null
+      })
     },
     /*
     * Получить документ по id
     * */
-    async actionGetById({ id }) {
+    async actionStatementGetById({ id }) {
+      const collectStore = useCollectRequestsStore()
       let { data } = await fetchGetDocumentById(id)
 
       this.detailModel.__copy_prototype = combineKeys(this.headers, data)
@@ -108,6 +119,12 @@ export const useRegStatement = defineStore("reg-statement", {
           ...item,
           __userId: item.user.id
         }
+      })
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionStatementGetById',
+        fn: this.actionStatementGetById,
+        params: null
       })
     },
     /*
@@ -135,7 +152,7 @@ export const useRegStatement = defineStore("reg-statement", {
 
       try {
         await fetchUpdateDocument({ id: this.detailModel.id, body: model })
-        await this.actionGetById({ id: this.detailModel.id })
+        await this.actionStatementGetById({ id: this.detailModel.id })
         dispatchNotify('Документ создан', 'Документ изменен', COLOR_TYPES.SUCCESS)
       }
       catch (error) {

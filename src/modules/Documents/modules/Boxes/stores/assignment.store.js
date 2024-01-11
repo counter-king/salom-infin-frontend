@@ -9,6 +9,7 @@ import { fetchPerformList } from '../services/review.service'
 // Utils
 import { dispatchNotify } from '@/utils/notify'
 import { COLOR_TYPES, JOURNAL } from '@/enums'
+import { useCollectRequestsStore } from "@/stores/collect-requests.store";
 
 export const useAssignmentStore = defineStore("assignment", {
   state: () => ({
@@ -207,16 +208,25 @@ export const useAssignmentStore = defineStore("assignment", {
     * Список поручение
     * */
     async actionAssignmentList() {
+      const collectStore = useCollectRequestsStore()
+
       this.listLoading = true
       let { data } = await fetchAssignmentList()
 
       this.list = data.results
       this.listLoading = false
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionAssignmentList',
+        fn: this.actionAssignmentList,
+        params: null
+      })
     },
     /**
      * Получить поручение по id
      * */
     async actionAssignmentById(payload) {
+      const collectStore = useCollectRequestsStore()
       const commonStore = useBoxesCommonStore()
       let { data } = await fetchAssignmentById({ id: payload.id })
       let { data: performers } = await fetchPerformList({ id: data.assignment.id })
@@ -234,6 +244,12 @@ export const useAssignmentStore = defineStore("assignment", {
         content: data.assignment?.content,
         assignees: performers.performers,
         reviewer: data.assignment?.reviewer.user
+      })
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionAssignmentById',
+        fn: this.actionAssignmentById,
+        params: payload
       })
     },
     /*
