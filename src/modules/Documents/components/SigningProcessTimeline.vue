@@ -113,8 +113,8 @@ const returnItemIconClass = (item) => {
       <template #marker="{ item }">
         <base-icon
           :name="returnItemIconName(item)"
-          width="29"
-          height="29"
+          width="24"
+          height="24"
           :stroke="false"
           :class="returnItemIconClass(item)"
         />

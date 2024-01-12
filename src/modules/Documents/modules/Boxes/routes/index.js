@@ -82,6 +82,14 @@ const Boxes = [
         },
         component: () => import("../views/Approval/index.vue"),
       },
+      {
+        path: "approval/show/:id",
+        name: "ApprovalShow",
+        meta: {
+          isAuthRequired: true
+        },
+        component: () => import("../views/Approval/show.vue"),
+      },
       // На контроль
       {
         path: "control",
