@@ -12,7 +12,14 @@ const props = defineProps({
   files: {
     type: Array,
     default: []
-  }
+  },
+	label: {
+		type: String,
+		default: null
+	},
+	required: {
+		type: Boolean
+	},
 })
 
 // Methods
@@ -95,8 +102,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <div class="app-file-upload">
+	  <base-label :label="props.label" :required="props.required" />
+
     <input type="file" name="file" multiple hidden ref="fileInput" @change="onFileSelect">
+
     <div
       class="flex bg-greyscale-50 rounded-xl border-dashed border h-16 hover:bg-primary-50 cursor-pointer"
       :class="{ 'bg-primary-50' : isDragging }"
