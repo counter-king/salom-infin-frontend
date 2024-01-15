@@ -12,11 +12,10 @@ const route = useRoute()
 const outgoingStore = useRegOutgoing()
 // Reactive
 const loading = ref(true)
-const previewDetail = ref([])
 // Hooks
 onMounted(async () => {
   loading.value = true
-  await outgoingStore.actionGetById({ id: route.params.id })
+  await outgoingStore.actionOutgoingGetById({ id: route.params.id })
   setTimeout(() => {
     loading.value = false
   }, 500)

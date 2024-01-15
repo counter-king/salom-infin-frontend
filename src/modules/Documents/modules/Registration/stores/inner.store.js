@@ -1,5 +1,7 @@
 // Core
 import { defineStore } from 'pinia'
+// Stores
+import { useCollectRequestsStore } from '@/stores/collect-requests.store'
 // Services
 import { fetchGetDocumentList, fetchGetDocumentById, fetchUpdateDocument } from '../services/docflow.service'
 // Utils
@@ -97,17 +99,26 @@ export const useRegInner = defineStore("reg-inner", {
     /*
     * Получить список
     * */
-    async actionGetList() {
+    async actionInnerGetList() {
+      const collectStore = useCollectRequestsStore()
+
       this.listLoading = true;
       let { data } = await fetchGetDocumentList({ journal_id: JOURNAL.INNER })
 
       this.list = data.results
-      this.listLoading = false;
+      this.listLoading = false
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionInnerGetList',
+        fn: this.actionInnerGetList,
+        params: null
+      })
     },
     /*
     * Получить документ по id
     * */
-    async actionGetById({ id }) {
+    async actionInnerGetById({ id }) {
+      const collectStore = useCollectRequestsStore()
       let { data } = await fetchGetDocumentById(id)
 
       this.detailModel.__copy_prototype = combineKeys(this.headers, data)
@@ -117,6 +128,12 @@ export const useRegInner = defineStore("reg-inner", {
           ...item,
           __userId: item.user.id
         }
+      })
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionInnerGetById',
+        fn: this.actionInnerGetById,
+        params: { id }
       })
     },
     /*
@@ -144,7 +161,7 @@ export const useRegInner = defineStore("reg-inner", {
 
       try {
         await fetchUpdateDocument({ id: this.detailModel.id, body: model })
-        await this.actionGetById({ id: this.detailModel.id })
+        await this.actionInnerGetById({ id: this.detailModel.id })
         dispatchNotify('Документ создан', 'Документ изменен', COLOR_TYPES.SUCCESS)
       }
       catch (error) {

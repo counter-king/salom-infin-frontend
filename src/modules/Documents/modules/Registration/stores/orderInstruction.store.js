@@ -1,4 +1,6 @@
 import { defineStore } from 'pinia'
+// Stores
+import { useCollectRequestsStore } from '@/stores/collect-requests.store'
 // Services
 import { fetchGetDocumentList, fetchGetDocumentById, fetchUpdateDocument } from '../services/docflow.service'
 // Utils
@@ -101,17 +103,26 @@ export const useRegOrderInstruction = defineStore("reg-order-instruction", {
     /*
     * Получить список
     * */
-    async actionGetList() {
-      this.listLoading = true;
+    async actionOrderGetList() {
+      const collectStore = useCollectRequestsStore()
+
+      this.listLoading = true
       let { data } = await fetchGetDocumentList({ journal_id: JOURNAL.ORDERS_PROTOCOLS })
 
       this.list = data.results
       this.listLoading = false
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionOrderGetList',
+        fn: this.actionOrderGetList,
+        params: null
+      })
     },
     /*
     * Получить документ по id
     * */
-    async actionGetById({ id }) {
+    async actionOrderGetById({ id }) {
+      const collectStore = useCollectRequestsStore()
       let { data } = await fetchGetDocumentById(id)
 
       this.detailModel.__copy_prototype = combineKeys(this.headers, data)
@@ -121,6 +132,12 @@ export const useRegOrderInstruction = defineStore("reg-order-instruction", {
           ...item,
           __userId: item.user.id
         }
+      })
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionOrderGetById',
+        fn: this.actionOrderGetById,
+        params: null
       })
     },
     /*
@@ -148,7 +165,7 @@ export const useRegOrderInstruction = defineStore("reg-order-instruction", {
 
       try {
         await fetchUpdateDocument({ id: this.detailModel.id, body: model })
-        await this.actionGetById({ id: this.detailModel.id })
+        await this.actionOrderGetById({ id: this.detailModel.id })
         dispatchNotify('Документ создан', 'Документ изменен', COLOR_TYPES.SUCCESS)
       }
       catch (error) {

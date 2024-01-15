@@ -12,11 +12,10 @@ const route = useRoute()
 const statementStore = useRegStatement()
 // Reactive
 const loading = ref(true)
-const previewDetail = ref([])
 // Hooks
 onMounted(async () => {
   loading.value = true
-  await statementStore.actionGetById({ id: route.params.id })
+  await statementStore.actionStatementGetById({ id: route.params.id })
   setTimeout(() => {
     loading.value = false
   }, 500)
@@ -33,8 +32,8 @@ onMounted(async () => {
       <layout-with-tabs
         :title="statementStore.detailModel.title"
         :preview-detail="statementStore.detailModel.__copy_prototype"
-        :object-id="outgoingStore.detailModel.id"
-        :headers="outgoingStore.headers"
+        :object-id="statementStore.detailModel.id"
+        :headers="statementStore.headers"
       >
         <template #preview-actions>
           <div class="mt-5">

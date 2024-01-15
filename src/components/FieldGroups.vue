@@ -29,7 +29,7 @@ const value = computed(() => combineKeys(props.headers, props.data))
 
         <template v-if="item.detail.component">
           <template v-if="item.detail.component === 'priority-chip'">
-            <priority-chip :id="item.field?.id" />
+            <priority-chip :id="item.field?.id" text-class="text-base font-semibold text-primary-900" />
           </template>
 
           <template v-if="item.detail.component === 'base-status'">

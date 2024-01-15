@@ -29,13 +29,16 @@
   "enter-here": "Введите здесь...",
   "deliver-type": "Вид подачи",
   "enter-deliver-type": "Введите вид подачи",
+  "choose-deliver-type": "Выберите вид подачи",
   "grif": "Гриф",
   "enter-grif": "Введите гриф",
   "document-type": "Тип документа",
   "enter-document-type": "Введите тип документа",
+  "choose-document-type": "Выберите тип документа",
   "priority": "Приоритет",
   "priority-document": "Приоритет документа",
   "enter-priority": "Введите приоритет",
+  "choose-priority": "Выберите приоритет",
   "language-document": "Язык документа",
   "enter-language-document": "Введите язык документа",
   "code": "Код",
@@ -50,6 +53,7 @@
   "enter-out-date": "Введите исх. дата",
   "correspondent": "Корреспондент",
   "enter-correspondent": "Введите корреспондент",
+  "choose-correspondent": "Выберите корреспондент",
   "reviewers": "На рассмотрение",
   "enter-reviewers": "Введите на рассмотрение",
   "content": "Содержание",
@@ -245,5 +249,7 @@
   "not-checked": "Не проверенный",
   "watch-process": "Просмотр процесс",
   "remove-from-control": "Снять документ с контроля",
-  "update-from-control": "Изменить снятия документа с контроля"
+  "update-from-control": "Изменить снятия документа с контроля",
+  "for-approval": "На согласование",
+  "do-you-agree": "Вы действительно согласны с этим документом?"
 }

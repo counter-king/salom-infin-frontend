@@ -58,7 +58,7 @@ const link = (data) => {
     >
       <template #priority="{ data }">
         <linkable-cell :to="link(data)">
-          <priority-chip :id="data.priority?.id" />
+	        <priority-chip :id="data.priority?.id" />
         </linkable-cell>
       </template>
 

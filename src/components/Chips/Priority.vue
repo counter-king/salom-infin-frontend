@@ -17,7 +17,7 @@ const props = defineProps({
   textClass: {
     type: String
   },
-  onImages: {
+  onlyImage: {
     type: Boolean
   }
 })
@@ -60,7 +60,9 @@ const current = computed(() => {
       class="w-4 h-4"
     />
 
-    <span v-if="onImages" class="text-base font-semibold text-primary-900" :class="[textClass]">{{ current.text }}</span>
+	  <span v-if="!onlyImage" :class="[textClass]">
+	    {{ current.text }}
+    </span>
   </div>
 </template>
 

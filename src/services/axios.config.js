@@ -10,9 +10,8 @@ import { COLOR_TYPES } from '@/enums'
 
 const axiosParams = {
 	baseURL: import.meta.env.VITE_BASE_URL
-};
-
-const axiosInstance = axios.create(axiosParams);
+}
+const axiosInstance = axios.create(axiosParams)
 const axiosConfig = (axiosInstance) => {
 	return {
 		get: (url, params) => axiosInstance.get(url, { params }),
@@ -25,10 +24,10 @@ const axiosConfig = (axiosInstance) => {
 axiosInstance.interceptors.request.use(
 	(config) => {
 		config.headers = {
-			Authorization: getStorageItem(ACCESS) ? "Bearer " + getStorageItem(ACCESS) : null,
-			Accept: "application/json",
-      "Accept-Language": getStorageItem(LANG) || "uz"
-		};
+			Authorization: getStorageItem(ACCESS) ? 'Bearer ' + getStorageItem(ACCESS) : null,
+			Accept: 'application/json',
+      "Accept-Language": getStorageItem(LANG) || 'uz'
+		}
 
 		return config;
 	},

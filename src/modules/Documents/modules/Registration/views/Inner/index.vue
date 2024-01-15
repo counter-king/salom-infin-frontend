@@ -14,7 +14,7 @@ const docFlowStore = useDocFlowStore()
 const regInner = useRegInner()
 // Hooks
 onMounted(async () => {
-  await regInner.actionGetList()
+  await regInner.actionInnerGetList()
 })
 // Methods
 const openModal = () => {

@@ -51,11 +51,11 @@ const props = defineProps({
   },
   placeholder: {
     type: String,
-    default: 'create'
+    default: 'search'
   },
   menuPlaceholder: {
     type: String,
-    default: 'create'
+    default: 'search'
   },
   borderColor: {
     type: String
@@ -100,10 +100,8 @@ const props = defineProps({
 const menuRef = ref(null)
 const list = ref([])
 const search = ref(null)
-// Non-reactive
-const modelValueCopy = modelValue.value
 // Composable
-const debounced = useDebounce(search, 750)
+const debounced = useDebounce(search, 500)
 // Computed
 const options = computed(() => props.options.length
   ? props.options
@@ -181,9 +179,6 @@ watch(debounced, async () => {
     console.log('filter is not done for props options :)')
   }
 })
-const testFunc = (value) => {
-  console.log(value);
-}
 </script>
 
 <template>
@@ -244,7 +239,7 @@ const testFunc = (value) => {
         },
         item: {
           class: [
-            'py-[6px] px-3 transition-all hover:bg-greyscale-50',
+            'py-[6px] px-3 transition-all hover:!bg-greyscale-50',
             {
               'item-selectable border border-solid border-transparent rounded-xl mb-1': props.selectable
             }
@@ -254,7 +249,6 @@ const testFunc = (value) => {
           class: ['text-sm font-medium text-primary-900']
         }
       }"
-      @change="testFunc"
     >
       <template #header="{ value, options }">
         <div class="flex items-center border-b border-greyscale-200">
@@ -266,11 +260,12 @@ const testFunc = (value) => {
           />
           <button
             v-tooltip.left="{
-            value: `<h4 class='text-xs text-white -my-1'>Очистить</h4>`,
-            escape: true,
-            autoHide: false
-          }"
+	            value: `<h4 class='text-xs text-white -my-1'>Очистить</h4>`,
+	            escape: true,
+	            autoHide: false
+	          }"
             class="text-grey-500 ml-auto mr-3"
+            @click="search = null"
           >
             <base-icon name="XIcon" width="18" height="18" />
           </button>

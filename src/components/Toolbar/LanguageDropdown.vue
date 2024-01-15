@@ -1,20 +1,25 @@
 <script setup>
 // Core
-import {ref, unref, onMounted } from 'vue'
+import { ref, unref, onMounted } from 'vue'
+import { useI18n } from "vue-i18n"
+// Stores
+import { useCollectRequestsStore } from '@/stores/collect-requests.store'
+// Utils
 import { saveStorageItem, getStorageItem } from "@/utils/storage"
 import { LANG } from "@/constants/storage"
-import { useI18n } from "vue-i18n"
 // Composable
 const { t } = useI18n()
+const collectStore = useCollectRequestsStore()
 // Reactive
 const opRef = ref(null)
 const active = ref('RU')
 // Methods
-const toggleIconVisibility = (event, icon) => {
+const toggleIconVisibility = async (event, icon) => {
   active.value = icon
   saveStorageItem(LANG, icon)
   toggle(event)
-};
+	await collectStore.actionResendRequests()
+}
 const toggle = (event) => {
   const _opRef = unref(opRef)
   _opRef.opRef.toggle(event)
@@ -42,10 +47,10 @@ onMounted(() => {
       menu-class="bg-primary-50  mt-7  p-0"
     >
       <div
-        @click="toggleIconVisibility(event, 'RU')"
         class="flex items-center justify-between px-3 py-3 rounded-xl bg-white cursor-pointer shadow-button mb-2"
-        >
-        <base-icon name="FlagsRuIcon"/>
+        @click="toggleIconVisibility(event, 'RU')"
+      >
+        <base-icon name="FlagsRuIcon" />
 
         <h1 class="flex-1 ml-3 text-sm font-semibold text-primary-900">Русский</h1>
 
@@ -54,22 +59,25 @@ onMounted(() => {
           width="17"
           height="17"
           name="CheckCircleBgIcon"
-          class="text-white transition-all duration-[400ms]" />
+          class="text-white transition-all duration-[400ms]"
+        />
       </div>
 
       <div
-        @click="toggleIconVisibility(event, 'UZ')"
         class="flex items-center justify-between px-3 py-3 rounded-xl bg-white cursor-pointer shadow-button"
-        >
-        <base-icon name="FlagsUzIcon"/>
+        @click="toggleIconVisibility(event, 'UZ')"
+      >
+        <base-icon name="FlagsUzIcon" />
 
         <h1 class="flex-1 ml-3 text-sm font-semibold text-primary-900">O’zbekcha</h1>
 
         <base-icon
           v-if="active === 'UZ'"
-          width="17"  height="17"
+          width="17"
+          height="17"
           name="CheckCircleBgIcon"
-          class="text-white transition-all duration-[400ms]" />
+          class="text-white transition-all duration-[400ms]"
+        />
       </div>
     </base-overlay-panel>
   </div>

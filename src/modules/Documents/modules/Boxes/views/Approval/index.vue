@@ -1,10 +1,95 @@
 <script setup>
+// Core
+import { onMounted } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
+// Components
+import { ActionToolbar } from "@/components/Actions";
+import DocType from "@/components/Chips/DocType.vue";
+// Constants
+import {
+  BOXES_APPROVAL_COLUMNS,
+  ROUTE_APPROVAL_SHOW
+} from "@/modules/Documents/modules/Boxes/constants";
+// Store
+import { useBoxesApprovalStore } from "@/modules/Documents/modules/Boxes/stores/approval.store";
+// Utils
+import { formatDate } from "@/utils/formatDate";
 
+const { t } = useI18n();
+const router = useRouter();
+const approvalStore = useBoxesApprovalStore();
+
+// Methods
+const onRowClick = (data) => {
+  router.push({
+    name: ROUTE_APPROVAL_SHOW,
+    params: {
+      id: data.id
+    },
+    query: {
+      compose_id: data.compose.id
+    }
+  })
+}
+
+// Hooks
+onMounted(async () => {
+  await approvalStore.actionGetApprovalList({ page: approvalStore.filterState.page, page_size: approvalStore.filterState.page_size });
+})
 </script>
 
 <template>
   <div class="approval-view">
-    Approval view
+    <action-toolbar
+      :column-menu-items="approvalStore.headers"
+      :title="t('for-approval')"
+      :storage-columns-name="BOXES_APPROVAL_COLUMNS"
+      @emit:reset-headers="approvalStore.resetHeaders"
+    />
+
+    <base-data-table
+      :headers="approvalStore.headers"
+      :loading="approvalStore.listLoading"
+      :page-size="approvalStore.filterState.page_size"
+      :storage-columns-name="BOXES_APPROVAL_COLUMNS"
+      :total-count="approvalStore.totalCount"
+      :value="approvalStore.documentList"
+      @emit:set-store-headers="(val) => approvalStore.headers = val"
+      @emit:row-click="onRowClick"
+    >
+      <template #register_number="{ data }">
+        {{ data.compose.register_number }}
+      </template>
+
+      <template #type="{ data }">
+        <doc-type :type="data.compose.type"/>
+      </template>
+
+      <template #register_date="{ data }">
+        {{ data.compose.register_date ? formatDate(data.compose.register_date) : null }}
+      </template>
+
+      <template #signers="{ data }">
+        <base-avatar-group
+          :items="data.compose.signers"
+          shape="circle"
+          avatar-classes="w-8 h-8"
+        />
+      </template>
+
+      <template #author="{ data }">
+        <base-avatar-group
+          :items="[data.compose.author]"
+          shape="circle"
+          avatar-classes="w-8 h-8"
+        />
+      </template>
+
+      <template #short_description="{ data }">
+        {{ data.compose.short_description }}
+      </template>
+    </base-data-table>
   </div>
 </template>
 

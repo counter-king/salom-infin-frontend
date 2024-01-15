@@ -14,7 +14,7 @@ const docFlowStore = useDocFlowStore()
 const regAppeal = useRegAppeal()
 // Hooks
 onMounted(async () => {
-  await regAppeal.actionGetList()
+  await regAppeal.actionAppealGetList()
 })
 // Methods
 const openModal = () => {
