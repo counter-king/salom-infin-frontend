@@ -6,7 +6,7 @@ import { useCollectRequestsStore } from '@/stores/collect-requests.store'
 // Services
 import { fetchGetDocumentList, fetchGetDocumentById, fetchUpdateDocument } from '../services/docflow.service'
 // Utils
-import { setValuesToKeys, combineKeys } from '@/utils'
+import { setValuesToKeys } from '@/utils'
 import { dispatchNotify } from '@/utils/notify'
 import { COLOR_TYPES, JOURNAL } from '@/enums'
 export const useRegIncoming = defineStore("reg-incoming", {
@@ -188,6 +188,7 @@ export const useRegIncoming = defineStore("reg-incoming", {
       description: null,
       document_type: null,
       files: [],
+      __files: [],
       // TODO: Временно 1 для создания документа (Входящий)
       grif: 1,
       id: null,
@@ -233,7 +234,6 @@ export const useRegIncoming = defineStore("reg-incoming", {
       let { data } = await fetchGetDocumentById(id)
 
       this.detailModel.__copy_prototype = data
-      // this.detailModel.__copy_prototype = combineKeys(this.headers, data)
       setValuesToKeys(this.detailModel, data)
       this.detailModel.__reviewers = data.reviewers.map(item => {
         return {
@@ -241,6 +241,7 @@ export const useRegIncoming = defineStore("reg-incoming", {
           __userId: item.user.id
         }
       })
+      this.detailModel.__files = data.files.map(file => file.file)
       // Добавляем запрос в коллекцию
 	    collectStore.actionAddRequests({
         id: 'actionGetById',
@@ -269,7 +270,8 @@ export const useRegIncoming = defineStore("reg-incoming", {
               document: this.detailModel.id
             }
           }
-        })
+        }),
+        files: this.detailModel.__files.map(file => ({ file: file.id }))
       }
 
       try {

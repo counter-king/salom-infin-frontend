@@ -67,6 +67,7 @@ const props = defineProps({
       description: null,
       document_type: null,
       files: [],
+	    __files: [],
       language: null,
       number_of_papers: null,
       outgoing_date: null,
@@ -86,10 +87,6 @@ const correspondentStore = useCorrespondentStore()
 const $v = useVuelidate(rules, props.formModel)
 // Macros
 defineExpose({ $v })
-// Methods
-const uploadFiles = (value) => {
-	props.formModel.files = value.map(file => ({ id: file.id }))
-}
 </script>
 
 <template>
@@ -290,8 +287,9 @@ const uploadFiles = (value) => {
 
 	    <base-col col-class="w-full">
 		    <base-file-upload
+			    :files="props.formModel.__files"
 			    label="attach-file"
-			    @emit:file-upload="uploadFiles"
+			    @emit:file-upload="(files) => props.formModel.__files = files"
 		    />
 	    </base-col>
     </base-row>

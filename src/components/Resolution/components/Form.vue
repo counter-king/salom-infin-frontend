@@ -10,6 +10,7 @@ import { UserWithLabel, UserWithSelectable } from '@/components/Users'
 import { StatusChip } from '@/components/Chips'
 // Utils
 import { isObject } from '@/utils'
+import { formatDateReverse } from '@/utils/formatDate'
 import { RESOLUTION_TYPES, STATUS_TYPES } from '@/enums'
 import { FORM_TYPE_CREATE, FORM_TYPE_READ } from '@/constants/constants'
 // Composable
@@ -92,6 +93,7 @@ const types = [
           :disabled="props.formType === FORM_TYPE_READ"
           label="deadline"
           placeholder="choose-date"
+          @update:modelValue="(value) => $v.deadline.$model = formatDateReverse(value)"
         />
       </base-col>
 

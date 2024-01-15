@@ -179,7 +179,8 @@ export const useControlStore = defineStore("control", {
         priority: null,
         register_date: null,
         register_number: null,
-        title: null
+        title: null,
+        __files: []
       },
       is_controller: null,
       is_performed: null,
@@ -222,6 +223,8 @@ export const useControlStore = defineStore("control", {
       let { data: performers } = await fetchPerformList({ id: data.assignment.id })
 
       this.detailModel = data
+      this.detailModel.document.__files = data.document.files.map(file => file.file)
+
       this.actionSetPerform({
         content: data.content,
         is_performed: data.is_performed

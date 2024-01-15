@@ -74,7 +74,12 @@ export const useDocFlowStore = defineStore("docFlowStore", {
      * */
     async actionCreateDocument(payload) {
       try {
-        let { data } = await fetchCreateDocument(payload)
+        let model = {
+          ...payload,
+          files: payload.__files.length ? payload.__files.map(file => ({ file: file.id })) : []
+        }
+
+        let { data } = await fetchCreateDocument(model)
         await clearModel(payload)
         dispatchNotify('Документ создан', 'Документ создан', COLOR_TYPES.SUCCESS)
         return Promise.resolve()
