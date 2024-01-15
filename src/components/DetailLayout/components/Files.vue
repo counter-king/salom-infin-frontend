@@ -6,7 +6,7 @@ import { saveAs } from  'file-saver'
 import { CardTable } from '@/components/Table'
 import { FilePreview } from "@/components/Files";
 // Utils
-import { formatDate } from "../../../utils/formatDate";
+import { formatDate } from '@/utils/formatDate'
 // Props
 const props = defineProps({
   files: {
@@ -24,13 +24,13 @@ const zoomDialog = ref(false)
 const currentFile = ref({})
 // Methods
 const zoomFile = (event, file) => {
-  event.stopImmediatePropagation();
-  zoomDialog.value = true;
-  currentFile.value = { ...file, document: file };
+  event.stopImmediatePropagation()
+  zoomDialog.value = true
+  currentFile.value = { ...file, document: file }
 }
 const download = (event, data) => {
-  event.stopImmediatePropagation();
-  saveAs(data.url, data.name);
+  event.stopImmediatePropagation()
+  saveAs(data.url, data.name)
 }
 </script>
 
@@ -106,21 +106,21 @@ const download = (event, data) => {
         </div>
       </template>
     </card-table>
+
+	  <base-dialog v-model="zoomDialog" max-width="max-w-[820px]">
+		  <template #header>
+			  <div class="flex-1 truncate mr-2">
+				  <h1 class="text-xl font-semibold truncate">{{ currentFile.title }}</h1>
+			  </div>
+		  </template>
+
+		  <template #content>
+			  <div class="-my-6 -mx-8 h-[80vh]">
+				  <file-preview :file="currentFile" />
+			  </div>
+		  </template>
+	  </base-dialog>
   </div>
-
-  <base-dialog v-model="zoomDialog" max-width="max-w-[820px]">
-    <template #header>
-      <div class="flex-1 truncate mr-2">
-        <h1 class="text-xl font-semibold truncate">{{ currentFile.title }}</h1>
-      </div>
-    </template>
-
-    <template #content>
-      <div class="-my-6 -mx-8 h-[80vh]">
-        <file-preview :file="currentFile" />
-      </div>
-    </template>
-  </base-dialog>
 </template>
 
 <style scoped>

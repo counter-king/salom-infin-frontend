@@ -56,6 +56,7 @@ const updateDocument = async () => {
         :object-id="controlStore.detailModel.document.id"
         :headers="controlStore.headers"
         :tree-items="docflowStore.tree"
+        :files="controlStore.detailModel.document.__files"
         :resolution="{
           ...boxesCommonStore.resolution,
           register_date: controlStore.detailModel.document.register_date,

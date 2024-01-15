@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref, unref } from 'vue'
+import { ref, unref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 // Utils
 import { formatDate, formatDateHour } from '@/utils/formatDate'
@@ -11,10 +11,18 @@ import { FilePreview } from '@/components/Files'
 // Utils
 import { formatNameToShort } from '@/utils'
 // Macros
-const { resolution } = defineProps({
+const props = defineProps({
   resolution: {
     type: Object,
     default: () => {}
+  },
+  hasResolution: {
+    type: Boolean,
+    default: true
+  },
+  files: {
+    type: Array,
+    default: () => []
   }
 })
 // Reactive
@@ -86,6 +94,16 @@ const tabView = ref([
     },
   },
 ])
+// Computed
+const filesList = computed(() => {
+  return props.hasResolution
+    ?
+      [
+        { title: 'Фишка Doclines', slot: 'resolution' },
+        ...props.files.map(file => ({ ...file, title: file.name, slot: 'file' }))
+      ]
+    : props.files.map(file => ({ ...file, title: file.name, slot: 'file' }))
+})
 // Methods
 const toggle = (event) => {
   const _menuRef = unref(menuRef)
@@ -96,7 +114,7 @@ const toggle = (event) => {
 <template>
   <div class="file-tabs-view">
     <base-tab-view
-      :tab-view="tabView"
+      :tab-view="filesList"
       scrollable
       segment
       truncate
@@ -116,19 +134,19 @@ const toggle = (event) => {
 
           <div
             class="flex items-center gap-2 border rounded-full p-[6px] mt-4"
-            :class="[ resolution.signed ? 'bg-primary-100 border-primary-500' : 'bg-critic-100 border-critic-500' ]"
+            :class="[ props.resolution.signed ? 'bg-primary-100 border-primary-500' : 'bg-critic-100 border-critic-500' ]"
           >
             <base-icon
-              :name="resolution.signed ? 'CheckCircleIcon' : 'TriangleDangerIcon'"
+              :name="props.resolution.signed ? 'CheckCircleIcon' : 'TriangleDangerIcon'"
               class="text-critic-500 ml-2"
-              :class="[ resolution.signed ? 'text-primary-500' : 'text-critic-500' ]"
+              :class="[ props.resolution.signed ? 'text-primary-500' : 'text-critic-500' ]"
             />
 
             <span
               class="flex-1 text-sm font-medium "
-              :class="[ resolution.signed ? 'text-primary-500' : 'text-critic-500' ]"
+              :class="[ props.resolution.signed ? 'text-primary-500' : 'text-critic-500' ]"
             >
-            {{ resolution.signed ? t('document-signed') : t('document-not-signed') }}
+            {{ props.resolution.signed ? t('document-signed') : t('document-not-signed') }}
           </span>
 
             <base-button
@@ -146,7 +164,7 @@ const toggle = (event) => {
             />
           </div>
 
-          <template v-if="resolution.assignees && resolution.assignees.length">
+          <template v-if="props.resolution.assignees && props.resolution.assignees?.length">
             <div class="text-sm font-semibold text-primary-900 mt-6 mb-5">
               <ul class="mt-3">
                 <template v-for="item in resolution.assignees">
@@ -175,12 +193,12 @@ const toggle = (event) => {
 
                 <li class="flex font-semibold">
                   <p class="text-greyscale-500 mr-1">Срок исполнения:</p>
-                  <span>{{ resolution.deadline ? resolution.deadline : 'Без срока исполнений' }}</span>
+                  <span>{{ props.resolution.deadline ? props.resolution.deadline : 'Без срока исполнений' }}</span>
                 </li>
               </ul>
 
               <div class="text-center mt-5">
-                <p v-html="resolution.content"></p>
+                <p v-html="props.resolution.content"></p>
               </div>
             </div>
 
@@ -188,11 +206,11 @@ const toggle = (event) => {
 
             <div class="flex items-center my-4">
               <div class="flex-1 text-sm font-semibold">
-                <h1 class="text-greyscale-500">{{ resolution.reviewer?.position?.name }}:</h1>
-                <p class="text-primary-900">{{ formatNameToShort(resolution.reviewer?.full_name) }}</p>
+                <h1 class="text-greyscale-500">{{ props.resolution.reviewer?.position?.name }}:</h1>
+                <p class="text-primary-900">{{ formatNameToShort(props.resolution.reviewer?.full_name) }}</p>
               </div>
 
-              <template v-if="resolution.signed">
+              <template v-if="props.resolution.signed">
                 <div class="w-[50px] h-[50px]">
                   <img src="/images/qr-code.svg" alt="Qr code" />
                 </div>
@@ -205,15 +223,15 @@ const toggle = (event) => {
           <ul class="text-greyscale-500 text-sm mt-3">
             <li class="flex font-semibold mb-1">
               <p class="text-primary-900 mr-1">Рег. номер:</p>
-              <span>{{ resolution.register_number }}</span>
+              <span>{{ props.resolution.register_number }}</span>
             </li>
             <li class="flex font-semibold mb-1">
               <p class="text-primary-900 mr-1">Рег. дата:</p>
-              <span>{{ formatDate(resolution.register_date) }}</span>
+              <span>{{ formatDate(props.resolution.register_date) }}</span>
             </li>
             <li class="flex font-semibold">
               <p class="text-primary-900 mr-1">Дата. подписания:</p>
-              <span>{{ resolution.receipt_date ? formatDateHour(resolution.receipt_date) : 'Еще не подписан' }}</span>
+              <span>{{ props.resolution.receipt_date ? formatDateHour(props.resolution.receipt_date) : 'Еще не подписан' }}</span>
             </li>
           </ul>
         </div>

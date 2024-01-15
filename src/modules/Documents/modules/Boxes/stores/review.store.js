@@ -191,7 +191,8 @@ export const useReviewStore = defineStore("review", {
         priority: null,
         register_date: null,
         register_number: null,
-        title: null
+        title: null,
+        __files: [],
       },
       has_resolution: false,
       read_time: null,
@@ -240,6 +241,7 @@ export const useReviewStore = defineStore("review", {
       let { data } = await fetchReviewById({ id: payload.id })
 
       this.detailModel = data
+      this.detailModel.document.__files = data.document.files.map(file => file.file)
 
       // Есть ли созданная резолюция
       if(data.assignments && data.assignments.length) {

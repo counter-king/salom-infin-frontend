@@ -6,10 +6,12 @@ import { helpers, required } from '@vuelidate/validators'
 import { useCommonStore } from '@/stores/common'
 import { useCorrespondentStore } from '@/stores/correspondent'
 // Components
-import { UserWithLabel } from '@/components/Users'
+import { UserWithLabel, UserWithSelectable } from '@/components/Users'
+import { PriorityChip } from '@/components/Chips'
 // Utils
 import { isObject } from '@/utils'
 import { replaceWithNumbers } from '@/utils/regex'
+import { formatDateReverse } from '@/utils/formatDate'
 // Non-reactive
 const rules = {
   register_number: {
@@ -65,6 +67,7 @@ const props = defineProps({
       description: null,
       document_type: null,
       files: [],
+	    __files: [],
       language: null,
       number_of_papers: null,
       outgoing_date: null,
@@ -116,7 +119,10 @@ defineExpose({ $v })
           required
           label="out-date"
           placeholder="enter-out-date"
-          @update:modelValue="(value) => $v.register_date.$model = value"
+          @update:modelValue="(value) => {
+						$v.register_date.$model = formatDateReverse(value)
+						$v.outgoing_date.$model = formatDateReverse(value)
+          }"
         />
       </base-col>
 
@@ -128,6 +134,7 @@ defineExpose({ $v })
           required
           label="reg-date"
           placeholder="enter-reg-date"
+          @update:modelValue="(value) => $v.register_date.$model = formatDateReverse(value)"
         />
       </base-col>
 
@@ -167,36 +174,45 @@ defineExpose({ $v })
       <base-col col-class="w-1/2">
         <base-dropdown
           v-model="$v.correspondent.$model"
+          v-model:options="correspondentStore.allList"
           :error="$v.correspondent"
-          :options="correspondentStore.allList"
-          required
+          api-url="correspondents"
           option-value="id"
           label="correspondent"
-          placeholder="enter-correspondent"
+          placeholder="choose-correspondent"
+          menu-placeholder="enter-correspondent"
+          searchable
+          required
         />
       </base-col>
 
       <base-col col-class="w-1/2">
         <base-dropdown
           v-model="$v.document_type.$model"
+          v-model:options="commonStore.documentTypesList"
           :error="$v.document_type"
-          :options="commonStore.documentTypesList"
-          required
+          api-url="document-types"
           option-value="id"
           label="document-type"
-          placeholder="enter-deliver-type"
+          placeholder="choose-document-type"
+          menu-placeholder="enter-document-type"
+          searchable
+          required
         />
       </base-col>
 
       <base-col col-class="w-1/2">
         <base-dropdown
           v-model="$v.delivery_type.$model"
+          v-model:options="commonStore.deliveryTypeList"
           :error="$v.delivery_type"
-          :options="commonStore.deliveryTypeList"
-          required
+          api-url="delivery-types"
           option-value="id"
           label="deliver-type"
-          placeholder="enter-document-type"
+          placeholder="choose-deliver-type"
+          menu-placeholder="enter-deliver-type"
+          searchable
+          required
         />
       </base-col>
 
@@ -205,20 +221,23 @@ defineExpose({ $v })
           v-model="$v.priority.$model"
           :error="$v.priority"
           :options="commonStore.prioryList"
-          required
           option-value="id"
           label="priority-document"
-          placeholder="enter-priority"
-        />
+          required
+        >
+	        <template #option="{ option }">
+		        <priority-chip :id="option?.id" />
+	        </template>
+        </base-dropdown>
       </base-col>
 
       <base-col col-class="w-1/2">
         <base-input
           v-model="$v.title.$model"
           :error="$v.title"
-          required
           label="naming"
-          placeholder="naming"
+          placeholder="enter-naming"
+          required
         />
       </base-col>
 
@@ -229,6 +248,8 @@ defineExpose({ $v })
           api-url="users"
           label="reviewers"
           display="chip"
+          placeholder="search-users"
+          menu-placeholder="search-users"
           required
         >
           <template #chip="{ value }">
@@ -241,12 +262,7 @@ defineExpose({ $v })
           </template>
 
           <template #option="{ value }">
-            <user-with-label
-              :compact="true"
-              :title="isObject(value?.user) ? value?.user.full_name : value?.full_name"
-              image="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D"
-              avatar-classes="w-6 h-6"
-            />
+	          <user-with-selectable :items="[value]" />
           </template>
 
           <template #hint="{ value }">
@@ -268,6 +284,14 @@ defineExpose({ $v })
           label="content"
         />
       </base-col>
+
+	    <base-col col-class="w-full">
+		    <base-file-upload
+			    :files="props.formModel.__files"
+			    label="attach-file"
+			    @emit:file-upload="(files) => props.formModel.__files = files"
+		    />
+	    </base-col>
     </base-row>
   </div>
 </template>

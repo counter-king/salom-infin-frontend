@@ -85,8 +85,8 @@ const createBranch = () => {
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите адрес"
             type="text"
-            @update:modelValue="value => {
-               branch = { ...branch, address_uz: replaceSpecCharsBracket(value) };
+            @update:modelValue="address_uz => {
+               branch = { ...branch, address_uz };
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Адрес (РУ) <span class="text-red-500 ml-1">*</span></p>
@@ -95,8 +95,8 @@ const createBranch = () => {
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите адрес"
             type="text"
-            @update:modelValue="value => {
-               branch = { ...branch, address_ru: replaceSpecCharsBracket(value) };
+            @update:modelValue="address_ru => {
+               branch = { ...branch, address_ru };
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Номер телефона<span class="text-red-500 ml-1">*</span></p>

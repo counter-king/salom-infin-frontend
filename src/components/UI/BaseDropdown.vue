@@ -1,8 +1,11 @@
 <script setup>
 // Core
-import { useModel, computed } from 'vue'
+import { useModel, ref, watch, computed } from 'vue'
+import { useDebounce } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
 import Dropdown from 'primevue/dropdown'
+// Services
+import axiosConfig from '@/services/axios.config'
 // Composable
 const modelValue = useModel(props, 'modelValue')
 const { t } = useI18n()
@@ -29,10 +32,25 @@ const props = defineProps({
     type: String,
     default: null
   },
+	searchable: {
+		type: Boolean
+	},
+	apiUrl: {
+		type: String,
+		default: null
+	},
+	apiParams: {
+		type: Object,
+		default: () => {}
+	},
   placeholder: {
     type: String,
     default: 'choose-one'
   },
+	menuPlaceholder: {
+		type: String,
+		default: 'search'
+	},
   required: {
     type: Boolean
   },
@@ -57,6 +75,12 @@ const props = defineProps({
     }
   },
 })
+const emit = defineEmits(['update:modelValue', 'update:options'])
+// Reactive
+const search = ref(null)
+const list = ref([])
+// Composable
+const debounced = useDebounce(search, 500)
 // Computed
 const rootClasses = computed(() => {
   return [
@@ -74,6 +98,26 @@ const rootClasses = computed(() => {
     },
   ]
 })
+const options = computed({
+	get() {
+		return props.options
+	},
+	set(value) {
+		emit('update:options', value)
+	}
+})
+// Watch
+watch(debounced, async () => {
+	props.searchable && await loadList({
+		...props.apiParams,
+		search: search.value
+	})
+})
+// Methods
+const loadList = async (params) => {
+	let { data } = await axiosConfig.get(`${props.apiUrl}/`, params)
+	options.value = data.results
+}
 </script>
 
 <template>
@@ -82,11 +126,12 @@ const rootClasses = computed(() => {
 
     <Dropdown
       v-model="modelValue"
-      :options="props.options"
+      :options="options"
       :option-label="props.optionLabel"
       :option-value="props.optionValue"
       :placeholder="t(props.placeholder)"
       :disabled="props.disabled"
+      filter
       :pt="{
         root: {
           class: rootClasses
@@ -101,6 +146,9 @@ const rootClasses = computed(() => {
             },
           ]
         },
+        header: {
+					class: ['bg-white hidden']
+        },
         panel: {
           class: ['translate-y-[8px] shadow-menu rounded-2xl overflow-hidden']
         },
@@ -108,13 +156,45 @@ const rootClasses = computed(() => {
           class: ['py-0']
         },
         item: {
-          class: ['py-[6px] px-3 text-sm font-medium text-primary-900 transition-all hover:bg-greyscale-50']
+          class: ['py-[6px] px-3 text-sm font-medium text-primary-900 transition-all hover:!bg-greyscale-50']
         },
         option: {
           class: ['text-sm font-medium text-primary-900']
+        },
+        emptyMessage: {
+          class: ['text-sm font-medium text-center']
         }
       }"
-    />
+    >
+	    <template
+		    v-if="props.searchable"
+		    #header="{ value, options }"
+	    >
+		    <div class="flex items-center border-b border-greyscale-200">
+			    <input
+				    v-model="search"
+				    type="text"
+				    :placeholder="t(props.menuPlaceholder)"
+				    class="flex-1 p-3 block outline-none font-medium text-sm text-gray-1"
+			    />
+			    <button
+				    v-tooltip.left="{
+	            value: `<h4 class='text-xs text-white -my-1'>Очистить</h4>`,
+	            escape: true,
+	            autoHide: false
+	          }"
+				    class="text-grey-500 ml-auto mr-3"
+				    @click="search = null"
+			    >
+				    <base-icon name="XIcon" width="18" height="18" />
+			    </button>
+		    </div>
+	    </template>
+
+	    <template #option="{ option }">
+		    <slot name="option" :option="option" />
+	    </template>
+    </Dropdown>
 
     <template v-if="props.error.$errors.length">
       <div

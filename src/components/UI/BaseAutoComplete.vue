@@ -2,66 +2,94 @@
 import AutoComplete from 'primevue/autocomplete';
 import Button from 'primevue/button';
 import ProgressSpinner from 'primevue/progressspinner';
-import { useSlots } from 'vue';
+import { useSlots, computed, ref } from 'vue';
+import Dropdown from 'primevue/dropdown';
 const slot = useSlots();
 const emit = defineEmits(['onInputChange', 'onChange', 'onClear']);
+const dropdownRef = ref(null);
 const props = defineProps({
-   field: String,
-   hasValue: [String, Boolean, Object],
+   key: String,
+   label: String,
    loading: Boolean,
    noOptionMessage: String,
    options: Array,
+   placeholder: String,
    value: [String, Boolean, Object],
 });
+const newValue = computed(() => {
+   const value = props.value;
+   const newValue = typeof value === 'string' ? value : value[props.label];
+   return newValue;
+})
 const autocompleteConfig = {
    checkboxContainer: { class: 'hidden' },
-   dropdownIcon: { class: ['w-4 h-4 bg-transparent'] },
+   trigger: { class: ['w-[32px] h-[32px] right-[6px] top-[6px] absolute bg-transparent'] },
    header: { class: ['bg-white hidden'] },
-   input: { class: ['w-full px-11 bg-transparent focus:border-primary'] },
+   input: { class: ['rounded-[12px] border-transparent focus:border-primary-500 w-full px-11 bg-transparent text-sm cursor-text'] },
    item: { class: [ 'p-0 transition-all hover:bg-greyscale-50 rounded-xl focus:border-primary focus:bg-greyscale-50 mt-[1px]'] },
    label: { class: [ 'text-sm font-medium text-greyscale-500' ] },
    list: { class: ['py-0'] },
    option: { class: ['text-xs font-medium text-primary-900 focus:border-primary'] },
-   panel: { class: ['translate-y-[8px] shadow-menu rounded-2xl p-2 user-search-autocomplete'] },
-   root: { class: ['w-[500px] group bg-greyscale-50 rounded-2xl border-transparent focus:border-primary-500 h-[44px]'] },
+   panel: { class: ['translate-y-[8px] shadow-menu rounded-[12px] pt-[5px] pb-[6px] pl-[6px] pr-[6px] user-search-autocomplete'] },
+   root: { class: ['w-[500px] relative group bg-greyscale-50 rounded-[12px] border-transparent focus:border-primary-500 h-[44px]'] },
    token: { class: ['chip-hover shadow-button bg-white cursor-pointer'] },
    tokenLabel: { class: ['text-sm font-medium'] },
+   emptyMessage: {class: ['p-0']}
 };
 </script>
 <template>
-   <AutoComplete
-      :minLength="0"
-      :model-value="value"
+   <Dropdown
+      :dataKey="key"
+      :modelValue="newValue"
+      :optionLabel="label"
+      :options="options"
+      :placeholder="placeholder"
       :pt="autocompleteConfig"
-      :suggestions="options"
-      @input="e => emit('onInputChange', e)"
-      @item-select="e => emit('onChange', e)"
-      completeOnFocus
-      dataKey="id"
-      dropdown
-      dropdownClass="bg-transparent border-0 shadow-none absolute w-[42px] h-[42px] left-[1px] top-[1px] rounded-xl"
-      forceSelection
-      inputClass="w-full rounded-xl border-transparent focus:border-primary-500"
-      loading
-      :optionLabel="field"
+      :searchMessage="label"
+      @update:modelValue="e => emit('onInputChange', e)"
+      editable
+      ref="dropdownRef"
       scrollHeight="258px"
-      :searchMessage="field"
-      :selectionMessage="field"
+      showClear
+      @focus="() => {
+         dropdownRef.show();
+         emit('onInputChange', newValue)
+      }"
       >
-      <template #option="{ option }">
-         <slot name="option" :option="option" />
+      <template #clearicon>
+         <div class="cursor-pointer absolute left-1.5 top-1 w-[32px] h-[32px] flex justify-center items-center">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+               <g clip-path="url(#clip0_2859_31081)">
+                  <circle cx="9.58317" cy="9.58268" r="7.91667" stroke="#757993" stroke-width="1.5"/>
+                  <path d="M15.4165 15.416L18.3332 18.3327" stroke="#757993" stroke-width="1.5" stroke-linecap="round"/>
+               </g>
+               <defs>
+                  <clipPath id="clip0_2859_31081">
+                     <rect width="20" height="20" fill="white"/>
+                  </clipPath>
+               </defs>
+            </svg>
+         </div>
       </template>
-      <template #loadingicon>
+      <template #value="{ value }">
+         <div v-if="value" class="flex align-items-center">
+            <div>{{ value[label] }}</div>
+         </div>
+         <span v-else>
+            {{ slotProps.placeholder }}
+         </span>
+      </template>
+      <template #dropdownicon>
          <template v-if="loading">
-            <div class="right-1.5 top-1.5 absolute flex align-center justify-center w-[36px] h-[36px]">
-               <ProgressSpinner class="m-0 w-[32px] h-[32px]" animationDuration=".5s" strokeWidth="3" />
+            <div class="flex items-center justify-center w-[36px] h-[36px]">
+               <ProgressSpinner class="m-0 w-[30px] h-[30px]" animationDuration=".5s" strokeWidth="3.5" />
             </div>
          </template>
          <template v-else>
-            <template v-if="hasValue">
+            <template v-if="value">
                <Button
                   @click="emit('onClear')"
-                  class="right-1.5 top-1.5 absolute bg-greyscale-50 rounded-3xl cursor-pointer w-[32px] h-[32px] flex justify-center items-center p-button p-component font-semibold text-sm rounded-xl !rounded-full p-0 m-0 border-none"
+                  class="bg-greyscale-50 rounded-3xl cursor-pointer w-[32px] h-[32px] flex justify-center items-center p-button p-component font-semibold text-sm rounded-xl !rounded-full p-0 m-0 border-none"
                   rounded
                   type="button"
                   >
@@ -76,26 +104,17 @@ const autocompleteConfig = {
             </template>
          </template>
       </template>
+      <template #option="{ option }">
+         <slot name="option" :option="option" />
+      </template>
       <template #empty>
          <div class="flex items-center justify-center w-[100%] h-[40px] text-m font-medium text-primary-900">
-            {{noOptionMessage}}
+            {{ noOptionMessage }}
          </div>
       </template>
-      <template #dropdownicon>
-         <div class="cursor-pointer w-[32px] h-[32px] flex justify-center items-center">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-               <g clip-path="url(#clip0_2859_31081)">
-                  <circle cx="9.58317" cy="9.58268" r="7.91667" stroke="#757993" stroke-width="1.5"/>
-                  <path d="M15.4165 15.416L18.3332 18.3327" stroke="#757993" stroke-width="1.5" stroke-linecap="round"/>
-               </g>
-               <defs>
-                  <clipPath id="clip0_2859_31081">
-                     <rect width="20" height="20" fill="white"/>
-                  </clipPath>
-               </defs>
-            </svg>
-         </div>
+      <template #loader>
+         <div class="h-[100px]">Loader</div>
       </template>
-   </AutoComplete>
+   </Dropdown>
 </template>
 <style></style>

@@ -77,8 +77,8 @@ const createUser = () => {
       dispatchNotify('Введите статус', '', 'error');
    }
 };
-const searchCompanies = e => {
-   const search = e.target.value;
+const searchCompanies = search => {
+   company.value = search;
    companyLoading.value = true;
    axiosConfig
       .get(`companies/?search=${search}`)
@@ -225,16 +225,16 @@ const updateVisible = () => {
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Филиал<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
-            :hasValue="company"
             :loading="companyLoading"
             :options="companies"
             :value="company"
             @onChange="({ value }) => { company = value }"
             @onClear="() => { company = '' }"
             @onInputChange="searchCompanies"
-            field="name"
+            label="name"
+            key="id"
             noOptionMessage="Филиал не найден"
-            v-model="company"
+            placeholder="Введите номер телефона"
             >
             <template #option="{ option }">
                <div class="flex items-center h-11 px-3 text-base">{{ option.name }}</div>

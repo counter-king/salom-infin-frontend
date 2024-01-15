@@ -105,3 +105,8 @@ body {
 .v-leave-to {
   opacity: 0;
 }
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item:not(.p-highlight):not(.p-disabled).p-focus,
+.p-multiselect-panel .p-multiselect-items .p-multiselect-item:not(.p-highlight):not(.p-disabled).p-focus {
+  background: transparent;
+}

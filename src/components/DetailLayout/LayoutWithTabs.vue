@@ -71,6 +71,10 @@ const props = defineProps({
     type: Object,
     default: () => {}
   },
+  hasResolution: {
+    type: Boolean,
+    default: false
+  },
   treeItems: {
     type: Object,
     default: () => {}
@@ -158,7 +162,7 @@ watch(activeTabMenu, (value) => {
 
           <div class="max-w-[566px] w-full ml-auto border-l">
             <slot name="template">
-              <file-tabs :resolution="props.resolution" />
+              <file-tabs :resolution="props.resolution" :files="props.files" />
             </slot>
           </div>
         </div>

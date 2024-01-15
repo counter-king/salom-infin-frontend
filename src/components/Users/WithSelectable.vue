@@ -96,17 +96,20 @@ const handleSelect = (item) => {
 
         <p class="text-warning-500">Командировка</p>
 
-        <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-full"></div>
+        <template v-if="item.position">
+          <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-full"></div>
 
-        <p class="text-greyscale-500">Bosh mutaxasis</p>
+          <p class="text-greyscale-500">{{ item.position?.name }}</p>
+        </template>
       </div>
     </div>
 
     <div class="w-[22px] h-[22px]">
       <template v-if="props.selectType === 'checked'">
         <base-icon
+          :stroke="false"
           name="CheckCircleBgIcon"
-          class="icon-selected w-[22px] h-[22px] stroke-0 hidden"
+          class="icon-selected w-[16px] h-[16px] stroke-0 hidden"
         />
       </template>
 
