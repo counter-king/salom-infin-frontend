@@ -1,19 +1,24 @@
 <script setup>
 // Core
-import { onMounted } from "vue";
+import {onMounted, ref} from "vue";
 import { useRoute } from "vue-router";
+// Service
+import { fetchRejectApprovalDocument } from "@/modules/Documents/modules/Boxes/services/approval.service";
 // Store
 import { useBoxesApprovalStore } from "@/modules/Documents/modules/Boxes/stores/approval.store";
 // Components
 import Approve from "@/components/Modal/Approve.vue";
 import { LayoutWithTabs } from "@/components/DetailLayout";
+import { ModalComment } from "@/components/Modal";
 import SigningProcessTimeline from "@/modules/Documents/components/SigningProcessTimeline.vue";
 // Enums
 import { CONTENT_TYPES } from "@/enums";
 import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue";
+import CancelSign from "@/components/Modal/CancelSign.vue";
 
 const approvalStore = useBoxesApprovalStore();
 const route = useRoute();
+const rejectModal = ref(false)
 
 
 
@@ -23,6 +28,11 @@ const getDetail = async () => {
 }
 const onApprove = () => {
   getDetail();
+}
+const onReject = async (comment) => {
+  await fetchRejectApprovalDocument({ id: route.params.id, comment });
+  rejectModal.value = false;
+  await getDetail();
 }
 
 // Hooks
@@ -44,35 +54,35 @@ onMounted(  () => {
       :title="approvalStore.detailModel?.compose?.title"
     >
       <template #header-end>
-        <template v-if="approvalStore.detailModel?.is_approved === null">
-          <base-button
-            color="bg-white hover:bg-greyscale-100 text-primary-dark"
-            border-color="border-transparent"
-            label="update"
-            icon-left="PenIcon"
-            icon-height="16"
-            icon-width="16"
-            icon-color="#767994"
-            rounded
-            shadow
-            type="button"
-          />
+        <base-button
+          color="bg-white hover:bg-greyscale-100 text-primary-dark"
+          border-color="border-transparent"
+          label="update"
+          icon-left="PenIcon"
+          icon-height="16"
+          icon-width="16"
+          icon-color="#767994"
+          rounded
+          shadow
+          type="button"
+        />
 
-          <base-button
-            severity="danger"
-            label="not-agree"
-            icon-left="XIcon"
-            icon-height="16"
-            icon-width="16"
-            rounded
-            shadow
-            type="button"
-          />
+        <base-button
+          v-if="approvalStore.detailModel?.is_approved !== false"
+          severity="danger"
+          label="not-agree"
+          icon-left="XIcon"
+          icon-height="16"
+          icon-width="16"
+          rounded
+          shadow
+          type="button"
+          @click="rejectModal = true"
+        />
 
-          <approve
-            @emit:on-approve="onApprove"
-          />
-        </template>
+        <approve
+          @emit:on-approve="onApprove"
+        />
 
       </template>
 
@@ -94,6 +104,13 @@ onMounted(  () => {
         </div>
       </template>
     </layout-with-tabs>
+
+    <modal-comment
+      v-model="rejectModal"
+      label="not-agree"
+      :create-button-fn="onReject"
+      create-button-color="danger"
+    />
   </template>
 </template>
 

@@ -82,7 +82,7 @@ const returnItemIconName = (item) => {
   return item.type === 'author'
     || (item.type === 'approvers' && item.is_approved === true)
       || (item.type === 'signers' && item.is_signed === true)
-       ? 'CheckCircleBgIcon' :
+       ? 'CheckCircleFilledIcon' :
         (item.type === 'approvers' && item.is_approved === false)
           || (item.type === 'signers' && item.is_signed === false)
            ? 'CloseCircleFilledIcon' : 'Circle'
