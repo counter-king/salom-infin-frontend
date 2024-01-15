@@ -1,7 +1,6 @@
 <script setup>
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
-import Dropdown from 'primevue/dropdown';
 import InputText from 'primevue/inputtext';
 import Menu from 'primevue/menu';
 import ProgressSpinner from 'primevue/progressspinner';
@@ -13,7 +12,7 @@ import { ref, watch, onMounted } from 'vue';
 import { replaceSpecChars } from '@/utils/string';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
-const props = defineProps({ data: Object, field: String, getFirstPageDistricts: Function, districts: Array, setDistricts: Function, regions: Array });
+const props = defineProps({ data: Object, field: String, getFirstPageDistricts: Function, districts: Array, setDistricts: Function });
 const conditionLoading = ref(false);
 const conditions = ref([]);
 const deleteLoading = ref(false);
@@ -22,7 +21,10 @@ const editDistrict = ref({});
 const editLoading = ref(false);
 const editVisible = ref(false);
 const menu = ref(null);
-const region = ref(null);
+const region = ref('');
+const regionLoading = ref(false);
+const regions = ref([]);
+const regionsPage = ref(1);
 const districtEdit = () => {
    const { name_ru, name_uz } = editDistrict.value;
    const regionId = region.value?.id;
@@ -60,6 +62,27 @@ const districtEdit = () => {
    } else {
       dispatchNotify('Введите название', '', 'error')
    }
+};
+const searchRegions = ({ search, page }) => {
+   regionLoading.value = true;
+   region.value = search;
+   const newSearch = typeof search === 'string' ? search : search.name;
+   axiosConfig
+      .get(`regions/?page=${page}&search=${newSearch}`)
+      .then(response => {
+         const newPage = response?.data?.next ? page + 1 : null;
+         const results = response?.data?.results;
+         const rootRegions = page === 1 ? [] : regions.value;
+         const newRegions = Array.isArray(results) ? results : [];
+         regions.value = [ ...rootRegions, ...newRegions];
+         regionsPage.value = newPage
+      })
+      .catch(() => {
+         regionsPage.value = null;
+      })
+      .finally(() => {
+         regionLoading.value = false;
+      });
 };
 const districtDelete = () => {
    deleteLoading.value = true;
@@ -112,10 +135,9 @@ const updateCondition = value => {
       });
 };
 const openEditModal = () => {
-   const newRegion = props.regions.find(region => region?.value === props.data?.region?.id);
    editDistrict.value = props?.data;
    editVisible.value = true;
-   region.value = newRegion;
+   region.value = props.data?.region;
 };
 const changeLanguage = () => {
    conditions.value = [
@@ -216,18 +238,25 @@ onMounted(() => {
       >
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Регион<span class="text-red-500 ml-1">*</span></p>
-         <Dropdown
-            :modelValue="region"
+         <base-auto-complete
+            :loading="regionLoading"
             :options="regions"
-            :pt="selectConfig"
-            class="w-full md:w-14rem border-transparent focus:border-primary-500"
-            optionLabel="name"
-            placeholder="Выберите регион"
-            showClear
-            @update:modelValue="value => {
+            :page="regionsPage"
+            :value="region"
+            key="id"
+            label="name"
+            noOptionMessage="Регион не найден"
+            placeholder="Введите регион"
+            @onInputChange="searchRegions"
+            @onChange="value => {
                region = value;
             }"
-            />
+            >
+            <template #option="{ option }">
+               <div class="flex items-center h-11 px-3 text-base">{{ option.name }}</div>
+            </template>
+         </base-auto-complete>
+         <div class="mb-6"></div>
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editDistrict.name_uz"

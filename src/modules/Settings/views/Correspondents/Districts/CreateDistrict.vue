@@ -1,7 +1,6 @@
 <script setup>
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
-import Dropdown from 'primevue/dropdown';
 import InputText from 'primevue/inputtext';
 import ProgressSpinner from 'primevue/progressspinner';
 import axiosConfig from "@/services/axios.config";
@@ -9,11 +8,14 @@ import { dialogConfig, selectConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { replaceSpecChars } from '@/utils/string';
-const props = defineProps({ getFirstPageDistricts: Function, setVisible: Function, visible: Boolean, regions: Array });
+const props = defineProps({ getFirstPageDistricts: Function, setVisible: Function, visible: Boolean });
 const defaultDistrict = { name_uz: '', name_ru: '' };
 const district = ref(defaultDistrict);
 const loading = ref(false);
-const region = ref(null);
+const region = ref('');
+const regionLoading = ref(false);
+const regions = ref([]);
+const regionsPage = ref(1);
 const createDistrict = () => {
    const {name_ru, name_uz} = district.value;
    const regionId = region.value?.id;
@@ -27,7 +29,7 @@ const createDistrict = () => {
                district.value = defaultDistrict;
                props.getFirstPageDistricts();
                props.setVisible(false);
-               region.value = null;
+               region.value = '';
             } else {
                dispatchNotify('Район не создан', '', 'error');
             }
@@ -44,12 +46,34 @@ const createDistrict = () => {
       dispatchNotify('Введите название', '', 'error')
    }
 };
+const searchRegions = ({ search, page }) => {
+   regionLoading.value = true;
+   region.value = search;
+   const newSearch = typeof search === 'string' ? search : search.name;
+   axiosConfig
+      .get(`regions/?page=${page}&search=${newSearch}`)
+      .then(response => {
+         const newPage = response?.data?.next ? page + 1 : null;
+         const results = response?.data?.results;
+         const rootRegions = page === 1 ? [] : regions.value;
+         const newRegions = Array.isArray(results) ? results : [];
+         regions.value = [ ...rootRegions, ...newRegions];
+         regionsPage.value = newPage
+      })
+      .catch(() => {
+         regionsPage.value = null;
+      })
+      .finally(() => {
+         regionLoading.value = false;
+      });
+};
 </script>
 <template>
    <Dialog
       @update:visible="() => {
          district = defaultDistrict;
          setVisible(!visible);
+         region = '';
       }"
       :closable="!loading"
       :pt="dialogConfig"
@@ -59,18 +83,25 @@ const createDistrict = () => {
       >
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Регион<span class="text-red-500 ml-1">*</span></p>
-         <Dropdown
-            :modelValue="region"
+         <base-auto-complete
+            :loading="regionLoading"
             :options="regions"
-            :pt="selectConfig"
-            class="w-full md:w-14rem border-transparent focus:border-primary-500"
-            optionLabel="name"
-            placeholder="Выберите регион"
-            showClear
-            @update:modelValue="value => {
+            :page="regionsPage"
+            :value="region"
+            key="id"
+            label="name"
+            noOptionMessage="Регион не найден"
+            placeholder="Введите регион"
+            @onInputChange="searchRegions"
+            @onChange="value => {
                region = value;
             }"
-            />
+            >
+            <template #option="{ option }">
+               <div class="flex items-center h-11 px-3 text-base">{{ option.name }}</div>
+            </template>
+         </base-auto-complete>
+         <div class="mb-6"></div>
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="district.name_uz"

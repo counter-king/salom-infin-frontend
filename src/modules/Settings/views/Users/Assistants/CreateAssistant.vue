@@ -10,43 +10,52 @@ const props = defineProps({ getFirstPageAssistants: Function, setVisible: Functi
 const assistant = ref('');
 const assistantLoading = ref(false);
 const assistants = ref([]);
+const assistantsPage = ref(1);
 const authStore = useAuthStore();
 const loading = ref(false);
 const supervisor = ref('');
 const supervisorLoading = ref(false);
 const supervisors = ref([]);
-const currentUserCompany = authStore.currentUser.company;
-const searchAssistants = e => {
-   const value = e.target.value
-   assistant.value = value;
+const supervisorsPage = ref(1);
+const searchAssistants = ({ search, page }) => {
    assistantLoading.value = true;
+   assistant.value = search;
+   const currentUserCompany = authStore.currentUser.company;
+   const newSearch = typeof search === 'string' ? search : search.full_name;
    axiosConfig
-      .get(`users/?search=${value}&company=${currentUserCompany}`)
+      .get(`users/?page=${page}&search=${newSearch}&company=${currentUserCompany}`)
       .then(response => {
+         const newPage = response?.data?.next ? page + 1 : null;
          const results = response?.data?.results;
+         const rootAssistants = page === 1 ? [] : assistants.value;
          const newAssistants = (Array.isArray(results) ? results: []).map(user => ({...user, position: user?.position?.name, optionDisabled: !user.is_active}));
-         assistants.value = newAssistants;
+         assistantsPage.value = newPage;
+         assistants.value = [ ...rootAssistants, ...newAssistants];
       })
       .catch(() => {
-         assistants.value = [];
+         assistantsPage.value = null;
       })
       .finally(() => {
          assistantLoading.value = false;
       });
 };
-const searchSupervisors = e => {
-   const value = e.target.value
-   supervisor.value = value;
+const searchSupervisors = ({ search, page }) => {
+   supervisor.value = search;
    supervisorLoading.value = true;
+   const currentUserCompany = authStore.currentUser.company;
+   const newSearch = typeof search === 'string' ? search : search.full_name;
    axiosConfig
-      .get(`users/?search=${value}&company=${currentUserCompany}`)
+      .get(`users/?page=${page}&search=${newSearch}&company=${currentUserCompany}`)
       .then(response => {
+         const newPage = response?.data?.next ? page + 1 : null;
          const results = response?.data?.results;
+         const rootSupervisors = page === 1 ? [] : supervisors.value;
          const newSupervisors = (Array.isArray(results) ? results: []).map(user => ({...user, position: user?.position?.name, optionDisabled: !user.is_active}));
-         supervisors.value = newSupervisors;
+         supervisors.value = [ ...rootSupervisors, ...newSupervisors ];
+         supervisorsPage.value = newPage;
       })
       .catch(() => {
-         supervisors.value = [];
+         supervisorsPage.value = null;
       })
       .finally(() => {
          supervisorLoading.value = false;
@@ -99,15 +108,18 @@ const assistantCreate = () => {
       <div class="flex flex-col">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Руководитель<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
-            :hasValue="supervisor"
             :loading="supervisorLoading"
             :options="supervisors"
-            @onChange="({ value }) => { supervisor = value }"
-            @onClear="() => { supervisor = '' }"
-            @onInputChange="searchSupervisors"
-            field="full_name"
+            :page="supervisorsPage"
+            :value="supervisor"
+            key="id"
+            label="full_name"
             noOptionMessage="Сотрудник не найден"
-            v-model="supervisor"
+            placeholder="Введите сотрудник"
+            @onInputChange="searchSupervisors"
+            @onChange="value => {
+               supervisor = value;
+            }"
             >
             <template #option="{option}">
                <div class="items-center flex w-[100%] px-3 py-2 text-m font-medium text-primary-900">
@@ -128,15 +140,18 @@ const assistantCreate = () => {
          <p class="text-sm text-greyscale-500 font-medium mt-6 mb-1">Помощник<span class="text-red-500 ml-1">*</span></p>
          <div class="pb-8">
             <base-auto-complete
-               :hasValue="assistant"
                :loading="assistantLoading"
                :options="assistants"
-               @onChange="({ value }) => { assistant = value }"
-               @onClear="() => { assistant = '' }"
-               @onInputChange="searchAssistants"
-               field="full_name"
+               :page="assistantsPage"
+               :value="assistant"
+               key="id"
+               label="full_name"
                noOptionMessage="Сотрудник не найден"
-               v-model="assistant"
+               placeholder="Введите сотрудник"
+               @onInputChange="searchAssistants"
+               @onChange="value => {
+                  assistant = value;
+               }"
                >
                <template #option="{option}">
                   <div class="items-center flex w-[100%] px-3 py-2 text-m font-medium text-primary-900">
