@@ -162,7 +162,7 @@ const loadList = async (params) => {
           class: ['text-sm font-medium text-primary-900']
         },
         emptyMessage: {
-					class: ['font-medium text-center']
+          class: ['text-sm font-medium text-center']
         }
       }"
     >

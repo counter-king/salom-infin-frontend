@@ -41,7 +41,7 @@ onMounted(async () => {
         :object-id="incomingStore.detailModel.id"
         :headers="incomingStore.headers"
         :tree-items="docflowStore.tree"
-        :files="incomingStore.detailModel.document.__files"
+        :files="incomingStore.detailModel.__files"
         :resolution="{
           ...boxesCommonStore.resolution,
           register_date: incomingStore.detailModel.register_date,

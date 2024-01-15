@@ -160,6 +160,7 @@ export const useRegIncoming = defineStore("reg-incoming", {
       description: null,
       document_type: null,
       files: [],
+      __files: [],
       // TODO: Временно 1 для создания документа (Входящий)
       grif: 1,
       id: null,
