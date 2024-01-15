@@ -1,11 +1,14 @@
 <script setup>
 // Core
-import { onMounted } from "vue";
+import {onMounted, ref} from "vue";
 import { useRoute } from "vue-router";
+// Service
+import { fetchRejectSignDocument } from "@/modules/Documents/modules/Boxes/services/sign.service";
 // Store
 import { useBoxesSignStore } from "@/modules/Documents/modules/Boxes/stores/sign.store";
 // Components
 import { LayoutWithTabs } from "@/components/DetailLayout";
+import { ModalComment } from "@/components/Modal";
 import SigningProcessTimeline from "@/modules/Documents/components/SigningProcessTimeline.vue";
 // Enums
 import { CONTENT_TYPES } from "@/enums";
@@ -13,6 +16,18 @@ import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue";
 
 const signStore = useBoxesSignStore();
 const route = useRoute();
+const rejectModal = ref(false);
+const changeModal = ref(false);
+
+// Methods
+const onReject = async (comment) => {
+  await fetchRejectSignDocument({ id: route.params.id, comment });
+  rejectModal.value = false;
+  await signStore.actionGetSignDetail(route.params.id);
+}
+const onChangeDocument = (text) => {
+  console.log(text)
+}
 
 // Hooks
 onMounted( async () => {
@@ -44,9 +59,11 @@ onMounted( async () => {
           rounded
           shadow
           type="button"
+          @click="changeModal = true"
         />
 
         <base-button
+          v-if="signStore.detailModel?.is_signed !== false"
           severity="danger"
           label="reject"
           icon-left="XIcon"
@@ -55,6 +72,7 @@ onMounted( async () => {
           rounded
           shadow
           type="button"
+          @click="rejectModal = true"
         />
 
         <base-button
@@ -87,6 +105,27 @@ onMounted( async () => {
         </div>
       </template>
     </layout-with-tabs>
+
+    <!-- REJECT MODAL -->
+    <modal-comment
+      v-model="rejectModal"
+      label="reject"
+      :create-button-fn="onReject"
+      create-button-color="danger"
+    />
+    <!-- /REJECT MODAL -->
+
+    <!-- CHANGE TEXT MODAL -->
+    <modal-comment
+      v-model="changeModal"
+      header-text="change-text"
+      label="update"
+      :create-button-fn="onChangeDocument"
+      editor
+      max-width="max-w-[750px]"
+      :editor-value="signStore.detailModel?.compose?.content"
+    />
+    <!-- /CHANGE TEXT MODAL -->
   </template>
 </template>
 

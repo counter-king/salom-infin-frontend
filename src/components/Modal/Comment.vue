@@ -1,6 +1,7 @@
 <script setup>
 // Core
-import { ref, useModel } from 'vue'
+import {onMounted, ref, useModel, watch} from 'vue'
+import BaseEditor from "@/components/UI/BaseEditor.vue";
 // Macros
 const props = defineProps({
   modelValue: {
@@ -24,6 +25,22 @@ const props = defineProps({
   createButtonFn: {
     type: Function,
     default: () => void 0
+  },
+  headerText: {
+    type: String,
+    default: null
+  },
+  editor: {
+    type: Boolean,
+    default: false
+  },
+  maxWidth: {
+    type: String,
+    default: 'max-w-[610px]'
+  },
+  editorValue: {
+    type: String,
+    default: ""
   }
 })
 const emit = defineEmits(['update:modelValue'])
@@ -46,16 +63,29 @@ const create = async () => {
     loading.value = false
   }
 }
+
+watch(modelValue, newVal => {
+  if (newVal === true && props.editor && props.editorValue){
+    text.value = props.editorValue;
+  }
+})
 </script>
 
 <template>
   <base-dialog
     v-model="modelValue"
     v-bind="props"
-    max-width="max-w-[610px]"
+    :label="props.headerText ? props.headerText : props.label"
+    :max-width="props.maxWidth"
+    :draggable="false"
   >
     <template #content>
+      <base-editor
+        v-if="props.editor"
+        v-model="text"
+      />
       <base-textarea
+        v-else
         v-model="text"
         label="enter-content"
       />

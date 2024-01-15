@@ -247,6 +247,9 @@ watch(debounced, async () => {
         },
         option: {
           class: ['text-sm font-medium text-primary-900']
+        },
+        emptyMessage: {
+          class: ['text-sm font-medium text-center']
         }
       }"
     >
