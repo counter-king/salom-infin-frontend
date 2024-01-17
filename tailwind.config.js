@@ -28,6 +28,8 @@ export default {
         },
         "greyscale": {
           50: "#F7F7F9",
+          70: "#F1F1F6",
+          90: "#ECECF3",
           100: "#F2F2F2",
           200: "#E2E8F0",
           300: "#ADB7C2",

@@ -80,7 +80,7 @@ watch(modelValue, newVal => {
     :draggable="false"
   >
     <template #content>
-      <base-editor
+      <base-froala-editor
         v-if="props.editor"
         v-model="text"
       />
