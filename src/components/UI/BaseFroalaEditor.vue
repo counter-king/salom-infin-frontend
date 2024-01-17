@@ -94,6 +94,11 @@ const config = {
 	padding: 0px !important;
 	height: 0px !important;
 }*/
+.fr-wrapper>div>a {
+	font-size: 0px !important;
+	padding: 0px !important;
+	height: 0px !important;
+}
 
 p[data-f-id="pbf"] {
 	display: none!important;
