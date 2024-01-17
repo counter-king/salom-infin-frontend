@@ -95,9 +95,7 @@ const config = {
 	height: 0px !important;
 }*/
 .fr-wrapper>div>a {
-	font-size: 0px !important;
-	padding: 0px !important;
-	height: 0px !important;
+	opacity: 0!important;
 }
 
 p[data-f-id="pbf"] {
