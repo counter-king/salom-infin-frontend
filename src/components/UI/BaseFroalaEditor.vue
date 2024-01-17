@@ -84,9 +84,15 @@ const config = {
 	background: var(--greyscale-90)!important;
 }
 
-.fr-second-toolbar,
-.fr-wrapper a {
-	display: none!important;
+//.fr-second-toolbar,
+//.fr-wrapper a {
+//	display: none!important;
+//}
+
+a[href='https://www.froala.com/wysiwyg-editor?k=u'] {
+	font-size: 0px !important;
+	padding: 0px !important;
+	height: 0px !important;
 }
 
 p[data-f-id="pbf"] {
