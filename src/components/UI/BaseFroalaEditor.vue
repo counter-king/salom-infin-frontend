@@ -89,11 +89,11 @@ const config = {
 	display: none!important;
 }*/
 
-a[href='https://www.froala.com/wysiwyg-editor?k=u'] {
+/*a[href='https://www.froala.com/wysiwyg-editor?k=u'] {
 	font-size: 0px !important;
 	padding: 0px !important;
 	height: 0px !important;
-}
+}*/
 
 p[data-f-id="pbf"] {
 	display: none!important;
