@@ -37,7 +37,7 @@ const config = {
 	quickInsertEnabled: false,
 	lineHeights: { '1': '1', '1.15': '1.15', '1.5': '1.5', '2': '2'},
 	tableStyles: {
-		customTable: 'Class1',
+		customTable: t('default-table'),
 	},
 	tableEditButtons: ['tableStyle', 'tableRows', 'tableColumns', 'tableCells', 'tableCellBackground', 'tableCellVerticalAlign', 'tableCellHorizontalAlign', 'tableRemove'],
 	events: {
@@ -69,6 +69,7 @@ const config = {
 .fr-wrapper, .fr-second-toolbar {
 	background: var(--greyscale-50)!important;
 	border: none!important;
+	border-radius: 0 0 10px 10px!important;
 }
 .fr-toolbar {
 	background: var(--greyscale-70)!important;
@@ -83,11 +84,12 @@ const config = {
 	background: var(--greyscale-90)!important;
 }
 
+.fr-second-toolbar,
 .fr-wrapper a {
 	display: none!important;
 }
 
-.fr-second-toolbar {
+p[data-f-id="pbf"] {
 	display: none!important;
 }
 </style>
