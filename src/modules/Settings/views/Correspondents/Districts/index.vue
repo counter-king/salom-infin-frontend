@@ -53,7 +53,6 @@ const headers = ref([
   },
 ]);
 const loading = ref(false);
-const regions = ref([]);
 const visible = ref(false);
 const settingsOverlay = ref(null);
 const visibleHeaders = computed(() => headers.value.filter(header => header?.is_active));
@@ -77,18 +76,6 @@ const getDistricts = (newFilter = {}) => {
     })
     .finally(() => {
       loading.value = false;
-    });
-};
-const getRegions = () => {
-  axiosConfig
-    .get('regions/?page_size=100')
-    .then(response => {
-      const results = response?.data?.results;
-      const newRegions = (Array.isArray(results) ? results : []).map(region => ({ ...region, value: region?.id }));
-      regions.value = newRegions;
-    })
-    .catch(() => {
-      regions.value = [];
     });
 };
 const searchDistricts = search => {
@@ -145,7 +132,6 @@ const initHeaders = () => {
 };
 onMounted(() => {
   getFirstPageDistricts();
-  getRegions();
   initHeaders();
 });
 </script>
@@ -206,7 +192,6 @@ onMounted(() => {
             :districts="districts"
             :field="field"
             :getFirstPageDistricts="getFirstPageDistricts"
-            :regions="regions"
             :setDistricts="setDistricts"
             />
         </template>
@@ -279,7 +264,6 @@ onMounted(() => {
   </OverlayPanel>
   <CreateDistrict
     :getFirstPageDistricts="getFirstPageDistricts"
-    :regions="regions"
     :setVisible="setVisible"
     :visible="visible"
     />
