@@ -82,4 +82,12 @@ const config = {
 .fr-active, .fr-btn:hover {
 	background: var(--greyscale-90)!important;
 }
+
+.fr-wrapper a {
+	display: none!important;
+}
+
+.fr-second-toolbar {
+	display: none!important;
+}
 </style>
