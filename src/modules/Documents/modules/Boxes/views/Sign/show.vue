@@ -137,7 +137,7 @@ onMounted( async () => {
       header-text="change-text"
       label="update"
       :create-button-fn="onChangeDocument"
-      editor
+      editor-type="editor"
       max-width="max-w-[750px]"
       :editor-value="signStore.detailModel?.compose?.content"
     />

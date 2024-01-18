@@ -30,10 +30,13 @@ const props = defineProps({
     type: String,
     default: null
   },
-  editor: {
-    type: Boolean,
-    default: false
-  },
+	editorType: {
+		type: String,
+		default: "textarea",
+		validator(value) {
+			return ['textarea', 'editor', 'comment'].includes(value)
+		}
+	},
   maxWidth: {
     type: String,
     default: 'max-w-[610px]'
@@ -41,7 +44,11 @@ const props = defineProps({
   editorValue: {
     type: String,
     default: ""
-  }
+  },
+	footer: {
+		type: Boolean,
+		default: true
+	}
 })
 const emit = defineEmits(['update:modelValue'])
 // Composable
@@ -65,7 +72,7 @@ const create = async () => {
 }
 
 watch(modelValue, newVal => {
-  if (newVal === true && props.editor && props.editorValue){
+  if (newVal === true && props.editorType === 'editor' && props.editorValue){
     text.value = props.editorValue;
   }
 })
@@ -81,9 +88,17 @@ watch(modelValue, newVal => {
   >
     <template #content>
       <base-froala-editor
-        v-if="props.editor"
+        v-if="props.editorType === 'editor'"
         v-model="text"
       />
+
+	    <div
+		    v-else-if="props.editorType === 'comment'"
+		    class="flex bg-greyscale-50 p-2 rounded-lg h-[200px] overflow-y-auto text-sm"
+	    >
+		   <span v-html="props.editorValue" />
+	    </div>
+
       <base-textarea
         v-else
         v-model="text"
@@ -91,7 +106,7 @@ watch(modelValue, newVal => {
       />
     </template>
 
-    <template #footer>
+    <template v-if="props.footer" #footer>
       <base-button
         :severity="props.createButtonColor"
         :loading="loading"
