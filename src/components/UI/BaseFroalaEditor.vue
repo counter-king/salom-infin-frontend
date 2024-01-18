@@ -23,7 +23,7 @@ const modelValue = useModel(props, 'modelValue');
 const emit = defineEmits(['update:modelValue']);
 
 const config = {
-	placeholderText: t('enter-text'),
+	placeholderText: '',
 	charCounterCount: false,
 	immediateVueModelUpdate: true,
 	toolbarButtons: ['bold', 'italic', 'underline', 'fontSize', 'lineHeight', 'textColor', 'backgroundColor', 'clearFormatting', 'insertTable'],
