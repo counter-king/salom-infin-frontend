@@ -95,7 +95,6 @@ const config = {
 	height: 0px !important;
 }*/
 .fr-wrapper>div>a {
-	position: absolute!important;
 	opacity: 0!important;
 	pointer-events: none!important;
 }
