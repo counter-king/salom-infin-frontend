@@ -13,7 +13,8 @@ const topSigner = ref('');
 const topSigners = ref([]);
 const topSignersLoading = ref(false);
 const topSignersPage = ref(1);
-const docType = ref('');
+const docType = ref([]);
+const docTypeInputValue = ref('');
 const docTypes = ref([]);
 const docTypesLoading = ref(false);
 const docTypesPage = ref(1);
@@ -40,18 +41,21 @@ const searchTopSigners = ({ search, page }) => {
          topSignersLoading.value = false;
       });
 };
-const searchDocTypes = e => {
-   const value = e.target.value
+const searchDocTypes = ({ search, page }) => {
+   docTypeInputValue.value = search;
    docTypesLoading.value = true;
    axiosConfig
-      .get(`document-types/?search=${value}`)
+      .get(`document-types/?page=${page}&search=${search}`)
       .then(response => {
+         const newPage = response?.data?.next ? page + 1 : null;
          const results = response?.data?.results;
          const documentTypes = Array.isArray(results) ? results: [];
-         docTypes.value = documentTypes;
+         const rootDocumentTypes = page === 1 ? [] : docTypes.value;
+         docTypes.value = [ ...rootDocumentTypes, ...documentTypes];
+         docTypesPage.value = newPage;
       })
       .catch(() => {
-         docTypes.value = [];
+         docTypesPage.value = null;
       })
       .finally(() => {
          docTypesLoading.value = false;
@@ -149,19 +153,30 @@ const topSignerCreate = () => {
          <p class="text-sm text-greyscale-500 font-medium mt-6 mb-1">Тип документа<span class="text-red-500 ml-1">*</span></p>
          <div class="pb-8">
             <base-multi-auto-complete
+               :inputValue="docTypeInputValue"
                :loading="docTypesLoading"
                :options="docTypes"
                :page="docTypesPage"
                :value="docType"
+               @onChange="value => { docType = value }"
                @onInputChange="searchDocTypes"
-               @onChange="option => { docType = option }"
-               key="id"
-               label="name"
-               placeholder="Введите тип документа"
-               noOptionMessage="Тип документа не найден"
+               dropdownPlaceholder="Введите тип документа"
+               optionKey="id"
+               optionLabel="name"
+               noOptionsMessage="Тип документа не найден"
+               placeholder="Поиск тип документа"
                >
                <template #option="{ option }">
-                  <div class="flex items-center h-11 px-3 text-base">{{ option.name }}</div>
+                  <div class="flex items-center w-full h-full py-3 px-4 text-base rounded-xl">{{ option.name }}</div>
+               </template>
+               <template #chip="{ value, removeItem }">
+                  <div class="flex justify-center items-center h-[20px]">
+                     <span>{{ value.name }}</span>
+                     <svg @click="e => removeItem(e, value)" class="ml-1.5" width="18" height="18" viewBox="0 0 16 16" fill="none">
+                        <path d="M12 4L4 12" stroke="#757994" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M4 4L12 12" stroke="#757994" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                     </svg>
+                  </div>
                </template>
             </base-multi-auto-complete>
          </div>

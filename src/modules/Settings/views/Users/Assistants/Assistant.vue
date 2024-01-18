@@ -274,7 +274,7 @@ onMounted(() => {
             :value="supervisor"
             key="id"
             label="full_name"
-            noOptionMessage="Сотрудник не найден"
+            noOptionsMessage="Сотрудник не найден"
             placeholder="Введите сотрудник"
             @onInputChange="searchSupervisors"
             @onChange="value => {
@@ -306,7 +306,7 @@ onMounted(() => {
                :value="assistant"
                key="id"
                label="full_name"
-               noOptionMessage="Сотрудник не найден"
+               noOptionsMessage="Сотрудник не найден"
                placeholder="Введите сотрудник"
                @onInputChange="searchAssistants"
                @onChange="value => {

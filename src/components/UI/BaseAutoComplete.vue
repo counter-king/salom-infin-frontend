@@ -1,29 +1,9 @@
 <script setup>
 import Button from 'primevue/button';
-import ProgressSpinner from 'primevue/progressspinner';
-import { useSlots, computed, ref, watch } from 'vue';
 import Dropdown from 'primevue/dropdown';
+import ProgressSpinner from 'primevue/progressspinner';
 import { useElementVisibility } from '@vueuse/core';
-const slot = useSlots();
-const emit = defineEmits(['onChange', 'onInputChange']);
-const dropdownRef = ref(null);
-const loadingRef = ref(null);
-const visible = useElementVisibility(loadingRef)
-const props = defineProps({
-   key: String,
-   label: String,
-   loading: Boolean,
-   noOptionMessage: String,
-   options: Array,
-   page: Number,
-   placeholder: String,
-   value: [String, Boolean, Object],
-});
-const newValue = computed(() => {
-   const value = props.value;
-   const newValue = typeof value === 'string' ? value : value[props.label];
-   return newValue;
-})
+import { useSlots, computed, ref, watch } from 'vue';
 const autocompleteConfig = {
    checkboxContainer: { class: 'hidden' },
    emptyMessage: { class: ['p-0'] },
@@ -39,10 +19,30 @@ const autocompleteConfig = {
    tokenLabel: { class: ['text-sm font-medium'] },
    trigger: { class: ['w-[32px] h-[32px] right-[40px] top-[4px] absolute bg-transparent'] },
 };
+const props = defineProps({
+   key: String,
+   label: String,
+   loading: Boolean,
+   noOptionsMessage: String,
+   options: Array,
+   page: Number,
+   placeholder: String,
+   value: [String, Boolean, Object],
+});
+const slot = useSlots();
+const emit = defineEmits(['onChange', 'onInputChange']);
+const dropdownRef = ref(null);
+const loadingRef = ref(null);
+const visible = useElementVisibility(loadingRef);
+const newValue = computed(() => {
+   const value = props.value;
+   const newValue = typeof value === 'string' ? value : value[props.label];
+   return newValue;
+})
 watch(visible, visible => {
    if(visible) {
       const search = typeof props?.value === 'string' ? props?.value : props?.value[props.label];
-      emit('onInputChange', { search, page: props?.page })
+      emit('onInputChange', { search, page: props?.page });
    }
 });
 </script>
@@ -123,7 +123,7 @@ watch(visible, visible => {
       </template>
       <template #empty>
          <div class="flex items-center justify-center w-[100%] h-[40px] text-m font-medium text-primary-900">
-            {{ noOptionMessage }}
+            {{ noOptionsMessage }}
          </div>
       </template>
    </Dropdown>
