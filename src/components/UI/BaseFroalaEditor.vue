@@ -84,17 +84,6 @@ const config = {
 	background: var(--greyscale-90)!important;
 }
 
-/*.fr-second-toolbar,
-.fr-wrapper a {
-	display: none!important;
-}*/
-
-/*a[href='https://www.froala.com/wysiwyg-editor?k=u'] {
-	font-size: 0px !important;
-	padding: 0px !important;
-	height: 0px !important;
-}*/
-.fr-second-toolbar,
 .fr-wrapper>div>a {
 	opacity: 0!important;
 	pointer-events: none!important;
@@ -107,5 +96,9 @@ p[data-f-id="pbf"] {
 .fr-element {
 	z-index: 99999;
 	margin-top: -48px;
+}
+
+.fr-second-toolbar {
+	display: none!important;
 }
 </style>
