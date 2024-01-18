@@ -1,9 +1,9 @@
 <script setup>
 // Core
-import {onMounted, ref} from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 // Service
-import { fetchRejectSignDocument } from "@/modules/Documents/modules/Boxes/services/sign.service";
+import {fetchRejectSignDocument, fetchSignDocument} from "@/modules/Documents/modules/Boxes/services/sign.service";
 // Store
 import { useBoxesSignStore } from "@/modules/Documents/modules/Boxes/stores/sign.store";
 // Components
@@ -19,6 +19,11 @@ const route = useRoute();
 const rejectModal = ref(false);
 const changeModal = ref(false);
 
+// Computed
+const signed = computed(() => {
+	return signStore.detailModel?.is_signed
+})
+
 // Methods
 const onReject = async (comment) => {
   await fetchRejectSignDocument({ id: route.params.id, comment });
@@ -27,6 +32,10 @@ const onReject = async (comment) => {
 }
 const onChangeDocument = (text) => {
   console.log(text)
+}
+const signTest = async () => {
+	await fetchSignDocument({ id: route.params.id, body: { pkcs7: "test" } });
+	await signStore.actionGetSignDetail(route.params.id);
 }
 
 // Hooks
@@ -49,6 +58,7 @@ onMounted( async () => {
     >
       <template #header-end>
         <base-button
+	        v-if="signed === null"
           color="bg-white hover:bg-greyscale-100 text-primary-dark"
           border-color="border-transparent"
           label="update"
@@ -63,7 +73,7 @@ onMounted( async () => {
         />
 
         <base-button
-          v-if="signStore.detailModel?.is_signed !== false"
+	        v-if="signed === null"
           severity="danger"
           label="reject"
           icon-left="XIcon"
@@ -76,6 +86,7 @@ onMounted( async () => {
         />
 
         <base-button
+	        v-if="signed === null"
           border-color="border-transparent"
           label="sign"
           icon-left="CheckCircleIcon"
@@ -84,12 +95,16 @@ onMounted( async () => {
           rounded
           shadow
           type="button"
+	        @click="signTest"
         />
       </template>
 
       <template #preview>
         <div class="p-6 w-full">
-          <signing-process-timeline :compose-model="signStore.detailModel?.compose" />
+          <signing-process-timeline
+	          v-if="signStore.detailModel && signStore.detailModel.compose"
+	          :compose-model="signStore.detailModel?.compose"
+          />
         </div>
       </template>
 
@@ -99,6 +114,7 @@ onMounted( async () => {
           style="height: calc(100vh - 250px)"
         >
           <base-template
+	          v-if="signStore.detailModel && signStore.detailModel.compose"
             :compose-model="signStore.detailModel?.compose"
             class="overflow-hidden"
           />

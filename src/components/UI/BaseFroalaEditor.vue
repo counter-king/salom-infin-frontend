@@ -26,7 +26,7 @@ const config = {
 	placeholderText: '',
 	charCounterCount: false,
 	immediateVueModelUpdate: true,
-	toolbarButtons: ['bold', 'italic', 'underline', 'fontSize', 'lineHeight', 'textColor', 'backgroundColor', 'clearFormatting', 'insertTable'],
+	toolbarButtons: ['bold', 'italic', 'underline', 'fontSize', 'lineHeight', 'alignLeft', 'alignCenter', 'alignRight', 'alignJustify', 'textColor', 'backgroundColor', 'clearFormatting', 'insertTable'],
 	attribution: false,
 	// enter: 'ENTER_BR',
 	heightMax: 500,
