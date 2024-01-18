@@ -30,8 +30,8 @@ const props = defineProps({
       XIZMAT XATI
     </div>
 
-    <div class="flex text-justify indent-4">
-      <span v-html="props.composeModel?.content" />
+    <div class="text-justify indent-4" v-html="props.composeModel?.content">
+
     </div>
 
     <div class="mt-6 pb-2 border-b">

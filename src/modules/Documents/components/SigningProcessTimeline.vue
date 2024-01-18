@@ -4,6 +4,7 @@ import {computed, ref} from "vue";
 import {useI18n} from "vue-i18n";
 import Timeline from 'primevue/timeline';
 import {formatDateHour} from "../../../utils/formatDate";
+import {ModalComment} from "@/components/Modal";
 
 const properties = defineProps({
   composeModel: {
@@ -14,7 +15,10 @@ const properties = defineProps({
 })
 
 const { t } = useI18n();
+const reason = ref("");
+const reasonModal = ref(false);
 
+// Computed
 const signingProcessComputed = computed(() => {
   if (!(properties.composeModel && properties.composeModel.approvers && properties.composeModel.signers)) {
     return [];
@@ -96,6 +100,10 @@ const returnItemIconClass = (item) => {
           || (item.type === 'signers' && item.is_signed === false)
             ? 'text-critic-500' : 'text-white'
 }
+const showReason = (item) => {
+	reason.value = item.comment;
+	reasonModal.value = true;
+}
 </script>
 
 <template>
@@ -160,12 +168,23 @@ const returnItemIconClass = (item) => {
                 <span class="text-sm font-medium text-greyscale-300 block ml-2">{{ returnItemActionTime(item) }}</span>
               </div>
 
-              <div
-                class="text-xs font-semibold px-2 py-[2px] rounded-2xl border"
-                :class="returnItemActionClass(item)"
-              >
-                {{ returnItemActionValue(item) }}
-              </div>
+	            <div class="flex items-center">
+		            <div
+			            v-if="(item.is_approved === false || item.is_signed === false) && item.comment"
+			            class="flex text-xs px-2 py-[2px] rounded-lg border bg-greyscale-50 mr-2 cursor-pointer"
+			            @click="showReason(item)"
+		            >
+			            <base-icon name="HorizontalDotsIcon" width="16" height="16" :stroke="false" class="text-greyscale-500" />
+			            <span class="ml-1 text-greyscale-500 font-medium">{{ t('reason') }}</span>
+		            </div>
+
+		            <div
+			            class="text-xs font-semibold px-2 py-[2px] rounded-lg border"
+			            :class="returnItemActionClass(item)"
+		            >
+			            {{ returnItemActionValue(item) }}
+		            </div>
+	            </div>
             </div>
 
             <div class="text-sm font-semibold text-greyscale-900 mt-1">
@@ -177,6 +196,17 @@ const returnItemIconClass = (item) => {
       </template>
     </Timeline>
   </div>
+
+	<!-- REASON MODAL -->
+	<modal-comment
+		v-model="reasonModal"
+		header-text="reject-reason"
+		editor-type="comment"
+		max-width="max-w-[750px]"
+		:editor-value="reason"
+		:footer="false"
+	/>
+	<!-- /REASON TEXT MODAL -->
 </template>
 
 <style scoped>
