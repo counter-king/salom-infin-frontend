@@ -103,4 +103,9 @@ const config = {
 p[data-f-id="pbf"] {
 	display: none!important;
 }
+
+.fr-element {
+	z-index: 99999;
+	margin-top: -48px;
+}
 </style>
