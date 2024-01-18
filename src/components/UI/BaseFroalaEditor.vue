@@ -55,12 +55,15 @@ onMounted(() => {
 	// Insert production-class in production mode to eradicate red alert of froala editor
 	setTimeout(() => {
 		const element = document.querySelector('.fr-element');
-		if (element && process.env.NODE_ENV !== 'development') {
-			element.classList.add('production-class');
-			const firstChild = element.querySelector(':first-child');
-			if (firstChild && firstChild.tagName.toLowerCase() === 'div'){
+		const parentElement = document.querySelector('.fr-wrapper');
+		if (parentElement && process.env.NODE_ENV !== 'development') {
+			const firstChild = parentElement.querySelector(':first-child');
+			if (firstChild && firstChild.tagName.toLowerCase() === 'div' && !firstChild.classList.length){
 				firstChild.classList.add('negative-z-index');
 			}
+		}
+		if (element && process.env.NODE_ENV !== 'development') {
+			element.classList.add('production-class');
 		}
 	}, 100);
 })
