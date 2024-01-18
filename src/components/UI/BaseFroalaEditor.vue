@@ -94,6 +94,7 @@ const config = {
 	padding: 0px !important;
 	height: 0px !important;
 }*/
+.fr-second-toolbar,
 .fr-wrapper>div>a {
 	opacity: 0!important;
 	pointer-events: none!important;
