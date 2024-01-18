@@ -57,6 +57,10 @@ onMounted(() => {
 		const element = document.querySelector('.fr-element');
 		if (element && process.env.NODE_ENV !== 'development') {
 			element.classList.add('production-class');
+			const firstChild = element.querySelector(':first-child');
+			if (firstChild && firstChild.tagName.toLowerCase() === 'div'){
+				firstChild.classList.add('negative-z-index');
+			}
 		}
 	}, 100);
 })
@@ -111,5 +115,9 @@ p[data-f-id="pbf"] {
 
 .fr-second-toolbar {
 	display: none!important;
+}
+
+.negative-z-index {
+	z-index: -1!important;
 }
 </style>
