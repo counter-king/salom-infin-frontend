@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { useModel } from "vue";
+import { nextTick, onMounted, useModel } from "vue";
 import { useI18n } from "vue-i18n";
 // Components
 import { Froala } from "vue-froala-wysiwyg/src/vue-froala";
@@ -49,6 +49,17 @@ const config = {
 		}
 	}
 }
+
+// Hooks
+onMounted(() => {
+	// Insert production-class in production mode to eradicate red alert of froala editor
+	setTimeout(() => {
+		const element = document.querySelector('.fr-element');
+		if (element && process.env.NODE_ENV !== 'development') {
+			element.classList.add('production-class');
+		}
+	}, 100);
+})
 </script>
 
 <template>
@@ -93,9 +104,9 @@ p[data-f-id="pbf"] {
 	display: none!important;
 }
 
-.fr-element {
-	z-index: 99999;
-	margin-top: -48px;
+.production-class {
+	z-index: 99999!important;
+	margin-top: -48px!important;
 }
 
 .fr-second-toolbar {
