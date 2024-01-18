@@ -97,6 +97,7 @@ onMounted(() => {
 
 .fr-wrapper>div>a {
 	opacity: 0!important;
+	z-index: -1!important;
 	pointer-events: none!important;
 }
 
@@ -105,7 +106,6 @@ p[data-f-id="pbf"] {
 }
 
 .production-class {
-	z-index: 99999!important;
 	margin-top: -48px!important;
 }
 
