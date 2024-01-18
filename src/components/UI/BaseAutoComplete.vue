@@ -66,7 +66,7 @@ watch(visible, visible => {
             emit('onChange', value)
          }
       }"
-      @click="(e) => {
+      @click="() => {
          dropdownRef.show();
          emit('onInputChange', { search: newValue, page: 1 })
       }"

@@ -130,7 +130,7 @@ const assistantCreate = () => {
                      <div class="text-base">{{ option.full_name }}</div>
                      <div class="flex items-center">
                         <span class="text-sm font-semibold" :style="{'color': option.optionDisabled ? '#F3335C' : '#63BA3D'}">{{ option.status && option.status.name }}</span>
-                        <span class="mx-2 w-[4px] h-[4px] rounded-full" style="background-color: #79889B"></span>
+                        <span v-if="option.status && option.status.name" class="mx-2 w-[4px] h-[4px] rounded-full" style="background-color: #79889B"></span>
                         <span class="text-sm font-medium" style="color: #767994">{{ option.position }}</span>
                      </div>
                   </div>

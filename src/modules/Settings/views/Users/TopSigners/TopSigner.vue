@@ -10,33 +10,37 @@ import { useAuthStore } from '../../../../Auth/stores';
 const props = defineProps({ topSigners: Array, data: Object, field: String, getFirstPageTopSigners: Function, setTopSigners: Function });
 const authStore = useAuthStore();
 const topSigner = ref('');
-const topSignerLoading = ref(false);
+const topSignersLoading = ref(false);
 const topSigners = ref([]);
+const topSignersPage = ref(1);
 const docType = ref('');
 const docTypeLoading = ref(false);
 const docTypes = ref([]);
-const currentUserCompany = authStore.currentUser.company;
 const deleteLoading = ref(false);
 const deleteVisible = ref(false);
 const editLoading = ref(false);
 const editTopSigner = ref({});
 const editVisible = ref(false);
-const searchTopSigners = e => {
-   const value = e.target.value
-   topSigner.value = value;
-   topSignerLoading.value = true;
+const searchTopSigners = ({ search, page }) => {
+   topSigner.value = search;
+   topSignersLoading.value = true;
+   const currentUserCompany = authStore.currentUser.company;
+   const newSearch = typeof search === 'string' ? search : search.full_name;
    axiosConfig
-      .get(`users/?search=${value}&comapany=${currentUserCompany}`)
+      .get(`users/?page=${page}&search=${newSearch}&comapany=${currentUserCompany}`)
       .then(response => {
+         const newPage = response?.data?.next ? page + 1 : null;
          const results = response?.data?.results;
+         const rootTopSigners = page === 1 ? [] : topSigners.value;
          const newTopSigners = (Array.isArray(results) ? results: []).map(user => ({...user, position: user?.position?.name, optionDisabled: !user.is_active}));
-         topSigners.value = newTopSigners;
+         topSigners.value = [ ...rootTopSigners, ...newTopSigners];
+         topSignersPage.value = newPage;
       })
       .catch(() => {
-         topSigners.value = [];
+         topSignersPage.value = null;
       })
       .finally(() => {
-         topSignerLoading.value = false;
+         topSignersLoading.value = false;
       });
 };
 const searchDocTypes = e => {
@@ -191,15 +195,18 @@ const topSignerDelete = () => {
       <div class="flex flex-col">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Руководитель<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
-            :hasValue="topSigner"
-            :loading="topSignerLoading"
+            :loading="topSignersLoading"
             :options="topSigners"
-            @onChange="({ value }) => { topSigner = value }"
-            @onClear="() => { topSigner = '' }"
+            :page="topSignersPage"
+            :value="topSigner"
+            key="id"
+            label="full_name"
+            noOptionMessage="Подписант не найден"
+            placeholder="Введите подписант"
             @onInputChange="searchTopSigners"
-            field="full_name"
-            noOptionMessage="Сотрудник не найден"
-            v-model="topSigner"
+            @onChange="value => {
+               topSigner = value;
+            }"
          >
             <template #option="{ option }">
                <div class="items-center flex w-[100%] px-3 py-2 text-m font-medium text-primary-900">
@@ -210,14 +217,14 @@ const topSignerDelete = () => {
                      <div class="text-base">{{ option.full_name }}</div>
                      <div class="flex items-center">
                         <span class="text-sm font-semibold" :style="{'color': option.optionDisabled ? '#F3335C' : '#63BA3D'}">{{ option.status && option.status.name }}</span>
-                        <span class="mx-2 w-[4px] h-[4px] rounded-full" style="background-color: #79889B"></span>
+                        <span v-if="option.status && option.status.name" class="mx-2 w-[4px] h-[4px] rounded-full" style="background-color: #79889B"></span>
                         <span class="text-sm font-medium" style="color: #767994">{{ option.position }}</span>
                      </div>
                   </div>
                </div>
             </template>
          </base-auto-complete>
-         <p class="text-sm text-greyscale-500 font-medium mt-6 mb-1">Помощник<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mt-6 mb-1">Тип документа<span class="text-red-500 ml-1">*</span></p>
          <div class="pb-8">
             <base-multi-auto-complete
                :loading="docTypeLoading"
