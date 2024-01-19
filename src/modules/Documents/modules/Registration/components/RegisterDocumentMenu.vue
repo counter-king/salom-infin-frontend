@@ -2,11 +2,11 @@
 // Core
 import { ref, unref, computed } from 'vue'
 // Store
+import { useCommonStore } from '@/stores/common'
 import { useDocFlowStore } from '../stores/docflow.store'
 // Composable
+const commonStore = useCommonStore()
 const docFlowStore = useDocFlowStore()
-// Macros
-const emit = defineEmits(['emit:up'])
 // Reactive
 const menuRef = ref(null)
 const items = ref([
@@ -47,14 +47,21 @@ const items = ref([
   }
 ])
 // Computed
-const menuActiveText = computed(() => items.value.find(menu => menu.component === docFlowStore.documentMenuType))
+const menuList = computed(() => commonStore.journalsList.map(journal => {
+  return {
+    ...journal,
+    label: journal.name,
+    command: () => documentType(journal.id)
+  }
+}))
+const menuActiveText = computed(() => items.value.find(menu => menu.component === docFlowStore.documentMenuType.name))
 // Methods
 const toggle = (event) => {
   const _menuRef = unref(menuRef)
   _menuRef.menuRef.toggle(event)
 }
-const documentType = (type) => {
-  emit('emit:up', type)
+const documentType = (journalId) => {
+  docFlowStore.actionLoadFormCreateDocument({ journalId })
 }
 </script>
 
@@ -70,7 +77,7 @@ const documentType = (type) => {
   </button>
 
   <base-menu
-    :items="items"
+    :items="menuList"
     width="w-[225px]"
     action-size-class="min-h-[40px]"
     label-class="text-greyscale-500 group-hover:text-primary-500"

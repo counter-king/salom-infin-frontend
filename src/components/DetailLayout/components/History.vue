@@ -34,8 +34,6 @@ const loadList = async () => {
   })
 
   list.value = data.results
-
-  console.log(data);
 }
 // Hooks
 onMounted(async () => {
