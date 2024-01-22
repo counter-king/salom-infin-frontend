@@ -81,34 +81,35 @@ const valueComputed = computed(() => {
 const onPageChange = async (val) => {
   page.value = val.page + 1;
   pageSize.value = val.rows;
-  // firstRow.value = Number(val.page + 1) * Number(val.rows) - 1;
+
+  if (route.query && route.query.page_size && Number(route.query.page_size) !== val.rows){
+    page.value = 1
+  }
+  firstRow.value = page.value * pageSize.value - 1;
   // emit('emit:onPageChange', val);
   await router.replace({
     ...route,
     query: {
       ...route.query,
-      page: val.page + 1,
+      page: page.value,
       page_size: val.rows
     }
   });
-  const response = await props.actionList({ ...route.query, page: val.page + 1, page_size: val.rows });
+  const response = await props.actionList({ ...route.query, page: page.value, page_size: val.rows });
 }
 const initializeTable = async () => {
-  if (route.query && route.query.page && route.query.page_size){
+  if (route.query && route.query.page && route.query.page_size) {
     page.value = Number(route.query.page);
     pageSize.value = Number(route.query.page_size);
+    firstRow.value = Number(route.query.page) * Number(route.query.page_size) - 1;
     await props.actionList({ ...route.query, page: route.query.page, page_size: route.query.page_size });
   } else if (route.query && route.query.length) {
     await props.actionList({ ...route.query });
   } else if (props.apiParams){
     await props.actionList({ ...props.apiParams});
   } else {
-    await props.actionList({ page: page.value, page_size: pageSize.value });
-  }
-  if (route.query && route.query.page && route.query.page_size){
-    firstRow.value = Number(route.query.page) * Number(route.query.page_size) - 1;
-  } else {
     firstRow.value = Number(page.value) * Number(pageSize.value) - 1;
+    await props.actionList({ page: page.value, page_size: pageSize.value });
   }
   if (getStorageItem(props.storageColumnsName)){
     emit('emit:setStoreHeaders', JSON.parse(getStorageItem(props.storageColumnsName)))
