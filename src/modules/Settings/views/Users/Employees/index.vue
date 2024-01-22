@@ -47,6 +47,7 @@ const headers = ref([
   },
   {
     columnKey: 'is_user_active',
+    disabled: true,
     field: 'is_user_active',
     header: 'Состояние',
     is_active: true,

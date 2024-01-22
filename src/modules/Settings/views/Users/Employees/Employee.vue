@@ -17,24 +17,32 @@ const props = defineProps({ data: Object, employees: Array, field: String, getFi
 const deleteLoading = ref(false);
 const deleteVisible = ref(false);
 const statusEditLoading = ref(false);
+const editEmployee = ref({});
+const editLoading = ref(false);
+const editVisible = ref(false);
 const items = ref([]);
 const menu = ref(null);
 
 const companies = ref([]);
+const companiesLoading = ref(false);
+const companiesPage = ref(1);
 const company = ref('');
-const companyLoading = ref(false);
+
 const topLevelDepartment = ref('');
-const topLevelDepartmentLoading = ref(false);
 const topLevelDepartments = ref([]);
+const topLevelDepartmentsLoading = ref(false);
+const topLevelDepartmentsPage = ref(1);
+
 const position = ref('');
-const positionLoading = ref(false);
 const positions = ref([]);
-const statuses = ref([]);
+const positionsLoading = ref(false);
+const positionsPage = ref(1);
+
 const status = ref('');
-const statusLoading = ref(false);
-const editEmployee = ref({});
-const editLoading = ref(false);
-const editVisible = ref(false);
+const statuses = ref([]);
+const statusesLoading = ref(false);
+const statusesPage = ref(1);
+
 const employeeEdit = () => {
    const companyId = company.value?.id;
    const departmentId = topLevelDepartment.value?.id;
@@ -86,75 +94,86 @@ const employeeEdit = () => {
       dispatchNotify('Введите статус', '', 'error');
    }
 };
-const searchCompanies = e => {
-   const search = e.target.value;
-   companyLoading.value = true;
+const searchCompanies = ({ search, page }) => {
+   company.value = search;
+   companiesLoading.value = true;
    axiosConfig
-      .get(`companies/?search=${search}`)
+      .get(`companies/?page=${page}&search=${search}`)
       .then(response => {
+         const newPage = response?.data?.next ? page + 1 : null;
          const results = response?.data?.results;
+         const rootCompanies = page === 1 ? [] : companies.value;
          const newCompanies = Array.isArray(results) ? results : [];
-         companies.value = newCompanies;
+         companiesPage.value = newPage;
+         companies.value = [ ...rootCompanies, ...newCompanies ];
       })
       .catch(() => {
-         companies.value = [];
+         companiesPage.value = null;
       })
       .finally(() => {
-         companyLoading.value = false;
+         companiesLoading.value = false;
       });
 };
-const searchTopLevelDepartments = e => {
-   const search = e.target.value;
-   topLevelDepartmentLoading.value = true;
+const searchTopLevelDepartments = ({ search, page }) => {
+   topLevelDepartmentsLoading.value = true;
+   topLevelDepartment.value = search;
    axiosConfig
-      .get(`departments/top-level-departments/?search=${search}`)
+      .get(`departments/top-level-departments/?page=${page}&search=${search}`)
       .then(response => {
+         const newPage = response?.data?.next ? page + 1 : null;
          const results = response?.data?.results;
+         const rootTopLevelDepartments = page === 1 ? [] : topLevelDepartments.value;
          const newTopLevelDepartments = Array.isArray(results) ? results : [];
-         topLevelDepartments.value = newTopLevelDepartments;
+         topLevelDepartments.value = [...rootTopLevelDepartments, ...newTopLevelDepartments];
+         topLevelDepartmentsPage.value = newPage;
       })
       .catch(() => {
-         topLevelDepartments.value = [];
+         topLevelDepartmentsPage.value = null;
       })
       .finally(() => {
-         topLevelDepartmentLoading.value = false;
+         topLevelDepartmentsLoading.value = false;
       });
 };
-const searchPositions = e => {
-   const search = e.target.value;
-   positionLoading.value = true;
+const searchPositions = ({ search, page }) => {
+   position.value = search;
+   positionsLoading.value = true;
    axiosConfig
-      .get(`positions/?search=${search}`)
+      .get(`positions/?page=${page}&search=${search}`)
       .then(response => {
+         const newPage = response?.data?.next ? page + 1 : null;
          const results = response?.data?.results;
+         const rootPositions = page === 1 ? [] : positions.value;
          const newPositions = Array.isArray(results) ? results : [];
-         positions.value = newPositions;
+         positions.value = [ ...rootPositions, ...newPositions];
+         positionsPage.value = newPage;
       })
       .catch(() => {
-         positions.value = [];
+         positionsPage.value = null;
       })
       .finally(() => {
-         positionLoading.value = false;
+         positionsLoading.value = false;
       });
 };
-const searchStatuses = e => {
-   const search = e.target.value;
-   statusLoading.value = true;
+const searchStatuses = ({ search, page }) => {
+   statusesLoading.value = true;
+   status.value = search;
    axiosConfig
-      .get(`users/statuses/?search=${search}`)
+      .get(`users/statuses/?page=${page}&search=${search}`)
       .then(response => {
+         const newPage = response?.data?.next ? page + 1 : null;
          const results = response?.data;
+         const rootStatuses = page === 1 ? [] : statuses.value;
          const newStatuses = Array.isArray(results) ? results : [];
-         statuses.value = newStatuses;
+         statuses.value = [ ...rootStatuses, ...newStatuses];
+         statusesPage.value = newPage;
       })
       .catch(() => {
-         statuses.value = [];
+         statusesPage.value = null;
       })
       .finally(() => {
-         statusLoading.value = false;
+         statusesLoading.value = false;
       });
 };
-
 const updateStatus = value => {
    statusEditLoading.value = true;
    const sendingData = { is_user_active: !!value?.value };
@@ -215,13 +234,16 @@ const toggle = event => {
    menu.value.toggle(event);
 };
 const openEditModal = data => {
-   company.value = data?.company;
-   editEmployee.value = data;
+   const phone = +data.phone.slice(2);
+   company.value = data?.company || '';
+   editEmployee.value = { ...data, phone };
    editVisible.value = true;
-   position.value = data?.position;
-   status.value = data?.status;
-   topLevelDepartment.value = data?.top_level_department;
-
+   position.value = data?.position || '';
+   status.value = data?.status || '';
+   topLevelDepartment.value = data?.top_level_department || '';
+};
+const setDepartment = department => {
+   editEmployee.value = { ...editEmployee.value, department };
 };
 watch(locale, () => {
    changeLanguage();
@@ -328,7 +350,7 @@ onMounted(() => {
                editEmployee = { ...editEmployee, last_name: replaceSpecChars(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Отчество<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Отчество</p>
          <InputText
             :modelValue="editEmployee.father_name"
             :pt="{ root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
@@ -365,16 +387,18 @@ onMounted(() => {
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Филиал<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
-            :hasValue="company"
-            :loading="companyLoading"
+            :loading="companiesLoading"
             :options="companies"
+            :page="companiesPage"
             :value="company"
-            @onChange="({ value }) => { company = value }"
-            @onClear="() => { company = '' }"
             @onInputChange="searchCompanies"
-            field="name"
-            noOptionMessage="Филиал не найден"
-            v-model="company"
+            key="id"
+            label="name"
+            noOptionsMessage="Филиал не найден"
+            placeholder="Введите филиал"
+            @onChange="value => {
+               company = value;
+            }"
             >
             <template #option="{ option }">
                <div class="flex items-center h-11 px-3 text-base">{{ option.name }}</div>
@@ -382,18 +406,17 @@ onMounted(() => {
          </base-auto-complete>
          <p class="text-sm text-greyscale-500 font-medium mb-1 mt-6">Департамент<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
-            :hasValue="topLevelDepartment"
-            :loading="topLevelDepartmentLoading"
+            :loading="topLevelDepartmentsLoading"
             :options="topLevelDepartments"
+            :page="topLevelDepartmentsPage"
             :value="topLevelDepartment"
-            @onChange="({ value }) => { topLevelDepartment = value }"
-            @onClear="() => { topLevelDepartment = '' }"
             @onInputChange="searchTopLevelDepartments"
-            field="name"
-            noOptionMessage="Департамент не найден"
-            v-model="topLevelDepartment"
-            :setDepartment="top_level_department => {
-               employee = { ...employee, top_level_department }
+            key="id"
+            label="name"
+            noOptionsMessage="Департамент не найден"
+            placeholder="Введите департамент"
+            @onChange="value => {
+               topLevelDepartment = value;
             }"
             >
             <template #option="{ option }">
@@ -401,20 +424,22 @@ onMounted(() => {
             </template>
          </base-auto-complete>
          <template v-if="topLevelDepartment?.id">
-            <SubDepartment :setTopLevelDepartment="top_level_department => { employee = { ...employee, top_level_department } }" :clearTopLevelDepartment="() => { employee = { ...employee, top_level_department: topLevelDepartment?.id } }" :department="topLevelDepartment" />
+            <SubDepartment :required="true" :setDepartment="setDepartment" :topLevelDepartment="topLevelDepartment" />
          </template>
          <p class="text-sm text-greyscale-500 font-medium mb-1 mt-6">Должность<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
-            :hasValue="position"
-            :loading="positionLoading"
+            :loading="positionsLoading"
             :options="positions"
+            :page="positionsPage"
             :value="position"
-            @onChange="({ value }) => { position = value }"
-            @onClear="() => { position = '' }"
             @onInputChange="searchPositions"
-            field="name"
-            noOptionMessage="Должность не найден"
-            v-model="position"
+            key="id"
+            label="name"
+            noOptionsMessage="Должность не найден"
+            placeholder="Введите должность"
+            @onChange="value => {
+               position = value;
+            }"
             >
             <template #option="{ option }">
                <div class="flex items-center h-11 px-3 text-base">{{ option.name }}</div>
@@ -422,16 +447,18 @@ onMounted(() => {
          </base-auto-complete>
          <p class="text-sm text-greyscale-500 font-medium mb-1 mt-6">Статусь<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
-            :hasValue="status"
-            :loading="statusLoading"
+            :loading="statusesLoading"
             :options="statuses"
+            :page="statusesPage"
             :value="status"
-            @onChange="({ value }) => { status = value }"
-            @onClear="() => { status = '' }"
             @onInputChange="searchStatuses"
-            field="name"
-            noOptionMessage="Статусь не найден"
-            v-model="status"
+            key="id"
+            label="name"
+            noOptionsMessage="Статусь не найден"
+            placeholder="Введите статусь"
+            @onChange="value => {
+               status = value
+            }"
             >
             <template #option="{ option }">
                <div class="flex items-center h-11 px-3 text-base">{{ option.name }}</div>
