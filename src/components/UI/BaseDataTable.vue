@@ -81,6 +81,7 @@ const valueComputed = computed(() => {
 const onPageChange = async (val) => {
   page.value = val.page + 1;
   pageSize.value = val.rows;
+  // firstRow.value = Number(val.page + 1) * Number(val.rows) - 1;
   // emit('emit:onPageChange', val);
   await router.replace({
     ...route,
@@ -94,6 +95,8 @@ const onPageChange = async (val) => {
 }
 const initializeTable = async () => {
   if (route.query && route.query.page && route.query.page_size){
+    page.value = Number(route.query.page);
+    pageSize.value = Number(route.query.page_size);
     await props.actionList({ ...route.query, page: route.query.page, page_size: route.query.page_size });
   } else if (route.query && route.query.length) {
     await props.actionList({ ...route.query });
@@ -124,7 +127,6 @@ const emit = defineEmits(['emit:setStoreHeaders', 'emit:rowClick', 'emit:onPageC
   <DataTable
     v-model:expanded-rows="expandedRowGroups"
     :value="valueComputed"
-    :current-page="page"
     lazy
     :page-link-size="5"
     :first="firstRow"
@@ -230,6 +232,7 @@ const emit = defineEmits(['emit:setStoreHeaders', 'emit:rowClick', 'emit:onPageC
       </div>
     </template>
   </DataTable>
+<!--  <pre>{{ firstRow }}</pre>-->
 </template>
 
 <style>
