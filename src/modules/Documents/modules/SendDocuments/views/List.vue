@@ -21,6 +21,10 @@ const title = computed(() => {
   return route.query?.type ? sdStore.SD_TOOLBAR_MENU_LIST.find(item => item.type === route.query?.type).label : SD_TYPE_INNER;
 })
 
+const apiParams = computed(() => {
+  return route.query?.type ? { type: route.query.type } : { type: SD_TYPE_INNER }
+})
+
 const onClickRow = (data) => {
   router.push({
     name: ROUTE_SD_DETAIL,
@@ -61,7 +65,7 @@ const create = () => {
 // Hooks
 onMounted(async () => {
   manageRoute();
-  await sdStore.actionGetDocumentList({ type: route.query.type ? route.query.type : SD_TYPE_INNER, page_size: sdStore.filterState.page_size });
+  // await sdStore.actionGetDocumentList({ type: route.query.type ? route.query.type : SD_TYPE_INNER, page_size: sdStore.filterState.page_size });
 })
 </script>
 
@@ -84,9 +88,10 @@ onMounted(async () => {
     </action-toolbar>
 
     <base-data-table
+      :action-list="sdStore.actionGetDocumentList"
+      :api-params="apiParams"
       :headers="sdStore.headers"
       :value="sdStore.documentList"
-      :page-size="sdStore.filterState.page_size"
       :total-count="sdStore.totalCount"
       :storage-columns-name="SD_INNER_COLUMNS"
       :loading="sdStore.listLoading"

@@ -2,14 +2,15 @@
 // Core
 import {computed, onMounted, ref} from "vue";
 import { useI18n } from 'vue-i18n'
+import { useRoute, useRouter } from "vue-router";
 // Components
-import DataTable from 'primevue/datatable'
+import BaseSkeleton from "@/components/UI/BaseSkeleton.vue";
 import Column from 'primevue/column'
+import DataTable from 'primevue/datatable'
 import FieldGroups from '@/components/FieldGroups.vue'
 // Utils
 import { formatDateHour } from "@/utils/formatDate";
 import { getStorageItem } from "@/utils/storage";
-import BaseSkeleton from "@/components/UI/BaseSkeleton.vue";
 // Composable
 const { t } = useI18n()
 // Macros
@@ -18,13 +19,13 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
+  apiParams: {
+    type: Object,
+    default: () => {}
+  },
   headers: {
     type: Array,
     default: () => []
-  },
-  pageSize: {
-    type: [String, Number],
-    default: () => 15
   },
   totalCount: {
     type: [String, Number],
@@ -45,16 +46,23 @@ const props = defineProps({
   },
   expandable: {
     type: Boolean
+  },
+  actionList: {
+    type: Function,
+    default: () => void 0
   }
-})
-
-const expandedRowGroups = ref()
-
-const emit = defineEmits(['emit:setStoreHeaders', 'emit:rowClick']);
-
+});
+const router = useRouter();
+const route = useRoute();
+const page = ref(1);
+const pageSize = ref(10);
+const firstRow = ref(0);
+// Reactive
+const expandedRowGroups = ref();
+// Computed
 const headersComputed = computed(() => {
   return props.headers.filter(header => header.active);
-})
+});
 
 const valueComputed = computed(() => {
   return props.value.map((item, index) => {
@@ -63,14 +71,52 @@ const valueComputed = computed(() => {
       ...item
     }
   })
-})
+});
 
-onMounted(() => {
+// const firstRow = computed(() => {
+//   return route.query?.page ? Number(route.query.page) * Number(pageSize.value) - 1 : Number(page.value) * Number(pageSize.value) - 1;
+// })
+
+// Methods
+const onPageChange = async (val) => {
+  page.value = val.page + 1;
+  pageSize.value = val.rows;
+  // emit('emit:onPageChange', val);
+  await router.replace({
+    ...route,
+    query: {
+      ...route.query,
+      page: val.page + 1,
+      page_size: val.rows
+    }
+  });
+  const response = await props.actionList({ ...route.query, page: val.page + 1, page_size: val.rows });
+}
+const initializeTable = async () => {
+  if (route.query && route.query.page && route.query.page_size){
+    await props.actionList({ ...route.query, page: route.query.page, page_size: route.query.page_size });
+  } else if (route.query && route.query.length) {
+    await props.actionList({ ...route.query });
+  } else if (props.apiParams){
+    await props.actionList({ ...props.apiParams});
+  } else {
+    await props.actionList({ page: page.value, page_size: pageSize.value });
+  }
+  if (route.query && route.query.page && route.query.page_size){
+    firstRow.value = Number(route.query.page) * Number(route.query.page_size) - 1;
+  } else {
+    firstRow.value = Number(page.value) * Number(pageSize.value) - 1;
+  }
   if (getStorageItem(props.storageColumnsName)){
     emit('emit:setStoreHeaders', JSON.parse(getStorageItem(props.storageColumnsName)))
   }
+}
+
+onMounted( async () => {
+  await initializeTable();
 })
 
+const emit = defineEmits(['emit:setStoreHeaders', 'emit:rowClick', 'emit:onPageChange']);
 
 </script>
 
@@ -78,16 +124,20 @@ onMounted(() => {
   <DataTable
     v-model:expanded-rows="expandedRowGroups"
     :value="valueComputed"
+    :current-page="page"
+    lazy
     :page-link-size="5"
+    :first="firstRow"
     paginator
     paginator-position="bottom"
     paginatorTemplate="RowsPerPageDropdown CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
     row-hover
     :rows-per-page-options="[10, 15, 30]"
-    :rows="props.pageSize"
+    :rows="pageSize"
     currentPageReportTemplate="{first}-{last} из {totalRecords}"
     :scroll-height="props.scrollHeight"
     scrollable
+    :total-records="props.totalCount"
     :loading="props.loading"
     :pt="{
       table: { class: ['border-separate', 'border-spacing-y-1', '-mt-1'] },
@@ -122,6 +172,7 @@ onMounted(() => {
     }"
     class="base-data-table"
     @row-click="event => emit('emit:rowClick', event.data)"
+    @page="onPageChange"
   >
     <template
       v-for="header in headersComputed"
