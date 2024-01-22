@@ -2,11 +2,11 @@
 // Core
 import { ref, unref } from 'vue'
 // Store
-import { useRegOutgoing } from '../../../stores/outgoing.store'
+import { useDocFlowStore } from '../stores/docflow.store'
 // Components
-import OutgoingForm from '../../../components/Form/Outgoing.vue'
+import IncomingForm from '../components/Form/Incoming.vue'
 // Composable
-const regOutgoing = useRegOutgoing()
+const docFlowStore = useDocFlowStore()
 // Reactive
 const sidebarRef = ref(null)
 const formRef = ref(null)
@@ -21,7 +21,7 @@ const updateDocument = async () => {
 
   try {
     _sidebarRef.successButtonLoading = true
-    await regOutgoing.actionUpdateDocument()
+    await docFlowStore.actionUpdateDocument()
     _sidebarRef.successButtonLoading = false
     sidebar.value = false
   }
@@ -47,7 +47,7 @@ const updateDocument = async () => {
       @emit:success-button="updateDocument"
     >
       <template #content>
-        <outgoing-form ref="formRef" />
+        <incoming-form ref="formRef" :form-model="docFlowStore.detailModel" />
       </template>
     </base-sidebar>
   </div>

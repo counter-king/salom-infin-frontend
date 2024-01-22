@@ -32,7 +32,11 @@ export const useCommonStore = defineStore("common", {
     composeStatusList: [],
 	}),
 	getters: {
-		getStatusList: (state) => state.statusList
+		getStatusList: (state) => state.statusList,
+    /*
+    *
+    * */
+    getJournalById: (state) => (id) => state.journalsList.find(journal => journal.id === id)
 	},
 	actions: {
 		init() {

@@ -10,6 +10,9 @@ dayjs.extend(customParseFormat)
 export const isDate = (date) => {
   return dayjs(date, 'YYYY-MM-DD', true).isValid()
 }
+export const isDateHour = (date) => {
+  return dayjs(date, 'DD.MM.YYYY HH:mm').isValid()
+}
 export function formatDateHour(date) {
   return date ? dayjs(date).format("DD.MM.YYYY HH:mm") : "Не верный формат даты"
 }
