@@ -20,6 +20,11 @@ const changeLanguage = () => {
       title: "Журнал",
       icon: "NotebookIcon",
       link: "MagazinesIndex",
+    },
+    {
+      title: "Заголовоки",
+      icon: "NotebookIcon",
+      link: "DocumentTitlesIndex",
     }
   ];
 };
