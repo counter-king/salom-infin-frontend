@@ -6,6 +6,8 @@ import { useAssignmentStore } from '../../stores/assignment.store'
 // Components
 import { StatusChip, PriorityChip } from '@/components/Chips'
 import { LinkableCell } from '@/components/Table'
+// Composable
+import { useNode } from '@/composable/useNode'
 // Utils
 import { BOXES_ASSIGNMENT_COLUMNS } from '../../constants'
 // Composable
