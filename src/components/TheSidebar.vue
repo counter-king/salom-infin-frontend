@@ -59,7 +59,12 @@ const props = defineProps({
             "
           >
             <base-icon v-if="menu.icon" :name="menu.icon" class="text-gray-1 transition-all duration-[400ms] group-hover:text-primary-500" />
-            <span class="ml-3">{{ menu.title }}</span>
+
+            <span class="flex-1 truncate mx-3">{{ menu.title }}</span>
+
+            <template v-if="menu.count">
+              <div class="badge-count flex items-center justify-center w-5 h-5 rounded-full bg-critic-500 text-[10px] font-semibold text-white ml-auto">{{ menu.count }}</div>
+            </template>
           </router-link>
         </template>
       </template>
@@ -76,7 +81,8 @@ const props = defineProps({
   padding: 12px;
 }
 
-.app-sidebar-collapse .sidebar-link > span {
+.app-sidebar-collapse .sidebar-link > span,
+.app-sidebar-collapse .sidebar-link > .badge-count {
   display: none;
 }
 
