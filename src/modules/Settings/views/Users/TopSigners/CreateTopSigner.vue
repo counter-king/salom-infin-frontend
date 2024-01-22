@@ -8,48 +8,57 @@ import { ref } from 'vue';
 import { useAuthStore } from '../../../../Auth/stores';
 import Avatar from 'primevue/avatar';
 const props = defineProps({ getFirstPageTopSigners: Function, setVisible: Function, visible: Boolean });
-const topSigner = ref('');
-const topSignerLoading = ref(false);
-const topSigners = ref([]);
 const authStore = useAuthStore();
-const docType = ref('');
-const docTypeLoading = ref(false);
+const topSigner = ref('');
+const topSigners = ref([]);
+const topSignersLoading = ref(false);
+const topSignersPage = ref(1);
+const docType = ref([]);
+const docTypeInputValue = ref('');
 const docTypes = ref([]);
+const docTypesLoading = ref(false);
+const docTypesPage = ref(1);
 const loading = ref(false);
-const currentUserCompany = authStore.currentUser.company;
-const searchTopSigners = e => {
-   const value = e.target.value
-   topSigner.value = value;
-   topSignerLoading.value = true;
+const searchTopSigners = ({ search, page }) => {
+   topSigner.value = search;
+   topSignersLoading.value = true;
+   const currentUserCompany = authStore.currentUser.company;
+   const newSearch = typeof search === 'string' ? search : search.full_name;
    axiosConfig
-      .get(`users/?search=${value}&comapany=${currentUserCompany}`)
+      .get(`users/?page=${page}&search=${newSearch}&comapany=${currentUserCompany}`)
       .then(response => {
+         const newPage = response?.data?.next ? page + 1 : null;
          const results = response?.data?.results;
+         const rootTopSigners = page === 1 ? [] : topSigners.value;
          const newTopSigners = (Array.isArray(results) ? results: []).map(user => ({...user, position: user?.position?.name, optionDisabled: !user.is_active}));
-         topSigners.value = newTopSigners;
+         topSigners.value = [ ...rootTopSigners, ...newTopSigners];
+         topSignersPage.value = newPage;
       })
       .catch(() => {
-         topSigners.value = [];
+         topSignersPage.value = null;
       })
       .finally(() => {
-         topSignerLoading.value = false;
+         topSignersLoading.value = false;
       });
 };
-const searchDocTypes = e => {
-   const value = e.target.value
-   docTypeLoading.value = true;
+const searchDocTypes = ({ search, page }) => {
+   docTypeInputValue.value = search;
+   docTypesLoading.value = true;
    axiosConfig
-      .get(`document-types/?search=${value}`)
+      .get(`document-types/?page=${page}&search=${search}`)
       .then(response => {
+         const newPage = response?.data?.next ? page + 1 : null;
          const results = response?.data?.results;
          const documentTypes = Array.isArray(results) ? results: [];
-         docTypes.value = documentTypes;
+         const rootDocumentTypes = page === 1 ? [] : docTypes.value;
+         docTypes.value = [ ...rootDocumentTypes, ...documentTypes];
+         docTypesPage.value = newPage;
       })
       .catch(() => {
-         docTypes.value = [];
+         docTypesPage.value = null;
       })
       .finally(() => {
-         docTypeLoading.value = false;
+         docTypesLoading.value = false;
       });
 };
 const topSignerCreate = () => {
@@ -107,20 +116,23 @@ const topSignerCreate = () => {
       @update:visible="() => {
          docType = '';
          setVisible(!visible);
-         user = '';
+         topSigner = '';
       }">
       <div class="flex flex-col">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Топ подписавший<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
-            :hasValue="topSigner"
-            :loading="topSignerLoading"
+            :loading="topSignersLoading"
             :options="topSigners"
-            @onChange="({ value }) => { topSigner = value }"
-            @onClear="() => { topSigner = '' }"
+            :page="topSignersPage"
+            :value="topSigner"
+            key="id"
+            label="full_name"
+            noOptionMessage="Подписант не найден"
+            placeholder="Введите подписант"
             @onInputChange="searchTopSigners"
-            field="full_name"
-            noOptionMessage="Сотрудник не найден"
-            v-model="topSigner"
+            @onChange="value => {
+               topSigner = value;
+            }"
             >
             <template #option="{ option }">
                <div class="items-center flex w-[100%] px-3 py-2 text-m font-medium text-primary-900">
@@ -131,7 +143,7 @@ const topSignerCreate = () => {
                      <div class="text-base">{{ option.full_name }}</div>
                      <div class="flex items-center">
                         <span class="text-sm font-semibold" :style="{'color': option.optionDisabled ? '#F3335C' : '#63BA3D'}">{{ option.status && option.status.name }}</span>
-                        <span class="mx-2 w-[4px] h-[4px] rounded-full" style="background-color: #79889B"></span>
+                        <span v-if="option.status && option.status.name" class="mx-2 w-[4px] h-[4px] rounded-full" style="background-color: #79889B"></span>
                         <span class="text-sm font-medium" style="color: #767994">{{ option.position }}</span>
                      </div>
                   </div>
@@ -141,18 +153,30 @@ const topSignerCreate = () => {
          <p class="text-sm text-greyscale-500 font-medium mt-6 mb-1">Тип документа<span class="text-red-500 ml-1">*</span></p>
          <div class="pb-8">
             <base-multi-auto-complete
-               :loading="docTypeLoading"
+               :inputValue="docTypeInputValue"
+               :loading="docTypesLoading"
                :options="docTypes"
+               :page="docTypesPage"
                :value="docType"
-               @onClear="() => { docType = '' }"
+               @onChange="value => { docType = value }"
                @onInputChange="searchDocTypes"
-               @removeOption="option => { docType = option }"
-               field="name"
-               noOptionMessage="Тип документа не найден"
-               v-model="docType"
+               dropdownPlaceholder="Введите тип документа"
+               optionKey="id"
+               optionLabel="name"
+               noOptionsMessage="Тип документа не найден"
+               placeholder="Поиск тип документа"
                >
                <template #option="{ option }">
-                  <div class="flex items-center h-11 px-3 text-base">{{ option.name }}</div>
+                  <div class="flex items-center w-full h-full py-3 px-4 text-base rounded-xl">{{ option.name }}</div>
+               </template>
+               <template #chip="{ value, removeItem }">
+                  <div class="flex justify-center items-center h-[20px]">
+                     <span>{{ value.name }}</span>
+                     <svg @click="e => removeItem(e, value)" class="ml-1.5" width="18" height="18" viewBox="0 0 16 16" fill="none">
+                        <path d="M12 4L4 12" stroke="#757994" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M4 4L12 12" stroke="#757994" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                     </svg>
+                  </div>
                </template>
             </base-multi-auto-complete>
          </div>
@@ -165,9 +189,9 @@ const topSignerCreate = () => {
             <template v-else>
                <Button
                   @click="() => {
-                     user = '';
-                     setVisible(!visible);
                      docType = '';
+                     setVisible(!visible);
+                     topSigner = '';
                   }"
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded

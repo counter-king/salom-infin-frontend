@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import {onMounted, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import { useRoute } from "vue-router";
 // Service
 import { fetchRejectApprovalDocument } from "@/modules/Documents/modules/Boxes/services/approval.service";
@@ -18,7 +18,13 @@ import CancelSign from "@/components/Modal/CancelSign.vue";
 
 const approvalStore = useBoxesApprovalStore();
 const route = useRoute();
-const rejectModal = ref(false)
+const rejectModal = ref(false);
+const changeModal = ref(false);
+
+// Computed
+const approved = computed(() => {
+	return approvalStore.detailModel?.is_approved
+})
 
 
 
@@ -33,6 +39,9 @@ const onReject = async (comment) => {
   await fetchRejectApprovalDocument({ id: route.params.id, comment });
   rejectModal.value = false;
   await getDetail();
+}
+const onChangeDocument = (text) => {
+	console.log(text)
 }
 
 // Hooks
@@ -55,6 +64,7 @@ onMounted(  () => {
     >
       <template #header-end>
         <base-button
+	        v-if="approved === null"
           color="bg-white hover:bg-greyscale-100 text-primary-dark"
           border-color="border-transparent"
           label="update"
@@ -65,10 +75,11 @@ onMounted(  () => {
           rounded
           shadow
           type="button"
+          @click="changeModal = true"
         />
 
         <base-button
-          v-if="approvalStore.detailModel?.is_approved !== false"
+	        v-if="approved === null"
           severity="danger"
           label="not-agree"
           icon-left="XIcon"
@@ -81,6 +92,7 @@ onMounted(  () => {
         />
 
         <approve
+	        v-if="approved === null"
           @emit:on-approve="onApprove"
         />
 
@@ -88,7 +100,10 @@ onMounted(  () => {
 
       <template #preview>
         <div class="p-6 w-full">
-          <signing-process-timeline :compose-model="approvalStore.detailModel?.compose" />
+          <signing-process-timeline
+	          v-if="approvalStore.detailModel && approvalStore.detailModel.compose"
+	          :compose-model="approvalStore.detailModel?.compose"
+          />
         </div>
       </template>
 
@@ -98,6 +113,7 @@ onMounted(  () => {
           style="height: calc(100vh - 250px)"
         >
           <base-template
+	          v-if="approvalStore.detailModel && approvalStore.detailModel.compose"
             :compose-model="approvalStore.detailModel?.compose"
             class="overflow-hidden"
           />
@@ -105,12 +121,26 @@ onMounted(  () => {
       </template>
     </layout-with-tabs>
 
+	  <!-- REJECT MODAL -->
     <modal-comment
       v-model="rejectModal"
       label="not-agree"
       :create-button-fn="onReject"
       create-button-color="danger"
     />
+	  <!-- /REJECT MODAL -->
+
+	  <!-- CHANGE TEXT MODAL -->
+	  <modal-comment
+		  v-model="changeModal"
+		  header-text="change-text"
+		  label="update"
+		  :create-button-fn="onChangeDocument"
+		  editor-type="editor"
+		  max-width="max-w-[750px]"
+		  :editor-value="approvalStore.detailModel?.compose?.content"
+	  />
+	  <!-- /CHANGE TEXT MODAL -->
   </template>
 </template>
 

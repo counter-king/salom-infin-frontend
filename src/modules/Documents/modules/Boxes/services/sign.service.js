@@ -12,3 +12,6 @@ export const fetchSignDetail = (id) => {
 export const fetchRejectSignDocument = ({ id, comment }) => {
   return axiosConfig.put(`${URLS.sign}/${id}/reject/`, { comment })
 }
+export const fetchSignDocument = ({ id, body }) => {
+  return axiosConfig.put(`${URLS.sign}/${id}/sign/`, body)
+}

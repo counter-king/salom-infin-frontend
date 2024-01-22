@@ -90,7 +90,7 @@ const searchRegions = ({ search, page }) => {
             :value="region"
             key="id"
             label="name"
-            noOptionMessage="Регион не найден"
+            noOptionsMessage="Регион не найден"
             placeholder="Введите регион"
             @onInputChange="searchRegions"
             @onChange="value => {

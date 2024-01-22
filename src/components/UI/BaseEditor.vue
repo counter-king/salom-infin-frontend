@@ -10,7 +10,7 @@ const props = defineProps({
 })
 
 const modelValue = useModel(props, 'modelValue');
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue']);
 
 </script>
 

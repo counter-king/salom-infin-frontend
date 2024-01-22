@@ -4,6 +4,7 @@ import {ref, useModel} from "vue";
 import BaseBrickTab from "@/components/UI/BaseBrickTab.vue";
 import BaseEditor from "@/components/UI/BaseEditor.vue";
 import BaseFileUpload from "@/components/UI/BaseFileUpload.vue";
+import BaseFroalaEditor from "@/components/UI/BaseFroalaEditor.vue";
 
 const props = defineProps({
   modelValue: {
@@ -42,7 +43,7 @@ const tabPanelList = ref([
     panel-container-class="px-0"
   >
     <template #editor>
-      <base-editor
+      <base-froala-editor
         v-model="modelValue"
       />
     </template>
