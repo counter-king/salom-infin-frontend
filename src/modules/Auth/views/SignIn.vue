@@ -1,22 +1,26 @@
 <script setup>
-import { ref, reactive } from 'vue'
+// Core
+import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from "vue-router"
-import TabView from 'primevue/tabview';
-import TabPanel from 'primevue/tabpanel';
-import Dropdown from 'primevue/dropdown';
-import Toast from 'primevue/toast';
-import { useToast } from 'primevue/usetoast';
+import TabView from 'primevue/tabview'
+import TabPanel from 'primevue/tabpanel'
+import Dropdown from 'primevue/dropdown'
+import Toast from 'primevue/toast'
+import { useToast } from 'primevue/usetoast'
 import useVuelidate from '@vuelidate/core'
 import { helpers, minLength, required } from '@vuelidate/validators'
 // Store
-import { useAuthStore } from "../stores/index"
-// Components
-import BaseButton from "@/components/UI/BaseButton.vue"
+import { useAuthStore } from '../stores'
+// Utils
+import { removeStorageItem } from '@/utils/storage'
+import { ACCESS, REFRESH, EXPIRES } from '@/constants/storage'
+// Composable
 const authStore = useAuthStore()
+const toast = useToast()
 const router = useRouter()
+// Reactive
 const loading = ref(false)
-const selectedCity = ref();
-const toast = useToast();
+const selectedCity = ref()
 const cities = ref([
   {
     name: "Everybody's Got Something to Hide Except Me and My Monkey",
@@ -26,7 +30,7 @@ const cities = ref([
     name: 'Drive My Car',
     value: 'song1'
   },
-]);
+])
 const formModel = reactive({
   username: null,
   password: null
@@ -61,6 +65,12 @@ const logIn = async () => {
 
   loading.value = false
 }
+// Hooks
+onMounted(() => {
+  removeStorageItem(ACCESS)
+  removeStorageItem(REFRESH)
+  removeStorageItem(EXPIRES)
+})
 </script>
 <template>
   <div class="sign-in-view">

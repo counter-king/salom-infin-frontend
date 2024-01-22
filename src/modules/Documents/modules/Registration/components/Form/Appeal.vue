@@ -6,51 +6,49 @@ import { helpers, required } from '@vuelidate/validators'
 import { useCommonStore } from '@/stores/common'
 import { useCorrespondentStore } from '@/stores/correspondent'
 // Components
-import { UserWithLabel } from '@/components/Users'
+import { UserWithLabel, UserWithSelectable } from '@/components/Users'
+import { PriorityChip } from '@/components/Chips'
 // Utils
 import { isObject } from '@/utils'
+import { replaceWithNumbers } from '@/utils/regex'
+import { formatDateReverse } from '@/utils/formatDate'
 // Non-reactive
 const rules = {
+  register_number: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
   outgoing_number: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  // grif: {
+  //   required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  // },
+  language: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  number_of_papers: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  register_date: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   outgoing_date: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
-  document_type: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
   correspondent: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
-  applicant: {
-    required: false
-    // required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
-  region: {
-    required: false
-    // required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
-  area: {
-    required: false
-    // required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
-  full_name_applicant: {
+  document_type: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
-  address: {
+  delivery_type: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
-  phone_number: {
+  priority: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
-  submission_form: {
-    required: false
-    // required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
-  type_complaint: {
-    required: false
-    // required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  title: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   __reviewers: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
@@ -64,24 +62,22 @@ const props = defineProps({
   formModel: {
     type: Object,
     default: () => ({
-      outgoing_number: null,
-      outgoing_date: null,
       correspondent: null,
-      applicant: null,
-      region:null,
-      area:null,
-      full_name_applicant: null,
-      address: null,
-      phone_number: null,
-      submission_form: null,
-      type_complaint:null,
-      reviewers: [],
-      __reviewers: [],
-      duplicateSwitch: false,
-      repeated_application: true,
+      delivery_type: null,
       description: null,
+      document_type: null,
+      files: [],
+      __files: [],
+      language: null,
+      number_of_papers: null,
+      outgoing_date: null,
+      outgoing_number: null,
+      priority: null,
+      register_date: null,
+      register_number: null,
+      __reviewers: [],
       status: null,
-      grif: 4
+      title: null,
     })
   }
 })
@@ -89,9 +85,8 @@ const props = defineProps({
 const commonStore = useCommonStore()
 const correspondentStore = useCorrespondentStore()
 const $v = useVuelidate(rules, props.formModel)
-// Composable
+// Macros
 defineExpose({ $v })
-// Watch
 </script>
 
 <template>
@@ -102,8 +97,17 @@ defineExpose({ $v })
           v-model="$v.outgoing_number.$model"
           :error="$v.outgoing_number"
           required
-          label="outgoing-number"
-          placeholder="document-number"
+          label="out-number"
+          placeholder="enter-out-number"
+        />
+      </base-col>
+
+      <base-col col-class="w-1/2">
+        <base-input
+          v-model="$v.register_number.$model"
+          :error="$v.register_number"
+          required
+          label="reg-number"
         />
       </base-col>
 
@@ -111,111 +115,130 @@ defineExpose({ $v })
         <base-calendar
           v-model="$v.outgoing_date.$model"
           :error="$v.outgoing_date"
+          :max-date="new Date()"
           required
-          label="outgoing-date"
-          placeholder="outgoing-date" />
+          label="out-date"
+          placeholder="enter-out-date"
+          @update:modelValue="(value) => {
+						$v.register_date.$model = formatDateReverse(value)
+						$v.outgoing_date.$model = formatDateReverse(value)
+          }"
+        />
       </base-col>
 
       <base-col col-class="w-1/2">
-        <base-dropdown
+        <base-calendar
+          v-model="$v.register_date.$model"
+          :error="$v.register_date"
+          :min-date="new Date($v.outgoing_date.$model)"
           required
-          v-model="$v.document_type.$model"
-          :error="$v.document_type"
-          :options="commonStore.documentTypesList"
+          label="reg-date"
+          placeholder="enter-reg-date"
+          @update:modelValue="(value) => $v.register_date.$model = formatDateReverse(value)"
+        />
+      </base-col>
+
+      <!--      <base-col col-class="w-1/2">-->
+      <!--        <base-dropdown-->
+      <!--          v-model="$v.grif.$model"-->
+      <!--          :error="$v.grif"-->
+      <!--          required-->
+      <!--          label="grif"-->
+      <!--        />-->
+      <!--      </base-col>-->
+
+      <base-col col-class="w-1/2">
+        <base-dropdown
+          v-model="$v.language.$model"
+          :error="$v.language"
+          :options="commonStore.languagesList"
+          required
           option-value="id"
-          label="document_type"
-          placeholder="document_type" />
+          option-label="name"
+          label="language-document"
+          placeholder="enter-language-document"
+        />
+      </base-col>
+
+      <base-col col-class="w-1/2">
+        <base-input
+          v-model.number="$v.number_of_papers.$model"
+          :error="$v.number_of_papers"
+          required
+          label="number-sheets"
+          placeholder="number-sheets"
+          @input="() => $v.number_of_papers.$model = replaceWithNumbers($v.number_of_papers.$model)"
+        />
       </base-col>
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          required
           v-model="$v.correspondent.$model"
+          v-model:options="correspondentStore.allList"
           :error="$v.correspondent"
-          :options="correspondentStore.allList"
+          api-url="correspondents"
           option-value="id"
           label="correspondent"
-          placeholder="enter-correspondent" />
-      </base-col>
-
-      <base-col col-class="w-1/2">
-        <base-dropdown
-          v-model="$v.applicant.$model"
-          :error="$v.applicant"
-          :options="commonStore.applicantList"
-          option-value="id"
-          label="applicant"
-          placeholder="author" />
-      </base-col>
-
-      <base-col col-class="w-1/2">
-        <base-dropdown
-          v-model="$v.region.$model"
-          :error="$v.region"
-          :options="commonStore.regionList"
-          option-value="id"
-          label="region"
-          placeholder="enter-region" />
-      </base-col>
-
-      <base-col col-class="w-1/2">
-        <base-dropdown
-          v-model="$v.area.$model"
-          :error="$v.area"
-          :options="commonStore.areaList"
-          option-value="id"
-          label="area"
-          placeholder="enter-area" />
-      </base-col>
-
-      <base-col col-class="w-1/2">
-        <base-input
-          v-model="$v.full_name_applicant.$model"
-          :error="$v.full_name_applicant"
+          placeholder="choose-correspondent"
+          menu-placeholder="enter-correspondent"
+          searchable
           required
-          label="full-name-applicant"
-          placeholder="enter-full-name"
-        />
-      </base-col>
-
-      <base-col col-class="w-1/2">
-        <base-input
-          v-model="$v.address.$model"
-          :error="$v.address"
-          required
-          label="address"
-          placeholder="enter-address"
-        />
-      </base-col>
-
-      <base-col col-class="w-1/2">
-        <base-input
-          v-model="$v.phone_number.$model"
-          :error="$v.phone_number"
-          required
-          label="phone-number"
-          placeholder="enter-phone-number"
         />
       </base-col>
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          v-model="$v.submission_form.$model"
-          :error="$v.submission_form"
-          :options="commonStore.submissionFormList"
+          v-model="$v.document_type.$model"
+          v-model:options="commonStore.documentTypesList"
+          :error="$v.document_type"
+          api-url="document-types"
           option-value="id"
-          label="submission-form"
-          placeholder="enter-submission-form" />
+          label="document-type"
+          placeholder="choose-document-type"
+          menu-placeholder="enter-document-type"
+          searchable
+          required
+        />
       </base-col>
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          v-model="$v.type_complaint.$model"
-          :error="$v.type_complaint"
-          :options="commonStore.typeComplaintList"
+          v-model="$v.delivery_type.$model"
+          v-model:options="commonStore.deliveryTypeList"
+          :error="$v.delivery_type"
+          api-url="delivery-types"
           option-value="id"
-          label="type-complaint"
-          placeholder="enter-type-complaint" />
+          label="deliver-type"
+          placeholder="choose-deliver-type"
+          menu-placeholder="enter-deliver-type"
+          searchable
+          required
+        />
+      </base-col>
+
+      <base-col col-class="w-1/2">
+        <base-dropdown
+          v-model="$v.priority.$model"
+          :error="$v.priority"
+          :options="commonStore.prioryList"
+          option-value="id"
+          label="priority-document"
+          required
+        >
+          <template #option="{ option }">
+            <priority-chip :id="option?.id" />
+          </template>
+        </base-dropdown>
+      </base-col>
+
+      <base-col col-class="w-1/2">
+        <base-input
+          v-model="$v.title.$model"
+          :error="$v.title"
+          label="naming"
+          placeholder="enter-naming"
+          required
+        />
       </base-col>
 
       <base-col col-class="w-1/2">
@@ -225,6 +248,8 @@ defineExpose({ $v })
           api-url="users"
           label="reviewers"
           display="chip"
+          placeholder="search-users"
+          menu-placeholder="search-users"
           required
         >
           <template #chip="{ value }">
@@ -237,12 +262,7 @@ defineExpose({ $v })
           </template>
 
           <template #option="{ value }">
-            <user-with-label
-              :compact="true"
-              :title="isObject(value?.user) ? value?.user.full_name : value?.full_name"
-              image="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D"
-              avatar-classes="w-6 h-6"
-            />
+            <user-with-selectable :items="[value]" />
           </template>
 
           <template #hint="{ value }">
@@ -256,38 +276,21 @@ defineExpose({ $v })
         </base-multi-select>
       </base-col>
 
-      <base-col col-class="w-1/2">
-        <base-label label="Cостояние" />
-
-        <base-row>
-          <base-col col-class="w-1/3">
-            <base-switch
-              v-model="$v.duplicateSwitch.$model"
-              :error="$v.duplicateSwitch"
-              label="duplicate"
-              classBody="flex items-center"
-              classLabel="order-2"
-            />
-          </base-col>
-
-          <base-col col-class="w-1/2">
-            <base-switch
-              v-model="$v.repeated_application.$model"
-              :error="$v.repeated_application"
-              label="repeated-application"
-              classBody="flex items-center"
-              classLabel="order-2"
-            />
-          </base-col>
-        </base-row>
+      <base-col col-class="w-full">
+        <base-textarea
+          v-model="$v.description.$model"
+          :error="$v.description"
+          required
+          label="content"
+        />
       </base-col>
 
       <base-col col-class="w-full">
-        <base-textarea
-          required
-          v-model="$v.description.$model"
-          :error="$v.description"
-          label="content" />
+        <base-file-upload
+          :files="props.formModel.__files"
+          label="attach-file"
+          @emit:file-upload="(files) => props.formModel.__files = files"
+        />
       </base-col>
     </base-row>
   </div>

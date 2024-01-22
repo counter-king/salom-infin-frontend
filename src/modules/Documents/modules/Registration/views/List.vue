@@ -1,41 +1,55 @@
 <script setup>
 // Core
-import { onMounted } from 'vue'
+import { computed, watch } from 'vue'
+import { useRoute } from 'vue-router'
 // Store
-import { useRegIncoming } from '../../stores/incoming.store'
-import { useDocFlowStore } from '../../stores/docflow.store'
+import { useCommonStore } from '@/stores/common'
+import { useDocFlowStore } from '../stores/docflow.store'
 // Components
 import { DocTypeChip, StatusChip, PriorityChip } from '@/components/Chips'
 import { ActionToolbar } from '@/components/Actions'
 import { LinkableCell } from '@/components/Table'
 // Constants
-import { R_INCOMING_COLUMNS } from '../../constants'
+import { R_INCOMING_COLUMNS } from '../constants'
 // Utils
 import { formatDate } from '@/utils/formatDate'
 // Composable
+const route = useRoute()
+const commonStore = useCommonStore()
 const docFlowStore = useDocFlowStore()
-const regIncoming = useRegIncoming()
-// Hooks
-onMounted(async () => {
-  await regIncoming.actionGetList()
-})
+// Computed
+const journal = computed(() => commonStore.getJournalById(Number(route.params.journal)))
+// Watch
+watch(
+  () => route.params.journal,
+  async (_route) => {
+    _route && await docFlowStore.actionGetList(Number(_route))
+  },
+  { immediate: true }
+)
 // Methods
 const openModal = () => {
-  docFlowStore.actionLoadFormCreateDocument('Incoming')
+  docFlowStore.actionLoadFormCreateDocument({ journalId: Number(route.params.journal) })
   docFlowStore.actionToggleModalCreateDocument(true)
 }
 const link = (data) => {
-  return { name: 'RegistrationIncomingShow', params: { id: data.id } }
+  return {
+    name: 'RegistrationShow',
+    params: {
+      journal: route.params.journal,
+      id: data.id
+    }
+  }
 }
 </script>
 
 <template>
   <div class="registration-incoming-view">
     <action-toolbar
-      title="incoming"
-      :column-menu-items="regIncoming.headers"
+      :title="journal.name"
+      :column-menu-items="docFlowStore.headers"
       :storage-columns-name="R_INCOMING_COLUMNS"
-      @emit:reset-headers="regIncoming.resetHeaders"
+      @emit:reset-headers="docFlowStore.resetHeaders"
     >
       <template #end>
         <base-button
@@ -49,89 +63,89 @@ const link = (data) => {
     </action-toolbar>
 
     <base-data-table
-      :headers="regIncoming.headers"
-      :value="regIncoming.list"
-      :loading="regIncoming.listLoading"
+      :headers="docFlowStore.headers"
+      :value="docFlowStore.list"
+      :loading="docFlowStore.listLoading"
       :storage-columns-name="R_INCOMING_COLUMNS"
       expandable
-      @emit:set-store-headers="(val) => regIncoming.headers = val"
+      @emit:set-store-headers="(val) => docFlowStore.headers = val"
     >
       <template #priority="{ data }">
         <linkable-cell :to="link(data)">
-	        <priority-chip :id="data.priority?.id" />
+          <priority-chip :id="data?.priority?.id" />
         </linkable-cell>
       </template>
 
       <template #title="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.title }}
+          {{ data?.title }}
         </linkable-cell>
       </template>
 
       <template #document_type="{ data }">
         <linkable-cell :to="link(data)">
-          <doc-type-chip :type="data.document_type?.name"/>
+          <doc-type-chip :type="data?.document_type?.name"/>
         </linkable-cell>
       </template>
 
       <template #delivery_type="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.delivery_type?.name }}
+          {{ data?.delivery_type?.name }}
         </linkable-cell>
       </template>
 
       <template #description="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.description }}
+          {{ data?.description }}
         </linkable-cell>
       </template>
 
       <template #journal="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.journal.name }}
+          {{ data?.journal.name }}
         </linkable-cell>
       </template>
 
       <template #language="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.language?.name }}
+          {{ data?.language?.name }}
         </linkable-cell>
       </template>
 
       <template #number_of_papers="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.number_of_papers }}
+          {{ data?.number_of_papers }}
         </linkable-cell>
       </template>
 
       <template #outgoing_date="{ data }">
         <linkable-cell :to="link(data)">
-          {{ formatDate(data.outgoing_date) }}
+          {{ formatDate(data?.outgoing_date) }}
         </linkable-cell>
       </template>
 
       <template #outgoing_number="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.outgoing_number }}
+          {{ data?.outgoing_number }}
         </linkable-cell>
       </template>
 
       <template #register_number="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.register_number }}
+          {{ data?.register_number }}
         </linkable-cell>
       </template>
 
       <template #register_date="{ data }">
         <linkable-cell :to="link(data)">
-          {{ formatDate(data.register_date) }}
+          {{ formatDate(data?.register_date) }}
         </linkable-cell>
       </template>
 
       <template #reviewers="{ data }">
         <linkable-cell :to="link(data)">
           <base-avatar-group
-            :items="data.reviewers"
+            :items="data?.reviewers"
             shape="circle"
             avatar-classes="w-8 h-8"
           />
@@ -140,13 +154,13 @@ const link = (data) => {
 
       <template #status="{ data }">
         <linkable-cell :to="link(data)">
-          <status-chip :status="data.status"/>
+          <status-chip :status="data?.status"/>
         </linkable-cell>
       </template>
 
       <template #correspondent="{ data }">
         <linkable-cell :to="link(data)">
-          {{ data.correspondent?.name }}
+          {{ data?.correspondent?.name }}
         </linkable-cell>
       </template>
     </base-data-table>

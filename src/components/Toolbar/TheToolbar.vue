@@ -213,7 +213,7 @@ provide('openModal', openModal)
 
       <template #end>
         <div class="flex items-center gap-4">
-          <create-action-dropdown v-if="openModal "/>
+          <create-action-dropdown v-if="openModal" />
 
           <div v-if="openModal" class="bg-greyscale-800 w-[1px] h-[28px]"></div>
 

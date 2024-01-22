@@ -46,6 +46,8 @@
   "reg-number": "Рег. номер",
   "enter-reg-number": "Введите рег. номер",
   "reg-date": "Рег. дата",
+  "created-date": "Дата создание",
+  "modified-date": "Дата изменение",
   "enter-reg-date": "Введите рег. дата",
   "out-number": "Исх. номер",
   "enter-out-number": "Введите исх. номер",

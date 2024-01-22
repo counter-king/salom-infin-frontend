@@ -1,127 +1,40 @@
+// Enums
+import { JOURNAL } from '@/enums'
+
 const Registration = [
   {
     path: "registration",
     name: "RegistrationIndex",
     meta: {
-      isAuthRequired: true
+      isAuthRequired: true,
+      navigation: true
+    },
+    redirect: {
+      name: 'RegistrationList',
+      params: {
+        journal: JOURNAL.INCOMING
+      }
     },
     component: () => import("../views/index.vue"),
-    redirect: { name: "RegistrationIncomingIndex" },
     children: [
-      // Входящий
       {
-        path: "incoming",
-        name: "RegistrationIncomingIndex",
+        path: ":journal",
+        name: "RegistrationList",
         meta: {
           isAuthRequired: true,
           navigation: true
         },
-        component: () => import("../views/Incoming/index.vue"),
+        component: () => import("../views/List.vue"),
       },
       {
-        path: "incoming/show/:id",
-        name: "RegistrationIncomingShow",
-        meta: {
-          isAuthRequired: true
-        },
-        component: () => import("../views/Incoming/show.vue"),
-      },
-      // /Входящий
-      // Внутренний
-      {
-        path: "inner",
-        name: "RegistrationInnerIndex",
+        path: ":journal/:id/show",
+        name: "RegistrationShow",
         meta: {
           isAuthRequired: true,
-          navigation: true
+          navigation: false
         },
-        component: () => import("../views/Inner/index.vue"),
-      },
-      {
-        path: "inner/show/:id",
-        name: "RegistrationInnerIndexShow",
-        meta: {
-          isAuthRequired: true
-        },
-        component: () => import("../views/Inner/show.vue"),
-      },
-      // /Внутренний
-      // Исходящие
-      {
-        path: "outgoing",
-        name: "RegistrationOutgoingIndex",
-        meta: {
-          isAuthRequired: true,
-          navigation: true
-        },
-        component: () => import("../views/Outgoing/index.vue"),
-      },
-      {
-        path: "outgoing/show/:id",
-        name: "RegistrationOutgoingIndexShow",
-        meta: {
-          isAuthRequired: true
-        },
-        component: () => import("../views/Outgoing/show.vue"),
-      },
-      // /Исходящие
-      // Обращения
-      {
-        path: "appeal",
-        name: "RegistrationAppealIndex",
-        meta: {
-          isAuthRequired: true,
-          navigation: true
-        },
-        component: () => import("../views/Appeal/index.vue"),
-      },
-      {
-        path: "appeal/show/:id",
-        name: "RegistrationAppealIndexShow",
-        meta: {
-          isAuthRequired: true
-        },
-        component: () => import("../views/Appeal/show.vue"),
-      },
-      // /Обращения
-      // Приказы и распоряжения
-      {
-        path: "orderInstruction",
-        name: "RegistrationOrderInstructionIndex",
-        meta: {
-          isAuthRequired: true,
-          navigation: true
-        },
-        component: () => import("../views/OrderInstruction/index.vue"),
-      },
-      {
-        path: "orderInstruction/show/:id",
-        name: "RegistrationOrderInstructionIndexShow",
-        meta: {
-          isAuthRequired: true
-        },
-        component: () => import("../views/OrderInstruction/show.vue"),
-      },
-      // /Приказы и распоряжения
-      // Заявления
-      {
-        path: "statement",
-        name: "RegistrationStatementIndex",
-        meta: {
-          isAuthRequired: true,
-          navigation: true
-        },
-        component: () => import("../views/Statement/index.vue"),
-      },
-      {
-        path: "statement/show/:id",
-        name: "RegistrationStatementIndexShow",
-        meta: {
-          isAuthRequired: true
-        },
-        component: () => import("../views/Statement/show.vue"),
-      },
-      // /Заявления
+        component: () => import("../views/Show.vue"),
+      }
     ]
   }
 ]

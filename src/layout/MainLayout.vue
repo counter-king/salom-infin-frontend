@@ -58,9 +58,13 @@ const getCurrentUser = async () => {
 		<div class="main-layout-content flex overflow-hidden">
       <router-view class="bg-primary-50" />
 		</div>
-
-    <session-end-message-bar />
 	</div>
+
+  <Transition>
+    <template v-if="authStore.sessionEnd">
+      <session-end-message-bar />
+    </template>
+  </Transition>
 </template>
 
 <style scoped>
