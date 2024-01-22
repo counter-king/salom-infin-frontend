@@ -87,6 +87,8 @@ const updateDocument = async () => {
               <modal-done-document
                 v-model:content="assignmentStore.performModel.content"
                 v-model:files="assignmentStore.performModel.files"
+                has-resolution
+                is-document-signed
                 :create-button-fn="doneDocument"
               />
             </template>
@@ -96,6 +98,8 @@ const updateDocument = async () => {
                 v-model:content="assignmentStore.performModel.content"
                 v-model:files="assignmentStore.performModel.files"
                 :is-done-document="assignmentStore.performModel.is_performed"
+                has-resolution
+                is-document-signed
                 :create-button-fn="updateDocument"
               />
             </template>
