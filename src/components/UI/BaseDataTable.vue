@@ -11,6 +11,8 @@ import FieldGroups from '@/components/FieldGroups.vue'
 // Utils
 import { formatDateHour } from "@/utils/formatDate";
 import { getStorageItem } from "@/utils/storage";
+// Store
+import { usePaginationStore } from "@/stores/pagination.store";
 // Composable
 const { t } = useI18n()
 // Macros
@@ -54,9 +56,7 @@ const props = defineProps({
 });
 const router = useRouter();
 const route = useRoute();
-const page = ref(1);
-const pageSize = ref(10);
-const firstRow = ref(0);
+const paginationStore = usePaginationStore();
 // Reactive
 const expandedRowGroups = ref();
 // Computed
@@ -73,43 +73,35 @@ const valueComputed = computed(() => {
   })
 });
 
-// const firstRow = computed(() => {
-//   return route.query?.page ? Number(route.query.page) * Number(pageSize.value) - 1 : Number(page.value) * Number(pageSize.value) - 1;
-// })
-
 // Methods
 const onPageChange = async (val) => {
-  page.value = val.page + 1;
-  pageSize.value = val.rows;
+  paginationStore.page = val.page + 1;
+  paginationStore.pageSize = val.rows;
+  paginationStore.firstRow = val.first;
 
-  if (route.query && route.query.page_size && Number(route.query.page_size) !== val.rows){
-    page.value = 1
-  }
-  firstRow.value = page.value * pageSize.value - 1;
-  // emit('emit:onPageChange', val);
   await router.replace({
-    ...route,
-    query: {
-      ...route.query,
-      page: page.value,
-      page_size: val.rows
-    }
-  });
-  const response = await props.actionList({ ...route.query, page: page.value, page_size: val.rows });
+      ...route,
+      query: {
+        ...route.query,
+        page: paginationStore.page,
+        page_size: paginationStore.pageSize,
+        first_row: paginationStore.firstRow
+      }
+    });
+  await props.actionList({ ...route.query, page: paginationStore.page, page_size: paginationStore.pageSize });
 }
 const initializeTable = async () => {
-  if (route.query && route.query.page && route.query.page_size) {
-    page.value = Number(route.query.page);
-    pageSize.value = Number(route.query.page_size);
-    firstRow.value = Number(route.query.page) * Number(route.query.page_size) - 1;
-    await props.actionList({ ...route.query, page: route.query.page, page_size: route.query.page_size });
+  if (route.query && route.query.page && route.query.page_size && route.query.first_row) {
+    paginationStore.page = Number(route.query.page);
+    paginationStore.pageSize = Number(route.query.page_size);
+    paginationStore.firstRow = Number(route.query.first_row);
+    await props.actionList({ ...route.query, page: paginationStore.page, page_size: paginationStore.pageSize });
   } else if (route.query && route.query.length) {
     await props.actionList({ ...route.query });
   } else if (props.apiParams){
     await props.actionList({ ...props.apiParams});
   } else {
-    firstRow.value = Number(page.value) * Number(pageSize.value) - 1;
-    await props.actionList({ page: page.value, page_size: pageSize.value });
+    await props.actionList({ page: paginationStore.page, page_size: paginationStore.pageSize });
   }
   if (getStorageItem(props.storageColumnsName)){
     emit('emit:setStoreHeaders', JSON.parse(getStorageItem(props.storageColumnsName)))
@@ -130,13 +122,13 @@ const emit = defineEmits(['emit:setStoreHeaders', 'emit:rowClick', 'emit:onPageC
     :value="valueComputed"
     lazy
     :page-link-size="5"
-    :first="firstRow"
+    :first="paginationStore.firstRow"
     paginator
     paginator-position="bottom"
     paginatorTemplate="RowsPerPageDropdown CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
     row-hover
     :rows-per-page-options="[10, 15, 30]"
-    :rows="pageSize"
+    :rows="paginationStore.pageSize"
     currentPageReportTemplate="{first}-{last} из {totalRecords}"
     :scroll-height="props.scrollHeight"
     scrollable
@@ -233,7 +225,7 @@ const emit = defineEmits(['emit:setStoreHeaders', 'emit:rowClick', 'emit:onPageC
       </div>
     </template>
   </DataTable>
-<!--  <pre>{{ firstRow }}</pre>-->
+<!--  <pre>{{ paginationStore.pageSize }}</pre>-->
 </template>
 
 <style>

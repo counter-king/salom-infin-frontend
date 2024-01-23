@@ -4,6 +4,7 @@ import {computed, onMounted} from "vue";
 import {useRoute, useRouter} from "vue-router";
 // Store
 import { useSDStore } from "../stores/index.store";
+import { usePaginationStore } from "@/stores/pagination.store";
 // Constants
 import { ROUTE_SD_DETAIL, SD_INNER_COLUMNS, SD_TYPE_INNER} from "../constants";
 // Components
@@ -14,6 +15,7 @@ import { ToolbarMenu } from "../components/index";
 import CreateButton from "@/modules/Documents/modules/SendDocuments/components/CreateButton.vue";
 
 const sdStore = useSDStore();
+const paginationStore = usePaginationStore();
 const route = useRoute();
 const router = useRouter();
 
@@ -38,6 +40,7 @@ const onDeleteRow = (data) => {
   console.log(data)
 }
 const onChangeDocType = (menu) => {
+  paginationStore.resetPagination();
   console.log(menu)
 }
 const manageRoute = () => {

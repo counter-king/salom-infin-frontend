@@ -90,6 +90,7 @@ const setFiles = () => {
   }
 }
 const deleteFile = (file) => {
+  fileInput.value.value = "";
   const index = uploadingFiles.value.findIndex(x => x.id === file.id);
   uploadingFiles.value.splice(index, 1);
   emit("emit:fileUpload", uploadingFiles.value.filter(file => file.uploaded));
