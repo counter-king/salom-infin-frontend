@@ -32,6 +32,12 @@ const headers = ref([
     is_active: true,
   },
   {
+    columnKey: 'is_active',
+    field: 'is_active',
+    header: 'Состояние',
+    is_active: true,
+  },
+  {
     columnKey: 'action',
     field: 'action',
     header: 'Действия',
