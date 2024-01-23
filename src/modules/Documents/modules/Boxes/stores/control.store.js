@@ -227,7 +227,8 @@ export const useControlStore = defineStore("control", {
 
       this.actionSetPerform({
         content: data.content,
-        is_performed: data.is_performed
+        is_performed: data.is_performed,
+        files: data.files,
       })
 
       await commonStore.actionSetActiveResolution({
@@ -263,7 +264,8 @@ export const useControlStore = defineStore("control", {
           id,
           model: {
             ...this.performModel,
-            is_performed: true
+            is_performed: true,
+            files: this.performModel.files.map(file => ({ id: file.id }))
           }
         })
         await this.actionControlById(this.detailModel)

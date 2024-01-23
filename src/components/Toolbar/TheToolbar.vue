@@ -18,7 +18,8 @@ const menus = ref([
     icon: "HomeAngleIcon",
     link: "DashboardIndex",
     children: [],
-    value: "dashboard"
+    value: "dashboard",
+    count: null
   },
   // Календарь
   {
@@ -26,14 +27,16 @@ const menus = ref([
     icon: "CalendarIcon",
     link: "CalendarIndex",
     children: [],
-    value: "calendar"
+    value: "calendar",
+    count: null
   },
   // Документ
   {
     title: "Документ",
     icon: "FolderWithFilesIcon",
     link: "DocumentsIndex",
-    value: "documents"
+    value: "documents",
+    count: 6
   },
   // Kanban
   {
@@ -41,7 +44,8 @@ const menus = ref([
     icon: "ChatSquareIcon",
     link: "KanbanIndex",
     children: [],
-    value: "kanban"
+    value: "kanban",
+    count: null
   },
   // Чат
   {
@@ -49,7 +53,8 @@ const menus = ref([
     icon: "ChatLineIcon",
     link: "ChatIndex",
     children: [],
-    value: "chat"
+    value: "chat",
+    count: null
   },
   // Настройки
   {
@@ -169,7 +174,8 @@ const menus = ref([
         children: []
       },
     ],
-    value: "settings"
+    value: "settings",
+    count: null
   },
 ])
 const openModal = ref(true)
@@ -203,10 +209,15 @@ provide('openModal', openModal)
         <template v-for="menu in menus" v-if="openModal">
           <router-link
             :to="{ name: menu.link }"
-            class="header-link group flex items-center text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full mr-3 transition-all duration-[400ms] hover:bg-primary-800 hover:text-white"
+            class="header-link group flex items-center gap-2 text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full mr-3 transition-all duration-[400ms] hover:bg-primary-800 hover:text-white"
           >
-            <base-icon v-if="menu.icon" :name="menu.icon" class="text-gray-2 transition-all duration-[400ms] group-hover:text-white mr-2" />
+            <base-icon v-if="menu.icon" :name="menu.icon" class="text-gray-2 transition-all duration-[400ms] group-hover:text-white" />
+
             {{ menu.title }}
+
+            <template v-if="menu.count">
+              <div class="flex items-center justify-center w-5 h-5 rounded-full bg-critic-500 text-[10px] font-semibold text-white">{{ menu.count }}</div>
+            </template>
           </router-link>
         </template>
       </template>

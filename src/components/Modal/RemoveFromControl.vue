@@ -80,6 +80,12 @@ const create = async () => {
         v-model="content"
         label="enter-content"
       />
+
+      <base-file-upload
+        :files="files"
+        label="attach-file"
+        @emit:file-upload="(_files) => files = _files"
+      />
     </template>
 
     <template #footer>

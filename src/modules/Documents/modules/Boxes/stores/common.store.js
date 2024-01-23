@@ -26,7 +26,8 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
           title: "На рассмотрении",
           icon: "TimeHistoryIcon",
           link: "ReviewIndex",
-          children: []
+          children: [],
+          count: 6
         },
         // Моё поручение
         {
@@ -63,7 +64,8 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
           link: "ControlIndex",
           children: []
         },
-      ]
+      ],
+      count: 6
     },
     createdResolutionsList: {
       label: 'created-resolutions',

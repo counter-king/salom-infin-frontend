@@ -11,34 +11,42 @@ import { dispatchNotify } from '@/utils/notify';
 import { ref, watch, onMounted } from 'vue';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
-const props = defineProps({ data: Object, field: String, getFirstPageJournals: Function, journals: Array, setJournals: Function });
+const props = defineProps({ data: Object, documentTitles: Array, field: String, getFirstPageDocumentTitles: Function, setDocumentTitles: Function });
 const conditionLoading = ref(false);
 const conditions = ref([]);
 const deleteLoading = ref(false);
 const deleteVisible = ref(false);
-const editJournal = ref({});
+const editDocumentTitle = ref({});
 const editLoading = ref(false);
 const editVisible = ref(false);
 const menu = ref(null);
-const journalEdit = () => {
-   const { name_ru, name_uz } = editJournal.value;
+const documentTitleEdit = () => {
+   const { name_ru, name_uz } = editDocumentTitle.value;
    if(name_uz && name_ru) {
       editLoading.value = true;
-      const journalId = props?.data?.id;
+      const documentTitleId = props?.data?.id;
       axiosConfig
-         .patch(`journals/${journalId}/`, { name_ru, name_uz })
+         .patch(`document-titles/${documentTitleId}/`, { name_ru, name_uz })
          .then(response => {
+            const data = response?.data;
             const status = response?.status;
             if(status === 200) {
-               dispatchNotify('Журнал обновлено', '', 'success');
+               const newDocumentTitles = props?.documentTitles.map(documentTitle => {
+                  if(documentTitle?.id === documentTitleId) {
+                     return data;
+                  } else {
+                     return documentTitle;
+                  }
+               });
+               dispatchNotify('Заголовок обновлено', '', 'success');
                editVisible.value = false;
-               props.getFirstPageJournals();
+               props.setDocumentTitles(newDocumentTitles);
             } else {
-               dispatchNotify('Журнал не обновлено', '', 'error');
+               dispatchNotify('Заголовок не обновлено', '', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Журнал не обновлено', '', 'error');
+            dispatchNotify('Заголовок не обновлено', '', 'error');
          })
          .finally(() => {
             editLoading.value = false;
@@ -47,22 +55,22 @@ const journalEdit = () => {
       dispatchNotify('Введите название', '', 'error')
    }
 };
-const journalDelete = () => {
+const documentTitleDelete = () => {
    deleteLoading.value = true;
-   const journalId = props?.data?.id;
+   const documentTitleId = props?.data?.id;
    axiosConfig
-      .delete(`journals/${journalId}/`)
+      .delete(`document-titles/${documentTitleId}/`)
       .then(response => {
          if(response?.status === 204) {
             deleteVisible.value = false;
-            dispatchNotify('Журнал удален', '', 'success')
-            props.getFirstPageJournals();
+            dispatchNotify('Заголовок удален', '', 'success')
+            props.getFirstPageDocumentTitles();
          } else {
-            dispatchNotify('Журнал не удален', '', 'error')
+            dispatchNotify('Заголовок не удален', '', 'error')
          }
       })
       .catch(() => {
-         dispatchNotify('Журнал не удален', '', 'error')
+         dispatchNotify('Заголовок не удален', '', 'error')
       })
       .finally(() => {
          deleteLoading.value = false;
@@ -70,13 +78,21 @@ const journalDelete = () => {
 };
 const updateCondition = value => {
    conditionLoading.value = true;
-   const journalId = props?.data?.id;
+   const documentTitleId = props?.data?.id;
    axiosConfig
-      .patch(`journals/${journalId}/`, { is_active: value?.value })
+      .patch(`document-titles/${documentTitleId}/`, { is_active: value?.value })
       .then(response => {
+         const data = response?.data;
          const status = response?.status;
          if(status === 200) {
-            props.getFirstPageJournals();
+            const newDocumentTitles = props?.documentTitles.map(documentTitle => {
+               if(documentTitle?.id === documentTitleId) {
+                  return data;
+               } else {
+                  return documentTitle;
+               }
+            });
+            props.setDocumentTitles(newDocumentTitles);
             dispatchNotify('Статус обновлено', '', 'success');
          } else {
             dispatchNotify('Статус не обновлено', '', 'error');
@@ -95,16 +111,6 @@ const changeLanguage = () => {
       { label: 'Неактивный', value: false }
    ];
 };
-const parseCreateDate = created_date => {
-   const parsingDate = new Date(created_date);
-   const date = parsingDate.getDate().toString().padStart(2, "0");
-   const hour = parsingDate.getHours().toString().padStart(2, "0");
-   const month = (parsingDate.getMonth() + 1).toString().padStart(2, "0");
-   const minute = parsingDate.getMinutes().toString().padStart(2, "0");
-   const year = parsingDate.getFullYear().toString();
-   const d = `${date}.${month}.${year} ${hour}:${minute}`;
-   return d;
-};
 const toggle = event => {
    menu.value.toggle(event);
 };
@@ -116,7 +122,7 @@ onMounted(() => {
 });
 </script>
 <template>
-   <template v-if="field === 'is_active'">
+   <template v-if="field === 'status'">
       <template v-if="conditionLoading">
          <Skeleton height="16px" />
       </template>
@@ -147,7 +153,7 @@ onMounted(() => {
    <template v-else-if="field === 'action'">
       <Button
          @click="() => {
-            editJournal = data;
+            editDocumentTitle = data;
             editVisible = true;
          }"
          class="shadow-none py-[7px] px-2 text-xs bg-greyscale-50 mr-2 rounded-[8px]"
@@ -186,38 +192,35 @@ onMounted(() => {
          </svg>
       </Button>
    </template>
-   <template v-else-if="field === 'created_date'">
-      <span class="text-sm font-medium">{{ parseCreateDate(data[field]) }}</span>
-   </template>
    <template v-else>
       <span class="text-sm font-medium">{{ data[field] }}</span>
    </template>
    <Dialog
       :closable="!editLoading"
       :pt="dialogConfig"
-      header="Изменить журнал"
+      header="Изменить заголовок"
       modal
       v-model:visible="editVisible"
       >
       <div class="flex flex-col pb-10 pt-4">
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
-            :modelValue="editJournal.name_uz"
+            :modelValue="editDocumentTitle.name_uz"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
             @update:modelValue="name_uz => {
-               editJournal = { ...editJournal, name_uz };
+               editDocumentTitle = { ...editDocumentTitle, name_uz };
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ) <span class="text-red-500 ml-1">*</span></p>
          <InputText
-            :modelValue="editJournal.name_ru"
+            :modelValue="editDocumentTitle.name_ru"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
             @update:modelValue="name_ru => {
-               editJournal = { ...editJournal, name_ru };
+               editDocumentTitle = { ...editDocumentTitle, name_ru };
             }"
             />
       </div>
@@ -236,7 +239,7 @@ onMounted(() => {
                   Отмена
                </Button>
                <Button
-                  @click="journalEdit"
+                  @click="documentTitleEdit"
                   class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"
@@ -249,7 +252,7 @@ onMounted(() => {
       :closable="!deleteLoading"
       :pt="dialogConfig"
       dismissableMask
-      header="Удалить журнал"
+      header="Удалить заголовок"
       modal
       v-model:visible="deleteVisible">
       <div class="flex flex-col items-center pb-10 pt-4">
@@ -260,9 +263,9 @@ onMounted(() => {
                <path fill-rule="evenodd" clip-rule="evenodd" d="M39.4608 53.3327H40.5392C44.2495 53.3327 46.1046 53.3327 47.3108 52.1514C48.517 50.9702 48.6404 49.0326 48.8872 45.1574L49.2428 39.5735C49.3767 37.4708 49.4437 36.4195 48.8386 35.7533C48.2335 35.0871 47.2116 35.0871 45.1679 35.0871H34.8321C32.7884 35.0871 31.7665 35.0871 31.1614 35.7533C30.5563 36.4195 30.6233 37.4708 30.7572 39.5735L31.1128 45.1574C31.3596 49.0326 31.483 50.9702 32.6892 52.1514C33.8954 53.3327 35.7505 53.3327 39.4608 53.3327ZM37.6617 40.2507C37.6067 39.6722 37.1167 39.2501 36.5672 39.308C36.0176 39.3658 35.6167 39.8817 35.6716 40.4601L36.3383 47.4777C36.3932 48.0561 36.8833 48.4782 37.4328 48.4203C37.9824 48.3625 38.3833 47.8467 38.3284 47.2682L37.6617 40.2507ZM43.4328 39.308C43.9824 39.3658 44.3833 39.8817 44.3284 40.4601L43.6617 47.4777C43.6068 48.0561 43.1167 48.4782 42.5672 48.4203C42.0176 48.3625 41.6167 47.8467 41.6716 47.2682L42.3383 40.2507C42.3933 39.6722 42.8833 39.2501 43.4328 39.308Z" fill="#F3335C"/>
             </svg>
          </div>
-         <h2 class="text-center font-semibold text-3xl text-gray-900 p-0 mt-6">Удалить журнал?</h2>
+         <h2 class="text-center font-semibold text-3xl text-gray-900 p-0 mt-6">Удалить заголовок?</h2>
          <p class="text-center py-0 px-6 mt-2 text-gray-400">
-            Вы уверены, что хотите удалить этого журнал
+            Вы уверены, что хотите удалить этого заголовок
          </p>
       </div>
       <template #footer>
@@ -280,7 +283,7 @@ onMounted(() => {
                   Отмена
                </Button>
                <Button
-                  @click="journalDelete"
+                  @click="documentTitleDelete"
                   class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"

@@ -32,6 +32,12 @@ const Settings = [
             name: "MagazinesIndex",
             path: "magazines",
           },
+          {
+            component: () => import("../views/DocumentFlow/DocumentTitles/index.vue"),
+            meta: { isAuthRequired: true },
+            name: "DocumentTitlesIndex",
+            path: "document-titles",
+          },
         ]
       },
       // Correspondents

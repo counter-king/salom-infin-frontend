@@ -128,6 +128,26 @@ const findAssigneeChildren = (target, assignee) => {
 
             <div v-if="assignee.content" class="text-sm font-medium px-4 pb-2 -mt-2">
               <p v-html="assignee.content"></p>
+
+              <template v-if="assignee.files && assignee.files.length">
+                <template v-for="file in assignee.files">
+                  <div class="mt-1">
+                    <a
+                      :href="file.url"
+                      target="_blank"
+                      class="inline-flex items-center gap-2 font-medium text-primary-500 py-1"
+                    >
+                      <base-icon
+                        name="FolderWithFilesIcon"
+                        width="18"
+                        height="18"
+                        class=""
+                      />
+                      <span class="lowercase border-b border-dashed border-primary-500">{{ file.name }}</span>
+                    </a>
+                  </div>
+                </template>
+              </template>
             </div>
           </div>
 
