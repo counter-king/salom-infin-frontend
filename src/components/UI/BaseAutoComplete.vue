@@ -98,7 +98,7 @@ watch(visible, visible => {
                   @click="() => {
                      emit('onInputChange', { search: '', page: 1 })
                   }"
-                  class="bg-greyscale-50 rounded-3xl cursor-pointer w-[30px] h-[30px] flex justify-center items-center p-button p-component font-semibold text-sm rounded-xl !rounded-full p-0 m-0 border-none"
+                  class="bg-greyscale-50 rounded-3xl cursor-pointer w-[30px] h-[30px] ml-1.5 flex justify-center items-center p-button p-component font-semibold text-sm rounded-xl !rounded-full p-0 m-0 border-none"
                   rounded
                   type="button"
                   >

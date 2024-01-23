@@ -8,54 +8,47 @@ import SubDepartment from './SubDepartment.vue';
 import axiosConfig from "@/services/axios.config";
 import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import { replaceSpecChars } from '@/utils/string';
 const props = defineProps({ getFirstPageEmployees: Function, setVisible: Function, visible: Boolean });
-const defaultEmployee = { first_name: '', last_name: '', father_name: '', phone: 8, pinfl: 0, department: '' };
+const defaultEmployee = { first_name: '', last_name: '', father_name: '', phone: 8, pinfl: 0, top_level_department: '' };
+const companies = ref([]);
+const company = ref('');
+const companiesPage = ref(1);
+const companyLoading = ref(false);
+const topLevelDepartment = ref('');
+const topLevelDepartmentLoading = ref(false);
+const topLevelDepartments = ref([]);
+const topLevelDepartmentPage = ref(1);
 const employee = ref(defaultEmployee);
 const loading = ref(false);
-
-const companies = ref([]);
-const companiesLoading = ref(false);
-const companiesPage = ref(1);
-const company = ref('');
-
-const topLevelDepartment = ref('');
-const topLevelDepartments = ref([]);
-const topLevelDepartmentsLoading = ref(false);
-const topLevelDepartmentsPage = ref(1);
-
 const position = ref('');
+const positionLoading = ref(false);
 const positions = ref([]);
-const positionsLoading = ref(false);
-const positionsPage = ref(1);
-
 const status = ref('');
+const statusLoading = ref(false);
 const statuses = ref([]);
-const statusesLoading = ref(false);
-const statusesPage = ref(1);
-
 const createUser = () => {
    const companyId = company.value?.id;
-   const department = employee.value?.department?.id;
+   const departmentId = topLevelDepartment.value?.id;
    const father_name = employee.value?.father_name;
    const first_name = employee.value?.first_name;
    const last_name = employee.value?.last_name;
-   const phone = '99' + String(employee.value?.phone || '').replace(/ /g, '').replace(/\+/g, '');
+   const phone = employee.value?.phone.replace(/ /g, '').replace(/\+/g, '');
    const pinfl = employee.value?.pinfl;
    const positionId = position.value?.id;
    const statusId = status.value?.id;
-   const top_level_department = topLevelDepartment?.value?.id;
-   if(first_name && last_name && String(pinfl || '')?.length === 14 && phone?.length === 12 && companyId && department && positionId && statusId && top_level_department) {
+   const top_level_department = employee?.value?.top_level_department;
+   if(first_name && last_name && father_name && pinfl?.length === 14 && phone?.length === 12 && companyId && departmentId && positionId && statusId) {
       loading.value = true;
-      const data = { phone, first_name, last_name, father_name, pinfl, company: companyId, top_level_department, department, position: positionId, status: statusId };
+      const data = { phone, first_name, last_name, father_name, pinfl, company: companyId, top_level_department, department: departmentId, position: positionId, status: statusId };
       axiosConfig
          .post('users/', data)
          .then(response => {
             if(response?.status === 201) {
                dispatchNotify('Сотрудник создан', '', 'success');
                props.getFirstPageEmployees();
-               updateVisible();
+               props.setVisible(false);
             } else {
                dispatchNotify('Сотрудник не создан', '', 'error');
             }
@@ -70,16 +63,16 @@ const createUser = () => {
       dispatchNotify('Введите имя', '', 'error');
    } else if(!last_name) {
       dispatchNotify('Введите фамилия', '', 'error');
-   } else if(String(pinfl || '')?.length !== 14) {
+   } else if(!father_name) {
+      dispatchNotify('Введите отчество', '', 'error');
+   } else if(pinfl?.length !== 14) {
       dispatchNotify('Введите ПИНФЛ', '', 'error');
    } else if(phone?.length !== 12) {
       dispatchNotify('Введите номер телефона', '', 'error');
    } else if(!companyId) {
       dispatchNotify('Введите филиал', '', 'error');
-   } else if(!top_level_department) {
+   } else if(!departmentId) {
       dispatchNotify('Введите департаментa', '', 'error');
-   } else if(!department) {
-      dispatchNotify('Введите отдела', '', 'error');
    } else if(!positionId) {
       dispatchNotify('Введите должность', '', 'error');
    } else if(!statusId) {
@@ -87,96 +80,95 @@ const createUser = () => {
    }
 };
 const searchCompanies = ({ search, page }) => {
-   company.value = search;
-   companiesLoading.value = true;
-   axiosConfig
-      .get(`companies/?page=${page}&search=${search}`)
-      .then(response => {
-         const newPage = response?.data?.next ? page + 1 : null;
-         const results = response?.data?.results;
-         const rootCompanies = page === 1 ? [] : companies.value;
-         const newCompanies = Array.isArray(results) ? results : [];
-         companiesPage.value = newPage;
-         companies.value = [ ...rootCompanies, ...newCompanies ];
-      })
-      .catch(() => {
-         companiesPage.value = null;
-      })
-      .finally(() => {
-         companiesLoading.value = false;
-      });
+   if(!companyLoading.value) {
+      company.value = search;
+      companyLoading.value = true;
+      axiosConfig
+         .get(`companies/?page=${page}&search=${search}`)
+         .then(response => {
+            const newPage = response?.data?.next ? page + 1 : null;
+            const results = response?.data?.results;
+            const rootCompanies = page === 1 ? [] : companies.value;
+            const newCompanies = Array.isArray(results) ? results : [];
+            companiesPage.value = newPage;
+            companies.value = [ ...rootCompanies, ...newCompanies ];
+         })
+         .catch(() => {
+            companiesPage.value = null;
+         })
+         .finally(() => {
+            companyLoading.value = false;
+         });
+   }
 };
 const searchTopLevelDepartments = ({ search, page }) => {
-   topLevelDepartmentsLoading.value = true;
-   topLevelDepartment.value = search;
-   axiosConfig
-      .get(`departments/top-level-departments/?page=${page}&search=${search}`)
-      .then(response => {
-         const newPage = response?.data?.next ? page + 1 : null;
-         const results = response?.data?.results;
-         const rootTopLevelDepartments = page === 1 ? [] : topLevelDepartments.value;
-         const newTopLevelDepartments = Array.isArray(results) ? results : [];
-         topLevelDepartments.value = [...rootTopLevelDepartments, ...newTopLevelDepartments];
-         topLevelDepartmentsPage.value = newPage;
-      })
-      .catch(() => {
-         topLevelDepartmentsPage.value = null;
-      })
-      .finally(() => {
-         topLevelDepartmentsLoading.value = false;
-      });
+   if(!topLevelDepartmentLoading.value) {
+      topLevelDepartmentLoading.value = true;
+      topLevelDepartment.value = search;
+      axiosConfig
+         .get(`departments/top-level-departments/?page=${page}&search=${search}`)
+         .then(response => {
+            const newPage = response?.data?.next ? page + 1 : null;
+            const results = response?.data?.results;
+            const rootTopLevelDepartments = page === 1 ? [] : topLevelDepartments.value;
+            const newTopLevelDepartments = Array.isArray(results) ? results : [];
+            topLevelDepartments.value = [...rootTopLevelDepartments, ...newTopLevelDepartments];
+            topLevelDepartmentPage.value = newPage;
+         })
+         .catch(() => {
+            topLevelDepartmentPage.value = null;
+         })
+         .finally(() => {
+            topLevelDepartmentLoading.value = false;
+         });
+   }
 };
-const searchPositions = ({ search, page }) => {
-   position.value = search;
-   positionsLoading.value = true;
+const searchPositions = e => {
+   const search = e.target.value;
+   positionLoading.value = true;
    axiosConfig
-      .get(`positions/?page=${page}&search=${search}`)
+      .get(`positions/?search=${search}`)
       .then(response => {
-         const newPage = response?.data?.next ? page + 1 : null;
          const results = response?.data?.results;
-         const rootPositions = page === 1 ? [] : positions.value;
          const newPositions = Array.isArray(results) ? results : [];
-         positions.value = [ ...rootPositions, ...newPositions];
-         positionsPage.value = newPage;
+         positions.value = newPositions;
       })
       .catch(() => {
-         positionsPage.value = null;
+         positions.value = [];
       })
       .finally(() => {
-         positionsLoading.value = false;
+         positionLoading.value = false;
       });
 };
-const searchStatuses = ({ search, page }) => {
-   statusesLoading.value = true;
-   status.value = search;
+const searchStatuses = e => {
+   const search = e.target.value;
+   statusLoading.value = true;
    axiosConfig
-      .get(`users/statuses/?page=${page}&search=${search}`)
+      .get(`users/statuses/?search=${search}`)
       .then(response => {
-         const newPage = response?.data?.next ? page + 1 : null;
          const results = response?.data;
-         const rootStatuses = page === 1 ? [] : statuses.value;
          const newStatuses = Array.isArray(results) ? results : [];
-         statuses.value = [ ...rootStatuses, ...newStatuses];
-         statusesPage.value = newPage;
+         statuses.value = newStatuses;
       })
       .catch(() => {
-         statusesPage.value = null;
+         statuses.value = [];
       })
       .finally(() => {
-         statusesLoading.value = false;
+         statusLoading.value = false;
       });
 };
 const updateVisible = () => {
+   companies.value = [];
    company.value = '';
    employee.value = defaultEmployee;
    position.value = '';
+   positions.value = [];
    props.setVisible(!props.visible);
    status.value = '';
+   statuses.value = [];
    topLevelDepartment.value = '';
-};
-const setDepartment = department => {
-   employee.value = { ...employee.value, department };
-};
+   topLevelDepartments.value = [];
+}
 </script>
 <template>
    <Dialog
@@ -208,7 +200,7 @@ const setDepartment = department => {
             placeholder="Введите фамилия"
             type="text"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Отчество</p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Отчество<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="employee.father_name"
             :pt="{ root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
@@ -245,18 +237,18 @@ const setDepartment = department => {
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Филиал<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
-            :loading="companiesLoading"
+            :loading="companyLoading"
             :options="companies"
             :page="companiesPage"
             :value="company"
-            @onInputChange="searchCompanies"
             key="id"
             label="name"
-            noOptionsMessage="Филиал не найден"
+            noOptionMessage="Филиал не найден"
             placeholder="Введите филиал"
             @onChange="value => {
                company = value;
             }"
+            @onInputChange="searchCompanies"
             >
             <template #option="{ option }">
                <div class="flex items-center h-11 px-3 text-base">{{ option.name }}</div>
@@ -264,15 +256,15 @@ const setDepartment = department => {
          </base-auto-complete>
          <p class="text-sm text-greyscale-500 font-medium mb-1 mt-6">Департамент<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
-            :loading="topLevelDepartmentsLoading"
+            :loading="topLevelDepartmentLoading"
             :options="topLevelDepartments"
-            :page="topLevelDepartmentsPage"
+            :page="topLevelDepartmentPage"
             :value="topLevelDepartment"
-            @onInputChange="searchTopLevelDepartments"
             key="id"
             label="name"
-            noOptionsMessage="Департамент не найден"
+            noOptionMessage="Департамент не найден"
             placeholder="Введите департамент"
+            @onInputChange="searchTopLevelDepartments"
             @onChange="value => {
                topLevelDepartment = value;
             }"
@@ -282,22 +274,20 @@ const setDepartment = department => {
             </template>
          </base-auto-complete>
          <template v-if="topLevelDepartment?.id">
-            <SubDepartment :required="true" :setDepartment="setDepartment" :topLevelDepartment="topLevelDepartment" />
+            <SubDepartment :setTopLevelDepartment="top_level_department => { employee = { ...employee, top_level_department } }" :clearTopLevelDepartment="() => { employee = { ...employee, top_level_department: topLevelDepartment?.id } }" :department="topLevelDepartment" />
          </template>
          <p class="text-sm text-greyscale-500 font-medium mb-1 mt-6">Должность<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
-            :loading="positionsLoading"
+            :hasValue="position"
+            :loading="positionLoading"
             :options="positions"
-            :page="positionsPage"
             :value="position"
+            @onChange="({ value }) => { position = value }"
+            @onClear="() => { position = '' }"
             @onInputChange="searchPositions"
-            key="id"
-            label="name"
-            noOptionsMessage="Должность не найден"
-            placeholder="Введите должность"
-            @onChange="value => {
-               position = value;
-            }"
+            field="name"
+            noOptionMessage="Должность не найден"
+            v-model="position"
             >
             <template #option="{ option }">
                <div class="flex items-center h-11 px-3 text-base">{{ option.name }}</div>
@@ -305,18 +295,15 @@ const setDepartment = department => {
          </base-auto-complete>
          <p class="text-sm text-greyscale-500 font-medium mb-1 mt-6">Статусь<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
-            :loading="statusesLoading"
+            :hasValue="status"
+            :loading="statusLoading"
             :options="statuses"
-            :page="statusesPage"
             :value="status"
+            @onChange="({ value }) => { status = value }"
             @onInputChange="searchStatuses"
-            key="id"
-            label="name"
-            noOptionsMessage="Статусь не найден"
-            placeholder="Введите статусь"
-            @onChange="value => {
-               status = value
-            }"
+            field="name"
+            noOptionMessage="Статусь не найден"
+            v-model="status"
             >
             <template #option="{ option }">
                <div class="flex items-center h-11 px-3 text-base">{{ option.name }}</div>
