@@ -21,17 +21,20 @@ const props = defineProps({
 const { t } = useI18n();
 const modelValue = useModel(props, 'modelValue');
 const emit = defineEmits(['update:modelValue']);
-
 const config = {
 	placeholderText: '',
 	charCounterCount: false,
 	immediateVueModelUpdate: true,
-	toolbarButtons: ['bold', 'italic', 'underline', 'fontSize', 'lineHeight', 'alignLeft', 'alignCenter', 'alignRight', 'alignJustify', 'textColor', 'backgroundColor', 'clearFormatting', 'insertTable'],
+	toolbarButtons: ['bold', 'italic', 'underline', 'fontSize', 'fontFamily', 'lineHeight', 'formatOL', 'formatUL', 'indent', 'outdent', 'alignLeft', 'alignCenter', 'alignRight', 'alignJustify', 'textColor', 'backgroundColor', 'clearFormatting', 'insertTable'],
 	attribution: false,
 	// enter: 'ENTER_BR',
 	heightMax: 500,
 	heightMin: 300,
 	imagePaste: false,
+  fontFamily: {
+    'Arial,Helvetica,sans-serif': 'Arial',
+    "'Times New Roman',Times,serif": 'Times New Roman',
+  },
 	fontSize: ['8', '10', '12', '13', '14', '16', '18', '30', '60', '96'],
 	language: 'ru',
 	quickInsertEnabled: false,
@@ -46,8 +49,32 @@ const config = {
 		},
 		'table.inserted': (table) => {
 			table.classList.add('customTable');
-		}
+		},
+    'commands.after': (cmd, param1, param2) => {
+      commandAfter(cmd, param1, param2);
+    }
 	}
+}
+
+// Methods
+const commandAfter = (cmd, param1, param2) => {
+  if (['formatOL','formatUL'].includes(cmd)) {
+    let editor = document.querySelector('.fr-element');
+    if (editor) {
+      let ol = editor.getElementsByTagName('ol');
+      let ul = editor.getElementsByTagName('ul');
+      if (ol){
+        for (let i = 0; i < ol.length; i++) {
+          ol[i].classList.add('customParagraph');
+        }
+      }
+      if (ul){
+        for (let i = 0; i < ul.length; i++) {
+          ul[i].classList.add('customParagraph');
+        }
+      }
+    }
+  }
 }
 
 // Hooks
@@ -83,6 +110,9 @@ onMounted(() => {
 .customTable tbody tr td  {
 	border: 1px solid;
 	padding: 5px;
+}
+.customParagraph {
+  margin-left: 48px;
 }
 .fr-wrapper, .fr-second-toolbar {
 	background: var(--greyscale-50)!important;

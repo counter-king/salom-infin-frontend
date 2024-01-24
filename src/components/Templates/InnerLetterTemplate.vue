@@ -30,7 +30,7 @@ const props = defineProps({
       XIZMAT XATI
     </div>
 
-    <div class="text-justify indent-4" v-html="props.composeModel?.content">
+    <div class="text-justify" v-html="props.composeModel?.content">
 
     </div>
 
