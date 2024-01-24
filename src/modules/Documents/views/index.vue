@@ -33,7 +33,7 @@ const menus = ref([
   <div class="document-view flex w-full">
     <the-sidebar :menus="menus" />
 
-    <div class="flex-1 overflow-y-auto p-6">
+    <div class="flex flex-col flex-1 overflow-y-auto p-6">
       <router-view />
     </div>
   </div>

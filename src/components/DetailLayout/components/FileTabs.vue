@@ -38,62 +38,6 @@ const items = ref([
     label: 'Формат A6',
   }
 ])
-const tabView = ref([
-  {
-    title: 'Фишка Doclines',
-    slot: 'resolution',
-  },
-  {
-    title: 'Фото Doclines Фото Doclines Фото Doclines Фото Doclines',
-    slot: 'file',
-    name: "CM00506.pdf",
-    document: {
-      id: 115508,
-      name: "CM00506.pdf",
-      url: "https://portal-drive.asakabank.uz/media/CM00506.pdf",
-    },
-  },
-  {
-    title: 'Фото Doclines 2',
-    slot: 'file',
-    name: "CM00506.pdf",
-    document: {
-      id: 115508,
-      name: "CM00506.pdf",
-      url: "https://portal-drive.asakabank.uz/media/CM21320.pdf",
-    },
-  },
-  {
-    title: 'Фото Doclines 3',
-    slot: 'file',
-    name: "CM00506.jpg",
-    document: {
-      id: 115508,
-      name: "CM00506.jpg",
-      url: "https://portal-drive.asakabank.uz/media/avatar_DHZyvvz.jpg",
-    },
-  },
-  {
-    title: 'Фото Doclines 4',
-    slot: 'file',
-    name: "CM00506.xlsx",
-    document: {
-      id: 115508,
-      name: "CM00506.xlsx",
-      url: "https://portal-drive.asakabank.uz/media/6_____ilova-Jarima_tHOhZmK_R0cJNfc.xlsx",
-    },
-  },
-  {
-    title: 'Фото Doclines 5',
-    slot: 'file',
-    name: "CM00506.pdf",
-    document: {
-      id: 115508,
-      name: "CM00506.pdf",
-      url: "https://portal-drive.asakabank.uz/media/CM00506.pdf",
-    },
-  },
-])
 // Computed
 const filesList = computed(() => {
   return props.hasResolution
@@ -112,7 +56,7 @@ const toggle = (event) => {
 </script>
 
 <template>
-  <div class="file-tabs-view">
+  <div class="file-tabs-view flex flex-col h-full">
     <base-tab-view
       :tab-view="filesList"
       scrollable
@@ -122,7 +66,7 @@ const toggle = (event) => {
       nav-container-class="m-5 mb-0"
     >
       <template #resolution="{ value }">
-        <div class="h-[650px] overflow-y-auto px-8 py-5">
+        <div class="h-[calc(100vh-303px)] overflow-y-auto px-8 py-5">
           <div class="flex mb-4">
             <div class="flex items-center flex-1">
               <img src="/images/logo.svg" alt="Logo" />

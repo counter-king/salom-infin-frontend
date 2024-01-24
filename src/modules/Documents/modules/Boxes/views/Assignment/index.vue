@@ -6,8 +6,6 @@ import { useAssignmentStore } from '../../stores/assignment.store'
 // Components
 import { StatusChip, PriorityChip } from '@/components/Chips'
 import { LinkableCell } from '@/components/Table'
-// Composable
-import { useNode } from '@/composable/useNode'
 // Utils
 import { BOXES_ASSIGNMENT_COLUMNS } from '../../constants'
 // Composable
@@ -23,7 +21,7 @@ const link = (data) => {
 </script>
 
 <template>
-  <div class="incoming-view">
+  <div class="incoming-view flex-1">
     <base-data-table
       :headers="assignmentStore.headers"
       :value="assignmentStore.list"

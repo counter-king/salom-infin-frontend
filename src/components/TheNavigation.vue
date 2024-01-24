@@ -30,7 +30,7 @@ const checkRouteMeta = () => {
 <template>
   <div
     v-if="visible"
-    class="flex flex-col flex-1 relative -m-6 mb-6"
+    class="flex flex-col relative -m-6 mb-6"
   >
     <div class="bg-white border-b border-greyscale-200 py-2 px-7">
       <div class="flex items-center">
