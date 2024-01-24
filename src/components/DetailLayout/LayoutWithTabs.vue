@@ -139,7 +139,7 @@ watch(activeTabMenu, (value) => {
       <slot name="content">
         <base-tab-menu v-model="activeTabMenuIndex" :tab-items="props.tabItems" />
 
-        <div class="flex flex-1">
+        <div class="flex flex-1 h-full">
           <slot :name="activeTabMenu.slot">
             <div class="flex-1 overflow-y-auto">
               <div class="h-[1px]">
