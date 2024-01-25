@@ -47,6 +47,7 @@ const headers = ref([
   },
   {
     columnKey: 'is_user_active',
+    disabled: true,
     field: 'is_user_active',
     header: 'Состояние',
     is_active: true,
@@ -63,11 +64,6 @@ const employees = ref([]);
 const settingsOverlay = ref(null);
 const visibleHeaders = computed(() => headers.value.filter(header => header?.is_active));
 const editableHeaders = computed(() => headers?.value.filter(header => !header?.disabled));
-const userDelete = () => {
-  deleteLoading.value = true;
-};
-const userEdit = () => {};
-const userCreate = () => {};
 const setVisible = newVisible => {
   visible.value = newVisible;
 };
@@ -81,7 +77,7 @@ const getEmployees = (newFilter = {}) => {
     .then(response => {
       const results = response?.data?.results;
       const newCount = response?.data?.count;
-      const newEmployees = (Array.isArray(results) ? results: []).map(user => ({...user, position: user?.position?.name}));
+      const newEmployees = (Array.isArray(results) ? results: []);
       employees.value = newEmployees;
       count.value = newCount;
     })
