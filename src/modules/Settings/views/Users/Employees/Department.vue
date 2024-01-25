@@ -16,13 +16,13 @@ const searchDepartments = ({ search, page }) => {
    departmentsLoading.value = true;
    department.value = search;
    axiosConfig
-      .get(`departments/sub-departments/${props.parent?.id}/?search=${search}`)
+      .get(`departments/sub-departments/${props.parent?.id}/?condition=A&search=${search}`)
       .then(response => {
          const newPage = response?.data?.next ? page + 1 : null;
          const results = response?.data?.results;
          const rootDepartments = page === 1 ? [] : departments.value;
          const newDepartments = Array.isArray(results) ? results : [];
-         departments.value = [ ...rootDepartments, ...newDepartments];
+         departments.value = [ ...rootDepartments, ...newDepartments ];
          departmentsPage.value = newPage;
       })
       .catch(() => {

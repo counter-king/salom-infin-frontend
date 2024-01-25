@@ -100,6 +100,16 @@ const Settings = [
           },
           {
             children: [],
+            component: () => import("../views/Structure/Department/index.vue"),
+            name: 'DepartmentIndex',
+            path: 'departments/:id',
+            meta: {
+              isAuthRequired: true,
+              navigation: true,
+            },
+          },
+          {
+            children: [],
             component: () => import("../views/Structure/Branches/index.vue"),
             name: 'BranchesIndex',
             path: 'branches',

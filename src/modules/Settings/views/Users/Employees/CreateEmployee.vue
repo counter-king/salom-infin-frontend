@@ -94,7 +94,7 @@ const searchCompanies = ({ search, page }) => {
    company.value = search;
    companiesLoading.value = true;
    axiosConfig
-      .get(`companies/?page=${page}&search=${search}`)
+      .get(`companies/?condition=A&page=${page}&search=${search}`)
       .then(response => {
          const newPage = response?.data?.next ? page + 1 : null;
          const results = response?.data?.results;
@@ -115,7 +115,7 @@ const searchTopLevelDepartments = ({ search, page }) => {
    topLevelDepartment.value = search;
    topLevelDepartmentsLoading.value = true;
    axiosConfig
-      .get(`departments/top-level-departments/?page=${page}&search=${search}`)
+      .get(`departments/top-level-departments/?condition=A&page=${page}&search=${search}`)
       .then(response => {
          const newPage = response?.data?.next ? page + 1 : null;
          const results = response?.data?.results;
@@ -135,7 +135,7 @@ const searchPositions = ({ search, page }) => {
    position.value = search;
    positionsLoading.value = true;
    axiosConfig
-      .get(`positions/?page=${page}&search=${search}`)
+      .get(`positions/?is_active=true&page=${page}&search=${search}`)
       .then(response => {
          const newPage = response?.data?.next ? page + 1 : null;
          const results = response?.data?.results;
