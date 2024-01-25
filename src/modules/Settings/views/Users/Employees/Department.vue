@@ -37,7 +37,7 @@ const onChange = value => {
 };
 watch(department, department => {
    const departments = [...props.departments.slice(0, props.order), department];
-   const newDepartments = typeof department !== 'string' && department ? [...departments, ''] : departments;
+   const newDepartments = typeof department !== 'string' && department?.has_child ? [...departments, ''] : departments;
    props.setDepartments(newDepartments);
 });
 </script>
