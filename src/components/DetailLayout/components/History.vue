@@ -50,12 +50,16 @@ onMounted(async () => {
       scroll-height="calc(100vh - 297px)"
       table-class="border-spacing-y-2"
       wrapper-class="h-[calc(100vh-297px)] p-6 pt-4"
-      body-cell-class="bg-greyscale-50"
+      body-cell-class="bg-greyscale-50 px-0"
       paginator-root-class="bg-greyscale-50 !rounded-none border-t"
       theadClass="hidden"
     >
       <template #action="{ data }">
-        <div class="flex gap-4 py-3">
+        <div class="flex gap-4 py-3 relative px-4">
+          <div
+            class="absolute w-[2px] left-0 top-6 bottom-6"
+            :style="{ background: data.description.color }"
+          />
           <div>
             <base-avatar
               :action-chip-type="data"

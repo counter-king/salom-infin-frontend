@@ -22,7 +22,13 @@ const current = computed(() => {
     }
   }
 
-  switch(props.type.action) {
+  return {
+    icon: 'XIcon',
+    color: props.type.description?.color,
+    text: props.type.description?.description
+  }
+
+  /*switch(props.type.action) {
     case FILE_ACTIONS.CREATED: // Файл создан
       return {
         icon: 'DownloadMinimalistic',
@@ -59,14 +65,14 @@ const current = computed(() => {
         color: 'bg-success-500',
         text: props.type.description?.description
       }
-  }
+  }*/
 })
 </script>
 
 <template>
   <div
     class="action-chip-view flex items-center justify-center w-[22px] h-[22px] rounded-full border-2 border-white absolute -right-2 -bottom-1"
-    :class="current.color"
+    :style="{ background: current.color }"
     v-tooltip.right="{
       value: `<h4 class='text-xs text-white -my-1'>${ current.text }</h4>`,
       escape: true,

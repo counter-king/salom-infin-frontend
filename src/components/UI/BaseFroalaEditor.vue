@@ -25,7 +25,7 @@ const config = {
 	placeholderText: '',
 	charCounterCount: false,
 	immediateVueModelUpdate: true,
-	toolbarButtons: ['bold', 'italic', 'underline', 'fontSize', 'fontFamily', 'lineHeight', 'formatOL', 'formatUL', 'indent', 'outdent', 'alignLeft', 'alignCenter', 'alignRight', 'alignJustify', 'textColor', 'backgroundColor', 'clearFormatting', 'insertTable'],
+	toolbarButtons: ['bold', 'italic', 'underline', 'fontFamily', 'fontSize', 'lineHeight', 'formatOL', 'formatUL', 'indent', 'outdent', 'alignLeft', 'alignCenter', 'alignRight', 'alignJustify', 'textColor', 'backgroundColor', 'clearFormatting', 'insertTable'],
 	attribution: false,
 	// enter: 'ENTER_BR',
 	heightMax: 500,
@@ -35,7 +35,10 @@ const config = {
     'Arial,Helvetica,sans-serif': 'Arial',
     "'Times New Roman',Times,serif": 'Times New Roman',
   },
+  fontFamilyDefaultSelection: 'Arial',
+  fontFamilySelection: true,
 	fontSize: ['8', '10', '12', '13', '14', '16', '18', '30', '60', '96'],
+  fontSizeSelection: true,
 	language: 'ru',
 	quickInsertEnabled: false,
 	lineHeights: { '1': '1', '1.15': '1.15', '1.5': '1.5', '2': '2'},
@@ -44,9 +47,6 @@ const config = {
 	},
 	tableEditButtons: ['tableStyle', 'tableRows', 'tableColumns', 'tableCells', 'tableCellBackground', 'tableCellVerticalAlign', 'tableCellHorizontalAlign', 'tableRemove'],
 	events: {
-		initialized: () => {
-			console.log('initialized')
-		},
 		'table.inserted': (table) => {
 			table.classList.add('customTable');
 		},
@@ -129,7 +129,7 @@ onMounted(() => {
 }
 
 .fr-active, .fr-btn:hover {
-	background: var(--greyscale-90)!important;
+	background: var(--greyscale-200)!important;
 }
 
 .fr-wrapper>div>a {
