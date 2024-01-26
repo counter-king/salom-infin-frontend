@@ -23,7 +23,7 @@ const current = computed(() => {
   }
 
   return {
-    icon: 'XIcon',
+    icon: props.type.description?.icon_name,
     color: props.type.description?.color,
     text: props.type.description?.description
   }
