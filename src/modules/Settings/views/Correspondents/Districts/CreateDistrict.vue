@@ -9,7 +9,7 @@ import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { replaceSpecChars } from '@/utils/string';
 const props = defineProps({ getFirstPageDistricts: Function, setVisible: Function, visible: Boolean });
-const defaultDistrict = { name_uz: '', name_ru: '' };
+const defaultDistrict = { name_uz: '', name_ru: '', code: '' };
 const district = ref(defaultDistrict);
 const loading = ref(false);
 const region = ref('');
@@ -17,12 +17,12 @@ const regionLoading = ref(false);
 const regions = ref([]);
 const regionsPage = ref(1);
 const createDistrict = () => {
-   const {name_ru, name_uz} = district.value;
+   const {name_ru, name_uz, code } = district.value;
    const regionId = region.value?.id;
-   if(name_uz && name_ru && regionId) {
+   if(name_uz && name_ru && regionId && code) {
       loading.value = true;
       axiosConfig
-         .post('districts/', { name_ru, name_uz, name: name_uz, region: regionId, is_active: true })
+         .post('districts/', { name_ru, name_uz, name: name_uz, region: regionId, is_active: true, code })
          .then(response => {
             if(response?.status === 201) {
                dispatchNotify('Район создан', '', 'success');
@@ -42,8 +42,10 @@ const createDistrict = () => {
          });
    } else if(!regionId) {
       dispatchNotify('Введите регион', '', 'error')
-   } else {
+   } else if(!name_uz || !name_ru) {
       dispatchNotify('Введите название', '', 'error')
+   } else {
+      dispatchNotify('Введите код', '', 'error')
    }
 };
 const searchRegions = ({ search, page }) => {
@@ -120,6 +122,15 @@ const searchRegions = ({ search, page }) => {
             type="text"
             @update:modelValue="value => {
                district = { ...district, name_ru: replaceSpecChars(value) };
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
+         <input
+            class="p-inputtext h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 text-sm"
+            placeholder="Введите код"
+            v-model="district.code"
+            @input="e => {
+               district = { ...district, code: e.target.value.replace(/\D/g, '') }
             }"
             />
       </div>

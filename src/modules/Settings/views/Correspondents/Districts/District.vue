@@ -17,7 +17,7 @@ const conditionLoading = ref(false);
 const conditions = ref([]);
 const deleteLoading = ref(false);
 const deleteVisible = ref(false);
-const editDistrict = ref({});
+const editDistrict = ref({ code: 0 });
 const editLoading = ref(false);
 const editVisible = ref(false);
 const menu = ref(null);
@@ -26,13 +26,13 @@ const regionLoading = ref(false);
 const regions = ref([]);
 const regionsPage = ref(1);
 const districtEdit = () => {
-   const { name_ru, name_uz } = editDistrict.value;
+   const { name_ru, name_uz, code } = editDistrict.value;
    const regionId = region.value?.id;
-   if(name_uz && name_ru && regionId) {
+   if(name_uz && name_ru && regionId && code) {
       editLoading.value = true;
       const districtId = props?.data?.id;
       axiosConfig
-         .patch(`districts/${districtId}/`, { name_ru, name_uz, name: name_uz, region: regionId })
+         .patch(`districts/${districtId}/`, { name_ru, name_uz, name: name_uz, region: regionId, code })
          .then(response => {
             const data = response?.data;
             const status = response?.status;
@@ -59,8 +59,10 @@ const districtEdit = () => {
          });
    } else if(!regionId) {
       dispatchNotify('Введите регион', '', 'error')
-   } else {
+   } else if(!name_uz || !name_ru) {
       dispatchNotify('Введите название', '', 'error')
+   } else {
+      dispatchNotify('Введите код', '', 'error')
    }
 };
 const searchRegions = ({ search, page }) => {
@@ -275,6 +277,15 @@ onMounted(() => {
             type="text"
             @update:modelValue="value => {
                editDistrict = { ...editDistrict, name_ru: replaceSpecChars(value) };
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
+         <input
+            class="p-inputtext h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 text-sm"
+            placeholder="Введите код"
+            v-model="editDistrict.code"
+            @input="e => {
+               editDistrict = { ...editDistrict, code: e.target.value.replace(/\D/g, '') }
             }"
             />
       </div>

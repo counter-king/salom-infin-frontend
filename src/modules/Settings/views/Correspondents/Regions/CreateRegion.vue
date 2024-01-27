@@ -9,15 +9,15 @@ import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { replaceSpecChars } from '@/utils/string';
 const props = defineProps({ getFirstPageRegions: Function, setVisible: Function, visible: Boolean });
-const defaultRegion = { name_uz: '', name_ru: '' };
+const defaultRegion = { name_uz: '', name_ru: '', code: '' };
 const loading = ref(false);
 const region = ref(defaultRegion);
 const createRegion = () => {
-   const {name_ru, name_uz} = region.value;
-   if(name_uz && name_ru) {
+   const { name_ru, name_uz, code } = region.value;
+   if(name_uz && name_ru && code) {
       loading.value = true;
       axiosConfig
-         .post('regions/', { name_ru, name_uz, name: name_uz, is_active: true })
+         .post('regions/', { name_ru, name_uz, name: name_uz, code, is_active: true })
          .then(response => {
             if(response?.status === 201) {
                dispatchNotify('Регион создан', '', 'success');
@@ -34,8 +34,10 @@ const createRegion = () => {
          .finally(() => {
             loading.value = false;
          });
-   } else {
+   } else if(!name_ru || !name_uz) {
       dispatchNotify('Введите название', '', 'error')
+   } else {
+      dispatchNotify('Введите код', '', 'error')
    }
 };
 </script>
@@ -70,6 +72,15 @@ const createRegion = () => {
             type="text"
             @update:modelValue="value => {
                region = { ...region, name_ru: replaceSpecChars(value) };
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
+         <input
+            class="p-inputtext h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 text-sm"
+            placeholder="Введите код"
+            v-model="region.code"
+            @input="e => {
+               region = { ...region, code: e.target.value.replace(/\D/g, '') }
             }"
             />
       </div>

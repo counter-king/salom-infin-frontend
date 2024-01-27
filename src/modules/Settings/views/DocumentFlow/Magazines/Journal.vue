@@ -7,6 +7,7 @@ import ProgressSpinner from 'primevue/progressspinner';
 import Skeleton from 'primevue/skeleton';
 import axiosConfig from "@/services/axios.config";
 import { dialogConfig, menuConfig } from './config';
+import InputNumber from 'primevue/inputnumber';
 import { dispatchNotify } from '@/utils/notify';
 import { ref, watch, onMounted } from 'vue';
 import { useI18n } from "vue-i18n";
@@ -20,13 +21,15 @@ const editJournal = ref({});
 const editLoading = ref(false);
 const editVisible = ref(false);
 const menu = ref(null);
+const sort_order = ref({ value: 1 });
+const sortOrderLoading = ref(false);
 const journalEdit = () => {
-   const { name_ru, name_uz } = editJournal.value;
-   if(name_uz && name_ru) {
+   const { name_ru, name_uz, sort_order } = editJournal.value;
+   if(name_uz && name_ru && sort_order) {
       editLoading.value = true;
       const journalId = props?.data?.id;
       axiosConfig
-         .patch(`journals/${journalId}/`, { name_ru, name_uz })
+         .patch(`journals/${journalId}/`, { name_ru, name_uz, sort_order })
          .then(response => {
             const status = response?.status;
             if(status === 200) {
@@ -43,8 +46,10 @@ const journalEdit = () => {
          .finally(() => {
             editLoading.value = false;
          });
+   } else if(!name_uz || !name_ru) {
+      dispatchNotify('Введите название', '', 'error');
    } else {
-      dispatchNotify('Введите название', '', 'error')
+      dispatchNotify('Введите сортировка', '', 'error');
    }
 };
 const journalDelete = () => {
@@ -89,6 +94,27 @@ const updateCondition = value => {
          conditionLoading.value = false;
       });
 };
+const changeOrder = () => {
+   sortOrderLoading.value = true;
+   const journalId = props?.data?.id;
+   axiosConfig
+      .put(`journals/${journalId}/change-order/`, { sort_order: sort_order.value.value })
+      .then(response => {
+         const status = response?.status;
+         if(status === 200) {
+            props.getFirstPageJournals();
+            dispatchNotify('Сортировка обновлено', '', 'success');
+         } else {
+            dispatchNotify('Сортировка не обновлено', '', 'error');
+         }
+      })
+      .catch(() => {
+         dispatchNotify('Сортировка не обновлено', '', 'error');
+      })
+      .finally(() => {
+         sortOrderLoading.value = false;
+      });
+}
 const changeLanguage = () => {
    conditions.value = [
       { label: 'Активный', value: true, },
@@ -108,11 +134,15 @@ const parseCreateDate = created_date => {
 const toggle = event => {
    menu.value.toggle(event);
 };
+watch(props.data.sort_order, value => {
+   sort_order.value = { value };
+});
 watch(locale, () => {
    changeLanguage();
 });
 onMounted(() => {
    changeLanguage();
+   sort_order.value = { value: props.data.sort_order };
 });
 </script>
 <template>
@@ -189,6 +219,25 @@ onMounted(() => {
    <template v-else-if="field === 'created_date'">
       <span class="text-sm font-medium">{{ parseCreateDate(data[field]) }}</span>
    </template>
+   <template v-else-if="field === 'sort_order'">
+      <template v-if="conditionLoading">
+         <Skeleton height="16px" />
+      </template>
+      <template v-else>
+         <input
+            @change="changeOrder"
+            class="p-inputtext h-[30px] w-[100px] border-transparent focus:border-primary-500 rounded-[6px] bg-greyscale-50 text-sm px-2"
+            v-model="sort_order.value"
+            @input="e => {
+               const value = +e.target.value.replace(/\D/g, '');
+               sort_order = { value: value > 0 ? value : 0 };
+            }"
+            @blur="() => {
+               sort_order = { value: data.sort_order };
+            }"
+            />
+      </template>
+   </template>
    <template v-else>
       <span class="text-sm font-medium">{{ data[field] }}</span>
    </template>
@@ -218,6 +267,19 @@ onMounted(() => {
             type="text"
             @update:modelValue="name_ru => {
                editJournal = { ...editJournal, name_ru };
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Сортировка<span class="text-red-500 ml-1">*</span></p>
+         <InputNumber
+            :maxFractionDigits="0"
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :useGrouping="false"
+            min="0"
+            placeholder="Введите сортировка"
+            v-model="editJournal.sort_order"
+            @input="({ value }) => {
+               const sort_order = value > 0 ? value : 0;
+               editJournal = { ...editJournal, sort_order };
             }"
             />
       </div>
