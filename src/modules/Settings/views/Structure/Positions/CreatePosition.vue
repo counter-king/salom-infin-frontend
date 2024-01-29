@@ -7,7 +7,6 @@ import axiosConfig from "@/services/axios.config";
 import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
-import { replaceSpecChars } from '@/utils/string';
 const props = defineProps({ getFirstPagePositions: Function, setVisible: Function, visible: Boolean });
 const defaultPosition = { name_uz: '', name_ru: '' };
 const position = ref(defaultPosition);
@@ -59,8 +58,8 @@ const createPosition = () => {
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
-            @update:modelValue="value => {
-               position = { ...position, name_uz: replaceSpecChars(value) };
+            @update:modelValue="name_uz => {
+               position = { ...position, name_uz };
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ)<span class="text-red-500 ml-1">*</span></p>
@@ -69,8 +68,8 @@ const createPosition = () => {
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
-            @update:modelValue="value => {
-               position = { ...position, name_ru: replaceSpecChars(value) };
+            @update:modelValue="name_ru => {
+               position = { ...position, name_ru };
             }"
             />
       </div>
