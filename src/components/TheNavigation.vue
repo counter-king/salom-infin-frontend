@@ -2,12 +2,9 @@
 // Core
 import { ref, watch, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-// Stores
-import { useNavigationStore } from '@/stores/navigation.store'
 // Composable
 const router = useRouter()
 const route = useRoute()
-const navigationStore = useNavigationStore()
 // Macros
 const props = defineProps({
   navs: {
@@ -53,6 +50,13 @@ const checkRouteMeta = () => {
   </div>
 </template>
 
-<style scoped>
+<style>
+.collapse-link.router-link-active,
+.collapse-link.router-link-active svg {
+  color: var(--primary-900);
+}
 
+.collapse-link.router-link-active::after {
+  opacity: 1;
+}
 </style>

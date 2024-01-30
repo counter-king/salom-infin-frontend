@@ -13,6 +13,9 @@ const props = defineProps({
     type: [String, Date],
     default: ""
   },
+  inline: {
+    type: Boolean
+  },
   minDate: {
     type: Date
   },
@@ -58,7 +61,8 @@ const emit = defineEmits(['update:modelValue'])
 // Computed
 const rootClasses = computed(() => {
   return [
-    'group w-full rounded-xl overflow-hidden border border-greyscale-50 focus:border-primary-500',
+    'group w-full rounded-xl overflow-hidden focus:border-primary-500',
+    { 'border border-greyscale-50': !props.inline },
     // Border
     props.borderColor,
     // Validation
@@ -93,6 +97,7 @@ const modelValue = computed({
 
     <Calendar
       v-model="modelValue"
+      :inline="props.inline"
       :min-date="props.minDate"
       :max-date="props.maxDate"
       :disabled="props.disabled"
@@ -110,6 +115,7 @@ const modelValue = computed({
           root: {
             class: [
               'bg-greyscale-50 border-greyscale-50 text-gray-2',
+              { 'hidden': props.inline },
               {
                 'size-small py-[2px] pr-2 pl-4': props.size === 'x-small',
                 'size-small py-[5px] pr-2 pl-4': props.size === 'small',
@@ -119,10 +125,16 @@ const modelValue = computed({
           }
         },
         panel: {
-          class: 'shadow-calendar !w-[288px] !min-w-[288px] !h-[288px] translate-y-2 border border-solid border-greyscale-200 rounded-xl p-0'
+          class: [
+            { 'shadow-calendar !w-[288px] !min-w-[288px] !h-[288px] translate-y-2 border border-solid border-greyscale-200 ': !props.inline },
+            { 'border-none border-0': props.inline },
+            'rounded-xl p-0'
+          ]
         },
         groupContainer: {
-          class: '!w-[288px] p-4'
+          class: [
+            { '!w-[288px] p-4': !props.inline },
+          ]
         },
         group: {
           class: '!w-full !h-full'
