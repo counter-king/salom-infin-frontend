@@ -11,6 +11,7 @@ import {
   fetchRegionsList,
   fetchShortDescriptionList,
   fetchStatusList,
+  fetchDocumentTitlesList
 } from "@/services/common.service"
 import { useCorrespondentStore } from "./correspondent"
 import { useUsersStore } from "./users.store"
@@ -30,6 +31,7 @@ export const useCommonStore = defineStore("common", {
     shortDescriptionList: [],
     statusList: [],
     composeStatusList: [],
+    documentTitleList: []
 	}),
 	getters: {
 		getStatusList: (state) => state.statusList,
@@ -57,6 +59,7 @@ export const useCommonStore = defineStore("common", {
       this.actionShortDescriptionList()
       this.actionStatusList()
       this.actionComposeStatusList()
+      this.actionDocumentTitlesList()
 		},
     /**
      * Возвращает список вид подачи
@@ -242,6 +245,23 @@ export const useCommonStore = defineStore("common", {
       collectStore.actionAddRequests({
         id: 'actionComposeStatusList',
         fn: this.actionComposeStatusList,
+        params: null
+      })
+    },
+    /**
+     * Возвращает список наименование
+     * @returns Array
+     * */
+    actionDocumentTitlesList() {
+      const collectStore = useCollectRequestsStore()
+
+      fetchDocumentTitlesList().then(({ data }) => {
+        this.documentTitleList = data.results
+      })
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionDocumentTitlesList',
+        fn: this.actionDocumentTitlesList,
         params: null
       })
     },
