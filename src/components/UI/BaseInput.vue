@@ -3,10 +3,19 @@
 import { useModel, useSlots } from 'vue'
 import { useI18n } from 'vue-i18n'
 import InputText from 'primevue/inputtext'
+import { vMaska } from 'maska'
 // Macros
 const props = defineProps({
   modelValue: {
     type: [Number, String],
+  },
+  maskRule: {
+    type: String,
+    default: null
+  },
+  disabled: {
+    type: Boolean,
+    default: false
   },
   label: {
     type: String,
@@ -62,9 +71,12 @@ const { t } = useI18n()
 
     <InputText
       v-model="modelValue"
+      :disabled="props.disabled"
+      :data-maska="props.maskRule"
+      :placeholder="t(props.placeholder)"
+      v-maska
       type="text"
       size="small"
-      :placeholder="t(props.placeholder)"
       :pt="{
         root: {
           class: [

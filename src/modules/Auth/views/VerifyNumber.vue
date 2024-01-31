@@ -1,45 +1,99 @@
 <script setup>
+// Core
 import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+// Services
+import { fetchVerifyNumber, fetchSendOtp } from '@/modules/Auth/services'
 // Components
-import Button from 'primevue/button';
-import OTPCode from "../components/otpcode.vue";
-import BaseButton from "@/components/UI/BaseButton.vue"
+import OTPCode from '../components/otpcode.vue'
+// Utils
+import { dispatchNotify } from '@/utils/notify'
+// Enums
+import { COLOR_TYPES } from '@/enums'
+// Composable
+const route = useRoute()
+const router = useRouter()
+// Reactive
+const loading = ref(false)
 const otpValue = ref('')
+// Methods
+const verifyNumber = async () => {
+  try {
+    loading.value = true
+    await fetchVerifyNumber({
+      phone_number: route.query.phone,
+      otp_code: otpValue.value
+    })
+    dispatchNotify('Успешно отправлен', null, COLOR_TYPES.SUCCESS)
+    await router.push({
+      name: 'SetCredentials',
+      query: {
+        phone: route.query.phone
+      }
+    })
+  }
+  catch (error) {
+
+  }
+  finally {
+    loading.value = false
+  }
+}
+const resendOtpCode = async () => {
+  try {
+    await fetchSendOtp({ phone_number: route.query.phone })
+    dispatchNotify('Код подтверждения отправлен', null, COLOR_TYPES.SUCCESS)
+  }
+  catch (error) {
+    dispatchNotify('Ошибка', 'Ошибка при отправки код подтверждения', COLOR_TYPES.ERROR)
+  }
+}
 </script>
 <template>
   <div class="sign-in-view">
     <div class="flex justify-center items-center w-20 h-20 rounded-full text-center text-indigo-700 bg-indigo-100 m-auto mb-4">
       <base-icon
         name="LetterIcon"
-        class="w-20  inline "/>
+        width="35"
+        height="35"
+      />
     </div>
-    <h1  class="text-2xl decoration-zinc-950  font-bold mb-1 text-center text-indigo-700"> Шаг проверки </h1>
-    <p class="font-light text-sm text-color-3 text-center mb-7">
+
+    <h1  class="text-2xl decoration-zinc-950 font-bold mb-2 text-center text-indigo-700"> Шаг проверки </h1>
+
+    <p class="font-medium text-sm text-color-3 text-center mb-7">
       Мы отправили код подтверждения на ваш телефон. Введите код из письма в поле ниже.
     </p>
 
-    <div class="w-[390px] m-auto">
+    <div class=" m-auto">
       <OTPCode
-        :digit-count="4"
+        :digit-count="6"
         class="mb-8"
         @emit:up="(value) => otpValue = value"
       />
-      <router-link type="primary" :to="{ name: 'SetCredensials' }" class="text-indigo-700">
-        <base-button
-          class="w-full text-indigo-700"
-          color="bg-indigo-100"
-          border-color="border-indigo-100"
-          label="Подтвердить номер"
-          size="large"
-          shadow
-          type="submit"
-          rounded
-        ></base-button>
-      </router-link>
 
-      <div class="text-center mt-4 text-xs">
+<!--      <router-link :to="{ name: 'SetCredentials' }">-->
+      <base-button
+        :loading="loading"
+        shadow
+        rounded
+        size="large"
+        label="Подтвердить номер"
+        class="w-full"
+        @click="verifyNumber"
+      ></base-button>
+<!--      </router-link>-->
+
+      <div class="text-sm font-medium text-center mt-4">
         Не получили код ?
-        <Button  class="text-xs p-0 font-thin text-indigo-700" text type="submit" severity="success" label=" Отправить повторно" />
+
+        <button
+          type="submit"
+          class="text-primary-500 ml-1"
+          @click="resendOtpCode"
+        >
+          Отправить повторно
+        </button>
       </div>
     </div>
   </div>

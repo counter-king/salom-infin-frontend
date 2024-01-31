@@ -11,6 +11,8 @@ import { ActionAnswerMenu, EriKeysMenu, AcquaintButton } from '@/components/Acti
 import { LayoutWithTabs } from '@/components/DetailLayout'
 import { ResolutionDropdown } from '@/components/Resolution'
 import { ModalForwardDocument, ModalDoneDocument, ModalCancelSign } from '@/components/Modal'
+// Enums
+import { STATUS_TYPES } from '@/enums'
 // Composable
 const route = useRoute()
 const docflowStore = useDocFlowStore()
@@ -45,6 +47,17 @@ const cancelSign = async (text) => {
 }
 const acquaintDocument = async () => {
   await reviewStore.actionAcquaintDocument({ id: route.params.id })
+}
+const handleDocumentStatus = async () => {
+  // Изменить исполнение
+  if(reviewStore.detailModel?.status.id === STATUS_TYPES.DONE) {
+    console.log('change')
+    await reviewStore.actionPerformDocument({ id: route.params.id, performed: false })
+  }
+  else { // Выполнить документ
+    console.log('done')
+    await reviewStore.actionPerformDocument({ id: route.params.id, performed: true })
+  }
 }
 </script>
 
@@ -105,8 +118,12 @@ const acquaintDocument = async () => {
           <!-- Если документ ознакомлен -->
           <template v-if="reviewStore.isDocumentAcquainted">
             <modal-done-document
+              v-model:content="reviewStore.performModel.comment"
+              v-model:files="reviewStore.performModel.files"
               :has-resolution="boxesCommonStore.getCreatedResolutionsList"
               :is-document-signed="reviewStore.isReviewSigned"
+              :is-done-document="reviewStore.detailModel.status.id === STATUS_TYPES.DONE"
+              :create-button-fn="handleDocumentStatus"
             />
           </template>
 
