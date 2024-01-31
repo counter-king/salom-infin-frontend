@@ -241,26 +241,32 @@ export const useDocFlowStore = defineStore("docFlowStore", {
     documentMenuType: {
       name: 'Incoming',
       journalId: JOURNAL.INCOMING
-    }
+    },
+    filterState: {
+      page: 1,
+      page_size: 3
+    },
+    totalCount: 0
   }),
   actions: {
     /**
-    * @param { number } journal Журнал id
+    * @param { Object } params Журнал id
     * Получить список
     * */
-    async actionGetList(journal) {
+    async actionGetList(params) {
       const collectStore = useCollectRequestsStore()
 
       this.listLoading = true
-      let { data } = await fetchGetDocumentList({ journal_id: journal })
+      let { data } = await fetchGetDocumentList(params)
 
       this.list = data.results
       this.listLoading = false
+      this.totalCount = data.count
       // Добавляем запрос в коллекцию
       collectStore.actionAddRequests({
         id: 'actionGetList',
         fn: this.actionGetList,
-        params: journal
+        params
       })
     },
     /**

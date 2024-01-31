@@ -88,7 +88,7 @@ const types = [
       <base-col col-class="w-full">
         <base-calendar
           v-model="$v.deadline.$model"
-          :min-date="props.registerDate"
+          :min-date="new Date() /* Минимальная дата сегодняшние число */"
           :error="$v.deadline"
           :disabled="props.formType === FORM_TYPE_READ"
           label="deadline"

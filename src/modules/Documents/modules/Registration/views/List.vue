@@ -1,7 +1,7 @@
 <script setup>
 // Core
 import { computed, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 // Store
 import { useCommonStore } from '@/stores/common'
 import { useDocFlowStore } from '../stores/docflow.store'
@@ -13,8 +13,11 @@ import { LinkableCell } from '@/components/Table'
 import { R_INCOMING_COLUMNS } from '../constants'
 // Utils
 import { formatDate } from '@/utils/formatDate'
+// Enums
+import { JOURNAL } from '@/enums'
 // Composable
 const route = useRoute()
+const router = useRouter()
 const commonStore = useCommonStore()
 const docFlowStore = useDocFlowStore()
 // Computed
@@ -23,9 +26,14 @@ const journal = computed(() => commonStore.getJournalById(Number(route.params.jo
 watch(
   () => route.params.journal,
   async (_route) => {
-    _route && await docFlowStore.actionGetList(Number(_route))
-  },
-  { immediate: true }
+    await router.replace({
+      query: {
+        ...route.query,
+        journal_id: Number(_route)
+      }
+    })
+    _route && await docFlowStore.actionGetList(route.query)
+  }
 )
 // Methods
 const openModal = () => {
@@ -63,6 +71,11 @@ const link = (data) => {
     </action-toolbar>
 
     <base-data-table
+      :action-list="docFlowStore.actionGetList"
+      :api-params="{
+        journal_id: route.query.journal_id ?? JOURNAL.INCOMING
+      }"
+      :total-count="docFlowStore.totalCount"
       :headers="docFlowStore.headers"
       :value="docFlowStore.list"
       :loading="docFlowStore.listLoading"
