@@ -1,4 +1,11 @@
-import { defineStore } from "pinia"
+// Core
+import { defineStore } from 'pinia'
+// Stores
+import { useCorrespondentStore } from './correspondent'
+import { useUsersStore } from './users.store'
+import { useCollectRequestsStore } from '@/stores/collect-requests.store'
+import { useDocumentCountStore } from '@/modules/Documents/stores/count.store'
+// Services
 import {
   fetchComposeStatusList,
   fetchDeliveryTypesList,
@@ -12,11 +19,9 @@ import {
   fetchShortDescriptionList,
   fetchStatusList,
   fetchDocumentTitlesList
-} from "@/services/common.service"
-import { useCorrespondentStore } from "./correspondent"
-import { useUsersStore } from "./users.store"
-import { CORRESPONDENT } from "@/enums"
-import { useCollectRequestsStore } from "@/stores/collect-requests.store";
+} from '@/services/common.service'
+// Enums
+import { CORRESPONDENT } from '@/enums'
 
 export const useCommonStore = defineStore("common", {
 	state: () => ({
@@ -41,13 +46,15 @@ export const useCommonStore = defineStore("common", {
     getJournalById: (state) => (id) => state.journalsList.find(journal => journal.id === id)
 	},
 	actions: {
-		init() {
+		async init() {
       const correspondent = useCorrespondentStore()
       const users = useUsersStore()
+      const documentCount = useDocumentCountStore()
 
-      correspondent.actionGetList({ type: CORRESPONDENT.ALL })
-      users.actionUsersList()
-      users.actionEmployeeGroupList()
+      await documentCount.actionDocumentCountList()
+      await correspondent.actionGetList({ type: CORRESPONDENT.ALL })
+      await users.actionUsersList()
+      await users.actionEmployeeGroupList()
       this.actionDeliveryTypesList()
       this.actionDepartmentList()
       this.actionDistrictList()

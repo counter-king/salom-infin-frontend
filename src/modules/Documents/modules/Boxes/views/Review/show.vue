@@ -3,6 +3,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 // Store
+import { useDocumentCountStore } from '../../../../stores/count.store'
 import { useDocFlowStore } from '../../../Registration/stores/docflow.store'
 import { useBoxesCommonStore } from '../../stores/common.store'
 import { useReviewStore } from '../../stores/review.store'
@@ -15,6 +16,7 @@ import { ModalForwardDocument, ModalDoneDocument, ModalCancelSign } from '@/comp
 import { STATUS_TYPES } from '@/enums'
 // Composable
 const route = useRoute()
+const countStore = useDocumentCountStore()
 const docflowStore = useDocFlowStore()
 const boxesCommonStore = useBoxesCommonStore()
 const reviewStore = useReviewStore()
@@ -47,6 +49,7 @@ const cancelSign = async (text) => {
 }
 const acquaintDocument = async () => {
   await reviewStore.actionAcquaintDocument({ id: route.params.id })
+  await countStore.actionDocumentCountList()
 }
 const handleDocumentStatus = async () => {
   // Изменить исполнение

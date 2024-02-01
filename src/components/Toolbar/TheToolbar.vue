@@ -3,6 +3,8 @@
 import { ref, provide } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import Toolbar from 'primevue/toolbar'
+// Stores
+import { useThemeStore } from '@/stores/theme.store'
 // Components
 import CreateActionDropdown from './CreateActionDropdown.vue'
 import Search from './Search.vue'
@@ -10,174 +12,9 @@ import SettingDropdown from './SettingDropdown.vue'
 import Notifications from './Notifications.vue'
 import LanguageDropdown from './LanguageDropdown.vue'
 import UserDropdown from './UserDropdown.vue'
+// Composable
+const themeStore = useThemeStore()
 // Reactive
-const menus = ref([
-  // Дашбоард
-  {
-    title: "Дашбоард",
-    icon: "HomeAngleIcon",
-    link: "DashboardIndex",
-    children: [],
-    value: "dashboard",
-    count: null
-  },
-  // Календарь
-  {
-    title: "Календарь",
-    icon: "CalendarIcon",
-    link: "CalendarIndex",
-    children: [],
-    value: "calendar",
-    count: null
-  },
-  // Документ
-  {
-    title: "Документ",
-    icon: "FolderWithFilesIcon",
-    link: "DocumentsIndex",
-    value: "documents",
-    count: 6
-  },
-  // Kanban
-  {
-    title: "Kanban",
-    icon: "ChatSquareIcon",
-    link: "KanbanIndex",
-    children: [],
-    value: "kanban",
-    count: null
-  },
-  // Чат
-  {
-    title: "Чат",
-    icon: "ChatLineIcon",
-    link: "ChatIndex",
-    children: [],
-    value: "chat",
-    count: null
-  },
-  // Настройки
-  {
-    title: "Настройки",
-    icon: "SettingsIcon",
-    link: "SettingsIndex",
-    children: [
-      {
-        title: "Настройки",
-        prefix: true
-      },
-      // Документ оборот
-      {
-        title: "Документ оборот",
-        icon: "FolderWithFilesIcon",
-        link: "DocumentTurnoverIndex",
-        children: [
-          {
-            title: "Тип документа",
-            icon: "ClipboardCheckIcon",
-            link: "DocumentTypeIndex",
-            children: []
-          },
-          {
-            title: "Вид документа",
-            icon: "DocumentTextIcon",
-            link: "DocumentViewIndex",
-            children: []
-          },
-          {
-            title: "Журнал",
-            icon: "NotebookIcon",
-            link: "MagazinesIndex",
-            children: []
-          }
-        ]
-      },
-      // Корреспонденты
-      {
-        title: "Корреспонденты",
-        icon: "BuildingsIcon",
-        link: "CorrespondentsIndex",
-        children: [
-          {
-            title: "Физическое лицо",
-            icon: "UserCheckRoundedIcon",
-            link: "IndividualIndex",
-            children: []
-          },
-          {
-            title: "Индивидуальный предприниматель",
-            icon: "BuildingsIcon",
-            link: "OrganizationsIndex",
-            children: []
-          }
-        ]
-      },
-      // Пользователи
-      {
-        title: "Пользователи",
-        icon: "UsersGroupTwoRoundedIcon",
-        link: "UsersIndex",
-        children: [
-        {
-            title: "Сотрудники",
-            icon: "UserCheckRoundedIcon",
-            link: "EmployeesIndex",
-            children: []
-          },
-          {
-            title: "Помощники",
-            icon: "UsersGroupRoundedIcon",
-            link: "AssistantsIndex",
-            children: []
-          },
-          {
-            title: "Топ подписантов",
-            icon: "UserSpeakIcon",
-            link: "TopSignersIndex",
-            children: []
-          }
-        ]
-      },
-      // Профиль
-      {
-        title: "Профиль",
-        icon: "UserIcon",
-        link: "ProfileIndex",
-        children: []
-      },
-      // Мои устройства
-      {
-        title: "Мои устройства",
-        icon: "LaptopMinimalisticIcon",
-        link: "MyDevicesIndex",
-        children: []
-      },
-      // Уведомления
-      {
-        title: "Уведомления",
-        icon: "BellIcon",
-        link: "NotificationsIndex",
-        children: []
-      },
-      // Техника и оборудования
-      {
-        title: "Техника и оборудования",
-        icon: "MouseIcon",
-        link: "MachineryEquipmentIndex",
-        children: []
-      },
-      // Общие настройки
-      {
-        title: "Общие настройки",
-        icon: "SettingsMinimalisticIcon",
-        link: "GeneralSettingsIndex",
-        children: []
-      },
-    ],
-    value: "settings",
-    count: null
-  },
-])
 const openModal = ref(true)
 const modalRef = ref(null)
 // Methods
@@ -206,7 +43,7 @@ provide('openModal', openModal)
           <img src="/images/logo-text.svg" alt="Logo text" class="ml-2" />
         </router-link>
 
-        <template v-for="menu in menus" v-if="openModal">
+        <template v-for="menu in themeStore.header" v-if="openModal">
           <router-link
             :to="{ name: menu.link }"
             class="header-link group flex items-center gap-2 text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full mr-3 transition-all duration-[400ms] hover:bg-primary-800 hover:text-white"

@@ -27,14 +27,17 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
           icon: "TimeHistoryIcon",
           link: "ReviewIndex",
           children: [],
-          count: 6
+          count: null,
+          name: 'unread_for_review'
         },
         // Моё поручение
         {
           title: "Мои поручение",
           icon: "ArrowRightDownIcon",
           link: "AssignmentIndex",
-          children: []
+          children: [],
+          count: null,
+          name: 'unread_assignments'
         },
         // Исходящие
         // {
@@ -48,24 +51,30 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
           title: "На подпись",
           icon: "PenIcon",
           link: "SignIndex",
-          children: []
+          children: [],
+          count: null,
+          name: 'for_signature'
         },
         // На согласовании
         {
           title: "На согласовании",
           icon: "EyeIcon",
           link: "ApprovalIndex",
-          children: []
+          children: [],
+          count: null,
+          name: 'for_approval'
         },
         // На контроль
         {
           title: "На контроль",
           icon: "CheckCircleIcon",
           link: "ControlIndex",
-          children: []
+          children: [],
+          count: null,
+          name: 'for_control'
         },
       ],
-      count: 6
+      count: null
     },
     createdResolutionsList: {
       label: 'created-resolutions',
