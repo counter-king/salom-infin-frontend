@@ -95,13 +95,4 @@ const props = defineProps({
 .sidebar-link.router-link-active svg {
   color: var(--primary-500);
 }
-
-.collapse-link.router-link-active,
-.collapse-link.router-link-active svg {
-  color: var(--primary-900);
-}
-
-.collapse-link.router-link-active::after {
-  opacity: 1;
-}
 </style>

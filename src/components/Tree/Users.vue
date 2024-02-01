@@ -11,6 +11,8 @@ import { useAuthStore } from '@/modules/Auth/stores'
 import { useBoxesCommonStore } from '@/modules/Documents/modules/Boxes/stores/common.store'
 // Utils
 import { formatDateHour } from '@/utils/formatDate'
+// Enums
+import { STATUS_TYPES } from '@/enums'
 // Composable
 const { t } = useI18n()
 const authStore = useAuthStore()
@@ -57,15 +59,34 @@ const props = defineProps({
                 <div class="flex items-center gap-2 text-sm">
                   <h1
                     class="font-semibold"
-                    :class="reviewer.read_time ? 'text-primary-500' : 'text-critic-500'"
+                    :class="!!reviewer.read_time === true && reviewer.status?.id === STATUS_TYPES.TODO
+                      ? 'text-primary-500'
+                      : !!reviewer.read_time === true && reviewer.status?.id === STATUS_TYPES.DONE
+                        ? 'text-success-500'
+                        : 'text-critic-500'
+                    "
                   >
-                    {{ reviewer.read_time ? 'Ознакомлен' : 'Еще не ознакомлен' }}
+                    {{
+                      !!reviewer.read_time === true && reviewer.status?.id === STATUS_TYPES.TODO
+                        ? 'Ознакомлен'
+                        : !!reviewer.read_time === true && reviewer.status?.id === STATUS_TYPES.DONE
+                          ? 'Выполнен'
+                          : 'Еще не ознакомлен'
+                    }}
                   </h1>
 
                   <template v-if="reviewer.read_time">
                     <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-full"></div>
 
-                    <h1 class="font-medium text-greyscale-500">{{ formatDateHour(reviewer.read_time) }}</h1>
+                    <h1 class="font-medium text-greyscale-500">
+                      <template v-if="reviewer.modified_date">
+                        {{ formatDateHour(reviewer.modified_date) }}
+                      </template>
+
+                      <template v-else>
+                        {{ formatDateHour(reviewer.read_time) }}
+                      </template>
+                    </h1>
                   </template>
                 </div>
 
@@ -80,6 +101,30 @@ const props = defineProps({
             </div>
 
             <status-chip :status="reviewer.status" />
+          </div>
+
+          <div v-if="reviewer.comment" class="text-sm font-medium px-4 pb-2 -mt-2">
+            <p v-html="reviewer.comment"></p>
+
+            <template v-if="reviewer.files && reviewer.files.length">
+              <template v-for="file in reviewer.files">
+                <div class="mt-1">
+                  <a
+                    :href="file.url"
+                    target="_blank"
+                    class="inline-flex items-center gap-2 font-medium text-primary-500 py-1"
+                  >
+                    <base-icon
+                      name="FolderWithFilesIcon"
+                      width="18"
+                      height="18"
+                      class=""
+                    />
+                    <span class="lowercase border-b border-dashed border-primary-500">{{ file.name }}</span>
+                  </a>
+                </div>
+              </template>
+            </template>
           </div>
         </div>
 

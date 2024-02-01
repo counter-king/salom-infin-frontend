@@ -1,4 +1,11 @@
-import { defineStore } from "pinia"
+// Core
+import { defineStore } from 'pinia'
+// Stores
+import { useCorrespondentStore } from './correspondent'
+import { useUsersStore } from './users.store'
+import { useCollectRequestsStore } from '@/stores/collect-requests.store'
+import { useDocumentCountStore } from '@/modules/Documents/stores/count.store'
+// Services
 import {
   fetchComposeStatusList,
   fetchDeliveryTypesList,
@@ -11,11 +18,10 @@ import {
   fetchRegionsList,
   fetchShortDescriptionList,
   fetchStatusList,
-} from "@/services/common.service"
-import { useCorrespondentStore } from "./correspondent"
-import { useUsersStore } from "./users.store"
-import { CORRESPONDENT } from "@/enums"
-import { useCollectRequestsStore } from "@/stores/collect-requests.store";
+  fetchDocumentTitlesList
+} from '@/services/common.service'
+// Enums
+import { CORRESPONDENT } from '@/enums'
 
 export const useCommonStore = defineStore("common", {
 	state: () => ({
@@ -30,6 +36,7 @@ export const useCommonStore = defineStore("common", {
     shortDescriptionList: [],
     statusList: [],
     composeStatusList: [],
+    documentTitleList: []
 	}),
 	getters: {
 		getStatusList: (state) => state.statusList,
@@ -39,13 +46,15 @@ export const useCommonStore = defineStore("common", {
     getJournalById: (state) => (id) => state.journalsList.find(journal => journal.id === id)
 	},
 	actions: {
-		init() {
+		async init() {
       const correspondent = useCorrespondentStore()
       const users = useUsersStore()
+      const documentCount = useDocumentCountStore()
 
-      correspondent.actionGetList({ type: CORRESPONDENT.ALL })
-      users.actionUsersList()
-      users.actionEmployeeGroupList()
+      await documentCount.actionDocumentCountList()
+      await correspondent.actionGetList({ type: CORRESPONDENT.ALL })
+      await users.actionUsersList()
+      await users.actionEmployeeGroupList()
       this.actionDeliveryTypesList()
       this.actionDepartmentList()
       this.actionDistrictList()
@@ -57,6 +66,7 @@ export const useCommonStore = defineStore("common", {
       this.actionShortDescriptionList()
       this.actionStatusList()
       this.actionComposeStatusList()
+      this.actionDocumentTitlesList()
 		},
     /**
      * Возвращает список вид подачи
@@ -242,6 +252,23 @@ export const useCommonStore = defineStore("common", {
       collectStore.actionAddRequests({
         id: 'actionComposeStatusList',
         fn: this.actionComposeStatusList,
+        params: null
+      })
+    },
+    /**
+     * Возвращает список наименование
+     * @returns Array
+     * */
+    actionDocumentTitlesList() {
+      const collectStore = useCollectRequestsStore()
+
+      fetchDocumentTitlesList().then(({ data }) => {
+        this.documentTitleList = data.results
+      })
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionDocumentTitlesList',
+        fn: this.actionDocumentTitlesList,
         params: null
       })
     },

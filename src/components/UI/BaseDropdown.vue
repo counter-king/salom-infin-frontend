@@ -77,6 +77,7 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:modelValue', 'update:options'])
 // Reactive
+const inputRef = ref(null)
 const search = ref(null)
 const list = ref([])
 // Composable
@@ -132,6 +133,7 @@ const loadList = async (params) => {
       :placeholder="t(props.placeholder)"
       :disabled="props.disabled"
       filter
+      @show="() => props.searchable && inputRef.focus()"
       :pt="{
         root: {
           class: rootClasses
@@ -170,8 +172,11 @@ const loadList = async (params) => {
 		    v-if="props.searchable"
 		    #header="{ value, options }"
 	    >
-		    <div class="flex items-center border-b border-greyscale-200">
+		    <div class="flex items-center border-b border-greyscale-200 px-3">
+          <base-icon name="MagniferIcon" width="16" />
+
 			    <input
+            ref="inputRef"
 				    v-model="search"
 				    type="text"
 				    :placeholder="t(props.menuPlaceholder)"
@@ -183,7 +188,7 @@ const loadList = async (params) => {
 	            escape: true,
 	            autoHide: false
 	          }"
-				    class="text-grey-500 ml-auto mr-3"
+				    class="text-grey-500 ml-auto"
 				    @click="search = null"
 			    >
 				    <base-icon name="XIcon" width="18" height="18" />

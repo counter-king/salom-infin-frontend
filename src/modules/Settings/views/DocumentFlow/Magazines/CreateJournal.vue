@@ -12,7 +12,7 @@ const defaultJournal = { name_uz: '', name_ru: '' };
 const journal = ref(defaultJournal);
 const loading = ref(false);
 const createJournal = () => {
-   const {name_ru, name_uz} = journal.value;
+   const { name_ru, name_uz } = journal.value;
    if(name_uz && name_ru) {
       loading.value = true;
       axiosConfig
@@ -34,7 +34,7 @@ const createJournal = () => {
             loading.value = false;
          });
    } else {
-      dispatchNotify('Введите название', '', 'error')
+      dispatchNotify('Введите название', '', 'error');
    }
 };
 </script>

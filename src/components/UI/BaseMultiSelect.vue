@@ -98,6 +98,7 @@ const props = defineProps({
 })
 // Reactive
 const menuRef = ref(null)
+const inputRef = ref(null)
 const list = ref([])
 const search = ref(null)
 // Composable
@@ -153,6 +154,7 @@ const removeItem = (event, value) => {
   )
 }
 const selectItem = (event, value) => {
+  search.value = null
   emit('emit:select-item', value)
 }
 const toggle = (event) => {
@@ -194,6 +196,7 @@ watch(debounced, async () => {
       :display="props.display"
       :disabled="props.disabled"
       filter
+      @show="() => inputRef.focus()"
       :pt="{
         root: {
           class: rootClasses
@@ -254,20 +257,24 @@ watch(debounced, async () => {
       }"
     >
       <template #header="{ value, options }">
-        <div class="flex items-center border-b border-greyscale-200">
+        <div class="flex items-center border-b border-greyscale-200 px-3">
+          <base-icon name="MagniferIcon" width="16" />
+
           <input
+            ref="inputRef"
             v-model="search"
             type="text"
             :placeholder="t(props.menuPlaceholder)"
             class="flex-1 p-3 block outline-none font-medium text-sm text-gray-1"
           />
+
           <button
             v-tooltip.left="{
 	            value: `<h4 class='text-xs text-white -my-1'>Очистить</h4>`,
 	            escape: true,
 	            autoHide: false
 	          }"
-            class="text-grey-500 ml-auto mr-3"
+            class="text-grey-500 ml-auto"
             @click="search = null"
           >
             <base-icon name="XIcon" width="18" height="18" />

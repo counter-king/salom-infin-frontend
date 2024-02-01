@@ -39,25 +39,30 @@ const emits = defineEmits(['emit:resetHeaders']);
 
 <template>
   <div class="flex mb-5 justify-between items-center">
-    <h1 class="text-2xl font-bold text-primary-900">{{ t(props.title) }}</h1>
+    <div class="flex items-center gap-4">
+      <h1 class="text-2xl font-bold text-primary-900">{{ t(props.title) }}</h1>
+
+      <slot name="title-after" />
+    </div>
 
     <div class="flex items-center gap-2">
+      <slot name="filters">
+        <export-button />
 
-      <export-button />
+        <calendar-menu />
 
-      <calendar-menu />
+        <filter-menu
+          :action-list="props.actionList"
+          :filter-keys="props.filterKeys"
+          :keys-to-include-on-clear-filter="props.keysToIncludeOnClearFilter"
+        />
 
-      <filter-menu
-        :action-list="props.actionList"
-        :filter-keys="props.filterKeys"
-        :keys-to-include-on-clear-filter="props.keysToIncludeOnClearFilter"
-      />
-
-      <column-menu
-        :items="props.columnMenuItems"
-        :storage-columns-name="props.storageColumnsName"
-        @emit:reset-headers="emits('emit:resetHeaders')"
-      />
+        <column-menu
+          :items="props.columnMenuItems"
+          :storage-columns-name="props.storageColumnsName"
+          @emit:reset-headers="emits('emit:resetHeaders')"
+        />
+      </slot>
 
       <slot name="end"/>
     </div>

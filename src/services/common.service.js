@@ -14,7 +14,8 @@ const URLS = {
   status: "status/",
   composeStatus: "compose/1/statuses/",
 	users: "users",
-  departments: "departments"
+  departments: "departments",
+  documentTitles: 'document-titles/'
 }
 /**
  * Возвращает список вид подачи
@@ -99,3 +100,11 @@ export const fetchUserDetail = (id) => {
 export const fetchDepartmentDetail = (id) => {
   return axiosConfig.get(`${URLS.departments}/${id}/`)
 }
+/**
+ * Возвращает список наименование
+ * @returns [{Array}]
+ */
+export const fetchDocumentTitlesList = () => {
+  return axiosConfig.get(URLS.documentTitles)
+}
+

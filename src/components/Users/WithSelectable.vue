@@ -109,7 +109,7 @@ const handleSelect = (item) => {
         <base-icon
           :stroke="false"
           name="CheckCircleBgIcon"
-          class="icon-selected w-[16px] h-[16px] stroke-0 hidden"
+          class="icon-selected hidden"
         />
       </template>
 
