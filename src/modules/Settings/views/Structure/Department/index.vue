@@ -3,22 +3,41 @@ import Button from 'primevue/button';
 import Loading from './Loading.vue';
 import NoDepartment from './NoDepartment.vue';
 import axiosConfig from '@/services/axios.config';
+import CreateDepartment from './CreateDepartment.vue';
+import Department from './Department.vue';
 import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 const route = useRoute();
-const status = ref('loading');
-const topLevelDepartment = ref(null);
+const activeDepartment = ref(null);
+const createDepartment = ref(null);
+const createVisible = ref(false);
 const departmentId = route.params?.id;
 const employees = ref([]);
 const employeesLoading = ref(false);
+const parentDepartments = ref([]);
+const status = ref('loading');
 const subDepartments = ref([]);
 const subDepartmentsLoading = ref(false);
+const topLevelDepartment = ref(null);
+const setCreateVisible = visible => {
+   createVisible.value = visible;
+};
+const setActiveDepartment = department => {
+   activeDepartment.value = department;
+};
+const openModal = (departments, department) => {
+   createDepartment.value = department;
+   createVisible.value = true;
+   parentDepartments.value = departments;
+};
 const getSubDepartments = department => {
    subDepartmentsLoading.value = true;
    axiosConfig
-      .get(`/departments/sub-departments/${department}/`)
+      .get(`/departments/${department}/`)
       .then(response => {
-         console.log(response);
+         const children = response?.data?.children;
+         const newSubDepartments = Array.isArray(children) ? children : [];
+         subDepartments.value = newSubDepartments;
       })
       .catch(() => {
          subDepartments.value = [];
@@ -28,6 +47,7 @@ const getSubDepartments = department => {
       })
 };
 const getEmployees = department => {
+   activeDepartment.value = department;
    employeesLoading.value = true;
    axiosConfig
       .get(`/users/?department=${department}`)
@@ -48,14 +68,12 @@ const getDepartment = department => {
    axiosConfig
       .get(`/departments/${department}/`)
       .then(response => {
-         const children = response?.data?.children;
          const data = response?.data;
          const success = response?.status === 200;
-         const newSubDepartments = Array.isArray(children) ? children : [];
          if(success && data) {
-            status.value = 'success';
             getEmployees(department);
-            subDepartments.value = newSubDepartments;
+            getSubDepartments(department);
+            status.value = 'success';
             topLevelDepartment.value = data;
          } else {
             status.value = 'error';
@@ -101,13 +119,57 @@ onMounted(() => {
             <div class="flex items-center gap-2"></div>
          </div>
          <div class="flex justify-between" style="height: calc(100% - 60px)">
-            <div style="width: calc(50% - 10px)" class="h-full rounded-2xl bg-white p-4 sub-departments">
+            <div style="width: calc(50% - 10px)" class="h-full rounded-2xl bg-white sub-departments">
                <template v-if="subDepartmentsLoading">
                   <Loading />
                </template>
                <template v-else>
                   <template v-if="subDepartments.length">
-                     <div>Sub Departments</div>
+                     <div class="h-full w-full">
+                        <div class="px-3 pt-3">
+                           <div class="flex items-center justify-between text-md font-semibold rounded-xl px-3 py-2.5 duration-[400ms] bg-greyscale-100">
+                              <span>Отдели</span>
+                              <Button
+                                 class="shadow-none p-0 text-xs bg-transparent rounded-full"
+                                 icon
+                                 severity="secondary"
+                                 text
+                                 @click="() => {
+                                    openModal([], topLevelDepartment);
+                                 }"
+                                 v-tooltip.top="{
+                                    autoHide: false,
+                                    escape: true,
+                                    value: `<h4 class='text-xs text-white -my-1'>Добавить</h4>`,
+                                 }"
+                                 >
+                                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="24" height="24" rx="12" fill="#EEE9FF"/>
+                                    <path d="M8 12H16" stroke="#635AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M12 16V8" stroke="#635AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                 </svg>
+                              </Button>
+                           </div>
+                        </div>
+                        <div class="flex flex-col overflow-y-scroll settings-structure-departments" style="height: calc(100% - 74px)">
+                           <div class="pl-3 pr-[6px] pt-2">
+                              <Department
+                                 :activeDepartment="activeDepartment"
+                                 :department="department"
+                                 :getEmployees="getEmployees"
+                                 :key="index"
+                                 :last="index === subDepartments.length - 1"
+                                 :openModal="openModal"
+                                 :parentDepartments="[]"
+                                 :setActiveDepartment="setActiveDepartment"
+                                 v-for="(department, index) in subDepartments"
+                                 :getSubDepartments="() => {
+                                    getSubDepartments(departmentId)
+                                 }"
+                              />
+                           </div>
+                        </div>
+                     </div>
                   </template>
                   <template v-else>
                      <div class="flex justify-center pt-12">
@@ -120,13 +182,20 @@ onMounted(() => {
                               </svg>
                            </div>
                            <p class="text-center text-greyscale-300 mt-3 mb-6">В этом отделе нет подотделов. Нажмите кнопку ниже, чтобы добавить.</p>
-                           <Button size="small" class="rounded-lg bg-greyscale-100 text-black text-sm font-semibold border-transparent focus:border-primary-500">
+                           <Button
+                              @click="() => {
+                                 createDepartment = topLevelDepartment;
+                                 createVisible = true;
+                                 parentDepartments = [];
+                              }"
+                              size="small"
+                              class="rounded-lg bg-greyscale-100 text-black text-sm font-semibold border-transparent focus:border-primary-500">
                               <span class="mr-2">
                                  <svg width="24" height="24" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5003 18.3307C15.1027 18.3307 18.8337 14.5998 18.8337 9.9974C18.8337 5.39502 15.1027 1.66406 10.5003 1.66406C5.89795 1.66406 2.16699 5.39502 2.16699 9.9974C2.16699 14.5998 5.89795 18.3307 10.5003 18.3307ZM11.1253 7.4974C11.1253 7.15222 10.8455 6.8724 10.5003 6.8724C10.1551 6.8724 9.87533 7.15222 9.87533 7.4974L9.87532 9.37242H8.00033C7.65515 9.37242 7.37533 9.65224 7.37533 9.99742C7.37533 10.3426 7.65515 10.6224 8.00033 10.6224H9.87532V12.4974C9.87532 12.8426 10.1551 13.1224 10.5003 13.1224C10.8455 13.1224 11.1253 12.8426 11.1253 12.4974L11.1253 10.6224H13.0003C13.3455 10.6224 13.6253 10.3426 13.6253 9.99742C13.6253 9.65224 13.3455 9.37242 13.0003 9.37242H11.1253V7.4974Z" fill="#635AFF"/>
                                  </svg>
                               </span>
-                              <span>Добавить субдепартамент</span>
+                              <span>Добавить отдел</span>
                            </Button>
                         </div>
                      </div>
@@ -169,6 +238,16 @@ onMounted(() => {
                   </template>
                </template>
             </div>
+            <CreateDepartment
+               :getSubDeparments="() => {
+                  getSubDepartments(departmentId);
+               }"
+               :parent="createDepartment"
+               :parentDepartments="parentDepartments"
+               :setVisible="setCreateVisible"
+               :topLevelDepartment="topLevelDepartment"
+               :visible="createVisible"
+               />
          </div>
       </template>
       <template v-else>
@@ -176,4 +255,20 @@ onMounted(() => {
       </template>
    </div>
 </template>
-<style></style>
+<style>
+.settings-structure-departments::-webkit-scrollbar {
+   height: 6px;
+   width: 6px;
+}
+.settings-structure-departments::-webkit-scrollbar-track {
+   border-radius: 3px;
+   box-shadow: none;
+}
+.settings-structure-departments::-webkit-scrollbar-thumb {
+   background-color: #635AFF;
+   border-radius: 3px;
+}
+.settings-structure-departments::-webkit-scrollbar-thumb:hover {
+   background-color: #635AFF;
+}
+</style>
