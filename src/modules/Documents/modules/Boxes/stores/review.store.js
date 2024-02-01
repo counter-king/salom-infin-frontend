@@ -10,7 +10,8 @@ import {
   fetchReviewById,
   fetchChangeReviewer,
   fetchSignOrCancel,
-  fetchAcquaintDocument
+  fetchAcquaintDocument,
+  fetchPerformDocument
 } from "../services/review.service.js"
 // Utils
 import { dispatchNotify } from '@/utils/notify'
@@ -198,7 +199,11 @@ export const useReviewStore = defineStore("review", {
       read_time: null,
       user: null,
     },
-    listLoading: false
+    listLoading: false,
+    performModel: {
+      comment: null,
+      files: []
+    },
   }),
   getters: {
     isReviewSigned: state => state.detailModel.assignments.length
@@ -242,6 +247,11 @@ export const useReviewStore = defineStore("review", {
 
       this.detailModel = data
       this.detailModel.document.__files = data.document.files.map(file => file.file)
+
+      this.actionSetPerform({
+        comment: data.comment,
+        files: data.files
+      })
 
       // Есть ли созданная резолюция
       if(data.assignments && data.assignments.length) {
@@ -319,6 +329,47 @@ export const useReviewStore = defineStore("review", {
       } catch (error) {
         dispatchNotify('Ошибка', 'Ошибка ознакомление документа', COLOR_TYPES.ERROR)
       }
+    },
+    /*
+    * Выполнить документ
+    * */
+    async actionPerformDocument({ id, performed }) {
+      try {
+        const docflowStore = useDocFlowStore()
+        await fetchPerformDocument({
+          id,
+          model: {
+            ...this.performModel,
+            files: this.performModel.files.map(file => ({ id: file.id }))
+          }
+        })
+        await this.actionReviewById(this.detailModel)
+        await docflowStore.actionGetTree(this.detailModel.document.id)
+        // Если идет выполнения документа
+        if(performed) {
+          dispatchNotify('Документ выполнен', null, COLOR_TYPES.SUCCESS)
+        }
+        else {
+          dispatchNotify('Исполнения изменено', null, COLOR_TYPES.SUCCESS)
+        }
+        return Promise.resolve()
+      }
+      catch (error) {
+        // Если идет выполнения документа
+        if(performed) {
+          dispatchNotify('Ошибка', 'Ошибка выполнение документа', COLOR_TYPES.ERROR)
+        }
+        else {
+          dispatchNotify('Ошибка', 'Ошибка исполнение документа', COLOR_TYPES.ERROR)
+        }
+        return Promise.reject()
+      }
+    },
+    /*
+    *
+    * */
+    actionSetPerform({ comment, files }) {
+      Object.assign(this.performModel, { comment, files })
     }
   }
 })

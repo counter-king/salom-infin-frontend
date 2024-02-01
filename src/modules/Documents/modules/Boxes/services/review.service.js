@@ -6,7 +6,8 @@ const URLS = {
   performers: 'performers',
   changeReviewer: "change-reviewer",
   verifyOrCancel: "verify-or-cancel",
-  acquaint: "acquaint"
+  acquaint: "acquaint",
+  perform: 'perform'
 }
 /**
  * Список на рассмотрение
@@ -49,4 +50,11 @@ export const fetchAcquaintDocument = ({ id }) => {
  * */
 export const fetchPerformList = ({ id }) => {
   return axiosConfig.get(`${URLS.resolution}/${id}/${URLS.performers}/`)
+}
+/**
+ * Выполнить документ
+ * @return Promise
+ * */
+export const fetchPerformDocument = ({ id, model }) => {
+  return axiosConfig.put(`${URLS.list}/${id}/${URLS.perform}/`, model)
 }

@@ -2,7 +2,7 @@ import axiosConfig from "./axios.config"
 
 const URLS = {
   deliveryTypes: "delivery-types/",
-  departments: "departments/top-level-departments/",
+  topDepartments: "departments/top-level-departments",
   districts: "districts/",
   documentTypes: "document-types/",
   employeeGroups: "employee-groups/",
@@ -13,7 +13,9 @@ const URLS = {
   shortDescription: "short-descriptions/",
   status: "status/",
   composeStatus: "compose/1/statuses/",
-	users: "users/",
+	users: "users",
+  departments: "departments",
+  documentTitles: 'document-titles/'
 }
 /**
  * Возвращает список вид подачи
@@ -27,7 +29,7 @@ export const fetchDeliveryTypesList = () => {
  * @returns [{Array}]
  * */
 export const fetchDepartmentList = () => {
-  return axiosConfig.get(URLS.departments, { page_size: 50 })
+  return axiosConfig.get(`${URLS.topDepartments}/`, { page_size: 50 })
 }
 /**
  * Возвращает список районов
@@ -92,3 +94,17 @@ export const fetchStatusList = () => {
 export const fetchComposeStatusList = () => {
   return axiosConfig.get(URLS.composeStatus)
 }
+export const fetchUserDetail = (id) => {
+  return axiosConfig.get(`${URLS.users}/${id}/`)
+}
+export const fetchDepartmentDetail = (id) => {
+  return axiosConfig.get(`${URLS.departments}/${id}/`)
+}
+/**
+ * Возвращает список наименование
+ * @returns [{Array}]
+ */
+export const fetchDocumentTitlesList = () => {
+  return axiosConfig.get(URLS.documentTitles)
+}
+

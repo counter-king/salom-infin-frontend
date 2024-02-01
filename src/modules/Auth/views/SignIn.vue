@@ -37,7 +37,7 @@ const formModel = reactive({
 })
 const rules = {
   username: {
-    required: helpers.withMessage(`Необходим логин`, required)
+    required: helpers.withMessage(`Необходим номер телефона`, required)
   },
   password: {
     required: helpers.withMessage(`Необходим пароль`, required),
@@ -54,7 +54,10 @@ const logIn = async () => {
 
   try {
     loading.value = true
-    await authStore.actionUserLogin(formModel)
+    await authStore.actionUserLogin({
+      ...formModel,
+      username: formModel.username?.replace(/\D/g, '')
+    })
     await authStore.actionUserProfile()
     await router.push({
       name: "DashboardIndex"
@@ -90,9 +93,10 @@ onMounted(() => {
           <base-col col-class="w-1/1">
             <base-input
               v-model="v.username.$model"
-              label="Логин"
               :error="v.username"
-              placeholder="Введите логин"
+              mask-rule="+### ## ### ## ##"
+              label="Телефона"
+              placeholder="Введите номер телефона"
             />
           </base-col>
 

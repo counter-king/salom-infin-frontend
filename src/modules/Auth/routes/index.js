@@ -18,8 +18,8 @@ const Auth = [
   },
   // Set credentials
   {
-    path: "set-credensials",
-    name: "SetCredensials",
+    path: "set-credentials",
+    name: "SetCredentials",
     component: () => import("../views/SetCredentials.vue")
   },
   // Forget password

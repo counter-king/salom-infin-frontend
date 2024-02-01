@@ -11,6 +11,10 @@ const props = defineProps({
     type: [Array],
     default: []
   },
+  required: {
+    type: Boolean,
+    default: true
+  }
 });
 const modelValue = useModel(props, 'modelValue')
 
@@ -26,7 +30,7 @@ const emit = defineEmits(['update:modelValue'])
     display="chip"
     selectable
     label="department"
-    required
+    :required="props.required"
     type="department"
   >
     <template #chip="{ value }">

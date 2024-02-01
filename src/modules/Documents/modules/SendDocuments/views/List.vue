@@ -18,6 +18,8 @@ const sdStore = useSDStore();
 const paginationStore = usePaginationStore();
 const route = useRoute();
 const router = useRouter();
+const filterKeys = ["approvers", "author", "curator", "signers", "departments"];
+const keysToIncludeOnClearFilter = ["type"]
 
 const title = computed(() => {
   return route.query?.type ? sdStore.SD_TOOLBAR_MENU_LIST.find(item => item.type === route.query?.type).label : SD_TYPE_INNER;
@@ -83,6 +85,9 @@ onMounted(async () => {
       :title="title"
       :column-menu-items="sdStore.headers"
       :storage-columns-name="SD_INNER_COLUMNS"
+      :action-list="sdStore.actionGetDocumentList"
+      :filter-keys="filterKeys"
+      :keys-to-include-on-clear-filter="keysToIncludeOnClearFilter"
       @emit:reset-headers="sdStore.resetHeaders"
     >
       <template #end>
