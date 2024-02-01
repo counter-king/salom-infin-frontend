@@ -96,8 +96,8 @@ const initializeTable = async () => {
     paginationStore.pageSize = Number(route.query.page_size);
     paginationStore.firstRow = Number(route.query.first_row);
     await props.actionList({ ...route.query, page: paginationStore.page, page_size: paginationStore.pageSize });
-  } else if (route.query && route.query.length) {
-    await props.actionList({ ...route.query });
+  } else if (route.query && props.apiParams) {
+    await props.actionList({ ...props.apiParams, ...route.query });
   } else if (props.apiParams){
     await props.actionList({ ...props.apiParams});
   } else {

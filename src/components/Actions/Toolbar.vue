@@ -19,6 +19,18 @@ const props = defineProps({
     type: String,
     default: () => "",
     required: true
+  },
+  actionList: {
+    type: Function,
+    default: () => void 0
+  },
+  filterKeys: {
+    type: Array,
+    default: () => []
+  },
+  keysToIncludeOnClearFilter: {
+    type: Array,
+    default: () => []
   }
 })
 
@@ -35,7 +47,11 @@ const emits = defineEmits(['emit:resetHeaders']);
 
       <calendar-menu />
 
-      <filter-menu />
+      <filter-menu
+        :action-list="props.actionList"
+        :filter-keys="props.filterKeys"
+        :keys-to-include-on-clear-filter="props.keysToIncludeOnClearFilter"
+      />
 
       <column-menu
         :items="props.columnMenuItems"

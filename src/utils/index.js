@@ -159,6 +159,7 @@ export const formatUserFullName = (item) => {
     return `${item.first_name[0]}. ${item.father_name ? item.father_name[0] + '. ' : ''} ${item.last_name}`
   }
 }
+/** **/
 export const adjustUsersToArray = (tempArray) => {
   return tempArray.map(item => {
     if (item.hasOwnProperty('user')) {
@@ -172,4 +173,37 @@ export const adjustUsersToArray = (tempArray) => {
       }
     }
   });
+}
+/** **/
+export const filterObjectByKeys = (obj, keysToInclude = []) => {
+  const filteredObject = {}
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key) && keysToInclude.includes(key)){
+      filteredObject[key] = obj[key];
+    }
+  }
+  return filteredObject;
+}
+/** **/
+export const filterFalsyValues = (obj) => {
+  const filteredObject = {};
+
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key) && obj[key]) {
+      filteredObject[key] = obj[key];
+    }
+  }
+
+  return filteredObject;
+}
+
+export const removeKeysWithDoubleUnderscore = (obj) => {
+  let strObj = JSON.stringify(obj);
+  let jsonObj = JSON.parse(strObj);
+  for (const key in jsonObj) {
+    if (Object.prototype.hasOwnProperty.call(jsonObj, key) && key.startsWith('__')) {
+      delete jsonObj[key];
+    }
+  }
+  return jsonObj;
 }

@@ -4,7 +4,9 @@ import {useI18n} from "vue-i18n";
 import {useRoute, useRouter} from "vue-router";
 // Constants
 import { useSDStore } from "@/modules/Documents/modules/SendDocuments/stores/index.store";
-import {computed, onMounted, ref, unref, watch} from "vue";
+import {computed, onMounted, onUnmounted, ref, unref, watch} from "vue";
+// Store
+import { useFilterStore } from "@/stores/filter.store";
 // Components
 import CustomizeMenuDialog from "@/modules/Documents/modules/SendDocuments/components/CustomizeMenuDialog.vue";
 // Utils
@@ -23,6 +25,7 @@ const opRef = ref(null);
 const moreVisible = ref(false);
 const dialog = ref(false);
 const limitExceeded = ref(false);
+const filterStore = useFilterStore();
 
 const selectedMenuItems = computed(() => {
   return sdStore.SD_TOOLBAR_MENU_LIST.filter(item => item.selected);
@@ -33,16 +36,17 @@ const unSelectedMenuItems = computed(() => {
 })
 
 // Methods
-const onChangeDocType = (menu) => {
+const onChangeDocType = async (menu) => {
   sdStore.SD_TOOLBAR_MENU_LIST.forEach(item => {
     item.active = item === menu;
   });
-  router.replace({
+  await router.replace({
     query: {
       type: menu.type
     }
   });
-  sdStore.actionGetDocumentList({ ...route.query, type: menu.type });
+  await sdStore.actionGetDocumentList({ ...route.query, type: menu.type });
+  filterStore.resetFilterState();
   saveStorageItem(SD_TOOLBAR_MENU_STORAGE_NAME, JSON.stringify(sdStore.SD_TOOLBAR_MENU_LIST));
   emit('emit:changeDocType', menu);
 }
@@ -71,6 +75,10 @@ const manageStorageMenu = () => {
 
 onMounted(() => {
   manageStorageMenu();
+});
+
+onUnmounted(() => {
+  filterStore.resetFilterState();
 })
 </script>
 
