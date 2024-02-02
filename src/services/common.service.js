@@ -107,4 +107,7 @@ export const fetchDepartmentDetail = (id) => {
 export const fetchDocumentTitlesList = () => {
   return axiosConfig.get(URLS.documentTitles)
 }
+export const fetchComposeStatusDetail = (id) => {
+  return axiosConfig.get(`${URLS.composeStatus}${id}/`)
+}
 

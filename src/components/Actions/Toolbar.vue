@@ -49,7 +49,10 @@ const emits = defineEmits(['emit:resetHeaders']);
       <slot name="filters">
         <export-button />
 
-        <calendar-menu />
+        <calendar-menu
+          :action-list="props.actionList"
+          :keys-to-include-on-clear-filter="props.keysToIncludeOnClearFilter"
+        />
 
         <filter-menu
           :action-list="props.actionList"

@@ -1,27 +1,45 @@
 <script setup>
 // Core
-import {ref, unref, watch} from "vue";
-import {useI18n} from "vue-i18n";
+import {onMounted, onUnmounted, ref, unref, watch} from "vue";
+import { useI18n } from "vue-i18n";
+import { useRoute, useRouter } from "vue-router";
 // Enums
 import { TEMPLATE_OPTIONS } from "@/enums";
+// Store
+import { useFilterStore } from "@/stores/filter.store";
+import { usePaginationStore } from "@/stores/pagination.store";
 // Components
 import BaseSeparateCalendar from "../UI/BaseSeparateCalendar.vue";
 // Utils
-import {getDateRange} from "@/utils";
+import {clearModel, filterObjectByKeys, getDateRange} from "@/utils";
+
+const props = defineProps({
+  actionList: {
+    type: Function,
+    default: () => void 0
+  },
+  keysToIncludeOnClearFilter: {
+    type: Array,
+    default: () => []
+  }
+})
 
 const opRef = ref(null);
 const { t } = useI18n();
+const route = useRoute();
+const router = useRouter();
+const filterStore = useFilterStore();
+const paginationStore = usePaginationStore();
 
 const patternVisible = ref(true);
-const selectedDate= ref(null);
-const datePicker= ref(null);
+const selectedDate = ref(null);
+const datePicker = ref(null);
 
-
+// Methods
 const toggle = (event) => {
   const _opRef = unref(opRef)
   _opRef.opRef.toggle(event)
 }
-
 const setPatternDate = (item) => {
   selectedDate.value = getDateRange(item.label);
   const year = new Date(selectedDate.value[0]).getFullYear();
@@ -31,22 +49,74 @@ const setPatternDate = (item) => {
     option.active = option === item;
   })
 }
-
 const clearPatternActive = () => {
   TEMPLATE_OPTIONS.forEach(option => {
     option.active = false;
   })
 }
-
-const clear = () => {
+const clear = async () => {
   selectedDate.value = [];
   clearPatternActive();
+  await clearModel(filterStore.filterState, props.keysToIncludeOnClearFilter);
+  toggle();
+  if (route.query) {
+    let tempRouteQuery = filterObjectByKeys(route.query, props.keysToIncludeOnClearFilter);
+    await paginationStore.resetPagination();
+    await router.replace({
+      query: {
+        ...tempRouteQuery,
+        page: paginationStore.page,
+        page_size: paginationStore.pageSize,
+        first_row: paginationStore.firstRow
+      }
+    });
+    await props.actionList({ ...route.query });
+  }
+}
+const returnStringDate = (date) => {
+  return `${new Date(date).getFullYear()}-${new Date(date).getMonth() + 1}-${new Date(date).getDate()}`;
+}
+const filter = async () => {
+  if (filterStore.filterState.created_start_date && filterStore.filterState.created_end_date) {
+    await paginationStore.resetPagination();
+    await router.replace({
+      query: {
+        ...route.query,
+        created_start_date: filterStore.filterState.created_start_date,
+        created_end_date: filterStore.filterState.created_end_date,
+        page: paginationStore.page,
+        page_size: paginationStore.pageSize,
+        first_row: paginationStore.firstRow
+      }
+    });
+    toggle();
+    await props.actionList(route.query);
+  }
+}
+const onChangePanelState = (val) => {
+  if (val) {
+    if (route.query && route.query.created_start_date && route.query.created_end_date) {
+      filterStore.filterState.created_start_date = route.query.created_start_date;
+      filterStore.filterState.created_end_date = route.query.created_end_date;
+      selectedDate.value = [filterStore.filterState.created_start_date, filterStore.filterState.created_end_date]
+    } else {
+      filterStore.filterState.created_start_date = null;
+      filterStore.filterState.created_end_date = null;
+      selectedDate.value = [];
+    }
+  }
 }
 
 watch(patternVisible, (val) =>  {
   patternVisible.value = val;
-  clear();
-}, { immediate: true })
+  selectedDate.value = [];
+  clearPatternActive();
+}, { immediate: true });
+
+watch(selectedDate, val => {
+  filterStore.filterState.created_start_date = returnStringDate(selectedDate.value[0]);
+  filterStore.filterState.created_end_date = returnStringDate(selectedDate.value[1]);
+})
 
 </script>
 
@@ -68,6 +138,7 @@ watch(patternVisible, (val) =>  {
     ref="opRef"
     :width="patternVisible ? 'w-[784px]' : 'w-[582px]'"
     menu-class="bg-white mt-1 overflow-hidden"
+    @emit:change-state="onChangePanelState"
   >
     <template #header>
       <div class="flex items-center justify-between h-14 px-4">
@@ -130,6 +201,7 @@ watch(patternVisible, (val) =>  {
           shadow
           type="button"
           size="small"
+          @click="filter"
         />
       </div>
     </template>
