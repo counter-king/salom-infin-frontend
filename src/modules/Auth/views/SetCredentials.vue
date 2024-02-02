@@ -54,7 +54,7 @@ const setCredentials = async () => {
 <template>
   <div class="sign-in-view">
     <h1  class="text-2xl decoration-zinc-950  font-bold mb-1 text-center">Установить учетные данные</h1>
-    <p class="font-light text-sm text-color-3 text-center mb-7">С возвращением, вас скучали!</p>
+    <p class="text-sm text-color-3 text-center mb-7">С возвращением, вас скучали!</p>
 
     <form @submit.prevent="setCredentials">
       <base-col col-class="w-1/1 pb-4">

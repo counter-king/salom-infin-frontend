@@ -59,7 +59,7 @@ const submit = async () => {
 <template>
   <div class="sign-in-view">
     <h1  class="text-2xl decoration-zinc-950  font-bold mb-1 text-center">{{ props.title }}</h1>
-    <p class="font-light text-sm text-color-3 text-center mb-7">Введите номер, чтобы получить подтверждающее сообщение</p>
+    <p class="text-sm text-color-3 text-center mb-7">Введите номер, чтобы получить подтверждающее сообщение</p>
 
     <form @submit.prevent="submit">
       <base-col col-class="w-1/1">

@@ -111,7 +111,7 @@ const logIn2 = async () => {
 <template>
   <div class="sign-in-view">
     <h1 class="text-2xl decoration-zinc-950  font-bold mb-1 text-center">Sign In</h1>
-    <p class="font-light text-sm text-color-3 text-center mb-7">Welcome back, you’ve been missed!</p>
+    <p class="text-sm text-color-3 text-center mb-7">Welcome back, you’ve been missed!</p>
 
     <TabView>
       <TabPanel>

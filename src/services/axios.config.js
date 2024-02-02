@@ -26,7 +26,9 @@ axiosInstance.interceptors.request.use(
 		config.headers = {
 			Authorization: getStorageItem(ACCESS) ? 'Bearer ' + getStorageItem(ACCESS) : null,
 			Accept: 'application/json',
-      "Accept-Language": getStorageItem(LANG) || 'uz'
+      "Accept-Language": getStorageItem(LANG)
+        ? JSON.parse(getStorageItem(LANG)).value
+        : 'uz'
 		}
 
 		return config;

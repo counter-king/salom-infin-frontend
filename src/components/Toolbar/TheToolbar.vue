@@ -37,7 +37,7 @@ provide('openModal', openModal)
         }
       }"
     >
-      <template #start >
+      <template #start>
         <router-link to="/" class="flex items-center mr-6">
           <img src="/images/logo.svg" alt="Logo" />
           <img src="/images/logo-text.svg" alt="Logo text" class="ml-2" />

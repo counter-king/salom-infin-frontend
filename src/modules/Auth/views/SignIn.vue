@@ -19,6 +19,18 @@ const authStore = useAuthStore()
 const toast = useToast()
 const router = useRouter()
 // Reactive
+const filesList = ref([
+  {
+    title: 'Логин',
+    slot: 'login',
+    icon: 'UserIcon'
+  },
+  {
+    title: 'ЭЦП',
+    slot: 'eri',
+    icon: 'KeyMinimalisticIcon'
+  }
+])
 const loading = ref(false)
 const selectedCity = ref()
 const cities = ref([
@@ -37,7 +49,7 @@ const formModel = reactive({
 })
 const rules = {
   username: {
-    required: helpers.withMessage(`Необходим номер телефона`, required)
+    required: helpers.withMessage(`Необходим телефона`, required)
   },
   password: {
     required: helpers.withMessage(`Необходим пароль`, required),
@@ -78,17 +90,15 @@ onMounted(() => {
 <template>
   <div class="sign-in-view">
     <h1 class="text-2xl decoration-zinc-950  font-bold mb-1 text-center">Войти</h1>
-    <p class="font-light text-sm text-color-3 text-center mb-7">С возвращением, вас скучали!</p>
+    <p class="text-sm text-color-3 text-center mb-7">С возвращением, вас скучали!</p>
 
-    <TabView>
-      <TabPanel>
-        <template #header class="">
-          <span class="w-full flex items-center justify-center">
-            <base-icon name="UserIcon" class="duration-[400ms] inline group-hover:text-white  mr-2" />
-            Логин
-          </span>
-        </template>
-
+    <base-tab-view
+      :tab-view="filesList"
+      scrollable
+      bricks
+      nav-container-class="max-w-[350px] w-full m-auto"
+    >
+      <template #login="{ value }">
         <form @submit.prevent="logIn">
           <base-col col-class="w-1/1">
             <base-input
@@ -96,7 +106,7 @@ onMounted(() => {
               :error="v.username"
               mask-rule="+### ## ### ## ##"
               label="Телефона"
-              placeholder="Введите номер телефона"
+              placeholder="Введите телефона"
             />
           </base-col>
 
@@ -123,23 +133,14 @@ onMounted(() => {
             icon-left="LockKeyholeUnlockedIcon" :loading="loading">
           </base-button>
         </form>
-        <Toast />
-      </TabPanel>
+      </template>
 
-      <TabPanel>
-        <template #header>
-          <span class="w-full flex items-center justify-center">
-            <base-icon name="KeyMinimalisticIcon" class="duration-[400ms] inline group-hover:text-white  mr-2" />
-            ЭЦП
-          </span>
-        </template>
-        <p>
+      <template #eri="{ value }">
         <div class="card flex justify-content-center">
           <Dropdown class="w-full" v-model="selectedCity" :options="cities" optionLabel="name" placeholder="Выбрать" />
         </div>
-        </p>
-      </TabPanel>
-    </TabView>
+      </template>
+    </base-tab-view>
 
     <div class="text-center mt-4">
       У вас еще нет аккаунта ?
