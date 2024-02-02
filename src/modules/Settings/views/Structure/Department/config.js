@@ -46,6 +46,14 @@ export const menuConfig = {
    content: { class: ['rounded-lg'] },
    label: { class: ['text-sm font-medium text-primary-900'] },
    menuitem: { class: 'group mb-1' },
+   root: { class: 'rounded-xl shadow-menu px-1.5 pb-0 pt-1.5' },
+   submenuHeader: { class: 'py-[6px] pl-3 text-sm font-semibold text-primary-500' }
+};
+export const menu2Config = {
+   action: { class: ['py-[6px] pl-3 min-h-[32px]'] },
+   content: { class: ['rounded-lg'] },
+   label: { class: ['text-sm font-medium text-primary-900'] },
+   menuitem: { class: 'group mb-1' },
    root: { class: 'translate-y-1 rounded-xl shadow-menu px-1 pb-0' },
    submenuHeader: { class: 'py-[6px] pl-3 text-sm font-semibold text-primary-500' }
 };

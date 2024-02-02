@@ -50,7 +50,7 @@ const getEmployees = department => {
    activeDepartment.value = department;
    employeesLoading.value = true;
    axiosConfig
-      .get(`/users/?department=${department}`)
+      .get(`/users/?department=${department?.id}`)
       .then(response => {
          const results = response?.data?.results;
          const newEmployees = Array.isArray(results) ? results : [];
@@ -143,10 +143,9 @@ onMounted(() => {
                                     value: `<h4 class='text-xs text-white -my-1'>Добавить</h4>`,
                                  }"
                                  >
-                                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect width="24" height="24" rx="12" fill="#EEE9FF"/>
-                                    <path d="M8 12H16" stroke="#635AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M12 16V8" stroke="#635AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                 <svg width="22" height="22" class="mr-2" viewBox="0 0 48 48">
+                                    <path fill="none" d="M0 0h48v48H0z"></path>
+                                    <path fill="#635AFF" d="M26 14h-4v8h-8v4h8v8h4v-8h8v-4h-8v-8zM24 4C12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4zm0 36c-8.82 0-16-7.18-16-16S15.18 8 24 8s16 7.18 16 16-7.18 16-16 16z"></path>
                                  </svg>
                               </Button>
                            </div>
