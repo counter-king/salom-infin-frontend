@@ -44,7 +44,7 @@ const rootClasses = computed(() => {
         class: rootClasses
       },
       content: {
-          class: ['p-0', props.content  ]
+        class: ['p-0', props.content]
       },
     }"
     @hide="emit('emit:changeState', false)"

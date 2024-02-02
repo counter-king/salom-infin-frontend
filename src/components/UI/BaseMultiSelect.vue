@@ -142,7 +142,12 @@ const rootClasses = computed(() => {
 // Methods
 const loadList = async (params) => {
   let { data } = await axiosConfig.get(`${props.apiUrl}/`, params)
-  list.value = data.results
+  if (data.hasOwnProperty('results')){
+    list.value = data.results
+  }else {
+    list.value = data
+  }
+
 }
 const removeItem = (event, value) => {
   event.stopImmediatePropagation()

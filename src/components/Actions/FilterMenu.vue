@@ -1,17 +1,21 @@
 <script setup>
+// Available keys: approvers, author, curator, signers, departments, register_number
 // Core
 import { onMounted, ref, unref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 // Services
-import { fetchUserDetail, fetchDepartmentDetail } from "@/services/common.service";
+import { fetchUserDetail, fetchDepartmentDetail, fetchComposeStatusDetail } from "@/services/common.service";
 // Utils
 import { clearModel, filterFalsyValues, filterObjectByKeys, removeKeysWithDoubleUnderscore } from "@/utils";
 // Store
+import { useCommonStore } from "@/stores/common";
 import { useFilterStore } from "@/stores/filter.store";
 import { usePaginationStore } from "@/stores/pagination.store";
 // Components
 import UserMultiSelect from "@/components/Select/UserMultiSelect.vue";
 import DepartmentMultiSelect from "@/components/Select/DepartmentMultiSelect.vue";
+import BaseMultiSelect from "@/components/UI/BaseMultiSelect.vue";
+import {UserWithRadio} from "@/components/Users";
 
 const props = defineProps({
   actionList: {
@@ -33,9 +37,35 @@ const router = useRouter();
 const filterStore = useFilterStore();
 const opRef = ref(null);
 const paginationStore = usePaginationStore();
+const commonStore = useCommonStore();
 
-const filterByUsersKeys = ["approvers", "author", "curator", "signers"];
-const objectToKeysList = ["approvers", "author", "curator", "signers", "departments"];
+const paramList = ["register_number"];
+const objectToKeysList = [
+  {
+    param: "approvers",
+    action: fetchUserDetail
+  },
+  {
+    param: "author",
+    action: fetchUserDetail
+  },
+  {
+    param: "curator",
+    action: fetchUserDetail
+  },
+  {
+    param: "signers",
+    action: fetchUserDetail
+  },
+  {
+    param: "departments",
+    action: fetchDepartmentDetail
+  },
+  {
+    param: "status",
+    action: fetchComposeStatusDetail
+  }
+]
 
 // Methods
 const toggle = (event) => {
@@ -49,7 +79,7 @@ const mapObjectsToKey = (sourceArray, targetKey) => {
 };
 const adjustKeysToValues = async () => {
   for (let i = 0; i < objectToKeysList.length; i++) {
-    await mapObjectsToKey(filterStore.filterState[`__${objectToKeysList[i]}`], objectToKeysList[i]);
+    await mapObjectsToKey(filterStore.filterState[`__${objectToKeysList[i].param}`], objectToKeysList[i].param);
   }
 }
 const filter = async () => {
@@ -85,32 +115,31 @@ const clearFilter = async () => {
     await props.actionList({ ...route.query });
   }
 }
-const fetchAndPopulateUsers = async (queryParam, targetArray) => {
+const fetchAndPopulateFilterState = async (queryParam, targetArray, action) => {
   if (route.query && route.query[queryParam]) {
     const idArray = route.query[queryParam].split(',').map(Number);
     for (const id of idArray) {
-      const response = await fetchUserDetail(id);
+      const response = await action(id);
       targetArray.push(response.data);
     }
   }
 };
 
-const fetchAndPopulateDepartments = async (queryParam, targetArray) => {
-  if (route.query && route.query[queryParam]) {
-    const idArray = route.query[queryParam].split(',').map(Number);
-    for (const id of idArray) {
-      const response = await fetchDepartmentDetail(id);
-      targetArray.push(response.data);
-    }
+const populateFilterState = async (queryParams) => {
+  if (route.query && route.query[queryParams]) {
+    filterStore.filterState[queryParams] = route.query[queryParams];
   }
-};
+}
 
 // Hooks
 onMounted(async () => {
-  for (let i = 0; i < filterByUsersKeys.length; i++) {
-    await fetchAndPopulateUsers(filterByUsersKeys[i], filterStore.filterState[`__${filterByUsersKeys[i]}`]);
+  for (let i = 0; i < objectToKeysList.length; i++) {
+    await fetchAndPopulateFilterState(objectToKeysList[i].param, filterStore.filterState[`__${objectToKeysList[i].param}`], objectToKeysList[i].action);
   }
-  await fetchAndPopulateDepartments("departments", filterStore.filterState.__departments);
+
+  for (let i = 0; i < paramList.length; i++) {
+    await populateFilterState(paramList[i]);
+  }
 })
 </script>
 
@@ -173,6 +202,36 @@ onMounted(async () => {
             v-model="filterStore.filterState.__departments"
             :required="false"
           />
+        </base-col>
+
+        <base-col v-if="props.filterKeys.includes('register_number')" col-class="w-1/2">
+          <base-input
+            v-model="filterStore.filterState.register_number"
+            label="reg-number"
+          />
+        </base-col>
+
+        <base-col v-if="props.filterKeys.includes('status')" col-class="w-1/2">
+          <base-multi-select
+            v-model="filterStore.filterState.__status"
+            api-url="compose/1/statuses"
+            :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
+            display="chip"
+            selectable
+            label="status"
+            type="department"
+          >
+            <template #chip="{ value }">
+              {{ value.name }}
+            </template>
+
+            <template #option="{ value }">
+              <user-with-radio
+                :title="value.name"
+              >
+              </user-with-radio>
+            </template>
+          </base-multi-select>
         </base-col>
       </base-row>
 

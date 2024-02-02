@@ -18,7 +18,7 @@ const sdStore = useSDStore();
 const paginationStore = usePaginationStore();
 const route = useRoute();
 const router = useRouter();
-const filterKeys = ["approvers", "author", "curator", "signers", "departments"];
+const filterKeys = ["approvers", "author", "curator", "signers", "departments", "register_number", "status"];
 const keysToIncludeOnClearFilter = ["type"]
 
 const title = computed(() => {

@@ -10,12 +10,17 @@ export const useFilterStore = defineStore("filter-store", {
       __approvers: [],
       author: [],
       __author: [],
+      created_start_date: null,
+      created_end_date: null,
       curator: [],
       __curator: [],
       departments: [],
       __departments: [],
+      register_number: null,
       signers: [],
       __signers: [],
+      status: [],
+      __status: []
     }
   }),
   actions: {
