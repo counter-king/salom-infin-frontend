@@ -106,7 +106,7 @@ const deleteDepartment = () => {
             <div class="flex justify-between items-center w-full">
                <div class="flex" style="width: calc(100% - 120px)">
                   <span>{{ department.name }}</span>
-                  <Badge :value="department.sub_department_count || 0" style="font-size: 12px; min-width: 20px" class="font-medium h-5 inline-flex items-center justify-center ml-1 mt-0.5"></Badge>
+                  <Badge :value="department.employee_count || 0" style="font-size: 12px; min-width: 20px" class="font-medium h-5 inline-flex items-center justify-center ml-1 mt-0.5"></Badge>
                </div>
                <div class="flex settings-department-action opacity-0 self-start">
                   <Button
