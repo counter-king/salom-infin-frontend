@@ -16,7 +16,11 @@ export const AVAILABLE_LOCALES = [
   },
 ]
 
-export function setupI18n(options = { locale: getStorageItem(LANG) || CURRENT_LOCALE }) {
+export function setupI18n(options = {
+  locale: getStorageItem(LANG)
+    ? JSON.parse(getStorageItem(LANG)).value
+    : CURRENT_LOCALE
+}) {
   const i18n = createI18n({
     ...options,
     legacy: false,

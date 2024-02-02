@@ -20,6 +20,9 @@ const props = defineProps({
   segment: {
     type: Boolean
   },
+  bricks: {
+    type: Boolean
+  },
   actions: {
     type: Boolean
   },
@@ -40,6 +43,9 @@ const panelClass = (_, parent, index) => {
     },
     {
       'text-primary-500 ': parent.state.d_activeIndex === index && props.segment
+    },
+    {
+      'action-bricks bg-white text-primary-500 ': parent.state.d_activeIndex === index && props.bricks
     }
   ]
 }
@@ -62,7 +68,8 @@ const zoomFile = (event, pane) => {
         class: [
           {
             'px-2 border-b border-greyscale-200': !props.segment,
-            'border-none': props.segment
+            'border-none': props.segment,
+            '!p-1 !bg-greyscale-50 rounded-xl border-none': props.bricks
           }
         ]
       },
@@ -73,7 +80,9 @@ const zoomFile = (event, pane) => {
         class: ['shadow-none w-6 justify-end']
       },
       navContainer: {
-        class: [props.navContainerClass]
+        class: [
+          props.navContainerClass
+        ]
       },
       panelContainer: {
         class: 'flex-1 p-0 overflow-hidden'
@@ -95,19 +104,23 @@ const zoomFile = (event, pane) => {
           },
           headerAction: ({ _, parent }) => ({
             class: [
-              'font-medium !border-transparent text-greyscale-500',
+              'font-medium !border-transparent bg-transparent text-greyscale-500',
               panelClass(_, parent, index),
               {
                 'm-0 py-4 px-0 mx-4': !props.segment,
                 'max-w-[200px] truncate': props.truncate,
-                'py-2 px-3 rounded-[6px] !bg-greyscale-50 font-semibold mr-2': props.segment
+                'py-2 px-3 rounded-[6px] !bg-greyscale-50 font-semibold mr-2': props.segment,
+                '!m-0 !p-2 !rounded-lg': props.bricks
               }
             ]
           })
         }"
       >
         <template #header>
-          <div class="flex items-center gap-2 overflow-hidden">
+          <div
+            class="flex items-center gap-2 overflow-hidden"
+            :class="{ 'justify-center w-full': props.bricks }"
+          >
             <base-icon
               v-if="pane.icon"
               :name="pane.icon"
@@ -117,7 +130,10 @@ const zoomFile = (event, pane) => {
 
             <p
               class="text-[15px]"
-              :class="{ 'truncate': props.truncate }"
+              :class="{
+                'truncate': props.truncate,
+                '!text-sm': props.bricks
+              }"
               v-tooltip.top="{
                 value: props.truncate ? `<h4 class='text-xs text-white -my-1'>${pane.title}</h4>` : null,
                 escape: true,
@@ -179,5 +195,7 @@ const zoomFile = (event, pane) => {
 </template>
 
 <style scoped>
-
+.action-bricks > div > * {
+  color: var(--primary-500)
+}
 </style>
