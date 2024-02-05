@@ -1,14 +1,23 @@
 <script setup>
 import Button from 'primevue/button';
-import Loading from './Loading.vue';
-import NoDepartment from './NoDepartment.vue';
-import axiosConfig from '@/services/axios.config';
+import Column from 'primevue/column';
 import CreateDepartment from './CreateDepartment.vue';
+import DataTable from 'primevue/datatable'
 import Department from './Department.vue';
+import Loading from './Loading.vue';
+import Employee from './Employee.vue';
+import NoDepartment from './NoDepartment.vue';
+import Paginator from 'primevue/paginator';
+import axiosConfig from '@/services/axios.config';
 import { ref, onMounted, watch } from 'vue';
+import Dropdown from 'primevue/dropdown';
+import { tableConfig, columnConfig, dropdownConfig, paginationConfig, dropdownOptions } from './config'
 import { useRoute } from 'vue-router';
 const route = useRoute();
+const defaultFilter = { page: 1, page_size: 10, department: '' };
 const activeDepartment = ref(null);
+const filter = ref(defaultFilter);
+const count = ref(1);
 const createDepartment = ref(null);
 const createVisible = ref(false);
 const departmentId = route.params?.id;
@@ -19,6 +28,23 @@ const status = ref('loading');
 const subDepartments = ref([]);
 const subDepartmentsLoading = ref(false);
 const topLevelDepartment = ref(null);
+const headers = ref([
+   {
+      columnKey: 'full_name',
+      field: 'full_name',
+      header: 'ФИО Сотрудника',
+   },
+   {
+      columnKey: 'position',
+      field: 'position',
+      header: 'Должность',
+   },
+   {
+      columnKey: 'action',
+      field: 'action',
+      header: 'Действия',
+   },
+]);
 const setCreateVisible = visible => {
    createVisible.value = visible;
 };
@@ -30,10 +56,10 @@ const openModal = (departments, department) => {
    createVisible.value = true;
    parentDepartments.value = departments;
 };
-const getSubDepartments = department => {
+const getSubDepartments = () => {
    subDepartmentsLoading.value = true;
    axiosConfig
-      .get(`/departments/${department}/`)
+      .get(`/departments/${departmentId}/`)
       .then(response => {
          const children = response?.data?.children;
          const newSubDepartments = Array.isArray(children) ? children : [];
@@ -46,15 +72,20 @@ const getSubDepartments = department => {
          subDepartmentsLoading.value = false;
       })
 };
-const getEmployees = department => {
+const getEmployees = (newFilter = {}) => {
+   const { department, page, page_size } = newFilter;
    activeDepartment.value = department;
+   const departmentId = department?.id;
    employeesLoading.value = true;
+   const params = `?page=${page}${page_size ? '&page_size=' + page_size : ''}${departmentId ? '&department=' + departmentId : ''}`;
    axiosConfig
-      .get(`/users/?department=${department?.id}`)
+      .get(`/users/${params}`)
       .then(response => {
+         const newCount = response?.data?.count;
          const results = response?.data?.results;
          const newEmployees = Array.isArray(results) ? results : [];
          employees.value = newEmployees;
+         count.value = newCount;
       })
       .catch(() => {
          employees.value = [];
@@ -63,16 +94,16 @@ const getEmployees = department => {
          employeesLoading.value = false;
       });
 };
-const getDepartment = department => {
+const getDepartment = () => {
    status.value = 'loading';
    axiosConfig
-      .get(`/departments/${department}/`)
+      .get(`/departments/${departmentId}/`)
       .then(response => {
          const data = response?.data;
          const success = response?.status === 200;
          if(success && data) {
-            getEmployees(department);
-            getSubDepartments(department);
+            getEmployees({ ...defaultFilter, department: data });
+            getSubDepartments();
             status.value = 'success';
             topLevelDepartment.value = data;
          } else {
@@ -83,11 +114,25 @@ const getDepartment = department => {
          status.value = 'error';
       });
 }
-watch(departmentId, departmentId => {
-   getDepartment(departmentId);
+const onChangePage = ({ page }) => {
+   const newFilter = { ...filter.value, page: page + 1, department: activeDepartment.value };
+   getEmployees(newFilter);
+};
+const onChangePageSize = ({ value }) => {
+   const newFilter = { ...filter.value, page: 1, page_size: value, department: activeDepartment.value };
+   getEmployees(newFilter);
+};
+const getFirstPageEmployees = () => {
+   getEmployees({ ...defaultFilter, department: activeDepartment.value });
+};
+const setEmployees = newEmployees => {
+   employees.value = newEmployees;
+}
+watch(departmentId, () => {
+   getDepartment();
 });
 onMounted(() => {
-   getDepartment(departmentId);
+   getDepartment();
 });
 </script>
 <template>
@@ -127,33 +172,13 @@ onMounted(() => {
                   <template v-if="subDepartments.length">
                      <div class="h-full w-full">
                         <div class="px-3 pt-3">
-                           <div class="flex items-center justify-between text-md font-semibold rounded-xl px-3 py-2.5 duration-[400ms] bg-greyscale-100">
-                              <span>Отдели</span>
-                              <Button
-                                 class="shadow-none p-0 text-xs bg-transparent rounded-full"
-                                 icon
-                                 severity="secondary"
-                                 text
-                                 @click="() => {
-                                    openModal([], topLevelDepartment);
-                                 }"
-                                 v-tooltip.top="{
-                                    autoHide: false,
-                                    escape: true,
-                                    value: `<h4 class='text-xs text-white -my-1'>Добавить</h4>`,
-                                 }"
-                                 >
-                                 <svg width="22" height="22" class="mr-2" viewBox="0 0 48 48">
-                                    <path fill="none" d="M0 0h48v48H0z"></path>
-                                    <path fill="#635AFF" d="M26 14h-4v8h-8v4h8v8h4v-8h8v-4h-8v-8zM24 4C12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4zm0 36c-8.82 0-16-7.18-16-16S15.18 8 24 8s16 7.18 16 16-7.18 16-16 16z"></path>
-                                 </svg>
-                              </Button>
-                           </div>
+                           <div class="text-sm font-semibold rounded-xl px-3 py-3 duration-[400ms] text-greyscale-500 bg-greyscale-100">Отдели</div>
                         </div>
-                        <div class="flex flex-col overflow-y-scroll settings-structure-departments" style="height: calc(100% - 74px)">
-                           <div class="pl-3 pr-[6px] pt-2">
+                        <div class="flex flex-col overflow-y-scroll settings-structure-departments" style="height: calc(100% - 112px)">
+                           <div class="pl-3 pr-[6px]">
                               <Department
                                  :activeDepartment="activeDepartment"
+                                 :defaultFilter="defaultFilter"
                                  :department="department"
                                  :getEmployees="getEmployees"
                                  :key="index"
@@ -167,6 +192,21 @@ onMounted(() => {
                                  }"
                               />
                            </div>
+                        </div>
+                        <div class="px-3 pb-3">
+                           <Button
+                              @click="() => {
+                                 openModal([], topLevelDepartment);
+                              }"
+                              size="small"
+                              class="rounded-xl px-2 h-[44px] bg-greyscale-100 text-black text-sm font-semibold border-transparent focus:border-none focus:shadow-none w-full flex items-center justify-center">
+                              <span class="mr-2">
+                                 <svg width="24" height="24" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5003 18.3307C15.1027 18.3307 18.8337 14.5998 18.8337 9.9974C18.8337 5.39502 15.1027 1.66406 10.5003 1.66406C5.89795 1.66406 2.16699 5.39502 2.16699 9.9974C2.16699 14.5998 5.89795 18.3307 10.5003 18.3307ZM11.1253 7.4974C11.1253 7.15222 10.8455 6.8724 10.5003 6.8724C10.1551 6.8724 9.87533 7.15222 9.87533 7.4974L9.87532 9.37242H8.00033C7.65515 9.37242 7.37533 9.65224 7.37533 9.99742C7.37533 10.3426 7.65515 10.6224 8.00033 10.6224H9.87532V12.4974C9.87532 12.8426 10.1551 13.1224 10.5003 13.1224C10.8455 13.1224 11.1253 12.8426 11.1253 12.4974L11.1253 10.6224H13.0003C13.3455 10.6224 13.6253 10.3426 13.6253 9.99742C13.6253 9.65224 13.3455 9.37242 13.0003 9.37242H11.1253V7.4974Z" fill="#635AFF"/>
+                                 </svg>
+                              </span>
+                              <span>Добавить отдел</span>
+                           </Button>
                         </div>
                      </div>
                   </template>
@@ -183,12 +223,10 @@ onMounted(() => {
                            <p class="text-center text-greyscale-300 mt-3 mb-6">В этом отделе нет подотделов. Нажмите кнопку ниже, чтобы добавить.</p>
                            <Button
                               @click="() => {
-                                 createDepartment = topLevelDepartment;
-                                 createVisible = true;
-                                 parentDepartments = [];
+                                 openModal([], topLevelDepartment);
                               }"
                               size="small"
-                              class="rounded-lg bg-greyscale-100 text-black text-sm font-semibold border-transparent focus:border-primary-500">
+                              class="rounded-xl bg-greyscale-100 text-black text-sm font-semibold border-transparent focus:border-none focus:shadow-none">
                               <span class="mr-2">
                                  <svg width="24" height="24" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5003 18.3307C15.1027 18.3307 18.8337 14.5998 18.8337 9.9974C18.8337 5.39502 15.1027 1.66406 10.5003 1.66406C5.89795 1.66406 2.16699 5.39502 2.16699 9.9974C2.16699 14.5998 5.89795 18.3307 10.5003 18.3307ZM11.1253 7.4974C11.1253 7.15222 10.8455 6.8724 10.5003 6.8724C10.1551 6.8724 9.87533 7.15222 9.87533 7.4974L9.87532 9.37242H8.00033C7.65515 9.37242 7.37533 9.65224 7.37533 9.99742C7.37533 10.3426 7.65515 10.6224 8.00033 10.6224H9.87532V12.4974C9.87532 12.8426 10.1551 13.1224 10.5003 13.1224C10.8455 13.1224 11.1253 12.8426 11.1253 12.4974L11.1253 10.6224H13.0003C13.3455 10.6224 13.6253 10.3426 13.6253 9.99742C13.6253 9.65224 13.3455 9.37242 13.0003 9.37242H11.1253V7.4974Z" fill="#635AFF"/>
@@ -201,13 +239,77 @@ onMounted(() => {
                   </template>
                </template>
             </div>
-            <div style="width: calc(50% - 10px)" class="h-full rounded-2xl bg-white p-4 employees">
+            <div style="width: calc(50% - 10px)" class="h-full rounded-2xl bg-white p-3 employees">
                <template v-if="employeesLoading">
                   <Loading />
                </template>
                <template v-else>
                   <template v-if="employees.length">
-                     <div>Employees</div>
+                     <div class="settings-structure-employees-table">
+                        <DataTable
+                           :loading="employeesLoading"
+                           :pt="tableConfig"
+                           :value="employees"
+                           row-hover
+                           scrollable
+                           scrollHeight="100%"
+                           style="height: 100%"
+                           >
+                           <Column
+                              :columnKey="item.columnKey"
+                              :field="item.field"
+                              :header="item.header"
+                              :key="index"
+                              :pt="columnConfig"
+                              v-for="(item, index) in headers"
+                              >
+                              <template #body="{ field, data }">
+                                 <Employee
+                                    :activeDepartment="activeDepartment"
+                                    :data="data"
+                                    :employees="employees"
+                                    :field="field"
+                                    :getFirstPageEmployees="getFirstPageEmployees"
+                                    :setEmployees="setEmployees"
+                                    />
+                              </template>
+                           </Column>
+                        </DataTable>
+                     </div>
+                     <div class="w-full">
+                        <Button
+                           size="small"
+                           class="rounded-xl px-2 h-[44px] bg-greyscale-100 text-black text-sm font-semibold border-transparent focus:border-none focus:shadow-none w-full flex items-center justify-center">
+                           <span class="mr-2">
+                              <svg width="24" height="24" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5003 18.3307C15.1027 18.3307 18.8337 14.5998 18.8337 9.9974C18.8337 5.39502 15.1027 1.66406 10.5003 1.66406C5.89795 1.66406 2.16699 5.39502 2.16699 9.9974C2.16699 14.5998 5.89795 18.3307 10.5003 18.3307ZM11.1253 7.4974C11.1253 7.15222 10.8455 6.8724 10.5003 6.8724C10.1551 6.8724 9.87533 7.15222 9.87533 7.4974L9.87532 9.37242H8.00033C7.65515 9.37242 7.37533 9.65224 7.37533 9.99742C7.37533 10.3426 7.65515 10.6224 8.00033 10.6224H9.87532V12.4974C9.87532 12.8426 10.1551 13.1224 10.5003 13.1224C10.8455 13.1224 11.1253 12.8426 11.1253 12.4974L11.1253 10.6224H13.0003C13.3455 10.6224 13.6253 10.3426 13.6253 9.99742C13.6253 9.65224 13.3455 9.37242 13.0003 9.37242H11.1253V7.4974Z" fill="#635AFF"/>
+                              </svg>
+                           </span>
+                           <span>Добавить сотрудник</span>
+                        </Button>
+                     </div>
+                     <div class="flex">
+                        <Paginator
+                           :first="(filter.page - 1) * filter.page_size"
+                           :pt="paginationConfig"
+                           :rows="filter.page_size"
+                           :totalRecords="count"
+                           @page="onChangePage"
+                           currentPageReportTemplate="{first}-{last} из {totalRecords}"
+                           template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+                           >
+                           <template #start>
+                              <Dropdown
+                                 :options="dropdownOptions"
+                                 :pt="dropdownConfig"
+                                 @change="onChangePageSize"
+                                 optionLabel="name"
+                                 optionValue="page_size"
+                                 v-model="filter.page_size"
+                                 />
+                           </template>
+                        </Paginator>
+                     </div>
                   </template>
                   <template v-else>
                      <div class="flex justify-center pt-12">
@@ -224,7 +326,7 @@ onMounted(() => {
                               </svg>
                            </div>
                            <p class="text-center text-greyscale-300 mt-3 mb-6">В этом отделе нет Сотрудников. Нажмите кнопку ниже, чтобы добавить.</p>
-                           <Button size="small" class="rounded-lg bg-greyscale-100 text-black text-sm font-semibold border-transparent focus:border-primary-500">
+                           <Button size="small" class="rounded-xl bg-greyscale-100 focus:border-none focus:shadow-none text-black text-sm font-semibold border-transparent">
                               <span class="mr-2">
                                  <svg width="24" height="24" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5003 18.3307C15.1027 18.3307 18.8337 14.5998 18.8337 9.9974C18.8337 5.39502 15.1027 1.66406 10.5003 1.66406C5.89795 1.66406 2.16699 5.39502 2.16699 9.9974C2.16699 14.5998 5.89795 18.3307 10.5003 18.3307ZM11.1253 7.4974C11.1253 7.15222 10.8455 6.8724 10.5003 6.8724C10.1551 6.8724 9.87533 7.15222 9.87533 7.4974L9.87532 9.37242H8.00033C7.65515 9.37242 7.37533 9.65224 7.37533 9.99742C7.37533 10.3426 7.65515 10.6224 8.00033 10.6224H9.87532V12.4974C9.87532 12.8426 10.1551 13.1224 10.5003 13.1224C10.8455 13.1224 11.1253 12.8426 11.1253 12.4974L11.1253 10.6224H13.0003C13.3455 10.6224 13.6253 10.3426 13.6253 9.99742C13.6253 9.65224 13.3455 9.37242 13.0003 9.37242H11.1253V7.4974Z" fill="#635AFF"/>
@@ -255,19 +357,41 @@ onMounted(() => {
    </div>
 </template>
 <style>
-.settings-structure-departments::-webkit-scrollbar {
+.settings-structure-departments::-webkit-scrollbar,
+.settings-structure-employees-table .p-datatable-wrapper::-webkit-scrollbar {
    height: 6px;
    width: 6px;
 }
+.settings-structure-employees-table .p-datatable-wrapper::-webkit-scrollbar-track,
 .settings-structure-departments::-webkit-scrollbar-track {
    border-radius: 3px;
    box-shadow: none;
 }
+.settings-structure-employees-table .p-datatable-wrapper::-webkit-scrollbar-thumb,
 .settings-structure-departments::-webkit-scrollbar-thumb {
    background-color: #635AFF;
    border-radius: 3px;
 }
+.settings-structure-employees-table .p-datatable-wrapper::-webkit-scrollbar-thumb:hover,
 .settings-structure-departments::-webkit-scrollbar-thumb:hover {
    background-color: #635AFF;
+}
+.settings-structure-employees-table {
+   height: calc(100% - 82px);
+}
+.settings-structure-employees-table tr th:first-child,
+.settings-structure-employees-table tr td:first-child {
+   border-top-left-radius: 12px;
+   border-bottom-left-radius: 12px;
+}
+
+.settings-structure-employees-table tr th:last-child,
+.settings-structure-employees-table tr td:last-child {
+   border-top-right-radius: 12px;
+   border-bottom-right-radius: 12px;
+}
+.settings-structure-employees-table tbody tr:after {
+   width: calc(100% - 18px);
+   height: 1px;
 }
 </style>

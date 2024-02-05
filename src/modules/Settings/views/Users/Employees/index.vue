@@ -17,13 +17,7 @@ import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
 const defaultFilter = { page: 1, page_size: 10, search: '' };
 const count = ref(1);
-const createUser = ref({});
 const visible = ref(false);
-const deleteLoading = ref(false);
-const deleteUser = ref({});
-const deleteVisible = ref(false);
-const editUser = ref({});
-const editVisible = ref(false);
 const filter = ref(defaultFilter);
 const headers = ref([
   {

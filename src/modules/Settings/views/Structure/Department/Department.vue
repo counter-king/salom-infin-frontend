@@ -14,6 +14,7 @@ import { dispatchNotify } from '@/utils/notify';
 import { replaceSpecCharsBracket } from '@/utils/string';
 const props = defineProps({
    activeDepartment: Object,
+   defaultFilter: Object,
    department: Object,
    getEmployees: Function,
    getSubDepartments: Function,
@@ -59,24 +60,29 @@ const departmentEdit = () => {
    }
 };
 const deleteDepartment = () => {
-   deleteLoading.value = true;
-   axiosConfig
-      .delete(`departments/${props?.department?.id}/`)
-      .then(response => {
-         if(response?.status === 204) {
-            visible.value = false;
-            dispatchNotify('Отдел удален', '', 'success')
-            props.getSubDepartments();
-         } else {
-            dispatchNotify('Отдел не удален', '', 'error')
-         }
-      })
-      .catch(() => {
-         dispatchNotify('Отдел не удален', '', 'error')
-      })
-      .finally(() => {
-         deleteLoading.value = false;
-      });
+   const department = props?.department;
+   if(department.employee_count > 0) {
+      dispatchNotify('В этом отделе есть сотрудники, сначала удалите сотрудников', '', 'error')
+   } else {
+      deleteLoading.value = true;
+      axiosConfig
+         .delete(`departments/${department?.id}/`)
+         .then(response => {
+            if(response?.status === 204) {
+               visible.value = false;
+               dispatchNotify('Отдел удален', '', 'success');
+               props.getSubDepartments();
+            } else {
+               dispatchNotify('Отдел не удален', '', 'error');
+            }
+         })
+         .catch(() => {
+            dispatchNotify('Отдел не удален', '', 'error');
+         })
+         .finally(() => {
+            deleteLoading.value = false;
+         });
+   }
 };
 const updateCondition = value => {
    const departmentId = props?.department?.id;
@@ -122,7 +128,7 @@ onMounted(() => {
 <template>
    <Panel
       :collapsed="collapsed"
-      toggleable
+      :toggleable="department.children.length > 0"
       @update:collapsed="value => {
          collapsed = value;
       }"
@@ -134,21 +140,22 @@ onMounted(() => {
                [
                   `${props.last ? '' :`after:content-[''] after:bg-greyscale-200 after:absolute after:bottom-[-1px] after:left-[9px] after:outline-offset-[-1px]`}
                   ${activeDepartment.id === department.id ? 'text-primary-500 outline-1 outline outline-primary-500' : ''} 
-                  font-medium duration-0 hover:outline-1 hover:outline hover:outline-primary-500 cursor-pointer border-0 p-0 border-transparent text-md rounded-none rounded-xl duration-[400ms] hover:text-primary-500 bg-transparent hover:bg-greyscale-100`
+                  font-medium duration-0 hover:outline-1 hover:outline hover:outline-primary-500 cursor-pointer border-0 p-0 border-transparent text-md rounded-none rounded-xl duration-0 hover:text-primary-500 bg-transparent hover:bg-greyscale-100`
                ]
             },
          root: {class: ['settings-structure-department relative bottom-0 flex flex-col w-full py-[1px]']},
          togglerIcon: {class: ['!bg-transparent flex items-center justify-center !hover:bg-transparent p-panel-header-icon p-link bg-greyscale-100']},
-         icons: {class: ['self-start pr-3 pt-3 pb-2 flex']}
+         icons: {class: ['self-start pr-3 pt-3 pb-2 flex flex-row-reverse']}
       }"
       >
       <template #header>
          <div
             @click="() => {
                setActiveDepartment(department);
-               getEmployees(department);
+               getEmployees({ ...defaultFilter, department });
             }"
             class="pl-3 pr-0 py-2 w-full"
+            style="width: calc(100% - 128px)"
             >
             <span>{{ department.name }}</span>
             <Badge
@@ -164,27 +171,6 @@ onMounted(() => {
          </div>
       </template>
       <template #icons>
-         <span
-            @click="toggle2"
-            :style="{ background: department.condition === 'A' ? '#EEFFE7' : '#F7F7F9', color: department.condition === 'A' ? '#63BA3D' : '#767994', 'border-color': department.condition === 'A' ? '#CDE7C2' : '#E2E8F0' }"
-            class="inline-flex items-center justify-center border-[1px] pr-2 pl-3 py-1 font-medium rounded-[80px] text-sm text-greyscale-500 cursor-pointer">
-            <span class="mr-1 w-[6px] h-[6px] block rounded-full" :style="{ background: department.condition === 'A' ? '#63BA3D' : '#9CA8B9' }"></span>
-            <svg width="16" height="16" viewBox="0 0 12 12" fill="none">
-               <path d="M9 4.5L6 7.5L3 4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-         </span>
-         <Menu ref="menu2" :model="conditions2" style="width: initial !important" :popup="true" :pt="menu2Config">
-            <template #item="{ item }">
-               <div @click="() => { updateCondition(item) }" class="flex justify-between py-[6px] pr-2 pl-3 cursor-pointer">
-                  <span class="text-sm font-medium text-primary-900">{{ item.label }}</span>
-                  <span class="ml-2" v-if="item.value === department.condition">
-                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M18.3337 9.99935C18.3337 14.6017 14.6027 18.3327 10.0003 18.3327C5.39795 18.3327 1.66699 14.6017 1.66699 9.99935C1.66699 5.39698 5.39795 1.66602 10.0003 1.66602C14.6027 1.66602 18.3337 5.39698 18.3337 9.99935ZM13.3589 7.47407C13.603 7.71815 13.603 8.11388 13.3589 8.35796L9.19227 12.5246C8.94819 12.7687 8.55246 12.7687 8.30838 12.5246L6.64172 10.858C6.39764 10.6139 6.39764 10.2182 6.64172 9.97407C6.8858 9.73 7.28152 9.73 7.5256 9.97407L8.75033 11.1988L10.6127 9.33644L12.4751 7.47407C12.7191 7.23 13.1149 7.23 13.3589 7.47407Z" fill="#635AFF"/>
-                     </svg>
-                  </span>
-               </div>
-            </template>
-         </Menu>
          <Button
             @click="toggle"
             class="shadow-none p-0 m-0 w-[32px] h-[32px] flex items-center justify-center text-xs bg-transparent rounded-full"
@@ -239,6 +225,27 @@ onMounted(() => {
                      </span>
                      <span class="text-sm font-medium" style="color: #F3335C">{{ item.label }}</span>
                   </template>
+               </div>
+            </template>
+         </Menu>
+         <span
+            @click="toggle2"
+            :style="{ background: department.condition === 'A' ? '#EEFFE7' : '#F7F7F9', color: department.condition === 'A' ? '#63BA3D' : '#767994', 'border-color': department.condition === 'A' ? '#CDE7C2' : '#E2E8F0' }"
+            class="inline-flex items-center justify-center border-[1px] pr-2 pl-3 py-1 font-medium rounded-[80px] text-sm text-greyscale-500 cursor-pointer ml-1">
+            <span class="mr-1 w-[6px] h-[6px] block rounded-full" :style="{ background: department.condition === 'A' ? '#63BA3D' : '#9CA8B9' }"></span>
+            <svg width="16" height="16" viewBox="0 0 12 12" fill="none">
+               <path d="M9 4.5L6 7.5L3 4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+         </span>
+         <Menu ref="menu2" :model="conditions2" style="width: initial !important" :popup="true" :pt="menu2Config">
+            <template #item="{ item }">
+               <div @click="() => { updateCondition(item) }" class="flex justify-between py-[6px] pr-2 pl-3 cursor-pointer">
+                  <span class="text-sm font-medium text-primary-900">{{ item.label }}</span>
+                  <span class="ml-2" v-if="item.value === department.condition">
+                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M18.3337 9.99935C18.3337 14.6017 14.6027 18.3327 10.0003 18.3327C5.39795 18.3327 1.66699 14.6017 1.66699 9.99935C1.66699 5.39698 5.39795 1.66602 10.0003 1.66602C14.6027 1.66602 18.3337 5.39698 18.3337 9.99935ZM13.3589 7.47407C13.603 7.71815 13.603 8.11388 13.3589 8.35796L9.19227 12.5246C8.94819 12.7687 8.55246 12.7687 8.30838 12.5246L6.64172 10.858C6.39764 10.6139 6.39764 10.2182 6.64172 9.97407C6.8858 9.73 7.28152 9.73 7.5256 9.97407L8.75033 11.1988L10.6127 9.33644L12.4751 7.47407C12.7191 7.23 13.1149 7.23 13.3589 7.47407Z" fill="#635AFF"/>
+                     </svg>
+                  </span>
                </div>
             </template>
          </Menu>
