@@ -22,6 +22,7 @@ const props = defineProps({
    openModal: Function,
    parentDepartments: Array,
    setActiveDepartment: Function,
+   topLevelDepartment: Object,
 });
 const collapsed = ref(true);
 const conditions = ref([]);
@@ -263,6 +264,7 @@ onMounted(() => {
             :openModal="openModal"
             :parentDepartments="[...parentDepartments, department]"
             :setActiveDepartment="setActiveDepartment"
+            :topLevelDepartment="topLevelDepartment"
          />
       </template>
    </Panel>
@@ -273,6 +275,22 @@ onMounted(() => {
       modal
       v-model:visible="editVisible">
       <div class="flex flex-col pb-10 pt-4">
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Департамент</p>
+         <InputText
+            :modelValue="topLevelDepartment.name"
+            :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            disabled
+            type="text"
+            />
+         <div v-for="(department, index) in parentDepartments" :key="index">
+            <p class="text-sm text-greyscale-500 font-medium mb-1">Отдел</p>
+            <InputText
+               :modelValue="department.name"
+               :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+               type="text"
+               disabled
+               />
+            </div>
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editDepartment.name_uz"

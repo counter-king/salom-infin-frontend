@@ -213,35 +213,7 @@ const changeLanguage = () => {
 };
 const toggle = event => {
    menu.value.toggle(event);
-};
-const openEditModal = () => {
-   const data = props.data;
-   const newDepartments = parseArray(data?.department_ids, data?.top_level_department?.children);
-   const phone = Number(String(data.phone || '').slice(2));
-   const pinfl = Number(data.pinfl);
-   company.value = data?.company || '';
-   departments.value = newDepartments;
-   editEmployee.value = { ...data, phone, pinfl };
-   editVisible.value = true;
-   position.value = data?.position || '';
-   status.value = data?.status || '';
-   topLevelDepartment.value = data?.top_level_department || '';
-};
-const parseArray = (list1, list2) => {
-   const rest = departments => {
-      const newDepartments = (Array.isArray(departments) ? departments : []).map(({ children, name, id }) => {
-         const newChildren = rest(Array.isArray(children) ? children : []);
-         return [ ...newChildren, { name, id } ];
-      });
-      return newDepartments;
-   }
-   const restList = rest(list2).flat(Infinity);
-   const newDepartments = (Array.isArray(list1) ? list1 : []).map(department => {
-      const newDepartment = restList.find(({ id }) => id == department);
-      return newDepartment;
-   });
-   return [...newDepartments, ''];
-};
+}
 const setDepartments = newDepartments => {
    departments.value = newDepartments;
 };
@@ -272,7 +244,6 @@ onMounted(() => {
                <div
                   @click="() => {
                      if(item.value === 'create') {
-                        openModal([...parentDepartments, department], department)
                      } else {
                         deleteVisible = true
                      }

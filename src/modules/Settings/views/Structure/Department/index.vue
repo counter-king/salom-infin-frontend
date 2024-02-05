@@ -181,11 +181,13 @@ onMounted(() => {
                                  :defaultFilter="defaultFilter"
                                  :department="department"
                                  :getEmployees="getEmployees"
+                                 :index="index"
                                  :key="index"
                                  :last="index === subDepartments.length - 1"
                                  :openModal="openModal"
                                  :parentDepartments="[]"
                                  :setActiveDepartment="setActiveDepartment"
+                                 :topLevelDepartment="topLevelDepartment"
                                  v-for="(department, index) in subDepartments"
                                  :getSubDepartments="() => {
                                     getSubDepartments(departmentId)
