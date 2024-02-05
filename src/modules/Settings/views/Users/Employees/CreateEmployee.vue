@@ -40,7 +40,7 @@ const createUser = () => {
    const rootDepartments = departments.value;
    const newDepartments = rootDepartments.slice(0, rootDepartments.length - 1);
    const department_ids = newDepartments.map(department => department?.id);
-   const department = newDepartments[newDepartments.length - 1]?.id;
+   const department = newDepartments[newDepartments.length - 1]?.id || null;
    const companyId = company.value?.id;
    const father_name = employee.value?.father_name;
    const first_name = employee.value?.first_name;
@@ -50,7 +50,7 @@ const createUser = () => {
    const positionId = position.value?.id;
    const statusId = status.value?.id;
    const top_level_department = topLevelDepartment?.value?.id;
-   if(first_name && last_name && String(pinfl || '')?.length === 14 && phone?.length === 12 && companyId && department && positionId && statusId && top_level_department) {
+   if(first_name && last_name && String(pinfl || '')?.length === 14 && phone?.length === 12 && companyId && positionId && statusId && top_level_department) {
       loading.value = true;
       const data = { phone, first_name, last_name, father_name, pinfl, company: companyId, top_level_department, department, position: positionId, status: statusId, department_ids };
       axiosConfig
@@ -82,8 +82,6 @@ const createUser = () => {
       dispatchNotify('Введите филиал', '', 'error');
    } else if(!top_level_department) {
       dispatchNotify('Введите департаментa', '', 'error');
-   } else if(!department) {
-      dispatchNotify('Введите отдела', '', 'error');
    } else if(!positionId) {
       dispatchNotify('Введите должность', '', 'error');
    } else if(!statusId) {

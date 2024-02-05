@@ -12,15 +12,15 @@ import { ref, onMounted, watch } from 'vue';
 import { replaceSpecChars } from '@/utils/string';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
-const props = defineProps({ data: Object, employees: Array, field: String, getFirstPageEmployees: Function, setEmployees: Function });
+const props = defineProps({ data: Object, employees: Array, field: String, getFirstPageEmployees: Function, setEmployees: Function, activeDepartment: Object });
 const deleteLoading = ref(false);
 const deleteVisible = ref(false);
-const statusEditLoading = ref(false);
 const editEmployee = ref({});
 const editLoading = ref(false);
 const editVisible = ref(false);
 const items = ref([]);
 const menu = ref(null);
+const conditions = ref([]);
 
 const departments = ref(['']);
 
@@ -180,60 +180,35 @@ const searchStatuses = ({ search, page }) => {
          statusesLoading.value = false;
       });
 };
-const updateStatus = value => {
-   statusEditLoading.value = true;
-   const sendingData = { is_user_active: !!value?.value };
-   const employeeId = props?.data?.id;
-   axiosConfig
-      .patch(`users/${employeeId}/`, sendingData)
-      .then(response => {
-         const data = response?.data;
-         const status = response?.status;
-         if(status === 200) {
-            const newEmployees = props?.employees.map(employee => {
-               if(employee?.id === employeeId) {
-                  return { ...data, position: data?.position?.name };
-               } else {
-                  return employee;
-               }
-            });
-            props.setEmployees(newEmployees);
-            dispatchNotify('Состояние обновлено', '', 'success');
-         } else {
-            dispatchNotify('Состояние не обновлено', '', 'error');
-         }
-      })
-      .catch(() => {
-         dispatchNotify('Состояние не обновлено', '', 'error');
-      })
-      .finally(() => {
-         statusEditLoading.value = false;
-      });
-};
 const employeeDelete = () => {
-   deleteLoading.value = true;
-   axiosConfig
-      .delete(`users/${props?.data?.id}`)
-      .then(response => {
-         if(response?.status === 204) {
-            deleteVisible.value = false;
-            dispatchNotify('Сотрудник удален', '', 'success')
-            props.getFirstPageEmployees();
-         } else {
-            dispatchNotify('Сотрудник не удален', '', 'error')
-         }
-      })
-      .catch(() => {
-         dispatchNotify('Сотрудник не удален', '', 'error')
-      })
-      .finally(() => {
-         deleteLoading.value = false;
-      });
+   console.log(props.data)
+   // deleteLoading.value = true;
+   // axiosConfig
+   //    .delete(`users/${props?.data?.id}`)
+   //    .then(response => {
+   //       if(response?.status === 204) {
+   //          deleteVisible.value = false;
+   //          dispatchNotify('Сотрудник удален', '', 'success')
+   //          props.getFirstPageEmployees();
+   //       } else {
+   //          dispatchNotify('Сотрудник не удален', '', 'error')
+   //       }
+   //    })
+   //    .catch(() => {
+   //       dispatchNotify('Сотрудник не удален', '', 'error')
+   //    })
+   //    .finally(() => {
+   //       deleteLoading.value = false;
+   //    });
 };
 const changeLanguage = () => {
    items.value = [
       { label: 'Активный', value: true, },
       { label: 'Неактивный', value: false }
+   ];
+   conditions.value = [
+      { label: 'Перевод', value: 'transfer' },
+      { label: 'Удалить', value: 'delete', },
    ];
 };
 const toggle = event => {
@@ -279,43 +254,55 @@ onMounted(() => {
 </script>
 <template>
    <template v-if="field === 'action'">
-      <Button
-         @click="() => openEditModal(data)"
-         class="shadow-none py-[7px] px-2 text-xs bg-greyscale-50 mr-2 rounded-[8px]"
-         icon
-         severity="secondary"
-         text
-         v-tooltip.top="{
-            autoHide: false,
-            escape: true,
-            value: `<h4 class='text-xs text-white -my-1'>Изменить</h4>`,
-         }"
-         >
-         <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
-            <path d="M4 22H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <path d="M13.8881 3.66293L14.6296 2.92142C15.8581 1.69286 17.85 1.69286 19.0786 2.92142C20.3071 4.14999 20.3071 6.14188 19.0786 7.37044L18.3371 8.11195M13.8881 3.66293C13.8881 3.66293 13.9807 5.23862 15.3711 6.62894C16.7614 8.01926 18.3371 8.11195 18.3371 8.11195M13.8881 3.66293L7.07106 10.4799C6.60933 10.9416 6.37846 11.1725 6.17992 11.4271C5.94571 11.7273 5.74491 12.0522 5.58107 12.396C5.44219 12.6874 5.33894 12.9972 5.13245 13.6167L4.25745 16.2417M18.3371 8.11195L11.5201 14.9289C11.0584 15.3907 10.8275 15.6215 10.5729 15.8201C10.2727 16.0543 9.94775 16.2551 9.60398 16.4189C9.31256 16.5578 9.00282 16.6611 8.38334 16.8675L5.75834 17.7426M5.75834 17.7426L5.11667 17.9564C4.81182 18.0581 4.47573 17.9787 4.2485 17.7515C4.02128 17.5243 3.94194 17.1882 4.04356 16.8833L4.25745 16.2417M5.75834 17.7426L4.25745 16.2417" stroke="currentColor" stroke-width="2"/>
-         </svg>
-      </Button>
-      <Button
-         @click="() => { deleteVisible = true }"
-         class="shadow-none py-[7px] px-2 text-xs bg-greyscale-50 rounded-[8px]"
-         icon
-         severity="danger"
-         text
-         v-tooltip.top="{
-            autoHide: false,
-            escape: true,
-            value: `<h4 class='text-xs text-white -my-1'>Удалить</h4>`,
-         }"
-         >
-         <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
-            <path d="M20.5001 6H3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <path d="M18.8332 8.5L18.3732 15.3991C18.1962 18.054 18.1077 19.3815 17.2427 20.1907C16.3777 21 15.0473 21 12.3865 21H11.6132C8.95235 21 7.62195 21 6.75694 20.1907C5.89194 19.3815 5.80344 18.054 5.62644 15.3991L5.1665 8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <path d="M9.5 11L10 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <path d="M14.5 11L14 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <path d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6" stroke="currentColor" stroke-width="2"/>
-         </svg>
-      </Button>
+      <div class="w-full h-full flex items-center justify-end">
+         <Button
+            @click="toggle"
+            class="shadow-none p-0 m-0 w-[32px] h-[32px] flex items-center justify-center text-xs bg-transparent rounded-full"
+            icon
+            severity="secondary"
+            text
+            >
+            <svg viewBox="0 0 24 24" width="20" height="20">
+               <path fill="#6c757d" d="M12,7a2,2,0,1,0-2-2A2,2,0,0,0,12,7Zm0,10a2,2,0,1,0,2,2A2,2,0,0,0,12,17Zm0-7a2,2,0,1,0,2,2A2,2,0,0,0,12,10Z">
+               </path>
+            </svg>
+         </Button>
+         <Menu ref="menu" :model="conditions" style="width: initial !important" :popup="true" :pt="menuConfig">
+            <template #item="{ item }">
+               <div
+                  @click="() => {
+                     if(item.value === 'create') {
+                        openModal([...parentDepartments, department], department)
+                     } else {
+                        deleteVisible = true
+                     }
+                  }"
+                  class="flex py-[7px] px-3 cursor-pointer">
+                  <template v-if="item.value === 'transfer'">
+                     <span class="mr-2">
+                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                           <path d="M2.45386 7.55555H1.80386V7.55556L2.45386 7.55555ZM2.45386 8.66667L1.99605 9.12809C2.24947 9.37953 2.65825 9.37953 2.91167 9.12809L2.45386 8.66667ZM4.03154 8.01698C4.28638 7.76414 4.288 7.35258 4.03515 7.09775C3.78231 6.84291 3.37076 6.84129 3.11592 7.09413L4.03154 8.01698ZM1.79179 7.09413C1.53696 6.84129 1.1254 6.84291 0.872563 7.09775C0.619721 7.35258 0.621338 7.76414 0.876174 8.01698L1.79179 7.09413ZM12.2832 5.00708C12.4712 5.3129 12.8716 5.4084 13.1774 5.2204C13.4832 5.03239 13.5787 4.63206 13.3907 4.32625L12.2832 5.00708ZM8.05323 1.35C4.60662 1.35 1.80386 4.12352 1.80386 7.55555H3.10386C3.10386 4.8511 5.31494 2.65 8.05323 2.65V1.35ZM1.80386 7.55556L1.80386 8.66667L3.10386 8.66667L3.10386 7.55555L1.80386 7.55556ZM2.91167 9.12809L4.03154 8.01698L3.11592 7.09413L1.99605 8.20525L2.91167 9.12809ZM2.91167 8.20525L1.79179 7.09413L0.876174 8.01698L1.99605 9.12809L2.91167 8.20525ZM13.3907 4.32625C12.2934 2.54143 10.3127 1.35 8.05323 1.35V2.65C9.84569 2.65 11.4143 3.59372 12.2832 5.00708L13.3907 4.32625Z" fill="#767994"/>
+                           <path d="M13.5419 7.33594L13.9989 6.87364C13.7457 6.62337 13.3382 6.62337 13.085 6.87364L13.5419 7.33594ZM11.9609 7.98475C11.7055 8.23711 11.7031 8.64866 11.9555 8.90398C12.2079 9.1593 12.6194 9.1617 12.8747 8.90934L11.9609 7.98475ZM14.2092 8.90934C14.4645 9.1617 14.876 9.1593 15.1284 8.90398C15.3808 8.64866 15.3784 8.23711 15.123 7.98475L14.2092 8.90934ZM3.67229 10.9946C3.48376 10.6891 3.08327 10.5943 2.77778 10.7828C2.47228 10.9713 2.37746 11.3718 2.56599 11.6773L3.67229 10.9946ZM7.92117 14.6526C11.3773 14.6526 14.1919 11.8814 14.1919 8.44705H12.8919C12.8919 11.1492 10.6736 13.3526 7.92117 13.3526V14.6526ZM14.1919 8.44705V7.33594H12.8919V8.44705H14.1919ZM13.085 6.87364L11.9609 7.98475L12.8747 8.90934L13.9989 7.79823L13.085 6.87364ZM13.085 7.79823L14.2092 8.90934L15.123 7.98475L13.9989 6.87364L13.085 7.79823ZM2.56599 11.6773C3.66754 13.4623 5.65509 14.6526 7.92117 14.6526V13.3526C6.11979 13.3526 4.54442 12.4078 3.67229 10.9946L2.56599 11.6773Z" fill="#767994"/>
+                        </svg>
+                     </span>
+                     <span class="text-sm font-medium" style="color: #6c757d">{{ item.label }}</span>
+                  </template>
+                  <template v-if="item.value === 'delete'">
+                     <span class="mr-2">
+                        <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                           <path d="M20.5001 6H3.5" stroke="#F3335C" stroke-width="2" stroke-linecap="round"/>
+                           <path d="M18.8332 8.5L18.3732 15.3991C18.1962 18.054 18.1077 19.3815 17.2427 20.1907C16.3777 21 15.0473 21 12.3865 21H11.6132C8.95235 21 7.62195 21 6.75694 20.1907C5.89194 19.3815 5.80344 18.054 5.62644 15.3991L5.1665 8.5" stroke="#F3335C" stroke-width="2" stroke-linecap="round"/>
+                           <path d="M9.5 11L10 16" stroke="#F3335C" stroke-width="2" stroke-linecap="round"/>
+                           <path d="M14.5 11L14 16" stroke="#F3335C" stroke-width="2" stroke-linecap="round"/>
+                           <path d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6" stroke="#F3335C" stroke-width="2"/>
+                        </svg>
+                     </span>
+                     <span class="text-sm font-medium" style="color: #F3335C">{{ item.label }}</span>
+                  </template>
+               </div>
+            </template>
+         </Menu>
+      </div>
    </template>
    <template v-else-if="field === 'position'">
       <span class="text-sm font-medium">{{ data[field] && data[field].name }}</span>

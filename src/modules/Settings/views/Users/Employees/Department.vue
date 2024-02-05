@@ -42,7 +42,7 @@ watch(department, department => {
 });
 </script>
 <template>
-   <p class="text-sm text-greyscale-500 font-medium mb-1 mt-6">Отдел<span v-if="order === 0" class="text-red-500 ml-1">*</span></p>
+   <p class="text-sm text-greyscale-500 font-medium mb-1 mt-6">Отдел</p>
    <base-auto-complete
       :loading="departmentsLoading"
       :options="departments"

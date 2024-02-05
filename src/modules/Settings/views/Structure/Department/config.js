@@ -8,9 +8,9 @@ export const tableConfig = {
    thead: { class: ['bg-greyscale-100'] },
 };
 export const columnConfig = {
-   bodyCell: { class: ['text-xs py-2 h-[44px] min-w-[120px] px-3 border-none'] },
+   bodyCell: { class: ['text-xs py-2 h-[44px] min-w-[40px] px-3 border-none'] },
    bodyCellContent: {class: ['text-sm font-semibold text-greyscale-500']},
-   headerCell: { class: ['bg-inherit h-[44px] text-right px-3 py-2 border-none'] },
+   headerCell: { class: ['bg-inherit h-[44px] text-left px-3 py-2 border-none'] },
    headerContent: { class: ['text-sm font-semibold text-greyscale-500'] },
 };
 export const dialogConfig = {
