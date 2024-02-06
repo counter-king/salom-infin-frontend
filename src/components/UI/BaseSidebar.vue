@@ -42,7 +42,6 @@ const props = defineProps({
     type: String
   }
 })
-// const emit = defineEmits(['emit:success-button, emit:cancel-button'])
 defineExpose({ successButtonLoading })
 </script>
 
@@ -52,7 +51,7 @@ defineExpose({ successButtonLoading })
     :position="props.position"
     :pt="{
       root: {
-        class: ['w-[675px]', props.rootClass]
+        class: ['w-[1500px]', props.rootClass]
       },
       header: {
         class: 'bg-greyscale-50 p-6'

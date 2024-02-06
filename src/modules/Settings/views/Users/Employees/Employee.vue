@@ -47,9 +47,10 @@ const statusesPage = ref(1);
 
 const employeeEdit = () => {
    const rootDepartments = departments.value;
-   const newDepartments = rootDepartments.slice(0, rootDepartments.length - 1);
+   const index = rootDepartments.length - 1;
+   const newDepartments = rootDepartments[index] ? rootDepartments : rootDepartments.slice(0, index);
    const department_ids = newDepartments.map(department => department?.id);
-   const department = newDepartments[newDepartments.length - 1]?.id;
+   const department = newDepartments[newDepartments.length - 1]?.id || null;
    const companyId = company.value?.id;
    const employeeId =  editEmployee?.value?.id;
    const father_name = editEmployee.value?.father_name;
@@ -60,7 +61,7 @@ const employeeEdit = () => {
    const positionId = position.value?.id;
    const statusId = status.value?.id;
    const top_level_department = topLevelDepartment.value?.id;
-   if(first_name && last_name && father_name && String(pinfl || '')?.length === 14 && phone?.length === 12 && companyId && department && positionId && statusId && top_level_department) {
+   if(first_name && last_name && father_name && String(pinfl || '')?.length === 14 && phone?.length === 12 && companyId && positionId && statusId && top_level_department) {
       editLoading.value = true;
       const data = { phone, first_name, last_name, father_name, pinfl, company: companyId, top_level_department, department, position: positionId, status: statusId, department_ids };
       axiosConfig
@@ -92,8 +93,6 @@ const employeeEdit = () => {
       dispatchNotify('Введите филиал', '', 'error');
    } else if(!top_level_department) {
       dispatchNotify('Введите департаментa', '', 'error');
-   } else if(!department) {
-      dispatchNotify('Введите отдела', '', 'error');
    } else if(!positionId) {
       dispatchNotify('Введите должность', '', 'error');
    } else if(!statusId) {
@@ -125,7 +124,7 @@ const searchTopLevelDepartments = ({ search, page }) => {
    topLevelDepartmentsLoading.value = true;
    topLevelDepartment.value = search;
    axiosConfig
-      .get(`departments/top-level-departments/?condition=Apage=${page}&search=${search}`)
+      .get(`departments/top-level-departments/?condition=A&page=${page}&search=${search}`)
       .then(response => {
          const newPage = response?.data?.next ? page + 1 : null;
          const results = response?.data?.results;
@@ -255,9 +254,9 @@ const openEditModal = () => {
 };
 const parseArray = (list1, list2) => {
    const rest = departments => {
-      const newDepartments = (Array.isArray(departments) ? departments : []).map(({ children, name, id }) => {
+      const newDepartments = (Array.isArray(departments) ? departments : []).map(({ children, name, id, ...spread }) => {
          const newChildren = rest(Array.isArray(children) ? children : []);
-         return [ ...newChildren, { name, id } ];
+         return [ ...newChildren, { name, id, ...spread } ];
       });
       return newDepartments;
    }
@@ -266,7 +265,9 @@ const parseArray = (list1, list2) => {
       const newDepartment = restList.find(({ id }) => id == department);
       return newDepartment;
    });
-   return [...newDepartments, ''];
+   const hasSubDepartment = newDepartments[newDepartments.length - 1]?.sub_department_count;
+   const departments = hasSubDepartment || !newDepartments?.length ? [...newDepartments, ''] : newDepartments;
+   return departments;
 };
 const setDepartments = newDepartments => {
    departments.value = newDepartments;

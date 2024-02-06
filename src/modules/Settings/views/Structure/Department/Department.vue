@@ -5,12 +5,16 @@ import Dialog from 'primevue/dialog';
 import Panel from 'primevue/panel';
 import ProgressSpinner from 'primevue/progressspinner';
 import axiosConfig from "@/services/axios.config";
-import { defineProps, ref } from 'vue';
-import { dialogConfig, menuConfig } from './config';
+import Menu from 'primevue/menu';
+import { defineProps, ref, watch, onMounted } from 'vue';
+import { dialogConfig, menuConfig, menu2Config } from './config';
+import { useI18n } from "vue-i18n";
+const { locale } = useI18n();
 import { dispatchNotify } from '@/utils/notify';
 import { replaceSpecCharsBracket } from '@/utils/string';
 const props = defineProps({
    activeDepartment: Object,
+   defaultFilter: Object,
    department: Object,
    getEmployees: Function,
    getSubDepartments: Function,
@@ -18,13 +22,18 @@ const props = defineProps({
    openModal: Function,
    parentDepartments: Array,
    setActiveDepartment: Function,
+   topLevelDepartment: Object,
 });
-const visible = ref(false);
+const collapsed = ref(true);
+const conditions = ref([]);
+const conditions2 = ref([]);
 const deleteLoading = ref(false);
 const editDepartment = ref({});
 const editLoading = ref(false);
 const editVisible = ref(false);
-const collapsed = ref(true);
+const menu = ref(null);
+const menu2 = ref(null);
+const visible = ref(false);
 const departmentEdit = () => {
    const { name_ru, name_uz, condition } = editDepartment.value;
    if(name_uz && name_ru) {
@@ -34,15 +43,15 @@ const departmentEdit = () => {
          .patch(`/departments/${departmentId}/`, { name_ru, name_uz, condition })
          .then(response => {
             if(response?.status === 200) {
-               dispatchNotify('Департамент обновлено', '', 'success');
+               dispatchNotify('Отдел обновлено', '', 'success');
                editVisible.value = false;
                props.getSubDepartments();
             } else {
-               dispatchNotify('Департамент не обновлено', '', 'error');
+               dispatchNotify('Отдел не обновлено', '', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Департамент не обновлено', '', 'error');
+            dispatchNotify('Отдел не обновлено', '', 'error');
          })
          .finally(() => {
             editLoading.value = false;
@@ -52,30 +61,75 @@ const departmentEdit = () => {
    }
 };
 const deleteDepartment = () => {
-   deleteLoading.value = true;
+   const department = props?.department;
+   if(department.employee_count > 0) {
+      dispatchNotify('В этом отделе есть сотрудники, сначала удалите сотрудников', '', 'error')
+   } else {
+      deleteLoading.value = true;
+      axiosConfig
+         .delete(`departments/${department?.id}/`)
+         .then(response => {
+            if(response?.status === 204) {
+               visible.value = false;
+               dispatchNotify('Отдел удален', '', 'success');
+               props.getSubDepartments();
+            } else {
+               dispatchNotify('Отдел не удален', '', 'error');
+            }
+         })
+         .catch(() => {
+            dispatchNotify('Отдел не удален', '', 'error');
+         })
+         .finally(() => {
+            deleteLoading.value = false;
+         });
+   }
+};
+const updateCondition = value => {
+   const departmentId = props?.department?.id;
    axiosConfig
-      .delete(`departments/${props?.department?.id}/`)
+      .patch(`departments/${departmentId}/`, { condition: value?.value })
       .then(response => {
-         if(response?.status === 204) {
-            visible.value = false;
-            dispatchNotify('Отдел удален', '', 'success')
+         if(response?.status === 200) {
             props.getSubDepartments();
+            dispatchNotify('Статус обновлено', '', 'success');
          } else {
-            dispatchNotify('Отдел не удален', '', 'error')
+            dispatchNotify('Статус не обновлено', '', 'error');
          }
       })
       .catch(() => {
-         dispatchNotify('Отдел не удален', '', 'error')
-      })
-      .finally(() => {
-         deleteLoading.value = false;
+         dispatchNotify('Статус не обновлено', '', 'error');
       });
 };
+const changeLanguage = () => {
+   conditions.value = [
+      { label: 'Добавить', value: 'create', },
+      { label: 'Изменить', value: 'edit' },
+      { label: 'Удалить', value: 'delete', },
+   ];
+   conditions2.value = [
+      { label: 'Активный', value: 'A', },
+      { label: 'Неактивный', value: 'P' }
+   ];
+};
+const toggle = e => {
+   menu.value.toggle(e);
+   e.stopPropagation();
+};
+const toggle2 = e => {
+   menu2.value.toggle(e);
+};
+watch(locale, () => {
+   changeLanguage();
+});
+onMounted(() => {
+   changeLanguage();
+});
 </script>
 <template>
    <Panel
       :collapsed="collapsed"
-      toggleable
+      :toggleable="department.children.length > 0"
       @update:collapsed="value => {
          collapsed = value;
       }"
@@ -87,99 +141,115 @@ const deleteDepartment = () => {
                [
                   `${props.last ? '' :`after:content-[''] after:bg-greyscale-200 after:absolute after:bottom-[-1px] after:left-[9px] after:outline-offset-[-1px]`}
                   ${activeDepartment.id === department.id ? 'text-primary-500 outline-1 outline outline-primary-500' : ''} 
-                  font-medium duration-0 hover:outline-1 hover:outline hover:outline-primary-500 cursor-pointer border-0 p-0 border-transparent text-md rounded-none rounded-xl duration-[400ms] hover:text-primary-500 bg-transparent hover:bg-greyscale-100`
+                  font-medium duration-0 hover:outline-1 hover:outline hover:outline-primary-500 cursor-pointer border-0 p-0 border-transparent text-md rounded-none rounded-xl duration-0 hover:text-primary-500 bg-transparent hover:bg-greyscale-100`
                ]
             },
          root: {class: ['settings-structure-department relative bottom-0 flex flex-col w-full py-[1px]']},
          togglerIcon: {class: ['!bg-transparent flex items-center justify-center !hover:bg-transparent p-panel-header-icon p-link bg-greyscale-100']},
-         icons: {class: ['self-start pr-3 pt-3 pb-2']}
+         icons: {class: ['self-start pr-3 pt-3 pb-2 flex flex-row-reverse']}
       }"
       >
       <template #header>
          <div
             @click="() => {
                setActiveDepartment(department);
-               getEmployees(department.id);
+               getEmployees({ ...defaultFilter, department });
             }"
             class="pl-3 pr-0 py-2 w-full"
+            style="width: calc(100% - 128px)"
             >
-            <div class="flex justify-between items-center w-full">
-               <div class="flex" style="width: calc(100% - 120px)">
-                  <span>{{ department.name }}</span>
-                  <Badge :value="department.employee_count || 0" style="font-size: 12px; min-width: 20px" class="font-medium h-5 inline-flex items-center justify-center ml-1 mt-0.5"></Badge>
-               </div>
-               <div class="flex settings-department-action opacity-0 self-start">
-                  <Button
-                     class="shadow-none py-[7px] px-[5px] text-xs bg-transparent rounded-full"
-                     icon
-                     severity="secondary"
-                     text
-                     @click="e => {
-                        e.preventDefault();
-                        e.stopPropagation();
+            <span>{{ department.name }}</span>
+            <Badge
+               :value="department.employee_count || 0"
+               style="font-size: 12px; min-width: 20px"
+               class="font-medium h-5 inline-flex items-center justify-center ml-1 mt-0.5"
+               v-tooltip.top="{
+                  autoHide: false,
+                  escape: true,
+                  value: `<h4 class='text-xs text-white -my-1'>Количество сотрудников</h4>`,
+               }">
+            </Badge>
+         </div>
+      </template>
+      <template #icons>
+         <Button
+            @click="toggle"
+            class="shadow-none p-0 m-0 w-[32px] h-[32px] flex items-center justify-center text-xs bg-transparent rounded-full"
+            icon
+            severity="secondary"
+            text
+            >
+            <svg viewBox="0 0 24 24" width="20" height="20">
+               <path fill="#6c757d" d="M12,7a2,2,0,1,0-2-2A2,2,0,0,0,12,7Zm0,10a2,2,0,1,0,2,2A2,2,0,0,0,12,17Zm0-7a2,2,0,1,0,2,2A2,2,0,0,0,12,10Z">
+               </path>
+            </svg>
+         </Button>
+         <Menu ref="menu" :model="conditions" style="width: initial !important" :popup="true" :pt="menuConfig">
+            <template #item="{ item }">
+               <div
+                  @click="() => {
+                     if(item.value === 'create') {
                         openModal([...parentDepartments, department], department)
-                     }"
-                     v-tooltip.top="{
-                        autoHide: false,
-                        escape: true,
-                        value: `<h4 class='text-xs text-white -my-1'>Добавить</h4>`,
-                     }"
-                     >
-                     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="24" height="24" rx="12" fill="#EEE9FF"/>
-                        <path d="M8 12H16" stroke="#635AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12 16V8" stroke="#635AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                     </svg>
-                  </Button>
-                  <Button
-                     class="shadow-none py-[7px] px-2 text-xs bg-transparent rounded-full"
-                     icon
-                     severity="secondary"
-                     text
-                     @click="e => {
-                        e.preventDefault();
-                        e.stopPropagation();
+                     } else if(item.value === 'edit') {
                         editDepartment = department;
                         editVisible = true;
-                     }"
-                     v-tooltip.top="{
-                        autoHide: false,
-                        escape: true,
-                        value: `<h4 class='text-xs text-white -my-1'>Изменить</h4>`,
-                     }"
-                     >
-                     <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
-                        <path d="M4 22H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M13.8881 3.66293L14.6296 2.92142C15.8581 1.69286 17.85 1.69286 19.0786 2.92142C20.3071 4.14999 20.3071 6.14188 19.0786 7.37044L18.3371 8.11195M13.8881 3.66293C13.8881 3.66293 13.9807 5.23862 15.3711 6.62894C16.7614 8.01926 18.3371 8.11195 18.3371 8.11195M13.8881 3.66293L7.07106 10.4799C6.60933 10.9416 6.37846 11.1725 6.17992 11.4271C5.94571 11.7273 5.74491 12.0522 5.58107 12.396C5.44219 12.6874 5.33894 12.9972 5.13245 13.6167L4.25745 16.2417M18.3371 8.11195L11.5201 14.9289C11.0584 15.3907 10.8275 15.6215 10.5729 15.8201C10.2727 16.0543 9.94775 16.2551 9.60398 16.4189C9.31256 16.5578 9.00282 16.6611 8.38334 16.8675L5.75834 17.7426M5.75834 17.7426L5.11667 17.9564C4.81182 18.0581 4.47573 17.9787 4.2485 17.7515C4.02128 17.5243 3.94194 17.1882 4.04356 16.8833L4.25745 16.2417M5.75834 17.7426L4.25745 16.2417" stroke="currentColor" stroke-width="2"/>
-                     </svg>
-                  </Button>
-                  <Button
-                     class="shadow-none py-[7px] px-2 text-xs bg-transparent rounded-full"
-                     icon
-                     severity="danger"
-                     text
-                     @click="e => {
-                        e.stopPropagation();
-                        e.preventDefault();
+                     } else {
                         visible = true;
-                     }"
-                     v-tooltip.top="{
-                        autoHide: false,
-                        escape: true,
-                        value: `<h4 class='text-xs text-white -my-1'>Удалить</h4>`,
-                     }"
-                     >
-                     <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
-                        <path d="M20.5001 6H3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M18.8332 8.5L18.3732 15.3991C18.1962 18.054 18.1077 19.3815 17.2427 20.1907C16.3777 21 15.0473 21 12.3865 21H11.6132C8.95235 21 7.62195 21 6.75694 20.1907C5.89194 19.3815 5.80344 18.054 5.62644 15.3991L5.1665 8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M9.5 11L10 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M14.5 11L14 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6" stroke="currentColor" stroke-width="2"/>
+                     }
+                  }"
+                  class="flex py-[7px] px-3 cursor-pointer">
+                  <template v-if="item.value === 'create'">
+                     <svg width="22" height="22" class="mr-2" viewBox="0 0 48 48">
+                        <path fill="none" d="M0 0h48v48H0z"></path>
+                        <path fill="#635AFF" d="M26 14h-4v8h-8v4h8v8h4v-8h8v-4h-8v-8zM24 4C12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4zm0 36c-8.82 0-16-7.18-16-16S15.18 8 24 8s16 7.18 16 16-7.18 16-16 16z"></path>
                      </svg>
-                  </Button>
+                     <span class="text-sm font-medium text-primary-500">{{ item.label }}</span>
+                  </template>
+                  <template v-if="item.value === 'edit'">
+                     <span class="mr-2">
+                        <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                           <path d="M4 22H20" stroke="#6c757d" stroke-width="2" stroke-linecap="round"/>
+                           <path d="M13.8881 3.66293L14.6296 2.92142C15.8581 1.69286 17.85 1.69286 19.0786 2.92142C20.3071 4.14999 20.3071 6.14188 19.0786 7.37044L18.3371 8.11195M13.8881 3.66293C13.8881 3.66293 13.9807 5.23862 15.3711 6.62894C16.7614 8.01926 18.3371 8.11195 18.3371 8.11195M13.8881 3.66293L7.07106 10.4799C6.60933 10.9416 6.37846 11.1725 6.17992 11.4271C5.94571 11.7273 5.74491 12.0522 5.58107 12.396C5.44219 12.6874 5.33894 12.9972 5.13245 13.6167L4.25745 16.2417M18.3371 8.11195L11.5201 14.9289C11.0584 15.3907 10.8275 15.6215 10.5729 15.8201C10.2727 16.0543 9.94775 16.2551 9.60398 16.4189C9.31256 16.5578 9.00282 16.6611 8.38334 16.8675L5.75834 17.7426M5.75834 17.7426L5.11667 17.9564C4.81182 18.0581 4.47573 17.9787 4.2485 17.7515C4.02128 17.5243 3.94194 17.1882 4.04356 16.8833L4.25745 16.2417M5.75834 17.7426L4.25745 16.2417" stroke="#6c757d" stroke-width="2"/>
+                        </svg>
+                     </span>
+                     <span class="text-sm font-medium" style="color: #6c757d">{{ item.label }}</span>
+                  </template>
+                  <template v-if="item.value === 'delete'">
+                     <span class="mr-2">
+                        <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                           <path d="M20.5001 6H3.5" stroke="#F3335C" stroke-width="2" stroke-linecap="round"/>
+                           <path d="M18.8332 8.5L18.3732 15.3991C18.1962 18.054 18.1077 19.3815 17.2427 20.1907C16.3777 21 15.0473 21 12.3865 21H11.6132C8.95235 21 7.62195 21 6.75694 20.1907C5.89194 19.3815 5.80344 18.054 5.62644 15.3991L5.1665 8.5" stroke="#F3335C" stroke-width="2" stroke-linecap="round"/>
+                           <path d="M9.5 11L10 16" stroke="#F3335C" stroke-width="2" stroke-linecap="round"/>
+                           <path d="M14.5 11L14 16" stroke="#F3335C" stroke-width="2" stroke-linecap="round"/>
+                           <path d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6" stroke="#F3335C" stroke-width="2"/>
+                        </svg>
+                     </span>
+                     <span class="text-sm font-medium" style="color: #F3335C">{{ item.label }}</span>
+                  </template>
                </div>
-            </div>
-         </div>
+            </template>
+         </Menu>
+         <span
+            @click="toggle2"
+            :style="{ background: department.condition === 'A' ? '#EEFFE7' : '#F7F7F9', color: department.condition === 'A' ? '#63BA3D' : '#767994', 'border-color': department.condition === 'A' ? '#CDE7C2' : '#E2E8F0' }"
+            class="inline-flex items-center justify-center border-[1px] pr-2 pl-3 py-1 font-medium rounded-[80px] text-sm text-greyscale-500 cursor-pointer ml-1">
+            <span class="mr-1 w-[6px] h-[6px] block rounded-full" :style="{ background: department.condition === 'A' ? '#63BA3D' : '#9CA8B9' }"></span>
+            <svg width="16" height="16" viewBox="0 0 12 12" fill="none">
+               <path d="M9 4.5L6 7.5L3 4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+         </span>
+         <Menu ref="menu2" :model="conditions2" style="width: initial !important" :popup="true" :pt="menu2Config">
+            <template #item="{ item }">
+               <div @click="() => { updateCondition(item) }" class="flex justify-between py-[6px] pr-2 pl-3 cursor-pointer">
+                  <span class="text-sm font-medium text-primary-900">{{ item.label }}</span>
+                  <span class="ml-2" v-if="item.value === department.condition">
+                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M18.3337 9.99935C18.3337 14.6017 14.6027 18.3327 10.0003 18.3327C5.39795 18.3327 1.66699 14.6017 1.66699 9.99935C1.66699 5.39698 5.39795 1.66602 10.0003 1.66602C14.6027 1.66602 18.3337 5.39698 18.3337 9.99935ZM13.3589 7.47407C13.603 7.71815 13.603 8.11388 13.3589 8.35796L9.19227 12.5246C8.94819 12.7687 8.55246 12.7687 8.30838 12.5246L6.64172 10.858C6.39764 10.6139 6.39764 10.2182 6.64172 9.97407C6.8858 9.73 7.28152 9.73 7.5256 9.97407L8.75033 11.1988L10.6127 9.33644L12.4751 7.47407C12.7191 7.23 13.1149 7.23 13.3589 7.47407Z" fill="#635AFF"/>
+                     </svg>
+                  </span>
+               </div>
+            </template>
+         </Menu>
       </template>
       <template #togglericon="{ collapsed }">
          <span :style="{ 'transform': `rotate(${collapsed ? 180 : 0}deg)` }" class="text-sm pi pi-chevron-up transition duration-400 origin-center"></span>
@@ -194,16 +264,33 @@ const deleteDepartment = () => {
             :openModal="openModal"
             :parentDepartments="[...parentDepartments, department]"
             :setActiveDepartment="setActiveDepartment"
+            :topLevelDepartment="topLevelDepartment"
          />
       </template>
    </Panel>
    <Dialog
       :closable="!editLoading"
       :pt="dialogConfig"
-      header="Изменить департамент"
+      header="Изменить отдел"
       modal
       v-model:visible="editVisible">
       <div class="flex flex-col pb-10 pt-4">
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Департамент</p>
+         <InputText
+            :modelValue="topLevelDepartment.name"
+            :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            disabled
+            type="text"
+            />
+         <div v-for="(department, index) in parentDepartments" :key="index">
+            <p class="text-sm text-greyscale-500 font-medium mb-1">Отдел</p>
+            <InputText
+               :modelValue="department.name"
+               :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+               type="text"
+               disabled
+               />
+            </div>
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editDepartment.name_uz"

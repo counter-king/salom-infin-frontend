@@ -1,17 +1,17 @@
 export const tableConfig = {
-   bodyRow: { class: ['cursor-pointer', 'hover:bg-greyscale-50'] },
-   emptymessagecell: { class: ['bg-white', '!rounded-xl'] },
+   bodyRow: { class: ['cursor-pointer hover:bg-greyscale-100 !rounded-xl relative', `after:content-[''] after:bg-greyscale-200 after:absolute after:bottom-0 after:left-[9px]`] },
+   emptymessagecell: { class: ['bg-white !rounded-xl'] },
    loadingoverlay: { class: ['bg-transparent'] },
-   rowExpansionCell: { class: '!bg-white !rounded-xl' },
+   rowExpansionCell: { class: '!bg-white rounded-xl' },
    rowStyle: { borderRadius: '4px' },
-   table: { class: ['border-separate', 'border-spacing-y-1', '-mt-1'] },
-   thead: { class: ['bg-white'] },
+   table: { class: ['border-separate '] },
+   thead: { class: ['bg-greyscale-100'] },
 };
 export const columnConfig = {
-   bodyCell: { class: ['text-xs', 'py-0', 'h-[56px] min-w-[120px]'] },
-   bodyCellContent: {class: ['text-sm', 'font-semibold', 'text-greyscale-500']},
-   headerCell: { class: ['bg-inherit', 'h-[56px]'] },
-   headerContent: { class: ['text-sm', 'font-semibold', 'text-greyscale-500'] },
+   bodyCell: { class: ['text-xs py-2 h-[44px] min-w-[40px] px-3 border-none'] },
+   bodyCellContent: {class: ['text-sm font-semibold text-greyscale-500']},
+   headerCell: { class: ['bg-inherit h-[44px] text-left px-3 py-2 border-none'] },
+   headerContent: { class: ['text-sm font-semibold text-greyscale-500'] },
 };
 export const dialogConfig = {
    closeButton: { class: ['w-9 h-9 shadow-button bg-white'] },
@@ -22,14 +22,14 @@ export const dialogConfig = {
    root: { class: ['p-dialog rounded-2xl'] },
 };
 export const paginationConfig = {
-   current: { class: ['text-xs', 'text-greyscale-300', 'mr-auto', 'h-full'] },
-   firstPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
-   lastPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
-   nextPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
-   pageButton: ({ context }) => ({ class:  [ context.active ? ['bg-primary-500', 'text-primary-0'] : undefined, 'rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'text-xs'] }),
+   current: { class: ['text-xs text-greyscale-300 mr-auto h-full'] },
+   firstPageButton: { class: ['rounded-[6px] h-6 w-6 min-w-[24px] border border-solid border-border-1'] },
+   lastPageButton: { class: ['rounded-[6px] h-6 w-6 min-w-[24px] border border-solid border-border-1'] },
+   nextPageButton: { class: ['rounded-[6px] h-6 w-6 min-w-[24px] border border-solid border-border-1'] },
+   pageButton: ({ context }) => ({ class:  [ context.active ? ['bg-primary-500 text-primary-0'] : undefined, 'rounded-[6px] h-6 w-6 min-w-[24px] text-xs'] }),
    paginatorWrapper: { class: ['w-[100%]'] },
-   previousPageButton: { class: ['rounded-[6px]', 'h-6', 'w-6', 'min-w-[24px]', 'border', 'border-solid', 'border-border-1'] },
-   root: { class: ['h-14', 'rounded-4 w-full rounded-[12px]'] },
+   previousPageButton: { class: ['rounded-[6px] h-6 w-6 min-w-[24px] border border-solid border-border-1'] },
+   root: { class: ['h-9 rounded-4 w-full rounded-[12px] pt-2 px-0 pb-0'] },
    start: { class: ['m-0'] }
 };
 export const dropdownConfig = {
@@ -42,6 +42,14 @@ export const dropdownConfig = {
    trigger: { class: ['w-[30px]'] },
 };
 export const menuConfig = {
+   action: { class: ['py-[6px] pl-3 min-h-[32px]'] },
+   content: { class: ['rounded-lg'] },
+   label: { class: ['text-sm font-medium text-primary-900'] },
+   menuitem: { class: 'group mb-1' },
+   root: { class: 'rounded-xl shadow-menu px-1.5 pb-0 pt-1.5' },
+   submenuHeader: { class: 'py-[6px] pl-3 text-sm font-semibold text-primary-500' }
+};
+export const menu2Config = {
    action: { class: ['py-[6px] pl-3 min-h-[32px]'] },
    content: { class: ['rounded-lg'] },
    label: { class: ['text-sm font-medium text-primary-900'] },
