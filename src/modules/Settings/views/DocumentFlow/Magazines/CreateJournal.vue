@@ -85,7 +85,7 @@ const createJournal = () => {
             placeholder="Введите код"
             type="text"
             @input="({ value }) => {
-               const code =  value < 100000 ? value : 9999;
+               const code =  value < 1000000 ? value : 999999;
                journal = { ...journal, code };
             }"
             />
@@ -107,7 +107,7 @@ const createJournal = () => {
             placeholder="Введите количество цифр"
             type="text"
             @input="({ value }) => {
-               const number_of_chars =  value < 10 ? value : 9;
+               const number_of_chars =  value < 9 ? value : 8;
                journal = { ...journal, number_of_chars };
             }"
             />
