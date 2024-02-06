@@ -33,6 +33,12 @@ const headers = ref([
     is_active: true,
   },
   {
+    columnKey: 'code',
+    field: 'code',
+    header: 'Код',
+    is_active: true,
+  },
+  {
     columnKey: 'sort_order',
     field: 'sort_order',
     header: 'Сортировка',

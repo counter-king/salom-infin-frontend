@@ -11,6 +11,7 @@ import InputNumber from 'primevue/inputnumber';
 import { dispatchNotify } from '@/utils/notify';
 import { ref, watch, onMounted } from 'vue';
 import { useI18n } from "vue-i18n";
+import Checkbox from 'primevue/checkbox';
 const { locale } = useI18n();
 const props = defineProps({ data: Object, field: String, getFirstPageJournals: Function, journals: Array, setJournals: Function });
 const conditionLoading = ref(false);
@@ -23,13 +24,15 @@ const editVisible = ref(false);
 const menu = ref(null);
 const sort_order = ref({ value: 1 });
 const sortOrderLoading = ref(false);
+const checkboxes = ref(['is_for_compose', 'is_auto_numbered']);
+const value = ref(['is_for_compose', 'is_auto_numbered']);
 const journalEdit = () => {
-   const { name_ru, name_uz, sort_order } = editJournal.value;
-   if(name_uz && name_ru && sort_order) {
+   const { name_ru, name_uz, sort_order, prefix, number_of_chars, is_for_compose, is_auto_numbered, code } = editJournal.value;
+   if(name_uz && name_ru && sort_order && code) {
       editLoading.value = true;
       const journalId = props?.data?.id;
       axiosConfig
-         .patch(`journals/${journalId}/`, { name_ru, name_uz, sort_order })
+         .patch(`journals/${journalId}/`, { name_ru, name_uz, sort_order, prefix, number_of_chars, is_for_compose, is_auto_numbered, code })
          .then(response => {
             const status = response?.status;
             if(status === 200) {
@@ -48,6 +51,8 @@ const journalEdit = () => {
          });
    } else if(!name_uz || !name_ru) {
       dispatchNotify('Введите название', '', 'error');
+   } else if(!code) {
+      dispatchNotify('Введите код', '', 'error');
    } else {
       dispatchNotify('Введите сортировка', '', 'error');
    }
@@ -226,7 +231,7 @@ onMounted(() => {
       <template v-else>
          <input
             @change="changeOrder"
-            class="p-inputtext h-[30px] w-[100px] border-transparent focus:border-primary-500 rounded-[6px] bg-greyscale-50 text-sm px-2"
+            class="p-inputtext h-[30px] w-[80px] border-transparent focus:border-primary-500 rounded-[6px] bg-greyscale-50 text-sm px-2"
             v-model="sort_order.value"
             @input="e => {
                const value = +e.target.value.replace(/\D/g, '');
@@ -282,6 +287,53 @@ onMounted(() => {
                editJournal = { ...editJournal, sort_order };
             }"
             />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
+         <InputNumber
+            v-model="editJournal.code"
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :useGrouping="false"
+            placeholder="Введите код"
+            type="text"
+            @input="({ value }) => {
+               const code =  value < 10000 ? value : 9999;
+               editJournal = { ...editJournal, code };
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Префикс</p>
+         <InputText
+            :modelValue="editJournal.prefix"
+            :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            placeholder="Введите префикс"
+            type="text"
+            @update:modelValue="prefix => {
+               editJournal = { ...editJournal, prefix: prefix.slice(0, 10) };
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Количество цифр</p>
+         <InputNumber
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :useGrouping="false"
+            placeholder="Введите количество цифр"
+            type="text"
+            v-model="editJournal.number_of_chars"
+            @input="({ value }) => {
+               const number_of_chars =  value < 10 ? value : 9;
+               editJournal = { ...editJournal, number_of_chars };
+            }"
+            />
+         <div v-for="(checkbox, index) in checkboxes" :key="index" class="flex items-center mt-4">
+            <Checkbox
+               :name="checkbox"
+               :value="checkbox"
+               v-model="value"
+               @update:modelValue="checkboxes => {
+                  const is_auto_numbered = checkboxes.includes('is_auto_numbered');
+                  const is_for_compose = checkboxes.includes('is_for_compose');
+                  editJournal = { ...editJournal, is_auto_numbered, is_for_compose };
+               }"
+            />
+            <label class="ml-2">{{ checkbox === 'is_for_compose' ? 'Для композ' : 'Автоматическая нумерация' }}</label>
+         </div>
       </div>
       <template #footer>
          <div class="flex justify-end">
