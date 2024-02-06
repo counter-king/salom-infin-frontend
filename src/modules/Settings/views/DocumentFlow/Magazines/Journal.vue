@@ -139,6 +139,19 @@ const parseCreateDate = created_date => {
 const toggle = event => {
    menu.value.toggle(event);
 };
+const openEditModal = () => {
+   const data = props.data;
+   let newValue = [];
+   if(data?.is_auto_numbered) {
+      newValue.push('is_auto_numbered');
+   }
+   if(data?.is_for_compose) {
+      newValue.push('is_for_compose');
+   }
+   value.value = newValue;
+   editJournal.value = data;
+   editVisible.value = true;
+};
 watch(props.data.sort_order, value => {
    sort_order.value = { value };
 });
@@ -181,10 +194,7 @@ onMounted(() => {
    </template>
    <template v-else-if="field === 'action'">
       <Button
-         @click="() => {
-            editJournal = data;
-            editVisible = true;
-         }"
+         @click="openEditModal"
          class="shadow-none py-[7px] px-2 text-xs bg-greyscale-50 mr-2 rounded-[8px]"
          icon
          severity="secondary"
@@ -342,7 +352,9 @@ onMounted(() => {
             </template>
             <template v-else>
                <Button
-                  @click="editVisible = false"
+                  @click="() => {
+                     editVisible = false;
+                  }"
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
