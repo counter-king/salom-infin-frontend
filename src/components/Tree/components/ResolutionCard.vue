@@ -69,10 +69,10 @@ const watchResolution = async (event, item) => {
               </h1>
 
               <template v-if="item.is_project_resolution">
-                <!-- Резолюция неподписанная -->
+                <!-- Резолюция не подписан -->
                 <template v-if="!item.is_verified">
                   <status-chip :status="{}">
-                    Резолюция неподписанная
+                    Резолюция не подписан
                   </status-chip>
                 </template>
 

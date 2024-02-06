@@ -83,6 +83,11 @@ export const PERFORMERS_TYPES = {
   RESPONSIBLE: "responsible",  // Ответ. исп.
   EXECUTOR: "executor"         // Исполнитель
 }
+export const ROLES = {
+  CHAIRMAN: 'chairman',                            // Председатель
+  FIRST_DEPUTY_CHAIRMAN: 'first_deputy_chairman',  // Первый заместитель председателя
+  DEPUTY_CHAIRMAN: 'deputy_chairman'               // Заместитель председателя
+}
 export const METHODS = {
   GET :    "GET",
   POST:    "POST",

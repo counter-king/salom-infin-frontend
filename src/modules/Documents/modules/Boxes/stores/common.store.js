@@ -242,8 +242,16 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
       this.resolutionModel.is_project_resolution = RESOLUTION_CREATE_TYPES.ASSIGNMENT !== resolutionCreateType
 
       try {
-        await fetchUpdateResolutionById({ id: this.resolutionModel.id, body: this.resolutionModel })
+        let { data } = await fetchUpdateResolutionById({ id: this.resolutionModel.id, body: this.resolutionModel })
         await docFlowStore.actionGetTree(resolutionListId)
+        await this.actionSetActiveResolution({
+          signed: false,
+          receipt_date: null,
+          deadline: data.deadline,
+          content: data.content,
+          assignees: data.assignees,
+          reviewer: data.reviewer.user
+        })
         dispatchNotify('Резолюция изменен', null, COLOR_TYPES.SUCCESS)
         clearModel(this.resolutionModel, ['type'])
         return Promise.resolve()
