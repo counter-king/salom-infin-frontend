@@ -1,15 +1,15 @@
 <script setup>
 // Core
-import { ref, unref, computed } from 'vue'
-import { useI18n } from 'vue-i18n'
-// Utils
-import { formatDate, formatDateHour } from '@/utils/formatDate'
-// Composable
-const { t } = useI18n()
+import { computed } from 'vue'
 // Components
 import { FilePreview } from '@/components/Files'
-// Utils
-import { formatNameToShort } from '@/utils'
+import {
+  ResolutionChairmanTemplate,
+  ResolutionDeputyChairmanTemplate,
+  ResolutionDefaultTemplate
+} from '@/components/Templates'
+// Enums
+import { ROLES } from '@/enums'
 // Macros
 const props = defineProps({
   resolution: {
@@ -25,19 +25,6 @@ const props = defineProps({
     default: () => []
   }
 })
-// Reactive
-const menuRef = ref(null)
-const items = ref([
-  {
-    label: 'Формат A4',
-  },
-  {
-    label: 'Формат A5',
-  },
-  {
-    label: 'Формат A6',
-  }
-])
 // Computed
 const filesList = computed(() => {
   return props.hasResolution
@@ -48,11 +35,6 @@ const filesList = computed(() => {
       ]
     : props.files.map(file => ({ ...file, title: file.name, slot: 'file' }))
 })
-// Methods
-const toggle = (event) => {
-  const _menuRef = unref(menuRef)
-  _menuRef.menuRef.toggle(event)
-}
 </script>
 
 <template>
@@ -67,117 +49,17 @@ const toggle = (event) => {
     >
       <template #resolution="{ value }">
         <div class="h-[calc(100vh-303px)] overflow-y-auto px-8 py-5">
-          <div class="flex mb-4">
-            <div class="flex items-center flex-1">
-              <img src="/images/logo.svg" alt="Logo" />
-              <img src="/images/logo-text.svg" alt="Logo text" class="invert ml-2" />
-            </div>
-          </div>
-
-          <div class="border-t-[1px]"></div>
-
-          <div
-            class="flex items-center gap-2 border rounded-full p-[6px] mt-4"
-            :class="[ props.resolution.signed ? 'bg-primary-100 border-primary-500' : 'bg-critic-100 border-critic-500' ]"
-          >
-            <base-icon
-              :name="props.resolution.signed ? 'CheckCircleIcon' : 'TriangleDangerIcon'"
-              class="text-critic-500 ml-2"
-              :class="[ props.resolution.signed ? 'text-primary-500' : 'text-critic-500' ]"
-            />
-
-            <span
-              class="flex-1 text-sm font-medium "
-              :class="[ props.resolution.signed ? 'text-primary-500' : 'text-critic-500' ]"
-            >
-            {{ props.resolution.signed ? t('document-signed') : t('document-not-signed') }}
-          </span>
-
-            <base-button
-              label="Загрузить фишку"
-              size="small"
-              rounded
-              icon-right="AltArrowDownIcon"
-              @click="toggle"
-            />
-
-            <base-menu
-              ref="menuRef"
-              id="overlay_menu"
-              :items="items"
-            />
-          </div>
-
-          <template v-if="props.resolution.assignees && props.resolution.assignees?.length">
-            <div class="text-sm font-semibold text-primary-900 mt-6 mb-5">
-              <ul class="mt-3">
-                <template v-for="item in resolution.assignees">
-                  <li class="flex gap-1 font-semibold mb-2">
-                    <span>{{ formatNameToShort(item.user.full_name) }}</span>
-
-                    <span class="text-greyscale-500">-</span>
-
-                    <p class="text-greyscale-500 mr-1">
-                      <template v-if="item.is_controller">
-                        Контролирующий
-                      </template>
-
-                      <template v-else>
-                        <template v-if="item.is_responsible">
-                          Исполнитель
-                        </template>
-
-                        <template v-else>
-                          Соисполнитель
-                        </template>
-                      </template>
-                    </p>
-                  </li>
-                </template>
-
-                <li class="flex font-semibold">
-                  <p class="text-greyscale-500 mr-1">Срок исполнения:</p>
-                  <span>{{ props.resolution.deadline ? props.resolution.deadline : 'Без срока исполнений' }}</span>
-                </li>
-              </ul>
-
-              <div class="text-center mt-5">
-                <p v-html="props.resolution.content"></p>
-              </div>
-            </div>
-
-            <div class="border-t-[1px]"></div>
-
-            <div class="flex items-center my-4">
-              <div class="flex-1 text-sm font-semibold">
-                <h1 class="text-greyscale-500">{{ props.resolution.reviewer?.position?.name }}:</h1>
-                <p class="text-primary-900">{{ formatNameToShort(props.resolution.reviewer?.full_name) }}</p>
-              </div>
-
-              <template v-if="props.resolution.signed">
-                <div class="w-[50px] h-[50px]">
-                  <img src="/images/qr-code.svg" alt="Qr code" />
-                </div>
-              </template>
-            </div>
-
-            <div class="border-t-[1px]"></div>
+          <template v-if="ROLES.CHAIRMAN === props.resolution.reviewer?.role?.name">
+            <resolution-chairman-template :resolution="props.resolution" />
           </template>
 
-          <ul class="text-greyscale-500 text-sm mt-3">
-            <li class="flex font-semibold mb-1">
-              <p class="text-primary-900 mr-1">Рег. номер:</p>
-              <span>{{ props.resolution.register_number }}</span>
-            </li>
-            <li class="flex font-semibold mb-1">
-              <p class="text-primary-900 mr-1">Рег. дата:</p>
-              <span>{{ formatDate(props.resolution.register_date) }}</span>
-            </li>
-            <li class="flex font-semibold">
-              <p class="text-primary-900 mr-1">Дата. подписания:</p>
-              <span>{{ props.resolution.receipt_date ? formatDateHour(props.resolution.receipt_date) : 'Еще не подписан' }}</span>
-            </li>
-          </ul>
+          <template v-else-if="ROLES.FIRST_DEPUTY_CHAIRMAN || ROLES.DEPUTY_CHAIRMAN === props.resolution.reviewer?.role?.name">
+            <resolution-deputy-chairman-template :resolution="props.resolution" />
+          </template>
+
+          <template v-else>
+            <resolution-default-template :resolution="props.resolution" />
+          </template>
         </div>
       </template>
 

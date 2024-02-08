@@ -1,22 +1,26 @@
 <script setup>
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
+import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import ProgressSpinner from 'primevue/progressspinner';
 import axiosConfig from "@/services/axios.config";
 import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
+import Checkbox from 'primevue/checkbox';
 import { ref } from 'vue';
 const props = defineProps({ getFirstPageJournals: Function, setVisible: Function, visible: Boolean });
-const defaultJournal = { name_uz: '', name_ru: '' };
+const defaultJournal = { name_uz: '', name_ru: '', prefix: '', number_of_chars: 10, is_for_compose: true, is_auto_numbered: true, code: 0 };
 const journal = ref(defaultJournal);
 const loading = ref(false);
+const checkboxes = ref(['is_for_compose', 'is_auto_numbered']);
+const value = ref(['is_for_compose', 'is_auto_numbered']);
 const createJournal = () => {
-   const { name_ru, name_uz } = journal.value;
-   if(name_uz && name_ru) {
+   const { name_ru, name_uz, prefix, number_of_chars, is_for_compose, is_auto_numbered, code } = journal.value;
+   if(name_uz && name_ru && code) {
       loading.value = true;
       axiosConfig
-         .post('journals/', { name_ru, name_uz, is_active: true })
+         .post('journals/', { name_ru, name_uz, is_active: true, prefix, number_of_chars, is_for_compose, is_auto_numbered, code })
          .then(response => {
             if(response?.status === 201) {
                dispatchNotify('Журнал создан', '', 'success');
@@ -33,8 +37,10 @@ const createJournal = () => {
          .finally(() => {
             loading.value = false;
          });
-   } else {
+   } else if(!name_ru || !name_uz) {
       dispatchNotify('Введите название', '', 'error');
+   } else {
+      dispatchNotify('Введите код', '', 'error');
    }
 };
 </script>
@@ -71,6 +77,53 @@ const createJournal = () => {
                journal = { ...journal, name_ru };
             }"
             />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
+         <InputNumber
+            v-model="journal.code"
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :useGrouping="false"
+            placeholder="Введите код"
+            type="text"
+            @input="({ value }) => {
+               const code =  value < 1000000 ? value : 999999;
+               journal = { ...journal, code };
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Префикс</p>
+         <InputText
+            :modelValue="journal.prefix"
+            :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            placeholder="Введите префикс"
+            type="text"
+            @update:modelValue="prefix => {
+               journal = { ...journal, prefix: prefix.slice(0, 10) };
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Количество цифр</p>
+         <InputNumber
+            v-model="journal.number_of_chars"
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :useGrouping="false"
+            placeholder="Введите количество цифр"
+            type="text"
+            @input="({ value }) => {
+               const number_of_chars =  value < 9 ? value : 8;
+               journal = { ...journal, number_of_chars };
+            }"
+            />
+         <div v-for="(checkbox, index) in checkboxes" :key="index" class="flex items-center mt-4">
+            <Checkbox
+               :name="checkbox"
+               :value="checkbox"
+               v-model="value"
+               @update:modelValue="checkboxes => {
+                  const is_auto_numbered = checkboxes.includes('is_auto_numbered');
+                  const is_for_compose = checkboxes.includes('is_for_compose');
+                  journal = { ...journal, is_auto_numbered, is_for_compose };
+               }"
+            />
+            <label class="ml-2">{{ checkbox === 'is_for_compose' ? 'Для композ' : 'Автоматическая нумерация' }}</label>
+         </div>
       </div>
       <template #footer>
          <div class="flex justify-end">
