@@ -46,7 +46,8 @@ const config = {
 		customTable: t('default-table'),
 	},
 	tableEditButtons: ['tableStyle', 'tableRows', 'tableColumns', 'tableCells', 'tableCellBackground', 'tableCellVerticalAlign', 'tableCellHorizontalAlign', 'tableRemove'],
-	events: {
+  tabSpaces: 8,
+  events: {
 		'table.inserted': (table) => {
 			table.classList.add('customTable');
 		},
