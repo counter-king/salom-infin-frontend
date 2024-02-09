@@ -16,13 +16,14 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 const defaultFilter = { page: 1, page_size: 10, department: '' };
 const activeDepartment = ref(null);
-const filter = ref(defaultFilter);
 const count = ref(1);
 const createDepartment = ref(null);
 const createVisible = ref(false);
 const departmentId = route.params?.id;
 const employees = ref([]);
 const employeesLoading = ref(false);
+const filter = ref(defaultFilter);
+const parentDepartment = ref(null);
 const parentDepartments = ref([]);
 const status = ref('loading');
 const subDepartments = ref([]);
@@ -54,6 +55,7 @@ const setActiveDepartment = department => {
 const openModal = (departments, department) => {
    createDepartment.value = department;
    createVisible.value = true;
+   parentDepartment.value = department;
    parentDepartments.value = departments;
 };
 const getSubDepartments = () => {
@@ -346,7 +348,7 @@ onMounted(() => {
                :getSubDeparments="() => {
                   getSubDepartments(departmentId);
                }"
-               :parent="createDepartment"
+               :parentDepartment="parentDepartment"
                :parentDepartments="parentDepartments"
                :setVisible="setCreateVisible"
                :topLevelDepartment="topLevelDepartment"

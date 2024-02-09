@@ -10,19 +10,19 @@ import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 const props = defineProps({
    getSubDeparments: Function,
-   parent: Object,
+   parentDepartment: Object,
    parentDepartments: Array,
    setVisible: Function,
    topLevelDepartment: Object,
    visible: Boolean,
 });
-const defaultDepartment = { name_uz: '', name_ru: '', code: 0 };
+const defaultDepartment = { name_uz: '', name_ru: '', code: '' };
 const department = ref(defaultDepartment);
 const loading = ref(false);
 const createDepartment = () => {
-   const company = props?.parent?.company?.id;
-   const parent = props?.parent?.id;
-   const parent_code = props?.parent?.code;
+   const company = props?.parentDepartment?.company?.id;
+   const parent = props?.parentDepartment?.id;
+   const parent_code = props?.parentDepartment?.code;
    const { name_ru, name_uz, code } = department.value;
    if(name_uz && name_ru && code) {
       loading.value = true;
@@ -105,18 +105,17 @@ const createDepartment = () => {
             :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
             :useGrouping="false"
             disabled
-            v-model="department.parent_code"
+            v-model="parentDepartment.code"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
-         <InputNumber
-            v-model="department.code"
+         <InputText
+            :modelValue="department.code"
             :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
             :useGrouping="false"
             placeholder="Введите код"
             type="text"
-            @input="({ value }) => {
-               const code =  value < 1000000 ? value : 999999;
-               department = { ...department, code };
+            @update:modelValue="value => {
+               department = { ...department, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 6) };
             }"
             />
       </div>
