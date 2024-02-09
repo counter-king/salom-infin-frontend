@@ -6,6 +6,7 @@ import { useRoute } from "vue-router";
 import { fetchRejectApprovalDocument } from "@/modules/Documents/modules/Boxes/services/approval.service";
 // Store
 import { useBoxesApprovalStore } from "@/modules/Documents/modules/Boxes/stores/approval.store";
+import { useDocumentCountStore } from "@/modules/Documents/stores/count.store";
 // Components
 import Approve from "@/components/Modal/Approve.vue";
 import { LayoutWithTabs } from "@/components/DetailLayout";
@@ -17,6 +18,7 @@ import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue";
 import CancelSign from "@/components/Modal/CancelSign.vue";
 
 const approvalStore = useBoxesApprovalStore();
+const countStore = useDocumentCountStore();
 const route = useRoute();
 const rejectModal = ref(false);
 const changeModal = ref(false);
@@ -24,21 +26,21 @@ const changeModal = ref(false);
 // Computed
 const approved = computed(() => {
 	return approvalStore.detailModel?.is_approved
-})
-
-
+});
 
 // Methods
 const getDetail = async () => {
   await approvalStore.actionGetApprovalDetail(route.params.id);
 }
-const onApprove = () => {
-  getDetail();
+const onApprove = async () => {
+  await getDetail();
+  await countStore.actionDocumentCountList();
 }
 const onReject = async (comment) => {
   await fetchRejectApprovalDocument({ id: route.params.id, comment });
   rejectModal.value = false;
   await getDetail();
+  await countStore.actionDocumentCountList();
 }
 const onChangeDocument = (text) => {
 	console.log(text)

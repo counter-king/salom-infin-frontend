@@ -68,7 +68,7 @@ const receivers = computed(() => {
           <base-col col-class="w-1/4">
             <qrcode-vue
               v-if="item.is_signed"
-              :value="'https://check.asakabank.uz/document/'"
+              :value="'Work Zone'"
               :size="50"
               level="L"
               render-as="svg"
@@ -82,9 +82,9 @@ const receivers = computed(() => {
       </template>
     </div>
 
-    <div class="flex flex-col my-4 text-sm font-medium">
-      <span class="text-greyscale-500">Ijrochi:</span>
-      <span class="block max-w-[300px]">{{ props.composeModel?.author && formatUserFullName(props.composeModel?.author) }}</span>
+    <div class="flex flex-col my-4 text-sm font-light">
+      <span>Ijrochi: {{ props.composeModel?.author && formatUserFullName(props.composeModel?.author) }}</span>
+      <span>Tel: +99899 777 77 77 (1234)</span>
     </div>
   </div>
 </template>

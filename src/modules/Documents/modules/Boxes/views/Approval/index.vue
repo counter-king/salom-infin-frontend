@@ -35,7 +35,7 @@ const onRowClick = (data) => {
 
 // Hooks
 onMounted(async () => {
-  await approvalStore.actionGetApprovalList({ page: approvalStore.filterState.page, page_size: approvalStore.filterState.page_size });
+  // await approvalStore.actionGetApprovalList({ page: approvalStore.filterState.page, page_size: approvalStore.filterState.page_size });
 })
 </script>
 
@@ -49,9 +49,9 @@ onMounted(async () => {
     />
 
     <base-data-table
+      :action-list="approvalStore.actionGetApprovalList"
       :headers="approvalStore.headers"
       :loading="approvalStore.listLoading"
-      :page-size="approvalStore.filterState.page_size"
       :storage-columns-name="BOXES_APPROVAL_COLUMNS"
       :total-count="approvalStore.totalCount"
       :value="approvalStore.documentList"
