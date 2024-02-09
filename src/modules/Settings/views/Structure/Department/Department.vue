@@ -145,9 +145,9 @@ onMounted(() => {
          header: {
             class: 
                [
-                  `${props.last ? '' :`after:content-[''] after:bg-greyscale-200 after:absolute after:bottom-0 after:left-[9px] after:outline-offset-[-1px]`}
-                  ${activeDepartment.id === department.id ? 'text-primary-500' : ''} 
-                  font-medium duration-0 cursor-pointer border-0 p-0 border-transparent text-md rounded-none rounded-xl duration-0 hover:text-primary-500 bg-transparent hover:bg-greyscale-100`
+                  `font-medium duration-0 cursor-pointer border-0 p-0 border-transparent text-md rounded-none rounded-xl duration-0 hover:text-primary-500 hover:bg-[#FAFAFF]
+                  ${props.last ? '' :`after:content-[''] after:bg-greyscale-200 after:absolute after:bottom-0 after:left-[9px] after:outline-offset-[-1px]`}
+                  ${activeDepartment?.id === department?.id ? 'text-primary-500 bg-[#F7F7F9]' : 'bg-transparent'}`
                ]
             },
          root: {class: ['settings-structure-department relative bottom-0 flex flex-col w-full ']},
@@ -268,7 +268,7 @@ onMounted(() => {
    <Dialog
       :closable="!editLoading"
       :pt="dialogConfig"
-      header="Изменить отдел"
+      header="Изменить субдепартамент"
       modal
       v-model:visible="editVisible">
       <div class="flex flex-col pb-10 pt-4">
@@ -280,7 +280,7 @@ onMounted(() => {
             type="text"
             />
          <div v-for="(department, index) in parentDepartments" :key="index">
-            <p class="text-sm text-greyscale-500 font-medium mb-1">Отдел</p>
+            <p class="text-sm text-greyscale-500 font-medium mb-1">`Субдепартамент</p>
             <InputText
                :modelValue="department.name"
                :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
@@ -307,6 +307,13 @@ onMounted(() => {
             @update:modelValue="value => {
                editDepartment = { ...editDepartment, name_ru: replaceSpecCharsBracket(value) };
             }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Код верхнего уровня</p>
+         <InputNumber
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :useGrouping="false"
+            disabled
+            v-model="editDepartment.parent_code"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
          <InputNumber

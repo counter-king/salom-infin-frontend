@@ -56,7 +56,7 @@ const createDepartment = () => {
       :closable="!loading"
       :pt="dialogConfig"
       :visible="visible"
-      header="Создать отдел"
+      header="Создать субдепартамент"
       modal
       @update:visible="() => {
          department = defaultDepartment;
@@ -72,7 +72,7 @@ const createDepartment = () => {
             disabled
             />
          <div v-for="(department, index) in parentDepartments" :key="index">
-            <p class="text-sm text-greyscale-500 font-medium mb-1">Отдел</p>
+            <p class="text-sm text-greyscale-500 font-medium mb-1">Субдепартамент</p>
             <InputText
                :modelValue="department.name"
                :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm opacity-100']}}"
@@ -99,6 +99,13 @@ const createDepartment = () => {
             @update:modelValue="name_ru => {
                department = { ...department, name_ru };
             }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Код верхнего уровня</p>
+         <InputNumber
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :useGrouping="false"
+            disabled
+            v-model="department.parent_code"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
          <InputNumber
