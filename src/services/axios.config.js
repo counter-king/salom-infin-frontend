@@ -8,9 +8,8 @@ import { getStorageItem, removeStorageItem } from "@/utils/storage"
 import { LANG, ACCESS, REFRESH, EXPIRES, CURRENT_ROUTE } from "@/constants/storage"
 import { COLOR_TYPES } from '@/enums'
 
-const axiosParams = {
-	baseURL: import.meta.env.VITE_BASE_URL
-}
+const baseURL = process.env.NODE_ENV === 'production' ? import.meta.env.VITE_BASE_URL : import.meta.env.VITE_BASE_TEST_URL;
+const axiosParams = { baseURL }
 const axiosInstance = axios.create(axiosParams)
 const axiosConfig = (axiosInstance) => {
 	return {
