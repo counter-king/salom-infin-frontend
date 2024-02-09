@@ -1,19 +1,30 @@
 <script setup>
 // Core
 import { ref, unref } from 'vue'
+// Components
+import EventSidebar from './EventSidebar.vue'
+// Stores
+import { useCalendarStore } from '../stores/calendar.store'
+// Composable
+const calendarStore = useCalendarStore()
 // Reactive
 const menuRef = ref(null)
 const items = ref([
   {
     label: 'Мероприятия',
     icon: 'event',
+    command: () => calendarStore.eventSidebar = true
   },
   {
     label: 'Моя задача',
-    icon: 'task'
+    icon: 'task',
+    command: async () => await createTask()
   }
 ])
 // Methods
+const createTask = async () => {
+  console.log('2')
+}
 const toggle = (event) => {
   const _menuRef = unref(menuRef)
   _menuRef.menuRef.toggle(event)
@@ -43,4 +54,8 @@ const toggle = (event) => {
       </div>
     </template>
   </base-menu>
+
+  <!-- Event sidebar -->
+  <event-sidebar />
+  <!-- /Event sidebar -->
 </template>
