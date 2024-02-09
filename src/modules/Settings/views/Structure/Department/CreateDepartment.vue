@@ -111,7 +111,6 @@ const createDepartment = () => {
          <InputText
             :modelValue="department.code"
             :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
-            :useGrouping="false"
             placeholder="Введите код"
             type="text"
             @update:modelValue="value => {

@@ -1,7 +1,6 @@
 <script setup>
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
-import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import ProgressSpinner from 'primevue/progressspinner';
 import axiosConfig from "@/services/axios.config";
@@ -10,7 +9,7 @@ import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { replaceSpecCharsBracket } from '@/utils/string';
 const props = defineProps({ getFirstPageDepartments: Function, setVisible: Function, visible: Boolean });
-const defaultDepartment = { name_uz: '', name_ru: '', code: 0 };
+const defaultDepartment = { name_uz: '', name_ru: '', code: '' };
 const department = ref(defaultDepartment);
 const loading = ref(false);
 
@@ -125,15 +124,13 @@ const searchCompanies = ({ search, page }) => {
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
-         <InputNumber
-            v-model="department.code"
+         <InputText
+            :modelValue="department.code"
             :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
-            :useGrouping="false"
             placeholder="Введите код"
             type="text"
-            @input="({ value }) => {
-               const code =  value < 1000000 ? value : 999999;
-               department = { ...department, code };
+            @update:modelValue="value => {
+               department = { ...department, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 6) };
             }"
             />
       </div>
