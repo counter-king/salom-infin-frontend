@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import {onMounted, onUnmounted, ref, unref, watch} from "vue";
+import { ref, unref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 // Enums
@@ -11,7 +11,7 @@ import { usePaginationStore } from "@/stores/pagination.store";
 // Components
 import BaseSeparateCalendar from "../UI/BaseSeparateCalendar.vue";
 // Utils
-import {clearModel, filterObjectByKeys, getDateRange} from "@/utils";
+import { clearModel, filterObjectByKeys, getDateRange } from "@/utils";
 
 const props = defineProps({
   actionList: {

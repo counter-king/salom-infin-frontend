@@ -6,6 +6,7 @@ import { useRoute } from "vue-router";
 import {fetchRejectSignDocument, fetchSignDocument} from "@/modules/Documents/modules/Boxes/services/sign.service";
 // Store
 import { useBoxesSignStore } from "@/modules/Documents/modules/Boxes/stores/sign.store";
+import { useDocumentCountStore } from "@/modules/Documents/stores/count.store";
 // Components
 import { LayoutWithTabs } from "@/components/DetailLayout";
 import { ModalComment } from "@/components/Modal";
@@ -15,6 +16,7 @@ import { CONTENT_TYPES } from "@/enums";
 import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue";
 
 const signStore = useBoxesSignStore();
+const countStore = useDocumentCountStore();
 const route = useRoute();
 const rejectModal = ref(false);
 const changeModal = ref(false);
@@ -29,6 +31,7 @@ const onReject = async (comment) => {
   await fetchRejectSignDocument({ id: route.params.id, comment });
   rejectModal.value = false;
   await signStore.actionGetSignDetail(route.params.id);
+  await countStore.actionDocumentCountList();
 }
 const onChangeDocument = (text) => {
   console.log(text)
@@ -36,6 +39,7 @@ const onChangeDocument = (text) => {
 const signTest = async () => {
 	await fetchSignDocument({ id: route.params.id, body: { pkcs7: "test" } });
 	await signStore.actionGetSignDetail(route.params.id);
+  await countStore.actionDocumentCountList();
 }
 
 // Hooks

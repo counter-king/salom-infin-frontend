@@ -51,7 +51,7 @@ defineExpose({ successButtonLoading })
     :position="props.position"
     :pt="{
       root: {
-        class: ['w-[1500px]', props.rootClass]
+        class: ['w-[750px]', props.rootClass]
       },
       header: {
         class: 'bg-greyscale-50 p-6'

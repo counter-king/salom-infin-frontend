@@ -185,7 +185,7 @@ const modelValue = computed({
       }"
     >
       <template #dropdownicon>
-        <base-icon name="CalendarIcon" />
+        <base-icon name="CalendarIcon" width="18" />
       </template>
     </Calendar>
 

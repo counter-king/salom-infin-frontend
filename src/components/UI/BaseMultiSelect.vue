@@ -226,7 +226,7 @@ watch(debounced, async () => {
           ]
         },
         dropdownIcon: {
-          class: ['w-4 h-4']
+          class: ['w-3 h-3']
         },
         panel: {
           class: ['translate-y-[8px] shadow-menu rounded-2xl overflow-hidden']
@@ -317,6 +317,7 @@ watch(debounced, async () => {
 
       <base-button
         icon-right="AltArrowDownIcon"
+        icon-height="16"
         button-class="shadow-md border-t border-r border-l border-greyscale-100"
         rounded
         outlined

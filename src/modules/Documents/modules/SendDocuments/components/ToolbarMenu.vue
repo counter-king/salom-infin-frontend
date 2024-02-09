@@ -88,7 +88,7 @@ onUnmounted(() => {
       <template v-for="menu in selectedMenuItems">
         <div
           class="cursor-pointer collapse-link group flex items-center text-sm font-medium text-greyscale-500 mr-6 py-[10px] relative transition-all duration-[400ms] after:content-[''] after:absolute after:bottom-[-9px] after:w-full after:h-[2px] after:bg-primary-500 after:opacity-0 after:transition-all after:duration-500 hover:text-primary-900 hover:after:opacity-100"
-          :class="{ 'router-link-active' : menu.active }"
+          :class="{ 'toolbar-menu-active' : menu.active }"
           @click="onChangeDocType(menu)"
         >
           <base-icon v-if="menu.icon" :name="menu.icon" class="text-gray-1 mr-2 transition-all duration-[400ms] group-hover:text-primary-900 w-4 h-4" />
@@ -99,7 +99,7 @@ onUnmounted(() => {
 
     <div
       class="select-none cursor-pointer collapse-link group flex items-center text-sm font-medium text-greyscale-500 mr-6 py-[10px] relative transition-all duration-[400ms] after:content-[''] after:absolute after:bottom-[-9px] after:w-full after:h-[2px] after:bg-primary-500 after:opacity-0 after:transition-all after:duration-500 hover:text-primary-900 hover:after:opacity-100"
-      :class="{ 'router-link-active' : moreVisible }"
+      :class="{ 'toolbar-menu-active' : moreVisible }"
       @click="toggle"
     >
       <base-icon name="VerticalDotsIcon" class="text-gray-1 mr-2 transition-all duration-[400ms] group-hover:text-primary-900 w-4 h-4" />
@@ -147,5 +147,15 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+.toolbar-menu-active {
+  color: var(--greyscale-900);
+}
 
+.toolbar-menu-active:after {
+  opacity: 1;
+}
+
+.toolbar-menu-active svg {
+  color: var(--greyscale-900);
+}
 </style>

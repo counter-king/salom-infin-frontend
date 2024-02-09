@@ -157,6 +157,9 @@ const loadList = async (params) => {
         list: {
           class: ['py-0']
         },
+        dropdownIcon: {
+          class: 'w-3 h-3'
+        },
         item: {
           class: ['py-[6px] px-3 text-sm font-medium text-primary-900 transition-all hover:!bg-greyscale-50']
         },
