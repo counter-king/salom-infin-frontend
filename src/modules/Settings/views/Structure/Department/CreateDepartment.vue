@@ -1,6 +1,7 @@
 <script setup>
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
+import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import ProgressSpinner from 'primevue/progressspinner';
 import axiosConfig from "@/services/axios.config";
@@ -9,22 +10,24 @@ import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 const props = defineProps({
    getSubDeparments: Function,
-   parent: Object,
+   parentDepartment: Object,
    parentDepartments: Array,
    setVisible: Function,
    topLevelDepartment: Object,
    visible: Boolean,
 });
-const defaultDepartment = { name_uz: '', name_ru: '' };
+const defaultDepartment = { name_uz: '', name_ru: '', code: '' };
 const department = ref(defaultDepartment);
 const loading = ref(false);
 const createDepartment = () => {
-   const { name_ru, name_uz } = department.value;
-   const code = new Date().toISOString();
-   if(name_uz && name_ru) {
+   const company = props?.parentDepartment?.company?.id;
+   const parent = props?.parentDepartment?.id;
+   const parent_code = props?.parentDepartment?.code;
+   const { name_ru, name_uz, code } = department.value;
+   if(name_uz && name_ru && code) {
       loading.value = true;
       axiosConfig
-         .post('/departments/', { name_ru, name_uz, code, condition: 'A', parent: props.parent?.id })
+         .post('/departments/', { name_ru, name_uz, code, condition: 'A', parent, code, parent_code, company })
          .then(response => {
             if(response?.status === 201) {
                dispatchNotify('Отдел создан', '', 'success');
@@ -41,8 +44,10 @@ const createDepartment = () => {
          .finally(() => {
             loading.value = false;
          });
+   } else if(!name_ru || !name_uz) {
+      dispatchNotify('Введите название', '', 'error');
    } else {
-      dispatchNotify('Введите название отдел', '', 'error')
+      dispatchNotify('Введите код', '', 'error')
    }
 };
 </script>
@@ -51,7 +56,7 @@ const createDepartment = () => {
       :closable="!loading"
       :pt="dialogConfig"
       :visible="visible"
-      header="Создать отдел"
+      header="Создать субдепартамент"
       modal
       @update:visible="() => {
          department = defaultDepartment;
@@ -67,7 +72,7 @@ const createDepartment = () => {
             disabled
             />
          <div v-for="(department, index) in parentDepartments" :key="index">
-            <p class="text-sm text-greyscale-500 font-medium mb-1">Отдел</p>
+            <p class="text-sm text-greyscale-500 font-medium mb-1">Субдепартамент</p>
             <InputText
                :modelValue="department.name"
                :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm opacity-100']}}"
@@ -93,6 +98,23 @@ const createDepartment = () => {
             type="text"
             @update:modelValue="name_ru => {
                department = { ...department, name_ru };
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Код верхнего уровня</p>
+         <InputNumber
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :useGrouping="false"
+            disabled
+            v-model="parentDepartment.code"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
+         <InputText
+            :modelValue="department.code"
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            placeholder="Введите код"
+            type="text"
+            @update:modelValue="value => {
+               department = { ...department, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 6) };
             }"
             />
       </div>

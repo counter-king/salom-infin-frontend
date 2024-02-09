@@ -227,12 +227,13 @@ onMounted(() => {
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
-         <input
-            class="p-inputtext h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 text-sm"
+         <InputText
+            :modelValue="editRegion.code"
+            :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите код"
-            v-model="editRegion.code"
-            @input="e => {
-               editRegion = { ...editRegion, code: e.target.value.replace(/\D/g, '') }
+            type="text"
+            @update:modelValue="value => {
+               editRegion = { ...editRegion, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 6) }
             }"
             />
       </div>

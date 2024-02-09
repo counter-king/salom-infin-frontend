@@ -31,7 +31,7 @@ const onRowClick = (data) => {
 }
 // Hooks
 onMounted(async () => {
-  await signStore.actionGetSignList({ page: signStore.filterState.page, page_size: signStore.filterState.page_size });
+  // await signStore.actionGetSignList({ page: signStore.filterState.page, page_size: signStore.filterState.page_size });
 })
 </script>
 
@@ -45,9 +45,9 @@ onMounted(async () => {
     />
 
     <base-data-table
+      :action-list="signStore.actionGetSignList"
       :headers="signStore.headers"
       :loading="signStore.listLoading"
-      :page-size="signStore.filterState.page_size"
       :storage-columns-name="BOXES_SIGN_COLUMNS"
       :total-count="signStore.totalCount"
       :value="signStore.documentList"

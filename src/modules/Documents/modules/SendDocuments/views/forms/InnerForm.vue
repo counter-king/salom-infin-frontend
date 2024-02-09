@@ -152,13 +152,19 @@ onUnmounted(() => {
             </base-col>
 
             <base-col col-class="w-1/2">
-              <base-input
+              <base-dropdown
                 v-model="$v.title.$model"
+                v-model:options="commonStore.documentTitleList"
                 :error="$v.title"
-                required
+                api-url="document-titles"
+                option-label="name"
+                option-value="id"
                 label="naming"
                 placeholder="enter-naming"
-              />
+                required
+                searchable
+              >
+              </base-dropdown>
             </base-col>
 
             <base-col col-class="w-1/2">
