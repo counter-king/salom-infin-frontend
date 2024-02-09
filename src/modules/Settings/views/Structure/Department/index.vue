@@ -185,6 +185,7 @@ onMounted(() => {
                                  :key="index"
                                  :last="index === subDepartments.length - 1"
                                  :openModal="openModal"
+                                 :parent="topLevelDepartment"
                                  :parentDepartments="[]"
                                  :setActiveDepartment="setActiveDepartment"
                                  :topLevelDepartment="topLevelDepartment"

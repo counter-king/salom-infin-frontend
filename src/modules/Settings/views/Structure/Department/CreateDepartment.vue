@@ -1,6 +1,7 @@
 <script setup>
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
+import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import ProgressSpinner from 'primevue/progressspinner';
 import axiosConfig from "@/services/axios.config";
@@ -15,16 +16,18 @@ const props = defineProps({
    topLevelDepartment: Object,
    visible: Boolean,
 });
-const defaultDepartment = { name_uz: '', name_ru: '' };
+const defaultDepartment = { name_uz: '', name_ru: '', code: 0 };
 const department = ref(defaultDepartment);
 const loading = ref(false);
 const createDepartment = () => {
-   const { name_ru, name_uz } = department.value;
-   const code = new Date().toISOString();
-   if(name_uz && name_ru) {
+   const company = props?.parent?.company?.id;
+   const parent = props?.parent?.id;
+   const parent_code = props?.parent?.code;
+   const { name_ru, name_uz, code } = department.value;
+   if(name_uz && name_ru && code) {
       loading.value = true;
       axiosConfig
-         .post('/departments/', { name_ru, name_uz, code, condition: 'A', parent: props.parent?.id })
+         .post('/departments/', { name_ru, name_uz, code, condition: 'A', parent, code, parent_code, company })
          .then(response => {
             if(response?.status === 201) {
                dispatchNotify('Отдел создан', '', 'success');
@@ -41,8 +44,10 @@ const createDepartment = () => {
          .finally(() => {
             loading.value = false;
          });
+   } else if(!name_ru || !name_uz) {
+      dispatchNotify('Введите название', '', 'error');
    } else {
-      dispatchNotify('Введите название отдел', '', 'error')
+      dispatchNotify('Введите код', '', 'error')
    }
 };
 </script>
@@ -93,6 +98,18 @@ const createDepartment = () => {
             type="text"
             @update:modelValue="name_ru => {
                department = { ...department, name_ru };
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
+         <InputNumber
+            v-model="department.code"
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :useGrouping="false"
+            placeholder="Введите код"
+            type="text"
+            @input="({ value }) => {
+               const code =  value < 1000000 ? value : 999999;
+               department = { ...department, code };
             }"
             />
       </div>

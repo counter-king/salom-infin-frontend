@@ -23,12 +23,12 @@ const editLoading = ref(false);
 const editVisible = ref(false);
 const menu = ref(null);
 const branchEdit = () => {
-   const { name_ru, name_uz, address_ru, address_uz, phone } = editBranch.value;
+   const { name_ru, name_uz, address_ru, address_uz, phone, code } = editBranch.value;
    const newPhone = '+99' + phone.toString();
-   if(name_uz && name_ru && address_ru && address_uz && newPhone.length === 13) {
+   if(name_uz && name_ru && address_ru && address_uz && newPhone.length === 13 && code) {
       editLoading.value = true;
       const branchId = props?.data?.id;
-      const data = { name_ru, name_uz, address_ru, address_uz, phone: newPhone };
+      const data = { name_ru, name_uz, address_ru, address_uz, phone: newPhone, code };
       axiosConfig
          .patch(`/companies/${branchId}/`, data)
          .then(response => {
@@ -59,8 +59,10 @@ const branchEdit = () => {
       dispatchNotify('Введите название', '', 'error');
    } else if(!address_ru || !address_uz) {
       dispatchNotify('Введите адрес', '', 'error');
-   } else {
+   } else if(newPhone?.length !== 13) {
       dispatchNotify('Введите номер телефона', '', 'error');
+   } else {
+      dispatchNotify('Введите код', '', 'error');
    }
 };
 const branchDelete = () => {
@@ -263,6 +265,18 @@ onMounted(() => {
             @input="({ value }) => {
                const phone = value && value > 7 ? +value.toString().slice(0, 10) : 8;
                editBranch = { ...editBranch, phone }
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
+         <InputNumber
+            v-model="editBranch.code"
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :useGrouping="false"
+            placeholder="Введите код"
+            type="text"
+            @input="({ value }) => {
+               const code =  value < 1000000 ? value : 999999;
+               editBranch = { ...editBranch, code };
             }"
             />
       </div>

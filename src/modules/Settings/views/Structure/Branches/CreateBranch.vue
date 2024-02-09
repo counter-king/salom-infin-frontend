@@ -10,15 +10,15 @@ import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { replaceSpecCharsBracket } from '@/utils/string';
 const props = defineProps({ getFirstPageBranches: Function, setVisible: Function, visible: Boolean });
-const defaultBranch = { name_uz: '', name_ru: '', address_ru: '', address_uz: '', phone: 8 };
+const defaultBranch = { name_uz: '', name_ru: '', address_ru: '', address_uz: '', phone: 8, code: 0 };
 const branch = ref(defaultBranch);
 const loading = ref(false);
 const createBranch = () => {
-   const { name_ru, name_uz, address_ru, address_uz, phone } = branch.value;
+   const { name_ru, name_uz, address_ru, address_uz, phone, code } = branch.value;
    const newPhone = '+99' + phone.toString();
-   if(name_uz && name_ru && address_ru && address_uz && newPhone.length === 13) {
+   if(name_uz && name_ru && address_ru && address_uz && newPhone.length === 13 && code) {
       loading.value = true;
-      const data = { name_ru, name_uz, condition: 'A', address_ru, address_uz, phone: newPhone };
+      const data = { name_ru, name_uz, condition: 'A', address_ru, address_uz, phone: newPhone, code };
       axiosConfig
          .post('/companies/', data)
          .then(response => {
@@ -41,8 +41,10 @@ const createBranch = () => {
       dispatchNotify('Введите название', '', 'error');
    } else if(!address_ru || !address_uz) {
       dispatchNotify('Введите адрес', '', 'error');
-   } else {
+   } else if(newPhone?.length !== 13) {
       dispatchNotify('Введите номер телефона', '', 'error');
+   } else {
+      dispatchNotify('Введите код', '', 'error');
    }
 };
 </script>
@@ -110,6 +112,18 @@ const createBranch = () => {
             @input="({ value }) => {
                const phone = value && value > 7 ? +value.toString().slice(0, 10) : 8;
                branch = { ...branch, phone }
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
+         <InputNumber
+            v-model="branch.code"
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :useGrouping="false"
+            placeholder="Введите код"
+            type="text"
+            @input="({ value }) => {
+               const code =  value < 1000000 ? value : 999999;
+               branch = { ...branch, code };
             }"
             />
       </div>

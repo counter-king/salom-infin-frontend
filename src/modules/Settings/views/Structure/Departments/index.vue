@@ -34,6 +34,18 @@ const headers = ref([
     is_active: true,
   },
   {
+    columnKey: 'code',
+    field: 'code',
+    header: 'Код',
+    is_active: true,
+  },
+  {
+    columnKey: 'branch',
+    field: 'branch',
+    header: 'Филиал',
+    is_active: true,
+  },
+  {
     columnKey: 'sub_department_count',
     field: 'sub_department_count',
     header: 'Субдепартамент',
@@ -75,7 +87,7 @@ const getDepartments = (newFilter = {}) => {
     .then(response => {
       const results = response?.data?.results;
       const newCount = response?.data?.count;
-      const newDepartments = (Array.isArray(results) ? results: []).map(user => ({...user, position: user?.position?.name}));
+      const newDepartments = (Array.isArray(results) ? results: []).map(department => ({...department, position: department?.position?.name, branch: department?.company?.name}));
       departments.value = newDepartments;
       count.value = newCount;
     })

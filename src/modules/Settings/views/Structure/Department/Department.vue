@@ -1,17 +1,17 @@
 <script setup>
-import Badge from 'primevue/badge';
+const { locale } = useI18n();
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
+import InputNumber from 'primevue/inputnumber';
+import Menu from 'primevue/menu';
 import Panel from 'primevue/panel';
 import ProgressSpinner from 'primevue/progressspinner';
 import axiosConfig from "@/services/axios.config";
-import Menu from 'primevue/menu';
 import { defineProps, ref, watch, onMounted } from 'vue';
 import { dialogConfig, menuConfig, menu2Config } from './config';
-import { useI18n } from "vue-i18n";
-const { locale } = useI18n();
 import { dispatchNotify } from '@/utils/notify';
 import { replaceSpecCharsBracket } from '@/utils/string';
+import { useI18n } from "vue-i18n";
 const props = defineProps({
    activeDepartment: Object,
    defaultFilter: Object,
@@ -20,6 +20,7 @@ const props = defineProps({
    getSubDepartments: Function,
    last: Boolean,
    openModal: Function,
+   parent: Object,
    parentDepartments: Array,
    setActiveDepartment: Function,
    topLevelDepartment: Object,
@@ -35,12 +36,15 @@ const menu = ref(null);
 const menu2 = ref(null);
 const visible = ref(false);
 const departmentEdit = () => {
-   const { name_ru, name_uz, condition } = editDepartment.value;
-   if(name_uz && name_ru) {
+   const parent = props?.parent?.id;
+   const parent_code = props?.parent?.code;
+   const company = props?.parent?.company?.id;
+   const { name_ru, name_uz, condition, code } = editDepartment.value;
+   if(name_uz && name_ru && code) {
       editLoading.value = true;
       const departmentId = props?.department?.id;
       axiosConfig
-         .patch(`/departments/${departmentId}/`, { name_ru, name_uz, condition })
+         .patch(`/departments/${departmentId}/`, { name_ru, name_uz, condition, code, parent, parent_code, company })
          .then(response => {
             if(response?.status === 200) {
                dispatchNotify('Отдел обновлено', '', 'success');
@@ -56,8 +60,10 @@ const departmentEdit = () => {
          .finally(() => {
             editLoading.value = false;
          });
+   } else if(!name_ru || !name_uz) {
+      dispatchNotify('Введите название', '', 'error');
    } else {
-      dispatchNotify('Введите название', '', 'error')
+      dispatchNotify('Введите код', '', 'error')
    }
 };
 const deleteDepartment = () => {
@@ -135,16 +141,16 @@ onMounted(() => {
       }"
       :pt="{
          content: {class: [
-            `relative border-none pl-4 pt-0 pr-0 pb-0 ${collapsed || department.children.length === 0 ? '' : `mt-[2px] after:content-[''] after:bg-greyscale-200 after:absolute after:top-[-1px] after:left-[9px] after:outline-offset-[-1px]`}`]},
+            `relative border-none pl-4 pt-0 pr-0 pb-0 ${collapsed || department.children.length === 0 ? '' : `after:content-[''] after:bg-greyscale-200 after:absolute after:top-[-1px] after:left-[9px] after:outline-offset-[-1px]`}`]},
          header: {
             class: 
                [
-                  `${props.last ? '' :`after:content-[''] after:bg-greyscale-200 after:absolute after:bottom-[-1px] after:left-[9px] after:outline-offset-[-1px]`}
-                  ${activeDepartment.id === department.id ? 'text-primary-500 outline-1 outline outline-primary-500' : ''} 
-                  font-medium duration-0 hover:outline-1 hover:outline hover:outline-primary-500 cursor-pointer border-0 p-0 border-transparent text-md rounded-none rounded-xl duration-0 hover:text-primary-500 bg-transparent hover:bg-greyscale-100`
+                  `${props.last ? '' :`after:content-[''] after:bg-greyscale-200 after:absolute after:bottom-0 after:left-[9px] after:outline-offset-[-1px]`}
+                  ${activeDepartment.id === department.id ? 'text-primary-500' : ''} 
+                  font-medium duration-0 cursor-pointer border-0 p-0 border-transparent text-md rounded-none rounded-xl duration-0 hover:text-primary-500 bg-transparent hover:bg-greyscale-100`
                ]
             },
-         root: {class: ['settings-structure-department relative bottom-0 flex flex-col w-full py-[1px]']},
+         root: {class: ['settings-structure-department relative bottom-0 flex flex-col w-full ']},
          togglerIcon: {class: ['!bg-transparent flex items-center justify-center !hover:bg-transparent p-panel-header-icon p-link bg-greyscale-100']},
          icons: {class: ['self-start pr-3 pt-3 pb-2 flex flex-row-reverse']}
       }"
@@ -159,16 +165,6 @@ onMounted(() => {
             style="width: calc(100% - 128px)"
             >
             <span>{{ department.name }}</span>
-            <Badge
-               :value="department.employee_count || 0"
-               style="font-size: 12px; min-width: 20px"
-               class="font-medium h-5 inline-flex items-center justify-center ml-1 mt-0.5"
-               v-tooltip.top="{
-                  autoHide: false,
-                  escape: true,
-                  value: `<h4 class='text-xs text-white -my-1'>Количество сотрудников</h4>`,
-               }">
-            </Badge>
          </div>
       </template>
       <template #icons>
@@ -191,7 +187,7 @@ onMounted(() => {
                      if(item.value === 'create') {
                         openModal([...parentDepartments, department], department)
                      } else if(item.value === 'edit') {
-                        editDepartment = department;
+                        editDepartment = { ...department, code: parseInt(department?.code) || 0};
                         editVisible = true;
                      } else {
                         visible = true;
@@ -262,6 +258,7 @@ onMounted(() => {
             :getSubDepartments="getSubDepartments"
             :last="department.children.length - 1 === index"
             :openModal="openModal"
+            :parent="department"
             :parentDepartments="[...parentDepartments, department]"
             :setActiveDepartment="setActiveDepartment"
             :topLevelDepartment="topLevelDepartment"
@@ -309,6 +306,18 @@ onMounted(() => {
             type="text"
             @update:modelValue="value => {
                editDepartment = { ...editDepartment, name_ru: replaceSpecCharsBracket(value) };
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
+         <InputNumber
+            v-model="editDepartment.code"
+            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :useGrouping="false"
+            placeholder="Введите код"
+            type="text"
+            @input="({ value }) => {
+               const code =  value < 1000000 ? value : 999999;
+               editDepartment = { ...editDepartment, code };
             }"
             />
       </div>
