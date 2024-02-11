@@ -12,3 +12,7 @@ export const WEEK_DAYS = [
   'Суббота',
   'Воскресенье'
 ]
+export const EVENT_TYPES = {
+  EVENT: 'event',
+  TASK: 'task'
+}

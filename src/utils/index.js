@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 /**
  * Проверяет все ключи объекта
  * Заполнен ли объект с данными или нет
@@ -5,13 +6,11 @@
  * @param exclude Ключи которые не будет проверятся
  * @returns Boolean
  * */
-import dayjs from "dayjs";
-
 export function isModelEmpty(model, exclude) {
-	return Object.entries(model)
+  return Object.entries(model)
 	// Исключаем ключи, которые не будет проверятся
 	.filter(([key]) => !exclude.includes(key))
-	.every(([_key, _value]) => !!_value)
+	.some(([_key, _value]) => !!_value)
 }
 /**
 * Очистит все ключи объекта

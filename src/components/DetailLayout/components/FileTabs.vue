@@ -64,7 +64,7 @@ const filesList = computed(() => {
       </template>
 
       <template #file="{ value }">
-        <div class="h-[632px] mt-5">
+        <div class="h-[calc(100vh-303px)] pt-5">
           <template v-if="value">
             <file-preview :file="value" />
           </template>

@@ -1,11 +1,35 @@
 <script setup>
-
+// Core
+import { inject } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+// Composable
+const route = useRoute()
+const router = useRouter()
+// Inject
+const { date } = inject('calendar')
+// Methods
+const monthChange = async ({ day, month, year }) => {
+  date.value = new Date(year, month, day)
+  await router.replace({
+    name: 'CalendarDate',
+    params: {
+      ...route.params,
+      y: year,
+      m: month,
+      d: day
+    }
+  })
+}
 </script>
 
 <template>
   <div class="sidebar-actions-view bg-white rounded-2xl shadow-button overflow-hidden">
     <div class="h-full pl-6 pr-5 py-3 overflow-y-auto">
-      <base-calendar inline />
+      <base-calendar
+        v-model="date"
+        inline
+        @emit:month-change="monthChange"
+      />
 
       <div class="mt-3 pt-3 border-t border-greyscale-200">
         <h1>Cumque fugiat, magnam?</h1>

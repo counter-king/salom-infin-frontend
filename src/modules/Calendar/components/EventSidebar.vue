@@ -5,6 +5,7 @@ import { PriorityChip } from '@/components/Chips'
 import { UserWithLabel, UserWithSelectable } from '@/components/Users'
 // Stores
 import { useCommonStore } from '@/stores/common'
+import { useUsersStore } from '@/stores/users.store'
 import { useCalendarStore } from '../stores/calendar.store'
 // Utils
 import { isObject } from '@/utils'
@@ -12,21 +13,17 @@ import { formatDateReverse } from '@/utils/formatDate'
 import { generateDayHours } from '../utils'
 // Composable
 const commonStore = useCommonStore()
+const userStore = useUsersStore()
 const calendarStore = useCalendarStore()
 // Reactive
 const sidebarRef = ref(null)
 const times = ref(generateDayHours(15, 'ru'))
 // Composable
 const endTimes = computed(() => {
-  let selected = times.value.findIndex(({ time }) => time === calendarStore.eventModel.start_time)
+  let selected = times.value.findIndex(({ time }) => time === calendarStore.eventModel.__start_time)
 
   if(selected > 0) {
-    return times.value.map((time, index) => {
-      return {
-        ...time,
-        disabled: index < selected + 1
-      }
-    })
+    return times.value.map((time, index) => ({ ...time, disabled: index < selected + 1 }))
   }
 })
 // Methods
@@ -37,6 +34,10 @@ const createEvent = async () => {
     _sidebarRef.successButtonLoading = true
     await calendarStore.actionCreateEvent()
     _sidebarRef.successButtonLoading = false
+    calendarStore.eventSidebar = false
+  }
+  catch (error) {
+
   }
   finally {
     _sidebarRef.successButtonLoading = false
@@ -73,23 +74,31 @@ const isOptionDisabled = (option) => {
             required
             label="start-date"
             placeholder="start-date"
-            @update:modelValue="(value) => calendarStore.eventModel.end_date = formatDateReverse(value)"
+            @update:modelValue="(value) => {
+              calendarStore.eventModel.start_date = formatDateReverse(value)
+              calendarStore.eventModel.end_date = formatDateReverse(value)
+            }"
           />
         </base-col>
 
         <base-col col-class="w-1/2">
           <base-calendar
             v-model="calendarStore.eventModel.end_date"
-            :min-date="calendarStore.eventModel.start_date"
+            :min-date="new Date(calendarStore.eventModel.start_date)"
+            required
             label="end-date"
             placeholder="end-date"
+            @update:modelValue="(value) => {
+              calendarStore.eventModel.end_date = formatDateReverse(value)
+            }"
           />
         </base-col>
 
         <base-col col-class="w-1/2">
           <base-dropdown
-            v-model="calendarStore.eventModel.start_time"
+            v-model="calendarStore.eventModel.__start_time"
             :options="times"
+            required
             option-value="time"
             option-label="time"
             label="start-time"
@@ -103,9 +112,10 @@ const isOptionDisabled = (option) => {
 
         <base-col col-class="w-1/2">
           <base-dropdown
-            v-model="calendarStore.eventModel.end_time"
+            v-model="calendarStore.eventModel.__end_time"
             :options="endTimes"
             :option-disabled="isOptionDisabled"
+            required
             option-value="time"
             option-label="time"
             label="end-time"
@@ -121,6 +131,7 @@ const isOptionDisabled = (option) => {
           <base-dropdown
             v-model="calendarStore.eventModel.priority"
             :options="commonStore.prioryList"
+            required
             option-value="id"
             label="priority"
           >
@@ -132,7 +143,7 @@ const isOptionDisabled = (option) => {
 
         <base-col col-class="w-full">
           <base-multi-select
-            v-model="calendarStore.eventModel.__assigners"
+            v-model="calendarStore.eventModel.__participants"
             api-url="users"
             label="add-participants"
             display="chip"
@@ -165,42 +176,28 @@ const isOptionDisabled = (option) => {
         </base-col>
 
         <base-col col-class="w-full">
-          <base-multi-select
-            v-model="calendarStore.eventModel.__organizers"
+          <base-dropdown
+            v-model="calendarStore.eventModel.__organizer"
+            v-model:options="userStore.usersList"
+            required
+            searchable
             api-url="users"
             label="add-organizer"
-            display="chip"
             placeholder="search-users"
             menu-placeholder="search-users"
-            required
+            option-value="id"
+            option-label="full_name"
           >
-            <template #chip="{ value }">
-              <user-with-label
-                :compact="true"
-                :title="isObject(value?.user) ? value?.user.full_name : value?.full_name"
-                image="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D"
-                avatar-classes="w-5 h-5"
-              />
+            <template #option="{ option }">
+              <user-with-selectable :items="[option]" />
             </template>
-
-            <template #option="{ value }">
-              <user-with-selectable :items="[value]" />
-            </template>
-
-            <template #hint="{ value }">
-              <user-with-label
-                :title="isObject(value?.user) ? value?.user.full_name : value?.full_name"
-                shadow
-                image="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D"
-                avatar-classes="w-5 h-5"
-              />
-            </template>
-          </base-multi-select>
+          </base-dropdown>
         </base-col>
 
         <base-col col-class="w-full">
           <base-textarea
-            v-model="calendarStore.eventModel.short_descriptions"
+            v-model="calendarStore.eventModel.descriptions"
+            required
             label="short-description"
             placeholder="enter-short-description"
           />
