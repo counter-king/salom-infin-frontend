@@ -7,6 +7,8 @@ const route = useRoute()
 const router = useRouter()
 // Inject
 const { date } = inject('calendar')
+// Macros
+const emit = defineEmits(['emit:month-change'])
 // Methods
 const monthChange = async ({ day, month, year }) => {
   date.value = new Date(year, month, day)
@@ -19,6 +21,7 @@ const monthChange = async ({ day, month, year }) => {
       d: day
     }
   })
+	emit('emit:month-change')
 }
 </script>
 

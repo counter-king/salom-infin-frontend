@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { provide, ref, watch } from 'vue'
+import { provide, ref, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 // Components
@@ -87,17 +87,20 @@ const setCalendarToday = async () => {
       d: dayjs(currentDate.value).date()
     }
   })
+	await monthChange()
+}
+const monthChange = async () => {
+	await calendarStore.actionGetList({
+		start_date: startInterval.value,
+		end_date: endInterval.value,
+		page_size: 50
+	})
 }
 // Watch
 watch(
   () => date.value,
-  async () => {
+  () => {
     generateDays()
-    await calendarStore.actionGetList({
-	    start_date: startInterval.value,
-	    end_date: endInterval.value,
-      page_size: 50
-    })
   },
   { immediate: true }
 )
@@ -110,6 +113,10 @@ watch(
   },
   { deep: true }
 )
+// Hooks
+onMounted(async () => {
+	await monthChange()
+})
 // Provide
 provide('calendar', {
   currentDate,
@@ -146,7 +153,10 @@ provide('calendar', {
     <div class="flex gap-6 h-[calc(100vh-245px)]">
       <calendar class="flex-1" />
 
-      <sidebar-actions class="w-[354px]" />
+      <sidebar-actions
+	      @emit:month-change="monthChange"
+	      class="w-[354px]"
+      />
     </div>
   </div>
 </template>
