@@ -5,6 +5,8 @@ import { ref, unref } from 'vue'
 import EventSidebar from './EventSidebar.vue'
 // Stores
 import { useCalendarStore } from '../stores/calendar.store'
+// Enums
+import { EVENT_TYPES, ACTION_FORM_TYPES } from '../enums'
 // Composable
 const calendarStore = useCalendarStore()
 // Reactive
@@ -12,19 +14,22 @@ const menuRef = ref(null)
 const items = ref([
   {
     label: 'Мероприятия',
-    icon: 'event',
-    command: () => calendarStore.eventSidebar = true
+    icon: EVENT_TYPES.EVENT,
+    command: () => {
+      calendarStore.actionTypesMenuSelected.name = ACTION_FORM_TYPES.EVENT
+      calendarStore.eventSidebar = true
+    }
   },
   {
     label: 'Моя задача',
-    icon: 'task',
-    command: async () => await createTask()
+    icon: EVENT_TYPES.TASK,
+    command: () => {
+      calendarStore.actionTypesMenuSelected.name = ACTION_FORM_TYPES.TASK
+      calendarStore.eventSidebar = true
+    }
   }
 ])
 // Methods
-const createTask = async () => {
-  console.log('2')
-}
 const toggle = (event) => {
   const _menuRef = unref(menuRef)
   _menuRef.menuRef.toggle(event)
@@ -49,7 +54,7 @@ const toggle = (event) => {
   >
     <template #item="{ item }">
       <div class="flex items-center gap-2 py-1.5 px-3 cursor-pointer">
-        <div class="w-3 h-3 rounded-full" :class="item.icon === 'event' ? 'bg-info-200' : 'bg-success-200'"></div>
+        <div class="w-3 h-3 rounded-full" :class="item.icon === EVENT_TYPES.EVENT ? 'bg-info-200' : 'bg-success-200'"></div>
         <span class="text-sm font-semibold text-primary-900">{{ item.label }}</span>
       </div>
     </template>

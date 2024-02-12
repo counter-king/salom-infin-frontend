@@ -7,6 +7,7 @@ import { clearModel, isObject } from '@/utils'
 import { dispatchNotify } from '@/utils/notify'
 // Enums
 import { COLOR_TYPES } from '@/enums'
+import { EVENT_TYPES, ACTION_FORM_TYPES } from '../enums'
 export const useCalendarStore = defineStore('calendar', {
   state: () => ({
     eventSidebar: false,
@@ -25,8 +26,11 @@ export const useCalendarStore = defineStore('calendar', {
       descriptions: null,
       files: [],
       __files: [],
-      type: 'event'
+      type: EVENT_TYPES.EVENT
     },
+    actionTypesMenuSelected: {
+      name: ACTION_FORM_TYPES.EVENT
+    }
   }),
   actions: {
     async actionGetList() {
@@ -36,18 +40,24 @@ export const useCalendarStore = defineStore('calendar', {
     /**
      * Создает новое мероприятие
      * */
-    async actionCreateEvent() {
+    async actionCreateEvent(type) {
       try {
         let model = {
           ...this.eventModel,
           start_date: `${this.eventModel.start_date}T${this.eventModel.__start_time}:00+05:00`, // 2023-09-28T09:35:00+05:00
           end_date: `${this.eventModel.end_date}T${this.eventModel.__end_time}:00+05:00`, // 2023-09-28T09:35:00+05:00
-          participants: this.eventModel.__participants.map(participant => {
-            return { user: participant.id }
-          }),
-          organizer: this.eventModel.__organizer,
-          files: this.eventModel.__files.map(file => file.id)
+          participants: type === EVENT_TYPES.EVENT
+            ? this.eventModel.__participants.map(participant => ({ user: participant.id }))
+            : [],
+          organizer: type === EVENT_TYPES.EVENT
+            ? this.eventModel.__organizer
+            : null,
+          files: type === EVENT_TYPES.EVENT
+            ? this.eventModel.__files.map(file => file.id)
+            : null,
+          type
         }
+
         await fetchCreateEvent(model)
         await clearModel(this.eventModel)
         dispatchNotify(null, 'Мероприятия создана', COLOR_TYPES.SUCCESS)

@@ -34,11 +34,11 @@ const props = defineProps({
               <div
                 :class="[
                   event.type === EVENT_TYPES.EVENT ? 'bg-info-100' : 'bg-warning-100',
-                  index + 1 !== events.length ? 'mb-2' : ''
+                  index + 1 !== events.length ? 'mb-1' : ''
                 ]"
                 class="rounded-[6px] px-2 py-1"
               >
-                <span class="block text-sm font-semibold text-primary-900">{{ event.title }}</span>
+                <span class="block text-[13px] font-semibold text-primary-900">{{ event.title }}</span>
               </div>
             </template>
           </template>

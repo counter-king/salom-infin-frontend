@@ -69,7 +69,10 @@ defineExpose({ successButtonLoading })
   >
     <template #header>
       <div class="flex w-full">
-        <span class="text-xl font-semibold text-primary-900 flex-1">{{ t(props.title) }}</span>
+        <slot name="title">
+          <span class="text-xl font-semibold text-primary-900 flex-1">{{ t(props.title) }}</span>
+        </slot>
+
         <slot name="headerCloseIcons" />
       </div>
     </template>

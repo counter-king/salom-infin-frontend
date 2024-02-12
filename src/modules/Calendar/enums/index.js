@@ -16,3 +16,7 @@ export const EVENT_TYPES = {
   EVENT: 'event',
   TASK: 'task'
 }
+export const ACTION_FORM_TYPES = {
+  EVENT: 'EventForm',
+  TASK: 'TaskForm'
+}

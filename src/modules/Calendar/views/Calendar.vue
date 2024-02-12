@@ -29,28 +29,6 @@ const date = ref(isModelEmpty(route.params, ['type'])
   new Date()
 )
 const daysList = ref([])
-const events = ref([
-  {
-    title: 'Тестового задания',
-    date: '2024.02.01',
-    type: EVENT_TYPES.EVENT
-  },
-  {
-    title: 'Тестового задания 2',
-    date: '2024.02.02',
-    type: EVENT_TYPES.TASK
-  },
-  {
-    title: 'Тестового задания 3',
-    date: '2024.02.03',
-    type: EVENT_TYPES.EVENT
-  },
-  {
-    title: 'Тестового задания 4',
-    date: '2024.02.01',
-    type: EVENT_TYPES.TASK
-  },
-])
 // Methods
 const daysRange = (start, end, unit) => {
   let current = start
@@ -64,7 +42,7 @@ const daysRange = (start, end, unit) => {
       day: current.$W,
       status: dayjs(date.value).month() - 1 === current.$M ? 'past' : dayjs(date.value).month() + 1 === current.$M ? 'future' : 'now',
       format: dayjs(current.$d).format('DD.MM.YYYY'),
-      events: calendarStore.eventList.filter(event => dayjs(dayjs(event.date).format('YYYY.MM.DD')).isSame(current))
+      events: calendarStore.eventList.filter(event => dayjs(dayjs(event.start_date).format('YYYY.MM.DD')).isSame(current))
     })
     current = current.add(1, unit)
   }
@@ -121,6 +99,14 @@ watch(
   },
   { immediate: true }
 )
+watch(
+  () => calendarStore.eventList,
+  (days) => {
+
+    console.log('event list', days)
+    console.log('days list', daysList.value)
+  }
+)
 // Provide
 provide('calendar', {
   currentDate,
@@ -155,7 +141,7 @@ provide('calendar', {
     </action-toolbar>
 
     <div class="flex gap-6 h-[calc(100vh-245px)]">
-      <calendar :events="events" class="flex-1" />
+      <calendar class="flex-1" />
 
       <sidebar-actions class="w-[354px]" />
     </div>
