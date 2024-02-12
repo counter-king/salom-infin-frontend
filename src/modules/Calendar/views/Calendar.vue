@@ -2,6 +2,7 @@
 // Core
 import { provide, ref, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useDebounce, useDebounceFn } from '@vueuse/core'
 import dayjs from 'dayjs'
 // Components
 import { ActionToolbar } from '@/components/Actions'
@@ -96,6 +97,27 @@ const monthChange = async () => {
 		page_size: 50
 	})
 }
+const debouncedWheelFn = useDebounceFn(async (event) => {
+	if(event.deltaY > 0) { // Next month
+		let { $d } = dayjs(date.value).add(1, 'month')
+		date.value = $d
+	}
+	else { // Prev month
+		let { $d } = dayjs(date.value).add(-1, 'month')
+		date.value = $d
+	}
+
+	await router.replace({
+		name: 'CalendarDate',
+		params: {
+			...route.params,
+			y: dayjs(date.value).year(),
+			m: dayjs(date.value).month(),
+			d: dayjs(date.value).date()
+		}
+	})
+	await monthChange()
+}, 500)
 // Watch
 watch(
   () => date.value,
@@ -151,7 +173,7 @@ provide('calendar', {
     </action-toolbar>
 
     <div class="flex gap-6 h-[calc(100vh-245px)]">
-      <calendar class="flex-1" />
+      <calendar @wheel="(event) => debouncedWheelFn(event)" class="flex-1" />
 
       <sidebar-actions
 	      @emit:month-change="monthChange"
