@@ -6,8 +6,8 @@ const URLS = {
 /**
  * Получает список мероприятий
  * */
-export const fetchEventList = () => {
-  return axiosConfig.get(`${URLS.event}/`)
+export const fetchEventList = (params) => {
+  return axiosConfig.get(`${URLS.event}/`, params)
 }
 /**
  * Создает новое мероприятие

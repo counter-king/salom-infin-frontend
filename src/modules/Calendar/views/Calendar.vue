@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref, provide, watch } from 'vue'
+import { provide, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 // Components
@@ -12,8 +12,6 @@ import SidebarActions from '../components/SidebarActions.vue'
 import { useCalendarStore } from '../stores/calendar.store'
 // Utils
 import { isModelEmpty } from '@/utils'
-// Enums
-import { EVENT_TYPES } from '../enums'
 // Composable
 const route = useRoute()
 const router = useRouter()
@@ -29,6 +27,8 @@ const date = ref(isModelEmpty(route.params, ['type'])
   new Date()
 )
 const daysList = ref([])
+const startInterval = ref(null)
+const endInterval = ref(null)
 // Methods
 const daysRange = (start, end, unit) => {
   let current = start
@@ -42,7 +42,7 @@ const daysRange = (start, end, unit) => {
       day: current.$W,
       status: dayjs(date.value).month() - 1 === current.$M ? 'past' : dayjs(date.value).month() + 1 === current.$M ? 'future' : 'now',
       format: dayjs(current.$d).format('DD.MM.YYYY'),
-      events: calendarStore.eventList.filter(event => dayjs(dayjs(event.start_date).format('YYYY.MM.DD')).isSame(current))
+      events: []
     })
     current = current.add(1, unit)
   }
@@ -51,32 +51,30 @@ const generateDays = () => {
   let dateInMonth = dayjs(date.value).daysInMonth()
   let startMonthDay = dayjs(date.value).startOf('month').day()
   let endMonthDay = dayjs(date.value).endOf('month').day()
-  let startInterval = null
-  let endInterval = null
 
   switch(startMonthDay) {
     case 0: // Если начало месяца начинается с воскресение
-      startInterval = dayjs(date.value).date(1 - 6).format("YYYY-MM-DD")
+      startInterval.value = dayjs(date.value).date(1 - 6).format("YYYY-MM-DD")
       break
     case 1: // Если начало месяца начинается с понедельника
-      startInterval = dayjs(date.value).date(1).format("YYYY-MM-DD")
+      startInterval.value = dayjs(date.value).date(1).format("YYYY-MM-DD")
       break
     default: // Остальные дни
-      startInterval = dayjs(date.value).date(2 - startMonthDay).format("YYYY-MM-DD")
+      startInterval.value = dayjs(date.value).date(2 - startMonthDay).format("YYYY-MM-DD")
   }
 
   switch(endMonthDay) {
     case 0: // Если конец месяца начинается с воскресение
-      endInterval = dayjs(date.value).date(dateInMonth).format("YYYY-MM-DD")
+      endInterval.value = dayjs(date.value).date(dateInMonth).format("YYYY-MM-DD")
       break
     case 1: // Если конец месяца начинается с понедельника
-      endInterval = dayjs(date.value).date(dateInMonth + 7 - endMonthDay).format("YYYY-MM-DD")
+      endInterval.value = dayjs(date.value).date(dateInMonth + 7 - endMonthDay).format("YYYY-MM-DD")
       break
     default: // Остальные дни
-      endInterval = dayjs(date.value).date(dateInMonth + (7 - endMonthDay)).format("YYYY-MM-DD")
+      endInterval.value = dayjs(date.value).date(dateInMonth + (7 - endMonthDay)).format("YYYY-MM-DD")
   }
 
-  daysRange(dayjs(startInterval), dayjs(endInterval), 'day')
+  daysRange(dayjs(startInterval.value), dayjs(endInterval.value), 'day')
 }
 const setCalendarToday = async () => {
   date.value = currentDate.value
@@ -94,18 +92,23 @@ const setCalendarToday = async () => {
 watch(
   () => date.value,
   async () => {
-    await calendarStore.actionGetList()
     generateDays()
+    await calendarStore.actionGetList({
+	    start_date: startInterval.value,
+	    end_date: endInterval.value,
+      page_size: 50
+    })
   },
   { immediate: true }
 )
 watch(
   () => calendarStore.eventList,
   (days) => {
-
-    console.log('event list', days)
-    console.log('days list', daysList.value)
-  }
+    for (let day of daysList.value) {
+      day.events = days.filter(event => day?.format === dayjs(event.start_date).format('DD.MM.YYYY'))
+    }
+  },
+  { deep: true }
 )
 // Provide
 provide('calendar', {

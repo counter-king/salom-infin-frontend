@@ -52,8 +52,10 @@ export const useCommonStore = defineStore("common", {
       const documentCount = useDocumentCountStore()
 
       await documentCount.actionDocumentCountList()
-      await correspondent.actionGetList({ type: CORRESPONDENT.ALL })
-      await users.actionUsersList()
+      await correspondent.actionGetList({
+	      a: 1
+      })
+			await users.actionUsersList()
       await users.actionEmployeeGroupList()
       this.actionDeliveryTypesList()
       this.actionDepartmentList()

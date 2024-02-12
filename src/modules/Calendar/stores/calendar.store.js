@@ -23,7 +23,7 @@ export const useCalendarStore = defineStore('calendar', {
       __participants: [],
       organizer: null,
       __organizer: null,
-      descriptions: null,
+      description: null,
       files: [],
       __files: [],
       type: EVENT_TYPES.EVENT
@@ -33,8 +33,8 @@ export const useCalendarStore = defineStore('calendar', {
     }
   }),
   actions: {
-    async actionGetList() {
-      let { data } = await fetchEventList()
+    async actionGetList(params) {
+      let { data } = await fetchEventList(params)
       this.eventList = data.results
     },
     /**
@@ -58,9 +58,10 @@ export const useCalendarStore = defineStore('calendar', {
           type
         }
 
-        await fetchCreateEvent(model)
+        let { data } = await fetchCreateEvent(model)
         await clearModel(this.eventModel)
         dispatchNotify(null, 'Мероприятия создана', COLOR_TYPES.SUCCESS)
+        this.eventList.push(data)
         return Promise.resolve()
       }
       catch (error) {

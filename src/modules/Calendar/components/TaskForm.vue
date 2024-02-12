@@ -51,7 +51,7 @@ const rules = {
   priority: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
-  descriptions: {
+  description: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
 }
@@ -154,8 +154,8 @@ defineExpose({ $v })
 
     <base-col col-class="w-full">
       <base-textarea
-        v-model="$v.descriptions.$model"
-        :error="$v.descriptions"
+        v-model="$v.description.$model"
+        :error="$v.description"
         required
         label="short-description"
         placeholder="enter-short-description"
