@@ -114,7 +114,7 @@ const createDepartment = () => {
             placeholder="Введите код"
             type="text"
             @update:modelValue="value => {
-               department = { ...department, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 6) };
+               department = { ...department, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 8) };
             }"
             />
       </div>

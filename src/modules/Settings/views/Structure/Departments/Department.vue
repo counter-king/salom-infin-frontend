@@ -288,11 +288,11 @@ onMounted(() => {
          <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editDepartment.code"
-            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :pt="{ root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
             placeholder="Введите код"
             type="text"
             @update:modelValue="value => {
-               editDepartment = { ...editDepartment, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 6) };
+               editDepartment = { ...editDepartment, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 8) };
             }"
             />
       </div>

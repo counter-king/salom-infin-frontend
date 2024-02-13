@@ -8,16 +8,15 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 const props = defineProps({ getFirstPagePositions: Function, setVisible: Function, visible: Boolean });
-const defaultPosition = { name_uz: '', name_ru: '' };
+const defaultPosition = { name_uz: '', name_ru: '', code: '' };
 const position = ref(defaultPosition);
 const loading = ref(false);
 const createPosition = () => {
-   const { name_ru, name_uz } = position.value;
-   const code = new Date().toISOString();
-   if(name_uz && name_ru) {
+   const { name_ru, name_uz, code } = position.value;
+   if(name_uz && name_ru && code) {
       loading.value = true;
       axiosConfig
-         .post('/positions/', { name_ru, name_uz, code, is_active: true })
+         .post('/positions/', { name_ru, name_uz, code, is_active: true, code })
          .then(response => {
             if(response?.status === 201) {
                dispatchNotify('Должность создан', '', 'success');
@@ -34,8 +33,10 @@ const createPosition = () => {
          .finally(() => {
             loading.value = false;
          });
+   } else if(!name_ru || !name_uz) {
+      dispatchNotify('Введите название', '', 'error');
    } else {
-      dispatchNotify('Введите название должность', '', 'error')
+      dispatchNotify('Введите код', '', 'error');
    }
 };
 </script>
@@ -70,6 +71,16 @@ const createPosition = () => {
             type="text"
             @update:modelValue="name_ru => {
                position = { ...position, name_ru };
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
+         <InputText
+            :modelValue="position.code"
+            :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            placeholder="Введите код"
+            type="text"
+            @update:modelValue="value => {
+               position = { ...position, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 8) };
             }"
             />
       </div>

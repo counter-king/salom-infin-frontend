@@ -121,7 +121,7 @@ const createBranch = () => {
             placeholder="Введите код"
             type="text"
             @update:modelValue="value => {
-               branch = { ...branch, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 6) };
+               branch = { ...branch, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 8) };
             }"
             />
       </div>

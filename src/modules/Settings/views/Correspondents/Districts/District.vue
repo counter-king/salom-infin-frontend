@@ -286,7 +286,7 @@ onMounted(() => {
             placeholder="Введите код"
             type="text"
             @update:modelValue="value => {
-               editDistrict = { ...editDistrict, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 6) };
+               editDistrict = { ...editDistrict, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 8) };
             }"
             />
       </div>

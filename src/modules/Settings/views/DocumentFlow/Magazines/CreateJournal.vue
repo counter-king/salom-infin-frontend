@@ -84,7 +84,7 @@ const createJournal = () => {
             placeholder="Введите код"
             type="text"
             @update:modelValue="value => {
-               journal = { ...journal, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 6) };
+               journal = { ...journal, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 8) };
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Префикс</p>

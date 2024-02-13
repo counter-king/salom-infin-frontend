@@ -131,7 +131,7 @@ const searchRegions = ({ search, page }) => {
             placeholder="Введите код"
             type="text"
             @update:modelValue="value => {
-               district = { ...district, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 6) };
+               district = { ...district, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 8) };
             }"
             />
       </div>

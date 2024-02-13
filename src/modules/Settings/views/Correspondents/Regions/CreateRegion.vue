@@ -81,7 +81,7 @@ const createRegion = () => {
             placeholder="Введите код"
             type="text"
             @update:modelValue="value => {
-               region = { ...region, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 6) }
+               region = { ...region, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 8) }
             }"
             />
       </div>
