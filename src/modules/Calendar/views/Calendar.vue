@@ -91,6 +91,7 @@ const setCalendarToday = async () => {
 	await monthChange()
 }
 const monthChange = async () => {
+	generateDays()
 	await calendarStore.actionGetList({
 		start_date: startInterval.value,
 		end_date: endInterval.value,
@@ -117,15 +118,8 @@ const debouncedWheelFn = useDebounceFn(async (event) => {
 		}
 	})
 	await monthChange()
-}, 500)
+}, 300)
 // Watch
-watch(
-  () => date.value,
-  () => {
-    generateDays()
-  },
-  { immediate: true }
-)
 watch(
   () => calendarStore.eventList,
   (days) => {
@@ -137,6 +131,7 @@ watch(
 )
 // Hooks
 onMounted(async () => {
+	generateDays()
 	await monthChange()
 })
 // Provide

@@ -4,6 +4,7 @@ import { defineStore } from 'pinia'
 import { fetchEventList, fetchCreateEvent} from '../services/calendar.service'
 // Utils
 import { clearModel, isObject } from '@/utils'
+import { formatDateReverse } from '@/utils/formatDate'
 import { dispatchNotify } from '@/utils/notify'
 // Enums
 import { COLOR_TYPES } from '@/enums'
@@ -44,8 +45,8 @@ export const useCalendarStore = defineStore('calendar', {
       try {
         let model = {
           ...this.eventModel,
-          start_date: `${this.eventModel.start_date}T${this.eventModel.__start_time}:00+05:00`, // 2023-09-28T09:35:00+05:00
-          end_date: `${this.eventModel.end_date}T${this.eventModel.__end_time}:00+05:00`, // 2023-09-28T09:35:00+05:00
+          start_date: `${formatDateReverse(this.eventModel.start_date)}T${this.eventModel.__start_time}:00+05:00`, // 2023-09-28T09:35:00+05:00
+          end_date: `${formatDateReverse(this.eventModel.end_date)}T${this.eventModel.__end_time}:00+05:00`, // 2023-09-28T09:35:00+05:00
           participants: type === EVENT_TYPES.EVENT
             ? this.eventModel.__participants.map(participant => ({ user: participant.id }))
             : [],

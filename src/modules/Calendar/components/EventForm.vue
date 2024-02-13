@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { computed, ref } from 'vue'
+import { computed, ref, inject, onMounted } from 'vue'
 import { helpers, required } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
 // Components
@@ -65,6 +65,13 @@ const rules = {
 const $v = useVuelidate(rules, calendarStore.eventModel)
 // Macros
 defineExpose({ $v })
+// Inject
+const { date } = inject('calendar')
+// Hooks
+onMounted(() => {
+	calendarStore.eventModel.start_date = date.value
+	calendarStore.eventModel.end_date = date.value
+})
 </script>
 
 <template>

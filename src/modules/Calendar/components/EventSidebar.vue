@@ -55,7 +55,7 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
   <base-sidebar
     ref="sidebarRef"
     v-model="calendarStore.eventSidebar"
-    title="create-event"
+    success-text="create"
     @emit:cancel-button="(value) => calendarStore.eventSidebar = value"
     @emit:success-button="createEvent"
   >
