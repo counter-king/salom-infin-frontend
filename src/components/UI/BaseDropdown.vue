@@ -28,6 +28,10 @@ const props = defineProps({
   disabled: {
     type: Boolean
   },
+  optionDisabled: {
+    type: [Function],
+    default: () => void 0
+  },
   label: {
     type: String,
     default: null
@@ -130,6 +134,7 @@ const loadList = async (params) => {
       :options="options"
       :option-label="props.optionLabel"
       :option-value="props.optionValue"
+      :option-disabled="props.optionDisabled"
       :placeholder="t(props.placeholder)"
       :disabled="props.disabled"
       filter
@@ -202,6 +207,12 @@ const loadList = async (params) => {
 	    <template #option="{ option }">
 		    <slot name="option" :option="option" />
 	    </template>
+
+      <template #dropdownicon>
+        <slot name="dropdownicon">
+          <base-icon name="AltArrowDownIcon" width="18" />
+        </slot>
+      </template>
     </Dropdown>
 
     <template v-if="props.error.$errors.length">

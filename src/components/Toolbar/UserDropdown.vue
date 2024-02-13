@@ -1,13 +1,15 @@
 <script setup>
 // Core
 import { ref, unref, computed } from 'vue'
-import { useRouter } from "vue-router"
+import { useRouter } from 'vue-router'
+import { vMaska } from 'maska'
 // Store
 import { useAuthStore } from "../../modules/Auth/stores/index"
 import { resetAllPiniaStores } from '@/stores/plugins/resetStores'
 // Utils
-import { removeStorageItem } from "@/utils/storage"
-import { ACCESS, EXPIRES, REFRESH, CURRENT_ROUTE } from "@/constants/storage"
+import { formatNameToShort } from '@/utils'
+import { removeStorageItem } from '@/utils/storage'
+import { ACCESS, EXPIRES, REFRESH, CURRENT_ROUTE } from '@/constants/storage'
 // Composable
 const authStore = useAuthStore()
 const router = useRouter()
@@ -52,7 +54,7 @@ const toggle = (event) => {
 }
 </script>
 <template>
-  <div class="flex items-center hover:cursor-pointer" @click="toggle">
+  <div class="flex items-center gap-3 cursor-pointer" @click="toggle">
     <base-avatar
       image="/images/avatars/1.jpg"
       shape="circle"
@@ -60,9 +62,17 @@ const toggle = (event) => {
       class="flex"
     />
 
-    <div class="ml-3">
-      <h1  class="text-white text-sm font-semibold mb-1">{{ userProfile.last_name }} {{ userProfile.first_name[0] }}.</h1>
-      <span class="block text-greyscale-500 text-xs">{{ userProfile.username }}</span>
+    <div>
+      <h1 class="text-white text-sm font-semibold mb-1">
+        {{ formatNameToShort(userProfile.full_name) }}
+      </h1>
+
+      <input
+        v-model="userProfile.username"
+        v-maska
+        data-maska="+### ## ### ## ##"
+        class="block w-[110px] bg-transparent text-greyscale-500 text-xs"
+      />
     </div>
 
     <base-menu

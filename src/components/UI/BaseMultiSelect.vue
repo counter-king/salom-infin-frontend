@@ -306,6 +306,12 @@ watch(debounced, async () => {
           </slot>
         </div>
       </template>
+
+      <template #dropdownicon>
+        <slot name="dropdownicon">
+          <base-icon name="AltArrowDownIcon" width="18" />
+        </slot>
+      </template>
     </MultiSelect>
 
     <div v-if="modelValue.length !== 0" class="flex items-center gap-2">
