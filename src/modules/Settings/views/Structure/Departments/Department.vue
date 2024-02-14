@@ -112,14 +112,14 @@ const updateCondition = value => {
    conditionLoading.value = true;
    const departmentId = props?.data?.id;
    axiosConfig
-      .patch(`departments/${departmentId}/`, { condition: value?.value })
+      .put(`departments/${departmentId}/make-active-or-inactive/`, { condition: value?.value })
       .then(response => {
-         const data = response?.data;
+         const condition = response?.data?.condition;
          const status = response?.status;
          if(status === 200) {
             const newDepartments = props?.departments.map(department => {
                if(department?.id === departmentId) {
-                  return data;
+                  return { ...department, condition };
                } else {
                   return department;
                }

@@ -94,7 +94,7 @@ const deleteDepartment = () => {
 const updateCondition = value => {
    const departmentId = props?.department?.id;
    axiosConfig
-      .patch(`departments/${departmentId}/`, { condition: value?.value })
+      .put(`departments/${departmentId}/make-active-or-inactive/`, { condition: value?.value })
       .then(response => {
          if(response?.status === 200) {
             props.getSubDepartments();
