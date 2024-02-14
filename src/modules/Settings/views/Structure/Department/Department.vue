@@ -99,12 +99,7 @@ const updateCondition = value => {
          if(response?.status === 200) {
             props.getSubDepartments();
             dispatchNotify('Статус обновлено', '', 'success');
-         } else {
-            dispatchNotify('Статус не обновлено', '', 'error');
          }
-      })
-      .catch(() => {
-         dispatchNotify('Статус не обновлено', '', 'error');
       });
 };
 const changeLanguage = () => {
