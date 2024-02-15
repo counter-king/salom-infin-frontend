@@ -6,6 +6,7 @@ import { useRouter } from "vue-router";
 // Components
 import { ActionToolbar } from "@/components/Actions";
 import DocType from "@/components/Chips/DocType.vue";
+import Status from "@/modules/Documents/modules/Boxes/components/Status.vue";
 // Constants
 import {BOXES_SIGN_COLUMNS, ROUTE_SIGN_SHOW} from "@/modules/Documents/modules/Boxes/constants";
 // Store
@@ -54,6 +55,13 @@ onMounted(async () => {
       @emit:set-store-headers="(val) => signStore.headers = val"
       @emit:row-click="onRowClick"
     >
+      <template #status="{ data }">
+        <status
+          :status="data.is_signed"
+          type="sign"
+        />
+      </template>
+
       <template #register_number="{ data }">
         {{ data.compose.register_number }}
       </template>
