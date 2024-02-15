@@ -41,6 +41,10 @@ const props = defineProps({
   actionChipType: {
     type: Object,
     default: () => {}
+  },
+  labelClasses: {
+    type: String,
+    default: 'text-sm leading-none text-white'
   }
 })
 </script>
@@ -62,7 +66,7 @@ const props = defineProps({
           ]
         },
         label: {
-          class: 'text-sm leading-none text-white'
+          class: props.labelClasses
         },
         image: {
           class: 'object-cover'

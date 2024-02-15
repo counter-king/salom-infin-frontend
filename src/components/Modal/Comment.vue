@@ -48,26 +48,28 @@ const props = defineProps({
 	footer: {
 		type: Boolean,
 		default: true
-	}
+	},
+  loading: {
+    type: Boolean,
+    default: false
+  }
 })
 const emit = defineEmits(['update:modelValue'])
 // Composable
 const modelValue = useModel(props, 'modelValue')
 // Reactive
 const text = ref(null)
-const loading = ref(false)
 // Methods
 const create = async () => {
   if(!(text.value && text.value.trim())) return
 
   try {
-    loading.value = true
     await props.createButtonFn(text.value)
     text.value = null
     emit('update:modelValue', false)
   }
   finally {
-    loading.value = false
+
   }
 }
 
@@ -109,7 +111,7 @@ watch(modelValue, newVal => {
     <template v-if="props.footer" #footer>
       <base-button
         :severity="props.createButtonColor"
-        :loading="loading"
+        :loading="props.loading"
         :label="props.label"
         rounded
         @click="create"

@@ -4,7 +4,7 @@ import { defineStore } from 'pinia'
 import {fetchSignDetail, fetchSignList} from "@/modules/Documents/modules/Boxes/services/sign.service";
 
 
-export const useBoxesSignStore = defineStore("sign-store", {
+export const useBoxesSignStore = defineStore("sign-stores", {
   state: () => ({
     filterState: {
       page: 1,

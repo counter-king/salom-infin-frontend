@@ -28,7 +28,7 @@ const receivers = computed(() => {
 
 <template>
   <div class="inner-letter-template">
-<!--    <pre>{{ receivers }}</pre>-->
+<!--    <pre>{{ composeModel }}</pre>-->
     <div class="flex justify-between border-b pb-4 items-center">
       <div class="flex">
         <img src="/images/logo.svg" alt="Logo" />

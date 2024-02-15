@@ -1,12 +1,17 @@
 // Core
-import {defineStore} from 'pinia'
+import { defineStore } from 'pinia'
+// Services
 import {
+  fetchCustomUpdate,
   fetchGetDocumentDetail,
   fetchGetDocumentList
 } from "@/modules/Documents/modules/SendDocuments/services/index.service";
-import {withAsync} from "@/utils/withAsync";
+// Utils
+import { withAsync } from "@/utils/withAsync";
+import { dispatchNotify } from "@/utils/notify";
+import { COLOR_TYPES } from "@/enums";
 
-export const useSDStore = defineStore("sd-store", {
+export const useSDStore = defineStore("sd-stores", {
   state: () => ({
     SD_TOOLBAR_MENU_LIST: [
       // Внутренний
@@ -114,6 +119,7 @@ export const useSDStore = defineStore("sd-store", {
     detailModel: {},
     listLoading: false,
     detailLoading: false,
+    customUpdateLoading: false,
     filterState: {
       page: 1,
       page_size: 15
@@ -339,6 +345,20 @@ export const useSDStore = defineStore("sd-store", {
       if (response){
         this.detailModel = response.data;
         return Promise.resolve(response);
+      }
+    },
+    /** **/
+    async actionCustomUpdate({ id, body }) {
+      this.customUpdateLoading = true;
+      const response = await fetchCustomUpdate({ id, body });
+      if (response) {
+        this.customUpdateLoading = false;
+        dispatchNotify('Изменено!', null, COLOR_TYPES.SUCCESS);
+        return Promise.resolve(response);
+      } else {
+        this.customUpdateLoading = false;
+        dispatchNotify('Произошла ошибка!', null, COLOR_TYPES.ERROR);
+        return Promise.reject();
       }
     }
   }

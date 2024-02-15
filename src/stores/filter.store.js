@@ -3,7 +3,7 @@ import { defineStore } from "pinia"
 // Utils
 import { clearModel } from "@/utils";
 
-export const useFilterStore = defineStore("filter-store", {
+export const useFilterStore = defineStore("filter-stores", {
   state: () => ({
     filterState: {
       approvers: [],

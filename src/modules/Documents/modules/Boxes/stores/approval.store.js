@@ -2,7 +2,7 @@
 import { defineStore } from 'pinia'
 import {fetchApprovalDetail, fetchApprovalList} from "@/modules/Documents/modules/Boxes/services/approval.service";
 
-export const useBoxesApprovalStore = defineStore("approval-store", {
+export const useBoxesApprovalStore = defineStore("approval-stores", {
   state: () => ({
     filterState: {
       page: 1,
