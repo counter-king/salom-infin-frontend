@@ -3,8 +3,6 @@
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Calendar from 'primevue/calendar'
-// Utils
-import { formatDateReverse } from '@/utils/formatDate'
 // Composable
 const { t } = useI18n()
 // Macros
@@ -57,7 +55,7 @@ const props = defineProps({
     }
   },
 })
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'emit:month-change'])
 // Computed
 const rootClasses = computed(() => {
   return [
@@ -89,6 +87,10 @@ const modelValue = computed({
     emit('update:modelValue', value)
   }
 })
+// Methods
+const monthChange = ({ month, year }) => {
+  emit('emit:month-change', { day: 1, month: month - 1, year })
+}
 </script>
 
 <template>
@@ -104,6 +106,7 @@ const modelValue = computed({
       :placeholder="t(props.placeholder)"
       show-icon
       date-format="yy-mm-dd"
+      @month-change="monthChange"
       :pt="{
         root: {
           class: rootClasses

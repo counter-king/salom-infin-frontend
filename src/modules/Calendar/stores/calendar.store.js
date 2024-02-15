@@ -1,0 +1,74 @@
+// Core
+import { defineStore } from 'pinia'
+// Services
+import { fetchEventList, fetchCreateEvent} from '../services/calendar.service'
+// Utils
+import { clearModel, isObject } from '@/utils'
+import { formatDateReverse } from '@/utils/formatDate'
+import { dispatchNotify } from '@/utils/notify'
+// Enums
+import { COLOR_TYPES } from '@/enums'
+import { EVENT_TYPES, ACTION_FORM_TYPES } from '../enums'
+export const useCalendarStore = defineStore('calendar', {
+  state: () => ({
+    eventSidebar: false,
+    eventList: [],
+    eventModel: {
+      title: null,
+      start_date: null,
+      __start_time: null,
+      end_date: null,
+      __end_time: null,
+      priority: null,
+      participants: null,
+      __participants: [],
+      organizer: null,
+      __organizer: null,
+      description: null,
+      files: [],
+      __files: [],
+      type: EVENT_TYPES.EVENT
+    },
+    actionTypesMenuSelected: {
+      name: ACTION_FORM_TYPES.EVENT
+    }
+  }),
+  actions: {
+    async actionGetList(params) {
+      let { data } = await fetchEventList(params)
+      this.eventList = data.results
+    },
+    /**
+     * Создает новое мероприятие
+     * */
+    async actionCreateEvent(type) {
+      try {
+        let model = {
+          ...this.eventModel,
+          start_date: `${formatDateReverse(this.eventModel.start_date)}T${this.eventModel.__start_time}:00+05:00`, // 2023-09-28T09:35:00+05:00
+          end_date: `${formatDateReverse(this.eventModel.end_date)}T${this.eventModel.__end_time}:00+05:00`, // 2023-09-28T09:35:00+05:00
+          participants: type === EVENT_TYPES.EVENT
+            ? this.eventModel.__participants.map(participant => ({ user: participant.id }))
+            : [],
+          organizer: type === EVENT_TYPES.EVENT
+            ? this.eventModel.__organizer
+            : null,
+          files: type === EVENT_TYPES.EVENT
+            ? this.eventModel.__files.map(file => file.id)
+            : null,
+          type
+        }
+
+        let { data } = await fetchCreateEvent(model)
+        await clearModel(this.eventModel)
+        dispatchNotify(null, 'Мероприятия создана', COLOR_TYPES.SUCCESS)
+        this.eventList.push(data)
+        return Promise.resolve()
+      }
+      catch (error) {
+        dispatchNotify('Ошибка', 'Ошибка создание мероприятий', COLOR_TYPES.ERROR)
+        return Promise.reject()
+      }
+    }
+  }
+})

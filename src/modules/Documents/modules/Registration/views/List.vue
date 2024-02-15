@@ -32,7 +32,9 @@ watch(
         journal_id: Number(_route)
       }
     })
-    _route && await docFlowStore.actionGetList(route.query)
+    _route && await docFlowStore.actionGetList({
+	    a: 1
+    })
   }
 )
 // Methods

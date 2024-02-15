@@ -16,13 +16,14 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 const defaultFilter = { page: 1, page_size: 10, department: '' };
 const activeDepartment = ref(null);
-const filter = ref(defaultFilter);
 const count = ref(1);
 const createDepartment = ref(null);
 const createVisible = ref(false);
 const departmentId = route.params?.id;
 const employees = ref([]);
 const employeesLoading = ref(false);
+const filter = ref(defaultFilter);
+const parentDepartment = ref(null);
 const parentDepartments = ref([]);
 const status = ref('loading');
 const subDepartments = ref([]);
@@ -54,6 +55,7 @@ const setActiveDepartment = department => {
 const openModal = (departments, department) => {
    createDepartment.value = department;
    createVisible.value = true;
+   parentDepartment.value = department;
    parentDepartments.value = departments;
 };
 const getSubDepartments = () => {
@@ -172,7 +174,7 @@ onMounted(() => {
                   <template v-if="subDepartments.length">
                      <div class="h-full w-full">
                         <div class="px-3 pt-3">
-                           <div class="text-sm font-semibold rounded-xl px-3 py-3 duration-[400ms] text-greyscale-500 bg-greyscale-100">Отдели</div>
+                           <div class="text-sm font-semibold rounded-xl px-3 py-3 duration-[400ms] text-greyscale-500 bg-greyscale-100">Субдепартаменти</div>
                         </div>
                         <div class="flex flex-col overflow-y-scroll settings-structure-departments" style="height: calc(100% - 112px)">
                            <div class="pl-3 pr-[6px]">
@@ -185,6 +187,7 @@ onMounted(() => {
                                  :key="index"
                                  :last="index === subDepartments.length - 1"
                                  :openModal="openModal"
+                                 :parent="topLevelDepartment"
                                  :parentDepartments="[]"
                                  :setActiveDepartment="setActiveDepartment"
                                  :topLevelDepartment="topLevelDepartment"
@@ -207,7 +210,7 @@ onMounted(() => {
                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5003 18.3307C15.1027 18.3307 18.8337 14.5998 18.8337 9.9974C18.8337 5.39502 15.1027 1.66406 10.5003 1.66406C5.89795 1.66406 2.16699 5.39502 2.16699 9.9974C2.16699 14.5998 5.89795 18.3307 10.5003 18.3307ZM11.1253 7.4974C11.1253 7.15222 10.8455 6.8724 10.5003 6.8724C10.1551 6.8724 9.87533 7.15222 9.87533 7.4974L9.87532 9.37242H8.00033C7.65515 9.37242 7.37533 9.65224 7.37533 9.99742C7.37533 10.3426 7.65515 10.6224 8.00033 10.6224H9.87532V12.4974C9.87532 12.8426 10.1551 13.1224 10.5003 13.1224C10.8455 13.1224 11.1253 12.8426 11.1253 12.4974L11.1253 10.6224H13.0003C13.3455 10.6224 13.6253 10.3426 13.6253 9.99742C13.6253 9.65224 13.3455 9.37242 13.0003 9.37242H11.1253V7.4974Z" fill="#635AFF"/>
                                  </svg>
                               </span>
-                              <span>Добавить отдел</span>
+                              <span>Добавить субдепартамент</span>
                            </Button>
                         </div>
                      </div>
@@ -222,7 +225,7 @@ onMounted(() => {
                                  <path fill-rule="evenodd" clip-rule="evenodd" d="M24 19.25C24.4142 19.25 24.75 19.5858 24.75 20V23.6893L27.0303 25.9697C27.3232 26.2626 27.3232 26.7374 27.0303 27.0303C26.7374 27.3232 26.2626 27.3232 25.9697 27.0303L23.4697 24.5303C23.329 24.3897 23.25 24.1989 23.25 24V20C23.25 19.5858 23.5858 19.25 24 19.25Z" fill="white"/>
                               </svg>
                            </div>
-                           <p class="text-center text-greyscale-300 mt-3 mb-6">В этом отделе нет подотделов. Нажмите кнопку ниже, чтобы добавить.</p>
+                           <p class="text-center text-greyscale-300 mt-3 mb-6">В этом субдепартамент нет подотделов. Нажмите кнопку ниже, чтобы добавить.</p>
                            <Button
                               @click="() => {
                                  openModal([], topLevelDepartment);
@@ -234,7 +237,7 @@ onMounted(() => {
                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5003 18.3307C15.1027 18.3307 18.8337 14.5998 18.8337 9.9974C18.8337 5.39502 15.1027 1.66406 10.5003 1.66406C5.89795 1.66406 2.16699 5.39502 2.16699 9.9974C2.16699 14.5998 5.89795 18.3307 10.5003 18.3307ZM11.1253 7.4974C11.1253 7.15222 10.8455 6.8724 10.5003 6.8724C10.1551 6.8724 9.87533 7.15222 9.87533 7.4974L9.87532 9.37242H8.00033C7.65515 9.37242 7.37533 9.65224 7.37533 9.99742C7.37533 10.3426 7.65515 10.6224 8.00033 10.6224H9.87532V12.4974C9.87532 12.8426 10.1551 13.1224 10.5003 13.1224C10.8455 13.1224 11.1253 12.8426 11.1253 12.4974L11.1253 10.6224H13.0003C13.3455 10.6224 13.6253 10.3426 13.6253 9.99742C13.6253 9.65224 13.3455 9.37242 13.0003 9.37242H11.1253V7.4974Z" fill="#635AFF"/>
                                  </svg>
                               </span>
-                              <span>Добавить отдел</span>
+                              <span>Добавить субдепартамент</span>
                            </Button>
                         </div>
                      </div>
@@ -345,7 +348,7 @@ onMounted(() => {
                :getSubDeparments="() => {
                   getSubDepartments(departmentId);
                }"
-               :parent="createDepartment"
+               :parentDepartment="parentDepartment"
                :parentDepartments="parentDepartments"
                :setVisible="setCreateVisible"
                :topLevelDepartment="topLevelDepartment"

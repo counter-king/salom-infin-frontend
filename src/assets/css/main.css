@@ -74,7 +74,8 @@ body {
   background-color: var(--primary-500);
 }
 
-.app-input {
+.app-input,
+.app-multiselect {
   margin-bottom: 8px;
 }
 

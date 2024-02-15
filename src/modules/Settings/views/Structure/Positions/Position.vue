@@ -22,9 +22,8 @@ const editPosition = ref({});
 const editVisible = ref(false);
 const menu = ref(null);
 const positionEdit = () => {
-   const { name_ru, name_uz } = editPosition.value;
-   const code = new Date().toISOString();
-   if(name_uz && name_ru) {
+   const { name_ru, name_uz, code } = editPosition.value;
+   if(name_uz && name_ru && code) {
       editLoading.value = true;
       const positionId = props?.data?.id;
       axiosConfig
@@ -53,8 +52,10 @@ const positionEdit = () => {
          .finally(() => {
             editLoading.value = false;
          });
+   } else if(!name_ru || !name_uz) {
+      dispatchNotify('Введите название', '', 'error');
    } else {
-      dispatchNotify('Введите название', '', 'error')
+      dispatchNotify('Введите код', '', 'error');
    }
 };
 const positionDelete = () => {
@@ -225,6 +226,16 @@ onMounted(() => {
             type="text"
             @update:modelValue="value => {
                editPosition = { ...editPosition, name_ru: replaceSpecChars(value) };
+            }"
+            />
+         <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
+         <InputText
+            :modelValue="editPosition.code"
+            :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
+            placeholder="Введите код"
+            type="text"
+            @update:modelValue="value => {
+               editPosition = { ...editPosition, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 8) };
             }"
             />
       </div>

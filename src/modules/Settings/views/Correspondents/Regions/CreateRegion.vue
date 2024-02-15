@@ -75,12 +75,13 @@ const createRegion = () => {
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
-         <input
-            class="p-inputtext h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 text-sm"
+         <InputText
+            :modelValue="region.code"
+            :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите код"
-            v-model="region.code"
-            @input="e => {
-               region = { ...region, code: e.target.value.replace(/\D/g, '') }
+            type="text"
+            @update:modelValue="value => {
+               region = { ...region, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 8) }
             }"
             />
       </div>

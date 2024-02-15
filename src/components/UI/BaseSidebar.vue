@@ -51,7 +51,7 @@ defineExpose({ successButtonLoading })
     :position="props.position"
     :pt="{
       root: {
-        class: ['w-[750px]', props.rootClass]
+        class: ['w-[672px]', props.rootClass]
       },
       header: {
         class: 'bg-greyscale-50 p-6'
@@ -69,7 +69,10 @@ defineExpose({ successButtonLoading })
   >
     <template #header>
       <div class="flex w-full">
-        <span class="text-xl font-semibold text-primary-900 flex-1">{{ t(props.title) }}</span>
+        <slot name="title">
+          <span class="text-xl font-semibold text-primary-900 flex-1">{{ t(props.title) }}</span>
+        </slot>
+
         <slot name="headerCloseIcons" />
       </div>
     </template>

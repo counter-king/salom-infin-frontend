@@ -3,15 +3,15 @@ import Button from 'primevue/button';
 import CreatePosition from './CreatePosition.vue';
 import DataTable from 'primevue/datatable';
 import Dropdown from 'primevue/dropdown';
+import InputSwitch from 'primevue/inputswitch';
 import InputText from 'primevue/inputtext';
+import OverlayPanel from 'primevue/overlaypanel';
 import Paginator from 'primevue/paginator';
 import Position from './Position.vue';
 import Skeleton from 'primevue/skeleton';
-import OverlayPanel from 'primevue/overlaypanel';
 import TheNavigation from '@/components/TheNavigation.vue';
 import axiosConfig from "@/services/axios.config";
 import { ref, watch, onMounted, computed } from 'vue';
-import InputSwitch from 'primevue/inputswitch';
 import { tableConfig, columnConfig, dropdownConfig, paginationConfig, dropdownOptions, overlayConfig } from './config';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
@@ -30,6 +30,12 @@ const headers = ref([
       columnKey: 'name_ru',
       field: 'name_ru',
       header: 'Название (РУ)',
+      is_active: true,
+   },
+   {
+      columnKey: 'code',
+      field: 'code',
+      header: 'Код',
       is_active: true,
    },
    {
