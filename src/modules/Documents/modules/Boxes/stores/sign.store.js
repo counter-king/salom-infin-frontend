@@ -22,6 +22,11 @@ export const useBoxesSignStore = defineStore("sign-stores", {
         active: true
       },
       {
+        header: "Статус",
+        field: "status",
+        active: true
+      },
+      {
         header: "Рег. номер",
         field: "register_number",
         active: true
@@ -59,6 +64,11 @@ export const useBoxesSignStore = defineStore("sign-stores", {
         {
           header: "№",
           field: "index",
+          active: true
+        },
+        {
+          header: "Статус",
+          field: "status",
           active: true
         },
         {
