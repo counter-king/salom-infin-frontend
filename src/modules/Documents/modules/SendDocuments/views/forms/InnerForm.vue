@@ -11,7 +11,9 @@ import FormContainer from "@/modules/Documents/modules/SendDocuments/components/
 import {LayoutWithTabs} from "@/components/DetailLayout";
 import UserMultiSelect from "@/components/Select/UserMultiSelect.vue";
 // Store
+import {useAuthStore} from "@/modules/Auth/stores";
 import {useCommonStore} from "@/stores/common";
+import {useDocumentCountStore} from "@/modules/Documents/stores/count.store";
 import {useSDStoreInner} from "@/modules/Documents/modules/SendDocuments/stores/inner.store";
 // Utils
 import {dispatchNotify} from "@/utils/notify";
@@ -29,8 +31,10 @@ const props = defineProps({
     default: FORM_TYPE_CREATE
   }
 });
+const authStore = useAuthStore();
 const SDStoreInner = useSDStoreInner();
 const commonStore = useCommonStore();
+const countStore = useDocumentCountStore();
 const dialog = ref(false);
 const formRef = ref(null);
 const {t} = useI18n();
@@ -69,6 +73,7 @@ const manage = () => {
 }
 const create = async () => {
   const response = await SDStoreInner.actionCreateDocument(SDStoreInner.model);
+  await countStore.actionDocumentCountList();
   if (response) {
     dialog.value = false;
     dispatchNotify(t('document-sent'), null, COLOR_TYPES.SUCCESS);
@@ -89,6 +94,7 @@ const update = async () => {
       body: SDStoreInner.model
     }
   );
+  await countStore.actionDocumentCountList();
   dispatchNotify(t('document-sent'), null, COLOR_TYPES.SUCCESS);
   await router.replace({
     name: ROUTE_SD_DETAIL,
@@ -231,7 +237,19 @@ onUnmounted(() => {
     >
       <template #content>
         <inner-letter-template
-          :compose-model="{ ...SDStoreInner.model, signers: SDStoreInner.model.__signers, approvers: SDStoreInner.model.__approvers, author: SDStoreInner.model.__signers[0] }"/>
+          :compose-model="{
+            ...SDStoreInner.model,
+            signers: SDStoreInner.model.__signers,
+            approvers: SDStoreInner.model.__approvers,
+            author: SDStoreInner.model.__signers[0],
+            sender: {
+              name: authStore.currentUser?.department?.name
+            },
+            receiver: {
+              departments: SDStoreInner.model.__departments
+            }
+          }"
+        />
       </template>
     </preview-dialog>
     <!-- /PREVIEW -->

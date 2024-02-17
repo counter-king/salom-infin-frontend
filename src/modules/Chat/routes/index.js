@@ -5,7 +5,7 @@ const Chat = [
     meta: {
       isAuthRequired: true
     },
-    component: () => import("../views/Home.vue"),
+    component: () => import("../views/index.vue"),
   }
 ]
 

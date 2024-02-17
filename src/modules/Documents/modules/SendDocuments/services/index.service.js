@@ -15,3 +15,6 @@ export const fetchUpdateDocument = ({ id, body }) => {
 export const fetchGetDocumentDetail = (id) => {
   return axiosConfig.get(`${URLS.compose}/${id}/`);
 }
+export const fetchCustomUpdate = ({ id, body }) => {
+  return axiosConfig.put(`${URLS.compose}/${id}/custom-update/`, body);
+}

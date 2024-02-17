@@ -6,6 +6,7 @@ import { useRouter } from "vue-router";
 // Components
 import { ActionToolbar } from "@/components/Actions";
 import DocType from "@/components/Chips/DocType.vue";
+import Status from "@/modules/Documents/modules/Boxes/components/Status.vue";
 // Constants
 import {
   BOXES_APPROVAL_COLUMNS,
@@ -58,6 +59,13 @@ onMounted(async () => {
       @emit:set-store-headers="(val) => approvalStore.headers = val"
       @emit:row-click="onRowClick"
     >
+      <template #status="{ data }">
+        <status
+          :status="data.is_approved"
+          type="approval"
+        />
+      </template>
+
       <template #register_number="{ data }">
         {{ data.compose.register_number }}
       </template>

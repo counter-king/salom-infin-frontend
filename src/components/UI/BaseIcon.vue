@@ -39,12 +39,14 @@ const icon = defineAsyncComponent(() =>
 
 <style>
 .app-stroke-icon path,
-.app-stroke-icon circle {
+.app-stroke-icon circle,
+.app-filled-icon ellipse {
   stroke: currentColor;
 }
 
 .app-filled-icon path,
-.app-filled-icon circle {
+.app-filled-icon circle,
+.app-filled-icon ellipse {
   fill: currentColor;
 }
 </style>

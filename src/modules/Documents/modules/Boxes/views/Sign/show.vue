@@ -7,6 +7,7 @@ import {fetchRejectSignDocument, fetchSignDocument} from "@/modules/Documents/mo
 // Store
 import { useBoxesSignStore } from "@/modules/Documents/modules/Boxes/stores/sign.store";
 import { useDocumentCountStore } from "@/modules/Documents/stores/count.store";
+import { useSDStore } from "@/modules/Documents/modules/SendDocuments/stores/index.store";
 // Components
 import { LayoutWithTabs } from "@/components/DetailLayout";
 import { ModalComment } from "@/components/Modal";
@@ -17,6 +18,7 @@ import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue";
 
 const signStore = useBoxesSignStore();
 const countStore = useDocumentCountStore();
+const sdStore = useSDStore();
 const route = useRoute();
 const rejectModal = ref(false);
 const changeModal = ref(false);
@@ -33,8 +35,10 @@ const onReject = async (comment) => {
   await signStore.actionGetSignDetail(route.params.id);
   await countStore.actionDocumentCountList();
 }
-const onChangeDocument = (text) => {
-  console.log(text)
+const onChangeDocument = async (text) => {
+  await sdStore.actionCustomUpdate({ id: route.query.compose_id, body: { content: text } });
+  changeModal.value = false;
+  await signStore.actionGetSignDetail(route.params.id);
 }
 const signTest = async () => {
 	await fetchSignDocument({ id: route.params.id, body: { pkcs7: "test" } });
@@ -73,6 +77,7 @@ onMounted( async () => {
           rounded
           shadow
           type="button"
+          :loading="sdStore.customUpdateLoading"
           @click="changeModal = true"
         />
 
@@ -144,6 +149,7 @@ onMounted( async () => {
       editor-type="editor"
       max-width="max-w-[750px]"
       :editor-value="signStore.detailModel?.compose?.content"
+      :loading="sdStore.customUpdateLoading"
     />
     <!-- /CHANGE TEXT MODAL -->
   </template>

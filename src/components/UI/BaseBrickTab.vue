@@ -12,6 +12,18 @@ const props = defineProps({
   panelContainerClass: {
     type: String,
     default: ""
+  },
+  headerClasses: {
+    type: String,
+    default: "rounded-xl h-7"
+  },
+  navClasses: {
+    type: String,
+    default: ""
+  },
+  navContainerClasses: {
+    type: String,
+    default: ""
   }
 });
 
@@ -30,22 +42,23 @@ const { t } = useI18n();
 <template>
   <TabView
     :pt="{
-      nav: { class: ['border-0', 'w-fit', 'bg-greyscale-50', 'rounded-xl', 'p-1'] },
-      panelcontainer: { class: [props.panelContainerClass] }
+      nav: { class: ['border-0', 'w-fit', 'bg-greyscale-50', 'rounded-xl', 'p-1', props.navClasses] },
+      panelcontainer: { class: [props.panelContainerClass] },
+      navcontainer: { class: props.navContainerClasses }
     }"
   >
     <TabPanel
       v-for="(item, index) in tabPanelList"
       :key="item.title"
       :pt="{
-        header: { class: ['rounded-xl', 'h-7'] },
+        header: { class: [props.headerClasses] },
         headeraction: ({ props, parent }) => ({
-                        class: [panelClass(props, parent, index), 'h-7', 'border-0', 'rounded-lg', 'py-2', 'px-4']
+                        class: [panelClass(props, parent, index), 'h-full', 'border-0', 'rounded-lg', 'py-2', 'px-4']
                     }),
       }"
     >
       <template #header>
-        <div class="flex items-center gap-x-2">
+        <div class="flex items-center gap-x-1 justify-center w-full">
           <base-icon
             v-if="item.icon"
             :name="item.icon"

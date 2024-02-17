@@ -12,7 +12,7 @@ import {SD_TYPE_INNER} from "@/modules/Documents/modules/SendDocuments/constants
 import logger from "quill/core/logger";
 import {setValuesToKeys} from "@/utils";
 
-export const useSDStoreInner = defineStore("sd-store-inner", {
+export const useSDStoreInner = defineStore("sd-stores-inner", {
   state: () => ({
     buttonLoading: false,
     detailLoading: false,

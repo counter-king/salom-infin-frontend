@@ -2,7 +2,7 @@
 import { defineStore } from 'pinia'
 import {fetchApprovalDetail, fetchApprovalList} from "@/modules/Documents/modules/Boxes/services/approval.service";
 
-export const useBoxesApprovalStore = defineStore("approval-store", {
+export const useBoxesApprovalStore = defineStore("approval-stores", {
   state: () => ({
     filterState: {
       page: 1,
@@ -17,6 +17,11 @@ export const useBoxesApprovalStore = defineStore("approval-store", {
       {
         header: "№",
         field: "index",
+        active: true
+      },
+      {
+        header: "Статус",
+        field: "status",
         active: true
       },
       {
@@ -57,6 +62,11 @@ export const useBoxesApprovalStore = defineStore("approval-store", {
         {
           header: "№",
           field: "index",
+          active: true
+        },
+        {
+          header: "Статус",
+          field: "status",
           active: true
         },
         {

@@ -7,18 +7,20 @@ import { fetchRejectApprovalDocument } from "@/modules/Documents/modules/Boxes/s
 // Store
 import { useBoxesApprovalStore } from "@/modules/Documents/modules/Boxes/stores/approval.store";
 import { useDocumentCountStore } from "@/modules/Documents/stores/count.store";
+import { useSDStore } from "@/modules/Documents/modules/SendDocuments/stores/index.store";
 // Components
 import Approve from "@/components/Modal/Approve.vue";
+import CancelSign from "@/components/Modal/CancelSign.vue";
 import { LayoutWithTabs } from "@/components/DetailLayout";
 import { ModalComment } from "@/components/Modal";
 import SigningProcessTimeline from "@/modules/Documents/components/SigningProcessTimeline.vue";
 // Enums
 import { CONTENT_TYPES } from "@/enums";
 import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue";
-import CancelSign from "@/components/Modal/CancelSign.vue";
 
 const approvalStore = useBoxesApprovalStore();
 const countStore = useDocumentCountStore();
+const sdStore = useSDStore();
 const route = useRoute();
 const rejectModal = ref(false);
 const changeModal = ref(false);
@@ -42,8 +44,10 @@ const onReject = async (comment) => {
   await getDetail();
   await countStore.actionDocumentCountList();
 }
-const onChangeDocument = (text) => {
-	console.log(text)
+const onChangeDocument = async (text) => {
+  await sdStore.actionCustomUpdate({ id: route.query.compose_id, body: { content: text } });
+  changeModal.value = false;
+  await getDetail();
 }
 
 // Hooks
@@ -77,6 +81,7 @@ onMounted(  () => {
           rounded
           shadow
           type="button"
+          :loading="sdStore.customUpdateLoading"
           @click="changeModal = true"
         />
 
@@ -141,6 +146,7 @@ onMounted(  () => {
 		  editor-type="editor"
 		  max-width="max-w-[750px]"
 		  :editor-value="approvalStore.detailModel?.compose?.content"
+      :loading="sdStore.customUpdateLoading"
 	  />
 	  <!-- /CHANGE TEXT MODAL -->
   </template>
