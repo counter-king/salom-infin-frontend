@@ -1,25 +1,28 @@
 <script setup>
+import AddEmployee from './AddEmployee.vue';
 import Button from 'primevue/button';
 import Column from 'primevue/column';
 import CreateDepartment from './CreateDepartment.vue';
 import DataTable from 'primevue/datatable'
 import Department from './Department.vue';
-import Loading from './Loading.vue';
+import Dropdown from 'primevue/dropdown';
 import Employee from './Employee.vue';
+import Loading from './Loading.vue';
 import NoDepartment from './NoDepartment.vue';
 import Paginator from 'primevue/paginator';
 import axiosConfig from '@/services/axios.config';
 import { ref, onMounted, watch } from 'vue';
-import Dropdown from 'primevue/dropdown';
 import { tableConfig, columnConfig, dropdownConfig, paginationConfig, dropdownOptions } from './config'
 import { useRoute } from 'vue-router';
 const route = useRoute();
 const defaultFilter = { page: 1, page_size: 10, department: '' };
 const activeDepartment = ref(null);
+const addEmployeeVisible = ref(false);
 const count = ref(1);
 const createDepartment = ref(null);
 const createVisible = ref(false);
 const departmentId = route.params?.id;
+const departmentsList = ref([]);
 const employees = ref([]);
 const employeesLoading = ref(false);
 const filter = ref(defaultFilter);
@@ -52,6 +55,9 @@ const setCreateVisible = visible => {
 const setActiveDepartment = department => {
    activeDepartment.value = department;
 };
+const setDepartmentsList = departments => {
+   departmentsList.value = departments;
+}
 const openModal = (departments, department) => {
    createDepartment.value = department;
    createVisible.value = true;
@@ -190,6 +196,7 @@ onMounted(() => {
                                  :parent="topLevelDepartment"
                                  :parentDepartments="[]"
                                  :setActiveDepartment="setActiveDepartment"
+                                 :setDepartmentsList="setDepartmentsList"
                                  :topLevelDepartment="topLevelDepartment"
                                  v-for="(department, index) in subDepartments"
                                  :getSubDepartments="() => {
@@ -283,6 +290,9 @@ onMounted(() => {
                      </div>
                      <div class="w-full">
                         <Button
+                           @click="() => {
+                              addEmployeeVisible = true;
+                           }"
                            size="small"
                            class="rounded-xl px-2 h-[44px] bg-greyscale-100 text-black text-sm font-semibold border-transparent focus:border-none focus:shadow-none w-full flex items-center justify-center">
                            <span class="mr-2">
@@ -331,7 +341,12 @@ onMounted(() => {
                               </svg>
                            </div>
                            <p class="text-center text-greyscale-300 mt-3 mb-6">В этом отделе нет Сотрудников. Нажмите кнопку ниже, чтобы добавить.</p>
-                           <Button size="small" class="rounded-xl bg-greyscale-100 focus:border-none focus:shadow-none text-black text-sm font-semibold border-transparent">
+                           <Button 
+                              @click="() => {
+                                 addEmployeeVisible = true;
+                              }"
+                              size="small"
+                              class="rounded-xl bg-greyscale-100 focus:border-none focus:shadow-none text-black text-sm font-semibold border-transparent">
                               <span class="mr-2">
                                  <svg width="24" height="24" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5003 18.3307C15.1027 18.3307 18.8337 14.5998 18.8337 9.9974C18.8337 5.39502 15.1027 1.66406 10.5003 1.66406C5.89795 1.66406 2.16699 5.39502 2.16699 9.9974C2.16699 14.5998 5.89795 18.3307 10.5003 18.3307ZM11.1253 7.4974C11.1253 7.15222 10.8455 6.8724 10.5003 6.8724C10.1551 6.8724 9.87533 7.15222 9.87533 7.4974L9.87532 9.37242H8.00033C7.65515 9.37242 7.37533 9.65224 7.37533 9.99742C7.37533 10.3426 7.65515 10.6224 8.00033 10.6224H9.87532V12.4974C9.87532 12.8426 10.1551 13.1224 10.5003 13.1224C10.8455 13.1224 11.1253 12.8426 11.1253 12.4974L11.1253 10.6224H13.0003C13.3455 10.6224 13.6253 10.3426 13.6253 9.99742C13.6253 9.65224 13.3455 9.37242 13.0003 9.37242H11.1253V7.4974Z" fill="#635AFF"/>
@@ -344,6 +359,15 @@ onMounted(() => {
                   </template>
                </template>
             </div>
+            <AddEmployee 
+               :activeDepartment="activeDepartment"
+               :departmentsList="departmentsList"
+               :getFirstPageEmployees="getFirstPageEmployees"
+               :topLevelDepartment="topLevelDepartment"
+               :visible="addEmployeeVisible"
+               :setVisible="visible => {
+                  addEmployeeVisible = visible;
+               }"/>
             <CreateDepartment
                :getSubDeparments="() => {
                   getSubDepartments(departmentId);

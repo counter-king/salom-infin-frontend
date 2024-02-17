@@ -20,7 +20,7 @@ const supervisorsPage = ref(1);
 const searchAssistants = ({ search, page }) => {
    assistantLoading.value = true;
    assistant.value = search;
-   const currentUserCompany = authStore.currentUser.company;
+   const currentUserCompany = authStore.currentUser?.company?.id;
    const newSearch = typeof search === 'string' ? search : search.full_name;
    axiosConfig
       .get(`users/?page=${page}&search=${newSearch}&company=${currentUserCompany}`)
@@ -42,7 +42,7 @@ const searchAssistants = ({ search, page }) => {
 const searchSupervisors = ({ search, page }) => {
    supervisor.value = search;
    supervisorLoading.value = true;
-   const currentUserCompany = authStore.currentUser.company;
+   const currentUserCompany = authStore.currentUser?.company?.id;
    const newSearch = typeof search === 'string' ? search : search.full_name;
    axiosConfig
       .get(`users/?page=${page}&search=${newSearch}&company=${currentUserCompany}`)

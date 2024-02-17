@@ -22,7 +22,7 @@ const loading = ref(false);
 const searchTopSigners = ({ search, page }) => {
    topSigner.value = search;
    topSignersLoading.value = true;
-   const currentUserCompany = authStore.currentUser.company;
+   const currentUserCompany = authStore.currentUser?.company?.id;
    const newSearch = typeof search === 'string' ? search : search.full_name;
    axiosConfig
       .get(`users/?page=${page}&search=${newSearch}&comapany=${currentUserCompany}`)
