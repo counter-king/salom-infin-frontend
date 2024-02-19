@@ -74,8 +74,8 @@ onMounted(() => {
         v-model="$v.title.$model"
         :error="$v.title"
         required
-        label="name-event"
-        placeholder="enter-name-event"
+        label="name-task"
+        placeholder="enter-name-task"
       />
     </base-col>
 
