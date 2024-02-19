@@ -4,6 +4,8 @@ import { ref, unref, computed } from 'vue'
 // Store
 import { useCommonStore } from '@/stores/common'
 import { useDocFlowStore } from '../stores/docflow.store'
+// Enums
+import { JOURNAL_CODES } from '@/enums'
 // Composable
 const commonStore = useCommonStore()
 const docFlowStore = useDocFlowStore()
@@ -13,37 +15,32 @@ const items = ref([
   {
     label: 'Входящий документ',
     component: 'Incoming',
-    command: () => documentType('Incoming')
+    command: () => documentType(JOURNAL_CODES.INCOMING)
   },
   {
     label: 'Внутренний документ',
     component: 'Inner',
-    command: () => documentType('Inner')
+    command: () => documentType(JOURNAL_CODES.INNER)
   },
   {
     label: 'Исходящий документ',
     component: 'Outgoing',
-    command: () => documentType('Outgoing')
+    command: () => documentType(JOURNAL_CODES.OUTGOING)
   },
   {
     label: 'Обращения',
     component: 'Appeal',
-    command: () => documentType('Appeal')
-  },
-  {
-    label: 'Входящие от филиалов',
-    component: 'IncomingBranches',
-    command: () => documentType('IncomingBranches')
+    command: () => documentType(JOURNAL_CODES.APPEALS)
   },
   {
     label: 'Приказы и распоряжения',
     component: 'OrderInstruction',
-    command: () => documentType('OrderInstruction')
+    command: () => documentType(JOURNAL_CODES.ORDERS_PROTOCOLS)
   },
   {
     label: 'Заявления',
     component: 'Statement',
-    command: () => documentType('Statement')
+    command: () => documentType(JOURNAL_CODES.APPLICATION)
   }
 ])
 // Computed
@@ -51,7 +48,7 @@ const menuList = computed(() => commonStore.journalsList.map(journal => {
   return {
     ...journal,
     label: journal.name,
-    command: () => documentType(journal.id)
+    command: () => documentType(journal.code)
   }
 }))
 const menuActiveText = computed(() => items.value.find(menu => menu.component === docFlowStore.documentMenuType.name))
@@ -60,8 +57,8 @@ const toggle = (event) => {
   const _menuRef = unref(menuRef)
   _menuRef.menuRef.toggle(event)
 }
-const documentType = (journalId) => {
-  docFlowStore.actionLoadFormCreateDocument({ journalId })
+const documentType = (journalCode) => {
+	docFlowStore.actionLoadFormCreateDocument({ journalCode })
 }
 </script>
 

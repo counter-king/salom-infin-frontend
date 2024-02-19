@@ -21,32 +21,33 @@ const router = useRouter()
 const commonStore = useCommonStore()
 const docFlowStore = useDocFlowStore()
 // Computed
-const journal = computed(() => commonStore.getJournalById(Number(route.params.journal)))
+const journal = computed(() => commonStore.getJournalByCode(route.params.code))
 // Watch
 watch(
-  () => route.params.journal,
+  () => route.params.code,
   async (_route) => {
-    await router.replace({
-      query: {
-        ...route.query,
-        journal_id: Number(_route)
-      }
-    })
-    _route && await docFlowStore.actionGetList({
-	    a: 1
-    })
-  }
+		if(route.params.code) {
+			await router.replace({
+				query: {
+					...route.query,
+					journal_id: journal.value.id
+				}
+			})
+			_route && await docFlowStore.actionGetList(route.query)
+		}
+  },
+	{ immediate: true }
 )
 // Methods
 const openModal = () => {
-  docFlowStore.actionLoadFormCreateDocument({ journalId: Number(route.params.journal) })
+  docFlowStore.actionLoadFormCreateDocument({ journalCode: Number(route.params.code) })
   docFlowStore.actionToggleModalCreateDocument(true)
 }
 const link = (data) => {
   return {
     name: 'RegistrationShow',
     params: {
-      journal: route.params.journal,
+      code: route.params.code,
       id: data.id
     }
   }
