@@ -13,7 +13,7 @@ import {
 // Utils
 import { clearModel, setValuesToKeys } from '@/utils'
 import { dispatchNotify } from '@/utils/notify'
-import { COLOR_TYPES, JOURNAL } from '@/enums'
+import { COLOR_TYPES, JOURNAL, JOURNAL_CODES } from '@/enums'
 export const useDocFlowStore = defineStore("docFlowStore", {
   state: () => ({
     routes: {
@@ -240,11 +240,7 @@ export const useDocFlowStore = defineStore("docFlowStore", {
     documentMenuModal: false,
     documentMenuType: {
       name: 'Incoming',
-      journalId: JOURNAL.INCOMING
-    },
-    filterState: {
-      page: 1,
-      page_size: 3
+      journalId: JOURNAL_CODES.INCOMING
     },
     totalCount: 0
   }),
@@ -253,7 +249,7 @@ export const useDocFlowStore = defineStore("docFlowStore", {
     * @param { Object } params Журнал id
     * Получить список
     * */
-    async actionGetList(params) {
+    async actionGetList(params = {}) {
       const collectStore = useCollectRequestsStore()
 
       this.listLoading = true
@@ -400,41 +396,41 @@ export const useDocFlowStore = defineStore("docFlowStore", {
     * Загрузить форму для создания документа
     * */
     actionLoadFormCreateDocument(payload) {
-      switch(payload.journalId) {
-        case JOURNAL.INCOMING: // Входящий
+      switch(Number(payload.journalCode)) {
+        case JOURNAL_CODES.INCOMING: // Входящий
           this.documentMenuType = {
             name: 'Incoming',
-            journalId: JOURNAL.INCOMING
+            journalId: JOURNAL_CODES.INCOMING
           }
           break
-        case JOURNAL.INNER: // Внутренние
+        case JOURNAL_CODES.INNER: // Внутренние
           this.documentMenuType = {
             name: 'Inner',
-            journalId: JOURNAL.INNER
+            journalId: JOURNAL_CODES.INNER
           }
           break
-        case JOURNAL.OUTGOING: // Исходящие
+        case JOURNAL_CODES.OUTGOING: // Исходящие
           this.documentMenuType = {
             name: 'Outgoing',
-            journalId: JOURNAL.OUTGOING
+            journalId: JOURNAL_CODES.OUTGOING
           }
           break
-        case JOURNAL.APPEALS: // Обращение
+        case JOURNAL_CODES.APPEALS: // Обращение
           this.documentMenuType = {
             name: 'Appeal',
-            journalId: JOURNAL.APPEALS
+            journalId: JOURNAL_CODES.APPEALS
           }
           break
-        case JOURNAL.ORDERS_PROTOCOLS: // Приказы и распоряжения
+        case JOURNAL_CODES.ORDERS_PROTOCOLS: // Приказы и распоряжения
           this.documentMenuType = {
             name: 'OrderInstruction',
-            journalId: JOURNAL.ORDERS_PROTOCOLS
+            journalId: JOURNAL_CODES.ORDERS_PROTOCOLS
           }
           break
         default: // Заявления
           this.documentMenuType = {
             name: 'Statement',
-            journalId: JOURNAL.APPLICATION
+            journalId: JOURNAL_CODES.APPLICATION
           }
       }
     },

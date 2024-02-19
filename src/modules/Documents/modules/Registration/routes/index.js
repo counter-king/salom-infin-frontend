@@ -1,5 +1,5 @@
 // Enums
-import { JOURNAL } from '@/enums'
+import { JOURNAL, JOURNAL_CODES } from '@/enums'
 
 const Registration = [
   {
@@ -12,13 +12,13 @@ const Registration = [
     redirect: {
       name: 'RegistrationList',
       params: {
-        journal: JOURNAL.INCOMING
+        code: JOURNAL_CODES.INCOMING
       }
     },
     component: () => import("../views/index.vue"),
     children: [
       {
-        path: ":journal",
+        path: ":code",
         name: "RegistrationList",
         meta: {
           isAuthRequired: true,
@@ -27,7 +27,7 @@ const Registration = [
         component: () => import("../views/List.vue"),
       },
       {
-        path: ":journal/:id/show",
+        path: ":code/:id/show",
         name: "RegistrationShow",
         meta: {
           isAuthRequired: true,
