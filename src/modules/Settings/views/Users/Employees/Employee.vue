@@ -61,7 +61,7 @@ const employeeEdit = () => {
    const positionId = position.value?.id;
    const statusId = status.value?.id;
    const top_level_department = topLevelDepartment.value?.id;
-   if(first_name && last_name && father_name && String(pinfl || '')?.length === 14 && phone?.length === 12 && companyId && positionId && statusId && top_level_department) {
+   if(first_name && last_name && String(pinfl || '')?.length === 14 && phone?.length === 12 && companyId && positionId && statusId && top_level_department) {
       editLoading.value = true;
       const data = { phone, first_name, last_name, father_name, pinfl, company: companyId, top_level_department, department, position: positionId, status: statusId, department_ids };
       axiosConfig
@@ -100,8 +100,10 @@ const employeeEdit = () => {
    }
 };
 const searchCompanies = ({ search, page }) => {
-   company.value = search;
    companiesLoading.value = true;
+   company.value = search;
+   departments.value = [''];
+   topLevelDepartment.value = '';
    axiosConfig
       .get(`companies/?condition=A&page=${page}&search=${search}`)
       .then(response => {
@@ -123,8 +125,9 @@ const searchTopLevelDepartments = ({ search, page }) => {
    departments.value = [''];
    topLevelDepartmentsLoading.value = true;
    topLevelDepartment.value = search;
+   const companyId = company.value?.id;
    axiosConfig
-      .get(`departments/top-level-departments/?condition=A&page=${page}&search=${search}`)
+      .get(`departments/top-level-departments/?condition=A&page=${page}&search=${search}&company=${companyId}`)
       .then(response => {
          const newPage = response?.data?.next ? page + 1 : null;
          const results = response?.data?.results;
@@ -428,32 +431,36 @@ onMounted(() => {
             placeholder="Введите филиал"
             @onChange="value => {
                company = value;
+               departments = [''];
+               topLevelDepartment = '';
             }"
             >
             <template #option="{ option }">
                <div class="flex items-center h-11 px-3 text-base">{{ option.name }}</div>
             </template>
          </base-auto-complete>
-         <p class="text-sm text-greyscale-500 font-medium mb-1 mt-6">Департамент<span class="text-red-500 ml-1">*</span></p>
-         <base-auto-complete
-            :loading="topLevelDepartmentsLoading"
-            :options="topLevelDepartments"
-            :page="topLevelDepartmentsPage"
-            :value="topLevelDepartment"
-            @onInputChange="searchTopLevelDepartments"
-            key="id"
-            label="name"
-            noOptionsMessage="Департамент не найден"
-            placeholder="Введите департамент"
-            @onChange="value => {
-               topLevelDepartment = value;
-            }"
-            >
-            <template #option="{ option }">
-               <div class="flex items-center h-11 px-3 text-base">{{ option.name }}</div>
-            </template>
-         </base-auto-complete>
-         <template v-if="topLevelDepartment?.id">
+         <template v-if="company && company.id">
+            <p class="text-sm text-greyscale-500 font-medium mb-1 mt-6">Департамент<span class="text-red-500 ml-1">*</span></p>
+            <base-auto-complete
+               :loading="topLevelDepartmentsLoading"
+               :options="topLevelDepartments"
+               :page="topLevelDepartmentsPage"
+               :value="topLevelDepartment"
+               @onInputChange="searchTopLevelDepartments"
+               key="id"
+               label="name"
+               noOptionsMessage="Департамент не найден"
+               placeholder="Введите департамент"
+               @onChange="value => {
+                  topLevelDepartment = value;
+               }"
+               >
+               <template #option="{ option }">
+                  <div class="flex items-center h-11 px-3 text-base">{{ option.name }}</div>
+               </template>
+            </base-auto-complete>
+         </template>
+         <template v-if="topLevelDepartment && topLevelDepartment.id">
             <Department
                :department="department"
                :departments="departments"

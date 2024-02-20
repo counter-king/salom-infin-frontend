@@ -43,7 +43,7 @@ export const useCommonStore = defineStore("common", {
     /*
     *
     * */
-    getJournalById: (state) => (id) => state.journalsList.find(journal => journal.id === id)
+    getJournalByCode: (state) => (code) => state?.journalsList.find(journal => journal.code === code)
 	},
 	actions: {
 		async init() {
@@ -52,9 +52,7 @@ export const useCommonStore = defineStore("common", {
       const documentCount = useDocumentCountStore()
 
       await documentCount.actionDocumentCountList()
-      await correspondent.actionGetList({
-	      a: 1
-      })
+      await correspondent.actionGetList({})
 			await users.actionUsersList()
       await users.actionEmployeeGroupList()
       this.actionDeliveryTypesList()

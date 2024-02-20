@@ -52,13 +52,9 @@ const updateStatus = value => {
             });
             props.setAssistants(newAssistants);
             dispatchNotify('Состояние обновлено', '', 'success');
-         } else {
-            dispatchNotify('Состояние не обновлено', '', 'error');
          }
       })
-      .catch(() => {
-         dispatchNotify('Состояние не обновлено', '', 'error');
-      })
+      .catch(() => {})
       .finally(() => {
          statusLoading.value = false;
       });
@@ -86,7 +82,7 @@ const assistantDelete = () => {
 const searchAssistants = ({ search, page }) => {
    assistantLoading.value = true;
    assistant.value = search;
-   const currentUserCompany = authStore.currentUser.company;
+   const currentUserCompany = authStore.currentUser?.company?.id;
    const newSearch = typeof search === 'string' ? search : search.full_name;
    axiosConfig
       .get(`users/?page=${page}&search=${newSearch}&company=${currentUserCompany}`)
@@ -108,7 +104,7 @@ const searchAssistants = ({ search, page }) => {
 const searchSupervisors = ({ search, page }) => {
    supervisor.value = search;
    supervisorLoading.value = true;
-   const currentUserCompany = authStore.currentUser.company;
+   const currentUserCompany = authStore.currentUser?.company?.id;
    const newSearch = typeof search === 'string' ? search : search.full_name;
    axiosConfig
       .get(`users/?page=${page}&search=${newSearch}&company=${currentUserCompany}`)
@@ -151,13 +147,9 @@ const assistantEdit = () => {
                   }
                });
                props.setAssistants(newAssistants);
-            } else {
-               dispatchNotify('Помощник не изменен', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Помощник не изменен', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             editLoading.value = false;
          });

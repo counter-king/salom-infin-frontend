@@ -30,16 +30,16 @@ const createDepartment = () => {
          .post('/departments/', { name_ru, name_uz, code, condition: 'A', parent, code, parent_code, company })
          .then(response => {
             if(response?.status === 201) {
-               dispatchNotify('Отдел создан', '', 'success');
+               dispatchNotify('Субдепартамент создан', '', 'success');
                department.value = defaultDepartment;
                props.getSubDeparments();
                props.setVisible(false);
             } else {
-               dispatchNotify('Отдел не создан', '', 'error');
+               dispatchNotify('Субдепартамент не создан', '', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Отдел не создан', '', 'error');
+            dispatchNotify('Субдепартамент не создан', '', 'error');
          })
          .finally(() => {
             loading.value = false;
@@ -102,7 +102,7 @@ const createDepartment = () => {
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Код верхнего уровня</p>
          <InputNumber
-            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :pt="{ root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
             :useGrouping="false"
             disabled
             v-model="parentDepartment.code"
@@ -110,7 +110,7 @@ const createDepartment = () => {
          <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="department.code"
-            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
+            :pt="{ root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
             placeholder="Введите код"
             type="text"
             @update:modelValue="value => {

@@ -12,6 +12,8 @@ import { dispatchNotify } from '@/utils/notify';
 import { ref, watch, onMounted } from 'vue';
 import { useI18n } from "vue-i18n";
 import Checkbox from 'primevue/checkbox';
+import { useCommonStore } from '@/stores/common';
+const commonStore = useCommonStore();
 const { locale } = useI18n();
 const props = defineProps({ data: Object, field: String, getFirstPageJournals: Function, journals: Array, setJournals: Function });
 const conditionLoading = ref(false);
@@ -36,6 +38,7 @@ const journalEdit = () => {
          .then(response => {
             const status = response?.status;
             if(status === 200) {
+               commonStore.actionJournalsList();
                dispatchNotify('Журнал обновлено', '', 'success');
                editVisible.value = false;
                props.getFirstPageJournals();
@@ -64,6 +67,7 @@ const journalDelete = () => {
       .delete(`journals/${journalId}/`)
       .then(response => {
          if(response?.status === 204) {
+            commonStore.actionJournalsList();
             deleteVisible.value = false;
             dispatchNotify('Журнал удален', '', 'success')
             props.getFirstPageJournals();
@@ -86,8 +90,9 @@ const updateCondition = value => {
       .then(response => {
          const status = response?.status;
          if(status === 200) {
-            props.getFirstPageJournals();
+            commonStore.actionJournalsList();
             dispatchNotify('Статус обновлено', '', 'success');
+            props.getFirstPageJournals();
          } else {
             dispatchNotify('Статус не обновлено', '', 'error');
          }
@@ -107,8 +112,9 @@ const changeOrder = () => {
       .then(response => {
          const status = response?.status;
          if(status === 200) {
-            props.getFirstPageJournals();
+            commonStore.actionJournalsList();
             dispatchNotify('Сортировка обновлено', '', 'success');
+            props.getFirstPageJournals();
          } else {
             dispatchNotify('Сортировка не обновлено', '', 'error');
          }
@@ -152,7 +158,7 @@ const openEditModal = () => {
    editJournal.value = data;
    editVisible.value = true;
 };
-watch(props.data.sort_order, value => {
+watch(() => props.data?.sort_order, value => {
    sort_order.value = { value };
 });
 watch(locale, () => {

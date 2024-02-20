@@ -1,5 +1,6 @@
 <script setup>
 import Button from 'primevue/button';
+import Checkbox from 'primevue/checkbox';
 import Dialog from 'primevue/dialog';
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
@@ -7,8 +8,9 @@ import ProgressSpinner from 'primevue/progressspinner';
 import axiosConfig from "@/services/axios.config";
 import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
-import Checkbox from 'primevue/checkbox';
 import { ref } from 'vue';
+import { useCommonStore } from '@/stores/common';
+const commonStore = useCommonStore();
 const props = defineProps({ getFirstPageJournals: Function, setVisible: Function, visible: Boolean });
 const defaultJournal = { name_uz: '', name_ru: '', prefix: '', number_of_chars: 10, is_for_compose: true, is_auto_numbered: true, code: 0 };
 const journal = ref(defaultJournal);
@@ -23,6 +25,7 @@ const createJournal = () => {
          .post('journals/', { name_ru, name_uz, is_active: true, prefix, number_of_chars, is_for_compose, is_auto_numbered, code })
          .then(response => {
             if(response?.status === 201) {
+               commonStore.actionJournalsList();
                dispatchNotify('Журнал создан', '', 'success');
                journal.value = defaultJournal
                props.getFirstPageJournals();

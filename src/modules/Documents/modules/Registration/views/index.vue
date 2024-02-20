@@ -18,7 +18,7 @@ const routes = computed(() => {
     title: journal.name,
     link: 'RegistrationList',
     params: {
-      journal: journal.id
+      code: journal.code
     }
   }))
 })
