@@ -51,7 +51,7 @@ const receivers = computed(() => {
     </div>
 
     <div class="flex w-full justify-center text-center text-sm font-semibold my-5">
-      Xizmat xati
+      {{ props.composeModel?.title?.name }}
     </div>
 
     <div class="text-justify" v-html="props.composeModel?.content"></div>
