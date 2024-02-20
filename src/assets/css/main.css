@@ -113,3 +113,16 @@ body {
 .p-multiselect-panel .p-multiselect-items .p-multiselect-item:not(.p-highlight):not(.p-disabled).p-focus {
   background: transparent;
 }
+
+.bg-dep-name {
+  background-color: rgb(187 187 187 / 20%);
+  max-width: 90%;
+  transform: skewX(-25deg);
+  transform-origin: top;
+  padding: 4px 16px;
+}
+
+.bg-dep-name-child {
+  transform: skewX(25deg);
+  transform-origin: top;
+}

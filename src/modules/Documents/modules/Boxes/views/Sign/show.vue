@@ -1,7 +1,7 @@
 <script setup>
 // Core
 import { computed, onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 // Service
 import {fetchRejectSignDocument, fetchSignDocument} from "@/modules/Documents/modules/Boxes/services/sign.service";
 // Store
@@ -20,6 +20,7 @@ const signStore = useBoxesSignStore();
 const countStore = useDocumentCountStore();
 const sdStore = useSDStore();
 const route = useRoute();
+const router = useRouter();
 const rejectModal = ref(false);
 const changeModal = ref(false);
 
@@ -38,7 +39,10 @@ const onReject = async (comment) => {
 const onChangeDocument = async (text) => {
   await sdStore.actionCustomUpdate({ id: route.query.compose_id, body: { content: text } });
   changeModal.value = false;
-  await signStore.actionGetSignDetail(route.params.id);
+  await countStore.actionDocumentCountList();
+  await router.replace({
+    name: "SignIndex"
+  })
 }
 const signTest = async () => {
 	await fetchSignDocument({ id: route.params.id, body: { pkcs7: "test" } });
@@ -62,7 +66,7 @@ onMounted( async () => {
       :content-type="CONTENT_TYPES.SEND_DOCUMENT"
       :files="signStore.detailModel?.compose?.files"
       :object-id="signStore.detailModel?.compose?.id"
-      :title="signStore.detailModel?.compose?.title"
+      :title="signStore.detailModel?.compose?.title?.name"
     >
       <template #header-end>
         <base-button

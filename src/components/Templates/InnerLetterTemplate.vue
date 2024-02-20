@@ -2,7 +2,7 @@
 // Core
 import { computed } from "vue";
 // Utils
-import { formatDate } from "@/utils/formatDate";
+import {formatDate, formatDateHour} from "@/utils/formatDate";
 import { formatUserFullName } from "@/utils";
 // Components
 import QrcodeVue from "qrcode.vue";
@@ -29,40 +29,41 @@ const receivers = computed(() => {
 <template>
   <div class="inner-letter-template">
 <!--    <pre>{{ composeModel }}</pre>-->
-    <div class="flex justify-between border-b pb-4 items-center">
-      <div class="flex">
-        <img src="/images/logo.svg" alt="Logo" />
-        <img src="/images/logo-text.svg" alt="Logo text" class="invert ml-2" />
-      </div>
-
-      <div class="flex flex-col items-end gap-y-2">
-        <span class="text-sm font-semibold block max-w-[300px] text-right">{{ props.composeModel?.sender?.name }}</span>
-<!--        <span class="text-sm font-medium text-greyscale-500">{{ props.composeModel?.register_date && formatDate(props.composeModel?.register_date) }}  № {{ props.composeModel?.register_number }}</span>-->
-      </div>
+    <div class="pb-4">
+      <img src="@/assets/img/logo.png" alt="Logo" />
     </div>
 
-    <div class="flex justify-between my-5">
-      <div class="flex flex-col text-sm font-medium">
-        <span> № {{ props.composeModel?.register_number }}</span>
-        <span>{{ props.composeModel?.register_date && formatDate(props.composeModel?.register_date) }}</span>
-      </div>
-      <div class="flex flex-col items-end text-sm font-medium text-right gap-y-2">
-        <div class="max-w-[300px]" v-for="receiver in receivers" :key="receiver.id">
-          {{ receiver.name }}
+    <div class="overflow-hidden">
+      <div class="bg-dep-name">
+        <div class="bg-dep-name-child">
+          <span class="text-sm font-semibold block">{{ props.composeModel?.sender?.name }}</span>
         </div>
       </div>
     </div>
 
-    <div class="text-justify" v-html="props.composeModel?.content">
-
+    <div class="flex text-sm font-medium gap-x-2 mt-4">
+      <span>{{ props.composeModel?.register_date && formatDate(props.composeModel?.register_date) }}</span>
+      <span> № {{ props.composeModel?.register_number }}</span>
     </div>
 
-    <div class="mt-6 pb-2 border-b">
+    <div class="flex flex-col items-end text-sm font-semibold text-right gap-y-2 my-4">
+      <div class="max-w-[300px]" v-for="receiver in receivers" :key="receiver.id">
+        {{ receiver.name }}
+      </div>
+    </div>
+
+    <div class="flex w-full justify-center text-center text-sm font-semibold my-5">
+      {{ props.composeModel?.title?.name }}
+    </div>
+
+    <div class="text-justify" v-html="props.composeModel?.content"></div>
+
+    <div class="mt-6 pb-2">
       <template v-for="item in props.composeModel?.signers" :key="item.id">
 <!--        <pre>{{ item }}</pre>-->
         <base-row class="mb-2 items-center">
           <base-col col-class="w-1/2">
-            <span class="text-sm font-medium block">{{ item.user ? item.user.position.name : item.position.name }}</span>
+            <span class="text-sm font-semibold block">{{ item.user ? item.user.position.name : item.position.name }}</span>
           </base-col>
 
           <base-col col-class="w-1/4">
@@ -76,15 +77,23 @@ const receivers = computed(() => {
           </base-col>
 
           <base-col col-class="w-1/4">
-            <span class="text-sm font-medium block">{{ formatUserFullName(item) }}</span>
+            <span class="text-sm font-semibold block">{{ formatUserFullName(item) }}</span>
           </base-col>
         </base-row>
       </template>
     </div>
 
-    <div class="flex flex-col my-4 text-sm font-light">
-      <span>Ijrochi: {{ props.composeModel?.author && formatUserFullName(props.composeModel?.author) }}</span>
-      <span>Tel: +99899 777 77 77 (1234)</span>
+    <div class="flex flex-col my-4 text-xs font-light">
+      <span><span class="font-medium">Ijrochi:</span> {{ props.composeModel?.author && formatUserFullName(props.composeModel?.author) }}</span>
+      <span><span class="font-medium">Tel:</span> +99899 777 77 77 (1234)</span>
+      <span>
+        <span class="font-medium">Kiritildi:</span>
+        {{ props.composeModel?.created_date && formatDateHour(props.composeModel.created_date) + '&nbsp' }}
+        <template v-if="props.composeModel?.is_signed">
+          <span class="font-medium">Imzolandi:</span>
+          {{ props.composeModel?.modified_date && formatDateHour(props.composeModel.modified_date) }}
+        </template>
+      </span>
     </div>
   </div>
 </template>

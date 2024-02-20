@@ -48,6 +48,7 @@ const onChangeDocument = async (text) => {
   await sdStore.actionCustomUpdate({ id: route.query.compose_id, body: { content: text } });
   changeModal.value = false;
   await getDetail();
+  await countStore.actionDocumentCountList();
 }
 
 // Hooks
@@ -66,7 +67,7 @@ onMounted(  () => {
       :content-type="CONTENT_TYPES.SEND_DOCUMENT"
       :files="approvalStore.detailModel?.compose?.files"
       :object-id="approvalStore.detailModel?.compose?.id"
-      :title="approvalStore.detailModel?.compose?.title"
+      :title="approvalStore.detailModel?.compose?.title?.name"
     >
       <template #header-end>
         <base-button

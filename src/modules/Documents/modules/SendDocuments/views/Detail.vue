@@ -41,7 +41,7 @@ onMounted(async () => {
 
   <template v-else>
     <layout-with-tabs
-      :title="SDStore.detailModel?.title"
+      :title="SDStore.detailModel?.title?.name"
       :object-id="SDStore.detailModel?.id"
       :content-type="CONTENT_TYPES.SEND_DOCUMENT"
       :files="SDStore.detailModel?.files"
