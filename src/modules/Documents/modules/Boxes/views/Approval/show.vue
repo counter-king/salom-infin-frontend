@@ -48,6 +48,7 @@ const onChangeDocument = async (text) => {
   await sdStore.actionCustomUpdate({ id: route.query.compose_id, body: { content: text } });
   changeModal.value = false;
   await getDetail();
+  await countStore.actionDocumentCountList();
 }
 
 // Hooks
