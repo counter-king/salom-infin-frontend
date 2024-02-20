@@ -16,15 +16,16 @@ const { t } = useI18n();
 
       <left-sidebar />
 
-      <template v-if="true">
+      <template v-if="false">
         <chat-are-wrapper />
 
         <right-sidebar />
       </template>
 
       <template v-else>
-        <div class="flex justify-center items-center w-full h-full bg-greyscale-50">
-          chatni tanlang
+        <div class="flex flex-col justify-center items-center w-full h-full bg-greyscale-50">
+          <img src="@/assets/img/chat-default-1.png" alt="no chat" class="w-[142px]">
+          <span class="block text-lg font-semibold mt-4">{{ t('select-chat') }}</span>
         </div>
       </template>
 

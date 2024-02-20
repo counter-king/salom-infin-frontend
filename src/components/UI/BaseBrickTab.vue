@@ -24,9 +24,17 @@ const props = defineProps({
   navContainerClasses: {
     type: String,
     default: ""
+  },
+  onTabChange: {
+    type: Function,
+    default: () => void 0
   }
 });
 
+// Methods
+const onTabChange = (val) => {
+  props.onTabChange(val);
+};
 const panelClass = (props, parent, index) => {
   return [
     {
@@ -46,6 +54,7 @@ const { t } = useI18n();
       panelcontainer: { class: [props.panelContainerClass] },
       navcontainer: { class: props.navContainerClasses }
     }"
+    @tab-change="onTabChange"
   >
     <TabPanel
       v-for="(item, index) in tabPanelList"

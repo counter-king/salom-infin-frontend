@@ -66,7 +66,7 @@ onMounted(  () => {
       :content-type="CONTENT_TYPES.SEND_DOCUMENT"
       :files="approvalStore.detailModel?.compose?.files"
       :object-id="approvalStore.detailModel?.compose?.id"
-      :title="approvalStore.detailModel?.compose?.title"
+      :title="approvalStore.detailModel?.compose?.title?.name"
     >
       <template #header-end>
         <base-button

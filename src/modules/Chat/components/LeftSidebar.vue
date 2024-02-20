@@ -43,6 +43,11 @@ watch(search, async (val) => {
 const createChat = async (user) => {
   await chatStore.actionCreatePrivateChat({ member_id: user.id });
 }
+const onTabChange = async (val) => {
+  if (val.index === 0) {
+    await chatStore.actionGetPrivateChatList({});
+  }
+}
 
 // Hooks
 onMounted(async () => {
@@ -103,6 +108,7 @@ onMounted(async () => {
         nav-classes="w-full"
         nav-container-classes="mx-4"
         class="mt-2"
+        :on-tab-change="onTabChange"
       >
         <template #personal>
           <div class="overflow-hidden overflow-y-auto px-4" style="height: calc(100vh - 332px)">

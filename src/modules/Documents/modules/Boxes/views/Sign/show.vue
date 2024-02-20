@@ -62,7 +62,7 @@ onMounted( async () => {
       :content-type="CONTENT_TYPES.SEND_DOCUMENT"
       :files="signStore.detailModel?.compose?.files"
       :object-id="signStore.detailModel?.compose?.id"
-      :title="signStore.detailModel?.compose?.title"
+      :title="signStore.detailModel?.compose?.title?.name"
     >
       <template #header-end>
         <base-button
