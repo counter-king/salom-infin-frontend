@@ -33,15 +33,15 @@ const shortDescriptionEdit = () => {
                      return shortDescription;
                   }
                });
-               dispatchNotify('Краткое описание обновлено', '', 'success');
+               dispatchNotify('Краткое описание обновлен', '', 'success');
                editVisible.value = false;
                props.setShortDescriptions(newShortDescriptions);
             } else {
-               dispatchNotify('Краткое описание не обновлено', '', 'error');
+               dispatchNotify('Краткое описание не обновлен', '', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Краткое описание не обновлено', '', 'error');
+            dispatchNotify('Краткое описание не обновлен', '', 'error');
          })
          .finally(() => {
             editLoading.value = false;

@@ -39,15 +39,15 @@ const positionEdit = () => {
                      return position;
                   }
                });
-               dispatchNotify('Должность обновлено', '', 'success');
+               dispatchNotify('Должность обновлен', '', 'success');
                editVisible.value = false;
                props.setPositions(newPositions);
             } else {
-               dispatchNotify('Должность не обновлено', '', 'error');
+               dispatchNotify('Должность не обновлен', '', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Должность не обновлено', '', 'error');
+            dispatchNotify('Должность не обновлен', '', 'error');
          })
          .finally(() => {
             editLoading.value = false;
@@ -99,13 +99,13 @@ const updateCondition = value => {
                }
             });
             props.setPositions(newPositions);
-            dispatchNotify('Статус обновлено', '', 'success');
+            dispatchNotify('Статус обновлен', '', 'success');
          } else {
-            dispatchNotify('Статус не обновлено', '', 'error');
+            dispatchNotify('Статус не обновлен', '', 'error');
          }
       })
       .catch(() => {
-         dispatchNotify('Статус не обновлено', '', 'error');
+         dispatchNotify('Статус не обновлен', '', 'error');
       })
       .finally(() => {
          conditionLoading.value = false;

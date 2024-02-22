@@ -201,13 +201,13 @@ const updateStatus = value => {
                }
             });
             props.setEmployees(newEmployees);
-            dispatchNotify('Состояние обновлено', '', 'success');
+            dispatchNotify('Состояние обновлен', '', 'success');
          } else {
-            dispatchNotify('Состояние не обновлено', '', 'error');
+            dispatchNotify('Состояние не обновлен', '', 'error');
          }
       })
       .catch(() => {
-         dispatchNotify('Состояние не обновлено', '', 'error');
+         dispatchNotify('Состояние не обновлен', '', 'error');
       })
       .finally(() => {
          statusEditLoading.value = false;

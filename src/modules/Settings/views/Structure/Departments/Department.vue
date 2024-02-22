@@ -67,15 +67,15 @@ const departmentEdit = () => {
                      return department;
                   }
                });
-               dispatchNotify('Департамент обновлено', '', 'success');
+               dispatchNotify('Департамент обновлен', '', 'success');
                editVisible.value = false;
                props.setDepartments(newDepartments);
             } else {
-               dispatchNotify('Департамент не обновлено', '', 'error');
+               dispatchNotify('Департамент не обновлен', '', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Департамент не обновлено', '', 'error');
+            dispatchNotify('Департамент не обновлен', '', 'error');
          })
          .finally(() => {
             editLoading.value = false;
@@ -125,7 +125,7 @@ const updateCondition = value => {
                }
             });
             props.setDepartments(newDepartments);
-            dispatchNotify('Статус обновлено', '', 'success');
+            dispatchNotify('Статус обновлен', '', 'success');
          }
       })
       .catch(() => {})

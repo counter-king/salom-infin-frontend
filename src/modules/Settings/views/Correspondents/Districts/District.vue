@@ -44,15 +44,15 @@ const districtEdit = () => {
                      return district;
                   }
                });
-               dispatchNotify('Район обновлено', '', 'success');
+               dispatchNotify('Район обновлен', '', 'success');
                editVisible.value = false;
                props.setDistricts(newDistricts);
             } else {
-               dispatchNotify('Район не обновлено', '', 'error');
+               dispatchNotify('Район не обновлен', '', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Район не обновлено', '', 'error');
+            dispatchNotify('Район не обновлен', '', 'error');
          })
          .finally(() => {
             editLoading.value = false;
@@ -124,13 +124,13 @@ const updateCondition = value => {
                }
             });
             props.setDistricts(newDistricts);
-            dispatchNotify('Статус обновлено', '', 'success');
+            dispatchNotify('Статус обновлен', '', 'success');
          } else {
-            dispatchNotify('Статус не обновлено', '', 'error');
+            dispatchNotify('Статус не обновлен', '', 'error');
          }
       })
       .catch(() => {
-         dispatchNotify('Статус не обновлено', '', 'error');
+         dispatchNotify('Статус не обновлен', '', 'error');
       })
       .finally(() => {
          conditionLoading.value = false;

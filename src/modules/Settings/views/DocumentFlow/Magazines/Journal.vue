@@ -39,15 +39,15 @@ const journalEdit = () => {
             const status = response?.status;
             if(status === 200) {
                commonStore.actionJournalsList();
-               dispatchNotify('Журнал обновлено', '', 'success');
+               dispatchNotify('Журнал обновлен', '', 'success');
                editVisible.value = false;
                props.getFirstPageJournals();
             } else {
-               dispatchNotify('Журнал не обновлено', '', 'error');
+               dispatchNotify('Журнал не обновлен', '', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Журнал не обновлено', '', 'error');
+            dispatchNotify('Журнал не обновлен', '', 'error');
          })
          .finally(() => {
             editLoading.value = false;
@@ -91,14 +91,14 @@ const updateCondition = value => {
          const status = response?.status;
          if(status === 200) {
             commonStore.actionJournalsList();
-            dispatchNotify('Статус обновлено', '', 'success');
+            dispatchNotify('Статус обновлен', '', 'success');
             props.getFirstPageJournals();
          } else {
-            dispatchNotify('Статус не обновлено', '', 'error');
+            dispatchNotify('Статус не обновлен', '', 'error');
          }
       })
       .catch(() => {
-         dispatchNotify('Статус не обновлено', '', 'error');
+         dispatchNotify('Статус не обновлен', '', 'error');
       })
       .finally(() => {
          conditionLoading.value = false;
@@ -113,14 +113,14 @@ const changeOrder = () => {
          const status = response?.status;
          if(status === 200) {
             commonStore.actionJournalsList();
-            dispatchNotify('Сортировка обновлено', '', 'success');
+            dispatchNotify('Сортировка обновлен', '', 'success');
             props.getFirstPageJournals();
          } else {
-            dispatchNotify('Сортировка не обновлено', '', 'error');
+            dispatchNotify('Сортировка не обновлен', '', 'error');
          }
       })
       .catch(() => {
-         dispatchNotify('Сортировка не обновлено', '', 'error');
+         dispatchNotify('Сортировка не обновлен', '', 'error');
       })
       .finally(() => {
          sortOrderLoading.value = false;
