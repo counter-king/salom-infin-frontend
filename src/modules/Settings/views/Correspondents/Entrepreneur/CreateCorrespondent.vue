@@ -26,7 +26,7 @@ const createCorrespondent = () => {
    const name = `${last_name} ${first_name} ${father_name}`;
    if(first_name && last_name && gender.value && String(pinfl || '').length === 14 && newPhone.length === 13 && (email?.length ? isValidEmail(email) : true) && address) {
       loading.value = true;
-      const data = { address, first_name, last_name, father_name, email, phone: newPhone, description, type: 'entrepreneur', gender: gender.value.value, name };
+      const data = { address, first_name, last_name, father_name, email, phone: newPhone, description, type: 'entrepreneur', gender: gender.value.value, name, pinfl };
       axiosConfig
          .post('correspondents/', data)
          .then(response => {
