@@ -61,6 +61,7 @@ const employeeEdit = () => {
    const positionId = position.value?.id;
    const statusId = status.value?.id;
    const top_level_department = topLevelDepartment.value?.id;
+   console.log(editEmployee.value, last_name)
    if(first_name && last_name && String(pinfl || '')?.length === 14 && phone?.length === 12 && companyId && positionId && statusId && top_level_department) {
       editLoading.value = true;
       const data = { phone, first_name, last_name, father_name, pinfl, company: companyId, top_level_department, department, position: positionId, status: statusId, department_ids };
@@ -379,7 +380,7 @@ onMounted(() => {
             :pt="{ root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
             placeholder="Введите фамилия"
             type="text"
-            @update:modeValue="value => {
+            @update:modelValue="value => {
                editEmployee = { ...editEmployee, last_name: replaceSpecChars(value) };
             }"
             />
