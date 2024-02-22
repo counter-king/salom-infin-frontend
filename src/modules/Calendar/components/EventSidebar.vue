@@ -8,6 +8,7 @@ import ActionTypesMenu from './ActionTypesMenu.vue'
 import { useCommonStore } from '@/stores/common'
 import { useCalendarStore } from '../stores/calendar.store'
 // Utils
+import { clearModel } from '@/utils'
 import { EVENT_TYPES, ACTION_FORM_TYPES } from '../enums'
 // Composable
 const commonStore = useCommonStore()
@@ -41,6 +42,10 @@ const createEvent = async () => {
     _sidebarRef.successButtonLoading = false
   }
 }
+const emitCancelButton = (value) => {
+	calendarStore.eventSidebar = value
+	clearModel(calendarStore.eventModel)
+}
 // Watch
 watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
   actionTypesMenuComponent.value = defineAsyncComponent({
@@ -56,7 +61,7 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
     ref="sidebarRef"
     v-model="calendarStore.eventSidebar"
     success-text="create"
-    @emit:cancel-button="(value) => calendarStore.eventSidebar = value"
+    @emit:cancel-button="(value) => emitCancelButton(value)"
     @emit:success-button="createEvent"
   >
     <template #title>
