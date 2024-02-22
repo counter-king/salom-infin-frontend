@@ -40,15 +40,15 @@ const correspondentEdit = () => {
                      return correspondent;
                   }
                });
-               dispatchNotify('Корреспондент обновлено', '', 'success');
+               dispatchNotify('Корреспондент обновлен', '', 'success');
                editVisible.value = false;
                props.setCorrespondents(newCorrespondents);
             } else {
-               dispatchNotify('Корреспондент не обновлено', '', 'error');
+               dispatchNotify('Корреспондент не обновлен', '', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Корреспондент не обновлено', '', 'error');
+            dispatchNotify('Корреспондент не обновлен', '', 'error');
          })
          .finally(() => {
             editLoading.value = false;

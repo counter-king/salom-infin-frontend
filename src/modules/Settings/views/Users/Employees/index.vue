@@ -24,7 +24,25 @@ const headers = ref([
     columnKey: 'full_name',
     disabled: true,
     field: 'full_name',
-    header: 'ФИО Сотрудника',
+    header: 'ФИО',
+    is_active: true,
+  },
+  {
+    columnKey: 'branchName',
+    field: 'branchName',
+    header: 'Филиал',
+    is_active: true,
+  },
+  {
+    columnKey: 'topLevelDepartment',
+    field: 'topLevelDepartment',
+    header: 'Департамент',
+    is_active: true,
+  },
+  {
+    columnKey: 'departmentName',
+    field: 'departmentName',
+    header: 'Субдепартамент',
     is_active: true,
   },
   {
@@ -71,7 +89,7 @@ const getEmployees = (newFilter = {}) => {
     .then(response => {
       const results = response?.data?.results;
       const newCount = response?.data?.count;
-      const newEmployees = (Array.isArray(results) ? results: []);
+      const newEmployees = (Array.isArray(results) ? results: []).map(employee => ({ ...employee, branchName: employee?.company?.name, departmentName: employee?.department?.name, topLevelDepartment: employee?.top_level_department?.name }));
       employees.value = newEmployees;
       count.value = newCount;
     })

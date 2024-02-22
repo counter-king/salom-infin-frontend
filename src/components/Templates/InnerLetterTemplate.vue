@@ -33,9 +33,11 @@ const receivers = computed(() => {
       <img src="@/assets/img/logo.png" alt="Logo" />
     </div>
 
-    <div class="bg-dep-name">
-      <div class="bg-dep-name-child">
-        <span class="text-sm font-semibold block">{{ props.composeModel?.sender?.name }}</span>
+    <div class="overflow-hidden">
+      <div class="bg-dep-name">
+        <div class="bg-dep-name-child">
+          <span class="text-sm font-semibold block">{{ props.composeModel?.sender?.name }}</span>
+        </div>
       </div>
     </div>
 

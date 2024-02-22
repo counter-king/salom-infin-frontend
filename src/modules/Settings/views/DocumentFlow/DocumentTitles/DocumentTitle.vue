@@ -38,15 +38,15 @@ const documentTitleEdit = () => {
                      return documentTitle;
                   }
                });
-               dispatchNotify('Заголовок обновлено', '', 'success');
+               dispatchNotify('Заголовок обновлен', '', 'success');
                editVisible.value = false;
                props.setDocumentTitles(newDocumentTitles);
             } else {
-               dispatchNotify('Заголовок не обновлено', '', 'error');
+               dispatchNotify('Заголовок не обновлен', '', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Заголовок не обновлено', '', 'error');
+            dispatchNotify('Заголовок не обновлен', '', 'error');
          })
          .finally(() => {
             editLoading.value = false;
@@ -93,13 +93,13 @@ const updateCondition = value => {
                }
             });
             props.setDocumentTitles(newDocumentTitles);
-            dispatchNotify('Статус обновлено', '', 'success');
+            dispatchNotify('Статус обновлен', '', 'success');
          } else {
-            dispatchNotify('Статус не обновлено', '', 'error');
+            dispatchNotify('Статус не обновлен', '', 'error');
          }
       })
       .catch(() => {
-         dispatchNotify('Статус не обновлено', '', 'error');
+         dispatchNotify('Статус не обновлен', '', 'error');
       })
       .finally(() => {
          conditionLoading.value = false;

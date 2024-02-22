@@ -99,13 +99,13 @@ const topSignerEdit = () => {
                      return topSigner;
                   }
                });
-               dispatchNotify('Топ подписавший обновлено', '', 'success');
+               dispatchNotify('Топ подписавший обновлен', '', 'success');
                docType.value = '';
                editVisible.value = false;
                props.setTopSigners(topSigners);
                topSigner.value = '';
             } else {
-               dispatchNotify('Топ подписавший не обновлено', '', 'error');
+               dispatchNotify('Топ подписавший не обновлен', '', 'error');
             }
          })
          .catch(e => {
@@ -165,13 +165,13 @@ const updateCondition = value => {
                }
             });
             props.setTopSigners(newTopSigners);
-            dispatchNotify('Статус обновлено', '', 'success');
+            dispatchNotify('Статус обновлен', '', 'success');
          } else {
-            dispatchNotify('Статус не обновлено', '', 'error');
+            dispatchNotify('Статус не обновлен', '', 'error');
          }
       })
       .catch(() => {
-         dispatchNotify('Статус не обновлено', '', 'error');
+         dispatchNotify('Статус не обновлен', '', 'error');
       })
       .finally(() => {
          conditionLoading.value = false;

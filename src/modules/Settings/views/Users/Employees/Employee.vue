@@ -68,15 +68,15 @@ const employeeEdit = () => {
          .put(`users/${employeeId}/`, data)
          .then(response => {
             if(response?.status === 200) {
-               dispatchNotify('Сотрудник создан', '', 'success');
+               dispatchNotify('Сотрудник изменен', '', 'success');
                editVisible.value = false;
                props.getFirstPageEmployees();
             } else {
-               dispatchNotify('Сотрудник не создан', '', 'error');
+               dispatchNotify('Сотрудник не изменен', '', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Сотрудник не создан', '', 'error');
+            dispatchNotify('Сотрудник не изменен', '', 'error');
          })
          .finally(() => {
             editLoading.value = false;
@@ -201,13 +201,13 @@ const updateStatus = value => {
                }
             });
             props.setEmployees(newEmployees);
-            dispatchNotify('Состояние обновлено', '', 'success');
+            dispatchNotify('Состояние обновлен', '', 'success');
          } else {
-            dispatchNotify('Состояние не обновлено', '', 'error');
+            dispatchNotify('Состояние не обновлен', '', 'error');
          }
       })
       .catch(() => {
-         dispatchNotify('Состояние не обновлено', '', 'error');
+         dispatchNotify('Состояние не обновлен', '', 'error');
       })
       .finally(() => {
          statusEditLoading.value = false;

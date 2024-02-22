@@ -51,7 +51,7 @@ const updateStatus = value => {
                }
             });
             props.setAssistants(newAssistants);
-            dispatchNotify('Состояние обновлено', '', 'success');
+            dispatchNotify('Состояние обновлен', '', 'success');
          }
       })
       .catch(() => {})
