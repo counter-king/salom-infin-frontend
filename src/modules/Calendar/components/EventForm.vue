@@ -24,7 +24,7 @@ const times = ref(generateDayHours(15, 'ru'))
 const endTimes = computed(() => {
   let selected = times.value.findIndex(({ time }) => time === calendarStore.eventModel.__start_time)
 
-  if(selected > 0) {
+  if(selected >= 0) {
     return times.value.map((time, index) => ({ ...time, disabled: index < selected + 1 }))
   }
 })
@@ -232,9 +232,9 @@ onMounted(() => {
 
     <base-col col-class="w-full">
       <base-file-upload
-        v-model="calendarStore.eventModel.__files"
+        v-model="calendarStore.eventModel.__attachments"
         label="attach-file"
-        @emit:file-upload="(files) => calendarStore.eventModel.__files = files"
+        @emit:file-upload="(files) => calendarStore.eventModel.__attachments = files"
       />
     </base-col>
   </base-row>

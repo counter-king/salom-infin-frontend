@@ -3,32 +3,36 @@ import { defineStore } from 'pinia'
 // Services
 import { fetchEventList, fetchCreateEvent} from '../services/calendar.service'
 // Utils
-import { clearModel, isObject } from '@/utils'
-import { formatDateReverse } from '@/utils/formatDate'
+import { clearModel, isObject, setValuesToKeys } from '@/utils'
+import { formatDateReverse, formatHour } from '@/utils/formatDate'
 import { dispatchNotify } from '@/utils/notify'
 // Enums
 import { COLOR_TYPES } from '@/enums'
 import { EVENT_TYPES, ACTION_FORM_TYPES } from '../enums'
+
+let model = {
+  title: null,
+  start_date: null,
+  __start_time: null,
+  end_date: null,
+  __end_time: null,
+  priority: null,
+  participants: null,
+  __participants: [],
+  organizer: null,
+  __organizer: null,
+  description: null,
+  attachments: [],
+  __attachments: [],
+  type: EVENT_TYPES.EVENT
+}
+
 export const useCalendarStore = defineStore('calendar', {
   state: () => ({
     eventSidebar: false,
     eventList: [],
-    eventModel: {
-      title: null,
-      start_date: null,
-      __start_time: null,
-      end_date: null,
-      __end_time: null,
-      priority: null,
-      participants: null,
-      __participants: [],
-      organizer: null,
-      __organizer: null,
-      description: null,
-      files: [],
-      __files: [],
-      type: EVENT_TYPES.EVENT
-    },
+    eventModel: Object.assign({}, model),
+    updateEventModel: Object.assign({}, model),
     actionTypesMenuSelected: {
       name: ACTION_FORM_TYPES.EVENT
     }
@@ -53,8 +57,8 @@ export const useCalendarStore = defineStore('calendar', {
           organizer: type === EVENT_TYPES.EVENT
             ? this.eventModel.__organizer
             : null,
-          files: type === EVENT_TYPES.EVENT
-            ? this.eventModel.__files.map(file => file.id)
+          attachments: type === EVENT_TYPES.EVENT
+            ? this.eventModel.__attachments.map(file => ({ id: file.id }))
             : null,
           type
         }
@@ -69,6 +73,19 @@ export const useCalendarStore = defineStore('calendar', {
         dispatchNotify('Ошибка', 'Ошибка создание мероприятий', COLOR_TYPES.ERROR)
         return Promise.reject()
       }
+    },
+    /**
+     *
+     * */
+    actionSetEventModel(payload) {
+      let model = {
+        ...payload,
+        __start_time: formatHour(payload.start_date),
+        __end_time: formatHour(payload.end_date),
+        __participants: payload.participants,
+        __organizer: payload.organizer
+      }
+      setValuesToKeys(this.updateEventModel, model)
     }
   }
 })
