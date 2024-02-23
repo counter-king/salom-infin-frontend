@@ -1,0 +1,5 @@
+export { default as WidgetApplications } from "./Applications.vue"
+export { default as WidgetBirthday } from "./Birthday.vue"
+export { default as WidgetContacts } from "./Contacts.vue"
+export { default as WidgetDocFlow } from "./Docflow.vue"
+export { default as WidgetTasks } from "./Tasks.vue"
