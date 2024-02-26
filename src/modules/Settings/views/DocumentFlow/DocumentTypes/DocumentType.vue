@@ -94,13 +94,9 @@ const updateCondition = value => {
             });
             props.setDocumentTypes(newDocumentTypes);
             dispatchNotify('Статус обновлен', '', 'success');
-         } else {
-            dispatchNotify('Статус не обновлен', '', 'error');
          }
       })
-      .catch(() => {
-         dispatchNotify('Статус не обновлен', '', 'error');
-      })
+      .catch(() => {})
       .finally(() => {
          conditionLoading.value = false;
       });

@@ -76,13 +76,9 @@ const assistantCreate = () => {
                props.getFirstPageAssistants();
                props.setVisible(false);
                supervisor.value = '';
-            } else {
-               dispatchNotify('Помощник не создан', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Помощник не создан', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             loading.value = false;
          });

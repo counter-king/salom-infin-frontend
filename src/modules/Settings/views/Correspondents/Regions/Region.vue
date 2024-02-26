@@ -42,13 +42,9 @@ const regionEdit = () => {
                dispatchNotify('Регион обновлен', '', 'success');
                editVisible.value = false;
                props.setRegions(newRegions);
-            } else {
-               dispatchNotify('Регион не обновлен', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Регион не обновлен', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             editLoading.value = false;
          });

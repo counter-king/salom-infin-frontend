@@ -31,13 +31,9 @@ const createDepartment = () => {
                dispatchNotify('Департамент создан', '', 'success');
                props.getFirstPageDepartments();
                props.setVisible(false);
-            } else {
-               dispatchNotify('Департамент не создан', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Департамент не создан', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             loading.value = false;
          });

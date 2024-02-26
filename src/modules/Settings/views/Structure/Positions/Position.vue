@@ -42,13 +42,9 @@ const positionEdit = () => {
                dispatchNotify('Должность обновлен', '', 'success');
                editVisible.value = false;
                props.setPositions(newPositions);
-            } else {
-               dispatchNotify('Должность не обновлен', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Должность не обновлен', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             editLoading.value = false;
          });
@@ -68,13 +64,9 @@ const positionDelete = () => {
             deleteVisible.value = false;
             dispatchNotify('Должность удален', '', 'success')
             props.getFirstPagePositions();
-         } else {
-            dispatchNotify('Должность не удален', '', 'error')
          }
       })
-      .catch(() => {
-         dispatchNotify('Должность не удален', '', 'error')
-      })
+      .catch(() => {})
       .finally(() => {
          deleteLoading.value = false;
       });
@@ -100,8 +92,6 @@ const updateCondition = value => {
             });
             props.setPositions(newPositions);
             dispatchNotify('Статус обновлен', '', 'success');
-         } else {
-            dispatchNotify('Статус не обновлен', '', 'error');
          }
       })
       .catch(() => {

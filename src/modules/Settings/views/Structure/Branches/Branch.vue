@@ -45,13 +45,9 @@ const branchEdit = () => {
                dispatchNotify('Филиал обновлен', '', 'success');
                editVisible.value = false;
                props.setBranches(newBranches);
-            } else {
-               dispatchNotify('Филиал не обновлен', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Филиал не обновлен', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             editLoading.value = false;
          });
@@ -75,13 +71,9 @@ const branchDelete = () => {
             deleteVisible.value = false;
             dispatchNotify('Филиал удален', '', 'success')
             props.getFirstPageBranches();
-         } else {
-            dispatchNotify('Филиал не удален', '', 'error')
          }
       })
-      .catch(() => {
-         dispatchNotify('Филиал не удален', '', 'error')
-      })
+      .catch(() => {})
       .finally(() => {
          deleteLoading.value = false;
       });
@@ -104,13 +96,9 @@ const updateCondition = value => {
             });
             props.setBranches(newBranches);
             dispatchNotify('Статус обновлен', '', 'success');
-         } else {
-            dispatchNotify('Статус не обновлен', '', 'error');
          }
       })
-      .catch(() => {
-         dispatchNotify('Статус не обновлен', '', 'error');
-      })
+      .catch(() => {})
       .finally(() => {
          conditionLoading.value = false;
       });

@@ -68,13 +68,9 @@ const assistantDelete = () => {
             deleteVisible.value = false;
             dispatchNotify('Помощник удален', '', 'success');
             props.getFirstPageAssistants();
-         } else {
-            dispatchNotify('Помощник не удален', '', 'error');
          }
       })
-      .catch(() => {
-         dispatchNotify('Помощник не удален', '', 'error');
-      })
+      .catch(() => {})
       .finally(() => {
          deleteLoading.value = false;
       });

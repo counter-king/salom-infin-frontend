@@ -36,13 +36,9 @@ const shortDescriptionEdit = () => {
                dispatchNotify('Краткое описание обновлен', '', 'success');
                editVisible.value = false;
                props.setShortDescriptions(newShortDescriptions);
-            } else {
-               dispatchNotify('Краткое описание не обновлен', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Краткое описание не обновлен', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             editLoading.value = false;
          });
@@ -60,13 +56,9 @@ const shortDescriptionDelete = () => {
             deleteVisible.value = false;
             dispatchNotify('Краткое описание удален', '', 'success')
             props.getFirstPageShortDescriptions();
-         } else {
-            dispatchNotify('Краткое описание не удален', '', 'error')
          }
       })
-      .catch(() => {
-         dispatchNotify('Краткое описание не удален', '', 'error')
-      })
+      .catch(() => {})
       .finally(() => {
          deleteLoading.value = false;
       });

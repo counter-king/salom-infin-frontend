@@ -23,13 +23,9 @@ const createPosition = () => {
                position.value = defaultPosition;
                props.getFirstPagePositions();
                props.setVisible(false);
-            } else {
-               dispatchNotify('Должность не создан', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Должность не создан', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             loading.value = false;
          });

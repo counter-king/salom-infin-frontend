@@ -41,13 +41,9 @@ const documentTitleEdit = () => {
                dispatchNotify('Заголовок обновлен', '', 'success');
                editVisible.value = false;
                props.setDocumentTitles(newDocumentTitles);
-            } else {
-               dispatchNotify('Заголовок не обновлен', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Заголовок не обновлен', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             editLoading.value = false;
          });
@@ -65,13 +61,9 @@ const documentTitleDelete = () => {
             deleteVisible.value = false;
             dispatchNotify('Заголовок удален', '', 'success')
             props.getFirstPageDocumentTitles();
-         } else {
-            dispatchNotify('Заголовок не удален', '', 'error')
          }
       })
-      .catch(() => {
-         dispatchNotify('Заголовок не удален', '', 'error')
-      })
+      .catch(() => {})
       .finally(() => {
          deleteLoading.value = false;
       });
@@ -94,13 +86,9 @@ const updateCondition = value => {
             });
             props.setDocumentTitles(newDocumentTitles);
             dispatchNotify('Статус обновлен', '', 'success');
-         } else {
-            dispatchNotify('Статус не обновлен', '', 'error');
          }
       })
-      .catch(() => {
-         dispatchNotify('Статус не обновлен', '', 'error');
-      })
+      .catch(() => {})
       .finally(() => {
          conditionLoading.value = false;
       });

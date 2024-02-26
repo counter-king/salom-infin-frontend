@@ -72,13 +72,9 @@ const employeeEdit = () => {
                dispatchNotify('Сотрудник изменен', '', 'success');
                editVisible.value = false;
                props.getFirstPageEmployees();
-            } else {
-               dispatchNotify('Сотрудник не изменен', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Сотрудник не изменен', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             editLoading.value = false;
          });
@@ -203,13 +199,9 @@ const updateStatus = value => {
             });
             props.setEmployees(newEmployees);
             dispatchNotify('Состояние обновлен', '', 'success');
-         } else {
-            dispatchNotify('Состояние не обновлен', '', 'error');
          }
       })
-      .catch(() => {
-         dispatchNotify('Состояние не обновлен', '', 'error');
-      })
+      .catch(() => {})
       .finally(() => {
          statusEditLoading.value = false;
       });
@@ -223,13 +215,9 @@ const employeeDelete = () => {
             deleteVisible.value = false;
             dispatchNotify('Сотрудник удален', '', 'success')
             props.getFirstPageEmployees();
-         } else {
-            dispatchNotify('Сотрудник не удален', '', 'error')
          }
       })
-      .catch(() => {
-         dispatchNotify('Сотрудник не удален', '', 'error')
-      })
+      .catch(() => {})
       .finally(() => {
          deleteLoading.value = false;
       });

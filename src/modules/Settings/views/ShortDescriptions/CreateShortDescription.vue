@@ -24,13 +24,9 @@ const createShortDescription = () => {
                props.getFirstPageShortDescriptions();
                props.setVisible(false);
                shortDescription.value = defaultShortDescription;
-            } else {
-               dispatchNotify('Краткое описание не создан', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Краткое описание не создан', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             loading.value = false;
          });

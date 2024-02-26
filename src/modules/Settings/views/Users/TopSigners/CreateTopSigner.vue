@@ -83,8 +83,6 @@ const topSignerCreate = () => {
                props.getFirstPageTopSigners();
                props.setVisible(false);
                docType.value = '';
-            } else {
-               dispatchNotify('Топ подписавший не создан', '', 'error');
             }
          })
          .catch(e => {
@@ -92,8 +90,6 @@ const topSignerCreate = () => {
             const message = e?.data?.message
             if(code === '619') {
                dispatchNotify(message, '', 'error');
-            } else {
-               dispatchNotify('Топ подписавший не создан', '', 'error');
             }
          })
          .finally(() => {

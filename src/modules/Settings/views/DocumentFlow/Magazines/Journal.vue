@@ -42,13 +42,9 @@ const journalEdit = () => {
                dispatchNotify('Журнал обновлен', '', 'success');
                editVisible.value = false;
                props.getFirstPageJournals();
-            } else {
-               dispatchNotify('Журнал не обновлен', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Журнал не обновлен', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             editLoading.value = false;
          });
@@ -71,13 +67,9 @@ const journalDelete = () => {
             deleteVisible.value = false;
             dispatchNotify('Журнал удален', '', 'success')
             props.getFirstPageJournals();
-         } else {
-            dispatchNotify('Журнал не удален', '', 'error')
          }
       })
-      .catch(() => {
-         dispatchNotify('Журнал не удален', '', 'error')
-      })
+      .catch(() => {})
       .finally(() => {
          deleteLoading.value = false;
       });
@@ -93,13 +85,9 @@ const updateCondition = value => {
             commonStore.actionJournalsList();
             dispatchNotify('Статус обновлен', '', 'success');
             props.getFirstPageJournals();
-         } else {
-            dispatchNotify('Статус не обновлен', '', 'error');
          }
       })
-      .catch(() => {
-         dispatchNotify('Статус не обновлен', '', 'error');
-      })
+      .catch(() => {})
       .finally(() => {
          conditionLoading.value = false;
       });
@@ -115,13 +103,9 @@ const changeOrder = () => {
             commonStore.actionJournalsList();
             dispatchNotify('Сортировка обновлен', '', 'success');
             props.getFirstPageJournals();
-         } else {
-            dispatchNotify('Сортировка не обновлен', '', 'error');
          }
       })
-      .catch(() => {
-         dispatchNotify('Сортировка не обновлен', '', 'error');
-      })
+      .catch(() => {})
       .finally(() => {
          sortOrderLoading.value = false;
       });

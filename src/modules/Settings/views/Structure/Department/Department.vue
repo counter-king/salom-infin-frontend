@@ -51,13 +51,9 @@ const departmentEdit = () => {
                dispatchNotify('Субдепартамент обновлен', '', 'success');
                editVisible.value = false;
                props.getSubDepartments();
-            } else {
-               dispatchNotify('Субдепартамент не обновлен', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Субдепартамент не обновлен', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             editLoading.value = false;
          });
@@ -80,13 +76,9 @@ const deleteDepartment = () => {
                visible.value = false;
                dispatchNotify('Субдепартамент удален', '', 'success');
                props.getSubDepartments();
-            } else {
-               dispatchNotify('Субдепартамент не удален', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Субдепартамент не удален', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             deleteLoading.value = false;
          });

@@ -70,13 +70,9 @@ const departmentEdit = () => {
                dispatchNotify('Департамент обновлен', '', 'success');
                editVisible.value = false;
                props.setDepartments(newDepartments);
-            } else {
-               dispatchNotify('Департамент не обновлен', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Департамент не обновлен', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             editLoading.value = false;
          });
@@ -97,13 +93,9 @@ const departmentDelete = () => {
             deleteVisible.value = false;
             dispatchNotify('Департамент удален', '', 'success')
             props.getFirstPageDepartments();
-         } else {
-            dispatchNotify('Департамент не удален', '', 'error')
          }
       })
-      .catch(() => {
-         dispatchNotify('Департамент не удален', '', 'error')
-      })
+      .catch(() => {})
       .finally(() => {
          deleteLoading.value = false;
       });

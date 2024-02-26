@@ -27,13 +27,9 @@ const createBranch = () => {
                dispatchNotify('Филиал создан', '', 'success');
                props.getFirstPageBranches();
                props.setVisible(false);
-            } else {
-               dispatchNotify('Филиал не создан', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Филиал не создан', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             loading.value = false;
          });
