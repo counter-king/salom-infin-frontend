@@ -130,7 +130,7 @@ export const useReviewStore = defineStore("review", {
       },
       {
         header: "reviewers",
-        field: "reviewers",
+        field: "for_reviewers",
         detail: {
           component: 'base-avatar-group',
           colClass: null

@@ -101,10 +101,10 @@ const link = (data) => {
         </linkable-cell>
       </template>
 
-      <template #reviewers="{ data }">
+      <template #for_reviewers="{ data }">
         <linkable-cell :to="link(data)">
           <base-avatar-group
-            :items="data?.reviewers"
+            :items="data?.for_reviewers"
             shape="circle"
             avatar-classes="w-8 h-8"
           />
