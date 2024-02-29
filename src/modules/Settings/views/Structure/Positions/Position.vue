@@ -204,8 +204,8 @@ onMounted(() => {
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
-            @update:modelValue="value => {
-               editPosition = { ...editPosition, name_uz: replaceSpecChars(value) };
+            @update:modelValue="name_uz => {
+               editPosition = { ...editPosition, name_uz };
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ) <span class="text-red-500 ml-1">*</span></p>
@@ -214,8 +214,8 @@ onMounted(() => {
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
-            @update:modelValue="value => {
-               editPosition = { ...editPosition, name_ru: replaceSpecChars(value) };
+            @update:modelValue="name_ru => {
+               editPosition = { ...editPosition, name_ru };
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
