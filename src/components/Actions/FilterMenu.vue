@@ -89,6 +89,7 @@ const filter = async () => {
   await paginationStore.resetPagination();
   await router.replace({
     query: {
+      ...route.query,
       ...filterModelFalsyKeys,
       page: paginationStore.page,
       page_size: paginationStore.pageSize,

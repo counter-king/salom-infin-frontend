@@ -204,6 +204,7 @@ export const useReviewStore = defineStore("review", {
       comment: null,
       files: []
     },
+    totalCount: 0
   }),
   getters: {
     isReviewSigned: state => state.detailModel.assignments.length
@@ -222,19 +223,20 @@ export const useReviewStore = defineStore("review", {
     /**
     * Получить список на рассмотрение
     * */
-    async actionReviewList() {
+    async actionReviewList(params = {}) {
       const collectStore = useCollectRequestsStore()
 
       this.listLoading = true
-      let { data } = await fetchReviewList()
+      let { data } = await fetchReviewList(params)
 
       this.list = data.results
       this.listLoading = false
+      this.totalCount = data.count
       // Добавляем запрос в коллекцию
       collectStore.actionAddRequests({
         id: 'actionReviewList',
         fn: this.actionReviewList,
-        params: null
+        params
       })
     },
     /**
@@ -370,6 +372,166 @@ export const useReviewStore = defineStore("review", {
     * */
     actionSetPerform({ comment, files }) {
       Object.assign(this.performModel, { comment, files })
+    },
+    /*
+    * Сбросит все колонки в изначальное состояние
+    * */
+    resetHeaders() {
+      this.headers = [
+        {
+          header: "priority",
+          field: "document.priority",
+          detail: {
+            component: 'priority-chip',
+            colClass: null
+          },
+          active: true
+        },
+        {
+          header: "naming",
+          field: "document.title",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: true
+        },
+        {
+          header: "document-type",
+          field: "document.document_type.name",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: true
+        },
+        {
+          header: "deliver-type",
+          field: "document.delivery_type.name",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: false
+        },
+        {
+          header: "description",
+          field: "document.description",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: false,
+        },
+        {
+          header: "magazine",
+          field: "document.journal.name",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: false
+        },
+        {
+          header: "language-document",
+          field: "document.language.name",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: false
+        },
+        {
+          header: "number-sheets",
+          field: "document.number_of_papers",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: false
+        },
+        {
+          header: "outgoing-date",
+          field: "document.outgoing_date",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: false
+        },
+        {
+          header: "outgoing-number",
+          field: "document.outgoing_number",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: false
+        },
+        {
+          header: "reg-number",
+          field: "document.register_number",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: true
+        },
+        {
+          header: "reg-date",
+          field: "document.register_date",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: true
+        },
+        {
+          header: "reviewers",
+          field: "for_reviewers",
+          detail: {
+            component: 'base-avatar-group',
+            colClass: null
+          },
+          active: true
+        },
+        {
+          header: "status",
+          field: "status",
+          detail: {
+            component: 'base-status',
+            colClass: null
+          },
+          active: true
+        },
+        {
+          header: "correspondent",
+          field: "document.correspondent.name",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: true
+        },
+        {
+          header: "code",
+          field: "document.code",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: false
+        },
+        {
+          header: "grif",
+          field: "document.grif",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: false,
+        },
+      ]
     }
   }
 })

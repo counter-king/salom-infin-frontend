@@ -13,6 +13,9 @@ const Registration = [
       name: 'RegistrationList',
       params: {
         code: JOURNAL_CODES.INCOMING
+      },
+      query: {
+        journal_id: JOURNAL.INCOMING
       }
     },
     component: () => import("../views/index.vue"),

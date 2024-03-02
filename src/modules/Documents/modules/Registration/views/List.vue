@@ -20,6 +20,9 @@ const route = useRoute()
 const router = useRouter()
 const commonStore = useCommonStore()
 const docFlowStore = useDocFlowStore()
+// Reactive
+const filterKeys = ['approvers', 'author', 'curator', 'signers', 'departments', 'register_number', 'status']
+const keysToIncludeOnClearFilter = ['type', 'journal_id']
 // Computed
 const journal = computed(() => commonStore.getJournalByCode(route.params.code))
 // Watch
@@ -36,7 +39,6 @@ watch(
 			_route && await docFlowStore.actionGetList(route.query)
 		}
   },
-	{ immediate: true }
 )
 // Methods
 const openModal = () => {
@@ -60,6 +62,9 @@ const link = (data) => {
       :title="journal.name"
       :column-menu-items="docFlowStore.headers"
       :storage-columns-name="R_INCOMING_COLUMNS"
+      :action-list="docFlowStore.actionGetList"
+      :filter-keys="filterKeys"
+      :keys-to-include-on-clear-filter="keysToIncludeOnClearFilter"
       @emit:reset-headers="docFlowStore.resetHeaders"
     >
       <template #end>
@@ -78,9 +83,9 @@ const link = (data) => {
       :api-params="{
         journal_id: route.query.journal_id ?? JOURNAL.INCOMING
       }"
-      :total-count="docFlowStore.totalCount"
       :headers="docFlowStore.headers"
       :value="docFlowStore.list"
+      :total-count="docFlowStore.totalCount"
       :loading="docFlowStore.listLoading"
       :storage-columns-name="R_INCOMING_COLUMNS"
       expandable
@@ -169,7 +174,7 @@ const link = (data) => {
       </template>
 
       <template #status="{ data }">
-        <linkable-cell :to="link(data)">
+        <linkable-cell v-if="data?.status" :to="link(data)">
           <status-chip :status="data?.status"/>
         </linkable-cell>
       </template>

@@ -10,6 +10,7 @@ import { fetchPerformList } from '../services/review.service'
 import { dispatchNotify } from '@/utils/notify'
 import { COLOR_TYPES } from '@/enums'
 import { FORM_TYPE_CREATE } from '@/constants/constants'
+import {useCollectRequestsStore} from "@/stores/collect-requests.store";
 export const useControlStore = defineStore("control", {
   state: () => ({
     list: [],
@@ -195,7 +196,8 @@ export const useControlStore = defineStore("control", {
       files: [],
       is_performed: false
     },
-    listLoading: false
+    listLoading: false,
+    totalCount: 0
   }),
   getters: {
     /*
@@ -207,12 +209,20 @@ export const useControlStore = defineStore("control", {
     /*
     * Список на контроль
     * */
-    async actionControlList() {
+    async actionControlList(params = {}) {
+      const collectStore = useCollectRequestsStore()
       this.listLoading = true
-      let { data } = await fetchControlList()
+      let { data } = await fetchControlList(params)
 
       this.list = data.results
       this.listLoading = false
+      this.totalCount = data.count
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionReviewList',
+        fn: this.actionControlList,
+        params
+      })
     },
     /**
      * Получить на контроль по id
@@ -294,6 +304,157 @@ export const useControlStore = defineStore("control", {
     * */
     actionSetPerform({ content, files, is_performed }) {
       Object.assign(this.performModel, { content, files, is_performed })
+    },
+    /*
+    * Сбросит все колонки в изначальное состояние
+    * */
+    resetHeaders() {
+      this.headers = [
+        {
+          header: "priority",
+          field: "document.priority",
+          detail: {
+            component: "priority-chip",
+            colClass: null
+          },
+          active: false
+        },
+        {
+          header: "naming",
+          field: "document.title",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: true
+        },
+        {
+          header: "document-type",
+          field: "document.document_type.name",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: true
+        },
+        {
+          header: "deliver-type",
+          field: "document.delivery_type.name",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: false
+        },
+        {
+          header: "description",
+          field: "document.description",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: false
+        },
+        {
+          header: "magazine",
+          field: "document.journal.name",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: false
+        },
+        {
+          header: "language-document",
+          field: "document.language.name",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: false
+        },
+        {
+          header: "number-sheets",
+          field: "document.number_of_papers",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: false
+        },
+        {
+          header: "outgoing-date",
+          field: "document.outgoing_date",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: false
+        },
+        {
+          header: "outgoing-number",
+          field: "document.outgoing_number",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: false
+        },
+        {
+          header: "reg-number",
+          field: "document.register_number",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: true
+        },
+        {
+          header: "reg-date",
+          field: "document.register_date",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: true
+        },
+        {
+          header: "status",
+          field: "status",
+          detail: {
+            component: "base-status",
+            colClass: null
+          },
+          active: true
+        },
+        {
+          header: "correspondent",
+          field: "document.correspondent.name",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: true
+        },
+        {
+          header: "code",
+          field: "document.code",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: false
+        },
+        {
+          header: "grif",
+          field: "document.grif",
+          detail: {
+            component: null,
+            colClass: null
+          },
+          active: false,
+        }
+      ]
     }
   }
 })

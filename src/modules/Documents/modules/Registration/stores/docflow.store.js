@@ -1,6 +1,7 @@
 // Core
 import { defineStore } from "pinia"
 // Store
+import { useCommonStore } from '@/stores/common'
 import { useCollectRequestsStore } from '@/stores/collect-requests.store'
 import { useBoxesCommonStore } from '../../Boxes/stores/common.store'
 // Services
@@ -240,7 +241,8 @@ export const useDocFlowStore = defineStore("docFlowStore", {
     documentMenuModal: false,
     documentMenuType: {
       name: 'Incoming',
-      journalId: JOURNAL_CODES.INCOMING
+      journalId: JOURNAL_CODES.INCOMING,
+      __journalId: null
     },
     totalCount: 0
   }),
@@ -396,41 +398,49 @@ export const useDocFlowStore = defineStore("docFlowStore", {
     * Загрузить форму для создания документа
     * */
     actionLoadFormCreateDocument(payload) {
+      const commonStore = useCommonStore()
+
       switch(Number(payload.journalCode)) {
         case JOURNAL_CODES.INCOMING: // Входящий
           this.documentMenuType = {
             name: 'Incoming',
-            journalId: JOURNAL_CODES.INCOMING
+            journalId: JOURNAL_CODES.INCOMING,
+            __journalId: commonStore.getJournalByCode(payload.journalCode)?.id
           }
           break
         case JOURNAL_CODES.INNER: // Внутренние
           this.documentMenuType = {
             name: 'Inner',
-            journalId: JOURNAL_CODES.INNER
+            journalId: JOURNAL_CODES.INNER,
+            __journalId: commonStore.getJournalByCode(payload.journalCode)?.id
           }
           break
         case JOURNAL_CODES.OUTGOING: // Исходящие
           this.documentMenuType = {
             name: 'Outgoing',
-            journalId: JOURNAL_CODES.OUTGOING
+            journalId: JOURNAL_CODES.OUTGOING,
+            __journalId: commonStore.getJournalByCode(payload.journalCode)?.id
           }
           break
         case JOURNAL_CODES.APPEALS: // Обращение
           this.documentMenuType = {
             name: 'Appeal',
-            journalId: JOURNAL_CODES.APPEALS
+            journalId: JOURNAL_CODES.APPEALS,
+            __journalId: commonStore.getJournalByCode(payload.journalCode)?.id
           }
           break
         case JOURNAL_CODES.ORDERS_PROTOCOLS: // Приказы и распоряжения
           this.documentMenuType = {
             name: 'OrderInstruction',
-            journalId: JOURNAL_CODES.ORDERS_PROTOCOLS
+            journalId: JOURNAL_CODES.ORDERS_PROTOCOLS,
+            __journalId: commonStore.getJournalByCode(payload.journalCode)?.id
           }
           break
         default: // Заявления
           this.documentMenuType = {
             name: 'Statement',
-            journalId: JOURNAL_CODES.APPLICATION
+            journalId: JOURNAL_CODES.APPLICATION,
+            __journalId: commonStore.getJournalByCode(payload.journalCode)?.id
           }
       }
     },

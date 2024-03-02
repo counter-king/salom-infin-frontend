@@ -12,7 +12,7 @@ import BaseSpinner from '@/components/UI/BaseSpinner.vue'
 // Utils
 import { clearModel } from '@/utils'
 // Enums
-import { JOURNAL } from '@/enums'
+import { JOURNAL_CODES } from '@/enums'
 // Composable
 const modelValue = useModel(props, 'modelValue')
 const route = useRoute()
@@ -44,7 +44,7 @@ const createDocument = async () => {
     case 'Incoming':
       model = {
         ...docFlowStore.createDocumentModel,
-        journal: docFlowStore.documentMenuType.journalId,
+        journal: docFlowStore.documentMenuType.__journalId,
         reviewers: docFlowStore.createDocumentModel.__reviewers.map(item => ({ user: item.id })),
         files: docFlowStore.createDocumentModel.__files.length
           ? docFlowStore.createDocumentModel.__files.map(file => ({ file: file.id }))
@@ -54,7 +54,7 @@ const createDocument = async () => {
     case 'Inner':
       model = {
         ...docFlowStore.createDocumentModel,
-        journal: docFlowStore.documentMenuType.journalId,
+        journal: docFlowStore.documentMenuType.__journalId,
         reviewers: docFlowStore.createDocumentModel.__reviewers.map(item => ({ user: item.id })),
         files: docFlowStore.createDocumentModel.__files.length
           ? docFlowStore.createDocumentModel.__files.map(file => ({ file: file.id }))
@@ -64,7 +64,7 @@ const createDocument = async () => {
     case 'Outgoing':
       model = {
         ...docFlowStore.createDocumentModel,
-        journal: docFlowStore.documentMenuType.journalId,
+        journal: docFlowStore.documentMenuType.__journalId,
         reviewers: docFlowStore.createDocumentModel.__reviewers.map(item => ({ user: item.id })),
         files: docFlowStore.createDocumentModel.__files.length
           ? docFlowStore.createDocumentModel.__files.map(file => ({ file: file.id }))
@@ -74,7 +74,7 @@ const createDocument = async () => {
     case 'Appeal':
       model = {
         ...docFlowStore.createDocumentModel,
-        journal: docFlowStore.documentMenuType.journalId,
+        journal: docFlowStore.documentMenuType.__journalId,
         reviewers: docFlowStore.createDocumentModel.__reviewers.map(item => ({ user: item.id })),
         files: docFlowStore.createDocumentModel.__files.length
           ? docFlowStore.createDocumentModel.__files.map(file => ({ file: file.id }))
@@ -84,7 +84,7 @@ const createDocument = async () => {
     case 'IncomingBranches':
       model = {
         ...docFlowStore.createDocumentModel,
-        journal: docFlowStore.documentMenuType.journalId,
+        journal: docFlowStore.documentMenuType.__journalId,
         reviewers: docFlowStore.createDocumentModel.__reviewers.map(item => ({ user: item.id })),
         files: docFlowStore.createDocumentModel.__files.length
           ? docFlowStore.createDocumentModel.__files.map(file => ({ file: file.id }))
@@ -94,7 +94,7 @@ const createDocument = async () => {
     case 'OrderInstruction':
       model = {
         ...docFlowStore.createDocumentModel,
-        journal: docFlowStore.documentMenuType.journalId,
+        journal: docFlowStore.documentMenuType.__journalId,
         reviewers: docFlowStore.createDocumentModel.__reviewers.map(item => ({ user: item.id })),
         files: docFlowStore.createDocumentModel.__files.length
           ? docFlowStore.createDocumentModel.__files.map(file => ({ file: file.id }))
@@ -104,7 +104,7 @@ const createDocument = async () => {
     case 'Statement':
       model = {
         ...docFlowStore.createDocumentModel,
-        journal: docFlowStore.documentMenuType.journalId,
+        journal: docFlowStore.documentMenuType.__journalId,
         reviewers: docFlowStore.createDocumentModel.__reviewers.map(item => ({ user: item.id })),
         files: docFlowStore.createDocumentModel.__files.length
           ? docFlowStore.createDocumentModel.__files.map(file => ({ file: file.id }))
@@ -135,13 +135,13 @@ const clearDocument = () => {
 const redirectRoute = async () => {
   await router.replace({
     name: 'RegistrationList',
-    params: { id: docFlowStore.documentMenuType.journalId }
+    params: { code: docFlowStore.documentMenuType.journalId },
+    query: { journal_id: docFlowStore.documentMenuType.__journalId }
   })
 }
 const afterHide = () => {
   docFlowStore.actionLoadFormCreateDocument({
-    name: 'Incoming',
-    journalId: JOURNAL.INCOMING
+    journalCode: JOURNAL_CODES.INCOMING
   })
 }
 // Watch
