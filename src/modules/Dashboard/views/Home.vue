@@ -8,13 +8,13 @@ import { WidgetDocFlow, WidgetBirthday, WidgetTasks, WidgetContacts, WidgetAppli
     <h1 class="text-2xl text-primary-900 font-bold mb-5">Дашбоард</h1>
 
     <div class="dashboard-grid flex h-[calc(100%-52px)] gap-5">
-      <div class="flex-1">
-        <widget-doc-flow class="mb-5" />
+      <div class="flex flex-col flex-1">
+        <widget-doc-flow class="h-[272px] mb-5" />
 
-        <div class="flex gap-5">
-          <widget-tasks />
+        <div class="flex flex-1 gap-5 overflow-y-auto">
+          <widget-tasks class="flex-1" />
 
-          <widget-contacts />
+          <widget-contacts class="w-[356px]" />
         </div>
       </div>
 

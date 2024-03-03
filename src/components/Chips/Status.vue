@@ -70,7 +70,7 @@ const name = computed(() => {
     return 'Не известный статус'
   }
 
-  return props.status.name
+  return active.name
 })
 
 </script>

@@ -11,6 +11,7 @@ import ToastService from 'primevue/toastservice'
 import "primevue/resources/themes/lara-light-indigo/theme.css"
 import 'primeicons/primeicons.css'
 import Notifications from '@kyvg/vue3-notification'
+import VueRewards from 'vue-rewards'
 // Router
 import router from './router'
 // Components
@@ -145,6 +146,7 @@ app.use(PrimeVue, {
 })
 app.use(setupI18n())
 app.use(Notifications)
+app.use(VueRewards)
 
 app.directive('badge', BadgeDirective)
 app.directive('tooltip', Tooltip)

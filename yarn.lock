@@ -3993,6 +3993,11 @@ vue-inbrowser-compiler-independent-utils@^4.69.0:
   resolved "https://registry.npmjs.org/vue-inbrowser-compiler-independent-utils/-/vue-inbrowser-compiler-independent-utils-4.71.1.tgz"
   integrity sha512-K3wt3iVmNGaFEOUR4JIThQRWfqokxLfnPslD41FDZB2ajXp789+wCqJyGYlIFsvEQ2P61PInw6/ph5iiqg51gg==
 
+vue-rewards@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/vue-rewards/-/vue-rewards-1.0.1.tgz#ae5a544888b1b53a1bcdc317ba25606940f8736b"
+  integrity sha512-9wmwoQevdbrGBa6XUjNnPRT0+croXPydxeyIkZKpqJEJ32FFRj8U239oiTKuXgLWil7y+JAH8D/NJ6R7llIfaA==
+
 vue-router@^4.2.4:
   version "4.2.5"
   resolved "https://registry.npmjs.org/vue-router/-/vue-router-4.2.5.tgz"
