@@ -1,13 +1,85 @@
 <script setup>
+// Core
+import { ref, unref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 // Components
 import { StatusChip } from '@/components/Chips'
 import WidgetWrapper from './WidgetWrapper.vue'
+// Composable
+const route = useRoute()
+const router = useRouter()
+const { t } = useI18n()
+// Reactive
+const menuRef = ref(null)
+const items = ref([
+  {
+    label: t('last-seven-days'),
+    command: () => itemSelect('last-seven-days')
+  },
+  {
+    label: t('last-two-weeks'),
+    command: () => itemSelect('last-two-weeks')
+  },
+  {
+    label: t('this-month'),
+    command: () => itemSelect('this-month')
+  },
+  {
+    label: t('last-month'),
+    command: () => itemSelect('last-month')
+  },
+])
+const itemSelected = ref('last-seven-days')
+// Hooks
+onMounted(async () => {
+  if(route.query.hasOwnProperty('task')) {
+    itemSelected.value = route.query.task
+  }
+})
+// Methods
+const itemSelect = async (text) => {
+  itemSelected.value = text
+
+  await router.push({
+    query: {
+      task: itemSelected.value
+    }
+  })
+}
+const toggle = (event) => {
+  const _menuRef = unref(menuRef)
+  _menuRef.menuRef.toggle(event)
+}
 </script>
 
 <template>
   <widget-wrapper title="upcoming-tasks">
     <template #header-after>
-      ads
+      <base-button
+        type="button"
+        size="small"
+        outlined
+        icon-right="AltArrowDownIcon"
+        icon-width="16"
+        icon-height="16"
+        button-class="!bg-greyscale-50 !py-1 !px-2 !rounded-[6px] border-none"
+        @click="toggle"
+      >
+        <template #label>
+          <span class="text-primary-500 font-semibold">{{ t(itemSelected) }}</span>
+        </template>
+      </base-button>
+
+      <base-menu
+        ref="menuRef"
+        :items="items"
+        width="w-[150px]"
+      >
+        <template #item="{ item }">
+          <span class="block text-xs font-semibold text-greyscale-900 px-2 py-1 cursor-pointer">{{ item.label }}</span>
+        </template>
+      </base-menu>
     </template>
 
     <template #content>

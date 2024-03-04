@@ -1,7 +1,15 @@
 <script setup>
 // Core
-import { ref, unref } from 'vue'
+import { ref, unref, onMounted } from 'vue'
 import Listbox from 'primevue/listbox'
+// Components
+import WidgetWrapper from './WidgetWrapper.vue'
+// Utils
+import { dispatchNotify } from '@/utils/notify'
+import { getStorageItem, removeStorageItem, saveStorageItem } from '@/utils/storage'
+// Enums
+import { COLOR_TYPES } from '@/enums'
+import { DASHBOARD_DOC_FLOW_SETTINGS } from '../../enums'
 // Reactive
 const overlayPanelRef = ref(null)
 const activeTabMenuIndex = ref(0)
@@ -19,39 +27,105 @@ const tabMenuItems = ref([
     name: 'Comments',
   }
 ])
-const selectedCity = ref([
+const settingOptions = ref([
   {
-    "name": "Rome",
-    "code": "RM",
-    "status": true
+    name: 'На рассмотрение',
+    icon: 'BoldGreenClockCircleIcon',
+    avatarColor: 'bg-success-50',
+    status: true,
+    order: 1
   },
   {
-    "name": "London",
-    "code": "LDN",
-    "status": true
-  }
+    name: 'Поручения',
+    icon: 'BoldPrimaryRoundArrowRightDownIcon',
+    avatarColor: 'bg-primary-50',
+    status: true,
+    order: 2
+  },
+  {
+    name: 'На подпись',
+    icon: 'BoldInfoMessageCoverIcon',
+    avatarColor: 'bg-info-50',
+    status: true,
+    order: 3
+  },
+  {
+    name: 'На согласование',
+    icon: 'BoldPrimaryFileCheckIcon',
+    avatarColor: 'bg-primary-50',
+    status: true,
+    order: 4
+  },
+  {
+    name: 'На обзоре',
+    icon: 'BoldWarningCursorIcon',
+    avatarColor: 'bg-warning-50',
+    status: true,
+    order: 5
+  },
+  {
+    name: 'Не выполнено',
+    icon: 'BoldCriticCloseCircleIcon',
+    avatarColor: 'bg-critic-50',
+    status: true,
+    order: 6
+  },
+  {
+    name: 'Просроченный',
+    icon: 'BoldGreyCalendarIcon',
+    avatarColor: 'bg-greyscale-50',
+    status: true,
+    order: 7
+  },
+  {
+    name: 'Для подтверждения',
+    icon: 'BoldGreenFolderFavIcon',
+    avatarColor: 'bg-success-50',
+    status: true,
+    order: 8
+  },
 ])
-const cities = ref([
-  { name: 'New York', code: 'NY', status: false },
-  { name: 'Rome', code: 'RM', status: true },
-  { name: 'London', code: 'LDN', status: true },
-  { name: 'Istanbul', code: 'IST', status: false },
-  { name: 'Paris', code: 'PRS', status: false }
-]);
+const selectedSetting = ref(settingOptions.value)
+const activeSettings = ref(settingOptions.value)
 // Methods
+const handleSettings = ({ value }) => {
+  activeSettings.value = settingOptions.value.map(setting => ({
+    ...setting,
+    status: value.find(column => column.name === setting.name)?.status
+  }))
+}
+const activeStatus = (list, name) => {
+  return list.find(item => item.name === name)?.status
+}
 const toggle = (event) => {
-  console.log(event);
   const _overlayPanelRef = unref(overlayPanelRef)
   _overlayPanelRef.opRef.toggle(event)
 }
+const saveSettings = (event) => {
+  saveStorageItem(DASHBOARD_DOC_FLOW_SETTINGS, JSON.stringify(activeSettings.value))
+  dispatchNotify('Фильтр сохранен', null, COLOR_TYPES.SUCCESS)
+  toggle(event)
+}
+const resetSettings = (event) => {
+  removeStorageItem(DASHBOARD_DOC_FLOW_SETTINGS)
+  activeSettings.value = settingOptions.value
+  dispatchNotify('Фильтр сброшен', null, COLOR_TYPES.SUCCESS)
+  toggle(event)
+}
+// Hooks
+onMounted(() => {
+  const settingStorage = JSON.parse(getStorageItem(DASHBOARD_DOC_FLOW_SETTINGS))
+
+  if(settingStorage && settingStorage.length > 0) {
+    activeSettings.value = JSON.parse(getStorageItem(DASHBOARD_DOC_FLOW_SETTINGS))
+  }
+})
 </script>
 
 <template>
-  <div class="doc-flow-view shadow-button rounded-xl bg-white p-5 pt-4">
-    <div class="flex items-center justify-between gap-4">
-      <h1 class="text-lg font-semibold text-primary-900">Входящие</h1>
-
-      <div class="flex items-center justify-end">
+  <widget-wrapper title="incoming">
+    <template #header-after>
+      <div class="flex items-center">
         <base-tab-menu
           v-model="activeTabMenuIndex"
           :tab-items="tabMenuItems"
@@ -79,12 +153,12 @@ const toggle = (event) => {
           menu-class="bg-white mt-1 overflow-hidden"
         >
           <div class="p-2">
-            <pre>{{ selectedCity }}</pre>
             <Listbox
-              v-model="selectedCity"
-              :options="cities"
+              v-model="selectedSetting"
+              :options="settingOptions"
               multiple
               optionLabel="name"
+              @change="handleSettings"
               :pt="{
                 root: [
                   'border-none shadow-none'
@@ -93,16 +167,30 @@ const toggle = (event) => {
                   'p-0'
                 ],
                 item: [
-                  'text-sm font-medium p-0 rounded-lg'
+                  'bg-transparent text-sm font-medium p-0 rounded-lg mb-1 hover:!bg-greyscale-50'
                 ]
               }"
             >
               <template #option="{ option }">
-                <base-toggle v-model="option.status" #default="{ state }">
-                  <pre>{{ state }}</pre>
-                  <pre>{{ option?.name }}</pre>
-                  <pre>FFF --- {{ option?.status }}</pre>
-                </base-toggle>
+                <div class="flex items-center gap-2 py-[10px] px-3 rounded-xl">
+                  <div class="w-5 h-5">
+                    <template v-if="activeStatus(activeSettings, option?.name)">
+                      <base-icon
+                        name="CheckCircleBgIcon"
+                        width="20"
+                        height="20"
+                        type="primary"
+                        class="fill-primary-500"
+                      />
+                    </template>
+
+                    <template v-else>
+                      <div class="w-5 h-5 border border-greyscale-200 rounded-full"></div>
+                    </template>
+                  </div>
+
+                  <span class="flex-1 text-greyscale-900 font-medium">{{ option?.name }}</span>
+                </div>
               </template>
             </Listbox>
           </div>
@@ -117,6 +205,7 @@ const toggle = (event) => {
                 size="small"
                 border-color="border-transparent"
                 button-class="w-[100px] bg-white text-primary-900 hover:bg-greyscale-100"
+                @click="resetSettings($event)"
               />
 
               <base-button
@@ -127,15 +216,44 @@ const toggle = (event) => {
                 size="small"
                 border-color="border-transparent"
                 button-class="w-[100px]"
+                @click="saveSettings($event)"
               />
             </div>
           </template>
         </base-overlay-panel>
       </div>
-    </div>
-  </div>
+    </template>
+
+    <template #content>
+      <div class="bg-greyscale-50 h-full p-3 pr-[6px] rounded-xl">
+        <div class="h-full pr-2 overflow-y-auto">
+          <div class="grid grid-rows-2 grid-cols-4 gap-2 h-full">
+            <template v-for="(item, index) in activeSettings" :key="index">
+              <template v-if="item.status">
+                <router-link to="/" class="flex gap-3 bg-white shadow-button rounded-[10px] p-4">
+                  <div class="flex items-center justify-center w-10 h-10 rounded-full" :class="item.avatarColor">
+                    <base-icon
+                      :key="item.icon"
+                      :name="item.icon"
+                      :class="item.iconColor"
+                      :stroke="false"
+                    />
+                  </div>
+
+                  <div class="flex-1">
+                    <h1 class="text-sm text-greyscale-900 font-semibold">{{ item.name }}</h1>
+                    <p class="text-greyscale-500 font-medium">{{ index + 1 }}</p>
+                  </div>
+                </router-link>
+              </template>
+            </template>
+          </div>
+        </div>
+      </div>
+    </template>
+  </widget-wrapper>
 </template>
 
-<style scoped>
+<style>
 
 </style>

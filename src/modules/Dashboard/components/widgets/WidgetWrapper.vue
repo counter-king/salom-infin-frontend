@@ -14,8 +14,10 @@ const props = defineProps({
 
 <template>
   <div class="doc-flow-view flex flex-col shadow-button rounded-xl bg-white">
-    <div class="flex items-center justify-between gap-4 px-5 pt-4 pb-3">
+    <div class="flex items-center gap-4 px-5 pt-4 pb-3">
       <h1 class="text-primary-900 font-semibold">{{ t(props.title) }}</h1>
+
+      <div class="flex-1"></div>
 
       <slot name="header-after"></slot>
     </div>

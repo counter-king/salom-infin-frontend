@@ -18,6 +18,10 @@ const props = defineProps({
     type: [Number, String],
     default: 20
   },
+  filled: {
+    type: Boolean,
+    default: false
+  },
   stroke: {
     type: Boolean,
     default: true
@@ -51,7 +55,8 @@ const icon = defineAsyncComponent(() =>
     :width="props.width"
     :height="props.height"
     :class="[
-      props.stroke ? 'app-stroke-icon' : 'app-filled-icon',
+      { 'app-stroke-icon': props.stroke },
+      { 'app-filled-icon': props.filled },
       typeClass
     ]"
   />
