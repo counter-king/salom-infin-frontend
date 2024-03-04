@@ -2,7 +2,7 @@
 // Core
 import { ref } from 'vue'
 // Components
-import WidgetWrapper from './WidgetWrapper.vue'
+import WidgetWrapper from '../WidgetWrapper.vue'
 import SelectedContacts from '../SelectedContacts.vue'
 import AllContacts from '../AllContacts.vue'
 // Reactive

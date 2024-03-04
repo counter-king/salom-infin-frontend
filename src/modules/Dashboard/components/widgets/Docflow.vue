@@ -3,7 +3,8 @@
 import { ref, unref, onMounted } from 'vue'
 import Listbox from 'primevue/listbox'
 // Components
-import WidgetWrapper from './WidgetWrapper.vue'
+import WidgetWrapper from '../WidgetWrapper.vue'
+import { DocFlowNewCount, DocFlowInProgressCount, DocFlowAllCount } from '../Docflow'
 // Utils
 import { dispatchNotify } from '@/utils/notify'
 import { getStorageItem, removeStorageItem, saveStorageItem } from '@/utils/storage'
@@ -33,6 +34,8 @@ const settingOptions = ref([
     icon: 'BoldGreenClockCircleIcon',
     avatarColor: 'bg-success-50',
     status: true,
+    key: 'for_review',
+    count: 0,
     order: 1
   },
   {
@@ -40,6 +43,8 @@ const settingOptions = ref([
     icon: 'BoldPrimaryRoundArrowRightDownIcon',
     avatarColor: 'bg-primary-50',
     status: true,
+    key: 'assignments',
+    count: 0,
     order: 2
   },
   {
@@ -47,6 +52,8 @@ const settingOptions = ref([
     icon: 'BoldInfoMessageCoverIcon',
     avatarColor: 'bg-info-50',
     status: true,
+    key: 'for_signature',
+    count: 0,
     order: 3
   },
   {
@@ -54,6 +61,8 @@ const settingOptions = ref([
     icon: 'BoldPrimaryFileCheckIcon',
     avatarColor: 'bg-primary-50',
     status: true,
+    key: 'for_approval',
+    count: 0,
     order: 4
   },
   {
@@ -61,6 +70,8 @@ const settingOptions = ref([
     icon: 'BoldWarningCursorIcon',
     avatarColor: 'bg-warning-50',
     status: true,
+    key: null,
+    count: 0,
     order: 5
   },
   {
@@ -68,6 +79,8 @@ const settingOptions = ref([
     icon: 'BoldCriticCloseCircleIcon',
     avatarColor: 'bg-critic-50',
     status: true,
+    key: null,
+    count: 0,
     order: 6
   },
   {
@@ -75,6 +88,8 @@ const settingOptions = ref([
     icon: 'BoldGreyCalendarIcon',
     avatarColor: 'bg-greyscale-50',
     status: true,
+    key: null,
+    count: 0,
     order: 7
   },
   {
@@ -82,6 +97,8 @@ const settingOptions = ref([
     icon: 'BoldGreenFolderFavIcon',
     avatarColor: 'bg-success-50',
     status: true,
+    key: null,
+    count: 0,
     order: 8
   },
 ])
@@ -227,25 +244,17 @@ onMounted(() => {
     <template #content>
       <div class="bg-greyscale-50 h-full p-3 pr-[6px] rounded-xl">
         <div class="h-full pr-2 overflow-y-auto">
-          <div class="grid grid-rows-2 grid-cols-4 gap-2 h-full">
-            <template v-for="(item, index) in activeSettings" :key="index">
-              <template v-if="item.status">
-                <router-link to="/" class="flex gap-3 bg-white shadow-button rounded-[10px] p-4">
-                  <div class="flex items-center justify-center w-10 h-10 rounded-full" :class="item.avatarColor">
-                    <base-icon
-                      :key="item.icon"
-                      :name="item.icon"
-                      :class="item.iconColor"
-                      :stroke="false"
-                    />
-                  </div>
+          <div class="grid grid-rows-2 grid-cols-4 gap-2 relative h-full">
+            <template v-if="activeTabMenuIndex === 0">
+              <doc-flow-new-count :list="activeSettings" />
+            </template>
 
-                  <div class="flex-1">
-                    <h1 class="text-sm text-greyscale-900 font-semibold">{{ item.name }}</h1>
-                    <p class="text-greyscale-500 font-medium">{{ index + 1 }}</p>
-                  </div>
-                </router-link>
-              </template>
+            <template v-if="activeTabMenuIndex === 1">
+              <doc-flow-in-progress-count :list="activeSettings" />
+            </template>
+
+            <template v-if="activeTabMenuIndex === 2">
+              <doc-flow-all-count :list="activeSettings" />
             </template>
           </div>
         </div>

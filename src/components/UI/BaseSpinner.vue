@@ -7,10 +7,6 @@ const props = defineProps({
   rootClasses: {
     type: String
   },
-  content: {
-    type: Boolean,
-    default: true
-  },
   absolute: {
     type: Boolean,
     default: false
@@ -22,10 +18,15 @@ const props = defineProps({
 })
 // Computed
 const classes = computed(() => {
-  return {
-    'w-full h-full flex items-center justify-center': props.content,
-    'fixed top-0 bg-white w-full h-full flex items-center justify-center': props.screen
-  }
+  return [
+    'flex items-center justify-center w-full h-full',
+    {
+      'absolute': props.absolute
+    },
+    {
+      'fixed top-0 bg-white': props.screen
+    }
+  ]
 })
 </script>
 

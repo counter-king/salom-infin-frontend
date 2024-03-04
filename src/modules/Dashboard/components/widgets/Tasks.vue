@@ -5,7 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 // Components
 import { StatusChip } from '@/components/Chips'
-import WidgetWrapper from './WidgetWrapper.vue'
+import WidgetWrapper from '../WidgetWrapper.vue'
 // Composable
 const route = useRoute()
 const router = useRouter()

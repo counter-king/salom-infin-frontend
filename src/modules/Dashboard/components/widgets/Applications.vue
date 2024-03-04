@@ -1,6 +1,6 @@
 <script setup>
 // Components
-import WidgetWrapper from './WidgetWrapper.vue'
+import WidgetWrapper from '../WidgetWrapper.vue'
 // Non-reactive
 const list = [
   'Трудовой отпуск',

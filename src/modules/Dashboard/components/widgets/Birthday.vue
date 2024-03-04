@@ -3,7 +3,7 @@
 import { useReward } from 'vue-rewards'
 // Components
 import { UserWithAction } from '@/components/Users'
-import WidgetWrapper from './WidgetWrapper.vue'
+import WidgetWrapper from '../WidgetWrapper.vue'
 // Non-reactive
 const config = {
   startVelocity: 10,

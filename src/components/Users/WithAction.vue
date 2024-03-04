@@ -16,15 +16,15 @@ const props = defineProps({
       :label="props.label"
     />
 
-    <div class="flex-1">
+    <div class="flex-1 min-w-0">
       <div class="flex items-center gap-1 font-semibold leading-[1] mb-1">
-        <h1 class="text-greyscale-900 text-[13px] font-semibold leading-[1]">{{ props.label }}</h1>
+        <h1 class="text-greyscale-900 text-[13px] font-semibold leading-[1] truncate">{{ props.label }}</h1>
 
         <slot name="title-after" />
       </div>
 
       <div class="flex items-center gap-1 font-semibold leading-[1]">
-        <h1 class="text-greyscale-400 text-[13px]">{{ props.subTitle }}</h1>
+        <h1 class="text-greyscale-400 text-[13px] truncate">{{ props.subTitle }}</h1>
 
         <slot name="sub-title-after" />
       </div>
