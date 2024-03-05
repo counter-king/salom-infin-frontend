@@ -24,18 +24,20 @@ const props = defineProps({
       </div>
 
       <div class="flex items-center gap-1 font-semibold leading-[1]">
-        <h1 class="text-greyscale-400 text-[13px] truncate">{{ props.subTitle }}</h1>
+        <h1 class="asdasd text-greyscale-400 text-[13px] truncate">{{ props.subTitle }}</h1>
 
         <slot name="sub-title-after" />
       </div>
     </div>
 
-    <div class="flex gap-2 cursor-pointer">
+    <div class="flex gap-2">
       <slot name="action" />
     </div>
   </div>
 </template>
 
-<style scoped>
-
+<style>
+.asdasd {
+  cursor: pointer;
+}
 </style>
