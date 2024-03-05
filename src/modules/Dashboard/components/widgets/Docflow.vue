@@ -103,7 +103,7 @@ const settingOptions = ref([
   },
 ])
 const selectedSetting = ref(settingOptions.value)
-const activeSettings = ref(settingOptions.value)
+const activeSettings = ref([])
 // Methods
 const handleSettings = ({ value }) => {
   activeSettings.value = settingOptions.value.map(setting => ({
@@ -135,6 +135,9 @@ onMounted(() => {
 
   if(settingStorage && settingStorage.length > 0) {
     activeSettings.value = JSON.parse(getStorageItem(DASHBOARD_DOC_FLOW_SETTINGS))
+  }
+  else {
+    activeSettings.value = settingOptions.value
   }
 })
 </script>
