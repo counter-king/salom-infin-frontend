@@ -106,10 +106,11 @@ const selectedSetting = ref(settingOptions.value)
 const activeSettings = ref(settingOptions.value)
 // Methods
 const handleSettings = ({ value }) => {
-  // activeSettings.value = settingOptions.value.map(setting => ({
-  //   ...setting,
-  //   status: value.find(column => column.name === setting.name)?.status
-  // }))
+  activeSettings.value = settingOptions.value.map(setting => ({
+    ...setting,
+    // status: value.find(column => column.name === setting.name)?.status
+    // status: value.find(column => column.name === setting.name)?.status
+  }))
 }
 const activeStatus = (list, name) => {
   return list.find(item => item.name === name)?.status
