@@ -195,7 +195,7 @@ onMounted(() => {
                 <div class="flex items-center gap-2 py-[10px] px-3 rounded-xl">
                   <div class="w-5 h-5">
 <!--                    <template v-if="activeStatus(activeSettings, option?.name)">-->
-                    <template v-if="true">
+                    <template v-if="activeSettings.find(setting => setting.name === option?.name)?.status ?? false">
                       <base-icon
                         name="CheckCircleBgIcon"
                         width="20"
