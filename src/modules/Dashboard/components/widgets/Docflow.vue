@@ -1,20 +1,15 @@
 <script setup>
 // Core
-import { ref, toRaw, unref, onMounted } from 'vue'
-import Listbox from 'primevue/listbox'
+import { ref, watch } from 'vue'
 // Components
 import WidgetWrapper from '../WidgetWrapper.vue'
-import { DocFlowNewCount, DocFlowInProgressCount, DocFlowAllCount } from '../Docflow'
-// Utils
-import { dispatchNotify } from '@/utils/notify'
-import { getStorageItem, removeStorageItem, saveStorageItem } from '@/utils/storage'
-// Enums
-import { COLOR_TYPES } from '@/enums'
-import { DASHBOARD_DOC_FLOW_SETTINGS } from '../../enums'
+import SettingMenu from '../Docflow/SettingMenu.vue'
+import DocFlowCard from '../Docflow/Card.vue'
+// Services
+import axiosConfig from '@/services/axios.config'
 // Reactive
-const overlayPanelRef = ref(null)
-const activeTabMenuIndex = ref(0)
-const tabMenuItems = ref([
+const tabIndex = ref(0)
+const tabMenus = ref([
   {
     label: 'Новые',
     name: 'Preview',
@@ -28,118 +23,43 @@ const tabMenuItems = ref([
     name: 'Comments',
   }
 ])
-const settingOptions = ref([
-  {
-    name: 'На рассмотрение',
-    icon: 'BoldGreenClockCircleIcon',
-    avatarColor: 'bg-success-50',
-    status: true,
-    key: 'for_review',
-    count: 0,
-    order: 1
-  },
-  {
-    name: 'Поручения',
-    icon: 'BoldPrimaryRoundArrowRightDownIcon',
-    avatarColor: 'bg-primary-50',
-    status: true,
-    key: 'assignments',
-    count: 0,
-    order: 2
-  },
-  {
-    name: 'На подпись',
-    icon: 'BoldInfoMessageCoverIcon',
-    avatarColor: 'bg-info-50',
-    status: true,
-    key: 'for_signature',
-    count: 0,
-    order: 3
-  },
-  {
-    name: 'На согласование',
-    icon: 'BoldPrimaryFileCheckIcon',
-    avatarColor: 'bg-primary-50',
-    status: true,
-    key: 'for_approval',
-    count: 0,
-    order: 4
-  },
-  {
-    name: 'На обзоре',
-    icon: 'BoldWarningCursorIcon',
-    avatarColor: 'bg-warning-50',
-    status: true,
-    key: null,
-    count: 0,
-    order: 5
-  },
-  {
-    name: 'Не выполнено',
-    icon: 'BoldCriticCloseCircleIcon',
-    avatarColor: 'bg-critic-50',
-    status: true,
-    key: null,
-    count: 0,
-    order: 6
-  },
-  {
-    name: 'Просроченный',
-    icon: 'BoldGreyCalendarIcon',
-    avatarColor: 'bg-greyscale-50',
-    status: true,
-    key: null,
-    count: 0,
-    order: 7
-  },
-  {
-    name: 'Для подтверждения',
-    icon: 'BoldGreenFolderFavIcon',
-    avatarColor: 'bg-success-50',
-    status: true,
-    key: null,
-    count: 0,
-    order: 8
-  },
-])
-const selectedSetting = ref(settingOptions.value)
-const activeSettings = ref([])
+const list = ref([])
+const loading = ref(true)
+const counts = ref(null)
 // Methods
-const handleSettings = ({ value }) => {
-  activeSettings.value = settingOptions.value.map(setting => ({
-    ...setting,
-    status: toRaw(value.find(column => column.name === setting.name))?.status ?? false
-  }))
-}
-const activeStatus = (list, name) => {
-  return list.find(item => item.name === name)?.status
-}
-const toggle = (event) => {
-  const _overlayPanelRef = unref(overlayPanelRef)
-  _overlayPanelRef.opRef.toggle(event)
-}
-const saveSettings = (event) => {
-  saveStorageItem(DASHBOARD_DOC_FLOW_SETTINGS, JSON.stringify(activeSettings.value))
-  dispatchNotify('Фильтр сохранен', null, COLOR_TYPES.SUCCESS)
-  toggle(event)
-}
-const resetSettings = (event) => {
-  removeStorageItem(DASHBOARD_DOC_FLOW_SETTINGS)
-  activeSettings.value = settingOptions.value
-  dispatchNotify('Фильтр сброшен', null, COLOR_TYPES.SUCCESS)
-  toggle(event)
-}
-// Hooks
-onMounted(() => {
-  const settingStorage = JSON.parse(getStorageItem(DASHBOARD_DOC_FLOW_SETTINGS))
+const getCounts = async () => {
+  let url = null
 
-  if(settingStorage && settingStorage.length > 0) {
-    activeSettings.value = JSON.parse(getStorageItem(DASHBOARD_DOC_FLOW_SETTINGS))
+  switch (tabIndex.value) {
+    case 0:
+      url = 'dashboard/new-counts/'
+      break;
+    case 1:
+      url = 'dashboard/in-progress-counts/'
+      break;
+    default:
+      url = 'dashboard/all-counts/'
   }
-  else {
-    activeSettings.value = settingOptions.value
+
+  try {
+    loading.value = true
+    let { data } = await axiosConfig.get(url)
+    counts.value = data
   }
-})
+  finally {
+    setTimeout(() => {
+      loading.value = false
+    }, 500)
+  }
+}
+// Watch
+watch(
+  () => tabIndex.value,
+  async () => {
+    await getCounts()
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
@@ -147,96 +67,14 @@ onMounted(() => {
     <template #header-after>
       <div class="flex items-center">
         <base-tab-menu
-          v-model="activeTabMenuIndex"
-          :tab-items="tabMenuItems"
+          v-model="tabIndex"
+          :tab-items="tabMenus"
           bricks
         />
 
         <div class="bg-greyscale-200 w-[1px] h-4 ml-2 mx-2"></div>
 
-        <base-button
-          :rounded="false"
-          rounded
-          shadow
-          size="small"
-          label="Настроить"
-          icon-left="SettingsMinimalisticIcon"
-          icon-width="16"
-          icon-height="16"
-          button-class="bg-transparent text-greyscale-500 !text-sm border-none shadow-none !rounded-[6px] !py-1 !px-2 hover:bg-greyscale-50"
-          @click="toggle"
-        />
-
-        <base-overlay-panel
-          ref="overlayPanelRef"
-          width="w-60"
-          menu-class="bg-white mt-1 overflow-hidden"
-        >
-          <div class="p-2">
-            <Listbox
-              v-model="selectedSetting"
-              :options="settingOptions"
-              multiple
-              optionLabel="name"
-              @change="handleSettings"
-              :pt="{
-                root: [
-                  'border-none shadow-none'
-                ],
-                list: [
-                  'p-0'
-                ],
-                item: [
-                  'bg-transparent text-sm font-medium p-0 rounded-lg mb-1 hover:!bg-greyscale-50'
-                ]
-              }"
-            >
-              <template #option="{ option }">
-                <div class="flex items-center gap-2 py-[10px] px-3 rounded-xl">
-                  <div class="w-5 h-5">
-                    <base-icon
-                      name="CheckCircleBgIcon"
-                      width="20"
-                      height="20"
-                      type="primary"
-                      class="checked-icon fill-primary-500"
-                    />
-
-                    <div class="unchecked-icon w-5 h-5 border border-greyscale-200 rounded-full"></div>
-                  </div>
-
-                  <span class="flex-1 text-greyscale-900 font-medium">{{ option?.name }}</span>
-                </div>
-              </template>
-            </Listbox>
-          </div>
-
-          <template #actions>
-            <div class="flex justify-center gap-2 p-1">
-              <base-button
-                label="reset"
-                :rounded="true"
-                shadow
-                type="button"
-                size="small"
-                border-color="border-transparent"
-                button-class="w-[100px] bg-white text-primary-900 hover:bg-greyscale-100"
-                @click="resetSettings($event)"
-              />
-
-              <base-button
-                label="save"
-                :rounded="true"
-                shadow
-                type="button"
-                size="small"
-                border-color="border-transparent"
-                button-class="w-[100px]"
-                @click="saveSettings($event)"
-              />
-            </div>
-          </template>
-        </base-overlay-panel>
+        <setting-menu @emit:change="(value) => list = value" />
       </div>
     </template>
 
@@ -244,16 +82,12 @@ onMounted(() => {
       <div class="bg-greyscale-50 h-full p-3 pr-[6px] rounded-xl">
         <div class="h-full pr-2 overflow-y-auto">
           <div class="grid grid-rows-2 grid-cols-4 gap-2 relative h-full">
-            <template v-if="activeTabMenuIndex === 0">
-              <doc-flow-new-count :list="activeSettings" />
+            <template v-if="loading">
+              <base-spinner absolute />
             </template>
 
-            <template v-if="activeTabMenuIndex === 1">
-              <doc-flow-in-progress-count :list="activeSettings" />
-            </template>
-
-            <template v-if="activeTabMenuIndex === 2">
-              <doc-flow-all-count :list="activeSettings" />
+            <template v-else>
+              <doc-flow-card :list="list" :counts="counts" />
             </template>
           </div>
         </div>
@@ -263,12 +97,5 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.checked-icon,
-.p-highlight .unchecked-icon {
-  display: none;
-}
 
-.p-highlight .checked-icon {
-  display: block;
-}
 </style>

@@ -4,6 +4,10 @@ const props = defineProps({
   list: {
     type: Array,
     default: () => []
+  },
+  counts: {
+    type: Object,
+    default: () => {}
   }
 })
 </script>
@@ -23,7 +27,7 @@ const props = defineProps({
 
         <div class="flex-1">
           <h1 class="text-sm text-greyscale-900 font-semibold">{{ item.name }}</h1>
-          <p class="text-greyscale-500 font-medium">{{ item.count }}</p>
+          <p class="text-greyscale-500 font-medium">{{ counts[item.key] }}</p>
         </div>
       </router-link>
     </template>
