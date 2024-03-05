@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref, unref, onMounted } from 'vue'
+import { ref, toRaw, unref, onMounted } from 'vue'
 import Listbox from 'primevue/listbox'
 // Components
 import WidgetWrapper from '../WidgetWrapper.vue'
@@ -108,8 +108,7 @@ const activeSettings = ref(settingOptions.value)
 const handleSettings = ({ value }) => {
   activeSettings.value = settingOptions.value.map(setting => ({
     ...setting,
-    // status: value.find(column => column.name === setting.name)?.status
-    // status: value.find(column => column.name === setting.name)?.status
+    status: toRaw(value.find(column => column.name === setting.name))?.status ?? false
   }))
 }
 const activeStatus = (list, name) => {
