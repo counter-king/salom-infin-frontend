@@ -194,20 +194,15 @@ onMounted(() => {
               <template #option="{ option }">
                 <div class="flex items-center gap-2 py-[10px] px-3 rounded-xl">
                   <div class="w-5 h-5">
-<!--                    <template v-if="activeStatus(activeSettings, option?.name)">-->
-                    <template v-if="activeSettings.find(setting => setting.name === option?.name)?.status ?? false">
-                      <base-icon
-                        name="CheckCircleBgIcon"
-                        width="20"
-                        height="20"
-                        type="primary"
-                        class="fill-primary-500"
-                      />
-                    </template>
+                    <base-icon
+                      name="CheckCircleBgIcon"
+                      width="20"
+                      height="20"
+                      type="primary"
+                      class="checked-icon fill-primary-500"
+                    />
 
-                    <template v-else>
-                      <div class="w-5 h-5 border border-greyscale-200 rounded-full"></div>
-                    </template>
+                    <div class="unchecked-icon w-5 h-5 border border-greyscale-200 rounded-full"></div>
                   </div>
 
                   <span class="flex-1 text-greyscale-900 font-medium">{{ option?.name }}</span>
@@ -267,6 +262,13 @@ onMounted(() => {
   </widget-wrapper>
 </template>
 
-<style>
+<style scoped>
+.checked-icon,
+.p-highlight .unchecked-icon {
+  display: none;
+}
 
+.p-highlight .checked-icon {
+  display: block;
+}
 </style>
