@@ -9,11 +9,11 @@ import { UserWithLabel, UserWithSelectable } from '@/components/Users'
 // Stores
 import { useCommonStore } from '@/stores/common'
 import { useUsersStore } from '@/stores/users.store'
-import { useCalendarStore } from '../stores/calendar.store'
+import { useCalendarStore } from '../../stores/calendar.store'
 // Utils
 import { formatDateReverse } from '@/utils/formatDate'
 import { isObject } from '@/utils'
-import { generateDayHours } from '../utils'
+import { generateDayHours } from '../../utils'
 // Composable
 const commonStore = useCommonStore()
 const userStore = useUsersStore()

@@ -49,7 +49,7 @@ const emitCancelButton = (value) => {
 // Watch
 watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
   actionTypesMenuComponent.value = defineAsyncComponent({
-    loader: () => import(`./${value}.vue`),
+    loader: () => import(`./Form/${value}.vue`),
     loadingComponent: BaseSpinner,
     delay: 200
   })
