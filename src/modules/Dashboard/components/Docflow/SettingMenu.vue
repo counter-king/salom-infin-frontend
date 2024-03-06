@@ -19,6 +19,7 @@ const options = ref([
     avatarColor: 'bg-success-50',
     status: true,
     key: 'for_review',
+    route: 'ReviewIndex',
     order: 1
   },
   {
@@ -27,6 +28,7 @@ const options = ref([
     avatarColor: 'bg-primary-50',
     status: true,
     key: 'assignments',
+    route: 'AssignmentIndex',
     order: 2
   },
   {
@@ -35,6 +37,7 @@ const options = ref([
     avatarColor: 'bg-info-50',
     status: true,
     key: 'for_signature',
+    route: 'SignIndex',
     order: 3
   },
   {
@@ -43,40 +46,45 @@ const options = ref([
     avatarColor: 'bg-primary-50',
     status: true,
     key: 'for_approval',
+    route: 'ApprovalIndex',
     order: 4
   },
-  {
-    name: 'На обзоре',
-    icon: 'BoldWarningCursorIcon',
-    avatarColor: 'bg-warning-50',
-    status: true,
-    key: null,
-    order: 5
-  },
-  {
-    name: 'Не выполнено',
-    icon: 'BoldCriticCloseCircleIcon',
-    avatarColor: 'bg-critic-50',
-    status: true,
-    key: null,
-    order: 6
-  },
-  {
-    name: 'Просроченный',
-    icon: 'BoldGreyCalendarIcon',
-    avatarColor: 'bg-greyscale-50',
-    status: true,
-    key: null,
-    order: 7
-  },
-  {
-    name: 'Для подтверждения',
-    icon: 'BoldGreenFolderFavIcon',
-    avatarColor: 'bg-success-50',
-    status: true,
-    key: null,
-    order: 8
-  },
+  // {
+  //   name: 'На обзоре',
+  //   icon: 'BoldWarningCursorIcon',
+  //   avatarColor: 'bg-warning-50',
+  //   status: true,
+  //   key: null,
+  //   route: 'ReviewIndex',
+  //   order: 5
+  // },
+  // {
+  //   name: 'Не выполнено',
+  //   icon: 'BoldCriticCloseCircleIcon',
+  //   avatarColor: 'bg-critic-50',
+  //   status: true,
+  //   key: null,
+  //   route: 'AssignmentIndex',
+  //   order: 6
+  // },
+  // {
+  //   name: 'Просроченный',
+  //   icon: 'BoldGreyCalendarIcon',
+  //   avatarColor: 'bg-greyscale-50',
+  //   status: true,
+  //   key: null,
+  //   route: 'AssignmentIndex',
+  //   order: 7
+  // },
+  // {
+  //   name: 'Для подтверждения',
+  //   icon: 'BoldGreenFolderFavIcon',
+  //   avatarColor: 'bg-success-50',
+  //   status: true,
+  //   key: null,
+  //   route: 'AssignmentIndex',
+  //   order: 8
+  // },
 ])
 const selected = ref([])
 const active = ref([])

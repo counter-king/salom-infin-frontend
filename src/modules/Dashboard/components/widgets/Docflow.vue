@@ -26,21 +26,9 @@ const tabMenus = ref([
 const list = ref([])
 const loading = ref(true)
 const counts = ref(null)
+const type = ref('new')
 // Methods
-const getCounts = async () => {
-  let url = null
-
-  switch (tabIndex.value) {
-    case 0:
-      url = 'dashboard/new-counts/'
-      break;
-    case 1:
-      url = 'dashboard/in-progress-counts/'
-      break;
-    default:
-      url = 'dashboard/all-counts/'
-  }
-
+const getCounts = async (url) => {
   try {
     loading.value = true
     let { data } = await axiosConfig.get(url)
@@ -55,8 +43,24 @@ const getCounts = async () => {
 // Watch
 watch(
   () => tabIndex.value,
-  async () => {
-    await getCounts()
+  async (newValue) => {
+    let url = null
+
+    switch (newValue) {
+      case 0:
+        url = 'dashboard/new-counts/'
+        type.value = 'new'
+        break;
+      case 1:
+        url = 'dashboard/in-progress-counts/'
+        type.value = 'in-progress'
+        break;
+      default:
+        url = 'dashboard/all-counts/'
+        type.value = 'all'
+    }
+
+    await getCounts(url)
   },
   { immediate: true }
 )
@@ -87,7 +91,11 @@ watch(
             </template>
 
             <template v-else>
-              <doc-flow-card :list="list" :counts="counts" />
+              <doc-flow-card
+                :list="list"
+                :counts="counts"
+                :type="type"
+              />
             </template>
           </div>
         </div>

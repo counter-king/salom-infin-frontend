@@ -14,6 +14,7 @@ const props = defineProps({
   <div class="user-with-action-view flex gap-2 bg-greyscale-50 rounded-lg py-[10px] px-3">
     <base-avatar
       :label="props.label"
+      :color="props.color"
     />
 
     <div class="flex-1 min-w-0">
@@ -24,7 +25,7 @@ const props = defineProps({
       </div>
 
       <div class="flex items-center gap-1 font-semibold leading-[1]">
-        <h1 class="asdasd text-greyscale-400 text-[13px] truncate">{{ props.subTitle }}</h1>
+        <h1 class="text-greyscale-400 text-[13px] font-medium truncate">{{ props.subTitle }}</h1>
 
         <slot name="sub-title-after" />
       </div>

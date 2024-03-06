@@ -39,13 +39,6 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
           count: null,
           name: 'unread_assignments'
         },
-        // Исходящие
-        // {
-        //   title: "Исходящие",
-        //   icon: "ArrowRightDownIcon",
-        //   link: "OutgoingIndex",
-        //   children: []
-        // },
         // На подпись
         {
           title: "На подпись",

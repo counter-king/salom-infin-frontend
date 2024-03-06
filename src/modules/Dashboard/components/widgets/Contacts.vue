@@ -46,6 +46,7 @@ onMounted(async () => {
             <user-with-action
               :label="item.full_name"
               :sub-title="item.position?.name"
+              :color="item.color"
               :class="{ 'mb-2': index !== list.length - 1 }"
             >
               <template #sub-title-after>

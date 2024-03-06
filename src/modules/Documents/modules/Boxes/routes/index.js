@@ -44,16 +44,6 @@ const Boxes = [
         },
         component: () => import("../views/Assignment/show.vue"),
       },
-      // Исходящие
-      {
-        path: "outgoing",
-        name: "OutgoingIndex",
-        meta: {
-          isAuthRequired: true,
-          navigation: true
-        },
-        component: () => import("../views/Outgoing/index.vue"),
-      },
       // На подпись
       {
         path: "sign",
