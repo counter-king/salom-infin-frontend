@@ -1,6 +1,7 @@
 <script setup>
 // Core
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
+import { useDebounce, useElementVisibility } from '@vueuse/core'
 // Components
 import { UserWithAction } from '@/components/Users'
 import WidgetWrapper from '../WidgetWrapper.vue'
@@ -11,15 +12,19 @@ import axiosConfig from '@/services/axios.config'
 // Composable
 const authStore = useAuthStore()
 // Reactive
+const scrollRef = ref(null)
 const loading = ref(true)
+const isResponseEmpty = ref(false)
 const list = ref([])
+const page = ref(1)
+// Composable
+const isScrollRefVisible = useElementVisibility(scrollRef)
+const debounceScrollVisible = useDebounce(isScrollRefVisible, 1000)
 const getList = async () => {
   loading.value = true
 
   try {
-    let { data } = await axiosConfig.get(`dashboard/my-department-users/${authStore.currentUser.top_level_department.id}/`)
-
-    list.value = data.results
+    await getListService()
   }
   finally {
     setTimeout(() => {
@@ -27,6 +32,24 @@ const getList = async () => {
     }, 500)
   }
 }
+const getListService = async () => {
+  let { data } = await axiosConfig.get(
+    `dashboard/my-department-users/${authStore.currentUser.top_level_department.id}/`,
+    {
+      page: page.value
+    }
+  )
+
+  isResponseEmpty.value = data.results.length === 0
+  list.value.push(...data.results)
+}
+// Watch
+watch(debounceScrollVisible, async (value) => {
+  if(value) {
+    page.value = page.value + 1
+    await getListService()
+  }
+})
 // Hooks
 onMounted(async () => {
   await getList()
@@ -72,6 +95,12 @@ onMounted(async () => {
                 </div>
               </template>
             </user-with-action>
+          </template>
+
+          <template v-if="!isResponseEmpty">
+            <div ref="scrollRef" class="my-2">
+              <base-spinner root-classes="!w-7 !h-7" />
+            </div>
           </template>
         </template>
 
