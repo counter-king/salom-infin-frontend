@@ -2,7 +2,7 @@
 // Core
 import { onMounted } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 // Components
 import { ActionToolbar } from "@/components/Actions";
 import DocType from "@/components/Chips/DocType.vue";
@@ -14,6 +14,7 @@ import { useBoxesSignStore } from "@/modules/Documents/modules/Boxes/stores/sign
 // Utils
 import { formatDate } from "@/utils/formatDate";
 
+const route = useRoute()
 const { t } = useI18n();
 const router = useRouter();
 const signStore = useBoxesSignStore();
@@ -47,6 +48,7 @@ onMounted(async () => {
 
     <base-data-table
       :action-list="signStore.actionGetSignList"
+      :api-params="{ ...route.query } ?? null"
       :headers="signStore.headers"
       :loading="signStore.listLoading"
       :storage-columns-name="BOXES_SIGN_COLUMNS"

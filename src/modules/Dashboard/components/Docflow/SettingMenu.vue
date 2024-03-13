@@ -19,7 +19,19 @@ const options = ref([
     avatarColor: 'bg-success-50',
     status: true,
     key: 'for_review',
-    route: 'ReviewIndex',
+    route: {
+      name: 'ReviewIndex',
+      new: {
+        query: {
+          is_read: 'False'
+        }
+      },
+      inProgress: {
+        query: {
+          status_type: 'in_progress'
+        }
+      }
+    },
     order: 1
   },
   {
@@ -28,7 +40,19 @@ const options = ref([
     avatarColor: 'bg-primary-50',
     status: true,
     key: 'assignments',
-    route: 'AssignmentIndex',
+    route: {
+      name: 'AssignmentIndex',
+      new: {
+        query: {
+          is_read: 'False'
+        }
+      },
+      inProgress: {
+        query: {
+          status_type: 'in_progress'
+        }
+      }
+    },
     order: 2
   },
   {
@@ -37,7 +61,19 @@ const options = ref([
     avatarColor: 'bg-info-50',
     status: true,
     key: 'for_signature',
-    route: 'SignIndex',
+    route: {
+      name: 'SignIndex',
+      new: {
+        query: {
+          approved: 'none'
+        }
+      },
+      inProgress: {
+        query: {
+          is_read: false
+        }
+      }
+    },
     order: 3
   },
   {
@@ -46,7 +82,19 @@ const options = ref([
     avatarColor: 'bg-primary-50',
     status: true,
     key: 'for_approval',
-    route: 'ApprovalIndex',
+    route: {
+      name: 'ApprovalIndex',
+      new: {
+        query: {
+          signed: 'none'
+        }
+      },
+      inProgress: {
+        query: {
+          signed: false
+        }
+      }
+    },
     order: 4
   },
   // {

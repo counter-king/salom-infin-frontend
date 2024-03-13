@@ -1,4 +1,6 @@
 <script setup>
+// Core
+import { useRoute } from 'vue-router'
 // Store
 import { useReviewStore } from '../../stores/review.store'
 // Components
@@ -8,6 +10,7 @@ import { LinkableCell } from '@/components/Table'
 // Utils
 import { BOXES_INCOMING_COLUMNS } from '../../constants'
 // Composable
+const route = useRoute()
 const reviewStore = useReviewStore()
 // Reactive
 const filterKeys = ['approvers', 'author', 'curator', 'signers', 'departments', 'register_number', 'status']
@@ -32,6 +35,7 @@ const link = (data) => {
 
     <base-data-table
       :action-list="reviewStore.actionReviewList"
+      :api-params="{ ...route.query } ?? null"
       :headers="reviewStore.headers"
       :value="reviewStore.list"
       :total-count="reviewStore.totalCount"

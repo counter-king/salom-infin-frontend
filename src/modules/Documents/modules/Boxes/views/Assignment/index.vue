@@ -1,4 +1,6 @@
 <script setup>
+// Core
+import { useRoute } from 'vue-router'
 // Store
 import { useAssignmentStore } from '../../stores/assignment.store'
 // Components
@@ -8,6 +10,7 @@ import { LinkableCell } from '@/components/Table'
 // Utils
 import { BOXES_ASSIGNMENT_COLUMNS } from '../../constants'
 // Composable
+const route = useRoute()
 const assignmentStore = useAssignmentStore()
 // Reactive
 const filterKeys = ['approvers', 'author', 'curator', 'signers', 'departments', 'register_number', 'status']
@@ -32,13 +35,14 @@ const link = (data) => {
 
     <base-data-table
       :action-list="assignmentStore.actionAssignmentList"
+      :api-params="{ ...route.query } ?? null"
       :headers="assignmentStore.headers"
       :value="assignmentStore.list"
       :total-count="assignmentStore.totalCount"
       :loading="assignmentStore.listLoading"
       :storage-columns-name="BOXES_ASSIGNMENT_COLUMNS"
       expandable
-      @emit:set-store-headers="(val) => reviewStore.headers = val"
+      @emit:set-store-headers="(val) => assignmentStore.headers = val"
     >
       <template #document.priority="{ data }">
         <linkable-cell :to="link(data)" :is-not-read="!data.read_time">

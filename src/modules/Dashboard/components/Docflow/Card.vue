@@ -26,10 +26,11 @@ const props = defineProps({
     <template v-if="item.status">
       <router-link
         :to="{
-          name: item.route,
-          query: {
-            status: props.type === 'new' ? STATUS_TYPES.TODO : props.type === 'in-progress' ? STATUS_TYPES.IN_PROGRESS : undefined
-          }
+          name: item.route.name,
+          query: props.type === 'new' ? item.route.new.query : props.type === 'in-progress' ? item.route.inProgress.query : null
+          // query: {
+          //   status: props.type === 'new' ? STATUS_TYPES.TODO : props.type === 'in-progress' ? STATUS_TYPES.IN_PROGRESS : undefined
+          // }
         }"
         class="flex gap-3 bg-white shadow-button rounded-[10px] p-4"
       >
