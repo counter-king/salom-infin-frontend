@@ -121,6 +121,19 @@ const debouncedWheelFn = useDebounceFn(async (event) => {
 }, 300)
 // Watch
 watch(
+  () => route.params,
+  () => {
+    date.value = new Date(
+      +route.params.y,
+      +route.params.m,
+      +route.params.d
+    )
+    calendarStore.eventModel.start_date = date.value
+    calendarStore.eventModel.end_date = date.value
+  },
+  { deep: true }
+)
+watch(
   () => calendarStore.eventList,
   (days) => {
     for (let day of daysList.value) {

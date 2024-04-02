@@ -40,16 +40,19 @@ const actionTypesMenu = (type) => {
     class="flex items-center gap-2 outline-none bg-transparent"
     @click="toggle"
   >
-    <h1 class="text-xl font-bold text-primary-900">{{ menuActiveText.label }}</h1>
+    <slot name="text" :text="menuActiveText.label">
+      <h1 class="text-xl font-bold text-primary-900">{{ menuActiveText.label }}</h1>
+    </slot>
+
     <base-icon name="AltArrowLeftIcon" class="-rotate-90 mt-1 text-gray-2" />
   </button>
 
   <base-menu
+    ref="menuRef"
     :items="items"
     width="w-[225px]"
     action-size-class="min-h-[40px]"
     label-class="text-greyscale-500 group-hover:text-primary-500"
-    ref="menuRef"
     id="overlay_menu2"
   ></base-menu>
 </template>

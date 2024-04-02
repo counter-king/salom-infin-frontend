@@ -68,10 +68,10 @@ defineExpose({ $v })
 // Inject
 const { date } = inject('calendar')
 // Hooks
-onMounted(() => {
-	calendarStore.eventModel.start_date = date.value
-	calendarStore.eventModel.end_date = date.value
-})
+// onMounted(() => {
+// 	calendarStore.eventModel.start_date = date.value
+// 	calendarStore.eventModel.end_date = date.value
+// })
 </script>
 
 <template>
