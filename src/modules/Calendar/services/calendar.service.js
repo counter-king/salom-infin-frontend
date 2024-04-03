@@ -15,3 +15,9 @@ export const fetchEventList = (params) => {
 export const fetchCreateEvent = (body) => {
   return axiosConfig.post(`${URLS.event}/`, body)
 }
+/**
+ * Изменить мероприятие
+ * */
+export const fetchUpdateEvent = (id, body) => {
+  return axiosConfig.put(`${URLS.event}/${id}/`, body)
+}

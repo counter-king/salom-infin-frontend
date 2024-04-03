@@ -72,6 +72,7 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
       <component
         ref="actionTypesMenuRef"
         :is="actionTypesMenuComponent"
+        :model="calendarStore.eventModel"
       />
     </template>
   </base-sidebar>
