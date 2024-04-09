@@ -168,6 +168,7 @@ const changeEvent = async (type) => {
 }
 const closeEvent = () => {
   menuVisible.value = false
+  clearModel(calendarStore.updateEventModel, ['type'])
 }
 const deleteEvent = async (type) => {
   if(!confirm(`Действительно хотите удалить ?`)) {
