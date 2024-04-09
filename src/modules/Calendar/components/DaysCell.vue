@@ -9,6 +9,8 @@ import BaseSpinner from '@/components/UI/BaseSpinner.vue'
 import ActionTypesMenu from './ActionTypesMenu.vue'
 // Stores
 import { useCalendarStore } from '../stores/calendar.store'
+// Utils
+import { clearModel } from '@/utils'
 // Enums
 import { EVENT_TYPES, ACTION_FORM_TYPES } from '../enums'
 // Macros
@@ -40,7 +42,6 @@ const formComponent = shallowRef(null)
 const menuVisible = ref(false)
 const toggleCount = ref(1)
 const isEventClicked = ref(false)
-const isCellClicked = ref(false)
 // Methods
 const collapseEventList = (index) => {
 	const _eventsListRef = document.querySelector(`#events-list-${index}`)
@@ -60,9 +61,9 @@ const collapseEventList = (index) => {
 	toggleCount.value = toggleCount.value + 1
 }
 const cellClick = async (cellIndex, date, month, year) => {
+  clearModel(calendarStore.updateEventModel, ['type'])
   menuVisible.value = true
-  isCellClicked.value = true
-  isEventClicked.value = false
+  calendarStore.actionToggleEventClick(false)
   await nextTick()
   await router.replace({
     name: 'CalendarDate',
@@ -96,8 +97,7 @@ const cellClick = async (cellIndex, date, month, year) => {
 }
 const eventClick = async (event, cellIndex, eventIndex, date, month, year, update) => {
   if(update) {
-    isEventClicked.value = true
-    isCellClicked.value = false
+    calendarStore.actionToggleEventClick(true)
   }
 
 	calendarStore.actionSetEventModel(event)
@@ -148,9 +148,34 @@ const maximizeEvent = () => {
   menuVisible.value = false
   calendarStore.eventSidebar = true
 }
+const createEvent = async (type) => {
+  try {
+    await calendarStore.actionCreateEvent(type)
+    menuVisible.value = false
+  }
+  catch (error) {
+
+  }
+}
 const changeEvent = async (type) => {
   try {
     await calendarStore.actionChangeEvent(type)
+    menuVisible.value = false
+  }
+  catch (error) {
+
+  }
+}
+const closeEvent = () => {
+  menuVisible.value = false
+}
+const deleteEvent = async (type) => {
+  if(!confirm(`Действительно хотите удалить ?`)) {
+    return
+  }
+
+  try {
+    await calendarStore.actionDeleteEvent(type)
     menuVisible.value = false
   }
   catch (error) {
@@ -261,7 +286,7 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
                   <div class="flex flex-col w-full max-h-[625px]">
                     <div class="flex items-center justify-between gap-3 border-b border-greyscale-200 py-3 pl-5 pr-3">
                       <div class="flex-1">
-                        <template v-if="!isEventClicked">
+                        <template v-if="!calendarStore.isEventClicked">
                           <action-types-menu>
                             <template #text="{ text }">
                               <h1 class="text-base font-semibold text-primary-900">{{ text }}</h1>
@@ -276,7 +301,7 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
                         </template>
                       </div>
 
-                      <div class="flex items-center">
+                      <div class="flex items-center gap-1">
                         <base-button
                           size="small"
                           only-icon
@@ -288,15 +313,19 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
                           @click="maximizeEvent"
                         />
 
-                        <template v-if="!isCellClicked">
+                        <template v-if="calendarStore.isEventClicked">
                           <base-button
                             size="small"
                             only-icon
                             rounded
                             text
-                            icon-left="VerticalDotsIcon"
-                            icon-width="16"
-                            class="text-greyscale-200"
+                            icon-left="TrashIcon"
+                            class="text-critic-500"
+                            @click="deleteEvent(
+                              calendarStore.actionTypesMenuSelected.name === ACTION_FORM_TYPES.EVENT
+                              ? EVENT_TYPES.EVENT
+                              : EVENT_TYPES.TASK
+                            )"
                           />
                         </template>
                       </div>
@@ -307,32 +336,50 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
                         <component
                           ref="formRef"
                           :is="formComponent"
-                          :model="calendarStore.updateEventModel"
+                          :model="calendarStore.isEventClicked
+                            ? calendarStore.updateEventModel
+                            : calendarStore.eventModel
+                          "
                         />
-                        <!--                    <pre>{{ calendarStore.updateEventModel }}</pre>-->
                       </div>
                     </div>
 
                     <div class="flex justify-end gap-3 bg-greyscale-50 border-t border-greyscale-200 py-3 px-5">
                       <base-button
-                        :label="t('cancel')"
+                        :label="t('close')"
                         size="normal"
                         border-color="border-transparent"
                         outlined
                         rounded
                         shadow
+                        @click="closeEvent"
                       />
 
-                      <base-button
-                        :label="t('update')"
-                        size="normal"
-                        rounded
-                        @click="changeEvent(
+                      <template v-if="calendarStore.isEventClicked">
+                        <base-button
+                          :label="t('update')"
+                          size="normal"
+                          rounded
+                          @click="changeEvent(
                           calendarStore.actionTypesMenuSelected.name === ACTION_FORM_TYPES.EVENT
-                          ? EVENT_TYPES.EVENT
-                          : EVENT_TYPES.TASK
-                        )"
-                      />
+                            ? EVENT_TYPES.EVENT
+                            : EVENT_TYPES.TASK
+                          )"
+                        />
+                      </template>
+
+                      <template v-else>
+                        <base-button
+                          :label="t('create')"
+                          size="normal"
+                          rounded
+                          @click="createEvent(
+                          calendarStore.actionTypesMenuSelected.name === ACTION_FORM_TYPES.EVENT
+                            ? EVENT_TYPES.EVENT
+                            : EVENT_TYPES.TASK
+                          )"
+                        />
+                      </template>
                     </div>
                   </div>
 								</div>

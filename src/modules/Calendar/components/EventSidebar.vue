@@ -27,11 +27,21 @@ const createEvent = async () => {
 
   try {
     _sidebarRef.successButtonLoading = true
-    await calendarStore.actionCreateEvent(
-      calendarStore.actionTypesMenuSelected.name === ACTION_FORM_TYPES.EVENT
-        ? EVENT_TYPES.EVENT
-        : EVENT_TYPES.TASK
-    )
+
+    if(calendarStore.isEventClicked) {
+      await calendarStore.actionChangeEvent(
+        calendarStore.actionTypesMenuSelected.name === ACTION_FORM_TYPES.EVENT
+          ? EVENT_TYPES.EVENT
+          : EVENT_TYPES.TASK
+      )
+    }
+    else {
+      await calendarStore.actionCreateEvent(
+        calendarStore.actionTypesMenuSelected.name === ACTION_FORM_TYPES.EVENT
+          ? EVENT_TYPES.EVENT
+          : EVENT_TYPES.TASK
+      )
+    }
     _sidebarRef.successButtonLoading = false
     calendarStore.eventSidebar = false
   }
@@ -44,7 +54,10 @@ const createEvent = async () => {
 }
 const emitCancelButton = (value) => {
 	calendarStore.eventSidebar = value
-	clearModel(calendarStore.eventModel)
+  calendarStore.actionTypesMenuSelected.name = ACTION_FORM_TYPES.EVENT
+  calendarStore.actionToggleEventClick(false)
+  clearModel(calendarStore.eventModel)
+  clearModel(calendarStore.updateEventModel)
 }
 // Watch
 watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
@@ -60,19 +73,31 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
   <base-sidebar
     ref="sidebarRef"
     v-model="calendarStore.eventSidebar"
-    success-text="create"
+    :success-text="calendarStore.isEventClicked ? 'update' : 'create'"
+    :cancel-text="calendarStore.isEventClicked ? 'close' : 'cancel'"
     @emit:cancel-button="(value) => emitCancelButton(value)"
     @emit:success-button="createEvent"
   >
     <template #title>
-      <action-types-menu />
+      <template v-if="!calendarStore.isEventClicked">
+        <action-types-menu />
+      </template>
+
+      <template v-else>
+        <h1 class="text-xl font-semibold text-primary-900">
+          {{ calendarStore.actionTypesMenuSelected.name === ACTION_FORM_TYPES.EVENT ? 'Мероприятия' : 'Моя задача' }}
+        </h1>
+      </template>
     </template>
 
     <template #content>
       <component
         ref="actionTypesMenuRef"
         :is="actionTypesMenuComponent"
-        :model="calendarStore.eventModel"
+        :model="calendarStore.isEventClicked
+          ? calendarStore.updateEventModel
+          : calendarStore.eventModel
+        "
       />
     </template>
   </base-sidebar>

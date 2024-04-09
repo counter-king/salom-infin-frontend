@@ -55,7 +55,7 @@ const props = defineProps({
     }
   },
 })
-const emit = defineEmits(['update:modelValue', 'emit:month-change'])
+const emit = defineEmits(['update:modelValue', 'emit:month-change', 'emit:day-select'])
 // Computed
 const rootClasses = computed(() => {
   return [
@@ -91,6 +91,9 @@ const modelValue = computed({
 const monthChange = ({ month, year }) => {
   emit('emit:month-change', { day: 1, month: month - 1, year })
 }
+const daySelect = (value) => {
+  emit('emit:day-select', value)
+}
 </script>
 
 <template>
@@ -107,6 +110,7 @@ const monthChange = ({ month, year }) => {
       show-icon
       date-format="yy-mm-dd"
       @month-change="monthChange"
+      @date-select="daySelect"
       :pt="{
         root: {
           class: rootClasses

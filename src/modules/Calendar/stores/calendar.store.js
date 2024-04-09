@@ -1,7 +1,7 @@
 // Core
 import { defineStore } from 'pinia'
 // Services
-import { fetchEventList, fetchCreateEvent, fetchUpdateEvent } from '../services/calendar.service'
+import { fetchEventList, fetchCreateEvent, fetchUpdateEvent, fetchDeleteEvent } from '../services/calendar.service'
 // Utils
 import { clearModel, isObject, setValuesToKeys } from '@/utils'
 import { formatDateReverse, formatHour } from '@/utils/formatDate'
@@ -35,7 +35,8 @@ export const useCalendarStore = defineStore('calendar', {
     updateEventModel: Object.assign({}, model),
     actionTypesMenuSelected: {
       name: ACTION_FORM_TYPES.EVENT
-    }
+    },
+    isEventClicked: false
   }),
   actions: {
     async actionGetList(params) {
@@ -65,12 +66,20 @@ export const useCalendarStore = defineStore('calendar', {
 
         let { data } = await fetchCreateEvent(model)
         await clearModel(this.eventModel)
-        dispatchNotify(null, 'Мероприятия создана', COLOR_TYPES.SUCCESS)
+        dispatchNotify(
+          null,
+          EVENT_TYPES.EVENT === type ? 'Мероприятия создана' : 'Задача создана',
+          COLOR_TYPES.SUCCESS
+        )
         this.eventList.push(data)
         return Promise.resolve()
       }
       catch (error) {
-        dispatchNotify('Ошибка', 'Ошибка создание мероприятий', COLOR_TYPES.ERROR)
+        dispatchNotify(
+          'Ошибка',
+          EVENT_TYPES.EVENT === type ? 'Ошибка создание мероприятий' : 'Ошибка создание задачи',
+          COLOR_TYPES.ERROR
+        )
         return Promise.reject()
       }
     },
@@ -115,15 +124,43 @@ export const useCalendarStore = defineStore('calendar', {
             return event
           }
         })
-        // let current = this.eventList.find(event => event.id === data.id)
-        // current = data
-        console.log(this.eventList);
         await clearModel(this.updateEventModel)
-        dispatchNotify(null, 'Мероприятия изменен', COLOR_TYPES.SUCCESS)
+        dispatchNotify(
+          null,
+          EVENT_TYPES.EVENT === type ? 'Мероприятия изменен' : 'Задача изменен',
+          COLOR_TYPES.SUCCESS
+        )
         return Promise.resolve()
       }
       catch (error) {
-        dispatchNotify('Ошибка', 'Ошибка изменение мероприятий', COLOR_TYPES.ERROR)
+        dispatchNotify(
+          'Ошибка',
+          EVENT_TYPES.EVENT === type ? 'Ошибка изменение мероприятий' : 'Ошибка изменение задачи',
+          COLOR_TYPES.ERROR
+        )
+        return Promise.reject()
+      }
+    },
+    /**
+     * Удалить мероприятие
+     * */
+    async actionDeleteEvent(type) {
+      try {
+        await fetchDeleteEvent(this.updateEventModel.id)
+        this.eventList = this.eventList.filter(event => event.id !== this.updateEventModel.id)
+        dispatchNotify(
+          null,
+          EVENT_TYPES.EVENT === type ? 'Мероприятия удален' : 'Задача удален',
+          COLOR_TYPES.SUCCESS
+        )
+        return Promise.resolve()
+      }
+      catch (error) {
+        dispatchNotify(
+          'Ошибка',
+          EVENT_TYPES.EVENT === type ? 'Ошибка удаление мероприятий' : 'Ошибка удаление задачи',
+          COLOR_TYPES.ERROR
+        )
         return Promise.reject()
       }
     },
@@ -146,6 +183,12 @@ export const useCalendarStore = defineStore('calendar', {
         __organizer: payload.organizer
       }
       setValuesToKeys(this.updateEventModel, model)
+    },
+    /**
+     *
+     * */
+    actionToggleEventClick(payload) {
+      this.isEventClicked = payload
     }
   }
 })

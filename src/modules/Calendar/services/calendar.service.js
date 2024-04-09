@@ -21,3 +21,9 @@ export const fetchCreateEvent = (body) => {
 export const fetchUpdateEvent = (id, body) => {
   return axiosConfig.put(`${URLS.event}/${id}/`, body)
 }
+/**
+ * Удалить мероприятие
+ * */
+export const fetchDeleteEvent = (id) => {
+  return axiosConfig.delete(`${URLS.event}/${id}/`)
+}
