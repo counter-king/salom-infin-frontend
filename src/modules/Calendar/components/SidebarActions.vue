@@ -43,7 +43,6 @@ const daySelect = async (value) => {
     <div class="h-full pl-6 pr-5 py-3 overflow-y-auto">
       <base-calendar
         v-model="date"
-        :min-date="new Date() /* Минимальная дата сегодняшние число */"
         inline
         @emit:month-change="monthChange"
         @emit:day-select="daySelect"

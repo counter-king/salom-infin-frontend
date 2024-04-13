@@ -6,7 +6,6 @@ import { onClickOutside } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
 // Components
 import BaseSpinner from '@/components/UI/BaseSpinner.vue'
-import ActionTypesMenu from './ActionTypesMenu.vue'
 // Stores
 import { useCalendarStore } from '../stores/calendar.store'
 // Utils
@@ -41,7 +40,6 @@ const formRef = ref(null)
 const formComponent = shallowRef(null)
 const menuVisible = ref(false)
 const toggleCount = ref(1)
-const isEventClicked = ref(false)
 // Methods
 const collapseEventList = (index) => {
 	const _eventsListRef = document.querySelector(`#events-list-${index}`)
@@ -168,7 +166,12 @@ const changeEvent = async (type) => {
 }
 const closeEvent = () => {
   menuVisible.value = false
-  clearModel(calendarStore.updateEventModel, ['type'])
+  clearModel(
+    calendarStore.isEventClicked
+      ? calendarStore.updateEventModel
+      : calendarStore.eventModel,
+    ['type']
+  )
 }
 const deleteEvent = async (type) => {
   if(!confirm(`Действительно хотите удалить ?`)) {
@@ -191,13 +194,13 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
     delay: 200
   })
 }, { immediate: true })
-// onClickOutside(
-// 	eventRef,
-// 	() => {
-// 		menuVisible.value = false
-// 	},
-// 	{ ignore: [menuContentRef] }
-// )
+onClickOutside(
+	eventRef,
+	() => {
+		menuVisible.value = false
+	},
+	{ ignore: [menuContentRef] }
+)
 </script>
 
 <template>
@@ -208,6 +211,7 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
 		<template v-for="({ date, month, year, status, events, format }, index) in props.interval">
 			<div
 				class="group relative transition-all [&:not(:nth-child(7n))]:border-r border-t border-greyscale-200 p-2"
+        :class="{ '!bg-greyscale-50': status !== 'now' }"
 				@click="cellClick(index, date, month, year)"
 			>
 				<div
@@ -217,8 +221,11 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
 				>
 					<div class="h-7">
 		        <span
-			        class="relative text-base font-medium text-gray-2 block text-center"
-			        :class="{ 'text-primary-900': status === 'now' }"
+			        class="flex items-center justify-center w-7 h-7 relative rounded-full m-auto text-[15px] font-medium text-gray-2"
+			        :class="{
+                'text-primary-900': status === 'now',
+                'bg-primary-500 text-white': date === new Date().getDate()
+              }"
 		        >
 		          {{ date }}
 		        </span>
@@ -288,11 +295,25 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
                     <div class="flex items-center justify-between gap-3 border-b border-greyscale-200 py-3 pl-5 pr-3">
                       <div class="flex-1">
                         <template v-if="!calendarStore.isEventClicked">
-                          <action-types-menu>
-                            <template #text="{ text }">
-                              <h1 class="text-base font-semibold text-primary-900">{{ text }}</h1>
-                            </template>
-                          </action-types-menu>
+                          <div class="flex gap-2">
+                            <div
+                              class="flex items-center gap-2 py-1.5 px-3 rounded cursor-pointer"
+                              :class="{ 'bg-greyscale-100': calendarStore.actionTypesMenuSelected.name === 'EventForm' }"
+                              @click="calendarStore.actionTypesMenuSelected.name = ACTION_FORM_TYPES.EVENT"
+                            >
+                              <div class="w-3 h-3 rounded-full bg-info-200"></div>
+                              <span class="text-sm font-semibold text-primary-900">Мероприятия</span>
+                            </div>
+
+                            <div
+                              class="flex items-center gap-2 py-1.5 px-3 rounded cursor-pointer"
+                              :class="{ 'bg-greyscale-100': calendarStore.actionTypesMenuSelected.name === 'TaskForm' }"
+                              @click="calendarStore.actionTypesMenuSelected.name = ACTION_FORM_TYPES.TASK"
+                            >
+                              <div class="w-3 h-3 rounded-full bg-success-200"></div>
+                              <span class="text-sm font-semibold text-primary-900">Моя задача</span>
+                            </div>
+                          </div>
                         </template>
 
                         <template v-else>

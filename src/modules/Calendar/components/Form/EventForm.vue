@@ -109,7 +109,6 @@ const { date } = inject('calendar')
       <base-calendar
         v-model="$v.start_date.$model"
         :error="$v.start_date"
-        :min-date="new Date() /* Минимальная дата сегодняшние число */"
         required
         label="start-date"
         placeholder="start-date"
@@ -124,7 +123,6 @@ const { date } = inject('calendar')
       <base-calendar
         v-model="$v.end_date.$model"
         :error="$v.end_date"
-        :min-date="new Date(props.model.start_date)"
         required
         label="end-date"
         placeholder="end-date"
