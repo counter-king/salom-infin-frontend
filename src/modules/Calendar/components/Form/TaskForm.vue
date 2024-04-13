@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { computed, ref, inject, onMounted } from 'vue'
+import { computed, ref, inject } from 'vue'
 import { helpers, required } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
 // Components
@@ -11,19 +11,42 @@ import { useUsersStore } from '@/stores/users.store'
 import { useCalendarStore } from '../../stores/calendar.store'
 // Utils
 import { formatDateReverse } from '@/utils/formatDate'
-import { isObject } from '@/utils'
 import { generateDayHours } from '../../utils'
+// Enums
+import { EVENT_TYPES } from '../../../Calendar/enums'
 // Composable
 const commonStore = useCommonStore()
 const userStore = useUsersStore()
 const calendarStore = useCalendarStore()
+// Macros
+const props = defineProps({
+  model: {
+    type: Object,
+    default: () => ({
+      title: null,
+      start_date: null,
+      __start_time: null,
+      end_date: null,
+      __end_time: null,
+      priority: null,
+      participants: null,
+      __participants: [],
+      organizer: null,
+      __organizer: null,
+      description: null,
+      attachments: [],
+      __attachments: [],
+      type: EVENT_TYPES.EVENT
+    })
+  }
+})
 // Reactive
 const times = ref(generateDayHours(15, 'ru'))
 // Composable
 const endTimes = computed(() => {
-  let selected = times.value.findIndex(({ time }) => time === calendarStore.eventModel.__start_time)
+  let selected = times.value.findIndex(({ time }) => time === props.model.__start_time)
 
-  if(selected > 0) {
+  if(selected >= 0) {
     return times.value.map((time, index) => ({ ...time, disabled: index < selected + 1 }))
   }
 })
@@ -55,16 +78,11 @@ const rules = {
   },
 }
 // Composable
-const $v = useVuelidate(rules, calendarStore.eventModel)
+const $v = useVuelidate(rules, props.model)
 // Macros
 defineExpose({ $v })
 // Inject
 const { date } = inject('calendar')
-// Hooks
-onMounted(() => {
-	calendarStore.eventModel.start_date = date.value
-	calendarStore.eventModel.end_date = date.value
-})
 </script>
 
 <template>
@@ -87,8 +105,8 @@ onMounted(() => {
         label="start-date"
         placeholder="start-date"
         @update:modelValue="(value) => {
-          calendarStore.eventModel.start_date = formatDateReverse(value)
-          calendarStore.eventModel.end_date = formatDateReverse(value)
+          props.model.start_date = formatDateReverse(value)
+          props.model.end_date = formatDateReverse(value)
         }"
       />
     </base-col>
@@ -101,7 +119,7 @@ onMounted(() => {
         label="end-date"
         placeholder="end-date"
         @update:modelValue="(value) => {
-          calendarStore.eventModel.end_date = formatDateReverse(value)
+          props.model.end_date = formatDateReverse(value)
         }"
       />
     </base-col>

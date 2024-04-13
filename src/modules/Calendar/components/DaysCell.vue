@@ -93,11 +93,12 @@ const cellClick = async (cellIndex, date, month, year) => {
     _menuTopRef.style.minHeight = `32px`
   }
 }
-const eventClick = async (event, cellIndex, eventIndex, date, month, year, update) => {
-  if(update) {
-    calendarStore.actionToggleEventClick(true)
-  }
+const eventClick = async (event, cellIndex, eventIndex, date, month, year, type) => {
+  type === EVENT_TYPES.EVENT
+    ? calendarStore.actionTypesMenuSelected.name = ACTION_FORM_TYPES.EVENT
+    : calendarStore.actionTypesMenuSelected.name = ACTION_FORM_TYPES.TASK
 
+  calendarStore.actionToggleEventClick(true)
 	calendarStore.actionSetEventModel(event)
 	menuVisible.value = true
 	await nextTick()
@@ -224,7 +225,7 @@ onClickOutside(
 			        class="flex items-center justify-center w-7 h-7 relative rounded-full m-auto text-[15px] font-medium text-gray-2"
 			        :class="{
                 'text-primary-900': status === 'now',
-                'bg-primary-500 text-white': date === new Date().getDate()
+                'bg-primary-500 text-white': month === new Date().getMonth() && date === new Date().getDate()
               }"
 		        >
 		          {{ date }}
@@ -246,7 +247,7 @@ onClickOutside(
 		                  eventIndex + 1 !== events.length ? 'mb-1' : ''
 		                ]"
 										class="rounded-[6px] cursor-pointer px-2 py-1"
-										@click.stop="eventClick(event, index, eventIndex, date, month, year, true)"
+										@click.stop="eventClick(event, index, eventIndex, date, month, year, event.type)"
 									>
 										<span class="block text-[13px] font-semibold text-primary-900 leading-[1]">{{ event.title }}</span>
 									</div>

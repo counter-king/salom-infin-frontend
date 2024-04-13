@@ -114,7 +114,7 @@ const debouncedWheelFn = useDebounceFn(async (event) => {
 			...route.params,
 			y: dayjs(date.value).year(),
 			m: dayjs(date.value).month(),
-			d: dayjs(date.value).date()
+			d: 1
 		}
 	})
 	await monthChange()
