@@ -124,8 +124,6 @@ defineExpose({ $v })
 						$v.outgoing_date.$model = formatDateReverse(value)
           }"
         />
-
-        <pre>{{$v.outgoing_date.$model}}</pre>
       </base-col>
 
       <base-col col-class="w-1/2">
