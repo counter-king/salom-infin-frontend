@@ -59,7 +59,7 @@ const link = (data) => {
 <template>
   <div class="registration-incoming-view">
     <action-toolbar
-      :title="journal.name"
+      :title="journal?.name"
       :column-menu-items="docFlowStore.headers"
       :storage-columns-name="R_INCOMING_COLUMNS"
       :action-list="docFlowStore.actionGetList"
