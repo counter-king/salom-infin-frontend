@@ -54,6 +54,7 @@ const receivers = computed(() => {
 
     <div class="flex w-full justify-center text-center text-sm font-semibold my-5">
       {{ props.composeModel?.title?.name }}
+<!--      <pre>{{ props.composeModel }}</pre>-->
     </div>
 
     <div class="text-justify" v-html="props.composeModel?.content"></div>
