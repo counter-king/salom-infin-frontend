@@ -38,16 +38,12 @@ const documentTitleEdit = () => {
                      return documentTitle;
                   }
                });
-               dispatchNotify('Заголовок обновлено', '', 'success');
+               dispatchNotify('Заголовок обновлен', '', 'success');
                editVisible.value = false;
                props.setDocumentTitles(newDocumentTitles);
-            } else {
-               dispatchNotify('Заголовок не обновлено', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Заголовок не обновлено', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             editLoading.value = false;
          });
@@ -65,13 +61,9 @@ const documentTitleDelete = () => {
             deleteVisible.value = false;
             dispatchNotify('Заголовок удален', '', 'success')
             props.getFirstPageDocumentTitles();
-         } else {
-            dispatchNotify('Заголовок не удален', '', 'error')
          }
       })
-      .catch(() => {
-         dispatchNotify('Заголовок не удален', '', 'error')
-      })
+      .catch(() => {})
       .finally(() => {
          deleteLoading.value = false;
       });
@@ -93,14 +85,10 @@ const updateCondition = value => {
                }
             });
             props.setDocumentTitles(newDocumentTitles);
-            dispatchNotify('Статус обновлено', '', 'success');
-         } else {
-            dispatchNotify('Статус не обновлено', '', 'error');
+            dispatchNotify('Статус обновлен', '', 'success');
          }
       })
-      .catch(() => {
-         dispatchNotify('Статус не обновлено', '', 'error');
-      })
+      .catch(() => {})
       .finally(() => {
          conditionLoading.value = false;
       });

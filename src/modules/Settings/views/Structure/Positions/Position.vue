@@ -39,16 +39,12 @@ const positionEdit = () => {
                      return position;
                   }
                });
-               dispatchNotify('Должность обновлено', '', 'success');
+               dispatchNotify('Должность обновлен', '', 'success');
                editVisible.value = false;
                props.setPositions(newPositions);
-            } else {
-               dispatchNotify('Должность не обновлено', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Должность не обновлено', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             editLoading.value = false;
          });
@@ -68,13 +64,9 @@ const positionDelete = () => {
             deleteVisible.value = false;
             dispatchNotify('Должность удален', '', 'success')
             props.getFirstPagePositions();
-         } else {
-            dispatchNotify('Должность не удален', '', 'error')
          }
       })
-      .catch(() => {
-         dispatchNotify('Должность не удален', '', 'error')
-      })
+      .catch(() => {})
       .finally(() => {
          deleteLoading.value = false;
       });
@@ -99,13 +91,11 @@ const updateCondition = value => {
                }
             });
             props.setPositions(newPositions);
-            dispatchNotify('Статус обновлено', '', 'success');
-         } else {
-            dispatchNotify('Статус не обновлено', '', 'error');
+            dispatchNotify('Статус обновлен', '', 'success');
          }
       })
       .catch(() => {
-         dispatchNotify('Статус не обновлено', '', 'error');
+         dispatchNotify('Статус не обновлен', '', 'error');
       })
       .finally(() => {
          conditionLoading.value = false;
@@ -214,8 +204,8 @@ onMounted(() => {
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
-            @update:modelValue="value => {
-               editPosition = { ...editPosition, name_uz: replaceSpecChars(value) };
+            @update:modelValue="name_uz => {
+               editPosition = { ...editPosition, name_uz };
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ) <span class="text-red-500 ml-1">*</span></p>
@@ -224,8 +214,8 @@ onMounted(() => {
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             placeholder="Введите название"
             type="text"
-            @update:modelValue="value => {
-               editPosition = { ...editPosition, name_ru: replaceSpecChars(value) };
+            @update:modelValue="name_ru => {
+               editPosition = { ...editPosition, name_ru };
             }"
             />
          <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>

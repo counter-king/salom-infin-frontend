@@ -40,16 +40,12 @@ const correspondentEdit = () => {
                      return correspondent;
                   }
                });
-               dispatchNotify('Корреспондент обновлено', '', 'success');
+               dispatchNotify('Корреспондент обновлен', '', 'success');
                editVisible.value = false;
                props.setCorrespondents(newCorrespondents);
-            } else {
-               dispatchNotify('Корреспондент не обновлено', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Корреспондент не обновлено', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             editLoading.value = false;
          });
@@ -75,13 +71,9 @@ const correspondentDelete = () => {
             deleteVisible.value = false;
             dispatchNotify('Корреспондент удален', '', 'success')
             props.getFirstPageCorrespondents();
-         } else {
-            dispatchNotify('Корреспондент не удален', '', 'error')
          }
       })
-      .catch(() => {
-         dispatchNotify('Корреспондент не удален', '', 'error')
-      })
+      .catch(() => {})
       .finally(() => {
          deleteLoading.value = false;
       });

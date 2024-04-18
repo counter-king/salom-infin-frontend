@@ -8,6 +8,7 @@ import ActionTypesMenu from './ActionTypesMenu.vue'
 import { useCommonStore } from '@/stores/common'
 import { useCalendarStore } from '../stores/calendar.store'
 // Utils
+import { clearModel } from '@/utils'
 import { EVENT_TYPES, ACTION_FORM_TYPES } from '../enums'
 // Composable
 const commonStore = useCommonStore()
@@ -26,11 +27,21 @@ const createEvent = async () => {
 
   try {
     _sidebarRef.successButtonLoading = true
-    await calendarStore.actionCreateEvent(
-      calendarStore.actionTypesMenuSelected.name === ACTION_FORM_TYPES.EVENT
-        ? EVENT_TYPES.EVENT
-        : EVENT_TYPES.TASK
-    )
+
+    if(calendarStore.isEventClicked) {
+      await calendarStore.actionChangeEvent(
+        calendarStore.actionTypesMenuSelected.name === ACTION_FORM_TYPES.EVENT
+          ? EVENT_TYPES.EVENT
+          : EVENT_TYPES.TASK
+      )
+    }
+    else {
+      await calendarStore.actionCreateEvent(
+        calendarStore.actionTypesMenuSelected.name === ACTION_FORM_TYPES.EVENT
+          ? EVENT_TYPES.EVENT
+          : EVENT_TYPES.TASK
+      )
+    }
     _sidebarRef.successButtonLoading = false
     calendarStore.eventSidebar = false
   }
@@ -41,10 +52,17 @@ const createEvent = async () => {
     _sidebarRef.successButtonLoading = false
   }
 }
+const emitCancelButton = (value) => {
+	calendarStore.eventSidebar = value
+  calendarStore.actionTypesMenuSelected.name = ACTION_FORM_TYPES.EVENT
+  calendarStore.actionToggleEventClick(false)
+  clearModel(calendarStore.eventModel)
+  clearModel(calendarStore.updateEventModel)
+}
 // Watch
 watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
   actionTypesMenuComponent.value = defineAsyncComponent({
-    loader: () => import(`./${value}.vue`),
+    loader: () => import(`./Form/${value}.vue`),
     loadingComponent: BaseSpinner,
     delay: 200
   })
@@ -55,18 +73,31 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
   <base-sidebar
     ref="sidebarRef"
     v-model="calendarStore.eventSidebar"
-    success-text="create"
-    @emit:cancel-button="(value) => calendarStore.eventSidebar = value"
+    :success-text="calendarStore.isEventClicked ? 'update' : 'create'"
+    :cancel-text="calendarStore.isEventClicked ? 'close' : 'cancel'"
+    @emit:cancel-button="(value) => emitCancelButton(value)"
     @emit:success-button="createEvent"
   >
     <template #title>
-      <action-types-menu />
+      <template v-if="!calendarStore.isEventClicked">
+        <action-types-menu />
+      </template>
+
+      <template v-else>
+        <h1 class="text-xl font-semibold text-primary-900">
+          {{ calendarStore.actionTypesMenuSelected.name === ACTION_FORM_TYPES.EVENT ? 'Мероприятия' : 'Моя задача' }}
+        </h1>
+      </template>
     </template>
 
     <template #content>
       <component
         ref="actionTypesMenuRef"
         :is="actionTypesMenuComponent"
+        :model="calendarStore.isEventClicked
+          ? calendarStore.updateEventModel
+          : calendarStore.eventModel
+        "
       />
     </template>
   </base-sidebar>

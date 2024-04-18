@@ -114,12 +114,25 @@ const debouncedWheelFn = useDebounceFn(async (event) => {
 			...route.params,
 			y: dayjs(date.value).year(),
 			m: dayjs(date.value).month(),
-			d: dayjs(date.value).date()
+			d: 1
 		}
 	})
 	await monthChange()
 }, 300)
 // Watch
+watch(
+  () => route.params,
+  () => {
+    date.value = new Date(
+      +route.params.y,
+      +route.params.m,
+      +route.params.d
+    )
+    calendarStore.eventModel.start_date = date.value
+    calendarStore.eventModel.end_date = date.value
+  },
+  { deep: true }
+)
 watch(
   () => calendarStore.eventList,
   (days) => {

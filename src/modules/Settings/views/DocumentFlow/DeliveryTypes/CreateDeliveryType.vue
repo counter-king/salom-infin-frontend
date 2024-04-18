@@ -23,13 +23,9 @@ const createDeliveryType = () => {
                dispatchNotify('Вид подачи создан', '', 'success');
                props.getFirstPageDeliveryTypes();
                props.setVisible(false);
-            } else {
-               dispatchNotify('Вид подачи не создан', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Вид подачи не создан', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             loading.value = false;
          });

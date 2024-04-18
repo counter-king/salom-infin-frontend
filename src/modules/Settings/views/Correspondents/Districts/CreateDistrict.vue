@@ -30,13 +30,9 @@ const createDistrict = () => {
                props.getFirstPageDistricts();
                props.setVisible(false);
                region.value = '';
-            } else {
-               dispatchNotify('Район не создан', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Район не создан', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             loading.value = false;
          });

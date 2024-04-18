@@ -38,15 +38,15 @@ const deliveryTypeEdit = () => {
                      return deliveryType;
                   }
                });
-               dispatchNotify('Вид подачи обновлено', '', 'success');
+               dispatchNotify('Вид подачи обновлен', '', 'success');
                editVisible.value = false;
                props.setDeliveryTypes(newDeliveryTypes);
             } else {
-               dispatchNotify('Вид подачи не обновлено', '', 'error');
+               dispatchNotify('Вид подачи не обновлен', '', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Вид подачи не обновлено', '', 'error');
+            dispatchNotify('Вид подачи не обновлен', '', 'error');
          })
          .finally(() => {
             editLoading.value = false;
@@ -93,14 +93,10 @@ const updateCondition = value => {
                }
             });
             props.setDeliveryTypes(newDeliveryTypes);
-            dispatchNotify('Статус обновлено', '', 'success');
-         } else {
-            dispatchNotify('Статус не обновлено', '', 'error');
+            dispatchNotify('Статус обновлен', '', 'success');
          }
       })
-      .catch(() => {
-         dispatchNotify('Статус не обновлено', '', 'error');
-      })
+      .catch(() => {})
       .finally(() => {
          conditionLoading.value = false;
       });

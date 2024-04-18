@@ -39,16 +39,12 @@ const regionEdit = () => {
                      return region;
                   }
                });
-               dispatchNotify('Регион обновлено', '', 'success');
+               dispatchNotify('Регион обновлен', '', 'success');
                editVisible.value = false;
                props.setRegions(newRegions);
-            } else {
-               dispatchNotify('Регион не обновлено', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Регион не обновлено', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             editLoading.value = false;
          });
@@ -96,13 +92,13 @@ const updateCondition = value => {
                }
             });
             props.setRegions(newRegions);
-            dispatchNotify('Статус обновлено', '', 'success');
+            dispatchNotify('Статус обновлен', '', 'success');
          } else {
-            dispatchNotify('Статус не обновлено', '', 'error');
+            dispatchNotify('Статус не обновлен', '', 'error');
          }
       })
       .catch(() => {
-         dispatchNotify('Статус не обновлено', '', 'error');
+         dispatchNotify('Статус не обновлен', '', 'error');
       })
       .finally(() => {
          conditionLoading.value = false;

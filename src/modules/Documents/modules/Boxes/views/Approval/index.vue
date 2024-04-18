@@ -2,7 +2,7 @@
 // Core
 import { onMounted } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 // Components
 import { ActionToolbar } from "@/components/Actions";
 import DocType from "@/components/Chips/DocType.vue";
@@ -17,6 +17,7 @@ import { useBoxesApprovalStore } from "@/modules/Documents/modules/Boxes/stores/
 // Utils
 import { formatDate } from "@/utils/formatDate";
 
+const route = useRoute()
 const { t } = useI18n();
 const router = useRouter();
 const approvalStore = useBoxesApprovalStore();
@@ -51,6 +52,7 @@ onMounted(async () => {
 
     <base-data-table
       :action-list="approvalStore.actionGetApprovalList"
+      :api-params="{ ...route.query } ?? null"
       :headers="approvalStore.headers"
       :loading="approvalStore.listLoading"
       :storage-columns-name="BOXES_APPROVAL_COLUMNS"

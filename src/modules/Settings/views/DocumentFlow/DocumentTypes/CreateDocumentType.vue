@@ -23,13 +23,9 @@ const createDocumentType = () => {
                documentType.value = defaultDocumentType
                props.getFirstPageDocumentTypes();
                props.setVisible(false);
-            } else {
-               dispatchNotify('Тип документа не создан', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Тип документа не создан', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             loading.value = false;
          });

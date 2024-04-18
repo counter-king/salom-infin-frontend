@@ -38,15 +38,15 @@ const documentTypeEdit = () => {
                      return documentType;
                   }
                });
-               dispatchNotify('Тип документа обновлено', '', 'success');
+               dispatchNotify('Тип документа обновлен', '', 'success');
                editVisible.value = false;
                props.setDocumentTypes(newDocumentTypes);
             } else {
-               dispatchNotify('Тип документа не обновлено', '', 'error');
+               dispatchNotify('Тип документа не обновлен', '', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Тип документа не обновлено', '', 'error');
+            dispatchNotify('Тип документа не обновлен', '', 'error');
          })
          .finally(() => {
             editLoading.value = false;
@@ -93,14 +93,10 @@ const updateCondition = value => {
                }
             });
             props.setDocumentTypes(newDocumentTypes);
-            dispatchNotify('Статус обновлено', '', 'success');
-         } else {
-            dispatchNotify('Статус не обновлено', '', 'error');
+            dispatchNotify('Статус обновлен', '', 'success');
          }
       })
-      .catch(() => {
-         dispatchNotify('Статус не обновлено', '', 'error');
-      })
+      .catch(() => {})
       .finally(() => {
          conditionLoading.value = false;
       });

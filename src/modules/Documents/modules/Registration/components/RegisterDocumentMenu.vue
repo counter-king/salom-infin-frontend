@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref, unref, computed } from 'vue'
+import {ref, unref, computed, onMounted} from 'vue'
 // Store
 import { useCommonStore } from '@/stores/common'
 import { useDocFlowStore } from '../stores/docflow.store'
@@ -60,6 +60,10 @@ const toggle = (event) => {
 const documentType = (journalCode) => {
 	docFlowStore.actionLoadFormCreateDocument({ journalCode })
 }
+// Hooks
+onMounted(() => {
+  docFlowStore.actionLoadFormCreateDocument({ journalCode: JOURNAL_CODES.INCOMING })
+})
 </script>
 
 <template>

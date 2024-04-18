@@ -24,13 +24,9 @@ const createRegion = () => {
                region.value = defaultRegion
                props.getFirstPageRegions();
                props.setVisible(false);
-            } else {
-               dispatchNotify('Регион не создан', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Регион не создан', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             loading.value = false;
          });

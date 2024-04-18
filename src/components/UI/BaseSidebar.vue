@@ -42,6 +42,7 @@ const props = defineProps({
     type: String
   }
 })
+const emit = defineEmits(['update:modelValue', 'emit:cancel-button', 'emit:success-button'])
 defineExpose({ successButtonLoading })
 </script>
 
@@ -49,6 +50,7 @@ defineExpose({ successButtonLoading })
   <Sidebar
     v-model:visible="modelValue"
     :position="props.position"
+    @hide="emit('emit:cancel-button', false)"
     :pt="{
       root: {
         class: ['w-[672px]', props.rootClass]
@@ -91,7 +93,7 @@ defineExpose({ successButtonLoading })
             outlined
             rounded
             shadow
-            @click="$emit('emit:cancel-button', false)"
+            @click="emit('emit:cancel-button', false)"
           />
 
           <base-button

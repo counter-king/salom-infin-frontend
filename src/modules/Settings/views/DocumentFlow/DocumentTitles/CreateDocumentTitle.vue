@@ -23,13 +23,9 @@ const createDocumentTitle = () => {
                documentTitle.value = defaultDocumentTitle
                props.getFirstPageDocumentTitles();
                props.setVisible(false);
-            } else {
-               dispatchNotify('Заголовок не создан', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Заголовок не создан', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             loading.value = false;
          });

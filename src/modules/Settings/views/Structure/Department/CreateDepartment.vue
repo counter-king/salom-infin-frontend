@@ -34,13 +34,9 @@ const createDepartment = () => {
                department.value = defaultDepartment;
                props.getSubDeparments();
                props.setVisible(false);
-            } else {
-               dispatchNotify('Субдепартамент не создан', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Субдепартамент не создан', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             loading.value = false;
          });

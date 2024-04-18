@@ -99,13 +99,11 @@ const topSignerEdit = () => {
                      return topSigner;
                   }
                });
-               dispatchNotify('Топ подписавший обновлено', '', 'success');
+               dispatchNotify('Топ подписавший обновлен', '', 'success');
                docType.value = '';
                editVisible.value = false;
                props.setTopSigners(topSigners);
                topSigner.value = '';
-            } else {
-               dispatchNotify('Топ подписавший не обновлено', '', 'error');
             }
          })
          .catch(e => {
@@ -113,8 +111,6 @@ const topSignerEdit = () => {
             const message = e?.data?.message
             if(code === '619') {
                dispatchNotify(message, '', 'error');
-            } else {
-               dispatchNotify('Топ подписавший не создан', '', 'error');
             }
          })
          .finally(() => {
@@ -135,13 +131,9 @@ const topSignerDelete = () => {
             deleteVisible.value = false;
             dispatchNotify('Топ подписавший удален', '', 'success');
             props.getFirstPageTopSigners();
-         } else {
-            dispatchNotify('Топ подписавший не удален', '', 'error');
          }
       })
-      .catch(() => {
-         dispatchNotify('Топ подписавший не удален', '', 'error');
-      })
+      .catch(() => {})
       .finally(() => {
          deleteLoading.value = false;
       });
@@ -165,14 +157,10 @@ const updateCondition = value => {
                }
             });
             props.setTopSigners(newTopSigners);
-            dispatchNotify('Статус обновлено', '', 'success');
-         } else {
-            dispatchNotify('Статус не обновлено', '', 'error');
+            dispatchNotify('Статус обновлен', '', 'success');
          }
       })
-      .catch(() => {
-         dispatchNotify('Статус не обновлено', '', 'error');
-      })
+      .catch(() => {})
       .finally(() => {
          conditionLoading.value = false;
       });

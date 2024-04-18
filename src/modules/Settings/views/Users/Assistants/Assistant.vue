@@ -51,7 +51,7 @@ const updateStatus = value => {
                }
             });
             props.setAssistants(newAssistants);
-            dispatchNotify('Состояние обновлено', '', 'success');
+            dispatchNotify('Состояние обновлен', '', 'success');
          }
       })
       .catch(() => {})
@@ -68,13 +68,9 @@ const assistantDelete = () => {
             deleteVisible.value = false;
             dispatchNotify('Помощник удален', '', 'success');
             props.getFirstPageAssistants();
-         } else {
-            dispatchNotify('Помощник не удален', '', 'error');
          }
       })
-      .catch(() => {
-         dispatchNotify('Помощник не удален', '', 'error');
-      })
+      .catch(() => {})
       .finally(() => {
          deleteLoading.value = false;
       });

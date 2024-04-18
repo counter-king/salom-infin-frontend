@@ -60,13 +60,9 @@ const createUser = () => {
                dispatchNotify('Сотрудник создан', '', 'success');
                props.getFirstPageEmployees();
                updateVisible();
-            } else {
-               dispatchNotify('Сотрудник не создан', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Сотрудник не создан', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             loading.value = false;
          });

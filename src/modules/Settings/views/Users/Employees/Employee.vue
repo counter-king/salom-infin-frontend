@@ -61,6 +61,7 @@ const employeeEdit = () => {
    const positionId = position.value?.id;
    const statusId = status.value?.id;
    const top_level_department = topLevelDepartment.value?.id;
+   console.log(editEmployee.value, last_name)
    if(first_name && last_name && String(pinfl || '')?.length === 14 && phone?.length === 12 && companyId && positionId && statusId && top_level_department) {
       editLoading.value = true;
       const data = { phone, first_name, last_name, father_name, pinfl, company: companyId, top_level_department, department, position: positionId, status: statusId, department_ids };
@@ -68,16 +69,12 @@ const employeeEdit = () => {
          .put(`users/${employeeId}/`, data)
          .then(response => {
             if(response?.status === 200) {
-               dispatchNotify('Сотрудник создан', '', 'success');
+               dispatchNotify('Сотрудник изменен', '', 'success');
                editVisible.value = false;
                props.getFirstPageEmployees();
-            } else {
-               dispatchNotify('Сотрудник не создан', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Сотрудник не создан', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             editLoading.value = false;
          });
@@ -201,14 +198,10 @@ const updateStatus = value => {
                }
             });
             props.setEmployees(newEmployees);
-            dispatchNotify('Состояние обновлено', '', 'success');
-         } else {
-            dispatchNotify('Состояние не обновлено', '', 'error');
+            dispatchNotify('Состояние обновлен', '', 'success');
          }
       })
-      .catch(() => {
-         dispatchNotify('Состояние не обновлено', '', 'error');
-      })
+      .catch(() => {})
       .finally(() => {
          statusEditLoading.value = false;
       });
@@ -222,13 +215,9 @@ const employeeDelete = () => {
             deleteVisible.value = false;
             dispatchNotify('Сотрудник удален', '', 'success')
             props.getFirstPageEmployees();
-         } else {
-            dispatchNotify('Сотрудник не удален', '', 'error')
          }
       })
-      .catch(() => {
-         dispatchNotify('Сотрудник не удален', '', 'error')
-      })
+      .catch(() => {})
       .finally(() => {
          deleteLoading.value = false;
       });
@@ -379,7 +368,7 @@ onMounted(() => {
             :pt="{ root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
             placeholder="Введите фамилия"
             type="text"
-            @update:modeValue="value => {
+            @update:modelValue="value => {
                editEmployee = { ...editEmployee, last_name: replaceSpecChars(value) };
             }"
             />

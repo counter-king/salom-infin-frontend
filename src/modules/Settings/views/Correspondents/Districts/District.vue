@@ -44,16 +44,12 @@ const districtEdit = () => {
                      return district;
                   }
                });
-               dispatchNotify('Район обновлено', '', 'success');
+               dispatchNotify('Район обновлен', '', 'success');
                editVisible.value = false;
                props.setDistricts(newDistricts);
-            } else {
-               dispatchNotify('Район не обновлено', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Район не обновлено', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             editLoading.value = false;
          });
@@ -96,13 +92,9 @@ const districtDelete = () => {
             deleteVisible.value = false;
             dispatchNotify('Район удален', '', 'success')
             props.getFirstPageDistricts();
-         } else {
-            dispatchNotify('Район не удален', '', 'error')
          }
       })
-      .catch(() => {
-         dispatchNotify('Район не удален', '', 'error')
-      })
+      .catch(() => {})
       .finally(() => {
          deleteLoading.value = false;
       });
@@ -124,14 +116,10 @@ const updateCondition = value => {
                }
             });
             props.setDistricts(newDistricts);
-            dispatchNotify('Статус обновлено', '', 'success');
-         } else {
-            dispatchNotify('Статус не обновлено', '', 'error');
+            dispatchNotify('Статус обновлен', '', 'success');
          }
       })
-      .catch(() => {
-         dispatchNotify('Статус не обновлено', '', 'error');
-      })
+      .catch(() => {})
       .finally(() => {
          conditionLoading.value = false;
       });

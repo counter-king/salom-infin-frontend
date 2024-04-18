@@ -48,16 +48,12 @@ const departmentEdit = () => {
          .patch(`/departments/${departmentId}/`, { name_ru, name_uz, condition, code, parent, parent_code, company })
          .then(response => {
             if(response?.status === 200) {
-               dispatchNotify('Субдепартамент обновлено', '', 'success');
+               dispatchNotify('Субдепартамент обновлен', '', 'success');
                editVisible.value = false;
                props.getSubDepartments();
-            } else {
-               dispatchNotify('Субдепартамент не обновлено', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Субдепартамент не обновлено', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             editLoading.value = false;
          });
@@ -80,13 +76,9 @@ const deleteDepartment = () => {
                visible.value = false;
                dispatchNotify('Субдепартамент удален', '', 'success');
                props.getSubDepartments();
-            } else {
-               dispatchNotify('Субдепартамент не удален', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Субдепартамент не удален', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             deleteLoading.value = false;
          });
@@ -99,7 +91,7 @@ const updateCondition = value => {
       .then(response => {
          if(response?.status === 200) {
             props.getSubDepartments();
-            dispatchNotify('Статус обновлено', '', 'success');
+            dispatchNotify('Статус обновлен', '', 'success');
          }
       });
 };

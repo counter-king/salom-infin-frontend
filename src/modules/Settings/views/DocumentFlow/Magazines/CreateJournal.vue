@@ -30,13 +30,9 @@ const createJournal = () => {
                journal.value = defaultJournal
                props.getFirstPageJournals();
                props.setVisible(false);
-            } else {
-               dispatchNotify('Журнал не создан', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Журнал не создан', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             loading.value = false;
          });

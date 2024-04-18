@@ -33,13 +33,9 @@ const createCorrespondent = () => {
                gender.value = null;
                props.getFirstPageCorrespondents();
                props.setVisible(false);
-            } else {
-               dispatchNotify('Корреспондент не создан', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Корреспондент не создан', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             loading.value = false;
          });

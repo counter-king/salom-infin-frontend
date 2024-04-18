@@ -67,16 +67,12 @@ const departmentEdit = () => {
                      return department;
                   }
                });
-               dispatchNotify('Департамент обновлено', '', 'success');
+               dispatchNotify('Департамент обновлен', '', 'success');
                editVisible.value = false;
                props.setDepartments(newDepartments);
-            } else {
-               dispatchNotify('Департамент не обновлено', '', 'error');
             }
          })
-         .catch(() => {
-            dispatchNotify('Департамент не обновлено', '', 'error');
-         })
+         .catch(() => {})
          .finally(() => {
             editLoading.value = false;
          });
@@ -97,13 +93,9 @@ const departmentDelete = () => {
             deleteVisible.value = false;
             dispatchNotify('Департамент удален', '', 'success')
             props.getFirstPageDepartments();
-         } else {
-            dispatchNotify('Департамент не удален', '', 'error')
          }
       })
-      .catch(() => {
-         dispatchNotify('Департамент не удален', '', 'error')
-      })
+      .catch(() => {})
       .finally(() => {
          deleteLoading.value = false;
       });
@@ -125,7 +117,7 @@ const updateCondition = value => {
                }
             });
             props.setDepartments(newDepartments);
-            dispatchNotify('Статус обновлено', '', 'success');
+            dispatchNotify('Статус обновлен', '', 'success');
          }
       })
       .catch(() => {})

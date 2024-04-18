@@ -1,6 +1,7 @@
 <script setup>
 // Core
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent, computed } from 'vue'
+import { COLOR_TYPES } from '@/enums'
 // Macros
 const props = defineProps({
   icon: {
@@ -17,9 +18,29 @@ const props = defineProps({
     type: [Number, String],
     default: 20
   },
+  filled: {
+    type: Boolean,
+    default: false
+  },
   stroke: {
     type: Boolean,
     default: true
+  },
+  type: {
+    type: String,
+    default: 'normal',
+    validator(value) {
+      return ['normal', 'primary'].includes(value)
+    }
+  }
+})
+// Computed
+const typeClass = computed(() => {
+  switch(props.type) {
+    case COLOR_TYPES.PRIMARY: // Primary
+      return 'base-icon-primary'
+    default: // Normal
+      return 'base-icon-normal'
   }
 })
 // Methods
@@ -33,7 +54,11 @@ const icon = defineAsyncComponent(() =>
     :is="icon"
     :width="props.width"
     :height="props.height"
-    :class="props.stroke ? 'app-stroke-icon' : 'app-filled-icon'"
+    :class="[
+      { 'app-stroke-icon': props.stroke },
+      { 'app-filled-icon': props.filled },
+      typeClass
+    ]"
   />
 </template>
 
@@ -48,5 +73,14 @@ const icon = defineAsyncComponent(() =>
 .app-filled-icon circle,
 .app-filled-icon ellipse {
   fill: currentColor;
+}
+
+.base-icon-primary circle {
+  fill: var(--primary-500);
+  color: var(--primary-500);
+}
+
+.base-icon-primary path {
+  color: #fff;
 }
 </style>
