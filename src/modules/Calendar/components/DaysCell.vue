@@ -1,17 +1,20 @@
 <script setup>
 // Core
-import { ref, inject, unref, nextTick, shallowRef, watch, defineAsyncComponent } from 'vue'
+import { ref, inject, unref, nextTick, shallowRef, watch, defineAsyncComponent, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { onClickOutside } from '@vueuse/core'
+import ScrollPanel from 'primevue/scrollpanel'
 import { useI18n } from 'vue-i18n'
+import dayjs from 'dayjs'
 // Components
 import BaseSpinner from '@/components/UI/BaseSpinner.vue'
 // Stores
 import { useCalendarStore } from '../stores/calendar.store'
 // Utils
 import { clearModel } from '@/utils'
+import { generateDayHours } from '@/modules/Calendar/utils'
 // Enums
-import { EVENT_TYPES, ACTION_FORM_TYPES } from '../enums'
+import { EVENT_TYPES, ACTION_FORM_TYPES, CALENDAR_TYPES } from '../enums'
 // Macros
 const props = defineProps({
 	interval: {
@@ -21,7 +24,14 @@ const props = defineProps({
 	events: {
 		type: Array,
 		default: () => []
-	}
+	},
+  type: {
+    type: String,
+    default: CALENDAR_TYPES.MONTHS,
+    validator(value) {
+      return Object.values(CALENDAR_TYPES).includes(value)
+    }
+  }
 })
 // Inject
 const { daysList } = inject('calendar')
@@ -30,7 +40,17 @@ const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 const calendarStore = useCalendarStore()
+// Inject
+const { date } = inject('calendar')
 // Reactive
+const dateCopy = computed(() => new Date(
+  date.value.getFullYear(),
+  date.value.getMonth(),
+  date.value.getDate(),
+  8,
+  0,
+  0
+))
 const menuContainerRef = ref(null)
 const menuTopRef = ref(null)
 const menuContentRef = ref(null)
@@ -40,6 +60,17 @@ const formRef = ref(null)
 const formComponent = shallowRef(null)
 const menuVisible = ref(false)
 const toggleCount = ref(1)
+const times = ref(generateDayHours(60, 'ru', 0))
+// Computed
+const firstDateOfWeek = computed(() => dateCopy.value.getDate() - dateCopy.value.getDay() + 1)
+const beginOfWeek = computed(() => new Date(dateCopy.value.setDate(firstDateOfWeek.value)))
+const weekInterval = computed(() => {
+  return props.interval.filter(interval =>
+    dayjs(beginOfWeek.value).format('D')
+    <= interval.date && interval.date <=
+    dayjs(beginOfWeek.value).add(6, 'day').format('D')
+  )
+})
 // Methods
 const collapseEventList = (index) => {
 	const _eventsListRef = document.querySelector(`#events-list-${index}`)
@@ -205,73 +236,122 @@ onClickOutside(
 </script>
 
 <template>
-	<div
-		class="grid grid-cols-7 grid-rows-5 flex-1"
-		:class="{ 'grid-rows-6' : daysList.length > 35 }"
-	>
-		<template v-for="({ date, month, year, status, events, format }, index) in props.interval">
-			<div
-				class="group relative transition-all [&:not(:nth-child(7n))]:border-r border-t border-greyscale-200 p-2"
-        :class="{ '!bg-greyscale-50': status !== 'now' }"
-				@click="cellClick(index, date, month, year)"
-			>
-				<div
-					:id="`events-list-${index}`"
-          :class="{ '!bg-greyscale-50': status !== 'now' }"
-          class="events-list flex flex-col bg-white absolute top-0 left-0 w-full h-full border-[2px] border-transparent transition-all rounded-lg p-2 group-hover:border-primary-500"
-				>
-					<div class="h-7">
-		        <span
-			        class="flex items-center justify-center w-7 h-7 relative rounded-full m-auto text-[15px] font-medium text-gray-2"
-			        :class="{
-                'text-primary-900': status === 'now',
-                'bg-primary-500 text-white': month === new Date().getMonth() && date === new Date().getDate()
-              }"
-		        >
-		          {{ date }}
-		        </span>
-					</div>
+  <template v-if="props.type === CALENDAR_TYPES.DAYS">
+    day
+  </template>
 
-					<template v-if="events.length">
-						<div class="overflow-hidden flex-1">
-							<div
-								:id="`event-items-wrap-${index}`"
-								class="event-items-wrap"
-							>
-								<template v-for="(event, eventIndex) in events">
-									<div
-										ref="eventRef"
-										:id="`event-item-${index}-${eventIndex}`"
-										:class="[
+  <template v-if="props.type === CALENDAR_TYPES.WEEKS">
+    <ScrollPanel class="flex-1 w-full h-[1px] border-t border-greyscale-200">
+      <div class="grid grid-cols-8 flex-1">
+        <div class="grid grid-cols-subgrid col-span-1 border-r border-greyscale-200">
+          <template v-for="{ time } in times">
+            <div class="h-[120px] p-3 font-medium text-sm text-gray-2 text-right [&:not(:last-child)]:border-b border-greyscale-200">
+              {{ time }}
+            </div>
+          </template>
+        </div>
+
+        <div class="col-span-7">
+          <div class="grid grid-cols-7 grid-rows-[repeat(17, minmax(0, 1fr))] flex-col">
+            <template v-for="{ events } in weekInterval">
+              <div class="border-r border-greyscale-200">
+                <template v-for="{ time } in times">
+                  <div class="flex flex-col h-[120px] [&:not(:last-child)]:border-b border-greyscale-200 p-2">
+                    <template v-if="events.length">
+                      <template v-for="event in events">
+                        <template v-if="time <= dayjs(event.start_date).format('HH:mm')">
+                          <div class="flex flex-col flex-1 bg-info-100 rounded-lg border-2 border-info-200 py-[6px] px-2">
+                            <h1 class="text-sm font-semibold truncate">{{ event.title }}</h1>
+                            <p class="text-sm font-medium text-greyscale-500 mt-1 mb-auto">{{ dayjs(event.start_date).format('HH:mm') }}-{{ dayjs(event.start_date).format('HH:mm') }}</p>
+
+                            <base-avatar-group
+                              :items="event.participants"
+                              avatar-classes="w-7 h-7"
+                              class="ml-2"
+                            />
+                          </div>
+                        </template>
+                      </template>
+                    </template>
+                  </div>
+                </template>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </ScrollPanel>
+  </template>
+
+  <template v-else>
+    <div
+      class="grid grid-cols-7 grid-rows-5 flex-1"
+      :class="{ 'grid-rows-6' : daysList.length > 35 }"
+    >
+      <template v-for="({ date, month, year, status, events, format }, index) in props.interval">
+        <div
+          class="group relative transition-all [&:not(:nth-child(7n))]:border-r border-t border-greyscale-200 p-2"
+          :class="{ '!bg-greyscale-50': status !== 'now' }"
+          @click="cellClick(index, date, month, year)"
+        >
+          <div
+            :id="`events-list-${index}`"
+            :class="{ '!bg-greyscale-50': status !== 'now' }"
+            class="events-list flex flex-col bg-white absolute top-0 left-0 w-full h-full border-[2px] border-transparent transition-all rounded-lg p-2 group-hover:border-primary-500"
+          >
+            <div class="h-7 mb-2">
+              <span
+                class="flex items-center justify-center w-7 h-7 relative rounded-full m-auto text-[15px] font-medium text-gray-2"
+                :class="{
+                  'text-primary-900': status === 'now',
+                  'bg-primary-500 text-white': month === new Date().getMonth() && date === new Date().getDate()
+                }"
+              >
+                {{ date }}
+              </span>
+            </div>
+
+            <template v-if="events.length">
+              <div class="overflow-hidden flex-1">
+                <div
+                  :id="`event-items-wrap-${index}`"
+                  class="event-items-wrap"
+                >
+                  <template v-for="(event, eventIndex) in events">
+                    <div
+                      ref="eventRef"
+                      :id="`event-item-${index}-${eventIndex}`"
+                      :class="[
 		                  event.type === EVENT_TYPES.EVENT ? 'bg-info-100' : 'bg-warning-100',
 		                  eventIndex + 1 !== events.length ? 'mb-1' : ''
 		                ]"
-										class="rounded-[6px] cursor-pointer px-2 py-1"
-										@click.stop="eventClick(event, index, eventIndex, date, month, year, event.type)"
-									>
-										<span class="block text-[13px] font-semibold text-primary-900 leading-[1]">{{ event.title }}</span>
-									</div>
-								</template>
-							</div>
-						</div>
-					</template>
+                      class="rounded-[6px] cursor-pointer px-2 py-1"
+                      @click.stop="eventClick(event, index, eventIndex, date, month, year, event.type)"
+                    >
+                      <span class="block text-[13px] font-semibold text-primary-900 leading-[1]">{{ event.title }}</span>
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </template>
 
-					<template v-if="events.length > 2">
-						<button
-							@click.stop="collapseEventList(index)"
-							class="flex items-center justify-center absolute bottom-0 right-[50%] translate-x-1/2 translate-y-[16px] z-[1] w-8 h-8 rounded-full bg-primary-500 opacity-0 transition group-hover:opacity-100"
-						>
-							<base-icon
-								name="DoubleAltArrowDownIcon"
-								class="text-white"
-								:class="{ 'rotate-180' : !(toggleCount & 1) }"
-							/>
-						</button>
-					</template>
-				</div>
-			</div>
-		</template>
-	</div>
+            <template v-if="events.length > 2">
+              <button
+                @click.stop="collapseEventList(index)"
+                class="flex items-center justify-center absolute bottom-0 right-[50%] translate-x-1/2 translate-y-[16px] z-[1] w-8 h-8 rounded-full bg-primary-500 opacity-0 transition group-hover:opacity-100"
+              >
+                <base-icon
+                  name="DoubleAltArrowDownIcon"
+                  class="text-white"
+                  :class="{ 'rotate-180' : !(toggleCount & 1) }"
+                />
+              </button>
+            </template>
+          </div>
+        </div>
+      </template>
+    </div>
+  </template>
 
 	<!-- Menu -->
 	<Teleport to="body">

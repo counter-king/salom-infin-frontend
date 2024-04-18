@@ -12,6 +12,15 @@ export const WEEK_DAYS = [
   'Суббота',
   'Воскресенье'
 ]
+export const WEEK_DAYS_SHORT = [
+  'Пн',
+  'Вт',
+  'Ср',
+  'Чт',
+  'Пт',
+  'Су',
+  'Вc'
+]
 export const EVENT_TYPES = {
   EVENT: 'event',
   TASK: 'task'

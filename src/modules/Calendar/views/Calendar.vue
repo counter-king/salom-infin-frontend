@@ -2,7 +2,7 @@
 // Core
 import { provide, ref, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useDebounce, useDebounceFn } from '@vueuse/core'
+import { useDebounceFn } from '@vueuse/core'
 import dayjs from 'dayjs'
 // Components
 import { ActionToolbar } from '@/components/Actions'
@@ -19,14 +19,7 @@ const router = useRouter()
 const calendarStore = useCalendarStore()
 // Reactive
 const currentDate = ref(new Date())
-const date = ref(isModelEmpty(route.params, ['type'])
-  ? new Date(
-    +route.params.y,
-    +route.params.m,
-    +route.params.d
-  ) :
-  new Date()
-)
+const date = ref(null)
 const daysList = ref([])
 const startInterval = ref(null)
 const endInterval = ref(null)
@@ -123,15 +116,20 @@ const debouncedWheelFn = useDebounceFn(async (event) => {
 watch(
   () => route.params,
   () => {
-    date.value = new Date(
-      +route.params.y,
-      +route.params.m,
-      +route.params.d
-    )
+    if(isModelEmpty(route.params, ['type'])) {
+      date.value = new Date(
+        +route.params.y,
+        +route.params.m,
+        +route.params.d
+      )
+    }
+    else {
+      date.value = new Date()
+    }
     calendarStore.eventModel.start_date = date.value
     calendarStore.eventModel.end_date = date.value
   },
-  { deep: true }
+  { deep: true, immediate: true }
 )
 watch(
   () => calendarStore.eventList,
@@ -181,7 +179,11 @@ provide('calendar', {
     </action-toolbar>
 
     <div class="flex gap-6 h-[calc(100vh-245px)]">
-      <calendar @wheel="(event) => debouncedWheelFn(event)" class="flex-1" />
+<!--      @wheel="(event) => debouncedWheelFn(event)"-->
+      <calendar
+        :type="route.params.type"
+        class="flex-1"
+      />
 
       <sidebar-actions
 	      @emit:month-change="monthChange"
