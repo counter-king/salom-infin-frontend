@@ -243,7 +243,7 @@ onUnmounted(() => {
             approvers: SDStoreInner.model.__approvers,
             author: SDStoreInner.model.__signers[0],
             sender: {
-              name: authStore.currentUser?.department?.name
+              name: authStore.currentUser?.top_level_department?.name
             },
             receiver: {
               departments: SDStoreInner.model.__departments
