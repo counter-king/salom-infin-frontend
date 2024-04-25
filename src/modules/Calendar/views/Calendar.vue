@@ -116,7 +116,7 @@ const debouncedWheelFn = useDebounceFn(async (event) => {
 watch(
   () => route.params,
   () => {
-    if(isModelEmpty(route.params, ['type'])) {
+	  if(isModelEmpty(route.params, ['type'])) {
       date.value = new Date(
         +route.params.y,
         +route.params.m,

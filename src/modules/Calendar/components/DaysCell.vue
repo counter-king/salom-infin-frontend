@@ -78,7 +78,7 @@ const collapseEventList = (index) => {
 
 	if(toggleCount.value & 1) {
 		_eventsListRef.classList.add('shadow-calendar-cell')
-		_eventsListRef.style.height = `${_eventItemsWrapRef.clientHeight + 70}px`
+		_eventsListRef.style.height = `${_eventItemsWrapRef?.clientHeight + 70}px`
 		_eventsListRef.style.zIndex = 3
 	}
 	else {
@@ -89,23 +89,17 @@ const collapseEventList = (index) => {
 
 	toggleCount.value = toggleCount.value + 1
 }
-const cellClick = async (cellIndex, date, month, year) => {
-  clearModel(calendarStore.updateEventModel, ['type'])
+const cellClick = async (cellIndex, date, month, year, time) => {
+	clearModel(calendarStore.updateEventModel, ['type'])
+  if(time) {
+    calendarStore.eventModel.__start_time = time
+    calendarStore.eventModel.__end_time = `${time.split(':')[0]}:30`
+  }
   menuVisible.value = true
-  calendarStore.actionToggleEventClick(false)
-  await nextTick()
-  await router.replace({
-    name: 'CalendarDate',
-    params: {
-      ...route.params,
-      y: year,
-      m: month,
-      d: date
-    }
-  })
-
+	calendarStore.actionToggleEventClick(false)
+	await nextTick()
   const _eventItemRef = document.querySelector(`#events-list-${cellIndex}`)
-  const { left: eventLeft, top: eventTop, width: eventWidth } = _eventItemRef.getBoundingClientRect()
+	const { left: eventLeft, top: eventTop, width: eventWidth } = _eventItemRef.getBoundingClientRect()
   const _menuContentRef = unref(menuContentRef)
   const { width: menuWidth } = _menuContentRef.getBoundingClientRect()
   const _menuContainerRef = unref(menuContainerRef)
@@ -123,6 +117,16 @@ const cellClick = async (cellIndex, date, month, year) => {
     _menuTopRef.style.maxHeight = `${eventTop}px`
     _menuTopRef.style.minHeight = `32px`
   }
+
+	await router.replace({
+		name: 'CalendarDate',
+		params: {
+			...route.params,
+			y: year,
+			m: month,
+			d: date
+		}
+	})
 }
 const eventClick = async (event, cellIndex, eventIndex, date, month, year, type) => {
   type === EVENT_TYPES.EVENT
@@ -133,16 +137,6 @@ const eventClick = async (event, cellIndex, eventIndex, date, month, year, type)
 	calendarStore.actionSetEventModel(event)
 	menuVisible.value = true
 	await nextTick()
-  await router.replace({
-    name: 'CalendarDate',
-    params: {
-      ...route.params,
-      y: year,
-      m: month,
-      d: date
-    }
-  })
-
 	const _eventItemRef = document.querySelector(`#event-item-${cellIndex}-${eventIndex}`)
 	const { left: eventLeft, top: eventTop, width: eventWidth } = _eventItemRef.getBoundingClientRect()
 	const _menuContentRef = unref(menuContentRef)
@@ -162,6 +156,16 @@ const eventClick = async (event, cellIndex, eventIndex, date, month, year, type)
 		_menuTopRef.style.maxHeight = `${eventTop}px`
 		_menuTopRef.style.minHeight = `32px`
 	}
+
+	await router.replace({
+		name: 'CalendarDate',
+		params: {
+			...route.params,
+			y: year,
+			m: month,
+			d: date
+		}
+	})
 
 	// {
 	// 	"x": 34,
@@ -202,7 +206,7 @@ const closeEvent = () => {
     calendarStore.isEventClicked
       ? calendarStore.updateEventModel
       : calendarStore.eventModel,
-    ['type']
+    ['type', 'start_date', 'end_date']
   )
 }
 const deleteEvent = async (type) => {
@@ -226,13 +230,13 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
     delay: 200
   })
 }, { immediate: true })
-onClickOutside(
-	eventRef,
-	() => {
-		menuVisible.value = false
-	},
-	{ ignore: [menuContentRef] }
-)
+// onClickOutside(
+// 	eventRef,
+// 	() => {
+// 		menuVisible.value = false
+// 	},
+// 	{ ignore: [menuContentRef] }
+// )
 </script>
 
 <template>
@@ -253,26 +257,74 @@ onClickOutside(
 
         <div class="col-span-7">
           <div class="grid grid-cols-7 grid-rows-[repeat(17, minmax(0, 1fr))] flex-col">
-            <template v-for="{ events } in weekInterval">
+            <template v-for="({ date, month, year, events }, weekIndex) in weekInterval">
               <div class="border-r border-greyscale-200">
-                <template v-for="{ time } in times">
-                  <div class="flex flex-col h-[120px] [&:not(:last-child)]:border-b border-greyscale-200 p-2">
-                    <template v-if="events.length">
-                      <template v-for="event in events">
-                        <template v-if="time <= dayjs(event.start_date).format('HH:mm')">
-                          <div class="flex flex-col flex-1 bg-info-100 rounded-lg border-2 border-info-200 py-[6px] px-2">
-                            <h1 class="text-sm font-semibold truncate">{{ event.title }}</h1>
-                            <p class="text-sm font-medium text-greyscale-500 mt-1 mb-auto">{{ dayjs(event.start_date).format('HH:mm') }}-{{ dayjs(event.start_date).format('HH:mm') }}</p>
+                <template v-for="({ time }, index) in times">
+                  <div class="group flex flex-col h-[120px] relative [&:not(:last-child)]:border-b border-greyscale-200 p-2">
+                    <div
+                      :id="`events-list-${weekIndex}-${index}`"
+                      class="events-list flex flex-col bg-white absolute top-0 left-0 w-full h-full border-[2px] border-transparent transition-all rounded-lg p-2 group-hover:border-primary-500"
+                    >
+                      <template v-if="events.length">
+                        <div class="overflow-hidden flex-1">
+                          <div
+                            :id="`event-items-wrap-${weekIndex}-${index}`"
+                            class="event-items-wrap flex flex-col gap-1"
+                          >
+                            <template v-for="(event, eventIndex) in events">
+                              <template v-if="time.split(':')[0] === dayjs(event.start_date).format('HH')">
+                                <div
+                                  ref="eventRef"
+                                  :id="`event-item-${index}-${eventIndex}`"
+                                  :class="[
+                                    event.type === EVENT_TYPES.EVENT ? 'bg-info-100' : 'bg-warning-100',
+                                  ]"
+                                  class="flex flex-col bg-info-100 h-[100px] rounded-lg py-[6px] px-2 cursor-pointer"
+                                  @click.stop="eventClick(event, index, eventIndex, date, month, year, event.type)"
+                                >
+                                  <h1 class="text-sm font-semibold truncate">{{ event.title }}</h1>
+                                  <p class="text-sm font-medium text-greyscale-500 mt-1 mb-auto">{{ dayjs(event.start_date).format('HH:mm') }}-{{ dayjs(event.end_date).format('HH:mm') }}</p>
 
-                            <base-avatar-group
-                              :items="event.participants"
-                              avatar-classes="w-7 h-7"
-                              class="ml-2"
-                            />
+                                  <base-avatar-group
+                                    :items="event.participants"
+                                    avatar-classes="w-7 h-7"
+                                    class="ml-2"
+                                  />
+                                </div>
+                              </template>
+                            </template>
                           </div>
-                        </template>
+                        </div>
                       </template>
-                    </template>
+
+                      <div class="flex gap-2 absolute bottom-0 right-[50%] translate-x-1/2 translate-y-[16px] z-[1] rounded-full opacity-0 transition group-hover:opacity-100">
+                        <button
+                          @click.stop="collapseEventList(`${weekIndex}-${index}`)"
+                          class="flex items-center justify-center w-8 h-8 rounded-full bg-primary-500 transition"
+                        >
+                          <base-icon
+                            name="DoubleAltArrowDownIcon"
+                            class="text-white"
+                            :class="{ 'rotate-180' : !(toggleCount & 1) }"
+                          />
+                        </button>
+
+                        <button
+                          @click="cellClick(`${weekIndex}-${index}`, date, month, year, time)"
+                          v-tooltip.top="{
+                            value: `<h4 class='text-xs text-white -my-1'>Создать</h4>`,
+                            escape: true,
+                            autoHide: false
+                          }"
+                          class="flex items-center justify-center w-8 h-8 rounded-full bg-primary-500 transition"
+                        >
+                          <base-icon
+                            name="AddIcon"
+                            class="text-white"
+                          />
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </template>
               </div>
@@ -288,11 +340,11 @@ onClickOutside(
       class="grid grid-cols-7 grid-rows-5 flex-1"
       :class="{ 'grid-rows-6' : daysList.length > 35 }"
     >
-      <template v-for="({ date, month, year, status, events, format }, index) in props.interval">
+      <template v-for="({ date, month, year, status, events }, index) in props.interval">
         <div
           class="group relative transition-all [&:not(:nth-child(7n))]:border-r border-t border-greyscale-200 p-2"
           :class="{ '!bg-greyscale-50': status !== 'now' }"
-          @click="cellClick(index, date, month, year)"
+          @click="cellClick(index, date, month, year, null)"
         >
           <div
             :id="`events-list-${index}`"
@@ -322,9 +374,9 @@ onClickOutside(
                       ref="eventRef"
                       :id="`event-item-${index}-${eventIndex}`"
                       :class="[
-		                  event.type === EVENT_TYPES.EVENT ? 'bg-info-100' : 'bg-warning-100',
-		                  eventIndex + 1 !== events.length ? 'mb-1' : ''
-		                ]"
+                        event.type === EVENT_TYPES.EVENT ? 'bg-info-100' : 'bg-warning-100',
+                        eventIndex + 1 !== events.length ? 'mb-1' : ''
+                      ]"
                       class="rounded-[6px] cursor-pointer px-2 py-1"
                       @click.stop="eventClick(event, index, eventIndex, date, month, year, event.type)"
                     >
