@@ -34,14 +34,12 @@ const props = defineProps({
   }
 })
 // Inject
-const { daysList } = inject('calendar')
+const { date, daysList } = inject('calendar')
 // Composable
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 const calendarStore = useCalendarStore()
-// Inject
-const { date } = inject('calendar')
 // Reactive
 const dateCopy = computed(() => new Date(
   date.value.getFullYear(),
@@ -71,6 +69,7 @@ const weekInterval = computed(() => {
     dayjs(beginOfWeek.value).add(6, 'day').format('D')
   )
 })
+const getOneEvent = computed(() => daysList.value.find(day => day.date === +dayjs(date.value).format('D')))
 // Methods
 const collapseEventList = (index) => {
 	const _eventsListRef = document.querySelector(`#events-list-${index}`)
@@ -241,7 +240,67 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
 
 <template>
   <template v-if="props.type === CALENDAR_TYPES.DAYS">
-    days
+    <ScrollPanel class="flex-1 w-full h-[1px] border-t border-greyscale-200">
+      <div class="grid grid-cols-[90px_1fr] flex-1">
+        <div class="grid grid-cols-subgrid col-span-1 border-r border-greyscale-200">
+          <template v-for="{ time } in times">
+            <div class="h-[120px] p-3 font-medium text-sm text-gray-2 text-right [&:not(:last-child)]:border-b border-greyscale-200">
+              {{ time }}
+            </div>
+          </template>
+        </div>
+
+        <div>
+          <template v-for="({ time }, index) in times">
+            <div
+              class="relative h-[120px] p-2 [&:not(:last-child)]:border-b border-greyscale-200"
+              @click="cellClick(index, route.params.d, route.params.m, route.params.y, null)"
+            >
+              <div
+                :id="`events-list-${index}`"
+                class="events-list flex flex-col bg-white absolute top-0 left-0 w-full h-full border-[2px] border-transparent transition-all rounded-lg p-2 group-hover:border-primary-500"
+              >
+                <template v-if="getOneEvent">
+                  <template v-if="getOneEvent.events?.length">
+                    <div
+                      :id="`event-items-wrap-${index}`"
+                      class="event-items-wrap grid grid-cols-4 gap-2"
+                    >
+                      <template v-for="(event, eventIndex) in getOneEvent?.events">
+                        <template v-if="time.split(':')[0] === dayjs(event.start_date).format('HH')">
+                          <div
+                            ref="eventRef"
+                            :id="`event-item-${index}-${eventIndex}`"
+                            :class="[
+                              event.type === EVENT_TYPES.EVENT ? 'bg-info-100' : 'bg-warning-100',
+                            ]"
+                            class="flex items-center rounded-[6px] cursor-pointer px-2 py-1"
+                            @click.stop="eventClick(event, index, eventIndex, getOneEvent.date, getOneEvent.month, getOneEvent.year, event.type)"
+                          >
+                            <div class="flex-1">
+                              <h1 class="text-sm font-semibold truncate">{{ event.title }}</h1>
+                              <p class="text-sm font-medium text-greyscale-500 mt-1 mb-auto">{{ dayjs(event.start_date).format('HH:mm') }}-{{ dayjs(event.end_date).format('HH:mm') }}</p>
+                            </div>
+
+                            <div>
+                              <base-avatar-group
+                                :items="event.participants"
+                                avatar-classes="w-7 h-7"
+                                class="ml-2"
+                              />
+                            </div>
+                          </div>
+                        </template>
+                      </template>
+                    </div>
+                  </template>
+                </template>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </ScrollPanel>
   </template>
 
   <template v-else-if="props.type === CALENDAR_TYPES.WEEKS">

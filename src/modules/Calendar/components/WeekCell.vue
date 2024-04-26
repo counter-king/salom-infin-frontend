@@ -79,8 +79,11 @@ const prevWeek = async () => {
     <template v-if="props.type === CALENDAR_TYPES.DAYS">
 	    <div class="flex items-center justify-center gap-2 h-[88px] border-r border-greyscale-200"></div>
 
-	    <div>
-		    333
+	    <div class="flex items-center px-3">
+		    <h1 class="font-bold text-lg text-primary-900 capitalize">
+          {{ dayjs(date).locale('ru').format('D-MMMM, YYYY') }}
+          <span class="lowercase">год</span>
+        </h1>
 	    </div>
     </template>
 

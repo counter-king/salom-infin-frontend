@@ -38,6 +38,13 @@ export const useCalendarStore = defineStore('calendar', {
     },
     isEventClicked: false
   }),
+  getters: {
+    getOneEvent: state => (id) => {
+      console.log(id)
+      console.log(state)
+      return id
+    }
+  },
   actions: {
     async actionGetList(params) {
       let { data } = await fetchEventList(params)
