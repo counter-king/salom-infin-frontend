@@ -42,8 +42,9 @@ const weekInterval = computed(() => {
 })
 const gridClass = computed(() => {
   return {
+    'grid-header-days grid-cols-[90px_1fr]': props.type === CALENDAR_TYPES.DAYS,
     'grid-header-month grid-cols-7': props.type === CALENDAR_TYPES.MONTHS,
-    'grid-header-week grid-cols-8': props.type === CALENDAR_TYPES.WEEKS
+    'grid-header-week grid-cols-[90px_1fr_1fr_1fr_1fr_1fr_1fr_1fr]': props.type === CALENDAR_TYPES.WEEKS
   }
 })
 // Methods
@@ -76,10 +77,14 @@ const prevWeek = async () => {
 <template>
   <div class="grid" :class="gridClass">
     <template v-if="props.type === CALENDAR_TYPES.DAYS">
-      day
+	    <div class="flex items-center justify-center gap-2 h-[88px] border-r border-greyscale-200"></div>
+
+	    <div>
+		    333
+	    </div>
     </template>
 
-    <template v-if="props.type === CALENDAR_TYPES.WEEKS">
+    <template v-else-if="props.type === CALENDAR_TYPES.WEEKS">
       <div class="flex items-center justify-center gap-2 h-[88px] border-r border-greyscale-200">
         <div
           v-tooltip.top="{
@@ -91,8 +96,8 @@ const prevWeek = async () => {
         >
           <base-icon
             name="AltArrowLeftIcon"
-            width="24"
-            height="24"
+            width="20"
+            height="20"
             class="text-gray-2 cursor-pointer"
           ></base-icon>
         </div>
@@ -107,8 +112,8 @@ const prevWeek = async () => {
         >
           <base-icon
             name="AltArrowLeftIcon"
-            width="24"
-            height="24"
+            width="20"
+            height="20"
             class="rotate-180 text-gray-2 cursor-pointer"
           ></base-icon>
         </div>

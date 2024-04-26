@@ -241,12 +241,12 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
 
 <template>
   <template v-if="props.type === CALENDAR_TYPES.DAYS">
-    day
+    days
   </template>
 
-  <template v-if="props.type === CALENDAR_TYPES.WEEKS">
+  <template v-else-if="props.type === CALENDAR_TYPES.WEEKS">
     <ScrollPanel class="flex-1 w-full h-[1px] border-t border-greyscale-200">
-      <div class="grid grid-cols-8 flex-1">
+      <div class="grid grid-cols-[90px_1fr_1fr_1fr_1fr_1fr_1fr_1fr] flex-1">
         <div class="grid grid-cols-subgrid col-span-1 border-r border-greyscale-200">
           <template v-for="{ time } in times">
             <div class="h-[120px] p-3 font-medium text-sm text-gray-2 text-right [&:not(:last-child)]:border-b border-greyscale-200">
@@ -258,7 +258,7 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
         <div class="col-span-7">
           <div class="grid grid-cols-7 grid-rows-[repeat(17, minmax(0, 1fr))] flex-col">
             <template v-for="({ date, month, year, events }, weekIndex) in weekInterval">
-              <div class="border-r border-greyscale-200">
+              <div class="[&:not(:last-child)]:border-r border-greyscale-200">
                 <template v-for="({ time }, index) in times">
                   <div class="group flex flex-col h-[120px] relative [&:not(:last-child)]:border-b border-greyscale-200 p-2">
                     <div
