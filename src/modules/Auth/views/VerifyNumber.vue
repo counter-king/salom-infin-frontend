@@ -24,7 +24,7 @@ const verifyNumber = async () => {
       phone_number: route.query.phone,
       otp_code: otpValue.value
     })
-    dispatchNotify('Успешно отправлен', null, COLOR_TYPES.SUCCESS)
+    dispatchNotify(null, 'Успешно отправлен', COLOR_TYPES.SUCCESS)
     await router.push({
       name: 'SetCredentials',
       query: {
@@ -42,10 +42,10 @@ const verifyNumber = async () => {
 const resendOtpCode = async () => {
   try {
     await fetchSendOtp({ phone_number: route.query.phone })
-    dispatchNotify('Код подтверждения отправлен', null, COLOR_TYPES.SUCCESS)
+    dispatchNotify(null, 'Код подтверждения отправлен', COLOR_TYPES.SUCCESS)
   }
   catch (error) {
-    dispatchNotify('Ошибка', 'Ошибка при отправки код подтверждения', COLOR_TYPES.ERROR)
+    dispatchNotify(null, 'Ошибка при отправки код подтверждения', COLOR_TYPES.ERROR)
   }
 }
 </script>

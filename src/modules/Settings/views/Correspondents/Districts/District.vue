@@ -44,7 +44,7 @@ const districtEdit = () => {
                      return district;
                   }
                });
-               dispatchNotify('Район обновлен', '', 'success');
+               dispatchNotify(null, 'Район обновлен', 'success');
                editVisible.value = false;
                props.setDistricts(newDistricts);
             }
@@ -54,11 +54,11 @@ const districtEdit = () => {
             editLoading.value = false;
          });
    } else if(!regionId) {
-      dispatchNotify('Введите регион', '', 'error')
+      dispatchNotify(null, 'Введите регион', 'error')
    } else if(!name_uz || !name_ru) {
-      dispatchNotify('Введите название', '', 'error')
+      dispatchNotify(null, 'Введите название', 'error')
    } else {
-      dispatchNotify('Введите код', '', 'error')
+      dispatchNotify(null, 'Введите код', 'error')
    }
 };
 const searchRegions = ({ search, page }) => {
@@ -90,7 +90,7 @@ const districtDelete = () => {
       .then(response => {
          if(response?.status === 204) {
             deleteVisible.value = false;
-            dispatchNotify('Район удален', '', 'success')
+            dispatchNotify(null, 'Район удален', 'success')
             props.getFirstPageDistricts();
          }
       })
@@ -116,7 +116,7 @@ const updateCondition = value => {
                }
             });
             props.setDistricts(newDistricts);
-            dispatchNotify('Статус обновлен', '', 'success');
+            dispatchNotify(null, 'Статус обновлен', 'success');
          }
       })
       .catch(() => {})

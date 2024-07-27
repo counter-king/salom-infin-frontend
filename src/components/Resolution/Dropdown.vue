@@ -65,7 +65,7 @@ const items = ref([
         label: 'create-resolutions',
         icon: 'AddCircleIcon',
         command: () => props.isResolutionSigned
-          ? dispatchNotify('Сначало отмените подпись', null, COLOR_TYPES.SUCCESS)
+          ? dispatchNotify(null, 'Сначало отмените подпись', COLOR_TYPES.SUCCESS)
           : createResolutionDialog.value = true
       }
     ]

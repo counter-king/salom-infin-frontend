@@ -52,7 +52,7 @@ const files = computed({
 const openModal = () => {
   if(!props.hasResolution || !props.isDocumentSigned) {
     dispatchNotify(
-      'Предупреждения',
+      null,
       !props.hasResolution
         ? 'Сначала создайте резолюцию'
         : 'Сначала подпишите резолюцию',

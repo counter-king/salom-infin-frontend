@@ -43,7 +43,7 @@ const correspondentEdit = () => {
                      return correspondent;
                   }
                });
-               dispatchNotify('Корреспондент обновлен', '', 'success');
+               dispatchNotify(null, 'Корреспондент обновлен', 'success');
                editVisible.value = false;
                props.setCorrespondents(newCorrespondents);
             }
@@ -53,19 +53,19 @@ const correspondentEdit = () => {
             editLoading.value = false;
          });
    } else if(!first_name) {
-      dispatchNotify('Введите имя', '', 'error')
+      dispatchNotify(null, 'Введите имя', 'error')
    } else if(!last_name) {
-      dispatchNotify('Введите фамилия', '', 'error')
+      dispatchNotify(null, 'Введите фамилия', 'error')
    } else if(!gender.value) {
-      dispatchNotify('Выберите пол', '', 'error')
+      dispatchNotify(null, 'Выберите пол', 'error')
    } else if(String(pinfl || '').length !== 14) {
-      dispatchNotify('Введите правильный ПИНФЛ', '', 'error')
+      dispatchNotify(null, 'Введите правильный ПИНФЛ', 'error')
    } else if(newPhone.length !== 13) {
-      dispatchNotify('Введите свой номер телефона правильно', '', 'error')
+      dispatchNotify(null, 'Введите свой номер телефона правильно', 'error')
    } else if((email?.length ? !isValidEmail(email) : false)) {
-      dispatchNotify('Введите свой адрес электронной почты правильно', '', 'error')
+      dispatchNotify(null, 'Введите свой адрес электронной почты правильно', 'error')
    } else {
-      dispatchNotify('Введите адрес', '', 'error')
+      dispatchNotify(null, 'Введите адрес', 'error')
    }
 };
 const correspondentDelete = () => {
@@ -76,7 +76,7 @@ const correspondentDelete = () => {
       .then(response => {
          if(response?.status === 204) {
             deleteVisible.value = false;
-            dispatchNotify('Корреспондент удален', '', 'success')
+            dispatchNotify(null, 'Корреспондент удален', 'success')
             props.getFirstPageCorrespondents();
          }
       })

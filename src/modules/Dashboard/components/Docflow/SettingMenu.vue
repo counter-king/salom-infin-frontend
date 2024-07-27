@@ -164,8 +164,8 @@ const callback = (state, event) => {
   }
 
   dispatchNotify(
-    state === 'save' ? 'Фильтр сохранен' : 'Фильтр сброшен',
     null,
+    state === 'save' ? 'Фильтр сохранен' : 'Фильтр сброшен',
     COLOR_TYPES.SUCCESS
   )
   toggle(event)

@@ -66,75 +66,77 @@ const handleSelect = (item) => {
 </script>
 
 <template>
-  <div
-    v-for="item in props.items"
-    class="flex items-center gap-3 w-full border border-transparent cursor-pointer"
-    :class="[
-      rootClass,
-      { 'p-highlight !border-primary-500 bg-primary-100/50': isObject(item.user)
-        ? item.user?.id === checkboxIndex
-        : item.id === checkboxIndex
-      }
-    ]"
-    @click="handleSelect(item)"
-  >
-    <base-avatar
-      :label="isObject(item.user) ? item.user?.full_name : item.full_name"
-      :color="isObject(item.user) ? item.user?.color : item.color"
-      :image="isObject(item.user) ? item.user?.image : item.image"
-      :type="props.type"
-      :size="props.size"
-      :shape="props.shape"
-      :avatarClasses="props.avatarClasses"
-    />
+  <div class="w-full">
+    <div
+      v-for="item in props.items"
+      class="flex items-center gap-3 w-full border border-transparent cursor-pointer"
+      :class="[
+        rootClass,
+        { 'p-highlight !border-primary-500 bg-primary-100/50': isObject(item.user)
+          ? item.user?.id === checkboxIndex
+          : item.id === checkboxIndex
+        }
+      ]"
+      @click="handleSelect(item)"
+    >
+      <base-avatar
+        :label="isObject(item.user) ? item.user?.full_name : item.full_name"
+        :color="isObject(item.user) ? item.user?.color : item.color"
+        :image="isObject(item.user) ? item.user?.image : item.image"
+        :type="props.type"
+        :size="props.size"
+        :shape="props.shape"
+        :avatarClasses="props.avatarClasses"
+      />
 
-    <div class="flex-1 font-medium">
-      <h1 class="text-sm text-primary-900">{{ isObject(item.user) ? item.user?.full_name : item.full_name }}</h1>
+      <div class="flex-1 font-medium">
+        <h1 class="text-sm text-primary-900">{{ isObject(item.user) ? item.user?.full_name : item.full_name }}</h1>
 
-      <div class="flex items-center gap-2 text-xs">
-        <slot name="chip-prepend" :item="item" />
+        <div class="flex items-center gap-2 text-xs">
+          <slot name="chip-prepend" :item="item" />
 
-        <p class="text-warning-500">Командировка</p>
+          <p class="text-warning-500">Командировка</p>
 
-        <template v-if="item.position">
-          <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-full"></div>
+          <template v-if="item.position">
+            <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-full"></div>
 
-          <p class="text-greyscale-500">{{ item.position?.name }}</p>
+            <p class="text-greyscale-500">{{ item.position?.name }}</p>
+          </template>
+        </div>
+      </div>
+
+      <div class="w-[22px] h-[22px]">
+        <template v-if="props.selectType === 'checked'">
+          <base-icon
+            :stroke="false"
+            name="CheckCircleBgIcon"
+            class="icon-selected hidden"
+          />
+        </template>
+
+        <template v-else-if="props.selectType === 'checkbox'">
+          <Checkbox
+            v-model="checkboxIndex"
+            :value="isObject(item.user) ? item.user?.id : item.id"
+            :inputId="isObject(item.user) ? item.user?.full_name : item.full_name"
+            name="users"
+          />
+        </template>
+
+        <template v-else>
+          <RadioButton
+            v-model="checkboxIndex"
+            :value="isObject(item.user) ? item.user?.id : item.id"
+            :inputId="isObject(item.user) ? item.user?.full_name : item.full_name"
+            name="users"
+            v-tooltip.top="{
+              value: `<h4 class='text-xs text-white text-center -my-1'>Назначить исполнителем</h4>`,
+              escape: true,
+              autoHide: false
+            }"
+          />
         </template>
       </div>
-    </div>
-
-    <div class="w-[22px] h-[22px]">
-      <template v-if="props.selectType === 'checked'">
-        <base-icon
-          :stroke="false"
-          name="CheckCircleBgIcon"
-          class="icon-selected hidden"
-        />
-      </template>
-
-      <template v-else-if="props.selectType === 'checkbox'">
-        <Checkbox
-          v-model="checkboxIndex"
-          :value="isObject(item.user) ? item.user?.id : item.id"
-          :inputId="isObject(item.user) ? item.user?.full_name : item.full_name"
-          name="users"
-        />
-      </template>
-
-      <template v-else>
-        <RadioButton
-          v-model="checkboxIndex"
-          :value="isObject(item.user) ? item.user?.id : item.id"
-          :inputId="isObject(item.user) ? item.user?.full_name : item.full_name"
-          name="users"
-          v-tooltip.top="{
-            value: `<h4 class='text-xs text-white text-center -my-1'>Назначить исполнителем</h4>`,
-            escape: true,
-            autoHide: false
-          }"
-        />
-      </template>
     </div>
   </div>
 </template>

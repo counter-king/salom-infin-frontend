@@ -40,7 +40,7 @@ const correspondentEdit = () => {
                      return correspondent;
                   }
                });
-               dispatchNotify('Корреспондент обновлен', '', 'success');
+               dispatchNotify(null, 'Корреспондент обновлен', 'success');
                editVisible.value = false;
                props.setCorrespondents(newCorrespondents);
             }
@@ -50,15 +50,15 @@ const correspondentEdit = () => {
             editLoading.value = false;
          });
    } else if(!legal_name) {
-      dispatchNotify('Введите наименование', '', 'error')
+      dispatchNotify(null, 'Введите наименование', 'error')
    } else if(!legal_address) {
-      dispatchNotify('Введите адрес', '', 'error')
+      dispatchNotify(null, 'Введите адрес', '', 'error')
    } else if(String(tin || '').length !== 9) {
-      dispatchNotify('Введите правильный ИНН', '', 'error')
+      dispatchNotify(null, 'Введите правильный ИНН', 'error')
    } else if(newPhone.length !== 13) {
-      dispatchNotify('Введите свой номер телефона правильно', '', 'error')
+      dispatchNotify(null, 'Введите свой номер телефона правильно', 'error')
    } else {
-      dispatchNotify('Введите свой адрес электронной почты правильно', '', 'error')
+      dispatchNotify(null, 'Введите свой адрес электронной почты правильно', 'error')
    }
 };
 const correspondentDelete = () => {
@@ -69,7 +69,7 @@ const correspondentDelete = () => {
       .then(response => {
          if(response?.status === 204) {
             deleteVisible.value = false;
-            dispatchNotify('Корреспондент удален', '', 'success')
+            dispatchNotify(null, 'Корреспондент удален', '', 'success')
             props.getFirstPageCorrespondents();
          }
       })

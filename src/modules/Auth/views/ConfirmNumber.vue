@@ -43,7 +43,7 @@ const submit = async () => {
   try {
     loading.value = true
     await fetchSendOtp({ phone_number: formModel.value.phone_number?.replace(/\D/g, '') })
-    dispatchNotify('Код подтверждения отправлен', null, COLOR_TYPES.SUCCESS)
+    dispatchNotify(null, 'Код подтверждения отправлен', COLOR_TYPES.SUCCESS)
     await router.push({
       name: 'VerifyNumber',
       query: {

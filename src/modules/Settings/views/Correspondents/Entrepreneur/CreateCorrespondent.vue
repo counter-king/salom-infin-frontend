@@ -31,7 +31,7 @@ const createCorrespondent = () => {
          .post('correspondents/', data)
          .then(response => {
             if(response?.status === 201) {
-               dispatchNotify('Корреспондент создан', '', 'success');
+               dispatchNotify(null, 'Корреспондент создан', 'success');
                correspondent.value = defaultCorrespondent;
                gender.value = null;
                props.getFirstPageCorrespondents();
@@ -43,19 +43,19 @@ const createCorrespondent = () => {
             loading.value = false;
          });
    } else if(!first_name) {
-      dispatchNotify('Введите имя', '', 'error')
+      dispatchNotify(null, 'Введите имя', 'error')
    } else if(!last_name) {
-      dispatchNotify('Введите фамилия', '', 'error')
+      dispatchNotify(null, 'Введите фамилия', 'error')
    } else if(!gender.value) {
-      dispatchNotify('Выберите пол', '', 'error')
+      dispatchNotify(null, 'Выберите пол', 'error')
    } else if(String(pinfl || '').length !== 14) {
-      dispatchNotify('Введите правильный ПИНФЛ', '', 'error')
+      dispatchNotify(null, 'Введите правильный ПИНФЛ', 'error')
    } else if(newPhone.length !== 13) {
-      dispatchNotify('Введите свой номер телефона правильно', '', 'error')
+      dispatchNotify(null, 'Введите свой номер телефона правильно', 'error')
    } else if((email?.length ? !isValidEmail(email) : false)) {
-      dispatchNotify('Введите свой адрес электронной почты правильно', '', 'error')
+      dispatchNotify(null, 'Введите свой адрес электронной почты правильно', 'error')
    } else {
-      dispatchNotify('Введите адрес', '', 'error')
+      dispatchNotify(null, 'Введите адрес', 'error')
    }
 };
 const changeLanguage = () => {

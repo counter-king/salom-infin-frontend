@@ -95,10 +95,10 @@ watch(debounced, async () => {
         />
 
         <user-with-selectable
+          v-model:checkbox-index="model.user"
           :items="userStore.usersList"
           :multiple="false"
           selectable
-          @emit:selected="(value) => model.user = value"
         />
       </div>
 

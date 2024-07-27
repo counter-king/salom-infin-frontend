@@ -149,7 +149,7 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
           assignees: data.assignees,
           reviewer: data.reviewer.user
         })
-        dispatchNotify('Резолюция создано', null, COLOR_TYPES.SUCCESS)
+        dispatchNotify(null, 'Резолюция создано', COLOR_TYPES.SUCCESS)
         clearModel(this.resolutionModel, ['type'])
         // Сбросим нумерацию
         this.actionSetResponsibleIndex(0)
@@ -245,7 +245,7 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
           assignees: data.assignees,
           reviewer: data.reviewer.user
         })
-        dispatchNotify('Резолюция изменен', null, COLOR_TYPES.SUCCESS)
+        dispatchNotify(null, 'Резолюция изменен', COLOR_TYPES.SUCCESS)
         clearModel(this.resolutionModel, ['type'])
         return Promise.resolve()
       } catch (error) {
@@ -261,7 +261,7 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
 
       try {
         await fetchDeleteResolutionById({ id, comment })
-        dispatchNotify('Резолюция удален', null, COLOR_TYPES.SUCCESS)
+        dispatchNotify(null, 'Резолюция удален', COLOR_TYPES.SUCCESS)
         await this.actionResolutionsList({ id: resolutionListId })
         await docFlowStore.actionGetTree(resolutionListId)
         await this.actionSetActiveResolution({
@@ -286,7 +286,7 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
     * */
     actionSetResponsibleIndex(payload) {
       if(payload === null || payload === undefined) {
-        dispatchNotify('Ошибка в базе данных', 'Ответственный исполнитель не найден', COLOR_TYPES.ERROR)
+        dispatchNotify(null, 'Ответственный исполнитель не найден', COLOR_TYPES.ERROR)
 
         return
       }
