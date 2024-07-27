@@ -284,7 +284,7 @@ export const useReviewStore = defineStore("review", {
         dispatchNotify('Документ перенаправлен к пользователю', null, COLOR_TYPES.SUCCESS)
         return Promise.resolve()
       } catch (error) {
-        dispatchNotify('Ошибка', 'Ошибка перенаправить документ', COLOR_TYPES.ERROR)
+        // dispatchNotify('Ошибка', 'Ошибка перенаправить документ', COLOR_TYPES.ERROR)
         return Promise.reject()
       }
     },
@@ -310,11 +310,11 @@ export const useReviewStore = defineStore("review", {
         return Promise.resolve()
       } catch (error) {
         // Если идет подпись
-        if(body.is_verified) {
-          dispatchNotify('Ошибка', 'Ошибка подписание резолюции', COLOR_TYPES.ERROR)
-        } else {
-          dispatchNotify('Ошибка', 'Ошибка удаление подписа', COLOR_TYPES.ERROR)
-        }
+        // if(body.is_verified) {
+        //   dispatchNotify('Ошибка', 'Ошибка подписание резолюции', COLOR_TYPES.ERROR)
+        // } else {
+        //   dispatchNotify('Ошибка', 'Ошибка удаление подписа', COLOR_TYPES.ERROR)
+        // }
         return Promise.reject()
       }
     },
@@ -329,7 +329,7 @@ export const useReviewStore = defineStore("review", {
         await docflowStore.actionGetTree(this.detailModel.document.id)
         dispatchNotify('Документ ознакомлен', null, COLOR_TYPES.SUCCESS)
       } catch (error) {
-        dispatchNotify('Ошибка', 'Ошибка ознакомление документа', COLOR_TYPES.ERROR)
+        // dispatchNotify('Ошибка', 'Ошибка ознакомление документа', COLOR_TYPES.ERROR)
       }
     },
     /*
@@ -358,12 +358,12 @@ export const useReviewStore = defineStore("review", {
       }
       catch (error) {
         // Если идет выполнения документа
-        if(performed) {
-          dispatchNotify('Ошибка', 'Ошибка выполнение документа', COLOR_TYPES.ERROR)
-        }
-        else {
-          dispatchNotify('Ошибка', 'Ошибка исполнение документа', COLOR_TYPES.ERROR)
-        }
+        // if(performed) {
+        //   dispatchNotify('Ошибка', 'Ошибка выполнение документа', COLOR_TYPES.ERROR)
+        // }
+        // else {
+        //   dispatchNotify('Ошибка', 'Ошибка исполнение документа', COLOR_TYPES.ERROR)
+        // }
         return Promise.reject()
       }
     },

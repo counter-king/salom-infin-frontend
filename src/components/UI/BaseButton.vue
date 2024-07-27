@@ -50,7 +50,7 @@ const props = defineProps({
     type: String,
     default: 'normal',
     validator(value) {
-      return ['small', 'normal', 'large'].includes(value)
+      return ['x-small', 'small', 'normal', 'large'].includes(value)
     }
   },
   iconWidth: {
@@ -85,12 +85,14 @@ const rootClasses = computed(() => {
     },
     // Size
     {
+      'py-[7px] px-0 text-xs': props.onlyIcon && props.size === 'x-small',
       'py-[7px] px-3 text-xs': !props.onlyIcon && props.size === 'small',
       'py-[9px] px-4': !props.onlyIcon && (props.size === null || props.size === "normal"),
       'py-[11px] px-4': !props.onlyIcon && props.size === 'large'
     },
     // onlyIcon
     {
+      'py-[7px] px-0 text-xs w-[24px] h-[24px]': props.onlyIcon && props.size === 'x-small',
       'py-[7px] px-0 text-xs w-[32px] h-[32px]': props.onlyIcon && props.size === 'small',
       'py-[9px] px-0 w-[40px]': props.onlyIcon && (props.size === null || props.size === "normal"),
       'py-[11px] px-0 w-[44px]': props.onlyIcon && props.size === 'large',

@@ -269,7 +269,7 @@ export const useAssignmentStore = defineStore("assignment", {
         await docflowStore.actionGetTree(this.detailModel.document.id)
         dispatchNotify('Документ ознакомлен', null, COLOR_TYPES.SUCCESS)
       } catch (error) {
-        dispatchNotify('Ошибка', 'Ошибка ознакомление документа', COLOR_TYPES.ERROR)
+        // dispatchNotify('Ошибка', 'Ошибка ознакомление документа', COLOR_TYPES.ERROR)
       }
     },
     /*
@@ -299,12 +299,12 @@ export const useAssignmentStore = defineStore("assignment", {
       }
       catch (error) {
         // Если идет выполнения документа
-        if(this.performModel.is_performed) {
-          dispatchNotify('Ошибка', 'Ошибка выполнение документа', COLOR_TYPES.ERROR)
-        }
-        else {
-          dispatchNotify('Ошибка', 'Ошибка исполнение документа', COLOR_TYPES.ERROR)
-        }
+        // if(this.performModel.is_performed) {
+        //   dispatchNotify('Ошибка', 'Ошибка выполнение документа', COLOR_TYPES.ERROR)
+        // }
+        // else {
+        //   dispatchNotify('Ошибка', 'Ошибка исполнение документа', COLOR_TYPES.ERROR)
+        // }
         return Promise.reject()
       }
     },

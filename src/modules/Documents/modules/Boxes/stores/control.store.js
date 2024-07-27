@@ -261,7 +261,7 @@ export const useControlStore = defineStore("control", {
         await docflowStore.actionGetTree(this.detailModel.document.id)
         dispatchNotify('Документ ознакомлен', null, COLOR_TYPES.SUCCESS)
       } catch (error) {
-        dispatchNotify('Ошибка', 'Ошибка ознакомление документа', COLOR_TYPES.ERROR)
+        // dispatchNotify('Ошибка', 'Ошибка ознакомление документа', COLOR_TYPES.ERROR)
       }
     },
     /*
@@ -290,12 +290,12 @@ export const useControlStore = defineStore("control", {
         return Promise.resolve()
       }
       catch (error) {
-        if(type === FORM_TYPE_CREATE) {
-          dispatchNotify('Ошибка', 'Ошибка снятия с контроля', COLOR_TYPES.ERROR)
-        }
-        else {
-          dispatchNotify('Ошибка', 'Изменение снятия с контроля', COLOR_TYPES.ERROR)
-        }
+        // if(type === FORM_TYPE_CREATE) {
+        //   dispatchNotify('Ошибка', 'Ошибка снятия с контроля', COLOR_TYPES.ERROR)
+        // }
+        // else {
+        //   dispatchNotify('Ошибка', 'Изменение снятия с контроля', COLOR_TYPES.ERROR)
+        // }
         return Promise.reject()
       }
     },

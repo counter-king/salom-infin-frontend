@@ -278,7 +278,7 @@ export const useDocFlowStore = defineStore("docFlowStore", {
         return Promise.resolve()
       }
       catch (error) {
-        dispatchNotify('Ошибка', 'Ошибка создание документа', COLOR_TYPES.ERROR)
+        // dispatchNotify('Ошибка', 'Ошибка создание документа', COLOR_TYPES.ERROR)
         return Promise.reject()
       }
     },
@@ -377,7 +377,7 @@ export const useDocFlowStore = defineStore("docFlowStore", {
         return Promise.resolve()
       }
       catch (error) {
-        dispatchNotify('Ошибка', 'Ошибка изменение документа', COLOR_TYPES.ERROR)
+        // dispatchNotify('Ошибка', 'Ошибка изменение документа', COLOR_TYPES.ERROR)
         return Promise.reject()
       }
     },

@@ -4,6 +4,7 @@ export function dispatchNotify(title, text, type) {
   notify({
     title: title,
     text: text,
-    type: type
+    type: type,
+    width: 372
   })
 }

@@ -155,7 +155,7 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
         this.actionSetResponsibleIndex(0)
         return Promise.resolve()
       } catch (error) {
-        dispatchNotify('Ошибка', 'Ошибка создание резолюции', COLOR_TYPES.ERROR)
+        // dispatchNotify('Ошибка', 'Ошибка создание резолюции', COLOR_TYPES.ERROR)
         return Promise.reject()
       }
     },
@@ -249,7 +249,7 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
         clearModel(this.resolutionModel, ['type'])
         return Promise.resolve()
       } catch (error) {
-        dispatchNotify('Ошибка', 'Ошибка изменение резолюции', COLOR_TYPES.ERROR)
+        // dispatchNotify('Ошибка', 'Ошибка изменение резолюции', COLOR_TYPES.ERROR)
         return Promise.reject()
       }
     },
@@ -277,7 +277,7 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
         this.actionSetResponsibleIndex(0)
         return Promise.resolve()
       } catch(error) {
-        dispatchNotify('Ошибка', 'Ошибка удаление резолюции', COLOR_TYPES.ERROR)
+        // dispatchNotify('Ошибка', 'Ошибка удаление резолюции', COLOR_TYPES.ERROR)
         return Promise.reject()
       }
     },
