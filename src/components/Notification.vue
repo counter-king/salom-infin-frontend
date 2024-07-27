@@ -13,7 +13,7 @@ import { COLOR_TYPES } from '@/enums'
         <base-iconify icon="solar:check-circle-bold" class="text-success-500" />
       </template>
 
-      <template v-if="props.item.type === 'warn'">
+      <template v-else-if="props.item.type === 'warn'">
         <base-iconify icon="solar:info-circle-bold-duotone" class="text-warning-500" />
       </template>
 

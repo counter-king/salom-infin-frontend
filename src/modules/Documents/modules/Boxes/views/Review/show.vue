@@ -124,7 +124,7 @@ const handleDocumentStatus = async () => {
           <!-- Если документ ознакомлен -->
           <template v-if="reviewStore.isDocumentAcquainted">
             <modal-done-document
-              v-model:content="reviewStore.performModel.comment"
+              v-model:content="reviewStore.performModel"
               v-model:files="reviewStore.performModel.files"
               :has-resolution="boxesCommonStore.getCreatedResolutionsList"
               :is-document-signed="reviewStore.isReviewSigned"

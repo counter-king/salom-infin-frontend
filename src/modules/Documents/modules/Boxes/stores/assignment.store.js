@@ -289,7 +289,7 @@ export const useAssignmentStore = defineStore("assignment", {
         await this.actionAssignmentById(this.detailModel)
         await docflowStore.actionGetTree(this.detailModel.document.id)
         // Если идет выполнения документа
-        if(this.performModel.is_performed) {
+        if(performed) {
           dispatchNotify(null, 'Документ выполнен', COLOR_TYPES.SUCCESS)
         }
         else {

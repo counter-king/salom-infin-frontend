@@ -1,13 +1,15 @@
 <script setup>
 // Core
 import { ref, computed } from 'vue'
+import { useVuelidate } from '@vuelidate/core'
+import { helpers, required } from '@vuelidate/validators'
 // Utils
 import { dispatchNotify } from '@/utils/notify'
 // Macros
 const props = defineProps({
   content: {
-    type: String,
-    default: null
+    type: Object,
+    default: () => {}
   },
   files: {
     type: Array,
@@ -31,13 +33,21 @@ const emit = defineEmits(['update:content', 'update:files'])
 // Reactive
 const modal = ref(false)
 const loading = ref(false)
+// Non-reactive
+const rules = {
+  content: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  }
+}
+// Composable
+const $v = useVuelidate(rules, props.content)
 // Computed
 const content = computed({
   get() {
     return props.content
   },
   set(value) {
-    emit('update:content', value)
+    emit('update:content', value.content)
   }
 })
 const files = computed({
@@ -64,7 +74,11 @@ const openModal = () => {
   }
 }
 const create = async () => {
-  if(!(content.value && content.value.trim())) return
+  const valid = await $v.value.$validate()
+
+  if(!valid) {
+    return
+  }
 
   try {
     loading.value = true
@@ -99,7 +113,8 @@ const create = async () => {
   >
     <template #content>
       <base-textarea
-        v-model="content"
+        v-model="$v.content.$model"
+        :error="$v.content"
         label="enter-content"
       />
 
