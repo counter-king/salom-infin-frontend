@@ -118,7 +118,7 @@ const rootClasses = computed(() => {
             :width="props.iconWidth"
             :height="props.iconHeight"
             :class="{
-              'mr-2': !props.onlyIcon,
+              'mr-1 -ml-1': !props.onlyIcon,
               'text-greyscale-500': props.outlined
             }"
           />
