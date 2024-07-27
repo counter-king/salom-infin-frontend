@@ -44,7 +44,7 @@ const cities = ref([
   },
 ])
 const formModel = reactive({
-  username: null,
+  username: '+998',
   password: null
 })
 const rules = {
@@ -104,9 +104,9 @@ onMounted(() => {
             <base-input
               v-model="v.username.$model"
               :error="v.username"
-              mask-rule="+### ## ### ## ##"
+              mask-rule="+998 ## ### ## ##"
               label="Телефона"
-              placeholder="Введите телефона"
+              placeholder="+998 XX XXX XX XX"
             />
           </base-col>
 
