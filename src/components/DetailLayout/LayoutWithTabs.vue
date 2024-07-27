@@ -120,30 +120,32 @@ watch(activeTabMenu, (value) => {
 
     <div class="detail-layout-content flex flex-col flex-1 bg-white overflow-hidden shadow-button rounded-2xl">
       <slot name="content">
-        <base-tab-menu v-model="activeTabMenuIndex" :tab-items="props.tabItems" />
+        <div class="flex">
+          <div class="flex-1">
+            <base-tab-menu v-model="activeTabMenuIndex" :tab-items="props.tabItems" />
 
-        <div class="flex flex-1 h-full">
-          <slot :name="activeTabMenu.slot">
-            <div class="flex-1 overflow-y-auto">
-              <div class="h-[1px]">
-                <component
-                  :is="activeTabComponent"
-                  :preview-detail="props.previewDetail"
-                  :object-id="props.objectId"
-                  :headers="props.headers"
-                  :tree-items="props.treeItems"
-                  :content-type="props.contentType"
-                  :files="props.files"
-                >
-                  <template #preview-actions>
-                    <slot name="preview-actions" />
-                  </template>
-                </component>
+            <slot :name="activeTabMenu.slot">
+              <div class="flex-1 h-full overflow-y-auto">
+                <div class="h-[1px]">
+                  <component
+                    :is="activeTabComponent"
+                    :preview-detail="props.previewDetail"
+                    :object-id="props.objectId"
+                    :headers="props.headers"
+                    :tree-items="props.treeItems"
+                    :content-type="props.contentType"
+                    :files="props.files"
+                  >
+                    <template #preview-actions>
+                      <slot name="preview-actions" />
+                    </template>
+                  </component>
+                </div>
               </div>
-            </div>
-          </slot>
+            </slot>
+          </div>
 
-          <div class="max-w-[566px] w-full ml-auto border-l">
+          <div class="max-w-[566px] w-full border-l">
             <slot name="template">
               <file-tabs :resolution="props.resolution" :files="props.files" />
             </slot>

@@ -39,7 +39,7 @@ const panelClass = (_, parent, index) => {
   return [
     'font-semibold',
     {
-      'text-primary-900 ': parent.state.d_activeIndex === index && !props.segment
+      'text-primary-900 !border-primary-500': parent.state.d_activeIndex === index && !props.segment
     },
     {
       'text-primary-500 ': parent.state.d_activeIndex === index && props.segment
@@ -104,10 +104,10 @@ const zoomFile = (event, pane) => {
           },
           headerAction: ({ _, parent }) => ({
             class: [
-              'font-medium !border-transparent bg-transparent text-greyscale-500',
+              'font-medium border-transparent bg-transparent text-greyscale-500',
               panelClass(_, parent, index),
               {
-                'm-0 py-4 px-0 mx-4': !props.segment,
+                'm-0 pt-4 pb-[10px] px-0 mx-4': !props.segment,
                 'max-w-[200px] truncate': props.truncate,
                 'py-2 px-3 rounded-[6px] !bg-greyscale-50 font-semibold mr-2': props.segment,
                 '!m-0 !p-2 !rounded-lg': props.bricks
@@ -129,7 +129,7 @@ const zoomFile = (event, pane) => {
             />
 
             <p
-              class="text-[15px]"
+              class="text-sm h-6"
               :class="{
                 'truncate': props.truncate,
                 '!text-sm': props.bricks
@@ -144,7 +144,7 @@ const zoomFile = (event, pane) => {
             </p>
 
             <template v-if="props.actions && pane.slot !== 'resolution'">
-              <div class="flex gap-2">
+              <div class="flex gap-[6px]">
                 <button
                   type="button"
                   v-tooltip.top="{
@@ -152,10 +152,10 @@ const zoomFile = (event, pane) => {
                     escape: true,
                     autoHide: false
                   }"
-                  class="hover:text-warning-500"
+                  class="flex items-center justify-center w-6 h-6 rounded-[6px] bg-greyscale-50 hover:text-primary-500"
                   @click="zoomFile($event, pane)"
                 >
-                  <base-icon name="EyeIcon" width="18" />
+                  <base-icon name="EyeIcon" width="16" />
                 </button>
 
                 <button
@@ -165,9 +165,9 @@ const zoomFile = (event, pane) => {
                     escape: true,
                     autoHide: false
                   }"
-                  class="hover:text-primary-500"
+                  class="flex items-center justify-center w-6 h-6 rounded-[6px] bg-greyscale-50 hover:text-primary-500"
                 >
-                  <base-icon name="DownloadMinimalisticIcon" width="18" />
+                  <base-icon name="DownloadMinimalisticIcon" width="16" />
                 </button>
               </div>
             </template>

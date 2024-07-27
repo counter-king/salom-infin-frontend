@@ -42,10 +42,8 @@ const filesList = computed(() => {
     <base-tab-view
       :tab-view="filesList"
       scrollable
-      segment
       truncate
       actions
-      nav-container-class="m-5 mb-0"
     >
       <template #resolution="{ value }">
         <div class="h-[calc(100vh-303px)] overflow-y-auto px-8 py-5">
@@ -64,7 +62,7 @@ const filesList = computed(() => {
       </template>
 
       <template #file="{ value }">
-        <div class="h-[calc(100vh-303px)] pt-5">
+        <div class="h-[calc(100vh-303px)]">
           <template v-if="value">
             <file-preview :file="value" />
           </template>
