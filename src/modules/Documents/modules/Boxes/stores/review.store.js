@@ -281,7 +281,7 @@ export const useReviewStore = defineStore("review", {
     async actionChangeReviewer({ id, body }) {
       try {
         await fetchChangeReviewer({ id, body })
-        dispatchNotify('Документ перенаправлен к пользователю', null, COLOR_TYPES.SUCCESS)
+        dispatchNotify(null, 'Документ перенаправлен к пользователю', COLOR_TYPES.SUCCESS)
         return Promise.resolve()
       } catch (error) {
         // dispatchNotify('Ошибка', 'Ошибка перенаправить документ', COLOR_TYPES.ERROR)
@@ -303,9 +303,9 @@ export const useReviewStore = defineStore("review", {
         await docflowStore.actionGetTree(this.detailModel.document.id)
         // Если идет подпись
         if(body.is_verified) {
-          dispatchNotify('Резолюция подписан', null, COLOR_TYPES.SUCCESS)
+          dispatchNotify(null, 'Резолюция подписан', COLOR_TYPES.SUCCESS)
         } else {
-          dispatchNotify('Подпись удален из резолюции', null, COLOR_TYPES.SUCCESS)
+          dispatchNotify(null, 'Подпись удален из резолюции', COLOR_TYPES.SUCCESS)
         }
         return Promise.resolve()
       } catch (error) {
@@ -327,7 +327,7 @@ export const useReviewStore = defineStore("review", {
         await fetchAcquaintDocument({ id })
         await this.actionReviewById(this.detailModel)
         await docflowStore.actionGetTree(this.detailModel.document.id)
-        dispatchNotify('Документ ознакомлен', null, COLOR_TYPES.SUCCESS)
+        dispatchNotify(null, 'Документ ознакомлен', COLOR_TYPES.SUCCESS)
       } catch (error) {
         // dispatchNotify('Ошибка', 'Ошибка ознакомление документа', COLOR_TYPES.ERROR)
       }
@@ -349,10 +349,10 @@ export const useReviewStore = defineStore("review", {
         await docflowStore.actionGetTree(this.detailModel.document.id)
         // Если идет выполнения документа
         if(performed) {
-          dispatchNotify('Документ выполнен', null, COLOR_TYPES.SUCCESS)
+          dispatchNotify(null, 'Документ выполнен', COLOR_TYPES.SUCCESS)
         }
         else {
-          dispatchNotify('Исполнения изменено', null, COLOR_TYPES.SUCCESS)
+          dispatchNotify(null, 'Исполнения изменено', COLOR_TYPES.SUCCESS)
         }
         return Promise.resolve()
       }

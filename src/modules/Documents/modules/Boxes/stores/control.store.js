@@ -282,10 +282,10 @@ export const useControlStore = defineStore("control", {
         await docflowStore.actionGetTree(this.detailModel.document.id)
         // Если идет выполнения документа
         if(type === FORM_TYPE_CREATE) {
-          dispatchNotify('Документ снят с контроля', null, COLOR_TYPES.SUCCESS)
+          dispatchNotify(null, 'Документ снят с контроля', COLOR_TYPES.SUCCESS)
         }
         else {
-          dispatchNotify('Снятия с контроля изменено', null, COLOR_TYPES.SUCCESS)
+          dispatchNotify(null, 'Снятия с контроля изменено', COLOR_TYPES.SUCCESS)
         }
         return Promise.resolve()
       }

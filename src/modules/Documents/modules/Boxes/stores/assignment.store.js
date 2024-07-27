@@ -267,7 +267,7 @@ export const useAssignmentStore = defineStore("assignment", {
         await fetchAcquaintDocument({ id })
         await this.actionAssignmentById(this.detailModel)
         await docflowStore.actionGetTree(this.detailModel.document.id)
-        dispatchNotify('Документ ознакомлен', null, COLOR_TYPES.SUCCESS)
+        dispatchNotify(null, 'Документ ознакомлен', COLOR_TYPES.SUCCESS)
       } catch (error) {
         // dispatchNotify('Ошибка', 'Ошибка ознакомление документа', COLOR_TYPES.ERROR)
       }
@@ -290,10 +290,10 @@ export const useAssignmentStore = defineStore("assignment", {
         await docflowStore.actionGetTree(this.detailModel.document.id)
         // Если идет выполнения документа
         if(this.performModel.is_performed) {
-          dispatchNotify('Документ выполнен', null, COLOR_TYPES.SUCCESS)
+          dispatchNotify(null, 'Документ выполнен', COLOR_TYPES.SUCCESS)
         }
         else {
-          dispatchNotify('Исполнения изменено', null, COLOR_TYPES.SUCCESS)
+          dispatchNotify(null, 'Исполнения изменено', COLOR_TYPES.SUCCESS)
         }
         return Promise.resolve()
       }

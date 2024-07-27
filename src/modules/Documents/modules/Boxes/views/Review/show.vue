@@ -85,7 +85,10 @@ const handleDocumentStatus = async () => {
         }"
       >
         <template #header-end>
-          <action-answer-menu />
+          <!-- Если документ ознакомлен -->
+          <template v-if="reviewStore.isDocumentAcquainted">
+            <action-answer-menu />
+          </template>
 
           <!-- Если документ еще не ознакомлен -->
           <template v-if="!reviewStore.isDocumentAcquainted">
