@@ -64,6 +64,9 @@ const props = defineProps({
   borderColor: {
     type: String
   },
+  rootClass: {
+    type: String
+  },
   error: {
     type: Object,
     default: () => ({
@@ -79,7 +82,7 @@ const props = defineProps({
     }
   },
 })
-const emit = defineEmits(['update:modelValue', 'update:options'])
+const emit = defineEmits(['update:modelValue', 'update:options', 'emit:change'])
 // Reactive
 const inputRef = ref(null)
 const search = ref(null)
@@ -89,7 +92,9 @@ const debounced = useDebounce(search, 500)
 // Computed
 const rootClasses = computed(() => {
   return [
-    'group w-full bg-greyscale-50 rounded-xl border-greyscale-50 focus:border-primary-500',
+    'group w-full bg-greyscale-50 rounded-xl border-greyscale-50 focus:border-transparent',
+    // Root
+    props.rootClass,
     // Border
     props.borderColor,
     // Validation
@@ -139,6 +144,7 @@ const loadList = async (params) => {
       :disabled="props.disabled"
       filter
       @show="() => props.searchable && inputRef.focus()"
+      @change="({ value }) => emit('emit:change', value)"
       :pt="{
         root: {
           class: rootClasses
@@ -149,7 +155,7 @@ const loadList = async (params) => {
             {
               'size-small py-[2px] pr-2 pl-4': props.size === 'x-small',
               'size-small py-[5px] pr-2 pl-4': props.size === 'small',
-              'size-normal py-3 pr-2 pl-4': props.size === null || props.size === 'normal',
+              'size-normal py-2 pr-2 pl-3': props.size === null || props.size === 'normal',
             },
           ]
         },
@@ -204,6 +210,10 @@ const loadList = async (params) => {
 		    </div>
 	    </template>
 
+      <template #value="{ value }">
+        <slot name="value" :value="value" />
+      </template>
+
 	    <template #option="{ option }">
 		    <slot name="option" :option="option" />
 	    </template>
@@ -229,7 +239,9 @@ const loadList = async (params) => {
 
 <style>
 .p-dropdown.p-focus {
-  border-color: rgb(99 90 255 / 1);
+  border-color: transparent !important;
+  box-shadow: none !important;
+  /* border-color: rgb(99 90 255 / 1); */
 }
 
 .p-dropdown.p-invalid.p-component {

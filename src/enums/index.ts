@@ -20,12 +20,12 @@ export const JOURNAL = {
   APPLICATION:      24, // Заявления
 }
 export const JOURNAL_CODES = {
-  INCOMING:         100, // Входящий
-  INNER:            103, // Внутренние
-  OUTGOING:         101, // Исходящие
-  APPEALS:          105, // Обращение
-  ORDERS_PROTOCOLS: 104, // Приказы и распоряжения
-  APPLICATION:      106, // Заявления
+  INCOMING:         '100', // Входящий
+  INNER:            '103', // Внутренние
+  OUTGOING:         '101', // Исходящие
+  APPEALS:          '105', // Обращение
+  ORDERS_PROTOCOLS: '104', // Приказы и распоряжения
+  APPLICATION:      '106', // Заявления
 }
 export const COLOR_TYPES = {
   PRIMARY: "primary",

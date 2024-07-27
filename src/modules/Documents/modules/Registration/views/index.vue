@@ -5,10 +5,8 @@ import { computed } from 'vue'
 import TheNavigation from '@/components/TheNavigation.vue'
 // Stores
 import { useCommonStore } from '@/stores/common'
-import { useDocFlowStore } from '../stores/docflow.store'
 // Composable
 const commonStore = useCommonStore()
-const docFlowStore = useDocFlowStore()
 // Computed
 const routes = computed(() => {
   return commonStore.journalsList

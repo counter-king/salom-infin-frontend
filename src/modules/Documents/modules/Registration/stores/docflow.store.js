@@ -400,7 +400,7 @@ export const useDocFlowStore = defineStore("docFlowStore", {
     actionLoadFormCreateDocument(payload) {
       const commonStore = useCommonStore()
 
-      switch(Number(payload.journalCode)) {
+      switch(payload.journalCode) {
         case JOURNAL_CODES.INCOMING: // Входящий
           this.documentMenuType = {
             name: 'Incoming',

@@ -157,6 +157,7 @@ watch(() => docFlowStore.documentMenuType.name, (value) => {
 <template>
   <base-dialog
     v-model="modelValue"
+    header-classes="py-2 pb-3"
     @emit:after-hide="afterHide"
   >
     <template #header>
