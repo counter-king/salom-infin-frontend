@@ -71,7 +71,7 @@ const rootClasses = computed(() => {
 })
 const inputClasses = computed(() => {
   return [
-    'bg-greyscale-50 text-sm font-medium text-greyscale-500 rounded-s-xl border-transparent',
+    'bg-greyscale-50 text-sm font-medium text-greyscale-900 rounded-s-xl border-transparent',
     {
       'size-small py-[2px] pr-2 pl-4': props.size === 'x-small',
       'size-small py-[5px] pr-2 pl-4': props.size === 'small',
@@ -116,7 +116,7 @@ const daySelect = (value) => {
           class: rootClasses
         },
         input: {
-          class: inputClasses
+          class: [inputClasses, 'placeholder:font-regular placeholder:text-greyscale-400']
         },
         dropdownButton: {
           root: {

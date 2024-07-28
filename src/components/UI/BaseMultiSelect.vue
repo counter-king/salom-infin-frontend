@@ -217,7 +217,7 @@ watch(debounced, async () => {
         },
         label: {
           class: [
-            'text-sm font-medium text-greyscale-500',
+            'text-sm font-regular text-greyscale-400',
             {
               'size-small py-[2px] pr-2 pl-4': props.size === 'x-small',
               'size-small py-[5px] pr-2 pl-4': props.size === 'small',

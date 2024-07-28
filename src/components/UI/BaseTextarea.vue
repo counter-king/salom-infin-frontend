@@ -60,7 +60,7 @@ const { t } = useI18n()
         :pt="{
           root: {
             class: [
-              'flex w-full rounded-xl bg-greyscale-50 text-sm border-greyscale-50 focus:border-primary-500 placeholder:text-sm placeholder:font-medium',
+              'flex w-full text-greyscale-900 rounded-xl bg-greyscale-50 text-sm border-greyscale-50 focus:border-primary-500 placeholder:text-sm placeholder:font-regular placeholder:text-greyscale-400',
               props.rootClass,
               {
                 'p-invalid !shadow-none': props.error.$error

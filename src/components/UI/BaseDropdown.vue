@@ -151,7 +151,10 @@ const loadList = async (params) => {
         },
         input: {
           class: [
-            'text-sm font-medium text-greyscale-500',
+            'text-sm font-regular text-greyscale-400',
+            {
+              'text-greyscale-900 !font-medium': modelValue
+            },
             {
               'size-small py-[2px] pr-2 pl-4': props.size === 'x-small',
               'size-small py-[5px] pr-2 pl-4': props.size === 'small',
