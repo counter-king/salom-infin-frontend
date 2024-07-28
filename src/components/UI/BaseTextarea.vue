@@ -80,12 +80,13 @@ const { t } = useI18n()
     </div>
 
     <template v-if="props.error.$errors.length">
-      <div
-        v-for="element of props.error.$errors"
-        :key="element.$uid"
-        class="mt-1"
-      >
-        <span class="block text-sm font-medium text-red-500">{{ element.$message }}</span>
+      <div class="space-y-1 mt-1">
+        <div
+          v-for="element of props.error.$errors"
+          :key="element.$uid"
+        >
+          <span class="block text-sm font-medium text-red-500">{{ element.$message }}</span>
+        </div>
       </div>
     </template>
   </div>

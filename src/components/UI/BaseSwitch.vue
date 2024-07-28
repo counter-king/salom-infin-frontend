@@ -86,14 +86,16 @@ const modelValue = useModel(props, 'modelValue')
       />
     </div>
 
-    <div v-if="props.error.$errors.length" class="mt-1">
-      <div
-        v-for="element of props.error.$errors"
-        :key="element.$uid"
-      >
-        <span class="block text-sm font-medium text-red-500">{{ element.$message }}</span>
+    <template v-if="props.error.$errors.length">
+      <div class="space-y-1 mt-1">
+        <div
+          v-for="element of props.error.$errors"
+          :key="element.$uid"
+        >
+          <span class="block text-sm font-medium text-red-500">{{ element.$message }}</span>
+        </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 

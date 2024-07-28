@@ -17,6 +17,13 @@ const props = defineProps({
 		type: String,
 		default: null
 	},
+  containerClass: {
+    type: String
+  },
+  shadow: {
+    type: Boolean,
+    default: false
+  },
 	required: {
 		type: Boolean
 	},
@@ -110,7 +117,11 @@ onMounted(() => {
 
     <div
       class="flex bg-greyscale-50 rounded-xl border-dashed border h-16 hover:bg-primary-50 cursor-pointer"
-      :class="{ 'bg-primary-50' : isDragging }"
+      :class="[
+        { 'bg-primary-50' : isDragging },
+        { 'shadow-block border-[0.095rem] !border-solid border-greyscale-200' : props.shadow },
+        props.containerClass
+      ]"
       @click="chooseFiles"
       @dragover.prevent="onDragOver"
       @dragleave.prevent="onDragLeave"

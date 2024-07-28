@@ -31,6 +31,10 @@ const documentTypeRef = ref(null)
 const documentTypeComponent = shallowRef(null)
 const formModel = ref(null)
 const buttonLoading = ref(false)
+const model = ref({
+  __files: [],
+  files: []
+})
 // Methods
 const createDocument = async () => {
   let model = null
@@ -157,6 +161,7 @@ watch(() => docFlowStore.documentMenuType.name, (value) => {
 <template>
   <base-dialog
     v-model="modelValue"
+    max-width="max-w-[1180px]"
     header-classes="py-2 pb-3"
     @emit:after-hide="afterHide"
   >
@@ -165,11 +170,25 @@ watch(() => docFlowStore.documentMenuType.name, (value) => {
     </template>
 
     <template #content>
-      <component
-        ref="documentTypeRef"
-        :is="documentTypeComponent"
-        :form-model="docFlowStore.createDocumentModel"
-      />
+      <div class="flex gap-6">
+        <div class="max-w-[510px] w-full">
+          <base-file-upload
+            :files="model.__files"
+            shadow
+            container-class="h-[625px]"
+            class="sticky top-0"
+            @emit:file-upload="(files) => model.__files = files"
+          />
+        </div>
+
+        <div class="flex-1">
+          <component
+            ref="documentTypeRef"
+            :is="documentTypeComponent"
+            :form-model="docFlowStore.createDocumentModel"
+          />
+        </div>
+      </div>
     </template>
 
     <template #footer>

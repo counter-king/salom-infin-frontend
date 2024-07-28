@@ -94,16 +94,16 @@ const { t } = useI18n()
       <base-icon :name="props.iconRight" width="16" height="16" :class="props.iconRightClass" />
     </slot>
 
-    <div>
-      <template v-if="props.error.$errors.length">
-        <div class="mt-1"
+    <template v-if="props.error.$errors.length">
+      <div class="space-y-1 mt-2">
+        <div
           v-for="element of props.error.$errors"
           :key="element.$uid"
         >
           <span class="block text-sm font-medium text-red-500">{{ element.$message }}</span>
         </div>
-      </template>
-    </div>
+      </div>
+    </template>
   </div>
 </template>
 
