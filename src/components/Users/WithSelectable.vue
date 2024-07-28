@@ -95,7 +95,7 @@ const handleSelect = (item) => {
         <div class="flex items-center gap-2 text-xs">
           <slot name="chip-prepend" :item="item" />
 
-          <p class="text-warning-500">Командировка</p>
+          <p class="text-warning-500">{{ item.status?.name }}</p>
 
           <template v-if="item.position">
             <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-full"></div>
