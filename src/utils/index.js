@@ -101,8 +101,8 @@ export function getValueByPath(obj, path) {
 * */
 export function combineKeys(cols, model) {
 	return cols
-	.filter(col => col.hasOwnProperty("detail"))
-	// .sort((prevCol, nextCol) => prevCol.detail.order - nextCol.detail.order)
+	.filter(col => col.hasOwnProperty('detail'))
+	.sort((prevCol, nextCol) => prevCol.detail.order - nextCol.detail.order)
 	.map(item => {
 		return {
       header: item.header,

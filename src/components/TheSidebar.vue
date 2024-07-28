@@ -1,5 +1,6 @@
 <script setup>
 // Core
+import { watch } from 'vue'
 import { useRoute } from 'vue-router'
 // Stores
 import { useNavigationStore } from '@/stores/navigation.store'
@@ -13,6 +14,16 @@ const props = defineProps({
     default: () => []
   }
 })
+// Watch
+watch(
+  () => route,
+  (value) => {
+    navigationStore.actionSidebarCollapse(value.meta?.miniSidebar)
+  },
+  {
+    deep: true
+  }
+)
 </script>
 
 <template>

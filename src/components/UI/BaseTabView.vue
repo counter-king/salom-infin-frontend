@@ -152,10 +152,10 @@ const zoomFile = (event, pane) => {
                     escape: true,
                     autoHide: false
                   }"
-                  class="flex items-center justify-center w-6 h-6 rounded-[6px] bg-greyscale-50 hover:text-primary-500"
+                  class="group flex items-center justify-center w-6 h-6 rounded-[6px] bg-greyscale-50"
                   @click="zoomFile($event, pane)"
                 >
-                  <base-icon name="EyeIcon" width="16" />
+                  <base-icon name="EyeIcon" width="16" class="text-greyscale-500 group-hover:text-primary-500" />
                 </button>
 
                 <button
@@ -165,9 +165,9 @@ const zoomFile = (event, pane) => {
                     escape: true,
                     autoHide: false
                   }"
-                  class="flex items-center justify-center w-6 h-6 rounded-[6px] bg-greyscale-50 hover:text-primary-500"
+                  class="group flex items-center justify-center w-6 h-6 rounded-[6px] bg-greyscale-50"
                 >
-                  <base-icon name="DownloadMinimalisticIcon" width="16" />
+                  <base-icon name="DownloadMinimalisticIcon" width="16" class="text-greyscale-500 group-hover:text-primary-500" />
                 </button>
               </div>
             </template>

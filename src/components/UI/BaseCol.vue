@@ -2,7 +2,7 @@
 // Macros
 const props = defineProps({
   colClass: {
-    type: String
+    type: [String, Array]
   }
 })
 </script>

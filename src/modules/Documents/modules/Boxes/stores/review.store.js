@@ -25,7 +25,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.priority",
         detail: {
           component: 'priority-chip',
-          colClass: null
+          colClass: null,
+          order: 11
         },
         active: true
       },
@@ -34,7 +35,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.title",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 12
         },
         active: true
       },
@@ -43,7 +45,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.document_type.name",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 13
         },
         active: true
       },
@@ -52,7 +55,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.delivery_type.name",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 14
         },
         active: false
       },
@@ -61,7 +65,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.description",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 15
         },
         active: false,
       },
@@ -70,7 +75,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.journal.name",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 16
         },
         active: false
       },
@@ -79,7 +85,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.language.name",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 17
         },
         active: false
       },
@@ -88,7 +95,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.number_of_papers",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 18
         },
         active: false
       },
@@ -97,7 +105,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.outgoing_date",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 19
         },
         active: false
       },
@@ -106,7 +115,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.outgoing_number",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 20
         },
         active: false
       },
@@ -115,7 +125,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.register_number",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 3
         },
         active: true
       },
@@ -124,7 +135,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.register_date",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 2
         },
         active: true
       },
@@ -133,7 +145,8 @@ export const useReviewStore = defineStore("review", {
         field: "for_reviewers",
         detail: {
           component: 'base-avatar-group',
-          colClass: null
+          colClass: null,
+          order: 21
         },
         active: true
       },
@@ -142,7 +155,8 @@ export const useReviewStore = defineStore("review", {
         field: "status",
         detail: {
           component: 'base-status',
-          colClass: null
+          colClass: null,
+          order: 4
         },
         active: true
       },
@@ -151,7 +165,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.correspondent.name",
         detail: {
           component: null,
-          colClass: null
+          colClass: 'w-full',
+          order: 1
         },
         active: true
       },
@@ -160,7 +175,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.code",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 22
         },
         active: false
       },
@@ -169,7 +185,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.grif",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 23
         },
         active: false,
       },
