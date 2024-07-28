@@ -87,15 +87,15 @@ export const useDocFlowStore = defineStore("docFlowStore", {
         },
         active: false
       },
-      {
-        header: "number-sheets",
-        field: "number_of_papers",
-        detail: {
-          component: null,
-          colClass: '',
-        },
-        active: false
-      },
+      // {
+      //   header: "number-sheets",
+      //   field: "number_of_papers",
+      //   detail: {
+      //     component: null,
+      //     colClass: '',
+      //   },
+      //   active: false
+      // },
       {
         header: "outgoing-date",
         field: "outgoing_date",
@@ -197,7 +197,7 @@ export const useDocFlowStore = defineStore("docFlowStore", {
       journal: JOURNAL.INCOMING,
       language: null,
       modified_date: null,
-      number_of_papers: null,
+      // number_of_papers: null,
       outgoing_date: null,
       outgoing_number: null,
       priority: null,
@@ -226,7 +226,7 @@ export const useDocFlowStore = defineStore("docFlowStore", {
       journal: JOURNAL.INCOMING,
       language: null,
       modified_date: null,
-      number_of_papers: null,
+      // number_of_papers: null,
       outgoing_date: null,
       outgoing_number: null,
       priority: null,
@@ -512,15 +512,15 @@ export const useDocFlowStore = defineStore("docFlowStore", {
           },
           active: false
         },
-        {
-          header: "number-sheets",
-          field: "number_of_papers",
-          detail: {
-            component: null,
-            colClass: '',
-          },
-          active: false
-        },
+        // {
+        //   header: "number-sheets",
+        //   field: "number_of_papers",
+        //   detail: {
+        //     component: null,
+        //     colClass: '',
+        //   },
+        //   active: false
+        // },
         {
           header: "outgoing-date",
           field: "outgoing_date",

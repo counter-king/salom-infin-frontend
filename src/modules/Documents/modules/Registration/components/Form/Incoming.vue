@@ -10,7 +10,7 @@ import { UserWithLabel, UserWithSelectable } from '@/components/Users'
 import { PriorityChip } from '@/components/Chips'
 // Utils
 import { isObject } from '@/utils'
-import { replaceWithNumbers } from '@/utils/regex'
+// import { replaceWithNumbers } from '@/utils/regex'
 import { formatDateReverse } from '@/utils/formatDate'
 // Non-reactive
 const rules = {
@@ -26,9 +26,9 @@ const rules = {
   language: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
-  number_of_papers: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
+  // number_of_papers: {
+  //   required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  // },
   register_date: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
@@ -69,7 +69,7 @@ const props = defineProps({
       files: [],
 	    __files: [],
       language: null,
-      number_of_papers: null,
+      // number_of_papers: null,
       outgoing_date: null,
       outgoing_number: null,
       priority: null,
@@ -92,38 +92,10 @@ defineExpose({ $v })
 <template>
   <div class="incoming-form-view">
     <base-row>
-      <base-col col-class="w-1/2">
-        <base-input
-          v-model="$v.outgoing_number.$model"
-          :error="$v.outgoing_number"
-          required
-          label="out-number"
-          placeholder="enter-out-number"
-        />
-      </base-col>
+      <base-col col-class="w-full">
+        <h1 class="font-medium text-greyscale-500">Основное</h1>
 
-      <base-col col-class="w-1/2">
-        <base-input
-          v-model="$v.register_number.$model"
-          :error="$v.register_number"
-          required
-          label="reg-number"
-        />
-      </base-col>
-
-      <base-col col-class="w-1/2">
-        <base-calendar
-          v-model="$v.outgoing_date.$model"
-          :error="$v.outgoing_date"
-          :max-date="new Date()"
-          required
-          label="out-date"
-          placeholder="enter-out-date"
-          @update:modelValue="(value) => {
-						$v.register_date.$model = formatDateReverse(value)
-						$v.outgoing_date.$model = formatDateReverse(value)
-          }"
-        />
+        <div></div>
       </base-col>
 
       <base-col col-class="w-1/2">
@@ -138,52 +110,29 @@ defineExpose({ $v })
         />
       </base-col>
 
-<!--      <base-col col-class="w-1/2">-->
-<!--        <base-dropdown-->
-<!--          v-model="$v.grif.$model"-->
-<!--          :error="$v.grif"-->
-<!--          required-->
-<!--          label="grif"-->
-<!--        />-->
-<!--      </base-col>-->
-
-      <base-col col-class="w-1/2">
-        <base-dropdown
-          v-model="$v.language.$model"
-          :error="$v.language"
-          :options="commonStore.languagesList"
-          required
-          option-value="id"
-          option-label="name"
-          label="language-document"
-          placeholder="enter-language-document"
-        />
-      </base-col>
-
       <base-col col-class="w-1/2">
         <base-input
-          v-model.number="$v.number_of_papers.$model"
-          :error="$v.number_of_papers"
+          v-model="$v.register_number.$model"
+          :error="$v.register_number"
           required
-          label="number-sheets"
-          placeholder="number-sheets"
-          @input="() => $v.number_of_papers.$model = replaceWithNumbers($v.number_of_papers.$model)"
+          label="reg-number"
         />
       </base-col>
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          v-model="$v.correspondent.$model"
-          v-model:options="correspondentStore.allList"
-          :error="$v.correspondent"
-          api-url="correspondents"
+          v-model="$v.title.$model"
+          v-model:options="commonStore.documentTitleList"
+          :error="$v.title"
+          api-url="document-titles"
+          option-label="name"
           option-value="id"
-          label="correspondent"
-          placeholder="choose-correspondent"
-          menu-placeholder="enter-correspondent"
-          searchable
+          label="naming"
+          placeholder="enter-naming"
           required
-        />
+          searchable
+        >
+        </base-dropdown>
       </base-col>
 
       <base-col col-class="w-1/2">
@@ -218,33 +167,72 @@ defineExpose({ $v })
 
       <base-col col-class="w-1/2">
         <base-dropdown
-          v-model="$v.priority.$model"
-          :error="$v.priority"
-          :options="commonStore.prioryList"
-          option-value="id"
-          label="priority-document"
+          v-model="$v.language.$model"
+          :error="$v.language"
+          :options="commonStore.languagesList"
           required
-        >
-	        <template #option="{ option }">
-		        <priority-chip :id="option?.id" />
-	        </template>
-        </base-dropdown>
+          option-value="id"
+          option-label="name"
+          label="language-document"
+          placeholder="enter-language-document"
+        />
+      </base-col>
+
+      <base-col col-class="w-full">
+        <base-textarea
+          v-model="$v.description.$model"
+          :error="$v.description"
+          required
+          label="content"
+        />
+      </base-col>
+
+      <base-col col-class="w-full">
+        <h1 class="font-medium text-greyscale-500">От кого</h1>
+      </base-col>
+
+      <base-col col-class="w-full">
+        <base-dropdown
+          v-model="$v.correspondent.$model"
+          v-model:options="correspondentStore.allList"
+          :error="$v.correspondent"
+          api-url="correspondents"
+          option-value="id"
+          label="correspondent"
+          placeholder="choose-correspondent"
+          menu-placeholder="enter-correspondent"
+          searchable
+          required
+        />
       </base-col>
 
       <base-col col-class="w-1/2">
-        <base-dropdown
-          v-model="$v.title.$model"
-          v-model:options="commonStore.documentTitleList"
-          :error="$v.title"
-          api-url="document-titles"
-          option-label="name"
-          option-value="id"
-          label="naming"
-          placeholder="enter-naming"
+        <base-calendar
+          v-model="$v.outgoing_date.$model"
+          :error="$v.outgoing_date"
+          :max-date="new Date()"
           required
-          searchable
-        >
-        </base-dropdown>
+          label="out-date"
+          placeholder="enter-out-date"
+          @update:modelValue="(value) => {
+						$v.register_date.$model = formatDateReverse(value)
+						$v.outgoing_date.$model = formatDateReverse(value)
+          }"
+        />
+      </base-col>
+
+      <base-col col-class="w-1/2">
+        <base-input
+          v-model="$v.outgoing_number.$model"
+          :error="$v.outgoing_number"
+          required
+          label="out-number"
+          placeholder="enter-out-number"
+        />
+      </base-col>
+
+      <base-col col-class="w-full">
+        <h1 class="font-medium text-greyscale-500">Кому</h1>
       </base-col>
 
       <base-col col-class="w-1/2">
@@ -282,22 +270,49 @@ defineExpose({ $v })
         </base-multi-select>
       </base-col>
 
-      <base-col col-class="w-full">
-        <base-textarea
-          v-model="$v.description.$model"
-          :error="$v.description"
+      <base-col col-class="w-1/2">
+        <base-dropdown
+          v-model="$v.priority.$model"
+          :error="$v.priority"
+          :options="commonStore.prioryList"
+          option-value="id"
+          label="priority-document"
           required
-          label="content"
-        />
+        >
+	        <template #option="{ option }">
+		        <priority-chip :id="option?.id" />
+	        </template>
+        </base-dropdown>
       </base-col>
 
-	    <base-col col-class="w-full">
+      <base-col col-class="w-full">
 		    <base-file-upload
 			    :files="props.formModel.__files"
 			    label="attach-file"
 			    @emit:file-upload="(files) => props.formModel.__files = files"
 		    />
 	    </base-col>
+
+<!--      <base-col col-class="w-1/2">-->
+<!--        <base-dropdown-->
+<!--          v-model="$v.grif.$model"-->
+<!--          :error="$v.grif"-->
+<!--          required-->
+<!--          label="grif"-->
+<!--        />-->
+<!--      </base-col>-->
+
+
+      <!-- <base-col col-class="w-1/2">
+        <base-input
+          v-model.number="$v.number_of_papers.$model"
+          :error="$v.number_of_papers"
+          required
+          label="number-sheets"
+          placeholder="number-sheets"
+          @input="() => $v.number_of_papers.$model = replaceWithNumbers($v.number_of_papers.$model)"
+        />
+      </base-col> -->
     </base-row>
   </div>
 </template>
