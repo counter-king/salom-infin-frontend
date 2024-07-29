@@ -1,3 +1,6 @@
+// Routes
+import Profile from './profile.route'
+
 const Settings = [
   {
     component: () => import("../views/index.vue"),
@@ -169,12 +172,13 @@ const Settings = [
         path: "short-descriptions",
       },
       // Profile
-      {
-        component: () => import("../views/Profile/index.vue"),
-        meta: { isAuthRequired: true },
-        name: "ProfileIndex",
-        path: "profile",
-      },
+      ...Profile,
+      // {
+      //   component: () => import("../views/Profile/index.vue"),
+      //   meta: { isAuthRequired: true },
+      //   name: "ProfileIndex",
+      //   path: "profile",
+      // },
       // Devices
       {
         component: () => import("../views/Devices/index.vue"),

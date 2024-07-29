@@ -1,9 +1,17 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue';
-import { useI18n } from "vue-i18n";
-import TheSidebar from '@/components/TheSidebar.vue';
-const { locale } = useI18n();
-const menus = ref([]);
+// Core
+import { ref, watch, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+// Stores
+import { profileStore } from '../stores/profile/index.store'
+// Components
+import TheSidebar from '@/components/TheSidebar.vue'
+// Composable
+const { locale } = useI18n()
+const profile = profileStore()
+// Reactive
+const menus = ref([])
+// Methods
 const changeLanguage = () => {
   menus.value = [
     {
@@ -35,11 +43,12 @@ const changeLanguage = () => {
       link: 'ShortDescriptionsIndex',
       title: 'Краткое описание',
     },
-    {
-      icon: 'UserIcon',
-      link: 'ProfileIndex',
-      title: 'Профиль',
-    },
+    profile.routes,
+    // {
+    //   icon: 'UserIcon',
+    //   link: 'ProfileIndex',
+    //   title: 'Профиль',
+    // },
     {
       icon: 'LaptopMinimalisticIcon',
       link: 'DevicesIndex',
@@ -72,6 +81,7 @@ onMounted(() => {
 <template>
   <div class="settings-view flex w-full">
     <the-sidebar :menus="menus" />
+
     <div class="flex-1 overflow-y-auto p-6">
       <router-view />
     </div>
