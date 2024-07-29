@@ -21,10 +21,18 @@ const props = defineProps({
   tabItems: {
     type: Array,
     default: () => [
+    {
+        label: "Фишка",
+        name: "Resolution",
+        icon: "solar:document-outline",
+        slot: "resolution",
+        component: "Resolution",
+        count: null
+      },
       {
         label: "Просмотр",
         name: "Preview",
-        icon: "EyeIcon",
+        icon: "solar:eye-outline",
         slot: "preview",
         component: "Preview",
         count: null
@@ -32,7 +40,7 @@ const props = defineProps({
       {
         label: "История",
         name: "History",
-        icon: "ClockCircleIcon",
+        icon: "solar:clock-circle-outline",
         slot: "history",
         component: "History",
         count: null
@@ -40,7 +48,7 @@ const props = defineProps({
       {
         label: "Комментарии",
         name: "Comments",
-        icon: "ChatLineIcon",
+        icon: "solar:chat-line-outline",
         slot: "comments",
         component: "Comments",
         count: 2
@@ -48,7 +56,7 @@ const props = defineProps({
       {
         label: "Файлы",
         name: "Files",
-        icon: "FileTextIcon",
+        icon: "solar:file-text-outline",
         slot: "files",
         component: "Files"
       }
@@ -120,7 +128,13 @@ watch(activeTabMenu, (value) => {
 
     <div class="detail-layout-content flex flex-col flex-1 bg-white overflow-hidden shadow-button rounded-2xl">
       <slot name="content">
-        <div class="flex">
+        <div class="flex h-full">
+          <div class="max-w-[1000px] w-full border-r">
+            <slot name="template">
+              <file-tabs :files="props.files" />
+            </slot>
+          </div>
+
           <div class="flex-1">
             <base-tab-menu v-model="activeTabMenuIndex" :tab-items="props.tabItems" />
 
@@ -129,6 +143,7 @@ watch(activeTabMenu, (value) => {
                 <div class="h-[1px]">
                   <component
                     :is="activeTabComponent"
+                    :resolution="props.resolution"
                     :preview-detail="props.previewDetail"
                     :object-id="props.objectId"
                     :headers="props.headers"
@@ -144,12 +159,6 @@ watch(activeTabMenu, (value) => {
               </div>
             </slot>
           </div>
-
-          <div class="max-w-[566px] w-full border-l">
-            <slot name="template">
-              <file-tabs :resolution="props.resolution" :files="props.files" />
-            </slot>
-          </div>
         </div>
       </slot>
     </div>
@@ -157,5 +166,9 @@ watch(activeTabMenu, (value) => {
 </template>
 
 <style scoped>
-
+@media (max-width: 1600px) {
+  .max-w-\[1000px\] {
+    max-width: 700px;
+  }
+}
 </style>

@@ -22,7 +22,8 @@ const Boxes = [
         path: "review/show/:id",
         name: "ReviewShow",
         meta: {
-          isAuthRequired: true
+          isAuthRequired: true,
+          miniSidebar: true
         },
         component: () => import("../views/Review/show.vue"),
       },
@@ -40,7 +41,8 @@ const Boxes = [
         path: "assignment/show/:id",
         name: "AssignmentShow",
         meta: {
-          isAuthRequired: true
+          isAuthRequired: true,
+          miniSidebar: true
         },
         component: () => import("../views/Assignment/show.vue"),
       },
@@ -58,7 +60,8 @@ const Boxes = [
         path: "sign/show/:id",
         name: "SignShow",
         meta: {
-          isAuthRequired: true
+          isAuthRequired: true,
+          miniSidebar: true
         },
         component: () => import("../views/Sign/show.vue"),
       },
@@ -76,7 +79,8 @@ const Boxes = [
         path: "approval/show/:id",
         name: "ApprovalShow",
         meta: {
-          isAuthRequired: true
+          isAuthRequired: true,
+          miniSidebar: true
         },
         component: () => import("../views/Approval/show.vue"),
       },
@@ -94,7 +98,8 @@ const Boxes = [
         path: "control/show/:id",
         name: "ControlShow",
         meta: {
-          isAuthRequired: true
+          isAuthRequired: true,
+          miniSidebar: true
         },
         component: () => import("../views/Control/show.vue"),
       },

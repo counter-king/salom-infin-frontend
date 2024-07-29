@@ -28,6 +28,7 @@ const acquaintDocument = async () => {
 
 <template>
   <base-button
+    severity="danger"
     label="acquaint-document"
     :loading="loading"
     rounded
