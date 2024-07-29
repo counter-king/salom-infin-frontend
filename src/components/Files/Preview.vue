@@ -12,7 +12,7 @@ const extension = computed(() => props.file.name.split(".").pop())
 </script>
 
 <template>
-  <div v-if="props.file" class="h-full">
+  <div v-if="props.file" class="h-full overflow-y-auto">
     <template v-if="extension === 'pdf' || extension === 'PDF'">
       <object
         :data="props.file?.url"

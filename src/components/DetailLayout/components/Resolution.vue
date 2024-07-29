@@ -24,7 +24,7 @@ const props = defineProps({
 
 <template>
   <div class="resolution-view">
-    <div class="h-[calc(100vh-303px)] overflow-y-auto p-6">
+    <div class="h-[calc(100vh-240px)] overflow-y-auto p-6">
       <div class="shadow-block min-h-[400px] border-[0.094rem] border-greyscale-200 rounded-lg p-6">
         <template v-if="ROLES.CHAIRMAN === props.resolution.reviewer?.role?.name">
           <resolution-chairman-template :resolution="props.resolution" />
@@ -37,6 +37,10 @@ const props = defineProps({
         <template v-else>
           <resolution-default-template :resolution="props.resolution" />
         </template>
+      </div>
+
+      <div class="flex items-center gap-2 mt-5">
+        <slot name="preview-actions"></slot>
       </div>
 
       <tree-users :tree-items="props.treeItems" />
