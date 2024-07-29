@@ -129,7 +129,7 @@ watch(activeTabMenu, (value) => {
     <div class="detail-layout-content flex flex-col flex-1 bg-white overflow-hidden shadow-button rounded-2xl">
       <slot name="content">
         <div class="flex h-full">
-          <div class="max-w-[900px] w-full border-r">
+          <div class="max-w-[1000px] w-full border-r">
             <slot name="template">
               <file-tabs :files="props.files" />
             </slot>
@@ -167,7 +167,7 @@ watch(activeTabMenu, (value) => {
 
 <style scoped>
 @media (max-width: 1600px) {
-  .max-w-\[900px\] {
+  .max-w-\[1000px\] {
     max-width: 700px;
   }
 }
