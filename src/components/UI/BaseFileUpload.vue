@@ -20,9 +20,12 @@ const props = defineProps({
   containerClass: {
     type: String
   },
-  shadow: {
-    type: Boolean,
-    default: false
+  mode: {
+    type: String,
+    default: 'simple',
+    validator(value) {
+      return ['simple', 'first-preview'].includes(value)
+    }
   },
 	required: {
 		type: Boolean
@@ -116,10 +119,9 @@ onMounted(() => {
     <input type="file" name="file" multiple hidden ref="fileInput" @change="onFileSelect">
 
     <div
-      class="flex bg-greyscale-50 rounded-xl border-dashed border h-16 hover:bg-primary-50 cursor-pointer"
+      class="group flex items-center justify-center bg-greyscale-50 hover:bg-primary-30 rounded-xl border-dashed h-16 border-[2px] border-greyscale-200 hover:border-primary-200 cursor-pointer"
       :class="[
         { 'bg-primary-50' : isDragging },
-        { 'shadow-block border-[0.095rem] !border-solid border-greyscale-200' : props.shadow },
         props.containerClass
       ]"
       @click="chooseFiles"
@@ -127,10 +129,22 @@ onMounted(() => {
       @dragleave.prevent="onDragLeave"
       @drop.prevent="onDrop"
     >
-      <div class="flex justify-center items-center w-full text-sm font-semibold select-none">
-        <span class="text-primary-500 block mr-1">Перетащите</span> и <span class="text-primary-500 block mx-1">загрузите</span> свой файл
+      <div class="text-sm font-medium select-none">
+        <div class="flex items-center justify-center w-12 h-12 transition-colors bg-primary-100 group-hover:bg-primary-500 rounded-full mb-3 mx-auto">
+          <base-iconify icon="iconamoon:cloud-upload-light" class="transition-colors text-primary-500 group-hover:text-white" />
+        </div>
+
+        <div class="flex items-center">
+          <span class="text-primary-500 block mr-1">Перетащите</span> и <span class="text-primary-500 block mx-1">загрузите</span> свой файл
+        </div>
+
+        <span class="block text-center text-greyscale-400 font-regular mt-1">Faylning maksimal hajmi 15 MB</span>
       </div>
     </div>
+
+    <template v-if="props.mode === 'first-preview'">
+      <div>asdasd</div>
+    </template>
 
     <section class="uploading-files">
       <template
