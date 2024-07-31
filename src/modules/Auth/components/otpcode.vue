@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 // Macros
 const props = defineProps({
   digitCount: {
@@ -8,14 +8,19 @@ const props = defineProps({
     default: 4
   }
 })
-const emit = defineEmits(["emit:up"])
+const emit = defineEmits(['emit:up'])
 // Reactive
 const inputRefs = ref(null)
 const digits = reactive([])
+// Hooks
+onMounted(() => {
+  // Установить фокус на первый input
+  inputRefs.value[0].focus()
 
-for(let key = 1; key <= props.digitCount; key++) {
-  digits.push(null)
-}
+  for(let key = 1; key <= props.digitCount; key++) {
+    digits.push(null)
+  }
+})
 // Methods
 const isDigitsFull = () => {
   for (const elem of digits) {
@@ -26,11 +31,11 @@ const isDigitsFull = () => {
   return true
 }
 const handleKeyDown = (event, index) => {
-  if (event.key !== "Tab" && event.key !== "ArrowRight" && event.key !== "ArrowLeft") {
+  if (event.key !== 'Tab' && event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') {
     event.preventDefault()
   }
 
-  if (event.key === "Backspace") {
+  if (event.key === 'Backspace') {
     digits[index] = null
 
     if (index !== 0) {
