@@ -7,8 +7,8 @@ import { useI18n } from 'vue-i18n'
 import { useDocFlowStore } from '../stores/docflow.store'
 import { useAuthStore } from '@/modules/Auth/stores'
 // Components
-import RegisterDocumentMenu from './RegisterDocumentMenu.vue'
 import BaseSpinner from '@/components/UI/BaseSpinner.vue'
+import RegisterDocumentMenu from './RegisterDocumentMenu.vue'
 // Utils
 import { clearModel } from '@/utils'
 // Enums
@@ -31,10 +31,6 @@ const documentTypeRef = ref(null)
 const documentTypeComponent = shallowRef(null)
 const formModel = ref(null)
 const buttonLoading = ref(false)
-const model = ref({
-  __files: [],
-  files: []
-})
 // Methods
 const createDocument = async () => {
   let model = null
@@ -173,12 +169,27 @@ watch(() => docFlowStore.documentMenuType.name, (value) => {
       <div class="flex gap-6">
         <div class="max-w-[510px] w-full">
           <base-file-upload
-            :files="model.__files"
-            shadow
-            container-class="h-[625px]"
+            :files="docFlowStore.createDocumentModel.__files"
+            first-preview
+            label="attach-file"
+            container-class="h-[609px]"
             class="sticky top-0"
-            @emit:file-upload="(files) => model.__files = files"
-          />
+            @emit:file-upload="(files) => docFlowStore.createDocumentModel.__files = files"
+          >
+            <template v-if="!docFlowStore.createDocumentModel.__files.length" #empty-content>
+              <div class="text-sm font-medium select-none">
+                <div class="flex items-center justify-center w-12 h-12 transition-colors bg-primary-100 group-hover:bg-primary-500 rounded-full mb-3 mx-auto">
+                  <base-iconify icon="iconamoon:cloud-upload-light" class="transition-colors text-primary-500 group-hover:text-white" />
+                </div>
+
+                <div class="flex items-center">
+                  <span class="text-primary-500 block mr-1">Перетащите</span> и <span class="text-primary-500 block mx-1">загрузите</span> свой файл
+                </div>
+
+                <span class="block text-center text-greyscale-400 font-regular mt-1">Faylning maksimal hajmi 15 MB</span>
+              </div>
+            </template>
+          </base-file-upload>
         </div>
 
         <div class="flex-1">
@@ -189,6 +200,8 @@ watch(() => docFlowStore.documentMenuType.name, (value) => {
           />
         </div>
       </div>
+
+      <pre>{{ docFlowStore.createDocumentModel }}</pre>
     </template>
 
     <template #footer>

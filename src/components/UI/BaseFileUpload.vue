@@ -2,6 +2,8 @@
 // Core
 import {onMounted, ref} from "vue";
 import axiosConfig from "@/services/axios.config";
+// Components
+import { FilePreview } from '@/components/Files'
 
 const fileInput = ref(null);
 const uploadingFiles = ref([]);
@@ -17,15 +19,11 @@ const props = defineProps({
 		type: String,
 		default: null
 	},
+  firstPreview: {
+    type: Boolean
+  },
   containerClass: {
     type: String
-  },
-  mode: {
-    type: String,
-    default: 'simple',
-    validator(value) {
-      return ['simple', 'first-preview'].includes(value)
-    }
   },
 	required: {
 		type: Boolean
@@ -79,6 +77,7 @@ const uploadFiles = async (files) => {
       .then(({ data }) => {
         item.id = data.id;
         item.uploaded = true;
+        item.url = data.url
       })
       .catch(() => {
         item.uploaded = false;
@@ -114,6 +113,14 @@ onMounted(() => {
 
 <template>
   <div class="app-file-upload">
+    <div :class="{ 'hide-label': props.firstPreview && !props.files.length }">
+      <template v-if="props.firstPreview && !!props.files.length">
+        <div class="shadow-block h-[530px] border-[0.095rem] border-greyscale-200 rounded-2xl overflow-hidden mb-3">
+          <file-preview :file="props.files[0]" />
+        </div>
+      </template>
+    </div>
+
 	  <base-label :label="props.label" :required="props.required" />
 
     <input type="file" name="file" multiple hidden ref="fileInput" @change="onFileSelect">
@@ -122,29 +129,32 @@ onMounted(() => {
       class="group flex items-center justify-center bg-greyscale-50 hover:bg-primary-30 rounded-xl border-dashed h-16 border-[2px] border-greyscale-200 hover:border-primary-200 cursor-pointer"
       :class="[
         { 'bg-primary-50' : isDragging },
-        props.containerClass
+        props.containerClass,
+        { '!h-16': props.firstPreview && !!props.files.length }
       ]"
       @click="chooseFiles"
       @dragover.prevent="onDragOver"
       @dragleave.prevent="onDragLeave"
       @drop.prevent="onDrop"
     >
-      <div class="text-sm font-medium select-none">
-        <div class="flex items-center justify-center w-12 h-12 transition-colors bg-primary-100 group-hover:bg-primary-500 rounded-full mb-3 mx-auto">
-          <base-iconify icon="iconamoon:cloud-upload-light" class="transition-colors text-primary-500 group-hover:text-white" />
-        </div>
+      <slot name="empty-content">
+        <div class="flex justify-center items-center w-full text-sm font-semibold select-none">
+          <base-iconify icon="iconamoon:cloud-upload-light" class="text-primary-500 mr-3" />
 
-        <div class="flex items-center">
-          <span class="text-primary-500 block mr-1">Перетащите</span> и <span class="text-primary-500 block mx-1">загрузите</span> свой файл
-        </div>
+          <span class="text-primary-500 block mr-1">
+            Перетащите
+          </span>
 
-        <span class="block text-center text-greyscale-400 font-regular mt-1">Faylning maksimal hajmi 15 MB</span>
-      </div>
+          <span class="text-primary-900">или</span>
+
+          <span class="text-primary-500 block mx-1">
+            загрузите
+          </span>
+
+          <span class="text-primary-900">свой файл</span>
+        </div>
+      </slot>
     </div>
-
-    <template v-if="props.mode === 'first-preview'">
-      <div>asdasd</div>
-    </template>
 
     <section class="uploading-files">
       <template
@@ -206,11 +216,11 @@ onMounted(() => {
         </div>
       </template>
     </section>
-
-<!--    <pre>{{ props.files }}</pre>-->
   </div>
 </template>
 
 <style scoped>
-
+.hide-label + p {
+  display: none;
+}
 </style>

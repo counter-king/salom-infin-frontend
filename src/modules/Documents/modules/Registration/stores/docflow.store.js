@@ -242,7 +242,7 @@ export const useDocFlowStore = defineStore("docFlowStore", {
     documentMenuType: {
       name: 'Incoming',
       journalId: JOURNAL_CODES.INCOMING,
-      __journalId: null
+      __journalId: JOURNAL.INCOMING
     },
     totalCount: 0
   }),

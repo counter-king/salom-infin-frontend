@@ -1,5 +1,7 @@
 <script setup>
 import { computed } from 'vue'
+// Utils
+import { isObject } from '@/utils'
 // Macros
 const props = defineProps({
   file: {
@@ -8,7 +10,11 @@ const props = defineProps({
   }
 })
 // Computed
-const extension = computed(() => props.file.name.split(".").pop())
+const extension = computed(
+  () => isObject(props.file)
+    ? props.file.name.split(".").pop()
+    : props.name.split(".").pop()
+)
 </script>
 
 <template>
@@ -20,14 +26,20 @@ const extension = computed(() => props.file.name.split(".").pop())
         width="100%"
         height="100%"
       >
-	      <iframe :src="props.file?.url" width="500px" height="500px">
-
-	      </iframe>
+	      <iframe
+          :src="isObject(props.file) ? props.file?.url : props.url"
+          width="500px"
+          height="500px"
+        />
       </object>
     </template>
 
     <template v-else-if="extension === 'jpg' || extension === 'jpeg' || extension === 'png'">
-      <img :src="props.file?.url" alt="Document image" class="max-w-full mx-auto block" />
+      <img
+        :src="isObject(props.file) ? props.file?.url : props.url"
+        alt="Document image"
+        class="max-w-full mx-auto block"
+      />
     </template>
 
     <template v-else>
@@ -35,8 +47,8 @@ const extension = computed(() => props.file.name.split(".").pop())
         <h3 class="text-lg font-bold text-primary-900">{{ $t('unsupported-file-type') }}</h3>
 
         <a
-          :href="props.file?.url"
-          :download="props.file?.url"
+          :href="isObject(props.file) ? props.file?.url : props.url"
+          :download="isObject(props.file) ? props.file?.url : props.url"
           target="_blank"
           class="flex gap-2 bg-primary-500 text-sm font-medium text-white rounded-full py-2 px-4 mt-2"
         >

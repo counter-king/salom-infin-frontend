@@ -90,7 +90,6 @@ const updateDocument = async () => {
           <template v-if="assignmentStore.isDocumentAcquainted">
             <!-- Если еще не выполнен документ -->
             <template v-if="!assignmentStore.performModel.is_performed">
-              <pre>{{ assignmentStore.performModel }}</pre>
               <modal-done-document
                 v-model:content="assignmentStore.performModel"
                 v-model:files="assignmentStore.performModel.files"

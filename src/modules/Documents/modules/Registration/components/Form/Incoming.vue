@@ -296,17 +296,19 @@ defineExpose({ $v })
               </template>
             </base-dropdown>
           </base-col>
-
-          <base-col col-class="w-full">
-            <base-file-upload
-              :files="props.formModel.__files"
-              label="attach-file"
-              @emit:file-upload="(files) => props.formModel.__files = files"
-            />
-          </base-col>
         </base-row>
       </div>
     </div>
+
+    <slot name="end" />
+
+    <!--          <base-col col-class="w-full">-->
+    <!--            <base-file-upload-->
+    <!--              :files="props.formModel.__files"-->
+    <!--              label="attach-file"-->
+    <!--              @emit:file-upload="(files) => props.formModel.__files = files"-->
+    <!--            />-->
+    <!--          </base-col>-->
 
 <!--      <base-col col-class="w-1/2">-->
 <!--        <base-dropdown-->

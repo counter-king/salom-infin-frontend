@@ -218,7 +218,7 @@ export const useReviewStore = defineStore("review", {
     },
     listLoading: false,
     performModel: {
-      comment: null,
+      content: null,
       files: []
     },
     totalCount: 0
@@ -268,7 +268,7 @@ export const useReviewStore = defineStore("review", {
       this.detailModel.document.__files = data.document.files.map(file => file.file)
 
       this.actionSetPerform({
-        comment: data.comment,
+        content: data.comment,
         files: data.files
       })
 
@@ -358,8 +358,8 @@ export const useReviewStore = defineStore("review", {
         await fetchPerformDocument({
           id,
           model: {
-            ...this.performModel,
-            files: this.performModel.files.map(file => ({ id: file.id }))
+            files: this.performModel.files.map(file => ({ id: file.id })),
+            comment: this.performModel.content
           }
         })
         await this.actionReviewById(this.detailModel)
@@ -387,8 +387,8 @@ export const useReviewStore = defineStore("review", {
     /*
     *
     * */
-    actionSetPerform({ comment, files }) {
-      Object.assign(this.performModel, { comment, files })
+    actionSetPerform({ content, files }) {
+      Object.assign(this.performModel, { content, files })
     },
     /*
     * Сбросит все колонки в изначальное состояние

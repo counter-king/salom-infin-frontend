@@ -116,6 +116,7 @@ const create = async () => {
         v-model="$v.content.$model"
         :error="$v.content"
         label="enter-content"
+        class="mb-4"
       />
 
       <base-file-upload

@@ -43,7 +43,7 @@ export const useCommonStore = defineStore("common", {
     /*
     *
     * */
-    getJournalByCode: (state) => (code) => state?.journalsList.find(journal => Number(journal.code) === Number(code))
+    getJournalByCode: (state) => (code) => state?.journalsList.find(journal => journal.code === code)
 	},
 	actions: {
 		async init() {
