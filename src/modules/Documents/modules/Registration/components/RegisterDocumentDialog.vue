@@ -200,8 +200,6 @@ watch(() => docFlowStore.documentMenuType.name, (value) => {
           />
         </div>
       </div>
-
-      <pre>{{ docFlowStore.createDocumentModel }}</pre>
     </template>
 
     <template #footer>
