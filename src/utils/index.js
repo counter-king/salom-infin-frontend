@@ -85,6 +85,19 @@ export const formatNameToShort = (value, separate = '.') => {
   }
 }
 /*
+* Форматирует число 1, 10.02, 100.55, 1 012.21 ...
+* */
+export const formatNumberWithFloat = (number) => {
+  // Преобразовать число в строку с фиксированным количеством десятичных знаков
+  const formattedNumber = parseFloat(number).toFixed(2)
+  // Разделить строку на части до и после десятичной точки
+  const [integerPart, decimalPart] = formattedNumber.split('.');
+  // Добавить пробелы между группами цифр
+  const formattedIntegerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  // Собрать отформатированное число с точкой
+  return `${ formattedIntegerPart }.${ decimalPart }`;
+}
+/*
 *
 * */
 export function getValueByPath(obj, path) {
