@@ -8,6 +8,7 @@ import { useVuelidate } from '@vuelidate/core'
 import { helpers, required } from '@vuelidate/validators'
 // Store
 import { useUsersStore } from '@/stores/users.store'
+import { useDocumentCountStore } from '@/modules/Documents/stores/count.store'
 import { useReviewStore } from '@/modules/Documents/modules/Boxes/stores/review.store'
 // Components
 import { UserWithSelectable } from '@/components/Users'
@@ -15,6 +16,7 @@ import { UserWithSelectable } from '@/components/Users'
 const route = useRoute()
 const router = useRouter()
 const userStore = useUsersStore()
+const countStore = useDocumentCountStore()
 const reviewStore = useReviewStore()
 // Macros
 const props = defineProps({
@@ -55,6 +57,7 @@ const send = async () => {
       id: Number(route.params.id),
       body: model.value
     })
+    await countStore.actionDocumentCountList()
     await router.replace({ name: 'ReviewIndex' })
   }
   finally {
@@ -95,10 +98,10 @@ watch(debounced, async () => {
         />
 
         <user-with-selectable
+          v-model:checkbox-index="model.user"
           :items="userStore.usersList"
           :multiple="false"
           selectable
-          @emit:selected="(value) => model.user = value"
         />
       </div>
 
@@ -108,6 +111,7 @@ watch(debounced, async () => {
         <base-textarea
           v-model="$v.comment.$model"
           :error="$v.comment"
+          required
           label="enter-content"
         />
       </div>

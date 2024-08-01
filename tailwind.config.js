@@ -15,6 +15,7 @@ export default {
       colors: {
         "primary": {
           0: "#FFFFFF",
+          30: "#F5F4FF",
           50: "#F2F3F8",
           100: "#E0DEFF",
           200: "#C1BDFF",
@@ -79,7 +80,8 @@ export default {
         'menu': '0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 2px 60px 0 rgba(0, 0, 0, 0.1)',
         'calendar': '0 16px 56px 0 rgba(0, 0, 0, 0.15)',
         'calendar-menu': '0 16px 50px 0 rgba(0, 0, 0, 0.12)',
-        'calendar-cell': '0 1px 2px 0 rgba(0, 0, 0, 0.05), 0 12px 32px 0 rgba(0, 0, 0, 0.1)'
+        'calendar-cell': '0 1px 2px 0 rgba(0, 0, 0, 0.05), 0 12px 32px 0 rgba(0, 0, 0, 0.1)',
+        'block': '0 2px 8px 0 rgba(0, 0, 0, 0.05), 0 1px 3px 0 rgba(0, 0, 0, 0.06)'
       }
     },
   },

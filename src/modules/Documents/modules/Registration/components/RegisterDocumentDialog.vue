@@ -7,8 +7,8 @@ import { useI18n } from 'vue-i18n'
 import { useDocFlowStore } from '../stores/docflow.store'
 import { useAuthStore } from '@/modules/Auth/stores'
 // Components
-import RegisterDocumentMenu from './RegisterDocumentMenu.vue'
 import BaseSpinner from '@/components/UI/BaseSpinner.vue'
+import RegisterDocumentMenu from './RegisterDocumentMenu.vue'
 // Utils
 import { clearModel } from '@/utils'
 // Enums
@@ -157,6 +157,8 @@ watch(() => docFlowStore.documentMenuType.name, (value) => {
 <template>
   <base-dialog
     v-model="modelValue"
+    max-width="max-w-[1180px]"
+    header-classes="py-2 pb-3"
     @emit:after-hide="afterHide"
   >
     <template #header>
@@ -164,11 +166,40 @@ watch(() => docFlowStore.documentMenuType.name, (value) => {
     </template>
 
     <template #content>
-      <component
-        ref="documentTypeRef"
-        :is="documentTypeComponent"
-        :form-model="docFlowStore.createDocumentModel"
-      />
+      <div class="flex gap-6">
+        <div class="max-w-[510px] w-full">
+          <base-file-upload
+            :files="docFlowStore.createDocumentModel.__files"
+            first-preview
+            label="attach-file"
+            container-class="h-[609px]"
+            class="sticky top-0"
+            @emit:file-upload="(files) => docFlowStore.createDocumentModel.__files = files"
+          >
+            <template v-if="!docFlowStore.createDocumentModel.__files.length" #empty-content>
+              <div class="text-sm font-medium select-none">
+                <div class="flex items-center justify-center w-12 h-12 transition-colors bg-primary-100 group-hover:bg-primary-500 rounded-full mb-3 mx-auto">
+                  <base-iconify icon="iconamoon:cloud-upload-light" class="transition-colors text-primary-500 group-hover:text-white" />
+                </div>
+
+                <div class="flex items-center">
+                  <span class="text-primary-500 block mr-1">Перетащите</span> и <span class="text-primary-500 block mx-1">загрузите</span> свой файл
+                </div>
+
+                <span class="block text-center text-greyscale-400 font-regular mt-1">Faylning maksimal hajmi 15 MB</span>
+              </div>
+            </template>
+          </base-file-upload>
+        </div>
+
+        <div class="flex-1">
+          <component
+            ref="documentTypeRef"
+            :is="documentTypeComponent"
+            :form-model="docFlowStore.createDocumentModel"
+          />
+        </div>
+      </div>
     </template>
 
     <template #footer>

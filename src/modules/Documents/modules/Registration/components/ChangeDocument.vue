@@ -47,7 +47,27 @@ const updateDocument = async () => {
       @emit:success-button="updateDocument"
     >
       <template #content>
-        <incoming-form ref="formRef" :form-model="docFlowStore.detailModel" />
+        <incoming-form ref="formRef" :form-model="docFlowStore.detailModel">
+          <template #end>
+            <div class="shadow-block border-[0.095rem] border-greyscale-200 rounded-2xl overflow-hidden">
+              <div class="bg-greyscale-50 border-b px-5 py-3">
+                <h1 class="text-base font-semibold text-greyscale-900">Прикрепить файл</h1>
+              </div>
+
+              <div class="px-5 py-3">
+                <base-row>
+                  <base-col col-class="w-full">
+                    <base-file-upload
+                      :files="docFlowStore.detailModel.__files"
+                      label="attach-file"
+                      @emit:file-upload="(files) => docFlowStore.detailModel.__files = files"
+                    />
+                  </base-col>
+                </base-row>
+              </div>
+            </div>
+          </template>
+        </incoming-form>
       </template>
     </base-sidebar>
   </div>

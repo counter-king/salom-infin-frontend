@@ -12,20 +12,20 @@ export const FILE_ACTIONS = {
   DONE:     'done',      // Пользователь выполнил
 }
 export const JOURNAL = {
-  INCOMING:         29, // Входящий
-  INNER:            28, // Внутренние
-  OUTGOING:         27, // Исходящие
-  APPEALS:          26, // Обращение
-  ORDERS_PROTOCOLS: 25, // Приказы и распоряжения
-  APPLICATION:      24, // Заявления
+  INCOMING:         1, // Входящий
+  INNER:            2, // Внутренние
+  OUTGOING:         3, // Исходящие
+  APPEALS:          4, // Обращение
+  ORDERS_PROTOCOLS: 5, // Приказы и распоряжения
+  APPLICATION:      7, // Заявления
 }
 export const JOURNAL_CODES = {
-  INCOMING:         100, // Входящий
-  INNER:            103, // Внутренние
-  OUTGOING:         101, // Исходящие
-  APPEALS:          105, // Обращение
-  ORDERS_PROTOCOLS: 104, // Приказы и распоряжения
-  APPLICATION:      106, // Заявления
+  INCOMING:         '100', // Входящий
+  INNER:            '103', // Внутренние
+  OUTGOING:         '101', // Исходящие
+  APPEALS:          '105', // Обращение
+  ORDERS_PROTOCOLS: '104', // Приказы и распоряжения
+  APPLICATION:      '106', // Заявления
 }
 export const COLOR_TYPES = {
   PRIMARY: "primary",

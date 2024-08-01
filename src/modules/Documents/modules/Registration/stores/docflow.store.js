@@ -87,15 +87,15 @@ export const useDocFlowStore = defineStore("docFlowStore", {
         },
         active: false
       },
-      {
-        header: "number-sheets",
-        field: "number_of_papers",
-        detail: {
-          component: null,
-          colClass: '',
-        },
-        active: false
-      },
+      // {
+      //   header: "number-sheets",
+      //   field: "number_of_papers",
+      //   detail: {
+      //     component: null,
+      //     colClass: '',
+      //   },
+      //   active: false
+      // },
       {
         header: "outgoing-date",
         field: "outgoing_date",
@@ -197,7 +197,7 @@ export const useDocFlowStore = defineStore("docFlowStore", {
       journal: JOURNAL.INCOMING,
       language: null,
       modified_date: null,
-      number_of_papers: null,
+      // number_of_papers: null,
       outgoing_date: null,
       outgoing_number: null,
       priority: null,
@@ -226,7 +226,7 @@ export const useDocFlowStore = defineStore("docFlowStore", {
       journal: JOURNAL.INCOMING,
       language: null,
       modified_date: null,
-      number_of_papers: null,
+      // number_of_papers: null,
       outgoing_date: null,
       outgoing_number: null,
       priority: null,
@@ -242,7 +242,7 @@ export const useDocFlowStore = defineStore("docFlowStore", {
     documentMenuType: {
       name: 'Incoming',
       journalId: JOURNAL_CODES.INCOMING,
-      __journalId: null
+      __journalId: JOURNAL.INCOMING
     },
     totalCount: 0
   }),
@@ -278,7 +278,7 @@ export const useDocFlowStore = defineStore("docFlowStore", {
         return Promise.resolve()
       }
       catch (error) {
-        dispatchNotify('Ошибка', 'Ошибка создание документа', COLOR_TYPES.ERROR)
+        // dispatchNotify('Ошибка', 'Ошибка создание документа', COLOR_TYPES.ERROR)
         return Promise.reject()
       }
     },
@@ -377,7 +377,7 @@ export const useDocFlowStore = defineStore("docFlowStore", {
         return Promise.resolve()
       }
       catch (error) {
-        dispatchNotify('Ошибка', 'Ошибка изменение документа', COLOR_TYPES.ERROR)
+        // dispatchNotify('Ошибка', 'Ошибка изменение документа', COLOR_TYPES.ERROR)
         return Promise.reject()
       }
     },
@@ -400,7 +400,7 @@ export const useDocFlowStore = defineStore("docFlowStore", {
     actionLoadFormCreateDocument(payload) {
       const commonStore = useCommonStore()
 
-      switch(Number(payload.journalCode)) {
+      switch(payload.journalCode) {
         case JOURNAL_CODES.INCOMING: // Входящий
           this.documentMenuType = {
             name: 'Incoming',
@@ -512,15 +512,15 @@ export const useDocFlowStore = defineStore("docFlowStore", {
           },
           active: false
         },
-        {
-          header: "number-sheets",
-          field: "number_of_papers",
-          detail: {
-            component: null,
-            colClass: '',
-          },
-          active: false
-        },
+        // {
+        //   header: "number-sheets",
+        //   field: "number_of_papers",
+        //   detail: {
+        //     component: null,
+        //     colClass: '',
+        //   },
+        //   active: false
+        // },
         {
           header: "outgoing-date",
           field: "outgoing_date",

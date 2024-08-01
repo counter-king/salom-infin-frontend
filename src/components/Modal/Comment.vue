@@ -1,7 +1,8 @@
 <script setup>
 // Core
-import {onMounted, ref, useModel, watch} from 'vue'
-import BaseEditor from "@/components/UI/BaseEditor.vue";
+import { ref, useModel, watch } from 'vue'
+import { useVuelidate } from '@vuelidate/core'
+import { helpers, required } from '@vuelidate/validators'
 // Macros
 const props = defineProps({
   modelValue: {
@@ -58,14 +59,28 @@ const emit = defineEmits(['update:modelValue'])
 // Composable
 const modelValue = useModel(props, 'modelValue')
 // Reactive
-const text = ref(null)
+const text = ref({
+  message: null
+})
+// Non-reactive
+const rules = {
+  message: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  }
+}
+// Composable
+const $v = useVuelidate(rules, text)
 // Methods
 const create = async () => {
-  if(!(text.value && text.value.trim())) return
+  const valid = await $v.value.$validate()
+
+  if(!valid) {
+    return
+  }
 
   try {
-    await props.createButtonFn(text.value)
-    text.value = null
+    await props.createButtonFn(text.value.message)
+    text.value.message = null
     emit('update:modelValue', false)
   }
   finally {
@@ -75,7 +90,7 @@ const create = async () => {
 
 watch(modelValue, newVal => {
   if (newVal === true && props.editorType === 'editor' && props.editorValue){
-    text.value = props.editorValue;
+    text.value.message = props.editorValue;
   }
 })
 </script>
@@ -91,7 +106,8 @@ watch(modelValue, newVal => {
     <template #content>
       <base-froala-editor
         v-if="props.editorType === 'editor'"
-        v-model="text"
+        v-model="$v.message.$model"
+        :error="$v.message"
       />
 
 	    <div
@@ -103,7 +119,8 @@ watch(modelValue, newVal => {
 
       <base-textarea
         v-else
-        v-model="text"
+        v-model="$v.message.$model"
+        :error="$v.message"
         label="enter-content"
       />
     </template>

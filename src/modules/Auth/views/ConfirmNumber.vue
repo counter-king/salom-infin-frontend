@@ -22,7 +22,7 @@ const props = defineProps({
 // Reactive
 const loading = ref(false)
 const formModel = ref({
-  phone_number: null
+  phone_number: '+998'
 })
 const rules = {
   phone_number: {
@@ -43,7 +43,7 @@ const submit = async () => {
   try {
     loading.value = true
     await fetchSendOtp({ phone_number: formModel.value.phone_number?.replace(/\D/g, '') })
-    dispatchNotify('Код подтверждения отправлен', null, COLOR_TYPES.SUCCESS)
+    dispatchNotify(null, 'Код подтверждения отправлен', COLOR_TYPES.SUCCESS)
     await router.push({
       name: 'VerifyNumber',
       query: {
@@ -66,9 +66,9 @@ const submit = async () => {
         <base-input
           v-model="v.phone_number.$model"
           :error="v.phone_number"
-          mask-rule="+### ## ### ## ##"
+          mask-rule="+998 ## ### ## ##"
           label="Телефона"
-          placeholder="Введите номер телефона"
+          placeholder="+998 XX XXX XX XX"
         />
       </base-col>
 

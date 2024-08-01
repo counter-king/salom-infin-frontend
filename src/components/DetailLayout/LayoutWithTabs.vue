@@ -1,15 +1,13 @@
 <script setup>
 // Core
 import { ref, shallowRef, watch, defineAsyncComponent, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import {useI18n} from "vue-i18n";
+import { useI18n } from 'vue-i18n'
 // Components
 import BaseSpinner from '@/components/UI/BaseSpinner.vue'
+import BackButton from '../Actions/BackButton.vue'
 import FileTabs from './components/FileTabs.vue'
 // Enums
 import { CONTENT_TYPES } from '@/enums'
-// Composable
-const router = useRouter()
 // Macros
 const props = defineProps({
   title: {
@@ -23,10 +21,18 @@ const props = defineProps({
   tabItems: {
     type: Array,
     default: () => [
+    {
+        label: "Фишка",
+        name: "Resolution",
+        icon: "solar:document-outline",
+        slot: "resolution",
+        component: "Resolution",
+        count: null
+      },
       {
         label: "Просмотр",
         name: "Preview",
-        icon: "EyeIcon",
+        icon: "solar:eye-outline",
         slot: "preview",
         component: "Preview",
         count: null
@@ -34,7 +40,7 @@ const props = defineProps({
       {
         label: "История",
         name: "History",
-        icon: "ClockCircleIcon",
+        icon: "solar:clock-circle-outline",
         slot: "history",
         component: "History",
         count: null
@@ -42,7 +48,7 @@ const props = defineProps({
       {
         label: "Комментарии",
         name: "Comments",
-        icon: "ChatLineIcon",
+        icon: "solar:chat-line-outline",
         slot: "comments",
         component: "Comments",
         count: 2
@@ -50,7 +56,7 @@ const props = defineProps({
       {
         label: "Файлы",
         name: "Files",
-        icon: "FileTextIcon",
+        icon: "solar:file-text-outline",
         slot: "files",
         component: "Files"
       }
@@ -109,22 +115,7 @@ watch(activeTabMenu, (value) => {
     <template v-if="props.toolbar">
       <div class="flex items-center justify-between h-10 mb-5">
         <div class="flex items-center gap-3">
-          <base-button
-            v-tooltip.left="{
-              value: `<h4 class='text-xs text-white -my-1'>Назад</h4>`,
-              escape: true,
-              autoHide: false
-            }"
-            size="small"
-            icon-left="AltArrowLeftIcon"
-            only-icon
-            outlined
-            shadow
-            icon-width="16"
-            border-color="border-transparent"
-            button-class="h-8"
-            @click="router.go(-1)"
-          />
+          <back-button />
 
           <h1 class="font-bold text-xl text-primary-900">{{ props.title ? t(props.title) : t('title-document') }}</h1>
         </div>
@@ -137,32 +128,35 @@ watch(activeTabMenu, (value) => {
 
     <div class="detail-layout-content flex flex-col flex-1 bg-white overflow-hidden shadow-button rounded-2xl">
       <slot name="content">
-        <base-tab-menu v-model="activeTabMenuIndex" :tab-items="props.tabItems" />
-
-        <div class="flex flex-1 h-full">
-          <slot :name="activeTabMenu.slot">
-            <div class="flex-1 overflow-y-auto">
-              <div class="h-[1px]">
-                <component
-                  :is="activeTabComponent"
-                  :preview-detail="props.previewDetail"
-                  :object-id="props.objectId"
-                  :headers="props.headers"
-                  :tree-items="props.treeItems"
-                  :content-type="props.contentType"
-                  :files="props.files"
-                >
-                  <template #preview-actions>
-                    <slot name="preview-actions" />
-                  </template>
-                </component>
-              </div>
-            </div>
-          </slot>
-
-          <div class="max-w-[566px] w-full ml-auto border-l">
+        <div class="flex h-full">
+          <div class="max-w-[1000px] w-full border-r">
             <slot name="template">
-              <file-tabs :resolution="props.resolution" :files="props.files" />
+              <file-tabs :files="props.files" />
+            </slot>
+          </div>
+
+          <div class="flex-1">
+            <base-tab-menu v-model="activeTabMenuIndex" :tab-items="props.tabItems" />
+
+            <slot :name="activeTabMenu.slot">
+              <div class="flex-1 h-full overflow-y-auto">
+                <div class="h-[1px]">
+                  <component
+                    :is="activeTabComponent"
+                    :resolution="props.resolution"
+                    :preview-detail="props.previewDetail"
+                    :object-id="props.objectId"
+                    :headers="props.headers"
+                    :tree-items="props.treeItems"
+                    :content-type="props.contentType"
+                    :files="props.files"
+                  >
+                    <template #preview-actions>
+                      <slot name="preview-actions" />
+                    </template>
+                  </component>
+                </div>
+              </div>
             </slot>
           </div>
         </div>
@@ -172,5 +166,9 @@ watch(activeTabMenu, (value) => {
 </template>
 
 <style scoped>
-
+@media (max-width: 1600px) {
+  .max-w-\[1000px\] {
+    max-width: 700px;
+  }
+}
 </style>

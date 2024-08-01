@@ -80,7 +80,7 @@ const { t } = useI18n()
       :pt="{
         root: {
           class: [
-            'w-full rounded-xl bg-greyscale-50 border-greyscale-50 focus:border-primary-500 placeholder:text-sm placeholder:font-medium',
+            'w-full text-greyscale-900 font-medium rounded-xl bg-greyscale-50 border-greyscale-50 focus:border-primary-500 placeholder:text-sm placeholder:font-regular placeholder:text-greyscale-400',
             {
               'p-invalid !shadow-none': props.error.$error
             },
@@ -94,16 +94,16 @@ const { t } = useI18n()
       <base-icon :name="props.iconRight" width="16" height="16" :class="props.iconRightClass" />
     </slot>
 
-    <div>
-      <template v-if="props.error.$errors.length">
-        <div class="mt-1"
+    <template v-if="props.error.$errors.length">
+      <div class="space-y-1 mt-2">
+        <div
           v-for="element of props.error.$errors"
           :key="element.$uid"
         >
           <span class="block text-sm font-medium text-red-500">{{ element.$message }}</span>
         </div>
-      </template>
-    </div>
+      </div>
+    </template>
   </div>
 </template>
 

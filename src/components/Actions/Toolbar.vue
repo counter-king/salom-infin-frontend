@@ -17,8 +17,7 @@ const props = defineProps({
   },
   storageColumnsName: {
     type: String,
-    default: () => "",
-    required: true
+    default: () => ""
   },
   actionList: {
     type: Function,

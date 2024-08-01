@@ -353,11 +353,11 @@ export const useSDStore = defineStore("sd-stores", {
       const response = await fetchCustomUpdate({ id, body });
       if (response) {
         this.customUpdateLoading = false;
-        dispatchNotify('Изменено!', null, COLOR_TYPES.SUCCESS);
+        dispatchNotify(null, 'Изменено!', COLOR_TYPES.SUCCESS);
         return Promise.resolve(response);
       } else {
         this.customUpdateLoading = false;
-        dispatchNotify('Произошла ошибка!', null, COLOR_TYPES.ERROR);
+        dispatchNotify(null, 'Произошла ошибка!', COLOR_TYPES.ERROR);
         return Promise.reject();
       }
     }

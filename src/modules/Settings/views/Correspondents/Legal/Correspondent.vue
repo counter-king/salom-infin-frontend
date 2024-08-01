@@ -40,7 +40,7 @@ const correspondentEdit = () => {
                      return correspondent;
                   }
                });
-               dispatchNotify('Корреспондент обновлен', '', 'success');
+               dispatchNotify(null, 'Корреспондент обновлен', 'success');
                editVisible.value = false;
                props.setCorrespondents(newCorrespondents);
             }
@@ -50,15 +50,15 @@ const correspondentEdit = () => {
             editLoading.value = false;
          });
    } else if(!legal_name) {
-      dispatchNotify('Введите наименование', '', 'error')
+      dispatchNotify(null, 'Введите наименование', 'error')
    } else if(!legal_address) {
-      dispatchNotify('Введите адрес', '', 'error')
+      dispatchNotify(null, 'Введите адрес', '', 'error')
    } else if(String(tin || '').length !== 9) {
-      dispatchNotify('Введите правильный ИНН', '', 'error')
+      dispatchNotify(null, 'Введите правильный ИНН', 'error')
    } else if(newPhone.length !== 13) {
-      dispatchNotify('Введите свой номер телефона правильно', '', 'error')
+      dispatchNotify(null, 'Введите свой номер телефона правильно', 'error')
    } else {
-      dispatchNotify('Введите свой адрес электронной почты правильно', '', 'error')
+      dispatchNotify(null, 'Введите свой адрес электронной почты правильно', 'error')
    }
 };
 const correspondentDelete = () => {
@@ -69,7 +69,7 @@ const correspondentDelete = () => {
       .then(response => {
          if(response?.status === 204) {
             deleteVisible.value = false;
-            dispatchNotify('Корреспондент удален', '', 'success')
+            dispatchNotify(null, 'Корреспондент удален', '', 'success')
             props.getFirstPageCorrespondents();
          }
       })
@@ -222,7 +222,7 @@ const openEditModal = () => {
             <template v-else>
                <Button
                   @click="editVisible = false"
-                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
@@ -230,7 +230,7 @@ const openEditModal = () => {
                </Button>
                <Button
                   @click="correspondentEdit"
-                  class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 m-0"
+                  class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"
                >Изменить</Button>
@@ -266,7 +266,7 @@ const openEditModal = () => {
             <template v-else>
                <Button
                   @click="deleteVisible = false"
-                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
@@ -274,7 +274,7 @@ const openEditModal = () => {
                </Button>
                <Button
                   @click="correspondentDelete"
-                  class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 m-0"
+                  class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"
                >Удалить</Button>

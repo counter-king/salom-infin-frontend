@@ -68,7 +68,10 @@ const updateDocument = async () => {
         }"
       >
         <template #header-end>
-          <action-answer-menu />
+          <!-- Если документ ознакомлен -->
+          <template v-if="assignmentStore.isDocumentAcquainted">
+            <action-answer-menu />
+          </template>
 
           <!-- Если документ ознакомлен -->
           <template v-if="assignmentStore.isDocumentAcquainted">
@@ -88,7 +91,7 @@ const updateDocument = async () => {
             <!-- Если еще не выполнен документ -->
             <template v-if="!assignmentStore.performModel.is_performed">
               <modal-done-document
-                v-model:content="assignmentStore.performModel.content"
+                v-model:content="assignmentStore.performModel"
                 v-model:files="assignmentStore.performModel.files"
                 has-resolution
                 is-document-signed
@@ -98,7 +101,7 @@ const updateDocument = async () => {
 
             <template v-else>
               <modal-done-document
-                v-model:content="assignmentStore.performModel.content"
+                v-model:content="assignmentStore.performModel"
                 v-model:files="assignmentStore.performModel.files"
                 :is-done-document="assignmentStore.performModel.is_performed"
                 has-resolution

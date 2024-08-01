@@ -217,7 +217,7 @@ watch(debounced, async () => {
         },
         label: {
           class: [
-            'text-sm font-medium text-greyscale-500',
+            'text-sm font-regular text-greyscale-400',
             {
               'size-small py-[2px] pr-2 pl-4': props.size === 'x-small',
               'size-small py-[5px] pr-2 pl-4': props.size === 'small',
@@ -314,7 +314,7 @@ watch(debounced, async () => {
       </template>
     </MultiSelect>
 
-    <div v-if="modelValue.length !== 0" class="flex items-center gap-2">
+    <div v-if="modelValue.length >= 3" class="flex items-center gap-2">
       <div class="flex items-center flex-1 gap-2 py-2 truncate">
         <template v-for="user in modelValue">
           <slot name="hint" :value="user" />
@@ -373,12 +373,13 @@ watch(debounced, async () => {
     </div>
 
     <template v-if="props.error.$errors.length">
-      <div
-        v-for="element of props.error.$errors"
-        :key="element.$uid"
-        class="mt-1"
-      >
-        <span class="block text-sm font-medium text-red-500">{{ element.$message }}</span>
+      <div class="space-y-1 mt-2">
+        <div
+          v-for="element of props.error.$errors"
+          :key="element.$uid"
+        >
+          <span class="block text-sm font-medium text-red-500">{{ element.$message }}</span>
+        </div>
       </div>
     </template>
   </div>

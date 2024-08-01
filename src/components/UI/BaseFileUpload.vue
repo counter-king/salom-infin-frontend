@@ -2,6 +2,8 @@
 // Core
 import {onMounted, ref} from "vue";
 import axiosConfig from "@/services/axios.config";
+// Components
+import { FilePreview } from '@/components/Files'
 
 const fileInput = ref(null);
 const uploadingFiles = ref([]);
@@ -17,6 +19,12 @@ const props = defineProps({
 		type: String,
 		default: null
 	},
+  firstPreview: {
+    type: Boolean
+  },
+  containerClass: {
+    type: String
+  },
 	required: {
 		type: Boolean
 	},
@@ -69,6 +77,7 @@ const uploadFiles = async (files) => {
       .then(({ data }) => {
         item.id = data.id;
         item.uploaded = true;
+        item.url = data.url
       })
       .catch(() => {
         item.uploaded = false;
@@ -104,21 +113,47 @@ onMounted(() => {
 
 <template>
   <div class="app-file-upload">
+    <div :class="{ 'hide-label': props.firstPreview && !props.files.length }">
+      <template v-if="props.firstPreview && !!props.files.length">
+        <div class="shadow-block h-[530px] border-[0.095rem] border-greyscale-200 rounded-2xl overflow-hidden mb-3">
+          <file-preview :file="props.files[0]" />
+        </div>
+      </template>
+    </div>
+
 	  <base-label :label="props.label" :required="props.required" />
 
     <input type="file" name="file" multiple hidden ref="fileInput" @change="onFileSelect">
 
     <div
-      class="flex bg-greyscale-50 rounded-xl border-dashed border h-16 hover:bg-primary-50 cursor-pointer"
-      :class="{ 'bg-primary-50' : isDragging }"
+      class="group flex items-center justify-center bg-greyscale-50 hover:bg-primary-30 rounded-xl border-dashed h-16 border-[2px] border-greyscale-200 hover:border-primary-200 cursor-pointer"
+      :class="[
+        { 'bg-primary-50' : isDragging },
+        props.containerClass,
+        { '!h-16': props.firstPreview && !!props.files.length }
+      ]"
       @click="chooseFiles"
       @dragover.prevent="onDragOver"
       @dragleave.prevent="onDragLeave"
       @drop.prevent="onDrop"
     >
-      <div class="flex justify-center items-center w-full text-sm font-semibold select-none">
-        <span class="text-primary-500 block mr-1">Перетащите</span> и <span class="text-primary-500 block mx-1">загрузите</span> свой файл
-      </div>
+      <slot name="empty-content">
+        <div class="flex justify-center items-center w-full text-sm font-semibold select-none">
+          <base-iconify icon="iconamoon:cloud-upload-light" class="text-primary-500 mr-3" />
+
+          <span class="text-primary-500 block mr-1">
+            Перетащите
+          </span>
+
+          <span class="text-primary-900">или</span>
+
+          <span class="text-primary-500 block mx-1">
+            загрузите
+          </span>
+
+          <span class="text-primary-900">свой файл</span>
+        </div>
+      </slot>
     </div>
 
     <section class="uploading-files">
@@ -181,11 +216,11 @@ onMounted(() => {
         </div>
       </template>
     </section>
-
-<!--    <pre>{{ props.files }}</pre>-->
   </div>
 </template>
 
 <style scoped>
-
+.hide-label + p {
+  display: none;
+}
 </style>

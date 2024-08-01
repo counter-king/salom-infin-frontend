@@ -43,7 +43,7 @@ const setCredentials = async () => {
   try {
     loading.value = true
     await fetchSetPassword(formModel)
-    dispatchNotify('Учетные данные установлены', null, COLOR_TYPES.SUCCESS)
+    dispatchNotify(null, 'Учетные данные установлены', COLOR_TYPES.SUCCESS)
     await router.push({ name: 'Login' })
   }
   finally {

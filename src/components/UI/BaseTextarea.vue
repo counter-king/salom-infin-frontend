@@ -60,7 +60,7 @@ const { t } = useI18n()
         :pt="{
           root: {
             class: [
-              'flex w-full rounded-xl bg-greyscale-50 text-sm border-greyscale-50 focus:border-primary-500 placeholder:text-sm placeholder:font-medium',
+              'flex w-full text-greyscale-900 rounded-xl bg-greyscale-50 text-sm border-greyscale-50 focus:border-primary-500 placeholder:text-sm placeholder:font-regular placeholder:text-greyscale-400',
               props.rootClass,
               {
                 'p-invalid !shadow-none': props.error.$error
@@ -80,12 +80,13 @@ const { t } = useI18n()
     </div>
 
     <template v-if="props.error.$errors.length">
-      <div
-        v-for="element of props.error.$errors"
-        :key="element.$uid"
-        class="mt-1"
-      >
-        <span class="block text-sm font-medium text-red-500">{{ element.$message }}</span>
+      <div class="space-y-1 mt-1">
+        <div
+          v-for="element of props.error.$errors"
+          :key="element.$uid"
+        >
+          <span class="block text-sm font-medium text-red-500">{{ element.$message }}</span>
+        </div>
       </div>
     </template>
   </div>

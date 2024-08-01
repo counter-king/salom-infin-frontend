@@ -25,7 +25,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.priority",
         detail: {
           component: 'priority-chip',
-          colClass: null
+          colClass: null,
+          order: 11
         },
         active: true
       },
@@ -34,7 +35,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.title",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 12
         },
         active: true
       },
@@ -43,7 +45,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.document_type.name",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 13
         },
         active: true
       },
@@ -52,7 +55,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.delivery_type.name",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 14
         },
         active: false
       },
@@ -61,7 +65,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.description",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 15
         },
         active: false,
       },
@@ -70,7 +75,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.journal.name",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 16
         },
         active: false
       },
@@ -79,7 +85,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.language.name",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 17
         },
         active: false
       },
@@ -88,7 +95,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.number_of_papers",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 18
         },
         active: false
       },
@@ -97,7 +105,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.outgoing_date",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 19
         },
         active: false
       },
@@ -106,7 +115,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.outgoing_number",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 20
         },
         active: false
       },
@@ -115,7 +125,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.register_number",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 3
         },
         active: true
       },
@@ -124,7 +135,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.register_date",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 2
         },
         active: true
       },
@@ -133,7 +145,8 @@ export const useReviewStore = defineStore("review", {
         field: "for_reviewers",
         detail: {
           component: 'base-avatar-group',
-          colClass: null
+          colClass: null,
+          order: 21
         },
         active: true
       },
@@ -142,7 +155,8 @@ export const useReviewStore = defineStore("review", {
         field: "status",
         detail: {
           component: 'base-status',
-          colClass: null
+          colClass: null,
+          order: 4
         },
         active: true
       },
@@ -151,7 +165,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.correspondent.name",
         detail: {
           component: null,
-          colClass: null
+          colClass: 'w-full',
+          order: 1
         },
         active: true
       },
@@ -160,7 +175,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.code",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 22
         },
         active: false
       },
@@ -169,7 +185,8 @@ export const useReviewStore = defineStore("review", {
         field: "document.grif",
         detail: {
           component: null,
-          colClass: null
+          colClass: null,
+          order: 23
         },
         active: false,
       },
@@ -201,7 +218,7 @@ export const useReviewStore = defineStore("review", {
     },
     listLoading: false,
     performModel: {
-      comment: null,
+      content: null,
       files: []
     },
     totalCount: 0
@@ -251,7 +268,7 @@ export const useReviewStore = defineStore("review", {
       this.detailModel.document.__files = data.document.files.map(file => file.file)
 
       this.actionSetPerform({
-        comment: data.comment,
+        content: data.comment,
         files: data.files
       })
 
@@ -281,10 +298,10 @@ export const useReviewStore = defineStore("review", {
     async actionChangeReviewer({ id, body }) {
       try {
         await fetchChangeReviewer({ id, body })
-        dispatchNotify('Документ перенаправлен к пользователю', null, COLOR_TYPES.SUCCESS)
+        dispatchNotify(null, 'Документ перенаправлен к пользователю', COLOR_TYPES.SUCCESS)
         return Promise.resolve()
       } catch (error) {
-        dispatchNotify('Ошибка', 'Ошибка перенаправить документ', COLOR_TYPES.ERROR)
+        // dispatchNotify('Ошибка', 'Ошибка перенаправить документ', COLOR_TYPES.ERROR)
         return Promise.reject()
       }
     },
@@ -303,18 +320,18 @@ export const useReviewStore = defineStore("review", {
         await docflowStore.actionGetTree(this.detailModel.document.id)
         // Если идет подпись
         if(body.is_verified) {
-          dispatchNotify('Резолюция подписан', null, COLOR_TYPES.SUCCESS)
+          dispatchNotify(null, 'Резолюция подписан', COLOR_TYPES.SUCCESS)
         } else {
-          dispatchNotify('Подпись удален из резолюции', null, COLOR_TYPES.SUCCESS)
+          dispatchNotify(null, 'Подпись удален из резолюции', COLOR_TYPES.SUCCESS)
         }
         return Promise.resolve()
       } catch (error) {
         // Если идет подпись
-        if(body.is_verified) {
-          dispatchNotify('Ошибка', 'Ошибка подписание резолюции', COLOR_TYPES.ERROR)
-        } else {
-          dispatchNotify('Ошибка', 'Ошибка удаление подписа', COLOR_TYPES.ERROR)
-        }
+        // if(body.is_verified) {
+        //   dispatchNotify('Ошибка', 'Ошибка подписание резолюции', COLOR_TYPES.ERROR)
+        // } else {
+        //   dispatchNotify('Ошибка', 'Ошибка удаление подписа', COLOR_TYPES.ERROR)
+        // }
         return Promise.reject()
       }
     },
@@ -327,9 +344,9 @@ export const useReviewStore = defineStore("review", {
         await fetchAcquaintDocument({ id })
         await this.actionReviewById(this.detailModel)
         await docflowStore.actionGetTree(this.detailModel.document.id)
-        dispatchNotify('Документ ознакомлен', null, COLOR_TYPES.SUCCESS)
+        dispatchNotify(null, 'Документ ознакомлен', COLOR_TYPES.SUCCESS)
       } catch (error) {
-        dispatchNotify('Ошибка', 'Ошибка ознакомление документа', COLOR_TYPES.ERROR)
+        // dispatchNotify('Ошибка', 'Ошибка ознакомление документа', COLOR_TYPES.ERROR)
       }
     },
     /*
@@ -341,37 +358,37 @@ export const useReviewStore = defineStore("review", {
         await fetchPerformDocument({
           id,
           model: {
-            ...this.performModel,
-            files: this.performModel.files.map(file => ({ id: file.id }))
+            files: this.performModel.files.map(file => ({ id: file.id })),
+            comment: this.performModel.content
           }
         })
         await this.actionReviewById(this.detailModel)
         await docflowStore.actionGetTree(this.detailModel.document.id)
         // Если идет выполнения документа
         if(performed) {
-          dispatchNotify('Документ выполнен', null, COLOR_TYPES.SUCCESS)
+          dispatchNotify(null, 'Документ выполнен', COLOR_TYPES.SUCCESS)
         }
         else {
-          dispatchNotify('Исполнения изменено', null, COLOR_TYPES.SUCCESS)
+          dispatchNotify(null, 'Исполнения изменено', COLOR_TYPES.SUCCESS)
         }
         return Promise.resolve()
       }
       catch (error) {
         // Если идет выполнения документа
-        if(performed) {
-          dispatchNotify('Ошибка', 'Ошибка выполнение документа', COLOR_TYPES.ERROR)
-        }
-        else {
-          dispatchNotify('Ошибка', 'Ошибка исполнение документа', COLOR_TYPES.ERROR)
-        }
+        // if(performed) {
+        //   dispatchNotify('Ошибка', 'Ошибка выполнение документа', COLOR_TYPES.ERROR)
+        // }
+        // else {
+        //   dispatchNotify('Ошибка', 'Ошибка исполнение документа', COLOR_TYPES.ERROR)
+        // }
         return Promise.reject()
       }
     },
     /*
     *
     * */
-    actionSetPerform({ comment, files }) {
-      Object.assign(this.performModel, { comment, files })
+    actionSetPerform({ content, files }) {
+      Object.assign(this.performModel, { content, files })
     },
     /*
     * Сбросит все колонки в изначальное состояние

@@ -42,7 +42,7 @@ watch(
 )
 // Methods
 const openModal = () => {
-  docFlowStore.actionLoadFormCreateDocument({ journalCode: Number(route.params.code) })
+  docFlowStore.actionLoadFormCreateDocument({ journalCode: route.params.code })
   docFlowStore.actionToggleModalCreateDocument(true)
 }
 const link = (data) => {

@@ -39,8 +39,7 @@ const props = defineProps({
   },
   storageColumnsName: {
     type: String,
-    default: "",
-    required: true
+    default: ""
   },
   loading: {
     type: Boolean,
@@ -169,6 +168,22 @@ const emit = defineEmits(['emit:setStoreHeaders', 'emit:rowClick', 'emit:onPageC
     @row-click="event => emit('emit:rowClick', event.data)"
     @page="onPageChange"
   >
+    <Column
+      header="№"
+      header-class="w-[60px] bg-white text-sm font-semibold text-greyscale-500"
+      body-class="relative"
+    >
+      <template #body="{ index, data }">
+        <slot
+          name="count"
+          :index="index"
+          :data="data"
+        >
+          <span class="text-sm font-medium text-greyscale-500">{{ index + 1 }}</span>
+        </slot>
+      </template>
+    </Column>
+
     <template
       v-for="header in headersComputed"
       :key="header.field"
@@ -179,7 +194,7 @@ const emit = defineEmits(['emit:setStoreHeaders', 'emit:rowClick', 'emit:onPageC
         :pt="{
           headerCell: { class: ['bg-inherit', 'h-[56px]'] },
           headerContent: { class: ['text-sm', 'font-semibold', 'text-greyscale-500'] },
-          bodyCell: { class: ['text-sm', 'py-0', 'h-[56px]'] }
+          bodyCell: { class: ['asdasdasdasd', 'text-sm', 'py-0', 'h-[56px]'] }
         }"
       >
         <template #body="{ field, data }">
@@ -217,12 +232,14 @@ const emit = defineEmits(['emit:setStoreHeaders', 'emit:rowClick', 'emit:onPageC
     </template>
 
     <template #empty>
-      <div
-        class="w-full flex justify-center items-center rounded-lg"
-        style="height: calc(100vh - 420px)"
-      >
-        <img class="w-[200px] h-[170px]" src="@/assets/img/empty-img-gray.png" alt="EmptyFolder">
-      </div>
+      <slot name="empty">
+        <div
+          class="w-full flex justify-center items-center rounded-lg"
+          style="height: calc(100vh - 420px)"
+        >
+          <img class="w-[200px] h-[170px]" src="@/assets/img/empty-img-gray.png" alt="EmptyFolder">
+        </div>
+      </slot>
     </template>
   </DataTable>
 <!--  <pre>{{ paginationStore.pageSize }}</pre>-->

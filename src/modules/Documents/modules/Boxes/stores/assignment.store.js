@@ -267,9 +267,9 @@ export const useAssignmentStore = defineStore("assignment", {
         await fetchAcquaintDocument({ id })
         await this.actionAssignmentById(this.detailModel)
         await docflowStore.actionGetTree(this.detailModel.document.id)
-        dispatchNotify('Документ ознакомлен', null, COLOR_TYPES.SUCCESS)
+        dispatchNotify(null, 'Документ ознакомлен', COLOR_TYPES.SUCCESS)
       } catch (error) {
-        dispatchNotify('Ошибка', 'Ошибка ознакомление документа', COLOR_TYPES.ERROR)
+        // dispatchNotify('Ошибка', 'Ошибка ознакомление документа', COLOR_TYPES.ERROR)
       }
     },
     /*
@@ -289,22 +289,22 @@ export const useAssignmentStore = defineStore("assignment", {
         await this.actionAssignmentById(this.detailModel)
         await docflowStore.actionGetTree(this.detailModel.document.id)
         // Если идет выполнения документа
-        if(this.performModel.is_performed) {
-          dispatchNotify('Документ выполнен', null, COLOR_TYPES.SUCCESS)
+        if(performed) {
+          dispatchNotify(null, 'Документ выполнен', COLOR_TYPES.SUCCESS)
         }
         else {
-          dispatchNotify('Исполнения изменено', null, COLOR_TYPES.SUCCESS)
+          dispatchNotify(null, 'Исполнения изменено', COLOR_TYPES.SUCCESS)
         }
         return Promise.resolve()
       }
       catch (error) {
         // Если идет выполнения документа
-        if(this.performModel.is_performed) {
-          dispatchNotify('Ошибка', 'Ошибка выполнение документа', COLOR_TYPES.ERROR)
-        }
-        else {
-          dispatchNotify('Ошибка', 'Ошибка исполнение документа', COLOR_TYPES.ERROR)
-        }
+        // if(this.performModel.is_performed) {
+        //   dispatchNotify('Ошибка', 'Ошибка выполнение документа', COLOR_TYPES.ERROR)
+        // }
+        // else {
+        //   dispatchNotify('Ошибка', 'Ошибка исполнение документа', COLOR_TYPES.ERROR)
+        // }
         return Promise.reject()
       }
     },

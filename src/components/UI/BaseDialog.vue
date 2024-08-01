@@ -16,6 +16,9 @@ const props = defineProps({
     type: String,
     default: 'Входящий документ'
   },
+  blur: {
+    type: Boolean
+  },
   headerClasses: {
     type: String,
   },
@@ -61,6 +64,13 @@ const rootClasses = computed(() => {
       },
       footer: {
         class: ['rounded-b-2xl bg-greyscale-50 border border-solid border-t-greyscale-200 py-5 pl-6 pr-4']
+      },
+      mask: {
+        class: [
+          {
+            'backdrop-blur-sm': props.blur
+          }
+        ]
       }
     }"
     @after-hide="emit('emit:after-hide')"

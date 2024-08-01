@@ -83,7 +83,7 @@ export const useCalendarStore = defineStore('calendar', {
       }
       catch (error) {
         dispatchNotify(
-          'Ошибка',
+          null,
           EVENT_TYPES.EVENT === type ? 'Ошибка создание мероприятий' : 'Ошибка создание задачи',
           COLOR_TYPES.ERROR
         )

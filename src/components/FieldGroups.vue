@@ -13,18 +13,21 @@ const props = defineProps({
     default: () => []
   },
   data: {
-    type: Object,
-    default: () => {}
+    type: [Object, Array]
   }
 })
 // Computed
-const value = computed(() => combineKeys(props.headers, props.data))
+const value = computed(
+  () => Array.isArray(props.data)
+    ? props.data
+    : combineKeys(props.headers, props.data)
+)
 </script>
 
 <template>
   <base-row>
     <template v-for="item in value">
-      <base-col col-class="w-1/3">
+      <base-col :col-class="['w-1/2', item.detail.colClass]">
         <base-label :label="item.header" />
 
         <template v-if="item.detail.component">
@@ -59,8 +62,4 @@ const value = computed(() => combineKeys(props.headers, props.data))
       </base-col>
     </template>
   </base-row>
-
-  <div class="flex items-center gap-2 mt-5">
-    <slot name="preview-actions"></slot>
-  </div>
 </template>

@@ -43,7 +43,7 @@ const correspondentEdit = () => {
                      return correspondent;
                   }
                });
-               dispatchNotify('Корреспондент обновлен', '', 'success');
+               dispatchNotify(null, 'Корреспондент обновлен', 'success');
                editVisible.value = false;
                props.setCorrespondents(newCorrespondents);
             }
@@ -53,19 +53,19 @@ const correspondentEdit = () => {
             editLoading.value = false;
          });
    } else if(!first_name) {
-      dispatchNotify('Введите имя', '', 'error')
+      dispatchNotify(null, 'Введите имя', 'error')
    } else if(!last_name) {
-      dispatchNotify('Введите фамилия', '', 'error')
+      dispatchNotify(null, 'Введите фамилия', 'error')
    } else if(!gender.value) {
-      dispatchNotify('Выберите пол', '', 'error')
+      dispatchNotify(null, 'Выберите пол', 'error')
    } else if(String(pinfl || '').length !== 14) {
-      dispatchNotify('Введите правильный ПИНФЛ', '', 'error')
+      dispatchNotify(null, 'Введите правильный ПИНФЛ', 'error')
    } else if(newPhone.length !== 13) {
-      dispatchNotify('Введите свой номер телефона правильно', '', 'error')
+      dispatchNotify(null, 'Введите свой номер телефона правильно', 'error')
    } else if((email?.length ? !isValidEmail(email) : false)) {
-      dispatchNotify('Введите свой адрес электронной почты правильно', '', 'error')
+      dispatchNotify(null, 'Введите свой адрес электронной почты правильно', 'error')
    } else {
-      dispatchNotify('Введите адрес', '', 'error')
+      dispatchNotify(null, 'Введите адрес', 'error')
    }
 };
 const correspondentDelete = () => {
@@ -76,7 +76,7 @@ const correspondentDelete = () => {
       .then(response => {
          if(response?.status === 204) {
             deleteVisible.value = false;
-            dispatchNotify('Корреспондент удален', '', 'success')
+            dispatchNotify(null, 'Корреспондент удален', 'success')
             props.getFirstPageCorrespondents();
          }
       })
@@ -253,7 +253,7 @@ onMounted(() => {
             <template v-else>
                <Button
                   @click="editVisible = false"
-                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
@@ -261,7 +261,7 @@ onMounted(() => {
                </Button>
                <Button
                   @click="correspondentEdit"
-                  class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 m-0"
+                  class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"
                >Изменить</Button>
@@ -297,7 +297,7 @@ onMounted(() => {
             <template v-else>
                <Button
                   @click="deleteVisible = false"
-                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
@@ -305,7 +305,7 @@ onMounted(() => {
                </Button>
                <Button
                   @click="correspondentDelete"
-                  class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 m-0"
+                  class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"
                >Удалить</Button>

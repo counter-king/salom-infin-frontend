@@ -44,6 +44,16 @@ const link = (data) => {
       expandable
       @emit:set-store-headers="(val) => reviewStore.headers = val"
     >
+      <template #count="{ index, data }">
+        <linkable-cell :to="link(data)" :is-not-read="!data.read_time">
+          {{ index + 1 }}
+
+          <template v-if="!data.read_time">
+            <div class="absolute top-4 left-0 w-[3px] h-6 rounded-2xl bg-primary-500"></div>
+          </template>
+        </linkable-cell>
+      </template>
+
       <template #document.priority="{ data }">
         <linkable-cell :to="link(data)" :is-not-read="!data.read_time">
           <priority-chip :id="data.document.priority?.id" />

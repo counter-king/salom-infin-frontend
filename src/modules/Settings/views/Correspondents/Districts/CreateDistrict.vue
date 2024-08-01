@@ -25,7 +25,7 @@ const createDistrict = () => {
          .post('districts/', { name_ru, name_uz, name: name_uz, region: regionId, is_active: true, code })
          .then(response => {
             if(response?.status === 201) {
-               dispatchNotify('Район создан', '', 'success');
+               dispatchNotify(null, 'Район создан', 'success');
                district.value = defaultDistrict;
                props.getFirstPageDistricts();
                props.setVisible(false);
@@ -37,11 +37,11 @@ const createDistrict = () => {
             loading.value = false;
          });
    } else if(!regionId) {
-      dispatchNotify('Введите регион', '', 'error')
+      dispatchNotify(null, 'Введите регион', 'error')
    } else if(!name_uz || !name_ru) {
-      dispatchNotify('Введите название', '', 'error')
+      dispatchNotify(null, 'Введите название', 'error')
    } else {
-      dispatchNotify('Введите код', '', 'error')
+      dispatchNotify(null, 'Введите код', 'error')
    }
 };
 const searchRegions = ({ search, page }) => {
