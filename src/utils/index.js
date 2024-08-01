@@ -97,6 +97,11 @@ export const formatNumberWithFloat = (number) => {
   // Собрать отформатированное число с точкой
   return `${ formattedIntegerPart }.${ decimalPart }`;
 }
+/**
+ * Форматирует номер 998 93 *** ** 78
+ * @param { string } number номер телефона
+ * */
+export const maskNumbers = (number) => number.replace(/\D/g, '').replace( /(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})/, '$1 $2 *** ** $5' )
 /*
 *
 * */

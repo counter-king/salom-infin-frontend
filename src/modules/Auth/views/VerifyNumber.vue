@@ -5,8 +5,10 @@ import { useRoute, useRouter } from 'vue-router'
 // Services
 import { fetchVerifyNumber, fetchSendOtp } from '@/modules/Auth/services'
 // Components
+import { ActionBackButton } from '@/components/Actions'
 import OTPCode from '../components/otpcode.vue'
 // Utils
+import { maskNumbers } from '@/utils'
 import { dispatchNotify } from '@/utils/notify'
 // Enums
 import { COLOR_TYPES } from '@/enums'
@@ -51,6 +53,8 @@ const resendOtpCode = async () => {
 </script>
 <template>
   <div class="sign-in-view">
+    <action-back-button class="!border !bg-greyscale-50 !rounded-lg !shadow-none" />
+
     <div class="flex justify-center items-center w-20 h-20 rounded-full text-center text-indigo-700 bg-indigo-100 m-auto mb-4">
       <base-icon
         name="LetterIcon"
@@ -59,22 +63,26 @@ const resendOtpCode = async () => {
       />
     </div>
 
-    <h1  class="text-2xl decoration-zinc-950 font-bold mb-2 text-center text-indigo-700"> Шаг проверки </h1>
+    <h1  class="text-xl text-primary-900 font-bold text-center mb-1">Подтверждение</h1>
 
-    <p class="font-medium text-sm text-color-3 text-center mb-7">
-      Мы отправили код подтверждения на ваш телефон. Введите код из письма в поле ниже.
+    <p class="text-sm font-medium text-greyscale-500 text-center mb-1">
+      Введите код, отправленный на номер
     </p>
 
-    <div class=" m-auto">
+    <p class="text-base font-semibold text-greyscale-900 text-center mb-8">
+      +{{ maskNumbers(route.query.phone) }}
+    </p>
+
+    <div class="m-auto">
       <OTPCode
         :digit-count="6"
         class="mb-8"
         @emit:up="(value) => otpValue = value"
       />
 
-<!--      <router-link :to="{ name: 'SetCredentials' }">-->
       <base-button
         :loading="loading"
+        :disabled="otpValue.length !== 6"
         shadow
         rounded
         size="large"
@@ -82,7 +90,6 @@ const resendOtpCode = async () => {
         class="w-full"
         @click="verifyNumber"
       ></base-button>
-<!--      </router-link>-->
 
       <div class="text-sm font-medium text-center mt-4">
         Не получили код ?
