@@ -14,7 +14,6 @@ import { clearModel } from '@/utils'
 // Enums
 import { JOURNAL_CODES } from '@/enums'
 // Composable
-const modelValue = useModel(props, 'modelValue')
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
@@ -26,6 +25,8 @@ const props = defineProps({
     type: Boolean
   },
 })
+const modelValue = useModel(props, 'modelValue')
+
 // Reactive
 const documentTypeRef = ref(null)
 const documentTypeComponent = shallowRef(null)
