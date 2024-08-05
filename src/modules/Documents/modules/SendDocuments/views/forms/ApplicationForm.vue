@@ -137,6 +137,7 @@ onMounted(async () => {
                 v-model="$v.__curator.$model"
                 label="whom"
                 placeholder="select-leader"
+                required
               />
             </base-col>
 

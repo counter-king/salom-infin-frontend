@@ -62,6 +62,7 @@ export const useSDStoreApplication = defineStore("sd-store-application", {
         this.buttonLoading = false;
         return Promise.resolve(response);
       } else {
+        this.buttonLoading = false
         return Promise.reject(error);
       }
     },
@@ -72,9 +73,9 @@ export const useSDStoreApplication = defineStore("sd-store-application", {
         const { data } = await fetchUpdateDocument({ id, body });
         return Promise.resolve(data);
       } catch (err) {
-
+        this.buttonLoading = false
       } finally {
-        this.buttonLoading = false;
+        this.buttonLoading = false
       }
     },
     /** **/

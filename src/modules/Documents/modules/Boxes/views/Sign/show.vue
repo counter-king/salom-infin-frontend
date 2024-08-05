@@ -45,14 +45,14 @@ const onChangeDocument = async (text) => {
   })
 }
 const signTest = async () => {
-	await fetchSignDocument({ id: route.params.id, body: { pkcs7: "test" } });
-	await signStore.actionGetSignDetail(route.params.id);
-  await countStore.actionDocumentCountList();
+	await fetchSignDocument({ id: route.params.id, body: { pkcs7: "test" } })
+	await signStore.actionGetSignDetail(route.params.id)
+  await countStore.actionDocumentCountList()
 }
 
 // Hooks
 onMounted( async () => {
-  await signStore.actionGetSignDetail(route.params.id);
+  await signStore.actionGetSignDetail(route.params.id)
 })
 </script>
 
@@ -123,14 +123,16 @@ onMounted( async () => {
 
       <template #template>
         <div
-          class="p-8 overflow-y-auto"
+          class="p-4 overflow-y-auto"
           style="height: calc(100vh - 250px)"
         >
-          <base-template
-	          v-if="signStore.detailModel && signStore.detailModel.compose"
-            :compose-model="signStore.detailModel?.compose"
-            class="overflow-hidden"
-          />
+          <div class="py-4 px-6 min-h-full shadow-block border-[0.095rem] border-greyscale-200 rounded-2xl">
+            <base-template
+              v-if="signStore.detailModel && signStore.detailModel.compose"
+              :compose-model="signStore.detailModel?.compose"
+              class="overflow-hidden"
+            />
+          </div>
         </div>
       </template>
     </layout-with-tabs-compose>

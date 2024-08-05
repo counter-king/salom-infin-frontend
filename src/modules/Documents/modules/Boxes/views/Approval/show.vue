@@ -117,9 +117,6 @@ onMounted(  () => {
             @emit:on-approve="onApprove"
           />
         </template>
-
-
-
       </template>
 
       <template #preview>
@@ -133,14 +130,16 @@ onMounted(  () => {
 
       <template #template>
         <div
-          class="p-8 overflow-y-auto"
+          class="p-4 overflow-y-auto"
           style="height: calc(100vh - 250px)"
         >
-          <base-template
-	          v-if="approvalStore.detailModel && approvalStore.detailModel.compose"
-            :compose-model="approvalStore.detailModel?.compose"
-            class="overflow-hidden"
-          />
+          <div class="py-4 px-6 min-h-full shadow-block border-[0.095rem] border-greyscale-200 rounded-2xl">
+            <base-template
+              v-if="approvalStore.detailModel && approvalStore.detailModel.compose"
+              :compose-model="approvalStore.detailModel?.compose"
+              class="overflow-hidden"
+            />
+          </div>
         </div>
       </template>
     </layout-with-tabs-compose>
