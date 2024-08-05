@@ -173,7 +173,7 @@ const deleteResolution = async (text) => {
                 <button
                   v-tooltip.top="{
                     value: `<h4 class='text-xs text-white -my-1'>Изменить</h4>`,
-                    escape: true,
+                    escape: false,
                     autoHide: false
                   }"
                   class="w-5 h-5"
@@ -185,7 +185,7 @@ const deleteResolution = async (text) => {
                 <button
                   v-tooltip.top="{
                     value: `<h4 class='text-xs text-white -my-1'>Удалить</h4>`,
-                    escape: true,
+                    escape: false,
                     autoHide: false
                   }"
                   class="w-5 h-5"
@@ -199,7 +199,7 @@ const deleteResolution = async (text) => {
                 <button
                   v-tooltip.top="{
                     value: `<h4 class='text-xs text-white -my-1'>Просмотр</h4>`,
-                    escape: true,
+                    escape: false,
                     autoHide: false
                   }"
                   class="w-5 h-5"
