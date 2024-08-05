@@ -2,8 +2,6 @@
 // Core
 import { useModel } from 'vue'
 import TabMenu from 'primevue/tabmenu'
-// Composable
-const modelValue = useModel(props, 'modelValue')
 // Macros
 const props = defineProps({
   modelValue: {
@@ -21,6 +19,8 @@ const props = defineProps({
     type: Boolean
   },
 })
+const modelValue = useModel(props, 'modelValue');
+const emit = defineEmits(['update:modelValue'])
 // Methods
 const panelClass = (_, state, context) => {
   return [

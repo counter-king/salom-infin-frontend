@@ -15,6 +15,7 @@ import FormContainer from "@/modules/Documents/modules/SendDocuments/components/
 import ApplicationLetterTemplate from "@/components/Templates/ApplicationLetterTemplate.vue"
 import {LayoutWithTabs} from "@/components/DetailLayout"
 import UserMultiSelect from "@/components/Select/UserMultiSelect.vue"
+import UserSelect from "@/components/Select/UserSelect.vue";
 import {FORM_TYPE_CREATE} from "@/constants/constants"
 import PreviewDialog from "@/modules/Documents/modules/SendDocuments/components/PreviewDialog.vue";
 import {adjustUsersToArray} from "@/utils";
@@ -54,7 +55,7 @@ const preview = async () => {
   applicationStore.model.signers = []
   applicationStore.model.signers = [ { user: authStore?.currentUser?.id } ]
   applicationStore.model.sender = authStore?.currentUser?.top_level_department?.id
-  applicationStore.model.curator = applicationStore?.model?.__curator[0].id
+  applicationStore.model.curator = applicationStore?.model?.__curator.id
   applicationStore.model.journal= COMPOSE_JOURNALS.APPLICATION
   applicationStore.model.document_type= commonStore.documentTypesList.find(item => item.journal === Number(COMPOSE_JOURNALS.APPLICATION)).id
   applicationStore.model.approvers = adjustUsersToArray(applicationStore.model.__approvers)
@@ -133,12 +134,16 @@ onMounted(async () => {
         >
           <base-row>
             <base-col col-class="w-1/2">
-              <user-multi-select
+              <user-select
                 v-model="$v.__curator.$model"
+                :error="$v.__curator"
                 label="whom"
+                required
                 placeholder="select-leader"
                 required
               />
+
+<!--              <pre>{{ $v.__curator.$model }}</pre>-->
             </base-col>
 
             <base-col col-class="w-1/2">

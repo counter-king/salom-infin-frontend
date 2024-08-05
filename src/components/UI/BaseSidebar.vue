@@ -4,7 +4,6 @@ import { useModel, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Sidebar from 'primevue/sidebar'
 // Composable
-const modelValue = useModel(props, 'modelValue')
 const { t } = useI18n()
 // Reactive
 const successButtonLoading = ref(false)
@@ -42,6 +41,7 @@ const props = defineProps({
     type: String
   }
 })
+const modelValue = useModel(props, 'modelValue')
 const emit = defineEmits(['update:modelValue', 'emit:cancel-button', 'emit:success-button'])
 defineExpose({ successButtonLoading })
 </script>

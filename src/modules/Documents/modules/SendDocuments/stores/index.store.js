@@ -31,9 +31,9 @@ export const useSDStore = defineStore("sd-stores", {
         icon: "NotesIcon",
         type: "application",
         sub_type: "application",
-        active: true,
+        active: false,
         selected: true,
-        disabled: true,
+        disabled: false,
         journal: COMPOSE_JOURNALS.APPLICATION
       },
       // // Рапорт

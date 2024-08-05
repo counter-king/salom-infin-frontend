@@ -10,6 +10,8 @@ import {
 } from "@/modules/Documents/modules/SendDocuments/services/index.service"
 import {SD_TYPE_APPLICATION, SD_TYPE_INNER} from "@/modules/Documents/modules/SendDocuments/constants"
 import {setValuesToKeys} from "@/utils"
+import {useCommonStore} from "@/stores/common";
+import {useUsersStore} from "@/stores/users.store";
 
 export const useSDStoreApplication = defineStore("sd-store-application", {
   state: () => ({
@@ -28,7 +30,7 @@ export const useSDStoreApplication = defineStore("sd-store-application", {
       __files: [],
       __approvers: [],
       __approvers_copy: [],
-      __curator: [],
+      __curator: null,
       __departments: [],
       __signers: [],
       __signers_copy: []
@@ -86,7 +88,7 @@ export const useSDStoreApplication = defineStore("sd-store-application", {
         setValuesToKeys(this.model, data)
         this.model.__approvers = data.approvers
         this.model.__files = data.files
-        this.model.__curator = [data.curator]
+        this.model.__curator = useUsersStore().usersList.find(item => item.id === data.curator.id)
         this.model.__signers = data.signers
       }
       catch (error) {
