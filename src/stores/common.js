@@ -18,7 +18,7 @@ import {
   fetchRegionsList,
   fetchShortDescriptionList,
   fetchStatusList,
-  fetchDocumentTitlesList
+  fetchDocumentTitlesList, fetchDocumentSubTypesList
 } from '@/services/common.service'
 // Enums
 import { CORRESPONDENT } from '@/enums'
@@ -29,6 +29,7 @@ export const useCommonStore = defineStore("common", {
     departmentList: [],
     districtList: [],
     documentTypesList: [],
+    documentSubTypesList: [],
     journalsList: [],
     languagesList: [],
     prioryList: [],
@@ -59,6 +60,7 @@ export const useCommonStore = defineStore("common", {
       this.actionDepartmentList()
       this.actionDistrictList()
       this.actionDocumentTypesList()
+      this.actionDocumentSubTypesList()
       this.actionJournalsList()
       this.actionLanguagesList()
       this.actionPrioryList()
@@ -133,6 +135,19 @@ export const useCommonStore = defineStore("common", {
       collectStore.actionAddRequests({
         id: 'actionDocumentTypesList',
         fn: this.actionDocumentTypesList,
+        params: null
+      })
+    },
+    actionDocumentSubTypesList() {
+      const collectStore = useCollectRequestsStore()
+
+      fetchDocumentSubTypesList().then(({ data }) => {
+        this.documentSubTypesList = data.results
+      })
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionDocumentSubTypesList',
+        fn: this.actionDocumentSubTypesList,
         params: null
       })
     },

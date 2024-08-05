@@ -9,7 +9,7 @@ import { useBoxesSignStore } from "@/modules/Documents/modules/Boxes/stores/sign
 import { useDocumentCountStore } from "@/modules/Documents/stores/count.store";
 import { useSDStore } from "@/modules/Documents/modules/SendDocuments/stores/index.store";
 // Components
-import { LayoutWithTabs } from "@/components/DetailLayout";
+import { LayoutWithTabsCompose } from "@/components/DetailLayout";
 import { ModalComment } from "@/components/Modal";
 import SigningProcessTimeline from "@/modules/Documents/components/SigningProcessTimeline.vue";
 // Enums
@@ -62,7 +62,7 @@ onMounted( async () => {
   </template>
 
   <template v-else>
-    <layout-with-tabs
+    <layout-with-tabs-compose
       :content-type="CONTENT_TYPES.SEND_DOCUMENT"
       :files="signStore.detailModel?.compose?.files"
       :object-id="signStore.detailModel?.compose?.id"
@@ -133,7 +133,7 @@ onMounted( async () => {
           />
         </div>
       </template>
-    </layout-with-tabs>
+    </layout-with-tabs-compose>
 
     <!-- REJECT MODAL -->
     <modal-comment

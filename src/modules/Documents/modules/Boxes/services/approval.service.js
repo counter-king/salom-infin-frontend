@@ -15,3 +15,6 @@ export const fetchApproveDocument = (id) => {
 export const fetchRejectApprovalDocument = ({ id, comment }) => {
   return axiosConfig.put(`${URLS.approval}/${id}/reject/`, { comment })
 }
+export const fetchSendToSigning = (id, body) => {
+  return axiosConfig.put(`${URLS.approval}/${id}/approve/`, body)
+}

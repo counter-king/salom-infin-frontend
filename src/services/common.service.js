@@ -5,6 +5,7 @@ const URLS = {
   topDepartments: "departments/top-level-departments",
   districts: "districts/",
   documentTypes: "document-types/",
+  documentSubTypes: "document-sub-types/",
   employeeGroups: "employee-groups/",
   journals: "journals/",
   languages: "languages/",
@@ -44,6 +45,13 @@ export const fetchDistrictList = () => {
  * */
 export const fetchDocumentTypesList = () => {
   return axiosConfig.get(URLS.documentTypes)
+}
+/**
+ * Возвращает список суб тип документов
+ * @returns [{Array}]
+ * */
+export const fetchDocumentSubTypesList = () => {
+  return axiosConfig.get(URLS.documentSubTypes)
 }
 /**
  * Возвращает список журналов

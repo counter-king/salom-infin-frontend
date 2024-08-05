@@ -170,10 +170,12 @@ export const getDateRange = (value) => {
   }
 }
 export const formatUserFullName = (item) => {
-  if (item && item.hasOwnProperty('user')){
-    return `${item.user.first_name[0]}. ${item.user.father_name ? item.user.father_name[0] + '. ' : ''} ${item.user.last_name}`
-  } else {
-    return `${item.first_name[0]}. ${item.father_name ? item.father_name[0] + '. ' : ''} ${item.last_name}`
+  if (item) {
+    if (item && item.hasOwnProperty('user')){
+      return `${item.user.first_name[0]}. ${item.user.father_name ? item.user.father_name[0] + '. ' : ''} ${item.user.last_name}`
+    } else {
+      return `${item.first_name[0]}. ${item.father_name ? item.father_name[0] + '. ' : ''} ${item.last_name}`
+    }
   }
 }
 /** **/
