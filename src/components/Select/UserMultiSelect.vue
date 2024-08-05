@@ -3,7 +3,7 @@
 import {useModel} from "vue";
 // Components
 import BaseMultiSelect from '@/components/UI/BaseMultiSelect.vue';
-import {UserWithLabel, UserWithRadio} from "@/components/Users";
+import { UserWithLabel, UserWithRadio } from "@/components/Users";
 import {isObject} from "@/utils";
 
 const props = defineProps({

@@ -147,7 +147,6 @@ const loadList = async (params) => {
   }else {
     list.value = data
   }
-
 }
 const removeItem = (event, value) => {
   event.stopImmediatePropagation()
