@@ -42,10 +42,10 @@ const onChangeDocType = async (menu) => {
   });
   await router.replace({
     query: {
-      type: menu.type
+      journal: menu.journal
     }
   });
-  await sdStore.actionGetDocumentList({ ...route.query, type: menu.type });
+  await sdStore.actionGetDocumentList({ ...route.query, journal: menu.journal });
   filterStore.resetFilterState();
   saveStorageItem(SD_TOOLBAR_MENU_STORAGE_NAME, JSON.stringify(sdStore.SD_TOOLBAR_MENU_LIST));
   emit('emit:changeDocType', menu);

@@ -85,6 +85,24 @@ export const formatNameToShort = (value, separate = '.') => {
   }
 }
 /*
+* Форматирует число 1, 10.02, 100.55, 1 012.21 ...
+* */
+export const formatNumberWithFloat = (number) => {
+  // Преобразовать число в строку с фиксированным количеством десятичных знаков
+  const formattedNumber = parseFloat(number).toFixed(2)
+  // Разделить строку на части до и после десятичной точки
+  const [integerPart, decimalPart] = formattedNumber.split('.');
+  // Добавить пробелы между группами цифр
+  const formattedIntegerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  // Собрать отформатированное число с точкой
+  return `${ formattedIntegerPart }.${ decimalPart }`;
+}
+/**
+ * Форматирует номер 998 93 *** ** 78
+ * @param { string } number номер телефона
+ * */
+export const maskNumbers = (number) => number.replace(/\D/g, '').replace( /(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})/, '$1 $2 *** ** $5' )
+/*
 *
 * */
 export function getValueByPath(obj, path) {
@@ -152,10 +170,12 @@ export const getDateRange = (value) => {
   }
 }
 export const formatUserFullName = (item) => {
-  if (item && item.hasOwnProperty('user')){
-    return `${item.user.first_name[0]}. ${item.user.father_name ? item.user.father_name[0] + '. ' : ''} ${item.user.last_name}`
-  } else {
-    return `${item.first_name[0]}. ${item.father_name ? item.father_name[0] + '. ' : ''} ${item.last_name}`
+  if (item) {
+    if (item && item.hasOwnProperty('user')){
+      return `${item.user.first_name[0]}. ${item.user.father_name ? item.user.father_name[0] + '. ' : ''} ${item.user.last_name}`
+    } else {
+      return `${item.first_name[0]}. ${item.father_name ? item.father_name[0] + '. ' : ''} ${item.last_name}`
+    }
   }
 }
 /** **/

@@ -288,5 +288,12 @@
   "birthday": "Именинники сегодня",
   "contacts": "Контакты",
   "upcoming-tasks": "Предстоящие задачи",
-  "close": "Закрыть"
+  "close": "Закрыть",
+  "service-letter": "Служебное письмо",
+  "application": "Заявление",
+  "create-sd-application": "Создать заявления",
+  "update-sd-application": "Изменить заявления",
+  "application-type": "Тип заявления",
+  "select-application-type": "Выберите тип заявления",
+  "send-to-signing": "Отправить на подпись"
 }

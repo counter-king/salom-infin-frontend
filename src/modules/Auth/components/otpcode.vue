@@ -41,7 +41,10 @@ const handleKeyDown = (event, index) => {
     if (index !== 0) {
       inputRefs.value[index - 1].focus()
     }
-    return;
+
+    emit('emit:up', digits.join(''))
+
+    return
   }
 
   if ((new RegExp('^([0-9])$')).test(event.key)) {
@@ -51,9 +54,9 @@ const handleKeyDown = (event, index) => {
       inputRefs.value[index + 1].focus()
     }
 
-    if (isDigitsFull()) {
+    // if (isDigitsFull()) {
       emit('emit:up', digits.join(''))
-    }
+    // }
   }
 }
 </script>
@@ -65,8 +68,7 @@ const handleKeyDown = (event, index) => {
         ref="inputRefs"
         v-model="digits[index]"
         maxlength="1"
-        class="w-[60px] h-[60px] border outline-0 rounded-lg text-center flex items-center justify-center"
-        placeholder="X"
+        class="w-[64px] h-[64px] outline-none ring-2 ring-[#E6E6F0] rounded-lg text-center flex items-center justify-center focus:ring-primary-500"
         @keydown="handleKeyDown($event, index)"
       />
     </template>

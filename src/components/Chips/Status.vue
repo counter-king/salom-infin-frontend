@@ -45,11 +45,12 @@ const statement = computed(() => {
       default:                                                              // Отклоненный
         return "bg-critic-50 text-critic-500 border-critic-500"
     }
-  }else {
+  } else {
     switch (props.status?.id) {
       case STATUS_TYPES.TODO:                                               // TO DO
-        return "bg-primary-50 text-primary-500 border-primary-500"
+        return "bg-greyscale-50 text-greyscale-500 border-greyscale-200"
       case STATUS_TYPES.IN_PROGRESS:                                        // IN_PROGRESS
+        return 'bg-info-50 text-info-500 border-info-100'
       case STATUS_TYPES.ON_HOLD:                                            // ON_HOLD
       case STATUS_TYPES.FOR_SIGNATURE:                                      // FOR_SIGNATURE
       case STATUS_TYPES.ON_REVIEW:                                          // ON_REVIEW

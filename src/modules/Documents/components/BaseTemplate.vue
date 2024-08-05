@@ -2,10 +2,11 @@
 // Core
 import {useRoute} from "vue-router";
 // Components
-import { InnerLetterTemplate } from "@/components/Templates/index";
+import { InnerLetterTemplate, ApplicationLetterTemplate } from "@/components/Templates/index";
 // Enums
 import {SD_TYPE_INNER} from "@/modules/Documents/modules/SendDocuments/constants";
 import {computed} from "vue";
+import {COMPOSE_JOURNALS} from "@/enums";
 
 const props = defineProps({
   composeModel: {
@@ -18,12 +19,13 @@ const props = defineProps({
 const route = useRoute();
 
 const templateValues  = {
-  [SD_TYPE_INNER]: InnerLetterTemplate
+  [COMPOSE_JOURNALS.INNER]: InnerLetterTemplate,
+  [COMPOSE_JOURNALS.APPLICATION]: ApplicationLetterTemplate,
 }
 
 const selectedTemplate = computed(
   () => {
-    return templateValues[route.params.type] || InnerLetterTemplate
+    return templateValues[route.params.journal] || InnerLetterTemplate
   })
 </script>
 

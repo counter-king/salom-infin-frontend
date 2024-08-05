@@ -5,13 +5,15 @@ import { useRoute } from "vue-router";
 // Service
 import { fetchRejectApprovalDocument } from "@/modules/Documents/modules/Boxes/services/approval.service";
 // Store
+import { useAuthStore } from "@/modules/Auth/stores";
 import { useBoxesApprovalStore } from "@/modules/Documents/modules/Boxes/stores/approval.store";
 import { useDocumentCountStore } from "@/modules/Documents/stores/count.store";
 import { useSDStore } from "@/modules/Documents/modules/SendDocuments/stores/index.store";
 // Components
 import Approve from "@/components/Modal/Approve.vue";
+import SendToSigning from "@/modules/Documents/modules/Boxes/components/SendToSigning.vue"
 import CancelSign from "@/components/Modal/CancelSign.vue";
-import { LayoutWithTabs } from "@/components/DetailLayout";
+import { LayoutWithTabsCompose } from "@/components/DetailLayout";
 import { ModalComment } from "@/components/Modal";
 import SigningProcessTimeline from "@/modules/Documents/components/SigningProcessTimeline.vue";
 // Enums
@@ -20,6 +22,7 @@ import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue";
 
 const approvalStore = useBoxesApprovalStore();
 const countStore = useDocumentCountStore();
+const authstore = useAuthStore()
 const sdStore = useSDStore();
 const route = useRoute();
 const rejectModal = ref(false);
@@ -28,7 +31,11 @@ const changeModal = ref(false);
 // Computed
 const approved = computed(() => {
 	return approvalStore.detailModel?.is_approved
-});
+})
+/** **/
+const isAssistant = computed(() => {
+  return approvalStore.detailModel?.compose?.curator?.assistant === authstore.currentUser?.id
+})
 
 // Methods
 const getDetail = async () => {
@@ -63,7 +70,7 @@ onMounted(  () => {
   </template>
 
   <template v-else>
-    <layout-with-tabs
+    <layout-with-tabs-compose
       :content-type="CONTENT_TYPES.SEND_DOCUMENT"
       :files="approvalStore.detailModel?.compose?.files"
       :object-id="approvalStore.detailModel?.compose?.id"
@@ -99,10 +106,19 @@ onMounted(  () => {
           @click="rejectModal = true"
         />
 
-        <approve
-	        v-if="approved === null"
-          @emit:on-approve="onApprove"
-        />
+        <template v-if="approved === null">
+          <send-to-signing
+            v-if="isAssistant"
+            @emit:on-send-to-signing="onApprove"
+          />
+
+          <approve
+            v-else
+            @emit:on-approve="onApprove"
+          />
+        </template>
+
+
 
       </template>
 
@@ -127,7 +143,7 @@ onMounted(  () => {
           />
         </div>
       </template>
-    </layout-with-tabs>
+    </layout-with-tabs-compose>
 
 	  <!-- REJECT MODAL -->
     <modal-comment

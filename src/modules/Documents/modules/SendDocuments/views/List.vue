@@ -13,6 +13,7 @@ import Status from "../../../../../components/Chips/Status.vue";
 import { ActionToolbar } from "../../../../../components/Actions";
 import { ToolbarMenu } from "../components/index";
 import CreateButton from "@/modules/Documents/modules/SendDocuments/components/CreateButton.vue";
+import {COMPOSE_JOURNALS} from "@/enums";
 
 const sdStore = useSDStore();
 const paginationStore = usePaginationStore();
@@ -22,11 +23,11 @@ const filterKeys = ["approvers", "author", "curator", "signers", "departments", 
 const keysToIncludeOnClearFilter = ["type"]
 
 const title = computed(() => {
-  return route.query?.type ? sdStore.SD_TOOLBAR_MENU_LIST.find(item => item.type === route.query?.type).label : SD_TYPE_INNER;
+  return route.query?.journal ? sdStore.SD_TOOLBAR_MENU_LIST.find(item => item.journal === route.query?.journal).label : COMPOSE_JOURNALS.INNER;
 })
 
 const apiParams = computed(() => {
-  return route.query?.type ? { type: route.query.type } : { type: SD_TYPE_INNER }
+  return route.query?.journal ? { journal: route.query.journal } : { journal: COMPOSE_JOURNALS.INNER }
 })
 
 const onClickRow = (data) => {
@@ -34,7 +35,7 @@ const onClickRow = (data) => {
     name: ROUTE_SD_DETAIL,
     params: {
       id: data.id,
-      subType: data.sub_type
+      journal: data.journal
     }
   })
 }
@@ -46,15 +47,15 @@ const onChangeDocType = (menu) => {
   console.log(menu)
 }
 const manageRoute = () => {
-  if (!(route.query && route.query.type)){
+  if (!(route.query && route.query.journal)){
     router.replace({
       query: {
         ...route.query,
-        type: SD_TYPE_INNER
+        journal: COMPOSE_JOURNALS.INNER
       }
     });
     sdStore.SD_TOOLBAR_MENU_LIST.forEach(menu => {
-      menu.active = menu.type === SD_TYPE_INNER;
+      menu.active = menu.journal === COMPOSE_JOURNALS.INNER;
     })
   }
 }
@@ -94,6 +95,7 @@ onMounted(async () => {
         <create-button />
       </template>
     </action-toolbar>
+
 
     <base-data-table
       :action-list="sdStore.actionGetDocumentList"

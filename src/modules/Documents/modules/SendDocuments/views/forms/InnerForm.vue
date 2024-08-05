@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import {onMounted, onUnmounted, ref, unref} from "vue";
+import {onMounted, onUnmounted, ref} from "vue";
 import {useVuelidate} from "@vuelidate/core";
 import {useI18n} from "vue-i18n";
 import {useRoute, useRouter} from "vue-router";
@@ -8,6 +8,7 @@ import {useRoute, useRouter} from "vue-router";
 import DepartmentMultiSelect from "@/components/Select/DepartmentMultiSelect.vue";
 import EditorWithTabs from "@/components/Composed/EditorWithTabs.vue";
 import FormContainer from "@/modules/Documents/modules/SendDocuments/components/FormContainer.vue";
+import InnerLetterTemplate from "@/components/Templates/InnerLetterTemplate.vue";
 import {LayoutWithTabs} from "@/components/DetailLayout";
 import UserMultiSelect from "@/components/Select/UserMultiSelect.vue";
 // Store
@@ -20,7 +21,6 @@ import {dispatchNotify} from "@/utils/notify";
 // Constants
 import {FORM_TYPE_CREATE} from "@/constants/constants";
 import PreviewDialog from "@/modules/Documents/modules/SendDocuments/components/PreviewDialog.vue";
-import InnerLetterTemplate from "@/components/Templates/InnerLetterTemplate.vue";
 import {COLOR_TYPES} from "@/enums";
 import {ROUTE_SD_DETAIL, ROUTE_SD_LIST, SD_TYPE_INNER} from "@/modules/Documents/modules/SendDocuments/constants";
 import {adjustUsersToArray, resetModel} from "@/utils";
@@ -35,6 +35,7 @@ const authStore = useAuthStore();
 const SDStoreInner = useSDStoreInner();
 const commonStore = useCommonStore();
 const countStore = useDocumentCountStore();
+
 const dialog = ref(false);
 const formRef = ref(null);
 const {t} = useI18n();

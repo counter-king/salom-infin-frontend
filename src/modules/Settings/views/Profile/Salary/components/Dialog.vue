@@ -12,7 +12,7 @@ const STEP_NAMES = {
   SET_PASSWORD: 'SetPassword'
 }
 // Reactive
-const dialog = ref(true)
+const dialog = ref(false)
 const component = shallowRef(null)
 const step = ref(STEP_NAMES.SET_PASSWORD)
 // Computed
@@ -21,13 +21,13 @@ const componentLabel = computed(() => {
     case STEP_NAMES.CONFIRM:
       return 'Подтверждение'
     case STEP_NAMES.FORGET_PASSWORD:
-      return 'Восстановить парол'
+      return 'Восстановить пароль'
     case STEP_NAMES.LOGIN:
       return 'Войти в зарплату'
     case STEP_NAMES.SET_NEW_PASSWORD:
-      return 'Установить новый Парол'
+      return 'Установить новый пароль'
     default:
-      return 'Установить Парол'
+      return 'Установить пароль'
   }
 })
 // Watch
@@ -51,7 +51,7 @@ const next = async (cur, next) => {
   step.value = next
 }
 const login = async () => {
-  // пользователь заного вводить пароль
+  // пользователь заново вводить пароль,
   // чтобы войти на страницу зарплаты
   step.value = STEP_NAMES.LOGIN
 }

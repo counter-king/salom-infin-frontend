@@ -20,7 +20,7 @@ import LanguageDropdown from '@/components/Toolbar/LanguageDropdown.vue'
     </header>
 
     <div class="auth-layout-view flex-1 flex items-center justify-center bg-greyscale-50">
-      <div class="w-[545px] bg-white rounded-2xl p-8 mb-12">
+      <div class="w-[545px] bg-white shadow-button rounded-2xl p-8 mb-12">
         <!-- Auth layout -->
         <router-view />
       </div>

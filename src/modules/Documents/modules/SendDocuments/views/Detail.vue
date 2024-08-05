@@ -6,7 +6,7 @@ import {useRoute, useRouter} from "vue-router";
 import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store";
 // Components
 import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue";
-import {LayoutWithTabs} from "@/components/DetailLayout";
+import {LayoutWithTabsCompose} from "@/components/DetailLayout";
 import SigningProcessTimeline from "@/modules/Documents/components/SigningProcessTimeline.vue";
 // Enums
 import {CONTENT_TYPES} from "@/enums";
@@ -19,7 +19,7 @@ const router = useRouter();
 const openUpdatePage = () => {
   router.push({
     name: 'SendDocumentsUpdate',
-    params: { id: route.params.id, type: SDStore.detailModel?.type }
+    params: { id: route.params.id, journal: SDStore.detailModel?.journal }
   })
 }
 
@@ -40,7 +40,7 @@ onMounted(async () => {
   </template>
 
   <template v-else>
-    <layout-with-tabs
+    <layout-with-tabs-compose
       :title="SDStore.detailModel?.title?.name"
       :object-id="SDStore.detailModel?.id"
       :content-type="CONTENT_TYPES.SEND_DOCUMENT"
@@ -92,7 +92,7 @@ onMounted(async () => {
           />
         </div>
       </template>
-    </layout-with-tabs>
+    </layout-with-tabs-compose>
   </template>
 </template>
 

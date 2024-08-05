@@ -27,7 +27,8 @@ const onRowClick = (data) => {
   router.push({
     name: ROUTE_APPROVAL_SHOW,
     params: {
-      id: data.id
+      id: data.id,
+      journal: data.compose.journal
     },
     query: {
       compose_id: data.compose.id
