@@ -393,6 +393,11 @@
   resolved "https://registry.npmjs.org/@types/sizzle/-/sizzle-2.3.4.tgz"
   integrity sha512-jA2llq2zNkg8HrALI7DtWzhALcVH0l7i89yhY3iBdOz6cBPeACoFq+fkQrjHA39t1hnSFOboZ7A/AY5MMZSlag==
 
+"@types/sortablejs@^1.15.8":
+  version "1.15.8"
+  resolved "https://registry.yarnpkg.com/@types/sortablejs/-/sortablejs-1.15.8.tgz#11ed555076046e00869a5ef85d1e7651e7a66ef6"
+  integrity sha512-b79830lW+RZfwaztgs1aVPgbasJ8e7AXtZYHTELNXZPsERt4ymJdjV4OccDbHQAvHrCcFpbF78jkm0R6h/pZVg==
+
 "@types/web-bluetooth@^0.0.18":
   version "0.0.18"
   resolved "https://registry.npmjs.org/@types/web-bluetooth/-/web-bluetooth-0.0.18.tgz"
@@ -3406,11 +3411,6 @@ slice-ansi@^4.0.0:
     astral-regex "^2.0.0"
     is-fullwidth-code-point "^3.0.0"
 
-sortablejs@1.10.2:
-  version "1.10.2"
-  resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.10.2.tgz#6e40364d913f98b85a14f6678f92b5c1221f5290"
-  integrity sha512-YkPGufevysvfwn5rfdlGyrGjt7/CRHwvRPogD/lC+TnvcN29jDpCifKP+rBqf+LRldfXSTh+0CGLcSg0VIxq3A==
-
 "source-map-js@>=0.6.2 <2.0.0", source-map-js@^1.0.1, source-map-js@^1.0.2:
   version "1.0.2"
   resolved "https://registry.npmjs.org/source-map-js/-/source-map-js-1.0.2.tgz"
@@ -3957,6 +3957,13 @@ vue-docgen-web-types@^0.1.8:
     mkdirp "^1.0.4"
     vue-docgen-api "^4.30.0"
 
+vue-draggable-plus@^0.5.3:
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/vue-draggable-plus/-/vue-draggable-plus-0.5.3.tgz#727fc2fbadc7affb20f17bed66f537e5bda21303"
+  integrity sha512-dwKDzZ8io3y7k2iuIwVwiGrdiq5C0S7Et7nt5Gz5KjpBS9MtZGFP+L4FJPWGSLYleOT8HmVuCXTZYjGet7wC0g==
+  dependencies:
+    "@types/sortablejs" "^1.15.8"
+
 vue-froala-wysiwyg@^4.1.4:
   version "4.2.1"
   resolved "https://registry.npmjs.org/vue-froala-wysiwyg/-/vue-froala-wysiwyg-4.2.1.tgz"
@@ -4016,13 +4023,6 @@ vue@^3.2.0, vue@^3.3.4:
     "@vue/runtime-dom" "3.3.4"
     "@vue/server-renderer" "3.3.4"
     "@vue/shared" "3.3.4"
-
-vuedraggable@^2.24.3:
-  version "2.24.3"
-  resolved "https://registry.yarnpkg.com/vuedraggable/-/vuedraggable-2.24.3.tgz#43c93849b746a24ce503e123d5b259c701ba0d19"
-  integrity sha512-6/HDXi92GzB+Hcs9fC6PAAozK1RLt1ewPTLjK0anTYguXLAeySDmcnqE8IC0xa7shvSzRjQXq3/+dsZ7ETGF3g==
-  dependencies:
-    sortablejs "1.10.2"
 
 w3c-xmlserializer@^4.0.0:
   version "4.0.0"

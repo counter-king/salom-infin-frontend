@@ -1,5 +1,6 @@
 <script setup>
 // Core
+import { VueDraggable } from 'vue-draggable-plus'
 import { useI18n } from 'vue-i18n'
 import { useVuelidate } from '@vuelidate/core'
 import { helpers, required, requiredIf } from '@vuelidate/validators'
@@ -8,6 +9,7 @@ import { useBoxesCommonStore } from '@/modules/Documents/modules/Boxes/stores/co
 // Components
 import { UserWithLabel, UserWithSelectable } from '@/components/Users'
 import { StatusChip } from '@/components/Chips'
+import { UserWithSelectableItem } from '@/components/Users'
 // Utils
 import { isObject } from '@/utils'
 import { formatDateReverse } from '@/utils/formatDate'
@@ -196,28 +198,37 @@ const types = [
         </base-multi-select>
 
         <div class="mt-2">
-          <user-with-selectable
-            v-model:checkbox-index="boxesCommonStore.responsibleIndex"
-            :items="boxesCommonStore.resolutionModel.__assignees"
-            select-type="radio"
-            selectable
+          <vue-draggable
+            v-model="boxesCommonStore.resolutionModel.__assignees"
+            :animation="150"
+            handle=".handle"
           >
-            <template #chip-prepend="{ item }">
-              <template v-if="(isObject(item?.user) ? item?.user.id : item?.id) === boxesCommonStore.responsibleIndex">
-                <status-chip :status="{ id: STATUS_TYPES.TODO }" root-class="!bg-primary-100">
-                  {{ t('executor') }}
-                </status-chip>
-              </template>
+            <template v-for="item in boxesCommonStore.resolutionModel.__assignees">
+              <user-with-selectable-item
+                v-model:checkbox-index="boxesCommonStore.responsibleIndex"
+                :item="item"
+                select-type="radio"
+                selectable
+                moveable
+              >
+                <template #chip-prepend="{ item }">
+                  <template v-if="(isObject(item?.user) ? item?.user.id : item?.id) === boxesCommonStore.responsibleIndex">
+                    <status-chip :status="{ id: STATUS_TYPES.TODO }">
+                      {{ t('executor') }}
+                    </status-chip>
+                  </template>
 
-              <template v-else>
-                <status-chip :status="{ id: STATUS_TYPES.IN_PROGRESS }" root-class="!bg-warning-100">
-                  {{ t('co-executor') }}
-                </status-chip>
-              </template>
+                  <template v-else>
+                    <status-chip :status="{ id: STATUS_TYPES.ON_HOLD }">
+                      {{ t('co-executor') }}
+                    </status-chip>
+                  </template>
 
-              <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-full"></div>
+                  <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-full"></div>
+                </template>
+              </user-with-selectable-item>
             </template>
-          </user-with-selectable>
+          </vue-draggable>
         </div>
       </base-col>
 

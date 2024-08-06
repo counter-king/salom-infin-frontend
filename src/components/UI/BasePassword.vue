@@ -46,14 +46,12 @@ const { t } = useI18n()
           class: ['w-full rounded-xl bg-greyscale-50 ']
         },
         input: {
-          root: {
-            class: [
-              'w-full rounded-xl bg-greyscale-50 border-greyscale-50 focus:border-primary-500 placeholder:text-sm placeholder:font-medium',
-              {
-                'p-invalid !shadow-none': props.error.$error
-              }
-            ]
-          }
+          class: [
+            'w-full rounded-xl bg-greyscale-50 border-greyscale-50 focus:border-primary-500 placeholder:text-sm placeholder:font-medium',
+            {
+              'p-invalid !shadow-none': props.error.$error
+            }
+          ]
         },
         panel: {
           class: ['hidden ']
