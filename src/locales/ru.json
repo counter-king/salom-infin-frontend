@@ -295,5 +295,6 @@
   "update-sd-application": "Изменить заявления",
   "application-type": "Тип заявления",
   "select-application-type": "Выберите тип заявления",
-  "send-to-signing": "Отправить на подпись"
+  "send-to-signing": "Отправить на подпись",
+  "sign-resolution": "Подписать резолюцию"
 }

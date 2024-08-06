@@ -140,7 +140,6 @@ onMounted(async () => {
                 label="whom"
                 required
                 placeholder="select-leader"
-                required
               />
 
 <!--              <pre>{{ $v.__curator.$model }}</pre>-->

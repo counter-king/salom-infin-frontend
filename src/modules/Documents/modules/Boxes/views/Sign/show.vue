@@ -12,6 +12,7 @@ import { useSDStore } from "@/modules/Documents/modules/SendDocuments/stores/ind
 import { LayoutWithTabsCompose } from "@/components/DetailLayout";
 import { ModalComment } from "@/components/Modal";
 import SigningProcessTimeline from "@/modules/Documents/components/SigningProcessTimeline.vue";
+import ResolutionPerformersModal from "@/modules/Documents/modules/Boxes/components/ResolutionPerformersModal.vue";
 // Enums
 import { CONTENT_TYPES } from "@/enums";
 import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue";
@@ -47,6 +48,11 @@ const onChangeDocument = async (text) => {
 const signTest = async () => {
 	await fetchSignDocument({ id: route.params.id, body: { pkcs7: "test" } })
 	await signStore.actionGetSignDetail(route.params.id)
+  await countStore.actionDocumentCountList()
+}
+const signDocument = async (body) => {
+  await fetchSignDocument({ id: route.params.id, body })
+  await signStore.actionGetSignDetail(route.params.id)
   await countStore.actionDocumentCountList()
 }
 
@@ -98,18 +104,28 @@ onMounted( async () => {
           @click="rejectModal = true"
         />
 
-        <base-button
-	        v-if="signed === null"
-          border-color="border-transparent"
-          label="sign"
-          icon-left="CheckCircleIcon"
-          icon-height="16"
-          icon-width="16"
-          rounded
-          shadow
-          type="button"
-	        @click="signTest"
-        />
+        <template v-if="signed === null">
+          <base-button
+            v-if="signStore.detailModel.type !== 'basic_signer'"
+            border-color="border-transparent"
+            label="sign"
+            icon-left="CheckCircleIcon"
+            icon-height="16"
+            icon-width="16"
+            rounded
+            shadow
+            type="button"
+            @click="signTest"
+          />
+
+          <resolution-performers-modal
+            v-else
+            :performers="signStore?.detailModel?.performers"
+            :resolution-text="signStore?.detailModel?.resolution_text"
+            @emit:on-sign="signDocument"
+          />
+        </template>
+
       </template>
 
       <template #preview>
