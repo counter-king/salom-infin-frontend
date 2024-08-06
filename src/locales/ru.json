@@ -296,5 +296,7 @@
   "application-type": "Тип заявления",
   "select-application-type": "Выберите тип заявления",
   "send-to-signing": "Отправить на подпись",
-  "sign-resolution": "Подписать резолюцию"
+  "sign-resolution": "Подписать резолюцию",
+  "create-notice": "Создать рапорт",
+  "update-notice": "Изменить рапорт"
 }

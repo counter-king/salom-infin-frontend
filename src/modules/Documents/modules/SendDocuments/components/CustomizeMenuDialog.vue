@@ -36,6 +36,8 @@ const unSelectedMenuItems = computed(() => {
   return sdStore.SD_TOOLBAR_MENU_LIST.filter(menu => !menu.selected);
 })
 
+const emit = defineEmits(['emit:resetToolbarMenu'])
+
 // Methods
 const toggle = () => {
   modelValue.value = !modelValue.value;
@@ -48,6 +50,7 @@ const saveMenuToStorage = () => {
 const resetToolbarMenu = () => {
   removeStorageItem(SD_TOOLBAR_MENU_STORAGE_NAME);
   sdStore.resetToolbarMenu();
+  emit('emit:resetToolbarMenu')
   dispatchNotify(t('menu-reset'), null, COLOR_TYPES.SUCCESS);
   toggle();
 }
@@ -115,7 +118,7 @@ const resetToolbarMenu = () => {
 
     <template #footer>
       <div class="flex items-center justify-between">
-<!--        <base-button
+        <base-button
           label="reset"
           rounded
           outlined
@@ -123,7 +126,7 @@ const resetToolbarMenu = () => {
           color="text-primary-900"
           border-color="border-transparent"
           @click="resetToolbarMenu"
-        />-->
+        />
         <div class="flex items-center justify-end w-full">
           <base-button
             label="cancel"

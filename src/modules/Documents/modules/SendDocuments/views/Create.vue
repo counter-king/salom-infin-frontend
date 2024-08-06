@@ -3,22 +3,20 @@
 import {computed} from "vue";
 import {useRoute} from "vue-router";
 // Components
-import {InnerForm, ApplicationForm} from "@/modules/Documents/modules/SendDocuments/views/forms/index"
+import {InnerForm, NoticeForm, ApplicationForm} from "@/modules/Documents/modules/SendDocuments/views/forms/index"
 // Constants
 import {FORM_TYPE_CREATE} from "@/constants/constants"
-import {
-  SD_TYPE_INNER,
-  SD_TYPE_APPLICATION
-} from "@/modules/Documents/modules/SendDocuments/constants"
+import {COMPOSE_DOCUMENT_TYPES} from "@/enums";
 
 const route = useRoute()
 const formValues  = {
-  [SD_TYPE_INNER]: InnerForm,
-  [SD_TYPE_APPLICATION]: ApplicationForm
+  [COMPOSE_DOCUMENT_TYPES.INNER]: InnerForm,
+  [COMPOSE_DOCUMENT_TYPES.NOTICE]: NoticeForm,
+  [COMPOSE_DOCUMENT_TYPES.APPLICATION]: ApplicationForm
 }
 const selectedComponent = computed(
   () => {
-    return formValues[route.params.type] || InnerForm
+    return formValues[route.params.document_type] || InnerForm
 })
 </script>
 

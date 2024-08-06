@@ -24,6 +24,7 @@ const route = useRoute();
 const router = useRouter();
 const rejectModal = ref(false);
 const changeModal = ref(false);
+const resolutionModal = ref(null)
 
 // Computed
 const signed = computed(() => {
@@ -50,8 +51,10 @@ const signTest = async () => {
 	await signStore.actionGetSignDetail(route.params.id)
   await countStore.actionDocumentCountList()
 }
-const signDocument = async (body) => {
+const signDocumentWithResolution = async (body) => {
   await fetchSignDocument({ id: route.params.id, body })
+  resolutionModal.value.buttonLoading = false
+  resolutionModal.value.dialog = false
   await signStore.actionGetSignDetail(route.params.id)
   await countStore.actionDocumentCountList()
 }
@@ -120,9 +123,10 @@ onMounted( async () => {
 
           <resolution-performers-modal
             v-else
+            ref="resolutionModal"
             :performers="signStore?.detailModel?.performers"
             :resolution-text="signStore?.detailModel?.resolution_text"
-            @emit:on-sign="signDocument"
+            @emit:on-sign="signDocumentWithResolution"
           />
         </template>
 

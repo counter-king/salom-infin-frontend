@@ -9,7 +9,7 @@ import {
 // Utils
 import { withAsync } from "@/utils/withAsync";
 import { dispatchNotify } from "@/utils/notify";
-import {COLOR_TYPES, COMPOSE_JOURNALS} from "@/enums";
+import {COLOR_TYPES, COMPOSE_DOCUMENT_TYPES} from "@/enums";
 
 export const useSDStore = defineStore("sd-stores", {
   state: () => ({
@@ -17,35 +17,36 @@ export const useSDStore = defineStore("sd-stores", {
       // Внутренний
       {
         label: "service-letter",
-        icon: "ArrowDownIcon",
+        icon: "NotebookIcon",
         type: "inner",
         sub_type: "inner",
         active: true,
         selected: true,
         disabled: true,
-        journal: COMPOSE_JOURNALS.INNER
+        document_type: COMPOSE_DOCUMENT_TYPES.INNER
+      },
+      // Рапорт
+      {
+        label: "notice",
+        icon: "NotesIcon",
+        type: "notice",
+        sub_type: "notice",
+        active: false,
+        selected: true,
+        disabled: false,
+        document_type: COMPOSE_DOCUMENT_TYPES.NOTICE
       },
       // Заявление
       {
         label: "application",
-        icon: "NotesIcon",
+        icon: "NotesPenIcon",
         type: "application",
         sub_type: "application",
         active: false,
         selected: true,
         disabled: false,
-        journal: COMPOSE_JOURNALS.APPLICATION
+        document_type: COMPOSE_DOCUMENT_TYPES.APPLICATION
       },
-      // // Рапорт
-      // {
-      //   label: "notice",
-      //   icon: "NotesIcon",
-      //   type: "notice",
-      //   sub_type: "notice",
-      //   active: false,
-      //   selected: true,
-      //   disabled: false
-      // },
       // // Рапорт для ротации
       // {
       //   label: "hr-rotation",
@@ -139,11 +140,6 @@ export const useSDStore = defineStore("sd-stores", {
     totalCount: 0,
     headers: [
       {
-        header: "№",
-        field: "index",
-        active: true
-      },
-      {
         header: "Тип письма",
         field: "type",
         active: true
@@ -230,13 +226,14 @@ export const useSDStore = defineStore("sd-stores", {
       this.SD_TOOLBAR_MENU_LIST = [
         // Внутренний
         {
-          label: "inner",
-          icon: "ArrowDownIcon",
+          label: "service-letter",
+          icon: "NotebookIcon",
           type: "inner",
           sub_type: "inner",
           active: true,
           selected: true,
-          disabled: true
+          disabled: true,
+          document_type: COMPOSE_DOCUMENT_TYPES.INNER
         },
         // Рапорт
         {
@@ -246,88 +243,110 @@ export const useSDStore = defineStore("sd-stores", {
           sub_type: "notice",
           active: false,
           selected: true,
-          disabled: false
+          disabled: false,
+          document_type: COMPOSE_DOCUMENT_TYPES.NOTICE
         },
-        // Рапорт для ротации
+        // Заявление
         {
-          label: "hr-rotation",
-          icon: "RefreshIcon",
-          type: "hr_rotation",
-          sub_type: "hr_rotation",
-          active: false,
-          selected: false,
-          disabled: false
-        },
-        // Заключение
-        {
-          label: "summary",
+          label: "application",
           icon: "NotesPenIcon",
-          type: "summary",
-          sub_type: "summary",
-          active: false,
-          selected: false,
-          disabled: false
-        },
-        // Исходящий
-        {
-          label: "outgoing",
-          icon: "RoundArrowDownIcon",
-          type: "outgoing",
-          sub_type: "outgoing",
+          type: "application",
+          sub_type: "application",
           active: false,
           selected: true,
-          disabled: false
+          disabled: false,
+          document_type: COMPOSE_DOCUMENT_TYPES.APPLICATION
         },
-        // Распоряжения
-        {
-          label: "decree",
-          icon: "CheckCircleIcon",
-          type: "decree",
-          sub_type: "decree",
-          active: false,
-          selected: true,
-          disabled: false
-        },
-        // Протокол правления
-        {
-          label: "board-protocol",
-          icon: "NotebookIcon",
-          type: "board_protocol",
-          sub_type: "board_protocol",
-          active: false,
-          selected: true,
-          disabled: false
-        },
-        // Протокол комитета
-        {
-          label: "committee-protocol",
-          icon: "NotesIcon",
-          type: "committee_protocol",
-          sub_type: "committee_protocol",
-          active: false,
-          selected: true,
-          disabled: false
-        },
-        // Созданные приказы
-        {
-          label: "hr-order",
-          icon: "DocumentMedicineIcon",
-          type: "hr_order",
-          sub_type: "hr_order",
-          active: false,
-          selected: true,
-          disabled: false
-        },
-        // В другие организации
-        {
-          label: "organization-letter",
-          icon: "BuildingsIcon",
-          type: "organization_letter",
-          sub_type: "organization_letter",
-          active: false,
-          selected: true,
-          disabled: false
-        },
+        // // Рапорт
+        // {
+        //   label: "notice",
+        //   icon: "NotesIcon",
+        //   type: "notice",
+        //   sub_type: "notice",
+        //   active: false,
+        //   selected: true,
+        //   disabled: false
+        // },
+        // // Рапорт для ротации
+        // {
+        //   label: "hr-rotation",
+        //   icon: "RefreshIcon",
+        //   type: "hr_rotation",
+        //   sub_type: "hr_rotation",
+        //   active: false,
+        //   selected: false,
+        //   disabled: false
+        // },
+        // // Заключение
+        // {
+        //   label: "summary",
+        //   icon: "NotesPenIcon",
+        //   type: "summary",
+        //   sub_type: "summary",
+        //   active: false,
+        //   selected: false,
+        //   disabled: false
+        // },
+        // // Исходящий
+        // {
+        //   label: "outgoing",
+        //   icon: "RoundArrowDownIcon",
+        //   type: "outgoing",
+        //   sub_type: "outgoing",
+        //   active: false,
+        //   selected: true,
+        //   disabled: false
+        // },
+        // // Распоряжения
+        // {
+        //   label: "decree",
+        //   icon: "CheckCircleIcon",
+        //   type: "decree",
+        //   sub_type: "decree",
+        //   active: false,
+        //   selected: true,
+        //   disabled: false
+        // },
+        // // Протокол правления
+        // {
+        //   label: "board-protocol",
+        //   icon: "NotebookIcon",
+        //   type: "board_protocol",
+        //   sub_type: "board_protocol",
+        //   active: false,
+        //   selected: true,
+        //   disabled: false
+        // },
+        // // Протокол комитета
+        // {
+        //   label: "committee-protocol",
+        //   icon: "NotesIcon",
+        //   type: "committee_protocol",
+        //   sub_type: "committee_protocol",
+        //   active: false,
+        //   selected: true,
+        //   disabled: false
+        // },
+        // // Созданные приказы
+        // {
+        //   label: "hr-order",
+        //   icon: "DocumentMedicineIcon",
+        //   type: "hr_order",
+        //   sub_type: "hr_order",
+        //   active: false,
+        //   selected: true,
+        //   disabled: false
+        // },
+        // // В другие организации
+        // {
+        //   label: "organization-letter",
+        //   icon: "BuildingsIcon",
+        //   type: "organization_letter",
+        //   sub_type: "organization_letter",
+        //   active: false,
+        //   selected: true,
+        //   disabled: false
+        // },
       ]
     },
     async actionGetDocumentList(params){

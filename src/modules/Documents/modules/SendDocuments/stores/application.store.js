@@ -8,9 +8,7 @@ import {
   fetchCreateDocument,
   fetchGetDocumentDetail, fetchUpdateDocument
 } from "@/modules/Documents/modules/SendDocuments/services/index.service"
-import {SD_TYPE_APPLICATION, SD_TYPE_INNER} from "@/modules/Documents/modules/SendDocuments/constants"
 import {setValuesToKeys} from "@/utils"
-import {useCommonStore} from "@/stores/common";
 import {useUsersStore} from "@/stores/users.store";
 
 export const useSDStoreApplication = defineStore("sd-store-application", {

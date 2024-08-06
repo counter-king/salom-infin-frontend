@@ -61,9 +61,7 @@ const onSign = async () => {
     resolution_text: model.value.resolution_text
   }
 
-  emit('emit:onSign', body);
-  buttonLoading.value = false;
-  dialog.value = false;
+  emit('emit:onSign', body)
 }
 
 // Hooks
@@ -76,6 +74,8 @@ onMounted(() => {
     model.value.resolution_text = props.resolutionText
   }
 })
+
+defineExpose({ buttonLoading, dialog })
 </script>
 
 <template>

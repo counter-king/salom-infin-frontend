@@ -6,7 +6,7 @@ import { InnerLetterTemplate, ApplicationLetterTemplate } from "@/components/Tem
 // Enums
 import {SD_TYPE_INNER} from "@/modules/Documents/modules/SendDocuments/constants";
 import {computed} from "vue";
-import {COMPOSE_JOURNALS} from "@/enums";
+import {COMPOSE_DOCUMENT_TYPES} from "@/enums";
 
 const props = defineProps({
   composeModel: {
@@ -19,8 +19,8 @@ const props = defineProps({
 const route = useRoute();
 
 const templateValues  = {
-  [COMPOSE_JOURNALS.INNER]: InnerLetterTemplate,
-  [COMPOSE_JOURNALS.APPLICATION]: ApplicationLetterTemplate,
+  [COMPOSE_DOCUMENT_TYPES.INNER]: InnerLetterTemplate,
+  [COMPOSE_DOCUMENT_TYPES.APPLICATION]: ApplicationLetterTemplate,
 }
 
 const selectedTemplate = computed(
