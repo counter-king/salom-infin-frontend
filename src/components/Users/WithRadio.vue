@@ -6,6 +6,10 @@ const props = defineProps({
   ...avatarProps,
   title: {
     type: String
+  },
+  textTruncate: {
+    type: Boolean,
+    default: true
   }
 })
 </script>
@@ -18,7 +22,12 @@ const props = defineProps({
       <div class="icon-not-selected w-5 h-5 border border-greyscale-200 rounded-full"></div>
     </div>
 
-    <h1 class="max-w-[140px] text-xs font-semibold text-primary-900 truncate">{{ props.title }}</h1>
+    <h1
+      class="max-w-[140px] text-xs font-semibold text-primary-900"
+      :class="{ 'truncate' : props.textTruncate }"
+    >
+      {{ props.title }}
+    </h1>
   </div>
 </template>
 
