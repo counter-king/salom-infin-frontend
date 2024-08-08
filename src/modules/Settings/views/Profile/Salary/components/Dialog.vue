@@ -1,9 +1,16 @@
 <script setup>
 // Core
 import { ref, shallowRef, computed, watch, defineAsyncComponent, provide } from 'vue'
+import { useRouter } from 'vue-router'
+// Stores
+import { useAuthStore } from '@/modules/Auth/stores'
+import { useSalaryStore } from '../../../../stores/profile/salary.store'
 // Components
 import BaseSpinner from '@/components/UI/BaseSpinner.vue'
+// Utils
+import { dispatchNotify } from '@/utils/notify'
 // Enums
+import { COLOR_TYPES } from '@/enums'
 const STEP_NAMES = {
   CONFIRM: 'Confirm',
   FORGET_PASSWORD: 'ForgetPassword',
@@ -11,10 +18,18 @@ const STEP_NAMES = {
   SET_NEW_PASSWORD: 'SetNewPassword',
   SET_PASSWORD: 'SetPassword'
 }
+// Composable
+const router = useRouter()
+const authStore = useAuthStore()
+const salaryStore = useSalaryStore()
 // Reactive
-const dialog = ref(false)
+const dialog = ref(true)
 const component = shallowRef(null)
-const step = ref(STEP_NAMES.SET_PASSWORD)
+const step = ref(authStore.currentUser?.is_passcode_set
+  ? STEP_NAMES.LOGIN
+  : STEP_NAMES.SET_PASSWORD
+)
+const loading = ref(false)
 // Computed
 const componentLabel = computed(() => {
   switch(step.value) {
@@ -47,17 +62,50 @@ watch(
 * @param { string } cur текущая страница
 * @param { string } next следующая Страница
  */
-const next = async (cur, next) => {
+const nextRoute = (cur, next) => {
   step.value = next
 }
-const login = async () => {
-  // пользователь заново вводить пароль,
-  // чтобы войти на страницу зарплаты
-  step.value = STEP_NAMES.LOGIN
+const setPasscode = async (cur, next) => {
+  try {
+    loading.value = true
+    await salaryStore.setPasscode()
+    dispatchNotify(null, 'Пароль успешно установлен!', COLOR_TYPES.SUCCESS)
+    nextRoute(cur, next)
+  }
+  finally {
+    loading.value = false
+  }
+}
+const checkPasscode = async () => {
+  try {
+    loading.value = true
+    await salaryStore.checkPasscode()
+    dialog.value = false
+    // пользователь заново вводить пароль,
+    // чтобы войти на страницу зарплаты
+    step.value = STEP_NAMES.LOGIN
+  }
+  catch (error) {
+
+  }
+  finally {
+    loading.value = false
+  }
+}
+const verifyNumber = async (cur, next) => {
+  try {
+    loading.value = true
+    await salaryStore.verifyNumber()
+    dispatchNotify(null, 'Пароль успешно установлен!', COLOR_TYPES.SUCCESS)
+    nextRoute(cur, next)
+  }
+  finally {
+    loading.value = false
+  }
 }
 // Provide
 provide('step-names', STEP_NAMES)
-provide('next-step', next)
+provide('next-step', nextRoute)
 </script>
 
 <template>
@@ -80,24 +128,29 @@ provide('next-step', next)
         rounded
         shadow
         class="min-w-[105px]"
+        @click="router.go(-1)"
       />
 
       <template v-if="step === STEP_NAMES.SET_PASSWORD">
         <base-button
+          :loading="loading"
+          :disabled="!salaryStore.setPasscodeModel.passcode"
           label="Установить"
           size="large"
           rounded
-          @click="next(STEP_NAMES.SET_PASSWORD, STEP_NAMES.LOGIN)"
+          @click="setPasscode(STEP_NAMES.SET_PASSWORD, STEP_NAMES.LOGIN)"
         />
       </template>
 
       <template v-if="step === STEP_NAMES.LOGIN">
         <base-button
+          :loading="loading"
+          :disabled="!salaryStore.checkPasscodeModel.passcode"
           label="Войти"
           size="large"
           rounded
           class="min-w-[105px]"
-          @click="login"
+          @click="checkPasscode"
         />
       </template>
 
@@ -106,16 +159,16 @@ provide('next-step', next)
           label="Продолжить"
           size="large"
           rounded
-          @click="next(STEP_NAMES.FORGET_PASSWORD, STEP_NAMES.CONFIRM)"
+          @click="nextRoute(STEP_NAMES.FORGET_PASSWORD, STEP_NAMES.CONFIRM)"
         />
       </template>
 
       <template v-if="step === STEP_NAMES.CONFIRM">
         <base-button
-          label="Подтверждить"
+          label="Подтвердить"
           size="large"
           rounded
-          @click="next(STEP_NAMES.CONFIRM, STEP_NAMES.SET_PASSWORD)"
+          @click="verifyNumber(STEP_NAMES.CONFIRM, STEP_NAMES.SET_PASSWORD)"
         />
         <!-- Страница Установить новый Парол равен => Установить Парол -->
       </template>
