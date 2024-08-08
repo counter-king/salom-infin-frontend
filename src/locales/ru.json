@@ -305,5 +305,7 @@
   "select-targets": "Выберите цели",
   "route": "Маршрут",
   "select-route": "Выберите маршрут",
-  "business-trip": "Командировка"
+  "business-trip": "Командировка",
+  "create-business-trip-notice": "Создать рапорт на командировке",
+  "update-business-trip-notice": "Изменить рапорт на командировке"
 }

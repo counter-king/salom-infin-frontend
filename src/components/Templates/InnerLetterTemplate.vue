@@ -30,7 +30,7 @@ const receivers = computed(() => {
   <div class="inner-letter-template">
 <!--    <pre>{{ composeModel }}</pre>-->
     <div class="pb-4">
-      <img src="@/assets/img/logo.png" alt="Logo" />
+      <img src="@/assets/img/sqb_logo.png" alt="Logo" class="w-[100px]" />
     </div>
 
     <div class="overflow-hidden">

@@ -32,6 +32,9 @@ export const COMPOSE_DOCUMENT_TYPES = {
   INNER: '3',
   APPLICATION: '5'
 }
+export const COMPOSE_DOCUMENT_SUB_TYPES = {
+  BUSINESS_TRIP: '2'
+}
 export const COLOR_TYPES = {
   PRIMARY: "primary",
   WARNING: "warning",
@@ -138,6 +141,25 @@ export const TEMPLATE_OPTIONS = [
   {
     label: "last-month",
     active: false
+  }
+]
+
+export const ROUTES_TYPE = [
+  {
+    label: "На машине",
+    value: "by_car"
+  },
+  {
+    label: "На автобусе",
+    value: "by_bus"
+  },
+  {
+    label: "На самолете",
+    value: "by_plane"
+  },
+  {
+    label: "На поезде",
+    value: "by_train"
   }
 ]
 
