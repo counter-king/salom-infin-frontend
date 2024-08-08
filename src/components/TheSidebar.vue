@@ -12,6 +12,10 @@ const props = defineProps({
   menus: {
     type: Array,
     default: () => []
+  },
+  iconStroke: {
+    type: Boolean,
+    default: true
   }
 })
 // Watch
@@ -36,7 +40,7 @@ watch(
         class="bg-primary-50 flex items-center justify-center border border-r-0 border-greyscale-200 rounded-l-lg w-5 h-8 cursor-pointer absolute top-[12px] right-0"
         @click="navigationStore.actionSidebarCollapse(true)"
       >
-        <base-icon name="AltArrowLeftIcon" width="16" height="16" class="text-greyscale-500" />
+        <base-icon name="AltArrowLeftIcon" width="16" height="16" :stroke="props.iconStroke" class="text-greyscale-500" />
       </div>
     </template>
 
@@ -45,7 +49,7 @@ watch(
         class="bg-primary-50 flex items-center justify-center -scale-x-100 border border-r-0 border-greyscale-200 rounded-l-lg w-5 h-8 cursor-pointer absolute top-[12px] -right-[22px] z-10"
         @click="navigationStore.actionSidebarCollapse(false)"
       >
-        <base-icon name="AltArrowLeftIcon" width="16" height="16" class="text-greyscale-500" />
+        <base-icon name="AltArrowLeftIcon" width="16" height="16" :stroke="props.iconStroke" class="text-greyscale-500" />
       </div>
     </template>
 
@@ -69,7 +73,7 @@ watch(
               : null
             "
           >
-            <base-icon v-if="menu.icon" :name="menu.icon" class="text-gray-1 transition-all duration-[400ms] group-hover:text-primary-500" />
+            <base-icon v-if="menu.icon" :name="menu.icon" :stroke="props.iconStroke" class="text-gray-1 transition-all duration-[400ms] group-hover:text-primary-500" />
 
             <span class="flex-1 truncate mx-3">{{ menu.title }}</span>
 

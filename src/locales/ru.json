@@ -304,5 +304,6 @@
   "targets": "Цели",
   "select-targets": "Выберите цели",
   "route": "Маршрут",
-  "select-route": "Выберите маршрут"
+  "select-route": "Выберите маршрут",
+  "business-trip": "Командировка"
 }

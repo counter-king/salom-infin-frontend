@@ -45,7 +45,16 @@ export const useThemeStore = defineStore("theme", {
         link: 'ChatIndex',
         children: [],
         count: null,
-        name: 'document'
+        name: 'chat'
+      },
+      // HR
+      {
+        title: 'HR',
+        icon: 'UserCheckIcon',
+        link: 'HRIndex',
+        children: [],
+        count: null,
+        name: 'hr'
       },
       // Настройки
       {

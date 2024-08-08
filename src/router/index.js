@@ -7,6 +7,7 @@ import Calendar from "../modules/Calendar/routes"
 import Documents from "../modules/Documents/routes"
 import Kanban from "../modules/Kanban/routes"
 import Chat from "../modules/Chat/routes"
+import HR from "../modules/HR/routes"
 import Settings from "../modules/Settings/routes"
 import Search from "../modules/Search/routes"
 // Utils
@@ -33,6 +34,8 @@ const router = createRouter({
         ...Kanban,
         // Chat
         ...Chat,
+        // HR
+        ...HR,
         // Settings
         ...Settings,
         // Search

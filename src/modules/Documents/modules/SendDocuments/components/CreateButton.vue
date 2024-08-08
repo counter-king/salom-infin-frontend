@@ -1,10 +1,12 @@
 <script setup>
 // Core
 import {ref, unref} from "vue";
+import {useRoute, useRouter} from "vue-router"
 import {useI18n} from "vue-i18n";
 // Store
-import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store";
-import {useRoute, useRouter} from "vue-router";
+import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store"
+// Enums
+import { ROUTE_SD_CREATE } from "@/modules/Documents/modules/SendDocuments/constants"
 
 const sdStore = useSDStore();
 const { t } = useI18n();
@@ -17,7 +19,7 @@ const toggle = (event) => {
 }
 const onChangeDocType = (menu) => {
   router.push({
-    name: 'SendDocumentsCreate',
+    name: ROUTE_SD_CREATE,
     params: { document_type: menu.document_type }
   })
 }

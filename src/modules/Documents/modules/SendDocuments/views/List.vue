@@ -15,15 +15,15 @@ import { ActionToolbar } from "../../../../../components/Actions";
 import { ToolbarMenu } from "../components/index";
 import CreateButton from "@/modules/Documents/modules/SendDocuments/components/CreateButton.vue";
 
-const sdStore = useSDStore();
-const paginationStore = usePaginationStore();
-const route = useRoute();
-const router = useRouter();
-const filterKeys = ["approvers", "author", "curator", "signers", "departments", "register_number", "status"];
+const sdStore = useSDStore()
+const paginationStore = usePaginationStore()
+const route = useRoute()
+const router = useRouter()
+const filterKeys = ["approvers", "author", "curator", "signers", "departments", "register_number", "status"]
 const keysToIncludeOnClearFilter = ["document_type"]
 
 const title = computed(() => {
-  return route.query?.document_type ? sdStore.SD_TOOLBAR_MENU_LIST.find(item => item.document_type === route.query?.document_type).label : COMPOSE_DOCUMENT_TYPES.INNER;
+  return route.query?.document_type ? sdStore.SD_TOOLBAR_MENU_LIST.find(item => item.document_type === route.query?.document_type).label : COMPOSE_DOCUMENT_TYPES.INNER
 })
 
 const apiParams = computed(() => {
@@ -58,14 +58,6 @@ const manageRoute = () => {
       menu.active = menu.document_type === COMPOSE_DOCUMENT_TYPES.INNER;
     })
   }
-}
-const create = () => {
-  router.push({
-    name: "SendDocumentsCreate",
-    params: {
-      type: route.query.type
-    }
-  })
 }
 
 // Hooks
