@@ -1,33 +1,33 @@
 <script setup>
 // Core
-import {computed, onMounted} from "vue";
-import {useRoute, useRouter} from "vue-router";
+import { computed, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
 // Store
 import { useSDStore } from "../stores/index.store";
 import { usePaginationStore } from "@/stores/pagination.store";
 // Constants
-import { ROUTE_SD_DETAIL, SD_INNER_COLUMNS, SD_TYPE_INNER} from "../constants";
+import { COMPOSE_DOCUMENT_TYPES } from "@/enums";
+import { ROUTE_SD_DETAIL, SD_INNER_COLUMNS } from "../constants";
 // Components
 import DocType from "../../../../../components/Chips/DocType.vue";
 import Status from "../../../../../components/Chips/Status.vue";
 import { ActionToolbar } from "../../../../../components/Actions";
 import { ToolbarMenu } from "../components/index";
 import CreateButton from "@/modules/Documents/modules/SendDocuments/components/CreateButton.vue";
-import {COMPOSE_JOURNALS} from "@/enums";
 
 const sdStore = useSDStore();
 const paginationStore = usePaginationStore();
 const route = useRoute();
 const router = useRouter();
 const filterKeys = ["approvers", "author", "curator", "signers", "departments", "register_number", "status"];
-const keysToIncludeOnClearFilter = ["type"]
+const keysToIncludeOnClearFilter = ["document_type"]
 
 const title = computed(() => {
-  return route.query?.journal ? sdStore.SD_TOOLBAR_MENU_LIST.find(item => item.journal === route.query?.journal).label : COMPOSE_JOURNALS.INNER;
+  return route.query?.document_type ? sdStore.SD_TOOLBAR_MENU_LIST.find(item => item.document_type === route.query?.document_type).label : COMPOSE_DOCUMENT_TYPES.INNER;
 })
 
 const apiParams = computed(() => {
-  return route.query?.journal ? { journal: route.query.journal } : { journal: COMPOSE_JOURNALS.INNER }
+  return route.query?.document_type ? { document_type: route.query.document_type } : { document_type: COMPOSE_DOCUMENT_TYPES.INNER }
 })
 
 const onClickRow = (data) => {
@@ -35,7 +35,7 @@ const onClickRow = (data) => {
     name: ROUTE_SD_DETAIL,
     params: {
       id: data.id,
-      journal: data.journal
+      document_type: data.document_type
     }
   })
 }
@@ -47,15 +47,15 @@ const onChangeDocType = (menu) => {
   console.log(menu)
 }
 const manageRoute = () => {
-  if (!(route.query && route.query.journal)){
+  if (!(route.query && route.query.document_type)){
     router.replace({
       query: {
         ...route.query,
-        journal: COMPOSE_JOURNALS.INNER
+        document_type: COMPOSE_DOCUMENT_TYPES.INNER
       }
     });
     sdStore.SD_TOOLBAR_MENU_LIST.forEach(menu => {
-      menu.active = menu.journal === COMPOSE_JOURNALS.INNER;
+      menu.active = menu.document_type === COMPOSE_DOCUMENT_TYPES.INNER;
     })
   }
 }
@@ -77,7 +77,6 @@ onMounted(async () => {
 
 <template>
   <div class="sending-documents-inner-view">
-
     <toolbar-menu
       @emit:change-doc-type="onChangeDocType"
     />

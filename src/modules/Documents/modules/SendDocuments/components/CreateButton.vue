@@ -18,7 +18,7 @@ const toggle = (event) => {
 const onChangeDocType = (menu) => {
   router.push({
     name: 'SendDocumentsCreate',
-    params: { type: menu.type }
+    params: { document_type: menu.document_type }
   })
 }
 </script>

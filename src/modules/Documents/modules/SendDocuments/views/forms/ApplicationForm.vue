@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import {onMounted, onUnmounted, ref} from "vue"
+import {onMounted, ref} from "vue"
 import {useVuelidate} from "@vuelidate/core"
 import {useI18n} from "vue-i18n"
 import {useRoute, useRouter} from "vue-router"
@@ -21,7 +21,7 @@ import PreviewDialog from "@/modules/Documents/modules/SendDocuments/components/
 import {adjustUsersToArray} from "@/utils";
 import {dispatchNotify} from "@/utils/notify";
 // Constants
-import {COLOR_TYPES, COMPOSE_JOURNALS} from "@/enums";
+import {COLOR_TYPES, COMPOSE_DOCUMENT_TYPES} from "@/enums";
 import {ROUTE_SD_DETAIL, ROUTE_SD_LIST, SD_TYPE_INNER} from "@/modules/Documents/modules/SendDocuments/constants";
 
 
@@ -56,8 +56,8 @@ const preview = async () => {
   applicationStore.model.signers = [ { user: authStore?.currentUser?.id } ]
   applicationStore.model.sender = authStore?.currentUser?.top_level_department?.id
   applicationStore.model.curator = applicationStore?.model?.__curator.id
-  applicationStore.model.journal= COMPOSE_JOURNALS.APPLICATION
-  applicationStore.model.document_type= commonStore.documentTypesList.find(item => item.journal === Number(COMPOSE_JOURNALS.APPLICATION)).id
+  applicationStore.model.journal= COMPOSE_DOCUMENT_TYPES.APPLICATION
+  applicationStore.model.document_type= commonStore.documentTypesList.find(item => item.document_type === Number(COMPOSE_DOCUMENT_TYPES.APPLICATION)).id
   applicationStore.model.approvers = adjustUsersToArray(applicationStore.model.__approvers)
 
 }
@@ -80,7 +80,7 @@ const create = async () => {
     await router.replace({
       name: ROUTE_SD_LIST,
       query: {
-        journal: COMPOSE_JOURNALS.APPLICATION
+        journal: COMPOSE_DOCUMENT_TYPES.APPLICATION
       }
     });
   } else {
@@ -119,7 +119,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <template v-if="false">
+  <template v-if="applicationStore.detailLoading">
     <base-spinner/>
   </template>
 

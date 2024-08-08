@@ -27,9 +27,10 @@ export const JOURNAL_CODES = {
   ORDERS_PROTOCOLS: '104', // Приказы и распоряжения
   APPLICATION:      '106', // Заявления
 }
-export const COMPOSE_JOURNALS = {
-  INNER: '2',
-  APPLICATION: '7'
+export const COMPOSE_DOCUMENT_TYPES = {
+  NOTICE: '1',
+  INNER: '3',
+  APPLICATION: '5'
 }
 export const COLOR_TYPES = {
   PRIMARY: "primary",

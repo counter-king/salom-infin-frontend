@@ -94,6 +94,10 @@ const props = defineProps({
     validator(value) {
       return ['user', 'department'].includes(value)
     }
+  },
+  selectionLength: {
+    type: [Number, String],
+    default: 3
   }
 })
 // Reactive
@@ -313,7 +317,7 @@ watch(debounced, async () => {
       </template>
     </MultiSelect>
 
-    <div v-if="modelValue.length >= 3" class="flex items-center gap-2">
+    <div v-if="modelValue.length >= props.selectionLength" class="flex items-center gap-2">
       <div class="flex items-center flex-1 gap-2 py-2 truncate">
         <template v-for="user in modelValue">
           <slot name="hint" :value="user" />

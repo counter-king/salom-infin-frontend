@@ -168,8 +168,8 @@
   "registration-date": "Регистрационная дата",
   "document_type": "Вид документа",
   "department":"Департамент",
-  "branch":"Филиал",
-  "enter-branch":"Выберите филиал",
+  "branch":"Филиалы",
+  "enter-branch":"Выберите филиалы",
   "title-document":"Наименование документа",
   "enter-document":"Написать наименование",
   "magazine":"Журнал",
@@ -296,5 +296,13 @@
   "application-type": "Тип заявления",
   "select-application-type": "Выберите тип заявления",
   "send-to-signing": "Отправить на подпись",
-  "sign-resolution": "Подписать резолюцию"
+  "sign-resolution": "Подписать резолюцию",
+  "create-notice": "Создать рапорт",
+  "update-notice": "Изменить рапорт",
+  "employees": "Сотрудники",
+  "select-employees": "Выбирайте сотрудников",
+  "targets": "Цели",
+  "select-targets": "Выберите цели",
+  "route": "Маршрут",
+  "select-route": "Выберите маршрут"
 }
