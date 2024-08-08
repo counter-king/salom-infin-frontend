@@ -1,16 +1,16 @@
 <script setup>
 // Stores
-import { salaryStore } from '../../../../stores/profile/salary.store'
+import { useSalaryStore } from '../../../../stores/profile/salary.store'
 // Composable
-const salary = salaryStore()
+const salaryStore = useSalaryStore()
 </script>
 
 <template>
   <base-data-table
-    :headers="salary.headers"
-    :value="salary.list"
-    :total-count="salary.totalCount"
-    :loading="salary.listLoading"
+    :headers="salaryStore.headers"
+    :value="salaryStore.list"
+    :total-count="salaryStore.totalCount"
+    :loading="salaryStore.listLoading"
     scroll-height="calc(100vh - 470px)"
   >
     <template #empty>

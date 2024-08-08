@@ -1,23 +1,22 @@
 <script setup>
-// Methods
-const submit = async () => {
-
-}
+// Core
+import { onBeforeUnmount } from 'vue'
+// Stores
+import { useSalaryStore } from '../../../../../stores/profile/salary.store'
+// Composable
+const salaryStore = useSalaryStore()
+// Hooks
+onBeforeUnmount(() => {
+  salaryStore.setPasscodeModel.passcode = null
+})
 </script>
 
 <template>
-  <form
-    @submit.prevent="submit"
-    class="set-password-view space-y-6 mb-10"
-  >
+  <form class="set-password-view space-y-6 mb-10">
     <base-password
-      label="Парол"
+      v-model="salaryStore.setPasscodeModel.passcode"
+      label="Пароль"
       placeholder="Введите пароль"
-    />
-
-    <base-password
-      label="Повторите парол"
-      placeholder="Повторите парол"
     />
   </form>
 </template>
