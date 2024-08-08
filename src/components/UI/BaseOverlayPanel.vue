@@ -19,6 +19,9 @@ const props = defineProps({
   },
   content: {
     type: String,
+  },
+  noAngle: {
+    type: Boolean
   }
 })
 defineExpose({
@@ -32,6 +35,7 @@ const rootClasses = computed(() => {
     // Width
     props.width,
     props.menuClass,
+    { 'no-angle': props.noAngle }
   ]
 })
 </script>
@@ -75,7 +79,16 @@ const rootClasses = computed(() => {
   background: rgba(0, 8, 28, 0.45);
   z-index: 9;
 }
+
 .after_none::after {
   display: none;
+}
+
+.no-angle:before {
+  display: none;
+}
+
+.no-angle {
+  margin-top: 6px !important;
 }
 </style>

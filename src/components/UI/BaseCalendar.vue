@@ -20,6 +20,17 @@ const props = defineProps({
   maxDate: {
     type: Date
   },
+  view: {
+    type: String,
+    default: 'date',
+    validator(value) {
+      return ['date', 'month', 'year'].includes(value)
+    }
+  },
+  dateFormat: {
+    type: String,
+    default: 'yy-mm-dd'
+  },
   disabled: {
     type: Boolean
   },
@@ -105,10 +116,11 @@ const daySelect = (value) => {
       :inline="props.inline"
       :min-date="props.minDate"
       :max-date="props.maxDate"
+      :view="props.view"
       :disabled="props.disabled"
       :placeholder="t(props.placeholder)"
+      :date-format="props.dateFormat"
       show-icon
-      date-format="yy-mm-dd"
       @month-change="monthChange"
       @date-select="daySelect"
       :pt="{

@@ -76,11 +76,12 @@ const setPasscode = async (cur, next) => {
     loading.value = false
   }
 }
-const checkPasscode = async () => {
+const login = async () => {
   try {
     loading.value = true
-    await salaryStore.checkPasscode()
+    await salaryStore.login()
     dialog.value = false
+    dispatchNotify(null, 'Вход успешно выполнен!', COLOR_TYPES.SUCCESS)
     // пользователь заново вводить пароль,
     // чтобы войти на страницу зарплаты
     step.value = STEP_NAMES.LOGIN
@@ -150,7 +151,7 @@ provide('next-step', nextRoute)
           size="large"
           rounded
           class="min-w-[105px]"
-          @click="checkPasscode"
+          @click="login"
         />
       </template>
 

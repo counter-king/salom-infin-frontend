@@ -10,7 +10,7 @@ import SalaryDialog from './components/Dialog.vue'
   <div class="salary-view">
     <salary-dialog />
 
-    <action-toolbar title="Моя зарплата">
+    <action-toolbar title="Годовая статистика зарплаты">
       <template #filters>
         <export-button />
       </template>

@@ -5,65 +5,42 @@ import AES256 from 'aes-everywhere'
 import { useAuthStore } from '@/modules/Auth/stores'
 // Services
 import { fetchVerifyNumber } from '@/modules/Auth/services'
-import { fetchSetPasscode, fetchCheckPasscode } from '../../services/profile/salary.service'
+import { fetchSetPasscode, fetchCheckPasscode, fetchUserSalary } from '../../services/profile/salary.service'
+// Utils
+import { saveStorageItem, getStorageItem } from '@/utils/storage'
+import { formatDate } from '@/utils/formatDate'
+
+const defaultStore = {
+  salaryList: [],
+  headers: [
+    {
+      header: 'Наименование',
+      field: 'pay_name',
+      active: true
+    },
+    {
+      header: 'В руки',
+      field: 'paid',
+      active: true
+    },
+  ],
+  isLoggedIn: false,
+  contentLoading: false,
+  setPasscodeModel: {
+    passcode: null
+  },
+  checkPasscodeModel: {
+    passcode: null
+  },
+  verifyNumberModel: {
+    phone_number: null,
+    otp_code: null
+  }
+}
 
 export const useSalaryStore = defineStore('salary-store', {
   state: () => ({
-    list: [
-      {
-        salary_date: 1,
-        naming: 1222,
-        tax: 1333,
-        total_sum: 144444,
-        on_hand: 15555555
-      },
-      {
-        salary_date: 2,
-        naming: 2222,
-        tax: 3333,
-        total_sum: 4444,
-        on_hand: 5555
-      }
-    ],
-    headers: [
-      {
-        header: 'Дата зарплаты',
-        field: 'salary_date',
-        active: true
-      },
-      {
-        header: 'Наименование',
-        field: 'naming',
-        active: true
-      },
-      {
-        header: 'Налог',
-        field: 'tax',
-        active: true
-      },
-      {
-        header: 'Общая сумма',
-        field: 'total_sum',
-        active: true
-      },
-      {
-        header: 'В руки',
-        field: 'on_hand',
-        active: true
-      },
-    ],
-    listLoading: false,
-    totalCount: 0,
-    setPasscodeModel: {
-      passcode: null
-    },
-    checkPasscodeModel: {
-      passcode: null
-    },
-    verifyNumberModel: {
-      phone_number: null,
-      otp_code: null
-    }
+    ...defaultStore
   }),
   actions: {
     async setPasscode() {
@@ -88,7 +65,7 @@ export const useSalaryStore = defineStore('salary-store', {
     /**
      *
      * */
-    async checkPasscode() {
+    async login() {
       try {
         let model = {
           passcode: AES256.encrypt(
@@ -98,6 +75,8 @@ export const useSalaryStore = defineStore('salary-store', {
         }
 
         await fetchCheckPasscode(model)
+        saveStorageItem('PASSCODE', model.passcode)
+        this.isLoggedIn = true
         return Promise.resolve()
       }
       catch (error) {
@@ -122,6 +101,35 @@ export const useSalaryStore = defineStore('salary-store', {
       catch (error) {
         return Promise.reject()
       }
+    },
+    /**
+     *
+     * */
+    async getUserSalary(date = new Date().setDate('01')) {
+      try {
+        this.contentLoading = true
+
+        let { data } = await fetchUserSalary({
+          passcode: getStorageItem('PASSCODE'),
+          date: formatDate(date)
+        })
+        this.salaryList = data.results
+        return Promise.resolve()
+      }
+      catch (error) {
+        return Promise.reject()
+      }
+      finally {
+        setTimeout(() => {
+          this.contentLoading = false
+        }, 500);
+      }
+    },
+    /**
+     *
+     * */
+    resetStore() {
+      Object.assign(this, defaultStore)
     }
   }
 })
