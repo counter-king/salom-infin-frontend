@@ -14,6 +14,7 @@ import Status from "../../../../../components/Chips/Status.vue";
 import { ActionToolbar } from "../../../../../components/Actions";
 import { ToolbarMenu } from "../components/index";
 import CreateButton from "@/modules/Documents/modules/SendDocuments/components/CreateButton.vue";
+import OverlayButton from "@/components/Menu/OverlayButton.vue";
 
 const sdStore = useSDStore()
 const paginationStore = usePaginationStore()
@@ -83,6 +84,7 @@ onMounted(async () => {
       @emit:reset-headers="sdStore.resetHeaders"
     >
       <template #end>
+<!--        <overlay-button />-->
         <create-button />
       </template>
     </action-toolbar>
