@@ -42,7 +42,7 @@ const login = async () => {
 
       <div class="flex items-center gap-3">
         <p class="flex-1 text-sm font-medium">
-          Сервер WorkZone испытывает проблему с соединением
+          Сервер SalomApp испытывает проблему с соединением
         </p>
 
         <base-button

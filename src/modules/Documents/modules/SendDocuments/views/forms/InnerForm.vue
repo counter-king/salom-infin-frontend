@@ -60,7 +60,7 @@ const preview = async () => {
   SDStoreInner.model.files = SDStoreInner.model.__files.map(item => { return { id: item.id } });
 
   // TEMP
-  SDStoreInner.model.sender = 1
+  SDStoreInner.model.sender = authStore.currentUser.top_level_department.id
 
   SDStoreInner.model.approvers = adjustUsersToArray(SDStoreInner.model.__approvers);
   SDStoreInner.model.signers = adjustUsersToArray(SDStoreInner.model.__signers);
@@ -202,18 +202,6 @@ onUnmounted(() => {
               />
             </base-col>
 
-            <base-col col-class="w-1/2">
-              <base-dropdown
-                v-model="$v.document_type.$model"
-                :error="$v.document_type"
-                :options="commonStore.documentTypesList"
-                required
-                option-value="id"
-                label="document-type"
-                placeholder="enter-document-type"
-              />
-            </base-col>
-
             <base-col col-class="w-full">
               <editor-with-tabs
                 v-model="$v.content.$model"
@@ -250,6 +238,7 @@ onUnmounted(() => {
               departments: SDStoreInner.model.__departments
             }
           }"
+          :preview="true"
         />
       </template>
     </preview-dialog>

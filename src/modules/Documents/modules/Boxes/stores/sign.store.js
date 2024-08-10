@@ -16,11 +16,11 @@ export const useBoxesSignStore = defineStore("sign-stores", {
     documentList: [],
     detailModel: {},
     headers: [
-      {
-        header: "№",
-        field: "index",
-        active: true
-      },
+      // {
+      //   header: "№",
+      //   field: "index",
+      //   active: true
+      // },
       {
         header: "Статус",
         field: "status",
@@ -33,7 +33,7 @@ export const useBoxesSignStore = defineStore("sign-stores", {
       },
       {
         header: "Тип письма",
-        field: "type",
+        field: "document_type",
         active: true
       },
       {
@@ -61,11 +61,11 @@ export const useBoxesSignStore = defineStore("sign-stores", {
   actions: {
     resetHeaders() {
       this.headers = [
-        {
-          header: "№",
-          field: "index",
-          active: true
-        },
+        // {
+        //   header: "№",
+        //   field: "index",
+        //   active: true
+        // },
         {
           header: "Статус",
           field: "status",
@@ -78,7 +78,7 @@ export const useBoxesSignStore = defineStore("sign-stores", {
         },
         {
           header: "Тип письма",
-          field: "type",
+          field: "document_type",
           active: true
         },
         {

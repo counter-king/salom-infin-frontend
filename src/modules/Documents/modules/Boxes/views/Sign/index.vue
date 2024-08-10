@@ -25,7 +25,8 @@ const onRowClick = (data) => {
     name: ROUTE_SIGN_SHOW,
     params: {
       id: data.id,
-      journal: data.compose.journal
+      document_type: data.compose.document_type.id,
+      document_sub_type: data.compose.document_sub_type.id
     },
     query: {
       compose_id: data.compose.id
@@ -69,8 +70,8 @@ onMounted(async () => {
         {{ data.compose.register_number }}
       </template>
 
-      <template #type="{ data }">
-        <doc-type :type="data.compose.type"/>
+      <template #document_type="{ data }">
+        <doc-type :type="data.compose.document_type.name"/>
       </template>
 
       <template #register_date="{ data }">

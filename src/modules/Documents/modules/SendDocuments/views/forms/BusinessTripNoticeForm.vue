@@ -1,7 +1,9 @@
 <script setup>
 // Core
-import {ref} from "vue"
+import {onMounted, ref} from "vue"
 import {useVuelidate} from "@vuelidate/core"
+import {useRoute, useRouter} from "vue-router"
+import {useI18n} from "vue-i18n"
 // Enums
 import { FORM_TYPE_CREATE } from "@/constants/constants"
 // Components
@@ -24,8 +26,8 @@ import {COLOR_TYPES, COMPOSE_DOCUMENT_TYPES, ROUTES_TYPE} from "@/enums"
 import PreviewDialog from "@/modules/Documents/modules/SendDocuments/components/PreviewDialog.vue"
 import UserSelect from "@/components/Select/UserSelect.vue"
 import {adjustUsersToArray} from "@/utils"
-import {dispatchNotify} from "@/utils/notify";
-import {ROUTE_SD_LIST} from "@/modules/Documents/modules/SendDocuments/constants";
+import {dispatchNotify} from "@/utils/notify"
+import {ROUTE_SD_DETAIL, ROUTE_SD_LIST} from "@/modules/Documents/modules/SendDocuments/constants"
 
 const props = defineProps({
   formType: {
@@ -34,6 +36,9 @@ const props = defineProps({
   }
 })
 
+const { t } = useI18n()
+const route = useRoute()
+const router = useRouter()
 const authStore = useAuthStore()
 const BTNoticeStore = useSDBTNoticeStore()
 const countStore = useDocumentCountStore()
@@ -44,8 +49,8 @@ const $v = useVuelidate(BTNoticeStore.rules, BTNoticeStore.model)
 
 // Methods
 const preview = async () => {
-  // const valid = await $v.value.$validate()
-  // if (!valid) return
+  const valid = await $v.value.$validate()
+  if (!valid) return
   BTNoticeStore.model.approvers = []
   BTNoticeStore.model.signers = []
   BTNoticeStore.model.notices = []
@@ -62,7 +67,7 @@ const preview = async () => {
     }
   })
   BTNoticeStore.model.sender = authStore?.currentUser?.top_level_department?.id
-  BTNoticeStore.model.tags_ids = BTNoticeStore.model.__tags.map(item => item.id)
+  BTNoticeStore.model.tags = BTNoticeStore.model.__tags.map(item => { return { id: item.id } })
   BTNoticeStore.model.files = BTNoticeStore.model.__files.map(item => { return { id: item.id } })
 
   dialog.value = true
@@ -81,7 +86,7 @@ const create = async () => {
   await countStore.actionDocumentCountList()
   if (response) {
     dialog.value = false
-    dispatchNotify(t('document-sent'), null, COLOR_TYPES.SUCCESS)
+    dispatchNotify(null, t('document-sent'), COLOR_TYPES.SUCCESS)
     await router.replace({
       name: ROUTE_SD_LIST,
       query: {
@@ -89,11 +94,26 @@ const create = async () => {
       }
     })
   } else {
-    dispatchNotify(t('error-occurred'), null, COLOR_TYPES.ERROR)
+    dispatchNotify(null, t('error-occurred'), COLOR_TYPES.ERROR)
   }
 }
 const update = async () => {
-
+  const data = await BTNoticeStore.actionUpdateDocument(
+    {
+      id: route.params.id,
+      body: BTNoticeStore.model
+    }
+  );
+  await countStore.actionDocumentCountList();
+  dispatchNotify(null, t('changed'), COLOR_TYPES.SUCCESS);
+  await router.replace({
+    name: ROUTE_SD_DETAIL,
+    params: {
+      id: route.params.id,
+      document_type: route.params.document_type,
+      document_sub_type: route.params.document_sun_type
+    }
+  });
 }
 const manage = () => {
   if (props.formType === FORM_TYPE_CREATE) {
@@ -102,10 +122,17 @@ const manage = () => {
     update()
   }
 }
+
+// Hooks
+onMounted( async () => {
+  if (route.params.id) {
+    await BTNoticeStore.actionGetDocumentDetailForUpdate(route.params.id)
+  }
+})
 </script>
 
 <template>
-  <template v-if="false">
+  <template v-if="BTNoticeStore.detailLoading">
     <base-spinner/>
   </template>
 
@@ -248,6 +275,7 @@ const manage = () => {
       <template #content>
         <business-trip-notice-template
           :compose-model="BTNoticeStore.model"
+          :preview="true"
         />
       </template>
     </preview-dialog>

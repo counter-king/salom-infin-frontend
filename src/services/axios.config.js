@@ -60,7 +60,11 @@ axiosInstance.interceptors.response.use(
       console.log("error 123123")
     }
 
-    dispatchNotify(null, response.data.message, COLOR_TYPES.ERROR)
+    if (response.status === 500) {
+      dispatchNotify(null, response.statusText, COLOR_TYPES.ERROR)
+    } else {
+      dispatchNotify(null, response.data.message, COLOR_TYPES.ERROR)
+    }
 
 		return Promise.reject(response)
 	}

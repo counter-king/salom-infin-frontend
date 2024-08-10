@@ -57,7 +57,7 @@ const Boxes = [
         component: () => import("../views/Sign/index.vue"),
       },
       {
-        path: "sign/show/:id/:journal",
+        path: "sign/show/:id/:document_type/:document_sub_type",
         name: "SignShow",
         meta: {
           isAuthRequired: true,
@@ -76,7 +76,7 @@ const Boxes = [
         component: () => import("../views/Approval/index.vue"),
       },
       {
-        path: "approval/show/:id/:journal",
+        path: "approval/show/:id/:document_type/:document_sub_type",
         name: "ApprovalShow",
         meta: {
           isAuthRequired: true,

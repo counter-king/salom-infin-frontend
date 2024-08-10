@@ -25,7 +25,7 @@ const SendDocuments = [
         component: () => import("../views/Create.vue"),
       },
       {
-        path: "update/:id/:document_type",
+        path: "update/:id/:document_type/:document_sub_type",
         name: "SendDocumentsUpdate",
         meta: {
           isAuthRequired: true
@@ -33,7 +33,7 @@ const SendDocuments = [
         component: () => import("../views/Update.vue"),
       },
       {
-        path: "detail/:id/:document_type",
+        path: "detail/:id/:document_type/:document_sub_type",
         name: "SendDocumentsDetail",
         meta: {
           isAuthRequired: true

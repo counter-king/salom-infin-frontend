@@ -2,10 +2,10 @@
 // Core
 import {useRoute} from "vue-router"
 // Components
-import { InnerLetterTemplate, ApplicationLetterTemplate } from "@/components/Templates/index"
+import { InnerLetterTemplate, ApplicationLetterTemplate, BusinessTripNoticeTemplate } from "@/components/Templates/index"
 // Enums
 import {computed} from "vue"
-import {COMPOSE_DOCUMENT_TYPES} from "@/enums"
+import {COMPOSE_DOCUMENT_SUB_TYPES} from "@/enums"
 
 const props = defineProps({
   composeModel: {
@@ -18,13 +18,14 @@ const props = defineProps({
 const route = useRoute();
 
 const templateValues  = {
-  [COMPOSE_DOCUMENT_TYPES.INNER]: InnerLetterTemplate,
-  [COMPOSE_DOCUMENT_TYPES.APPLICATION]: ApplicationLetterTemplate,
+  [COMPOSE_DOCUMENT_SUB_TYPES.SERVICE_LETTER]: InnerLetterTemplate,
+  [COMPOSE_DOCUMENT_SUB_TYPES.LABOR_LEAVE]: ApplicationLetterTemplate,
+  [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP]: BusinessTripNoticeTemplate,
 }
 
 const selectedTemplate = computed(
   () => {
-    return templateValues[route.params.document_type] || InnerLetterTemplate
+    return templateValues[route.params.document_sub_type] || InnerLetterTemplate
   })
 </script>
 

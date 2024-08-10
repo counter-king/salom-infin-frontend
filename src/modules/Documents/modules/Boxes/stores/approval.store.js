@@ -14,11 +14,11 @@ export const useBoxesApprovalStore = defineStore("approval-stores", {
     documentList: [],
     detailModel: {},
     headers: [
-      {
-        header: "№",
-        field: "index",
-        active: true
-      },
+      // {
+      //   header: "№",
+      //   field: "index",
+      //   active: true
+      // },
       {
         header: "Статус",
         field: "status",
@@ -31,7 +31,7 @@ export const useBoxesApprovalStore = defineStore("approval-stores", {
       },
       {
         header: "Тип письма",
-        field: "type",
+        field: "document_type",
         active: true
       },
       {
@@ -59,11 +59,11 @@ export const useBoxesApprovalStore = defineStore("approval-stores", {
   actions: {
     resetHeaders() {
       this.headers = [
-        {
-          header: "№",
-          field: "index",
-          active: true
-        },
+        // {
+        //   header: "№",
+        //   field: "index",
+        //   active: true
+        // },
         {
           header: "Статус",
           field: "status",
@@ -76,7 +76,7 @@ export const useBoxesApprovalStore = defineStore("approval-stores", {
         },
         {
           header: "Тип письма",
-          field: "type",
+          field: "document_type",
           active: true
         },
         {

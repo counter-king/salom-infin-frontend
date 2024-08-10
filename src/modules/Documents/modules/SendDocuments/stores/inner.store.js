@@ -11,6 +11,7 @@ import {
 import {SD_TYPE_INNER} from "@/modules/Documents/modules/SendDocuments/constants";
 import logger from "quill/core/logger";
 import {setValuesToKeys} from "@/utils";
+import {COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL} from "@/enums";
 
 export const useSDStoreInner = defineStore("sd-stores-inner", {
   state: () => ({
@@ -18,17 +19,16 @@ export const useSDStoreInner = defineStore("sd-stores-inner", {
     detailLoading: false,
     model: {
       content: null,
-      document_type: null,
+      document_type: COMPOSE_DOCUMENT_TYPES.INNER,
+      document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.SERVICE_LETTER,
       register_number: null,
       short_description: null,
       title: null,
       approvers: [],
-      journal: 28,
+      journal: JOURNAL.INNER,
       departments: [],
       sender: null,
       signers: [],
-      sub_type: SD_TYPE_INNER,
-      type: SD_TYPE_INNER,
       files: [],
       __files: [],
       __approvers: [],
@@ -45,9 +45,6 @@ export const useSDStoreInner = defineStore("sd-stores-inner", {
         required: helpers.withMessage(`Поле не должен быть пустым`, required)
       },
       short_description: {
-        required: helpers.withMessage(`Поле не должен быть пустым`, required)
-      },
-      document_type: {
         required: helpers.withMessage(`Поле не должен быть пустым`, required)
       },
       content: {

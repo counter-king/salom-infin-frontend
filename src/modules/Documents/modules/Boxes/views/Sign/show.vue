@@ -52,11 +52,15 @@ const signTest = async () => {
   await countStore.actionDocumentCountList()
 }
 const signDocumentWithResolution = async (body) => {
-  await fetchSignDocument({ id: route.params.id, body })
-  resolutionModal.value.buttonLoading = false
-  resolutionModal.value.dialog = false
-  await signStore.actionGetSignDetail(route.params.id)
-  await countStore.actionDocumentCountList()
+  try {
+    await fetchSignDocument({ id: route.params.id, body })
+    resolutionModal.value.buttonLoading = false
+    resolutionModal.value.dialog = false
+    await signStore.actionGetSignDetail(route.params.id)
+    await countStore.actionDocumentCountList()
+  } catch (err) {
+    resolutionModal.value.buttonLoading = false
+  }
 }
 
 // Hooks

@@ -33,7 +33,9 @@ export const COMPOSE_DOCUMENT_TYPES = {
   APPLICATION: '5'
 }
 export const COMPOSE_DOCUMENT_SUB_TYPES = {
-  BUSINESS_TRIP: '2'
+  LABOR_LEAVE: '1',
+  BUSINESS_TRIP: '2',
+  SERVICE_LETTER: '3'
 }
 export const COLOR_TYPES = {
   PRIMARY: "primary",

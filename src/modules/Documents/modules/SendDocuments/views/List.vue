@@ -36,7 +36,8 @@ const onClickRow = (data) => {
     name: ROUTE_SD_DETAIL,
     params: {
       id: data.id,
-      document_type: data.document_type
+      document_type: data.document_type.id,
+      document_sub_type: data.document_sub_type.id
     }
   })
 }
@@ -101,8 +102,8 @@ onMounted(async () => {
       @emit:set-store-headers="(val) => sdStore.headers = val"
       @emit:row-click="onClickRow"
     >
-      <template #type="{ data }">
-        <doc-type :type="data.type"/>
+      <template #document_sub_type="{ data }">
+        {{ data.document_sub_type.name }}
       </template>
 
       <template #status="{ data }">

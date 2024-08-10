@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import {onMounted} from "vue";
+import {onBeforeMount, onMounted} from "vue";
 import {useRoute, useRouter} from "vue-router";
 // Store
 import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store";
@@ -19,11 +19,15 @@ const router = useRouter();
 const openUpdatePage = () => {
   router.push({
     name: 'SendDocumentsUpdate',
-    params: { id: route.params.id, journal: SDStore.detailModel?.journal }
+    params: {
+      id: route.params.id,
+      document_type: route.params.document_type,
+      document_sub_type: route.params.document_sub_type,
+    }
   })
 }
 
-onMounted(async () => {
+onBeforeMount(async () => {
   SDStore.detailLoading = true;
   const response = await SDStore.actionGetDocumentDetail(route.params.id);
   if (response){

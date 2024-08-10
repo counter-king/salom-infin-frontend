@@ -141,7 +141,7 @@ export const useSDStore = defineStore("sd-stores", {
     headers: [
       {
         header: "Тип письма",
-        field: "type",
+        field: "document_sub_type",
         active: true
       },
       {
@@ -187,7 +187,7 @@ export const useSDStore = defineStore("sd-stores", {
         },
         {
           header: "Тип письма",
-          field: "type",
+          field: "document_sub_type",
           active: true
         },
         {
