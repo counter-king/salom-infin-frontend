@@ -1,6 +1,12 @@
 <script setup>
 // Core
 import { useRouter } from 'vue-router'
+// Macros
+const props = defineProps({
+  self: {
+    type: Boolean
+  }
+})
 // Composable
 const router = useRouter()
 </script>
@@ -14,7 +20,7 @@ const router = useRouter()
     icon-width="16"
     border-color="border-transparent"
     button-class="h-8"
-    @click="router.go(-1)"
+    @click="props.self ? void 0 : router.go(-1)"
   >
     <template #label>
       Назад
