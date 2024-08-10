@@ -62,7 +62,7 @@ const list = [
     <span class="text-greyscale-900">Докумeнт (нем. — образец, свидетельство, доказательство) — это зафиксированная на материальном носителе информация в виде текста, звукозаписи или изображения с реквизитами, позволяющими её идентифицировать.</span>
   </InlineMessage>
 
-  <div class="grid grid-cols-4 gap-4 mt-4">
+  <div class="grid grid-cols-3 gap-4 mt-4">
     <template v-for="item in list">
       <router-link
         :to="{ name: 'AgreementGroupsList', params: { item: item.id } }"
