@@ -15,7 +15,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <form class="salary-login-view mb-6">
+  <div class="salary-login-view mb-6">
     <base-password
       v-model="salaryStore.checkPasscodeModel.passcode"
       label="Пароль"
@@ -28,5 +28,5 @@ onBeforeUnmount(() => {
     >
       Забыли пароль?
     </div>
-  </form>
+  </div>
 </template>
