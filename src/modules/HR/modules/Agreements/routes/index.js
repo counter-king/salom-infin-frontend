@@ -1,0 +1,51 @@
+const Agreements = [
+  {
+    path: 'agreements',
+    name: 'AgreementsIndex',
+    meta: {
+      isAuthRequired: true
+    },
+    component: () => import('../views/index.vue'),
+    redirect: { name: 'AgreementGroups' },
+    children: [
+      {
+        path: 'groups',
+        name: 'AgreementGroups',
+        meta: {
+          isAuthRequired: true
+        },
+        component: () => import('../views/groups.vue'),
+      },
+      {
+        path: 'groups/list/:item',
+        name: 'AgreementGroupsList',
+        meta: {
+          isAuthRequired: true,
+          navigation: true
+        },
+        component: () => import('../views/groups-list.vue'),
+        redirect: { name: 'AgreementNotSigned' },
+        children: [
+          {
+            path: 'not-signed',
+            name: 'AgreementNotSigned',
+            meta: {
+              isAuthRequired: true
+            },
+            component: () => import('../views/not-signed.vue'),
+          },
+          {
+            path: 'signed',
+            name: 'AgreementSigned',
+            meta: {
+              isAuthRequired: true
+            },
+            component: () => import('../views/signed.vue'),
+          },
+        ]
+      }
+    ]
+  }
+]
+
+export default Agreements

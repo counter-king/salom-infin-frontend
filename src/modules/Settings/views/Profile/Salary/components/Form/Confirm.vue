@@ -18,7 +18,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <form class="confirm-password-view mb-5">
+  <div class="confirm-password-view mb-5">
     <div class="max-w-[270px] w-full text-center mx-auto mb-5">
       <div class="flex justify-center items-center w-12 h-12 bg-primary-100 rounded-full mx-auto">
         <base-iconify icon="solar:letter-linear" class="text-primary-500" />
@@ -34,5 +34,5 @@ onMounted(async () => {
       label="СМС - Код"
       placeholder="Введите код"
     />
-  </form>
+  </div>
 </template>

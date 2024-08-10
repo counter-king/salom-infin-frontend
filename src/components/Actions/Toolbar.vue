@@ -39,6 +39,8 @@ const emits = defineEmits(['emit:resetHeaders']);
 <template>
   <div class="flex mb-5 justify-between items-center">
     <div class="flex items-center gap-4">
+      <slot name="title-before" />
+
       <h1 class="text-2xl font-bold text-primary-900">{{ t(props.title) }}</h1>
 
       <slot name="title-after" />

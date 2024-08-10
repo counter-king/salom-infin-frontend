@@ -1,20 +1,24 @@
 <script setup>
+// Core
+import { onBeforeUnmount } from 'vue'
+// Stores
+import { useSalaryStore } from '../../../stores/profile/salary.store'
+// Composable
+const salaryStore = useSalaryStore()
 // Components
-import { ActionToolbar, ExportButton } from '@/components/Actions'
 import SalaryChart from './components/Chart.vue'
 import SalaryTable from './components/Table.vue'
 import SalaryDialog from './components/Dialog.vue'
+// Hooks
+onBeforeUnmount(() => {
+  salaryStore.resetStore()
+  console.log(salaryStore)
+})
 </script>
 
 <template>
   <div class="salary-view">
     <salary-dialog />
-
-    <action-toolbar title="Годовая статистика зарплаты">
-      <template #filters>
-        <export-button />
-      </template>
-    </action-toolbar>
 
     <div class="space-y-5">
       <salary-chart />

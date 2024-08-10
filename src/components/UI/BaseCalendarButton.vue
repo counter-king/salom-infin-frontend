@@ -36,6 +36,7 @@ const dateSelect = (value) => {
 const clear = (event) => {
   event.stopImmediatePropagation()
   date.value = null
+  emit('emit:date-select', formatDate(new Date()))
 }
 </script>
 
@@ -68,7 +69,7 @@ const clear = (event) => {
   >
     <base-calendar
       inline
-      :wiew="props.view"
+      :view="props.view"
       :date-format="props.dateFormat"
       @emit:day-select="dateSelect"
     />

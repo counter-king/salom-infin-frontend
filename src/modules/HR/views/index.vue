@@ -3,6 +3,10 @@
 import { ref } from 'vue'
 // Components
 import TheSidebar from '@/components/TheSidebar.vue'
+// Stores
+import { useAgreementsRoutesStore } from '../modules/Agreements/stores/routes.store'
+// Composable
+const agreementsRoutesStore = useAgreementsRoutesStore()
 
 const menus = ref([
   {
@@ -14,7 +18,8 @@ const menus = ref([
     icon: "SchoolCaseIcon",
     link: "BusinessTripIndex",
     children: []
-  }
+  },
+  agreementsRoutesStore.routes
 ])
 </script>
 

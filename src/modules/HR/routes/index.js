@@ -1,4 +1,5 @@
 import BusinessTrip from "@/modules/HR/modules/BusinessTrip/routes"
+import Agreements from '../modules/Agreements/routes'
 
 const HR = [
   {
@@ -11,7 +12,9 @@ const HR = [
     redirect: { name: "BusinessTripIndex" },
     children: [
       // Business Trip
-      ...BusinessTrip
+      ...BusinessTrip,
+      // Agreements
+      ...Agreements
     ]
   }
 ]

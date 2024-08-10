@@ -12,11 +12,11 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <form class="set-password-view space-y-6 mb-10">
+  <div class="set-password-view space-y-6 mb-10">
     <base-password
       v-model="salaryStore.setPasscodeModel.passcode"
       label="Пароль"
       placeholder="Введите пароль"
     />
-  </form>
+  </div>
 </template>

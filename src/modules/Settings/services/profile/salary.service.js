@@ -3,7 +3,8 @@ import axiosConfig from '@/services/axios.config'
 const URLS = {
   setPasscode: 'set-passcode',
   checkPasscode: 'check-passcode',
-  userSalary: 'my-salary'
+  salary: 'my-salary',
+  salaryStatistic: 'my-salary-statistics'
 }
 /**
  *
@@ -20,6 +21,12 @@ export const fetchCheckPasscode = (body) => {
 /**
  *
  * */
-export const fetchUserSalary = (params) => {
-  return axiosConfig.get(`${URLS.userSalary}/`, params)
+export const fetchSalary = (params) => {
+  return axiosConfig.get(`${URLS.salary}/`, params)
+}
+/**
+ *
+ * */
+export const fetchSalaryStatistic = (params) => {
+  return axiosConfig.get(`${URLS.salaryStatistic}/`, params)
 }
