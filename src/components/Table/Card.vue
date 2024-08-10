@@ -1,7 +1,15 @@
 <script setup>
+// Core
+import { useRoute, useRouter } from 'vue-router'
 // Components
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
+// Stores
+import { usePaginationStore } from '@/stores/pagination.store'
+// Composable
+const router = useRouter()
+const route = useRoute()
+const paginationStore = usePaginationStore()
 // Macros
 const props = defineProps({
   headers: {
@@ -53,22 +61,47 @@ const props = defineProps({
     default: null
   }
 })
+const emit = defineEmits(['emit:page-change'])
+// Methods
+const pageChange = async (val) => {
+  paginationStore.page = Number(val.page + 1)
+  paginationStore.pageSize = Number(val.rows)
+  paginationStore.firstRow = Number(val.first)
+
+  await router.replace({
+    ...route,
+    query: {
+      ...route.query,
+      page: paginationStore.page,
+      page_size: paginationStore.pageSize,
+      first_row: paginationStore.firstRow
+    }
+  })
+  emit('emit:page-change', {
+    page: paginationStore.page,
+    page_size: paginationStore.pageSize
+  })
+}
 </script>
 
 <template>
   <div class="table-card">
     <DataTable
       :value="props.value"
+      lazy
       :page-link-size="5"
+      :first="paginationStore.firstRow"
       paginator
       paginator-position="bottom"
       paginatorTemplate="RowsPerPageDropdown CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
       row-hover
       :rows-per-page-options="[10, 15, 30]"
-      :rows="props.pageSize"
+      :rows="Number(route.query.page_size) ? Number(route.query.page_size) : paginationStore.pageSize"
       currentPageReportTemplate="{first}-{last} из {totalRecords}"
       :scroll-height="props.scrollHeight"
       scrollable
+      :total-records="props.totalCount"
+      :loading="props.loading"
       :pt="{
         table: { class: ['border-separate', 'border-spacing-y-1', '-mt-1', props.tableClass] },
         thead: { class: ['bg-white', props.theadClass ] },
@@ -101,6 +134,7 @@ const props = defineProps({
         }
       }"
       class="base-data-table"
+      @page="pageChange"
     >
       <Column
         v-for="col of headers"

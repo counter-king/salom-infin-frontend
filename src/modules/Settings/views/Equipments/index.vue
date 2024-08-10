@@ -1,38 +1,81 @@
 <script setup>
-import { useI18n } from 'vue-i18n'
-import { useSearchStore } from "./stores/index";
-import { CardTable} from "../../../../components/Table/index";
-const { t } = useI18n()
-const searchStore = useSearchStore();
+// Core
+import { onBeforeUnmount, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+// Components
+import { ActionToolbar } from '@/components/Actions'
+import { CardTable } from '@/components/Table'
+import Empty from '@/components/Empty.vue'
+// Stores
+import { usePaginationStore } from '../../../../stores/pagination.store'
+import { useEquipmentStore } from '../../stores/equipments.store'
+// Composable
+const paginationStore = usePaginationStore()
+const equipmentStore = useEquipmentStore()
+const route = useRoute()
+// Methods
+const pageChange = async ({ page, page_size }) => {
+  await equipmentStore.getEquipment({ page, page_size })
+}
+// Hooks
+onMounted(async () => {
+  await equipmentStore.getEquipment({
+    page: route.query.page,
+    page_size: route.query.page_size
+  })
+})
+onBeforeUnmount(() => {
+  paginationStore.resetPagination()
+})
 </script>
 <template>
-  <div class="flex flex-col h-full">
-    <div class="flex mb-5 justify-between items-center">
-      <h1 class="text-2xl font-bold text-primary-900">Техника и оборудования</h1>
-    </div>
-    <div class="bg-white flex flex-col h-full rounded-2xl p-6">
-      <card-table
-        class="m-e-table"
-        :value="searchStore.list"
-        :headers="searchStore.headers"
+  <div class="equipments-view">
+    <action-toolbar title="Техника и оборудования">
+      <template #filters>
+        <span></span>
+      </template>
+    </action-toolbar>
+
+    <template v-if="equipmentStore.contentLoading">
+      <div
+        class="flex items-center justify-center bg-white shadow-button rounded-xl"
+        style="height: calc(100vh - 650px)"
       >
-        <template #number="{ data }">
-          {{data.number}}
-        </template>
-        <template #nameTechnique="{ data }">
-          {{data.nameTechnique}}
-        </template>
-        <template #id="{ data }">
-          {{data.id}}
-        </template>
-        <template #inb="{ data }">
-          {{data.inb}}
-        </template>
-        <template #dateEntered="{ data }">
-          {{data.dateEntered}}
-        </template>
-      </card-table>
-    </div>
+        <base-spinner content />
+      </div>
+    </template>
+
+    <template v-else-if="!equipmentStore.list.length">
+      <empty class="h-[calc(100vh-650px)]" />
+    </template>
+
+    <template v-else>
+      <div class="bg-white flex flex-col h-full rounded-2xl p-6">
+        <card-table
+          :value="equipmentStore.list"
+          :headers="equipmentStore.headers"
+          :total-count="equipmentStore.count"
+          @emit:page-change="pageChange"
+          class="m-e-table"
+        >
+          <template #card_id="{ data }">
+            {{ data.card_id }}
+          </template>
+
+          <template #name="{ data }">
+            {{ data.name }}
+          </template>
+
+          <template #inv_num="{ data }">
+            {{ data.inv_num }}
+          </template>
+
+          <template #date_oper="{ data }">
+            {{ data.date_oper }}
+          </template>
+        </card-table>
+      </div>
+    </template>
   </div>
 </template>
 <style>
