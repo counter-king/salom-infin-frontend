@@ -1,8 +1,9 @@
 <script setup>
 // Core
-import { watch, onBeforeUnmount } from 'vue'
+import { watch } from 'vue'
 // Components
 import { ActionToolbar, ExportButton } from '@/components/Actions'
+import Empty from '@/components/Empty.vue'
 // Stores
 import { useSalaryStore } from '../../../../stores/profile/salary.store'
 // Utils
@@ -12,17 +13,13 @@ const salaryStore = useSalaryStore()
 // Watch
 watch(
   () => salaryStore.isLoggedIn,
-  async () => salaryStore.isLoggedIn && await salaryStore.getUserSalary()
+  async () => salaryStore.isLoggedIn && await salaryStore.getSalary()
 )
 // Methods
 const dateSelect = async (value) => {
   const [_, month, year] = value.split('.')
-  await salaryStore.getUserSalary(new Date(year, month - 1, 1))
+  await salaryStore.getSalary(new Date(year, month - 1, 1))
 }
-// Hooks
-onBeforeUnmount(() => {
-  salaryStore.resetStore()
-})
 </script>
 
 <template>
@@ -35,16 +32,7 @@ onBeforeUnmount(() => {
   </action-toolbar>
 
   <template v-if="!salaryStore.isLoggedIn">
-    <div
-      class="flex justify-center items-center bg-white shadow-button rounded-xl"
-      style="height: calc(100vh - 650px)"
-    >
-      <div class="text-center">
-        <img src="/images/cloud-table-empty.svg" alt="EmptyFolder" class="block mb-5" />
-
-        <h1 class="text-greyscale-500 font-medium text-sm">У вас нет данных</h1>
-      </div>
-    </div>
+    <empty class="h-[calc(100vh-650px)]" />
   </template>
 
   <template v-else-if="salaryStore.contentLoading">
@@ -63,16 +51,7 @@ onBeforeUnmount(() => {
       scroll-height="calc(100vh - 470px)"
     >
       <template #empty>
-        <div
-          class="w-full flex justify-center items-center rounded-lg"
-          style="height: calc(100vh - 470px)"
-        >
-          <div class="text-center">
-            <img src="/images/cloud-table-empty.svg" alt="EmptyFolder" class="block mb-5" />
-
-            <h1 class="text-greyscale-500 font-medium text-sm">У вас нет данных</h1>
-          </div>
-        </div>
+        <empty class="h-[calc(100vh-470px)]" />
       </template>
 
       <template #pay_name="{ data }">

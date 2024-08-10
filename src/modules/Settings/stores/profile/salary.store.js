@@ -5,13 +5,18 @@ import AES256 from 'aes-everywhere'
 import { useAuthStore } from '@/modules/Auth/stores'
 // Services
 import { fetchVerifyNumber } from '@/modules/Auth/services'
-import { fetchSetPasscode, fetchCheckPasscode, fetchUserSalary } from '../../services/profile/salary.service'
+import { fetchSetPasscode, fetchCheckPasscode, fetchSalary, fetchSalaryStatistic } from '../../services/profile/salary.service'
 // Utils
 import { saveStorageItem, getStorageItem } from '@/utils/storage'
 import { formatDate } from '@/utils/formatDate'
 
 const defaultStore = {
   salaryList: [],
+  salaryStatisticList: [],
+  salarySeries: [{
+    name: 'Salary',
+    data: []
+  }],
   headers: [
     {
       header: 'Наименование',
@@ -26,6 +31,7 @@ const defaultStore = {
   ],
   isLoggedIn: false,
   contentLoading: false,
+  statisticContentLoading: false,
   setPasscodeModel: {
     passcode: null
   },
@@ -105,11 +111,11 @@ export const useSalaryStore = defineStore('salary-store', {
     /**
      *
      * */
-    async getUserSalary(date = new Date().setDate('01')) {
+    async getSalary(date = new Date().setDate('01')) {
       try {
         this.contentLoading = true
 
-        let { data } = await fetchUserSalary({
+        let { data } = await fetchSalary({
           passcode: getStorageItem('PASSCODE'),
           date: formatDate(date)
         })
@@ -122,6 +128,29 @@ export const useSalaryStore = defineStore('salary-store', {
       finally {
         setTimeout(() => {
           this.contentLoading = false
+        }, 500);
+      }
+    },
+    /**
+     *
+     * */
+    async getSalaryStatistic(date = new Date().getFullYear()) {
+      try {
+        this.statisticContentLoading = true
+
+        let { data } = await fetchSalaryStatistic({
+          passcode: getStorageItem('PASSCODE'),
+          date
+        })
+        this.salarySeries[0].data = data.results.map(salary => salary.monthly_salary)
+        return Promise.resolve()
+      }
+      catch (error) {
+        return Promise.reject()
+      }
+      finally {
+        setTimeout(() => {
+          this.statisticContentLoading = false
         }, 500);
       }
     },

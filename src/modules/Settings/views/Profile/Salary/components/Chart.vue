@@ -1,13 +1,21 @@
 <script setup>
 // Core
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+// Components
+import { ActionToolbar, ExportButton } from '@/components/Actions'
+import Empty from '@/components/Empty.vue'
+// Stores
+import { useSalaryStore } from '../../../../stores/profile/salary.store'
 // Utils
 import { formatNumberWithFloat } from '@/utils'
+// Composable
+const salaryStore = useSalaryStore()
+// Watch
+watch(
+  () => salaryStore.isLoggedIn,
+  async () => salaryStore.isLoggedIn && await salaryStore.getSalaryStatistic()
+)
 // Reactive
-const series = ref([{
-  name: 'Desktops',
-  data: [1e6, 2e6, 3e6, 4e6, 5e6, 6e6, 7e6, 8e6, 9e6, 10e6, 11e6, 11200000]
-}])
 const options = ref({
   chart: {
     height: 275,
@@ -68,18 +76,63 @@ const options = ref({
   },
   yaxis: {
     labels: {
-      formatter: (value) => { return `${value / 1e6} млн` },
+      formatter: (value) => {
+        return String(parseInt(value)).length <= 9 ? `${value / 1e6} млн` : `${value / 1e9} млрд`
+      },
     }
   }
 })
+// Methods
+const dateSelect = async (value) => {
+  const [_, __, year] = value.split('.')
+  await salaryStore.getSalaryStatistic(year)
+}
 </script>
 
 <template>
-  <div class="salary-chart-view bg-white shadow-button rounded-xl pt-4 pb-3 px-5">
-    <div class="-mx-1">
-      <apexchart type="line" height="275" :options="options" :series="series"></apexchart>
+  <action-toolbar title="Годовая статистика зарплаты">
+    <template #filters>
+      <export-button />
+
+      <base-calendar-button
+        view="year"
+        date-format="yyyy"
+        @emit:date-select="dateSelect"
+      />
+    </template>
+  </action-toolbar>
+
+  <template v-if="!salaryStore.isLoggedIn">
+    <empty class="h-[calc(100vh-655px)]" />
+  </template>
+
+  <template v-else-if="salaryStore.statisticContentLoading">
+    <div
+      class="flex items-center justify-center bg-white shadow-button rounded-xl"
+      style="height: calc(100vh - 655px)"
+    >
+      <base-spinner content />
     </div>
-  </div>
+  </template>
+
+  <template v-else>
+    <template v-if="!salaryStore.salarySeries[0].data.length">
+      <empty title="На этот год зарплата не найдено" class="h-[calc(100vh-655px)]" />
+    </template>
+
+    <template v-else>
+      <div class="salary-chart-view bg-white shadow-button rounded-xl pt-4 pb-3 px-5">
+        <div class="-mx-1">
+          <apexchart
+            :options="options"
+            :series="salaryStore.salarySeries"
+            type="line"
+            height="275"
+          ></apexchart>
+        </div>
+      </div>
+    </template>
+  </template>
 </template>
 
 <style>
