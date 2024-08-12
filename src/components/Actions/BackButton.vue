@@ -1,6 +1,8 @@
 <script setup>
 // Core
 import { useRouter } from 'vue-router'
+// Components
+import AltArrowLeft from '~icons/solar/alt-arrow-left-outline'
 // Macros
 const props = defineProps({
   self: {
@@ -14,10 +16,10 @@ const router = useRouter()
 <template>
   <base-button
     size="small"
-    icon-left="solar:alt-arrow-left-outline"
+    :icon-left="AltArrowLeft"
     outlined
     shadow
-    icon-width="16"
+    icon-width="!w-4"
     border-color="border-transparent"
     button-class="h-8"
     @click="props.self ? void 0 : router.go(-1)"

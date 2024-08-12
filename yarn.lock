@@ -230,6 +230,13 @@
   dependencies:
     "@hapi/hoek" "^9.0.0"
 
+"@iconify-json/ci@^1.1.14":
+  version "1.1.14"
+  resolved "https://registry.yarnpkg.com/@iconify-json/ci/-/ci-1.1.14.tgz#cc580a9a530950480542200b3b7992d4cade92b2"
+  integrity sha512-i/idwyOyz11qT6zxTDaIUDt+mCdS9LBSoiT29KOqdOy27j3AfjHFOtKRaIbPcaO3gwJXr+S7LCd0UDc1WPJTEA==
+  dependencies:
+    "@iconify/types" "*"
+
 "@iconify-json/solar@^1.1.10":
   version "1.1.10"
   resolved "https://registry.yarnpkg.com/@iconify-json/solar/-/solar-1.1.10.tgz#5032a157508a0fb74f2a4beac56b1a577470609d"
