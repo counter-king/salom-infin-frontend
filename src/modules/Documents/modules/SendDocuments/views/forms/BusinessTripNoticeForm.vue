@@ -231,6 +231,7 @@ onMounted( async () => {
                 option-value="value"
                 label="route"
                 placeholder="select-route"
+                size="large"
               />
             </base-col>
 

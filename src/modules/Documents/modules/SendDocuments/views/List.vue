@@ -85,8 +85,8 @@ onMounted(async () => {
       @emit:reset-headers="sdStore.resetHeaders"
     >
       <template #end>
-<!--        <overlay-button />-->
-        <create-button />
+        <overlay-button />
+<!--        <create-button />-->
       </template>
     </action-toolbar>
 
