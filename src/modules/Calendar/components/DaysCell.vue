@@ -361,8 +361,8 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
                           @click.stop="collapseEventList(`${weekIndex}-${index}`)"
                           class="flex items-center justify-center w-8 h-8 rounded-full bg-primary-500 transition"
                         >
-                          <base-icon
-                            name="DoubleAltArrowDownIcon"
+                          <base-iconify
+                            icon="solar:double-alt-arrow-down-linear"
                             class="text-white"
                             :class="{ 'rotate-180' : !(toggleCount & 1) }"
                           />
@@ -377,8 +377,8 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
                           }"
                           class="flex items-center justify-center w-8 h-8 rounded-full bg-primary-500 transition"
                         >
-                          <base-icon
-                            name="AddIcon"
+                          <base-iconify
+                            icon="octicon:plus-16"
                             class="text-white"
                           />
                         </button>
@@ -451,8 +451,8 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
                 @click.stop="collapseEventList(index)"
                 class="flex items-center justify-center absolute bottom-0 right-[50%] translate-x-1/2 translate-y-[16px] z-[1] w-8 h-8 rounded-full bg-primary-500 opacity-0 transition group-hover:opacity-100"
               >
-                <base-icon
-                  name="DoubleAltArrowDownIcon"
+                <base-iconify
+                  icon="solar:double-alt-arrow-down-outline"
                   class="text-white"
                   :class="{ 'rotate-180' : !(toggleCount & 1) }"
                 />
@@ -521,8 +521,8 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
                           only-icon
                           rounded
                           text
-                          icon-left="MaximizeIcon"
-                          icon-width="16"
+                          icon-left="solar:maximize-outline"
+                          icon-width="!w-4"
                           class="text-greyscale-400"
                           @click="maximizeEvent"
                         />
@@ -533,7 +533,7 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
                             only-icon
                             rounded
                             text
-                            icon-left="TrashIcon"
+                            icon-left="solar:trash-bin-trash-outline"
                             class="text-critic-500"
                             @click="deleteEvent(
                               calendarStore.actionTypesMenuSelected.name === ACTION_FORM_TYPES.EVENT

@@ -97,12 +97,10 @@ const prevWeek = async () => {
           }"
           @click="prevWeek"
         >
-          <base-icon
-            name="AltArrowLeftIcon"
-            width="20"
-            height="20"
-            class="text-gray-2 cursor-pointer"
-          ></base-icon>
+          <base-iconify
+            icon="solar:alt-arrow-left-outline"
+            class="!w-5 !h-5 text-gray-2 cursor-pointer"
+          ></base-iconify>
         </div>
 
         <div
@@ -113,12 +111,10 @@ const prevWeek = async () => {
           }"
           @click="nextWeek"
         >
-          <base-icon
-            name="AltArrowLeftIcon"
-            width="20"
-            height="20"
-            class="rotate-180 text-gray-2 cursor-pointer"
-          ></base-icon>
+          <base-iconify
+            icon="solar:alt-arrow-right-outline"
+            class="!w-5 !h-5 text-gray-2 cursor-pointer"
+          ></base-iconify>
         </div>
       </div>
 
