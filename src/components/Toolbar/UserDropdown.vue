@@ -28,22 +28,22 @@ const items = ref([
   {
     label: 'Профиль',
     subTitle: 'Выбор режима программы',
-    icon: 'UserIcon',
+    icon: 'solar:user-outline',
   },
   {
     label: 'Настройки',
     subTitle: 'Выбор режима программы',
-    icon: 'SettingsIcon'
+    icon: 'solar:settings-outline'
   },
   {
     label: 'Поддержка',
     subTitle: 'Выбор режима программы',
-    icon: 'InfoCircleIcon'
+    icon: 'solar:info-circle-outline'
   },
   {
     label: 'Выход',
     subTitle: 'Выбор режима программы',
-    icon: 'LogoutIcon',
+    icon: 'solar:logout-2-outline',
     command: handleMenu
   }
 ])
@@ -95,8 +95,12 @@ const toggle = (event) => {
             <h1 class="text-sm font-semibold text-primary-900">{{ item.label }}</h1>
             <span class="text-xs font-medium text-greyscale-500">{{ item.subTitle }}</span>
           </div>
-          <div class="w-8 h-8 flex items-center justify-center  rounded-full bg-gray-100  group-hover:bg-primary-500 ">
-            <base-icon  width="16"  height="16" :name="item.icon" class="text-primary-900 transition-all duration-[400ms] group-hover:text-white" />
+
+          <div class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 group-hover:bg-primary-500 transition-all duration-[400ms]">
+            <base-iconify
+              :icon="item.icon"
+              class="!w-4 !h-4 text-primary-900 transition-all duration-[400ms] group-hover:text-white"
+            />
           </div>
         </div>
       </template>

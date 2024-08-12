@@ -98,12 +98,10 @@ const rootClasses = computed(() => {
     </template>
 
     <template #itemicon="{ item }">
-      <base-icon
+      <base-iconify
         v-if="item.icon"
-        :name="item.icon"
-        width="18"
-        height="18"
-        class="mr-2"
+        :icon="item.icon"
+        class="!w-[18px] !h-[18px] mr-2"
       />
     </template>
   </Menu>

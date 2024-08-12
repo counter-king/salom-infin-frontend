@@ -6,7 +6,7 @@ export const useThemeStore = defineStore("theme", {
       // Дашбоард
       {
         title: 'Дашбоард',
-        icon: 'HomeAngleIcon',
+        icon: 'solar:home-angle-2-outline',
         link: 'DashboardIndex',
         children: [],
         count: null,
@@ -15,7 +15,7 @@ export const useThemeStore = defineStore("theme", {
       // Календарь
       {
         title: 'Календарь',
-        icon: 'CalendarIcon',
+        icon: 'solar:calendar-outline',
         link: 'CalendarIndex',
         children: [],
         count: null,
@@ -24,24 +24,24 @@ export const useThemeStore = defineStore("theme", {
       // Документ
       {
         title: 'Документ',
-        icon: 'FolderWithFilesIcon',
+        icon: 'solar:folder-with-files-outline',
         link: 'DocumentsIndex',
         count: null,
         name: 'document'
       },
       // Kanban
-      {
-        title: 'Kanban',
-        icon: 'ChatSquareIcon',
-        link: 'KanbanIndex',
-        children: [],
-        count: null,
-        name: 'kanban'
-      },
+      // {
+      //   title: 'Kanban',
+      //   icon: 'ChatSquareIcon',
+      //   link: 'KanbanIndex',
+      //   children: [],
+      //   count: null,
+      //   name: 'kanban'
+      // },
       // Чат
       {
         title: 'Чат',
-        icon: 'ChatLineIcon',
+        icon: 'solar:chat-line-outline',
         link: 'ChatIndex',
         children: [],
         count: null,
@@ -50,7 +50,7 @@ export const useThemeStore = defineStore("theme", {
       // HR
       {
         title: 'HR',
-        icon: 'UserCheckIcon',
+        icon: 'solar:user-check-outline',
         link: 'HRIndex',
         children: [],
         count: null,
@@ -59,7 +59,7 @@ export const useThemeStore = defineStore("theme", {
       // Настройки
       {
         title: 'Настройки',
-        icon: 'SettingsIcon',
+        icon: 'solar:settings-outline',
         link: 'SettingsIndex',
         children: [],
         count: null,

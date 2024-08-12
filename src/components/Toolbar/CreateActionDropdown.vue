@@ -12,12 +12,12 @@ const menuRef = ref(null)
 const items = ref([
   {
     label: 'Документ',
-    icon: 'ClipboardCheckIcon',
+    icon: 'solar:clipboard-check-outline',
     command: () => docFlowStore.actionToggleModalCreateDocument(true)
   },
   {
     label: 'Задача',
-    icon: 'CheckCircleIcon'
+    icon: 'solar:check-circle-outline'
   }
 ])
 // Methods
@@ -30,8 +30,8 @@ const toggle = (event) => {
 <template>
   <base-button
     label="create"
-    icon-left="AddIcon"
-    icon-right="AltArrowDownIcon"
+    icon-left="heroicons:plus-20-solid"
+    icon-right="solar:alt-arrow-down-outline"
     rounded
     type="button"
     aria-haspopup="true"

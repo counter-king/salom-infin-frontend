@@ -9,7 +9,7 @@ const sidebar = ref(false)
     <base-button
       color="bg-greyscale-800 hover:bg-greyscale-900"
       border-color="border-greyscale-800"
-      icon-left="BellIcon"
+      icon-left="solar:bell-outline"
       only-icon
       rounded
       @click="sidebar = !sidebar"
@@ -23,8 +23,8 @@ const sidebar = ref(false)
       rootClass="w-[506px]"
     >
       <template #headerCloseIcons>
-        <base-icon name="CheckReadIcon" width="16" height="16" class="mr-3 cursor-pointer"/>
-        <base-icon name="SettingsIcon" width="16" height="16" class="cursor-pointer"/>
+        <base-iconify icon="solar:check-read-outline" class="!w-5 !h-5 mr-3 cursor-pointer"/>
+        <base-iconify icon="solar:settings-outline" class="!w-5 !h-5 cursor-pointer"/>
       </template>
 
       <template #content>

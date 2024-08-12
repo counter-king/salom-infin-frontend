@@ -22,8 +22,7 @@ const navigateToRouter = () => {
       !focus:outline-none focus:ring-0  focus:border-inherit focus-visible:border-inherit"
       v-model="search"
       placeholder="document-number"
-      iconLeft="MagniferIcon"
-      iconLeftClass="-mt-2"
+      iconLeft="solar:magnifer-outline"
       @keyup.enter="navigateToRouter"
       >
     </base-input>
