@@ -26,9 +26,10 @@ const list = [
           class="flex items-center gap-2 bg-greyscale-50 h-12 rounded-lg py-3 px-4"
           :class="{ 'mb-1': index !== list.length - 1 }"
         >
-          <base-icon
-            name="AddCircleIcon"
+          <base-iconify
+            icon="solar:add-circle-bold"
             type="primary"
+            class="text-primary-500"
           />
 
           <h1 class="text-sm text-primary-900 font-semibold">{{ item }}</h1>

@@ -21,7 +21,7 @@ import {
   fetchDocumentTitlesList, fetchDocumentSubTypesList, fetchCompaniesList
 } from '@/services/common.service'
 // Enums
-import { CORRESPONDENT } from '@/enums'
+import { CORRESPONDENT, JOURNAL_CODES } from '@/enums'
 
 export const useCommonStore = defineStore("common", {
 	state: () => ({
@@ -161,7 +161,35 @@ export const useCommonStore = defineStore("common", {
       const collectStore = useCollectRequestsStore()
 
       fetchJournalsList().then(({ data }) => {
-        this.journalsList = data.results
+        // this.journalsList = data.results
+        this.journalsList = data.results.map(journal => {
+          let iconPath = null
+
+          switch (journal.code) {
+            case JOURNAL_CODES.INCOMING:
+              iconPath = 'solar:arrow-right-down-outline'
+              break;
+            case JOURNAL_CODES.INNER:
+              iconPath = 'solar:arrow-down-outline'
+              break;
+            case JOURNAL_CODES.OUTGOING:
+              iconPath = 'solar:round-alt-arrow-down-outline'
+              break;
+            case JOURNAL_CODES.APPEALS:
+              iconPath = 'solar:document-text-outline'
+              break;
+            case JOURNAL_CODES.ORDERS_PROTOCOLS:
+              iconPath = 'solar:notebook-linear'
+              break;
+            default: // APPLICATION
+              iconPath = 'solar:notes-outline'
+          }
+
+          return {
+            ...journal,
+            icon: iconPath
+          }
+        })
       })
       // Добавляем запрос в коллекцию
       collectStore.actionAddRequests({

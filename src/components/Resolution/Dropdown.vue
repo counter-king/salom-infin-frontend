@@ -63,7 +63,7 @@ const items = ref([
     items: [
       {
         label: 'create-resolutions',
-        icon: 'AddCircleIcon',
+        icon: 'solar:add-circle-linear',
         command: () => props.isResolutionSigned
           ? dispatchNotify(null, 'Сначало отмените подпись', COLOR_TYPES.SUCCESS)
           : createResolutionDialog.value = true
@@ -146,7 +146,7 @@ const deleteResolution = async (text) => {
   <div class="resolution-dropdown-view">
     <base-button
       label="resolution"
-      icon-right="AltArrowDownIcon"
+      icon-right="solar:alt-arrow-down-outline"
       rounded
       outlined
       shadow
@@ -162,7 +162,7 @@ const deleteResolution = async (text) => {
     >
       <template #item="{ item }">
         <div class="flex items-center gap-2 py-[6px] pl-3 cursor-pointer">
-          <base-icon :name="item.icon" width="18" />
+          <base-iconify :icon="item.icon" class="!w-4 !h-4" />
 
           <span class="flex-1 text-sm font-medium text-primary-900">{{ t(item.label) }}</span>
 
@@ -179,7 +179,7 @@ const deleteResolution = async (text) => {
                   class="w-5 h-5"
                   @click="getResolutionById(item, FORM_TYPE_UPDATE)"
                 >
-                  <base-icon name="PenIcon" width="16" class="text-primary-500" />
+                  <base-iconify icon="solar:pen-2-outline" class="text-primary-500" />
                 </button>
 
                 <button
@@ -191,7 +191,7 @@ const deleteResolution = async (text) => {
                   class="w-5 h-5"
                   @click="showCommentModal(item)"
                 >
-                  <base-icon name="TrashIcon" width="16" class="text-critic-500" />
+                  <base-iconify icon="solar:trash-bin-trash-outline" class="text-critic-500" />
                 </button>
               </template>
 

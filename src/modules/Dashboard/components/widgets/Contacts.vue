@@ -86,11 +86,9 @@ onMounted(async () => {
                   }"
                   class="h-4"
                 >
-                  <base-icon
-                    name="ChatLineIcon"
-                    width="16"
-                    height="16"
-                    class="text-greyscale-300 cursor-pointer hover:text-primary-500"
+                  <base-iconify
+                    icon="solar:chat-line-outline"
+                    class="text-greyscale-300 cursor-pointer hover:text-primary-500 !w-5 !h-5"
                   />
                 </div>
               </template>

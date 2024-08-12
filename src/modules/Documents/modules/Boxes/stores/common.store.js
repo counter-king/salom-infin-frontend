@@ -18,13 +18,13 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
   state: () => ({
     routes: {
       title: "Ящики",
-      icon: "InboxUnreadIcon",
+      icon: "solar:inbox-unread-outline",
       link: "BoxesIndex",
       children: [
         // На рассмотрении
         {
           title: "На рассмотрении",
-          icon: "TimeHistoryIcon",
+          icon: "solar:history-2-outline",
           link: "ReviewIndex",
           children: [],
           count: null,
@@ -33,7 +33,7 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
         // Моё поручение
         {
           title: "Мои поручение",
-          icon: "ArrowRightDownIcon",
+          icon: "solar:arrow-right-down-outline",
           link: "AssignmentIndex",
           children: [],
           count: null,
@@ -42,7 +42,7 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
         // На подпись
         {
           title: "На подпись",
-          icon: "PenIcon",
+          icon: "solar:pen-2-outline",
           link: "SignIndex",
           children: [],
           count: null,
@@ -51,7 +51,7 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
         // На согласовании
         {
           title: "На согласовании",
-          icon: "EyeIcon",
+          icon: "solar:eye-outline",
           link: "ApprovalIndex",
           children: [],
           count: null,
@@ -60,7 +60,7 @@ export const useBoxesCommonStore = defineStore("boxes-common", {
         // На контроль
         {
           title: "На контроль",
-          icon: "CheckCircleIcon",
+          icon: "solar:check-circle-outline",
           link: "ControlIndex",
           children: [],
           count: null,

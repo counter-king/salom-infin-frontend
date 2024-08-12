@@ -136,7 +136,7 @@ const { date } = inject('calendar')
         placeholder="choose-start-time"
       >
         <template #dropdownicon>
-          <base-icon name="ClockCircleIcon" width="18" />
+          <base-iconify icon="solar:clock-circle-linear" class="!w-5 !h-5" />
         </template>
       </base-dropdown>
     </base-col>
@@ -154,7 +154,7 @@ const { date } = inject('calendar')
         placeholder="choose-end-time"
       >
         <template #dropdownicon>
-          <base-icon name="ClockCircleIcon" width="18" />
+          <base-iconify icon="solar:clock-circle-linear" class="!w-5 !h-5" />
         </template>
       </base-dropdown>
     </base-col>

@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Calendar from 'primevue/calendar'
 // Composable
@@ -204,7 +204,7 @@ const daySelect = (value) => {
       }"
     >
       <template #dropdownicon>
-        <base-icon name="CalendarIcon" width="18" />
+        <base-iconify icon="solar:calendar-linear" class="!w-5 !h-5" />
       </template>
     </Calendar>
 

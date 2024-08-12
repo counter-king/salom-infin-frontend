@@ -44,7 +44,7 @@ const actionTypesMenu = (type) => {
       <h1 class="text-xl font-bold text-primary-900">{{ menuActiveText.label }}</h1>
     </slot>
 
-    <base-icon name="AltArrowLeftIcon" class="-rotate-90 mt-1 text-gray-2" />
+    <base-iconify icon="solar:alt-arrow-down-outline" class="mt-1 text-gray-2" />
   </button>
 
   <base-menu

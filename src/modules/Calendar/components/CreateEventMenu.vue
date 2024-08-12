@@ -39,7 +39,7 @@ const toggle = (event) => {
 <template>
   <base-button
     label="create"
-    icon-right="AltArrowDownIcon"
+    icon-right="solar:alt-arrow-down-outline"
     rounded
     type="button"
     aria-haspopup="true"
