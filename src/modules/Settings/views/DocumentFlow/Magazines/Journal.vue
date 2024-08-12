@@ -13,6 +13,8 @@ import { ref, watch, onMounted } from 'vue';
 import { useI18n } from "vue-i18n";
 import Checkbox from 'primevue/checkbox';
 import { useCommonStore } from '@/stores/common';
+// Enums
+import { COLOR_TYPES } from '@/enums'
 const commonStore = useCommonStore();
 const { locale } = useI18n();
 const props = defineProps({ data: Object, field: String, getFirstPageJournals: Function, journals: Array, setJournals: Function });
@@ -39,7 +41,7 @@ const journalEdit = () => {
             const status = response?.status;
             if(status === 200) {
                commonStore.actionJournalsList();
-               dispatchNotify('Журнал обновлен', '', 'success');
+               dispatchNotify(null, 'Журнал обновлен', COLOR_TYPES.SUCCESS);
                editVisible.value = false;
                props.getFirstPageJournals();
             }
@@ -49,11 +51,11 @@ const journalEdit = () => {
             editLoading.value = false;
          });
    } else if(!name_uz || !name_ru) {
-      dispatchNotify('Введите название', '', 'error');
+      dispatchNotify(null, 'Введите название', COLOR_TYPES.ERROR);
    } else if(!code) {
-      dispatchNotify('Введите код', '', 'error');
+      dispatchNotify(null, 'Введите код', COLOR_TYPES.ERROR);
    } else {
-      dispatchNotify('Введите сортировка', '', 'error');
+      dispatchNotify(null, 'Введите сортировка', COLOR_TYPES.ERROR);
    }
 };
 const journalDelete = () => {
@@ -65,7 +67,7 @@ const journalDelete = () => {
          if(response?.status === 204) {
             commonStore.actionJournalsList();
             deleteVisible.value = false;
-            dispatchNotify('Журнал удален', '', 'success')
+            dispatchNotify(null, 'Журнал удален', COLOR_TYPES.SUCCESS)
             props.getFirstPageJournals();
          }
       })
@@ -83,7 +85,7 @@ const updateCondition = value => {
          const status = response?.status;
          if(status === 200) {
             commonStore.actionJournalsList();
-            dispatchNotify('Статус обновлен', '', 'success');
+            dispatchNotify(null, 'Статус обновлен', COLOR_TYPES.SUCCESS);
             props.getFirstPageJournals();
          }
       })
@@ -101,7 +103,7 @@ const changeOrder = () => {
          const status = response?.status;
          if(status === 200) {
             commonStore.actionJournalsList();
-            dispatchNotify('Сортировка обновлен', '', 'success');
+            dispatchNotify(null, 'Сортировка обновлен', COLOR_TYPES.SUCCESS);
             props.getFirstPageJournals();
          }
       })
@@ -343,7 +345,7 @@ onMounted(() => {
                   @click="() => {
                      editVisible = false;
                   }"
-                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
@@ -351,7 +353,7 @@ onMounted(() => {
                </Button>
                <Button
                   @click="journalEdit"
-                  class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 m-0"
+                  class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"
                >Изменить</Button>
@@ -387,7 +389,7 @@ onMounted(() => {
             <template v-else>
                <Button
                   @click="deleteVisible = false"
-                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
@@ -395,7 +397,7 @@ onMounted(() => {
                </Button>
                <Button
                   @click="journalDelete"
-                  class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 m-0"
+                  class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"
                >Удалить</Button>

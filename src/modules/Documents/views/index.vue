@@ -20,7 +20,7 @@ const menus = ref([
   // Отправка документов
   {
     title: "Отправка документов",
-    icon: "ArchiveUpIcon",
+    icon: "solar:archive-up-outline",
     link: "SendDocumentsIndex",
     children: []
   },

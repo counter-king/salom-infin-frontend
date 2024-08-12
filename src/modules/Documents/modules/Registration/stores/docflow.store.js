@@ -19,7 +19,7 @@ export const useDocFlowStore = defineStore("docFlowStore", {
   state: () => ({
     routes: {
       title: "Регистрация",
-      icon: "ClipboardUpIcon",
+      icon: "solar:clipboard-add-outline",
       link: "RegistrationIndex",
       children: []
     },
