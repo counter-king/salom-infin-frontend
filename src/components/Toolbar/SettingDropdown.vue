@@ -20,7 +20,7 @@ const toggle = (event) => {
     <base-button
       color="bg-greyscale-800 hover:bg-greyscale-900"
       border-color="border-greyscale-800"
-      icon-left="SettingsIcon"
+      icon-left="solar:settings-outline"
       only-icon
       rounded
       @click="toggle"
@@ -31,14 +31,12 @@ const toggle = (event) => {
       width="w-[406px]"
       has-overlay
       content="p-3"
-      menu-class="bg-primary-50  mt-7  p-0"
+      menu-class="bg-primary-50 mt-7 p-0"
     >
       <div class="block">
         <div class="flex justify-between items-start px-4 py-5 mb-1 rounded-xl bg-white cursor-pointer shadow-button">
-          <base-icon
-            width="24"
-            height="24"
-            name="MoonStarsIcon"
+          <base-iconify
+            icon="solar:moon-stars-outline"
             class="text-primary-500 transition-all duration-[400ms"
           />
           <div class="block ml-3 flex-1">
@@ -53,10 +51,8 @@ const toggle = (event) => {
         </div>
 
         <div class="flex justify-between items-start px-4 py-5 mb-1 rounded-xl bg-white cursor-pointer shadow-button">
-          <base-icon
-            width="24"
-            height="24"
-            name="RefreshIcon"
+          <base-iconify
+            icon="solar:refresh-outline"
             class="text-primary-500 transition-all duration-[400ms"
           />
           <div class="block ml-3 flex-1">
@@ -75,10 +71,8 @@ const toggle = (event) => {
         <base-row>
           <base-col col-class="w-1/2 py-0 pr-0.5">
             <div class="flex justify-between items-start px-4 py-5 mb-1 rounded-xl bg-white cursor-pointer shadow-button">
-              <base-icon
-                width="24"
-                height="24"
-                name="ClockCircleIcon"
+              <base-iconify
+                icon="solar:clock-circle-outline"
                 class="text-primary-500 transition-all duration-[400ms"
               />
               <div class="block ml-3 flex-1">
@@ -91,10 +85,8 @@ const toggle = (event) => {
 
           <base-col col-class="w-1/2 py-0 pl-0.5">
             <div class="flex justify-between items-start px-4 py-5 mb-1 rounded-xl bg-white cursor-pointer shadow-button">
-              <base-icon
-                width="24"
-                height="24"
-                name="CalendarIcon"
+              <base-iconify
+                icon="solar:calendar-outline"
                 class="text-primary-500 transition-all duration-[400ms"
               />
               <div class="block ml-3 flex-1">
@@ -107,10 +99,8 @@ const toggle = (event) => {
         </base-row>
 
         <div class="flex justify-between items-start px-4 py-5 mb-1 rounded-xl bg-white cursor-pointer shadow-button">
-          <base-icon
-            width="24"
-            height="24"
-            name="FiltersIcon"
+          <base-iconify
+            icon="solar:filter-outline"
             class="text-primary-500 transition-all duration-[400ms"
           />
           <div class="block ml-3 flex-1">
@@ -173,10 +163,8 @@ const toggle = (event) => {
         </div>
 
         <div class="flex justify-between items-start px-4 py-5 mb-1 rounded-xl bg-white cursor-pointer shadow-button">
-          <base-icon
-            width="24"
-            height="24"
-            name="MirrorRightIcon"
+          <base-iconify
+            icon="solar:mirror-right-outline"
             class="text-primary-500 transition-all duration-[400ms"
           />
           <div class="block ml-3 flex-1">

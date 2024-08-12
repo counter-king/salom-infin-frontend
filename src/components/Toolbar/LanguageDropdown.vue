@@ -7,6 +7,7 @@ import { useCollectRequestsStore } from '@/stores/collect-requests.store'
 // Utils
 import { saveStorageItem, getStorageItem } from "@/utils/storage"
 import { LANG } from "@/constants/storage"
+import BaseIconify from "@/components/UI/BaseIconify.vue";
 // Composable
 const { t } = useI18n()
 const collectStore = useCollectRequestsStore()
@@ -69,7 +70,7 @@ onMounted(() => {
       >
         <span class="text-primary-900 font-semibold text-sm">{{ languageSelected.text }}</span>
 
-        <base-icon name="AltArrowDownIcon" width="18" class="text-greyscale-500" />
+        <base-iconify icon="solar:alt-arrow-down-outline" class="!w-5 !h-5 text-greyscale-500" />
       </button>
     </template>
 
@@ -77,7 +78,7 @@ onMounted(() => {
       <base-button
         color="bg-greyscale-800 hover:bg-greyscale-900"
         border-color="border-greyscale-800"
-        icon-left="GlobalIcon"
+        icon-left="solar:global-outline"
         only-icon
         rounded
         @click="toggle"
@@ -102,12 +103,10 @@ onMounted(() => {
 
           <h1 class="flex-1 ml-3 text-sm font-semibold text-primary-900">{{ language.text }}</h1>
 
-          <base-icon
+          <base-iconify
             v-if="language.icon === languageSelected.icon"
-            width="17"
-            height="17"
-            name="CheckCircleBgIcon"
-            class="text-white transition-all duration-[400ms]"
+            icon="solar:check-circle-bold-duotone"
+            class="!w-4 !h-4 text-primary-500 transition-all duration-[400ms]"
           />
         </div>
       </template>
@@ -115,9 +114,5 @@ onMounted(() => {
   </div>
 </template>
 <style>
-.base-menu-logout-icons {
-  background-color: var(--primary-50);
-  color: var(--primary-500);
-  border-color: var(--greyscale-200);
-}
+
 </style>

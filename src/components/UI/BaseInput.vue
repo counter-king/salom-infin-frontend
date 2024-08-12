@@ -65,8 +65,15 @@ const { t } = useI18n()
   <div class="app-input">
     <base-label :label="props.label" :required="props.required" />
 
-    <slot name="input-icon-left" v-if="slots['input-icon-left'] || props.iconLeft">
-      <base-icon :name="props.iconLeft" width="16" height="16" :class="props.iconLeftClass" />
+    <slot
+      v-if="slots['input-icon-left'] || props.iconLeft"
+      name="input-icon-left"
+    >
+      <base-iconify
+        :icon="props.iconLeft"
+        :class="props.iconLeftClass"
+        class="!w-5 !h-5 -mt-[11px]"
+      />
     </slot>
 
     <InputText
@@ -90,8 +97,15 @@ const { t } = useI18n()
       }"
     />
 
-    <slot name="input-icon-right" v-if="slots['input-icon-right'] || props.iconRight">
-      <base-icon :name="props.iconRight" width="16" height="16" :class="props.iconRightClass" />
+    <slot
+      v-if="slots['input-icon-right'] || props.iconRight"
+      name="input-icon-right"
+      class="!w-5 !h-5"
+    >
+      <base-iconify
+        :icon="props.iconRight"
+        :class="props.iconRightClass"
+      />
     </slot>
 
     <template v-if="props.error.$errors.length">

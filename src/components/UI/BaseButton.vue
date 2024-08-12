@@ -54,12 +54,12 @@ const props = defineProps({
     }
   },
   iconWidth: {
-    type: [Number, String],
-    default: 20
+    type: String,
+    default: '!w-5'
   },
   iconHeight: {
-    type: [Number, String],
-    default: 20
+    type: String,
+    default: '!h-5'
   },
 })
 // Classes
@@ -114,15 +114,15 @@ const rootClasses = computed(() => {
     <template #default>
       <div class="flex items-center justify-center w-full">
         <template v-if="props.iconLeft">
-          <base-icon
-            :name="props.iconLeft"
-            :color="props.iconColor"
-            :width="props.iconWidth"
-            :height="props.iconHeight"
-            :class="{
-              'mr-1 -ml-1': !props.onlyIcon,
-              'text-greyscale-500': props.outlined
-            }"
+          <base-iconify
+            :icon="props.iconLeft"
+            :class="[
+              props.iconColor, props.iconWidth, props.iconHeight,
+              {
+                'mr-1 -ml-1': !props.onlyIcon,
+                'text-greyscale-500': props.outlined
+              }
+            ]"
           />
         </template>
 
@@ -133,15 +133,15 @@ const rootClasses = computed(() => {
         </slot>
 
         <template v-if="props.iconRight">
-          <base-icon
-            :name="props.iconRight"
-            :color="props.iconColor"
-            :width="props.iconWidth"
-            :height="props.iconHeight"
-            :class="{
-              'ml-2': !props.onlyIcon,
-              'text-greyscale-500': props.outlined
-            }"
+          <base-iconify
+            :icon="props.iconRight"
+            :class="[
+              props.iconColor, props.iconWidth, props.iconHeight,
+              {
+                'ml-2': !props.onlyIcon,
+                'text-greyscale-500': props.outlined
+              }
+            ]"
           />
         </template>
 
