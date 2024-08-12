@@ -31,7 +31,6 @@ const items = [
     items: [
       {
         label: 'business-trip',
-	      icon: 'NotesIcon',
 	      type: 'submenu',
 	      hasRouterLink: true,
 	      routerLinkName: ROUTE_SD_CREATE,
@@ -48,12 +47,27 @@ const items = [
     items: [
       {
         label: 'labor-leave',
-	      icon: 'NotesIcon',
 	      type: 'submenu',
 	      hasRouterLink: true,
 	      routerLinkName: ROUTE_SD_CREATE,
 	      documentType: COMPOSE_DOCUMENT_TYPES.APPLICATION,
 	      documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.LABOR_LEAVE
+      }
+    ],
+  },
+  {
+    label: 'order',
+    icon: 'DocumentMedicineIcon',
+    type: 'menu',
+    hasRouterLink: false,
+    items: [
+      {
+        label: 'business-trip-order',
+        type: 'submenu',
+        hasRouterLink: true,
+        routerLinkName: ROUTE_SD_CREATE,
+        documentType: COMPOSE_DOCUMENT_TYPES.ORDER,
+        documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER
       }
     ],
   },
@@ -83,7 +97,7 @@ const onShow = () => {
   <div>
     <base-button
       label="create"
-      icon-left="AddIcon"
+      icon-left="ic:baseline-plus"
       rounded
       type="button"
       @click="toggleMenu"

@@ -14,7 +14,7 @@ const router = useRouter()
 <template>
   <base-button
     size="small"
-    icon-left="AltArrowLeftIcon"
+    icon-left="solar:alt-arrow-left-outline"
     outlined
     shadow
     icon-width="16"

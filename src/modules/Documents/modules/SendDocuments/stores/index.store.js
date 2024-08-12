@@ -47,16 +47,17 @@ export const useSDStore = defineStore("sd-stores", {
         disabled: false,
         document_type: COMPOSE_DOCUMENT_TYPES.APPLICATION
       },
-      // // Рапорт для ротации
-      // {
-      //   label: "hr-rotation",
-      //   icon: "RefreshIcon",
-      //   type: "hr_rotation",
-      //   sub_type: "hr_rotation",
-      //   active: false,
-      //   selected: false,
-      //   disabled: false
-      // },
+      // 	Приказ
+      {
+        label: "order",
+        icon: "DocumentMedicineIcon",
+        type: "hr_rotation",
+        sub_type: "hr_rotation",
+        active: false,
+        selected: true,
+        disabled: false,
+        document_type: COMPOSE_DOCUMENT_TYPES.ORDER
+      },
       // // Заключение
       // {
       //   label: "summary",
@@ -256,6 +257,17 @@ export const useSDStore = defineStore("sd-stores", {
           selected: true,
           disabled: false,
           document_type: COMPOSE_DOCUMENT_TYPES.APPLICATION
+        },
+        // 	Приказ
+        {
+          label: "order",
+          icon: "DocumentMedicineIcon",
+          type: "hr_rotation",
+          sub_type: "hr_rotation",
+          active: false,
+          selected: true,
+          disabled: false,
+          document_type: COMPOSE_DOCUMENT_TYPES.ORDER
         },
         // // Рапорт
         // {

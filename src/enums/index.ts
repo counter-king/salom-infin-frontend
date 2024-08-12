@@ -29,13 +29,15 @@ export const JOURNAL_CODES = {
 }
 export const COMPOSE_DOCUMENT_TYPES = {
   NOTICE: '1',
+  ORDER: '2',
   INNER: '3',
   APPLICATION: '5'
 }
 export const COMPOSE_DOCUMENT_SUB_TYPES = {
   LABOR_LEAVE: '1',
   BUSINESS_TRIP: '2',
-  SERVICE_LETTER: '3'
+  SERVICE_LETTER: '3',
+  BUSINESS_TRIP_ORDER: '4'
 }
 export const COLOR_TYPES = {
   PRIMARY: "primary",

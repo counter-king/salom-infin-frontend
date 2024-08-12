@@ -150,7 +150,7 @@ onMounted( async () => {
           class="p-4 overflow-y-auto"
           style="height: calc(100vh - 250px)"
         >
-          <div class="py-4 px-6 min-h-full shadow-block border-[0.095rem] border-greyscale-200 rounded-2xl">
+          <div class="p-10 pl-[80px] min-h-full shadow-block border-[0.095rem] border-greyscale-200 rounded-2xl">
             <base-template
               v-if="signStore.detailModel && signStore.detailModel.compose"
               :compose-model="signStore.detailModel?.compose"
