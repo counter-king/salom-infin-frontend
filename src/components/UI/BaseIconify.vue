@@ -1,15 +1,8 @@
 <script setup>
-// Core
-import { Icon } from '@iconify/vue'
 // Macros
-const props = defineProps({
-  icon: {
-    type: String,
-    default: 'solar:home-2-outline'
-  }
-})
+const props = defineProps(['icon'])
 </script>
 
 <template>
-  <Icon :icon="props.icon" class="w-6 h-6" />
+  <component :is="props.icon" class="w-5 h-5" />
 </template>
