@@ -35,11 +35,10 @@ const props = defineProps({
         class="flex gap-3 bg-white shadow-button rounded-[10px] p-4"
       >
         <div class="flex items-center justify-center w-10 h-10 rounded-full" :class="item.avatarColor">
-          <base-icon
+          <base-iconify
             :key="item.icon"
-            :name="item.icon"
+            :icon="item.icon"
             :class="item.iconColor"
-            :stroke="false"
           />
         </div>
 

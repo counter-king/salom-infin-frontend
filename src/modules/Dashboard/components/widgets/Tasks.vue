@@ -60,7 +60,7 @@ const toggle = (event) => {
         type="button"
         size="small"
         outlined
-        icon-right="AltArrowDownIcon"
+        icon-right="solar:alt-arrow-down-outline"
         icon-width="16"
         icon-height="16"
         button-class="!bg-greyscale-50 !py-1 !px-2 !rounded-[6px] border-none"
@@ -99,7 +99,7 @@ const toggle = (event) => {
                 </div>
 
                 <div class="flex items-center gap-1">
-                  <base-icon name="CalendarIcon" class="text-greyscale-400" />
+                  <base-iconify icon="solar:calendar-outline" class="text-greyscale-400 !w-5 !h-5" />
                   <span class="text-sm font-medium text-greyscale-400">12.02.2024</span>
                 </div>
 
