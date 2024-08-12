@@ -94,7 +94,7 @@
   "upload-file": "Загрузить файл",
   "no-comment": "Пока что нет ни каких комментариев",
   "attach-file": "Прикрепить файл",
-  "changed": "изменено",
+  "changed": "Изменено",
   "answer": "Ответить",
   "edit": "Редактировать",
   "delete" : "Удалить",
@@ -305,5 +305,10 @@
   "select-targets": "Выберите цели",
   "route": "Маршрут",
   "select-route": "Выберите маршрут",
-  "business-trip": "Командировка"
+  "business-trip": "Командировка",
+  "create-business-trip-notice": "Создать рапорт на командировке",
+  "update-business-trip-notice": "Изменить рапорт на командировке",
+  "labor-leave": "Трудовой отпуск",
+  "order": "Приказ",
+  "business-trip-order": "Командировочный приказ"
 }

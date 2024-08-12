@@ -150,7 +150,7 @@ onMounted(async () => {
     border-color="border-transparent"
     label="filter"
     icon-color="#767994"
-    icon-left="SortIcon"
+    icon-left="solar:sort-outline"
     rounded
     shadow
     type="button"

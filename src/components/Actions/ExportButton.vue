@@ -8,7 +8,7 @@
     border-color="border-transparent"
     label="export"
     icon-color="#767994"
-    icon-left="FileDownload"
+    icon-left="ci:file-download"
     rounded
     shadow
     type="button"

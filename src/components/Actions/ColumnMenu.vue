@@ -49,7 +49,7 @@ const emits = defineEmits(['emit:resetHeaders']);
     border-color="border-transparent"
     label="customize-columns"
     icon-color="#767994"
-    icon-left="SettingsMinimalisticIcon"
+    icon-left="solar:settings-minimalistic-outline"
     rounded
     shadow
     type="button"

@@ -17,7 +17,7 @@ const SendDocuments = [
         component: () => import("../views/List.vue"),
       },
       {
-        path: "create/:document_type",
+        path: "create/:document_type/:document_sub_type",
         name: "SendDocumentsCreate",
         meta: {
           isAuthRequired: true

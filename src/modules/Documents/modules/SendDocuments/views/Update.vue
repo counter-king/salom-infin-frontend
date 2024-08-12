@@ -3,7 +3,7 @@
 import {computed} from "vue";
 import {useRoute} from "vue-router";
 // Components
-import {InnerForm, ApplicationForm, BusinessTripNoticeForm} from "@/modules/Documents/modules/SendDocuments/views/forms/index";
+import {InnerForm, ApplicationForm, BusinessTripNoticeForm, OrderForm} from "@/modules/Documents/modules/SendDocuments/views/forms/index";
 // Constants
 import {FORM_TYPE_UPDATE} from "@/constants/constants";
 import {COMPOSE_DOCUMENT_SUB_TYPES} from "@/enums";
@@ -13,6 +13,7 @@ const formValues  = {
   [COMPOSE_DOCUMENT_SUB_TYPES.SERVICE_LETTER]: InnerForm,
   [COMPOSE_DOCUMENT_SUB_TYPES.LABOR_LEAVE]: ApplicationForm,
   [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP]: BusinessTripNoticeForm,
+  [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER]: OrderForm,
 }
 const selectedComponent = computed(
   () => {

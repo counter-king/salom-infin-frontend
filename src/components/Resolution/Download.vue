@@ -36,10 +36,10 @@ const toggle = (event) => {
       class="flex items-center gap-2 border rounded-full p-[6px] mt-4"
       :class="[props.signed ? 'bg-primary-100 border-primary-500' : 'bg-critic-100 border-critic-500']"
     >
-      <base-icon
-        :name="props.signed ? 'CheckCircleIcon' : 'TriangleDangerIcon'"
+      <base-iconify
+        :icon="props.signed ? 'solar:check-circle-outline' : 'solar:danger-triangle-outline'"
         class="text-critic-500 ml-2"
-        :class="[ props.signed ? 'text-primary-500' : 'text-critic-500' ]"
+        :class="[ '!w-5 !h-5', props.signed ? 'text-primary-500' : 'text-critic-500' ]"
       />
 
       <span
@@ -53,7 +53,7 @@ const toggle = (event) => {
         label="Загрузить фишку"
         size="small"
         rounded
-        icon-right="AltArrowDownIcon"
+        icon-right="solar:alt-arrow-down-outline"
         @click="toggle"
       />
 

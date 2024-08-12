@@ -126,8 +126,8 @@ watch(selectedDate, val => {
     border-color="border-transparent"
     label="date"
     icon-color="#767994"
-    icon-left="CalendarIcon"
-    icon-right="AltArrowDownIcon"
+    icon-left="solar:calendar-outline"
+    icon-right="solar:alt-arrow-down-outline"
     rounded
     shadow
     type="button"

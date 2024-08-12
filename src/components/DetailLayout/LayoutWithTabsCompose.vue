@@ -156,7 +156,7 @@ watch(activeTabMenu, (value) => {
             </div>
           </slot>
 
-          <div class="max-w-[600px] w-full ml-auto border-l">
+          <div class="max-w-[690px] w-full ml-auto border-l">
             <slot name="template">
               <file-tabs :resolution="props.resolution" />
             </slot>
