@@ -39,6 +39,7 @@
     "vue3-apexcharts": "^1.5.3"
   },
   "devDependencies": {
+    "@iconify-json/solar": "^1.1.10",
     "@iconify/vue": "^4.1.2",
     "@vitejs/plugin-vue": "^4.3.4",
     "@vue-macros/volar": "^0.17.1",
@@ -50,6 +51,7 @@
     "sass": "^1.69.4",
     "start-server-and-test": "^2.0.0",
     "tailwindcss": "^3.3.3",
+    "unplugin-icons": "^0.19.2",
     "unplugin-vue-components": "^0.25.2",
     "vite": "^4.4.9",
     "vitest": "^0.34.4",

@@ -1,15 +1,16 @@
 <script setup>
 // Core
 import { ref, unref, onMounted } from 'vue'
-import { useI18n } from "vue-i18n"
 // Stores
 import { useCollectRequestsStore } from '@/stores/collect-requests.store'
+// Components
+import AltArrowDownOutline from '~icons/solar/alt-arrow-down-outline'
+import CheckCircleBold from '~icons/solar/check-circle-bold'
 // Utils
-import { saveStorageItem, getStorageItem } from "@/utils/storage"
-import { LANG } from "@/constants/storage"
-import BaseIconify from "@/components/UI/BaseIconify.vue";
+import { saveStorageItem, getStorageItem } from '@/utils/storage'
+// Const
+import { LANG } from '@/constants/storage'
 // Composable
-const { t } = useI18n()
 const collectStore = useCollectRequestsStore()
 // Macros
 const props = defineProps({
@@ -70,7 +71,7 @@ onMounted(() => {
       >
         <span class="text-primary-900 font-semibold text-sm">{{ languageSelected.text }}</span>
 
-        <base-iconify icon="solar:alt-arrow-down-outline" class="!w-5 !h-5 text-greyscale-500" />
+        <base-iconify :icon="AltArrowDownOutline" class="text-greyscale-500" />
       </button>
     </template>
 
@@ -105,8 +106,8 @@ onMounted(() => {
 
           <base-iconify
             v-if="language.icon === languageSelected.icon"
-            icon="solar:check-circle-bold-duotone"
-            class="!w-4 !h-4 text-primary-500 transition-all duration-[400ms]"
+            :icon="CheckCircleBold"
+            class="text-primary-500 transition-all duration-[400ms]"
           />
         </div>
       </template>
