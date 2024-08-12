@@ -15,8 +15,9 @@ const menuRef = ref(null)
 const options = ref([
   {
     name: 'На рассмотрение',
-    icon: 'BoldGreenClockCircleIcon',
+    icon: 'solar:clock-circle-bold',
     avatarColor: 'bg-success-50',
+    iconColor: 'text-success-500',
     status: true,
     key: 'for_review',
     route: {
@@ -36,8 +37,9 @@ const options = ref([
   },
   {
     name: 'Поручения',
-    icon: 'BoldPrimaryRoundArrowRightDownIcon',
+    icon: 'solar:round-arrow-right-down-bold',
     avatarColor: 'bg-primary-50',
+    iconColor: 'text-primary-500',
     status: true,
     key: 'assignments',
     route: {
@@ -57,8 +59,9 @@ const options = ref([
   },
   {
     name: 'На подпись',
-    icon: 'BoldInfoMessageCoverIcon',
+    icon: 'solar:pen-new-round-bold',
     avatarColor: 'bg-info-50',
+    iconColor: 'text-info-500',
     status: true,
     key: 'for_signature',
     route: {
@@ -78,8 +81,9 @@ const options = ref([
   },
   {
     name: 'На согласование',
-    icon: 'BoldPrimaryFileCheckIcon',
+    icon: 'solar:file-check-bold',
     avatarColor: 'bg-primary-50',
+    iconColor: 'text-primary-500',
     status: true,
     key: 'for_approval',
     route: {
@@ -97,42 +101,94 @@ const options = ref([
     },
     order: 4
   },
-  // {
-  //   name: 'На обзоре',
-  //   icon: 'BoldWarningCursorIcon',
-  //   avatarColor: 'bg-warning-50',
-  //   status: true,
-  //   key: null,
-  //   route: 'ReviewIndex',
-  //   order: 5
-  // },
-  // {
-  //   name: 'Не выполнено',
-  //   icon: 'BoldCriticCloseCircleIcon',
-  //   avatarColor: 'bg-critic-50',
-  //   status: true,
-  //   key: null,
-  //   route: 'AssignmentIndex',
-  //   order: 6
-  // },
-  // {
-  //   name: 'Просроченный',
-  //   icon: 'BoldGreyCalendarIcon',
-  //   avatarColor: 'bg-greyscale-50',
-  //   status: true,
-  //   key: null,
-  //   route: 'AssignmentIndex',
-  //   order: 7
-  // },
-  // {
-  //   name: 'Для подтверждения',
-  //   icon: 'BoldGreenFolderFavIcon',
-  //   avatarColor: 'bg-success-50',
-  //   status: true,
-  //   key: null,
-  //   route: 'AssignmentIndex',
-  //   order: 8
-  // },
+  {
+    name: 'На обзоре',
+    icon: 'solar:cursor-square-bold',
+    avatarColor: 'bg-warning-50',
+    iconColor: 'text-warning-500',
+    status: true,
+    key: null,
+    route: {
+      name: 'ReviewIndex',
+      new: {
+        query: {
+          signed: 'none'
+        }
+      },
+      inProgress: {
+        query: {
+          signed: false
+        }
+      }
+    },
+    order: 5
+  },
+  {
+    name: 'Не выполнено',
+    icon: 'solar:close-circle-bold',
+    avatarColor: 'bg-critic-50',
+    iconColor: 'text-critic-500',
+    status: true,
+    key: null,
+    route: {
+      name: 'AssignmentIndex',
+      new: {
+        query: {
+          signed: 'none'
+        }
+      },
+      inProgress: {
+        query: {
+          signed: false
+        }
+      }
+    },
+    order: 6
+  },
+  {
+    name: 'Просроченный',
+    icon: 'solar:calendar-date-bold',
+    avatarColor: 'bg-greyscale-50',
+    iconColor: 'text-greyscale-500',
+    status: true,
+    key: null,
+    route: {
+      name: 'AssignmentIndex',
+      new: {
+        query: {
+          signed: 'none'
+        }
+      },
+      inProgress: {
+        query: {
+          signed: false
+        }
+      }
+    },
+    order: 7
+  },
+  {
+    name: 'Для подтверждения',
+    icon: 'solar:folder-favourite-star-bold',
+    avatarColor: 'bg-success-50',
+    iconColor: 'text-success-500',
+    status: true,
+    key: null,
+    route: {
+      name: 'AssignmentIndex',
+      new: {
+        query: {
+          signed: 'none'
+        }
+      },
+      inProgress: {
+        query: {
+          signed: false
+        }
+      }
+    },
+    order: 8
+  },
 ])
 const selected = ref([])
 const active = ref([])
@@ -198,9 +254,7 @@ onMounted(() => {
     shadow
     size="small"
     label="Настроить"
-    icon-left="SettingsMinimalisticIcon"
-    icon-width="16"
-    icon-height="16"
+    icon-left="solar:settings-minimalistic-outline"
     button-class="bg-transparent text-greyscale-500 !text-sm border-none shadow-none !rounded-[6px] !py-1 !px-2 hover:bg-greyscale-50"
     @click="toggle"
   />
@@ -232,12 +286,10 @@ onMounted(() => {
         <template #option="{ option }">
           <div class="flex items-center gap-2 py-[10px] px-3 rounded-xl">
             <div class="w-5 h-5">
-              <base-icon
-                name="CheckCircleBgIcon"
-                width="20"
-                height="20"
+              <base-iconify
+                icon="solar:check-circle-bold"
                 type="primary"
-                class="checked-icon fill-primary-500"
+                class="checked-icon !w-5 !h-5"
               />
 
               <div class="unchecked-icon w-5 h-5 border border-greyscale-200 rounded-full"></div>
