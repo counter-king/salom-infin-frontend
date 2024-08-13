@@ -166,4 +166,10 @@ export const ROUTES_TYPE = [
     value: "by_train"
   }
 ]
+export const SIGNER_TYPES = {
+  BASIC_SIGNER: 'basic_signer',
+  INVITED: 'invited',
+  NEGOTIATOR: 'negotiator',
+  SIGNER: 'signer'
+}
 

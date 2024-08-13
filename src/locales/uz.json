@@ -310,5 +310,9 @@
   "update-business-trip-notice": "Изменить рапорт на командировке",
   "labor-leave": "Трудовой отпуск",
   "order": "Приказ",
-  "business-trip-order": "Командировочный приказ"
+  "business-trip-order": "Командировочный приказ",
+  "create-order": "Создать приказ",
+  "update-order": "Изменить приказ",
+  "approver-signers": "Согласующие подписанты",
+  "select-approver-signers": "Выберите согласующие подписанты"
 }

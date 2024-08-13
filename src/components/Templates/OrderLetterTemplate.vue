@@ -4,6 +4,8 @@ import { computed } from "vue"
 // Utils
 import {formatDate, formatDateHour} from "@/utils/formatDate"
 import { formatUserFullName } from "@/utils"
+// Enums
+import { SIGNER_TYPES } from "@/enums"
 // Store
 import { useAuthStore } from "@/modules/Auth/stores"
 // Components
@@ -26,7 +28,11 @@ const author = computed(() => {
 })
 
 const signers = computed(() => {
-  return props.preview ? props.composeModel?.__signers : props.composeModel?.signers
+  return props.preview ? props.composeModel?.__signers : props.composeModel?.signers.filter(item => item.type !== SIGNER_TYPES.NEGOTIATOR)
+})
+
+const negotiators = computed(() => {
+  return props.preview ? props.composeModel?.__negotiators : props.composeModel?.signers.filter(item => item.type === SIGNER_TYPES.NEGOTIATOR)
 })
 </script>
 
@@ -42,9 +48,9 @@ const signers = computed(() => {
       </div>
     </div>
 
-    <div class="w-full rounded-[6px] bg-greyscale-50 text-sm font-semibold px-3 py-1" style="color: #003D64">
+<!--    <div class="w-full rounded-[6px] bg-greyscale-50 text-sm font-semibold px-3 py-1" style="color: #003D64">
       {{ author?.top_level_department.name }}
-    </div>
+    </div>-->
 
     <div class="flex flex-col text-sm font-medium mt-4">
       <span> № {{ props.composeModel?.register_number }}</span>
@@ -78,6 +84,31 @@ const signers = computed(() => {
             <span class="text-sm font-semibold block">{{ formatUserFullName(item) }}</span>
           </base-col>
         </base-row>
+      </template>
+
+      <template v-if="negotiators && negotiators.length">
+        <div class="text-sm italic mb-2 mt-4">Kelishuvchilar:</div>
+        <template v-for="item in negotiators" :key="item.id">
+          <base-row class="mb-2 items-center">
+            <base-col col-class="w-1/2">
+              <span class="text-sm font-semibold block">{{ item.user ? item.user.position.name : item.position.name }}</span>
+            </base-col>
+
+            <base-col col-class="w-1/4">
+              <qrcode-vue
+                v-if="item.is_signed"
+                :value="'Work Zone'"
+                :size="50"
+                level="L"
+                render-as="svg"
+              />
+            </base-col>
+
+            <base-col col-class="w-1/4">
+              <span class="text-sm font-semibold block">{{ formatUserFullName(item) }}</span>
+            </base-col>
+          </base-row>
+        </template>
       </template>
     </div>
 

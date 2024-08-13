@@ -5,7 +5,7 @@ import { helpers, required } from "@vuelidate/validators"
 import { setValuesToKeys } from "@/utils"
 import { withAsync } from "@/utils/withAsync"
 // Enums
-import { COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL } from "@/enums"
+import {COMPOSE_DOCUMENT_TYPES, JOURNAL, SIGNER_TYPES} from "@/enums"
 // Store
 import { useUsersStore } from "@/stores/users.store"
 // Services
@@ -32,11 +32,13 @@ export const useSDOrderStore = defineStore("order-store", {
       sender: null,
       signers: [],
       files: [],
+      trip_notice_id: null,
       __files: [],
       __approvers: [],
       __approvers_copy: [],
       __curator: null,
       __signers: [],
+      __negotiators: [],
       __signers_copy: []
     },
     rules: {
@@ -50,6 +52,9 @@ export const useSDOrderStore = defineStore("order-store", {
         required: helpers.withMessage(`Поле не должен быть пустым`, required)
       },
       __approvers: {
+
+      },
+      __negotiators: {
 
       },
       __curator: {
@@ -90,7 +95,8 @@ export const useSDOrderStore = defineStore("order-store", {
         this.detailLoading = true
         const {data} = await fetchGetDocumentDetail(id)
         setValuesToKeys(this.model, data)
-        this.model.__signers = data.signers
+        this.model.__signers = data.signers.filter(item => item.type !== SIGNER_TYPES.NEGOTIATOR)
+        this.model.__negotiators = data.signers.filter(item => item.type === SIGNER_TYPES.NEGOTIATOR)
         this.model.__approvers = data.approvers
         this.model.__curator = useUsersStore().usersList.find(item => item.id === data.curator.id)
 

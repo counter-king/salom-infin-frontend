@@ -6,7 +6,7 @@ import {useRoute, useRouter} from "vue-router"
 import { useVuelidate } from "@vuelidate/core"
 // Enums
 import { FORM_TYPE_CREATE } from "@/constants/constants"
-import { COLOR_TYPES, COMPOSE_DOCUMENT_TYPES } from "@/enums"
+import {COLOR_TYPES, COMPOSE_DOCUMENT_TYPES, SIGNER_TYPES} from "@/enums"
 import { ROUTE_SD_DETAIL, ROUTE_SD_LIST } from "@/modules/Documents/modules/SendDocuments/constants"
 // Utils
 import { adjustUsersToArray } from "@/utils"
@@ -55,6 +55,17 @@ const preview = async () => {
   orderStore.model.files = orderStore.model.__files.map(item => { return { id: item.id } })
   orderStore.model.document_sub_type = route.params.document_sub_type
   orderStore.model.register_date = formatDateReverse(orderStore.model.register_date)
+  orderStore.model.__negotiators.forEach(item => {
+    orderStore.model.signers.push(
+      item.hasOwnProperty('user')
+        ? { id: item.id, user: item.user.id, type: SIGNER_TYPES.NEGOTIATOR }
+        : { user: item.id, type: SIGNER_TYPES.NEGOTIATOR }
+    )
+  })
+
+  if (route.query.compose_id) {
+    orderStore.model.trip_notice_id = route.query.compose_id
+  }
 
   dialog.value = true
 
@@ -169,6 +180,14 @@ onMounted( async () => {
                 placeholder="enter-approvers"
               />
             </base-col>
+
+	          <base-col col-class="w-1/2">
+		          <user-multi-select
+			          v-model="$v.__negotiators.$model"
+			          label="approver-signers"
+			          placeholder="select-approver-signers"
+		          />
+	          </base-col>
 
             <base-col col-class="w-1/2">
               <user-multi-select
