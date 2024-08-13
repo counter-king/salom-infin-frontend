@@ -7,7 +7,8 @@ import { formatUserFullName } from "@/utils";
 // Store
 import {useAuthStore} from "@/modules/Auth/stores"
 // Components
-import QrcodeVue from "qrcode.vue";
+import QrcodeVue from "qrcode.vue"
+import { BaseHeaderTemplate, BaseSignersTemplate } from "@/components/Templates/components"
 
 
 const props = defineProps({
@@ -39,15 +40,7 @@ const author = computed(() => {
 <template>
   <div class="inner-letter-template">
 <!--    <pre>{{ composeModel }}</pre>-->
-    <div class="mb-[10px]">
-      <div class="flex">
-        <img src="@/assets/img/sqb_logo.png" alt="Logo" class="w-[114px] h-full" />
-        <div class="ml-2">
-          <div class="text-[8px] font-bold">"O'ZBEKISTON SANOAT-QURILISH BANKI" AKSIYADORLIK TIJORAT BANKI</div>
-          <div class="text-[8px] font-bold mt-[2px]">АКЦИОНЕРНЫЙ КОММЕРЧЕСКИЙ БАНК "УЗБЕКСКИЙ ПРОМЫШЛЕННО-СТРОИТЕЛЬНЫЙ БАНК"</div>
-        </div>
-      </div>
-    </div>
+    <base-header-template />
 
     <div class="w-full rounded-[6px] bg-greyscale-50 text-sm font-semibold px-3 py-1" style="color: #003D64">
       {{ author.top_level_department.name }}
@@ -70,29 +63,7 @@ const author = computed(() => {
 
     <div class="text-justify" v-html="props.composeModel?.content"></div>
 
-    <div class="mt-6 pb-2 px-4">
-      <template v-for="item in props.composeModel?.signers" :key="item.id">
-        <base-row class="mb-2 items-center">
-          <base-col col-class="w-1/2">
-            <span class="text-sm font-semibold block">{{ item.user ? item.user.position.name : item.position.name }}</span>
-          </base-col>
-
-          <base-col col-class="w-1/4">
-            <qrcode-vue
-              v-if="item.is_signed"
-              :value="'Work Zone'"
-              :size="50"
-              level="L"
-              render-as="svg"
-            />
-          </base-col>
-
-          <base-col col-class="w-1/4">
-            <span class="text-sm font-semibold block">{{ formatUserFullName(item) }}</span>
-          </base-col>
-        </base-row>
-      </template>
-    </div>
+    <base-signers-template :signers="props.composeModel?.signers" />
 
     <div class="flex flex-col my-4 text-xs font-light">
       <span><span class="font-medium">Ijrochi:</span> {{ props.composeModel?.author && formatUserFullName(props.composeModel?.author) }}</span>

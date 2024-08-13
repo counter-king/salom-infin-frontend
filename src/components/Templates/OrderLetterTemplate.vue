@@ -10,6 +10,7 @@ import { SIGNER_TYPES } from "@/enums"
 import { useAuthStore } from "@/modules/Auth/stores"
 // Components
 import QrcodeVue from "qrcode.vue"
+import { BaseHeaderTemplate } from "@/components/Templates/components"
 
 const props = defineProps({
   composeModel: {
@@ -38,15 +39,8 @@ const negotiators = computed(() => {
 
 <template>
   <div class="order-template-view">
-    <div class="mb-[10px]">
-      <div class="flex">
-        <img src="@/assets/img/sqb_logo.png" alt="Logo" class="w-[114px] h-full" />
-        <div class="ml-2">
-          <div class="text-[8px] font-bold">"O'ZBEKISTON SANOAT-QURILISH BANKI" AKSIYADORLIK TIJORAT BANKI</div>
-          <div class="text-[8px] font-bold mt-[2px]">АКЦИОНЕРНЫЙ КОММЕРЧЕСКИЙ БАНК "УЗБЕКСКИЙ ПРОМЫШЛЕННО-СТРОИТЕЛЬНЫЙ БАНК"</div>
-        </div>
-      </div>
-    </div>
+
+    <base-header-template />
 
 <!--    <div class="w-full rounded-[6px] bg-greyscale-50 text-sm font-semibold px-3 py-1" style="color: #003D64">
       {{ author?.top_level_department.name }}
