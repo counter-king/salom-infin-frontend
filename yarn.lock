@@ -237,6 +237,13 @@
   dependencies:
     "@iconify/types" "*"
 
+"@iconify-json/heroicons@^1.1.24":
+  version "1.1.24"
+  resolved "https://registry.yarnpkg.com/@iconify-json/heroicons/-/heroicons-1.1.24.tgz#91b8e1a1f6fffdc5104c5fa4e7195164d5234c2e"
+  integrity sha512-Axd6nxsEeQMpuK8ugkAkJ1kS6cbmgXX1s1+Z6NbANvtgtNTBIx9bLQcEL6loKjxpfktDXERElrR5G6xzWOqysg==
+  dependencies:
+    "@iconify/types" "*"
+
 "@iconify-json/solar@^1.1.10":
   version "1.1.10"
   resolved "https://registry.yarnpkg.com/@iconify-json/solar/-/solar-1.1.10.tgz#5032a157508a0fb74f2a4beac56b1a577470609d"
