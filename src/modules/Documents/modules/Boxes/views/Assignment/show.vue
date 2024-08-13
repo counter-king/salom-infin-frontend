@@ -29,7 +29,8 @@ const assignmentStore = useAssignmentStore()
 const loading = ref(true)
 // Computed
 const createOrderVisible = computed(() => {
-	return assignmentStore.detailModel?.document?.document_type
+	return assignmentStore.detailModel?.document?.document_type?.id === Number(COMPOSE_DOCUMENT_TYPES.NOTICE) &&
+		assignmentStore.detailModel?.document?.document_sub_type?.id === Number(COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP)
 })
 // Hooks
 onMounted(async () => {
@@ -91,21 +92,25 @@ const updateDocument = async () => {
               :resolution-create-type="RESOLUTION_CREATE_TYPES.ASSIGNMENT"
               :register-date="new Date(assignmentStore.detailModel.document.register_date)"
             />
-          </template>
 
-	        <base-button
-		        label="create-order"
-		        :icon-left="CheckCircleIcon"
-		        rounded
-		        type="button"
-		        @click="router.push({
+	          <base-button
+		          v-if="createOrderVisible"
+		          label="create-order"
+		          :icon-left="CheckCircleIcon"
+		          rounded
+		          type="button"
+		          @click="router.push({
 			        name: ROUTE_SD_CREATE,
 			        params: {
 								document_type: COMPOSE_DOCUMENT_TYPES.ORDER,
 								document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER
+							},
+							query: {
+								compose_id: assignmentStore.detailModel?.document?.compose.id
 							}
 						})"
-	        />
+	          />
+          </template>
         </template>
 
         <template #preview-actions>

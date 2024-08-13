@@ -312,5 +312,7 @@
   "order": "Приказ",
   "business-trip-order": "Командировочный приказ",
   "create-order": "Создать приказ",
-  "update-order": "Изменить приказ"
+  "update-order": "Изменить приказ",
+  "approver-signers": "Согласующие подписанты",
+  "select-approver-signers": "Выберите согласующие подписанты"
 }

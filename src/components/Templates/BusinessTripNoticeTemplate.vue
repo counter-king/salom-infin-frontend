@@ -8,6 +8,7 @@ import {formatUserFullName} from "@/utils"
 import {useAuthStore} from "@/modules/Auth/stores"
 // Components
 import QrcodeVue from "qrcode.vue"
+import { BaseHeaderTemplate, BaseSignersTemplate } from "@/components/Templates/components"
 
 const props = defineProps({
   composeModel: {
@@ -66,15 +67,8 @@ const author = computed(() => {
 
 <template>
   <div class="business-trip-notice-template-view">
-    <div class="mb-[10px]">
-      <div class="flex">
-        <img src="@/assets/img/sqb_logo.png" alt="Logo" class="w-[114px] h-full" />
-        <div class="ml-2">
-          <div class="text-[8px] font-bold">"O'ZBEKISTON SANOAT-QURILISH BANKI" AKSIYADORLIK TIJORAT BANKI</div>
-          <div class="text-[8px] font-bold mt-[2px]">АКЦИОНЕРНЫЙ КОММЕРЧЕСКИЙ БАНК "УЗБЕКСКИЙ ПРОМЫШЛЕННО-СТРОИТЕЛЬНЫЙ БАНК"</div>
-        </div>
-      </div>
-    </div>
+
+    <base-header-template />
 
     <div class="w-full rounded-[6px] bg-greyscale-50 text-sm font-semibold px-3 py-1" style="color: #003D64">
       {{ author?.top_level_department.name }}
@@ -144,29 +138,7 @@ const author = computed(() => {
       </table>
     </div>
 
-    <div class="mt-6 pb-2 px-4">
-      <template v-for="item in signers" :key="item.id">
-        <base-row class="mb-2 items-center">
-          <base-col col-class="w-1/2">
-            <span class="text-sm font-semibold block">{{ item.user ? item.user.position.name : item.position.name }}</span>
-          </base-col>
-
-          <base-col col-class="w-1/4">
-            <qrcode-vue
-              v-if="item.is_signed"
-              :value="'Work Zone'"
-              :size="50"
-              level="L"
-              render-as="svg"
-            />
-          </base-col>
-
-          <base-col col-class="w-1/4">
-            <span class="text-sm font-semibold block">{{ formatUserFullName(item) }}</span>
-          </base-col>
-        </base-row>
-      </template>
-    </div>
+    <base-signers-template :signers="signers" />
 
     <div class="flex flex-col my-4 text-xs font-light">
       <span><span class="font-medium">Ijrochi:</span> {{ formatUserFullName(author) }}</span>

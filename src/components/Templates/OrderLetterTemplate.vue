@@ -4,10 +4,13 @@ import { computed } from "vue"
 // Utils
 import {formatDate, formatDateHour} from "@/utils/formatDate"
 import { formatUserFullName } from "@/utils"
+// Enums
+import { SIGNER_TYPES } from "@/enums"
 // Store
 import { useAuthStore } from "@/modules/Auth/stores"
 // Components
 import QrcodeVue from "qrcode.vue"
+import { BaseHeaderTemplate } from "@/components/Templates/components"
 
 const props = defineProps({
   composeModel: {
@@ -26,25 +29,22 @@ const author = computed(() => {
 })
 
 const signers = computed(() => {
-  return props.preview ? props.composeModel?.__signers : props.composeModel?.signers
+  return props.preview ? props.composeModel?.__signers : props.composeModel?.signers.filter(item => item.type !== SIGNER_TYPES.NEGOTIATOR)
+})
+
+const negotiators = computed(() => {
+  return props.preview ? props.composeModel?.__negotiators : props.composeModel?.signers.filter(item => item.type === SIGNER_TYPES.NEGOTIATOR)
 })
 </script>
 
 <template>
   <div class="order-template-view">
-    <div class="mb-[10px]">
-      <div class="flex">
-        <img src="@/assets/img/sqb_logo.png" alt="Logo" class="w-[114px] h-full" />
-        <div class="ml-2">
-          <div class="text-[8px] font-bold">"O'ZBEKISTON SANOAT-QURILISH BANKI" AKSIYADORLIK TIJORAT BANKI</div>
-          <div class="text-[8px] font-bold mt-[2px]">АКЦИОНЕРНЫЙ КОММЕРЧЕСКИЙ БАНК "УЗБЕКСКИЙ ПРОМЫШЛЕННО-СТРОИТЕЛЬНЫЙ БАНК"</div>
-        </div>
-      </div>
-    </div>
 
-    <div class="w-full rounded-[6px] bg-greyscale-50 text-sm font-semibold px-3 py-1" style="color: #003D64">
+    <base-header-template />
+
+<!--    <div class="w-full rounded-[6px] bg-greyscale-50 text-sm font-semibold px-3 py-1" style="color: #003D64">
       {{ author?.top_level_department.name }}
-    </div>
+    </div>-->
 
     <div class="flex flex-col text-sm font-medium mt-4">
       <span> № {{ props.composeModel?.register_number }}</span>
@@ -78,6 +78,31 @@ const signers = computed(() => {
             <span class="text-sm font-semibold block">{{ formatUserFullName(item) }}</span>
           </base-col>
         </base-row>
+      </template>
+
+      <template v-if="negotiators && negotiators.length">
+        <div class="text-sm italic mb-2 mt-4">Kelishuvchilar:</div>
+        <template v-for="item in negotiators" :key="item.id">
+          <base-row class="mb-2 items-center">
+            <base-col col-class="w-1/2">
+              <span class="text-sm font-semibold block">{{ item.user ? item.user.position.name : item.position.name }}</span>
+            </base-col>
+
+            <base-col col-class="w-1/4">
+              <qrcode-vue
+                v-if="item.is_signed"
+                :value="'Work Zone'"
+                :size="50"
+                level="L"
+                render-as="svg"
+              />
+            </base-col>
+
+            <base-col col-class="w-1/4">
+              <span class="text-sm font-semibold block">{{ formatUserFullName(item) }}</span>
+            </base-col>
+          </base-row>
+        </template>
       </template>
     </div>
 

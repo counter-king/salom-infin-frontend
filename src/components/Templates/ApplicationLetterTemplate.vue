@@ -1,7 +1,10 @@
 <script setup>
-import {formatUserFullName} from "@/utils";
-import QrcodeVue from "qrcode.vue";
-import {formatDateHour} from "@/utils/formatDate";
+// Utils
+import { formatUserFullName } from "@/utils"
+import { formatDateHour } from "@/utils/formatDate"
+// Components
+import QrcodeVue from "qrcode.vue"
+import { BaseSignersTemplate } from "@/components/Templates/components"
 
 const props = defineProps({
   composeModel: {
@@ -31,30 +34,7 @@ const props = defineProps({
 
     <div class="text-justify" v-html="props.composeModel?.content"></div>
 
-    <div class="mt-6 pb-2">
-      <template v-for="item in props.composeModel?.signers" :key="item.id">
-        <!--        <pre>{{ item }}</pre>-->
-        <base-row class="mb-2 items-center">
-          <base-col col-class="w-1/2">
-            <span class="text-sm font-semibold block">{{ item.user ? item.user.position.name : item.position.name }}</span>
-          </base-col>
-
-          <base-col col-class="w-1/4">
-            <qrcode-vue
-              v-if="item.is_signed"
-              :value="'Work Zone'"
-              :size="50"
-              level="L"
-              render-as="svg"
-            />
-          </base-col>
-
-          <base-col col-class="w-1/4">
-            <span class="text-sm font-semibold block">{{ formatUserFullName(item) }}</span>
-          </base-col>
-        </base-row>
-      </template>
-    </div>
+    <base-signers-template :signers="props.composeModel?.signers" />
 
     <div class="flex flex-col my-4 text-xs font-light">
       <span><span class="font-medium">Ijrochi:</span> {{ props.composeModel?.author && formatUserFullName(props.composeModel?.author) }}</span>
