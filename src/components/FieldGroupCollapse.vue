@@ -2,6 +2,7 @@
 // Core
 import { ref, computed } from 'vue'
 // Components
+import { AltArrowUpIcon, AltArrowDownIcon } from '@/components/Icons'
 import FieldGroups from './FieldGroups.vue'
 // Utils
 import { combineKeys } from '@/utils'
@@ -30,8 +31,7 @@ const visible = computed(() => count.value & 1 ? value.value.slice(0, props.max)
 <template>
   <div class="field-group-collapse-view bg-greyscale-50 relative border border-greyscale-90 rounded-xl py-4 px-5">
     <slot>
-      <field-groups :headers="props.headers" :data="visible">
-      </field-groups>
+      <field-groups :headers="props.headers" :data="visible" />
     </slot>
 
     <button
@@ -39,10 +39,7 @@ const visible = computed(() => count.value & 1 ? value.value.slice(0, props.max)
       class="flex items-center justify-center w-8 h-8 bg-greyscale-70 rounded-lg border border-greyscale-200 absolute top-5 right-5 p-1"
       @click="count++"
     >
-      <base-iconify
-        :icon="`solar:alt-arrow-${count & 1 ? 'down' : 'up'}-outline`"
-        class="!w-5 !h-5"
-      />
+      <base-iconify :icon="`${count & 1 ? AltArrowDownIcon : AltArrowUpIcon}`" />
     </button>
   </div>
 </template>

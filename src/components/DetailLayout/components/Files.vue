@@ -3,8 +3,9 @@
 import { ref } from 'vue'
 import { saveAs } from  'file-saver'
 // Components
+import { FileTextBoldIcon, DownloadMinimalisticIcon, EyeIcon } from '@/components/Icons'
 import { CardTable } from '@/components/Table'
-import { FilePreview } from "@/components/Files";
+import { FilePreview } from '@/components/Files'
 // Utils
 import { formatDate } from '@/utils/formatDate'
 // Props
@@ -50,7 +51,7 @@ const download = (event, data) => {
       <template #title="{ data }">
         <div class="flex items-center gap-4">
           <div class="flex items-center justify-center w-10 h-10 bg-[#E8F1FF] p-1 rounded-[10px]">
-            <base-icon name="FileTextIconFilled" color="transparent" />
+            <base-iconify :icon="FileTextBoldIcon" />
           </div>
 
           <div class="flex-1">
@@ -71,12 +72,12 @@ const download = (event, data) => {
           <div class="flex justify-end gap-2">
             <base-button
               size="small"
-              icon-left="DownloadMinimalistic"
+              :icon-left="DownloadMinimalisticIcon"
+              icon-width="w-[18px]"
+              icon-height="h-[18px]"
               only-icon
               rounded
               text
-              icon-width="18"
-              icon-height="18"
               v-tooltip.top="{
                 value: `<h4 class='text-xs text-white -my-1'>Скачать файл</h4>`,
                 escape: true,
@@ -88,12 +89,12 @@ const download = (event, data) => {
 
             <base-button
               size="small"
-              icon-left="EyeIcon"
+              :icon-left="EyeIcon"
+              icon-width="w-[18px]"
+              icon-height="h-[18px]"
               only-icon
               rounded
               text
-              icon-width="18"
-              icon-height="18"
               v-tooltip.top="{
                 value: `<h4 class='text-xs text-white -my-1'>Просмотр файла</h4>`,
                 escape: true,

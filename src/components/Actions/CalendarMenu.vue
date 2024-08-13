@@ -9,6 +9,7 @@ import { TEMPLATE_OPTIONS } from "@/enums";
 import { useFilterStore } from "@/stores/filter.store";
 import { usePaginationStore } from "@/stores/pagination.store";
 // Components
+import { CalendarIcon, AltArrowDownIcon } from '@/components/Icons'
 import BaseSeparateCalendar from "../UI/BaseSeparateCalendar.vue";
 // Utils
 import { clearModel, filterObjectByKeys, getDateRange } from "@/utils";
@@ -126,8 +127,8 @@ watch(selectedDate, val => {
     border-color="border-transparent"
     label="date"
     icon-color="#767994"
-    icon-left="solar:calendar-outline"
-    icon-right="solar:alt-arrow-down-outline"
+    :icon-left="CalendarIcon"
+    :icon-right="AltArrowDownIcon"
     rounded
     shadow
     type="button"

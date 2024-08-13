@@ -3,6 +3,8 @@
 import { ref, unref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { vMaska } from 'maska'
+// Components
+import { UserIcon, SettingsIcon, InfoCircleIcon, Logout2Icon } from '@/components/Icons'
 // Store
 import { useAuthStore } from "../../modules/Auth/stores/index"
 import { resetAllPiniaStores } from '@/stores/plugins/resetStores'
@@ -28,22 +30,22 @@ const items = ref([
   {
     label: 'Профиль',
     subTitle: 'Выбор режима программы',
-    icon: 'solar:user-outline',
+    icon: UserIcon,
   },
   {
     label: 'Настройки',
     subTitle: 'Выбор режима программы',
-    icon: 'solar:settings-outline'
+    icon: SettingsIcon
   },
   {
     label: 'Поддержка',
     subTitle: 'Выбор режима программы',
-    icon: 'solar:info-circle-outline'
+    icon: InfoCircleIcon
   },
   {
     label: 'Выход',
     subTitle: 'Выбор режима программы',
-    icon: 'solar:logout-2-outline',
+    icon: Logout2Icon,
     command: handleMenu
   }
 ])

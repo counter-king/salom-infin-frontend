@@ -4,6 +4,7 @@ import { ref } from 'vue'
 import TabView from 'primevue/tabview'
 import TabPanel from 'primevue/tabpanel'
 // Components
+import { DownloadMinimalisticIcon, EyeIcon } from '@/components/Icons'
 import { FilePreview } from '@/components/Files'
 // Macros
 const props = defineProps({
@@ -121,11 +122,10 @@ const zoomFile = (event, pane) => {
             class="flex items-center gap-2 overflow-hidden"
             :class="{ 'justify-center w-full': props.bricks }"
           >
-            <base-icon
+            <base-iconify
               v-if="pane.icon"
-              :name="pane.icon"
-              width="18"
-              height="18"
+              :icon="pane.icon"
+              class="!w-[18px] !h-[18px]"
             />
 
             <p
@@ -155,7 +155,7 @@ const zoomFile = (event, pane) => {
                   class="group flex items-center justify-center w-6 h-6 rounded-[6px] bg-greyscale-50"
                   @click="zoomFile($event, pane)"
                 >
-                  <base-icon name="EyeIcon" width="16" class="text-greyscale-500 group-hover:text-primary-500" />
+                  <base-iconify :icon="EyeIcon" class="!w-4 !h-4 text-greyscale-500 group-hover:text-primary-500" />
                 </button>
 
                 <button
@@ -167,7 +167,7 @@ const zoomFile = (event, pane) => {
                   }"
                   class="group flex items-center justify-center w-6 h-6 rounded-[6px] bg-greyscale-50"
                 >
-                  <base-icon name="DownloadMinimalisticIcon" width="16" class="text-greyscale-500 group-hover:text-primary-500" />
+                  <base-iconify :icon="DownloadMinimalisticIcon" class="!w-4 !h-4 text-greyscale-500 group-hover:text-primary-500" />
                 </button>
               </div>
             </template>

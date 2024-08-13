@@ -4,6 +4,8 @@ import { computed, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 import ru from 'dayjs/locale/ru'
+// Components
+import { AltArrowLeftIcon, AltArrowRightIcon } from '@/components/Icons'
 // Enums
 import { CALENDAR_TYPES, WEEK_DAYS } from '../enums'
 // Macros
@@ -98,8 +100,8 @@ const prevWeek = async () => {
           @click="prevWeek"
         >
           <base-iconify
-            icon="solar:alt-arrow-left-outline"
-            class="!w-5 !h-5 text-gray-2 cursor-pointer"
+            :icon="AltArrowLeftIcon"
+            class="text-gray-2 cursor-pointer"
           ></base-iconify>
         </div>
 
@@ -112,8 +114,8 @@ const prevWeek = async () => {
           @click="nextWeek"
         >
           <base-iconify
-            icon="solar:alt-arrow-right-outline"
-            class="!w-5 !h-5 text-gray-2 cursor-pointer"
+            :icon="AltArrowRightIcon"
+            class="text-gray-2 cursor-pointer"
           ></base-iconify>
         </div>
       </div>

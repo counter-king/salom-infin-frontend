@@ -1,6 +1,8 @@
 <script setup>
 // Core
 import { useModel } from 'vue'
+// Components
+import { XMarkSolidIcon } from '@/components/Icons'
 // Composable
 const modelValue = useModel(props, 'modelValue')
 // Macros
@@ -101,7 +103,7 @@ const props = defineProps({
       </template>
 
       <template #removetokenicon="{ item }">
-        <base-icon name="XIcon" width="16" height="16" class="ml-[6px] hover:text-critic-500" />
+        <base-iconify :icon="XMarkSolidIcon" class="!w-4 !h-4 ml-[6px] hover:text-critic-500" />
       </template>
     </base-multi-select>
   </div>

@@ -1,6 +1,7 @@
 <script setup>
 // Components
 import WidgetWrapper from '../WidgetWrapper.vue'
+import { AddCircleBoldIcon } from '@/components/Icons'
 // Non-reactive
 const list = [
   'Трудовой отпуск',
@@ -27,7 +28,7 @@ const list = [
           :class="{ 'mb-1': index !== list.length - 1 }"
         >
           <base-iconify
-            icon="solar:add-circle-bold"
+            :icon="AddCircleBoldIcon"
             type="primary"
             class="text-primary-500"
           />

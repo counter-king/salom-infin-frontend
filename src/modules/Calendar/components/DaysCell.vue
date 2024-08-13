@@ -8,6 +8,12 @@ import { useI18n } from 'vue-i18n'
 import dayjs from 'dayjs'
 // Components
 import BaseSpinner from '@/components/UI/BaseSpinner.vue'
+import {
+	DoubleAltArrowDownLinearIcon,
+	MaximizeIcon,
+	Plus20SolidIcon,
+	TrashBinTrashIcon
+} from '@/components/Icons'
 // Stores
 import { useCalendarStore } from '../stores/calendar.store'
 // Utils
@@ -362,7 +368,7 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
                           class="flex items-center justify-center w-8 h-8 rounded-full bg-primary-500 transition"
                         >
                           <base-iconify
-                            icon="solar:double-alt-arrow-down-linear"
+                            :icon="DoubleAltArrowDownLinearIcon"
                             class="text-white"
                             :class="{ 'rotate-180' : !(toggleCount & 1) }"
                           />
@@ -378,7 +384,7 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
                           class="flex items-center justify-center w-8 h-8 rounded-full bg-primary-500 transition"
                         >
                           <base-iconify
-                            icon="octicon:plus-16"
+                            :icon="Plus20SolidIcon"
                             class="text-white"
                           />
                         </button>
@@ -452,7 +458,7 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
                 class="flex items-center justify-center absolute bottom-0 right-[50%] translate-x-1/2 translate-y-[16px] z-[1] w-8 h-8 rounded-full bg-primary-500 opacity-0 transition group-hover:opacity-100"
               >
                 <base-iconify
-                  icon="solar:double-alt-arrow-down-outline"
+                  :icon="DoubleAltArrowDownIcon"
                   class="text-white"
                   :class="{ 'rotate-180' : !(toggleCount & 1) }"
                 />
@@ -521,7 +527,7 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
                           only-icon
                           rounded
                           text
-                          icon-left="solar:maximize-outline"
+                          :icon-left="MaximizeIcon"
                           icon-width="!w-4"
                           class="text-greyscale-400"
                           @click="maximizeEvent"
@@ -533,7 +539,7 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
                             only-icon
                             rounded
                             text
-                            icon-left="solar:trash-bin-trash-outline"
+                            :icon-left="TrashBinTrashIcon"
                             class="text-critic-500"
                             @click="deleteEvent(
                               calendarStore.actionTypesMenuSelected.name === ACTION_FORM_TYPES.EVENT

@@ -2,6 +2,16 @@
 // Core
 import {ref, unref, computed } from 'vue'
 import { useI18n } from "vue-i18n"
+// Components
+import {
+	SettingsIcon,
+	MoonStarsIcon,
+	RefreshIcon,
+	ClockCircleIcon,
+	CalendarIcon,
+	FilterIcon,
+	MirrorRightIcon
+} from '@/components/Icons'
 // Composable
 const { t } = useI18n()
 // Reactive
@@ -20,7 +30,7 @@ const toggle = (event) => {
     <base-button
       color="bg-greyscale-800 hover:bg-greyscale-900"
       border-color="border-greyscale-800"
-      icon-left="solar:settings-outline"
+      :icon-left="SettingsIcon"
       only-icon
       rounded
       @click="toggle"
@@ -36,7 +46,7 @@ const toggle = (event) => {
       <div class="block">
         <div class="flex justify-between items-start px-4 py-5 mb-1 rounded-xl bg-white cursor-pointer shadow-button">
           <base-iconify
-            icon="solar:moon-stars-outline"
+            :icon="MoonStarsIcon"
             class="text-primary-500 transition-all duration-[400ms"
           />
           <div class="block ml-3 flex-1">
@@ -52,7 +62,7 @@ const toggle = (event) => {
 
         <div class="flex justify-between items-start px-4 py-5 mb-1 rounded-xl bg-white cursor-pointer shadow-button">
           <base-iconify
-            icon="solar:refresh-outline"
+            :icon="RefreshIcon"
             class="text-primary-500 transition-all duration-[400ms"
           />
           <div class="block ml-3 flex-1">
@@ -72,7 +82,7 @@ const toggle = (event) => {
           <base-col col-class="w-1/2 py-0 pr-0.5">
             <div class="flex justify-between items-start px-4 py-5 mb-1 rounded-xl bg-white cursor-pointer shadow-button">
               <base-iconify
-                icon="solar:clock-circle-outline"
+                :icon="ClockCircleIcon"
                 class="text-primary-500 transition-all duration-[400ms"
               />
               <div class="block ml-3 flex-1">
@@ -86,7 +96,7 @@ const toggle = (event) => {
           <base-col col-class="w-1/2 py-0 pl-0.5">
             <div class="flex justify-between items-start px-4 py-5 mb-1 rounded-xl bg-white cursor-pointer shadow-button">
               <base-iconify
-                icon="solar:calendar-outline"
+                :icon="CalendarIcon"
                 class="text-primary-500 transition-all duration-[400ms"
               />
               <div class="block ml-3 flex-1">
@@ -100,7 +110,7 @@ const toggle = (event) => {
 
         <div class="flex justify-between items-start px-4 py-5 mb-1 rounded-xl bg-white cursor-pointer shadow-button">
           <base-iconify
-            icon="solar:filter-outline"
+            :icon="FilterIcon"
             class="text-primary-500 transition-all duration-[400ms"
           />
           <div class="block ml-3 flex-1">
@@ -164,7 +174,7 @@ const toggle = (event) => {
 
         <div class="flex justify-between items-start px-4 py-5 mb-1 rounded-xl bg-white cursor-pointer shadow-button">
           <base-iconify
-            icon="solar:mirror-right-outline"
+            :icon="MirrorRightIcon"
             class="text-primary-500 transition-all duration-[400ms"
           />
           <div class="block ml-3 flex-1">

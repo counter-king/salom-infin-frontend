@@ -7,6 +7,7 @@ import { useAuthStore } from "@/modules/Auth/stores";
 import { useChatStore } from "@/modules/Chat/stores";
 // Components
 import BaseBrickTab from "@/components/UI/BaseBrickTab.vue";
+import { MagniferIcon, Plus20SolidIcon, UserRoundedBoldIcon, UsersGroupTwoRoundedBoldIcon } from '@/components/Icons'
 import GroupItem from "@/modules/Chat/components/GroupItem.vue";
 import UserItem from "@/modules/Chat/components/UserItem.vue";
 import UserItemSearch from "@/modules/Chat/components/UserItemSearch.vue";
@@ -19,12 +20,12 @@ const tabPanelList = [
   {
     title: 'personal',
     slot: 'personal',
-    icon: 'UserFilledIcon'
+    icon: UserRoundedBoldIcon
   },
   {
     title: 'group',
     slot: 'group',
-    icon: 'UsersGroupTwoRoundedFilledIcon'
+    icon: UsersGroupTwoRoundedBoldIcon
   }
 ];
 
@@ -60,7 +61,7 @@ onMounted(async () => {
     <div class="flex m-4 mb-0">
       <base-input
         v-model="search"
-        icon-left="MagniferIcon"
+        :icon-left="MagniferIcon"
         placeholder="search"
         class="p-input-icon-left w-[270px] mr-2"
         input-class="h-10"
@@ -68,7 +69,7 @@ onMounted(async () => {
 
       <div class="flex justify-center items-center bg-greyscale-50 hover:bg-primary-100 rounded-3xl h-8 w-8 cursor-pointer mt-1">
         <base-icon
-          name="PlusIcon"
+          :name="Plus20SolidIcon"
           width="20"
           height="20"
           class="text-primary-500"

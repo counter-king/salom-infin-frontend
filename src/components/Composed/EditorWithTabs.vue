@@ -5,7 +5,9 @@ import BaseBrickTab from "@/components/UI/BaseBrickTab.vue";
 import BaseEditor from "@/components/UI/BaseEditor.vue";
 import BaseFileUpload from "@/components/UI/BaseFileUpload.vue";
 import BaseFroalaEditor from "@/components/UI/BaseFroalaEditor.vue";
-
+// Components
+import { FileTextBoldIcon, TextSquareBoldIcon } from '@/components/Icons'
+// Macros
 const props = defineProps({
   modelValue: {
     type: String,
@@ -26,12 +28,12 @@ const tabPanelList = ref([
   {
     title: 'text',
     slot: 'editor',
-    icon: 'TextSquareIcon'
+    icon: TextSquareBoldIcon
   },
   {
     title: 'file',
     slot: 'file',
-    icon: 'FileTextFilledIcon'
+    icon: FileTextBoldIcon
   },
 ]);
 

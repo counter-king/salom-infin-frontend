@@ -5,6 +5,8 @@ import { useDebounce } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
 import MultiSelect from 'primevue/multiselect'
 import axiosConfig from "@/services/axios.config"
+// Components
+import { AltArrowDownIcon, MagniferIcon, TrashBinTrashIcon, XMarkSolidIcon } from '@/components/Icons'
 // Utils
 import { isObject } from '@/utils'
 // Composable
@@ -266,7 +268,7 @@ watch(debounced, async () => {
     >
       <template #header="{ value, options }">
         <div class="flex items-center border-b border-greyscale-200 px-3">
-          <base-icon name="MagniferIcon" width="16" />
+          <base-iconify :icon="MagniferIcon" class="!w-4 !h-4" />
 
           <input
             ref="inputRef"
@@ -285,7 +287,7 @@ watch(debounced, async () => {
             class="text-grey-500 ml-auto"
             @click="search = null"
           >
-            <base-icon name="XIcon" width="18" height="18" />
+            <base-iconify :icon="XMarkSolidIcon" class="!w-[18px] !h-[18px]" />
           </button>
         </div>
       </template>
@@ -305,14 +307,14 @@ watch(debounced, async () => {
       <template #removetokenicon="{ item }">
         <div @click="(event) => removeItem(event, item)">
           <slot name="removetokenicon" :item="item">
-            <base-icon name="XIcon" width="16" height="16" class="ml-[6px] hover:text-critic-500" />
+            <base-iconify :icon="XMarkSolidIcon" class="!w-4 !h-4 ml-[6px] hover:text-critic-500" />
           </slot>
         </div>
       </template>
 
       <template #dropdownicon>
         <slot name="dropdownicon">
-          <base-icon name="AltArrowDownIcon" width="18" />
+          <base-iconify :icon="AltArrowDownIcon" class="!w-[18px] !h-[18px]" />
         </slot>
       </template>
     </MultiSelect>
@@ -325,13 +327,13 @@ watch(debounced, async () => {
       </div>
 
       <base-button
-        icon-right="AltArrowDownIcon"
-        icon-height="16"
+        :icon-right="AltArrowDownIcon"
+        icon-width="!w-4"
+        icon-height="!h-4"
         button-class="shadow-md border-t border-r border-l border-greyscale-100"
         rounded
         outlined
         size="small"
-        icon-width="18"
         aria-haspopup="true"
         aria-controls="overlay_menu"
         @click="toggle"
@@ -367,7 +369,7 @@ watch(debounced, async () => {
                 }"
                 @click="(event) => removeItem(event, item)"
               >
-                <base-icon name="TrashIcon" width="16" class="text-critic-500" />
+                <base-iconify :icon="TrashBinTrashIcon" class="!w-4 !h-4 text-critic-500" />
               </button>
             </template>
           </div>

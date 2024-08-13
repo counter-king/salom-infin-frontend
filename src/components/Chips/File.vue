@@ -1,4 +1,6 @@
 <script setup>
+// Components
+import { FileTextIcon } from '@/components/Icons'
 // Macros
 const props = defineProps({
   name: {
@@ -9,7 +11,7 @@ const props = defineProps({
 
 <template>
   <div class="file-chip-view flex items-center gap-1 bg-white shadow-button py-[2px] px-2 rounded">
-    <base-icon name="FileTextIcon" width="12" />
+    <base-icon :name="FileTextIcon" class="!w-3" />
 
     <span>{{ props.name }}</span>
   </div>

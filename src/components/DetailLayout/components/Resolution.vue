@@ -8,7 +8,6 @@ import {
 import { TreeUsers } from '@/components/Tree'
 // Enums
 import { ROLES } from '@/enums'
-
 // Macros
 const props = defineProps({
   resolution: {

@@ -2,6 +2,8 @@
 // Core
 import { ref, unref } from 'vue'
 import { useI18n } from 'vue-i18n'
+// Components
+import { CheckCircleIcon, DangerTriangleIcon, AltArrowDownIcon } from '@/components/Icons'
 // Composable
 const { t } = useI18n()
 // Macros
@@ -37,9 +39,9 @@ const toggle = (event) => {
       :class="[props.signed ? 'bg-primary-100 border-primary-500' : 'bg-critic-100 border-critic-500']"
     >
       <base-iconify
-        :icon="props.signed ? 'solar:check-circle-outline' : 'solar:danger-triangle-outline'"
+        :icon="props.signed ? CheckCircleIcon : DangerTriangleIcon"
         class="text-critic-500 ml-2"
-        :class="[ '!w-5 !h-5', props.signed ? 'text-primary-500' : 'text-critic-500' ]"
+        :class="[ props.signed ? 'text-primary-500' : 'text-critic-500' ]"
       />
 
       <span
@@ -53,7 +55,7 @@ const toggle = (event) => {
         label="Загрузить фишку"
         size="small"
         rounded
-        icon-right="solar:alt-arrow-down-outline"
+        :icon-right="AltArrowDownIcon"
         @click="toggle"
       />
 

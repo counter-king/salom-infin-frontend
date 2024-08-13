@@ -4,6 +4,8 @@ import { useModel, ref, watch, computed } from 'vue'
 import { useDebounce } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
 import Dropdown from 'primevue/dropdown'
+// Components
+import { AltArrowDownIcon, MagniferIcon, XMarkSolidIcon } from '@/components/Icons'
 // Services
 import axiosConfig from '@/services/axios.config'
 // Composable
@@ -190,7 +192,7 @@ const loadList = async (params) => {
 		    #header="{ value, options }"
 	    >
 		    <div class="flex items-center border-b border-greyscale-200 px-3">
-          <base-icon name="MagniferIcon" width="16" />
+          <base-iconify :icon="MagniferIcon" class="!w-4 !h-4" />
 
 			    <input
             ref="inputRef"
@@ -208,7 +210,7 @@ const loadList = async (params) => {
 				    class="text-grey-500 ml-auto"
 				    @click="search = null"
 			    >
-				    <base-icon name="XIcon" width="18" height="18" />
+				    <base-iconify :icon="XMarkSolidIcon" class="!w-[18px] !h-[18px]" />
 			    </button>
 		    </div>
 	    </template>
@@ -223,7 +225,7 @@ const loadList = async (params) => {
 
       <template #dropdownicon>
         <slot name="dropdownicon">
-          <base-icon name="AltArrowDownIcon" width="18" />
+          <base-iconify :icon="AltArrowDownIcon" class="!w-[18px] !h-[18px]" />
         </slot>
       </template>
     </Dropdown>

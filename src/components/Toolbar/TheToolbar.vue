@@ -6,6 +6,7 @@ import Toolbar from 'primevue/toolbar'
 // Stores
 import { useThemeStore } from '@/stores/theme.store'
 // Components
+import { MagniferIcon } from '@/components/Icons'
 import CreateActionDropdown from './CreateActionDropdown.vue'
 import Search from './Search.vue'
 import SettingDropdown from './SettingDropdown.vue'
@@ -51,7 +52,7 @@ provide('openModal', openModal)
             <base-iconify
               v-if="menu.icon"
               :icon="menu.icon"
-              class="!w-5 !h-5 text-gray-2 transition-all duration-[400ms] group-hover:text-white"
+              class="text-gray-2 transition-all duration-[400ms] group-hover:text-white"
             />
 
             {{ menu.title }}
@@ -74,24 +75,24 @@ provide('openModal', openModal)
               v-if="openModal"
               color="bg-greyscale-800 hover:bg-greyscale-900"
               border-color="border-greyscale-800"
-              icon-left="solar:magnifer-outline"
+              :icon-left="MagniferIcon"
               only-icon
               rounded
               @click="openModal = false"
             />
 
-            <search v-else ref="modalRef"></search>
+            <search v-else ref="modalRef" />
 
-            <setting-dropdown></setting-dropdown>
+            <setting-dropdown />
 
-            <notifications></notifications>
+            <notifications />
 
-            <language-dropdown></language-dropdown>
+            <language-dropdown />
           </div>
 
           <div class="bg-greyscale-800 w-[1px] h-[28px]"></div>
 
-          <UserDropdown></UserDropdown>
+          <user-dropdown />
         </div>
       </template>
     </toolbar>

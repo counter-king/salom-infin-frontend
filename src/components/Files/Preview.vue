@@ -1,5 +1,7 @@
 <script setup>
 import { computed } from 'vue'
+// Components
+import { FileDownloadIcon } from '@/components/Icons'
 // Utils
 import { isObject } from '@/utils'
 // Macros
@@ -54,7 +56,7 @@ const extension = computed(
         >
           {{ $t('upload-file') }}
 
-          <base-icon name="FileDownload" />
+          <base-iconify :icon="FileDownloadIcon" />
         </a>
       </div>
     </template>

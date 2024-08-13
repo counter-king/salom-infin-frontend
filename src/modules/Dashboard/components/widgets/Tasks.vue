@@ -5,6 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 // Components
 import { StatusChip } from '@/components/Chips'
+import { AltArrowDownIcon, CalendarIcon } from '@/components/Icons'
 import WidgetWrapper from '../WidgetWrapper.vue'
 // Composable
 const route = useRoute()
@@ -60,10 +61,8 @@ const toggle = (event) => {
         type="button"
         size="small"
         outlined
-        icon-right="solar:alt-arrow-down-outline"
-        icon-width="16"
-        icon-height="16"
-        button-class="!bg-greyscale-50 !py-1 !px-2 !rounded-[6px] border-none"
+        :icon-right="AltArrowDownIcon"
+        button-class="!w-4 !h-4 !bg-greyscale-50 !py-1 !px-2 !rounded-[6px] border-none"
         @click="toggle"
       >
         <template #label>
@@ -99,7 +98,7 @@ const toggle = (event) => {
                 </div>
 
                 <div class="flex items-center gap-1">
-                  <base-iconify icon="solar:calendar-outline" class="text-greyscale-400 !w-5 !h-5" />
+                  <base-iconify :icon="CalendarIcon" class="text-greyscale-400" />
                   <span class="text-sm font-medium text-greyscale-400">12.02.2024</span>
                 </div>
 

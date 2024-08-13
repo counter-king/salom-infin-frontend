@@ -6,8 +6,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { fetchVerifyNumber, fetchSendOtp } from '@/modules/Auth/services'
 // Components
 import { ActionBackButton } from '@/components/Actions'
+import { LetterIcon } from '@/components/Icons'
 import OTPCode from '../components/otpcode.vue'
-import LetterOutline from '~icons/solar/letter-outline'
 // Utils
 import { maskNumbers } from '@/utils'
 import { dispatchNotify } from '@/utils/notify'
@@ -58,7 +58,7 @@ const resendOtpCode = async () => {
 
     <div class="flex justify-center items-center w-20 h-20 rounded-full text-center text-indigo-700 bg-indigo-100 m-auto mb-4">
       <base-iconify
-        :icon="LetterOutline"
+        :icon="LetterIcon"
         class="!w-9 !h-9"
       />
     </div>

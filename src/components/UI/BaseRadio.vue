@@ -51,25 +51,25 @@ const { t } = useI18n()
 
 <template>
   <div class="app-radio">
-      <base-label :label="props.label" :class="props.classLabel" :required="props.required" />
+    <base-label :label="props.label" :class="props.classLabel" :required="props.required" />
 
-      <RadioButton
-        v-model="modelValue"
-        :inputId="props.inputId"
-        :name="props.name"
-        :value="props.value"
-        :pt="{
-          root: {
-            class: ['mr-2 text-sm/[3px] rounded-full',  props.bgRadio]
-          },
-          input: {
-            class: ['border-none', props.bgRadio]
-          },
-          icon: {
-            class: ['text-white my_icon pt-0.5 pl-0.5 pi pi-check', props.iconRadio, props.bgRadio]
-          }
-        }"
-      />
+    <RadioButton
+      v-model="modelValue"
+      :inputId="props.inputId"
+      :name="props.name"
+      :value="props.value"
+      :pt="{
+        root: {
+          class: ['mr-2 text-sm/[3px] rounded-full',  props.bgRadio]
+        },
+        input: {
+          class: ['border-none', props.bgRadio]
+        },
+        icon: {
+          class: ['text-white my_icon pt-0.5 pl-0.5 pi pi-check', props.iconRadio, props.bgRadio]
+        }
+      }"
+    />
 
     <template v-if="props.error.$errors.length">
       <div class="space-y-1 mt-2">

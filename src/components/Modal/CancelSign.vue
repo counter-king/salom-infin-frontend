@@ -3,6 +3,7 @@
 import { ref } from 'vue'
 // Components
 import { ModalComment } from '@/components/Modal'
+import { DangerTriangleIcon } from '@/components/Icons'
 // Macros
 const props = defineProps({
   createButtonFn: {
@@ -18,7 +19,7 @@ const modal = ref(false)
   <base-button
     severity="danger"
     label="cancel-sign"
-    icon-left="TriangleDangerIcon"
+    :icon-left="DangerTriangleIcon"
     rounded
     type="button"
     @click="modal = true"

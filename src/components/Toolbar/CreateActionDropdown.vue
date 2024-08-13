@@ -1,10 +1,11 @@
 <script setup>
 // Core
 import { ref, unref } from 'vue'
-// Store
-import { useDocFlowStore } from '@/modules/Documents/modules/Registration/stores/docflow.store'
 // Components
 import RegisterDocumentDialog from '@/modules/Documents/modules/Registration/components/RegisterDocumentDialog.vue'
+import { Plus20SolidIcon } from '@/components/Icons'
+// Store
+import { useDocFlowStore } from '@/modules/Documents/modules/Registration/stores/docflow.store'
 // Composable
 const docFlowStore = useDocFlowStore()
 // Reactive
@@ -30,7 +31,7 @@ const toggle = (event) => {
 <template>
   <base-button
     label="create"
-    icon-left="heroicons:plus-20-solid"
+    :icon-left="Plus20SolidIcon"
     icon-right="solar:alt-arrow-down-outline"
     rounded
     type="button"

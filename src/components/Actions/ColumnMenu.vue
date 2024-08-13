@@ -3,6 +3,8 @@
 import {ref, unref} from "vue";
 import {useI18n} from "vue-i18n";
 import {useToast} from "primevue/usetoast";
+// Components
+import { SettingsMinimalisticIcon } from '@/components/Icons'
 // Utils
 import {removeStorageItem, saveStorageItem} from "@/utils/storage";
 
@@ -49,7 +51,7 @@ const emits = defineEmits(['emit:resetHeaders']);
     border-color="border-transparent"
     label="customize-columns"
     icon-color="#767994"
-    icon-left="solar:settings-minimalistic-outline"
+    :icon-left="SettingsMinimalisticIcon"
     rounded
     shadow
     type="button"

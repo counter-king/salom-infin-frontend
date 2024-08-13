@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router'
 import useVuelidate from '@vuelidate/core'
 import { helpers, minLength, required } from '@vuelidate/validators'
 // Components
-import AltArrowLeft from '~icons/solar/alt-arrow-left-outline'
+import { AltArrowLeftIcon } from "@/components/Icons";
 // Services
 import { fetchSendOtp } from '@/modules/Auth/services'
 // Utils
@@ -92,7 +92,7 @@ const submit = async () => {
       class="flex items-center justify-center text-sm mt-4 text-indigo-700"
     >
       <base-iconify
-        :icon="AltArrowLeft"
+        :icon="AltArrowLeftIcon"
         class="w-3.5 duration-[400ms] inline"
       />
 

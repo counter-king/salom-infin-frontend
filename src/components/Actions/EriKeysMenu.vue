@@ -2,6 +2,8 @@
 // Core
 import { ref, unref } from 'vue'
 import { useI18n } from 'vue-i18n'
+// Components
+import { AltArrowDownIcon, KeyMinimalisticIcon } from '@/components/Icons'
 // Composable
 const { t } = useI18n()
 // Macros
@@ -14,17 +16,17 @@ const items = ref([
     items: [
       {
         label: 'key #1',
-        icon: 'KeyMinimalisticIcon',
+        icon: KeyMinimalisticIcon,
         command: () => signDocument()
       },
       {
         label: 'key #2',
-        icon: 'KeyMinimalisticIcon',
+        icon: KeyMinimalisticIcon,
         command: () => signDocument()
       },
       {
         label: 'key #3',
-        icon: 'KeyMinimalisticIcon',
+        icon: KeyMinimalisticIcon,
         command: () => signDocument()
       }
     ]
@@ -44,7 +46,7 @@ const signDocument = async () => {
   <div class="eri-key-view">
     <base-button
       label="sign-document"
-      icon-right="AltArrowDownIcon"
+      :icon-right="AltArrowDownIcon"
       rounded
       outlined
       shadow

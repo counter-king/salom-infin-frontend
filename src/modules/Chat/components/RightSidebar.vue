@@ -1,6 +1,8 @@
 <script setup>
 // Core
 import { useI18n } from "vue-i18n";
+// Components
+import { XMarkSolidIcon } from '@/components/Icons'
 // Store
 import { useChatStore } from "@/modules/Chat/stores";
 
@@ -18,12 +20,9 @@ const chatStore = useChatStore();
       <div class="flex h-[72px] w-full border-b justify-between items-center px-6">
         <span class="text-lg font-medium select-none">{{ t('information') }}</span>
 
-        <base-icon
-          name="XIcon"
-          width="20"
-          height="20"
-          color="#767994"
-          class="cursor-pointer"
+        <base-iconify
+          :name="XMarkSolidIcon"
+          class="text-greyscale-500 cursor-pointer"
           @click="chatStore.toggleRightSidebar"
         />
       </div>
