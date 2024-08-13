@@ -1,7 +1,9 @@
 <script setup>
 // Core
-import BaseIconify from './UI/BaseIconify.vue'
-import BaseButton from './UI/BaseButton.vue'
+import CheckCircleBold from '~icons/solar/check-circle-bold'
+import InfoCircleBold from '~icons/solar/info-circle-bold'
+import DangerTriangleBold from '~icons/solar/danger-triangle-bold'
+import CloseSm from '~icons/ci/close-sm'
 // Enums
 import { COLOR_TYPES } from '@/enums'
 </script>
@@ -10,15 +12,15 @@ import { COLOR_TYPES } from '@/enums'
   <notifications :pauseOnHover="true" :duration="5000">
     <template #body="props">
       <template v-if="props.item.type === COLOR_TYPES.SUCCESS">
-        <base-iconify icon="solar:check-circle-bold" class="text-success-500" />
+        <base-iconify :icon="CheckCircleBold" class="text-success-500" />
       </template>
 
       <template v-else-if="props.item.type === 'warn'">
-        <base-iconify icon="solar:info-circle-bold-duotone" class="text-warning-500" />
+        <base-iconify :icon="InfoCircleBold" class="text-warning-500" />
       </template>
 
       <template v-else>
-        <base-iconify icon="solar:danger-triangle-bold-duotone" class="text-critic-500" />
+        <base-iconify :icon="DangerTriangleBold" class="text-critic-500" />
       </template>
 
       <span class="flex-1 text-white">{{ props.item.text }}</span>
@@ -32,7 +34,7 @@ import { COLOR_TYPES } from '@/enums'
         @click="props.close()"
       >
         <template #label>
-          <base-iconify icon="ci:close-sm" class="!w-5 !h-5" />
+          <base-iconify :icon="CloseSm" />
         </template>
       </base-button>
     </template>

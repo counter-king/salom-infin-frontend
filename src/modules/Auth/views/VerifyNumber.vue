@@ -7,6 +7,7 @@ import { fetchVerifyNumber, fetchSendOtp } from '@/modules/Auth/services'
 // Components
 import { ActionBackButton } from '@/components/Actions'
 import OTPCode from '../components/otpcode.vue'
+import LetterOutline from '~icons/solar/letter-outline'
 // Utils
 import { maskNumbers } from '@/utils'
 import { dispatchNotify } from '@/utils/notify'
@@ -56,10 +57,9 @@ const resendOtpCode = async () => {
     <action-back-button class="!border !bg-greyscale-50 !rounded-lg !shadow-none" />
 
     <div class="flex justify-center items-center w-20 h-20 rounded-full text-center text-indigo-700 bg-indigo-100 m-auto mb-4">
-      <base-icon
-        name="LetterIcon"
-        width="35"
-        height="35"
+      <base-iconify
+        :icon="LetterOutline"
+        class="!w-9 !h-9"
       />
     </div>
 

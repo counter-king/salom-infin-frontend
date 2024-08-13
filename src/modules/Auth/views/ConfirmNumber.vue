@@ -4,6 +4,8 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import useVuelidate from '@vuelidate/core'
 import { helpers, minLength, required } from '@vuelidate/validators'
+// Components
+import AltArrowLeft from '~icons/solar/alt-arrow-left-outline'
 // Services
 import { fetchSendOtp } from '@/modules/Auth/services'
 // Utils
@@ -83,16 +85,17 @@ const submit = async () => {
           class="w-full"
         ></base-button>
       </base-col>
-
-<!--      <router-link  :to="{ name: 'VerifyNumber' }">-->
-
-<!--      </router-link>-->
     </form>
 
-    <router-link type="primary" :to="{ name: 'Login' }" class="flex items-center justify-center text-sm mt-4 text-indigo-700">
-      <base-icon
-        name="AltArrowLeftIcon"
-        class="w-3.5 duration-[400ms] inline "/>
+    <router-link
+      :to="{ name: 'Login' }"
+      class="flex items-center justify-center text-sm mt-4 text-indigo-700"
+    >
+      <base-iconify
+        :icon="AltArrowLeft"
+        class="w-3.5 duration-[400ms] inline"
+      />
+
       Вернуться к входу
     </router-link>
   </div>
