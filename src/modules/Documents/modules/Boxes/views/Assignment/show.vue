@@ -1,7 +1,7 @@
 <script setup>
 // Core
-import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import {ref, onMounted, computed} from 'vue'
+import {useRoute, useRouter} from 'vue-router'
 // Store
 import { useDocumentCountStore } from '../../../../stores/count.store'
 import { useDocFlowStore } from '../../../Registration/stores/docflow.store'
@@ -12,16 +12,25 @@ import { AcquaintButton, ActionAnswerMenu } from '@/components/Actions'
 import { LayoutWithTabs } from '@/components/DetailLayout'
 import { ResolutionDropdown } from '@/components/Resolution'
 import { ModalDoneDocument } from '@/components/Modal'
+import { CheckCircleIcon } from "@/components/Icons"
+// Enums
+import {ROUTE_SD_CREATE} from "../../../SendDocuments/constants"
+import {COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES} from "../../../../../../enums"
 // Utils
 import { RESOLUTION_CREATE_TYPES } from '@/enums'
 // Composable
 const route = useRoute()
+const router = useRouter()
 const countStore = useDocumentCountStore()
 const docflowStore = useDocFlowStore()
 const boxesCommonStore = useBoxesCommonStore()
 const assignmentStore = useAssignmentStore()
 // Reactive
 const loading = ref(true)
+// Computed
+const createOrderVisible = computed(() => {
+	return assignmentStore.detailModel?.document?.document_type
+})
 // Hooks
 onMounted(async () => {
   loading.value = true
@@ -83,6 +92,20 @@ const updateDocument = async () => {
               :register-date="new Date(assignmentStore.detailModel.document.register_date)"
             />
           </template>
+
+	        <base-button
+		        label="create-order"
+		        :icon-left="CheckCircleIcon"
+		        rounded
+		        type="button"
+		        @click="router.push({
+			        name: ROUTE_SD_CREATE,
+			        params: {
+								document_type: COMPOSE_DOCUMENT_TYPES.ORDER,
+								document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER
+							}
+						})"
+	        />
         </template>
 
         <template #preview-actions>
