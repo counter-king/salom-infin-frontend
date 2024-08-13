@@ -4,6 +4,13 @@ import {onMounted, ref} from "vue";
 import axiosConfig from "@/services/axios.config";
 // Components
 import { FilePreview } from '@/components/Files'
+import {
+	CheckCircleBoldIcon,
+	CloudUploadIcon,
+	FileTextBoldIcon,
+	RestartIcon,
+	XMarkSolidIcon
+} from '@/components/Icons'
 
 const fileInput = ref(null);
 const uploadingFiles = ref([]);
@@ -139,7 +146,7 @@ onMounted(() => {
     >
       <slot name="empty-content">
         <div class="flex justify-center items-center w-full text-sm font-semibold select-none">
-          <base-iconify icon="iconamoon:cloud-upload-light" class="text-primary-500 mr-3" />
+          <base-iconify :icon="CloudUploadIcon" class="text-primary-500 mr-3" />
 
           <span class="text-primary-500 block mr-1">
             Перетащите
@@ -174,11 +181,8 @@ onMounted(() => {
             <div class="flex w-full h-full z-10 p-3 justify-between items-center">
               <div class="flex">
                 <div class="bg-white rounded-lg p-2 flex justify-center items-center">
-                  <base-icon
-                    name="FileTextIconFilled"
-                    width="20"
-                    height="20"
-                    :stroke="false"
+                  <base-iconify
+                    :name="FileTextBoldIcon"
                     :class="file.uploaded === false ? 'text-critic-500' : 'text-primary-500'"
                   />
                 </div>
@@ -191,22 +195,18 @@ onMounted(() => {
 
               <div class="flex items-center">
                 <span v-if="file.uploaded === null" class="text-sm font-medium">{{ file.progress }}%</span>
-                <base-icon v-else-if="file.uploaded === true" name="CheckCircleBgIcon" width="22" height="22" class="text-success-500" :stroke="false"/>
+                <base-iconify v-else-if="file.uploaded === true" :icon="CheckCircleBoldIcon" class="!w-[22px] !h-[22px] text-success-500" />
 
-                <base-icon
-                  name="XIcon"
-                  width="16"
-                  height="16"
-                  class="text-greyscale-500 ml-3 cursor-pointer"
+                <base-iconify
+                  :icon="XMarkSolidIcon"
+                  class="!w-4 !h-4 text-greyscale-500 ml-3 cursor-pointer"
                   :class="{ 'hidden': !file.uploaded === true }"
                   @click="deleteFile(file)"
                 />
 
-                <base-icon
-                  name="RestartIcon"
-                  width="16"
-                  height="16"
-                  class="text-greyscale-500 ml-3 cursor-pointer"
+                <base-iconify
+                  :icon="RestartIcon"
+                  class="!w-4 !h-4 text-greyscale-500 ml-3 cursor-pointer"
                   :class="{ 'hidden': !file.uploaded === false }"
                   @click="deleteFile(file)"
                 />

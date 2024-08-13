@@ -3,6 +3,8 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Calendar from 'primevue/calendar'
+// Components
+import { CalendarLinearIcon } from '@/components/Icons'
 // Composable
 const { t } = useI18n()
 // Macros
@@ -204,7 +206,7 @@ const daySelect = (value) => {
       }"
     >
       <template #dropdownicon>
-        <base-iconify icon="solar:calendar-linear" class="!w-5 !h-5" />
+        <base-iconify :icon="CalendarLinearIcon" />
       </template>
     </Calendar>
 

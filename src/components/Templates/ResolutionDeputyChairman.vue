@@ -1,7 +1,7 @@
 <script setup>
 // Components
 import { ResolutionDownload } from '@/components/Resolution'
-//Utils
+// Utils
 import { formatNameToShort } from '@/utils'
 import { formatDateHour } from '@/utils/formatDate'
 // Enums

@@ -5,7 +5,13 @@ import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 // Components
 import TieredMenu from 'primevue/tieredmenu'
-import BaseIconify from "@/components/UI/BaseIconify.vue"
+import {
+	DocumentAddIcon,
+	DocumentMedicineIcon,
+	NotebookLinearIcon,
+	NotesIcon,
+	Plus20SolidIcon
+} from '@/components/Icons'
 // Enums
 import { ROUTE_SD_CREATE } from "@/modules/Documents/modules/SendDocuments/constants"
 import { COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES } from "@/enums"
@@ -16,7 +22,7 @@ const router = useRouter()
 const items = [
   {
     label: 'service-letter',
-    icon: 'NotebookIcon',
+    icon: NotebookLinearIcon,
 		type: 'menu',
 	  hasRouterLink: true,
 	  routerLinkName: ROUTE_SD_CREATE,
@@ -25,7 +31,7 @@ const items = [
   },
   {
     label: 'notice',
-    icon: 'NotesIcon',
+    icon: NotesIcon,
 	  type: 'menu',
 	  hasRouterLink: false,
     items: [
@@ -41,7 +47,7 @@ const items = [
   },
   {
     label: 'application',
-    icon: 'NotesPenIcon',
+    icon: DocumentAddIcon,
 	  type: 'menu',
 	  hasRouterLink: false,
     items: [
@@ -57,7 +63,7 @@ const items = [
   },
   {
     label: 'order',
-    icon: 'DocumentMedicineIcon',
+    icon: DocumentMedicineIcon,
     type: 'menu',
     hasRouterLink: false,
     items: [
@@ -97,7 +103,7 @@ const onShow = () => {
   <div>
     <base-button
       label="create"
-      icon-left="ic:baseline-plus"
+      :icon-left="Plus20SolidIcon"
       rounded
       type="button"
       @click="toggleMenu"
@@ -127,10 +133,10 @@ const onShow = () => {
           @click="onSelect(item)"
         >
           <div class="flex items-center">
-            <base-icon
+            <base-iconify
 	            v-if="item.type === 'menu'"
-              :name="item.icon"
-              class="text-greyscale-500 mr-2 w-4 h-4 hover:text-primary-dark"
+              :icon="item.icon"
+              class="text-greyscale-500 mr-2 !w-4 !h-4 hover:text-primary-dark"
             />
 	          <div v-else class="w-[6px] h-[6px] bg-info-500 rounded-full mr-2"></div>
             <span>{{ t(item.label) }} </span>

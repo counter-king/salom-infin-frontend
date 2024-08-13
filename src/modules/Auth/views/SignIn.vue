@@ -9,6 +9,8 @@ import Toast from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
 import useVuelidate from '@vuelidate/core'
 import { helpers, minLength, required } from '@vuelidate/validators'
+// Components
+import { UserIcon, KeyMinimalisticIcon } from '@/components/Icons'
 // Store
 import { useAuthStore } from '../stores'
 // Utils
@@ -23,12 +25,12 @@ const filesList = ref([
   {
     title: 'Логин',
     slot: 'login',
-    icon: 'UserIcon'
+    icon: UserIcon
   },
   {
     title: 'ЭЦП',
     slot: 'eri',
-    icon: 'KeyMinimalisticIcon'
+    icon: KeyMinimalisticIcon
   }
 ])
 const loading = ref(false)

@@ -3,6 +3,8 @@
 import { ref } from 'vue'
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
+// Components
+import { CheckCircleIcon, InfoCircleBoldIcon } from '@/components/Icons'
 // Service
 import { fetchApproveDocument } from "@/modules/Documents/modules/Boxes/services/approval.service";
 
@@ -29,9 +31,9 @@ const onApprove = async () => {
   <base-button
     border-color="border-transparent"
     label="agree"
-    icon-left="CheckCircleIcon"
-    icon-height="16"
-    icon-width="16"
+    :icon-left="CheckCircleIcon"
+    icon-width="!w-4"
+    icon-height="!h-4"
     rounded
     shadow
     type="button"
@@ -41,19 +43,13 @@ const onApprove = async () => {
   <base-dialog
     v-model="dialog"
     max-width="max-w-[472px]"
-    label="Согласень документ"
+    label="Согласен документ"
     :draggable="false"
   >
     <template #content>
       <div class="flex flex-col justify-center items-center py-8 px-4">
         <div class="flex justify-center items-center w-[80px] h-[80px] rounded-full bg-warning-50">
-          <base-icon
-            name="InfoCircleFilledIcon"
-            width="40"
-            height="40"
-            color="#FFC352"
-            :stroke="false"
-          />
+          <base-iconify :icon="InfoCircleBoldIcon" class="!w-10 !h-10" />
         </div>
 
         <div class="flex justify-center text-lg font-medium text-greyscale-900 text-center mt-6">

@@ -4,6 +4,7 @@ import { ref, shallowRef, watch, defineAsyncComponent, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 // Components
 import BaseSpinner from '@/components/UI/BaseSpinner.vue'
+import { DocumentIcon, EyeIcon, ClockCircleIcon, ChatLineIcon, FileTextIcon } from '@/components/Icons'
 import BackButton from '../Actions/BackButton.vue'
 import FileTabs from './components/FileTabs.vue'
 // Enums
@@ -12,7 +13,7 @@ import { CONTENT_TYPES } from '@/enums'
 const props = defineProps({
   title: {
     type: String,
-    default: ""
+    default: ''
   },
   toolbar: {
     type: Boolean,
@@ -21,44 +22,44 @@ const props = defineProps({
   tabItems: {
     type: Array,
     default: () => [
-    {
-        label: "Фишка",
-        name: "Resolution",
-        icon: "solar:document-outline",
-        slot: "resolution",
-        component: "Resolution",
+      {
+        label: 'Фишка',
+        name: 'Resolution',
+        icon: DocumentIcon,
+        slot: 'resolution',
+        component: 'Resolution',
         count: null
       },
       {
-        label: "Просмотр",
-        name: "Preview",
-        icon: "solar:eye-outline",
-        slot: "preview",
-        component: "Preview",
+        label: 'Просмотр',
+        name: 'Preview',
+        icon: EyeIcon,
+        slot: 'preview',
+        component: 'Preview',
         count: null
       },
       {
-        label: "История",
-        name: "History",
-        icon: "solar:clock-circle-outline",
-        slot: "history",
-        component: "History",
+        label: 'История',
+        name: 'History',
+        icon: ClockCircleIcon,
+        slot: 'history',
+        component: 'History',
         count: null
       },
       {
-        label: "Комментарии",
-        name: "Comments",
-        icon: "solar:chat-line-outline",
-        slot: "comments",
-        component: "Comments",
+        label: 'Комментарии',
+        name: 'Comments',
+        icon: ChatLineIcon,
+        slot: 'comments',
+        component: 'Comments',
         count: 2
       },
       {
-        label: "Файлы",
-        name: "Files",
-        icon: "solar:file-text-outline",
-        slot: "files",
-        component: "Files"
+        label: 'Файлы',
+        name: 'Files',
+        icon: FileTextIcon,
+        slot: 'files',
+        component: 'Files'
       }
     ]
   },

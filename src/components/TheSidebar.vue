@@ -2,6 +2,8 @@
 // Core
 import { watch } from 'vue'
 import { useRoute } from 'vue-router'
+// Components
+import { AltArrowLeftIcon } from '@/components/Icons'
 // Stores
 import { useNavigationStore } from '@/stores/navigation.store'
 // Composable
@@ -41,8 +43,8 @@ watch(
         @click="navigationStore.actionSidebarCollapse(true)"
       >
         <base-iconify
-          icon="solar:alt-arrow-left-outline"
-          class="!w-5 !h-5 text-greyscale-500"
+          :icon="AltArrowLeftIcon"
+          class="text-greyscale-500"
         />
       </div>
     </template>
@@ -53,8 +55,8 @@ watch(
         @click="navigationStore.actionSidebarCollapse(false)"
       >
         <base-iconify
-          icon="solar:alt-arrow-left-outline"
-          class="!w-5 !h-5 text-greyscale-500"
+          :icon="AltArrowLeftIcon"
+          class="text-greyscale-500"
         />
       </div>
     </template>

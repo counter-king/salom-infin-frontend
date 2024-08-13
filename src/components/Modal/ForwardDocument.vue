@@ -11,6 +11,7 @@ import { useUsersStore } from '@/stores/users.store'
 import { useDocumentCountStore } from '@/modules/Documents/stores/count.store'
 import { useReviewStore } from '@/modules/Documents/modules/Boxes/stores/review.store'
 // Components
+import { RefreshIcon, MagniferIcon } from '@/components/Icons'
 import { UserWithSelectable } from '@/components/Users'
 // Composable
 const route = useRoute()
@@ -73,7 +74,7 @@ watch(debounced, async () => {
 <template>
   <base-button
     label="move-document"
-    icon-left="RefreshIcon"
+    :icon-left="RefreshIcon"
     rounded
     outlined
     shadow
@@ -92,7 +93,7 @@ watch(debounced, async () => {
       <div class="p-6 pb-0">
         <base-input
           v-model="search"
-          icon-left="MagniferIcon"
+          :icon-left="MagniferIcon"
           placeholder="search-users"
           class="p-input-icon-left w-full !mb-3"
         />

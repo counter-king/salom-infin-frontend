@@ -1,6 +1,8 @@
 <script setup>
 // Core
 import { computed } from 'vue'
+// Components
+import { QuestionCircleIcon } from '@/components/Icons'
 // Enums
 import { FILE_ACTIONS } from '@/enums'
 // Macros
@@ -16,7 +18,7 @@ const current = computed(() => {
 
   if(!active) {
     return {
-      icon: 'QuestionIcon',
+      icon: QuestionCircleIcon,
       color: 'bg-critic-500',
       text: 'Не известный статус'
     }
@@ -79,11 +81,9 @@ const current = computed(() => {
       autoHide: false
     }"
   >
-    <base-icon
-      :name="current.icon"
-      width="12"
-      height="12"
-      color="#fff"
+    <base-iconify
+      :icon="current.icon"
+      class="!w-3 !h-3 text-white"
     />
   </div>
 </template>

@@ -2,6 +2,7 @@
 // Core
 import { ref, unref } from 'vue'
 // Components
+import { AltArrowDownIcon } from '@/components/Icons'
 import EventSidebar from './EventSidebar.vue'
 // Stores
 import { useCalendarStore } from '../stores/calendar.store'
@@ -39,7 +40,7 @@ const toggle = (event) => {
 <template>
   <base-button
     label="create"
-    icon-right="solar:alt-arrow-down-outline"
+    :icon-right="AltArrowDownIcon"
     rounded
     type="button"
     aria-haspopup="true"

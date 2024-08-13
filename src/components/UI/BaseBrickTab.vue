@@ -62,18 +62,16 @@ const { t } = useI18n();
       :pt="{
         header: { class: [props.headerClasses] },
         headeraction: ({ props, parent }) => ({
-                        class: [panelClass(props, parent, index), 'h-full', 'border-0', 'rounded-lg', 'py-2', 'px-4']
-                    }),
+          class: [panelClass(props, parent, index), 'h-full', 'border-0', 'rounded-lg', 'py-2', 'px-4']
+        }),
       }"
     >
       <template #header>
         <div class="flex items-center gap-x-1 justify-center w-full">
-          <base-icon
+          <base-iconify
             v-if="item.icon"
-            :name="item.icon"
-            width="16"
-            height="16"
-            :stroke="false"
+            :icon="item.icon"
+            class="!w-4 !h-4"
           />
           <span class="text-sm font-semibold">{{ t(item.title) }}</span>
         </div>

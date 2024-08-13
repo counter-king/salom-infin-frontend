@@ -5,6 +5,16 @@ import {useI18n} from "vue-i18n";
 import Timeline from 'primevue/timeline';
 import {formatDateHour} from "../../../utils/formatDate";
 import {ModalComment} from "@/components/Modal";
+// Components
+import {
+	CheckCircleBoldIcon,
+	CheckCircleIcon, CircleIcon, CloseCircleBoldIcon,
+	EyeClosedIcon,
+	EyeIcon,
+	FileCheckIcon,
+	MenuDotsBoldIcon,
+	Pen2Icon
+} from '@/components/Icons'
 
 const properties = defineProps({
   composeModel: {
@@ -41,7 +51,7 @@ const returnConnectorClasses = (props, context) => {
              ? 'bg-critic-500' : ''
 }
 const returnItemIcon = (item) => {
-  return item.type === 'author' ? 'PenIcon' : item.type === 'signers' ? 'CheckCircleIcon' : 'FileCheckIcon'
+  return item.type === 'author' ? Pen2Icon : item.type === 'signers' ? CheckCircleIcon : FileCheckIcon
 }
 const returnItemRole = (item) => {
   return item.type === 'author' ? t('author') : item.type === 'signers' ? t('signer') : t('approver')
@@ -86,10 +96,10 @@ const returnItemIconName = (item) => {
   return item.type === 'author'
     || (item.type === 'approvers' && item.is_approved === true)
       || (item.type === 'signers' && item.is_signed === true)
-       ? 'CheckCircleFilledIcon' :
+       ? CheckCircleBoldIcon :
         (item.type === 'approvers' && item.is_approved === false)
           || (item.type === 'signers' && item.is_signed === false)
-           ? 'CloseCircleFilledIcon' : 'Circle'
+           ? CloseCircleBoldIcon : CircleIcon
 }
 const returnItemIconClass = (item) => {
   return item.type === 'author'
@@ -119,12 +129,9 @@ const showReason = (item) => {
       }"
     >
       <template #marker="{ item }">
-        <base-icon
-          :name="returnItemIconName(item)"
-          width="24"
-          height="24"
-          :stroke="false"
-          :class="returnItemIconClass(item)"
+        <base-iconify
+          :icon="returnItemIconName(item)"
+          :class="['!w-6 !h-6', returnItemIconClass(item)]"
         />
       </template>
 
@@ -144,11 +151,9 @@ const showReason = (item) => {
               class="absolute left-6 top-6 border-2 rounded-3xl border-white p-1"
               :class="item.type === 'signers' && !item.is_all_approved ? 'bg-greyscale-300' : 'bg-success-500'"
             >
-              <base-icon
-                :name="item.type === 'signers' && !item.is_all_approved ? 'EyeHideIcon' : 'EyeIcon'"
-                width="12"
-                height="12"
-                class="text-white"
+              <base-iconify
+                :icon="item.type === 'signers' && !item.is_all_approved ? EyeClosedIcon : EyeIcon"
+                class="!w-3 !h-3 text-white"
               />
             </div>
           </div>
@@ -156,13 +161,11 @@ const showReason = (item) => {
           <div class="flex flex-col ml-3 w-full">
             <div class="flex items-center justify-between">
               <div class="flex items-center">
-                <base-icon
-                  :name="returnItemIcon(item)"
-                  width="16"
-                  height="16"
-                  class="text-greyscale-500"
-                  :stroke="item.type !== 'approvers'"
+                <base-iconify
+                  :icon="returnItemIcon(item)"
+                  class="!w-4 !h-4 text-greyscale-500"
                 />
+<!--	              :stroke="item.type !== 'approvers'"-->
                 <span class="text-sm font-semibold text-primary-500 mx-2">{{ returnItemRole(item) }}</span>
                 <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-lg"></div>
                 <span class="text-sm font-medium text-greyscale-300 block ml-2">{{ returnItemActionTime(item) }}</span>
@@ -174,7 +177,7 @@ const showReason = (item) => {
 			            class="flex text-xs px-2 py-[2px] rounded-lg border bg-greyscale-50 mr-2 cursor-pointer"
 			            @click="showReason(item)"
 		            >
-			            <base-icon name="HorizontalDotsIcon" width="16" height="16" :stroke="false" class="text-greyscale-500" />
+			            <base-iconify :icon="MenuDotsBoldIcon" class="!w-4 !h-4 text-greyscale-500" />
 			            <span class="ml-1 text-greyscale-500 font-medium">{{ t('reason') }}</span>
 		            </div>
 

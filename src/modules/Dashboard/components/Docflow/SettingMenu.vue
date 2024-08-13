@@ -2,6 +2,17 @@
 // Core
 import { ref, toRaw, unref, onMounted } from 'vue'
 import Listbox from 'primevue/listbox'
+// Components
+import {
+	CalendarDateBoldIcon, CheckCircleBoldIcon,
+	ClockCircleBoldIcon,
+	CloseCircleBoldIcon,
+	CursorSquareBoldIcon,
+	FileCheckBoldIcon,
+	FolderFavouriteStarBoldIcon,
+	PenNewRoundBoldIcon,
+	RoundArrowRightDownBoldIcon, SettingsMinimalisticIcon
+} from '@/components/Icons'
 // Utils
 import { getStorageItem, removeStorageItem, saveStorageItem } from '@/utils/storage'
 import { dispatchNotify } from '@/utils/notify'
@@ -15,7 +26,7 @@ const menuRef = ref(null)
 const options = ref([
   {
     name: 'На рассмотрение',
-    icon: 'solar:clock-circle-bold',
+    icon: ClockCircleBoldIcon,
     avatarColor: 'bg-success-50',
     iconColor: 'text-success-500',
     status: true,
@@ -37,7 +48,7 @@ const options = ref([
   },
   {
     name: 'Поручения',
-    icon: 'solar:round-arrow-right-down-bold',
+    icon: RoundArrowRightDownBoldIcon,
     avatarColor: 'bg-primary-50',
     iconColor: 'text-primary-500',
     status: true,
@@ -59,7 +70,7 @@ const options = ref([
   },
   {
     name: 'На подпись',
-    icon: 'solar:pen-new-round-bold',
+    icon: PenNewRoundBoldIcon,
     avatarColor: 'bg-info-50',
     iconColor: 'text-info-500',
     status: true,
@@ -81,7 +92,7 @@ const options = ref([
   },
   {
     name: 'На согласование',
-    icon: 'solar:file-check-bold',
+    icon: FileCheckBoldIcon,
     avatarColor: 'bg-primary-50',
     iconColor: 'text-primary-500',
     status: true,
@@ -103,7 +114,7 @@ const options = ref([
   },
   {
     name: 'На обзоре',
-    icon: 'solar:cursor-square-bold',
+    icon: CursorSquareBoldIcon,
     avatarColor: 'bg-warning-50',
     iconColor: 'text-warning-500',
     status: true,
@@ -125,7 +136,7 @@ const options = ref([
   },
   {
     name: 'Не выполнено',
-    icon: 'solar:close-circle-bold',
+    icon: CloseCircleBoldIcon,
     avatarColor: 'bg-critic-50',
     iconColor: 'text-critic-500',
     status: true,
@@ -147,7 +158,7 @@ const options = ref([
   },
   {
     name: 'Просроченный',
-    icon: 'solar:calendar-date-bold',
+    icon: CalendarDateBoldIcon,
     avatarColor: 'bg-greyscale-50',
     iconColor: 'text-greyscale-500',
     status: true,
@@ -169,7 +180,7 @@ const options = ref([
   },
   {
     name: 'Для подтверждения',
-    icon: 'solar:folder-favourite-star-bold',
+    icon: FolderFavouriteStarBoldIcon,
     avatarColor: 'bg-success-50',
     iconColor: 'text-success-500',
     status: true,
@@ -254,7 +265,7 @@ onMounted(() => {
     shadow
     size="small"
     label="Настроить"
-    icon-left="solar:settings-minimalistic-outline"
+    :icon-left="SettingsMinimalisticIcon"
     button-class="bg-transparent text-greyscale-500 !text-sm border-none shadow-none !rounded-[6px] !py-1 !px-2 hover:bg-greyscale-50"
     @click="toggle"
   />
@@ -287,9 +298,9 @@ onMounted(() => {
           <div class="flex items-center gap-2 py-[10px] px-3 rounded-xl">
             <div class="w-5 h-5">
               <base-iconify
-                icon="solar:check-circle-bold"
+                :icon="CheckCircleBoldIcon"
                 type="primary"
-                class="checked-icon !w-5 !h-5"
+                class="checked-icon"
               />
 
               <div class="unchecked-icon w-5 h-5 border border-greyscale-200 rounded-full"></div>

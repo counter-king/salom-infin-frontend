@@ -5,6 +5,7 @@ import { helpers, required } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
 // Components
 import { PriorityChip } from '@/components/Chips'
+import { ClockCircleLinearIcon } from '@/components/Icons'
 import { UserWithLabel, UserWithSelectable } from '@/components/Users'
 // Stores
 import { useCommonStore } from '@/stores/common'
@@ -144,7 +145,7 @@ const { date } = inject('calendar')
         placeholder="choose-start-time"
       >
         <template #dropdownicon>
-          <base-iconify icon="solar:clock-circle-linear" class="!w-5 !h-5" />
+          <base-iconify :icon="ClockCircleLinearIcon" />
         </template>
       </base-dropdown>
     </base-col>
@@ -162,7 +163,7 @@ const { date } = inject('calendar')
         placeholder="choose-end-time"
       >
         <template #dropdownicon>
-          <base-iconify icon="solar:clock-circle-linear" class="!w-5 !h-5" />
+	        <base-iconify :icon="ClockCircleLinearIcon" />
         </template>
       </base-dropdown>
     </base-col>

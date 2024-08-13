@@ -1,4 +1,6 @@
 <script setup>
+// Components
+import { SidebarMinimalisticIcon } from '@/components/Icons'
 // Store
 import { useChatStore } from "@/modules/Chat/stores";
 
@@ -26,11 +28,9 @@ const chatStore = useChatStore();
         </div>
       </div>
 
-      <base-icon
-        name="SidebarMinimalisticIcon"
-        width="24"
-        height="24"
-        class="cursor-pointer"
+      <base-iconify
+        :icon="SidebarMinimalisticIcon"
+        class="!w-6 !h-6 cursor-pointer"
         :class="chatStore.rightSidebarVisible ? 'text-primary-500' : 'text-greyscale-500'"
         @click="chatStore.toggleRightSidebar"
       />

@@ -2,6 +2,8 @@
 // Core
 import { ref, unref, } from 'vue'
 import { useI18n } from 'vue-i18n'
+// Components
+import { SortIcon } from '@/components/Icons'
 // Stores
 import { useCommonStore } from '@/stores/common'
 // Composable
@@ -25,7 +27,7 @@ const toggle = (event) => {
   <div>
     <base-button
       label="filter"
-      icon-left="solar:sort-outline"
+      :icon-left="SortIcon"
       rounded
       type="button"
       class="h-8 my-1 mr-1 !px-3 btn_fliter"
@@ -37,7 +39,7 @@ const toggle = (event) => {
       width="w-[748px]"
       has-overlay
       content="rounded-xl relative p-0 bg-white relative"
-      menu-class="bg-primary-500  mt-7  p-0"
+      menu-class="bg-primary-500 mt-7 p-0"
     >
 
     <div class="form-search-filter p-4">

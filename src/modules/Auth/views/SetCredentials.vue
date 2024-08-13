@@ -4,6 +4,8 @@ import { ref, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import useVuelidate from '@vuelidate/core'
 import { helpers, sameAs,  minLength, required } from '@vuelidate/validators'
+// Components
+import { LockKeyholeUnlockedIcon } from '@/components/Icons'
 // Services
 import { fetchSetPassword } from '@/modules/Auth/services'
 // Utils
@@ -87,7 +89,7 @@ const setCredentials = async () => {
 
       <base-button
         :loading="loading"
-        icon-left="LockKeyholeUnlockedIcon"
+        :icon-left="LockKeyholeUnlockedIcon"
         label="Установить учетные данные"
         size="large"
         type="submit"

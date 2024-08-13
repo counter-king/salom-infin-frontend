@@ -9,6 +9,7 @@ import { useAuthStore } from '@/modules/Auth/stores'
 // Components
 import BaseSpinner from '@/components/UI/BaseSpinner.vue'
 import RegisterDocumentMenu from './RegisterDocumentMenu.vue'
+import { CloudUploadIcon } from '@/components/Icons'
 // Utils
 import { clearModel } from '@/utils'
 // Enums
@@ -180,7 +181,7 @@ watch(() => docFlowStore.documentMenuType.name, (value) => {
             <template v-if="!docFlowStore.createDocumentModel.__files.length" #empty-content>
               <div class="text-sm font-medium select-none">
                 <div class="flex items-center justify-center w-12 h-12 transition-colors bg-primary-100 group-hover:bg-primary-500 rounded-full mb-3 mx-auto">
-                  <base-iconify icon="iconamoon:cloud-upload-light" class="transition-colors text-primary-500 group-hover:text-white" />
+                  <base-iconify :icon="CloudUploadIcon" class="transition-colors text-primary-500 group-hover:text-white" />
                 </div>
 
                 <div class="flex items-center">

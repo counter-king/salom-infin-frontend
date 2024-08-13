@@ -1,9 +1,6 @@
 <script setup>
-// Core
-import CheckCircleBold from '~icons/solar/check-circle-bold'
-import InfoCircleBold from '~icons/solar/info-circle-bold'
-import DangerTriangleBold from '~icons/solar/danger-triangle-bold'
-import CloseSm from '~icons/ci/close-sm'
+// Components
+import { CheckCircleBoldIcon, InfoCircleBoldIcon, DangerTriangleBoldIcon, CloseSmIcon } from '@/components/Icons'
 // Enums
 import { COLOR_TYPES } from '@/enums'
 </script>
@@ -12,15 +9,15 @@ import { COLOR_TYPES } from '@/enums'
   <notifications :pauseOnHover="true" :duration="5000">
     <template #body="props">
       <template v-if="props.item.type === COLOR_TYPES.SUCCESS">
-        <base-iconify :icon="CheckCircleBold" class="text-success-500" />
+        <base-iconify :icon="CheckCircleBoldIcon" class="text-success-500" />
       </template>
 
       <template v-else-if="props.item.type === 'warn'">
-        <base-iconify :icon="InfoCircleBold" class="text-warning-500" />
+        <base-iconify :icon="InfoCircleBoldIcon" class="text-warning-500" />
       </template>
 
       <template v-else>
-        <base-iconify :icon="DangerTriangleBold" class="text-critic-500" />
+        <base-iconify :icon="DangerTriangleBoldIcon" class="text-critic-500" />
       </template>
 
       <span class="flex-1 text-white">{{ props.item.text }}</span>
@@ -34,7 +31,7 @@ import { COLOR_TYPES } from '@/enums'
         @click="props.close()"
       >
         <template #label>
-          <base-iconify :icon="CloseSm" />
+          <base-iconify :icon="CloseSmIcon" />
         </template>
       </base-button>
     </template>
@@ -55,10 +52,10 @@ import { COLOR_TYPES } from '@/enums'
   align-items: center;
   gap:12px;
   @apply bg-primary-900 !important;
-  border-radius: 6px !important;
+  //border-radius: 6px !important;
   font-size: 16px !important;
-  margin-bottom: 8px !important;
-  padding: 8px 12px !important;
+  //margin-bottom: 8px !important;
+  //padding: 8px 12px !important;
   margin: 6px 0 0 !important;
   border-radius: 12px !important;
   padding: 14px 16px !important;

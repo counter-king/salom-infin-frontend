@@ -1,7 +1,9 @@
 <script setup>
 // Core
 import { ref } from 'vue'
-
+// Components
+import { BellIcon, CheckReadIcon, SettingsIcon } from '@/components/Icons'
+// Reactive
 const sidebar = ref(false)
 </script>
 <template>
@@ -9,7 +11,7 @@ const sidebar = ref(false)
     <base-button
       color="bg-greyscale-800 hover:bg-greyscale-900"
       border-color="border-greyscale-800"
-      icon-left="solar:bell-outline"
+      :icon-left="BellIcon"
       only-icon
       rounded
       @click="sidebar = !sidebar"
@@ -23,8 +25,8 @@ const sidebar = ref(false)
       rootClass="w-[506px]"
     >
       <template #headerCloseIcons>
-        <base-iconify icon="solar:check-read-outline" class="!w-5 !h-5 mr-3 cursor-pointer"/>
-        <base-iconify icon="solar:settings-outline" class="!w-5 !h-5 cursor-pointer"/>
+        <base-iconify :icon="CheckReadIcon" class="!w-5 !h-5 mr-3 cursor-pointer"/>
+        <base-iconify :icon="SettingsIcon" class="!w-5 !h-5 cursor-pointer"/>
       </template>
 
       <template #content>

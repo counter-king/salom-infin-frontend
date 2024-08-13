@@ -5,6 +5,7 @@ import AccordionTab from 'primevue/accordiontab'
 import { useI18n } from 'vue-i18n'
 // Components
 import { StatusChip } from '@/components/Chips'
+import { FolderWithFilesIcon } from '@/components/Icons'
 import ResolutionCard from '@/components/Tree/components/ResolutionCard.vue'
 // Stores
 import { useAuthStore } from '@/modules/Auth/stores'
@@ -114,11 +115,9 @@ const props = defineProps({
                     target="_blank"
                     class="inline-flex items-center gap-2 font-medium text-primary-500 py-1"
                   >
-                    <base-icon
-                      name="FolderWithFilesIcon"
-                      width="18"
-                      height="18"
-                      class=""
+                    <base-iconify
+                      :icon="FolderWithFilesIcon"
+                      class="!w-[18px] !h-[18px]"
                     />
                     <span class="lowercase border-b border-dashed border-primary-500">{{ file.name }}</span>
                   </a>

@@ -4,8 +4,7 @@ import { ref, unref, onMounted } from 'vue'
 // Stores
 import { useCollectRequestsStore } from '@/stores/collect-requests.store'
 // Components
-import AltArrowDownOutline from '~icons/solar/alt-arrow-down-outline'
-import CheckCircleBold from '~icons/solar/check-circle-bold'
+import { AltArrowDownIcon, CheckCircleBoldIcon, GlobalIcon } from '@/components/Icons'
 // Utils
 import { saveStorageItem, getStorageItem } from '@/utils/storage'
 // Const
@@ -71,7 +70,7 @@ onMounted(() => {
       >
         <span class="text-primary-900 font-semibold text-sm">{{ languageSelected.text }}</span>
 
-        <base-iconify :icon="AltArrowDownOutline" class="text-greyscale-500" />
+        <base-iconify :icon="AltArrowDownIcon" class="text-greyscale-500" />
       </button>
     </template>
 
@@ -79,7 +78,7 @@ onMounted(() => {
       <base-button
         color="bg-greyscale-800 hover:bg-greyscale-900"
         border-color="border-greyscale-800"
-        icon-left="solar:global-outline"
+        :icon-left="GlobalIcon"
         only-icon
         rounded
         @click="toggle"
@@ -106,7 +105,7 @@ onMounted(() => {
 
           <base-iconify
             v-if="language.icon === languageSelected.icon"
-            :icon="CheckCircleBold"
+            :icon="CheckCircleBoldIcon"
             class="text-primary-500 transition-all duration-[400ms]"
           />
         </div>

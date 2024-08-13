@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router'
 import { useI18n } from "vue-i18n";
 // Components
 import BaseSpinner from '@/components/UI/BaseSpinner.vue'
+import { AltArrowLeftIcon, EyeIcon, ClockCircleIcon, ChatLineIcon, FileTextIcon } from '@/components/Icons'
 import FileTabs from './components/FileTabs.vue'
 // Enums
 import { CONTENT_TYPES } from '@/enums'
@@ -26,7 +27,7 @@ const props = defineProps({
       {
         label: "Просмотр",
         name: "Preview",
-        icon: "solar:eye-outline",
+        icon: EyeIcon,
         slot: "preview",
         component: "Preview",
         count: null
@@ -34,7 +35,7 @@ const props = defineProps({
       {
         label: "История",
         name: "History",
-        icon: "solar:clock-circle-outline",
+        icon: ClockCircleIcon,
         slot: "history",
         component: "History",
         count: null
@@ -42,7 +43,7 @@ const props = defineProps({
       {
         label: "Комментарии",
         name: "Comments",
-        icon: "solar:chat-line-outline",
+        icon: ChatLineIcon,
         slot: "comments",
         component: "Comments",
         count: 2
@@ -50,7 +51,7 @@ const props = defineProps({
       {
         label: "Файлы",
         name: "Files",
-        icon: "solar:file-text-outline",
+        icon: FileTextIcon,
         slot: "files",
         component: "Files"
       }
@@ -112,11 +113,11 @@ watch(activeTabMenu, (value) => {
               autoHide: false
             }"
             size="small"
-            icon-left="AltArrowLeftIcon"
+            :icon-left="AltArrowLeftIcon"
+            icon-width="!w-4 !h-4"
             only-icon
             outlined
             shadow
-            icon-width="16"
             border-color="border-transparent"
             button-class="h-8"
             @click="router.go(-1)"

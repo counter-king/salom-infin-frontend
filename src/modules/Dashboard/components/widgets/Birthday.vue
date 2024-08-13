@@ -3,6 +3,7 @@
 import { useReward } from 'vue-rewards'
 // Components
 import { UserWithAction } from '@/components/Users'
+import { GiftIcon } from '@/components/Icons'
 import WidgetWrapper from '../WidgetWrapper.vue'
 // Non-reactive
 const config = {
@@ -29,11 +30,9 @@ const { reward } = useReward('confetti', 'confetti', config)
           </template>
 
           <template #action>
-            <base-icon
-              name="GiftIcon"
-              width="16"
-              height="16"
-              class="text-greyscale-400"
+            <base-iconify
+              :icon="GiftIcon"
+              class="!w-4 !h-4 text-greyscale-400"
               @click="reward"
             />
           </template>

@@ -3,6 +3,7 @@
 import { onMounted, ref, watch } from 'vue'
 import { useDebounce, useElementVisibility } from '@vueuse/core'
 // Components
+import { ChatLineIcon } from '@/components/Icons'
 import { UserWithAction } from '@/components/Users'
 import WidgetWrapper from '../WidgetWrapper.vue'
 // Stores
@@ -87,7 +88,7 @@ onMounted(async () => {
                   class="h-4"
                 >
                   <base-iconify
-                    icon="solar:chat-line-outline"
+                    :icon="ChatLineIcon"
                     class="text-greyscale-300 cursor-pointer hover:text-primary-500 !w-5 !h-5"
                   />
                 </div>

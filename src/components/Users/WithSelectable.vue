@@ -1,6 +1,8 @@
 <script setup>
 // Core
 import { computed } from 'vue'
+// Components
+import { CheckCircleBoldIcon } from '@/components/Icons'
 // Props
 import avatarProps from './props'
 // Utils
@@ -107,9 +109,8 @@ const handleSelect = (item) => {
 
       <div class="w-[22px] h-[22px]">
         <template v-if="props.selectType === 'checked'">
-          <base-icon
-            :stroke="false"
-            name="CheckCircleBgIcon"
+          <base-iconify
+            :icon="CheckCircleBoldIcon"
             class="icon-selected hidden"
           />
         </template>

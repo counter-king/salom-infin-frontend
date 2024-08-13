@@ -3,6 +3,8 @@
 // Core
 import { onMounted, ref, unref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+// Components
+import { SortIcon } from '@/components/Icons'
 // Services
 import { fetchUserDetail, fetchDepartmentDetail, fetchComposeStatusDetail } from "@/services/common.service";
 // Utils
@@ -150,7 +152,7 @@ onMounted(async () => {
     border-color="border-transparent"
     label="filter"
     icon-color="#767994"
-    icon-left="solar:sort-outline"
+    :icon-left="SortIcon"
     rounded
     shadow
     type="button"

@@ -1,4 +1,6 @@
 <script setup>
+// Components
+import { Plus20SolidIcon } from '@/components/Icons'
 // Methods
 const handleFiles = (event) => {
   let files = event.target.files
@@ -20,7 +22,7 @@ const handleFiles = (event) => {
         autoHide: false
       }"
     >
-      <base-icon name="AddIcon" />
+      <base-iconify :icon="Plus20SolidIcon" />
 
       <input type="file" id="file" multiple hidden @change="handleFiles" />
     </label>

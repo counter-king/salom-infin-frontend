@@ -1,5 +1,6 @@
 <script setup>
-
+// Components
+import { FileDownloadIcon } from '@/components/Icons'
 </script>
 
 <template>
@@ -8,7 +9,7 @@
     border-color="border-transparent"
     label="export"
     icon-color="#767994"
-    icon-left="ci:file-download"
+    :icon-left="FileDownloadIcon"
     rounded
     shadow
     type="button"

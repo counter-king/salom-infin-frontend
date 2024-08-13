@@ -6,6 +6,7 @@ import AccordionTab from 'primevue/accordiontab'
 // Components
 import { UserWithCollapse } from '@/components/Users'
 import { StatusChip } from '@/components/Chips'
+import { DocumentTextIcon, EyeIcon } from '@/components/Icons'
 // Stores
 import { useBoxesCommonStore } from '@/modules/Documents/modules/Boxes/stores/common.store'
 // Props
@@ -56,10 +57,7 @@ const watchResolution = async (event, item) => {
       <div class="flex items-start p-2 pb-0">
         <div class="flex flex-1 gap-3 p-2">
           <div class="flex items-center justify-center bg-primary-500 w-10 h-10 rounded-full">
-            <base-icon
-              name="DocumentTextIcon"
-              class="text-white"
-            />
+            <base-iconify :icon="DocumentTextIcon" class="text-white" />
           </div>
 
           <div class="flex-1">
@@ -134,12 +132,14 @@ const watchResolution = async (event, item) => {
 
             <div class="flex-1"></div>
 
-            <base-icon name="EyeIcon" width="16" class="text-greyscale-500" />
+            <base-iconify :icon="EyeIcon" class="!w-4 !h-4 text-greyscale-500" />
 
             <h1
               class="text-sm font-semibold text-greyscale-500"
               @click="watchResolution($event, item)"
-            >Просмотр резолюция</h1>
+            >
+	            Просмотр резолюция
+            </h1>
           </div>
         </template>
 

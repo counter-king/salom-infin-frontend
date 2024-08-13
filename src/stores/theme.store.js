@@ -1,12 +1,22 @@
 // Core
-import { defineStore } from "pinia"
+import { defineStore } from 'pinia'
+// Components
+import {
+  HomeAngle2Icon,
+  CalendarIcon,
+  FolderWithFilesIcon,
+  ChatLineIcon,
+  UserCheckIcon,
+  SettingsIcon
+} from '@/components/Icons'
+
 export const useThemeStore = defineStore("theme", {
   state: () => ({
     header: [
       // Дашбоард
       {
         title: 'Дашбоард',
-        icon: 'solar:home-angle-2-outline',
+        icon: HomeAngle2Icon,
         link: 'DashboardIndex',
         children: [],
         count: null,
@@ -15,7 +25,7 @@ export const useThemeStore = defineStore("theme", {
       // Календарь
       {
         title: 'Календарь',
-        icon: 'solar:calendar-outline',
+        icon: CalendarIcon,
         link: 'CalendarIndex',
         children: [],
         count: null,
@@ -24,7 +34,7 @@ export const useThemeStore = defineStore("theme", {
       // Документ
       {
         title: 'Документ',
-        icon: 'solar:folder-with-files-outline',
+        icon: FolderWithFilesIcon,
         link: 'DocumentsIndex',
         count: null,
         name: 'document'
@@ -41,7 +51,7 @@ export const useThemeStore = defineStore("theme", {
       // Чат
       {
         title: 'Чат',
-        icon: 'solar:chat-line-outline',
+        icon: ChatLineIcon,
         link: 'ChatIndex',
         children: [],
         count: null,
@@ -50,7 +60,7 @@ export const useThemeStore = defineStore("theme", {
       // HR
       {
         title: 'HR',
-        icon: 'solar:user-check-outline',
+        icon: UserCheckIcon,
         link: 'HRIndex',
         children: [],
         count: null,
@@ -59,7 +69,7 @@ export const useThemeStore = defineStore("theme", {
       // Настройки
       {
         title: 'Настройки',
-        icon: 'solar:settings-outline',
+        icon: SettingsIcon,
         link: 'SettingsIndex',
         children: [],
         count: null,

@@ -2,6 +2,7 @@
 // Components
 import { CommentEdit } from '@/components/Comment'
 // Components
+import { Pen2Icon } from '@/components/Icons'
 import { CommentItem } from '@/components/Comment'
 // Store
 import { useAuthStore } from '@/modules/Auth/stores'
@@ -68,7 +69,7 @@ const props = defineProps({
             class="group flex cursor-pointer"
             @click="commentStore.openEditOrReplyArea({ item: props.item, action: COMMENT_ACTIONS.EDIT })"
           >
-            <base-icon name="PenIcon" width="16" class="mr-1 group-hover:text-primary-500" />
+            <base-iconify :icon="Pen2Icon" class="!w-4 mr-1 group-hover:text-primary-500" />
             <span class="group-hover:text-primary-500">Редактировать</span>
           </div>
         </template>

@@ -1,6 +1,8 @@
 <script setup>
 // Core
 import { ref, unref } from 'vue'
+// Components
+import { AltArrowDownLinearIcon, CalendarIcon, CloseCircleBoldIcon } from '@/components/Icons'
 // Utils
 import { formatDate } from '@/utils/formatDate'
 // Macros
@@ -45,18 +47,18 @@ const clear = (event) => {
     class="p-button p-component font-semibold text-sm bg-primary-0 hover:bg-greyscale-100 text-primary-dark border-transparent !rounded-full shadow-button pt-[10px] pb-[9px] pl-4 pr-3"
     @click="toggle"
   >
-    <base-iconify icon="solar:calendar-outline" class="!w-5 !h-5 text-greyscale-500 mr-2" />
+    <base-iconify :icon="CalendarIcon" class="text-greyscale-500 mr-2" />
 
     <span>{{ date ?? 'Дата' }}</span>
 
     <template v-if="!date">
-      <base-iconify icon="solar:alt-arrow-down-linear" class="!w-5 !h-5 text-greyscale-500 ml-1" />
+      <base-iconify :icon="AltArrowDownLinearIcon" class="text-greyscale-500 ml-1" />
     </template>
 
     <template v-else>
       <base-iconify
-        icon="solar:close-circle-bold"
-        class="!w-5 !h-5 text-greyscale-500 ml-1"
+        :icon="CloseCircleBoldIcon"
+        class="text-greyscale-500 ml-1"
         @click="clear"
       />
     </template>

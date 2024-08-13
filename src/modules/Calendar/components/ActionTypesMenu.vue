@@ -1,6 +1,8 @@
 <script setup>
 // Core
 import { ref, unref, computed } from 'vue'
+// Components
+import { AltArrowDownIcon } from '@/components/Icons'
 // Store
 import { useCalendarStore } from '../stores/calendar.store'
 // Enums
@@ -44,7 +46,7 @@ const actionTypesMenu = (type) => {
       <h1 class="text-xl font-bold text-primary-900">{{ menuActiveText.label }}</h1>
     </slot>
 
-    <base-iconify icon="solar:alt-arrow-down-outline" class="mt-1 text-gray-2" />
+    <base-iconify :icon="AltArrowDownIcon" class="mt-1 text-gray-2" />
   </button>
 
   <base-menu
