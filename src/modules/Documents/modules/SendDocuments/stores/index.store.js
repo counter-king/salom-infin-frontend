@@ -9,7 +9,11 @@ import {
 // Utils
 import { withAsync } from "@/utils/withAsync";
 import { dispatchNotify } from "@/utils/notify";
-import {COLOR_TYPES, COMPOSE_DOCUMENT_TYPES} from "@/enums";
+// Enums
+import {COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES} from "@/enums"
+import {ROUTE_SD_CREATE} from "@/modules/Documents/modules/SendDocuments/constants"
+// Components
+import {DocumentAddIcon, DocumentMedicineIcon, NotebookLinearIcon, NotesIcon} from "@/components/Icons"
 
 export const useSDStore = defineStore("sd-stores", {
   state: () => ({
@@ -176,7 +180,75 @@ export const useSDStore = defineStore("sd-stores", {
         active: false
       }
     ],
-    list: []
+    list: [],
+    SEND_DOCUMENT_CREATE_MENU_LIST: [
+      {
+        id: 1,
+        label: 'service-letter',
+        icon: NotebookLinearIcon,
+        type: 'menu',
+        hasRouterLink: true,
+        active: true,
+        routerLinkName: ROUTE_SD_CREATE,
+        documentType: COMPOSE_DOCUMENT_TYPES.INNER,
+        documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.SERVICE_LETTER,
+        items: []
+      },
+      {
+        id: 2,
+        label: 'notice',
+        icon: NotesIcon,
+        type: 'menu',
+        hasRouterLink: false,
+        active: false,
+        items: [
+          {
+            label: 'business-trip',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.NOTICE,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP
+          }
+        ],
+      },
+      {
+        id: 3,
+        label: 'application',
+        icon: DocumentAddIcon,
+        type: 'menu',
+        hasRouterLink: false,
+        active: false,
+        items: [
+          {
+            label: 'labor-leave',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.APPLICATION,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.LABOR_LEAVE
+          }
+        ],
+      },
+      {
+        id: 4,
+        label: 'order',
+        icon: DocumentMedicineIcon,
+        type: 'menu',
+        hasRouterLink: false,
+        active: false,
+        items: [
+          {
+            label: 'business-trip-order',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.ORDER,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER
+          }
+        ],
+      },
+    ]
   }),
   actions: {
     resetHeaders() {

@@ -6,78 +6,15 @@ import { useRouter } from "vue-router"
 // Components
 import TieredMenu from 'primevue/tieredmenu'
 import {
-	DocumentAddIcon,
-	DocumentMedicineIcon,
-	NotebookLinearIcon,
-	NotesIcon,
 	Plus20SolidIcon
 } from '@/components/Icons'
-// Enums
-import { ROUTE_SD_CREATE } from "@/modules/Documents/modules/SendDocuments/constants"
-import { COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES } from "@/enums"
+// Store
+import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store"
 
 const menu = ref(null)
 const { t } = useI18n()
 const router = useRouter()
-const items = [
-  {
-    label: 'service-letter',
-    icon: NotebookLinearIcon,
-		type: 'menu',
-	  hasRouterLink: true,
-	  routerLinkName: ROUTE_SD_CREATE,
-	  documentType: COMPOSE_DOCUMENT_TYPES.INNER,
-	  documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.SERVICE_LETTER
-  },
-  {
-    label: 'notice',
-    icon: NotesIcon,
-	  type: 'menu',
-	  hasRouterLink: false,
-    items: [
-      {
-        label: 'business-trip',
-	      type: 'submenu',
-	      hasRouterLink: true,
-	      routerLinkName: ROUTE_SD_CREATE,
-	      documentType: COMPOSE_DOCUMENT_TYPES.NOTICE,
-	      documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP
-      }
-    ],
-  },
-  {
-    label: 'application',
-    icon: DocumentAddIcon,
-	  type: 'menu',
-	  hasRouterLink: false,
-    items: [
-      {
-        label: 'labor-leave',
-	      type: 'submenu',
-	      hasRouterLink: true,
-	      routerLinkName: ROUTE_SD_CREATE,
-	      documentType: COMPOSE_DOCUMENT_TYPES.APPLICATION,
-	      documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.LABOR_LEAVE
-      }
-    ],
-  },
-  {
-    label: 'order',
-    icon: DocumentMedicineIcon,
-    type: 'menu',
-    hasRouterLink: false,
-    items: [
-      {
-        label: 'business-trip-order',
-        type: 'submenu',
-        hasRouterLink: true,
-        routerLinkName: ROUTE_SD_CREATE,
-        documentType: COMPOSE_DOCUMENT_TYPES.ORDER,
-        documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER
-      }
-    ],
-  },
-]
+const SDStore = useSDStore()
 
 // Methods
 const toggleMenu = (event) => {
@@ -109,7 +46,7 @@ const onShow = () => {
       @click="toggleMenu"
     />
     <TieredMenu
-      :model="items"
+      :model="SDStore.SEND_DOCUMENT_CREATE_MENU_LIST"
       popup
       ref="menu"
       :pt="{

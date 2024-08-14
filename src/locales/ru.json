@@ -314,5 +314,14 @@
   "create-order": "Создать приказ",
   "update-order": "Изменить приказ",
   "approver-signers": "Согласующие подписанты",
-  "select-approver-signers": "Выберите согласующие подписанты"
+  "select-approver-signers": "Выберите согласующие подписанты",
+  "sending-documents": "Отправка документов",
+  "send-documents-on-case": "Отправить документ по делу",
+  "favourites": "Избранный",
+  "selected-actions": "Действия, которые вы выбираете",
+  "calendar": "Календарь",
+  "set-tasks-according-date": "Привязывайте задачи к датам",
+  "chat": "Чат",
+  "chat-with-colleagues": "Чат с сотрудниками и коллегами",
+  "category": "Категории"
 }

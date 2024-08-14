@@ -15,6 +15,7 @@ export { default as AddCircleLinearIcon } from  '~icons/solar/add-circle-linear'
 export { default as LetterLinearIcon } from  '~icons/solar/letter-linear'
 export { default as NotebookLinearIcon } from  '~icons/solar/notebook-linear'
 export { default as CalendarLinearIcon } from  '~icons/solar/calendar-linear'
+export { default as StarLinearIcon } from  '~icons/solar/star-linear'
 // Solar (Outline)
 export { default as CheckCircleIcon } from  '~icons/solar/check-circle-outline'
 export { default as AltArrowUpIcon } from  '~icons/solar/alt-arrow-up-outline'
@@ -90,3 +91,9 @@ export { default as DangerTriangleBoldIcon } from  '~icons/solar/danger-triangle
 export { default as UserRoundedBoldIcon } from  '~icons/solar/user-rounded-bold'
 export { default as UsersGroupTwoRoundedBoldIcon } from  '~icons/solar/users-group-two-rounded-bold'
 export { default as MenuDotsBoldIcon } from  '~icons/solar/menu-dots-bold'
+// Solar (Bold Duotone)
+export { default as ArchiveUpBoldDuotoneIcon } from  '~icons/solar/archive-up-bold-duotone'
+export { default as StarBoldDuotoneIcon } from  '~icons/solar/star-bold-duotone'
+export { default as CalendarBoldDuotoneIcon } from  '~icons/solar/calendar-bold-duotone'
+export { default as Dialog2BoldDuotoneIcon } from  '~icons/solar/dialog-2-bold-duotone'
+
