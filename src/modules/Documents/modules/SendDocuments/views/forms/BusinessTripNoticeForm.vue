@@ -207,6 +207,7 @@ onMounted( async () => {
                 label="targets"
                 type="department"
                 placeholder="select-targets"
+                required
               >
                 <template #chip="{ value }">
                   {{ value.name }}
@@ -231,7 +232,6 @@ onMounted( async () => {
                 option-value="value"
                 label="route"
                 placeholder="select-route"
-                size="large"
               />
             </base-col>
 

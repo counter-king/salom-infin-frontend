@@ -170,7 +170,6 @@ onUnmounted(() => {
                 placeholder="enter-naming"
                 required
                 searchable
-                size="large"
               >
               </base-dropdown>
             </base-col>

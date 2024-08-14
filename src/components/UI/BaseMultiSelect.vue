@@ -141,7 +141,7 @@ const rootClasses = computed(() => {
     // Size
     {
       'size-small': props.size === 'small',
-      'size-normal': props.size === null || props.size === 'normal',
+      'size-normal h-11': props.size === null || props.size === 'normal',
     },
   ]
 })
@@ -226,7 +226,8 @@ watch(debounced, async () => {
             {
               'size-small py-[2px] pr-2 pl-4': props.size === 'x-small',
               'size-small py-[5px] pr-2 pl-4': props.size === 'small',
-              'size-normal py-3 pr-2 pl-4': props.size === null || props.size === 'normal',
+              'size-normal py-[10px] pr-2 pl-4': props.size === null || props.size === 'normal',
+              '!py-[5px]' : props.modelValue && props.modelValue.length
             }
           ]
         },

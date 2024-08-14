@@ -6,7 +6,8 @@ import { useRouter } from "vue-router"
 // Components
 import TieredMenu from 'primevue/tieredmenu'
 import {
-	Plus20SolidIcon
+	Plus20SolidIcon,
+  AltArrowRightIcon
 } from '@/components/Icons'
 // Store
 import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store"
@@ -79,7 +80,11 @@ const onShow = () => {
             <span>{{ t(item.label) }} </span>
           </div>
 
-          <base-iconify v-if="hasSubmenu" icon="solar:alt-arrow-right-outline" class="!w-4 !h-4"/>
+          <base-iconify
+            v-if="!item.hasRouterLink"
+            :icon="AltArrowRightIcon"
+            class="!w-4 !h-4"
+          />
         </div>
       </template>
     </TieredMenu>

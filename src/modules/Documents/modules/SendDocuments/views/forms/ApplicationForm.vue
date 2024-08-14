@@ -157,7 +157,6 @@ onMounted(async () => {
                 placeholder="select-application-type"
                 required
                 searchable
-                size="large"
               >
               </base-dropdown>
             </base-col>

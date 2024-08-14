@@ -106,7 +106,7 @@ const rootClasses = computed(() => {
     // Size
     {
       'size-small': props.size === 'small',
-      'size-normal': props.size === null || props.size === 'normal',
+      'size-normal h-11': props.size === null || props.size === 'normal',
     },
   ]
 })
@@ -160,8 +160,8 @@ const loadList = async (params) => {
             {
               'size-small py-[2px] pr-2 pl-4': props.size === 'x-small',
               'size-small py-[5px] pr-2 pl-4': props.size === 'small',
-              'size-normal py-2 pr-2 pl-3': props.size === null || props.size === 'normal',
-            },
+              'size-normal py-[10px] pr-2 pl-3': props.size === null || props.size === 'normal'
+            }
           ]
         },
         header: {

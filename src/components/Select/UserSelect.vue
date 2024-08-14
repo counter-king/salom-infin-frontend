@@ -63,7 +63,6 @@ onMounted(async () => {
       :placeholder="props.placeholder"
       :required="props.required"
       searchable
-      size="large"
     >
       <template #option="{ option }">
         <user-with-label
