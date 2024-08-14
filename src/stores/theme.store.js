@@ -33,7 +33,7 @@ export const useThemeStore = defineStore("theme", {
       },
       // Документ
       {
-        title: 'Документ',
+        title: 'eDocs',
         icon: FolderWithFilesIcon,
         link: 'DocumentsIndex',
         count: null,
