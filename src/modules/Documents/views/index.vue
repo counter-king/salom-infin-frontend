@@ -6,22 +6,23 @@ import { useBoxesCommonStore } from '../modules/Boxes/stores/common.store'
 import { useDocFlowStore } from '../modules/Registration/stores/docflow.store'
 // Components
 import TheSidebar from '@/components/TheSidebar.vue'
+import { ArchiveUpIcon } from '@/components/Icons'
 // Composable
 const boxesStore = useBoxesCommonStore()
 const docFlowStore = useDocFlowStore()
 // Reactive
 const menus = ref([
   {
-    title: "Документ",
+    title: 'Документ',
     prefix: true
   },
   // Ящики
   boxesStore.routes,
   // Отправка документов
   {
-    title: "Отправка документов",
-    icon: "solar:archive-up-outline",
-    link: "SendDocumentsIndex",
+    title: 'Отправка документов',
+    icon: ArchiveUpIcon,
+    link: 'SendDocumentsIndex',
     children: []
   },
   // Регистрация

@@ -23,10 +23,10 @@ const props = defineProps({
     type: String
   },
   iconLeft: {
-    type: String
+    type: undefined
   },
   iconRight: {
-    type: String
+    type: undefined
   },
   iconColor: {
     type: String

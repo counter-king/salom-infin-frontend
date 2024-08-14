@@ -8,6 +8,7 @@ import { useSearchStore } from "../stores/index";
 import { ExportButton} from "../../../components/Actions/index";
 import { CardTable} from "../../../components/Table/index";
 import SearchFilter from '../../../components/Toolbar/SearchFilter.vue'
+import { MagniferIcon, XMarkSolidIcon } from '@/components/Icons'
 // Composable
 const { t } = useI18n()
 const searchStore = useSearchStore();
@@ -25,13 +26,12 @@ const searchStore = useSearchStore();
       <div class="flex w-full h-12  rounded-full bg-greyscale-50 border-greyscale-50 focus:border-primary-500">
         <base-input
           class="!mb-0 flex-1 p-input-icon-left p-input-icon-right search_input"
-          inputClass="h-12 bg-inherit border-transparent
-          !focus:outline-none focus:ring-0  focus:border-inherit focus-visible:border-inherit"
-          v-model="model"
+          input-class="h-12 bg-inherit border-transparent
+          !focus:outline-none focus:ring-0 focus:border-inherit focus-visible:border-inherit"
           placeholder="document-number"
-          iconLeft="MagniferIcon"
-          iconRight="XIcon"
-          iconRightClass="bg-slate-300 rounded-full w-5 h-5 p-0.5"
+          :icon-left="MagniferIcon"
+          :icon-right="XMarkSolidIcon"
+          icon-right-class="bg-slate-300 rounded-full w-5 h-5 p-0.5"
           >
         </base-input>
 

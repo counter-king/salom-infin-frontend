@@ -8,7 +8,6 @@ import InputText from 'primevue/inputtext';
 import Paginator from 'primevue/paginator';
 import OverlayPanel from 'primevue/overlaypanel';
 import Skeleton from 'primevue/skeleton';
-import TheNavigation from '@/components/TheNavigation.vue';
 import axiosConfig from "@/services/axios.config";
 import InputSwitch from 'primevue/inputswitch';
 import { ref, watch, onMounted, computed } from 'vue';
@@ -167,7 +166,6 @@ onMounted(() => {
 });
 </script>
 <template>
-  <the-navigation :navs="navs"/>
   <div class="flex mb-5 justify-between items-center">
     <h1 class="text-2xl font-bold text-primary-900">Филиалы</h1>
     <div class="flex items-center gap-2">

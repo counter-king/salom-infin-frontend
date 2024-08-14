@@ -2,6 +2,7 @@
 // Core
 import {onMounted, ref} from "vue"
 // Components
+import { CheckCircleIcon } from '@/components/Icons'
 import UserMultiSelect from "@/components/Select/UserMultiSelect.vue"
 // Validators
 import { helpers, required } from "@vuelidate/validators"
@@ -82,9 +83,9 @@ defineExpose({ buttonLoading, dialog })
   <base-button
     border-color="border-transparent"
     label="sign"
-    icon-left="CheckCircleIcon"
-    icon-height="16"
-    icon-width="16"
+    :icon-left="CheckCircleIcon"
+    icon-height="!w-4"
+    icon-width="!h-4"
     rounded
     shadow
     type="button"

@@ -2,6 +2,8 @@
 export { default as Plus20SolidIcon } from  '~icons/heroicons/plus-20-solid'
 export { default as XMarkSolidIcon } from  '~icons/heroicons/x-mark-solid'
 export { default as GiftIcon } from  '~icons/heroicons/gift'
+export { default as EllipsisVertical20SolidIcon } from  '~icons/heroicons/ellipsis-vertical-20-solid'
+export { default as CurrencyDollarIcon } from  '~icons/heroicons/currency-dollar'
 // Ci
 export { default as FileDownloadIcon } from  '~icons/ci/file-download'
 export { default as DragVerticalIcon } from  '~icons/ci/drag-vertical'
@@ -73,6 +75,17 @@ export { default as LockKeyholeUnlockedIcon } from  '~icons/solar/lock-keyhole-u
 export { default as LetterIcon } from  '~icons/solar/letter-outline'
 export { default as SidebarMinimalisticIcon } from  '~icons/solar/sidebar-minimalistic-outline'
 export { default as FileCheckIcon } from  '~icons/solar/file-check-outline'
+export { default as NotebookIcon } from  '~icons/solar/notebook-outline'
+export { default as DangerCircleIcon } from  '~icons/solar/danger-circle-outline'
+export { default as CaseIcon } from  '~icons/solar/case-outline'
+export { default as UserSpeakRoundedIcon } from  '~icons/solar/user-speak-rounded-outline'
+export { default as BuildingsIcon } from  '~icons/solar/buildings-outline'
+export { default as BoxMinimalisticIcon } from  '~icons/solar/box-minimalistic-outline'
+export { default as UsersGroupTwoRoundedIcon } from  '~icons/solar/users-group-two-rounded-outline'
+export { default as LaptopMinimalisticIcon } from  '~icons/solar/laptop-minimalistic-outline'
+export { default as MouseIcon } from  '~icons/solar/mouse-outline'
+export { default as MapIcon } from  '~icons/solar/map-outline'
+export { default as StreetsMapPointIcon } from  '~icons/solar/streets-map-point-outline'
 // Solar (Bold)
 export { default as CheckCircleBoldIcon } from  '~icons/solar/check-circle-bold'
 export { default as CalendarDateBoldIcon } from  '~icons/solar/calendar-date-bold'
@@ -96,4 +109,6 @@ export { default as ArchiveUpBoldDuotoneIcon } from  '~icons/solar/archive-up-bo
 export { default as StarBoldDuotoneIcon } from  '~icons/solar/star-bold-duotone'
 export { default as CalendarBoldDuotoneIcon } from  '~icons/solar/calendar-bold-duotone'
 export { default as Dialog2BoldDuotoneIcon } from  '~icons/solar/dialog-2-bold-duotone'
+// Solar (Bold Broken)
+export { default as UserCheckRoundedBrokenIcon } from  '~icons/solar/user-check-rounded-broken'
 

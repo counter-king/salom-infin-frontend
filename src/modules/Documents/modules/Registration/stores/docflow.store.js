@@ -1,5 +1,7 @@
 // Core
-import { defineStore } from "pinia"
+import { defineStore } from 'pinia'
+// Components
+import { ClipboardAddIcon } from '@/components/Icons'
 // Store
 import { useCommonStore } from '@/stores/common'
 import { useCollectRequestsStore } from '@/stores/collect-requests.store'
@@ -18,15 +20,15 @@ import { COLOR_TYPES, JOURNAL, JOURNAL_CODES } from '@/enums'
 export const useDocFlowStore = defineStore("docFlowStore", {
   state: () => ({
     routes: {
-      title: "Регистрация",
-      icon: "solar:clipboard-add-outline",
-      link: "RegistrationIndex",
+      title: 'Регистрация',
+      icon: ClipboardAddIcon,
+      link: 'RegistrationIndex',
       children: []
     },
     headers: [
       {
-        header: "priority",
-        field: "priority",
+        header: 'priority',
+        field: 'priority',
         detail: {
           component: 'priority-chip',
           colClass: '',
@@ -34,8 +36,8 @@ export const useDocFlowStore = defineStore("docFlowStore", {
         active: true
       },
       {
-        header: "naming",
-        field: "title",
+        header: 'naming',
+        field: 'title',
         detail: {
           component: null,
           colClass: '',
@@ -43,8 +45,8 @@ export const useDocFlowStore = defineStore("docFlowStore", {
         active: true
       },
       {
-        header: "document-type",
-        field: "document_type",
+        header: 'document-type',
+        field: 'document_type',
         detail: {
           component: null,
           colClass: '',
@@ -52,8 +54,8 @@ export const useDocFlowStore = defineStore("docFlowStore", {
         active: true
       },
       {
-        header: "deliver-type",
-        field: "delivery_type",
+        header: 'deliver-type',
+        field: 'delivery_type',
         detail: {
           component: null,
           colClass: '',
@@ -61,8 +63,8 @@ export const useDocFlowStore = defineStore("docFlowStore", {
         active: false
       },
       {
-        header: "description",
-        field: "description",
+        header: 'description',
+        field: 'description',
         detail: {
           component: null,
           colClass: '',
@@ -70,8 +72,8 @@ export const useDocFlowStore = defineStore("docFlowStore", {
         active: false
       },
       {
-        header: "magazine",
-        field: "journal",
+        header: 'magazine',
+        field: 'journal',
         detail: {
           component: null,
           colClass: '',
@@ -79,8 +81,8 @@ export const useDocFlowStore = defineStore("docFlowStore", {
         active: false
       },
       {
-        header: "language-document",
-        field: "language",
+        header: 'language-document',
+        field: 'language',
         detail: {
           component: null,
           colClass: '',
@@ -97,8 +99,8 @@ export const useDocFlowStore = defineStore("docFlowStore", {
       //   active: false
       // },
       {
-        header: "outgoing-date",
-        field: "outgoing_date",
+        header: 'outgoing-date',
+        field: 'outgoing_date',
         detail: {
           component: null,
           colClass: '',
@@ -106,8 +108,8 @@ export const useDocFlowStore = defineStore("docFlowStore", {
         active: false
       },
       {
-        header: "outgoing-number",
-        field: "outgoing_number",
+        header: 'outgoing-number',
+        field: 'outgoing_number',
         detail: {
           component: null,
           colClass: '',
@@ -115,8 +117,8 @@ export const useDocFlowStore = defineStore("docFlowStore", {
         active: false
       },
       {
-        header: "reg-number",
-        field: "register_number",
+        header: 'reg-number',
+        field: 'register_number',
         detail: {
           component: null,
           colClass: '',
@@ -124,8 +126,8 @@ export const useDocFlowStore = defineStore("docFlowStore", {
         active: true
       },
       {
-        header: "reg-date",
-        field: "register_date",
+        header: 'reg-date',
+        field: 'register_date',
         detail: {
           component: null,
           colClass: '',
@@ -133,8 +135,8 @@ export const useDocFlowStore = defineStore("docFlowStore", {
         active: true
       },
       {
-        header: "reviewers",
-        field: "reviewers",
+        header: 'reviewers',
+        field: 'reviewers',
         detail: {
           component: 'base-avatar-group',
           colClass: '',
@@ -142,8 +144,8 @@ export const useDocFlowStore = defineStore("docFlowStore", {
         active: true
       },
       {
-        header: "status",
-        field: "status",
+        header: 'status',
+        field: 'status',
         detail: {
           component: 'base-status',
           colClass: '',
@@ -151,8 +153,8 @@ export const useDocFlowStore = defineStore("docFlowStore", {
         active: true
       },
       {
-        header: "correspondent",
-        field: "correspondent",
+        header: 'correspondent',
+        field: 'correspondent',
         detail: {
           component: null,
           colClass: '',
@@ -160,8 +162,8 @@ export const useDocFlowStore = defineStore("docFlowStore", {
         active: true
       },
       {
-        header: "created-date",
-        field: "created_date",
+        header: 'created-date',
+        field: 'created_date',
         detail: {
           component: null,
           colClass: '',
@@ -169,8 +171,8 @@ export const useDocFlowStore = defineStore("docFlowStore", {
         active: false
       },
       {
-        header: "modified-date",
-        field: "modified_date",
+        header: 'modified-date',
+        field: 'modified_date',
         detail: {
           component: null,
           colClass: '',

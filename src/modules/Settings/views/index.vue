@@ -6,6 +6,14 @@ import { useI18n } from 'vue-i18n'
 import { profileStore } from '../stores/profile/index.store'
 // Components
 import TheSidebar from '@/components/TheSidebar.vue'
+import {
+  BellIcon,
+  BoxMinimalisticIcon,
+  BuildingsIcon,
+  DocumentTextIcon,
+  FolderWithFilesIcon, LaptopMinimalisticIcon, MouseIcon, SettingsMinimalisticIcon,
+  UsersGroupTwoRoundedIcon
+} from '@/components/Icons'
 // Composable
 const { locale } = useI18n()
 const profile = profileStore()
@@ -19,27 +27,27 @@ const changeLanguage = () => {
       prefix: true
     },
     {
-      icon: 'FolderWithFilesIcon',
+      icon: FolderWithFilesIcon,
       link: 'DocumentFlowIndex',
       title: 'Документооборот',
     },
     {
-      icon: 'BuildingsIcon',
+      icon: BuildingsIcon,
       link: 'CorrespondentsIndex',
       title: 'Корреспонденты',
     },
     {
-      icon: 'BoxIcon',
+      icon: BoxMinimalisticIcon,
       link: 'StructureIndex',
       title: 'Структура',
     },
     {
-      icon: 'UsersGroupTwoRoundedIcon',
+      icon: UsersGroupTwoRoundedIcon,
       link: 'UsersIndex',
       title: 'Пользователи',
     },
     {
-      icon: 'DocumentTextIcon',
+      icon: DocumentTextIcon,
       link: 'ShortDescriptionsIndex',
       title: 'Краткое описание',
     },
@@ -50,22 +58,22 @@ const changeLanguage = () => {
     //   title: 'Профиль',
     // },
     {
-      icon: 'LaptopMinimalisticIcon',
+      icon: LaptopMinimalisticIcon,
       link: 'DevicesIndex',
       title: 'Мои устройства',
     },
     {
-      icon: 'BellIcon',
+      icon: BellIcon,
       link: 'NotificationsIndex',
       title: 'Уведомления',
     },
     {
-      icon: 'MouseIcon',
+      icon: MouseIcon,
       link: 'EquipmentsIndex',
       title: 'Техника и оборудования',
     },
     {
-      icon: 'SettingsMinimalisticIcon',
+      icon: SettingsMinimalisticIcon,
       link: 'GeneralSettingsIndex',
       title: 'Общие настройки',
     }

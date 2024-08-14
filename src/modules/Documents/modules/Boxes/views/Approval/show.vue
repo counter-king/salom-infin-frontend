@@ -10,6 +10,7 @@ import { useBoxesApprovalStore } from "@/modules/Documents/modules/Boxes/stores/
 import { useDocumentCountStore } from "@/modules/Documents/stores/count.store";
 import { useSDStore } from "@/modules/Documents/modules/SendDocuments/stores/index.store";
 // Components
+import { Pen2Icon, XMarkSolidIcon } from '@/components/Icons'
 import Approve from "@/components/Modal/Approve.vue";
 import SendToSigning from "@/modules/Documents/modules/Boxes/components/SendToSigning.vue"
 import CancelSign from "@/components/Modal/CancelSign.vue";
@@ -82,9 +83,9 @@ onMounted(  () => {
           color="bg-white hover:bg-greyscale-100 text-primary-dark"
           border-color="border-transparent"
           label="update"
-          icon-left="PenIcon"
-          icon-height="16"
-          icon-width="16"
+          :icon-left="Pen2Icon"
+          icon-height="!w-4"
+          icon-width="!h-4"
           icon-color="#767994"
           rounded
           shadow
@@ -97,9 +98,9 @@ onMounted(  () => {
 	        v-if="approved === null"
           severity="danger"
           label="not-agree"
-          icon-left="XIcon"
-          icon-height="16"
-          icon-width="16"
+          :icon-left="XMarkSolidIcon"
+          icon-height="!w-4"
+          icon-width="!h-4"
           rounded
           shadow
           type="button"

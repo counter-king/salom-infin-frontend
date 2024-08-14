@@ -13,7 +13,7 @@ import { dispatchNotify } from "@/utils/notify";
 import {COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES} from "@/enums"
 import {ROUTE_SD_CREATE} from "@/modules/Documents/modules/SendDocuments/constants"
 // Components
-import {DocumentAddIcon, DocumentMedicineIcon, NotebookLinearIcon, NotesIcon} from "@/components/Icons"
+import { DocumentAddIcon, DocumentMedicineIcon, NotebookIcon, NotebookLinearIcon, NotesIcon } from "@/components/Icons"
 
 export const useSDStore = defineStore("sd-stores", {
   state: () => ({
@@ -21,7 +21,7 @@ export const useSDStore = defineStore("sd-stores", {
       // Внутренний
       {
         label: "service-letter",
-        icon: "NotebookIcon",
+        icon: NotebookIcon,
         type: "inner",
         sub_type: "inner",
         active: true,
@@ -32,7 +32,7 @@ export const useSDStore = defineStore("sd-stores", {
       // Рапорт
       {
         label: "notice",
-        icon: "NotesIcon",
+        icon: NotesIcon,
         type: "notice",
         sub_type: "notice",
         active: false,
@@ -43,7 +43,7 @@ export const useSDStore = defineStore("sd-stores", {
       // Заявление
       {
         label: "application",
-        icon: "NotesPenIcon",
+        icon: DocumentAddIcon,
         type: "application",
         sub_type: "application",
         active: false,
@@ -54,7 +54,7 @@ export const useSDStore = defineStore("sd-stores", {
       // 	Приказ
       {
         label: "order",
-        icon: "DocumentMedicineIcon",
+        icon: DocumentMedicineIcon,
         type: "hr_rotation",
         sub_type: "hr_rotation",
         active: false,
@@ -300,7 +300,7 @@ export const useSDStore = defineStore("sd-stores", {
         // Внутренний
         {
           label: "service-letter",
-          icon: "NotebookIcon",
+          icon: NotebookIcon,
           type: "inner",
           sub_type: "inner",
           active: true,
@@ -311,7 +311,7 @@ export const useSDStore = defineStore("sd-stores", {
         // Рапорт
         {
           label: "notice",
-          icon: "NotesIcon",
+          icon: NotesIcon,
           type: "notice",
           sub_type: "notice",
           active: false,
@@ -322,7 +322,7 @@ export const useSDStore = defineStore("sd-stores", {
         // Заявление
         {
           label: "application",
-          icon: "NotesPenIcon",
+          icon: DocumentAddIcon,
           type: "application",
           sub_type: "application",
           active: false,
@@ -333,7 +333,7 @@ export const useSDStore = defineStore("sd-stores", {
         // 	Приказ
         {
           label: "order",
-          icon: "DocumentMedicineIcon",
+          icon: DocumentMedicineIcon,
           type: "hr_rotation",
           sub_type: "hr_rotation",
           active: false,

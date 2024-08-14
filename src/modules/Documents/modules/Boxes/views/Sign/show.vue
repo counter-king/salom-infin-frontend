@@ -9,6 +9,7 @@ import { useBoxesSignStore } from "@/modules/Documents/modules/Boxes/stores/sign
 import { useDocumentCountStore } from "@/modules/Documents/stores/count.store";
 import { useSDStore } from "@/modules/Documents/modules/SendDocuments/stores/index.store";
 // Components
+import { CheckCircleIcon, Pen2Icon, XMarkSolidIcon } from '@/components/Icons'
 import { LayoutWithTabsCompose } from "@/components/DetailLayout";
 import { ModalComment } from "@/components/Modal";
 import SigningProcessTimeline from "@/modules/Documents/components/SigningProcessTimeline.vue";
@@ -87,9 +88,9 @@ onMounted( async () => {
           color="bg-white hover:bg-greyscale-100 text-primary-dark"
           border-color="border-transparent"
           label="update"
-          icon-left="PenIcon"
-          icon-height="16"
-          icon-width="16"
+          :icon-left="Pen2Icon"
+          icon-height="!w-4"
+          icon-width="!h-4"
           icon-color="#767994"
           rounded
           shadow
@@ -102,9 +103,9 @@ onMounted( async () => {
 	        v-if="signed === null"
           severity="danger"
           label="reject"
-          icon-left="XIcon"
-          icon-height="16"
-          icon-width="16"
+          :icon-left="XMarkSolidIcon"
+          icon-height="!w-4"
+          icon-width="!h-4"
           rounded
           shadow
           type="button"
@@ -116,9 +117,9 @@ onMounted( async () => {
             v-if="signStore.detailModel.type !== 'basic_signer'"
             border-color="border-transparent"
             label="sign"
-            icon-left="CheckCircleIcon"
-            icon-height="16"
-            icon-width="16"
+            :icon-left="CheckCircleIcon"
+            icon-height="!w-4"
+            icon-width="!h-4"
             rounded
             shadow
             type="button"

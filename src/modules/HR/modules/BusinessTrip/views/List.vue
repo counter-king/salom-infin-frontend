@@ -4,6 +4,7 @@ import {useRoute, useRouter} from "vue-router"
 // Components
 import { ActionToolbar } from "@/components/Actions"
 import BaseDataTable from "@/components/UI/BaseDataTable.vue"
+import { Plus20SolidIcon } from '@/components/Icons'
 // Store
 import { useBusinessTripStore } from "@/modules/HR/modules/BusinessTrip/stores/businessTrip.store"
 // Enums
@@ -35,7 +36,7 @@ const openRoute = async () => {
       <template #end>
         <base-button
           label="create"
-          icon-left="AddIcon"
+          :icon-left="Plus20SolidIcon"
           rounded
           type="button"
           @click="openRoute"
