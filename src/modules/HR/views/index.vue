@@ -2,6 +2,7 @@
 // Core
 import { ref } from 'vue'
 // Components
+import { CaseIcon } from '@/components/Icons'
 import TheSidebar from '@/components/TheSidebar.vue'
 // Stores
 import { useAgreementsRoutesStore } from '../modules/Agreements/stores/routes.store'
@@ -15,7 +16,7 @@ const menus = ref([
   },
   {
     title: "Командировка",
-    icon: "SchoolCaseIcon",
+    icon: CaseIcon,
     link: "BusinessTripIndex",
     children: []
   },

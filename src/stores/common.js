@@ -1,5 +1,13 @@
 // Core
 import { defineStore } from 'pinia'
+// Components
+import {
+  ArrowDownIcon,
+  ArrowRightDownIcon,
+  DocumentTextIcon,
+  NotebookLinearIcon, NotesIcon,
+  RoundAltArrowDownIcon
+} from '@/components/Icons'
 // Stores
 import { useCorrespondentStore } from './correspondent'
 import { useUsersStore } from './users.store'
@@ -167,22 +175,22 @@ export const useCommonStore = defineStore("common", {
 
           switch (journal.code) {
             case JOURNAL_CODES.INCOMING:
-              iconPath = 'solar:arrow-right-down-outline'
+              iconPath = ArrowRightDownIcon
               break;
             case JOURNAL_CODES.INNER:
-              iconPath = 'solar:arrow-down-outline'
+              iconPath = ArrowDownIcon
               break;
             case JOURNAL_CODES.OUTGOING:
-              iconPath = 'solar:round-alt-arrow-down-outline'
+              iconPath = RoundAltArrowDownIcon
               break;
             case JOURNAL_CODES.APPEALS:
-              iconPath = 'solar:document-text-outline'
+              iconPath = DocumentTextIcon
               break;
             case JOURNAL_CODES.ORDERS_PROTOCOLS:
-              iconPath = 'solar:notebook-linear'
+              iconPath = NotebookLinearIcon
               break;
             default: // APPLICATION
-              iconPath = 'solar:notes-outline'
+              iconPath = NotesIcon
           }
 
           return {

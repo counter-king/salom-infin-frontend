@@ -9,7 +9,6 @@ import OverlayPanel from 'primevue/overlaypanel';
 import Paginator from 'primevue/paginator';
 import Position from './Position.vue';
 import Skeleton from 'primevue/skeleton';
-import TheNavigation from '@/components/TheNavigation.vue';
 import axiosConfig from "@/services/axios.config";
 import { ref, watch, onMounted, computed } from 'vue';
 import { tableConfig, columnConfig, dropdownConfig, paginationConfig, dropdownOptions, overlayConfig } from './config';
@@ -161,7 +160,6 @@ onMounted(() => {
 });
 </script>
 <template>
-   <the-navigation :navs="navs"/>
    <div class="flex mb-5 justify-between items-center">
       <h1 class="text-2xl font-bold text-primary-900">Должность</h1>
       <div class="flex items-center gap-2">

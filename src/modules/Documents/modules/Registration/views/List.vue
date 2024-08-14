@@ -9,6 +9,7 @@ import { useDocFlowStore } from '../stores/docflow.store'
 import { DocTypeChip, StatusChip, PriorityChip } from '@/components/Chips'
 import { ActionToolbar } from '@/components/Actions'
 import { LinkableCell } from '@/components/Table'
+import { Plus20SolidIcon } from '@/components/Icons'
 // Constants
 import { R_INCOMING_COLUMNS } from '../constants'
 // Utils
@@ -70,7 +71,7 @@ const link = (data) => {
       <template #end>
         <base-button
           label="create"
-          icon-left="AddIcon"
+          :icon-left="Plus20SolidIcon"
           rounded
           type="button"
           @click="openModal"

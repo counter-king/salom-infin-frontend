@@ -1,5 +1,14 @@
 // Core
 import { defineStore } from "pinia"
+// Components
+import {
+  ArrowRightDownIcon,
+  CheckCircleIcon,
+  EyeIcon,
+  History2Icon,
+  InboxUnreadIcon,
+  Pen2Icon
+} from '@/components/Icons'
 // Store
 import { useDocFlowStore } from '../../Registration/stores/docflow.store'
 // Service
@@ -13,55 +22,55 @@ import {
 // Utils
 import { clearModel, isObject, setValuesToKeys } from '@/utils'
 import { dispatchNotify } from '@/utils/notify'
-import { RESOLUTION_TYPES, RESOLUTION_CREATE_TYPES, COLOR_TYPES } from "@/enums"
-export const useBoxesCommonStore = defineStore("boxes-common", {
+import { RESOLUTION_TYPES, RESOLUTION_CREATE_TYPES, COLOR_TYPES } from '@/enums'
+export const useBoxesCommonStore = defineStore('boxes-common', {
   state: () => ({
     routes: {
-      title: "Ящики",
-      icon: "solar:inbox-unread-outline",
-      link: "BoxesIndex",
+      title: 'Ящики',
+      icon: InboxUnreadIcon,
+      link: 'BoxesIndex',
       children: [
         // На рассмотрении
         {
-          title: "На рассмотрении",
-          icon: "solar:history-2-outline",
-          link: "ReviewIndex",
+          title: 'На рассмотрении',
+          icon: History2Icon,
+          link: 'ReviewIndex',
           children: [],
           count: null,
           name: 'unread_for_review'
         },
         // Моё поручение
         {
-          title: "Мои поручение",
-          icon: "solar:arrow-right-down-outline",
-          link: "AssignmentIndex",
+          title: 'Мои поручение',
+          icon: ArrowRightDownIcon,
+          link: 'AssignmentIndex',
           children: [],
           count: null,
           name: 'unread_assignments'
         },
         // На подпись
         {
-          title: "На подпись",
-          icon: "solar:pen-2-outline",
-          link: "SignIndex",
+          title: 'На подпись',
+          icon: Pen2Icon,
+          link: 'SignIndex',
           children: [],
           count: null,
           name: 'for_signature'
         },
         // На согласовании
         {
-          title: "На согласовании",
-          icon: "solar:eye-outline",
-          link: "ApprovalIndex",
+          title: 'На согласовании',
+          icon: EyeIcon,
+          link: 'ApprovalIndex',
           children: [],
           count: null,
           name: 'for_approval'
         },
         // На контроль
         {
-          title: "На контроль",
-          icon: "solar:check-circle-outline",
-          link: "ControlIndex",
+          title: 'На контроль',
+          icon: CheckCircleIcon,
+          link: 'ControlIndex',
           children: [],
           count: null,
           name: 'for_control'

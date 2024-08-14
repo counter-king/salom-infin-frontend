@@ -3,6 +3,8 @@
 import {ref, unref} from "vue";
 import {useRoute, useRouter} from "vue-router"
 import {useI18n} from "vue-i18n";
+// Components
+import { Plus20SolidIcon } from '@/components/Icons'
 // Store
 import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store"
 // Enums
@@ -28,7 +30,7 @@ const onChangeDocType = (menu) => {
 <template>
   <base-button
     label="create"
-    icon-left="AddIcon"
+    :icon-left="Plus20SolidIcon"
     rounded
     type="button"
     @click="toggle"
@@ -45,8 +47,8 @@ const onChangeDocType = (menu) => {
           class="select-none cursor-pointer flex font-medium text-sm items-center hover:text-primary-dark hover:bg-greyscale-50 transition-all duration-[400ms] rounded-[8px] p-3"
           @click="onChangeDocType(menu)"
         >
-          <base-icon
-            :name="menu.icon"
+          <base-iconify
+            :icon="menu.icon"
             class="text-greyscale-500 mr-2 w-4 h-4 hover:text-primary-dark"
             :class="menu.active ? 'text-primary-dark font-semibold' : ''"
           />

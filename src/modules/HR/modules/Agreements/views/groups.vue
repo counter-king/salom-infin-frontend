@@ -1,6 +1,7 @@
 <script setup>
 // Components
 import { ActionToolbar } from '@/components/Actions'
+import { InfoCircleBoldIcon, AltArrowRightIcon } from '@/components/Icons'
 
 const list = [
   {
@@ -56,7 +57,7 @@ const list = [
     }"
   >
     <template #icon>
-      <base-iconify icon="solar:info-circle-bold" />
+      <base-iconify :icon="InfoCircleBoldIcon" />
     </template>
 
     <span class="text-greyscale-900">Докумeнт (нем. — образец, свидетельство, доказательство) — это зафиксированная на материальном носителе информация в виде текста, звукозаписи или изображения с реквизитами, позволяющими её идентифицировать.</span>
@@ -75,7 +76,7 @@ const list = [
           <button class="flex items-center gap-1 transition-colors bg-greyscale-50 group-hover:bg-primary-500 rounded-xl border border-greyscale-100 p-2 pl-3 mt-auto">
             <span class="text-sm font-medium text-greyscale-900 group-hover:text-white transition-colors">Подробнee</span>
 
-            <base-iconify icon="solar:alt-arrow-right-outline" class="!w-4 !h-4 text-greyscale-500 group-hover:text-white transition-colors" />
+            <base-iconify :icon="AltArrowRightIcon" class="!w-4 !h-4 text-greyscale-500 group-hover:text-white transition-colors" />
           </button>
         </div>
 
