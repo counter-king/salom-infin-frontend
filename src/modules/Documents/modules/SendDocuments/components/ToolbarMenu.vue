@@ -92,7 +92,7 @@ onUnmounted(() => {
           :class="{ 'toolbar-menu-active' : menu.active }"
           @click="onChangeDocType(menu)"
         >
-          <base-iconify v-if="menu.icon" :icon="menu.icon" class="text-gray-1 mr-2 transition-all duration-[400ms] group-hover:text-primary-900 !w-4 !h-4" />
+          <base-icon v-if="menu.icon" :name="menu.icon" class="text-gray-1 mr-2 transition-all duration-[400ms] group-hover:text-primary-900 !w-4 !h-4" />
           {{ t(menu.label) }}
         </div>
       </template>
@@ -122,8 +122,8 @@ onUnmounted(() => {
           :class="menu.active ? 'before:content-[\'\'] before:absolute before:left-1 before:h-5 before:w-[2px] before:bg-primary-500 bg-greyscale-50 text-primary-dark font-semibold' : ''"
           @click="onChangeDocType(menu)"
         >
-          <base-iconify
-            :icon="menu.icon"
+          <base-icon
+            :name="menu.icon"
             class="text-greyscale-500 mr-2 !w-4 !h-4 hover:text-primary-dark"
             :class="menu.active ? 'text-primary-dark font-semibold' : ''"
           />
@@ -135,7 +135,7 @@ onUnmounted(() => {
         class="select-none cursor-pointer flex font-medium text-sm items-center hover:bg-greyscale-50 transition-all duration-[400ms] hover:text-primary-900 rounded-[8px] p-3"
         @click="dialog = !dialog"
       >
-        <base-iconify :iocn="SettingsIcon" class="text-greyscale-500 mr-2 !w-4 !h-4" />
+        <base-iconify :icon="SettingsIcon" class="text-greyscale-500 mr-2 !w-4 !h-4" />
         {{ t('customize-menu') }}
       </div>
     </div>

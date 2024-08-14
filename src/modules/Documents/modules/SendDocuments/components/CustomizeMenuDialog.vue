@@ -36,7 +36,7 @@ const unSelectedMenuItems = computed(() => {
   return sdStore.SD_TOOLBAR_MENU_LIST.filter(menu => !menu.selected);
 })
 
-const emit = defineEmits(['emit:resetToolbarMenu'])
+const emit = defineEmits(['emit:resetToolbarMenu', 'update:modelValue'])
 
 // Methods
 const toggle = () => {
@@ -94,7 +94,7 @@ const resetToolbarMenu = () => {
         </div>
 
         <div class="w-2/4 border-l pt-5">
-          <div class="flex text-base font-semibold px-4 text-primary-900">
+          <div class="flex text-base font-semibold px-8 text-primary-900">
             {{ t('available=menu') }}
           </div>
 
