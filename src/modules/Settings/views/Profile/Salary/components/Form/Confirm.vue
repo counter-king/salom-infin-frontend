@@ -1,6 +1,8 @@
 <script setup>
 // Core
 import { onMounted } from 'vue'
+// Components
+import { LetterLinearIcon } from '@/components/Icons'
 // Stores
 import { useAuthStore } from '@/modules/Auth/stores'
 import { useSalaryStore } from '../../../../../stores/profile/salary.store'
@@ -21,7 +23,7 @@ onMounted(async () => {
   <div class="confirm-password-view mb-5">
     <div class="max-w-[270px] w-full text-center mx-auto mb-5">
       <div class="flex justify-center items-center w-12 h-12 bg-primary-100 rounded-full mx-auto">
-        <base-iconify icon="solar:letter-linear" class="text-primary-500" />
+        <base-iconify :icon="LetterLinearIcon" class="text-primary-500" />
       </div>
 
       <h1 class="text-sm font-medium text-greyscale-500 mt-3 mb-1">Введите код, отправленный на номер</h1>

@@ -6,6 +6,7 @@ import { useI18n } from 'vue-i18n'
 import { useBoxesCommonStore } from '@/modules/Documents/modules/Boxes/stores/common.store'
 // Components
 import { ModalComment } from '@/components/Modal'
+import { Pen2Icon, TrashBinTrashIcon } from '@/components/Icons'
 import ResolutionForm from './components/Form.vue'
 // Utils
 import { clearModel } from '@/utils'
@@ -179,7 +180,7 @@ const deleteResolution = async (text) => {
                   class="w-5 h-5"
                   @click="getResolutionById(item, FORM_TYPE_UPDATE)"
                 >
-                  <base-iconify icon="solar:pen-2-outline" class="text-primary-500" />
+                  <base-iconify :icon="Pen2Icon" class="text-primary-500" />
                 </button>
 
                 <button
@@ -191,7 +192,7 @@ const deleteResolution = async (text) => {
                   class="w-5 h-5"
                   @click="showCommentModal(item)"
                 >
-                  <base-iconify icon="solar:trash-bin-trash-outline" class="text-critic-500" />
+                  <base-iconify :icon="TrashBinTrashIcon" class="text-critic-500" />
                 </button>
               </template>
 

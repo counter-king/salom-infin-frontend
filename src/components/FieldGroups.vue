@@ -32,32 +32,68 @@ const value = computed(
 
         <template v-if="item.detail.component">
           <template v-if="item.detail.component === 'priority-chip'">
-            <priority-chip :id="item.field?.id" text-class="text-base font-semibold text-primary-900" />
+            <template v-if="item.field?.id">
+              <priority-chip :id="item.field?.id" text-class="text-base font-semibold text-primary-900" />
+            </template>
+
+            <template v-else>
+              <span class="text-base font-semibold text-primary-900">-</span>
+            </template>
           </template>
 
           <template v-if="item.detail.component === 'base-status'">
-            <status-chip :status="item.field" />
+            <template v-if="item.field">
+              <status-chip :status="item.field" />
+            </template>
+
+            <template v-else>
+              <span class="text-base font-semibold text-primary-900">-</span>
+            </template>
           </template>
 
           <template v-if="item.detail.component === 'base-avatar-group'">
-            <base-avatar-group :items="item.field" />
+            <template v-if="item.field">
+              <base-avatar-group :items="item.field" />
+            </template>
+
+            <template v-else>
+              <span class="text-base font-semibold text-primary-900">-</span>
+            </template>
           </template>
         </template>
 
         <template v-if="item.field?.hasOwnProperty('name') && !item.detail.component">
-          <span class="text-base font-semibold text-primary-900">{{ item.field?.name }}</span>
+          <template v-if="item.field?.name">
+            <span class="text-base font-semibold text-primary-900">{{ item.field?.name }}</span>
+          </template>
+
+          <template v-else>
+            <span class="text-base font-semibold text-primary-900">-</span>
+          </template>
         </template>
 
         <template v-if="!item.field?.hasOwnProperty('name') && !item.detail.component">
-          <span class="text-base font-semibold text-primary-900">
-            {{
-              isDate(item.field)
+          <template
+            v-if="isDate(item.field)
                 ? formatDate(item.field)
                 : isDateHour(item.field)
                   ? formatDateHour(item.field)
-                  : item.field
-            }}
-          </span>
+                  : item.field"
+          >
+            <span class="text-base font-semibold text-primary-900">
+              {{
+                isDate(item.field)
+                  ? formatDate(item.field)
+                  : isDateHour(item.field)
+                    ? formatDateHour(item.field)
+                    : item.field
+              }}
+            </span>
+          </template>
+
+          <template v-else>
+            <span class="text-base font-semibold text-primary-900">-</span>
+          </template>
         </template>
       </base-col>
     </template>

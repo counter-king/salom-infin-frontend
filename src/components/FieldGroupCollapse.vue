@@ -39,7 +39,13 @@ const visible = computed(() => count.value & 1 ? value.value.slice(0, props.max)
       class="flex items-center justify-center w-8 h-8 bg-greyscale-70 rounded-lg border border-greyscale-200 absolute top-5 right-5 p-1"
       @click="count++"
     >
-      <base-iconify :icon="`${count & 1 ? AltArrowDownIcon : AltArrowUpIcon}`" />
+      <template v-if="count & 1">
+        <base-iconify :icon="AltArrowDownIcon" />
+      </template>
+
+      <template v-else>
+        <base-iconify :icon="AltArrowUpIcon" />
+      </template>
     </button>
   </div>
 </template>
