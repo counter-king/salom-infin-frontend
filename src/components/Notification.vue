@@ -52,10 +52,7 @@ import { COLOR_TYPES } from '@/enums'
   align-items: center;
   gap:12px;
   @apply bg-primary-900 !important;
-  //border-radius: 6px !important;
   font-size: 16px !important;
-  //margin-bottom: 8px !important;
-  //padding: 8px 12px !important;
   margin: 6px 0 0 !important;
   border-radius: 12px !important;
   padding: 14px 16px !important;

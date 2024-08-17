@@ -86,6 +86,7 @@ export { default as LaptopMinimalisticIcon } from  '~icons/solar/laptop-minimali
 export { default as MouseIcon } from  '~icons/solar/mouse-outline'
 export { default as MapIcon } from  '~icons/solar/map-outline'
 export { default as StreetsMapPointIcon } from  '~icons/solar/streets-map-point-outline'
+export { default as DisplayIcon } from  '~icons/solar/display-outline'
 // Solar (Bold)
 export { default as CheckCircleBoldIcon } from  '~icons/solar/check-circle-bold'
 export { default as CalendarDateBoldIcon } from  '~icons/solar/calendar-date-bold'

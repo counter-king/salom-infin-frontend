@@ -7,7 +7,8 @@ import {
   EyeIcon,
   History2Icon,
   InboxUnreadIcon,
-  Pen2Icon
+  Pen2Icon,
+  DocumentTextIcon
 } from '@/components/Icons'
 // Store
 import { useDocFlowStore } from '../../Registration/stores/docflow.store'
@@ -175,7 +176,7 @@ export const useBoxesCommonStore = defineStore('boxes-common', {
       let { data } = await fetchResolutionList({ document_id: id, params })
       this.createdResolutionsList.items = data.results.map((item, index) => ({
         label: `Резолюция #${ index + 1 }`,
-        icon: 'DocumentTextIcon',
+        icon: DocumentTextIcon,
         resolution: item
       }))
     },

@@ -16,7 +16,7 @@ const login = async () => {
 </script>
 
 <template>
-  <div class="fixed max-w-[600px] w-full z-[1110] bottom-[20px] right-[50%] translate-x-[50%]">
+  <div class="fixed max-w-[600px] w-full z-[1110] bottom-[110px] right-[50%] translate-x-[50%]">
     <Message
       :closable="false"
       severity="error"

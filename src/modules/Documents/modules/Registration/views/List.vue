@@ -10,6 +10,7 @@ import { DocTypeChip, StatusChip, PriorityChip } from '@/components/Chips'
 import { ActionToolbar } from '@/components/Actions'
 import { LinkableCell } from '@/components/Table'
 import { Plus20SolidIcon } from '@/components/Icons'
+import RegisterDocumentDialog from '../components/RegisterDocumentDialog.vue'
 // Constants
 import { R_INCOMING_COLUMNS } from '../constants'
 // Utils
@@ -186,6 +187,10 @@ const link = (data) => {
         </linkable-cell>
       </template>
     </base-data-table>
+
+    <!-- RegisterDocumentDialog -->
+    <register-document-dialog v-model="docFlowStore.documentMenuModal" />
+    <!-- /RegisterDocumentDialog -->
   </div>
 </template>
 

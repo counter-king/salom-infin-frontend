@@ -127,8 +127,8 @@ defineExpose({ $v })
               api-url="document-titles"
               option-label="name"
               option-value="id"
-              label="naming"
-              placeholder="enter-naming"
+              label="title-document"
+              placeholder="enter-document"
               required
               searchable
             >

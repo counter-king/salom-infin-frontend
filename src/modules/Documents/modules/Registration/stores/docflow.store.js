@@ -36,7 +36,7 @@ export const useDocFlowStore = defineStore("docFlowStore", {
         active: true
       },
       {
-        header: 'naming',
+        header: 'title-document',
         field: 'title',
         detail: {
           component: null,

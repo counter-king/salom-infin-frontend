@@ -2,15 +2,12 @@
 // Core
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from "vue-router"
-import TabView from 'primevue/tabview'
-import TabPanel from 'primevue/tabpanel'
 import Dropdown from 'primevue/dropdown'
-import Toast from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
 import useVuelidate from '@vuelidate/core'
 import { helpers, minLength, required } from '@vuelidate/validators'
 // Components
-import { UserIcon, KeyMinimalisticIcon } from '@/components/Icons'
+import { UserIcon, DisplayIcon, KeyMinimalisticIcon } from '@/components/Icons'
 // Store
 import { useAuthStore } from '../stores'
 // Utils
@@ -18,7 +15,6 @@ import { removeStorageItem } from '@/utils/storage'
 import { ACCESS, REFRESH, EXPIRES } from '@/constants/storage'
 // Composable
 const authStore = useAuthStore()
-const toast = useToast()
 const router = useRouter()
 // Reactive
 const filesList = ref([
@@ -27,6 +23,11 @@ const filesList = ref([
     slot: 'login',
     icon: UserIcon
   },
+  // {
+  //   title: 'AD',
+  //   slot: 'active-directory',
+  //   icon: DisplayIcon
+  // },
   {
     title: 'ЭЦП',
     slot: 'eri',
@@ -82,6 +83,9 @@ const logIn = async () => {
 
   loading.value = false
 }
+const logInWithAd = async () => {
+
+}
 // Hooks
 onMounted(() => {
   removeStorageItem(ACCESS)
@@ -100,9 +104,9 @@ onMounted(() => {
       bricks
       nav-container-class="max-w-[350px] w-full m-auto"
     >
-      <template #login="{ value }">
+      <template #login>
         <form @submit.prevent="logIn">
-          <base-col col-class="w-1/1">
+          <base-col col-class="w-full">
             <base-input
               v-model="v.username.$model"
               :error="v.username"
@@ -112,7 +116,7 @@ onMounted(() => {
             />
           </base-col>
 
-          <base-col col-class="w-1/1">
+          <base-col col-class="w-full">
             <base-password
               v-model="v.password.$model"
               label="Пароль"
@@ -121,23 +125,61 @@ onMounted(() => {
             />
           </base-col>
 
-          <RouterLink :to="{ name: 'ForgetPassword' }" class="text-indigo-700 text-sm mb-3 mt-2 float-right">
-            Забыли пароль
-          </RouterLink>
+          <base-col col-class="w-full">
+            <RouterLink :to="{ name: 'ForgetPassword' }" class="text-indigo-700 text-sm mb-3 mt-2 float-right">
+              Забыли пароль
+            </RouterLink>
 
-          <base-button
-            class="w-full"
-            label=" Войти в систему"
-            size="large"
-            shadow
-            type="submit"
-            rounded
-            icon-left="LockKeyholeUnlockedIcon" :loading="loading">
-          </base-button>
+            <base-button
+              class="w-full"
+              label=" Войти в систему"
+              size="large"
+              shadow
+              type="submit"
+              rounded
+              icon-left="LockKeyholeUnlockedIcon" :loading="loading">
+            </base-button>
+          </base-col>
         </form>
       </template>
 
-      <template #eri="{ value }">
+      <!-- <template #active-directory>
+        <form @submit.prevent="logInWithAd">
+          <base-col col-class="w-full">
+            <base-input
+              v-model="v.username.$model"
+              :error="v.username"
+              mask-rule="+998 ## ### ## ##"
+              label="Телефона"
+              placeholder="+998 XX XXX XX XX"
+            />
+          </base-col>
+
+          <base-col col-class="w-full">
+            <base-password
+              v-model="v.password.$model"
+              label="Пароль"
+              :error="v.password"
+              placeholder="Введите пароль"
+            />
+          </base-col>
+
+          <base-col col-class="w-full">
+            <base-button
+              type="submit"
+              size="large"
+              shadow
+              rounded
+              :loading="loading"
+              label=" Войти через Active Directory"
+              class="w-full mt-3"
+            >
+            </base-button>
+          </base-col>
+        </form>
+      </template> -->
+
+      <template #eri>
         <div class="card flex justify-content-center">
           <Dropdown class="w-full" v-model="selectedCity" :options="cities" optionLabel="name" placeholder="Выбрать" />
         </div>

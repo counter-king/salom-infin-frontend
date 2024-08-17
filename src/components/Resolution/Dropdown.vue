@@ -6,7 +6,7 @@ import { useI18n } from 'vue-i18n'
 import { useBoxesCommonStore } from '@/modules/Documents/modules/Boxes/stores/common.store'
 // Components
 import { ModalComment } from '@/components/Modal'
-import { Pen2Icon, TrashBinTrashIcon } from '@/components/Icons'
+import { AltArrowDownIcon, AddCircleLinearIcon, Pen2Icon, TrashBinTrashIcon } from '@/components/Icons'
 import ResolutionForm from './components/Form.vue'
 // Utils
 import { clearModel } from '@/utils'
@@ -64,7 +64,7 @@ const items = ref([
     items: [
       {
         label: 'create-resolutions',
-        icon: 'solar:add-circle-linear',
+        icon: AddCircleLinearIcon,
         command: () => props.isResolutionSigned
           ? dispatchNotify(null, 'Сначало отмените подпись', COLOR_TYPES.SUCCESS)
           : createResolutionDialog.value = true
@@ -147,7 +147,7 @@ const deleteResolution = async (text) => {
   <div class="resolution-dropdown-view">
     <base-button
       label="resolution"
-      icon-right="solar:alt-arrow-down-outline"
+      :icon-right="AltArrowDownIcon"
       rounded
       outlined
       shadow
