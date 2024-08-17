@@ -27,11 +27,14 @@ export const useAuthStore = defineStore("authStore", {
     /*
     *
     * */
-   async loginWithAd(payload) {
-    const { response, error } = await withAsync(fetchLoginWithAd, payload)
+    async loginWithAd(payload) {
+      const { response, error } = await withAsync(fetchLoginWithAd, payload)
 
-    if(error) return Promise.reject(error.data)
-   },
+      if(error) return Promise.reject(error.data)
+      saveStorageItem(ACCESS, response.data.access)
+      saveStorageItem(REFRESH, response.data.refresh)
+      saveStorageItem(EXPIRES, response.data.expires_in)
+    },
     /*
     *
     * */
