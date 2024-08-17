@@ -10,6 +10,7 @@ import Chat from "../modules/Chat/routes"
 import HR from "../modules/HR/routes"
 import Settings from "../modules/Settings/routes"
 import Search from "../modules/Search/routes"
+import Handbook from '../modules/Handbook/routes'
 // Utils
 import { getStorageItem } from "@/utils/storage"
 import { ACCESS } from "@/constants/storage"
@@ -39,7 +40,9 @@ const router = createRouter({
         // Settings
         ...Settings,
         // Search
-        ...Search
+        ...Search,
+        // Handbook
+        ...Handbook
       ]
     },
     // /MainLayout

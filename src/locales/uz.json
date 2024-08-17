@@ -323,5 +323,9 @@
   "set-tasks-according-date": "Привязывайте задачи к датам",
   "chat": "Чат",
   "chat-with-colleagues": "Чат с сотрудниками и коллегами",
-  "category": "Категории"
+  "category": "Категории",
+  "fio": "Ф.И.О",
+  "position": "Должность",
+  "ip-phone": "IP-телефона",
+  "corp-mail": "Корп. почта"
 }

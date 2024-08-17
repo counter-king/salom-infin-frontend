@@ -44,23 +44,25 @@ provide('openModal', openModal)
           <img src="/images/logo-text.svg" alt="Logo text" class="ml-2" />
         </router-link>
 
-        <template v-for="menu in themeStore.header" v-if="openModal">
-          <router-link
-            :to="{ name: menu.link }"
-            class="header-link group flex items-center gap-2 text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full mr-3 transition-all duration-[400ms] hover:bg-primary-800 hover:text-white"
-          >
-            <base-iconify
-              v-if="menu.icon"
-              :icon="menu.icon"
-              class="text-gray-2 transition-all duration-[400ms] group-hover:text-white"
-            />
+        <template v-if="openModal">
+          <template v-for="menu in themeStore.header">
+            <router-link
+              :to="{ name: menu.link }"
+              class="header-link group flex items-center gap-2 text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full mr-3 transition-all duration-[400ms] hover:bg-primary-800 hover:text-white"
+            >
+              <base-iconify
+                v-if="menu.icon"
+                :icon="menu.icon"
+                class="text-gray-2 transition-all duration-[400ms] group-hover:text-white"
+              />
 
-            {{ menu.title }}
+              {{ menu.title }}
 
-            <template v-if="menu.count">
-              <div class="flex items-center justify-center w-5 h-5 rounded-full bg-critic-500 text-[10px] font-semibold text-white">{{ menu.count }}</div>
-            </template>
-          </router-link>
+              <template v-if="menu.count">
+                <div class="flex items-center justify-center w-5 h-5 rounded-full bg-critic-500 text-[10px] font-semibold text-white">{{ menu.count }}</div>
+              </template>
+            </router-link>
+          </template>
         </template>
       </template>
 

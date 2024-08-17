@@ -1,7 +1,7 @@
 // Core
 import { defineStore } from 'pinia'
 // Services
-import { fetchUserLogin, fetchCurrentUser } from "../services/index"
+import { fetchUserLogin, fetchCurrentUser, fetchLoginWithAd } from "../services/index"
 // Utils
 import { withAsync } from "@/utils/withAsync"
 import { saveStorageItem } from "@/utils/storage"
@@ -24,6 +24,14 @@ export const useAuthStore = defineStore("authStore", {
       saveStorageItem(REFRESH, response.data.refresh)
       saveStorageItem(EXPIRES, response.data.expires_in)
     },
+    /*
+    *
+    * */
+   async loginWithAd(payload) {
+    const { response, error } = await withAsync(fetchLoginWithAd, payload)
+
+    if(error) return Promise.reject(error.data)
+   },
     /*
     *
     * */

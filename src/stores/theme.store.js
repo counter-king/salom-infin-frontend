@@ -7,7 +7,8 @@ import {
   FolderWithFilesIcon,
   ChatLineIcon,
   UserCheckIcon,
-  SettingsIcon
+  SettingsIcon,
+  NotebookIcon
 } from '@/components/Icons'
 
 export const useThemeStore = defineStore("theme", {
@@ -49,14 +50,14 @@ export const useThemeStore = defineStore("theme", {
       //   name: 'kanban'
       // },
       // Чат
-      {
-        title: 'Чат',
-        icon: ChatLineIcon,
-        link: 'ChatIndex',
-        children: [],
-        count: null,
-        name: 'chat'
-      },
+      // {
+      //   title: 'Чат',
+      //   icon: ChatLineIcon,
+      //   link: 'ChatIndex',
+      //   children: [],
+      //   count: null,
+      //   name: 'chat'
+      // },
       // HR
       {
         title: 'HR',
@@ -65,6 +66,15 @@ export const useThemeStore = defineStore("theme", {
         children: [],
         count: null,
         name: 'hr'
+      },
+      // Handbook
+      {
+        title: 'Справочик',
+        icon: NotebookIcon,
+        link: 'HandbookIndex',
+        children: [],
+        count: null,
+        name: 'handbook'
       },
       // Настройки
       {

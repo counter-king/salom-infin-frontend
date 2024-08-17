@@ -2,6 +2,7 @@ import axiosConfig from "../../../services/axios.config"
 
 const URLS = {
   login: 'login/',
+  loginWithAd: 'ldap-login/',
   profile: 'profile/',
   otp: 'send-otp/',
   verify: 'verify-phone/',
@@ -12,6 +13,12 @@ const URLS = {
 * */
 export const fetchUserLogin = (body) => {
   return axiosConfig.post(URLS.login, body)
+}
+/**
+*
+* */
+export const fetchLoginWithAd = (body) => {
+  return axiosConfig.post(URLS.loginWithAd, body)
 }
 /**
 *
