@@ -12,8 +12,6 @@ import { dispatchNotify } from "@/utils/notify";
 // Enums
 import {COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES} from "@/enums"
 import {ROUTE_SD_CREATE} from "@/modules/Documents/modules/SendDocuments/constants"
-// Components
-import { DocumentAddIcon, DocumentMedicineIcon, NotebookIcon, NotebookLinearIcon, NotesIcon } from "@/components/Icons"
 
 export const useSDStore = defineStore("sd-stores", {
   state: () => ({
@@ -43,7 +41,7 @@ export const useSDStore = defineStore("sd-stores", {
       // Заявление
       {
         label: "application",
-        icon: "NotesPenIcon",
+        icon: "DocumentAddIcon",
         type: "application",
         sub_type: "application",
         active: false,
@@ -185,7 +183,7 @@ export const useSDStore = defineStore("sd-stores", {
       {
         id: 1,
         label: 'service-letter',
-        icon: NotebookLinearIcon,
+        icon: 'NotebookIcon',
         type: 'menu',
         hasRouterLink: true,
         active: true,
@@ -197,7 +195,7 @@ export const useSDStore = defineStore("sd-stores", {
       {
         id: 2,
         label: 'notice',
-        icon: NotesIcon,
+        icon: 'NotesIcon',
         type: 'menu',
         hasRouterLink: false,
         active: false,
@@ -215,7 +213,7 @@ export const useSDStore = defineStore("sd-stores", {
       {
         id: 3,
         label: 'application',
-        icon: DocumentAddIcon,
+        icon: 'DocumentAddIcon',
         type: 'menu',
         hasRouterLink: false,
         active: false,
@@ -233,7 +231,7 @@ export const useSDStore = defineStore("sd-stores", {
       {
         id: 4,
         label: 'order',
-        icon: DocumentMedicineIcon,
+        icon: 'DocumentMedicineIcon',
         type: 'menu',
         hasRouterLink: false,
         active: false,
@@ -322,7 +320,7 @@ export const useSDStore = defineStore("sd-stores", {
         // Заявление
         {
           label: "application",
-          icon: "NotesPenIcon",
+          icon: "DocumentAddIcon",
           type: "application",
           sub_type: "application",
           active: false,
