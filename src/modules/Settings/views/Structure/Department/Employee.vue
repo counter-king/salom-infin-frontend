@@ -40,7 +40,7 @@ const transferEmployee = () => {
          .then(response => {
             if(response?.status === 200) {
                editVisible.value = false;
-               dispatchNotify('Сотрудник удален', '', 'success')
+               dispatchNotify(null, 'Сотрудник удален', 'success')
                props.getFirstPageEmployees();
             }
          })
@@ -49,7 +49,7 @@ const transferEmployee = () => {
             editLoading.value = false;
          });
    } else {
-      dispatchNotify('Введите департаментa', '', 'error');
+      dispatchNotify(null, 'Введите департаментa', 'error');
    }
 };
 const searchTopLevelDepartments = ({ search, page }) => {
@@ -84,7 +84,7 @@ const employeeDelete = () => {
       .then(response => {
          if(response?.status === 200) {
             deleteVisible.value = false;
-            dispatchNotify('Сотрудник удален', '', 'success')
+            dispatchNotify(null, 'Сотрудник удален', 'success')
             props.getFirstPageEmployees();
          }
       })
@@ -241,7 +241,7 @@ onMounted(() => {
             <template v-else>
                <Button
                   @click="editVisible = false"
-                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
@@ -249,7 +249,7 @@ onMounted(() => {
                </Button>
                <Button
                   @click="transferEmployee"
-                  class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4"
+                  class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4"
                   rounded
                   type="button"
                >Перевод</Button>
@@ -284,7 +284,7 @@ onMounted(() => {
             <template v-else>
                <Button
                   @click="deleteVisible = false"
-                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
@@ -292,7 +292,7 @@ onMounted(() => {
                </Button>
                <Button
                   @click="employeeDelete"
-                  class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4"
+                  class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4"
                   rounded
                   type="button"
                >Удалить</Button>

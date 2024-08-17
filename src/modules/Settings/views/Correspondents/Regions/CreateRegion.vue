@@ -20,7 +20,7 @@ const createRegion = () => {
          .post('regions/', { name_ru, name_uz, name: name_uz, code, is_active: true })
          .then(response => {
             if(response?.status === 201) {
-               dispatchNotify('Регион создан', '', 'success');
+               dispatchNotify(null, 'Регион создан', 'success');
                region.value = defaultRegion
                props.getFirstPageRegions();
                props.setVisible(false);
@@ -31,9 +31,9 @@ const createRegion = () => {
             loading.value = false;
          });
    } else if(!name_ru || !name_uz) {
-      dispatchNotify('Введите название', '', 'error')
+      dispatchNotify(null, 'Введите название', 'error')
    } else {
-      dispatchNotify('Введите код', '', 'error')
+      dispatchNotify(null, 'Введите код', 'error')
    }
 };
 </script>

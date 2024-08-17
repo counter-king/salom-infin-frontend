@@ -69,7 +69,7 @@ const employeeEdit = () => {
          .put(`users/${employeeId}/`, data)
          .then(response => {
             if(response?.status === 200) {
-               dispatchNotify('Сотрудник изменен', '', 'success');
+               dispatchNotify(null, 'Сотрудник изменен', 'success');
                editVisible.value = false;
                props.getFirstPageEmployees();
             }
@@ -79,21 +79,21 @@ const employeeEdit = () => {
             editLoading.value = false;
          });
    } else if(!first_name) {
-      dispatchNotify('Введите имя', '', 'error');
+      dispatchNotify(null, 'Введите имя', 'error');
    } else if(!last_name) {
-      dispatchNotify('Введите фамилия', '', 'error');
+      dispatchNotify(null, 'Введите фамилия', 'error');
    } else if(String(pinfl || '')?.length !== 14) {
-      dispatchNotify('Введите ПИНФЛ', '', 'error');
+      dispatchNotify(null, 'Введите ПИНФЛ', 'error');
    } else if(phone?.length !== 12) {
-      dispatchNotify('Введите номер телефона', '', 'error');
+      dispatchNotify(null, 'Введите номер телефона', 'error');
    } else if(!companyId) {
-      dispatchNotify('Введите филиал', '', 'error');
+      dispatchNotify(null, 'Введите филиал', 'error');
    } else if(!top_level_department) {
-      dispatchNotify('Введите департаментa', '', 'error');
+      dispatchNotify(null, 'Введите департаментa', 'error');
    } else if(!positionId) {
-      dispatchNotify('Введите должность', '', 'error');
+      dispatchNotify(null, 'Введите должность', 'error');
    } else if(!statusId) {
-      dispatchNotify('Введите статус', '', 'error');
+      dispatchNotify(null, 'Введите статус', 'error');
    }
 };
 const searchCompanies = ({ search, page }) => {
@@ -198,7 +198,7 @@ const updateStatus = value => {
                }
             });
             props.setEmployees(newEmployees);
-            dispatchNotify('Состояние обновлен', '', 'success');
+            dispatchNotify(null, 'Состояние обновлен', 'success');
          }
       })
       .catch(() => {})
@@ -213,7 +213,7 @@ const employeeDelete = () => {
       .then(response => {
          if(response?.status === 204) {
             deleteVisible.value = false;
-            dispatchNotify('Сотрудник удален', '', 'success')
+            dispatchNotify(null, 'Сотрудник удален', 'success')
             props.getFirstPageEmployees();
          }
       })
@@ -507,7 +507,7 @@ onMounted(() => {
             <template v-else>
                <Button
                   @click="editVisible = false"
-                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
@@ -515,7 +515,7 @@ onMounted(() => {
                </Button>
                <Button
                   @click="employeeEdit"
-                  class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4"
+                  class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4"
                   rounded
                   type="button"
                >Изменить</Button>
@@ -550,7 +550,7 @@ onMounted(() => {
             <template v-else>
                <Button
                   @click="deleteVisible = false"
-                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
@@ -558,7 +558,7 @@ onMounted(() => {
                </Button>
                <Button
                   @click="employeeDelete"
-                  class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4"
+                  class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4"
                   rounded
                   type="button"
                >Удалить</Button>

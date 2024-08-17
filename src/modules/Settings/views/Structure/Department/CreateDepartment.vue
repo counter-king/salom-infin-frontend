@@ -30,7 +30,7 @@ const createDepartment = () => {
          .post('/departments/', { name_ru, name_uz, code, condition: 'A', parent, code, parent_code, company })
          .then(response => {
             if(response?.status === 201) {
-               dispatchNotify('Субдепартамент создан', '', 'success');
+               dispatchNotify(null, 'Субдепартамент создан', 'success');
                department.value = defaultDepartment;
                props.getSubDeparments();
                props.setVisible(false);
@@ -41,9 +41,9 @@ const createDepartment = () => {
             loading.value = false;
          });
    } else if(!name_ru || !name_uz) {
-      dispatchNotify('Введите название', '', 'error');
+      dispatchNotify(null, 'Введите название', 'error');
    } else {
-      dispatchNotify('Введите код', '', 'error')
+      dispatchNotify(null, 'Введите код', 'error')
    }
 };
 </script>

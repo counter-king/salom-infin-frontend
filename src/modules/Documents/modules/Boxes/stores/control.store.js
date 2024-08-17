@@ -259,7 +259,7 @@ export const useControlStore = defineStore("control", {
         await fetchAcquaintDocument({ id })
         await this.actionControlById(this.detailModel)
         await docflowStore.actionGetTree(this.detailModel.document.id)
-        dispatchNotify('Документ ознакомлен', null, COLOR_TYPES.SUCCESS)
+        dispatchNotify(null, 'Документ ознакомлен', COLOR_TYPES.SUCCESS)
       } catch (error) {
         // dispatchNotify('Ошибка', 'Ошибка ознакомление документа', COLOR_TYPES.ERROR)
       }

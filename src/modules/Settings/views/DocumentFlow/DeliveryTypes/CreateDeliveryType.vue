@@ -20,7 +20,7 @@ const createDeliveryType = () => {
          .then(response => {
             if(response?.status === 201) {
                deliveryType.value = defaultDeliveryType
-               dispatchNotify('Вид подачи создан', '', 'success');
+               dispatchNotify(null, 'Вид подачи создан', 'success');
                props.getFirstPageDeliveryTypes();
                props.setVisible(false);
             }
@@ -30,7 +30,7 @@ const createDeliveryType = () => {
             loading.value = false;
          });
    } else {
-      dispatchNotify('Введите название', '', 'error')
+      dispatchNotify(null, 'Введите название', 'error')
    }
 };
 </script>

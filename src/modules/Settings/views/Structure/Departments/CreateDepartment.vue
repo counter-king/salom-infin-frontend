@@ -28,7 +28,7 @@ const createDepartment = () => {
          .then(response => {
             if(response?.status === 201) {
                department.value = defaultDepartment;
-               dispatchNotify('Департамент создан', '', 'success');
+               dispatchNotify(null, 'Департамент создан', 'success');
                props.getFirstPageDepartments();
                props.setVisible(false);
             }
@@ -38,11 +38,11 @@ const createDepartment = () => {
             loading.value = false;
          });
    } else if(!companyId) {
-      dispatchNotify('Введите филиал', '', 'error');
+      dispatchNotify(null, 'Введите филиал', 'error');
    } else if(!name_uz || !name_ru) {
-      dispatchNotify('Введите название', '', 'error')
+      dispatchNotify(null, 'Введите название', 'error')
    } else {
-      dispatchNotify('Введите код', '', 'error');
+      dispatchNotify(null, 'Введите код', 'error');
    }
 };
 const searchCompanies = ({ search, page }) => {

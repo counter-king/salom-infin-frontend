@@ -42,7 +42,7 @@ const branchEdit = () => {
                      return branch;
                   }
                });
-               dispatchNotify('Филиал обновлен', '', 'success');
+               dispatchNotify(null, 'Филиал обновлен', 'success');
                editVisible.value = false;
                props.setBranches(newBranches);
             }
@@ -52,13 +52,13 @@ const branchEdit = () => {
             editLoading.value = false;
          });
    } else if(!name_ru || !name_uz) {
-      dispatchNotify('Введите название', '', 'error');
+      dispatchNotify(null, 'Введите название', 'error');
    } else if(!address_ru || !address_uz) {
-      dispatchNotify('Введите адрес', '', 'error');
+      dispatchNotify(null, 'Введите адрес', 'error');
    } else if(newPhone?.length !== 13) {
-      dispatchNotify('Введите номер телефона', '', 'error');
+      dispatchNotify(null, 'Введите номер телефона', 'error');
    } else {
-      dispatchNotify('Введите код', '', 'error');
+      dispatchNotify(null, 'Введите код', 'error');
    }
 };
 const branchDelete = () => {
@@ -69,7 +69,7 @@ const branchDelete = () => {
       .then(response => {
          if(response?.status === 204) {
             deleteVisible.value = false;
-            dispatchNotify('Филиал удален', '', 'success')
+            dispatchNotify(null, 'Филиал удален', 'success')
             props.getFirstPageBranches();
          }
       })
@@ -95,7 +95,7 @@ const updateCondition = value => {
                }
             });
             props.setBranches(newBranches);
-            dispatchNotify('Статус обновлен', '', 'success');
+            dispatchNotify(null, 'Статус обновлен', 'success');
          }
       })
       .catch(() => {})
@@ -274,7 +274,7 @@ onMounted(() => {
             <template v-else>
                <Button
                   @click="editVisible = false"
-                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
@@ -282,7 +282,7 @@ onMounted(() => {
                </Button>
                <Button
                   @click="branchEdit"
-                  class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 m-0"
+                  class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"
                >Изменить</Button>
@@ -318,7 +318,7 @@ onMounted(() => {
             <template v-else>
                <Button
                   @click="deleteVisible = false"
-                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
@@ -326,7 +326,7 @@ onMounted(() => {
                </Button>
                <Button
                   @click="branchDelete"
-                  class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 m-0"
+                  class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"
                >Удалить</Button>

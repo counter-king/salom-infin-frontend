@@ -99,7 +99,7 @@ const topSignerEdit = () => {
                      return topSigner;
                   }
                });
-               dispatchNotify('Топ подписавший обновлен', '', 'success');
+               dispatchNotify(null, 'Топ подписавший обновлен', 'success');
                docType.value = '';
                editVisible.value = false;
                props.setTopSigners(topSigners);
@@ -110,16 +110,16 @@ const topSignerEdit = () => {
             const code = e?.data?.code;
             const message = e?.data?.message
             if(code === '619') {
-               dispatchNotify(message, '', 'error');
+               dispatchNotify(null, message, 'error');
             }
          })
          .finally(() => {
             editLoading.value = false;
          });
    } else if(!user) {
-      dispatchNotify('Введите топ подписавший', '', 'error');
+      dispatchNotify(null, 'Введите топ подписавший', 'error');
    } else {
-      dispatchNotify('Введите тип документа', '', 'error');
+      dispatchNotify(null, 'Введите тип документа', 'error');
    }
 };
 const topSignerDelete = () => {
@@ -129,7 +129,7 @@ const topSignerDelete = () => {
       .then(response => {
          if(response?.status === 204) {
             deleteVisible.value = false;
-            dispatchNotify('Топ подписавший удален', '', 'success');
+            dispatchNotify(null, 'Топ подписавший удален', 'success');
             props.getFirstPageTopSigners();
          }
       })
@@ -157,7 +157,7 @@ const updateCondition = value => {
                }
             });
             props.setTopSigners(newTopSigners);
-            dispatchNotify('Статус обновлен', '', 'success');
+            dispatchNotify(null, 'Статус обновлен', 'success');
          }
       })
       .catch(() => {})
@@ -337,7 +337,7 @@ onMounted(() => {
             <template v-else>
                <Button
                   @click="editVisible = false"
-                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
@@ -345,7 +345,7 @@ onMounted(() => {
                </Button>
                <Button
                   @click="topSignerEdit"
-                  class="shadow-none p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 mx-0"
+                  class="shadow-none p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 mx-0"
                   rounded
                   type="button">
                   Изменить</Button>
@@ -380,7 +380,7 @@ onMounted(() => {
             <template v-else>
                <Button
                   @click="deleteVisible = false"
-                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
@@ -388,7 +388,7 @@ onMounted(() => {
                </Button>
                <Button
                   @click="topSignerDelete"
-                  class="shadow-none p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 mx-0"
+                  class="shadow-none p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 mx-0"
                   rounded
                   type="button">
                   Удалить</Button>

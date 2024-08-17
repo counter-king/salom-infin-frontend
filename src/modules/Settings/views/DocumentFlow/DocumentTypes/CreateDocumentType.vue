@@ -19,7 +19,7 @@ const createDocumentType = () => {
          .post('document-types/', { name_ru, name_uz, is_active: true })
          .then(response => {
             if(response?.status === 201) {
-               dispatchNotify('Тип документа создан', '', 'success');
+               dispatchNotify(null, 'Тип документа создан', 'success');
                documentType.value = defaultDocumentType
                props.getFirstPageDocumentTypes();
                props.setVisible(false);
@@ -30,7 +30,7 @@ const createDocumentType = () => {
             loading.value = false;
          });
    } else {
-      dispatchNotify('Введите название', '', 'error')
+      dispatchNotify(null, 'Введите название', 'error')
    }
 };
 </script>

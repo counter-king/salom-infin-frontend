@@ -57,7 +57,7 @@ const createUser = () => {
          .post('users/', data)
          .then(response => {
             if(response?.status === 201) {
-               dispatchNotify('Сотрудник создан', '', 'success');
+               dispatchNotify(null, 'Сотрудник создан', 'success');
                props.getFirstPageEmployees();
                updateVisible();
             }
@@ -67,21 +67,21 @@ const createUser = () => {
             loading.value = false;
          });
    } else if(!first_name) {
-      dispatchNotify('Введите имя', '', 'error');
+      dispatchNotify(null, 'Введите имя', 'error');
    } else if(!last_name) {
-      dispatchNotify('Введите фамилия', '', 'error');
+      dispatchNotify(null, 'Введите фамилия', 'error');
    } else if(String(pinfl || '')?.length !== 14) {
-      dispatchNotify('Введите ПИНФЛ', '', 'error');
+      dispatchNotify(null, 'Введите ПИНФЛ', 'error');
    } else if(phone?.length !== 12) {
-      dispatchNotify('Введите номер телефона', '', 'error');
+      dispatchNotify(null, 'Введите номер телефона', 'error');
    } else if(!companyId) {
-      dispatchNotify('Введите филиал', '', 'error');
+      dispatchNotify(null, 'Введите филиал', 'error');
    } else if(!top_level_department) {
-      dispatchNotify('Введите департаментa', '', 'error');
+      dispatchNotify(null, 'Введите департаментa', 'error');
    } else if(!positionId) {
-      dispatchNotify('Введите должность', '', 'error');
+      dispatchNotify(null, 'Введите должность', 'error');
    } else if(!statusId) {
-      dispatchNotify('Введите статус', '', 'error');
+      dispatchNotify(null, 'Введите статус', 'error');
    }
 };
 const searchCompanies = ({ search, page }) => {
@@ -346,7 +346,7 @@ const setDepartments = newDepartments => {
             <template v-else>
                <Button
                   @click="() => { setVisible(!visible) }"
-                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
@@ -354,7 +354,7 @@ const setDepartments = newDepartments => {
                </Button>
                <Button
                   @click="createUser"
-                  class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4"
+                  class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4"
                   rounded
                   type="button"
                >Создать</Button>

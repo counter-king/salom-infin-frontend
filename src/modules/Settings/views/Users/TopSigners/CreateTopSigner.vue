@@ -79,7 +79,7 @@ const topSignerCreate = () => {
          .then(response => {
             if(response?.status === 201) {
                topSigner.value = '';
-               dispatchNotify('Топ подписавший создан', '', 'success');
+               dispatchNotify(null, 'Топ подписавший создан', 'success');
                props.getFirstPageTopSigners();
                props.setVisible(false);
                docType.value = '';
@@ -89,16 +89,16 @@ const topSignerCreate = () => {
             const code = e?.data?.code;
             const message = e?.data?.message
             if(code === '619') {
-               dispatchNotify(message, '', 'error');
+               dispatchNotify(null, message, 'error');
             }
          })
          .finally(() => {
             loading.value = false;
          });
    } else if(!user) {
-      dispatchNotify('Введите топ подписавший', '', 'error');
+      dispatchNotify(null, 'Введите топ подписавший', 'error');
    } else {
-      dispatchNotify('Введите тип документа', '', 'error');
+      dispatchNotify(null, 'Введите тип документа', 'error');
    }
 };
 </script>
@@ -189,7 +189,7 @@ const topSignerCreate = () => {
                      setVisible(!visible);
                      topSigner = '';
                   }"
-                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
@@ -197,7 +197,7 @@ const topSignerCreate = () => {
                </Button>
                <Button
                   @click="topSignerCreate"
-                  class="shadow-none p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 mx-0"
+                  class="shadow-none p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 mx-0"
                   rounded
                   type="button">
                   Создать</Button>

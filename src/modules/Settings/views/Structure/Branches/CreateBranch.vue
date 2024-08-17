@@ -24,7 +24,7 @@ const createBranch = () => {
          .then(response => {
             if(response?.status === 201) {
                branch.value = defaultBranch;
-               dispatchNotify('Филиал создан', '', 'success');
+               dispatchNotify(null, 'Филиал создан', 'success');
                props.getFirstPageBranches();
                props.setVisible(false);
             }
@@ -34,13 +34,13 @@ const createBranch = () => {
             loading.value = false;
          });
    } else if(!name_ru || !name_uz) {
-      dispatchNotify('Введите название', '', 'error');
+      dispatchNotify(null, 'Введите название', 'error');
    } else if(!address_ru || !address_uz) {
-      dispatchNotify('Введите адрес', '', 'error');
+      dispatchNotify(null, 'Введите адрес', 'error');
    } else if(newPhone?.length !== 13) {
-      dispatchNotify('Введите номер телефона', '', 'error');
+      dispatchNotify(null, 'Введите номер телефона', 'error');
    } else {
-      dispatchNotify('Введите код', '', 'error');
+      dispatchNotify(null, 'Введите код', 'error');
    }
 };
 </script>

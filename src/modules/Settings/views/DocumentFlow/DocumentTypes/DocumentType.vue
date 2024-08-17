@@ -38,21 +38,21 @@ const documentTypeEdit = () => {
                      return documentType;
                   }
                });
-               dispatchNotify('Тип документа обновлен', '', 'success');
+               dispatchNotify(null, 'Тип документа обновлен', 'success');
                editVisible.value = false;
                props.setDocumentTypes(newDocumentTypes);
             } else {
-               dispatchNotify('Тип документа не обновлен', '', 'error');
+               dispatchNotify(null, 'Тип документа не обновлен', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Тип документа не обновлен', '', 'error');
+            dispatchNotify(null, 'Тип документа не обновлен', 'error');
          })
          .finally(() => {
             editLoading.value = false;
          });
    } else {
-      dispatchNotify('Введите название', '', 'error')
+      dispatchNotify(null, 'Введите название', 'error')
    }
 };
 const documentTypeDelete = () => {
@@ -63,14 +63,14 @@ const documentTypeDelete = () => {
       .then(response => {
          if(response?.status === 204) {
             deleteVisible.value = false;
-            dispatchNotify('Тип документа удален', '', 'success')
+            dispatchNotify(null, 'Тип документа удален', 'success')
             props.getFirstPageDocumentTypes();
          } else {
-            dispatchNotify('Тип документа не удален', '', 'error')
+            dispatchNotify(null, 'Тип документа не удален', 'error')
          }
       })
       .catch(() => {
-         dispatchNotify('Тип документа не удален', '', 'error')
+         dispatchNotify(null, 'Тип документа не удален', 'error')
       })
       .finally(() => {
          deleteLoading.value = false;
@@ -93,7 +93,7 @@ const updateCondition = value => {
                }
             });
             props.setDocumentTypes(newDocumentTypes);
-            dispatchNotify('Статус обновлен', '', 'success');
+            dispatchNotify(null, 'Статус обновлен', 'success');
          }
       })
       .catch(() => {})
@@ -241,7 +241,7 @@ onMounted(() => {
             <template v-else>
                <Button
                   @click="editVisible = false"
-                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
@@ -249,7 +249,7 @@ onMounted(() => {
                </Button>
                <Button
                   @click="documentTypeEdit"
-                  class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 m-0"
+                  class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"
                >Изменить</Button>
@@ -285,7 +285,7 @@ onMounted(() => {
             <template v-else>
                <Button
                   @click="deleteVisible = false"
-                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
@@ -293,7 +293,7 @@ onMounted(() => {
                </Button>
                <Button
                   @click="documentTypeDelete"
-                  class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 m-0"
+                  class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"
                >Удалить</Button>

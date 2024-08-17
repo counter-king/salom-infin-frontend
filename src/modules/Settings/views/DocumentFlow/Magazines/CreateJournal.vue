@@ -26,7 +26,7 @@ const createJournal = () => {
          .then(response => {
             if(response?.status === 201) {
                commonStore.actionJournalsList();
-               dispatchNotify('Журнал создан', '', 'success');
+               dispatchNotify(null, 'Журнал создан', 'success');
                journal.value = defaultJournal
                props.getFirstPageJournals();
                props.setVisible(false);
@@ -37,9 +37,9 @@ const createJournal = () => {
             loading.value = false;
          });
    } else if(!name_ru || !name_uz) {
-      dispatchNotify('Введите название', '', 'error');
+      dispatchNotify(null, 'Введите название', 'error');
    } else {
-      dispatchNotify('Введите код', '', 'error');
+      dispatchNotify(null, 'Введите код', 'error');
    }
 };
 </script>

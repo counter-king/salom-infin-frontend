@@ -48,7 +48,7 @@ const departmentEdit = () => {
          .patch(`/departments/${departmentId}/`, { name_ru, name_uz, condition, code, parent, parent_code, company })
          .then(response => {
             if(response?.status === 200) {
-               dispatchNotify('Субдепартамент обновлен', '', 'success');
+               dispatchNotify(null, 'Субдепартамент обновлен', 'success');
                editVisible.value = false;
                props.getSubDepartments();
             }
@@ -58,15 +58,15 @@ const departmentEdit = () => {
             editLoading.value = false;
          });
    } else if(!name_ru || !name_uz) {
-      dispatchNotify('Введите название', '', 'error');
+      dispatchNotify(null, 'Введите название', 'error');
    } else {
-      dispatchNotify('Введите код', '', 'error')
+      dispatchNotify(null, 'Введите код', 'error')
    }
 };
 const deleteDepartment = () => {
    const department = props?.department;
    if(department.employee_count > 0) {
-      dispatchNotify('В этом отделе есть сотрудники, сначала удалите сотрудников', '', 'error')
+      dispatchNotify(null, 'В этом отделе есть сотрудники, сначала удалите сотрудников', 'error')
    } else {
       deleteLoading.value = true;
       axiosConfig
@@ -74,7 +74,7 @@ const deleteDepartment = () => {
          .then(response => {
             if(response?.status === 204) {
                visible.value = false;
-               dispatchNotify('Субдепартамент удален', '', 'success');
+               dispatchNotify(null, 'Субдепартамент удален', 'success');
                props.getSubDepartments();
             }
          })
@@ -91,7 +91,7 @@ const updateCondition = value => {
       .then(response => {
          if(response?.status === 200) {
             props.getSubDepartments();
-            dispatchNotify('Статус обновлен', '', 'success');
+            dispatchNotify(null, 'Статус обновлен', 'success');
          }
       });
 };
@@ -131,7 +131,7 @@ onMounted(() => {
          content: {class: [
             `relative border-none pl-4 pt-0 pr-0 pb-0 ${collapsed || department.children.length === 0 ? '' : `after:content-[''] after:bg-greyscale-200 after:absolute after:top-[-1px] after:left-[9px] after:outline-offset-[-1px]`}`]},
          header: {
-            class: 
+            class:
                [
                   `font-medium duration-0 cursor-pointer border-0 p-0 border-transparent text-md rounded-none rounded-xl duration-0 hover:text-primary-500 hover:bg-[#FAFAFF]
                   ${props.last ? '' :`after:content-[''] after:bg-greyscale-200 after:absolute after:bottom-0 after:left-[9px] after:outline-offset-[-1px]`}
@@ -324,7 +324,7 @@ onMounted(() => {
             <template v-else>
                <Button
                   @click="editVisible = false"
-                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
@@ -332,7 +332,7 @@ onMounted(() => {
                </Button>
                <Button
                   @click="departmentEdit"
-                  class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 m-0"
+                  class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"
                >Изменить</Button>
@@ -368,7 +368,7 @@ onMounted(() => {
             <template v-else>
                <Button
                   @click="visible = false"
-                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
@@ -376,7 +376,7 @@ onMounted(() => {
                </Button>
                <Button
                   @click="deleteDepartment"
-                  class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 m-0"
+                  class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"
                >Удалить</Button>

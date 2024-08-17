@@ -38,21 +38,21 @@ const deliveryTypeEdit = () => {
                      return deliveryType;
                   }
                });
-               dispatchNotify('Вид подачи обновлен', '', 'success');
+               dispatchNotify(null, 'Вид подачи обновлен', 'success');
                editVisible.value = false;
                props.setDeliveryTypes(newDeliveryTypes);
             } else {
-               dispatchNotify('Вид подачи не обновлен', '', 'error');
+               dispatchNotify(null, 'Вид подачи не обновлен', 'error');
             }
          })
          .catch(() => {
-            dispatchNotify('Вид подачи не обновлен', '', 'error');
+            dispatchNotify(null, 'Вид подачи не обновлен', 'error');
          })
          .finally(() => {
             editLoading.value = false;
          });
    } else {
-      dispatchNotify('Введите название', '', 'error')
+      dispatchNotify(null, 'Введите название', 'error')
    }
 };
 const deliveryTypeDelete = () => {
@@ -63,14 +63,14 @@ const deliveryTypeDelete = () => {
       .then(response => {
          if(response?.status === 204) {
             deleteVisible.value = false;
-            dispatchNotify('Вид подачи удален', '', 'success')
+            dispatchNotify(null, 'Вид подачи удален', 'success')
             props.getFirstPageDeliveryTypes();
          } else {
-            dispatchNotify('Вид подачи не удален', '', 'error')
+            dispatchNotify(null, 'Вид подачи не удален', 'error')
          }
       })
       .catch(() => {
-         dispatchNotify('Вид подачи не удален', '', 'error')
+         dispatchNotify(null, 'Вид подачи не удален', 'error')
       })
       .finally(() => {
          deleteLoading.value = false;
@@ -93,7 +93,7 @@ const updateCondition = value => {
                }
             });
             props.setDeliveryTypes(newDeliveryTypes);
-            dispatchNotify('Статус обновлен', '', 'success');
+            dispatchNotify(null, 'Статус обновлен', 'success');
          }
       })
       .catch(() => {})
@@ -228,7 +228,7 @@ onMounted(() => {
             <template v-else>
                <Button
                   @click="editVisible = false"
-                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
@@ -236,7 +236,7 @@ onMounted(() => {
                </Button>
                <Button
                   @click="deliveryTypeEdit"
-                  class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 m-0"
+                  class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"
                >Изменить</Button>
@@ -271,7 +271,7 @@ onMounted(() => {
             <template v-else>
                <Button
                   @click="deleteVisible = false"
-                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
@@ -279,7 +279,7 @@ onMounted(() => {
                </Button>
                <Button
                   @click="deliveryTypeDelete"
-                  class="p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 m-0"
+                  class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"
                >Удалить</Button>

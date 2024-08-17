@@ -51,7 +51,7 @@ const updateStatus = value => {
                }
             });
             props.setAssistants(newAssistants);
-            dispatchNotify('Состояние обновлен', '', 'success');
+            dispatchNotify(null, 'Состояние обновлен', 'success');
          }
       })
       .catch(() => {})
@@ -66,7 +66,7 @@ const assistantDelete = () => {
       .then(response => {
          if(response?.status === 204) {
             deleteVisible.value = false;
-            dispatchNotify('Помощник удален', '', 'success');
+            dispatchNotify(null, 'Помощник удален', 'success');
             props.getFirstPageAssistants();
          }
       })
@@ -133,7 +133,7 @@ const assistantEdit = () => {
             const status = response?.status;
             const data = response?.data;
             if(status === 200) {
-               dispatchNotify('Помощник изменен', '', 'success');
+               dispatchNotify(null, 'Помощник изменен', 'success');
                editVisible.value = false;
                const newAssistants = props.assistants.map(assistant => {
                   if(assistant?.id === id) {
@@ -150,9 +150,9 @@ const assistantEdit = () => {
             editLoading.value = false;
          });
    } else if(!supervisorId) {
-      dispatchNotify('Введите руководитель', '', 'error');
+      dispatchNotify(null, 'Введите руководитель', 'error');
    } else {
-      dispatchNotify('Введите помощника', '', 'error');
+      dispatchNotify(null, 'Введите помощника', 'error');
    }
 };
 const changeLanguage = () => {
@@ -327,7 +327,7 @@ onMounted(() => {
             <template v-else>
                <Button
                   @click="editVisible = false"
-                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
@@ -335,7 +335,7 @@ onMounted(() => {
                </Button>
                <Button
                   @click="assistantEdit"
-                  class="shadow-none p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 mx-0"
+                  class="shadow-none p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 mx-0"
                   rounded
                   type="button">
                   Изменить</Button>
@@ -370,7 +370,7 @@ onMounted(() => {
             <template v-else>
                <Button
                   @click="deleteVisible = false"
-                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
@@ -378,7 +378,7 @@ onMounted(() => {
                </Button>
                <Button
                   @click="assistantDelete"
-                  class="shadow-none p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 mx-0"
+                  class="shadow-none p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 mx-0"
                   rounded
                   type="button">
                   Удалить</Button>

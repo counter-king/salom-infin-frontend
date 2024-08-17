@@ -72,7 +72,7 @@ const assistantCreate = () => {
          .then(response => {
             if(response?.status === 201) {
                assistant.value = '';
-               dispatchNotify('Помощник создан', '', 'success');
+               dispatchNotify(null, 'Помощник создан', 'success');
                props.getFirstPageAssistants();
                props.setVisible(false);
                supervisor.value = '';
@@ -83,9 +83,9 @@ const assistantCreate = () => {
             loading.value = false;
          });
    } else if(!supervisorId) {
-      dispatchNotify('Введите руководитель', '', 'error');
+      dispatchNotify(null, 'Введите руководитель', 'error');
    } else {
-      dispatchNotify('Введите помощника', '', 'error');
+      dispatchNotify(null, 'Введите помощника', 'error');
    }
 };
 </script>
@@ -179,7 +179,7 @@ const assistantCreate = () => {
                      setVisible(!visible);
                      supervisor = '';
                   }"
-                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm rounded-xl !rounded-full py-[10px] px-4 ml-0 mr-3"
+                  class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
@@ -187,7 +187,7 @@ const assistantCreate = () => {
                </Button>
                <Button
                   @click="assistantCreate"
-                  class="shadow-none p-button p-component font-semibold text-sm rounded-xl !rounded-full py-[9px] px-4 mx-0"
+                  class="shadow-none p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 mx-0"
                   rounded
                   type="button">
                   Создать</Button>

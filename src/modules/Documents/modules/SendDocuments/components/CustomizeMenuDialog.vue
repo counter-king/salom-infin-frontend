@@ -44,14 +44,14 @@ const toggle = () => {
 }
 const saveMenuToStorage = () => {
   saveStorageItem(SD_TOOLBAR_MENU_STORAGE_NAME, JSON.stringify(sdStore.SD_TOOLBAR_MENU_LIST));
-  dispatchNotify(t('menu-saved'), null, COLOR_TYPES.SUCCESS);
+  dispatchNotify(null, t('menu-saved'), COLOR_TYPES.SUCCESS);
   toggle();
 }
 const resetToolbarMenu = () => {
   removeStorageItem(SD_TOOLBAR_MENU_STORAGE_NAME);
   sdStore.resetToolbarMenu();
   emit('emit:resetToolbarMenu')
-  dispatchNotify(t('menu-reset'), null, COLOR_TYPES.SUCCESS);
+  dispatchNotify(null, t('menu-reset'), COLOR_TYPES.SUCCESS);
   toggle();
 }
 </script>

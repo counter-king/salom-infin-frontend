@@ -141,7 +141,7 @@ export const useCalendarStore = defineStore('calendar', {
       }
       catch (error) {
         dispatchNotify(
-          'Ошибка',
+          null,
           EVENT_TYPES.EVENT === type ? 'Ошибка изменение мероприятий' : 'Ошибка изменение задачи',
           COLOR_TYPES.ERROR
         )
@@ -164,7 +164,7 @@ export const useCalendarStore = defineStore('calendar', {
       }
       catch (error) {
         dispatchNotify(
-          'Ошибка',
+          null,
           EVENT_TYPES.EVENT === type ? 'Ошибка удаление мероприятий' : 'Ошибка удаление задачи',
           COLOR_TYPES.ERROR
         )

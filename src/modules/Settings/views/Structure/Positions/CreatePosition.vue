@@ -19,7 +19,7 @@ const createPosition = () => {
          .post('/positions/', { name_ru, name_uz, code, is_active: true, code })
          .then(response => {
             if(response?.status === 201) {
-               dispatchNotify('Должность создан', '', 'success');
+               dispatchNotify(null, 'Должность создан', 'success');
                position.value = defaultPosition;
                props.getFirstPagePositions();
                props.setVisible(false);
@@ -30,9 +30,9 @@ const createPosition = () => {
             loading.value = false;
          });
    } else if(!name_ru || !name_uz) {
-      dispatchNotify('Введите название', '', 'error');
+      dispatchNotify(null, 'Введите название', 'error');
    } else {
-      dispatchNotify('Введите код', '', 'error');
+      dispatchNotify(null, 'Введите код', 'error');
    }
 };
 </script>

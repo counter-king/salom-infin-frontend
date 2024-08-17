@@ -19,7 +19,7 @@ const createDocumentTitle = () => {
          .post('document-titles/', { name_ru, name_uz, is_active: true })
          .then(response => {
             if(response?.status === 201) {
-               dispatchNotify('Заголовок создан', '', 'success');
+               dispatchNotify(null, 'Заголовок создан', 'success');
                documentTitle.value = defaultDocumentTitle
                props.getFirstPageDocumentTitles();
                props.setVisible(false);
@@ -30,7 +30,7 @@ const createDocumentTitle = () => {
             loading.value = false;
          });
    } else {
-      dispatchNotify('Введите название', '', 'error')
+      dispatchNotify(null, 'Введите название', 'error')
    }
 };
 </script>

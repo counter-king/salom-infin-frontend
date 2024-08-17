@@ -276,7 +276,7 @@ export const useDocFlowStore = defineStore("docFlowStore", {
       try {
         await fetchCreateDocument(payload)
         await clearModel(payload)
-        dispatchNotify('Документ создан', 'Документ создан', COLOR_TYPES.SUCCESS)
+        dispatchNotify(null, 'Документ создан', COLOR_TYPES.SUCCESS)
         return Promise.resolve()
       }
       catch (error) {
@@ -375,7 +375,7 @@ export const useDocFlowStore = defineStore("docFlowStore", {
         await fetchUpdateDocument({ id: this.detailModel.id, body: model })
         await this.actionGetDocumentById({ id: this.detailModel.id })
         await this.actionGetTree(this.detailModel.id)
-        dispatchNotify('Документ изменен', 'Документ изменен', COLOR_TYPES.SUCCESS)
+        dispatchNotify(null, 'Документ изменен', COLOR_TYPES.SUCCESS)
         return Promise.resolve()
       }
       catch (error) {

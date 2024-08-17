@@ -76,7 +76,7 @@ const create = async () => {
   await countStore.actionDocumentCountList()
   if (response) {
     dialog.value = false;
-    dispatchNotify(t('document-sent'), null, COLOR_TYPES.SUCCESS);
+    dispatchNotify(null, t('document-sent'), COLOR_TYPES.SUCCESS);
     await router.replace({
       name: ROUTE_SD_LIST,
       query: {
@@ -84,7 +84,7 @@ const create = async () => {
       }
     });
   } else {
-    dispatchNotify(t('error-occurred'), null, COLOR_TYPES.ERROR);
+    dispatchNotify(null, t('error-occurred'), COLOR_TYPES.ERROR);
   }
 }
 const update = async () => {
@@ -95,7 +95,7 @@ const update = async () => {
     }
   );
   await countStore.actionDocumentCountList();
-  dispatchNotify(t('document-sent'), null, COLOR_TYPES.SUCCESS);
+  dispatchNotify(null, t('document-sent'), COLOR_TYPES.SUCCESS);
   await router.replace({
     name: ROUTE_SD_DETAIL,
     params: {

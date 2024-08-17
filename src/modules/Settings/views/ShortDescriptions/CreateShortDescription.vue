@@ -20,7 +20,7 @@ const createShortDescription = () => {
          .post('short-descriptions/', data)
          .then(response => {
             if(response?.status === 201) {
-               dispatchNotify('Краткое описание создан', '', 'success');
+               dispatchNotify(null, 'Краткое описание создан', 'success');
                props.getFirstPageShortDescriptions();
                props.setVisible(false);
                shortDescription.value = defaultShortDescription;
@@ -31,7 +31,7 @@ const createShortDescription = () => {
             loading.value = false;
          });
    } else {
-      dispatchNotify('Введите название', '', 'error');
+      dispatchNotify(null, 'Введите название', 'error');
    }
 };
 </script>
