@@ -71,6 +71,8 @@ const onSign = async () => {
 
 // Hooks
 onMounted(() => {
+  console.log('props.performers.length', props.performers.length)
+  console.log('props.resolutionText', props.resolutionText)
   if (props.performers.length && props.resolutionText) {
     props.performers.forEach(item => {
       let user = useUsersStore().usersList.find(user => user.id === item.id)
