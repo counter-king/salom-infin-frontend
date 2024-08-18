@@ -51,8 +51,6 @@ const onSign = async () => {
 
   buttonLoading.value = true
 
-  console.log('before', model.value.__performers)
-
   const body = {
     performers: props.performers.map(item => ({
       id: item.id,
@@ -64,15 +62,11 @@ const onSign = async () => {
     resolution_text: model.value.resolution_text
   }
 
-  console.log('body', body)
-
   emit('emit:onSign', body)
 }
 
 // Hooks
 onMounted(() => {
-  console.log('props.performers.length', props.performers.length)
-  console.log('props.resolutionText', props.resolutionText)
   if (props.performers.length && props.resolutionText) {
     props.performers.forEach(item => {
       let user = useUsersStore().usersList.find(user => user.id === item.id)

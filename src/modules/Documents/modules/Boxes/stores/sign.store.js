@@ -119,8 +119,6 @@ export const useBoxesSignStore = defineStore("sign-stores", {
       const response = await fetchSignDetail(id);
       if (response.status === 200) {
         this.detailModel = response.data;
-
-        console.log('this.detailModel', this.detailModel)
         this.detailLoading = false;
       }
     }
