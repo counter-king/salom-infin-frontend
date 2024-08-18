@@ -51,6 +51,8 @@ const onSign = async () => {
 
   buttonLoading.value = true
 
+  console.log('before', model.value.__performers)
+
   const body = {
     performers: model.value.__performers.map(item => ({
       id: item.id,
