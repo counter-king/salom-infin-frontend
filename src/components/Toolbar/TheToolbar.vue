@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref, provide } from 'vue'
+import { ref, provide, onMounted } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import Toolbar from 'primevue/toolbar'
 // Stores
@@ -18,6 +18,7 @@ const themeStore = useThemeStore()
 // Reactive
 const openModal = ref(true)
 const modalRef = ref(null)
+const isHostVercel = ref(null)
 // Methods
 onClickOutside(
   modalRef,
@@ -27,6 +28,10 @@ onClickOutside(
 )
 // Provide
 provide('openModal', openModal)
+// Hooks
+onMounted(() => {
+  isHostVercel.value = window.location.host === 'new-side-project.vercel.app' || window.location.host.startsWith('localhost')
+})
 </script>
 
 <template>
@@ -40,8 +45,14 @@ provide('openModal', openModal)
     >
       <template #start>
         <router-link to="/" class="flex items-center mr-6">
-          <img src="/images/logo.svg" alt="Logo" />
-          <img src="/images/logo-text.svg" alt="Logo text" class="ml-2" />
+          <template v-if="isHostVercel">
+            <img src="/images/logo.svg" alt="Logo" />
+            <img src="/images/logo-text.svg" alt="Logo text" class="ml-2" />
+          </template>
+
+          <template v-else>
+            <img src="/images/sqb-logo.svg" alt="Logo" />
+          </template>
         </router-link>
 
         <template v-if="openModal">

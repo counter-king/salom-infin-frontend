@@ -38,8 +38,8 @@ export const fetchDepartmentList = (params) => {
  * Возвращает список департаментов
  * @returns [{Array}]
  * */
-export const fetchDepartmentsWithUserList = (params) => {
-  return axiosConfig.get(`${URLS.departmentsWithUser}/`, { page_size: 200, ...params })
+export const fetchDepartmentsWithUserList = ({ id, params }) => {
+  return axiosConfig.get(`${URLS.departmentsWithUser}/${id}/`, { page_size: 50, ...params })
 }
 /**
  * Возвращает список районов

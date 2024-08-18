@@ -28,11 +28,16 @@ watchEffect(async () => {
     let { data } = await fetchDepartmentList({ page_size: 30, company: branchSelect.value })
     deparments.value = data.results
     deparmentSelect.value = data.results[0] ? data.results[0].id : null
+  }
+})
+watchEffect(async () => {
+  if(!deparmentSelect.value) {
+    return
+  }
 
-    if(deparmentSelect.value) {
-      let { data: users } = await fetchDepartmentsWithUserList({ id: deparmentSelect.value })
-      departmentUsers.value = users.results
-    }
+  if(deparmentSelect.value) {
+    let { data: users } = await fetchDepartmentsWithUserList({ id: deparmentSelect.value })
+    departmentUsers.value = [users]
   }
 })
 // Hooks
@@ -48,12 +53,10 @@ onMounted(async () => {
     <action-toolbar title="Справочник">
       <template #filters>
         <div class="max-w-[300px] w-full">
-          <pre>{{ branchSelect }}</pre>
           <branches-dropdown v-model="branchSelect" :items="branches" />
         </div>
 
         <div class="max-w-[300px] w-full">
-          <pre>{{ deparmentSelect }}</pre>
           <departments-dropdown v-model="deparmentSelect" :items="deparments" />
         </div>
       </template>
@@ -63,27 +66,7 @@ onMounted(async () => {
       <linear-table
         :value="departmentUsers"
         row-group-mode="subheader"
-        group-rows-by="name"
       >
-        <template #fio="{ data }">
-          <span>{{ data.fio }}</span>
-        </template>
-
-        <template #position="{ data }">
-          <span>{{ data.position }}</span>
-        </template>
-
-        <template #status="{ data }">
-          <span>{{ data.status }}</span>
-        </template>
-
-        <template #ip_phone="{ data }">
-          <span>{{ data.ip_phone }}</span>
-        </template>
-
-        <template #corp_mail="{ data }">
-          <span>{{ data.corp_mail }}</span>
-        </template>
       </linear-table>
     </div>
   </div>

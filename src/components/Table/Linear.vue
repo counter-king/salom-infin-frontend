@@ -1,18 +1,16 @@
 <script setup>
 // Core
-import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 // Components
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
+import Empty from '@/components/Empty.vue'
 import HandbookTable from '@/modules/Handbook/components/HandbookTable.vue'
 // Stores
 import { usePaginationStore } from '@/stores/pagination.store'
 // Composable
 const router = useRouter()
 const route = useRoute()
-const { t } = useI18n()
 const paginationStore = usePaginationStore()
 // Macros
 const props = defineProps({
@@ -51,8 +49,6 @@ const props = defineProps({
   }
 })
 const emit = defineEmits(['emit:page-change'])
-// Reactive
-const cellWidth = ref([])
 // Methods
 const pageChange = async (val) => {
   paginationStore.page = Number(val.page + 1)
@@ -73,15 +69,6 @@ const pageChange = async (val) => {
     page_size: paginationStore.pageSize
   })
 }
-// Hooks
-onMounted(() => {
-  cellWidth.value = []
-  let data = document.querySelectorAll('[data-pc-section="rowgroupheadercell"]')
-  data.forEach(el => el.setAttribute('colspan', props.headers.length))
-
-  let items = document.querySelectorAll('[data-pc-section="headercell"]')
-  items.forEach(el => cellWidth.value.push(el.clientWidth))
-})
 </script>
 
 <template>
@@ -107,6 +94,9 @@ onMounted(() => {
         table: {
           class: ['border-separate']
         },
+        header: {
+          class: 'bg-transparent text-xs font-semibold text-greyscale-500 text-left border-none p-0'
+        },
         bodyRow: {
           class: ['cursor-pointer rounded-xl hover:bg-white']
         },
@@ -114,7 +104,7 @@ onMounted(() => {
           class: ['bg-transparent h-[90%]']
         },
         emptymessagecell: {
-          class: ['bg-white !rounded-xl']
+          class: ['border-none']
         },
         paginator: {
           rowPerPageDropdown: {
@@ -171,20 +161,56 @@ onMounted(() => {
       @page="pageChange"
     >
       <template #header>
-        asdasd
+        <table class="w-full">
+          <thead>
+            <tr>
+              <th width="500" class="bg-greyscale-50 py-[10px] px-4 rounded-tl-lg rounded-bl-lg">
+                <span>Ф.И.О.</span>
+              </th>
+
+              <th width="500" class="bg-greyscale-50 py-[10px] px-4">
+                <span>Должность</span>
+              </th>
+
+              <th width="225" class="bg-greyscale-50 py-[10px] px-4">
+                <span>Статус</span>
+              </th>
+
+              <th width="225" class="bg-greyscale-50 py-[10px] px-4">
+                <span>IP-телефона</span>
+              </th>
+
+              <th width="225" class="bg-greyscale-50 py-[10px] px-4 rounded-tr-lg rounded-br-lg">
+                <span>Корп. почта</span>
+              </th>
+            </tr>
+          </thead>
+        </table>
       </template>
 
       <template #groupheader="{ data }">
-        <handbook-table :item="data" />
+        <handbook-table :item="data">
+          <template #department>
+            <span></span>
+          </template>
+        </handbook-table>
 
         <template v-if="data.children && data.children.length > 0">
           <template v-for="children in data.children">
-            <handbook-table :item="children" />
+            <handbook-table :item="children">
+              <template #top-level>
+                {{ data.name }}
+              </template>
+            </handbook-table>
           </template>
         </template>
       </template>
 
       <Column v-if="false"></Column>
+
+      <template #empty>
+        <empty class="h-[calc(100vh-650px)]" />
+      </template>
     </DataTable>
   </div>
 </template>
