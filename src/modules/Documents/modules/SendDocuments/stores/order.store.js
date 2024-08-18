@@ -13,58 +13,63 @@ import {
   fetchCreateDocument, fetchGetDocumentDetail,
   fetchUpdateDocument
 } from "@/modules/Documents/modules/SendDocuments/services/index.service"
+import { useAuthStore } from '@/modules/Auth/stores'
 
 export const useSDOrderStore = defineStore("order-store", {
-  state: () => ({
-    buttonLoading: false,
-    detailLoading: false,
+  state: () => {
+    const authStore = useAuthStore()
 
-    model: {
-      content: null,
-      company: 16,
-      curator: null,
-      document_type: COMPOSE_DOCUMENT_TYPES.ORDER,
-      document_sub_type: null,
-      register_number: null,
-      register_date: null,
-      approvers: [],
-      journal: JOURNAL.ORDERS_PROTOCOLS,
-      sender: null,
-      signers: [],
-      files: [],
-      trip_notice_id: null,
-      __files: [],
-      __approvers: [],
-      __approvers_copy: [],
-      __curator: null,
-      __signers: [],
-      __negotiators: [],
-      __signers_copy: []
-    },
-    rules: {
-      register_number: {
-        required: helpers.withMessage(`Поле не должен быть пустым`, required)
-      },
-      register_date: {
-        required: helpers.withMessage(`Поле не должен быть пустым`, required)
-      },
-      content: {
-        required: helpers.withMessage(`Поле не должен быть пустым`, required)
-      },
-      __approvers: {
+    return {
+      buttonLoading: false,
+      detailLoading: false,
 
+      model: {
+        content: null,
+        company: authStore.currentUser.company.id,
+        curator: null,
+        document_type: COMPOSE_DOCUMENT_TYPES.ORDER,
+        document_sub_type: null,
+        register_number: null,
+        register_date: null,
+        approvers: [],
+        journal: JOURNAL.ORDERS_PROTOCOLS,
+        sender: null,
+        signers: [],
+        files: [],
+        trip_notice_id: null,
+        __files: [],
+        __approvers: [],
+        __approvers_copy: [],
+        __curator: null,
+        __signers: [],
+        __negotiators: [],
+        __signers_copy: []
       },
-      __negotiators: {
+      rules: {
+        register_number: {
+          required: helpers.withMessage(`Поле не должен быть пустым`, required)
+        },
+        register_date: {
+          required: helpers.withMessage(`Поле не должен быть пустым`, required)
+        },
+        content: {
+          required: helpers.withMessage(`Поле не должен быть пустым`, required)
+        },
+        __negotiators: {
 
-      },
-      __curator: {
-        required: helpers.withMessage(`Поле не должен быть пустым`, required)
-      },
-      __signers: {
-        required: helpers.withMessage(`Поле не должен быть пустым`, required)
-      },
+        },
+        // __approvers: {
+        //   required: helpers.withMessage(`Поле не должен быть пустым`, required)
+        // },
+        __curator: {
+          required: helpers.withMessage(`Поле не должен быть пустым`, required)
+        },
+        __signers: {
+          required: helpers.withMessage(`Поле не должен быть пустым`, required)
+        },
+      }
     }
-  }),
+  },
   actions: {
     async actionCreateDocument(body) {
       this.buttonLoading = true

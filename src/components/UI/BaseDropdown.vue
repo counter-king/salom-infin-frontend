@@ -69,6 +69,9 @@ const props = defineProps({
   rootClass: {
     type: String
   },
+  inputClass: {
+    type: String
+  },
   error: {
     type: Object,
     default: () => ({
@@ -144,6 +147,7 @@ const loadList = async (params) => {
       :option-disabled="props.optionDisabled"
       :placeholder="t(props.placeholder)"
       :disabled="props.disabled"
+      :show-clear="!!modelValue"
       filter
       @show="() => props.searchable && inputRef.focus()"
       @change="({ value }) => emit('emit:change', value)"
@@ -161,7 +165,8 @@ const loadList = async (params) => {
               'size-small py-[2px] pr-2 pl-4': props.size === 'x-small',
               'size-small py-[5px] pr-2 pl-4': props.size === 'small',
               'size-normal py-[10px] pr-2 pl-3': props.size === null || props.size === 'normal'
-            }
+            },
+            props.inputClass
           ]
         },
         header: {
@@ -184,6 +189,12 @@ const loadList = async (params) => {
         },
         emptyMessage: {
           class: ['text-sm font-medium text-center']
+        },
+        trigger: {
+          class: ['w-8 mr-2']
+        },
+        clearicon: {
+          class: 'w-3 h-3 right-10 -mt-[6px]'
         }
       }"
     >

@@ -182,7 +182,7 @@ onMounted(() => {
       </span>
       <Button
         @click="toggle"
-        class="p-button p-component font-medium text-sm border-transparent bg-primary-0 hover:bg-greyscale-100 text-primary-dark shadow-button rounded-xl !rounded-full py-[9px] px-4"
+        class="p-button p-component font-medium text-sm border-transparent bg-primary-0 hover:bg-greyscale-100 text-primary-dark shadow-button !rounded-full py-[9px] px-4"
         rounded
         type="button"
         >
@@ -191,7 +191,7 @@ onMounted(() => {
       </Button>
       <Button
         @click="visible = true"
-        class="p-button p-component font-medium text-sm rounded-xl !rounded-full py-[9px] px-4"
+        class="p-button p-component font-medium text-sm !rounded-full py-[9px] px-4"
         rounded
         type="button"
       >
@@ -288,7 +288,7 @@ onMounted(() => {
       </div>
     </div>
     <div class="flex justify-end border-t bg-greyscale-50 py-3 pr-5 pl-8">
-      <Button @click="resetHeaders" class="p-button p-component shadow-button font-medium flex justify-center shadow-none rounded-full text-[14px] py-[6px] px-4 bg-white text-primary-900 border-transparent">Сбросить</Button>
+      <Button @click="resetHeaders" class="p-button p-component font-medium flex justify-center shadow-none rounded-full text-[14px] py-[6px] px-4 bg-white text-primary-900 border-transparent">Сбросить</Button>
       <Button @click="saveChanges" class="p-button p-component font-medium flex justify-center shadow-none rounded-full text-[14px] py-[6px] px-4 ml-2">Сохранить</Button>
     </div>
   </OverlayPanel>

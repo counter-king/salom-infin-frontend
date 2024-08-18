@@ -6,7 +6,6 @@ import { useI18n } from 'vue-i18n'
 // Components
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
-import HandbookTable from '@/modules/Handbook/components/HandbookTable.vue'
 // Stores
 import { usePaginationStore } from '@/stores/pagination.store'
 // Composable
@@ -170,21 +169,51 @@ onMounted(() => {
       class="base-data-table"
       @page="pageChange"
     >
-      <template #header>
-        asdasd
-      </template>
-
       <template #groupheader="{ data }">
-        <handbook-table :item="data" />
+        <div class="flex !bg-white">
+          <div class="flex items-end gap-[6px] font-semibold py-[10px] px-4 truncate" :style="{ width: `${cellWidth[0]}px` }">
+            <span class="text-xs text-greyscale-500">Департамент:</span>
+            <span class="text-sm text-primary-500 truncate">{{ data.sub.dep_name }}</span>
+          </div>
 
-        <template v-if="data.children && data.children.length > 0">
-          <template v-for="children in data.children">
-            <handbook-table :item="children" />
-          </template>
-        </template>
+          <div class="flex items-end gap-[6px] font-semibold py-[10px] px-4 truncate" :style="{ width: `${cellWidth[1]}px` }">
+            <span class="text-xs text-greyscale-500">Отдел:</span>
+            <span class="text-sm text-primary-500 truncate">{{ data.sub.department }}</span>
+          </div>
+
+          <div class="flex items-end gap-[6px] font-semibold py-[10px] px-4" :style="{ width: `${cellWidth[2]}px` }"></div>
+
+          <div class="flex items-end gap-[6px] font-semibold py-[10px] px-4" :style="{ width: `${cellWidth[3]}px` }">
+            <span class="text-xs text-greyscale-500">Filial:</span>
+            <span class="text-sm text-primary-500">{{ data.sub.is_main }}</span>
+          </div>
+
+          <div class="flex items-end gap-[6px] font-semibold py-[10px] px-4" :style="{ width: `${cellWidth[4]}px` }"></div>
+        </div>
       </template>
 
-      <Column v-if="false"></Column>
+      <Column
+        v-for="col of headers"
+        :key="col.field"
+        :field="col.field"
+        :header="t(col.header)"
+        :style="{ width: col.width }"
+        :pt="{
+          headerCell: {
+            class: ['bg-greyscale-50 h-10 border-none py-[10px] px-4']
+          },
+          headerContent: {
+            class: ['text-xs font-semibold text-greyscale-500']
+          },
+          bodyCell: {
+            class: ['h-12 text-sm font-medium text-primary-900 border-b-[1.5px] border-greyscale-100 py-0']
+          }
+        }"
+      >
+        <template #body="{ field, data }">
+          <slot :name="field" :data="data" />
+        </template>
+      </Column>
     </DataTable>
   </div>
 </template>
@@ -200,7 +229,7 @@ onMounted(() => {
   border-bottom-right-radius: 8px;
 }
 
-.table-linear .p-rowgroup-header > td {
+.table-linear .p-rowgroup-header td {
   padding: 0 !important;
   border-bottom: 1.5px solid #A19CFF;
 }

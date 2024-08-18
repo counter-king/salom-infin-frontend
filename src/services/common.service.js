@@ -17,7 +17,8 @@ const URLS = {
 	users: "users",
   departments: "departments",
   documentTitles: 'document-titles/',
-  companies: 'companies'
+  companies: 'companies',
+  departmentsWithUser: 'departments-with-users'
 }
 /**
  * Возвращает список вид подачи
@@ -30,8 +31,15 @@ export const fetchDeliveryTypesList = () => {
  * Возвращает список департаментов
  * @returns [{Array}]
  * */
-export const fetchDepartmentList = () => {
-  return axiosConfig.get(`${URLS.topDepartments}/`, { page_size: 50 })
+export const fetchDepartmentList = (params) => {
+  return axiosConfig.get(`${URLS.topDepartments}/`, { page_size: 50, ...params })
+}
+/**
+ * Возвращает список департаментов
+ * @returns [{Array}]
+ * */
+export const fetchDepartmentsWithUserList = (params) => {
+  return axiosConfig.get(`${URLS.departmentsWithUser}/`, { page_size: 200, ...params })
 }
 /**
  * Возвращает список районов

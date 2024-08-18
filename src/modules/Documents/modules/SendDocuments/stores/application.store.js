@@ -43,9 +43,9 @@ export const useSDStoreApplication = defineStore("sd-store-application", {
       document_sub_type: {
         required: helpers.withMessage(`Поле не должен быть пустым`, required)
       },
-      __approvers: {
+      // __approvers: {
 
-      },
+      // },
       __signers: {
 
       },
