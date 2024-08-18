@@ -53,6 +53,7 @@ const signTest = async () => {
   await countStore.actionDocumentCountList()
 }
 const signDocumentWithResolution = async (body) => {
+  console.log('signDocumentWithResolution', body)
   try {
     await fetchSignDocument({ id: route.params.id, body })
     resolutionModal.value.buttonLoading = false

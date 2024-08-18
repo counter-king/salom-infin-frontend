@@ -62,6 +62,8 @@ const onSign = async () => {
     resolution_text: model.value.resolution_text
   }
 
+  console.log('body', body)
+
   emit('emit:onSign', body)
 }
 
