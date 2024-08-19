@@ -1,4 +1,6 @@
 <script setup>
+// Core
+import { ref, onMounted } from 'vue'
 // Components
 import { ResolutionDownload } from '@/components/Resolution'
 // Utils
@@ -11,13 +13,25 @@ const props = defineProps({
     default: () => {}
   }
 })
+// Reactive
+const isHostVercel = ref(null)
+// Hooks
+onMounted(() => {
+  isHostVercel.value = window.location.host === 'new-side-project.vercel.app' || window.location.host.startsWith('localhost')
+})
 </script>
 
 <template>
   <div class="flex mb-4">
     <div class="flex items-center flex-1">
-      <img src="/images/logo.svg" alt="Logo" />
-      <img src="/images/logo-text.svg" alt="Logo text" class="invert ml-2" />
+      <template v-if="isHostVercel">
+        <img src="/images/logo.svg" alt="Logo" />
+        <img src="/images/logo-text.svg" alt="Logo text" class="ml-2" />
+      </template>
+
+      <template v-else>
+        <img src="/images/sqb-logo.svg" alt="Logo" />
+      </template>
     </div>
   </div>
 
