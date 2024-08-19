@@ -209,7 +209,7 @@ export const useSDStore = defineStore("sd-stores", {
             documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP
           },
           {
-            label: 'Распоряжения Правления Банка',
+            label: 'Рапорт',
             type: 'submenu',
             hasRouterLink: true,
             routerLinkName: ROUTE_SD_CREATE,
