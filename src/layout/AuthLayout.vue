@@ -18,7 +18,7 @@ onMounted(() => {
         <router-link :to="{ name: 'Login' }" class="flex items-center">
           <template v-if="isHostVercel">
             <img src="/images/logo.svg" alt="Logo" />
-            <img src="/images/logo-text.svg" alt="Logo text" class="ml-2" />
+            <img src="/images/logo-text-dark.svg" alt="Logo text" class="ml-2" />
           </template>
 
           <template v-else>
