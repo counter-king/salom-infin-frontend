@@ -81,7 +81,7 @@ const props = defineProps({
       <template #chip="{ value }">
         <div class="flex items-center gap-2">
           <base-avatar
-            image="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D"
+            color="#635AFF"
             shape="circle"
             avatar-classes="w-5 h-5"
           />
@@ -93,7 +93,7 @@ const props = defineProps({
       <template #option="{ value }">
         <div class="flex items-center gap-2">
           <base-avatar
-            image="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D"
+            color="#635AFF"
             shape="circle"
             avatar-classes="w-6 h-6"
           />

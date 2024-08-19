@@ -9,6 +9,7 @@ import {useAuthStore} from "@/modules/Auth/stores"
 import {useCommonStore} from "@/stores/common"
 import {useDocumentCountStore} from "@/modules/Documents/stores/count.store"
 import {useSDStoreApplication} from "@/modules/Documents/modules/SendDocuments/stores/application.store"
+import { useSDOrderStore } from "@/modules/Documents/modules/SendDocuments/stores/order.store"
 // Components
 import EditorWithTabs from "@/components/Composed/EditorWithTabs.vue"
 import FormContainer from "@/modules/Documents/modules/SendDocuments/components/FormContainer.vue"
@@ -36,6 +37,7 @@ const authStore = useAuthStore()
 const applicationStore = useSDStoreApplication()
 const commonStore = useCommonStore()
 const countStore = useDocumentCountStore()
+const orderStore = useSDOrderStore()
 
 const dialog = ref(false)
 const formRef = ref(null)

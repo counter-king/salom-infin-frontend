@@ -262,7 +262,7 @@ defineExpose({ $v })
                 <user-with-label
                   :compact="true"
                   :title="isObject(value?.user) ? value?.user.full_name : value?.full_name"
-                  image="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D"
+                  color="#635AFF"
                   avatar-classes="w-5 h-5"
                 />
               </template>
@@ -275,7 +275,7 @@ defineExpose({ $v })
                 <user-with-label
                   :title="isObject(value?.user) ? value?.user.full_name : value?.full_name"
                   shadow
-                  image="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D"
+                  color="#635AFF"
                   avatar-classes="w-5 h-5"
                 />
               </template>
