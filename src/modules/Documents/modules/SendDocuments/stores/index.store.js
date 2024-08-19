@@ -207,7 +207,15 @@ export const useSDStore = defineStore("sd-stores", {
             routerLinkName: ROUTE_SD_CREATE,
             documentType: COMPOSE_DOCUMENT_TYPES.NOTICE,
             documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP
-          }
+          },
+          {
+            label: 'Распоряжения Правления Банка',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.NOTICE,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.ORDERS_BANK_MANAGEMENT
+          },
         ],
       },
       {
