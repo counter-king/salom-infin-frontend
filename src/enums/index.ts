@@ -26,6 +26,8 @@ export const JOURNAL_CODES = {
   APPEALS:          '105', // Обращение
   ORDERS_PROTOCOLS: '104', // Приказы и распоряжения
   APPLICATION:      '106', // Заявления
+  PROTOCOL:         '107', // Протокол
+  DECISION:         '108', // Указ
 }
 export const COMPOSE_DOCUMENT_TYPES = {
   NOTICE: '1',
