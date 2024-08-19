@@ -187,7 +187,7 @@ const pageChange = async (val) => {
       <template #groupheader="{ data }">
         <handbook-table :item="data">
           <template #department>
-            <span></span>
+            <span>-</span>
           </template>
         </handbook-table>
 

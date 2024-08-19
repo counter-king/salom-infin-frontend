@@ -34,7 +34,7 @@ const select = ref({
 
 <template>
   <div class="w-full">
-    <div class="table-header flex border-b-[1.5px] border-primary-300">
+    <div class="table-header flex border-b-[1.5px] border-greyscale-200">
       <div class="flex items-center flex-1 font-semibold truncate py-[10px] px-4">
         <span class="text-xs text-greyscale-500 mr-1">Департамент:</span>
 
@@ -58,9 +58,9 @@ const select = ref({
       <div class="max-w-[150px] w-full py-[10px] px-4"></div>
 
       <div class="max-w-[225px] w-full flex items-center font-semibold py-[10px] px-4">
-        <span class="text-xs text-greyscale-500 mr-1">Filial:</span>
+        <!-- <span class="text-xs text-greyscale-500 mr-1">Filial:</span>
 
-        <span class="text-sm text-primary-500">Головной офис</span>
+        <span class="text-sm text-primary-500">Головной офис</span> -->
       </div>
 
       <div class="max-w-[225px] w-full py-[10px] px-4"></div>
@@ -156,7 +156,7 @@ const select = ref({
 
             <vertical-card-item title="Отдел" :description="props.item.name" />
 
-            <vertical-card-item title="Filial" description="Головной офис" />
+            <!-- <vertical-card-item title="Filial" description="Головной офис" /> -->
 
             <vertical-card-item title="IP-телефона" :description="select.cisco" />
 
