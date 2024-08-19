@@ -197,6 +197,7 @@ const { date } = inject('calendar')
         <template #chip="{ value }">
           <user-with-label
             :compact="true"
+            :label="isObject(value?.user) ? value?.user.full_name : value?.full_name"
             :title="isObject(value?.user) ? value?.user.full_name : value?.full_name"
             color="#635AFF"
             avatar-classes="w-5 h-5"
@@ -209,6 +210,7 @@ const { date } = inject('calendar')
 
         <template #hint="{ value }">
           <user-with-label
+            :label="isObject(value?.user) ? value?.user.full_name : value?.full_name"
             :title="isObject(value?.user) ? value?.user.full_name : value?.full_name"
             shadow
             color="#635AFF"

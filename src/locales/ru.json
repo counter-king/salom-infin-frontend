@@ -327,5 +327,9 @@
   "fio": "Ф.И.О",
   "position": "Должность",
   "ip-phone": "IP-телефона",
-  "corp-mail": "Корп. почта"
+  "corp-mail": "Корп. почта",
+  "child-care-leave": "Отпуск по уходу за ребенком",
+  "vacation-own-expense": "Отпуск за свой счет",
+  "educational-leave": "Учебный отпуск",
+  "material-support": "Материальная поддержка"
 }

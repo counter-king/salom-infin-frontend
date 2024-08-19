@@ -4,6 +4,7 @@ import { ref } from 'vue'
 // Components
 import BaseMultiSelect from '@/components/UI/BaseMultiSelect.vue'
 import { UserWithLabel, UserWithRadio } from '@/components/Users'
+import { isObject } from "@/utils";
 // Reactive
 const select = ref([])
 const select2 = ref([])
@@ -28,6 +29,7 @@ const selectItem = (value) => {
         <template #chip="{ value }">
           <user-with-label
             :compact="true"
+            :label="isObject(value?.user) ? value?.user.full_name : value?.full_name"
             :title="value.full_name"
             color="#635AFF"
             avatar-classes="w-5 h-5"
@@ -37,6 +39,7 @@ const selectItem = (value) => {
         <template #option="{ value }">
           <user-with-label
             :compact="true"
+            :label="isObject(value?.user) ? value?.user.full_name : value?.full_name"
             :title="value.full_name"
             color="#635AFF"
             avatar-classes="w-6 h-6"
@@ -45,6 +48,7 @@ const selectItem = (value) => {
 
         <template #hint="{ value }">
           <user-with-label
+            :label="isObject(value?.user) ? value?.user.full_name : value?.full_name"
             :title="value.full_name"
             shadow
             color="#635AFF"
@@ -67,6 +71,7 @@ const selectItem = (value) => {
         <template #chip="{ value }">
           <user-with-label
             :compact="true"
+            :label="isObject(value?.user) ? value?.user.full_name : value?.full_name"
             :title="value.full_name"
             color="#635AFF"
             avatar-classes="w-5 h-5"
@@ -86,6 +91,7 @@ const selectItem = (value) => {
 
         <template #hint="{ value }">
           <user-with-label
+            :label="isObject(value?.user) ? value?.user.full_name : value?.full_name"
             :title="value.full_name"
             shadow
             color="#635AFF"

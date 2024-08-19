@@ -67,6 +67,7 @@ onMounted(async () => {
       <template #option="{ option }">
         <user-with-label
           :compact="true"
+          :label="isObject(option?.user) ? option?.user.full_name : option?.full_name"
           :title="isObject(option?.user) ? option?.user.full_name : option?.full_name"
           color="#635AFF"
           avatar-classes="w-6 h-6"

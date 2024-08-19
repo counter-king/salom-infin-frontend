@@ -59,7 +59,7 @@ const preview = async () => {
   applicationStore.model.sender = authStore?.currentUser?.top_level_department?.id
   applicationStore.model.curator = applicationStore?.model?.__curator.id
   applicationStore.model.journal= COMPOSE_DOCUMENT_TYPES.APPLICATION
-  applicationStore.model.document_type= commonStore.documentTypesList.find(item => item.document_type === Number(COMPOSE_DOCUMENT_TYPES.APPLICATION)).id
+  applicationStore.model.document_type= commonStore.documentTypesList.find(item => item.id === Number(COMPOSE_DOCUMENT_TYPES.APPLICATION)).id
   applicationStore.model.approvers = adjustUsersToArray(applicationStore.model.__approvers)
 
 }
@@ -148,6 +148,7 @@ onMounted(async () => {
             </base-col>
 
             <base-col col-class="w-1/2">
+              <!-- :model-value="Number(route.params.document_sub_type)" -->
               <base-dropdown
                 v-model="$v.document_sub_type.$model"
                 v-model:options="commonStore.documentSubTypesList"

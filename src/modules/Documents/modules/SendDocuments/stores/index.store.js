@@ -225,7 +225,47 @@ export const useSDStore = defineStore("sd-stores", {
             routerLinkName: ROUTE_SD_CREATE,
             documentType: COMPOSE_DOCUMENT_TYPES.APPLICATION,
             documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.LABOR_LEAVE
-          }
+          },
+          {
+            label: 'material-support',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.APPLICATION,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.MATERIAL_SUPPORT
+          },
+          {
+            label: 'educational-leave',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.APPLICATION,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.EDUCATIONAL_LEAVE
+          },
+          {
+            label: 'vacation-own-expense',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.APPLICATION,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.VACATION_OWN_EXPENSE
+          },
+          {
+            label: 'child-care-leave',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.APPLICATION,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.CHILD_CARE_LEAVE
+          },
+          {
+            label: 'application',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.APPLICATION,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.APPLICATION
+          },
         ],
       },
       {

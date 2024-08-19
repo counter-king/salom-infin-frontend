@@ -39,6 +39,7 @@ const emit = defineEmits(['update:modelValue'])
     <template #chip="{ value }">
       <user-with-label
         :compact="true"
+        :label="isObject(value?.user) ? value?.user.full_name : value?.full_name"
         :title="isObject(value?.user) ? value?.user.full_name : value?.full_name"
         color="#635AFF"
         avatar-classes="w-5 h-5"
@@ -48,6 +49,7 @@ const emit = defineEmits(['update:modelValue'])
     <template #option="{ value }">
       <user-with-label
         :compact="true"
+        :label="isObject(value?.user) ? value?.user.full_name : value?.full_name"
         :title="isObject(value?.user) ? value?.user.full_name : value?.full_name"
         color="#635AFF"
         avatar-classes="w-6 h-6"
@@ -56,6 +58,7 @@ const emit = defineEmits(['update:modelValue'])
 
     <template #hint="{ value }">
       <user-with-label
+        :label="isObject(value?.user) ? value?.user.full_name : value?.full_name"
         :title="isObject(value?.user) ? value?.user.full_name : value?.full_name"
         shadow
         color="#635AFF"
