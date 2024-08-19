@@ -193,7 +193,7 @@ const pageChange = async (val) => {
 
         <template v-if="data.children && data.children.length > 0">
           <template v-for="children in data.children">
-            <handbook-table :item="children">
+            <handbook-table :item="children" :top-level="data.name">
               <template #top-level>
                 {{ data.name }}
               </template>
