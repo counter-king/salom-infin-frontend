@@ -1,6 +1,6 @@
 // Core
 import { defineStore } from 'pinia'
-import {fetchBusinessTripList} from "@/modules/HR/modules/BusinessTrip/services";
+import {fetchBusinessTripDetail, fetchBusinessTripList} from "@/modules/HR/modules/BusinessTrip/services";
 
 export const useBusinessTripStore = defineStore("business-trip-store", {
   state: () => ({
@@ -49,6 +49,15 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
         this.businessTripList = response.data.results
         this.totalCount = response.data.count
         this.listLoading = false
+      }
+    },
+    /** **/
+    async actionGetBusinessTripDetail(id) {
+      this.detailLoading = true
+      const response = await fetchBusinessTripDetail(id)
+      if (response && response.status === 200) {
+        this.detailModel = response.data
+        this.detailLoading = false
       }
     },
     /** **/

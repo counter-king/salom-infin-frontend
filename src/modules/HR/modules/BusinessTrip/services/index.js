@@ -7,3 +7,6 @@ const URLS = {
 export const fetchBusinessTripList = (params = {}) => {
   return axiosConfig.get(`${URLS.trips}/`, params)
 }
+export const fetchBusinessTripDetail = (id) => {
+  return axiosConfig.get(`${URLS.trips}/${id}/`)
+}

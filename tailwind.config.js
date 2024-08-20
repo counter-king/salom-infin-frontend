@@ -62,6 +62,7 @@ export default {
           500: "#11A5ED",
         },
         "critic": {
+          30: "#FAEEF1",
           50: "#FFEEF2",
           100: "#FFDAE2",
           200: "#FFB8C7",
