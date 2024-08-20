@@ -71,6 +71,9 @@ const rootClasses = computed(() => {
             'backdrop-blur-sm': props.blur
           }
         ]
+      },
+      headerIcons: {
+        class: 'z-10'
       }
     }"
     @after-hide="emit('emit:after-hide')"

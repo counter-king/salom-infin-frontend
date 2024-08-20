@@ -161,43 +161,39 @@ const pageChange = async (val) => {
       @page="pageChange"
     >
       <template #header>
-        <table class="w-full">
-          <thead>
-            <tr>
-              <th width="500" class="bg-greyscale-50 py-[10px] px-4 rounded-tl-lg rounded-bl-lg">
-                <span>Ф.И.О.</span>
-              </th>
+        <div class="flex w-full">
+          <div class="flex-1 bg-greyscale-50 py-[10px] px-4 rounded-tl-lg rounded-bl-lg">
+            <span class="text-xs text-greyscale-500">Ф.И.О.</span>
+          </div>
 
-              <th width="500" class="bg-greyscale-50 py-[10px] px-4">
-                <span>Должность</span>
-              </th>
+          <div class="flex-1 bg-greyscale-50 py-[10px] px-4">
+            <span class="text-xs text-greyscale-500">Должность</span>
+          </div>
 
-              <th width="225" class="bg-greyscale-50 py-[10px] px-4">
-                <span>Статус</span>
-              </th>
+          <div class="max-w-[150px] w-full bg-greyscale-50 py-[10px] px-4">
+            <span class="text-xs text-greyscale-500">Статус</span>
+          </div>
 
-              <th width="225" class="bg-greyscale-50 py-[10px] px-4">
-                <span>IP-телефона</span>
-              </th>
+          <div class="max-w-[225px] w-full bg-greyscale-50 py-[10px] px-4">
+            <span class="text-xs text-greyscale-500">IP-телефона</span>
+          </div>
 
-              <th width="225" class="bg-greyscale-50 py-[10px] px-4 rounded-tr-lg rounded-br-lg">
-                <span>Корп. почта</span>
-              </th>
-            </tr>
-          </thead>
-        </table>
+          <div class="max-w-[225px] w-full bg-greyscale-50 py-[10px] px-4 rounded-tr-lg rounded-br-lg">
+            <span class="text-xs text-greyscale-500">Корп. почта</span>
+          </div>
+        </div>
       </template>
 
       <template #groupheader="{ data }">
         <handbook-table :item="data">
           <template #department>
-            <span></span>
+            <span>-</span>
           </template>
         </handbook-table>
 
         <template v-if="data.children && data.children.length > 0">
           <template v-for="children in data.children">
-            <handbook-table :item="children">
+            <handbook-table :item="children" :top-level="data.name">
               <template #top-level>
                 {{ data.name }}
               </template>
@@ -228,6 +224,6 @@ const pageChange = async (val) => {
 
 .table-linear .p-rowgroup-header > td {
   padding: 0 !important;
-  border-bottom: 1.5px solid #A19CFF;
+  border-bottom: none;
 }
 </style>
