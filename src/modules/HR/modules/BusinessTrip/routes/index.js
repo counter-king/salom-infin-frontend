@@ -15,6 +15,14 @@ const BusinessTrip = [
           isAuthRequired: true
         },
         component: () => import("../views/List.vue"),
+      },
+      {
+        path: "show/:id",
+        name: "BusinessTripDetail",
+        meta: {
+          isAuthRequired: true
+        },
+        component: () => import("../views/Detail.vue")
       }
     ]
   }

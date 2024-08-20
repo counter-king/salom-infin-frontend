@@ -49,7 +49,7 @@ const preview = async () => {
   orderStore.model.approvers = []
   orderStore.model.signers = []
   orderStore.model.approvers = adjustUsersToArray(orderStore.model.__approvers)
-  orderStore.model.signers = adjustUsersToArray(orderStore.model.__signers)
+  // orderStore.model.signers = adjustUsersToArray(orderStore.model.__signers)
   orderStore.model.curator = orderStore?.model?.__curator.id
   orderStore.model.sender = authStore?.currentUser?.top_level_department?.id
   orderStore.model.files = orderStore.model.__files.map(item => { return { id: item.id } })
@@ -184,20 +184,22 @@ onMounted( async () => {
 	          <base-col col-class="w-1/2">
 		          <user-multi-select
 			          v-model="$v.__negotiators.$model"
+                :error="$v.__negotiators"
 			          label="approver-signers"
 			          placeholder="select-approver-signers"
+                required
 		          />
 	          </base-col>
 
-            <base-col col-class="w-1/2">
-              <user-multi-select
-                v-model="$v.__signers.$model"
-                :error="$v.__signers"
-                label="signers"
-                placeholder="enter-signers"
-                required
-              />
-            </base-col>
+<!--            <base-col col-class="w-1/2">-->
+<!--              <user-multi-select-->
+<!--                v-model="$v.__signers.$model"-->
+<!--                :error="$v.__signers"-->
+<!--                label="signers"-->
+<!--                placeholder="enter-signers"-->
+<!--                required-->
+<!--              />-->
+<!--            </base-col>-->
 
             <base-col col-class="w-full">
               <editor-with-tabs

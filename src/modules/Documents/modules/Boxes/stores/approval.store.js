@@ -104,11 +104,11 @@ export const useBoxesApprovalStore = defineStore("approval-stores", {
     /** **/
     async actionGetApprovalList(params) {
       this.listLoading = true;
-      const response = await fetchApprovalList(params);
+      const response = await fetchApprovalList(params)
       if (response.status === 200) {
-        this.documentList = response.data.results;
-        this.totalCount = response.data.count;
-        this.listLoading = false;
+        this.documentList = response.data.results
+        this.totalCount = response.data.count
+        this.listLoading = false
       }
     },
     /** **/

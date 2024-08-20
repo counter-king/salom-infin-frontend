@@ -41,9 +41,8 @@ export const useSDOrderStore = defineStore("order-store", {
         __approvers: [],
         __approvers_copy: [],
         __curator: null,
-        __signers: [],
-        __negotiators: [],
-        __signers_copy: []
+        // __signers: [],
+        __negotiators: []
       },
       rules: {
         register_number: {
@@ -56,7 +55,7 @@ export const useSDOrderStore = defineStore("order-store", {
           required: helpers.withMessage(`Поле не должен быть пустым`, required)
         },
         __negotiators: {
-
+          required: helpers.withMessage(`Поле не должен быть пустым`, required)
         },
         // __approvers: {
         //   required: helpers.withMessage(`Поле не должен быть пустым`, required)
@@ -64,9 +63,9 @@ export const useSDOrderStore = defineStore("order-store", {
         __curator: {
           required: helpers.withMessage(`Поле не должен быть пустым`, required)
         },
-        __signers: {
-          required: helpers.withMessage(`Поле не должен быть пустым`, required)
-        },
+        // __signers: {
+        //   required: helpers.withMessage(`Поле не должен быть пустым`, required)
+        // },
       }
     }
   },

@@ -328,8 +328,11 @@
   "position": "Должность",
   "ip-phone": "IP-телефона",
   "corp-mail": "Корп. почта",
-  "child-care-leave": "Bola parvarishlash ta'tili",
-  "vacation-own-expense": "O'z hisobidan ta'til",
-  "educational-leave": "O'quv ta'tili",
-  "material-support": "Moddiy yordam"
+  "child-care-leave": "Отпуск по уходу за ребенком",
+  "vacation-own-expense": "Отпуск за свой счет",
+  "educational-leave": "Учебный отпуск",
+  "material-support": "Материальная поддержка",
+  "process": "Процесс",
+  "avans-report": "Авансовый отчет",
+  "sketch": "Оформления"
 }

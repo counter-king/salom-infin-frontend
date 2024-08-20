@@ -1,19 +1,24 @@
 <script setup>
 // Core
-import {onBeforeMount, onMounted} from "vue";
-import {useRoute, useRouter} from "vue-router";
+import {computed, onBeforeMount, onMounted} from "vue"
+import {useRoute, useRouter} from "vue-router"
 // Store
-import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store";
+import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store"
 // Components
-import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue";
-import {LayoutWithTabsCompose} from "@/components/DetailLayout";
-import SigningProcessTimeline from "@/modules/Documents/components/SigningProcessTimeline.vue";
+import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue"
+import {LayoutWithTabsCompose} from "@/components/DetailLayout"
+import SigningProcessTimeline from "@/modules/Documents/components/SigningProcessTimeline.vue"
+import { EyeIcon, Pen2Icon } from "@/components/Icons"
 // Enums
-import {CONTENT_TYPES} from "@/enums";
+import {CONTENT_TYPES} from "@/enums"
 
-const SDStore = useSDStore();
-const route = useRoute();
-const router = useRouter();
+const SDStore = useSDStore()
+const route = useRoute()
+const router = useRouter()
+
+const isChangeable = computed(() => {
+  return SDStore.detailModel
+})
 
 // Methods
 const openUpdatePage = () => {
@@ -44,6 +49,7 @@ onBeforeMount(async () => {
   </template>
 
   <template v-else>
+<!--    <pre>{{ isChangeable }}</pre>-->
     <layout-with-tabs-compose
       :title="SDStore.detailModel?.title?.name"
       :object-id="SDStore.detailModel?.id"
@@ -55,7 +61,7 @@ onBeforeMount(async () => {
           color="bg-white hover:bg-greyscale-100 text-primary-dark"
           border-color="border-transparent"
           label="watch-process"
-          icon-left="EyeIcon"
+          :icon-left="EyeIcon"
           icon-height="16"
           icon-width="16"
           icon-color="#767994"
@@ -68,7 +74,7 @@ onBeforeMount(async () => {
           color="bg-white hover:bg-greyscale-100 text-primary-dark"
           border-color="border-transparent"
           label="update"
-          icon-left="PenIcon"
+          :icon-left="Pen2Icon"
           icon-height="16"
           icon-width="16"
           icon-color="#767994"

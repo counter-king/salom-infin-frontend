@@ -105,6 +105,9 @@ export { default as DangerTriangleBoldIcon } from  '~icons/solar/danger-triangle
 export { default as UserRoundedBoldIcon } from  '~icons/solar/user-rounded-bold'
 export { default as UsersGroupTwoRoundedBoldIcon } from  '~icons/solar/users-group-two-rounded-bold'
 export { default as MenuDotsBoldIcon } from  '~icons/solar/menu-dots-bold'
+export { default as CheckListMinimalisticIcon } from  '~icons/solar/checklist-minimalistic-bold'
+export { default as BillListIcon } from  '~icons/solar/bill-list-bold'
+export { default as DocumentTextBoldIcon } from  '~icons/solar/document-text-bold'
 // Solar (Bold Duotone)
 export { default as ArchiveUpBoldDuotoneIcon } from  '~icons/solar/archive-up-bold-duotone'
 export { default as StarBoldDuotoneIcon } from  '~icons/solar/star-bold-duotone'

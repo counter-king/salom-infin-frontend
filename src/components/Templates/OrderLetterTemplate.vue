@@ -29,7 +29,11 @@ const author = computed(() => {
 })
 
 const signers = computed(() => {
-  return props.preview ? props.composeModel?.__signers : props.composeModel?.signers.filter(item => item.type !== SIGNER_TYPES.NEGOTIATOR)
+  if (props.preview) {
+    return [props.composeModel?.__curator]
+  }
+  const basicSigner = props.composeModel?.signers.find(item => item.type === SIGNER_TYPES.BASIC_SIGNER)
+  return basicSigner ? [basicSigner] : [props.composeModel?.curator].filter(Boolean)
 })
 
 const negotiators = computed(() => {
