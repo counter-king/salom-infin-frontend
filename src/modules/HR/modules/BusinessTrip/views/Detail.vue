@@ -68,39 +68,21 @@ onMounted( async () => {
               <span class="text-primary-900 text-sm font-semibold">{{ t('sketch') }}</span>
 
               <div class="flex flex-col gap-y-1 mt-2">
-                <div class="flex items-center justify-between bg-white rounded-lg p-2">
+                <div
+                  v-for="item in BTStore.detailModel?.compose"
+                  class="flex items-center justify-between bg-white rounded-lg p-2"
+                >
                   <div class="flex items-center gap-x-[6px]">
                     <base-iconify
                       :icon="DocumentTextBoldIcon"
                       class="text-primary-500"
                     />
-                    <span class="text-xs text-greyscale-900 font-semibold">{{ t('notice') }}</span>
+                    <span class="text-xs text-greyscale-900 font-semibold">{{ t(item.name) }}</span>
                   </div>
 
                   <div class="flex items-center gap-x-1">
                     <div class="flex justify-center items-center border border-success-100 bg-success-50 text-xs font-semibold text-success-500 rounded-lg px-2 py-1">
-                      Done
-                    </div>
-
-                    <base-iconify
-                      :icon="AltArrowRightIcon"
-                      class="text-greyscale-400 !w-4 !h-4"
-                    />
-                  </div>
-                </div>
-
-                <div class="flex items-center justify-between bg-white rounded-lg p-2">
-                  <div class="flex items-center gap-x-[6px]">
-                    <base-iconify
-                      :icon="DocumentTextBoldIcon"
-                      class="text-primary-500"
-                    />
-                    <span class="text-xs text-greyscale-900 font-semibold">{{ t('order') }}</span>
-                  </div>
-
-                  <div class="flex items-center gap-x-1">
-                    <div class="flex justify-center items-center border border-success-100 bg-success-50 text-xs font-semibold text-success-500 rounded-lg px-2 py-1">
-                      Done
+                      {{ item.status }}
                     </div>
 
                     <base-iconify
@@ -129,8 +111,10 @@ onMounted( async () => {
           </div>
 
           <verification-process
-            v-for="item in verificationList"
+            v-for="(item, index) in verificationList"
             :item="item"
+            :verifications="verificationList"
+            :index="index"
           />
         </div>
       </div>

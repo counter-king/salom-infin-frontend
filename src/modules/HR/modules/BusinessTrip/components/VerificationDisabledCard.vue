@@ -1,0 +1,126 @@
+<script setup>
+// Core
+import {computed, ref} from "vue"
+import {useRoute} from "vue-router"
+// Components
+import { ArrowLeftDownIcon, ArrowRightUpIcon } from "@/components/Icons"
+import { VerificationConfirmationModal } from "@/modules/HR/modules/BusinessTrip/components/index"
+// Store
+import {useAuthStore} from "@/modules/Auth/stores"
+import { useBusinessTripStore } from "@/modules/HR/modules/BusinessTrip/stores/businessTrip.store"
+
+const props = defineProps({
+  item: {
+    type: Object
+  },
+  verifications: {
+    type: Array,
+    default: () => []
+  },
+  index: {
+    type: [Number, String],
+    default: null
+  }
+})
+
+const route = useRoute()
+const currentUser = useAuthStore().currentUser
+const BTStore = useBusinessTripStore()
+
+// Reactive
+const confirmModal = ref(null)
+const dialog = ref(null)
+
+// Computed
+const isSenderOffice = computed(() => {
+  return props.item.is_sender
+})
+const buttonText = computed(() => {
+  if (props.item.is_sender) {
+    return 'left'
+  } else {
+    return 'arrived'
+  }
+})
+const buttonDisabled = computed(() => {
+  return !(Number(currentUser?.company?.id) === Number(props.item?.company?.id))
+})
+const itemId = computed(() => {
+  return props.verifications.find(item => item?.company?.id === currentUser.company?.id).id
+})
+
+// Methods
+const onConfirm = async () => {
+  try {
+    await BTStore.actionVerifyBusinessTrip(itemId.value, route.params.id, isSenderOffice ? 'left' : 'arrived')
+  } catch (err) {
+    BTStore.detailLoading = false
+  }
+}
+</script>
+
+<template>
+  <div class="flex flex-col rounded-xl border border-greyscale-100 py-[10px] px-3 bg-greyscale-50 mb-[6px] gap-y-2">
+      <span class="text-greyscale-400 text-sm font-semibold">
+        Филиал банка
+      </span>
+
+    <div
+      v-if="!isSenderOffice"
+      class="flex items-center gap-x-[6px]"
+    >
+      <div class="flex items-center bg-greyscale-70 py-[2px] pr-2 pl-[3px] gap-x-1 rounded-xl">
+        <div class="flex justify-center items-center w-[18px] h-[18px] bg-white rounded-full shadow">
+          <base-iconify
+            :icon="ArrowLeftDownIcon"
+            class="text-greyscale-400 !w-3 !h-3"
+          />
+        </div>
+
+        <span class="text-greyscale-400 text-xs font-medium">Прибыл</span>
+      </div>
+
+      <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
+
+      <span class="text-xs font-medium text-greyscale-400">Дата</span>
+    </div>
+
+    <div class="flex items-center gap-x-[6px]">
+      <div class="flex items-center bg-greyscale-70 py-[2px] pr-2 pl-[3px] gap-x-1 rounded-xl">
+        <div class="flex justify-center items-center w-[18px] h-[18px] bg-white rounded-full shadow">
+          <base-iconify
+            :icon="ArrowRightUpIcon"
+            class="text-greyscale-400 !w-3 !h-3"
+          />
+        </div>
+
+        <span class="text-greyscale-400 text-xs font-medium">Убыл</span>
+      </div>
+
+      <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
+
+      <span class="text-xs font-medium text-greyscale-400">Дата</span>
+    </div>
+
+    <div class="flex justify-between items-center">
+      <span class="text-xs font-medium text-greyscale-400">Имя сотрудника</span>
+
+      <base-button
+        size="small"
+        :label="buttonText"
+        @click="dialog = true"
+      >
+      </base-button>
+    </div>
+  </div>
+
+  <verification-confirmation-modal
+    v-model="dialog"
+    ref="confirmModal"
+    @emit:on-confirm="onConfirm"
+  />
+</template>
+
+<style scoped>
+
+</style>

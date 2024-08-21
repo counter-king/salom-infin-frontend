@@ -1,14 +1,47 @@
 <script setup>
 // Components
 import { UnreadLinearIcon } from "@/components/Icons"
-import { VerificationProcessCard } from "@/modules/HR/modules/BusinessTrip/components/index"
+import { VerificationProcessCard, VerificationDisabledCard } from "@/modules/HR/modules/BusinessTrip/components/index"
+import {computed} from "vue";
 
 const props = defineProps({
   item: {
     type: Object,
-    default: () => {
-    }
+    default: () => {}
   },
+  verifications: {
+    type: Array,
+    default: () => []
+  },
+  index: {
+    type: [Number, String],
+    default: null
+  }
+})
+
+// Computed
+const iconColor = computed(() => {
+  return props.item.arrived_at === null && props.item.left_at === null
+    ? 'text-greyscale-300'
+    : props.item.arrived_at && props.item.left_at === null
+      ? 'text-warning-300'
+      : 'text-success-500'
+})
+const stepperColor = computed(() => {
+  return props.item.arrived_at === null && props.item.left_at === null
+    ? 'bg-greyscale-70'
+    : props.item.arrived_at && props.item.left_at === null
+      ? 'bg-warning-300'
+      : 'bg-success-500'
+})
+const itemVisible = computed(() => {
+  return props.item.arrived_at || props.item.left_at
+})
+const isSenderOffice = computed(() => {
+  return props.verifications[0].id === props.item.id
+})
+const disabledCardVisible = computed(() => {
+  return isSenderOffice.value || (!isSenderOffice.value && props.verifications[props.index - 1].left_at)
 })
 </script>
 
@@ -17,28 +50,54 @@ const props = defineProps({
     <div class="flex gap-x-3">
       <div class="w-[350px] min-h-[130px]">
         <verification-process-card
-          v-if="props.item.direction === 'left'"
+          v-if="props.item.direction === 'left' && itemVisible"
           :item="props.item"
+          :verifications="props.verifications"
+          :index="props.index"
+        />
+
+        <verification-disabled-card
+          v-else-if="props.item.direction === 'left' && disabledCardVisible"
+          :item="props.item"
+          :verifications="props.verifications"
+          :index="props.index"
         />
       </div>
 
       <div class="flex flex-col items-center w-8">
-        <div class="flex justify-center items-center bg-success-500 rounded-full w-8 h-8">
+        <div
+          class="flex justify-center items-center rounded-full w-8 h-8"
+          :class="stepperColor"
+        >
           <div class="flex justify-center items-center bg-white rounded-full w-6 h-6">
             <base-iconify
               :icon="UnreadLinearIcon"
-              class="text-success-500"
+              :class="iconColor"
             />
           </div>
         </div>
 
-        <div class="w-2 bg-success-500 flex-1"></div>
+        <div
+          class="w-2 flex-1"
+          :class="stepperColor"
+        >
+
+        </div>
       </div>
 
       <div class="w-[350px] min-h-[130px]">
         <verification-process-card
-          v-if="props.item.direction === 'right'"
+          v-if="props.item.direction === 'right' && itemVisible"
           :item="props.item"
+          :verifications="props.verifications"
+          :index="props.index"
+        />
+
+        <verification-disabled-card
+          v-else-if="props.item.direction === 'right' && disabledCardVisible"
+          :item="props.item"
+          :verifications="props.verifications"
+          :index="props.index"
         />
       </div>
     </div>
