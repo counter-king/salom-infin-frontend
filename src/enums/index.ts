@@ -29,6 +29,36 @@ export const JOURNAL_CODES = {
   PROTOCOL:         '107', // Протокол
   DECISION:         '108', // Указ
 }
+export const USER_STATUS_CODES = {
+  OTHERS:                        'PR', // Прочие
+  AUDIT_COMMISSION:              'AT', // Ревизионная комиссия
+  BANK_COUNCIL:                  'AK', // Совет банка
+  INTERNS:                       'AS', // Стажеры
+  SICK_LEAVES:                   'B',  // Болничные
+  BUSINESS_TRIP:                 'K',  // Командировка
+  TRANSFER_TO_ANOTHER_BRANCH:    'SF', // Перевод другой филиал
+  SUSPENDED_NOT_STAFF:           'KO', // Отстраненные (не штат.)
+  DISMISSED_NOT_STAFF:           'KP', // Уволенные (не штат.)
+  WORKERS_NOT_STAFF:             'KA', // Рабочие (не штат.)
+  FROM_THE_CONTENT:              'OS', // С содержания
+  NO_CONTENT:                    'OB', // Без содержания
+  LABOR_LEAVE:                   'OT', // Трудовой отп.
+  MILITARY_SERVICE:              'I',  // Воинская служба
+  ACADEMICIAN_VACATION:          'AO', // Академик отп.
+  STUDY_LEAVE:                   'OU', // Ученический отп.
+  DECREE_3:                      'OF', // Декрет_3
+  DECREE_2:                      'OD', // Декрет_2
+  SICK_LEAVE_DECREE:             'DB', // Декрет больничный
+  SUSPENDED:                     'PO', // Отстранен
+  DISMISSAL_TRANSFER_TO_BRANCH:  'PF', // Увол. (пер. филиалу)
+  DISMISSED:                     'P',  // Уволенные
+  PART_TIMERS:                   'AP', // Совместители
+  WORKERS:                       'A',  // Рабочие
+  REJECTED:                      'SO', // Отклонен
+  ON_THE_STATEMENTS:             'SU', // На утверждения
+  INTRODUCED:                    'SV', // Введен
+  APPROVED:                      'SA'  // Утвержден
+}
 export const COMPOSE_DOCUMENT_TYPES = {
   NOTICE: '1',
   ORDER: '2',
