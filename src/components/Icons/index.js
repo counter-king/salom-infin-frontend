@@ -9,6 +9,7 @@ export { default as FileDownloadIcon } from  '~icons/ci/file-download'
 export { default as DragVerticalIcon } from  '~icons/ci/drag-vertical'
 export { default as CloseSmIcon } from  '~icons/ci/close-sm'
 export { default as CircleIcon } from  '~icons/ci/circle'
+export { default as RemoveMinusIcon } from  '~icons/ci/remove-minus'
 // Solar (Linear)
 export { default as AltArrowDownLinearIcon } from  '~icons/solar/alt-arrow-down-linear'
 export { default as DoubleAltArrowDownLinearIcon } from  '~icons/solar/double-alt-arrow-down-linear'
