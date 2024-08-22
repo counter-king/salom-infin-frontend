@@ -103,7 +103,7 @@ const update = async () => {
     params: {
       id: route.params.id,
       document_type: route.params.document_type,
-      document_sub_type: route.params.document_sun_type
+      document_sub_type: route.params.document_sub_type
     }
   });
 }

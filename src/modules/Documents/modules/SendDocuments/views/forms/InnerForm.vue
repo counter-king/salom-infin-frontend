@@ -21,7 +21,7 @@ import {dispatchNotify} from "@/utils/notify";
 // Constants
 import {FORM_TYPE_CREATE} from "@/constants/constants";
 import PreviewDialog from "@/modules/Documents/modules/SendDocuments/components/PreviewDialog.vue";
-import {COLOR_TYPES} from "@/enums";
+import {COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES} from "@/enums";
 import {ROUTE_SD_DETAIL, ROUTE_SD_LIST, SD_TYPE_INNER} from "@/modules/Documents/modules/SendDocuments/constants";
 import {adjustUsersToArray, resetModel} from "@/utils";
 
@@ -81,7 +81,7 @@ const create = async () => {
     await router.replace({
       name: ROUTE_SD_LIST,
       query: {
-        type: SD_TYPE_INNER
+        document_type: COMPOSE_DOCUMENT_TYPES.INNER
       }
     });
   } else {
@@ -101,7 +101,8 @@ const update = async () => {
     name: ROUTE_SD_DETAIL,
     params: {
       id: route.params.id,
-      subType: SDStoreInner.model.sub_type
+      document_type: COMPOSE_DOCUMENT_TYPES.INNER,
+      document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.SERVICE_LETTER
     }
   });
 }
