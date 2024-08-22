@@ -15,7 +15,17 @@ import 'froala-editor/css/plugins/table.min.css';
 const props = defineProps({
 	modelValue: {
 		type: String,
-	}
+	},
+  disabled: {
+    type: Boolean
+  },
+  error: {
+    type: Object,
+    default: () => ({
+      $error: false,
+      $errors: []
+    })
+  }
 });
 
 const { t } = useI18n();
@@ -102,8 +112,23 @@ onMounted(() => {
 		v-model:value="modelValue"
 		:config="config"
 		ref="editor"
+    :class="{
+      'froala-editor rounded-[10px] border border-transparent': true,
+      'p-invalid': props.error.$error,
+      'opacity-60 pointer-events-none': props.disabled
+    }"
 	></froala>
-<!--	<pre>{{ modelValue }}</pre>-->
+
+  <template v-if="props.error.$errors.length">
+    <div class="space-y-1 mt-2">
+      <div
+        v-for="element of props.error.$errors"
+        :key="element.$uid"
+      >
+        <span class="block text-sm font-medium text-red-500">{{ element.$message }}</span>
+      </div>
+    </div>
+  </template>
 </template>
 
 <style>
@@ -153,5 +178,9 @@ p[data-f-id="pbf"] {
 
 .negative-z-index {
 	z-index: -1!important;
+}
+
+.froala-editor.p-invalid {
+  border-color: #e24c4c !important;
 }
 </style>

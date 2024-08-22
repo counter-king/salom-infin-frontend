@@ -25,6 +25,22 @@ const Agreements = [
         component: () => import('../views/create.vue')
       },
       {
+        path: 'created',
+        name: 'AgreementCreated',
+        meta: {
+          isAuthRequired: true
+        },
+        component: () => import('../views/created.vue')
+      },
+      {
+        path: 'created/read/:id',
+        name: 'AgreementCreatedRead',
+        meta: {
+          isAuthRequired: true
+        },
+        component: () => import('../views/read.vue')
+      },
+      {
         path: 'groups/list/:item',
         name: 'AgreementGroupsList',
         meta: {

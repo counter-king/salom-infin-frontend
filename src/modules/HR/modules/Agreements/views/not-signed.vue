@@ -1,11 +1,13 @@
 <script setup>
 // Core
-import { useRouter } from 'vue-router'
+import { onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 // Components
 import { ActionToolbar, ActionBackButton, EriKeysMenu } from '@/components/Actions'
 // Stores
 import { useAgreementsStore } from '../stores/agreements.store'
 // Composable
+const route = useRoute()
 const router = useRouter()
 const agreementsStore = useAgreementsStore()
 // Methods
@@ -15,6 +17,13 @@ const back = async () => {
 const signDocument = () => {
   console.log('sign')
 }
+// Hooks
+onMounted(async () => {
+  await agreementsStore.getNegotiators({
+    doc_type: route.params.item,
+    unchecked: 'none'
+  })
+})
 </script>
 
 <template>
