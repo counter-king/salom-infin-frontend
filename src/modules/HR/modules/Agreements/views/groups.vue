@@ -1,7 +1,7 @@
 <script setup>
 // Components
 import { ActionToolbar } from '@/components/Actions'
-import { InfoCircleBoldIcon, AltArrowRightIcon } from '@/components/Icons'
+import { InfoCircleBoldIcon, AltArrowRightIcon, Plus20SolidIcon } from '@/components/Icons'
 
 const list = [
   {
@@ -45,7 +45,14 @@ const list = [
 <template>
   <action-toolbar title="Согласия">
     <template #filters>
-      <span></span>
+      <router-link :to="{ name: 'AgreementCreate' }">
+        <base-button
+          label="add"
+          rounded
+          :icon-left="Plus20SolidIcon"
+        >
+        </base-button>
+      </router-link>
     </template>
   </action-toolbar>
 
