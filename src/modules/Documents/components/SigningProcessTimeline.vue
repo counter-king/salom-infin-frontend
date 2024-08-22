@@ -117,7 +117,7 @@ const showReason = (item) => {
 </script>
 
 <template>
-  <div class="signing-process bg-greyscale-50 rounded-xl p-6 overflow-y-auto" style="max-height: calc(100vh - 300px)">
+  <div class="signing-process bg-greyscale-50 rounded-xl p-6 overflow-y-auto">
     <Timeline
       v-if="properties.composeModel"
       :value="signingProcessComputed"

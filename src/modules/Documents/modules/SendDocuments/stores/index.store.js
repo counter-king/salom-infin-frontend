@@ -12,6 +12,7 @@ import { dispatchNotify } from "@/utils/notify";
 // Enums
 import {COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES} from "@/enums"
 import {ROUTE_SD_CREATE} from "@/modules/Documents/modules/SendDocuments/constants"
+import {fetchGetTree} from "@/modules/Documents/modules/Registration/services/docflow.service";
 
 export const useSDStore = defineStore("sd-stores", {
   state: () => ({
@@ -136,6 +137,7 @@ export const useSDStore = defineStore("sd-stores", {
     listLoading: false,
     detailLoading: false,
     customUpdateLoading: false,
+    tree: null,
     filterState: {
       page: 1,
       page_size: 15
@@ -185,12 +187,18 @@ export const useSDStore = defineStore("sd-stores", {
         label: 'service-letter',
         icon: 'NotebookIcon',
         type: 'menu',
-        hasRouterLink: true,
+        hasRouterLink: false,
         active: true,
-        routerLinkName: ROUTE_SD_CREATE,
-        documentType: COMPOSE_DOCUMENT_TYPES.INNER,
-        documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.SERVICE_LETTER,
-        items: []
+        items: [
+          {
+            label: 'service-memo',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.INNER,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.SERVICE_LETTER
+          },
+        ]
       },
       {
         id: 2,
@@ -503,7 +511,11 @@ export const useSDStore = defineStore("sd-stores", {
     /** **/
     async actionGetDocumentDetail(id){
       const { response, error } = await withAsync(fetchGetDocumentDetail, id);
-      if (response){
+      if (response && response.status === 200){
+        if (response.data?.registered_document){
+          let { data } = await fetchGetTree(response.data?.registered_document)
+          this.tree = data
+        }
         this.detailModel = response.data;
         return Promise.resolve(response);
       }

@@ -1,25 +1,27 @@
 <script setup>
 // Core
-import {computed, onMounted, ref} from "vue";
-import { useRoute } from "vue-router";
+import {computed, onMounted, ref} from "vue"
+import { useRoute } from "vue-router"
+import {useI18n} from "vue-i18n"
 // Service
-import { fetchRejectApprovalDocument } from "@/modules/Documents/modules/Boxes/services/approval.service";
+import { fetchRejectApprovalDocument } from "@/modules/Documents/modules/Boxes/services/approval.service"
 // Store
-import { useAuthStore } from "@/modules/Auth/stores";
-import { useBoxesApprovalStore } from "@/modules/Documents/modules/Boxes/stores/approval.store";
-import { useDocumentCountStore } from "@/modules/Documents/stores/count.store";
-import { useSDStore } from "@/modules/Documents/modules/SendDocuments/stores/index.store";
+import { useAuthStore } from "@/modules/Auth/stores"
+import { useBoxesApprovalStore } from "@/modules/Documents/modules/Boxes/stores/approval.store"
+import { useDocumentCountStore } from "@/modules/Documents/stores/count.store"
+import { useSDStore } from "@/modules/Documents/modules/SendDocuments/stores/index.store"
 // Components
 import { Pen2Icon, XMarkSolidIcon } from '@/components/Icons'
-import Approve from "@/components/Modal/Approve.vue";
+import Approve from "@/components/Modal/Approve.vue"
 import SendToSigning from "@/modules/Documents/modules/Boxes/components/SendToSigning.vue"
 import CancelSign from "@/components/Modal/CancelSign.vue";
-import { LayoutWithTabsCompose } from "@/components/DetailLayout";
-import { ModalComment } from "@/components/Modal";
-import SigningProcessTimeline from "@/modules/Documents/components/SigningProcessTimeline.vue";
+import { LayoutWithTabsCompose } from "@/components/DetailLayout"
+import { ModalComment } from "@/components/Modal"
+import SigningProcessTimeline from "@/modules/Documents/components/SigningProcessTimeline.vue"
 // Enums
-import { CONTENT_TYPES } from "@/enums";
-import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue";
+import { CONTENT_TYPES } from "@/enums"
+import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue"
+import {TreeUsers} from "@/components/Tree"
 
 const approvalStore = useBoxesApprovalStore();
 const countStore = useDocumentCountStore();
@@ -28,6 +30,7 @@ const sdStore = useSDStore();
 const route = useRoute();
 const rejectModal = ref(false);
 const changeModal = ref(false);
+const { t } = useI18n()
 
 // Computed
 const approved = computed(() => {
@@ -121,11 +124,23 @@ onMounted(  () => {
       </template>
 
       <template #preview>
-        <div class="p-6 w-full">
+        <div class="p-6 w-full overflow-y-auto !h-[calc(100vh-250px)]">
           <signing-process-timeline
 	          v-if="approvalStore.detailModel && approvalStore.detailModel.compose"
 	          :compose-model="approvalStore.detailModel?.compose"
           />
+
+          <template v-if="approvalStore.detailModel?.compose?.registered_document && approvalStore.tree">
+            <div class="text-base font-semibold text-primary-900 mt-4 mb-2">{{ t('process') }}</div>
+
+            <div class="bg-greyscale-50 rounded-xl overflow-y-auto">
+              <tree-users
+                v-if="approvalStore.tree"
+                :tree-items="approvalStore?.tree"
+                root-classes="mt-0"
+              />
+            </div>
+          </template>
         </div>
       </template>
 

@@ -1,6 +1,7 @@
 // Core
 import { defineStore } from 'pinia'
 import {fetchApprovalDetail, fetchApprovalList} from "@/modules/Documents/modules/Boxes/services/approval.service";
+import {fetchGetTree} from "@/modules/Documents/modules/Registration/services/docflow.service";
 
 export const useBoxesApprovalStore = defineStore("approval-stores", {
   state: () => ({
@@ -13,6 +14,7 @@ export const useBoxesApprovalStore = defineStore("approval-stores", {
     detailLoading: false,
     documentList: [],
     detailModel: {},
+    tree: null,
     headers: [
       // {
       //   header: "№",
@@ -116,6 +118,10 @@ export const useBoxesApprovalStore = defineStore("approval-stores", {
       this.detailLoading = true;
       const response = await fetchApprovalDetail(id);
       if (response.status === 200) {
+        if (response.data?.compose?.registered_document){
+          let { data } = await fetchGetTree(response.data?.compose?.registered_document)
+          this.tree = data
+        }
         this.detailModel = response.data;
         setTimeout(() => {
           this.detailLoading = false;

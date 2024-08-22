@@ -2,7 +2,7 @@
 // Core
 import {useI18n} from "vue-i18n"
 import {useRoute, useRouter} from "vue-router"
-import {computed} from "vue"
+import {computed, onBeforeUnmount} from "vue"
 // Utils
 import {formatDateReverse} from "@/utils/formatDate"
 // Store
@@ -11,6 +11,8 @@ import {useCommonStore} from "@/stores/common"
 // Components
 import {AddPlusIcon, TrashBinTrashIcon} from "@/components/Icons"
 import {ROUTE_HR_BUSINESS_TRIP_ADVANCE_REPORT_LIST} from "@/modules/HR/constants";
+import {dispatchNotify} from "@/utils/notify";
+import {COLOR_TYPES} from "@/enums";
 
 const { t } = useI18n()
 const route = useRoute()
@@ -35,10 +37,16 @@ const create = async () => {
     })
     await BTStore.actionGetBusinessTripDetail(route.params.id)
     BTStore.actionResetModel()
+    dispatchNotify(null, t('document-sent'), COLOR_TYPES.SUCCESS)
   } catch (err) {
+    BTStore.buttonLoading = false
     console.log(err)
   }
 }
+
+onBeforeUnmount(() => {
+  BTStore.actionResetModel()
+})
 </script>
 
 <template>

@@ -337,7 +337,7 @@
   "sketch": "Оформления",
   "documents": "Документы",
   "arrived": "Прибыл",
-  "left": "Ушел",
+  "left": "Убыл",
   "confirmation": "Подтверждение",
   "confirm-with-eri": "Подтвердите электронным ключом!",
   "confirm": "Подтвердить",
@@ -349,5 +349,6 @@
   "expenses": "Расходы",
   "select-expense-type": "Выберите тип расхода",
   "enter-amount": "Введите сумма",
-  "total-expenses": "Общие расходы"
+  "total-expenses": "Общие расходы",
+  "service-memo": "Служебная записка"
 }
