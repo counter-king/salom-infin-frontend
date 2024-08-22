@@ -26,7 +26,7 @@ import {
   fetchRegionsList,
   fetchShortDescriptionList,
   fetchStatusList,
-  fetchDocumentTitlesList, fetchDocumentSubTypesList, fetchCompaniesList
+  fetchDocumentTitlesList, fetchDocumentSubTypesList, fetchCompaniesList, fetchExpenseTypeList
 } from '@/services/common.service'
 // Enums
 import { CORRESPONDENT, JOURNAL_CODES } from '@/enums'
@@ -46,6 +46,7 @@ export const useCommonStore = defineStore("common", {
     statusList: [],
     composeStatusList: [],
     documentTitleList: [],
+    expenseTypeList: [],
     filialList: []
 	}),
 	getters: {
@@ -79,6 +80,7 @@ export const useCommonStore = defineStore("common", {
       this.actionComposeStatusList()
       this.actionDocumentTitlesList()
       this.actionCompaniesList()
+      this.actionExpenseTypeList()
 		},
     /**
      * Возвращает список вид подачи
@@ -322,6 +324,20 @@ export const useCommonStore = defineStore("common", {
       collectStore.actionAddRequests({
         id: 'actionDocumentTitlesList',
         fn: this.actionDocumentTitlesList,
+        params: null
+      })
+    },
+    /** **/
+    actionExpenseTypeList() {
+      const collectStore = useCollectRequestsStore()
+
+      fetchExpenseTypeList().then(({ data }) => {
+        this.expenseTypeList = data.results
+      })
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionExpenseTypeList',
+        fn: this.actionExpenseTypeList,
         params: null
       })
     },

@@ -18,7 +18,8 @@ const URLS = {
   departments: "departments",
   documentTitles: 'document-titles/',
   companies: 'companies',
-  departmentsWithUser: 'departments-with-users'
+  departmentsWithUser: 'departments-with-users',
+  expenseTypes: 'expense-types'
 }
 /**
  * Возвращает список вид подачи
@@ -129,5 +130,8 @@ export const fetchComposeStatusDetail = (id) => {
 }
 export const fetchCompaniesList = (params) => {
   return axiosConfig.get(`${URLS.companies}/`, params)
+}
+export const fetchExpenseTypeList = (params) => {
+  return axiosConfig.get(`${URLS.expenseTypes}/`, params)
 }
 

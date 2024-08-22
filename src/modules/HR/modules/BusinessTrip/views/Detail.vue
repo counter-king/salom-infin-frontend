@@ -2,37 +2,49 @@
 // Core
 import {computed, onMounted} from "vue"
 import { useI18n } from "vue-i18n"
-import { useRoute } from "vue-router"
+import {useRoute, useRouter} from "vue-router"
 // Store
 import { useBusinessTripStore } from "@/modules/HR/modules/BusinessTrip/stores/businessTrip.store"
 // Components
 import {
   BillListIcon,
-  CheckListMinimalisticIcon,
-  DocumentTextBoldIcon,
-  AltArrowRightIcon,
-  UnreadLinearIcon,
-  FileTextBoldIcon
+  CheckListMinimalisticIcon, Plus20SolidIcon
 } from "@/components/Icons"
-import { VerificationProcess, ReportProcess } from "@/modules/HR/modules/BusinessTrip/components"
+// Enums
+import {
+  ROUTE_HR_BUSINESS_TRIP_ADVANCE_REPORT_CREATE,
+  ROUTE_HR_BUSINESS_TRIP_ADVANCE_REPORT_LIST,
+  ROUTE_HR_BUSINESS_TRIP_PROCESS
+} from "@/modules/HR/constants"
 
 const { t } = useI18n()
 const BTStore = useBusinessTripStore()
 const route = useRoute()
+const router = useRouter()
 
-const verificationList = computed(() => {
-  if (BTStore.detailModel.verifications) {
-    return BTStore?.detailModel?.verifications.map((item, index) => {
-      return {
-        ...item,
-        direction: index % 2 !== 0 ? 'left' : 'right'
-      }
-    })
-  }
+// Computed
+const processRouteClass = computed(() => {
+  return isProcessFinished.value ? 'border-success-500 bg-success-50' : route.name === ROUTE_HR_BUSINESS_TRIP_PROCESS ? 'border-primary-500 text-primary-900' : 'border-greyscale-70 text-greyscale-500'
+})
+const reportRouteClass = computed(() => {
+  return route.name === ROUTE_HR_BUSINESS_TRIP_ADVANCE_REPORT_LIST || route.name === ROUTE_HR_BUSINESS_TRIP_ADVANCE_REPORT_CREATE ? 'border-primary-500 text-primary-900' : 'border-greyscale-70 text-greyscale-500'
+})
+const processIconClass = computed(() => {
+  return isProcessFinished.value ? 'text-success-500' : route.name === ROUTE_HR_BUSINESS_TRIP_PROCESS ? 'text-primary-500' : 'text-greyscale-400'
+})
+const reportIconClass = computed(() => {
+  return route.name === ROUTE_HR_BUSINESS_TRIP_ADVANCE_REPORT_LIST || route.name === ROUTE_HR_BUSINESS_TRIP_ADVANCE_REPORT_CREATE ? 'text-primary-500' : 'text-greyscale-400'
 })
 const isProcessFinished = computed(() => {
-  return verificationList.value?.every(every => every.left_at && every.arrived_at)
+  return false
 })
+
+// Methods
+const openRoute = async (routeName) => {
+  await router.replace({
+    name: routeName
+  })
+}
 
 // Hooks
 onMounted( async () => {
@@ -46,117 +58,47 @@ onMounted( async () => {
   </template>
   <template v-else>
     <div class="business-trip-detail-view bg-white shadow-block h-full rounded-2xl relative">
-      <div class="flex items-center w-full py-4 px-6 border-b-[1.5px]">
-        <div class="flex gap-x-2 items-center py-[10px] px-4 border border-primary-500 rounded-[80px] text-base font-semibold text-primary-900">
-          <base-iconify
-            :icon="CheckListMinimalisticIcon"
-            class="text-primary-500"
-          />
-          <span>{{ t('process') }}</span>
-        </div>
-        <div class="flex h-2 bg-greyscale-200 w-8"></div>
-        <div class="flex gap-x-2 items-center py-[10px] px-4 border border-greyscale-70 bg-greyscale-50 rounded-[80px] text-base font-semibold text-greyscale-500">
-          <base-iconify
-            :icon="BillListIcon"
-            class="text-greyscale-400"
-          />
-          <span>{{ t('avans-report') }}</span>
-        </div>
-      </div>
-
-      <div class="flex px-6 py-6 overflow-y-auto" style="height: calc(100% - 100px)">
-        <div class="flex flex-col w-2/3">
-          <div class="flex gap-x-3">
-            <div class="flex flex-col w-[350px] rounded-xl border border-greyscale-100 py-[10px] px-3 bg-greyscale-50 mb-[6px]">
-              <span class="text-primary-900 text-sm font-semibold">{{ t('sketch') }}</span>
-
-              <div class="flex flex-col gap-y-1 mt-2">
-                <div
-                  v-for="item in BTStore.detailModel?.compose"
-                  class="flex items-center justify-between bg-white rounded-lg p-2"
-                >
-                  <div class="flex items-center gap-x-[6px]">
-                    <base-iconify
-                      :icon="DocumentTextBoldIcon"
-                      class="text-primary-500"
-                    />
-                    <span class="text-xs text-greyscale-900 font-semibold">{{ t(item.name) }}</span>
-                  </div>
-
-                  <div class="flex items-center gap-x-1">
-                    <div class="flex justify-center items-center border border-success-100 bg-success-50 text-xs font-semibold text-success-500 rounded-lg px-2 py-1">
-                      {{ item.status }}
-                    </div>
-
-                    <base-iconify
-                      :icon="AltArrowRightIcon"
-                      class="text-greyscale-400 !w-4 !h-4"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="flex flex-col items-center w-8">
-              <div class="flex justify-center items-center bg-success-500 rounded-full w-8 h-8">
-                <div class="flex justify-center items-center bg-white rounded-full w-6 h-6">
-                  <base-iconify
-                    :icon="UnreadLinearIcon"
-                    class="text-success-500"
-                  />
-                </div>
-              </div>
-
-              <div class="w-2 bg-success-500 flex-1">
-
-              </div>
-            </div>
+      <div class="flex items-center justify-between w-full py-4 px-6 border-b-[1.5px]">
+        <div class="flex items-center">
+          <div
+            class="flex gap-x-2 items-center py-[10px] px-4 border rounded-[80px] text-base font-semibold cursor-pointer"
+            :class="processRouteClass"
+            @click="openRoute(ROUTE_HR_BUSINESS_TRIP_PROCESS)"
+          >
+            <base-iconify
+              :icon="CheckListMinimalisticIcon"
+              :class="processIconClass"
+            />
+            <span>{{ t('process') }}</span>
           </div>
 
-          <verification-process
-            v-for="(item, index) in verificationList"
-            :item="item"
-            :verifications="verificationList"
-            :index="index"
-          />
+          <div class="flex h-2 bg-greyscale-200 w-8"></div>
 
-          <report-process
-            v-if="isProcessFinished"
-            :verifications="verificationList"
-          />
-
-        </div>
-      </div>
-
-      <div class="absolute flex flex-col gap-y-2 right-[32px] top-[102px] w-[298px] max-h-[72vh] overflow-y-auto rounded-2xl border border-primary-100 bg-primary-10 p-4 pt-3">
-        <span class="text-base text-primary-900 font-semibold">{{ t('documents') }}</span>
-
-        <a
-          v-for="doc in BTStore.detailModel?.compose"
-          class="flex items-center justify-between bg-greyscale-70 rounded-[10px] py-1 px-2 cursor-pointer"
-          target="_blank"
-          :href="doc.file"
-        >
-          <div class="flex items-center gap-x-3">
-            <div class="flex justify-center items-center w-8 h-8 border bg-white rounded-lg">
-              <base-iconify
-                :icon="FileTextBoldIcon"
-                class="text-primary-500 !w-4 !h-4"
-              />
-            </div>
-
-            <div class="flex flex-col gap-y-[2px]">
-              <span class="text-sm text-greyscale-900 font-medium">{{ doc.file_name }} ({{t(doc.name)}})</span>
-              <span class="text-greyscale-500 text-xs font-medium">{{ doc.file_size }} MB</span>
-            </div>
+          <div
+            class="flex gap-x-2 items-center py-[10px] px-4 border bg-greyscale-50 rounded-[80px] text-base font-semibold cursor-pointer"
+            :class="reportRouteClass"
+            @click="openRoute(ROUTE_HR_BUSINESS_TRIP_ADVANCE_REPORT_LIST)"
+          >
+            <base-iconify
+              :icon="BillListIcon"
+              :class="reportIconClass"
+            />
+            <span>{{ t('avans-report') }}</span>
           </div>
+        </div>
 
-          <base-iconify
-            :icon="AltArrowRightIcon"
-            class="text-greyscale-400 !w-4 !h-4"
-          />
-        </a>
+        <base-button
+          v-if="route.name === ROUTE_HR_BUSINESS_TRIP_ADVANCE_REPORT_LIST"
+          label="create"
+          :icon-left="Plus20SolidIcon"
+          rounded
+          type="button"
+          @click="router.push({ name: ROUTE_HR_BUSINESS_TRIP_ADVANCE_REPORT_CREATE })"
+        />
       </div>
+
+      <router-view />
+
     </div>
   </template>
 </template>

@@ -16,7 +16,7 @@ const fileInput = ref(null);
 const uploadingFiles = ref([]);
 const isDragging = ref(false);
 
-const emit = defineEmits(['emit:fileUpload']);
+const emit = defineEmits(['emit:fileUpload', 'emit:onFileDelete']);
 const props = defineProps({
   files: {
     type: Array,
@@ -35,6 +35,17 @@ const props = defineProps({
 	required: {
 		type: Boolean
 	},
+  multiple: {
+    type: Boolean,
+    default: true
+  },
+  size: {
+    type: String,
+    default: 'normal',
+    validator(value) {
+      return ['x-small', 'small', 'normal', 'large'].includes(value)
+    }
+  },
 })
 
 // Methods
@@ -106,10 +117,14 @@ const setFiles = () => {
   }
 }
 const deleteFile = (file) => {
-  fileInput.value.value = "";
+  fileInput.value.value = ""
   const index = uploadingFiles.value.findIndex(x => x.id === file.id);
   uploadingFiles.value.splice(index, 1);
-  emit("emit:fileUpload", uploadingFiles.value.filter(file => file.uploaded));
+  if (props.multiple) {
+    emit("emit:fileUpload", uploadingFiles.value.filter(file => file.uploaded))
+  } else {
+    emit("emit:onFileDelete")
+  }
 }
 
 onMounted(() => {
@@ -130,14 +145,17 @@ onMounted(() => {
 
 	  <base-label :label="props.label" :required="props.required" />
 
-    <input type="file" name="file" multiple hidden ref="fileInput" @change="onFileSelect">
+    <input type="file" name="file" :multiple="props.multiple" hidden ref="fileInput" @change="onFileSelect">
 
     <div
-      class="group flex items-center justify-center bg-greyscale-50 hover:bg-primary-30 rounded-xl border-dashed h-16 border-[2px] border-greyscale-200 hover:border-primary-200 cursor-pointer"
+      v-if="!props.multiple && !uploadingFiles.length"
+      class="group flex items-center justify-center bg-greyscale-50 hover:bg-primary-30 rounded-xl border-dashed border-[2px] border-greyscale-200 hover:border-primary-200 cursor-pointer"
       :class="[
         { 'bg-primary-50' : isDragging },
         props.containerClass,
-        { '!h-16': props.firstPreview && !!props.files.length }
+        { '!h-16': props.firstPreview && !!props.files.length },
+        { '!h-16': props.size === 'normal' },
+        { 'h-14': props.size === 'small' }
       ]"
       @click="chooseFiles"
       @dragover.prevent="onDragOver"
@@ -182,7 +200,7 @@ onMounted(() => {
               <div class="flex">
                 <div class="bg-white rounded-lg p-2 flex justify-center items-center">
                   <base-iconify
-                    :name="FileTextBoldIcon"
+                    :icon="FileTextBoldIcon"
                     :class="file.uploaded === false ? 'text-critic-500' : 'text-primary-500'"
                   />
                 </div>

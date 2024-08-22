@@ -2,7 +2,8 @@ import axiosConfig from "@/services/axios.config"
 
 const URLS = {
   trips: "trips",
-  tripVerification: "trip-verification"
+  tripVerification: "trip-verification",
+  tripExpenses: "trip-expenses"
 }
 
 export const fetchBusinessTripList = (params = {}) => {
@@ -16,4 +17,7 @@ export const fetchMarkBusinessTripLeft = (id) => {
 }
 export const fetchMarkBusinessTripArrived = (id) => {
   return axiosConfig.put(`${URLS.tripVerification}/${id}/mark-arrived/`)
+}
+export const fetchAdvanceReportCreate = (body) => {
+  return axiosConfig.post(`${URLS.tripExpenses}/`, body)
 }

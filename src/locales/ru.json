@@ -342,5 +342,12 @@
   "confirm-with-eri": "Подтвердите электронным ключом!",
   "confirm": "Подтвердить",
   "perform-action": "Вы действительно хотите это сделать?",
-  "reports": "Отчеты"
+  "reports": "Отчеты",
+  "attached-documents": "Прикрепленные файлы",
+  "amount": "Сумма",
+  "expense-type": "Тип расхода",
+  "expenses": "Расходы",
+  "select-expense-type": "Выберите тип расхода",
+  "enter-amount": "Введите сумма",
+  "total-expenses": "Общие расходы"
 }

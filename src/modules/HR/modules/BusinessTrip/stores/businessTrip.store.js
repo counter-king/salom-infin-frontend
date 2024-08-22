@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia'
 // Services
 import {
+  fetchAdvanceReportCreate,
   fetchBusinessTripDetail,
   fetchBusinessTripList, fetchMarkBusinessTripArrived, fetchMarkBusinessTripLeft,
 } from "@/modules/HR/modules/BusinessTrip/services"
@@ -15,6 +16,7 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
     totalCount: 0,
     listLoading: false,
     detailLoading: false,
+    buttonLoading: false,
     businessTripList: [],
     detailModel: {},
     headers: [
@@ -42,6 +44,17 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
         header: "Филиалы",
         field: "destinations",
         active: true
+      }
+    ],
+
+    advanceReportModel: [
+      {
+        amount: null,
+        comment: null,
+        date: null,
+        trip: null,
+        type: null,
+        file: null
       }
     ],
   }),
@@ -78,6 +91,48 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
           await this.actionGetBusinessTripDetail(tripId)
         }
       }
+    },
+    /** **/
+    actionManageAdvanceReport(index) {
+      if (index === 0) {
+        this.advanceReportModel.push({
+          amount: null,
+          comment: null,
+          date: null,
+          trip: null,
+          type: null,
+          file: null
+        })
+      } else {
+        this.advanceReportModel.splice(index, 1)
+      }
+    },
+    /** **/
+    async actionAdvanceReportCreate(tripId) {
+      const arr = this.advanceReportModel.map(item => {
+        return {
+          ...item,
+          trip: tripId
+        }
+      })
+      this.buttonLoading = true
+      const response = await fetchAdvanceReportCreate(arr)
+      if (response.status === 201) {
+        this.buttonLoading = false
+      }
+    },
+    /** **/
+    actionResetModel() {
+      this.advanceReportModel = [
+        {
+          amount: null,
+          comment: null,
+          date: null,
+          trip: null,
+          type: null,
+          file: null
+        }
+      ]
     },
     /** **/
     resetHeaders() {

@@ -10,6 +10,7 @@ export { default as DragVerticalIcon } from  '~icons/ci/drag-vertical'
 export { default as CloseSmIcon } from  '~icons/ci/close-sm'
 export { default as CircleIcon } from  '~icons/ci/circle'
 export { default as RemoveMinusIcon } from  '~icons/ci/remove-minus'
+export { default as AddPlusIcon } from  '~icons/ci/add-plus'
 // Solar (Linear)
 export { default as AltArrowDownLinearIcon } from  '~icons/solar/alt-arrow-down-linear'
 export { default as DoubleAltArrowDownLinearIcon } from  '~icons/solar/double-alt-arrow-down-linear'

@@ -22,7 +22,34 @@ const BusinessTrip = [
         meta: {
           isAuthRequired: true
         },
-        component: () => import("../views/Detail.vue")
+        component: () => import("../views/Detail.vue"),
+        redirect: { name: "BusinessTripProcess" },
+        children: [
+          {
+            path: "process",
+            name: "BusinessTripProcess",
+            meta: {
+              isAuthRequired: true
+            },
+            component: () => import("../views/BusinessTripProcess/Detail.vue")
+          },
+          {
+            path: "advance-report-list",
+            name: "BusinessTripAdvanceReportList",
+            meta: {
+              isAuthRequired: true
+            },
+            component: () => import("../views/AdvanceReport/List.vue")
+          },
+          {
+            path: "advance-report-create",
+            name: "BusinessTripAdvanceReportCreate",
+            meta: {
+              isAuthRequired: true
+            },
+            component: () => import("../views/AdvanceReport/Create.vue")
+          }
+        ]
       }
     ]
   }
