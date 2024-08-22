@@ -84,10 +84,10 @@ const isProcessFinished = computed(() => {
         :index="index"
       />
 
-      <report-process
-        v-if="isProcessFinished"
-        :verifications="verificationList"
-      />
+<!--      <report-process-->
+<!--        v-if="isProcessFinished"-->
+<!--        :verifications="verificationList"-->
+<!--      />-->
 
     </div>
   </div>
