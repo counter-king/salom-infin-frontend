@@ -1,6 +1,6 @@
 <script setup>
 // Components
-import { UnreadLinearIcon } from "@/components/Icons"
+import { UnreadLinearIcon, RemoveMinusIcon } from "@/components/Icons"
 import { VerificationProcessCard, VerificationDisabledCard } from "@/modules/HR/modules/BusinessTrip/components/index"
 import {computed} from "vue";
 
@@ -43,6 +43,9 @@ const isSenderOffice = computed(() => {
 const disabledCardVisible = computed(() => {
   return isSenderOffice.value || (!isSenderOffice.value && props.verifications[props.index - 1].left_at)
 })
+const stepperIcon = computed(() => {
+  return props.item.left_at === null && props.item.arrived_at ? RemoveMinusIcon : UnreadLinearIcon
+})
 </script>
 
 <template>
@@ -71,7 +74,7 @@ const disabledCardVisible = computed(() => {
         >
           <div class="flex justify-center items-center bg-white rounded-full w-6 h-6">
             <base-iconify
-              :icon="UnreadLinearIcon"
+              :icon="stepperIcon"
               :class="iconColor"
             />
           </div>

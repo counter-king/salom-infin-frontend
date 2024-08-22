@@ -2,6 +2,7 @@
 // Core
 import {computed, ref} from "vue"
 import {useRoute} from "vue-router"
+import {useI18n} from "vue-i18n"
 // Components
 import { ArrowLeftDownIcon, ArrowRightUpIcon } from "@/components/Icons"
 import { VerificationConfirmationModal } from "@/modules/HR/modules/BusinessTrip/components/index"
@@ -24,6 +25,7 @@ const props = defineProps({
 })
 
 const route = useRoute()
+const { t } = useI18n()
 const currentUser = useAuthStore().currentUser
 const BTStore = useBusinessTripStore()
 
@@ -33,26 +35,31 @@ const dialog = ref(null)
 
 // Computed
 const isSenderOffice = computed(() => {
-  return props.item.is_sender
+  return props.verifications.find(item => item.is_sender).company?.id === currentUser?.company.id
+    && props.item.is_sender
 })
 const buttonText = computed(() => {
-  if (props.item.is_sender) {
+  if (isSenderOffice.value) {
     return 'left'
   } else {
     return 'arrived'
   }
 })
-const buttonDisabled = computed(() => {
-  return !(Number(currentUser?.company?.id) === Number(props.item?.company?.id))
+const buttonVisible = computed(() => {
+  return !props.verifications.find(item => item.company.id === currentUser.company.id).arrived_at && !isSenderOffice.value
+    && !props.verifications.find(item => item.company.id === currentUser.company.id).is_sender
 })
 const itemId = computed(() => {
   return props.verifications.find(item => item?.company?.id === currentUser.company?.id).id
+})
+const buttonVisibleForSenderOffice = computed(() => {
+  return !props.item.arrived_at && isSenderOffice.value
 })
 
 // Methods
 const onConfirm = async () => {
   try {
-    await BTStore.actionVerifyBusinessTrip(itemId.value, route.params.id, isSenderOffice ? 'left' : 'arrived')
+    await BTStore.actionVerifyBusinessTrip(itemId.value, route.params.id, isSenderOffice.value ? 'left' : 'arrived')
   } catch (err) {
     BTStore.detailLoading = false
   }
@@ -77,7 +84,7 @@ const onConfirm = async () => {
           />
         </div>
 
-        <span class="text-greyscale-400 text-xs font-medium">Прибыл</span>
+        <span class="text-greyscale-400 text-xs font-medium">{{ t('arrived') }}</span>
       </div>
 
       <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
@@ -94,7 +101,7 @@ const onConfirm = async () => {
           />
         </div>
 
-        <span class="text-greyscale-400 text-xs font-medium">Убыл</span>
+        <span class="text-greyscale-400 text-xs font-medium">{{ t('left') }}</span>
       </div>
 
       <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
@@ -106,8 +113,17 @@ const onConfirm = async () => {
       <span class="text-xs font-medium text-greyscale-400">Имя сотрудника</span>
 
       <base-button
+        v-if="buttonVisible"
         size="small"
         :label="buttonText"
+        @click="dialog = true"
+      >
+      </base-button>
+
+      <base-button
+        v-if="buttonVisibleForSenderOffice"
+        size="small"
+        label="left"
         @click="dialog = true"
       >
       </base-button>
