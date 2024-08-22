@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia'
 // Service
 import {fetchSignDetail, fetchSignList} from "@/modules/Documents/modules/Boxes/services/sign.service";
+import {fetchGetTree} from "@/modules/Documents/modules/Registration/services/docflow.service";
 
 
 export const useBoxesSignStore = defineStore("sign-stores", {
@@ -15,6 +16,7 @@ export const useBoxesSignStore = defineStore("sign-stores", {
     detailLoading: false,
     documentList: [],
     detailModel: {},
+    tree: null,
     headers: [
       // {
       //   header: "№",
@@ -118,6 +120,10 @@ export const useBoxesSignStore = defineStore("sign-stores", {
       this.detailLoading = true;
       const response = await fetchSignDetail(id);
       if (response.status === 200) {
+        if (response.data?.compose?.registered_document){
+          let { data } = await fetchGetTree(response.data?.compose?.registered_document)
+          this.tree = data
+        }
         this.detailModel = response.data;
         this.detailLoading = false;
       }

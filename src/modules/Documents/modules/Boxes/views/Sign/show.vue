@@ -1,30 +1,33 @@
 <script setup>
 // Core
-import { computed, onMounted, ref } from "vue";
-import {useRoute, useRouter} from "vue-router";
+import { computed, onMounted, ref } from "vue"
+import {useRoute, useRouter} from "vue-router"
+import {useI18n} from "vue-i18n"
 // Service
-import {fetchRejectSignDocument, fetchSignDocument} from "@/modules/Documents/modules/Boxes/services/sign.service";
+import {fetchRejectSignDocument, fetchSignDocument} from "@/modules/Documents/modules/Boxes/services/sign.service"
 // Store
-import { useBoxesSignStore } from "@/modules/Documents/modules/Boxes/stores/sign.store";
-import { useDocumentCountStore } from "@/modules/Documents/stores/count.store";
-import { useSDStore } from "@/modules/Documents/modules/SendDocuments/stores/index.store";
+import { useBoxesSignStore } from "@/modules/Documents/modules/Boxes/stores/sign.store"
+import { useDocumentCountStore } from "@/modules/Documents/stores/count.store"
+import { useSDStore } from "@/modules/Documents/modules/SendDocuments/stores/index.store"
 // Components
 import { CheckCircleIcon, Pen2Icon, XMarkSolidIcon } from '@/components/Icons'
-import { LayoutWithTabsCompose } from "@/components/DetailLayout";
-import { ModalComment } from "@/components/Modal";
-import SigningProcessTimeline from "@/modules/Documents/components/SigningProcessTimeline.vue";
-import ResolutionPerformersModal from "@/modules/Documents/modules/Boxes/components/ResolutionPerformersModal.vue";
+import { LayoutWithTabsCompose } from "@/components/DetailLayout"
+import { ModalComment } from "@/components/Modal"
+import SigningProcessTimeline from "@/modules/Documents/components/SigningProcessTimeline.vue"
+import ResolutionPerformersModal from "@/modules/Documents/modules/Boxes/components/ResolutionPerformersModal.vue"
+import { TreeUsers } from '@/components/Tree'
 // Enums
-import { CONTENT_TYPES } from "@/enums";
-import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue";
+import { CONTENT_TYPES } from "@/enums"
+import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue"
 
-const signStore = useBoxesSignStore();
-const countStore = useDocumentCountStore();
-const sdStore = useSDStore();
-const route = useRoute();
-const router = useRouter();
-const rejectModal = ref(false);
-const changeModal = ref(false);
+const signStore = useBoxesSignStore()
+const countStore = useDocumentCountStore()
+const sdStore = useSDStore()
+const route = useRoute()
+const router = useRouter()
+const { t } = useI18n()
+const rejectModal = ref(false)
+const changeModal = ref(false)
 const resolutionModal = ref(null)
 
 // Computed
@@ -34,15 +37,15 @@ const signed = computed(() => {
 
 // Methods
 const onReject = async (comment) => {
-  await fetchRejectSignDocument({ id: route.params.id, comment });
+  await fetchRejectSignDocument({ id: route.params.id, comment })
   rejectModal.value = false;
-  await signStore.actionGetSignDetail(route.params.id);
-  await countStore.actionDocumentCountList();
+  await signStore.actionGetSignDetail(route.params.id)
+  await countStore.actionDocumentCountList()
 }
 const onChangeDocument = async (text) => {
-  await sdStore.actionCustomUpdate({ id: route.query.compose_id, body: { content: text } });
-  changeModal.value = false;
-  await countStore.actionDocumentCountList();
+  await sdStore.actionCustomUpdate({ id: route.query.compose_id, body: { content: text } })
+  changeModal.value = false
+  await countStore.actionDocumentCountList()
   await router.replace({
     name: "SignIndex"
   })
@@ -138,11 +141,23 @@ onMounted( async () => {
       </template>
 
       <template #preview>
-        <div class="p-6 w-full">
+        <div class="p-6 w-full overflow-y-auto !h-[calc(100vh-250px)]">
           <signing-process-timeline
 	          v-if="signStore.detailModel && signStore.detailModel.compose"
 	          :compose-model="signStore.detailModel?.compose"
           />
+
+          <template v-if="signStore.detailModel?.compose?.registered_document && signStore.tree">
+            <div class="text-base font-semibold text-primary-900 mt-4 mb-2">{{ t('process') }}</div>
+
+            <div class="bg-greyscale-50 rounded-xl overflow-y-auto">
+              <tree-users
+                v-if="signStore.tree"
+                :tree-items="signStore?.tree"
+                root-classes="mt-0"
+              />
+            </div>
+          </template>
         </div>
       </template>
 

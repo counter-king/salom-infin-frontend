@@ -23,12 +23,19 @@ const props = defineProps({
   treeItems: {
     type: Object,
     default: () => {}
+  },
+  rootClasses: {
+    type: String,
+    default: 'mt-6'
   }
 })
 </script>
 
 <template>
-  <div class="bg-greyscale-50 rounded-lg p-6 mt-6">
+  <div
+    class="bg-greyscale-50 rounded-lg p-6"
+    :class="props.rootClasses"
+  >
     <template v-for="reviewer in treeItems.reviewers" :key="reviewer.id">
       <div class="mb-6">
         <div class="flex items-center gap-2 text-sm mb-2">

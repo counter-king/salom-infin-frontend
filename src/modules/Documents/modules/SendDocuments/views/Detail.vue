@@ -2,6 +2,7 @@
 // Core
 import {computed, onBeforeMount, onMounted} from "vue"
 import {useRoute, useRouter} from "vue-router"
+import {useI18n} from "vue-i18n"
 // Store
 import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store"
 // Components
@@ -11,10 +12,12 @@ import SigningProcessTimeline from "@/modules/Documents/components/SigningProces
 import { EyeIcon, Pen2Icon } from "@/components/Icons"
 // Enums
 import {CONTENT_TYPES} from "@/enums"
+import {TreeUsers} from "@/components/Tree"
 
 const SDStore = useSDStore()
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
 
 const isChangeable = computed(() => {
   return SDStore.detailModel
@@ -86,8 +89,20 @@ onBeforeMount(async () => {
       </template>
 
       <template #preview>
-        <div class="p-6 w-full">
+        <div class="p-6 w-full overflow-y-auto !h-[calc(100vh-250px)]">
           <signing-process-timeline :compose-model="SDStore.detailModel" />
+
+          <template v-if="SDStore.detailModel?.registered_document && SDStore.tree">
+            <div class="text-base font-semibold text-primary-900 mt-4 mb-2">{{ t('process') }}</div>
+
+            <div class="bg-greyscale-50 rounded-xl overflow-y-auto">
+              <tree-users
+                v-if="SDStore.tree"
+                :tree-items="SDStore?.tree"
+                root-classes="mt-0"
+              />
+            </div>
+          </template>
         </div>
       </template>
 

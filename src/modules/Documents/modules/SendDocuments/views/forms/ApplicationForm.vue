@@ -22,7 +22,7 @@ import PreviewDialog from "@/modules/Documents/modules/SendDocuments/components/
 import {adjustUsersToArray} from "@/utils";
 import {dispatchNotify} from "@/utils/notify";
 // Constants
-import {COLOR_TYPES, COMPOSE_DOCUMENT_TYPES} from "@/enums";
+import {COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES} from "@/enums";
 import {ROUTE_SD_DETAIL, ROUTE_SD_LIST, SD_TYPE_INNER} from "@/modules/Documents/modules/SendDocuments/constants";
 
 
@@ -82,7 +82,7 @@ const create = async () => {
     await router.replace({
       name: ROUTE_SD_LIST,
       query: {
-        journal: COMPOSE_DOCUMENT_TYPES.APPLICATION
+        document_type: COMPOSE_DOCUMENT_TYPES.APPLICATION
       }
     });
   } else {
@@ -102,7 +102,8 @@ const update = async () => {
     name: ROUTE_SD_DETAIL,
     params: {
       id: route.params.id,
-      journal: applicationStore.model.journal
+      document_type: COMPOSE_DOCUMENT_TYPES.APPLICATION,
+      document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.LABOR_LEAVE
     }
   });
 }

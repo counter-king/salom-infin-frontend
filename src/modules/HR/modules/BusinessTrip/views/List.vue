@@ -1,26 +1,37 @@
 <script setup>
 // Core
+import {computed, onMounted} from "vue"
 import {useRoute, useRouter} from "vue-router"
 // Components
 import { ActionToolbar } from "@/components/Actions"
 import BaseDataTable from "@/components/UI/BaseDataTable.vue"
 import { Plus20SolidIcon } from '@/components/Icons'
 // Store
+import {useAuthStore} from "@/modules/Auth/stores"
 import { useBusinessTripStore } from "@/modules/HR/modules/BusinessTrip/stores/businessTrip.store"
 // Enums
-import { COMPOSE_DOCUMENT_TYPES } from "@/enums"
+import {COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES} from "@/enums"
 import { HR_BUSINESS_TRIP_COLUMNS, ROUTE_HR_BUSINESS_TRIP_DETAIL } from "@/modules/HR/constants"
 import { ROUTE_SD_CREATE } from "@/modules/Documents/modules/SendDocuments/constants"
 
 const router = useRouter()
 const route = useRoute()
 const BTStore = useBusinessTripStore()
+const currentUser = useAuthStore().currentUser
+
+// Computed
+const apiParams = computed(() => {
+return route.query?.destination ? { destination: route.query.destination } : { destination: currentUser?.company?.id }
+})
 
 // Methods
 const openRoute = async () => {
   await router.push({
     name: ROUTE_SD_CREATE,
-    params: { document_type: COMPOSE_DOCUMENT_TYPES.NOTICE }
+    params: {
+      document_type: COMPOSE_DOCUMENT_TYPES.NOTICE,
+      document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP
+    }
   })
 }
 const onRowClick = async (item) => {
@@ -31,6 +42,21 @@ const onRowClick = async (item) => {
     }
   })
 }
+const manageRoute = () => {
+  if (!(route.query && route.query.destination)){
+    router.replace({
+      query: {
+        ...route.query,
+        destination: currentUser?.company?.id
+      }
+    })
+  }
+}
+
+// Hooks
+onMounted(() => {
+  manageRoute()
+})
 </script>
 
 <template>
@@ -54,7 +80,7 @@ const onRowClick = async (item) => {
 
     <base-data-table
       :action-list="BTStore.actionGetBusinessTripList"
-      :api-params="{ destination: 8 }"
+      :api-params="apiParams"
       :loading="BTStore.listLoading"
       :total-count="BTStore.totalCount"
       :value="BTStore.businessTripList"

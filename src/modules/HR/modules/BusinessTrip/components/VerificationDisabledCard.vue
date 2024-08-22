@@ -53,7 +53,7 @@ const itemId = computed(() => {
   return props.verifications.find(item => item?.company?.id === currentUser.company?.id).id
 })
 const buttonVisibleForSenderOffice = computed(() => {
-  return !props.item.arrived_at && isSenderOffice.value
+  return !props.item.arrived_at && isSenderOffice.value && !props.verifications.find(item => item.is_sender).left_at
 })
 
 // Methods
