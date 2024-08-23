@@ -5,7 +5,7 @@ import axiosConfig from "@/services/axios.config"
 // Components
 import BaseDropdown from "@/components/UI/BaseDropdown.vue"
 import {isObject} from "@/utils";
-import {UserWithLabel} from "@/components/Users";
+import { UserWithLabel, UserWithSelectable } from "@/components/Users";
 
 const props = defineProps({
   modelValue: {
@@ -65,13 +65,14 @@ onMounted(async () => {
       searchable
     >
       <template #option="{ option }">
-        <user-with-label
-          :compact="true"
-          :label="isObject(option?.user) ? option?.user.full_name : option?.full_name"
-          :title="isObject(option?.user) ? option?.user.full_name : option?.full_name"
-          color="#635AFF"
-          avatar-classes="w-6 h-6"
-        />
+        <user-with-selectable :items="[option]" />
+<!--        <user-with-label-->
+<!--          :compact="true"-->
+<!--          :label="isObject(option?.user) ? option?.user.full_name : option?.full_name"-->
+<!--          :title="isObject(option?.user) ? option?.user.full_name : option?.full_name"-->
+<!--          color="#635AFF"-->
+<!--          avatar-classes="w-6 h-6"-->
+<!--        />-->
       </template>
     </base-dropdown>
   </div>
