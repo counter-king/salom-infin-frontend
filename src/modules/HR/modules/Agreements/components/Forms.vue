@@ -81,6 +81,9 @@ const handleDocType = async (value) => {
 onMounted(async () => {
   if(route.params.id) {
     await agreementsStore.getNegotiationsById({ id: route.params.id })
+    await agreementsStore.getNegotiationSubTypes({
+      doc_type: agreementsStore.createModel.doc_type
+    })
   }
   await agreementsStore.getNegotiationTypes()
 })

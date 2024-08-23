@@ -7,6 +7,7 @@ import SessionEndMessageBar from '@/components/SessionEndMessageBar.vue'
 // Store
 import { useCommonStore } from '@/stores/common'
 import { useAuthStore } from '../modules/Auth/stores/index'
+import { useAgreementsRoutesStore } from '@/modules/HR/modules/Agreements/stores/routes.store'
 // Components
 import TheToolbar from '@/components/Toolbar/TheToolbar.vue'
 // Utils
@@ -16,6 +17,7 @@ import { ACCESS } from '@/constants/storage'
 const router = useRouter()
 const commonStore = useCommonStore()
 const authStore = useAuthStore()
+const agreementsRoutesStore = useAgreementsRoutesStore()
 // Reactive
 // TODO: false
 const appLoading = ref(true)
@@ -28,6 +30,7 @@ onMounted(async () => {
     // TODO: uncomment
     await getCurrentUser()
     await commonStore.init()
+    await agreementsRoutesStore.setCounts()
     setTimeout(() => {
       appLoading.value = false
     }, 500)

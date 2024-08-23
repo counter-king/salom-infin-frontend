@@ -48,16 +48,26 @@ const props = defineProps({
   expandable: {
     type: Boolean
   },
+  selectable: {
+    type: Boolean
+  },
   actionList: {
     type: Function,
     default: () => void 0
   }
 });
+const emit = defineEmits([
+  'emit:setStoreHeaders',
+  'emit:rowClick',
+  'emit:onPageChange',
+  'update:selection'
+]);
 const router = useRouter();
 const route = useRoute();
 const paginationStore = usePaginationStore();
 // Reactive
-const expandedRowGroups = ref();
+const expandedRowGroups = ref()
+const selection = ref()
 // Computed
 const headersComputed = computed(() => {
   return props.headers.filter(header => header.active);
@@ -106,18 +116,19 @@ const initializeTable = async () => {
     emit('emit:setStoreHeaders', JSON.parse(getStorageItem(props.storageColumnsName)))
   }
 }
-
+const updateSelection = (value) => {
+  emit('update:selection', value)
+}
+// Hooks
 onMounted( async () => {
   await initializeTable();
 })
-
-const emit = defineEmits(['emit:setStoreHeaders', 'emit:rowClick', 'emit:onPageChange']);
-
 </script>
 
 <template>
   <DataTable
     v-model:expanded-rows="expandedRowGroups"
+    v-model:selection="selection"
     :value="valueComputed"
     lazy
     :page-link-size="5"
@@ -167,7 +178,16 @@ const emit = defineEmits(['emit:setStoreHeaders', 'emit:rowClick', 'emit:onPageC
     class="base-data-table"
     @row-click="event => emit('emit:rowClick', event.data)"
     @page="onPageChange"
+    @update:selection="updateSelection"
   >
+    <template v-if="props.selectable">
+      <Column selectionMode="multiple" header-class="w-[60px]">
+<!--        <template #body="{ index, data }">-->
+<!--          das-->
+<!--        </template>-->
+      </Column>
+    </template>
+
     <Column
       header="№"
       header-class="w-[60px] bg-white text-sm font-semibold text-greyscale-500"

@@ -69,7 +69,7 @@ export const useThemeStore = defineStore("theme", {
       },
       // Handbook
       {
-        title: 'Справочик',
+        title: 'Справочник',
         icon: NotebookIcon,
         link: 'HandbookIndex',
         children: [],
