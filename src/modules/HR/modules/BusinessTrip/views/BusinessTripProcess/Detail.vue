@@ -1,15 +1,18 @@
 <script setup>
 // Core
-import { computed } from "vue"
+import {computed, ref} from "vue"
 import {useI18n} from "vue-i18n"
 // Store
 import {useBusinessTripStore} from "@/modules/HR/modules/BusinessTrip/stores/businessTrip.store"
 // Components
-import { AltArrowRightIcon, DocumentTextBoldIcon, FileTextBoldIcon, UnreadLinearIcon } from "@/components/Icons"
+import {AltArrowRightIcon, DocumentTextBoldIcon, EyeIcon, FileTextBoldIcon, UnreadLinearIcon} from "@/components/Icons"
 import { VerificationProcess, ReportProcess } from "@/modules/HR/modules/BusinessTrip/components"
+import {FilePreview} from "@/components/Files";
 
 const { t } = useI18n()
 const BTStore = useBusinessTripStore()
+const filePreview = ref(false)
+const currentFile = ref(null)
 
 // Computed
 const verificationList = computed(() => {
@@ -25,6 +28,13 @@ const verificationList = computed(() => {
 const isProcessFinished = computed(() => {
   return verificationList.value?.every(every => every.left_at && every.arrived_at)
 })
+
+// Methods
+const zoomFile = (event, file) => {
+  event.stopImmediatePropagation()
+  currentFile.value = { ...file, document: file }
+  filePreview.value = true
+}
 </script>
 
 <template>
@@ -44,7 +54,7 @@ const isProcessFinished = computed(() => {
                   :icon="DocumentTextBoldIcon"
                   class="text-primary-500"
                 />
-                <span class="text-xs text-greyscale-900 font-semibold">{{ t(item.name) }}</span>
+                <span class="text-xs text-greyscale-900 font-semibold">{{ t(item.doc_type) }}</span>
               </div>
 
               <div class="flex items-center gap-x-1">
@@ -95,11 +105,10 @@ const isProcessFinished = computed(() => {
   <div class="absolute flex flex-col gap-y-2 right-[32px] top-[102px] w-[298px] max-h-[72vh] overflow-y-auto rounded-2xl border border-primary-100 bg-primary-10 p-4 pt-3">
     <span class="text-base text-primary-900 font-semibold">{{ t('documents') }}</span>
 
-    <a
+    <div
       v-for="doc in BTStore.detailModel?.compose"
       class="flex items-center justify-between bg-greyscale-70 rounded-[10px] py-1 px-2 cursor-pointer"
-      target="_blank"
-      :href="doc.file"
+      @click="zoomFile($event, doc)"
     >
       <div class="flex items-center gap-x-3">
         <div class="flex justify-center items-center w-8 h-8 border bg-white rounded-lg">
@@ -110,17 +119,33 @@ const isProcessFinished = computed(() => {
         </div>
 
         <div class="flex flex-col gap-y-[2px]">
-          <span class="text-sm text-greyscale-900 font-medium">{{ doc.file_name }} ({{t(doc.name)}})</span>
-          <span class="text-greyscale-500 text-xs font-medium">{{ doc.file_size }} MB</span>
+          <span class="text-sm text-greyscale-900 font-medium">{{ doc.name }} ({{t(doc.doc_type)}})</span>
+          <span class="text-greyscale-500 text-xs font-medium">{{ doc.size }} MB</span>
         </div>
       </div>
 
       <base-iconify
-        :icon="AltArrowRightIcon"
-        class="text-greyscale-400 !w-4 !h-4"
+        :icon="EyeIcon"
+        class="text-primary-500"
       />
-    </a>
+    </div>
   </div>
+
+  <!-- FILE PREVIEW -->
+  <base-dialog v-model="filePreview" max-width="max-w-[820px]">
+    <template #header>
+      <div class="flex-1 truncate mr-2">
+        <h1 class="text-xl font-semibold truncate"> {{ t('preview') }} </h1>
+      </div>
+    </template>
+
+    <template #content>
+      <div class="-my-6 -mx-8 h-[80vh]">
+        <FilePreview :file="currentFile" />
+      </div>
+    </template>
+  </base-dialog>
+  <!-- /FILE PREVIEW -->
 </template>
 
 <style scoped>
