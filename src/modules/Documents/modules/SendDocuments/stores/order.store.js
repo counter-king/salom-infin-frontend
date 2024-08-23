@@ -14,6 +14,7 @@ import {
   fetchUpdateDocument
 } from "@/modules/Documents/modules/SendDocuments/services/index.service"
 import { useAuthStore } from '@/modules/Auth/stores'
+import {fetchUserDetail} from "@/services/users.service";
 
 export const useSDOrderStore = defineStore("order-store", {
   state: () => {
@@ -102,7 +103,8 @@ export const useSDOrderStore = defineStore("order-store", {
         this.model.__signers = data.signers.filter(item => item.type !== SIGNER_TYPES.NEGOTIATOR)
         this.model.__negotiators = data.signers.filter(item => item.type === SIGNER_TYPES.NEGOTIATOR)
         this.model.__approvers = data.approvers
-        this.model.__curator = useUsersStore().usersList.find(item => item.id === data.curator.id)
+        const res = await fetchUserDetail(data.curator.id)
+        this.model.__curator = res.data
 
       } catch (err) {
 

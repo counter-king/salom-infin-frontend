@@ -350,5 +350,6 @@
   "select-expense-type": "Выберите тип расхода",
   "enter-amount": "Введите сумма",
   "total-expenses": "Общие расходы",
-  "service-memo": "Служебная записка"
+  "service-memo": "Служебная записка",
+  "certificate": "Удостоверение"
 }

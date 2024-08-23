@@ -22,7 +22,7 @@ const props = defineProps({
         <div class="text-sm font-bold text-end">“Ўзсаноатқурилишбанк” АТБ</div>
         <div class="text-sm font-bold text-end">{{ props.composeModel?.curator?.position?.name }}</div>
         <div class="text-sm font-bold text-end">{{ props.composeModel && props.composeModel.curator && formatUserFullName(props.composeModel?.curator) }}га</div>
-        <div class="text-sm font-bold text-end">Банк маҳсулотларини сотиш ва тармоқларни мувофиқлаштириш департаменти </div>
+        <div class="text-sm font-bold text-end">{{ props.composeModel?.author?.top_level_department?.name }} </div>
         <div class="text-sm font-bold text-end">{{ props.composeModel?.author?.position?.name }}</div>
         <div class="text-sm font-bold text-end">{{ props.composeModel && props.composeModel.author && formatUserFullName(props.composeModel?.author) }}дан</div>
       </div>

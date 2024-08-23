@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import {onMounted, ref} from "vue"
+import {onMounted, onUnmounted, ref} from "vue"
 import {useVuelidate} from "@vuelidate/core"
 import {useI18n} from "vue-i18n"
 import {useRoute, useRouter} from "vue-router"
@@ -19,7 +19,7 @@ import UserMultiSelect from "@/components/Select/UserMultiSelect.vue"
 import UserSelect from "@/components/Select/UserSelect.vue";
 import {FORM_TYPE_CREATE} from "@/constants/constants"
 import PreviewDialog from "@/modules/Documents/modules/SendDocuments/components/PreviewDialog.vue";
-import {adjustUsersToArray} from "@/utils";
+import {adjustUsersToArray, resetModel} from "@/utils";
 import {dispatchNotify} from "@/utils/notify";
 // Constants
 import {COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES} from "@/enums";
@@ -58,8 +58,9 @@ const preview = async () => {
   applicationStore.model.signers = [ { user: authStore?.currentUser?.id } ]
   applicationStore.model.sender = authStore?.currentUser?.top_level_department?.id
   applicationStore.model.curator = applicationStore?.model?.__curator.id
-  applicationStore.model.journal= COMPOSE_DOCUMENT_TYPES.APPLICATION
-  applicationStore.model.document_type= commonStore.documentTypesList.find(item => item.id === Number(COMPOSE_DOCUMENT_TYPES.APPLICATION)).id
+  applicationStore.model.journal = COMPOSE_DOCUMENT_TYPES.APPLICATION
+  applicationStore.model.document_type = route.params.document_type
+  applicationStore.model.document_sub_type = route.params.document_sub_type
   applicationStore.model.approvers = adjustUsersToArray(applicationStore.model.__approvers)
 
 }
@@ -119,6 +120,10 @@ onMounted(async () => {
     await applicationStore.actionGetDocumentDetailForUpdate(route.params.id);
   }
 })
+
+onUnmounted(() => {
+  resetModel(applicationStore.model)
+})
 </script>
 
 <template>
@@ -148,8 +153,8 @@ onMounted(async () => {
 <!--              <pre>{{ $v.__curator.$model }}</pre>-->
             </base-col>
 
-            <base-col col-class="w-1/2">
-              <!-- :model-value="Number(route.params.document_sub_type)" -->
+<!--            <base-col col-class="w-1/2">
+              &lt;!&ndash; :model-value="Number(route.params.document_sub_type)" &ndash;&gt;
               <base-dropdown
                 v-model="$v.document_sub_type.$model"
                 v-model:options="commonStore.documentSubTypesList"
@@ -163,13 +168,15 @@ onMounted(async () => {
                 searchable
               >
               </base-dropdown>
-            </base-col>
+            </base-col>-->
 
             <base-col col-class="w-1/2">
               <user-multi-select
-                v-model="orderStore.model.__approvers"
+                v-model="$v.__approvers.$model"
+                :error="$v.__approvers"
                 label="approvers"
                 placeholder="enter-approvers"
+                required
               />
             </base-col>
 
@@ -209,7 +216,7 @@ onMounted(async () => {
         <application-letter-template
           :compose-model="{
             ...applicationStore.model,
-            curator: applicationStore.model.__curator[0],
+            curator: applicationStore.model.__curator,
             author: props.formType === FORM_TYPE_CREATE ? authStore.currentUser : applicationStore.model.__signers[0].user,
             signers: props.formType === FORM_TYPE_CREATE ? [authStore.currentUser] : applicationStore.model.__signers,
           }"

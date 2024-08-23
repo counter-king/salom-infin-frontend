@@ -48,7 +48,15 @@ const BusinessTrip = [
               isAuthRequired: true
             },
             component: () => import("../views/AdvanceReport/Create.vue")
-          }
+          },
+          {
+            path: "certificate",
+            name: "BusinessTripCertificate",
+            meta: {
+              isAuthRequired: true
+            },
+            component: () => import("../views/BusinessTripProcess/Certificate.vue")
+          },
         ]
       }
     ]

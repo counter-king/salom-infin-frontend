@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import {onMounted, ref} from "vue"
+import {onBeforeMount, onMounted, onUnmounted, ref} from "vue"
 import {useVuelidate} from "@vuelidate/core"
 import {useRoute, useRouter} from "vue-router"
 import {useI18n} from "vue-i18n"
@@ -25,7 +25,7 @@ import EditorWithTabs from "@/components/Composed/EditorWithTabs.vue"
 import {COLOR_TYPES, COMPOSE_DOCUMENT_TYPES, ROUTES_TYPE} from "@/enums"
 import PreviewDialog from "@/modules/Documents/modules/SendDocuments/components/PreviewDialog.vue"
 import UserSelect from "@/components/Select/UserSelect.vue"
-import {adjustUsersToArray} from "@/utils"
+import {adjustUsersToArray, resetModel} from "@/utils"
 import {dispatchNotify} from "@/utils/notify"
 import {ROUTE_SD_DETAIL, ROUTE_SD_LIST} from "@/modules/Documents/modules/SendDocuments/constants"
 
@@ -124,10 +124,14 @@ const manage = () => {
 }
 
 // Hooks
-onMounted( async () => {
+onBeforeMount( async () => {
   if (route.params.id) {
     await BTNoticeStore.actionGetDocumentDetailForUpdate(route.params.id)
   }
+})
+
+onUnmounted(() => {
+  resetModel(BTNoticeStore.model)
 })
 </script>
 

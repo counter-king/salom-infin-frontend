@@ -10,6 +10,7 @@ import {
 } from "@/modules/Documents/modules/SendDocuments/services/index.service"
 import {setValuesToKeys} from "@/utils"
 import {useUsersStore} from "@/stores/users.store";
+import {fetchUserDetail} from "@/services/users.service";
 
 export const useSDStoreApplication = defineStore("sd-store-application", {
   state: () => ({
@@ -40,7 +41,7 @@ export const useSDStoreApplication = defineStore("sd-store-application", {
       __curator: {
         required: helpers.withMessage(`Поле не должен быть пустым`, required)
       },
-      document_sub_type: {
+      __approvers: {
         required: helpers.withMessage(`Поле не должен быть пустым`, required)
       },
       // __approvers: {
@@ -86,8 +87,9 @@ export const useSDStoreApplication = defineStore("sd-store-application", {
         setValuesToKeys(this.model, data)
         this.model.__approvers = data.approvers
         this.model.__files = data.files
-        this.model.__curator = useUsersStore().usersList.find(item => item.id === data.curator.id)
         this.model.__signers = data.signers
+        const res = await fetchUserDetail(data.curator.id)
+        this.model.__curator = res.data
       }
       catch (error) {
 

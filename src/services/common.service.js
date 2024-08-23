@@ -131,6 +131,9 @@ export const fetchComposeStatusDetail = (id) => {
 export const fetchCompaniesList = (params) => {
   return axiosConfig.get(`${URLS.companies}/`, params)
 }
+export const fetchCompanyDetail = (id) => {
+  return axiosConfig.get(`${URLS.companies}/${id}/`)
+}
 export const fetchExpenseTypeList = (params) => {
   return axiosConfig.get(`${URLS.expenseTypes}/`, params)
 }

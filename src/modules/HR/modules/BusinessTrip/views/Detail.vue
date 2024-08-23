@@ -8,12 +8,12 @@ import { useBusinessTripStore } from "@/modules/HR/modules/BusinessTrip/stores/b
 // Components
 import {
   BillListIcon,
-  CheckListMinimalisticIcon, Plus20SolidIcon
+  CheckListMinimalisticIcon, DocumentTextBoldIcon, FileTextBoldIcon, NotesIcon, Plus20SolidIcon
 } from "@/components/Icons"
 // Enums
 import {
   ROUTE_HR_BUSINESS_TRIP_ADVANCE_REPORT_CREATE,
-  ROUTE_HR_BUSINESS_TRIP_ADVANCE_REPORT_LIST,
+  ROUTE_HR_BUSINESS_TRIP_ADVANCE_REPORT_LIST, ROUTE_HR_BUSINESS_TRIP_CERTIFICATE,
   ROUTE_HR_BUSINESS_TRIP_PROCESS
 } from "@/modules/HR/constants"
 
@@ -37,6 +37,12 @@ const reportIconClass = computed(() => {
 })
 const isProcessFinished = computed(() => {
   return false
+})
+const certificateRouteClass = computed(() => {
+  return route.name === ROUTE_HR_BUSINESS_TRIP_CERTIFICATE  ? 'border-primary-500 text-primary-900' : 'border-greyscale-70 text-greyscale-500'
+})
+const certificateIconClass = computed(() => {
+  return route.name === ROUTE_HR_BUSINESS_TRIP_CERTIFICATE  ? 'text-primary-500' : 'text-greyscale-400'
 })
 
 // Methods
@@ -85,6 +91,20 @@ onMounted( async () => {
             />
             <span>{{ t('avans-report') }}</span>
           </div>
+
+<!--          <div class="flex h-2 bg-greyscale-200 w-8"></div>-->
+
+<!--          <div-->
+<!--            class="flex gap-x-2 items-center py-[10px] px-4 border bg-greyscale-50 rounded-[80px] text-base font-semibold cursor-pointer"-->
+<!--            :class="certificateRouteClass"-->
+<!--            @click="openRoute(ROUTE_HR_BUSINESS_TRIP_CERTIFICATE)"-->
+<!--          >-->
+<!--            <base-iconify-->
+<!--              :icon="DocumentTextBoldIcon"-->
+<!--              :class="certificateIconClass"-->
+<!--            />-->
+<!--            <span>{{ t('certificate') }}</span>-->
+<!--          </div>-->
         </div>
 
         <base-button

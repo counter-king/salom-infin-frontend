@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import {onMounted, ref} from "vue"
+import {onMounted, onUnmounted, ref} from "vue"
 import { useI18n } from "vue-i18n"
 import {useRoute, useRouter} from "vue-router"
 import { useVuelidate } from "@vuelidate/core"
@@ -9,7 +9,7 @@ import { FORM_TYPE_CREATE } from "@/constants/constants"
 import {COLOR_TYPES, COMPOSE_DOCUMENT_TYPES, SIGNER_TYPES} from "@/enums"
 import { ROUTE_SD_DETAIL, ROUTE_SD_LIST } from "@/modules/Documents/modules/SendDocuments/constants"
 // Utils
-import { adjustUsersToArray } from "@/utils"
+import {adjustUsersToArray, resetModel} from "@/utils"
 import { dispatchNotify } from "@/utils/notify"
 import { formatDateReverse } from "@/utils/formatDate"
 // Store
@@ -126,6 +126,10 @@ onMounted( async () => {
   if (route.params.id) {
     await orderStore.actionGetDocumentDetailForUpdate(route.params.id)
   }
+})
+
+onUnmounted(() => {
+  resetModel(orderStore.model);
 })
 </script>
 

@@ -99,7 +99,6 @@ export const useSDStoreInner = defineStore("sd-stores-inner", {
         this.model.__signers = data.signers;
         this.model.__approvers = data.approvers;
         this.model.__files = data.files;
-        console.log(this.model)
       }
       catch (error) {
 

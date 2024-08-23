@@ -11,6 +11,10 @@ const URLS = {
 export const fetchUsersList = (params) => {
   return axiosConfig.get(`${URLS.users}/`, params)
 }
+/** **/
+export const fetchUserDetail = (id) => {
+  return axiosConfig.get(`${URLS.users}/${id}/`)
+}
 /**
  * Возвращает список группа сотрудников
  * @returns Promise

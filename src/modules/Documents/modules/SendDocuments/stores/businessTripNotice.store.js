@@ -13,6 +13,8 @@ import {useUsersStore} from "@/stores/users.store"
 import {COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL} from "@/enums";
 import {useCommonStore} from "@/stores/common";
 import { useAuthStore } from '@/modules/Auth/stores'
+import {fetchUserDetail} from "@/services/users.service";
+import {fetchCompanyDetail} from "@/services/common.service";
 
 export const useSDBTNoticeStore = defineStore("sd-notice-store", {
   state: () => {
@@ -109,13 +111,23 @@ export const useSDBTNoticeStore = defineStore("sd-notice-store", {
       try {
         this.detailLoading = true
         const { data } = await fetchGetDocumentDetail(id)
-        console.log(data)
         setValuesToKeys(this.model, data)
+        this.model.__employees = []
+        this.model.__companies = []
         this.model.__signers = data.signers
         this.model.__approvers = data.approvers
-        this.model.__curator = useUsersStore().usersList.find(item => item.id === data.curator.id)
-        this.model.__employees = data.notices.map(item => useUsersStore().usersList.find(user => user.id === item.user.id))
-        this.model.__companies = data.notices[0].destinations.map(item => useCommonStore().filialList.find(f => f.id === item.id))
+        const curator = await fetchUserDetail(data.curator.id)
+        this.model.__curator = curator.data
+
+        data.notices.forEach(async (item) => {
+          let emp = await fetchUserDetail(item.user.id)
+          this.model.__employees.push(emp.data)
+        })
+
+        data.notices[0].destinations.forEach(async (item) => {
+          let destination = await fetchCompanyDetail(item.id)
+          this.model.__companies.push(destination.data)
+        })
         this.model.start_date = data.notices[0].start_date
         this.model.end_date = data.notices[0].end_date
         this.model.__tags = data.tags

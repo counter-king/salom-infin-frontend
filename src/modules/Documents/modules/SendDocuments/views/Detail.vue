@@ -60,20 +60,21 @@ onBeforeMount(async () => {
       :files="SDStore.detailModel?.files"
     >
       <template #header-end>
-        <base-button
-          color="bg-white hover:bg-greyscale-100 text-primary-dark"
-          border-color="border-transparent"
-          label="watch-process"
-          :icon-left="EyeIcon"
-          icon-height="16"
-          icon-width="16"
-          icon-color="#767994"
-          rounded
-          shadow
-          type="button"
-        />
+<!--        <base-button-->
+<!--          color="bg-white hover:bg-greyscale-100 text-primary-dark"-->
+<!--          border-color="border-transparent"-->
+<!--          label="watch-process"-->
+<!--          :icon-left="EyeIcon"-->
+<!--          icon-height="16"-->
+<!--          icon-width="16"-->
+<!--          icon-color="#767994"-->
+<!--          rounded-->
+<!--          shadow-->
+<!--          type="button"-->
+<!--        />-->
 
         <base-button
+          v-if="!SDStore.detailModel?.registered_document"
           color="bg-white hover:bg-greyscale-100 text-primary-dark"
           border-color="border-transparent"
           label="update"
