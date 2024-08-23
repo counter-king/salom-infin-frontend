@@ -32,6 +32,8 @@ const icons = [
       <router-link :to="{ name: 'AgreementCreated' }">
         <base-button
           :icon-left="FileTextIcon"
+          icon-width="!w-4"
+          icon-height="!h-4"
           border-color="border-transparent"
           label="Созданные документы"
           outlined
@@ -84,7 +86,7 @@ const icons = [
 
         <div class="flex flex-col justify-between items-end flex-1">
           <div class="flex items-center justify-center w-8 h-8 rounded-full bg-critic-50">
-            <span class="text-critic-500 font-bold">{{ item.docs_count }}</span>
+            <span class="text-critic-500 font-bold">{{ item.docs_count_to_sign }}</span>
           </div>
 
           <img :src="icons[index % 6]" alt="icon" />

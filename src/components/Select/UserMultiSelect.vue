@@ -3,7 +3,7 @@
 import {useModel} from "vue";
 // Components
 import BaseMultiSelect from '@/components/UI/BaseMultiSelect.vue';
-import { UserWithLabel, UserWithRadio } from "@/components/Users";
+import { UserWithLabel, UserWithRadio, UserWithSelectable } from "@/components/Users";
 import {isObject} from "@/utils";
 
 const props = defineProps({
@@ -47,13 +47,7 @@ const emit = defineEmits(['update:modelValue'])
     </template>
 
     <template #option="{ value }">
-      <user-with-label
-        :compact="true"
-        :label="isObject(value?.user) ? value?.user.full_name : value?.full_name"
-        :title="isObject(value?.user) ? value?.user.full_name : value?.full_name"
-        color="#635AFF"
-        avatar-classes="w-6 h-6"
-      />
+      <user-with-selectable :items="[value]" />
     </template>
 
     <template #hint="{ value }">

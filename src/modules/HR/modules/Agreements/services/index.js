@@ -4,13 +4,14 @@ const URLS = {
   negotiationTypes: 'negotiation-types',
   negotiationSubTypes: 'negotiation-sub-types',
   negotiation: 'negotiation',
-  negotiators: 'negotiators'
+  negotiationInstances: 'negotiation-instances',
+  negotiators: 'negotiators',
+  sign: 'sign',
 }
 export const fetchNegotiationTypes = (params = {}) => {
   return axiosConfig.get(`${URLS.negotiationTypes}/`, params)
 }
 /**
- *
  *
  */
 export const fetchNegotiationSubTypes = (params = {}) => {
@@ -18,13 +19,17 @@ export const fetchNegotiationSubTypes = (params = {}) => {
 }
 /**
  *
- *
  */
 export const fetchNegotiationList = (params) => {
   return axiosConfig.get(`${URLS.negotiation}/`, params)
 }
 /**
  *
+ */
+export const fetchNegotiationInstances = (params) => {
+  return axiosConfig.get(`${URLS.negotiationInstances}/`, params)
+}
+/**
  *
  */
 export const fetchNegotiationById = ({ id, params }) => {
@@ -32,6 +37,11 @@ export const fetchNegotiationById = ({ id, params }) => {
 }
 /**
  *
+ */
+export const fetchNegotiationCreate = (body) => {
+  return axiosConfig.post(`${URLS.negotiation}/`, body)
+}
+/**
  *
  */
 export const fetchNegotiators = (params) => {
@@ -39,8 +49,7 @@ export const fetchNegotiators = (params) => {
 }
 /**
  *
- *
  */
-export const fetchNegotiationCreate = (body) => {
-  return axiosConfig.post(`${URLS.negotiation}/`, body)
+export const fetchSignNegotiators = (data) => {
+  return axiosConfig.put(`${URLS.negotiators}/${URLS.sign}/`, data)
 }

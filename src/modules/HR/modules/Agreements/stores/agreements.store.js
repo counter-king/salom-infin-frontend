@@ -6,8 +6,9 @@ import {
   fetchNegotiationSubTypes,
   fetchNegotiationList,
   fetchNegotiationById,
-  fetchNegotiators,
-  fetchNegotiationCreate
+  fetchNegotiationInstances,
+  fetchNegotiationCreate,
+  fetchNegotiators, fetchSignNegotiators
 } from '../services'
 
 let negotiationModel = {
@@ -23,24 +24,52 @@ export const useAgreementsStore = defineStore('agreements-store', {
   state: () => ({
     headers: [
       {
-        header: 'Название документа',
-        field: 'name',
+        header: 'Категория документа',
+        field: 'negotiation.doc_type.name',
         active: true
       },
       {
-        header: 'Статус',
-        field: 'status',
+        header: 'Вид документа',
+        field: 'negotiation.doc_sub_type.name',
         active: true
       },
       {
-        header: 'Дата',
-        field: 'date',
+        header: 'Дата создание',
+        field: 'created_date',
         active: true
       },
+      {
+        header: '',
+        field: 'actions',
+        active: true
+      }
     ],
     notSignedList: [],
     notSignedCount: 0,
     signedList: [],
+    signedHeaders: [
+      {
+        header: 'Категория документа',
+        field: 'negotiation.doc_type.name',
+        active: true
+      },
+      {
+        header: 'Вид документа',
+        field: 'negotiation.doc_sub_type.name',
+        active: true
+      },
+      {
+        header: 'Дата подписание',
+        field: 'action_date',
+        active: true
+      },
+      {
+        header: '',
+        field: 'actions',
+        active: true
+      }
+    ],
+    signedCount: 0,
     createdHeaders: [
       {
         header: 'Название документа',
@@ -82,7 +111,6 @@ export const useAgreementsStore = defineStore('agreements-store', {
     },
     /**
      *
-     *
      */
     async getNegotiationSubTypes(params) {
       try {
@@ -94,7 +122,6 @@ export const useAgreementsStore = defineStore('agreements-store', {
       }
     },
     /**
-     *
      *
      */
     async getNegotiations() {
@@ -108,7 +135,6 @@ export const useAgreementsStore = defineStore('agreements-store', {
     },
     /**
      *
-     *
      */
     async getNegotiationsById({ id, params = {} }) {
       try {
@@ -116,10 +142,10 @@ export const useAgreementsStore = defineStore('agreements-store', {
 
         let { data } = await fetchNegotiationById({ id, params })
         this.createModel.title = data.title
-        this.createModel.doc_type = data.doc_type
-        this.createModel.doc_sub_type = data.doc_sub_type
+        this.createModel.doc_type = data.doc_type.id
+        this.createModel.doc_sub_type = data.doc_sub_type.id
         this.createModel.content = data.content
-        console.log(data)
+        this.createModel.__users = data.users
       }
       finally {
         setTimeout(() => {
@@ -129,14 +155,14 @@ export const useAgreementsStore = defineStore('agreements-store', {
     },
     /**
      *
-     *
      */
     async getNegotiators(params) {
-      console.log(params)
       try {
         let { data } = await fetchNegotiators(params)
-        console.log(data.results)
-        // this.createdList = data.results
+        return Promise.resolve(data)
+      }
+      catch (error) {
+        return Promise.reject()
       }
       finally {
 
@@ -144,6 +170,52 @@ export const useAgreementsStore = defineStore('agreements-store', {
     },
     /**
      *
+     */
+    async getNegotiatorsNotSigned(params) {
+      try {
+        let { results } = await this.getNegotiators(params)
+        this.notSignedList = results
+      }
+      finally {
+
+      }
+    },
+    /**
+     *
+     */
+    async getNegotiatorsSigned(params) {
+      try {
+        let { results } = await this.getNegotiators(params)
+        this.signedList = results
+      }
+      finally {
+
+      }
+    },
+    /**
+     *
+     */
+    async signNegotiatorsNotSigned(value) {
+      try {
+        await fetchSignNegotiators({ ids: value })
+        return Promise.resolve()
+      }
+      catch(error) {
+        return Promise.reject()
+      }
+    },
+    /**
+     *
+     */
+    async getNegotiationInstances(params) {
+      try {
+        let { data } = await fetchNegotiationInstances(params)
+      }
+      finally {
+
+      }
+    },
+    /**
      *
      */
     async createNegotiation() {
@@ -160,6 +232,6 @@ export const useAgreementsStore = defineStore('agreements-store', {
       catch(error) {
         return Promise.reject()
       }
-    }
+    },
   }
 })
