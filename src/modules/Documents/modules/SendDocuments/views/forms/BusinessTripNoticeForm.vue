@@ -161,6 +161,16 @@ onUnmounted(() => {
             </base-col>
 
             <base-col col-class="w-1/2">
+              <base-input
+                v-model="$v.short_description.$model"
+                :error="$v.short_description"
+                required
+                label="short-description"
+                placeholder="enter-short-description"
+              />
+            </base-col>
+
+            <base-col col-class="w-1/2">
               <user-multi-select
                 v-model="$v.__employees.$model"
                 :error="$v.__employees"

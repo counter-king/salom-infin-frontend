@@ -1,7 +1,7 @@
 <script setup>
 // Core
-import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import {ref, onMounted, computed} from 'vue'
+import {useRoute, useRouter} from 'vue-router'
 // Store
 import { useDocumentCountStore } from '../../../../stores/count.store'
 import { useDocFlowStore } from '../../../Registration/stores/docflow.store'
@@ -13,15 +13,22 @@ import { LayoutWithTabs } from '@/components/DetailLayout'
 import { ResolutionDropdown } from '@/components/Resolution'
 import { ModalForwardDocument, ModalDoneDocument, ModalCancelSign } from '@/components/Modal'
 // Enums
-import { STATUS_TYPES } from '@/enums'
+import {COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, STATUS_TYPES} from '@/enums'
+import {CheckCircleIcon} from "@/components/Icons";
+import {ROUTE_SD_CREATE} from "@/modules/Documents/modules/SendDocuments/constants";
 // Composable
 const route = useRoute()
+const router = useRouter()
 const countStore = useDocumentCountStore()
 const docflowStore = useDocFlowStore()
 const boxesCommonStore = useBoxesCommonStore()
 const reviewStore = useReviewStore()
 // Reactive
 const loading = ref(true)
+// Computed
+const createOrderVisible = computed(() => {
+  return [COMPOSE_DOCUMENT_TYPES.NOTICE, COMPOSE_DOCUMENT_TYPES.APPLICATION].includes(String(reviewStore.detailModel?.document?.document_type?.id))
+})
 // Hooks
 onMounted(async () => {
   loading.value = true
@@ -30,6 +37,7 @@ onMounted(async () => {
   setTimeout(() => {
     loading.value = false
   }, 500)
+  console.log(reviewStore.detailModel)
 })
 // Methods
 const signDocument = async () => {
@@ -85,6 +93,27 @@ const handleDocumentStatus = async () => {
         }"
       >
         <template #header-end>
+
+          <!-- Create order button -->
+          <base-button
+            v-if="createOrderVisible"
+            label="create-order"
+            :icon-left="CheckCircleIcon"
+            rounded
+            type="button"
+            @click="router.push({
+			        name: ROUTE_SD_CREATE,
+			        params: {
+								document_type: COMPOSE_DOCUMENT_TYPES.ORDER,
+								document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER
+							},
+							query: {
+								compose_id: reviewStore.detailModel?.document?.compose.id
+							}
+						})"
+          />
+          <!-- /Create order button -->
+
           <!-- Если документ ознакомлен -->
           <template v-if="reviewStore.isDocumentAcquainted">
             <action-answer-menu />

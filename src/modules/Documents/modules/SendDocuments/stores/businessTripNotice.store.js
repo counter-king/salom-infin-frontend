@@ -35,6 +35,7 @@ export const useSDBTNoticeStore = defineStore("sd-notice-store", {
         notices: [],
         start_date: null,
         end_date: null,
+        short_description: null,
         route: null,
         companies: [],
         sender: null,
@@ -77,6 +78,9 @@ export const useSDBTNoticeStore = defineStore("sd-notice-store", {
           required: helpers.withMessage(`Поле не должен быть пустым`, required)
         },
         __tags: {
+          required: helpers.withMessage(`Поле не должен быть пустым`, required)
+        },
+        short_description: {
           required: helpers.withMessage(`Поле не должен быть пустым`, required)
         },
       }

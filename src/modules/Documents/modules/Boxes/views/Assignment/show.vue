@@ -29,8 +29,7 @@ const assignmentStore = useAssignmentStore()
 const loading = ref(true)
 // Computed
 const createOrderVisible = computed(() => {
-	return assignmentStore.detailModel?.document?.document_type?.id === Number(COMPOSE_DOCUMENT_TYPES.NOTICE) &&
-		assignmentStore.detailModel?.document?.document_sub_type?.id === Number(COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP)
+  return [COMPOSE_DOCUMENT_TYPES.NOTICE, COMPOSE_DOCUMENT_TYPES.APPLICATION].includes(String(assignmentStore.detailModel?.document?.document_type?.id))
 })
 // Hooks
 onMounted(async () => {

@@ -104,6 +104,10 @@ const author = computed(() => {
       BILDIRISHNOMA
     </div>
 
+    <div class="text-sm italic text-justify mt-4 indent-8">
+      Qisqacha mazmuni: {{ props.composeModel?.short_description }}
+    </div>
+
     <div class="text-justify mt-4" v-html="props.composeModel?.content"></div>
 
     <div class="employees-table text-sm mt-4">
