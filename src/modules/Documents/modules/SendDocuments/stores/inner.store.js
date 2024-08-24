@@ -12,12 +12,14 @@ import {SD_TYPE_INNER} from "@/modules/Documents/modules/SendDocuments/constants
 import logger from "quill/core/logger";
 import {adjustDepartmentObjectToArray, adjustUserObjectToArray, setValuesToKeys} from "@/utils";
 import {COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL} from "@/enums";
+import {useAuthStore} from "@/modules/Auth/stores";
 
 export const useSDStoreInner = defineStore("sd-stores-inner", {
   state: () => ({
     buttonLoading: false,
     detailLoading: false,
     model: {
+      company: useAuthStore().currentUser?.company?.id,
       content: null,
       document_type: COMPOSE_DOCUMENT_TYPES.INNER,
       document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.SERVICE_LETTER,

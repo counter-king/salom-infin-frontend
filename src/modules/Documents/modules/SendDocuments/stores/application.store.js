@@ -12,12 +12,14 @@ import {adjustUserObjectToArray, setValuesToKeys} from "@/utils"
 import {useUsersStore} from "@/stores/users.store";
 import {fetchUserDetail} from "@/services/users.service";
 import {SIGNER_TYPES} from "@/enums";
+import {useAuthStore} from "@/modules/Auth/stores";
 
 export const useSDStoreApplication = defineStore("sd-store-application", {
   state: () => ({
     buttonLoading: false,
     detailLoading: false,
     model: {
+      company: useAuthStore().currentUser?.company?.id,
       content: null,
       curator: null,
       document_type: null,
