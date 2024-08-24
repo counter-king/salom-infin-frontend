@@ -36,11 +36,19 @@ const numberOfDays = computed(() => {
 
 const verifications = computed(() => {
   let arr = []
-  BTStore.detailModel?.verifications.forEach(item => {
+  BTStore.detailModel?.verifications?.forEach(item => {
     arr.push({
-
+      arrived: null,
+      left: item.left_at,
+      filial: item.company?.name,
+      full_name: item.verified_by?.full_name
     })
+
   })
+
+  // BTStore.detailModel?.verifications?.map()
+
+  return arr
 })
 </script>
 
@@ -106,7 +114,7 @@ const verifications = computed(() => {
     </div>
   </div>
 
-  <pre>{{ BTStore.detailModel }}</pre>
+  <pre>{{ verifications }}</pre>
 </template>
 
 <style scoped>

@@ -10,17 +10,21 @@ import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue"
 import {LayoutWithTabsCompose} from "@/components/DetailLayout"
 import SigningProcessTimeline from "@/modules/Documents/components/SigningProcessTimeline.vue"
 import { EyeIcon, Pen2Icon } from "@/components/Icons"
+import {TreeUsers} from "@/components/Tree"
 // Enums
 import {CONTENT_TYPES} from "@/enums"
-import {TreeUsers} from "@/components/Tree"
 
 const SDStore = useSDStore()
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 
+// Computed
 const isChangeable = computed(() => {
   return SDStore.detailModel
+})
+const title = computed(() => {
+  return route.params?.document_type ? SDStore.SD_TOOLBAR_MENU_LIST.find(item => item.document_type === route.params?.document_type).label : SDStore.SD_TOOLBAR_MENU_LIST[0].label
 })
 
 // Methods
@@ -54,7 +58,7 @@ onBeforeMount(async () => {
   <template v-else>
 <!--    <pre>{{ isChangeable }}</pre>-->
     <layout-with-tabs-compose
-      :title="SDStore.detailModel?.title?.name"
+      :title="title"
       :object-id="SDStore.detailModel?.id"
       :content-type="CONTENT_TYPES.SEND_DOCUMENT"
       :files="SDStore.detailModel?.files"

@@ -24,7 +24,7 @@ const emit = defineEmits(['update:modelValue'])
 <template>
   <base-multi-select
     v-model="modelValue"
-    api-url="departments"
+    api-url="departments/top-level-departments"
     :api-params="{ condition: 'A' }"
     :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
     display="chip"

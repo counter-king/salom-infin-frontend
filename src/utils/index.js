@@ -1,4 +1,6 @@
 import dayjs from 'dayjs'
+import {fetchUsersList} from "@/services/users.service";
+import {fetchCompaniesList, fetchDepartmentList} from "@/services/common.service";
 /**
  * Проверяет все ключи объекта
  * Заполнен ли объект с данными или нет
@@ -225,4 +227,67 @@ export const removeKeysWithDoubleUnderscore = (obj) => {
     }
   }
   return jsonObj;
+}
+
+export const adjustUserObjectToArray = async (items = [], userId = null, multiple = true) => {
+  if (items.length && multiple) {
+    const userIds = items.map(item => item.user.id).join(',')
+    const res = await fetchUsersList({ ids: userIds })
+    if (res && res.status === 200) {
+      return Promise.resolve(res.data.results)
+    } else {
+      return Promise.reject([])
+    }
+  } else if (multiple === false && userId){
+    const res = await fetchUsersList({ ids: userId })
+    if (res && res.status === 200) {
+      return Promise.resolve(res.data.results[0])
+    } else {
+      return Promise.reject(null)
+    }
+  } else {
+    return null
+  }
+}
+
+export const adjustDepartmentObjectToArray = async (items = [], departmentId = null, multiple = true) => {
+  if (items.length && multiple) {
+    const depIds = items.map(item => item.id).join(',')
+    const res = await fetchDepartmentList({ids: depIds})
+    if (res && res.status === 200) {
+      return Promise.resolve(res.data.results)
+    } else {
+      return Promise.reject([])
+    }
+  } else if (multiple === false && departmentId){
+    const res = await fetchDepartmentList({ ids: departmentId })
+    if (res && res.status === 200) {
+      return Promise.resolve(res.data.results[0])
+    } else {
+      return Promise.reject(null)
+    }
+  } else {
+    return null
+  }
+}
+
+export const adjustCompanyObjectToArray = async (items = [], companyId = null, multiple = true) => {
+  if (items.length && multiple) {
+    const compIds = items.map(item => item.id).join(',')
+    const res = await fetchCompaniesList({ids: compIds})
+    if (res && res.status === 200) {
+      return Promise.resolve(res.data.results)
+    } else {
+      return Promise.reject([])
+    }
+  } else if (multiple === false && companyId){
+    const res = await fetchCompaniesList({ ids: companyId })
+    if (res && res.status === 200) {
+      return Promise.resolve(res.data.results[0])
+    } else {
+      return Promise.reject(null)
+    }
+  } else {
+    return null
+  }
 }

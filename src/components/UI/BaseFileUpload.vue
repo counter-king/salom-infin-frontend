@@ -148,7 +148,7 @@ onMounted(() => {
     <input type="file" name="file" :multiple="props.multiple" hidden ref="fileInput" @change="onFileSelect">
 
     <div
-      v-if="!props.multiple && !uploadingFiles.length"
+      v-if="!uploadingFiles.length || props.multiple"
       class="group flex items-center justify-center bg-greyscale-50 hover:bg-primary-30 rounded-xl border-dashed border-[2px] border-greyscale-200 hover:border-primary-200 cursor-pointer"
       :class="[
         { 'bg-primary-50' : isDragging },

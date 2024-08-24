@@ -2,7 +2,7 @@
 import { defineStore } from 'pinia'
 // Utils
 import { helpers, required } from "@vuelidate/validators"
-import { setValuesToKeys } from "@/utils"
+import {adjustUserObjectToArray, setValuesToKeys} from "@/utils"
 import { withAsync } from "@/utils/withAsync"
 // Enums
 import {COMPOSE_DOCUMENT_TYPES, JOURNAL, SIGNER_TYPES} from "@/enums"
@@ -100,12 +100,10 @@ export const useSDOrderStore = defineStore("order-store", {
         this.detailLoading = true
         const {data} = await fetchGetDocumentDetail(id)
         setValuesToKeys(this.model, data)
-        this.model.__signers = data.signers.filter(item => item.type !== SIGNER_TYPES.NEGOTIATOR)
-        this.model.__negotiators = data.signers.filter(item => item.type === SIGNER_TYPES.NEGOTIATOR)
-        this.model.__approvers = data.approvers
-        const res = await fetchUserDetail(data.curator.id)
-        this.model.__curator = res.data
-
+        this.model.__signers = await adjustUserObjectToArray(data.signers.filter(item => item.type !== SIGNER_TYPES.NEGOTIATOR))
+        this.model.__negotiators = await adjustUserObjectToArray(data.signers.filter(item => item.type === SIGNER_TYPES.NEGOTIATOR))
+        this.model.__approvers = await adjustUserObjectToArray(data.approvers)
+        this.model.__curator = await adjustUserObjectToArray([], data.curator.id, false)
       } catch (err) {
 
       }

@@ -10,7 +10,7 @@ import {
 } from "@/modules/Documents/modules/SendDocuments/services/index.service";
 import {SD_TYPE_INNER} from "@/modules/Documents/modules/SendDocuments/constants";
 import logger from "quill/core/logger";
-import {setValuesToKeys} from "@/utils";
+import {adjustDepartmentObjectToArray, adjustUserObjectToArray, setValuesToKeys} from "@/utils";
 import {COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL} from "@/enums";
 
 export const useSDStoreInner = defineStore("sd-stores-inner", {
@@ -39,9 +39,6 @@ export const useSDStoreInner = defineStore("sd-stores-inner", {
     },
     rules: {
       register_number: {
-        required: helpers.withMessage(`Поле не должен быть пустым`, required)
-      },
-      title: {
         required: helpers.withMessage(`Поле не должен быть пустым`, required)
       },
       short_description: {
@@ -86,25 +83,25 @@ export const useSDStoreInner = defineStore("sd-stores-inner", {
       } catch (err) {
 
       } finally {
-        this.buttonLoading = false;
+        this.buttonLoading = false
       }
     },
     /** **/
     async actionGetDocumentDetailForUpdate(id){
       try {
         this.detailLoading = true;
-        const { data } = await fetchGetDocumentDetail(id);
-        setValuesToKeys(this.model, data);
-        this.model.__departments = data.receiver.departments;
-        this.model.__signers = data.signers;
-        this.model.__approvers = data.approvers;
-        this.model.__files = data.files;
+        const { data } = await fetchGetDocumentDetail(id)
+        setValuesToKeys(this.model, data)
+        this.model.__approvers =  await adjustUserObjectToArray(data.approvers)
+        this.model.__signers =  await adjustUserObjectToArray(data.signers)
+        this.model.__departments = await adjustDepartmentObjectToArray(data.receiver.departments)
+        this.model.__files = data.files
       }
       catch (error) {
 
       }
       finally {
-        this.detailLoading = false;
+        this.detailLoading = false
       }
     }
   }

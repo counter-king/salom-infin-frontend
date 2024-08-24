@@ -5,14 +5,16 @@ import {
   fetchCustomUpdate,
   fetchGetDocumentDetail,
   fetchGetDocumentList
-} from "@/modules/Documents/modules/SendDocuments/services/index.service";
+} from "@/modules/Documents/modules/SendDocuments/services/index.service"
 // Utils
-import { withAsync } from "@/utils/withAsync";
-import { dispatchNotify } from "@/utils/notify";
+import { withAsync } from "@/utils/withAsync"
+import { dispatchNotify } from "@/utils/notify"
 // Enums
 import {COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES} from "@/enums"
 import {ROUTE_SD_CREATE} from "@/modules/Documents/modules/SendDocuments/constants"
-import {fetchGetTree} from "@/modules/Documents/modules/Registration/services/docflow.service";
+import {fetchGetTree} from "@/modules/Documents/modules/Registration/services/docflow.service"
+// Components
+import {DocumentAddIcon, DocumentMedicineIcon, NotebookLinearIcon, NotesIcon} from "@/components/Icons"
 
 export const useSDStore = defineStore("sd-stores", {
   state: () => ({
@@ -185,7 +187,7 @@ export const useSDStore = defineStore("sd-stores", {
       {
         id: 1,
         label: 'service-letter',
-        icon: 'NotebookIcon',
+        icon: NotebookLinearIcon,
         type: 'menu',
         hasRouterLink: false,
         active: true,
@@ -203,7 +205,7 @@ export const useSDStore = defineStore("sd-stores", {
       {
         id: 2,
         label: 'notice',
-        icon: 'NotesIcon',
+        icon: NotesIcon,
         type: 'menu',
         hasRouterLink: false,
         active: false,
@@ -229,7 +231,7 @@ export const useSDStore = defineStore("sd-stores", {
       {
         id: 3,
         label: 'application',
-        icon: 'DocumentAddIcon',
+        icon: DocumentAddIcon,
         type: 'menu',
         hasRouterLink: false,
         active: false,
@@ -287,7 +289,7 @@ export const useSDStore = defineStore("sd-stores", {
       {
         id: 4,
         label: 'order',
-        icon: 'DocumentMedicineIcon',
+        icon: DocumentMedicineIcon,
         type: 'menu',
         hasRouterLink: false,
         active: false,

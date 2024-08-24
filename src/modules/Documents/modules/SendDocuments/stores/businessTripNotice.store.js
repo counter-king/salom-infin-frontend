@@ -8,7 +8,7 @@ import {
   fetchCreateDocument,
   fetchGetDocumentDetail, fetchUpdateDocument
 } from "@/modules/Documents/modules/SendDocuments/services/index.service"
-import {setValuesToKeys} from "@/utils"
+import {adjustCompanyObjectToArray, adjustUserObjectToArray, setValuesToKeys} from "@/utils"
 import {useUsersStore} from "@/stores/users.store"
 import {COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL} from "@/enums";
 import {useCommonStore} from "@/stores/common";
@@ -112,22 +112,12 @@ export const useSDBTNoticeStore = defineStore("sd-notice-store", {
         this.detailLoading = true
         const { data } = await fetchGetDocumentDetail(id)
         setValuesToKeys(this.model, data)
-        this.model.__employees = []
         this.model.__companies = []
-        this.model.__signers = data.signers
-        this.model.__approvers = data.approvers
-        const curator = await fetchUserDetail(data.curator.id)
-        this.model.__curator = curator.data
-
-        data.notices.forEach(async (item) => {
-          let emp = await fetchUserDetail(item.user.id)
-          this.model.__employees.push(emp.data)
-        })
-
-        data.notices[0].destinations.forEach(async (item) => {
-          let destination = await fetchCompanyDetail(item.id)
-          this.model.__companies.push(destination.data)
-        })
+        this.model.__curator = await adjustUserObjectToArray([], data.curator.id, false)
+        this.model.__employees = await adjustUserObjectToArray(data.notices)
+        this.model.__approvers =  await adjustUserObjectToArray(data.approvers)
+        this.model.__signers =  await adjustUserObjectToArray(data.signers)
+        this.model.__companies = await adjustCompanyObjectToArray(data.notices[0].destinations)
         this.model.start_date = data.notices[0].start_date
         this.model.end_date = data.notices[0].end_date
         this.model.__tags = data.tags

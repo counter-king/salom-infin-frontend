@@ -159,7 +159,7 @@ onUnmounted(() => {
               />
             </base-col>
 
-            <base-col col-class="w-1/2">
+<!--            <base-col col-class="w-1/2">
               <base-dropdown
                 v-model="$v.title.$model"
                 v-model:options="commonStore.documentTitleList"
@@ -173,7 +173,7 @@ onUnmounted(() => {
                 searchable
               >
               </base-dropdown>
-            </base-col>
+            </base-col>-->
 
             <base-col col-class="w-1/2">
               <base-input

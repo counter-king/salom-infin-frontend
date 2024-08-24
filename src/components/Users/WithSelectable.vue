@@ -7,6 +7,7 @@ import { CheckCircleBoldIcon } from '@/components/Icons'
 import avatarProps from './props'
 // Utils
 import { isObject } from '@/utils'
+import {USER_STATUS_CODES} from "@/enums";
 // Macros
 const props = defineProps({
   ...avatarProps,
@@ -65,6 +66,14 @@ const handleSelect = (item) => {
     checkboxIndex.value = id
   }
 }
+const returnStatusColor = (status) => {
+  switch (status.code){
+    case USER_STATUS_CODES.WORKERS:
+      return 'text-success-500'
+    default:
+      return 'text-warning-500'
+  }
+}
 </script>
 
 <template>
@@ -97,7 +106,7 @@ const handleSelect = (item) => {
         <div class="flex items-center gap-2 text-xs">
           <slot name="chip-prepend" :item="item" />
 
-          <p class="text-warning-500">{{ item.status?.name }}</p>
+          <p :class="returnStatusColor(item.status)">{{ item.status?.name }}</p>
 
           <template v-if="item.position">
             <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-full"></div>
