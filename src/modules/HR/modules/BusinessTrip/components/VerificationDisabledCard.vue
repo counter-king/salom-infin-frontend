@@ -47,7 +47,7 @@ const buttonText = computed(() => {
 })
 const buttonVisible = computed(() => {
   return !props.verifications.find(item => item.company.id === currentUser.company.id).arrived_at && !isSenderOffice.value
-    && !props.verifications.find(item => item.company.id === currentUser.company.id).is_sender
+    && props.verifications.find(item => item.company.id === currentUser.company.id).is_sender === false && (!props.item.is_sender && !(props.item.arrived_at && props.item.left_at))
 })
 const itemId = computed(() => {
   return props.verifications.find(item => item?.company?.id === currentUser.company?.id).id
@@ -90,6 +90,10 @@ const onConfirm = async () => {
       <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
 
       <span class="text-xs font-medium text-greyscale-400">Дата</span>
+
+      <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
+
+      <span class="text-xs font-medium text-greyscale-400">Имя сотрудника</span>
     </div>
 
     <div class="flex items-center gap-x-[6px]">
@@ -107,10 +111,13 @@ const onConfirm = async () => {
       <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
 
       <span class="text-xs font-medium text-greyscale-400">Дата</span>
+
+      <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
+
+      <span class="text-xs font-medium text-greyscale-400">Имя сотрудника</span>
     </div>
 
-    <div class="flex justify-between items-center">
-      <span class="text-xs font-medium text-greyscale-400">Имя сотрудника</span>
+    <div class="flex justify-end items-center">
 
       <base-button
         v-if="buttonVisible"

@@ -99,7 +99,9 @@ onMounted(async () => {
       </template>
 
       <template #short_description="{ data }">
-        {{ data.compose.short_description }}
+        <div class="max-w-[200px] truncate">
+          {{ data.compose.short_description }}
+        </div>
       </template>
     </base-data-table>
   </div>

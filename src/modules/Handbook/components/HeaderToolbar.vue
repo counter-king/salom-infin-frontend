@@ -25,7 +25,7 @@ watchEffect(async () => {
   }
 
   if(branchSelect.value) {
-    let { data } = await fetchDepartmentList({ page_size: 30, company: branchSelect.value })
+    let { data } = await fetchDepartmentList({ page_size: 100, company: branchSelect.value })
     deparments.value = data.results
     deparmentSelect.value = data.results[0] ? data.results[0].id : null
   }
@@ -44,7 +44,7 @@ watchEffect(async () => {
 })
 // Hooks
 onMounted(async () => {
-  let { data } = await fetchCompaniesList({ page_size: 30 })
+  let { data } = await fetchCompaniesList({ page_size: 100 })
   branches.value = data.results
   branchSelect.value = data.results[0].id
 })

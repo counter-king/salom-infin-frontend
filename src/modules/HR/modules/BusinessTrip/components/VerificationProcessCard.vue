@@ -10,6 +10,7 @@ import {ArrowLeftDownIcon, ArrowRightUpIcon} from "@/components/Icons"
 import {formatDateHour} from "@/utils/formatDate";
 import {useAuthStore} from "@/modules/Auth/stores";
 import {VerificationConfirmationModal} from "@/modules/HR/modules/BusinessTrip/components/index"
+import {formatUserFullName} from "../../../../../utils";
 
 const props = defineProps({
   item: {
@@ -46,7 +47,7 @@ const buttonText = computed(() => {
   return 'left'
 })
 const buttonVisible = computed(() => {
-  return props.item.arrived_at && !props.item.left_at
+  return props.item.arrived_at && !props.item.left_at && (props.item?.company?.id === currentUser?.company.id)
 })
 const itemId = computed(() => {
   return props.verifications.find(item => item?.company?.id === currentUser.company?.id).id
@@ -71,6 +72,7 @@ const onConfirm = async () => {
 
 <template>
   <div class="flex flex-col rounded-xl border border-greyscale-100 py-[10px] px-3 bg-greyscale-50 mb-[6px] gap-y-2">
+<!--    <pre>{{ props.item }}</pre>-->
     <span class="text-primary-900 text-sm font-semibold">
       {{ props.item?.company?.name }}
     </span>
@@ -93,6 +95,10 @@ const onConfirm = async () => {
       <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
 
       <span class="text-xs font-medium text-greyscale-500">{{ formatDateHour(props.item?.arrived_at) }}</span>
+
+      <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
+
+      <span class="text-xs font-medium text-primary-900">{{ formatUserFullName(props.item.arrived_verified_by) }}</span>
     </div>
 
     <div
@@ -124,10 +130,19 @@ const onConfirm = async () => {
       <span class="text-xs font-medium text-greyscale-500">
         {{ isLeft ? formatDateHour(props.item?.left_at) : t('date') }}
       </span>
+
+      <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
+
+      <span
+        class="text-xs font-medium"
+        :class="isLeft ? 'text-primary-900' : 'text-greyscale-500'"
+      >
+        {{ isLeft ? formatUserFullName(props.item.left_verified_by) : 'Имя сотрудника'}}
+      </span>
+
     </div>
 
-    <div class="flex justify-between items-center">
-      <span class="text-xs font-medium text-primary-900">{{ props.item.verified_by?.full_name }}</span>
+    <div class="flex justify-end items-center">
 
       <base-button
         v-if="buttonVisible"

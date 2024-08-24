@@ -98,11 +98,9 @@ const select = ref({
 
           <div class="max-w-[150px] w-full py-3 px-4 cursor-pointer" @click="modal = true; select = user">
             <!-- TODO: испавить потом -->
-            <template v-if="user.status === 'V rabote'">
-              <status-chip :status="{ id: 13 }">
-                {{ user.status }}
-              </status-chip>
-            </template>
+            <status-chip type="handbook" :status="user.status">
+              {{ user.status.name }}
+            </status-chip>
           </div>
 
           <div class="max-w-[225px] w-full py-3 px-4 cursor-pointer" @click="modal = true; select = user">

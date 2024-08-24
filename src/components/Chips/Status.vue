@@ -4,7 +4,7 @@ import { computed } from 'vue'
 // Store
 import { useCommonStore } from '@/stores/common'
 // Utils
-import { STATUS_TYPES } from '@/enums'
+import {STATUS_TYPES, USER_STATUS_CODES} from '@/enums'
 // Composable
 const commonStore = useCommonStore()
 // Macros
@@ -27,7 +27,7 @@ const props = defineProps({
     type: String,
     default: 'registration',
     validator(value) {
-      return ['registration', 'compose'].includes(value)
+      return ['registration', 'compose', 'handbook'].includes(value)
     }
   }
 })
@@ -44,6 +44,13 @@ const statement = computed(() => {
         return "bg-success-50 text-success-500 border-success-500"
       default:                                                              // Отклоненный
         return "bg-critic-50 text-critic-500 border-critic-500"
+    }
+  } else if (props.type === 'handbook'){
+    switch (props.status.code) {
+      case USER_STATUS_CODES.WORKERS:
+        return 'bg-success-50 text-success-500 border-success-500'
+      default:
+        return 'bg-warning-50 text-warning-500 border-warning-500'
     }
   } else {
     switch (props.status?.id) {

@@ -3,7 +3,7 @@
 import {computed} from "vue"
 // Components
 import { ReportProcessCard } from "@/modules/HR/modules/BusinessTrip/components/index"
-import {UnreadLinearIcon} from "@/components/Icons"
+import {RemoveMinusIcon, UnreadLinearIcon} from "@/components/Icons"
 
 const props = defineProps({
   verifications: {
@@ -28,19 +28,19 @@ const alignment = computed(() => {
     <div class="flex flex-col items-center w-8">
       <div
         class="flex justify-center items-center rounded-full w-8 h-8"
-        :class="`bg-success-500`"
+        :class="`bg-warning-300`"
       >
         <div class="flex justify-center items-center bg-white rounded-full w-6 h-6">
           <base-iconify
-            :icon="UnreadLinearIcon"
-            :class="`text-success-500`"
+            :icon="RemoveMinusIcon"
+            :class="`text-warning-300`"
           />
         </div>
       </div>
 
       <div
         class="w-2 flex-1"
-        :class="`bg-success-500`"
+        :class="`bg-warning-300`"
       >
 
       </div>
