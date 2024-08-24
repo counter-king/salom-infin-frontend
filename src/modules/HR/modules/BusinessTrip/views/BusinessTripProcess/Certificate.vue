@@ -7,6 +7,7 @@ import {useBusinessTripStore} from "@/modules/HR/modules/BusinessTrip/stores/bus
 import {formatDate} from "@/utils/formatDate"
 // Components
 import QrcodeVue from "qrcode.vue"
+import {formatUserFullName} from "@/utils";
 
 const BTStore = useBusinessTripStore()
 
@@ -37,18 +38,47 @@ const numberOfDays = computed(() => {
 const verifications = computed(() => {
   let arr = []
   BTStore.detailModel?.verifications?.forEach(item => {
-    arr.push({
-      arrived: null,
-      left: item.left_at,
-      filial: item.company?.name,
-      full_name: item.verified_by?.full_name
-    })
-
+    if (item.is_sender && item.left_at) {
+      arr.push({
+        label: 'Jo\'nadi',
+        actionTime: item.left_at,
+        filial: item.company?.name,
+        responsible: formatUserFullName(item.left_verified_by)
+      })
+    }
+    if (!item.is_sender && item.left_at) {
+      arr.push({
+        label: 'Jo\'nadi',
+        actionTime: item.left_at,
+        filial: item.company?.name,
+        responsible: formatUserFullName(item.left_verified_by)
+      })
+    } if (!item.is_sender && item.arrived_at){
+      arr.push({
+        label: 'Keldi',
+        actionTime: item.arrived_at,
+        filial: item.company?.name,
+        responsible: formatUserFullName(item.arrived_verified_by)
+      })
+    } if (item.is_sender && item.arrived_at) {
+      arr.push({
+        label: 'Keldi',
+        actionTime: item.arrived_at,
+        filial: item.company?.name,
+        responsible: formatUserFullName(item.arrived_verified_by)
+      })
+    }
   })
 
   // BTStore.detailModel?.verifications?.map()
 
-  return arr
+  return arr.sort((a, b) => new Date(a.actionTime) - new Date(b.actionTime))
+})
+const orderRegisteredNumber = computed(() => {
+  return BTStore.detailModel?.compose?.find(item => item.doc_type === 'order').register_number
+})
+const orderRegisteredDate = computed(() => {
+  return BTStore.detailModel?.compose?.find(item => item.doc_type === 'order').register_date
 })
 </script>
 
@@ -74,7 +104,7 @@ const verifications = computed(() => {
         </div>
 
         <div>
-          <span class="font-semibold">Asos: </span> 13.08.2024 dagi 11-k-sonli buyruq
+          <span class="font-semibold">Asos: </span> {{ formatDate(orderRegisteredDate) }} dagi {{ orderRegisteredNumber }}-sonli buyruq
         </div>
       </div>
 
@@ -93,13 +123,13 @@ const verifications = computed(() => {
       <div>
         <base-row>
           <base-col
-            v-for="item in 1"
+            v-for="item in verifications"
             col-class="w-1/2"
           >
             <div class="text-sm flex flex-col">
-              <div><span class="font-semibold">Jo'nadi:</span> 12.08.2024</div>
-              <div><span class="font-semibold">Filial:</span> Bosh ofis</div>
-              <div><span class="font-semibold">Mas'ul xodim: </span> E.Toshmatov</div>
+              <div><span class="font-semibold">{{ item.label }}:</span> {{ formatDate(item.actionTime) }}</div>
+              <div><span class="font-semibold">Filial:</span> {{ item.filial }}</div>
+              <div><span class="font-semibold">Mas'ul xodim: </span> {{ item.responsible }}</div>
               <qrcode-vue
                 :value="'Work Zone'"
                 :size="50"
@@ -113,8 +143,6 @@ const verifications = computed(() => {
       </div>
     </div>
   </div>
-
-  <pre>{{ verifications }}</pre>
 </template>
 
 <style scoped>
