@@ -6,7 +6,7 @@ import { DragVerticalIcon, CheckCircleBoldIcon } from '@/components/Icons'
 // Props
 import avatarProps from './props'
 // Utils
-import { isObject } from '@/utils'
+import {isObject, returnStatusColor} from '@/utils'
 // Macros
 const props = defineProps({
   ...avatarProps,
@@ -112,7 +112,7 @@ const handleSelect = (item) => {
       <div class="flex items-center gap-2 text-xs">
         <slot name="chip-prepend" :item="item" />
 
-        <p class="text-warning-500">{{ item.status?.name }}</p>
+        <p :class="returnStatusColor(item?.status?.code)">{{ item.status?.name }}</p>
 
         <template v-if="item.position">
           <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-full"></div>

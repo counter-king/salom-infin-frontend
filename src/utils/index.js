@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import {fetchUsersList} from "@/services/users.service";
 import {fetchCompaniesList, fetchDepartmentList} from "@/services/common.service";
+import {STATUS_COLORS, STATUS_TYPES, USER_STATUS_CODES} from "@/enums";
 /**
  * Проверяет все ключи объекта
  * Заполнен ли объект с данными или нет
@@ -289,5 +290,14 @@ export const adjustCompanyObjectToArray = async (items = [], companyId = null, m
     }
   } else {
     return null
+  }
+}
+
+export const returnStatusColor = (code) => {
+  switch (code) {
+    case USER_STATUS_CODES.WORKERS:
+      return 'text-success-500'
+    default:
+      return 'text-warning-500'
   }
 }

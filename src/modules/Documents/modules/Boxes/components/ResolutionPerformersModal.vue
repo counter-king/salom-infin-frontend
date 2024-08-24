@@ -11,6 +11,7 @@ import { useVuelidate } from "@vuelidate/core"
 import { useRoute } from "vue-router"
 // Store
 import { useUsersStore } from "@/stores/users.store";
+import {adjustUserObjectToArray} from "@/utils";
 
 const dialog = ref(false)
 const buttonLoading = ref(false)
@@ -66,12 +67,10 @@ const onSign = async () => {
 }
 
 // Hooks
-onMounted(() => {
+onMounted( async () => {
   if (props.performers.length && props.resolutionText) {
-    props.performers.forEach(item => {
-      let user = useUsersStore().usersList.find(user => user.id === item.id)
-      model.value.__performers.push(user)
-    })
+    let users = props.performers.map(item => ({ ...item, user: item }))
+    model.value.__performers = await adjustUserObjectToArray(users)
     model.value.resolution_text = props.resolutionText
   }
 })

@@ -18,8 +18,8 @@ const props = defineProps({
 <template>
   <div class="resolution-deputy-chairman-view">
     <h1 class="text-center text-sm font-semibold uppercase text-primary-dark">
-      <span class="block">{{ formatNameToShort(props.resolution?.reviewer?.full_name) }}</span>
-      <span class="block">O'zbekiston respublikasi markaziy banki</span>
+      <span class="block">{{ props.resolution?.reviewer?.position?.name }}</span>
+      <span class="block">"O'ZBEKISTON SANOAT-QURILISH BANKI" ATB</span>
 
       <template v-if="ROLES.FIRST_DEPUTY_CHAIRMAN === props.resolution?.reviewer?.role?.name">
         <span class="block">raisining birinchi o'rinbosari</span>

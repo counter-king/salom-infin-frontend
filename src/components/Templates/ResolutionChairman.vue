@@ -16,8 +16,8 @@ const props = defineProps({
 <template>
   <div class="resolution-deputy-chairman-view">
     <h1 class="text-center text-sm font-semibold uppercase text-primary-dark">
-      <span class="block">O'zbekiston respublikasi markaziy banki</span>
-      <span class="block">{{ formatNameToShort(props.resolution?.reviewer?.full_name) }}</span>
+      <span class="block">"O'ZBEKISTON SANOAT-QURILISH BANKI" ATB</span>
+      <span class="block">{{ props.resolution?.reviewer?.position?.name }}</span>
     </h1>
 
     <div class="max-w-[400px] w-full h-1 bg-primary-dark mx-auto mt-3 mb-5"></div>
