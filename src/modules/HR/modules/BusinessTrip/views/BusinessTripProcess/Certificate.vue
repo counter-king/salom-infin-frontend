@@ -8,6 +8,7 @@ import {formatDate} from "@/utils/formatDate"
 // Components
 import QrcodeVue from "qrcode.vue"
 import {formatUserFullName} from "@/utils";
+import {AltArrowDownIcon, DownloadMinimalisticIcon} from "@/components/Icons";
 
 const BTStore = useBusinessTripStore()
 
@@ -84,7 +85,7 @@ const orderRegisteredDate = computed(() => {
 
 <template>
   <div class="flex justify-center px-6 py-6 overflow-y-auto" style="height: calc(100% - 100px)">
-    <div class="w-[600px] h-fit min-h-full border shadow py-10 px-8">
+    <div class="w-[600px] h-fit border shadow py-10 px-8">
       <div class="flex justify-center text-base font-semibold text-greyscale-900">
         Xizmat safari guvohnomasi
       </div>
@@ -140,6 +141,14 @@ const orderRegisteredDate = computed(() => {
             </div>
           </base-col>
         </base-row>
+      </div>
+
+      <div class="flex justify-end items-end mt-8">
+        <base-button
+          label="download"
+          :icon-left="DownloadMinimalisticIcon"
+          type="button"
+        />
       </div>
     </div>
   </div>

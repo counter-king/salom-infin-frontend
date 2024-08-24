@@ -351,5 +351,6 @@
   "enter-amount": "Введите сумма",
   "total-expenses": "Общие расходы",
   "service-memo": "Служебная записка",
-  "certificate": "Удостоверение"
+  "certificate": "Удостоверение",
+  "download": "Скачать"
 }
