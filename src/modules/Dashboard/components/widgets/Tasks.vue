@@ -62,7 +62,7 @@ const toggle = (event) => {
         size="small"
         outlined
         :icon-right="AltArrowDownIcon"
-        button-class="!w-4 !h-4 !bg-greyscale-50 !py-1 !px-2 !rounded-[6px] border-none"
+        button-class="!bg-greyscale-50 !py-1 !px-2 !rounded-[6px] border-none"
         @click="toggle"
       >
         <template #label>
