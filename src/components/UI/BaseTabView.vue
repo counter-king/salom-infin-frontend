@@ -111,7 +111,7 @@ const zoomFile = (event, pane) => {
                 'm-0 pt-4 pb-[10px] px-0 mx-4': !props.segment,
                 'max-w-[200px] truncate': props.truncate,
                 'py-2 px-3 rounded-[6px] !bg-greyscale-50 font-semibold mr-2': props.segment,
-                '!m-0 !p-2 !rounded-lg': props.bricks
+                '!m-0 !p-2 !rounded-lg !border-transparent': props.bricks
               }
             ]
           })
@@ -129,7 +129,7 @@ const zoomFile = (event, pane) => {
             />
 
             <p
-              class="text-sm h-6"
+              class="flex items-center text-sm h-6"
               :class="{
                 'truncate': props.truncate,
                 '!text-sm': props.bricks

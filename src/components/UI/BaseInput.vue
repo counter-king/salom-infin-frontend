@@ -87,7 +87,7 @@ const { t } = useI18n()
       :pt="{
         root: {
           class: [
-            'w-full text-greyscale-900 font-medium rounded-xl bg-greyscale-50 border-greyscale-50 focus:border-primary-500 placeholder:text-sm placeholder:font-regular placeholder:text-greyscale-400',
+            'w-full text-greyscale-900 font-medium rounded-xl bg-greyscale-50 border-greyscale-50 focus:border-primary-500 placeholder:text-sm placeholder:font-regular placeholder:text-greyscale-400 p-[0.68rem]',
             {
               'p-invalid !shadow-none': props.error.$error
             },

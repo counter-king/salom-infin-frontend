@@ -47,7 +47,7 @@ const { t } = useI18n()
         },
         input: {
           class: [
-            'w-full rounded-xl bg-greyscale-50 border-greyscale-50 focus:border-primary-500 placeholder:text-sm placeholder:font-medium',
+            'w-full min-h-[44px] rounded-xl bg-greyscale-50 text-sm border-greyscale-50 focus:border-primary-500 placeholder:text-sm placeholder:font-medium py-[0.68rem] pl-[0.68rem]',
             {
               'p-invalid !shadow-none': props.error.$error
             }
