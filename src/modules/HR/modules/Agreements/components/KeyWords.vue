@@ -1,36 +1,34 @@
 <script setup>
 // Components
 import { InfoCircleBoldIcon, QuestionCircleIcon, CopyIcon } from '@/components/Icons'
+// Macros
+const emit = defineEmits(['emit:up'])
 // Non-reactive
 const items = [
   {
-    key: 'the_date_begin',
-    description: 'Дата начала'
+    key: 'last_name',
+    description: 'Фамилия'
   },
   {
-    key: 'the_date_End',
-    description: 'Дата окончания'
+    key: 'first_name',
+    description: 'Имя'
   },
   {
-    key: 'worker_name',
-    description: 'Имя сотрудника'
+    key: 'father_name',
+    description: 'Отчество'
   },
   {
-    key: 'holiday',
-    description: 'Праздничный день'
+    key: 'department',
+    description: 'Департамент'
   },
   {
-    key: 'agreements',
-    description: 'Согласия'
+    key: 'division',
+    description: 'Отдел'
   },
   {
-    key: 'the_date_Begin',
-    description: 'Дата начала'
-  },
-  {
-    key: 'the_date_begin',
-    description: 'Дата начала'
-  },
+    key: 'position',
+    description: 'Позиция'
+  }
 ]
 </script>
 
@@ -75,6 +73,7 @@ const items = [
               <base-iconify
                 :icon="CopyIcon"
                 class="!w-4 !h-4 cursor-pointer text-greyscale-400 hover:text-primary-500"
+                @click="emit('emit:up', item.key)"
               />
             </div>
           </li>

@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { nextTick, onMounted, useModel } from "vue";
+import { ref, onMounted, useModel } from "vue";
 import { useI18n } from "vue-i18n";
 // Components
 import { Froala } from "vue-froala-wysiwyg/src/vue-froala";
@@ -31,6 +31,10 @@ const props = defineProps({
 const { t } = useI18n();
 const modelValue = useModel(props, 'modelValue');
 const emit = defineEmits(['update:modelValue']);
+// Reactive
+const editor = ref(null)
+// Macros
+defineExpose({ editor })
 const config = {
 	placeholderText: '',
 	charCounterCount: false,

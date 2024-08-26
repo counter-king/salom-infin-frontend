@@ -48,6 +48,7 @@ const router = useRouter()
 const agreementsStore = useAgreementsStore()
 const $v = useVuelidate(rules, agreementsStore.createModel)
 // Reactive
+const editor = ref(null)
 const loading = ref(false)
 const dialog = ref(false)
 // Methods
@@ -76,6 +77,20 @@ const handleDocType = async (value) => {
   await agreementsStore.getNegotiationSubTypes({
     doc_type: value
   })
+}
+const handleKeyWords = (key) => {
+  let el = document.querySelector('.fr-element > p')
+  const range = document.createRange()
+  const selection = window.getSelection()
+  el.innerHTML = `${el.innerHTML} (${key})&nbsp;`
+
+  // Устанавливаем диапазон в конец содержимого элемента
+  range.setStart(el.childNodes[el.childNodes.length - 1], el.childNodes[el.childNodes.length - 1].length)
+  range.collapse(true)
+
+  // Очищаем текущее выделение и устанавливаем новый диапазон
+  selection.removeAllRanges()
+  selection.addRange(range)
 }
 // Hooks
 onMounted(async () => {
@@ -198,6 +213,7 @@ onMounted(async () => {
                   <base-label label="Текст документа" :required="true" />
 
                   <base-froala-editor
+                    ref="editor"
                     v-model="$v.content.$model"
                     :error="$v.content"
                     :disabled="props.type === FORM_TYPE_READ"
@@ -215,7 +231,7 @@ onMounted(async () => {
             </div>
 
             <div class="max-w-[420px] w-full">
-              <key-words class="sticky top-6" />
+              <key-words class="sticky top-6" @emit:up="handleKeyWords" />
             </div>
           </div>
         </template>
