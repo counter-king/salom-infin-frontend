@@ -18,8 +18,8 @@ import FileTabs from './components/FileTabs.vue'
 import BackButton from "@/components/Actions/BackButton.vue"
 // Enums
 import { CONTENT_TYPES } from '@/enums'
-import {textDifference} from "@/utils";
-import {formatDateHour} from "@/utils/formatDate";
+import {textDifference} from "@/utils"
+import {formatDateHour} from "@/utils/formatDate"
 // Composable
 const route = useRoute()
 const router = useRouter()
