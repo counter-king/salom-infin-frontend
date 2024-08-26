@@ -59,6 +59,11 @@ export const useAgreementsStore = defineStore('agreements-store', {
         active: true
       },
       {
+        header: 'Статус',
+        field: 'sign',
+        active: true
+      },
+      {
         header: 'Дата подписание',
         field: 'action_date',
         active: true
