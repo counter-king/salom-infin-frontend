@@ -39,7 +39,7 @@ const classes = computed(() => {
       />
     </slot>
 
-    <h1 class="max-w-[140px] text-xs font-semibold text-primary-900 truncate">{{ props.title }}</h1>
+    <h1 class="max-w-[240px] text-xs font-semibold text-primary-900 truncate">{{ props.title }}</h1>
   </div>
 </template>
 

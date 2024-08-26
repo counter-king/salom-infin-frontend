@@ -141,7 +141,7 @@ const rootClasses = computed(() => {
     // Size
     {
       'size-small': props.size === 'small',
-      'size-normal h-11': props.size === null || props.size === 'normal',
+      'size-normal': props.size === null || props.size === 'normal',
     },
   ]
 })
@@ -205,6 +205,7 @@ watch(debounced, async () => {
       :placeholder="t(props.placeholder)"
       :display="props.display"
       :disabled="props.disabled"
+      :panel-style="{ height: 'auto' }"
       filter
       @show="() => inputRef.focus()"
       :pt="{
@@ -214,7 +215,7 @@ watch(debounced, async () => {
         token: {
           class: [
             props.tokenClass,
-            'chip-hover shadow-button bg-white cursor-pointer'
+            'chip-hover shadow-button bg-white cursor-pointer h-8'
           ]
         },
         tokenLabel: {
@@ -222,7 +223,7 @@ watch(debounced, async () => {
         },
         label: {
           class: [
-            'text-sm font-regular text-greyscale-400',
+            'text-sm font-regular text-greyscale-400 flex flex-wrap gap-y-2',
             {
               'size-small py-[2px] pr-2 pl-4': props.size === 'x-small',
               'size-small py-[5px] pr-2 pl-4': props.size === 'small',
@@ -320,7 +321,7 @@ watch(debounced, async () => {
       </template>
     </MultiSelect>
 
-    <div v-if="modelValue && modelValue.length >= props.selectionLength" class="flex items-center gap-2">
+<!--    <div v-if="modelValue && modelValue.length >= props.selectionLength" class="flex items-center gap-2">
       <div class="flex items-center flex-1 gap-2 py-2 truncate">
         <template v-for="user in modelValue">
           <slot name="hint" :value="user" />
@@ -376,7 +377,7 @@ watch(debounced, async () => {
           </div>
         </template>
       </base-menu>
-    </div>
+    </div>-->
 
     <template v-if="props.error.$errors.length">
       <div class="space-y-1 mt-2">

@@ -81,6 +81,9 @@ const orderRegisteredNumber = computed(() => {
 const orderRegisteredDate = computed(() => {
   return BTStore.detailModel?.compose?.find(item => item.doc_type === 'order').register_date
 })
+const curatorFullName = computed(() => {
+  return BTStore.detailModel?.compose?.find(item => item.doc_type === 'order').curator
+})
 </script>
 
 <template>
@@ -116,7 +119,7 @@ const orderRegisteredDate = computed(() => {
           level="L"
           render-as="svg"
         />
-        <span class="text-sm font-medium text-greyscale-900">A. G'aybullayev</span>
+        <span class="text-sm font-medium text-greyscale-900">{{ curatorFullName }}</span>
       </div>
 
       <div class="text-sm font-semibold text-greyscale-900 my-4">Berilgan manzilga yetib borish va u yerdan qaytish belgilari:</div>

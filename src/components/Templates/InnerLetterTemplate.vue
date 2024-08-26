@@ -65,7 +65,6 @@ const SDStore = useSDStore()
     </div>
 
     <div v-if="SDStore.historyShow" class="text-justify" v-html="SDStore.historyContent"></div>
-
     <div v-else class="text-justify" v-html="props.composeModel?.content"></div>
 
     <base-signers-template :signers="props.composeModel?.signers" />

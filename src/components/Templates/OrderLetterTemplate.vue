@@ -8,6 +8,7 @@ import { formatUserFullName } from "@/utils"
 import { SIGNER_TYPES } from "@/enums"
 // Store
 import { useAuthStore } from "@/modules/Auth/stores"
+import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store"
 // Components
 import QrcodeVue from "qrcode.vue"
 import { BaseHeaderTemplate } from "@/components/Templates/components"
@@ -23,6 +24,9 @@ const props = defineProps({
     default: false
   }
 })
+
+// Composable
+const SDStore = useSDStore()
 
 const author = computed(() => {
   return props.preview ? useAuthStore().currentUser : props.composeModel?.author
@@ -59,7 +63,8 @@ const negotiators = computed(() => {
       BUYRUQ
     </div>
 
-    <div class="text-justify mt-4" v-html="props.composeModel?.content"></div>
+    <div v-if="SDStore.historyShow" class="text-justify" v-html="SDStore.historyContent"></div>
+    <div v-else class="text-justify" v-html="props.composeModel?.content"></div>
 
     <div class="mt-6 pb-2 px-4">
       <template v-for="item in signers" :key="item.id">

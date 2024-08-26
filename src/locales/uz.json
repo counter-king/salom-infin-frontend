@@ -353,7 +353,7 @@
   "service-memo": "Служебная записка",
   "certificate": "Удостоверение",
   "download": "Скачать",
-  "version-history": "История версий",
+  "change-history": "История изменения",
   "change-time": "Дата изменения",
   "transport-type": "Вид транспорта",
   "select-transport-type": "Выбирайте вид транспорта"

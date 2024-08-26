@@ -8,15 +8,14 @@ import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index
 // Components
 import BaseSpinner from '@/components/UI/BaseSpinner.vue'
 import {
-  AltArrowLeftIcon,
   EyeIcon,
   ClockCircleIcon,
   ChatLineIcon,
   FileTextIcon,
-  CloseSmIcon,
   CloseCircleBoldIcon
 } from '@/components/Icons'
 import FileTabs from './components/FileTabs.vue'
+import BackButton from "@/components/Actions/BackButton.vue"
 // Enums
 import { CONTENT_TYPES } from '@/enums'
 import {textDifference} from "@/utils";
@@ -131,22 +130,8 @@ const closeHistoryDetail = () => {
     <template v-if="props.toolbar">
       <div class="flex items-center justify-between h-10 mb-5">
         <div class="flex items-center gap-3">
-          <base-button
-            v-tooltip.left="{
-              value: `<h4 class='text-xs text-white -my-1'>Назад</h4>`,
-              escape: true,
-              autoHide: false
-            }"
-            size="small"
-            :icon-left="AltArrowLeftIcon"
-            icon-width="!w-4 !h-4"
-            only-icon
-            outlined
-            shadow
-            border-color="border-transparent"
-            button-class="h-8"
-            @click="router.go(-1)"
-          />
+
+          <back-button />
 
           <h1 class="font-bold text-xl text-primary-900">{{ props.title ? t(props.title) : t('title-document') }}</h1>
         </div>
@@ -167,30 +152,30 @@ const closeHistoryDetail = () => {
             class="flex flex-col max-w-[690px] w-full border-l px-5"
           >
             <div class="flex justify-between relative">
-              <span class="text-xs font-medium text-greyscale-500">{{ t('version-history') }}</span>
+<!--              <span class="text-xs font-medium text-greyscale-500">{{ t('version-history') }}</span>-->
               <base-iconify
                 v-if="SDStore.historyShow"
                 :icon="CloseCircleBoldIcon"
-                class="text-critic-500 cursor-pointer !w-6 !h-6 absolute right-0 top-2"
+                class="text-critic-500 cursor-pointer !w-8 !h-8 absolute right-0 top-2"
                 @click="closeHistoryDetail"
               />
             </div>
-            <div class="flex gap-x-1 overflow-x-auto">
+            <div class="flex gap-x-2 overflow-x-auto h-full">
               <div
                 v-for="item in SDStore.versionHistoryList"
                 v-tooltip.top="{
-                  value: `<h4 class='text-xs text-white -my-1 !w-[250px]'>${t('author')}: ${item.created_by.full_name} <br> ${t('change-time')}: ${formatDateHour(item.created_date)}</h4>`,
+                  value: `<h4 class='text-xs text-white -my-1 !w-[250px]'> ${t('change-history')} <br> ${t('author')}: ${item.created_by.full_name} <br> ${t('change-time')}: ${formatDateHour(item.created_date)}</h4>`,
                   escape: true,
                   autoHide: false
                 }"
-                class="flex justify-center items-center cursor-pointer w-[37px] h-[37px]"
+                class="flex justify-center items-center cursor-pointer w-10 h-full"
                 :class="item.active ? 'border-b-2 border-primary-500' : 'border-b-2'"
                 @click="getVersionHistoryDetail(item)"
               >
                 <base-iconify
                   :icon="FileTextIcon"
                   class="text-greyscale-900 !w-4 !h-4"
-                  :class="item.active ? 'text-greyscale-900' : 'text-greyscale-500'"
+                  :class="item.active ? 'text-primary-500' : 'text-greyscale-500'"
                 />
               </div>
             </div>
