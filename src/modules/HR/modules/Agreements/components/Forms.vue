@@ -82,7 +82,7 @@ const handleKeyWords = (key) => {
   let el = document.querySelector('.fr-element > p')
   const range = document.createRange()
   const selection = window.getSelection()
-  el.innerHTML = `${el.innerHTML} (${key})&nbsp;`
+  el.innerHTML = `${el.innerHTML} {${key}}&nbsp;`
 
   // Устанавливаем диапазон в конец содержимого элемента
   range.setStart(el.childNodes[el.childNodes.length - 1], el.childNodes[el.childNodes.length - 1].length)
