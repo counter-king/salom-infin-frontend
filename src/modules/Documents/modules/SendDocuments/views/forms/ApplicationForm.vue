@@ -22,7 +22,7 @@ import PreviewDialog from "@/modules/Documents/modules/SendDocuments/components/
 import {adjustUsersToArray, resetModel} from "@/utils";
 import {dispatchNotify} from "@/utils/notify";
 // Constants
-import {COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES} from "@/enums";
+import {COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL} from "@/enums";
 import {ROUTE_SD_DETAIL, ROUTE_SD_LIST, SD_TYPE_INNER} from "@/modules/Documents/modules/SendDocuments/constants";
 
 
@@ -58,7 +58,7 @@ const preview = async () => {
   applicationStore.model.signers = [ { user: authStore?.currentUser?.id } ]
   applicationStore.model.sender = authStore?.currentUser?.top_level_department?.id
   applicationStore.model.curator = applicationStore?.model?.__curator.id
-  applicationStore.model.journal = COMPOSE_DOCUMENT_TYPES.APPLICATION
+  applicationStore.model.journal = JOURNAL.APPLICATION
   applicationStore.model.document_type = route.params.document_type
   applicationStore.model.document_sub_type = route.params.document_sub_type
   applicationStore.model.approvers = adjustUsersToArray(applicationStore.model.__approvers)

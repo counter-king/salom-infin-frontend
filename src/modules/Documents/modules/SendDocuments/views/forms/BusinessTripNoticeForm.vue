@@ -22,7 +22,7 @@ import {useCommonStore} from "@/stores/common"
 import {useDocumentCountStore} from "@/modules/Documents/stores/count.store";
 import {useSDBTNoticeStore} from "@/modules/Documents/modules/SendDocuments/stores/businessTripNotice.store"
 import EditorWithTabs from "@/components/Composed/EditorWithTabs.vue"
-import {COLOR_TYPES, COMPOSE_DOCUMENT_TYPES, ROUTES_TYPE} from "@/enums"
+import {COLOR_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL, ROUTES_TYPE} from "@/enums"
 import PreviewDialog from "@/modules/Documents/modules/SendDocuments/components/PreviewDialog.vue"
 import UserSelect from "@/components/Select/UserSelect.vue"
 import {adjustUsersToArray, resetModel} from "@/utils"
@@ -57,6 +57,7 @@ const preview = async () => {
   BTNoticeStore.model.approvers = adjustUsersToArray(BTNoticeStore.model.__approvers)
   BTNoticeStore.model.signers = adjustUsersToArray(BTNoticeStore.model.__signers)
   BTNoticeStore.model.curator = BTNoticeStore?.model?.__curator.id
+  BTNoticeStore.model.journal = JOURNAL.INNER
   BTNoticeStore.model.notices = BTNoticeStore.model.__employees.map(item => {
     return {
       start_date: BTNoticeStore.model.start_date,
