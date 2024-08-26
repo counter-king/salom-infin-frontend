@@ -39,8 +39,8 @@ const emit = defineEmits(['update:modelValue'])
     <template #chip="{ value }">
       <user-with-label
         :compact="true"
-        :label="isObject(value?.user) ? value?.user.full_name : value?.full_name"
-        :title="isObject(value?.user) ? value?.user.full_name : value?.full_name"
+        :label="isObject(value?.user) ? value?.user.last_name + ' ' + value?.user.first_name : value?.last_name + ' ' + value?.first_name"
+        :title="isObject(value?.user) ? value?.user.last_name + ' ' + value?.user.first_name : value?.last_name + ' ' + value?.first_name"
         color="#635AFF"
         avatar-classes="w-5 h-5"
       />
