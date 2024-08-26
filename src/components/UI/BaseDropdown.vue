@@ -72,6 +72,12 @@ const props = defineProps({
   inputClass: {
     type: String
   },
+  wrapperClass: {
+    type: String
+  },
+  itemClass: {
+    type: String
+  },
   error: {
     type: Object,
     default: () => ({
@@ -172,6 +178,9 @@ const loadList = async (params) => {
         header: {
 					class: ['bg-white hidden']
         },
+        wrapper: {
+          class: wrapperClass
+        },
         panel: {
           class: ['translate-y-[8px] shadow-menu rounded-2xl overflow-hidden']
         },
@@ -182,7 +191,10 @@ const loadList = async (params) => {
           class: 'w-3 h-3'
         },
         item: {
-          class: ['py-[6px] px-3 text-sm font-medium text-primary-900 transition-all hover:!bg-greyscale-50']
+          class: [
+            'py-[6px] px-3 text-sm font-medium text-primary-900 transition-all hover:!bg-greyscale-50',
+            props.itemClass
+          ]
         },
         option: {
           class: ['text-sm font-medium text-primary-900']

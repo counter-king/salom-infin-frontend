@@ -47,6 +47,8 @@ const options = computed({
       option-value="id"
       root-class="bg-white !rounded-[80px] shadow-button !h-10"
       input-class="leading-[14px] !py-3 !pl-4"
+      wrapper-class="!max-h-[240px]"
+      item-class="!py-[10px]"
     >
     </base-dropdown>
   </div>
