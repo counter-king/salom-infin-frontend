@@ -60,7 +60,7 @@ onBeforeMount(async () => {
     <layout-with-tabs-compose
       :title="title"
       :object-id="SDStore.detailModel?.id"
-      :content-type="CONTENT_TYPES.SEND_DOCUMENT"
+      :content-type="SDStore.detailModel?.content_type"
       :files="SDStore.detailModel?.files"
     >
       <template #header-end>

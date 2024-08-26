@@ -1,7 +1,12 @@
+// Core
 import dayjs from 'dayjs'
-import {fetchUsersList} from "@/services/users.service";
-import {fetchCompaniesList, fetchDepartmentList} from "@/services/common.service";
-import {STATUS_COLORS, STATUS_TYPES, USER_STATUS_CODES} from "@/enums";
+import {diffWords} from "diff"
+// Services
+import {fetchUsersList} from "@/services/users.service"
+import {fetchCompaniesList, fetchDepartmentList} from "@/services/common.service"
+// Enums
+import {USER_STATUS_CODES} from "@/enums"
+
 /**
  * Проверяет все ключи объекта
  * Заполнен ли объект с данными или нет
@@ -183,7 +188,7 @@ export const formatUserFullName = (item) => {
 }
 /** **/
 export const adjustUsersToArray = (tempArray) => {
-  return tempArray.map(item => {
+  return tempArray?.map(item => {
     if (item.hasOwnProperty('user')) {
       return {
         id: item.id,
@@ -231,7 +236,7 @@ export const removeKeysWithDoubleUnderscore = (obj) => {
 }
 
 export const adjustUserObjectToArray = async (items = [], userId = null, multiple = true) => {
-  if (items.length && multiple) {
+  if (items && items.length && multiple) {
     const userIds = items.map(item => item.user.id).join(',')
     const res = await fetchUsersList({ ids: userIds })
     if (res && res.status === 200) {
@@ -300,4 +305,24 @@ export const returnStatusColor = (code) => {
     default:
       return 'text-warning-500'
   }
+}
+
+export const textDifference = (oldText, newText) => {
+  return compareText(oldText, newText)
+}
+
+// Compare old_text and new_text and generate HTML
+const compareText = (oldText, newText) => {
+  const diff = diffWords(oldText, newText)
+  let result = ''
+  diff.forEach((part) => {
+    if (part.added) {
+      result += `<span class="text-success-500 bg-success-100">${part.value}</span>`
+    } else if (part.removed) {
+      result += `<span class="text-critic-500 bg-critic-100">${part.value}</span>`
+    } else {
+      result += `<span class="text-greyscale-900">${part.value}</span>`
+    }
+  })
+  return result
 }

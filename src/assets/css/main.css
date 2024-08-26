@@ -126,3 +126,7 @@ body {
   transform: skewX(25deg);
   transform-origin: top;
 }
+
+.p-tooltip-text {
+  width: fit-content!important;
+}

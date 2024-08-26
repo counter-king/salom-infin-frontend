@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia'
 import {fetchApprovalDetail, fetchApprovalList} from "@/modules/Documents/modules/Boxes/services/approval.service";
 import {fetchGetTree} from "@/modules/Documents/modules/Registration/services/docflow.service";
+import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store";
 
 export const useBoxesApprovalStore = defineStore("approval-stores", {
   state: () => ({
@@ -116,8 +117,9 @@ export const useBoxesApprovalStore = defineStore("approval-stores", {
     /** **/
     async actionGetApprovalDetail(id) {
       this.detailLoading = true;
-      const response = await fetchApprovalDetail(id);
+      const response = await fetchApprovalDetail(id)
       if (response.status === 200) {
+        await useSDStore().actionVersionHistory(response.data?.compose?.id)
         if (response.data?.compose?.registered_document){
           let { data } = await fetchGetTree(response.data?.compose?.registered_document)
           this.tree = data

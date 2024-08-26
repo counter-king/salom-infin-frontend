@@ -245,8 +245,8 @@ onUnmounted(() => {
                 required
                 option-label="label"
                 option-value="value"
-                label="route"
-                placeholder="select-route"
+                label="transport-type"
+                placeholder="select-transport-type"
               />
             </base-col>
 

@@ -1,16 +1,31 @@
 <script setup>
 // Core
 import { ref, shallowRef, watch, defineAsyncComponent, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { useI18n } from "vue-i18n";
+import {useRoute, useRouter} from 'vue-router'
+import { useI18n } from "vue-i18n"
+// Store
+import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store"
 // Components
 import BaseSpinner from '@/components/UI/BaseSpinner.vue'
-import { AltArrowLeftIcon, EyeIcon, ClockCircleIcon, ChatLineIcon, FileTextIcon } from '@/components/Icons'
+import {
+  AltArrowLeftIcon,
+  EyeIcon,
+  ClockCircleIcon,
+  ChatLineIcon,
+  FileTextIcon,
+  CloseSmIcon,
+  CloseCircleBoldIcon
+} from '@/components/Icons'
 import FileTabs from './components/FileTabs.vue'
 // Enums
 import { CONTENT_TYPES } from '@/enums'
+import {textDifference} from "@/utils";
+import {formatDateHour} from "@/utils/formatDate";
 // Composable
+const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
+const SDStore = useSDStore()
 // Macros
 const props = defineProps({
   title: {
@@ -85,7 +100,6 @@ const props = defineProps({
     default: () => []
   }
 })
-const { t } = useI18n();
 // Reactive
 const activeTabMenuIndex = ref(0)
 const activeTabComponent = shallowRef(null)
@@ -99,6 +113,17 @@ watch(activeTabMenu, (value) => {
     delay: 200
   })
 }, { immediate: true })
+
+// Methods
+const getVersionHistoryDetail = async (item) => {
+  SDStore.versionHistoryList.forEach(i => i.active = i.id === item.id)
+  SDStore.historyContent = textDifference(item.old_text, item.new_text)
+  SDStore.historyShow = true
+}
+const closeHistoryDetail = () => {
+  SDStore.historyShow = false
+  SDStore.versionHistoryList.forEach(i => i.active = false)
+}
 </script>
 
 <template>
@@ -134,7 +159,44 @@ watch(activeTabMenu, (value) => {
 
     <div class="detail-layout-content flex flex-col flex-1 bg-white overflow-hidden shadow-button rounded-2xl">
       <slot name="content">
-        <base-tab-menu v-model="activeTabMenuIndex" :tab-items="props.tabItems" />
+        <div class="flex justify-between border-b">
+          <base-tab-menu v-model="activeTabMenuIndex" :tab-items="props.tabItems" />
+          <!-- Version history -->
+          <div
+            v-if="SDStore.versionHistoryList.length"
+            class="flex flex-col max-w-[690px] w-full border-l px-5"
+          >
+            <div class="flex justify-between relative">
+              <span class="text-xs font-medium text-greyscale-500">{{ t('version-history') }}</span>
+              <base-iconify
+                v-if="SDStore.historyShow"
+                :icon="CloseCircleBoldIcon"
+                class="text-critic-500 cursor-pointer !w-6 !h-6 absolute right-0 top-2"
+                @click="closeHistoryDetail"
+              />
+            </div>
+            <div class="flex gap-x-1 overflow-x-auto">
+              <div
+                v-for="item in SDStore.versionHistoryList"
+                v-tooltip.top="{
+                  value: `<h4 class='text-xs text-white -my-1 !w-[250px]'>${t('author')}: ${item.created_by.full_name} <br> ${t('change-time')}: ${formatDateHour(item.created_date)}</h4>`,
+                  escape: true,
+                  autoHide: false
+                }"
+                class="flex justify-center items-center cursor-pointer w-[37px] h-[37px]"
+                :class="item.active ? 'border-b-2 border-primary-500' : 'border-b-2'"
+                @click="getVersionHistoryDetail(item)"
+              >
+                <base-iconify
+                  :icon="FileTextIcon"
+                  class="text-greyscale-900 !w-4 !h-4"
+                  :class="item.active ? 'text-greyscale-900' : 'text-greyscale-500'"
+                />
+              </div>
+            </div>
+          </div>
+          <!-- /Version history -->
+        </div>
 
         <div class="flex flex-1">
           <slot :name="activeTabMenu.slot">

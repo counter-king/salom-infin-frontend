@@ -81,8 +81,8 @@ const current = computed(() => {
       autoHide: false
     }"
   >
-    <base-iconify
-      :icon="current.icon"
+    <base-icon
+      :name="current.icon"
       class="!w-3 !h-3 text-white"
     />
   </div>

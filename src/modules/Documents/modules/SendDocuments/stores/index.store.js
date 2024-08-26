@@ -4,7 +4,7 @@ import { defineStore } from 'pinia'
 import {
   fetchCustomUpdate,
   fetchGetDocumentDetail,
-  fetchGetDocumentList
+  fetchGetDocumentList, fetchVersionHistory
 } from "@/modules/Documents/modules/SendDocuments/services/index.service"
 // Utils
 import { withAsync } from "@/utils/withAsync"
@@ -139,6 +139,9 @@ export const useSDStore = defineStore("sd-stores", {
     listLoading: false,
     detailLoading: false,
     customUpdateLoading: false,
+    versionHistoryList: [],
+    historyContent: "",
+    historyShow: false,
     tree: null,
     filterState: {
       page: 1,
@@ -512,28 +515,37 @@ export const useSDStore = defineStore("sd-stores", {
     },
     /** **/
     async actionGetDocumentDetail(id){
-      const { response, error } = await withAsync(fetchGetDocumentDetail, id);
+      const { response, error } = await withAsync(fetchGetDocumentDetail, id)
       if (response && response.status === 200){
         if (response.data?.registered_document){
           let { data } = await fetchGetTree(response.data?.registered_document)
           this.tree = data
         }
-        this.detailModel = response.data;
-        return Promise.resolve(response);
+        await this.actionVersionHistory(id)
+        this.detailModel = response.data
+        return Promise.resolve(response)
       }
     },
     /** **/
     async actionCustomUpdate({ id, body }) {
       this.customUpdateLoading = true;
-      const response = await fetchCustomUpdate({ id, body });
+      const response = await fetchCustomUpdate({ id, body })
       if (response) {
-        this.customUpdateLoading = false;
-        dispatchNotify(null, 'Изменено!', COLOR_TYPES.SUCCESS);
-        return Promise.resolve(response);
+        this.customUpdateLoading = false
+        dispatchNotify(null, 'Изменено!', COLOR_TYPES.SUCCESS)
+        return Promise.resolve(response)
       } else {
-        this.customUpdateLoading = false;
-        dispatchNotify(null, 'Произошла ошибка!', COLOR_TYPES.ERROR);
-        return Promise.reject();
+        this.customUpdateLoading = false
+        dispatchNotify(null, 'Произошла ошибка!', COLOR_TYPES.ERROR)
+        return Promise.reject()
+      }
+    },
+    /** **/
+    async actionVersionHistory(id) {
+      this.versionHistoryList = []
+      const response = await fetchVersionHistory(id)
+      if (response.status === 200) {
+        this.versionHistoryList = response.data.map(item => ({ ...item, active: false }))
       }
     }
   }

@@ -6,6 +6,7 @@ import {formatDate, formatDateHour} from "@/utils/formatDate";
 import { formatUserFullName } from "@/utils";
 // Store
 import {useAuthStore} from "@/modules/Auth/stores"
+import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store"
 // Components
 import QrcodeVue from "qrcode.vue"
 import { BaseHeaderTemplate, BaseSignersTemplate } from "@/components/Templates/components"
@@ -35,6 +36,8 @@ const receivers = computed(() => {
 const author = computed(() => {
   return props.preview ? useAuthStore().currentUser : props.composeModel?.author
 })
+
+const SDStore = useSDStore()
 </script>
 
 <template>
@@ -61,7 +64,9 @@ const author = computed(() => {
       XIZMAT YOZISHMASI
     </div>
 
-    <div class="text-justify" v-html="props.composeModel?.content"></div>
+    <div v-if="SDStore.historyShow" class="text-justify" v-html="SDStore.historyContent"></div>
+
+    <div v-else class="text-justify" v-html="props.composeModel?.content"></div>
 
     <base-signers-template :signers="props.composeModel?.signers" />
 

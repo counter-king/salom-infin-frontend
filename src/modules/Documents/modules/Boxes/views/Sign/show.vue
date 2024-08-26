@@ -80,7 +80,7 @@ onMounted( async () => {
 
   <template v-else>
     <layout-with-tabs-compose
-      :content-type="CONTENT_TYPES.SEND_DOCUMENT"
+      :content-type="signStore.detailModel?.compose?.content_type"
       :files="signStore.detailModel?.compose?.files"
       :object-id="signStore.detailModel?.compose?.id"
       :title="signStore.detailModel?.compose?.title?.name"

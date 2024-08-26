@@ -54,16 +54,18 @@ const preview = async () => {
   SDStoreInner.model.approvers = [];
   SDStoreInner.model.signers = [];
   SDStoreInner.model.departments = [];
-  SDStoreInner.model.departments = SDStoreInner.model.__departments.map(item => item.id);
+  SDStoreInner.model.departments = SDStoreInner.model.__departments.map(item => item.id)
 
-  SDStoreInner.model.files = [];
-  SDStoreInner.model.files = SDStoreInner.model.__files.map(item => { return { id: item.id } });
+  SDStoreInner.model.files = []
+  SDStoreInner.model.files = SDStoreInner.model.__files.map(item => { return { id: item.id } })
 
   SDStoreInner.model.journal = JOURNAL.INNER
   SDStoreInner.model.sender = authStore.currentUser.top_level_department.id
 
-  SDStoreInner.model.approvers = adjustUsersToArray(SDStoreInner.model.__approvers);
-  SDStoreInner.model.signers = adjustUsersToArray(SDStoreInner.model.__signers);
+  SDStoreInner.model.approvers = adjustUsersToArray(SDStoreInner.model.__approvers)
+  SDStoreInner.model.signers = adjustUsersToArray(SDStoreInner.model.__signers)
+
+  console.log(SDStoreInner.model.signers)
 }
 const manage = () => {
   if (props.formType === FORM_TYPE_CREATE) {

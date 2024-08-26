@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 // Service
 import {fetchSignDetail, fetchSignList} from "@/modules/Documents/modules/Boxes/services/sign.service";
 import {fetchGetTree} from "@/modules/Documents/modules/Registration/services/docflow.service";
+import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store";
 
 
 export const useBoxesSignStore = defineStore("sign-stores", {
@@ -118,14 +119,15 @@ export const useBoxesSignStore = defineStore("sign-stores", {
     /** **/
     async actionGetSignDetail(id) {
       this.detailLoading = true;
-      const response = await fetchSignDetail(id);
+      const response = await fetchSignDetail(id)
       if (response.status === 200) {
+        await useSDStore().actionVersionHistory(response.data?.compose?.id)
         if (response.data?.compose?.registered_document){
           let { data } = await fetchGetTree(response.data?.compose?.registered_document)
           this.tree = data
         }
-        this.detailModel = response.data;
-        this.detailLoading = false;
+        this.detailModel = response.data
+        this.detailLoading = false
       }
     }
   }

@@ -75,7 +75,7 @@ onMounted(  () => {
 
   <template v-else>
     <layout-with-tabs-compose
-      :content-type="CONTENT_TYPES.SEND_DOCUMENT"
+      :content-type="approvalStore.detailModel?.compose?.content_type"
       :files="approvalStore.detailModel?.compose?.files"
       :object-id="approvalStore.detailModel?.compose?.id"
       :title="approvalStore.detailModel?.compose?.title?.name"
