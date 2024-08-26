@@ -6,11 +6,14 @@ import QrCodeVue from 'qrcode.vue'
 // Components
 import { ActionToolbar, ActionBackButton } from '@/components/Actions'
 import { EyeIcon } from '@/components/Icons'
+import { StatusChip } from '@/components/Chips'
 // Stores
 import { useAgreementsStore } from '../stores/agreements.store'
 // Utils
 import { formatUserFullName } from '@/utils'
 import { formatDateHour } from '@/utils/formatDate'
+// Enums
+import { STATUS_TYPES } from '@/enums'
 // Composable
 const route = useRoute()
 const router = useRouter()
@@ -60,6 +63,12 @@ onMounted(async () => {
 
     <template #negotiation.doc_sub_type.name="{ data }">
       <span class="font-medium text-greyscale-900">{{ data.negotiation.doc_sub_type?.name ?? '-' }}</span>
+    </template>
+
+    <template #sign="{ data }">
+      <status-chip :status="{ id: STATUS_TYPES.DONE }">
+        Подписан
+      </status-chip>
     </template>
 
     <template #action_date="{ data }">
