@@ -21,7 +21,7 @@ import {dispatchNotify} from "@/utils/notify";
 // Constants
 import {FORM_TYPE_CREATE} from "@/constants/constants";
 import PreviewDialog from "@/modules/Documents/modules/SendDocuments/components/PreviewDialog.vue";
-import {COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES} from "@/enums";
+import {COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL} from "@/enums";
 import {ROUTE_SD_DETAIL, ROUTE_SD_LIST, SD_TYPE_INNER} from "@/modules/Documents/modules/SendDocuments/constants";
 import {adjustUsersToArray, resetModel} from "@/utils";
 
@@ -59,7 +59,7 @@ const preview = async () => {
   SDStoreInner.model.files = [];
   SDStoreInner.model.files = SDStoreInner.model.__files.map(item => { return { id: item.id } });
 
-  // TEMP
+  SDStoreInner.model.journal = JOURNAL.INNER
   SDStoreInner.model.sender = authStore.currentUser.top_level_department.id
 
   SDStoreInner.model.approvers = adjustUsersToArray(SDStoreInner.model.__approvers);

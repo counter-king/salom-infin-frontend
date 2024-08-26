@@ -6,7 +6,7 @@ import {useRoute, useRouter} from "vue-router"
 import { useVuelidate } from "@vuelidate/core"
 // Enums
 import { FORM_TYPE_CREATE } from "@/constants/constants"
-import {COLOR_TYPES, COMPOSE_DOCUMENT_TYPES, SIGNER_TYPES} from "@/enums"
+import {COLOR_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL, SIGNER_TYPES} from "@/enums"
 import { ROUTE_SD_DETAIL, ROUTE_SD_LIST } from "@/modules/Documents/modules/SendDocuments/constants"
 // Utils
 import {adjustUsersToArray, resetModel} from "@/utils"
@@ -54,6 +54,7 @@ const preview = async () => {
   orderStore.model.sender = authStore?.currentUser?.top_level_department?.id
   orderStore.model.files = orderStore.model.__files.map(item => { return { id: item.id } })
   orderStore.model.document_sub_type = route.params.document_sub_type
+  orderStore.model.journal = JOURNAL.ORDERS_PROTOCOLS
   orderStore.model.register_date = formatDateReverse(orderStore.model.register_date)
   orderStore.model.__negotiators.forEach(item => {
     orderStore.model.signers.push(
