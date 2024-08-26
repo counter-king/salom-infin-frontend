@@ -6,6 +6,7 @@ import {formatDate, formatDateHour} from "@/utils/formatDate"
 import {formatUserFullName} from "@/utils"
 // Store
 import {useAuthStore} from "@/modules/Auth/stores"
+import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store"
 // Components
 import QrcodeVue from "qrcode.vue"
 import { BaseHeaderTemplate, BaseSignersTemplate } from "@/components/Templates/components"
@@ -21,7 +22,11 @@ const props = defineProps({
     default: false
   }
 })
+// Composable
+const SDStore = useSDStore()
 
+
+// Computed
 const curator = computed(() => {
   let basicSigner = props.composeModel && props.composeModel.signers && props.composeModel.signers.length && props.composeModel?.signers.find(item => item.type === 'basic_signer')
   return  props.preview ?
@@ -108,7 +113,8 @@ const author = computed(() => {
       Qisqacha mazmuni: {{ props.composeModel?.short_description }}
     </div>
 
-    <div class="text-justify mt-4" v-html="props.composeModel?.content"></div>
+    <div v-if="SDStore.historyShow" class="text-justify" v-html="SDStore.historyContent"></div>
+    <div v-else class="text-justify" v-html="props.composeModel?.content"></div>
 
     <div class="employees-table text-sm mt-4">
       <table class="w-full">

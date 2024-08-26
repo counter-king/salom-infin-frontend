@@ -3,8 +3,8 @@
 import { formatUserFullName } from "@/utils"
 import { formatDateHour } from "@/utils/formatDate"
 // Components
-import QrcodeVue from "qrcode.vue"
 import { BaseSignersTemplate } from "@/components/Templates/components"
+import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store"
 
 const props = defineProps({
   composeModel: {
@@ -13,6 +13,8 @@ const props = defineProps({
     required: true
   }
 })
+// Composable
+const SDStore = useSDStore()
 </script>
 
 <template>
@@ -32,7 +34,8 @@ const props = defineProps({
       АРИЗА
     </div>
 
-    <div class="text-justify" v-html="props.composeModel?.content"></div>
+    <div v-if="SDStore.historyShow" class="text-justify" v-html="SDStore.historyContent"></div>
+    <div v-else class="text-justify" v-html="props.composeModel?.content"></div>
 
     <base-signers-template :signers="props.composeModel?.signers" />
 
@@ -48,8 +51,6 @@ const props = defineProps({
         </template>
       </span>
     </div>
-
-<!--    <pre>{{ props.composeModel }}</pre>-->
   </div>
 </template>
 
