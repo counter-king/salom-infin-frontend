@@ -128,7 +128,7 @@ onMounted(async () => {
   <!-- preview dialog -->
   <base-dialog
     v-model="dialog"
-    max-width="max-w-[610px]"
+    max-width="max-w-[21cm]"
     @emit:after-hide="afterHideDialog"
   >
     <template #header>
@@ -138,7 +138,9 @@ onMounted(async () => {
     </template>
 
     <template #content>
-      <div v-html="selected.negotiation?.content" />
+      <div class="shadow-block border-[0.094rem] border-greyscale-200 p-6">
+        <div v-html="selected.negotiation?.content" />
+      </div>
     </template>
 
     <template #footer>

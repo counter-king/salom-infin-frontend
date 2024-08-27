@@ -240,7 +240,7 @@ onMounted(async () => {
   </layout-with-tabs>
 
   <!-- preview dialog -->
-  <base-dialog v-model="dialog" max-width="max-w-[610px]">
+  <base-dialog v-model="dialog" max-width="max-w-[21cm]">
     <template #header>
       <div class="flex-1 truncate mr-2">
         <h1 class="text-xl font-semibold truncate">Просмотр документа</h1>
@@ -248,7 +248,9 @@ onMounted(async () => {
     </template>
 
     <template #content>
-      <div v-html="agreementsStore.createModel.content" />
+      <div class="shadow-block border-[0.094rem] border-greyscale-200 p-6">
+        <div v-html="agreementsStore.createModel.content" />
+      </div>
     </template>
 
     <template #footer>

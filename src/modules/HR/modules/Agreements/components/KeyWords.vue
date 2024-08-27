@@ -27,7 +27,7 @@ const items = [
   },
   {
     key: 'position',
-    description: 'Позиция'
+    description: 'Должность'
   }
 ]
 </script>
@@ -60,12 +60,14 @@ const items = [
             <div class="w-2 h-2 bg-primary-400 rounded-full mr-3"></div>
 
             <div class="flex-1">
-              <span class="uppercase font-semibold mr-1">({{ item.key }})</span> - {{ item.description }}
+              <span class="uppercase font-semibold mr-1">
+                <span class="text-greyscale-900">{</span> {{ item.key }} <span class="text-greyscale-900">}</span> - {{ item.description }}
+              </span>
             </div>
 
             <div
               v-tooltip.top="{
-                value: `<h4 class='text-xs text-white -my-1'>Скопировать</h4>`,
+                value: `<h4 class='text-xs text-white -my-1'>Вставить</h4>`,
                 escape: true,
                 autoHide: false
               }"

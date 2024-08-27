@@ -96,7 +96,7 @@ onMounted(async () => {
   <!-- preview dialog -->
   <base-dialog
     v-model="dialog"
-    max-width="max-w-[610px]"
+    max-width="max-w-[21cm]"
   >
     <template #header>
       <div class="flex-1 truncate mr-2">
@@ -105,31 +105,33 @@ onMounted(async () => {
     </template>
 
     <template #content>
-      <div v-html="selected.negotiation?.content" />
+      <div class="shadow-block border-[0.094rem] border-greyscale-200 p-6">
+        <div v-html="selected.negotiation?.content" />
 
-      <div class="mt-5">
-        <base-row class="items-center">
-          <base-col col-class="w-1/2">
+        <div class="mt-5">
+          <base-row class="items-center">
+            <base-col col-class="w-1/2">
             <span class="text-sm font-semibold block">
               {{ selected.user?.position?.name ?? '-' }}
             </span>
-          </base-col>
+            </base-col>
 
-          <base-col col-class="w-1/4">
-            <qr-code-vue
-              :value="'SQB Bank'"
-              :size="50"
-              level="L"
-              render-as="svg"
-            />
-          </base-col>
+            <base-col col-class="w-1/4">
+              <qr-code-vue
+                :value="'SQB Bank'"
+                :size="50"
+                level="L"
+                render-as="svg"
+              />
+            </base-col>
 
-          <base-col col-class="w-1/4">
+            <base-col col-class="w-1/4">
             <span class="text-sm font-semibold block">
               {{ formatUserFullName(selected.user) }}
             </span>
-          </base-col>
-        </base-row>
+            </base-col>
+          </base-row>
+        </div>
       </div>
     </template>
   </base-dialog>
