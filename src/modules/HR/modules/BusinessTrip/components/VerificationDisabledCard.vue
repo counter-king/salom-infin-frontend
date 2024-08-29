@@ -73,7 +73,7 @@ const onConfirm = async () => {
       </span>
 
     <div
-      v-if="!isSenderOffice"
+      v-if="!isSenderOffice && !props.item?.is_sender"
       class="flex items-center gap-x-[6px]"
     >
       <div class="flex items-center bg-greyscale-70 py-[2px] pr-2 pl-[3px] gap-x-1 rounded-xl">

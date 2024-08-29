@@ -70,6 +70,8 @@ const preview = async () => {
   BTNoticeStore.model.sender = authStore?.currentUser?.top_level_department?.id
   BTNoticeStore.model.tags = BTNoticeStore.model.__tags.map(item => { return { id: item.id } })
   BTNoticeStore.model.files = BTNoticeStore.model.__files.map(item => { return { id: item.id } })
+  BTNoticeStore.model.document_type = route.params.document_type
+  BTNoticeStore.model.document_sub_type = route.params.document_sub_type
 
   dialog.value = true
 }

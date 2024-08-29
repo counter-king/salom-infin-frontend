@@ -64,8 +64,8 @@ const preview = async () => {
 
   SDStoreInner.model.approvers = adjustUsersToArray(SDStoreInner.model.__approvers)
   SDStoreInner.model.signers = adjustUsersToArray(SDStoreInner.model.__signers)
-
-  console.log(SDStoreInner.model.signers)
+  SDStoreInner.model.document_type = route.params.document_type
+  SDStoreInner.model.document_sub_type = route.params.document_sub_type
 }
 const manage = () => {
   if (props.formType === FORM_TYPE_CREATE) {

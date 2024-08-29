@@ -53,6 +53,7 @@ const preview = async () => {
   orderStore.model.curator = orderStore?.model?.__curator.id
   orderStore.model.sender = authStore?.currentUser?.top_level_department?.id
   orderStore.model.files = orderStore.model.__files.map(item => { return { id: item.id } })
+  orderStore.model.document_type = route.params.document_type
   orderStore.model.document_sub_type = route.params.document_sub_type
   orderStore.model.journal = JOURNAL.ORDERS_PROTOCOLS
   orderStore.model.register_date = formatDateReverse(orderStore.model.register_date)

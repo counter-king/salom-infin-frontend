@@ -4,3 +4,5 @@ export { default as VerificationDisabledCard } from './VerificationDisabledCard.
 export { default as VerificationConfirmationModal } from './VerificationConfirmationModal.vue'
 export { default as ReportProcess } from './ReportProcess.vue'
 export { default as ReportProcessCard } from './ReportProcessCard.vue'
+export { default as SenderProcess } from './SenderProcess.vue'
+export { default as SenderProcessCard } from './SenderProcessCard.vue'

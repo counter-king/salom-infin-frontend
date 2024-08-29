@@ -6,7 +6,7 @@ import {useI18n} from "vue-i18n"
 import {useBusinessTripStore} from "@/modules/HR/modules/BusinessTrip/stores/businessTrip.store"
 // Components
 import {AltArrowRightIcon, DocumentTextBoldIcon, EyeIcon, FileTextBoldIcon, UnreadLinearIcon} from "@/components/Icons"
-import { VerificationProcess, ReportProcess } from "@/modules/HR/modules/BusinessTrip/components"
+import { VerificationProcess, ReportProcess, SenderProcess } from "@/modules/HR/modules/BusinessTrip/components"
 import {FilePreview} from "@/components/Files";
 
 const { t } = useI18n()
@@ -88,14 +88,20 @@ const zoomFile = (event, file) => {
       </div>
 
       <verification-process
+        v-if="verificationList && verificationList.length"
         v-for="(item, index) in verificationList"
         :item="item"
         :verifications="verificationList"
         :index="index"
       />
 
+      <sender-process
+        v-if="verificationList && verificationList.length"
+        :verifications="verificationList"
+      />
+
       <report-process
-        v-if="isProcessFinished"
+        v-if="isProcessFinished && verificationList && verificationList.length"
         :verifications="verificationList"
       />
 

@@ -78,7 +78,7 @@ const onConfirm = async () => {
     </span>
 
     <div
-      v-if="props.item?.arrived_at"
+      v-if="props.item?.arrived_at && !props.item?.is_sender"
       class="flex items-center gap-x-[6px]"
     >
       <div class="flex items-center bg-success-100 py-[2px] pr-2 pl-[3px] gap-x-1 rounded-xl">
@@ -152,13 +152,13 @@ const onConfirm = async () => {
       >
       </base-button>
 
-      <base-button
+<!--      <base-button
         v-if="buttonVisibleForSenderOffice"
         size="small"
         label="arrived"
         @click="dialog = true"
       >
-      </base-button>
+      </base-button>-->
     </div>
 
     <verification-confirmation-modal

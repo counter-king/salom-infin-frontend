@@ -22,7 +22,7 @@ const alignment = computed(() => {
 <template>
   <div class="flex gap-x-3">
     <div class="w-[350px] min-h-[80px]">
-      <report-process-card v-if="alignment === 'left'" />
+      <report-process-card v-if="alignment === 'right'" />
     </div>
 
     <div class="flex flex-col items-center w-8">
@@ -42,12 +42,11 @@ const alignment = computed(() => {
         class="w-2 flex-1"
         :class="`bg-warning-300`"
       >
-
       </div>
     </div>
 
     <div class="w-[350px] min-h-[80px]">
-      <report-process-card v-if="alignment === 'right'" />
+      <report-process-card v-if="alignment === 'left'" />
     </div>
   </div>
 </template>
