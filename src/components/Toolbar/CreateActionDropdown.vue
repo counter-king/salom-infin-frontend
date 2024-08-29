@@ -104,8 +104,8 @@ const onHover = (item) => {
             >
               <div class="flex">
                 <div
-                  class="flex justify-center items-center rounded-full bg-white shadow transition-all duration-[200ms] group-hover:bg-primary-30 w-10 h-10"
-                  :class="{ 'shadow-none bg-primary-30' : item.active }"
+                  class="flex justify-center items-center rounded-full transition-all duration-[200ms] group-hover:bg-primary-30 w-10 h-10"
+                  :class="item.active ? 'shadow-none bg-primary-30' : 'bg-white shadow'"
                 >
                   <base-iconify
                     :icon="item.icon"
