@@ -87,7 +87,7 @@ const curatorFullName = computed(() => {
 </script>
 
 <template>
-  <div class="flex justify-center px-6 py-6 overflow-y-auto" style="height: calc(100% - 100px)">
+  <div v-if="verifications && verifications.length" class="flex justify-center px-6 py-6 overflow-y-auto" style="height: calc(100% - 100px)">
     <div class="w-[600px] h-fit border shadow py-10 px-8">
       <div class="flex justify-center text-base font-semibold text-greyscale-900">
         Xizmat safari guvohnomasi

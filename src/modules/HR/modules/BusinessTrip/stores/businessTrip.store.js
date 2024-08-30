@@ -139,7 +139,7 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
       this.headers = [
         {
           header: "Название департамент",
-          field: "deparment",
+          field: "department",
           active: true
         },
         {
