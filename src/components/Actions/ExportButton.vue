@@ -1,6 +1,12 @@
 <script setup>
 // Components
 import { FileDownloadIcon } from '@/components/Icons'
+// Macros
+const props = defineProps({
+  rootClass: {
+    type: String
+  }
+})
 </script>
 
 <template>
@@ -13,6 +19,7 @@ import { FileDownloadIcon } from '@/components/Icons'
     rounded
     shadow
     type="button"
+    :class="props.rootClass"
   />
 </template>
 

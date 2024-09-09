@@ -2,7 +2,7 @@
 // Core
 import { ref } from 'vue'
 // Components
-import { CaseIcon } from '@/components/Icons'
+import { CaseIcon, UserIcon } from '@/components/Icons'
 import TheSidebar from '@/components/TheSidebar.vue'
 // Stores
 import { useAgreementsRoutesStore } from '../modules/Agreements/stores/routes.store'
@@ -13,6 +13,12 @@ const menus = ref([
   {
     title: "HR",
     prefix: true
+  },
+  {
+    title: 'Мой профиль',
+    icon: UserIcon,
+    link: 'ProfileIndex',
+    children: []
   },
   {
     title: "Командировка",

@@ -1,5 +1,5 @@
 // Routes
-import Profile from './profile.route'
+// import Profile from './profile.route'
 
 const Settings = [
   {
@@ -7,7 +7,7 @@ const Settings = [
     meta: { isAuthRequired: true },
     name: "SettingsIndex",
     path: "settings",
-    redirect: { name: "ProfileIndex" },
+    // redirect: { name: "ProfileIndex" },
     children: [
       // DocumentFlow
       {
@@ -172,7 +172,7 @@ const Settings = [
         path: "short-descriptions",
       },
       // Profile
-      ...Profile,
+      // ...Profile,
       // {
       //   component: () => import("../views/Profile/index.vue"),
       //   meta: { isAuthRequired: true },

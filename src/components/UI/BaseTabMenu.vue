@@ -18,6 +18,9 @@ const props = defineProps({
   bricks: {
     type: Boolean
   },
+  menuClass: {
+    type: String
+  }
 })
 const modelValue = useModel(props, 'modelValue');
 const emit = defineEmits(['update:modelValue'])
@@ -51,7 +54,8 @@ const panelClass = (_, state, context) => {
           'px-2 border-b border-greyscale-200': !(props.segment || props.bricks),
           'bg-primary-50 rounded-xl border-hidden': props.segment,
           'gap-1 !px-0 border-none h-7': props.bricks
-          }
+          },
+          props.menuClass
         ]
       },
       panelContainer: {
