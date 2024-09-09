@@ -9,12 +9,8 @@ import {
   fetchGetDocumentDetail, fetchUpdateDocument
 } from "@/modules/Documents/modules/SendDocuments/services/index.service"
 import {adjustCompanyObjectToArray, adjustUserObjectToArray, setValuesToKeys} from "@/utils"
-import {useUsersStore} from "@/stores/users.store"
-import {COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL} from "@/enums";
-import {useCommonStore} from "@/stores/common";
+import {COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL} from "@/enums"
 import { useAuthStore } from '@/modules/Auth/stores'
-import {fetchUserDetail} from "@/services/users.service";
-import {fetchCompanyDetail} from "@/services/common.service";
 
 export const useSDBTNoticeStore = defineStore("sd-notice-store", {
   state: () => {
@@ -26,7 +22,7 @@ export const useSDBTNoticeStore = defineStore("sd-notice-store", {
 
       model: {
         approvers: [],
-        company: authStore.currentUser.company.id,
+        company: null,
         content: null,
         curator: null,
         document_type: COMPOSE_DOCUMENT_TYPES.NOTICE,

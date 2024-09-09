@@ -1,23 +1,38 @@
 <script setup>
 // Core
-import {computed} from "vue";
-import {useRoute} from "vue-router";
+import {computed} from "vue"
+import {useRoute} from "vue-router"
 // Components
-import {InnerForm, BusinessTripNoticeForm, ApplicationForm, OrderForm} from "@/modules/Documents/modules/SendDocuments/views/forms/index"
+import {
+  InnerForm,
+  BusinessTripNoticeForm,
+  ApplicationForm,
+  OrderForm,
+  OrdinaryNoticeForm
+} from "@/modules/Documents/modules/SendDocuments/views/forms/index"
 // Constants
 import {FORM_TYPE_CREATE} from "@/constants/constants"
-import {COMPOSE_DOCUMENT_TYPES} from "@/enums";
+import {COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES} from "@/enums"
 
 const route = useRoute()
 const formValues  = {
-  [COMPOSE_DOCUMENT_TYPES.INNER]: InnerForm,
-  [COMPOSE_DOCUMENT_TYPES.NOTICE]: BusinessTripNoticeForm,
-  [COMPOSE_DOCUMENT_TYPES.APPLICATION]: ApplicationForm,
-  [COMPOSE_DOCUMENT_TYPES.ORDER]: OrderForm,
+  [COMPOSE_DOCUMENT_SUB_TYPES.SERVICE_LETTER]: InnerForm,
+  [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP]: BusinessTripNoticeForm,
+  [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER]: OrderForm,
+  [COMPOSE_DOCUMENT_SUB_TYPES.ORDINARY_NOTICE]: OrdinaryNoticeForm,
 }
 const selectedComponent = computed(
   () => {
-    return formValues[route.params.document_type] || InnerForm
+    const docSubType = route.params.document_sub_type
+    if ([COMPOSE_DOCUMENT_SUB_TYPES.LABOR_LEAVE,
+        COMPOSE_DOCUMENT_SUB_TYPES.CHILD_CARE_LEAVE,
+        COMPOSE_DOCUMENT_SUB_TYPES.VACATION_OWN_EXPENSE,
+        COMPOSE_DOCUMENT_SUB_TYPES.EDUCATIONAL_LEAVE,
+        COMPOSE_DOCUMENT_SUB_TYPES.MATERIAL_SUPPORT,
+        COMPOSE_DOCUMENT_SUB_TYPES.APPLICATION].includes(docSubType)) {
+      return ApplicationForm
+    }
+    return formValues[docSubType] || InnerForm
 })
 </script>
 
