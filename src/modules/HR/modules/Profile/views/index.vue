@@ -18,7 +18,7 @@ import {
   TwitterIcon,
   InstagramAltIcon,
   FacebookCircleIcon
-} from '@/components/icons'
+} from '@/components/Icons'
 // Stores
 import { useAuthStore } from '@/modules/Auth/stores'
 // Enums
