@@ -230,6 +230,13 @@
   dependencies:
     "@hapi/hoek" "^9.0.0"
 
+"@iconify-json/bxl@^1.1.11":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@iconify-json/bxl/-/bxl-1.2.0.tgz#e93a9bcd8c9d40b138c7ad9a53b3675f29a338e3"
+  integrity sha512-qIBKOJClhiHqdHBdlw8SQlrlslP0QbcI2nTQ9UKqAB/60FTfkLyPm+CeRXwg871ypbMTuPMBbLAYMlIL2zLLLQ==
+  dependencies:
+    "@iconify/types" "*"
+
 "@iconify-json/ci@^1.1.14":
   version "1.1.14"
   resolved "https://registry.yarnpkg.com/@iconify-json/ci/-/ci-1.1.14.tgz#cc580a9a530950480542200b3b7992d4cade92b2"

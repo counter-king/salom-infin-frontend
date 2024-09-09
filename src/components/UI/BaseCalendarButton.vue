@@ -17,6 +17,9 @@ const props = defineProps({
   dateFormat: {
     type: String,
     default: 'yy-mm-dd'
+  },
+  rootClass: {
+    type: String
   }
 })
 const emit = defineEmits(['emit:date-select', 'emit:date-clear'])
@@ -45,6 +48,7 @@ const clear = (event) => {
 <template>
   <button
     class="p-button p-component font-semibold text-sm bg-primary-0 hover:bg-greyscale-100 text-primary-dark border-transparent !rounded-full shadow-button pt-[10px] pb-[9px] pl-4 pr-3"
+    :class="props.rootClass"
     @click="toggle"
   >
     <base-iconify :icon="CalendarIcon" class="text-greyscale-500 mr-2" />

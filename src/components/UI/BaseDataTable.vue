@@ -45,6 +45,10 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  roundable: {
+    type: Boolean,
+    default: true
+  },
   expandable: {
     type: Boolean
   },
@@ -176,6 +180,7 @@ onMounted( async () => {
       }
     }"
     class="base-data-table"
+    :class="{ 'base-data-table--roundable': props.roundable }"
     @row-click="event => emit('emit:rowClick', event.data)"
     @page="onPageChange"
     @update:selection="updateSelection"
@@ -266,11 +271,11 @@ onMounted( async () => {
 </template>
 
 <style>
-th:first-child, td:first-child {
+.base-data-table--roundable th:first-child, .base-data-table--roundable td:first-child {
   border-radius: 12px 0 0 12px;
 }
 
-th:last-child, td:last-child {
+.base-data-table--roundable th:last-child, .base-data-table--roundable td:last-child {
   border-radius: 0 12px 12px 0;
 }
 </style>

@@ -45,7 +45,7 @@ const statement = computed(() => {
       default:                                                              // Отклоненный
         return "bg-critic-50 text-critic-500 border-critic-500"
     }
-  } else if (props.type === 'handbook'){
+  } else if (props.type === 'handbook') {
     switch (props.status.code) {
       case USER_STATUS_CODES.WORKERS:
         return 'bg-success-50 text-success-500 border-success-500'
@@ -90,7 +90,7 @@ const name = computed(() => {
       statement,
       {
         'border': props.border,
-        'rounded-[80px]': props.circle
+        '!rounded-[80px]': props.circle
       },
       props.rootClass
     ]"
