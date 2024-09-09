@@ -18,7 +18,11 @@ const props = defineProps({
   label: {
     type: String,
     default: ""
-  }
+  },
+  apiParams: {
+    type: Object,
+    default: () => {}
+  },
 });
 const modelValue = useModel(props, 'modelValue')
 
@@ -30,6 +34,7 @@ const emit = defineEmits(['update:modelValue'])
     v-model="modelValue"
     api-url="users"
     :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
+    :api-params="props.apiParams"
     display="chip"
     selectable
     :label="props.label"

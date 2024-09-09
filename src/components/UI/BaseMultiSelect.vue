@@ -171,6 +171,9 @@ const toggle = (event) => {
   const _menuRef = unref(menuRef)
   _menuRef.menuRef.toggle(event)
 }
+const onLazyLoad = (event) => {
+  console.log('sssssss')
+}
 // Hooks
 onMounted(async () => {
   // Если не переданы props.options
@@ -207,6 +210,7 @@ watch(debounced, async () => {
       :disabled="props.disabled"
       :panel-style="{ height: 'auto' }"
       filter
+      scroll-height="300px"
       @show="() => inputRef.focus()"
       :pt="{
         root: {
