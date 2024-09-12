@@ -217,7 +217,7 @@ onMounted( async () => {
         :header="t(header.header)"
         :field="header.field"
         :pt="{
-          headerCell: { class: ['bg-inherit', 'h-[56px]'] },
+          headerCell: { class: ['bg-inherit h-[56px]', header.class] },
           headerContent: { class: ['text-sm', 'font-semibold', 'text-greyscale-500'] },
           bodyCell: { class: ['text-sm', 'py-0', 'h-[56px]'] }
         }"
