@@ -2,7 +2,7 @@
 // Core
 import { ref } from 'vue'
 // Components
-import { CaseIcon, UserIcon } from '@/components/Icons'
+import { CaseIcon, UserIcon, SettingsMinimalisticIcon } from '@/components/Icons'
 import TheSidebar from '@/components/TheSidebar.vue'
 // Stores
 import { useAgreementsRoutesStore } from '../modules/Agreements/stores/routes.store'
@@ -26,7 +26,13 @@ const menus = ref([
     link: "BusinessTripIndex",
     children: []
   },
-  agreementsRoutesStore.routes
+  agreementsRoutesStore.routes,
+  {
+    title: "Настройки согласия",
+    icon: SettingsMinimalisticIcon,
+    link: "AgreementSettingsIndex",
+    children: []
+  },
 ])
 </script>
 

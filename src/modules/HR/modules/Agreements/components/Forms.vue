@@ -10,6 +10,8 @@ import { UserWithLabel, UserWithSelectable } from '@/components/Users'
 import KeyWords from './KeyWords.vue'
 // Stores
 import { useAgreementsStore } from '../stores/agreements.store'
+import { useAgreementCategory } from '../../AgreementSettings/stores/category.store'
+import { useAgreementTypes } from '../../AgreementSettings/stores/types.store'
 // Utils
 import { dispatchNotify } from '@/utils/notify'
 import { isObject } from '@/utils'
@@ -46,6 +48,8 @@ const rules = {
 const route = useRoute()
 const router = useRouter()
 const agreementsStore = useAgreementsStore()
+const agreementCategory = useAgreementCategory()
+const agreementTypes = useAgreementTypes()
 const $v = useVuelidate(rules, agreementsStore.createModel)
 // Reactive
 const editor = ref(null)
@@ -74,9 +78,10 @@ const create = async () => {
   }
 }
 const handleDocType = async (value) => {
-  await agreementsStore.getNegotiationSubTypes({
+  await agreementTypes.getTypes({
     doc_type: value
   })
+  agreementsStore.createModel.doc_sub_type = null
 }
 const handleKeyWords = (key) => {
   let el = document.querySelector('.fr-element > p')
@@ -96,11 +101,11 @@ const handleKeyWords = (key) => {
 onMounted(async () => {
   if(route.params.id) {
     await agreementsStore.getNegotiationsById({ id: route.params.id })
-    await agreementsStore.getNegotiationSubTypes({
+    await agreementTypes.getTypes({
       doc_type: agreementsStore.createModel.doc_type
     })
   }
-  await agreementsStore.getNegotiationTypes()
+  await agreementCategory.getCategories()
 })
 </script>
 
@@ -120,7 +125,7 @@ onMounted(async () => {
                   <base-dropdown
                     v-model="$v.doc_type.$model"
                     :error="$v.doc_type"
-                    :options="agreementsStore.negotiationTypes"
+                    :options="agreementCategory.list"
                     :disabled="props.type === FORM_TYPE_READ"
                     required
                     option-value="id"
@@ -135,7 +140,7 @@ onMounted(async () => {
                   <base-dropdown
                     v-model="$v.doc_sub_type.$model"
                     :error="$v.doc_sub_type"
-                    :options="agreementsStore.negotiationSubTypes"
+                    :options="agreementTypes.list"
                     :disabled="props.type === FORM_TYPE_READ"
                     required
                     option-value="id"
