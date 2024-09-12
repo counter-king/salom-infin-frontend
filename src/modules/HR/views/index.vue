@@ -26,13 +26,13 @@ const menus = ref([
     link: "BusinessTripIndex",
     children: []
   },
+  agreementsRoutesStore.routes,
   {
     title: "Настройки согласия",
     icon: SettingsMinimalisticIcon,
     link: "AgreementSettingsIndex",
     children: []
   },
-  agreementsRoutesStore.routes
 ])
 </script>
 

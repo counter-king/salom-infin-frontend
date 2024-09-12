@@ -38,9 +38,9 @@ export const useAgreementTypes = defineStore('agreements-types', {
     totalCount: 0
   }),
   actions: {
-    async getTypes() {
+    async getTypes(params = {}) {
       try {
-        let { data } = await fetchTypes()
+        let { data } = await fetchTypes(params)
         this.list = data.results
       }
       catch(error) {

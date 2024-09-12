@@ -270,8 +270,18 @@ onMounted(async () => {
       </template>
 
       <template #content>
-        <pre>{{ updateModel }}</pre>
         <div class="space-y-5 mb-12">
+          <base-dropdown
+            v-model="$v2.doc_type.$model"
+            :error="$v2.doc_type"
+            :options="agreementCategory.list"
+            required
+            option-value="id"
+            option-label="name"
+            label="Категория документа"
+            placeholder="Выберите категорию"
+          />
+
           <base-input
             v-model="$v2.name.$model"
             :error="$v2.name"
