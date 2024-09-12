@@ -7,3 +7,4 @@ export { default as EriKeysMenu } from './EriKeysMenu.vue'
 export { default as FilterMenu } from "./FilterMenu.vue"
 export { default as CalendarMenu } from "./CalendarMenu.vue"
 export { default as ExportButton } from "./ExportButton.vue"
+export { default as CreateMenu } from "./CreateMenu.vue"
