@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import {onBeforeMount, onMounted, onUnmounted, ref} from "vue"
+import {onBeforeMount, onUnmounted, ref} from "vue"
 import {useVuelidate} from "@vuelidate/core"
 import {useRoute, useRouter} from "vue-router"
 import {useI18n} from "vue-i18n"
@@ -13,18 +13,18 @@ import BranchMultiSelect from "@/components/Select/BranchMultiSelect.vue"
 import FormContainer from "@/modules/Documents/modules/SendDocuments/components/FormContainer.vue"
 import {LayoutWithTabs} from "@/components/DetailLayout"
 import UserMultiSelect from "@/components/Select/UserMultiSelect.vue"
+import UserSelect from "@/components/Select/UserSelect.vue"
 import {UserWithRadio} from "@/components/Users"
+import EditorWithTabs from "@/components/Composed/EditorWithTabs.vue"
 // Utils
 import {formatDateReverse} from "@/utils/formatDate"
 // Store
 import {useAuthStore} from "@/modules/Auth/stores"
 import {useCommonStore} from "@/stores/common"
-import {useDocumentCountStore} from "@/modules/Documents/stores/count.store";
+import {useDocumentCountStore} from "@/modules/Documents/stores/count.store"
 import {useSDBTNoticeStore} from "@/modules/Documents/modules/SendDocuments/stores/businessTripNotice.store"
-import EditorWithTabs from "@/components/Composed/EditorWithTabs.vue"
 import {COLOR_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL, ROUTES_TYPE} from "@/enums"
 import PreviewDialog from "@/modules/Documents/modules/SendDocuments/components/PreviewDialog.vue"
-import UserSelect from "@/components/Select/UserSelect.vue"
 import {adjustUsersToArray, resetModel} from "@/utils"
 import {dispatchNotify} from "@/utils/notify"
 import {ROUTE_SD_DETAIL, ROUTE_SD_LIST} from "@/modules/Documents/modules/SendDocuments/constants"
@@ -58,6 +58,7 @@ const preview = async () => {
   BTNoticeStore.model.signers = adjustUsersToArray(BTNoticeStore.model.__signers)
   BTNoticeStore.model.curator = BTNoticeStore?.model?.__curator.id
   BTNoticeStore.model.journal = JOURNAL.INNER
+  BTNoticeStore.model.company = authStore.currentUser.company.id
   BTNoticeStore.model.notices = BTNoticeStore.model.__employees.map(item => {
     return {
       start_date: BTNoticeStore.model.start_date,

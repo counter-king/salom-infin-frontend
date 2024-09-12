@@ -60,22 +60,23 @@ export const USER_STATUS_CODES = {
   APPROVED:                      'SA'  // Утвержден
 }
 export const COMPOSE_DOCUMENT_TYPES = {
-  NOTICE: '1',
-  ORDER: '2',
-  INNER: '3',
-  APPLICATION: '5'
+  NOTICE:                        '1', // Рапорт
+  ORDER:                         '2', // Приказ
+  INNER:                         '3', // Внутренний
+  APPLICATION:                   '5'  // Заявление
 }
 export const COMPOSE_DOCUMENT_SUB_TYPES = {
-  LABOR_LEAVE: '1',
-  BUSINESS_TRIP: '2',
-  SERVICE_LETTER: '3',
-  BUSINESS_TRIP_ORDER: '4',
-  MATERIAL_SUPPORT: '5',
-  EDUCATIONAL_LEAVE: '6',
-  VACATION_OWN_EXPENSE: '7',
-  CHILD_CARE_LEAVE: '8',
-  APPLICATION: '27',
-  ORDERS_BANK_MANAGEMENT: '18'
+  LABOR_LEAVE:                   '1', // Трудовой отпуск
+  BUSINESS_TRIP:                 '2', // Командировочный рапорт
+  SERVICE_LETTER:                '3', // Служебное письмо
+  BUSINESS_TRIP_ORDER:           '4', // Командировочный приказ
+  MATERIAL_SUPPORT:              '5', // Материалка
+  EDUCATIONAL_LEAVE:             '6', // Учебный отпуск
+  VACATION_OWN_EXPENSE:          '7', // Отпуск за свой счет
+  CHILD_CARE_LEAVE:              '8', // Отпуск по уходу за ребенком
+  ORDINARY_NOTICE:               '9', // Рапорт
+  ORDERS_BANK_MANAGEMENT:        '18', // Приказ правления банка
+  APPLICATION:                   '27' // Заявление
 }
 export const COLOR_TYPES = {
   PRIMARY: "primary",

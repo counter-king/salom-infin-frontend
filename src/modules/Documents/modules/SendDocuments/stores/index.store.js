@@ -214,20 +214,20 @@ export const useSDStore = defineStore("sd-stores", {
         active: false,
         items: [
           {
+            label: 'notice',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.NOTICE,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.ORDINARY_NOTICE
+          },
+          {
             label: 'business-trip',
             type: 'submenu',
             hasRouterLink: true,
             routerLinkName: ROUTE_SD_CREATE,
             documentType: COMPOSE_DOCUMENT_TYPES.NOTICE,
             documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP
-          },
-          {
-            label: 'Рапорт',
-            type: 'submenu',
-            hasRouterLink: true,
-            routerLinkName: ROUTE_SD_CREATE,
-            documentType: COMPOSE_DOCUMENT_TYPES.NOTICE,
-            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.ORDERS_BANK_MANAGEMENT
           },
         ],
       },
