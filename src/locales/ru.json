@@ -299,6 +299,8 @@
   "sign-resolution": "Подписать резолюцию",
   "create-notice": "Создать рапорт",
   "update-notice": "Изменить рапорт",
+  "create-decree": "Создать распоряжения",
+  "update-decree": "Изменить распоряжения",
   "employees": "Сотрудники",
   "select-employees": "Выбирайте сотрудников",
   "targets": "Цели",

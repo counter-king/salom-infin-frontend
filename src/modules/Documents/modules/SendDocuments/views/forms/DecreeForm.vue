@@ -14,16 +14,16 @@ import {LayoutWithTabs} from "@/components/DetailLayout"
 import UserMultiSelect from "@/components/Select/UserMultiSelect.vue"
 import UserSelect from "@/components/Select/UserSelect.vue"
 import EditorWithTabs from "@/components/Composed/EditorWithTabs.vue"
-import {OrdinaryNoticeTemplate} from "@/components/Templates"
 import PreviewDialog from "@/modules/Documents/modules/SendDocuments/components/PreviewDialog.vue"
+import {DecreeTemplate} from "@/components/Templates"
 // Utils
 import {adjustUsersToArray, resetModel} from "@/utils"
 import {dispatchNotify} from "@/utils/notify"
 // Store
 import {useAuthStore} from "@/modules/Auth/stores"
-import {useNoticeStore} from "@/modules/Documents/modules/SendDocuments/stores/notice.store"
 import {useDocumentCountStore} from "@/modules/Documents/stores/count.store"
 import {useCommonStore} from "@/stores/common"
+import {useDecreeStore} from "@/modules/Documents/modules/SendDocuments/stores/decree.store"
 
 const props = defineProps({
   formType: {
@@ -36,29 +36,29 @@ const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
-const noticeStore = useNoticeStore()
 const countStore = useDocumentCountStore()
 const commonStore = useCommonStore()
 const dialog = ref(false)
+const decreeStore = useDecreeStore()
 
-const $v = useVuelidate(noticeStore.rules, noticeStore.model)
+const $v = useVuelidate(decreeStore.rules, decreeStore.model)
 
 // Methods
 const preview = async () => {
   const valid = await $v.value.$validate()
   if (!valid) return
 
-  noticeStore.model.approvers = []
-  noticeStore.model.signers = []
-  noticeStore.model.approvers = adjustUsersToArray(noticeStore.model.__approvers)
-  noticeStore.model.signers = adjustUsersToArray(noticeStore.model.__signers)
-  noticeStore.model.curator = noticeStore?.model?.__curator.id
-  noticeStore.model.journal = JOURNAL.INNER
-  noticeStore.model.company = authStore.currentUser.company.id
-  noticeStore.model.sender = authStore?.currentUser?.top_level_department?.id
-  noticeStore.model.files = noticeStore.model.__files.map(item => { return { id: item.id } })
-  noticeStore.model.document_type = route.params.document_type
-  noticeStore.model.document_sub_type = route.params.document_sub_type
+  decreeStore.model.approvers = []
+  decreeStore.model.signers = []
+  decreeStore.model.approvers = adjustUsersToArray(decreeStore.model.__approvers)
+  decreeStore.model.signers = adjustUsersToArray(decreeStore.model.__signers)
+  decreeStore.model.curator = decreeStore?.model?.__curator.id
+  decreeStore.model.journal = JOURNAL.ORDERS_PROTOCOLS
+  decreeStore.model.company = authStore.currentUser.company.id
+  decreeStore.model.sender = authStore?.currentUser?.top_level_department?.id
+  decreeStore.model.files = decreeStore.model.__files.map(item => { return { id: item.id } })
+  decreeStore.model.document_type = route.params.document_type
+  decreeStore.model.document_sub_type = route.params.document_sub_type
 
   dialog.value = true
 }
@@ -66,13 +66,14 @@ const clearForm = () => {
 
 }
 const onFileUpload = (files) => {
-  noticeStore.model.__files = []
+  decreeStore.model.__files = []
   files.forEach(file => {
-    noticeStore.model.__files.push(file)
+    decreeStore.model.__files.push(file)
   })
 }
+
 const create = async () => {
-  const response = await noticeStore.actionCreateDocument(noticeStore.model)
+  const response = await decreeStore.actionCreateDocument(decreeStore.model)
   await countStore.actionDocumentCountList()
   if (response) {
     dialog.value = false
@@ -80,7 +81,7 @@ const create = async () => {
     await router.replace({
       name: ROUTE_SD_LIST,
       query: {
-        document_type: COMPOSE_DOCUMENT_TYPES.NOTICE
+        document_type: route.params.document_type
       }
     })
   } else {
@@ -88,10 +89,10 @@ const create = async () => {
   }
 }
 const update = async () => {
-  const data = await noticeStore.actionUpdateDocument(
+  const data = await decreeStore.actionUpdateDocument(
     {
       id: route.params.id,
-      body: noticeStore.model
+      body: decreeStore.model
     }
   );
   await countStore.actionDocumentCountList();
@@ -112,27 +113,25 @@ const manage = () => {
     update()
   }
 }
-
 // Hooks
 onBeforeMount( async () => {
   if (route.params.id) {
-    await noticeStore.actionGetDocumentDetailForUpdate(route.params.id)
+    await decreeStore.actionGetDocumentDetailForUpdate(route.params.id)
   }
 })
-
 onUnmounted(() => {
-  resetModel(noticeStore.model)
+  resetModel(decreeStore.model)
 })
 </script>
 
 <template>
-  <template v-if="noticeStore.detailLoading">
+  <template v-if="decreeStore.detailLoading">
     <base-spinner/>
   </template>
 
   <template v-else>
     <layout-with-tabs
-      :title="props.formType === FORM_TYPE_CREATE ? 'create-notice' : 'update-notice'"
+      :title="props.formType === FORM_TYPE_CREATE ? 'create-decree' : 'update-decree'"
     >
       <template #content>
         <form-container
@@ -163,7 +162,7 @@ onUnmounted(() => {
 
             <base-col col-class="w-1/2">
               <user-multi-select
-                v-model="noticeStore.model.__approvers"
+                v-model="decreeStore.model.__approvers"
                 label="approvers"
                 placeholder="enter-approvers"
               />
@@ -184,7 +183,7 @@ onUnmounted(() => {
                 v-model="$v.content.$model"
                 :error="$v.content"
                 file-upload-container-classes="w-1/2 pr-2"
-                :files="noticeStore.model.__files"
+                :files="decreeStore.model.__files"
                 @emit:file-upload="onFileUpload"
               />
             </base-col>
@@ -196,12 +195,12 @@ onUnmounted(() => {
     <!-- PREVIEW -->
     <preview-dialog
       v-model="dialog"
-      :send-button-loading="noticeStore.buttonLoading"
+      :send-button-loading="decreeStore.buttonLoading"
       @emit:send="manage"
     >
       <template #content>
-        <ordinary-notice-template
-          :compose-model="noticeStore.model"
+        <decree-template
+          :compose-model="decreeStore.model"
           :preview="true"
         />
       </template>

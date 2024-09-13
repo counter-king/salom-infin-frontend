@@ -7,7 +7,7 @@ import {useI18n} from "vue-i18n"
 import {ROUTE_SD_CREATE} from "@/modules/Documents/modules/SendDocuments/constants"
 import {COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES} from "@/enums"
 // Components
-import {AltArrowDownIcon, DocumentAddIcon} from "@/components/Icons"
+import {AltArrowDownIcon, DocumentAddIcon, CheckCircleIcon} from "@/components/Icons"
 
 const props = defineProps({
   composeId: {
@@ -28,6 +28,20 @@ const items = ref([
       params: {
         document_type: COMPOSE_DOCUMENT_TYPES.ORDER,
         document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER
+      },
+      query: {
+        compose_id: props.composeId
+      }
+    })
+  },
+  {
+    label: t('decree'),
+    icon: CheckCircleIcon,
+    command: () => router.push({
+      name: ROUTE_SD_CREATE,
+      params: {
+        document_type: COMPOSE_DOCUMENT_TYPES.DECREE,
+        document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.ORDINARY_DECREE
       },
       query: {
         compose_id: props.composeId

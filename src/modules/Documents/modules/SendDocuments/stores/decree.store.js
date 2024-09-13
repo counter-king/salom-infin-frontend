@@ -10,7 +10,7 @@ import {
   fetchGetDocumentDetail, fetchUpdateDocument
 } from "@/modules/Documents/modules/SendDocuments/services/index.service"
 
-export const useNoticeStore = defineStore("notice-store", {
+export const useDecreeStore = defineStore("decree-store", {
   state: () => ({
     buttonLoading: false,
     detailLoading: false,
@@ -59,10 +59,10 @@ export const useNoticeStore = defineStore("notice-store", {
       }
     },
     /** **/
-    async actionUpdateDocument({ id, body }) {
+    async actionUpdateDocument({id, body}) {
       try {
         this.buttonLoading = true;
-        const { data } = await fetchUpdateDocument({ id, body });
+        const {data} = await fetchUpdateDocument({id, body});
         return Promise.resolve(data);
       } catch (err) {
 
@@ -74,11 +74,11 @@ export const useNoticeStore = defineStore("notice-store", {
     async actionGetDocumentDetailForUpdate(id) {
       try {
         this.detailLoading = true
-        const { data } = await fetchGetDocumentDetail(id)
+        const {data} = await fetchGetDocumentDetail(id)
         setValuesToKeys(this.model, data)
         this.model.__curator = await adjustUserObjectToArray([], data.curator.id, false)
-        this.model.__approvers =  await adjustUserObjectToArray(data.approvers)
-        this.model.__signers =  await adjustUserObjectToArray(data.signers)
+        this.model.__approvers = await adjustUserObjectToArray(data.approvers)
+        this.model.__signers = await adjustUserObjectToArray(data.signers)
       } catch (err) {
 
       } finally {

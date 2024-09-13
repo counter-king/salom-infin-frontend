@@ -14,7 +14,7 @@ import {COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES} from "@
 import {ROUTE_SD_CREATE} from "@/modules/Documents/modules/SendDocuments/constants"
 import {fetchGetTree} from "@/modules/Documents/modules/Registration/services/docflow.service"
 // Components
-import {DocumentAddIcon, DocumentMedicineIcon, NotebookLinearIcon, NotesIcon} from "@/components/Icons"
+import {CheckCircleIcon, DocumentAddIcon, DocumentMedicineIcon, NotebookLinearIcon, NotesIcon} from "@/components/Icons"
 
 export const useSDStore = defineStore("sd-stores", {
   state: () => ({
@@ -63,6 +63,17 @@ export const useSDStore = defineStore("sd-stores", {
         disabled: false,
         document_type: COMPOSE_DOCUMENT_TYPES.ORDER
       },
+      // Распоряжения
+      {
+        label: "decree",
+        icon: "CheckCircleIcon",
+        type: "decree",
+        sub_type: "decree",
+        active: false,
+        selected: true,
+        disabled: false,
+        document_type: COMPOSE_DOCUMENT_TYPES.DECREE
+      },
       // // Заключение
       // {
       //   label: "summary",
@@ -79,16 +90,6 @@ export const useSDStore = defineStore("sd-stores", {
       //   icon: "RoundArrowDownIcon",
       //   type: "outgoing",
       //   sub_type: "outgoing",
-      //   active: false,
-      //   selected: true,
-      //   disabled: false
-      // },
-      // // Распоряжения
-      // {
-      //   label: "decree",
-      //   icon: "CheckCircleIcon",
-      //   type: "decree",
-      //   sub_type: "decree",
       //   active: false,
       //   selected: true,
       //   disabled: false
@@ -307,6 +308,24 @@ export const useSDStore = defineStore("sd-stores", {
           }
         ],
       },
+      {
+        id: 5,
+        label: 'decree',
+        icon: CheckCircleIcon,
+        type: 'menu',
+        hasRouterLink: false,
+        active: false,
+        items: [
+          {
+            label: 'decree',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.DECREE,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.ORDINARY_DECREE
+          }
+        ],
+      },
     ]
   }),
   actions: {
@@ -400,6 +419,17 @@ export const useSDStore = defineStore("sd-stores", {
           disabled: false,
           document_type: COMPOSE_DOCUMENT_TYPES.ORDER
         },
+        // Распоряжения
+        {
+          label: "decree",
+          icon: "CheckCircleIcon",
+          type: "decree",
+          sub_type: "decree",
+          active: false,
+          selected: true,
+          disabled: false,
+          document_type: COMPOSE_DOCUMENT_TYPES.DECREE
+        },
         // // Рапорт
         // {
         //   label: "notice",
@@ -436,16 +466,6 @@ export const useSDStore = defineStore("sd-stores", {
         //   icon: "RoundArrowDownIcon",
         //   type: "outgoing",
         //   sub_type: "outgoing",
-        //   active: false,
-        //   selected: true,
-        //   disabled: false
-        // },
-        // // Распоряжения
-        // {
-        //   label: "decree",
-        //   icon: "CheckCircleIcon",
-        //   type: "decree",
-        //   sub_type: "decree",
         //   active: false,
         //   selected: true,
         //   disabled: false

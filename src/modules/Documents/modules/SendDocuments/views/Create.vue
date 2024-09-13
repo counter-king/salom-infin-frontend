@@ -8,7 +8,8 @@ import {
   BusinessTripNoticeForm,
   ApplicationForm,
   OrderForm,
-  OrdinaryNoticeForm
+  OrdinaryNoticeForm,
+  DecreeForm
 } from "@/modules/Documents/modules/SendDocuments/views/forms/index"
 // Constants
 import {FORM_TYPE_CREATE} from "@/constants/constants"
@@ -20,6 +21,7 @@ const formValues  = {
   [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP]: BusinessTripNoticeForm,
   [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER]: OrderForm,
   [COMPOSE_DOCUMENT_SUB_TYPES.ORDINARY_NOTICE]: OrdinaryNoticeForm,
+  [COMPOSE_DOCUMENT_SUB_TYPES.ORDINARY_DECREE]: DecreeForm,
 }
 const selectedComponent = computed(
   () => {

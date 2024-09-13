@@ -145,7 +145,7 @@ onUnmounted(() => {
               <user-select
                 v-model="$v.__curator.$model"
                 :error="$v.__curator"
-                api-url="top-signers"
+                api-url="users"
                 label="whom"
                 required
                 placeholder="select-leader"

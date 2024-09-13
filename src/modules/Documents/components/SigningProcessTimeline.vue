@@ -1,11 +1,14 @@
 <script setup>
 // Core
-import {computed, ref} from "vue";
-import {useI18n} from "vue-i18n";
-import Timeline from 'primevue/timeline';
-import {formatDateHour} from "../../../utils/formatDate";
-import {ModalComment} from "@/components/Modal";
+import {computed, ref} from "vue"
+import {useI18n} from "vue-i18n"
+// Utils
+import {formatDateHour} from "@/utils/formatDate"
+// Enums
+import {SIGNER_TYPES} from "@/enums"
 // Components
+import Timeline from 'primevue/timeline'
+import {ModalComment} from "@/components/Modal"
 import {
 	CheckCircleBoldIcon,
 	CheckCircleIcon, CircleIcon, CloseCircleBoldIcon,
@@ -44,10 +47,10 @@ const signingProcessComputed = computed(() => {
     approvers = approvers.filter(item => item.user.id !== assistant.user.id)
   }
 
-  let signers = composeModel.signers.filter(item => item.type !== 'basic_signer').map(item => ({ ...item, type: "signers" }))
+  let signers = composeModel.signers.filter(item => item.type !== SIGNER_TYPES.BASIC_SIGNER).map(item => ({ ...item, type: "signers" }))
 
   const curator = composeModel?.curator
-    ? composeModel.signers.find(item => item.type === 'basic_signer')
+    ? composeModel.signers.find(item => item.type === SIGNER_TYPES.BASIC_SIGNER)
     : null
 
   const author = { user: composeModel.author, type: "author" }

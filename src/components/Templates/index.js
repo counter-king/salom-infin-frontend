@@ -3,6 +3,7 @@ export { default as ApplicationLetterTemplate } from "./ApplicationLetterTemplat
 export { default as BusinessTripNoticeTemplate } from "./BusinessTripNoticeTemplate.vue"
 export { default as OrdinaryNoticeTemplate } from "./OrdinaryNoticeTemplate.vue"
 export { default as OrderLetterTemplate } from "./OrderLetterTemplate.vue"
+export { default as DecreeTemplate } from "./DecreeTemplate.vue"
 export { default as ResolutionChairmanTemplate } from "./ResolutionChairman.vue"
 export { default as ResolutionDeputyChairmanTemplate } from "./ResolutionDeputyChairman.vue"
 export { default as ResolutionDefaultTemplate } from "./ResolutionDefault.vue"

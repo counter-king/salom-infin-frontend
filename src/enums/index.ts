@@ -63,6 +63,7 @@ export const COMPOSE_DOCUMENT_TYPES = {
   NOTICE:                        '1', // Рапорт
   ORDER:                         '2', // Приказ
   INNER:                         '3', // Внутренний
+  DECREE:                        '4', // Распоряжение
   APPLICATION:                   '5'  // Заявление
 }
 export const COMPOSE_DOCUMENT_SUB_TYPES = {
@@ -75,6 +76,7 @@ export const COMPOSE_DOCUMENT_SUB_TYPES = {
   VACATION_OWN_EXPENSE:          '7', // Отпуск за свой счет
   CHILD_CARE_LEAVE:              '8', // Отпуск по уходу за ребенком
   ORDINARY_NOTICE:               '9', // Рапорт
+  ORDINARY_DECREE:               '10', //Распоряжение
   ORDERS_BANK_MANAGEMENT:        '18', // Приказ правления банка
   APPLICATION:                   '27' // Заявление
 }
