@@ -103,7 +103,7 @@ const props = defineProps({
   },
   clearAfterSelect: {
     type: Boolean,
-    default: true
+    default: false
   }
 })
 // Reactive

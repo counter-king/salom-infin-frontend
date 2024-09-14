@@ -133,6 +133,7 @@ export { default as HashtagCircleBoldIcon } from  '~icons/solar/hashtag-circle-b
 export { default as UserHandsBoldIcon } from  '~icons/solar/user-hands-bold'
 export { default as LetterBoldIcon } from  '~icons/solar/letter-bold'
 export { default as UserSpeakBoldIcon } from  '~icons/solar/user-speak-bold'
+export { default as FolderBoldIcon } from  '~icons/solar/folder-bold'
 // Solar (Bold Duotone)
 export { default as ArchiveUpBoldDuotoneIcon } from  '~icons/solar/archive-up-bold-duotone'
 export { default as StarBoldDuotoneIcon } from  '~icons/solar/star-bold-duotone'

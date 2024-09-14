@@ -12,7 +12,8 @@ import {
   ClockCircleIcon,
   ChatLineIcon,
   FileTextIcon,
-  CloseCircleBoldIcon
+  CloseCircleBoldIcon,
+  FolderWithFilesIcon
 } from '@/components/Icons'
 import FileTabs from './components/FileTabs.vue'
 import BackButton from "@/components/Actions/BackButton.vue"
@@ -68,6 +69,13 @@ const props = defineProps({
         icon: FileTextIcon,
         slot: "files",
         component: "Files"
+      },
+      {
+        label: "Связанные документы",
+        name: "ConnectedDocuments",
+        icon: FolderWithFilesIcon,
+        slot: "connected-documents",
+        component: "ConnectedDocuments"
       }
     ]
   },
@@ -194,7 +202,7 @@ const closeHistoryDetail = () => {
         <div class="flex flex-1">
           <slot :name="activeTabMenu.slot">
             <div class="flex-1 overflow-y-auto">
-              <div class="h-[1px]">
+              <div class="h-full">
                 <component
                   :is="activeTabComponent"
                   :preview-detail="props.previewDetail"
