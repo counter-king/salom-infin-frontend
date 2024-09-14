@@ -8,6 +8,7 @@ import {fetchGetLinkedDocumentsList} from "@/modules/Documents/modules/SendDocum
 import {FolderBoldIcon, AltArrowRightIcon} from "@/components/Icons"
 import {StatusChip} from "@/components/Chips"
 import Empty from "@/components/Empty.vue";
+import {STATUS_TYPES} from "@/enums";
 
 // Composable
 const route = useRoute()
@@ -35,9 +36,15 @@ const getLinkedDocuments = async () => {
   }
 }
 const openRoute = async (item) => {
-  // await router.push({
-  //
-  // })
+  if (item?.compose?.registered_document && item?.compose?.registered_document?.id && item?.compose?.journal?.code) {
+    await router.push({
+      name: 'RegistrationShow',
+      params: {
+        code: item?.compose?.journal?.code,
+        id: item?.compose?.registered_document?.id
+      }
+    })
+  }
 }
 
 // Hooks
