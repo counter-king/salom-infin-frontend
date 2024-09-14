@@ -52,7 +52,7 @@ const preview = async () => {
   noticeStore.model.signers = []
   noticeStore.model.approvers = adjustUsersToArray(noticeStore.model.__approvers)
   noticeStore.model.signers = adjustUsersToArray(noticeStore.model.__signers)
-  noticeStore.model.curator = noticeStore?.model?.__curator.id
+  noticeStore.model.curator = noticeStore?.model?.__curator?.user_id
   noticeStore.model.journal = JOURNAL.INNER
   noticeStore.model.company = authStore.currentUser.company.id
   noticeStore.model.sender = authStore?.currentUser?.top_level_department?.id
@@ -144,7 +144,7 @@ onUnmounted(() => {
               <user-select
                 v-model="$v.__curator.$model"
                 :error="$v.__curator"
-                api-url="users"
+                api-url="top-signers"
                 label="whom"
                 required
                 placeholder="select-leader"

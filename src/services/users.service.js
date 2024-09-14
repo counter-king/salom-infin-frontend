@@ -2,7 +2,8 @@ import axiosConfig from "./axios.config"
 
 const URLS = {
   users: "users",
-  employeeGroups: "employee-groups"
+  employeeGroups: "employee-groups",
+  topSigners: "top-signers"
 }
 /**
  * Возвращает список пользователей
@@ -10,6 +11,10 @@ const URLS = {
  * */
 export const fetchUsersList = (params) => {
   return axiosConfig.get(`${URLS.users}/`, params)
+}
+/** **/
+export const fetchTopSignersList = (params) => {
+  return axiosConfig.get(`${URLS.topSigners}/`, params)
 }
 /** **/
 export const fetchUserDetail = (id) => {

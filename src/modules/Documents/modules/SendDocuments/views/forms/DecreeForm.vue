@@ -52,13 +52,16 @@ const preview = async () => {
   decreeStore.model.signers = []
   decreeStore.model.approvers = adjustUsersToArray(decreeStore.model.__approvers)
   decreeStore.model.signers = adjustUsersToArray(decreeStore.model.__signers)
-  decreeStore.model.curator = decreeStore?.model?.__curator.id
+  decreeStore.model.curator = decreeStore?.model?.__curator?.user_id
   decreeStore.model.journal = JOURNAL.ORDERS_PROTOCOLS
   decreeStore.model.company = authStore.currentUser.company.id
   decreeStore.model.sender = authStore?.currentUser?.top_level_department?.id
   decreeStore.model.files = decreeStore.model.__files.map(item => { return { id: item.id } })
   decreeStore.model.document_type = route.params.document_type
   decreeStore.model.document_sub_type = route.params.document_sub_type
+  if (route.query.compose_id) {
+    decreeStore.model.trip_notice_id = route.query.compose_id
+  }
 
   dialog.value = true
 }
@@ -143,7 +146,7 @@ onUnmounted(() => {
               <user-select
                 v-model="$v.__curator.$model"
                 :error="$v.__curator"
-                api-url="users"
+                api-url="top-signers"
                 label="whom"
                 required
                 placeholder="select-leader"

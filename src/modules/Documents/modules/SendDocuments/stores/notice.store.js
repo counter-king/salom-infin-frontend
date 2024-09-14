@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 // Utils
 import {withAsync} from "@/utils/withAsync"
 import { helpers, required } from "@vuelidate/validators"
-import {adjustUserObjectToArray, setValuesToKeys} from "@/utils"
+import {adjustTopSignerObjectToArray, adjustUserObjectToArray, setValuesToKeys} from "@/utils"
 // Services
 import {
   fetchCreateDocument,
@@ -76,7 +76,7 @@ export const useNoticeStore = defineStore("notice-store", {
         this.detailLoading = true
         const { data } = await fetchGetDocumentDetail(id)
         setValuesToKeys(this.model, data)
-        this.model.__curator = await adjustUserObjectToArray([], data.curator.id, false)
+        this.model.__curator = await adjustTopSignerObjectToArray([], data.curator.id, false)
         this.model.__approvers =  await adjustUserObjectToArray(data.approvers)
         this.model.__signers =  await adjustUserObjectToArray(data.signers)
       } catch (err) {

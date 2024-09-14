@@ -8,7 +8,7 @@ import {
   fetchCreateDocument,
   fetchGetDocumentDetail, fetchUpdateDocument
 } from "@/modules/Documents/modules/SendDocuments/services/index.service"
-import {adjustUserObjectToArray, setValuesToKeys} from "@/utils"
+import {adjustTopSignerObjectToArray, adjustUserObjectToArray, setValuesToKeys} from "@/utils"
 import {useUsersStore} from "@/stores/users.store";
 import {fetchUserDetail} from "@/services/users.service";
 import {SIGNER_TYPES} from "@/enums";
@@ -90,7 +90,7 @@ export const useSDStoreApplication = defineStore("sd-store-application", {
         setValuesToKeys(this.model, data)
         this.model.__approvers = await adjustUserObjectToArray(data.approvers)
         this.model.__signers = await adjustUserObjectToArray(data.signers.filter(item => item.type === SIGNER_TYPES.SIGNER))
-        this.model.__curator = await adjustUserObjectToArray([], data.curator.id, false)
+        this.model.__curator = await adjustTopSignerObjectToArray([], data.curator.id, false)
         this.model.__files = data.files
       }
       catch (error) {

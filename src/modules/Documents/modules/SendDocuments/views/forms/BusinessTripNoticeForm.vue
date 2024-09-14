@@ -56,7 +56,7 @@ const preview = async () => {
   BTNoticeStore.model.notices = []
   BTNoticeStore.model.approvers = adjustUsersToArray(BTNoticeStore.model.__approvers)
   BTNoticeStore.model.signers = adjustUsersToArray(BTNoticeStore.model.__signers)
-  BTNoticeStore.model.curator = BTNoticeStore?.model?.__curator.id
+  BTNoticeStore.model.curator = BTNoticeStore?.model?.__curator?.user_id
   BTNoticeStore.model.journal = JOURNAL.INNER
   BTNoticeStore.model.company = authStore.currentUser.company.id
   BTNoticeStore.model.notices = BTNoticeStore.model.__employees.map(item => {
@@ -158,7 +158,7 @@ onUnmounted(() => {
               <user-select
                 v-model="$v.__curator.$model"
                 :error="$v.__curator"
-                api-url="users"
+                api-url="top-signers"
                 label="whom"
                 required
                 placeholder="select-leader"

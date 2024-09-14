@@ -2,7 +2,7 @@
 import dayjs from 'dayjs'
 import {diffWords} from "diff"
 // Services
-import {fetchUsersList} from "@/services/users.service"
+import {fetchTopSignersList, fetchUsersList} from "@/services/users.service"
 import {fetchCompaniesList, fetchDepartmentList} from "@/services/common.service"
 // Enums
 import {USER_STATUS_CODES} from "@/enums"
@@ -246,6 +246,27 @@ export const adjustUserObjectToArray = async (items = [], userId = null, multipl
     }
   } else if (multiple === false && userId){
     const res = await fetchUsersList({ ids: userId })
+    if (res && res.status === 200) {
+      return Promise.resolve(res.data.results[0])
+    } else {
+      return Promise.reject(null)
+    }
+  } else {
+    return null
+  }
+}
+
+export const adjustTopSignerObjectToArray = async (items = [], userId = null, multiple = true) => {
+  if (items && items.length && multiple) {
+    const userIds = items.map(item => item.user_id).join(',')
+    const res = await fetchTopSignersList({ ids: userIds })
+    if (res && res.status === 200) {
+      return Promise.resolve(res.data.results)
+    } else {
+      return Promise.reject([])
+    }
+  } else if (multiple === false && userId){
+    const res = await fetchTopSignersList({ ids: userId })
     if (res && res.status === 200) {
       return Promise.resolve(res.data.results[0])
     } else {
