@@ -322,7 +322,7 @@ export const useSDStore = defineStore("sd-stores", {
       //       hasRouterLink: true,
       //       routerLinkName: ROUTE_SD_CREATE,
       //       documentType: COMPOSE_DOCUMENT_TYPES.DECREE,
-      //       documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.ORDINARY_DECREE
+      //       documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE
       //     }
       //   ],
       // },

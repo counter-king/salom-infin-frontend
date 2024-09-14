@@ -23,6 +23,10 @@ const props = defineProps({
     type: Object,
     default: () => {}
   },
+  clearAfterSelect: {
+    type: Boolean,
+    default: true
+  }
 });
 const modelValue = useModel(props, 'modelValue')
 
@@ -37,6 +41,7 @@ const emit = defineEmits(['update:modelValue'])
     :api-params="props.apiParams"
     display="chip"
     selectable
+    :clear-after-select="props.clearAfterSelect"
     :label="props.label"
     :required="props.required"
     type="user"

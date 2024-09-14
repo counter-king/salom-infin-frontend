@@ -22,7 +22,7 @@ const templateValues  = {
   [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP]: BusinessTripNoticeTemplate,
   [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER]: OrderLetterTemplate,
   [COMPOSE_DOCUMENT_SUB_TYPES.ORDINARY_NOTICE]: OrdinaryNoticeTemplate,
-  [COMPOSE_DOCUMENT_SUB_TYPES.ORDINARY_DECREE]: DecreeTemplate,
+  [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE]: DecreeTemplate,
 }
 
 const selectedTemplate = computed(

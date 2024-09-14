@@ -76,7 +76,7 @@ export const COMPOSE_DOCUMENT_SUB_TYPES = {
   VACATION_OWN_EXPENSE:          '7', // Отпуск за свой счет
   CHILD_CARE_LEAVE:              '8', // Отпуск по уходу за ребенком
   ORDINARY_NOTICE:               '9', // Рапорт
-  ORDINARY_DECREE:               '10', //Распоряжение
+  BUSINESS_TRIP_DECREE:          '10', // Командировочный распоряжение
   ORDERS_BANK_MANAGEMENT:        '18', // Приказ правления банка
   APPLICATION:                   '27' // Заявление
 }

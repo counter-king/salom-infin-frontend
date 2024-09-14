@@ -21,7 +21,7 @@ const formValues  = {
   [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP]: BusinessTripNoticeForm,
   [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER]: OrderForm,
   [COMPOSE_DOCUMENT_SUB_TYPES.ORDINARY_NOTICE]: OrdinaryNoticeForm,
-  [COMPOSE_DOCUMENT_SUB_TYPES.ORDINARY_DECREE]: DecreeForm,
+  [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE]: DecreeForm,
 }
 const selectedComponent = computed(
   () => {
