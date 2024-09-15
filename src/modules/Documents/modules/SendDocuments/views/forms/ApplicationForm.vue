@@ -57,7 +57,7 @@ const preview = async () => {
   applicationStore.model.signers = []
   applicationStore.model.signers = [ { user: authStore?.currentUser?.id } ]
   applicationStore.model.sender = authStore?.currentUser?.top_level_department?.id
-  applicationStore.model.curator = applicationStore?.model?.__curator.id
+  applicationStore.model.curator = applicationStore?.model?.__curator?.user_id
   applicationStore.model.journal = JOURNAL.APPLICATION
   applicationStore.model.document_type = route.params.document_type
   applicationStore.model.document_sub_type = route.params.document_sub_type
@@ -117,7 +117,7 @@ const onFileUpload = (files) => {
 
 onMounted(async () => {
   if (route.params.id) {
-    await applicationStore.actionGetDocumentDetailForUpdate(route.params.id);
+    await applicationStore.actionGetDocumentDetailForUpdate(route.params.id)
   }
 })
 
@@ -145,6 +145,7 @@ onUnmounted(() => {
               <user-select
                 v-model="$v.__curator.$model"
                 :error="$v.__curator"
+                api-url="top-signers"
                 label="whom"
                 required
                 placeholder="select-leader"

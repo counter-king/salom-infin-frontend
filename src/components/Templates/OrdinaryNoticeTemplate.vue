@@ -7,6 +7,8 @@ import {formatUserFullName} from "@/utils"
 // Store
 import {useAuthStore} from "@/modules/Auth/stores"
 import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store"
+// Enums
+import {SIGNER_TYPES} from "@/enums"
 // Components
 import QrcodeVue from "qrcode.vue"
 import { BaseHeaderTemplate, BaseSignersTemplate } from "@/components/Templates/components"
@@ -26,7 +28,7 @@ const props = defineProps({
 const SDStore = useSDStore()
 // Computed
 const curator = computed(() => {
-  let basicSigner = props.composeModel && props.composeModel.signers && props.composeModel.signers.length && props.composeModel?.signers.find(item => item.type === 'basic_signer')
+  let basicSigner = props.composeModel && props.composeModel.signers && props.composeModel.signers.length && props.composeModel?.signers.find(item => item.type === SIGNER_TYPES.BASIC_SIGNER)
   return  props.preview ?
     props.composeModel.__curator :
     {
@@ -36,7 +38,7 @@ const curator = computed(() => {
     }
 })
 const signers = computed(() => {
-  return props.preview ? props.composeModel?.__signers : props.composeModel?.signers.filter(item => item.type === 'signer')
+  return props.preview ? props.composeModel?.__signers : props.composeModel?.signers.filter(item => item.type === SIGNER_TYPES.SIGNER)
 })
 const author = computed(() => {
   return props.preview ? useAuthStore().currentUser : props.composeModel?.author

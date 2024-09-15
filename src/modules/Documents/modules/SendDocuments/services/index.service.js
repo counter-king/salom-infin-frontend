@@ -21,3 +21,6 @@ export const fetchCustomUpdate = ({ id, body }) => {
 export const fetchVersionHistory = (id) => {
   return axiosConfig.get(`${URLS.compose}/${id}/version-history/`)
 }
+export const fetchGetLinkedDocumentsList = (id) => {
+  return axiosConfig.get(`${URLS.compose}/${id}/links/`)
+}

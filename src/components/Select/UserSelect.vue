@@ -27,7 +27,11 @@ const props = defineProps({
   error: {
     type: Object,
     default: () => {}
-  }
+  },
+  apiUrl: {
+    type: String,
+    default: 'users'
+  },
 });
 
 const list = ref([])
@@ -38,7 +42,7 @@ const emit = defineEmits(['update:modelValue'])
 
 // Methods
 const loadList = async (params) => {
-  let { data } = await axiosConfig.get(`users/`, params)
+  let { data } = await axiosConfig.get(`${props.apiUrl}/`, params)
   if (data.hasOwnProperty('results')){
     list.value = data.results
   }else {
@@ -57,7 +61,7 @@ onMounted(async () => {
       v-model="modelValue"
       v-model:options="list"
       :error="props.error"
-      api-url="users"
+      :api-url="props.apiUrl"
       option-label="full_name"
       :label="props.label"
       :placeholder="props.placeholder"

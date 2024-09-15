@@ -111,7 +111,7 @@ const handleSelect = (item) => {
         <template v-if="props.selectType === 'checked'">
           <base-iconify
             :icon="CheckCircleBoldIcon"
-            class="icon-selected hidden"
+            class="icon-selected hidden text-success-500"
           />
         </template>
 

@@ -50,7 +50,7 @@ const preview = async () => {
   orderStore.model.signers = []
   orderStore.model.approvers = adjustUsersToArray(orderStore.model.__approvers)
   // orderStore.model.signers = adjustUsersToArray(orderStore.model.__signers)
-  orderStore.model.curator = orderStore?.model?.__curator.id
+  orderStore.model.curator = orderStore?.model?.__curator?.user_id
   orderStore.model.sender = authStore?.currentUser?.top_level_department?.id
   orderStore.model.files = orderStore.model.__files.map(item => { return { id: item.id } })
   orderStore.model.document_type = route.params.document_type
@@ -154,6 +154,7 @@ onUnmounted(() => {
               <user-select
                 v-model="$v.__curator.$model"
                 :error="$v.__curator"
+                api-url="top-signers"
                 label="whom"
                 required
                 placeholder="select-leader"

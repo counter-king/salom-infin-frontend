@@ -8,7 +8,12 @@ import {
   fetchCreateDocument,
   fetchGetDocumentDetail, fetchUpdateDocument
 } from "@/modules/Documents/modules/SendDocuments/services/index.service"
-import {adjustCompanyObjectToArray, adjustUserObjectToArray, setValuesToKeys} from "@/utils"
+import {
+  adjustCompanyObjectToArray,
+  adjustTopSignerObjectToArray,
+  adjustUserObjectToArray,
+  setValuesToKeys
+} from "@/utils"
 import {COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL} from "@/enums"
 import { useAuthStore } from '@/modules/Auth/stores'
 
@@ -113,7 +118,7 @@ export const useSDBTNoticeStore = defineStore("sd-notice-store", {
         const { data } = await fetchGetDocumentDetail(id)
         setValuesToKeys(this.model, data)
         this.model.__companies = []
-        this.model.__curator = await adjustUserObjectToArray([], data.curator.id, false)
+        this.model.__curator = await adjustTopSignerObjectToArray([], data.curator.id, false)
         this.model.__employees = await adjustUserObjectToArray(data.notices)
         this.model.__approvers =  await adjustUserObjectToArray(data.approvers)
         this.model.__signers =  await adjustUserObjectToArray(data.signers)

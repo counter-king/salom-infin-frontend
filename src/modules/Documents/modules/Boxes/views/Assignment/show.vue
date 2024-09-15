@@ -8,7 +8,7 @@ import { useDocFlowStore } from '../../../Registration/stores/docflow.store'
 import { useBoxesCommonStore } from '../../stores/common.store'
 import { useAssignmentStore } from '../../stores/assignment.store'
 // Components
-import { AcquaintButton, ActionAnswerMenu } from '@/components/Actions'
+import {AcquaintButton, ActionAnswerMenu, CreateMenu} from '@/components/Actions'
 import { LayoutWithTabs } from '@/components/DetailLayout'
 import { ResolutionDropdown } from '@/components/Resolution'
 import { ModalDoneDocument } from '@/components/Modal'
@@ -28,7 +28,7 @@ const assignmentStore = useAssignmentStore()
 // Reactive
 const loading = ref(true)
 // Computed
-const createOrderVisible = computed(() => {
+const createMenuVisible = computed(() => {
   return [COMPOSE_DOCUMENT_TYPES.NOTICE, COMPOSE_DOCUMENT_TYPES.APPLICATION].includes(String(assignmentStore.detailModel?.document?.document_type?.id))
 })
 // Hooks
@@ -92,8 +92,8 @@ const updateDocument = async () => {
               :register-date="new Date(assignmentStore.detailModel.document.register_date)"
             />
 
-	          <base-button
-		          v-if="createOrderVisible"
+<!--	          <base-button
+		          v-if="createMenuVisible"
 		          label="create-order"
 		          :icon-left="CheckCircleIcon"
 		          rounded
@@ -108,7 +108,12 @@ const updateDocument = async () => {
 								compose_id: assignmentStore.detailModel?.document?.compose.id
 							}
 						})"
-	          />
+	          />-->
+
+            <create-menu
+              v-if="createMenuVisible"
+              :compose-id="assignmentStore.detailModel?.document?.compose.id"
+            />
           </template>
         </template>
 

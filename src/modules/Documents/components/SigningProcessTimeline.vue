@@ -1,11 +1,14 @@
 <script setup>
 // Core
-import {computed, ref} from "vue";
-import {useI18n} from "vue-i18n";
-import Timeline from 'primevue/timeline';
-import {formatDateHour} from "../../../utils/formatDate";
-import {ModalComment} from "@/components/Modal";
+import {computed, ref} from "vue"
+import {useI18n} from "vue-i18n"
+// Utils
+import {formatDateHour} from "@/utils/formatDate"
+// Enums
+import {SIGNER_TYPES} from "@/enums"
 // Components
+import Timeline from 'primevue/timeline'
+import {ModalComment} from "@/components/Modal"
 import {
 	CheckCircleBoldIcon,
 	CheckCircleIcon, CircleIcon, CloseCircleBoldIcon,
@@ -30,15 +33,36 @@ const reasonModal = ref(false);
 
 // Computed
 const signingProcessComputed = computed(() => {
-  if (!(properties.composeModel && properties.composeModel.approvers && properties.composeModel.signers)) {
-    return [];
-  }
-  const author = { user: properties.composeModel.author, type: "author" };
-  const approvers = properties.composeModel.approvers.map(item => ({ ...item, type: "approvers" }));
-  const signers = properties.composeModel.signers.map(item => ({ ...item, type: "signers" }));
+  const { composeModel } = properties
 
-  return [author, ...approvers, ...signers];
-});
+  if (!composeModel?.approvers || !composeModel?.signers) return []
+
+  let approvers = composeModel.approvers.map(item => ({ ...item, type: "approvers" }))
+
+  const assistant = composeModel?.curator?.assistant
+    ? approvers.find(item => item.user.id === composeModel.curator.assistant)
+    : null
+
+  if (assistant) {
+    approvers = approvers.filter(item => item.user.id !== assistant.user.id)
+  }
+
+  let signers = composeModel.signers.filter(item => item.type !== SIGNER_TYPES.BASIC_SIGNER).map(item => ({ ...item, type: "signers" }))
+
+  const curator = composeModel?.curator
+    ? composeModel.signers.find(item => item.type === SIGNER_TYPES.BASIC_SIGNER)
+    : null
+
+  const author = { user: composeModel.author, type: "author" }
+
+  return [
+    author,
+    ...approvers,
+    ...signers,
+    ...(assistant ? [{ ...assistant, type: "approvers", role: "assistant" }] : []),
+    ...(curator ? [{ ...curator, type: "signers" }] : []),
+  ]
+})
 
 // Methods
 const returnConnectorClasses = (props, context) => {
@@ -48,13 +72,13 @@ const returnConnectorClasses = (props, context) => {
         ? 'bg-success-500' :
           (props.value[context.index].type === "approvers" && props.value[context.index].is_approved === false)
             || (props.value[context.index].type === "signers" && props.value[context.index].is_signed === false)
-             ? 'bg-critic-500' : ''
+             ? 'bg-critic-500' : 'bg-greyscale-200'
 }
 const returnItemIcon = (item) => {
   return item.type === 'author' ? Pen2Icon : item.type === 'signers' ? CheckCircleIcon : FileCheckIcon
 }
 const returnItemRole = (item) => {
-  return item.type === 'author' ? t('author') : item.type === 'signers' ? t('signer') : t('approver')
+  return (item.type === 'approvers' && item.role === 'assistant') ? t('referent') : item.type === 'author' ? t('author') : item.type === 'signers' ? t('signer') : t('approver')
 }
 const returnItemActionTime = (item) => {
   if (item.type === 'author') {
@@ -108,7 +132,7 @@ const returnItemIconClass = (item) => {
         ? 'text-success-500' :
           (item.type === 'approvers' && item.is_approved === false)
           || (item.type === 'signers' && item.is_signed === false)
-            ? 'text-critic-500' : 'text-white'
+            ? 'text-critic-500' : 'text-greyscale-200'
 }
 const showReason = (item) => {
 	reason.value = item.comment;
@@ -124,7 +148,7 @@ const showReason = (item) => {
       :pt="{
         opposite: { class: [ 'hidden' ] },
         connector: ({ props, context }) => (
-          { class: [returnConnectorClasses(props, context)] }
+          { class: [returnConnectorClasses(props, context), '-my-1'] }
         )
       }"
     >

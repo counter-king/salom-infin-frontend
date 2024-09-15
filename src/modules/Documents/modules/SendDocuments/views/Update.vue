@@ -3,7 +3,14 @@
 import {computed} from "vue";
 import {useRoute} from "vue-router";
 // Components
-import {InnerForm, ApplicationForm, BusinessTripNoticeForm, OrderForm, OrdinaryNoticeForm} from "@/modules/Documents/modules/SendDocuments/views/forms/index";
+import {
+  InnerForm,
+  ApplicationForm,
+  BusinessTripNoticeForm,
+  OrderForm,
+  OrdinaryNoticeForm,
+  DecreeForm
+} from "@/modules/Documents/modules/SendDocuments/views/forms/index";
 // Constants
 import {FORM_TYPE_UPDATE} from "@/constants/constants";
 import {COMPOSE_DOCUMENT_SUB_TYPES} from "@/enums";
@@ -14,6 +21,7 @@ const formValues  = {
   [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP]: BusinessTripNoticeForm,
   [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER]: OrderForm,
   [COMPOSE_DOCUMENT_SUB_TYPES.ORDINARY_NOTICE]: OrdinaryNoticeForm,
+  [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE]: DecreeForm,
 }
 const selectedComponent = computed(
   () => {

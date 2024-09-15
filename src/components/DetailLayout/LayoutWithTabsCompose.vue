@@ -12,7 +12,8 @@ import {
   ClockCircleIcon,
   ChatLineIcon,
   FileTextIcon,
-  CloseCircleBoldIcon
+  CloseCircleBoldIcon,
+  FolderWithFilesIcon
 } from '@/components/Icons'
 import FileTabs from './components/FileTabs.vue'
 import BackButton from "@/components/Actions/BackButton.vue"
@@ -68,6 +69,13 @@ const props = defineProps({
         icon: FileTextIcon,
         slot: "files",
         component: "Files"
+      },
+      {
+        label: "Связанные документы",
+        name: "ConnectedDocuments",
+        icon: FolderWithFilesIcon,
+        slot: "connected-documents",
+        component: "ConnectedDocuments"
       }
     ]
   },
@@ -160,23 +168,31 @@ const closeHistoryDetail = () => {
                 @click="closeHistoryDetail"
               />
             </div>
-            <div class="flex gap-x-2 overflow-x-auto h-full">
-              <div
-                v-for="item in SDStore.versionHistoryList"
-                v-tooltip.top="{
-                  value: `<h4 class='text-xs text-white -my-1 !w-[250px]'> ${t('change-history')} <br> ${t('author')}: ${item.created_by.full_name} <br> ${t('change-time')}: ${formatDateHour(item.created_date)}</h4>`,
-                  escape: true,
-                  autoHide: false
-                }"
-                class="flex justify-center items-center cursor-pointer w-10 h-full"
-                :class="item.active ? 'border-b-2 border-primary-500' : 'border-b-2'"
-                @click="getVersionHistoryDetail(item)"
-              >
-                <base-iconify
-                  :icon="FileTextIcon"
-                  class="text-greyscale-900 !w-4 !h-4"
-                  :class="item.active ? 'text-primary-500' : 'text-greyscale-500'"
-                />
+              <div class="flex gap-x-3 overflow-x-auto h-full">
+                <div
+                  v-for="item in SDStore.versionHistoryList"
+                  v-tooltip.top="{
+                    value: `<h4 class='text-xs text-white -my-1 !w-[250px]'> ${t('change-history')} <br> ${t('author')}: ${item.created_by.full_name} <br> ${t('change-time')}: ${formatDateHour(item.created_date)}</h4>`,
+                    escape: true,
+                    autoHide: false
+                  }"
+                  class="flex justify-center items-center cursor-pointer w-12 h-full"
+                  :class="item.active ? 'border-b-2 border-primary-500' : 'border-b-2'"
+                  @click="getVersionHistoryDetail(item)"
+                >
+                <div class="flex flex-col gap-y-1 h-full items-center">
+                  <div
+                    class="text-[10px]"
+                    :class="item.active ? 'text-primary-500' : 'text-greyscale-900'"
+                  >
+                    {{ t('updated') }}
+                  </div>
+                  <base-iconify
+                    :icon="FileTextIcon"
+                    class="text-greyscale-900 !w-4 !h-4"
+                    :class="item.active ? 'text-primary-500' : 'text-greyscale-500'"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -186,7 +202,7 @@ const closeHistoryDetail = () => {
         <div class="flex flex-1">
           <slot :name="activeTabMenu.slot">
             <div class="flex-1 overflow-y-auto">
-              <div class="h-[1px]">
+              <div class="h-full">
                 <component
                   :is="activeTabComponent"
                   :preview-detail="props.previewDetail"

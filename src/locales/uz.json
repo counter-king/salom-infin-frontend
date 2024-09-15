@@ -299,6 +299,8 @@
   "sign-resolution": "Подписать резолюцию",
   "create-notice": "Создать рапорт",
   "update-notice": "Изменить рапорт",
+  "create-decree": "Создать распоряжения",
+  "update-decree": "Изменить распоряжения",
   "employees": "Сотрудники",
   "select-employees": "Выбирайте сотрудников",
   "targets": "Цели",
@@ -356,5 +358,7 @@
   "change-history": "История изменения",
   "change-time": "Дата изменения",
   "transport-type": "Вид транспорта",
-  "select-transport-type": "Выбирайте вид транспорта"
+  "select-transport-type": "Выбирайте вид транспорта",
+  "referent": "Референт",
+  "updated": "Изменено"
 }

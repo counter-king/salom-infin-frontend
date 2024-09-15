@@ -100,6 +100,10 @@ const props = defineProps({
   selectionLength: {
     type: [Number, String],
     default: 3
+  },
+  clearAfterSelect: {
+    type: Boolean,
+    default: false
   }
 })
 // Reactive
@@ -107,6 +111,7 @@ const menuRef = ref(null)
 const inputRef = ref(null)
 const list = ref([])
 const search = ref(null)
+const multiselect = ref(null)
 // Composable
 const debounced = useDebounce(search, 500)
 // Computed
@@ -174,17 +179,46 @@ const toggle = (event) => {
 const onLazyLoad = (event) => {
   console.log('sssssss')
 }
+const onChange = () => {
+  if (props.clearAfterSelect){
+    list.value = []
+    props.options.value = []
+    setTimeout(() => {
+      if (multiselect.value) {
+        multiselect.value.show()  // Open the overlay panel
+      }
+    }, 10)
+  }else {
+    setTimeout(() => {
+      inputRef.value.focus()
+    }, 10)
+  }
+}
+const onShow = () => {
+  inputRef.value.focus()
+  props.options.value = []
+}
+const onSearchClear = async (event) => {
+  event.stopImmediatePropagation()
+  search.value = null
+  if(!props.options.length && !props.clearAfterSelect) {
+    await loadList(props.apiParams)
+  }
+  setTimeout(() => {
+    inputRef.value.focus()
+  }, 10)
+}
 // Hooks
 onMounted(async () => {
   // Если не переданы props.options
-  if(!props.options.length) {
+  if(!props.options.length && !props.clearAfterSelect) {
     await loadList(props.apiParams)
   }
 })
 // Watch
 watch(debounced, async () => {
   // Если не переданы props.options
-  if(!props.options.length) {
+  if(!props.options.length && search.value) {
     await loadList({
       ...props.apiParams,
       search: search.value
@@ -209,9 +243,10 @@ watch(debounced, async () => {
       :display="props.display"
       :disabled="props.disabled"
       :panel-style="{ height: 'auto' }"
-      filter
       scroll-height="300px"
-      @show="() => inputRef.focus()"
+      ref="multiselect"
+      @show="onShow"
+      @change="onChange"
       :pt="{
         root: {
           class: rootClasses
@@ -285,13 +320,14 @@ watch(debounced, async () => {
           />
 
           <button
+            v-if="search"
             v-tooltip.left="{
 	            value: `<h4 class='text-xs text-white -my-1'>Очистить</h4>`,
 	            escape: true,
 	            autoHide: false
 	          }"
             class="text-grey-500 ml-auto"
-            @click="search = null"
+            @click="(event) => onSearchClear(event)"
           >
             <base-iconify :icon="XMarkSolidIcon" class="!w-[18px] !h-[18px]" />
           </button>
@@ -322,6 +358,10 @@ watch(debounced, async () => {
         <slot name="dropdownicon">
           <base-iconify :icon="AltArrowDownIcon" class="!w-[18px] !h-[18px]" />
         </slot>
+      </template>
+
+      <template v-if="props.clearAfterSelect" #empty>
+        <div></div>
       </template>
     </MultiSelect>
 

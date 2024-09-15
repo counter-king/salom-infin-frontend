@@ -2,11 +2,10 @@
 // Core
 import {useRoute} from "vue-router"
 // Components
-import { InnerLetterTemplate, ApplicationLetterTemplate, BusinessTripNoticeTemplate, OrderLetterTemplate, OrdinaryNoticeTemplate } from "@/components/Templates/index"
+import { InnerLetterTemplate, ApplicationLetterTemplate, BusinessTripNoticeTemplate, OrderLetterTemplate, OrdinaryNoticeTemplate, DecreeTemplate } from "@/components/Templates/index"
 // Enums
 import {computed} from "vue"
 import {COMPOSE_DOCUMENT_SUB_TYPES} from "@/enums"
-import {ApplicationForm, OrdinaryNoticeForm} from "@/modules/Documents/modules/SendDocuments/views/forms";
 
 const props = defineProps({
   composeModel: {
@@ -23,6 +22,7 @@ const templateValues  = {
   [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP]: BusinessTripNoticeTemplate,
   [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER]: OrderLetterTemplate,
   [COMPOSE_DOCUMENT_SUB_TYPES.ORDINARY_NOTICE]: OrdinaryNoticeTemplate,
+  [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE]: DecreeTemplate,
 }
 
 const selectedTemplate = computed(

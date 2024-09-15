@@ -17,7 +17,7 @@ import SigningProcessTimeline from "@/modules/Documents/components/SigningProces
 import ResolutionPerformersModal from "@/modules/Documents/modules/Boxes/components/ResolutionPerformersModal.vue"
 import { TreeUsers } from '@/components/Tree'
 // Enums
-import { CONTENT_TYPES } from "@/enums"
+import {SIGNER_TYPES} from "@/enums"
 import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue"
 
 const signStore = useBoxesSignStore()
@@ -117,7 +117,7 @@ onMounted( async () => {
 
         <template v-if="signed === null">
           <base-button
-            v-if="signStore.detailModel.type !== 'basic_signer'"
+            v-if="signStore.detailModel.type !== SIGNER_TYPES.BASIC_SIGNER"
             border-color="border-transparent"
             label="sign"
             :icon-left="CheckCircleIcon"
