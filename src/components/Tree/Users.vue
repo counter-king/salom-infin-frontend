@@ -142,24 +142,24 @@ const props = defineProps({
         >
           <AccordionTab
             :pt="{
-            root: {
-              class: 'mb-0'
-            },
-            headerAction: {
-              class: [
-                'bg-white border-0 rounded-b-2xl border-t border-t-greyscale-200 rounded-none py-2 px-4',
-                {
-                  '!border !border-primary-500 !border-t-greyscale-200': authStore.currentUser.id === reviewer.user.id
-                }
-              ]
-            },
-            content: {
-              class: 'bg-transparent border-0 p-0'
-            },
-            headerIcon: {
-              class: 'w-3 h-3 text-greyscale-500'
-            }
-          }"
+              root: {
+                class: 'mb-0'
+              },
+              headerAction: {
+                class: [
+                  'bg-white border-0 rounded-b-2xl border-t border-t-greyscale-200 rounded-none py-2 px-4',
+                  {
+                    '!border !border-primary-500 !border-t-greyscale-200': authStore.currentUser.id === reviewer.user.id
+                  }
+                ]
+              },
+              content: {
+                class: 'bg-transparent border-0 p-0'
+              },
+              headerIcon: {
+                class: 'w-3 h-3 text-greyscale-500'
+              }
+            }"
           >
             <template #header>
               <div class="flex items-center gap-2 w-full">

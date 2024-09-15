@@ -11,6 +11,7 @@ import {
 // Stores
 import { useCorrespondentStore } from './correspondent'
 import { useUsersStore } from './users.store'
+import { useAllUrlStore } from './all-urls.store'
 import { useCollectRequestsStore } from '@/stores/collect-requests.store'
 import { useDocumentCountStore } from '@/modules/Documents/stores/count.store'
 // Services
@@ -60,12 +61,14 @@ export const useCommonStore = defineStore("common", {
 		async init() {
       const correspondent = useCorrespondentStore()
       const users = useUsersStore()
+      const allUrlStore = useAllUrlStore()
       const documentCount = useDocumentCountStore()
 
       await documentCount.actionDocumentCountList()
       await correspondent.actionGetList({})
 			await users.actionUsersList()
       await users.actionEmployeeGroupList()
+      await allUrlStore.getAllUrls()
       this.actionDeliveryTypesList()
       this.actionDepartmentList()
       this.actionDistrictList()

@@ -11,7 +11,11 @@ import {
   BoxMinimalisticIcon,
   BuildingsIcon,
   DocumentTextIcon,
-  FolderWithFilesIcon, LaptopMinimalisticIcon, MouseIcon, SettingsMinimalisticIcon,
+  FolderWithFilesIcon,
+  LaptopMinimalisticIcon,
+  MouseIcon,
+  SettingsMinimalisticIcon,
+  CheckCircleIcon,
   UsersGroupTwoRoundedIcon
 } from '@/components/Icons'
 // Composable
@@ -47,11 +51,16 @@ const changeLanguage = () => {
       title: 'Пользователи',
     },
     {
+      icon: CheckCircleIcon,
+      link: 'PermissionsIndex',
+      title: 'Права доступа',
+    },
+    {
       icon: DocumentTextIcon,
       link: 'ShortDescriptionsIndex',
       title: 'Краткое описание',
     },
-    profile.routes,
+    // profile.routes,
     // {
     //   icon: 'UserIcon',
     //   link: 'ProfileIndex',

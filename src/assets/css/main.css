@@ -74,6 +74,10 @@ body {
   background-color: var(--primary-500);
 }
 
+.p-accordion-header.p-highlight > .p-accordion-header-link .p-accordion-toggle-icon {
+  transform: rotate(-180deg);
+}
+
 /* .app-input,
 .app-multiselect {
   margin-bottom: 8px;

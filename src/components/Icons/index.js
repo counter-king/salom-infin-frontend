@@ -111,6 +111,7 @@ export { default as CalendarDateBoldIcon } from  '~icons/solar/calendar-date-bol
 export { default as ClockCircleBoldIcon } from  '~icons/solar/clock-circle-bold'
 export { default as RoundArrowRightDownBoldIcon } from  '~icons/solar/round-arrow-right-down-bold'
 export { default as PenNewRoundBoldIcon } from  '~icons/solar/pen-new-round-bold'
+export { default as PenBoldIcon } from '~icons/solar/pen-bold'
 export { default as FileCheckBoldIcon } from  '~icons/solar/file-check-bold'
 export { default as CursorSquareBoldIcon } from  '~icons/solar/cursor-square-bold'
 export { default as CloseCircleBoldIcon } from  '~icons/solar/close-circle-bold'
@@ -133,6 +134,7 @@ export { default as HashtagCircleBoldIcon } from  '~icons/solar/hashtag-circle-b
 export { default as UserHandsBoldIcon } from  '~icons/solar/user-hands-bold'
 export { default as LetterBoldIcon } from  '~icons/solar/letter-bold'
 export { default as UserSpeakBoldIcon } from  '~icons/solar/user-speak-bold'
+export { default as TrashBinTrashBoldIcon } from  '~icons/solar/trash-bin-trash-bold'
 // Solar (Bold Duotone)
 export { default as ArchiveUpBoldDuotoneIcon } from  '~icons/solar/archive-up-bold-duotone'
 export { default as StarBoldDuotoneIcon } from  '~icons/solar/star-bold-duotone'
