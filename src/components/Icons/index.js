@@ -141,6 +141,12 @@ export { default as ArchiveUpBoldDuotoneIcon } from  '~icons/solar/archive-up-bo
 export { default as StarBoldDuotoneIcon } from  '~icons/solar/star-bold-duotone'
 export { default as CalendarBoldDuotoneIcon } from  '~icons/solar/calendar-bold-duotone'
 export { default as Dialog2BoldDuotoneIcon } from  '~icons/solar/dialog-2-bold-duotone'
+export { default as UserBoldDuotoneIcon } from  '~icons/solar/user-bold-duotone'
+export { default as UsersGroupBoldDuotoneIcon } from  '~icons/solar/users-group-rounded-bold-duotone'
+export { default as UserCheckBoldDuotoneIcon } from  '~icons/solar/user-check-bold-duotone'
+export { default as CalendarDateBoldDuotoneIcon } from  '~icons/solar/calendar-date-bold-duotone'
 // Solar (Bold Broken)
 export { default as UserCheckRoundedBrokenIcon } from  '~icons/solar/user-check-rounded-broken'
+// Fluent
+export { default as BotFilledIcon } from  '~icons/fluent/bot-20-filled'
 

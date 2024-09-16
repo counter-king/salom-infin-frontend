@@ -4,6 +4,10 @@ const props = defineProps({
   title: {
     type: String,
     default: 'У вас нет данных'
+  },
+  labelClasses: {
+    type: String,
+    default: ''
   }
 })
 </script>
@@ -17,7 +21,10 @@ const props = defineProps({
         class="block mb-5 mx-auto"
       />
 
-      <h1 class="text-greyscale-500 font-medium text-sm">{{ props.title }}</h1>
+      <h1
+        class="text-greyscale-500 font-medium text-sm"
+        :class="props.labelClasses"
+      >{{ props.title }}</h1>
     </div>
   </div>
 </template>

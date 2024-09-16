@@ -244,6 +244,13 @@
   dependencies:
     "@iconify/types" "*"
 
+"@iconify-json/fluent@^1.1.10":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@iconify-json/fluent/-/fluent-1.2.1.tgz#0a0c3c58d28d9d93c1f4576c0a959bcef6882b0f"
+  integrity sha512-jvKSynYz6iuYuZDwDry4BxVcDHMrr/cFN5DMi6JOdTubYEHCT+oxyyIVjjSKtX5ebnlhJIuHVI+LhC/U9HSoFQ==
+  dependencies:
+    "@iconify/types" "*"
+
 "@iconify-json/heroicons@^1.1.24":
   version "1.1.24"
   resolved "https://registry.yarnpkg.com/@iconify-json/heroicons/-/heroicons-1.1.24.tgz#91b8e1a1f6fffdc5104c5fa4e7195164d5234c2e"

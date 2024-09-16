@@ -14,10 +14,14 @@ import {COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES} from "@/enums"
 import { HR_BUSINESS_TRIP_COLUMNS, ROUTE_HR_BUSINESS_TRIP_DETAIL } from "@/modules/HR/constants"
 import { ROUTE_SD_CREATE } from "@/modules/Documents/modules/SendDocuments/constants"
 
+// Composable
 const router = useRouter()
 const route = useRoute()
 const BTStore = useBusinessTripStore()
 const currentUser = useAuthStore().currentUser
+
+// Const
+const filterKeys = ["author"]
 
 // Computed
 const apiParams = computed(() => {
@@ -63,7 +67,9 @@ onMounted(() => {
   <div class="business-trip-list-view">
     <action-toolbar
       title="business-trip"
+      :action-list="BTStore.actionGetBusinessTripList"
       :column-menu-items="BTStore.headers"
+      :filter-keys="filterKeys"
       :storage-columns-name="HR_BUSINESS_TRIP_COLUMNS"
       @emit:reset-headers="BTStore.resetHeaders"
     >
