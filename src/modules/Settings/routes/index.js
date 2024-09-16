@@ -1,5 +1,6 @@
 // Routes
 import Permissions from './permissions.route'
+import Roles from './roles.routes'
 // import Profile from './profile.route'
 
 const Settings = [
@@ -167,6 +168,8 @@ const Settings = [
       },
       // Permissions
       ...Permissions,
+      // Roles
+      ...Roles,
       // ShortDescription
       {
         component: () => import("../views/ShortDescriptions/index.vue"),

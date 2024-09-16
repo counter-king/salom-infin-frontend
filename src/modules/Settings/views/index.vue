@@ -16,7 +16,8 @@ import {
   MouseIcon,
   SettingsMinimalisticIcon,
   CheckCircleIcon,
-  UsersGroupTwoRoundedIcon
+  UsersGroupTwoRoundedIcon,
+  UserSpeakRoundedIcon
 } from '@/components/Icons'
 // Composable
 const { locale } = useI18n()
@@ -49,6 +50,11 @@ const changeLanguage = () => {
       icon: UsersGroupTwoRoundedIcon,
       link: 'UsersIndex',
       title: 'Пользователи',
+    },
+    {
+      icon: UserSpeakRoundedIcon,
+      link: 'RolesIndex',
+      title: 'Роли',
     },
     {
       icon: CheckCircleIcon,
