@@ -93,7 +93,6 @@ const handleDocumentStatus = async () => {
         }"
       >
         <template #header-end>
-
           <!-- Create order button -->
           <base-button
             v-if="createOrderVisible"
