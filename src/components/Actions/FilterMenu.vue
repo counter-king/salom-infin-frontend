@@ -1,12 +1,17 @@
 <script setup>
-// Available keys: approvers, author, curator, signers, departments, register_number
+// Available keys: approvers, author, curator, signers, departments, register_number, user, branches, document_types, document_sub_types, department_recipients
 // Core
 import { onMounted, ref, unref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 // Components
 import { SortIcon } from '@/components/Icons'
 // Services
-import { fetchUserDetail, fetchDepartmentDetail, fetchComposeStatusDetail } from "@/services/common.service";
+import {
+  fetchUserDetail,
+  fetchDepartmentDetail,
+  fetchComposeStatusDetail,
+  fetchCompanyDetail, fetchDocumentTypesDetail, fetchDocumentSubTypesDetail
+} from "@/services/common.service"
 // Utils
 import { clearModel, filterFalsyValues, filterObjectByKeys, removeKeysWithDoubleUnderscore } from "@/utils";
 // Store
@@ -18,6 +23,7 @@ import UserMultiSelect from "@/components/Select/UserMultiSelect.vue";
 import DepartmentMultiSelect from "@/components/Select/DepartmentMultiSelect.vue";
 import BaseMultiSelect from "@/components/UI/BaseMultiSelect.vue";
 import {UserWithRadio} from "@/components/Users";
+import BranchMultiSelect from "@/components/Select/BranchMultiSelect.vue";
 
 const props = defineProps({
   actionList: {
@@ -41,7 +47,7 @@ const opRef = ref(null);
 const paginationStore = usePaginationStore();
 const commonStore = useCommonStore();
 
-const paramList = ["register_number"];
+const paramList = ["register_number", "register_date"]
 const objectToKeysList = [
   {
     param: "approvers",
@@ -56,6 +62,10 @@ const objectToKeysList = [
     action: fetchUserDetail
   },
   {
+    param: "users",
+    action: fetchUserDetail
+  },
+  {
     param: "signers",
     action: fetchUserDetail
   },
@@ -64,8 +74,28 @@ const objectToKeysList = [
     action: fetchDepartmentDetail
   },
   {
+    param: "department_recipients",
+    action: fetchDepartmentDetail
+  },
+  {
+    param: "branches",
+    action: fetchCompanyDetail
+  },
+  {
+    param: "branch_recipients",
+    action: fetchCompanyDetail
+  },
+  {
     param: "status",
     action: fetchComposeStatusDetail
+  },
+  {
+    param: "document_types",
+    action: fetchDocumentTypesDetail
+  },
+  {
+    param: "document_sub_types",
+    action: fetchDocumentSubTypesDetail
   }
 ]
 
@@ -85,10 +115,10 @@ const adjustKeysToValues = async () => {
   }
 }
 const filter = async () => {
-  await adjustKeysToValues();
-  const filterModel = await removeKeysWithDoubleUnderscore(filterStore.filterState);
-  const filterModelFalsyKeys = filterFalsyValues({ ...route.query, ...filterModel });
-  await paginationStore.resetPagination();
+  await adjustKeysToValues()
+  const filterModel = await removeKeysWithDoubleUnderscore(filterStore.filterState)
+  const filterModelFalsyKeys = filterFalsyValues({ ...route.query, ...filterModel })
+  await paginationStore.resetPagination()
   await router.replace({
     query: {
       ...route.query,
@@ -98,8 +128,8 @@ const filter = async () => {
       first_row: paginationStore.firstRow
     }
   });
-  toggle();
-  await props.actionList({ ...route.query });
+  toggle()
+  await props.actionList({ ...route.query })
 }
 const clearFilter = async () => {
   await clearModel(filterStore.filterState, props.keysToIncludeOnClearFilter);
@@ -120,17 +150,17 @@ const clearFilter = async () => {
 }
 const fetchAndPopulateFilterState = async (queryParam, targetArray, action) => {
   if (route.query && route.query[queryParam]) {
-    const idArray = route.query[queryParam].split(',').map(Number);
+    const idArray = route.query[queryParam].split(',').map(Number)
     for (const id of idArray) {
-      const response = await action(id);
-      targetArray.push(response.data);
+      const response = await action(id)
+      targetArray.push(response.data)
     }
   }
 };
 
 const populateFilterState = async (queryParams) => {
   if (route.query && route.query[queryParams]) {
-    filterStore.filterState[queryParams] = route.query[queryParams];
+    filterStore.filterState[queryParams] = route.query[queryParams]
   }
 }
 
@@ -141,9 +171,10 @@ onMounted(async () => {
   }
 
   for (let i = 0; i < paramList.length; i++) {
-    await populateFilterState(paramList[i]);
+    await populateFilterState(paramList[i])
   }
 })
+
 </script>
 
 <template>
@@ -179,6 +210,13 @@ onMounted(async () => {
           />
         </base-col>
 
+        <base-col v-if="props.filterKeys.includes('users')" col-class="w-1/2">
+          <user-multi-select
+            v-model="filterStore.filterState.__users"
+            :label="props.filterKeys.find(item => item.key === 'users')?.label ? props.filterKeys.find(item => item.key === 'users')?.label : 'author'"
+          />
+        </base-col>
+
         <base-col v-if="props.filterKeys.includes('curator')" col-class="w-1/2">
           <user-multi-select
             v-model="filterStore.filterState.__curator"
@@ -207,10 +245,26 @@ onMounted(async () => {
           />
         </base-col>
 
+        <base-col v-if="props.filterKeys.includes('branches')" col-class="w-1/2">
+          <branch-multi-select
+            v-model="filterStore.filterState.__branches"
+            :required="false"
+            :text-truncate="true"
+          />
+        </base-col>
+
         <base-col v-if="props.filterKeys.includes('register_number')" col-class="w-1/2">
           <base-input
             v-model="filterStore.filterState.register_number"
             label="reg-number"
+          />
+        </base-col>
+
+        <base-col v-if="props.filterKeys.includes('register_date')" col-class="w-1/2">
+          <base-calendar
+            v-model="filterStore.filterState.register_date"
+            label="reg-date"
+            placeholder="enter-reg-date"
           />
         </base-col>
 
@@ -235,6 +289,71 @@ onMounted(async () => {
               </user-with-radio>
             </template>
           </base-multi-select>
+        </base-col>
+
+        <base-col v-if="props.filterKeys.includes('document_types')" col-class="w-1/2">
+          <base-multi-select
+            v-model="filterStore.filterState.__document_types"
+            api-url="document-types"
+            :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
+            display="chip"
+            selectable
+            label="document-type"
+            type="department"
+            placeholder="choose-document-type"
+          >
+            <template #chip="{ value }">
+              {{ value.name }}
+            </template>
+
+            <template #option="{ value }">
+              <user-with-radio
+                :title="value.name"
+              >
+              </user-with-radio>
+            </template>
+          </base-multi-select>
+        </base-col>
+
+        <base-col v-if="props.filterKeys.includes('document_sub_types')" col-class="w-1/2">
+          <base-multi-select
+            v-model="filterStore.filterState.__document_sub_types"
+            api-url="document-sub-types"
+            :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
+            display="chip"
+            selectable
+            label="document-sub-type"
+            type="department"
+            placeholder="choose-document-sub-type"
+          >
+            <template #chip="{ value }">
+              {{ value.name }}
+            </template>
+
+            <template #option="{ value }">
+              <user-with-radio
+                :title="value.name"
+              >
+              </user-with-radio>
+            </template>
+          </base-multi-select>
+        </base-col>
+
+        <base-col v-if="props.filterKeys.includes('department_recipients')" col-class="w-1/2">
+          <department-multi-select
+            v-model="filterStore.filterState.__department_recipients"
+            :label="props.filterKeys.find(item => item.key === 'department_recipients')?.label ? props.filterKeys.find(item => item.key === 'department_recipients')?.label : 'department'"
+            :required="false"
+          />
+        </base-col>
+
+        <base-col v-if="props.filterKeys.includes('branch_recipients')" col-class="w-1/2">
+          <branch-multi-select
+            v-model="filterStore.filterState.__branch_recipients"
+            :required="false"
+            :text-truncate="true"
+            :label="props.filterKeys.find(item => item.key === 'branch_recipients')?.label ? props.filterKeys.find(item => item.key === 'branch_recipients')?.label : 'branch'"
+          />
         </base-col>
       </base-row>
 

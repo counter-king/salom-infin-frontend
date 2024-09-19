@@ -14,6 +14,10 @@ const props = defineProps({
   required: {
     type: Boolean,
     default: true
+  },
+  label: {
+    type: String,
+    default: 'department'
   }
 });
 const modelValue = useModel(props, 'modelValue')
@@ -29,7 +33,7 @@ const emit = defineEmits(['update:modelValue'])
     :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
     display="chip"
     selectable
-    label="department"
+    :label="props.label"
     :required="props.required"
     type="department"
   >

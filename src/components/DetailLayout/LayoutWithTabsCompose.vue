@@ -157,7 +157,7 @@ const closeHistoryDetail = () => {
           <!-- Version history -->
           <div
             v-if="SDStore.versionHistoryList.length"
-            class="flex flex-col max-w-[690px] w-full border-l px-5"
+            class="flex flex-col max-w-[670px] w-full border-l px-5"
           >
             <div class="flex justify-between relative">
 <!--              <span class="text-xs font-medium text-greyscale-500">{{ t('version-history') }}</span>-->
@@ -220,7 +220,7 @@ const closeHistoryDetail = () => {
             </div>
           </slot>
 
-          <div class="max-w-[690px] w-full ml-auto border-l">
+          <div class="max-w-[670px] w-full ml-auto border-l">
             <slot name="template">
               <file-tabs :resolution="props.resolution" />
             </slot>

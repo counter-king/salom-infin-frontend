@@ -17,10 +17,23 @@ export const useFilterStore = defineStore("filter-stores", {
       departments: [],
       __departments: [],
       register_number: null,
+      register_date: null,
       signers: [],
       __signers: [],
       status: [],
-      __status: []
+      __status: [],
+      users: [],
+      __users: [],
+      branches: [],
+      __branches: [],
+      document_types: [],
+      __document_types: [],
+      document_sub_types: [],
+      __document_sub_types: [],
+      department_recipients: [],
+      __department_recipients: [],
+      branch_recipients: [],
+      __branch_recipients: []
     }
   }),
   actions: {

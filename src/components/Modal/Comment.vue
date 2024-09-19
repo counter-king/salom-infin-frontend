@@ -1,8 +1,11 @@
 <script setup>
 // Core
-import { ref, useModel, watch } from 'vue'
+import {ref, unref, useModel, watch} from 'vue'
 import { useVuelidate } from '@vuelidate/core'
+import {useI18n} from "vue-i18n"
 import { helpers, required } from '@vuelidate/validators'
+// Components
+import {InfoCircleBoldIcon} from "@/components/Icons"
 // Macros
 const props = defineProps({
   modelValue: {
@@ -58,10 +61,12 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue'])
 // Composable
 const modelValue = useModel(props, 'modelValue')
+const { t } = useI18n()
 // Reactive
 const text = ref({
   message: null
 })
+const menuRef = ref(null)
 // Non-reactive
 const rules = {
   message: {
@@ -93,6 +98,12 @@ watch(modelValue, newVal => {
     text.value.message = props.editorValue;
   }
 })
+
+// Methods
+const toggle = (event) => {
+  const _menuRef = unref(menuRef)
+  _menuRef.opRef.toggle(event)
+}
 </script>
 
 <template>
@@ -128,11 +139,31 @@ watch(modelValue, newVal => {
     <template v-if="props.footer" #footer>
       <base-button
         :severity="props.createButtonColor"
-        :loading="props.loading"
         :label="props.label"
         rounded
-        @click="create"
+        @click="toggle"
       />
+
+      <base-overlay-panel
+        ref="menuRef"
+        width="w-60"
+        menu-class="bg-white mt-1 overflow-hidden"
+      >
+        <div class="flex items-center flex-col p-4">
+          <base-iconify :icon="InfoCircleBoldIcon" class="text-warning-500 !w-10 !h-10" />
+          <div class="text-xs font-semibold text-greyscale-900 text-center mt-2 mb-4">{{ t('all-signs-and-approvals-deleted') }}</div>
+
+          <base-button
+            :severity="props.createButtonColor"
+            :loading="props.loading"
+            label="agree"
+            size="small"
+            rounded
+            @click="create"
+          />
+        </div>
+      </base-overlay-panel>
+
     </template>
   </base-dialog>
 </template>

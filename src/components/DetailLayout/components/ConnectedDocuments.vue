@@ -8,11 +8,18 @@ import {fetchGetLinkedDocumentsList} from "@/modules/Documents/modules/SendDocum
 import {FolderBoldIcon, AltArrowRightIcon} from "@/components/Icons"
 import {StatusChip} from "@/components/Chips"
 import Empty from "@/components/Empty.vue";
-import {STATUS_TYPES} from "@/enums";
+import {CONTENT_TYPES, STATUS_TYPES} from "@/enums";
 
 // Composable
 const route = useRoute()
 const router = useRouter()
+
+const props = defineProps({
+  objectId: {
+    type: Number
+  }
+})
+
 // Reactive
 const data = ref(null)
 const loading = ref(true)
@@ -29,7 +36,7 @@ const list = computed(() => {
 // Methods
 const getLinkedDocuments = async () => {
   loading.value = true
-  const res = await fetchGetLinkedDocumentsList(route.params.id)
+  const res = await fetchGetLinkedDocumentsList(props.objectId)
   if (res && res.status === 200) {
     data.value = res.data
     loading.value = false

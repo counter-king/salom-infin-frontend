@@ -56,12 +56,20 @@ export const fetchDistrictList = () => {
 export const fetchDocumentTypesList = () => {
   return axiosConfig.get(URLS.documentTypes)
 }
+/** **/
+export const fetchDocumentTypesDetail = (id) => {
+  return axiosConfig.get(`${URLS.documentTypes}${id}/`)
+}
 /**
  * Возвращает список суб тип документов
  * @returns [{Array}]
  * */
 export const fetchDocumentSubTypesList = () => {
   return axiosConfig.get(URLS.documentSubTypes)
+}
+/** **/
+export const fetchDocumentSubTypesDetail = (id) => {
+  return axiosConfig.get(`${URLS.documentSubTypes}${id}/`)
 }
 /**
  * Возвращает список журналов
