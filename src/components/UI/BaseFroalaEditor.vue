@@ -97,6 +97,7 @@ onMounted(() => {
 	// Insert production-class in production mode to eradicate red alert of froala editor
 	setTimeout(() => {
 		const element = document.querySelector('.fr-element');
+
 		const parentElement = document.querySelector('.fr-wrapper');
 		if (parentElement && process.env.NODE_ENV !== 'development') {
 			const firstChild = parentElement.querySelector(':first-child');
