@@ -91,6 +91,8 @@ const handleDocumentStatus = async () => {
           register_date: reviewStore.detailModel.document.register_date,
           register_number: reviewStore.detailModel.document.register_number
         }"
+        self
+        @emit:back-button="() => router.push({ name: 'ReviewIndex' })"
       >
         <template #header-end>
           <!-- Create order button -->

@@ -67,7 +67,7 @@ const props = defineProps({
                 <div class="flex items-center gap-2 text-sm">
                   <h1
                     class="font-semibold"
-                    :class="!!reviewer.read_time === true && reviewer.status?.id === STATUS_TYPES.TODO
+                    :class="!!reviewer.read_time === true && (reviewer.status?.id === STATUS_TYPES.TODO || reviewer.status?.id === STATUS_TYPES.IN_PROGRESS)
                       ? 'text-primary-500'
                       : !!reviewer.read_time === true && reviewer.status?.id === STATUS_TYPES.DONE
                         ? 'text-success-500'
@@ -75,7 +75,7 @@ const props = defineProps({
                     "
                   >
                     {{
-                      !!reviewer.read_time === true && reviewer.status?.id === STATUS_TYPES.TODO
+                      !!reviewer.read_time === true && (reviewer.status?.id === STATUS_TYPES.TODO || reviewer.status?.id === STATUS_TYPES.IN_PROGRESS)
                         ? 'Ознакомлен'
                         : !!reviewer.read_time === true && reviewer.status?.id === STATUS_TYPES.DONE
                           ? 'Выполнен'

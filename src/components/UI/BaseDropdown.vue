@@ -92,6 +92,9 @@ const props = defineProps({
       return ['x-small', 'small', 'normal', 'large'].includes(value)
     }
   },
+  customSearch: {
+    type: Boolean
+  }
 })
 const emit = defineEmits(['update:modelValue', 'update:options', 'emit:change'])
 // Reactive
@@ -129,6 +132,10 @@ const options = computed({
 })
 // Watch
 watch(debounced, async () => {
+  if(props.customSearch) {
+    console.log('cs')
+    return
+  }
 	props.searchable && await loadList({
 		...props.apiParams,
 		search: search.value

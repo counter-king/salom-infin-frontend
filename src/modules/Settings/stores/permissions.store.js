@@ -20,7 +20,10 @@ const model = {
   method: 'GET',
   value: null,
   content_type: null,
-  __url: null
+  __url: null,
+  journal: null,
+  doc_type: null,
+  doc_sub_type: null
 }
 
 export const usePermissionStore = defineStore('permission-store', {
