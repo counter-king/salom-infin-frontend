@@ -215,6 +215,10 @@ export const filterObjectByKeys = (obj, keysToInclude = []) => {
 export const filterFalsyValues = (obj) => {
   const filteredObject = {};
 
+  if (obj.register_date){
+    obj.register_date = new Date(obj.register_date).toISOString().split('T')[0]
+  }
+
   for (const key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key) && obj[key]) {
       filteredObject[key] = obj[key];

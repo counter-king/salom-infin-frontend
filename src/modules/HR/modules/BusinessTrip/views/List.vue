@@ -21,7 +21,8 @@ const BTStore = useBusinessTripStore()
 const currentUser = useAuthStore().currentUser
 
 // Const
-const filterKeys = ["author"]
+const filterKeys = ["user", "branches"]
+const keysToIncludeOnClearFilter = ["destination"]
 
 // Computed
 const apiParams = computed(() => {
@@ -70,6 +71,7 @@ onMounted(() => {
       :action-list="BTStore.actionGetBusinessTripList"
       :column-menu-items="BTStore.headers"
       :filter-keys="filterKeys"
+      :keys-to-include-on-clear-filter="keysToIncludeOnClearFilter"
       :storage-columns-name="HR_BUSINESS_TRIP_COLUMNS"
       @emit:reset-headers="BTStore.resetHeaders"
     >

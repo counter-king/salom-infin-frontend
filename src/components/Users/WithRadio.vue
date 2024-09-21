@@ -25,7 +25,7 @@ const props = defineProps({
     </div>
 
     <h1
-      class="max-w-[140px] text-xs font-semibold text-primary-900"
+      class="max-w-[250px] text-xs font-semibold text-primary-900"
       :class="{ 'truncate' : props.textTruncate }"
     >
       {{ props.title }}

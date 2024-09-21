@@ -17,10 +17,18 @@ import { useBoxesApprovalStore } from "@/modules/Documents/modules/Boxes/stores/
 // Utils
 import { formatDate } from "@/utils/formatDate";
 
+// Composable
 const route = useRoute()
-const { t } = useI18n();
-const router = useRouter();
-const approvalStore = useBoxesApprovalStore();
+const { t } = useI18n()
+const router = useRouter()
+const approvalStore = useBoxesApprovalStore()
+
+// Const
+const filterKeys = ["register_number", "document_types", "document_sub_types", "register_date", "department_recipients", "users", "branch_recipients",
+  { key: 'department_recipients', label: 'recipient-departments' },
+  { key: 'users', label: 'signers' },
+  { key: 'branch_recipients', label: 'recipient-branches' }
+]
 
 // Methods
 const onRowClick = (data) => {
@@ -44,11 +52,13 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="approval-view">
+  <div class="approval-view w-">
     <action-toolbar
       :column-menu-items="approvalStore.headers"
       :title="t('for-approval')"
       :storage-columns-name="BOXES_APPROVAL_COLUMNS"
+      :filter-keys="filterKeys"
+      :action-list="approvalStore.actionGetApprovalList"
       @emit:reset-headers="approvalStore.resetHeaders"
     />
 

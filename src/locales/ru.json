@@ -371,5 +371,10 @@
   "bot": "Бот",
   "personal-chat": "Создать и написать приватный чат",
   "group-chat": "Создайте группу в чате",
-  "bot-chat": "Создать и написать через бот"
+  "bot-chat": "Создать и написать через бот",
+  "all-signs-and-approvals-deleted": "Все подписи и согласия будут удалены!",
+  "document-sub-type": "Подтип документа",
+  "choose-document-sub-type": "Выберите подтип документа",
+  "recipient-departments": "Приемные департаменты",
+  "recipient-branches": "Приемные филиалы"
 }

@@ -14,10 +14,18 @@ import { useBoxesSignStore } from "@/modules/Documents/modules/Boxes/stores/sign
 // Utils
 import { formatDate } from "@/utils/formatDate";
 
+// Composable
 const route = useRoute()
-const { t } = useI18n();
-const router = useRouter();
-const signStore = useBoxesSignStore();
+const { t } = useI18n()
+const router = useRouter()
+const signStore = useBoxesSignStore()
+
+// Const
+const filterKeys = ["register_number", "document_types", "document_sub_types", "register_date", "department_recipients", "users", "branch_recipients",
+  { key: 'department_recipients', label: 'recipient-departments' },
+  { key: 'users', label: 'signers' },
+  { key: 'branch_recipients', label: 'recipient-branches' }
+]
 
 // Methods
 const onRowClick = (data) => {
@@ -44,6 +52,8 @@ onMounted(async () => {
     <action-toolbar
       :column-menu-items="signStore.headers"
       :title="t('for_signing')"
+      :filter-keys="filterKeys"
+      :action-list="signStore.actionGetSignList"
       :storage-columns-name="BOXES_SIGN_COLUMNS"
       @emit:reset-headers="signStore.resetHeaders"
     />

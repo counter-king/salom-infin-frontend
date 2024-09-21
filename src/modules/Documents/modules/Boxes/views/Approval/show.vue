@@ -1,7 +1,7 @@
 <script setup>
 // Core
 import {computed, onMounted, ref} from "vue"
-import { useRoute } from "vue-router"
+import {useRoute, useRouter} from "vue-router"
 import {useI18n} from "vue-i18n"
 // Service
 import { fetchRejectApprovalDocument } from "@/modules/Documents/modules/Boxes/services/approval.service"
@@ -23,14 +23,19 @@ import { CONTENT_TYPES } from "@/enums"
 import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue"
 import {TreeUsers} from "@/components/Tree"
 
-const approvalStore = useBoxesApprovalStore();
-const countStore = useDocumentCountStore();
-const authstore = useAuthStore()
-const sdStore = useSDStore();
-const route = useRoute();
-const rejectModal = ref(false);
-const changeModal = ref(false);
+// Composable
+const route = useRoute()
+const router = useRouter()
 const { t } = useI18n()
+const approvalStore = useBoxesApprovalStore()
+const countStore = useDocumentCountStore()
+const authstore = useAuthStore()
+const sdStore = useSDStore()
+
+// Reactive
+const rejectModal = ref(false)
+const changeModal = ref(false)
+const confirmModal = ref(false)
 
 // Computed
 const approved = computed(() => {
@@ -43,28 +48,31 @@ const isAssistant = computed(() => {
 
 // Methods
 const getDetail = async () => {
-  await approvalStore.actionGetApprovalDetail(route.params.id);
+  await approvalStore.actionGetApprovalDetail(route.params.id)
 }
 const onApprove = async () => {
-  await getDetail();
-  await countStore.actionDocumentCountList();
+  await getDetail()
+  await countStore.actionDocumentCountList()
 }
 const onReject = async (comment) => {
-  await fetchRejectApprovalDocument({ id: route.params.id, comment });
+  await fetchRejectApprovalDocument({ id: route.params.id, comment })
   rejectModal.value = false;
-  await getDetail();
-  await countStore.actionDocumentCountList();
+  await getDetail()
+  await countStore.actionDocumentCountList()
+}
+const openConfirmModal = () => {
+  confirmModal.value = true
 }
 const onChangeDocument = async (text) => {
-  await sdStore.actionCustomUpdate({ id: route.query.compose_id, body: { content: text } });
-  changeModal.value = false;
-  await getDetail();
-  await countStore.actionDocumentCountList();
+  await sdStore.actionCustomUpdate({ id: route.query.compose_id, body: { content: text } })
+  changeModal.value = false
+  await countStore.actionDocumentCountList()
+  await router.go(-1)
 }
 
 // Hooks
 onMounted(  () => {
-  getDetail();
+  getDetail()
 })
 </script>
 
@@ -181,6 +189,23 @@ onMounted(  () => {
       :loading="sdStore.customUpdateLoading"
 	  />
 	  <!-- /CHANGE TEXT MODAL -->
+
+    <!-- CONFIRM CHANGE MODAL -->
+    <base-dialog
+      v-model="confirmModal"
+      label="props.headerText ? props.headerText : props.label"
+      max-width="max-w-[750px]"
+      :draggable="false"
+    >
+      <template #content>
+        sdsdsdsdsds
+      </template>
+
+      <template #footer>
+        aaaaaaaaaa
+      </template>
+    </base-dialog>
+    <!-- /CONFIRM CHANGE MODAL -->
   </template>
 </template>
 
