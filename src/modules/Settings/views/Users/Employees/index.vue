@@ -57,13 +57,13 @@ const headers = ref([
     header: 'Телефон',
     is_active: true,
   },
-  {
-    columnKey: 'is_user_active',
-    disabled: true,
-    field: 'is_user_active',
-    header: 'Состояние',
-    is_active: true,
-  },
+  // {
+  //   columnKey: 'is_user_active',
+  //   disabled: true,
+  //   field: 'is_user_active',
+  //   header: 'Состояние',
+  //   is_active: true,
+  // },
   {
     columnKey: 'action',
     field: 'action',
@@ -171,22 +171,22 @@ onMounted(() => {
       </span>
       <Button
         @click="toggle"
-        class="p-button p-component font-medium text-sm border-transparent bg-primary-0 hover:bg-greyscale-100 text-primary-dark shadow-button rounded-xl !rounded-full py-[9px] px-4"
+        class="p-button p-component font-medium text-sm border-transparent bg-primary-0 hover:bg-greyscale-100 text-primary-dark shadow-button !rounded-full py-[9px] px-4"
         rounded
         type="button"
         >
         <base-icon class="mr-2" color="#767994" height="20" name="SettingsMinimalisticIcon" width="20"/>
         <span>Настроить столбцы</span>
       </Button>
-      <Button
+      <!-- <Button
         @click="visible = true"
-        class="p-button p-component font-medium text-sm rounded-xl !rounded-full py-[9px] px-4"
+        class="p-button p-component font-medium text-sm !rounded-full py-[9px] px-4"
         rounded
         type="button"
       >
         <base-icon class="mr-2" height="20" name="AddIcon" width="20"/>
         <span>Создать</span>
-      </Button>
+      </Button> -->
     </div>
   </div>
   <div class="employees-table">
@@ -196,6 +196,7 @@ onMounted(() => {
       :value="employees"
       row-hover
       scrollable
+      scrollHeight="calc(100vh - 305px)"
       >
       <Column
         :columnKey="item.columnKey"
@@ -277,7 +278,7 @@ onMounted(() => {
       </div>
     </div>
     <div class="flex justify-end border-t bg-greyscale-50 py-3 pr-5 pl-8">
-      <Button @click="resetHeaders" class="p-button p-component shadow-button font-medium flex justify-center shadow-none rounded-full text-[14px] py-[6px] px-4 bg-white text-primary-900 border-transparent">Сбросить</Button>
+      <Button @click="resetHeaders" class="p-button p-component font-medium flex justify-center shadow-none rounded-full text-[14px] py-[6px] px-4 bg-white text-primary-900 border-transparent">Сбросить</Button>
       <Button @click="saveChanges" class="p-button p-component font-medium flex justify-center shadow-none rounded-full text-[14px] py-[6px] px-4 ml-2">Сохранить</Button>
     </div>
   </OverlayPanel>

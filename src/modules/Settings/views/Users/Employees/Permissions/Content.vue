@@ -6,7 +6,7 @@ import { useRoute } from 'vue-router'
 import Empty from '@/components/Empty.vue'
 import RolesItems from './Items.vue'
 // Stores
-import { usePermissionStore } from '../../../stores/permissions.store'
+import { usePermissionStore } from '../../../../stores/permissions.store'
 // Composable
 const route = useRoute()
 const permissionStore = usePermissionStore()

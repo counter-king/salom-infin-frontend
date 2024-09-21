@@ -74,7 +74,7 @@ const update = async () => {
   dispatchNotify(null, 'Права доступа изменен', COLOR_TYPES.SUCCESS)
 }
 const afterHide = () => {
-  clearModel(rolesStore.createModel)
+  clearModel(rolesStore.createModel, ['is_active'])
   $v.value.$reset()
 }
 </script>

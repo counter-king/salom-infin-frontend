@@ -46,7 +46,7 @@ const emits = defineEmits(['emit:resetHeaders']);
       <slot name="title-after" />
     </div>
 
-    <div class="flex items-center gap-2">
+    <div class="flex items-center justify-end flex-1 gap-2">
       <slot name="filters">
         <export-button />
 

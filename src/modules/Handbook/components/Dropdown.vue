@@ -14,6 +14,10 @@ const props = defineProps({
 		type: String,
 		default: null
 	},
+  placeholder: {
+    type: String,
+    default: 'choose-one'
+  },
   apiParams: {
 		type: Object,
 		default: () => ({
@@ -42,6 +46,7 @@ const options = computed({
       v-model:options="options"
       :api-url="props.apiUrl"
       :api-params="props.apiParams"
+      :placeholder="props.placeholder"
       searchable
       option-label="name_ru"
       option-value="id"
