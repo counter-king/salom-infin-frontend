@@ -45,6 +45,7 @@ const updateDocument = async () => {
   await controlStore.actionRemoveFromControl({ id: +route.params.id, type: FORM_TYPE_UPDATE })
   boxesCommonStore.actionRerenderComponent()
 }
+
 </script>
 
 <template>
