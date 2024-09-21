@@ -30,7 +30,7 @@ const rules = {
 }
 
 const $v = useVuelidate(rules, model)
-const emit = defineEmits(['emit:onSendToSigning']);
+const emit = defineEmits(['emit:onSendToSigning'])
 
 // Methods
 const onSendToSigning = async () => {
@@ -51,9 +51,9 @@ const onSendToSigning = async () => {
 
   const response = await fetchSendToSigning(route.params.id, body)
   if (response.status === 200) {
-    emit('emit:onSendToSigning');
-    buttonLoading.value = false;
-    dialog.value = false;
+    emit('emit:onSendToSigning')
+    buttonLoading.value = false
+    dialog.value = false
   }
 }
 </script>

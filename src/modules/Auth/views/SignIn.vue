@@ -222,7 +222,7 @@ onMounted(() => {
     <div class="text-center mt-4">
       У вас еще нет аккаунта ?
       <router-link :to="{ name: 'ConfirmNumber' }" class="text-indigo-700">
-        Подтвердите номер
+        Зарегистрируйтесь
       </router-link>
     </div>
   </div>

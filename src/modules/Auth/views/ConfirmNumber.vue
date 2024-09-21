@@ -18,7 +18,7 @@ const router = useRouter()
 const props = defineProps({
   title: {
     type: String,
-    default: "Потвердеть пароль"
+    default: "Зарегистрируйтесь"
   }
 })
 // Reactive
