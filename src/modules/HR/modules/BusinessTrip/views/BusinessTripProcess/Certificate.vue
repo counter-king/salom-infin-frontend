@@ -75,14 +75,17 @@ const verifications = computed(() => {
 
   return arr.sort((a, b) => new Date(a.actionTime) - new Date(b.actionTime))
 })
+const docType = computed(() => {
+  return BTStore.detailModel?.compose?.find(item => item.doc_type === 'order') ? 'order' : 'decree'
+})
 const orderRegisteredNumber = computed(() => {
-  return BTStore.detailModel?.compose?.find(item => item.doc_type === 'order').register_number
+  return BTStore.detailModel?.compose?.find(item => item.doc_type === docType.value).register_number
 })
 const orderRegisteredDate = computed(() => {
-  return BTStore.detailModel?.compose?.find(item => item.doc_type === 'order').register_date
+  return BTStore.detailModel?.compose?.find(item => item.doc_type === docType.value).register_date
 })
 const curatorFullName = computed(() => {
-  return BTStore.detailModel?.compose?.find(item => item.doc_type === 'order').curator
+  return BTStore.detailModel?.compose?.find(item => item.doc_type === docType.value).curator
 })
 </script>
 
