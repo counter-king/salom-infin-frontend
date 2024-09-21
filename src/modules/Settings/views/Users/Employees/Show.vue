@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref, watch, onMounted,onUnmounted } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 // Components
 import { LayoutWithTabs } from '@/components/DetailLayout'
@@ -26,8 +26,10 @@ const roles = ref([])
 watch(
   () => roles.value,
   (value) => {
-    let permissions = value.map(item => item.permissions).flat(1)
-    employeeStore.createModel.permissions = Object.keys(Object.groupBy(permissions, ({ id }) => id)).map(item => parseInt(item))
+    let permissionsAll = value.map(item => item.permissions).flat(1)
+    let permissions = Object.keys(Object.groupBy(permissionsAll, ({ id }) => id)).map(item => parseInt(item))
+    let userPermissions = Object.keys(Object.groupBy(user.value.permissions, ({ id }) => id)).map(item => parseInt(item))
+    employeeStore.createModel.permissions = [...new Set([...permissions, ...userPermissions])]
   }
 )
 // Methods
@@ -35,7 +37,6 @@ const getByOne = async () => {
   try {
     let { data } = await axiosConfig.get(`users/${route.params.id}/`)
     user.value = data
-    employeeStore.createModel.permissions = data.permissions.map(permissions => parseInt(permissions.id))
     roles.value = data.roles
   }
   catch(error) {
@@ -76,9 +77,6 @@ onMounted(async () => {
       loading.value = false
     }, 500)
   }
-})
-onUnmounted(() => {
-
 })
 </script>
 
