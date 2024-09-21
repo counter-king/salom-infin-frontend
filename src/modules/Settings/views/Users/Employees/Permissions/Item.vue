@@ -1,8 +1,8 @@
 <script setup>
 // Stores
-import { useRolesStore } from '../../../stores/roles.store'
+import { useEmployeeStore } from '../../../../stores/users/employees.store'
 // Composable
-const rolesStore = useRolesStore()
+const employeeStore = useEmployeeStore()
 // Macros
 const props = defineProps({
   item: {
@@ -20,7 +20,7 @@ const handleCheckbox = (event) => {
 <template>
   <div class="role-item-view flex items-center gap-3 h-11 transition-colors hover:bg-greyscale-50 rounded-xl px-3">
     <Checkbox
-      v-model="rolesStore.createModel.permissions"
+      v-model="employeeStore.createModel.permissions"
       :value="item.id"
       :pt="{
         root: {

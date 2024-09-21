@@ -179,6 +179,7 @@ onUnmounted(() => {
               />
             </base-col>
 
+
             <base-col col-class="w-full">
               <editor-with-tabs
                 v-model="$v.content.$model"

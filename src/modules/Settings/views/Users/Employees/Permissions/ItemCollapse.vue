@@ -3,8 +3,11 @@
 import Accordion from 'primevue/accordion'
 import AccordionTab from 'primevue/accordiontab'
 // Components
-import PermissionActions from './Actions.vue'
 import PermissionItem from './Item.vue'
+// Stores
+import { useEmployeeStore } from '../../../../stores/users/employees.store'
+// Composable
+const employeeStore = useEmployeeStore()
 // Macros
 const props = defineProps({
   item: {
@@ -19,6 +22,11 @@ const props = defineProps({
     default: () => []
   }
 })
+// Methods
+const handleCheckbox = (event) => {
+  event.preventDefault()
+  event.stopImmediatePropagation()
+}
 </script>
 
 <template>
@@ -33,7 +41,7 @@ const props = defineProps({
             class: 'permission-header'
           },
           headerAction: {
-            class: 'group justify-between flex-row-reverse gap-3 bg-white hover:bg-greyscale-50 rounded-none hover:rounded-xl border-none shadow-[0_1.5px_0px_0px_#F2F2F2] hover:shadow-none py-3 px-4'
+            class: 'group justify-between flex-row-reverse gap-3 bg-white hover:bg-greyscale-50 rounded-none hover:rounded-xl border-none shadow-[0_1.5px_0px_0px_#F2F2F2] hover:shadow-none py-3 px-3'
           },
           headerIcon: {
             class: 'rotate-90 text-greyscale-400 m-0'
@@ -44,16 +52,22 @@ const props = defineProps({
         }"
       >
         <template #header>
-          <div class="flex flex-1">
-            <span class="flex-1 text-[15px] line-clamp-1 text-sm leading-[24px] font-semibold text-greyscale-900">{{ item.name_ru }}</span>
+          <div class="flex gap-3 flex-1">
+            <Checkbox
+              v-model="employeeStore.createModel.permissions"
+              :value="item.id"
+              :pt="{
+                root: {
+                  class: 'flex items-center'
+                },
+                input:{
+                  class: 'w-[18px] h-[18px] rounded'
+                }
+              }"
+              @click="handleCheckbox($event)"
+            />
 
-            <div class="permission-actions-block hidden group-hover:block">
-              <permission-actions
-                :item="item"
-                :index="index"
-                :items="items"
-              />
-            </div>
+            <span class="flex-1 text-[15px] line-clamp-1 text-sm leading-[24px] font-semibold text-greyscale-900">{{ item.name }}</span>
           </div>
         </template>
 

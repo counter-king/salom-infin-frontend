@@ -3,14 +3,18 @@ import { defineStore } from 'pinia'
 // Service
 import {
   fetchListRole,
+  fetchOneRole,
   fetchCreateRole,
   fetchUpdateRole,
   fetchDeleteRole
 } from '../services/role.service'
+// Utils
+import { setValuesToKeys } from '../../../utils'
 
 let model = {
-  name_uz: null,
-  name_ru: null,
+  id: null,
+  name: null,
+  permissions: [],
   is_active: true
 }
 
@@ -24,7 +28,7 @@ export const useRolesStore = defineStore('roles-store', {
         active: true
       },
       {
-        header: 'Создано',
+        header: 'Дата создание',
         field: 'created_date',
         active: true
       },
@@ -32,12 +36,13 @@ export const useRolesStore = defineStore('roles-store', {
         header: 'Действия',
         field: 'actions',
         active: true,
-        class: 'w-[125px]'
+        class: 'w-[150px]'
       }
     ],
     count: 0,
     contentLoading: false,
-    createModel: Object.assign({}, model)
+    createModel: Object.assign({}, model),
+    selected: []
   }),
   actions: {
     async actionGetList() {
@@ -48,12 +53,22 @@ export const useRolesStore = defineStore('roles-store', {
      *
      *
     */
+   async getOneRole(id) {
+      let { data } = await fetchOneRole(id)
+      this.setRole(data)
+      this.createModel.permissions = data.permissions.map(permission => permission.id)
+   },
+    /**
+     *
+     *
+    */
     async createRole() {
       try {
         await fetchCreateRole(this.createModel)
+        return Promise.resolve()
       }
-      finally {
-
+      catch(error) {
+        return Promise.reject()
       }
     },
     /**
@@ -62,10 +77,11 @@ export const useRolesStore = defineStore('roles-store', {
     */
     async updateRole() {
       try {
-        await fetchUpdateRole(this.createModel)
+        await fetchUpdateRole(this.createModel.id, this.createModel)
+        return Promise.resolve()
       }
-      finally {
-
+      catch(error) {
+        return Promise.reject()
       }
     },
     /**
@@ -80,5 +96,12 @@ export const useRolesStore = defineStore('roles-store', {
 
       }
     },
+    /**
+     *
+     *
+    */
+    setRole(payload) {
+      setValuesToKeys(this.createModel, payload)
+    }
   }
 })

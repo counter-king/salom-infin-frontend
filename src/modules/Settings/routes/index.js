@@ -151,6 +151,25 @@ const Settings = [
             path: "employees",
           },
           {
+            path: 'employees/:id',
+            name: 'EmployeesID',
+            meta: {
+              isAuthRequired: true,
+              navigation: false
+            },
+            component: () => import('../views/Users/Employees/Show.vue'),
+            children: [
+              {
+                path: ':permissionId',
+                name: 'EmployeesIDPermissionId',
+                meta: {
+                  isAuthRequired: true
+                },
+                component: () => import('../views/Users/Employees/Content.vue'),
+              }
+            ]
+          },
+          {
             component: () => import("../views/Users/Assistants/index.vue"),
             meta: { isAuthRequired: true },
             name: "AssistantsIndex",

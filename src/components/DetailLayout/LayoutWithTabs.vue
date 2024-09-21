@@ -1,6 +1,7 @@
 <script setup>
 // Core
 import { ref, shallowRef, watch, defineAsyncComponent, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 // Components
 import BaseSpinner from '@/components/UI/BaseSpinner.vue'
@@ -9,6 +10,8 @@ import BackButton from '../Actions/BackButton.vue'
 import FileTabs from './components/FileTabs.vue'
 // Enums
 import { CONTENT_TYPES } from '@/enums'
+// Composable
+const router = useRouter()
 // Macros
 const props = defineProps({
   title: {
@@ -93,8 +96,12 @@ const props = defineProps({
   files: {
     type: Array,
     default: () => []
+  },
+  self: {
+    type: Boolean
   }
 })
+const emit = defineEmits(['emit:back-button'])
 const { t } = useI18n();
 // Reactive
 const activeTabMenuIndex = ref(0)
@@ -116,7 +123,10 @@ watch(activeTabMenu, (value) => {
     <template v-if="props.toolbar">
       <div class="flex items-center justify-between h-10 mb-5">
         <div class="flex items-center gap-3">
-          <back-button />
+          <back-button
+            :self="props.self"
+            @click="props.self ? emit('emit:back-button') : router.go(-1)"
+          />
 
           <h1 class="font-bold text-xl text-primary-900">{{ props.title ? t(props.title) : t('title-document') }}</h1>
         </div>

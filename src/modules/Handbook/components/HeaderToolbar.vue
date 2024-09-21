@@ -53,19 +53,21 @@ onMounted(async () => {
 <template>
   <action-toolbar title="Справочник">
     <template #filters>
-      <div class="max-w-[300px] w-full">
+      <div class="max-w-[350px] w-full">
         <handbook-dropdown
           v-model="branchSelect"
           v-model:options="branches"
           api-url="companies"
+          placeholder="Филиал"
         />
       </div>
 
-      <div class="max-w-[300px] min-w-[200px] w-full">
+      <div class="max-w-[350px] w-full">
         <handbook-dropdown
           v-model="deparmentSelect"
           v-model:options="deparments"
           api-url=departments/top-level-departments
+          placeholder="Подразделение"
         />
       </div>
     </template>

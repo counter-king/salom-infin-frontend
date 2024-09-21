@@ -14,7 +14,17 @@ const Roles = [
       isAuthRequired: true
     },
     component: () => import('../views/Roles/show.vue'),
-  },
+    children: [
+      {
+        path: ':permissionId',
+        name: 'RolesPermissionId',
+        meta: {
+          isAuthRequired: true
+        },
+        component: () => import('../views/Roles/Content.vue'),
+      }
+    ]
+  }
 ]
 
 export default Roles

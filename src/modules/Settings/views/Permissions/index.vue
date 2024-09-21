@@ -1,6 +1,5 @@
 <script setup>
 // Core
-import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 // Components
 import { ActionToolbar } from '@/components/Actions'
@@ -11,10 +10,6 @@ import { usePermissionStore } from '../../stores/permissions.store'
 // Composable
 const route = useRoute()
 const permissionStore = usePermissionStore()
-// Hooks
-onMounted(async () => {
-  await permissionStore.listPermission()
-})
 </script>
 
 <template>
