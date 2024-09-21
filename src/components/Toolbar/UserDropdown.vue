@@ -17,13 +17,19 @@ const authStore = useAuthStore()
 const router = useRouter()
 const userProfile = computed(() => authStore.getCurrentUser)
 
-const handleMenu = async () => {
-  removeStorageItem(ACCESS)
-  removeStorageItem(REFRESH)
-  removeStorageItem(EXPIRES)
-  removeStorageItem(CURRENT_ROUTE)
-  await router.push({ name: "Login" })
-  resetAllPiniaStores()
+const handleMenu = async ({item}) => {
+  if (item.value === 'profile') {
+    await router.push({
+      name: 'ProfileIndex'
+    })
+  } else {
+    removeStorageItem(ACCESS)
+    removeStorageItem(REFRESH)
+    removeStorageItem(EXPIRES)
+    removeStorageItem(CURRENT_ROUTE)
+    await router.push({ name: "Login" })
+    resetAllPiniaStores()
+  }
 }
 const menuRef = ref(null)
 const items = ref([
@@ -31,21 +37,26 @@ const items = ref([
     label: 'Профиль',
     subTitle: 'Выбор режима программы',
     icon: UserIcon,
+    value: 'profile',
+    command: handleMenu
   },
   {
     label: 'Настройки',
     subTitle: 'Выбор режима программы',
-    icon: SettingsIcon
+    icon: SettingsIcon,
+    value: 'settings',
   },
   {
     label: 'Поддержка',
     subTitle: 'Выбор режима программы',
-    icon: InfoCircleIcon
+    icon: InfoCircleIcon,
+    value: 'support',
   },
   {
     label: 'Выход',
     subTitle: 'Выбор режима программы',
     icon: Logout2Icon,
+    value: 'logout',
     command: handleMenu
   }
 ])
@@ -53,6 +64,9 @@ const items = ref([
 const toggle = (event) => {
   const _menuRef = unref(menuRef)
   _menuRef.menuRef.toggle(event)
+}
+const onSelect = (item) => {
+
 }
 </script>
 <template>
@@ -92,6 +106,7 @@ const toggle = (event) => {
         <div
           class="flex items-center justify-between px-3 py-3 rounded-xl bg-white cursor-pointer shadow-button"
           :class="item"
+          @click="onSelect(item)"
         >
           <div>
             <h1 class="text-sm font-semibold text-primary-900">{{ item.label }}</h1>

@@ -111,7 +111,7 @@ const curatorFullName = computed(() => {
         </div>
 
         <div>
-          <span class="font-semibold">Asos: </span> {{ formatDate(orderRegisteredDate) }} dagi {{ orderRegisteredNumber }}-sonli buyruq
+          <span class="font-semibold">Asos: </span> {{ formatDate(orderRegisteredDate) }} dagi {{ orderRegisteredNumber }}-sonli {{ docType === 'order' ? 'buyruq' : 'farmoyish' }}
         </div>
       </div>
 
