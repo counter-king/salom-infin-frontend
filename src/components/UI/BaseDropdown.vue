@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { useModel, ref, watch, computed } from 'vue'
+import { useModel, ref, watch, computed, onMounted } from 'vue'
 import { useDebounce } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
 import Dropdown from 'primevue/dropdown'
@@ -133,7 +133,12 @@ const options = computed({
 // Watch
 watch(debounced, async () => {
   if(props.customSearch) {
-    console.log('cs')
+    if(search.value) {
+      options.value = props.options.filter(option => option.url.includes(search.value))
+    }
+    else {
+      options.value = list.value
+    }
     return
   }
 	props.searchable && await loadList({
@@ -146,6 +151,12 @@ const loadList = async (params) => {
 	let { data } = await axiosConfig.get(`${props.apiUrl}/`, params)
 	options.value = data.results
 }
+// Hooks
+onMounted(() => {
+  if(props.customSearch) {
+    list.value = props.options
+  }
+})
 </script>
 
 <template>

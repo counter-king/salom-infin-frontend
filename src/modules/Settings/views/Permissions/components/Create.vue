@@ -27,7 +27,7 @@ const props = defineProps({
     default: FORM_TYPE_CREATE
   },
   parent: {
-    type: Number
+    type: Boolean
   },
   list: {
     type: Array,
@@ -77,9 +77,9 @@ const rules = {
   name_ru: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
-  __url: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
+  // __url: {
+  //   required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  // },
   method: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
@@ -209,16 +209,14 @@ const afterHide = () => {
           />
 
           <base-dropdown
-            v-model="$v.__url.$model"
+            v-model="permissionStore.createModel.__url"
             v-model:options="allUrlStore.list"
-            :error="$v.__url"
             api-url="all-urls"
             searchable
             option-label="url"
             custom-search
             label="АПИ путь"
             placeholder="АПИ путь"
-            required
             @emit:change="handleUrlPath"
           />
 
@@ -241,7 +239,7 @@ const afterHide = () => {
             required
           />
 
-          <template v-if="!props.item?.name_ru">
+          <template v-if="props.parent">
             <base-dropdown
               v-model="permissionStore.createModel.journal"
               v-model:options="commonStore.journalsList"

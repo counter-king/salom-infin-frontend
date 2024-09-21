@@ -13,6 +13,9 @@ const props = defineProps({
   items: {
     type: Array,
     default: () => []
+  },
+  parent: {
+    type: Boolean
   }
 })
 const emit = defineEmits(['emit:deleted'])
@@ -27,6 +30,7 @@ const emit = defineEmits(['emit:deleted'])
         :item="item"
         :index="index"
         :items="items"
+        :parent="props.parent"
         @emit:deleted="emit('emit:deleted')"
       />
     </div>

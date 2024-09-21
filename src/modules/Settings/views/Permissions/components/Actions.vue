@@ -20,6 +20,9 @@ const props = defineProps({
   items: {
     type: Array,
     default: () => []
+  },
+  parent: {
+    type: Boolean
   }
 })
 const emit = defineEmits(['emit:deleted'])
@@ -64,6 +67,7 @@ const deletePermission = async (event, id, index, list) => {
       :list="props.items"
       :item="item"
       :index="index"
+      :parent="props.parent"
       only-icon
       compact
     />

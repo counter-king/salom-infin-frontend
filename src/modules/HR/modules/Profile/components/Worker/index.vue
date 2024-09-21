@@ -50,22 +50,22 @@ const items = [
   },
   {
     title: 'Отдел',
-    description: 'Отдел технической поддержки',
+    description: authStore.currentUser.department?.name ?? '-',
     icon: UsersGroupTwoRoundedBoldIcon
   },
   {
     title: 'Опыт работы',
-    description: '3 года в должности, 7 лет в Псб',
+    description: authStore.currentUser.begin_work_date ?? '-',
     icon: BriefCase20SolidIcon
   },
   {
     title: 'Управления',
-    description: 'Innovation texnologiyalar boshqarmasi',
+    description: authStore.currentUser.parent_dept_name?.name ?? '-',
     icon: UserHandsBoldIcon
   },
   {
     title: 'Корп. почта',
-    description: 'jessica.hanson@example.com',
+    description: authStore.currentUser.email ?? '-',
     icon: LetterBoldIcon
   },
 ]
