@@ -376,5 +376,6 @@
   "document-sub-type": "Подтип документа",
   "choose-document-sub-type": "Выберите подтип документа",
   "recipient-departments": "Приемные департаменты",
-  "recipient-branches": "Приемные филиалы"
+  "recipient-branches": "Приемные филиалы",
+  "business-trip-decree-local": "Командировочный распоряжение"
 }

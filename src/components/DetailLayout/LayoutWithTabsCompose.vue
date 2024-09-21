@@ -154,6 +154,7 @@ const closeHistoryDetail = () => {
       <slot name="content">
         <div class="flex justify-between border-b">
           <base-tab-menu v-model="activeTabMenuIndex" :tab-items="props.tabItems" />
+
           <!-- Version history -->
           <div
             v-if="SDStore.versionHistoryList.length"
@@ -168,7 +169,7 @@ const closeHistoryDetail = () => {
                 @click="closeHistoryDetail"
               />
             </div>
-              <div class="flex gap-x-3 overflow-x-auto h-full">
+              <div class="flex gap-x-3 overflow-x-auto h-full max-w-[80%]">
                 <div
                   v-for="item in SDStore.versionHistoryList"
                   v-tooltip.top="{
@@ -177,7 +178,6 @@ const closeHistoryDetail = () => {
                     autoHide: false
                   }"
                   class="flex justify-center items-center cursor-pointer w-12 h-full"
-                  :class="item.active ? 'border-b-2 border-primary-500' : 'border-b-2'"
                   @click="getVersionHistoryDetail(item)"
                 >
                 <div class="flex flex-col gap-y-1 h-full items-center">
@@ -197,6 +197,7 @@ const closeHistoryDetail = () => {
             </div>
           </div>
           <!-- /Version history -->
+
         </div>
 
         <div class="flex flex-1">
