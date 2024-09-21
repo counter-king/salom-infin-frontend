@@ -211,6 +211,7 @@ onUnmounted(() => {
                 v-model="$v.__tags.$model"
                 :error="$v.__tags"
                 api-url="tags"
+                :api-params="{ document_sub_type: route.params. document_sub_type}"
                 :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
                 display="chip"
                 selectable
@@ -237,6 +238,7 @@ onUnmounted(() => {
                 <base-calendar
                   v-model="$v.start_date.$model"
                   :error="$v.start_date"
+                  :min-date="new Date()"
                   required
                   label="start-date"
                   placeholder="choose-start-time"
@@ -246,6 +248,7 @@ onUnmounted(() => {
                 <base-calendar
                   v-model="$v.end_date.$model"
                   :error="$v.end_date"
+                  :min-date="new Date()"
                   required
                   label="end-date"
                   placeholder="choose-end-time"
