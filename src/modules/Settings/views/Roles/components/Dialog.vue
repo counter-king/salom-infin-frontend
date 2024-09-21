@@ -25,10 +25,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'emit:success'])
 // Non-reactive
 const rules = {
-  name_uz: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
-  name_ru: {
+  name: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
 }
@@ -65,9 +62,15 @@ const submit = async () => {
   }
 }
 const create = async () => {
+  await rolesStore.createRole()
+  await rolesStore.actionGetList()
+  modelValue.value = false
   dispatchNotify(null, 'Права доступа создана', COLOR_TYPES.SUCCESS)
 }
 const update = async () => {
+  await rolesStore.updateRole()
+  await rolesStore.actionGetList()
+  modelValue.value = false
   dispatchNotify(null, 'Права доступа изменен', COLOR_TYPES.SUCCESS)
 }
 const afterHide = () => {
@@ -86,19 +89,11 @@ const afterHide = () => {
     <template #content>
       <div class="space-y-5 pb-10">
         <base-input
-          v-model="$v.name_uz.$model"
-          :error="$v.name_uz"
+          v-model="$v.name.$model"
+          :error="$v.name"
           required
-          label="Наименование (RU)"
-          placeholder="Наименование (RU)"
-        />
-
-        <base-input
-          v-model="$v.name_ru.$model"
-          :error="$v.name_ru"
-          required
-          label="Наименование (UZ)"
-          placeholder="Наименование (UZ)"
+          label="Наименование"
+          placeholder="Наименование"
         />
 
         <div class="flex items-center justify-between !mt-7">
