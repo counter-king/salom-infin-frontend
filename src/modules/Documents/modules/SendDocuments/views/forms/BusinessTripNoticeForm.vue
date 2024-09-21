@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import {onBeforeMount, onUnmounted, ref} from "vue"
+import { computed, onBeforeMount, onUnmounted, ref, watch } from "vue"
 import {useVuelidate} from "@vuelidate/core"
 import {useRoute, useRouter} from "vue-router"
 import {useI18n} from "vue-i18n"
@@ -8,7 +8,7 @@ import {useI18n} from "vue-i18n"
 import { FORM_TYPE_CREATE } from "@/constants/constants"
 // Components
 import BaseMultiSelect from "@/components/UI/BaseMultiSelect.vue"
-import { BusinessTripNoticeTemplate } from "@/components/Templates"
+import { BusinessTripNoticeTemplate, BusinessTripDecreeTemplate } from "@/components/Templates"
 import BranchMultiSelect from "@/components/Select/BranchMultiSelect.vue"
 import FormContainer from "@/modules/Documents/modules/SendDocuments/components/FormContainer.vue"
 import {LayoutWithTabs} from "@/components/DetailLayout"
@@ -23,7 +23,7 @@ import {useAuthStore} from "@/modules/Auth/stores"
 import {useCommonStore} from "@/stores/common"
 import {useDocumentCountStore} from "@/modules/Documents/stores/count.store"
 import {useSDBTNoticeStore} from "@/modules/Documents/modules/SendDocuments/stores/businessTripNotice.store"
-import {COLOR_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL, ROUTES_TYPE} from "@/enums"
+import {COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL, ROUTES_TYPE} from "@/enums"
 import PreviewDialog from "@/modules/Documents/modules/SendDocuments/components/PreviewDialog.vue"
 import {adjustUsersToArray, resetModel} from "@/utils"
 import {dispatchNotify} from "@/utils/notify"
@@ -36,6 +36,7 @@ const props = defineProps({
   }
 })
 
+// Composable
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
@@ -43,9 +44,31 @@ const authStore = useAuthStore()
 const BTNoticeStore = useSDBTNoticeStore()
 const countStore = useDocumentCountStore()
 const commonStore = useCommonStore()
+const $v = useVuelidate(BTNoticeStore.rules, BTNoticeStore.model)
+
+// Reactive
 const dialog = ref(false)
 
-const $v = useVuelidate(BTNoticeStore.rules, BTNoticeStore.model)
+// Computed
+const title = computed(() => {
+  if (props.formType === FORM_TYPE_CREATE) {
+    return route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL ? 'create-decree' : 'create-business-trip-notice'
+  }
+  return route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL ? 'update-decree' : 'update-business-trip-notice'
+})
+
+// Watch
+watch(() => BTNoticeStore.model.__tags, (newVal) => {
+  if (props.formType === FORM_TYPE_CREATE) {
+    if (newVal && newVal.length) {
+      let sentence = `${newVal.map(item => item.name_uz).join(', ')} yuzasidan`
+      BTNoticeStore.model.short_description = sentence.charAt(0).toUpperCase() + sentence.slice(1).toLowerCase()
+    }
+    else {
+      BTNoticeStore.model.short_description = null
+    }
+  }
+})
 
 // Methods
 const preview = async () => {
@@ -57,7 +80,7 @@ const preview = async () => {
   BTNoticeStore.model.approvers = adjustUsersToArray(BTNoticeStore.model.__approvers)
   BTNoticeStore.model.signers = adjustUsersToArray(BTNoticeStore.model.__signers)
   BTNoticeStore.model.curator = BTNoticeStore?.model?.__curator?.user_id
-  BTNoticeStore.model.journal = JOURNAL.INNER
+  BTNoticeStore.model.journal = route.params.document_type === COMPOSE_DOCUMENT_TYPES.DECREE ? JOURNAL.ORDERS_PROTOCOLS : JOURNAL.INNER
   BTNoticeStore.model.company = authStore.currentUser.company.id
   BTNoticeStore.model.notices = BTNoticeStore.model.__employees.map(item => {
     return {
@@ -94,7 +117,7 @@ const create = async () => {
     await router.replace({
       name: ROUTE_SD_LIST,
       query: {
-        document_type: COMPOSE_DOCUMENT_TYPES.NOTICE
+        document_type: route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL ? COMPOSE_DOCUMENT_TYPES.DECREE : COMPOSE_DOCUMENT_TYPES.NOTICE
       }
     })
   } else {
@@ -109,7 +132,7 @@ const update = async () => {
     }
   );
   await countStore.actionDocumentCountList();
-  dispatchNotify(null, t('changed'), COLOR_TYPES.SUCCESS);
+  dispatchNotify(null, t('changed'), COLOR_TYPES.SUCCESS)
   await router.replace({
     name: ROUTE_SD_DETAIL,
     params: {
@@ -146,7 +169,7 @@ onUnmounted(() => {
 
   <template v-else>
     <layout-with-tabs
-      :title="props.formType === FORM_TYPE_CREATE ? 'create-business-trip-notice' : 'update-business-trip-notice'"
+      :title="title"
     >
       <template #content>
         <form-container
@@ -166,16 +189,6 @@ onUnmounted(() => {
             </base-col>
 
             <base-col col-class="w-1/2">
-              <base-input
-                v-model="$v.short_description.$model"
-                :error="$v.short_description"
-                required
-                label="short-description"
-                placeholder="enter-short-description"
-              />
-            </base-col>
-
-            <base-col col-class="w-1/2">
               <user-multi-select
                 v-model="$v.__employees.$model"
                 :error="$v.__employees"
@@ -189,30 +202,8 @@ onUnmounted(() => {
               <branch-multi-select
                 v-model="$v.__companies.$model"
                 :error="$v.__companies"
+                text-truncate
               />
-            </base-col>
-
-            <base-col col-class="w-1/2">
-              <div class="flex w-full gap-x-4">
-                <base-calendar
-                  v-model="$v.start_date.$model"
-                  :error="$v.start_date"
-                  required
-                  label="start-date"
-                  placeholder="choose-start-time"
-                  class="w-1/2"
-                  @update:modelValue="(value) => $v.start_date.$model = formatDateReverse(value)"
-                />
-                <base-calendar
-                  v-model="$v.end_date.$model"
-                  :error="$v.end_date"
-                  required
-                  label="end-date"
-                  placeholder="choose-end-time"
-                  class="w-1/2"
-                  @update:modelValue="(value) => $v.end_date.$model = formatDateReverse(value)"
-                />
-              </div>
             </base-col>
 
             <base-col col-class="w-1/2">
@@ -220,6 +211,7 @@ onUnmounted(() => {
                 v-model="$v.__tags.$model"
                 :error="$v.__tags"
                 api-url="tags"
+                :api-params="{ document_sub_type: route.params. document_sub_type}"
                 :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
                 display="chip"
                 selectable
@@ -239,6 +231,31 @@ onUnmounted(() => {
                   </user-with-radio>
                 </template>
               </base-multi-select>
+            </base-col>
+
+            <base-col col-class="w-1/2">
+              <div class="flex w-full gap-x-4">
+                <base-calendar
+                  v-model="$v.start_date.$model"
+                  :error="$v.start_date"
+                  :min-date="new Date()"
+                  required
+                  label="start-date"
+                  placeholder="choose-start-time"
+                  class="w-1/2"
+                  @update:modelValue="(value) => $v.start_date.$model = formatDateReverse(value)"
+                />
+                <base-calendar
+                  v-model="$v.end_date.$model"
+                  :error="$v.end_date"
+                  :min-date="new Date()"
+                  required
+                  label="end-date"
+                  placeholder="choose-end-time"
+                  class="w-1/2"
+                  @update:modelValue="(value) => $v.end_date.$model = formatDateReverse(value)"
+                />
+              </div>
             </base-col>
 
             <base-col col-class="w-1/2">
@@ -272,6 +289,16 @@ onUnmounted(() => {
               />
             </base-col>
 
+            <base-col col-class="w-1/2">
+              <base-input
+                v-model="$v.short_description.$model"
+                :error="$v.short_description"
+                required
+                label="short-description"
+                placeholder="enter-short-description"
+              />
+            </base-col>
+
             <base-col col-class="w-full">
               <editor-with-tabs
                 v-model="$v.content.$model"
@@ -293,7 +320,13 @@ onUnmounted(() => {
       @emit:send="manage"
     >
       <template #content>
+        <business-trip-decree-template
+          v-if="route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL"
+          :compose-model="BTNoticeStore.model"
+          :preview="true"
+        />
         <business-trip-notice-template
+          v-else
           :compose-model="BTNoticeStore.model"
           :preview="true"
         />

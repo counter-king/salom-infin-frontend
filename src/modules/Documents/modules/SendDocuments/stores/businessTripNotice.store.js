@@ -9,7 +9,7 @@ import {
   fetchGetDocumentDetail, fetchUpdateDocument
 } from "@/modules/Documents/modules/SendDocuments/services/index.service"
 import {
-  adjustCompanyObjectToArray,
+  adjustCompanyObjectToArray, adjustTagObjectToArray,
   adjustTopSignerObjectToArray,
   adjustUserObjectToArray,
   setValuesToKeys
@@ -123,6 +123,7 @@ export const useSDBTNoticeStore = defineStore("sd-notice-store", {
         this.model.__approvers =  await adjustUserObjectToArray(data.approvers)
         this.model.__signers =  await adjustUserObjectToArray(data.signers)
         this.model.__companies = await adjustCompanyObjectToArray(data.notices[0].destinations)
+        this.model.__tags = await adjustTagObjectToArray(data.tags)
         this.model.start_date = data.notices[0].start_date
         this.model.end_date = data.notices[0].end_date
         this.model.__tags = data.tags

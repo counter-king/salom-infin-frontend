@@ -19,7 +19,8 @@ const URLS = {
   documentTitles: 'document-titles/',
   companies: 'companies',
   departmentsWithUser: 'departments-with-users',
-  expenseTypes: 'expense-types'
+  expenseTypes: 'expense-types',
+  tags: 'tags'
 }
 /**
  * Возвращает список вид подачи
@@ -144,5 +145,8 @@ export const fetchCompanyDetail = (id) => {
 }
 export const fetchExpenseTypeList = (params) => {
   return axiosConfig.get(`${URLS.expenseTypes}/`, params)
+}
+export const fetchTagList = (params) => {
+  return axiosConfig.get(`${URLS.tags}/`, params)
 }
 

@@ -21,7 +21,7 @@ const BTStore = useBusinessTripStore()
 const currentUser = useAuthStore().currentUser
 
 // Const
-const filterKeys = ["user", "branches"]
+const filterKeys = ["users", "branches"]
 const keysToIncludeOnClearFilter = ["destination"]
 
 // Computed

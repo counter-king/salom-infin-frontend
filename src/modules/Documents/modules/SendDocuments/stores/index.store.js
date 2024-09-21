@@ -308,24 +308,24 @@ export const useSDStore = defineStore("sd-stores", {
           }
         ],
       },
-      // {
-      //   id: 5,
-      //   label: 'decree',
-      //   icon: CheckCircleIcon,
-      //   type: 'menu',
-      //   hasRouterLink: false,
-      //   active: false,
-      //   items: [
-      //     {
-      //       label: 'decree',
-      //       type: 'submenu',
-      //       hasRouterLink: true,
-      //       routerLinkName: ROUTE_SD_CREATE,
-      //       documentType: COMPOSE_DOCUMENT_TYPES.DECREE,
-      //       documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE
-      //     }
-      //   ],
-      // },
+      {
+        id: 5,
+        label: 'decree',
+        icon: CheckCircleIcon,
+        type: 'menu',
+        hasRouterLink: false,
+        active: false,
+        items: [
+          {
+            label: 'business-trip-decree-local',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.DECREE,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL
+          }
+        ],
+      },
     ]
   }),
   actions: {

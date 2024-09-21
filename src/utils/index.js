@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import {diffWords} from "diff"
 // Services
 import {fetchTopSignersList, fetchUsersList} from "@/services/users.service"
-import {fetchCompaniesList, fetchDepartmentList} from "@/services/common.service"
+import { fetchCompaniesList, fetchDepartmentList, fetchTagList } from "@/services/common.service"
 // Enums
 import {USER_STATUS_CODES} from "@/enums"
 
@@ -313,6 +313,27 @@ export const adjustCompanyObjectToArray = async (items = [], companyId = null, m
     }
   } else if (multiple === false && companyId){
     const res = await fetchCompaniesList({ ids: companyId })
+    if (res && res.status === 200) {
+      return Promise.resolve(res.data.results[0])
+    } else {
+      return Promise.reject(null)
+    }
+  } else {
+    return null
+  }
+}
+
+export const adjustTagObjectToArray = async (items = [], tagId = null, multiple = true) => {
+  if (items.length && multiple) {
+    const tagIds = items.map(item => item.id).join(',')
+    const res = await fetchTagList({ids: tagIds})
+    if (res && res.status === 200) {
+      return Promise.resolve(res.data.results)
+    } else {
+      return Promise.reject([])
+    }
+  } else if (multiple === false && tagId){
+    const res = await fetchTagList({ ids: tagId })
     if (res && res.status === 200) {
       return Promise.resolve(res.data.results[0])
     } else {
