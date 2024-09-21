@@ -6,6 +6,7 @@ import { helpers, required } from '@vuelidate/validators'
 // Components
 import { AddCircleBoldIcon, PenBoldIcon } from '@/components/Icons'
 // Stores
+import { useCommonStore } from '@/stores/common'
 import { useAllUrlStore } from '@/stores/all-urls.store'
 import { usePermissionStore } from '../../../stores/permissions.store'
 // Utils
@@ -16,6 +17,7 @@ import { COLOR_TYPES } from '@/enums'
 // Constants
 import { FORM_TYPE_CREATE, FORM_TYPE_UPDATE } from '@/constants/constants'
 // Composable
+const commonStore = useCommonStore()
 const allUrlStore = useAllUrlStore()
 const permissionStore = usePermissionStore()
 // Macros
@@ -208,9 +210,12 @@ const afterHide = () => {
 
           <base-dropdown
             v-model="$v.__url.$model"
+            v-model:options="allUrlStore.list"
             :error="$v.__url"
-            :options="allUrlStore.list"
+            api-url="all-urls"
+            searchable
             option-label="url"
+            custom-search
             label="АПИ путь"
             placeholder="АПИ путь"
             required
@@ -235,6 +240,42 @@ const afterHide = () => {
             placeholder="Значение"
             required
           />
+
+          <template v-if="!props.item?.name_ru">
+            <base-dropdown
+              v-model="permissionStore.createModel.journal"
+              v-model:options="commonStore.journalsList"
+              api-url="journals"
+              option-label="name"
+              option-value="id"
+              label="magazine"
+              placeholder="enter-magazine"
+              menu-placeholder="enter-magazine"
+              searchable
+            />
+
+            <base-dropdown
+              v-model="permissionStore.createModel.doc_type"
+              v-model:options="commonStore.documentTypesList"
+              api-url="document-types"
+              option-value="id"
+              label="document-type"
+              placeholder="choose-document-type"
+              menu-placeholder="enter-document-type"
+              searchable
+            />
+
+            <base-dropdown
+              v-model="permissionStore.createModel.doc_sub_type"
+              v-model:options="commonStore.documentSubTypesList"
+              api-url="document-sub-types"
+              option-value="id"
+              label="document-sub-type"
+              placeholder="choose-document-sub-type"
+              menu-placeholder="choose-document-sub-type"
+              searchable
+            />
+          </template>
         </div>
       </template>
 

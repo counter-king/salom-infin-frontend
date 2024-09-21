@@ -1,7 +1,7 @@
 <script setup>
 // Core
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 // Store
 import { useDocumentCountStore } from '../../../../stores/count.store'
 import { useDocFlowStore } from '../../../Registration/stores/docflow.store'
@@ -15,6 +15,7 @@ import { ModalRemoveFromControl } from '@/components/Modal'
 import { FORM_TYPE_CREATE, FORM_TYPE_UPDATE } from '@/constants/constants'
 // Composable
 const route = useRoute()
+const router = useRouter()
 const countStore = useDocumentCountStore()
 const docflowStore = useDocFlowStore()
 const boxesCommonStore = useBoxesCommonStore()
@@ -65,6 +66,8 @@ const updateDocument = async () => {
           register_date: controlStore.detailModel.document.register_date,
           register_number: controlStore.detailModel.document.register_number
         }"
+        self
+        @emit:back-button="() => router.push({ name: 'ControlIndex' })"
       >
         <template #preview-actions>
           <!-- Если документ ознакомлен -->

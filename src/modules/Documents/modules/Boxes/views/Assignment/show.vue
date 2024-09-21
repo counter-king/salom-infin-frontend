@@ -75,6 +75,8 @@ const updateDocument = async () => {
           register_date: assignmentStore.detailModel.document.register_date,
           register_number: assignmentStore.detailModel.document.register_number
         }"
+        self
+        @emit:back-button="() => router.push({ name: 'AssignmentIndex' })"
       >
         <template #header-end>
           <!-- Если документ ознакомлен -->
