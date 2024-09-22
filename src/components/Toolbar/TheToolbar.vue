@@ -5,8 +5,9 @@ import { onClickOutside } from '@vueuse/core'
 import Toolbar from 'primevue/toolbar'
 // Stores
 import { useThemeStore } from '@/stores/theme.store'
+import { useAuthStore } from '../../modules/Auth/stores'
 // Components
-import { MagniferIcon } from '@/components/Icons'
+import { MagniferIcon, SettingsIcon } from '@/components/Icons'
 import CreateActionDropdown from './CreateActionDropdown.vue'
 import Search from './Search.vue'
 import SettingDropdown from './SettingDropdown.vue'
@@ -15,6 +16,7 @@ import LanguageDropdown from './LanguageDropdown.vue'
 import UserDropdown from './UserDropdown.vue'
 // Composable
 const themeStore = useThemeStore()
+const authStore = useAuthStore()
 // Reactive
 const openModal = ref(true)
 const modalRef = ref(null)
@@ -74,6 +76,20 @@ onMounted(() => {
               </template>
             </router-link>
           </template>
+
+          <!-- TODO: Исправить когда будет созданы права доступа -->
+          <router-link
+            v-if="authStore.currentUser.is_superuser"
+            :to="{ name: 'SettingsIndex' }"
+            class="header-link group flex items-center gap-2 text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full mr-3 transition-all duration-[400ms] hover:bg-primary-800 hover:text-white"
+          >
+            <base-iconify
+              :icon="SettingsIcon"
+              class="text-gray-2 transition-all duration-[400ms] group-hover:text-white"
+            />
+
+            Настройки
+          </router-link>
         </template>
       </template>
 

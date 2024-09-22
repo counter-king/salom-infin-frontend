@@ -28,6 +28,7 @@ const dateSelect = async (value) => {
       <export-button root-class="!bg-greyscale-50 !border !border-greyscale-70 !shadow-none" />
 
       <base-calendar-button
+        view="month"
         date-format="dd-mm-yyyy"
         @emit:date-select="dateSelect"
         root-class="!bg-greyscale-50 !border !border-greyscale-70 !shadow-none"

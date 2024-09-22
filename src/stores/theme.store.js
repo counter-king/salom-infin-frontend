@@ -77,14 +77,14 @@ export const useThemeStore = defineStore("theme", {
         name: 'handbook'
       },
       // Настройки
-      {
-        title: 'Настройки',
-        icon: SettingsIcon,
-        link: 'SettingsIndex',
-        children: [],
-        count: null,
-        name: 'settings'
-      },
+      // {
+      //   title: 'Настройки',
+      //   icon: SettingsIcon,
+      //   link: 'SettingsIndex',
+      //   children: [],
+      //   count: null,
+      //   name: 'settings'
+      // },
     ]
   }),
   actions: {
