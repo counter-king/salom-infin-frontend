@@ -8,7 +8,7 @@ import {useI18n} from "vue-i18n"
 import { FORM_TYPE_CREATE } from "@/constants/constants"
 // Components
 import BaseMultiSelect from "@/components/UI/BaseMultiSelect.vue"
-import { BusinessTripNoticeTemplate, BusinessTripDecreeTemplate } from "@/components/Templates"
+import { BusinessTripNoticeTemplate, BusinessTripDecreeTemplate, BusinessTripOrderTemplate } from "@/components/Templates"
 import BranchMultiSelect from "@/components/Select/BranchMultiSelect.vue"
 import FormContainer from "@/modules/Documents/modules/SendDocuments/components/FormContainer.vue"
 import {LayoutWithTabs} from "@/components/DetailLayout"
@@ -51,10 +51,16 @@ const dialog = ref(false)
 
 // Computed
 const title = computed(() => {
-  if (props.formType === FORM_TYPE_CREATE) {
-    return route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL ? 'create-decree' : 'create-business-trip-notice'
+  const isCreate = props.formType === FORM_TYPE_CREATE
+  const docSubType = route.params.document_sub_type
+
+  if (docSubType === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL) {
+    return isCreate ? 'create-decree' : 'update-decree'
+  } else if (docSubType === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER_LOCAL) {
+    return isCreate ? 'create-order' : 'update-order'
+  } else {
+    return isCreate ? 'create-business-trip-notice' : 'update-business-trip-notice'
   }
-  return route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL ? 'update-decree' : 'update-business-trip-notice'
 })
 
 // Watch
@@ -80,7 +86,7 @@ const preview = async () => {
   BTNoticeStore.model.approvers = adjustUsersToArray(BTNoticeStore.model.__approvers)
   BTNoticeStore.model.signers = adjustUsersToArray(BTNoticeStore.model.__signers)
   BTNoticeStore.model.curator = BTNoticeStore?.model?.__curator?.user_id
-  BTNoticeStore.model.journal = route.params.document_type === COMPOSE_DOCUMENT_TYPES.DECREE ? JOURNAL.ORDERS_PROTOCOLS : JOURNAL.INNER
+  BTNoticeStore.model.journal = route.params.document_type === COMPOSE_DOCUMENT_TYPES.DECREE || route.params.document_type === COMPOSE_DOCUMENT_TYPES.ORDER ? JOURNAL.ORDERS_PROTOCOLS : JOURNAL.INNER
   BTNoticeStore.model.company = authStore.currentUser.company.id
   BTNoticeStore.model.notices = BTNoticeStore.model.__employees.map(item => {
     return {
@@ -117,7 +123,8 @@ const create = async () => {
     await router.replace({
       name: ROUTE_SD_LIST,
       query: {
-        document_type: route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL ? COMPOSE_DOCUMENT_TYPES.DECREE : COMPOSE_DOCUMENT_TYPES.NOTICE
+        document_type: route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL ? COMPOSE_DOCUMENT_TYPES.DECREE :
+          route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER_LOCAL ?  COMPOSE_DOCUMENT_TYPES.ORDER : COMPOSE_DOCUMENT_TYPES.NOTICE
       }
     })
   } else {
@@ -322,6 +329,11 @@ onUnmounted(() => {
       <template #content>
         <business-trip-decree-template
           v-if="route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL"
+          :compose-model="BTNoticeStore.model"
+          :preview="true"
+        />
+        <business-trip-order-template
+          v-else-if="route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER_LOCAL"
           :compose-model="BTNoticeStore.model"
           :preview="true"
         />
