@@ -41,7 +41,7 @@ const emit = defineEmits(['update:modelValue'])
     :api-params="props.apiParams"
     display="chip"
     selectable
-    :clear-after-select="props.clearAfterSelect"
+    :clear-after-select="false"
     :label="props.label"
     :required="props.required"
     type="user"
