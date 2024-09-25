@@ -192,9 +192,9 @@ export const returnFirstLetter = (text) => {
 export const formatUserFullName = (item) => {
   if (item) {
     if (item && item.hasOwnProperty('user')){
-      return `${returnFirstLetter(item.user.first_name)}. ${item.user.father_name ? returnFirstLetter(item.user.father_name) + '. ' : ''} ${item.user.last_name}`
+      return `${returnFirstLetter(item.user.first_name)}. ${item.user.last_name}`
     } else {
-      return `${returnFirstLetter(item.first_name)}. ${item.father_name ? returnFirstLetter(item.father_name) + '. ' : ''} ${item.last_name}`
+      return `${returnFirstLetter(item.first_name)}. ${item.last_name}`
     }
   }
 }
