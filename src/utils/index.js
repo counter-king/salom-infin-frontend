@@ -177,12 +177,24 @@ export const getDateRange = (value) => {
       return [];
   }
 }
+export const returnFirstLetter = (text) => {
+  if (text) {
+    const firstLetter = text.slice(0, 2).toLowerCase()
+    if (["sh", "ch", "o'", "g'" ].includes(firstLetter)){
+      return text.slice(0, 2)
+    }else {
+      return text.slice(0, 1)
+    }
+  } else {
+    return ""
+  }
+}
 export const formatUserFullName = (item) => {
   if (item) {
     if (item && item.hasOwnProperty('user')){
-      return `${item.user.first_name[0]}. ${item.user.father_name ? item.user.father_name[0] + '. ' : ''} ${item.user.last_name}`
+      return `${returnFirstLetter(item.user.first_name)}. ${item.user.father_name ? returnFirstLetter(item.user.father_name) + '. ' : ''} ${item.user.last_name}`
     } else {
-      return `${item.first_name[0]}. ${item.father_name ? item.father_name[0] + '. ' : ''} ${item.last_name}`
+      return `${returnFirstLetter(item.first_name)}. ${item.father_name ? returnFirstLetter(item.father_name) + '. ' : ''} ${item.last_name}`
     }
   }
 }
