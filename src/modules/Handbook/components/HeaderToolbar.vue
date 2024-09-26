@@ -67,6 +67,9 @@ onMounted(async () => {
           v-model="deparmentSelect"
           v-model:options="deparments"
           api-url=departments/top-level-departments
+          :api-params="{
+            company: branchSelect
+          }"
           placeholder="Подразделение"
         />
       </div>

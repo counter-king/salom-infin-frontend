@@ -25,10 +25,10 @@ const props = defineProps({
     })
 	},
 })
-const emit = defineEmits(['update:options'])
+const emit = defineEmits(['update:modelValue', 'update:options'])
 // Composable
 const modelValue = useModel(props, 'modelValue')
-// Coomputed
+// Computed
 const options = computed({
 	get() {
 		return props.options
