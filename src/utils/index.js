@@ -77,19 +77,19 @@ export const formatNameToShort = (value, separate = '.') => {
   if(!value) return 'Текст не найден'
 
   const [name, firstName, fatherName] = value.split(' ')
-  const nameChar = name.slice(0, 2).toLowerCase()
+  const firstNameChar = name.slice(0, 2).toLowerCase()
   const fatherNameChar = fatherName?.slice(0, 2).toLowerCase()
 
   if (
-    nameChar === `sh` || fatherNameChar === `sh` ||
-    nameChar === `ch` || fatherNameChar === `ch` ||
-    nameChar === `o'` || fatherNameChar === `o'` ||
-    nameChar === `g'` || fatherNameChar === `g'`
+    firstNameChar === `sh` || fatherNameChar === `sh` ||
+    firstNameChar === `ch` || fatherNameChar === `ch` ||
+    firstNameChar === `o'` || fatherNameChar === `o'` ||
+    firstNameChar === `g'` || fatherNameChar === `g'`
   ) {
-    return `${ firstName } ${ name.slice(0, 2) + separate } ${ fatherName ? fatherName.slice(0, 2) + separate : '' }`
+    return `${ name } ${ (firstNameChar.slice(0, 2) + separate).toUpperCase() }`
   }
   else {
-    return `${ firstName } ${ name.slice(0, 1) + separate } ${ fatherName ? fatherName.slice(0, 1) + separate : '' }`
+    return `${ name } ${ (firstNameChar.slice(0, 1) + separate).toUpperCase() }`
   }
 }
 /*
@@ -177,12 +177,24 @@ export const getDateRange = (value) => {
       return [];
   }
 }
+export const returnFirstLetter = (text) => {
+  if (text) {
+    const firstLetter = text.slice(0, 2).toLowerCase()
+    if (["sh", "ch", "o'", "g'" ].includes(firstLetter)){
+      return text.slice(0, 2)
+    }else {
+      return text.slice(0, 1)
+    }
+  } else {
+    return ""
+  }
+}
 export const formatUserFullName = (item) => {
   if (item) {
     if (item && item.hasOwnProperty('user')){
-      return `${item.user.first_name[0]}. ${item.user.father_name ? item.user.father_name[0] + '. ' : ''} ${item.user.last_name}`
+      return `${returnFirstLetter(item.user.first_name)}. ${item.user.last_name}`
     } else {
-      return `${item.first_name[0]}. ${item.father_name ? item.father_name[0] + '. ' : ''} ${item.last_name}`
+      return `${returnFirstLetter(item.first_name)}. ${item.last_name}`
     }
   }
 }

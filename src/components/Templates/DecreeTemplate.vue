@@ -87,11 +87,11 @@ const signers = computed(() => {
 
       <template v-for="item in signers" :key="item.id">
         <base-row class="mb-2 items-center">
-          <base-col col-class="w-1/2">
+          <base-col col-class="w-1/3">
             <span class="text-sm font-semibold block">{{ item.user ? item.user.position.name : item.position.name }}</span>
           </base-col>
 
-          <base-col col-class="w-1/4">
+          <base-col col-class="w-1/3">
             <qrcode-vue
               v-if="item.is_signed"
               :value="'Work Zone'"
@@ -101,7 +101,7 @@ const signers = computed(() => {
             />
           </base-col>
 
-          <base-col col-class="w-1/4">
+          <base-col col-class="w-1/3">
             <span class="text-sm font-semibold block">{{ formatUserFullName(item) }}</span>
           </base-col>
         </base-row>

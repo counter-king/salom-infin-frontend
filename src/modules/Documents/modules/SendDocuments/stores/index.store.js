@@ -305,6 +305,14 @@ export const useSDStore = defineStore("sd-stores", {
             routerLinkName: ROUTE_SD_CREATE,
             documentType: COMPOSE_DOCUMENT_TYPES.ORDER,
             documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER
+          },
+          {
+            label: 'business-trip-order-local',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.ORDER,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER_LOCAL
           }
         ],
       },

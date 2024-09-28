@@ -73,7 +73,7 @@ const searchDocTypes = ({ search, page }) => {
       });
 };
 const topSignerEdit = () => {
-   const user = topSigner.value?.id;
+   const user = topSigner.value?.user_id ? topSigner.value?.user_id : topSigner.value?.id;
    const docTypes = docType.value;
    const topSignerId = editTopSigner?.value?.id;
    if(docTypes?.length && user) {
@@ -183,8 +183,11 @@ onMounted(() => {
 </script>
 <template>
    <template v-if="field === 'user'">
-      <span class="text-sm font-medium">{{ data[field] && data[field].full_name }}</span>
+      <span class="text-sm font-medium">{{ data.full_name }}</span>
    </template>
+  <template v-else-if="field === 'position'">
+    <span class="text-sm font-medium">{{ data[field] && data[field].name }}</span>
+  </template>
    <template v-else-if="field === 'doc_types'">
       <span class="text-sm rounded-full px-3 bg-greyscale-50 font-medium h-[28px] inline-flex mr-2 items-center border-b-[1px] justify-center" v-for="(doc_type, index) in data.doc_types" :key="index">{{doc_type.name}}</span>
    </template>
@@ -222,7 +225,7 @@ onMounted(() => {
             docType = data.doc_types;
             editTopSigner = data;
             editVisible = true;
-            topSigner = data.user;
+            topSigner = data;
          }"
          class="shadow-none py-[7px] px-2 text-xs bg-greyscale-50 rounded-[8px] mr-2"
          icon
@@ -263,7 +266,7 @@ onMounted(() => {
    <Dialog
       :closable="!editLoading"
       :pt="dialogConfig"
-      header="Изменить помощник"
+      header="Изменить топ подписант"
       modal
       v-model:visible="editVisible">
       <div class="flex flex-col">

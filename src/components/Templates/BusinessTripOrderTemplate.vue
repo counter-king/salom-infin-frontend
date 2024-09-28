@@ -68,11 +68,10 @@ const curators = computed(() => {
 const signers = computed(() => {
   return props.preview ? props.composeModel?.__signers : props.composeModel?.signers.filter(item => item.type === SIGNER_TYPES.SIGNER)
 })
-
 </script>
 
 <template>
-  <div class="business-trip-decree-template-view">
+  <div class="business-trip-order-template-view">
     <base-header-template/>
 
     <div class="w-full rounded-[6px] bg-greyscale-50 text-sm font-semibold px-3 py-1" style="color: #003D64">
@@ -85,7 +84,7 @@ const signers = computed(() => {
     </div>
 
     <div class="flex w-full justify-center text-base font-bold my-5">
-      FARMOYISH
+      BUYRUQ
     </div>
 
     <div v-if="SDStore.historyShow" class="text-justify" v-html="SDStore.historyContent"></div>
@@ -145,6 +144,8 @@ const signers = computed(() => {
           </base-col>
         </base-row>
       </template>
+
+      <div class="text-sm font-semibold text-greyscale-900 italic mt-2"> Kelishuvchilar: </div>
 
       <template v-for="item in signers" :key="item.id">
         <base-row class="mb-2 items-center">

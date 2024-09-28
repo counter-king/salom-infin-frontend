@@ -6,13 +6,7 @@ import { InnerLetterTemplate, ApplicationLetterTemplate, BusinessTripNoticeTempl
 // Enums
 import {computed} from "vue"
 import {COMPOSE_DOCUMENT_SUB_TYPES} from "@/enums"
-import {
-  ApplicationForm,
-  BusinessTripNoticeForm, DecreeForm,
-  InnerForm,
-  OrderForm,
-  OrdinaryNoticeForm
-} from "@/modules/Documents/modules/SendDocuments/views/forms";
+import { BusinessTripOrderTemplate } from "@/components/Templates";
 
 const props = defineProps({
   composeModel: {
@@ -31,6 +25,9 @@ const formMap = {
     [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER]: OrderLetterTemplate,
     [COMPOSE_DOCUMENT_SUB_TYPES.ORDINARY_NOTICE]: OrdinaryNoticeTemplate,
     [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_FOREIGN]: DecreeTemplate,
+    [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP]: BusinessTripNoticeTemplate,
+    [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL]: BusinessTripDecreeTemplate,
+    [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER_LOCAL]: BusinessTripOrderTemplate,
   },
   APPLICATION: [
     COMPOSE_DOCUMENT_SUB_TYPES.LABOR_LEAVE,
@@ -39,10 +36,6 @@ const formMap = {
     COMPOSE_DOCUMENT_SUB_TYPES.EDUCATIONAL_LEAVE,
     COMPOSE_DOCUMENT_SUB_TYPES.MATERIAL_SUPPORT,
     COMPOSE_DOCUMENT_SUB_TYPES.APPLICATION,
-  ],
-  BUSINESS_TRIP: [
-    COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP,
-    COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL,
   ]
 }
 const selectedTemplate = computed(() => {
@@ -50,10 +43,7 @@ const selectedTemplate = computed(() => {
   if (formMap.APPLICATION.includes(docSubType)) {
     return ApplicationLetterTemplate
   }
-  if (formMap.BUSINESS_TRIP.includes(docSubType)) {
-    return BusinessTripDecreeTemplate
-  }
-  return formMap[docSubType] || InnerForm
+  return formMap[docSubType] || InnerLetterTemplate
 })
 </script>
 

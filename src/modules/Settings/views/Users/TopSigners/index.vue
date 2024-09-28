@@ -26,6 +26,13 @@ const headers = ref([
     is_active: true,
   },
   {
+    columnKey: 'position',
+    disabled: true,
+    field: 'position',
+    header: 'Должность',
+    is_active: true,
+  },
+  {
     columnKey: 'doc_types',
     field: 'doc_types',
     header: 'Тип документа',

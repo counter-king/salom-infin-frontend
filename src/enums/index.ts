@@ -79,7 +79,8 @@ export const COMPOSE_DOCUMENT_SUB_TYPES = {
   BUSINESS_TRIP_DECREE_FOREIGN:  '10', // Командировочный распоряжение (зарубежный)
   ORDERS_BANK_MANAGEMENT:        '18', // Приказ правления банка
   APPLICATION:                   '27', // Заявление
-  BUSINESS_TRIP_DECREE_LOCAL:    '28' // Командировочный распоряжение (локальный)
+  BUSINESS_TRIP_DECREE_LOCAL:    '28', // Командировочный распоряжение (локальный)
+  BUSINESS_TRIP_ORDER_LOCAL:     '29' // Командировочный приказ (локальный)
 }
 export const COLOR_TYPES = {
   PRIMARY: "primary",
