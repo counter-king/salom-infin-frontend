@@ -1,5 +1,6 @@
 <script setup>
 // Core
+import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 // Components
 import DataTable from 'primevue/datatable'
@@ -59,9 +60,29 @@ const props = defineProps({
   theadClass:{
     type: String,
     default: null
+  },
+  headerCellClass: {
+    type: String,
+    default: null
+  },
+  selectable: {
+    type: Boolean
+  },
+  selectionOptions: {
+    type: Array,
+    default: () => []
   }
 })
-const emit = defineEmits(['emit:page-change'])
+const emit = defineEmits(['emit:page-change', 'update:selection', 'update:selection-options'])
+// Computed
+const selection = computed({
+  get() {
+    return props.selectionOptions
+  },
+  set(value) {
+    emit('update:selection-options', value)
+  }
+})
 // Methods
 const pageChange = async (val) => {
   paginationStore.page = Number(val.page + 1)
@@ -82,11 +103,15 @@ const pageChange = async (val) => {
     page_size: paginationStore.pageSize
   })
 }
+const updateSelection = (value) => {
+  emit('update:selection', value)
+}
 </script>
 
 <template>
   <div class="table-card">
     <DataTable
+      v-model:selection="selection"
       :value="props.value"
       lazy
       :page-link-size="5"
@@ -104,7 +129,7 @@ const pageChange = async (val) => {
       :loading="props.loading"
       :pt="{
         table: { class: ['border-separate', 'border-spacing-y-1', '-mt-1', props.tableClass] },
-        thead: { class: ['bg-white', props.theadClass ] },
+        thead: { class: ['bg-white ssssssssssssss', props.theadClass ] },
         bodyRow: { class: ['cursor-pointer bg-transparent rounded-xl', { 'shadow-button': props.shadow }] },
         loadingoverlay: { class: ['bg-transparent', 'h-[90%]'] },
         emptymessagecell: { class: ['bg-white', '!rounded-xl'] },
@@ -136,6 +161,10 @@ const pageChange = async (val) => {
       class="base-data-table"
       @page="pageChange"
     >
+      <template v-if="props.selectable">
+        <Column selectionMode="multiple" :header-class="`${props.headerCellClass} 'w-[60px]'`" :body-class="props.bodyCellClass" />
+      </template>
+
       <Column
         v-for="col of headers"
         :key="col.field"
@@ -143,7 +172,7 @@ const pageChange = async (val) => {
         :header="col.header"
         :style="{width: col.width}"
         :pt="{
-          headerCell: { class: ['bg-inherit', 'h-[56px]',  props.theadClass] },
+          headerCell: { class: ['bg-inherit', 'h-[56px] bbbbbbbbbbbbbb',  props.headerCellClass] },
           headerContent: { class: ['text-sm', 'font-semibold', 'text-greyscale-500'] },
           bodyCell: { class: [props.bodyCellClass, 'text-base', 'py-0', 'h-[56px]', 'font-medium', 'text-primary-900', 'border-hidden', 'hover:text-primary-500', ] }
         }"

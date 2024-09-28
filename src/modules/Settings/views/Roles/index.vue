@@ -1,6 +1,7 @@
 <script setup>
 // Core
 import { ref } from 'vue'
+import { useRoute } from 'vue-router'
 // Components
 import { ActionToolbar } from '@/components/Actions'
 import { LinkableCell } from '@/components/Table'
@@ -13,6 +14,7 @@ import { formatDateHour } from '@/utils/formatDate'
 // Const
 import { FORM_TYPE_CREATE, FORM_TYPE_UPDATE } from '@/constants/constants'
 // Composable
+const route = useRoute()
 const rolesStore = useRolesStore()
 // Reactive
 const modal = ref(false)
@@ -49,6 +51,7 @@ const link = (data) => {
 
     <base-data-table
       :action-list="rolesStore.actionGetList"
+      :api-params="route.query"
       :headers="rolesStore.headers"
       :value="rolesStore.list"
       :total-count="rolesStore.totalCount"

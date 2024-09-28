@@ -1,69 +1,55 @@
 <script setup>
 // Core
-import { ref, watch, onMounted } from 'vue'
+import { ref, shallowRef, computed, watch, defineAsyncComponent, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 // Components
+import BaseSpinner from '@/components/UI/BaseSpinner.vue'
 import { LayoutWithTabs } from '@/components/DetailLayout'
-import { InfoCircleBoldIcon } from '@/components/Icons'
-import PermissionAside from './Permissions/Aside.vue'
+import { UserSpeakRoundedIcon, FolderWithFilesIcon, ClockCircleIcon } from '@/components/Icons'
 // Stores
 import { useEmployeeStore } from '../../../stores/users/employees.store'
-// Services
-import axiosConfig from '@/services/axios.config'
-// Utils
-import { dispatchNotify } from '@/utils/notify'
-// Enums
-import { COLOR_TYPES } from '@/enums'
 // Composable
 const route = useRoute()
 const router = useRouter()
 const employeeStore = useEmployeeStore()
 // Reactive
 const loading = ref(true)
-const user = ref(null)
-const roles = ref([])
+const activeTabMenuIndex = ref(0)
+const activeTabComponent = shallowRef(null)
+const tabItems = ref([
+  {
+    label: 'Закрепление роли',
+    name: 'Resolution',
+    icon: UserSpeakRoundedIcon,
+    slot: 'resolution',
+    component: 'RolesTable',
+  },
+  {
+    label: 'Закрепление меню',
+    name: 'Preview',
+    icon: FolderWithFilesIcon,
+    slot: 'preview',
+    component: 'SetPermissions',
+  },
+  {
+    label: 'История',
+    name: 'History',
+    icon: ClockCircleIcon,
+    slot: 'history',
+    component: 'History',
+  }
+])
+// Computed
+const activeTabMenu = computed(() => tabItems.value[activeTabMenuIndex.value])
 // Watch
-watch(
-  () => roles.value,
-  (value) => {
-    let permissionsAll = value.map(item => item.permissions).flat(1)
-    let permissions = Object.keys(Object.groupBy(permissionsAll, ({ id }) => id)).map(item => parseInt(item))
-    let userPermissions = Object.keys(Object.groupBy(user.value.permissions, ({ id }) => id)).map(item => parseInt(item))
-    employeeStore.createModel.permissions = [...new Set([...permissions, ...userPermissions])]
-  }
-)
+watch(activeTabMenu, (value) => {
+  activeTabComponent.value = defineAsyncComponent({
+    loader: () => import(`./components/${value?.component}.vue`),
+    loadingComponent: BaseSpinner,
+    delay: 200
+  })
+}, { immediate: true })
 // Methods
-const getByOne = async () => {
-  try {
-    let { data } = await axiosConfig.get(`users/${route.params.id}/`)
-    user.value = data
-    roles.value = data.roles
-  }
-  catch(error) {
-
-  }
-}
-const save = async () => {
-  try {
-    await setRoles()
-    await employeeStore.userSetPermissions(route.params.id)
-    dispatchNotify(null, 'Права доступа успешно сохранен', COLOR_TYPES.SUCCESS)
-  }
-  finally {
-
-  }
-}
-const setRoles = async () => {
-  try {
-    let model = {
-      roles: roles.value.map(role => parseInt(role.id))
-    }
-    await axiosConfig.put(`set-role/${route.params.id}/`, model)
-  }
-  catch(error) {
-
-  }
-}
 const handleBackButton = async () => {
   await router.replace({ name: 'EmployeesIndex' })
 }
@@ -71,7 +57,7 @@ const handleBackButton = async () => {
 onMounted(async () => {
   try {
     loading.value = true
-    await getByOne()
+    await employeeStore.getUserOne(route.params.id)
   } finally {
     setTimeout(() => {
       loading.value = false
@@ -92,74 +78,28 @@ onMounted(async () => {
         self
         @emit:back-button="handleBackButton"
       >
-        <template #header-end>
-          <base-button
-            label="save"
-            rounded
-            type="button"
-            @click="save"
-          />
-        </template>
-
         <template #content>
           <div class="flex flex-col h-full">
             <div class="employee-layout-top p-8 pb-6">
               <div class="flex gap-3">
                 <base-avatar
-                  :label="user.full_name"
-                  :color="user.color"
+                  :label="employeeStore.userOne?.full_name"
+                  :color="employeeStore.userOne?.color"
                   shape="circle"
                   avatar-classes="w-11 h-11"
                 />
 
                 <div class="flex-1">
-                  <h1 class="font-semibold text-primary-900">{{ user.full_name }}</h1>
-                  <p class="text-sm font-medium text-greyscale-400">{{ user.position?.name }}</p>
+                  <h1 class="font-semibold text-primary-900">{{ employeeStore.userOne?.full_name ?? '-' }}</h1>
+                  <p class="text-sm font-medium text-greyscale-400">{{ employeeStore.userOne?.position?.name ?? '-' }}</p>
                 </div>
               </div>
-
-              <div class="max-w-[580px] my-5">
-                <base-multi-select
-                  v-model="roles"
-                  api-url="roles"
-                  label="Роли"
-                  display="chip"
-                  placeholder="Поиск ролей"
-                  menu-placeholder="Поиск ролей"
-                >
-                  <template #chip="{ value }">
-                    <span class="text-xs font-semibold text-greyscale-900">{{ value.name }}</span>
-                  </template>
-
-                  <template #option="{ value }">
-                    <span class="block w-full text-sm font-medium text-primary-900 transition-all hover:!bg-greyscale-50">{{ value.name }}</span>
-                  </template>
-
-                  <template #hint="{ value }">
-                    333
-                  </template>
-                </base-multi-select>
-              </div>
-
-              <InlineMessage
-                severity="info"
-                :pt="{
-                  root: 'items-start gap-3 rounded-xl !bg-primary-10 overflow-hidden border border-primary-100',
-                  text: 'flex-1 text-sm font-medium'
-                }"
-              >
-                <template #icon>
-                  <base-iconify :icon="InfoCircleBoldIcon" />
-                </template>
-
-                <span class="text-sm text-greyscale-900">Здесь в реальном времени видны права доступы привязанные к ролям. Вы можете добавить или удалить права доступы привязанные к ролям.</span>
-              </InlineMessage>
             </div>
 
-            <div class="employee-layout-bottom flex flex-1 h-[1px] border-t border-t-greyscale-200">
-              <PermissionAside />
+            <div class="employee-layout-bottom flex flex-col flex-1 h-[1px]">
+              <base-tab-menu v-model="activeTabMenuIndex" :tab-items="tabItems" class="w-full" />
 
-              <router-view :key="route.fullPath" />
+              <component :is="activeTabComponent" />
             </div>
           </div>
         </template>

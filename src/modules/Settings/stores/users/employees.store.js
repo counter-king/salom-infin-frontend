@@ -1,7 +1,7 @@
 // Core
 import { defineStore } from 'pinia'
 // Services
-import { fetchUserSetPermissions } from '../../services/users/employees.service'
+import { fetchUserOne, fetchUserSetPermissions } from '../../services/users/employees.service'
 
 let model = {
   permissions: []
@@ -10,8 +10,24 @@ let model = {
 export const useEmployeeStore = defineStore('employees-store', {
   state: () => ({
     createModel: Object.assign({}, model),
+    userOne: {}
   }),
   actions: {
+    async getUserOne(id) {
+      try {
+        let { data } = await fetchUserOne(id)
+        this.userOne = data
+        this.createModel.permissions = data.permissions.map(permission => permission.id)
+        return Promise.resolve()
+      }
+      catch(error) {
+        return Promise.reject()
+      }
+    },
+    /**
+     *
+     *
+     */
     async userSetPermissions(id) {
       try {
         await fetchUserSetPermissions(id, this.createModel)
