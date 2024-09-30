@@ -39,15 +39,16 @@ export const useRolesStore = defineStore('roles-store', {
         class: 'w-[150px]'
       }
     ],
-    count: 0,
+    totalCount: 0,
     contentLoading: false,
     createModel: Object.assign({}, model),
     selected: []
   }),
   actions: {
-    async actionGetList() {
-      let { data } = await fetchListRole()
+    async actionGetList(params = {}) {
+      let { data } = await fetchListRole(params)
       this.list = data.results
+      this.totalCount = data.count
     },
     /**
      *
