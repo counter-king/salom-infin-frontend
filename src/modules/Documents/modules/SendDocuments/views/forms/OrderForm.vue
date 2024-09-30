@@ -155,6 +155,7 @@ onUnmounted(() => {
                 v-model="$v.__curator.$model"
                 :error="$v.__curator"
                 api-url="top-signers"
+                :api-params="{ doc_types: route.params.document_type }"
                 label="whom"
                 required
                 placeholder="select-leader"

@@ -94,6 +94,10 @@ const props = defineProps({
   },
   customSearch: {
     type: Boolean
+  },
+  showClear: {
+    type: Boolean,
+    default: true
   }
 })
 const emit = defineEmits(['update:modelValue', 'update:options', 'emit:change'])
@@ -171,7 +175,7 @@ onMounted(() => {
       :option-disabled="props.optionDisabled"
       :placeholder="t(props.placeholder)"
       :disabled="props.disabled"
-      :show-clear="!!modelValue"
+      :show-clear="!!modelValue && props.showClear"
       filter
       @show="() => props.searchable && inputRef.focus()"
       @change="({ value }) => emit('emit:change', value)"

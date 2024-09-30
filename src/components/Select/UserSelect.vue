@@ -32,6 +32,10 @@ const props = defineProps({
     type: String,
     default: 'users'
   },
+  apiParams: {
+    type: Object,
+    default: () => {}
+  },
 });
 
 const list = ref([])
@@ -62,6 +66,7 @@ onMounted(async () => {
       v-model:options="list"
       :error="props.error"
       :api-url="props.apiUrl"
+      :api-params="props.apiParams"
       option-label="full_name"
       :label="props.label"
       :placeholder="props.placeholder"
