@@ -1,14 +1,16 @@
 <script setup>
 // Core
-import { onMounted, ref } from "vue"
+import { computed, onMounted, ref } from "vue"
 import { useI18n } from "vue-i18n"
 // Utils
 import { dispatchNotify } from "@/utils/notify"
 // Enums
-import { COLOR_TYPES, SIGNER_TYPES } from "@/enums"
+import { COLOR_TYPES } from "@/enums"
 // Components
 import BaseDropdown from "@/components/UI/BaseDropdown.vue"
-import { CheckCircleIcon } from "@/components/Icons";
+import { CheckCircleIcon } from "@/components/Icons"
+import { helpers, required } from "@vuelidate/validators";
+import { useVuelidate } from "@vuelidate/core";
 
 // Composable
 const { t } = useI18n()
@@ -27,39 +29,91 @@ const props = defineProps({
   buttonLoading: {
     type: Boolean,
     default: false
+  },
+  data: {
+    type: [String, Number],
+    default: ''
   }
 })
 
 // Reactive
 const pfxKeys = ref([])
-const selectedKey = ref(null)
 const keyValue = ref(null)
 const loading = ref(true)
 const keyIdTemp = ref(null)
+const model = ref({
+  selectedKey: null
+})
+
+const rules = {
+  selectedKey: {
+    required
+  }
+}
+
+const $v = useVuelidate(rules, model)
+
+const EIMZO_MAJOR = 3
+const EIMZO_MINOR = 37
+const errorCAPIWS = 'Ошибка соединения с E-IMZO. Возможно у вас не установлен модуль E-IMZO или Браузер E-IMZO.'
+const errorBrowserWS = 'Браузер не поддерживает технологию WebSocket. Установите последнюю версию браузера.'
+const errorUpdateApp = 'ВНИМАНИЕ !!! Установите новую версию приложения E-IMZO или Браузера E-IMZO'
+const errorWrongPassword = 'Пароль неверный.'
 
 // Methods
-const uiAppLoad = () => {
+const AppLoad = () => {
   EIMZOClient.API_KEYS = [
     'localhost', '96D0C1491615C82B9A54D9989779DF825B690748224C2B04F500F370D51827CE2644D8D4A82C18184D73AB8530BB8ED537269603F61DB0D03D2104ABF789970B',
     '127.0.0.1', 'A7BCFA5D490B351BE0754130DF03A068F855DB4333D43921125B9CF2670EF6A40370C646B90401955E1F7BC9CDBF59CE0B2C5467D820BE189C845D0B79CFC96F',
     'salom.sqb.uz', '850FF0E4A84282419377FDC21B0F81F8F89D45F6313AE806531472908CF201629C1DDA93CDC03339F2E530ADF9CDE851BD92ED0256C3D47BD6E1DAEC49D7A833'
   ]
 
-  EIMZOClient.listAllUserKeys(function(o, i){
+  EIMZOClient.checkVersion((major, minor) => {
+    const newVersion = EIMZO_MAJOR * 100 + EIMZO_MINOR
+    const installedVersion = parseInt(major) * 100 + parseInt(minor)
+    if (installedVersion < newVersion) {
+      uiUpdateApp()
+    } else {
+      EIMZOClient.installApiKeys(() => {
+        uiLoadKeys()
+      }, function (e, r) {
+        if (r) {
+          dispatchNotify(null, r, COLOR_TYPES.WARNING)
+        } else {
+          dispatchNotify(null, e, COLOR_TYPES.ERROR)
+        }
+      });
+    }
+  }, (e, r) => {
+    if (r) {
+      dispatchNotify(null, r, COLOR_TYPES.WARNING)
+    } else {
+      console.error("No pfx files found!")
+    }
+  })
+}
+
+const uiLoadKeys = () => {
+  EIMZOClient.listAllUserKeys((o, i) => {
     return "itm-" + o.serialNumber + "-" + i
-  },function(itemId, v){
+  },(itemId, v) => {
     return uiCreateItem(itemId, v)
-  },function(items, firstId){
+  },(items, firstId) => {
     uiFillCombo(items)
     uiLoaded()
-  },function(e, r){
+  },(e, r) => {
     if(e){
-      dispatchNotify(null, e, COLOR_TYPES.ERROR)
+      dispatchNotify(null, `${errorCAPIWS}, ${e}`, COLOR_TYPES.ERROR)
     } else {
       dispatchNotify(null, r, COLOR_TYPES.ERROR)
     }
   })
 }
+
+const uiUpdateApp = () => {
+  dispatchNotify(null, errorUpdateApp, COLOR_TYPES.WARNING)
+}
+
 const uiCreateItem = (itmkey, vo) => {
   const now = new Date()
   vo.expired = dates.compare(now, vo.validTo) > 0
@@ -85,7 +139,7 @@ const uiFillCombo = (items) => {
         option: items[item]
       })
     }
-    selectedKey.value = pfxKeys.value[0]
+    model.value.selectedKey = pfxKeys.value[0]
     keyValue.value = pfxKeys.value[0].option
   }
 }
@@ -97,11 +151,11 @@ const onKeyChange = (item) => {
   keyIdTemp.value = null
 }
 const getPkcs7 = () => {
-  if (pfxKeys.value.length && selectedKey.value) {
+  if (pfxKeys.value.length && model.value.selectedKey) {
     const itm = keyValue.value
     if (itm) {
       const vo = JSON.parse(itm.getAttribute('vo'))
-      const data = 'Sample Data'
+      const data = props.data || 'salom.sqb.uz'
       const keyId = keyIdTemp.value
       if (keyId) {
         EIMZOClient.createPkcs7(keyId, data, null, (pkcs7) => {
@@ -137,13 +191,13 @@ const getPkcs7 = () => {
       }
     }
   } else {
+    $v.value.$validate()
     dispatchNotify(null, t('select-pfx'), COLOR_TYPES.WARNING)
   }
 }
-
 // Hooks
 onMounted(() => {
-  uiAppLoad()
+  AppLoad()
 })
 
 const emit = defineEmits(['emit:onGetPkcs7'])
@@ -155,11 +209,13 @@ const emit = defineEmits(['emit:onGetPkcs7'])
     :class="props.type === 'sign' ? 'flex gap-x-2 justify-end w-fit' : 'w-full'"
   >
     <base-dropdown
-      v-model="selectedKey"
+      v-model="$v.selectedKey.$model"
       v-model:options="pfxKeys"
+      :error="$v.selectedKey"
       option-label="name"
       placeholder="Выбрать"
       :show-clear="false"
+      :error-message="false"
       :root-class="props.inputClasses"
       @emit:change="(val) => onKeyChange(val)"
     />

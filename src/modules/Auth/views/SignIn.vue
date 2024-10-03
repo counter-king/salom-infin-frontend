@@ -36,6 +36,7 @@ const filesList = ref([
   }
 ])
 const loading = ref(false)
+const activeTab = ref(null)
 const selectedCity = ref()
 const cities = ref([
   {
@@ -121,6 +122,23 @@ const logInWithAd = async () => {
     loading.value = false
   }
 }
+const loginViaEri = async (pkcs7) => {
+  try {
+    loading.value = true
+    await authStore.actionLoginViaERI({pkcs7})
+    await authStore.actionUserProfile()
+    await router.push({
+      name: "DashboardIndex"
+    })
+  }
+  catch (err) {
+
+  }
+  finally {
+    loading.value = false
+  }
+}
+
 // Hooks
 onMounted(() => {
   removeStorageItem(ACCESS)
@@ -138,6 +156,7 @@ onMounted(() => {
       scrollable
       bricks
       nav-container-class="max-w-[350px] w-full m-auto"
+      @emit:tab-click="(value) => activeTab = value"
     >
       <template #login>
         <form @submit.prevent="logIn">
@@ -214,12 +233,16 @@ onMounted(() => {
       </template>
 
       <template #eri>
-        <div class="card flex justify-content-center">
-          <eimzo
-            type="login"
-            @emit:onGetPkcs7="(pkcs7) => console.log(pkcs7)"
-          />
-        </div>
+        <template v-if="activeTab?.slot === 'eri'">
+          <div class="card flex justify-content-center">
+            <eimzo
+              type="login"
+              data="sign-in"
+              :button-loading="loading"
+              @emit:onGetPkcs7="(pkcs7) => loginViaEri(pkcs7)"
+            />
+          </div>
+        </template>
       </template>
     </base-tab-view>
 
