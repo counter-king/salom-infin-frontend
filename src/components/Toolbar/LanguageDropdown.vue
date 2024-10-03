@@ -1,6 +1,7 @@
 <script setup>
 // Core
 import { ref, unref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 // Stores
 import { useCollectRequestsStore } from '@/stores/collect-requests.store'
 // Components
@@ -10,6 +11,7 @@ import { saveStorageItem, getStorageItem } from '@/utils/storage'
 // Const
 import { LANG } from '@/constants/storage'
 // Composable
+const { locale } = useI18n()
 const collectStore = useCollectRequestsStore()
 // Macros
 const props = defineProps({
@@ -43,6 +45,7 @@ const languageSelected = ref({
 // Methods
 const toggleIconVisibility = async (event, language) => {
   languageSelected.value = language
+  locale.value = language.value
   saveStorageItem(LANG, JSON.stringify(language))
   toggle(event)
 	await collectStore.actionResendRequests()

@@ -2,6 +2,7 @@
 // Core
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from "vue-router"
+import { useI18n } from 'vue-i18n'
 import Dropdown from 'primevue/dropdown'
 import { useToast } from 'primevue/usetoast'
 import useVuelidate from '@vuelidate/core'
@@ -17,10 +18,11 @@ import { ACCESS, REFRESH, EXPIRES } from '@/constants/storage'
 // Composable
 const authStore = useAuthStore()
 const router = useRouter()
+const { t } = useI18n()
 // Reactive
 const filesList = ref([
   {
-    title: 'Логин',
+    title: t('login'),
     slot: 'login',
     icon: UserIcon
   },
@@ -30,7 +32,7 @@ const filesList = ref([
     icon: DisplayIcon
   },
   {
-    title: 'ЭЦП',
+    title: t('eri'),
     slot: 'eri',
     icon: KeyMinimalisticIcon
   }
@@ -148,8 +150,8 @@ onMounted(() => {
 </script>
 <template>
   <div class="sign-in-view">
-    <h1 class="text-2xl decoration-zinc-950  font-bold mb-1 text-center">Войти</h1>
-    <p class="text-sm text-color-3 text-center mb-7">С возвращением, вас скучали!</p>
+    <h1 class="text-2xl decoration-zinc-950  font-bold mb-7 text-center">{{ t('enter') }}</h1>
+    <!-- <p class="text-sm text-color-3 text-center mb-7">С возвращением, вас скучали!</p> -->
 
     <base-tab-view
       :tab-view="filesList"
@@ -165,7 +167,7 @@ onMounted(() => {
               v-model="v.username.$model"
               :error="v.username"
               mask-rule="+998 ## ### ## ##"
-              label="Телефона"
+              :label="t('mobile-phone')"
               placeholder="+998 XX XXX XX XX"
             />
           </base-col>
@@ -173,20 +175,20 @@ onMounted(() => {
           <base-col col-class="w-full">
             <base-password
               v-model="v.password.$model"
-              label="Пароль"
+              :label="t('password')"
               :error="v.password"
-              placeholder="Введите пароль"
+              :placeholder="t('enter-password')"
             />
           </base-col>
 
           <base-col col-class="w-full">
             <RouterLink :to="{ name: 'ForgetPassword' }" class="text-indigo-700 text-sm mb-3 mt-2 float-right">
-              Забыли пароль
+              {{ t('forgot-password') }}
             </RouterLink>
 
             <base-button
               class="w-full"
-              label=" Войти в систему"
+              :label="t('sign-in')"
               size="large"
               shadow
               type="submit"
@@ -203,8 +205,8 @@ onMounted(() => {
             <base-input
               v-model="v2.username.$model"
               :error="v2.username"
-              label="Имя компьютера"
-              placeholder="Введите имя компьютера"
+              :label="t('login-with-ad')"
+              :placeholder="t('enter-ad-name')"
             />
           </base-col>
 
@@ -212,8 +214,8 @@ onMounted(() => {
             <base-password
               v-model="v2.password.$model"
               :error="v2.password"
-              label="Пароль"
-              placeholder="Введите пароль"
+              :label="t('password')"
+              :placeholder="t('enter-password')"
             />
           </base-col>
 
@@ -224,7 +226,7 @@ onMounted(() => {
               shadow
               rounded
               :loading="loading"
-              label=" Войти через Active Directory"
+              :label="t('enter-with-ad')"
               class="w-full mt-3"
             >
             </base-button>
@@ -246,9 +248,9 @@ onMounted(() => {
     </base-tab-view>
 
     <div class="text-center mt-4">
-      У вас еще нет аккаунта ?
+      {{ t('account-text') }}
       <router-link :to="{ name: 'ConfirmNumber' }" class="text-indigo-700">
-        Зарегистрируйтесь
+        {{ t('register') }}
       </router-link>
     </div>
   </div>
