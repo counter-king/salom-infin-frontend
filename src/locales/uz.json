@@ -378,5 +378,9 @@
   "recipient-departments": "Приемные департаменты",
   "recipient-branches": "Приемные филиалы",
   "business-trip-decree-local": "Командировочный распоряжение",
-  "business-trip-order-local": "Командировочный приказ (локальный)"
+  "business-trip-order-local": "Командировочный приказ (локальный)",
+  "key-not-found": "Ключ не найден",
+  "error-2": "Браузер не поддерживает технологию WebSocket. Установите последнюю версию браузера.",
+  "enter-via-eri": "Войти через ЭЦП",
+  "select-pfx": "Выберите ключ PFX"
 }

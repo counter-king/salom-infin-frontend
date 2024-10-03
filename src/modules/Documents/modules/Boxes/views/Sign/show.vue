@@ -16,6 +16,7 @@ import { ModalComment } from "@/components/Modal"
 import SigningProcessTimeline from "@/modules/Documents/components/SigningProcessTimeline.vue"
 import ResolutionPerformersModal from "@/modules/Documents/modules/Boxes/components/ResolutionPerformersModal.vue"
 import { TreeUsers } from '@/components/Tree'
+import Eimzo from "@/components/EIMZO/Eimzo.vue"
 // Enums
 import {SIGNER_TYPES} from "@/enums"
 import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue"
@@ -50,8 +51,8 @@ const onChangeDocument = async (text) => {
     name: "SignIndex"
   })
 }
-const signTest = async () => {
-	await fetchSignDocument({ id: route.params.id, body: { pkcs7: "test" } })
+const signTest = async (pkcs7) => {
+	await fetchSignDocument({ id: route.params.id, body: { pkcs7: pkcs7 } })
 	await signStore.actionGetSignDetail(route.params.id)
   await countStore.actionDocumentCountList()
 }
@@ -116,17 +117,11 @@ onMounted( async () => {
         />
 
         <template v-if="signed === null">
-          <base-button
+          <eimzo
             v-if="signStore.detailModel.type !== SIGNER_TYPES.BASIC_SIGNER"
-            border-color="border-transparent"
-            label="sign"
-            :icon-left="CheckCircleIcon"
-            icon-height="!w-4"
-            icon-width="!h-4"
-            rounded
-            shadow
-            type="button"
-            @click="signTest"
+            type="sign"
+            input-classes="bg-white"
+            @emit:onGetPkcs7="(pkcs7) => signTest(pkcs7)"
           />
 
           <resolution-performers-modal
@@ -134,6 +129,8 @@ onMounted( async () => {
             ref="resolutionModal"
             :performers="signStore?.detailModel?.performers"
             :resolution-text="signStore?.detailModel?.resolution_text"
+            :resolution-type="signStore?.detailModel?.resolution_type"
+            :deadline="signStore?.detailModel?.deadline"
             @emit:on-sign="signDocumentWithResolution"
           />
         </template>

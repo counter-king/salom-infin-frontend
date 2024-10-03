@@ -8,6 +8,7 @@ import useVuelidate from '@vuelidate/core'
 import { helpers, minLength, required } from '@vuelidate/validators'
 // Components
 import { UserIcon, DisplayIcon, KeyMinimalisticIcon } from '@/components/Icons'
+import Eimzo from "@/components/EIMZO/Eimzo.vue"
 // Store
 import { useAuthStore } from '../stores'
 // Utils
@@ -214,7 +215,10 @@ onMounted(() => {
 
       <template #eri>
         <div class="card flex justify-content-center">
-          <Dropdown class="w-full" v-model="selectedCity" :options="cities" optionLabel="name" placeholder="Выбрать" />
+          <eimzo
+            type="login"
+            @emit:onGetPkcs7="(pkcs7) => console.log(pkcs7)"
+          />
         </div>
       </template>
     </base-tab-view>
