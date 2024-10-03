@@ -15,21 +15,25 @@ const changeLanguage = () => {
       title: 'Тип документа',
       icon: ClipboardCheckIcon,
       link: 'DocumentTypesIndex',
+      permission: 'settings-e-docs-document-types'
     },
     {
       title: 'Вид подачи',
       icon: DocumentTextIcon,
       link: 'DeliveryTypesIndex',
+      permission: 'settings-e-docs-delivery-types'
     },
     {
       title: 'Журнал',
       icon: NotebookIcon,
       link: 'MagazinesIndex',
+      permission: 'settings-e-docs-journal'
     },
     {
       title: 'Заголовки',
       icon: NotebookIcon,
       link: 'DocumentTitlesIndex',
+      permission: 'settings-e-docs-document-titles'
     }
   ];
 };

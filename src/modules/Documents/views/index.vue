@@ -23,7 +23,8 @@ const menus = ref([
     title: 'Отправка документов',
     icon: ArchiveUpIcon,
     link: 'SendDocumentsIndex',
-    children: []
+    children: [],
+    permission: 'sending-documents'
   },
   // Регистрация
   docFlowStore.routes

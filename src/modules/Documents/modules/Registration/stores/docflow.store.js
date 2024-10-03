@@ -23,7 +23,8 @@ export const useDocFlowStore = defineStore("docFlowStore", {
       title: 'Регистрация',
       icon: ClipboardAddIcon,
       link: 'RegistrationIndex',
-      children: []
+      children: [],
+      permission: 'registration'
     },
     headers: [
       {

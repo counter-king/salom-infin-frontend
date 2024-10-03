@@ -7,6 +7,7 @@ import { useSDStore } from "@/modules/Documents/modules/SendDocuments/stores/ind
 import {computed, onMounted, onUnmounted, ref, unref, watch} from "vue";
 // Store
 import { useFilterStore } from "@/stores/filter.store";
+import { useUserPermissionStore } from '../../../../../stores/user-permissions.store';
 // Components
 import { AltArrowDownIcon, EllipsisVertical20SolidIcon, SettingsIcon } from '@/components/Icons'
 import CustomizeMenuDialog from "@/modules/Documents/modules/SendDocuments/components/CustomizeMenuDialog.vue";
@@ -22,6 +23,7 @@ const router = useRouter();
 const { t } = useI18n();
 const emit = defineEmits(['emit:changeDocType']);
 const sdStore = useSDStore();
+const userPermissionStore = useUserPermissionStore()
 const opRef = ref(null);
 const moreVisible = ref(false);
 const dialog = ref(false);
@@ -87,20 +89,22 @@ onUnmounted(() => {
   <div class="bg-white border-b border-greyscale-200 py-2 px-6 -mt-6 -mx-6 mb-6 flex justify-between">
     <div class="flex items-center">
       <template v-for="menu in selectedMenuItems">
-        <div
-          class="cursor-pointer collapse-link group flex items-center text-sm font-medium text-greyscale-500 mr-6 py-[10px] relative transition-all duration-[400ms] after:content-[''] after:absolute after:bottom-[-9px] after:w-full after:h-[2px] after:bg-primary-500 after:opacity-0 after:transition-all after:duration-500 hover:text-primary-900 hover:after:opacity-100"
-          :class="{ 'toolbar-menu-active' : menu.active }"
-          @click="onChangeDocType(menu)"
-        >
-          <!-- <base-icon v-if="menu.icon" :name="menu.icon" class="text-gray-1 mr-2 transition-all duration-[400ms] group-hover:text-primary-900 !w-4 !h-4" /> -->
-          <base-iconify
-            v-if="menu.icon"
-            :icon="menu.icon"
-            :define-async="true"
-            class="text-gray-1 mr-2 transition-all duration-[400ms] group-hover:text-primary-900"
-          />
-          {{ t(menu.label) }}
-        </div>
+        <template v-if="userPermissionStore.canAccess(menu.permission)">
+          <div
+            class="cursor-pointer collapse-link group flex items-center text-sm font-medium text-greyscale-500 mr-6 py-[10px] relative transition-all duration-[400ms] after:content-[''] after:absolute after:bottom-[-9px] after:w-full after:h-[2px] after:bg-primary-500 after:opacity-0 after:transition-all after:duration-500 hover:text-primary-900 hover:after:opacity-100"
+            :class="{ 'toolbar-menu-active' : menu.active }"
+            @click="onChangeDocType(menu)"
+          >
+            <!-- <base-icon v-if="menu.icon" :name="menu.icon" class="text-gray-1 mr-2 transition-all duration-[400ms] group-hover:text-primary-900 !w-4 !h-4" /> -->
+            <base-iconify
+              v-if="menu.icon"
+              :icon="menu.icon"
+              :define-async="true"
+              class="text-gray-1 mr-2 transition-all duration-[400ms] group-hover:text-primary-900"
+            />
+            {{ t(menu.label) }}
+          </div>
+        </template>
       </template>
     </div>
 
