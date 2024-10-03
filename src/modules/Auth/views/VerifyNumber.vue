@@ -2,6 +2,7 @@
 // Core
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 // Services
 import { fetchVerifyNumber, fetchSendOtp } from '@/modules/Auth/services'
 // Components
@@ -16,6 +17,7 @@ import { COLOR_TYPES } from '@/enums'
 // Composable
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
 // Reactive
 const loading = ref(false)
 const otpValue = ref('')
@@ -27,7 +29,7 @@ const verifyNumber = async () => {
       phone_number: route.query.phone,
       otp_code: otpValue.value
     })
-    dispatchNotify(null, 'Успешно отправлен', COLOR_TYPES.SUCCESS)
+    dispatchNotify(null, t('successfully-send'), COLOR_TYPES.SUCCESS)
     await router.push({
       name: 'SetCredentials',
       query: {
@@ -45,10 +47,10 @@ const verifyNumber = async () => {
 const resendOtpCode = async () => {
   try {
     await fetchSendOtp({ phone_number: route.query.phone })
-    dispatchNotify(null, 'Код подтверждения отправлен', COLOR_TYPES.SUCCESS)
+    dispatchNotify(null, t('confirm-code-send'), COLOR_TYPES.SUCCESS)
   }
   catch (error) {
-    dispatchNotify(null, 'Ошибка при отправки код подтверждения', COLOR_TYPES.ERROR)
+    dispatchNotify(null, t('error-confirm-code-send'), COLOR_TYPES.ERROR)
   }
 }
 </script>
@@ -63,10 +65,10 @@ const resendOtpCode = async () => {
       />
     </div>
 
-    <h1  class="text-xl text-primary-900 font-bold text-center mb-1">Подтверждение</h1>
+    <h1  class="text-xl text-primary-900 font-bold text-center mb-1">{{ t('confirmation') }}</h1>
 
     <p class="text-sm font-medium text-greyscale-500 text-center mb-1">
-      Введите код, отправленный на номер
+      {{ t('enter-code-send-to-number') }}
     </p>
 
     <p class="text-base font-semibold text-greyscale-900 text-center mb-8">
@@ -92,14 +94,14 @@ const resendOtpCode = async () => {
       ></base-button>
 
       <div class="text-sm font-medium text-center mt-4">
-        Не получили код ?
+        {{ t('not-receive-code') }}
 
         <button
           type="submit"
           class="text-primary-500 ml-1"
           @click="resendOtpCode"
         >
-          Отправить повторно
+          {{ t('resend-code') }}
         </button>
       </div>
     </div>

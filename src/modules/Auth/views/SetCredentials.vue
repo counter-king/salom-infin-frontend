@@ -2,6 +2,7 @@
 // Core
 import { ref, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import useVuelidate from '@vuelidate/core'
 import { helpers, sameAs,  minLength, required } from '@vuelidate/validators'
 // Components
@@ -15,6 +16,7 @@ import { COLOR_TYPES } from '@/enums'
 // Composable
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
 // Reactive
 const loading = ref(false)
 const formModel = reactive({
@@ -24,11 +26,11 @@ const formModel = reactive({
 })
 const rules = reactive({
   new_password: {
-    required: helpers.withMessage(`Необходим пароль`, required),
+    required: helpers.withMessage(t('password-required'), required),
     minLength: helpers.withMessage(`Минимальная длина: 6 символа`, minLength(6))
   },
   reenteredPassword: {
-    required: helpers.withMessage(`Необходим пароль`, required),
+    required: helpers.withMessage(t('password-required'), required),
     minLength: helpers.withMessage(`Минимальная длина: 6 символа`, minLength(6)),
     // sameAsPassword: helpers.withMessage(`Пароли не совпадают`, sameAs('123'))
   },
@@ -45,7 +47,7 @@ const setCredentials = async () => {
   try {
     loading.value = true
     await fetchSetPassword(formModel)
-    dispatchNotify(null, 'Учетные данные установлены', COLOR_TYPES.SUCCESS)
+    dispatchNotify(null, t('credentials-set'), COLOR_TYPES.SUCCESS)
     await router.push({ name: 'Login' })
   }
   finally {
@@ -55,8 +57,8 @@ const setCredentials = async () => {
 </script>
 <template>
   <div class="sign-in-view">
-    <h1  class="text-2xl decoration-zinc-950  font-bold mb-1 text-center">Установить учетные данные</h1>
-    <p class="text-sm text-color-3 text-center mb-7">С возвращением, вас скучали!</p>
+    <h1  class="text-2xl decoration-zinc-950  font-bold mb-7 text-center">{{ t('set-credentials') }}</h1>
+    <!-- <p class="text-sm text-color-3 text-center mb-7">С возвращением, вас скучали!</p> -->
 
     <form @submit.prevent="setCredentials">
       <base-col col-class="w-1/1 pb-4">
@@ -64,33 +66,33 @@ const setCredentials = async () => {
           v-model="route.query.phone"
           mask-rule="+### ## ### ## ##"
           disabled
-          label="Логин"
-          placeholder="Введите логин"
+          :label="t('login')"
+          :placeholder="t('enter-login')"
         />
       </base-col>
 
       <base-col col-class="w-1/1 pb-4">
         <base-password
           v-model="v.new_password.$model"
-          label="Пароль"
+          :label="t('password')"
           :error="v.new_password"
-          placeholder="Введите пароль"
+          :placeholder="t('enter-password')"
         />
       </base-col>
 
       <base-col col-class="w-1/1 pb-4">
         <base-password
           v-model="v.reenteredPassword.$model"
-          label="Подтвердить пароль"
+          :label="t('confirm-password')"
           :error="v.reenteredPassword"
-          placeholder="Подтвердить пароль"
+          :placeholder="t('confirm-password')"
         />
       </base-col>
 
       <base-button
         :loading="loading"
         :icon-left="LockKeyholeUnlockedIcon"
-        label="Установить учетные данные"
+        :label="t('set-credentials')"
         size="large"
         type="submit"
         shadow

@@ -2,10 +2,11 @@
 // Core
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import useVuelidate from '@vuelidate/core'
 import { helpers, minLength, required } from '@vuelidate/validators'
 // Components
-import { AltArrowLeftIcon } from "@/components/Icons";
+import { AltArrowLeftIcon } from '@/components/Icons'
 // Services
 import { fetchSendOtp } from '@/modules/Auth/services'
 // Utils
@@ -14,11 +15,12 @@ import { dispatchNotify } from '@/utils/notify'
 import { COLOR_TYPES } from '@/enums'
 // Composable
 const router = useRouter()
+const { t } = useI18n()
 // Macros
 const props = defineProps({
   title: {
     type: String,
-    default: "Зарегистрируйтесь"
+    default: "register"
   }
 })
 // Reactive
@@ -28,7 +30,7 @@ const formModel = ref({
 })
 const rules = {
   phone_number: {
-    required: helpers.withMessage(`Требуется номер телефона`, required),
+    required: helpers.withMessage(t('phone-number-required'), required),
     minLength: helpers.withMessage(`Минимальная длина: 8 символа`, minLength(8))
   },
 }
@@ -45,7 +47,7 @@ const submit = async () => {
   try {
     loading.value = true
     await fetchSendOtp({ phone_number: formModel.value.phone_number?.replace(/\D/g, '') })
-    dispatchNotify(null, 'Код подтверждения отправлен', COLOR_TYPES.SUCCESS)
+    dispatchNotify(null, t('confirm-code-send'), COLOR_TYPES.SUCCESS)
     await router.push({
       name: 'VerifyNumber',
       query: {
@@ -60,8 +62,8 @@ const submit = async () => {
 </script>
 <template>
   <div class="sign-in-view">
-    <h1  class="text-2xl decoration-zinc-950  font-bold mb-1 text-center">{{ props.title }}</h1>
-    <p class="text-sm text-color-3 text-center mb-7">Введите номер, чтобы получить подтверждающее сообщение</p>
+    <h1  class="text-2xl decoration-zinc-950  font-bold mb-1 text-center">{{ t(props.title) }}</h1>
+    <p class="text-sm text-color-3 text-center mb-7">{{ t('confirm-text') }}</p>
 
     <form @submit.prevent="submit">
       <base-col col-class="w-1/1">
@@ -69,7 +71,7 @@ const submit = async () => {
           v-model="v.phone_number.$model"
           :error="v.phone_number"
           mask-rule="+998 ## ### ## ##"
-          label="Телефона"
+          :label="t('mobile-phone')"
           placeholder="+998 XX XXX XX XX"
         />
       </base-col>
@@ -81,7 +83,7 @@ const submit = async () => {
           shadow
           size="large"
           type="submit"
-          label="Отправить номер"
+          :label="t('send-number')"
           class="w-full"
         ></base-button>
       </base-col>
@@ -96,7 +98,7 @@ const submit = async () => {
         class="w-3.5 duration-[400ms] inline"
       />
 
-      Вернуться к входу
+      {{ t('back-in-enter') }}
     </router-link>
   </div>
 </template>
