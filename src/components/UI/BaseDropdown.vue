@@ -142,10 +142,10 @@ const options = computed({
 watch(debounced, async () => {
   if(props.customSearch) {
     if(search.value) {
-      options.value = props.options.filter(option => option.url.includes(search.value))
+      list.value = props.options.filter(option => option.url.includes(search.value))
     }
     else {
-      options.value = list.value
+      list.value = props.options
     }
     return
   }
@@ -173,7 +173,7 @@ onMounted(() => {
 
     <Dropdown
       v-model="modelValue"
-      :options="options"
+      :options="customSearch ? list : options"
       :option-label="props.optionLabel"
       :option-value="props.optionValue"
       :option-disabled="props.optionDisabled"

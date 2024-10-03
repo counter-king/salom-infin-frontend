@@ -21,7 +21,8 @@ export const useThemeStore = defineStore("theme", {
         link: 'DashboardIndex',
         children: [],
         count: null,
-        name: 'dashboard'
+        name: 'dashboard',
+        permission: 'dashboard'
       },
       // Календарь
       {
@@ -30,7 +31,8 @@ export const useThemeStore = defineStore("theme", {
         link: 'CalendarIndex',
         children: [],
         count: null,
-        name: 'calendar'
+        name: 'calendar',
+        permission: 'calendar'
       },
       // Документ
       {
@@ -38,7 +40,8 @@ export const useThemeStore = defineStore("theme", {
         icon: FolderWithFilesIcon,
         link: 'DocumentsIndex',
         count: null,
-        name: 'document'
+        name: 'document',
+        permission: 'e-docs'
       },
       // Kanban
       // {
@@ -65,7 +68,8 @@ export const useThemeStore = defineStore("theme", {
         link: 'HRIndex',
         children: [],
         count: null,
-        name: 'hr'
+        name: 'hr',
+        permission: 'hr'
       },
       // Handbook
       {
@@ -74,17 +78,19 @@ export const useThemeStore = defineStore("theme", {
         link: 'HandbookIndex',
         children: [],
         count: null,
-        name: 'handbook'
+        name: 'handbook',
+        permission: null
       },
       // Настройки
-      // {
-      //   title: 'Настройки',
-      //   icon: SettingsIcon,
-      //   link: 'SettingsIndex',
-      //   children: [],
-      //   count: null,
-      //   name: 'settings'
-      // },
+      {
+        title: 'Настройки',
+        icon: SettingsIcon,
+        link: 'SettingsIndex',
+        children: [],
+        count: null,
+        name: 'settings',
+        permission: 'settings'
+      },
     ]
   }),
   actions: {

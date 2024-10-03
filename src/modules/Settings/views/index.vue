@@ -35,36 +35,43 @@ const changeLanguage = () => {
       icon: FolderWithFilesIcon,
       link: 'DocumentFlowIndex',
       title: 'Документооборот',
+      permission: 'settings-e-docs'
     },
     {
       icon: BuildingsIcon,
       link: 'CorrespondentsIndex',
       title: 'Корреспонденты',
+      permission: 'settings-correspondents'
     },
     {
       icon: BoxMinimalisticIcon,
       link: 'StructureIndex',
       title: 'Структура',
+      permission: 'settings-structure'
     },
     {
       icon: UsersGroupTwoRoundedIcon,
       link: 'UsersIndex',
       title: 'Пользователи',
+      permission: 'settings-users'
     },
     {
       icon: UserSpeakRoundedIcon,
       link: 'RolesIndex',
       title: 'Роли',
+      permission: 'settings-roles-list'
     },
     {
       icon: CheckCircleIcon,
       link: 'PermissionsIndex',
       title: 'Права доступа',
+      permission: 'settings-project-permission-list'
     },
     {
       icon: DocumentTextIcon,
       link: 'ShortDescriptionsIndex',
       title: 'Краткое описание',
+      permission: 'settings-short-descriptions-list'
     },
     // profile.routes,
     // {
@@ -72,21 +79,21 @@ const changeLanguage = () => {
     //   link: 'ProfileIndex',
     //   title: 'Профиль',
     // },
-    {
-      icon: LaptopMinimalisticIcon,
-      link: 'DevicesIndex',
-      title: 'Мои устройства',
-    },
+    // {
+    //   icon: LaptopMinimalisticIcon,
+    //   link: 'DevicesIndex',
+    //   title: 'Мои устройства',
+    // },
     {
       icon: BellIcon,
       link: 'NotificationsIndex',
       title: 'Уведомления',
     },
-    {
-      icon: MouseIcon,
-      link: 'EquipmentsIndex',
-      title: 'Техника и оборудования',
-    },
+    // {
+    //   icon: MouseIcon,
+    //   link: 'EquipmentsIndex',
+    //   title: 'Техника и оборудования',
+    // },
     {
       icon: SettingsMinimalisticIcon,
       link: 'GeneralSettingsIndex',

@@ -38,7 +38,8 @@ export const useBoxesCommonStore = defineStore('boxes-common', {
           link: 'ReviewIndex',
           children: [],
           count: null,
-          name: 'unread_for_review'
+          name: 'unread_for_review',
+          permission: 'boxes-for-review-list'
         },
         // Моё поручение
         {
@@ -47,7 +48,8 @@ export const useBoxesCommonStore = defineStore('boxes-common', {
           link: 'AssignmentIndex',
           children: [],
           count: null,
-          name: 'unread_assignments'
+          name: 'unread_assignments',
+          permission: 'boxes-my-assignment-list'
         },
         // На подпись
         {
@@ -56,7 +58,8 @@ export const useBoxesCommonStore = defineStore('boxes-common', {
           link: 'SignIndex',
           children: [],
           count: null,
-          name: 'for_signature'
+          name: 'for_signature',
+          permission: 'boxes-signers-list'
         },
         // На согласовании
         {
@@ -65,7 +68,8 @@ export const useBoxesCommonStore = defineStore('boxes-common', {
           link: 'ApprovalIndex',
           children: [],
           count: null,
-          name: 'for_approval'
+          name: 'for_approval',
+          permission: 'boxes-approvers-list'
         },
         // На контроль
         {
@@ -74,10 +78,12 @@ export const useBoxesCommonStore = defineStore('boxes-common', {
           link: 'ControlIndex',
           children: [],
           count: null,
-          name: 'for_control'
+          name: 'for_control',
+          permission: 'boxes-my-controls-list'
         },
       ],
-      count: null
+      count: null,
+      permission: 'boxes'
     },
     createdResolutionsList: {
       label: 'created-resolutions',

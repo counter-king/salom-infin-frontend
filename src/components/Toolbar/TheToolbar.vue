@@ -5,6 +5,7 @@ import { onClickOutside } from '@vueuse/core'
 import Toolbar from 'primevue/toolbar'
 // Stores
 import { useThemeStore } from '@/stores/theme.store'
+import { useUserPermissionStore } from '../../stores/user-permissions.store'
 import { useAuthStore } from '../../modules/Auth/stores'
 // Components
 import { MagniferIcon, SettingsIcon } from '@/components/Icons'
@@ -16,6 +17,7 @@ import LanguageDropdown from './LanguageDropdown.vue'
 import UserDropdown from './UserDropdown.vue'
 // Composable
 const themeStore = useThemeStore()
+const userPermissionStore = useUserPermissionStore()
 const authStore = useAuthStore()
 // Reactive
 const openModal = ref(true)
@@ -59,37 +61,25 @@ onMounted(() => {
 
         <template v-if="openModal">
           <template v-for="menu in themeStore.header">
-            <router-link
-              :to="{ name: menu.link }"
-              class="header-link group flex items-center gap-2 text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full mr-3 transition-all duration-[400ms] hover:bg-primary-800 hover:text-white"
-            >
-              <base-iconify
-                v-if="menu.icon"
-                :icon="menu.icon"
-                class="text-gray-2 transition-all duration-[400ms] group-hover:text-white"
-              />
+            <template v-if="userPermissionStore.canAccess(menu.permission)">
+              <router-link
+                :to="{ name: menu.link }"
+                class="header-link group flex items-center gap-2 text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full mr-3 transition-all duration-[400ms] hover:bg-primary-800 hover:text-white"
+              >
+                <base-iconify
+                  v-if="menu.icon"
+                  :icon="menu.icon"
+                  class="text-gray-2 transition-all duration-[400ms] group-hover:text-white"
+                />
 
-              {{ menu.title }}
+                {{ menu.title }}
 
-              <template v-if="menu.count">
-                <div class="flex items-center justify-center w-5 h-5 rounded-full bg-critic-500 text-[10px] font-semibold text-white">{{ menu.count }}</div>
-              </template>
-            </router-link>
+                <template v-if="menu.count">
+                  <div class="flex items-center justify-center w-5 h-5 rounded-full bg-critic-500 text-[10px] font-semibold text-white">{{ menu.count }}</div>
+                </template>
+              </router-link>
+            </template>
           </template>
-
-          <!-- TODO: Исправить когда будет созданы права доступа -->
-          <router-link
-            v-if="authStore.currentUser.is_superuser"
-            :to="{ name: 'SettingsIndex' }"
-            class="header-link group flex items-center gap-2 text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full mr-3 transition-all duration-[400ms] hover:bg-primary-800 hover:text-white"
-          >
-            <base-iconify
-              :icon="SettingsIcon"
-              class="text-gray-2 transition-all duration-[400ms] group-hover:text-white"
-            />
-
-            Настройки
-          </router-link>
         </template>
       </template>
 

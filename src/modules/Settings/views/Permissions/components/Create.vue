@@ -210,7 +210,7 @@ const afterHide = () => {
 
           <base-dropdown
             v-model="permissionStore.createModel.__url"
-            v-model:options="allUrlStore.list"
+            :options="allUrlStore.list"
             api-url="all-urls"
             searchable
             option-label="url"

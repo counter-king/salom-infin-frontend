@@ -5,6 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 // Components
 import { ActionToolbar, ActionBackButton, EriKeysMenu } from '@/components/Actions'
 import { EyeIcon } from '@/components/Icons'
+import { LinkableCell } from '@/components/Table'
 // Stores
 import { useAgreementsStore } from '../stores/agreements.store'
 import { useAgreementsRoutesStore } from '../stores/routes.store'
@@ -65,6 +66,9 @@ const afterHideDialog = () => {
     checkedValues.value = []
   }
 }
+const link = (data) => {
+  return { name: 'AgreementNotSignedShow', params: { id: data.id } }
+}
 // Hooks
 onMounted(async () => {
   await agreementsStore.getNegotiatorsNotSigned({
@@ -96,15 +100,21 @@ onMounted(async () => {
     @update:selection="handleSelection"
   >
     <template #negotiation.doc_type.name="{ data }">
-      <span class="font-medium text-greyscale-900">{{ data.negotiation?.doc_type?.name ?? '-' }}</span>
+      <!-- <linkable-cell :to="link(data)"> -->
+        <span class="font-medium text-greyscale-900">{{ data.negotiation?.doc_type?.name ?? '-' }}</span>
+      <!-- </linkable-cell> -->
     </template>
 
     <template #negotiation.doc_sub_type.name="{ data }">
-      <span class="font-medium text-greyscale-900">{{ data.negotiation.doc_sub_type?.name ?? '-' }}</span>
+      <!-- <linkable-cell :to="link(data)"> -->
+        <span class="font-medium text-greyscale-900">{{ data.negotiation.doc_sub_type?.name ?? '-' }}</span>
+      <!-- </linkable-cell> -->
     </template>
 
     <template #created_date="{ data }">
-      {{ formatDateHour(data.created_date) }}
+      <!-- <linkable-cell :to="link(data)"> -->
+        <span class="font-medium text-greyscale-900">{{ formatDateHour(data.created_date) }}</span>
+      <!-- </linkable-cell> -->
     </template>
 
     <template #actions="{ data }">

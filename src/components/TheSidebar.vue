@@ -5,9 +5,11 @@ import { useRoute } from 'vue-router'
 // Components
 import { AltArrowLeftIcon } from '@/components/Icons'
 // Stores
+import { useUserPermissionStore } from '../stores/user-permissions.store'
 import { useNavigationStore } from '@/stores/navigation.store'
 // Composable
 const route = useRoute()
+const userPermissionStore = useUserPermissionStore()
 const navigationStore = useNavigationStore()
 // Macros
 const props = defineProps({
@@ -68,31 +70,33 @@ watch(
         </template>
 
         <template v-else>
-          <router-link
-            :to="{ name: menu.link }"
-            class="sidebar-link group flex items-center text-sm font-medium text-gray-1 rounded-xl p-3 pr-4 mb-1 border-b-2 border-transparent transition-all duration-[400ms] hover:text-primary-500 hover:border-gray-3 hover:bg-primary-50"
-            :class="{ 'pointer-events-none' : menu.link === route.name }"
-            v-tooltip="navigationStore.sidebarCollapse
-              ? {
-                  value: `<h4 class='text-xs text-white -my-1'>${menu.title}</h4>`,
-                  escape: true,
-                  autoHide: false
-                }
-              : null
-            "
-          >
-            <base-iconify
-              v-if="menu.icon"
-              :icon="menu.icon"
-              class="text-gray-1 transition-all duration-[400ms] group-hover:text-primary-500"
-            />
+          <template v-if="userPermissionStore.canAccess(menu.permission)">
+            <router-link
+              :to="{ name: menu.link }"
+              class="sidebar-link group flex items-center text-sm font-medium text-gray-1 rounded-xl p-3 pr-4 mb-1 border-b-2 border-transparent transition-all duration-[400ms] hover:text-primary-500 hover:border-gray-3 hover:bg-primary-50"
+              :class="{ 'pointer-events-none' : menu.link === route.name }"
+              v-tooltip="navigationStore.sidebarCollapse
+                ? {
+                    value: `<h4 class='text-xs text-white -my-1'>${menu.title}</h4>`,
+                    escape: true,
+                    autoHide: false
+                  }
+                : null
+              "
+            >
+              <base-iconify
+                v-if="menu.icon"
+                :icon="menu.icon"
+                class="text-gray-1 transition-all duration-[400ms] group-hover:text-primary-500"
+              />
 
-            <span class="flex-1 truncate mx-3">{{ menu.title }}</span>
+              <span class="flex-1 truncate mx-3">{{ menu.title }}</span>
 
-            <template v-if="menu.count">
-              <div class="badge-count flex items-center justify-center w-5 h-5 rounded-full bg-critic-500 text-[10px] font-semibold text-white ml-auto">{{ menu.count }}</div>
-            </template>
-          </router-link>
+              <template v-if="menu.count">
+                <div class="badge-count flex items-center justify-center w-5 h-5 rounded-full bg-critic-500 text-[10px] font-semibold text-white ml-auto">{{ menu.count }}</div>
+              </template>
+            </router-link>
+          </template>
         </template>
       </template>
     </div>

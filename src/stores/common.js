@@ -9,6 +9,7 @@ import {
   RoundAltArrowDownIcon
 } from '@/components/Icons'
 // Stores
+import { useUserPermissionStore } from './user-permissions.store'
 import { useCorrespondentStore } from './correspondent'
 import { useUsersStore } from './users.store'
 import { useAllUrlStore } from './all-urls.store'
@@ -60,12 +61,14 @@ export const useCommonStore = defineStore("common", {
 	},
 	actions: {
 		async init() {
+      const userPermissionStore = useUserPermissionStore()
       const correspondent = useCorrespondentStore()
       const users = useUsersStore()
       const allUrlStore = useAllUrlStore()
       const documentCount = useDocumentCountStore()
       const permissionStore = usePermissionStore()
 
+      await userPermissionStore.getUserPermisission()
       await documentCount.actionDocumentCountList()
       await correspondent.actionGetList({})
 			await users.actionUsersList()
@@ -180,30 +183,38 @@ export const useCommonStore = defineStore("common", {
         // this.journalsList = data.results
         this.journalsList = data.results.map(journal => {
           let iconPath = null
+          let permission = null
 
           switch (journal.code) {
             case JOURNAL_CODES.INCOMING:
               iconPath = ArrowRightDownIcon
+              permission = 'registration-incoming-list'
               break;
             case JOURNAL_CODES.INNER:
               iconPath = ArrowDownIcon
+              permission = 'registration-inner-list'
               break;
             case JOURNAL_CODES.OUTGOING:
               iconPath = RoundAltArrowDownIcon
+              permission = 'registration-outgoing-list'
               break;
             case JOURNAL_CODES.APPEALS:
               iconPath = DocumentTextIcon
+              permission = 'registration-appeals-list'
               break;
             case JOURNAL_CODES.ORDERS_PROTOCOLS:
               iconPath = NotebookLinearIcon
+              permission = 'registration-orders-and-protocols-list'
               break;
             default: // APPLICATION
               iconPath = NotesIcon
+              permission = 'registration-application-list'
           }
 
           return {
             ...journal,
-            icon: iconPath
+            icon: iconPath,
+            permission
           }
         })
       })

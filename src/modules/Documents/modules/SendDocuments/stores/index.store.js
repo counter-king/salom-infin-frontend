@@ -28,7 +28,8 @@ export const useSDStore = defineStore("sd-stores", {
         active: true,
         selected: true,
         disabled: true,
-        document_type: COMPOSE_DOCUMENT_TYPES.INNER
+        document_type: COMPOSE_DOCUMENT_TYPES.INNER,
+        permission: 'sending-documents-service-letter-list'
       },
       // Рапорт
       {
@@ -39,7 +40,8 @@ export const useSDStore = defineStore("sd-stores", {
         active: false,
         selected: true,
         disabled: false,
-        document_type: COMPOSE_DOCUMENT_TYPES.NOTICE
+        document_type: COMPOSE_DOCUMENT_TYPES.NOTICE,
+        permission: 'sending-documents-notice-list'
       },
       // Заявление
       {
@@ -50,7 +52,8 @@ export const useSDStore = defineStore("sd-stores", {
         active: false,
         selected: true,
         disabled: false,
-        document_type: COMPOSE_DOCUMENT_TYPES.APPLICATION
+        document_type: COMPOSE_DOCUMENT_TYPES.APPLICATION,
+        permission: 'sending-documents-applications-list'
       },
       // 	Приказ
       {
@@ -61,7 +64,8 @@ export const useSDStore = defineStore("sd-stores", {
         active: false,
         selected: true,
         disabled: false,
-        document_type: COMPOSE_DOCUMENT_TYPES.ORDER
+        document_type: COMPOSE_DOCUMENT_TYPES.ORDER,
+        permission: 'sending-documents-order-list'
       },
       // Распоряжения
       {
@@ -72,7 +76,8 @@ export const useSDStore = defineStore("sd-stores", {
         active: false,
         selected: true,
         disabled: false,
-        document_type: COMPOSE_DOCUMENT_TYPES.DECREE
+        document_type: COMPOSE_DOCUMENT_TYPES.DECREE,
+        permission: 'sending-documents-decree-list'
       },
       // // Заключение
       // {
@@ -392,7 +397,8 @@ export const useSDStore = defineStore("sd-stores", {
           active: true,
           selected: true,
           disabled: true,
-          document_type: COMPOSE_DOCUMENT_TYPES.INNER
+          document_type: COMPOSE_DOCUMENT_TYPES.INNER,
+          permission: 'sending-documents-service-letter-list'
         },
         // Рапорт
         {
@@ -403,7 +409,8 @@ export const useSDStore = defineStore("sd-stores", {
           active: false,
           selected: true,
           disabled: false,
-          document_type: COMPOSE_DOCUMENT_TYPES.NOTICE
+          document_type: COMPOSE_DOCUMENT_TYPES.NOTICE,
+          permission: 'sending-documents-notice-list'
         },
         // Заявление
         {
@@ -414,7 +421,8 @@ export const useSDStore = defineStore("sd-stores", {
           active: false,
           selected: true,
           disabled: false,
-          document_type: COMPOSE_DOCUMENT_TYPES.APPLICATION
+          document_type: COMPOSE_DOCUMENT_TYPES.APPLICATION,
+          permission: 'sending-documents-applications-list'
         },
         // 	Приказ
         {
@@ -425,7 +433,8 @@ export const useSDStore = defineStore("sd-stores", {
           active: false,
           selected: true,
           disabled: false,
-          document_type: COMPOSE_DOCUMENT_TYPES.ORDER
+          document_type: COMPOSE_DOCUMENT_TYPES.ORDER,
+          permission: 'sending-documents-order-list'
         },
         // Распоряжения
         {
@@ -436,7 +445,8 @@ export const useSDStore = defineStore("sd-stores", {
           active: false,
           selected: true,
           disabled: false,
-          document_type: COMPOSE_DOCUMENT_TYPES.DECREE
+          document_type: COMPOSE_DOCUMENT_TYPES.DECREE,
+          permission: 'sending-documents-decree-list'
         },
         // // Рапорт
         // {
