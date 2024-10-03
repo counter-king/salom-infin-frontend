@@ -15,16 +15,19 @@ const changeLanguage = () => {
       icon: UserCheckRoundedBrokenIcon,
       link: 'EmployeesIndex',
       title: 'Сотрудники',
+      permission: 'settings-users-employees'
     },
     {
       icon: UsersGroupTwoRoundedIcon,
       link: 'AssistantsIndex',
       title: 'Помощники',
+      permission: 'settings-users-assistants'
     },
     {
       icon: UserSpeakRoundedIcon,
       link: 'TopSignersIndex',
       title: 'Топ подписантов',
+      permission: 'settings-users-top-signers'
     }
   ];
 };

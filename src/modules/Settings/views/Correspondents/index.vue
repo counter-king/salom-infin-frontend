@@ -15,26 +15,31 @@ const changeLanguage = () => {
       title: 'Физическое лицо',
       icon: UserCheckRoundedBrokenIcon,
       link: 'PhysicalIndex',
+      permission: 'settings-correspondent-physical'
     },
     {
       title: 'Индивидуальный предприниматель',
       icon: UserCheckRoundedBrokenIcon,
       link: 'EntrepreneurIndex',
+      permission: 'settings-correspondent-individual'
     },
     {
       title: 'Юридическое лицо',
       icon: BuildingsIcon,
       link: 'LegalIndex',
+      permission: 'settings-correspondent-legal'
     },
     {
       title: 'Регионы',
       icon: MapIcon,
       link: 'RegionsIndex',
+      permission: 'settings-correspondent-regions'
     },
     {
       title: 'Районы',
       icon: StreetsMapPointIcon,
       link: 'DistrictsIndex',
+      permission: 'settings-correspondent-districts'
     }
   ];
 };
