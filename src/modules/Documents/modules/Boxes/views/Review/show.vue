@@ -37,7 +37,6 @@ onMounted(async () => {
   setTimeout(() => {
     loading.value = false
   }, 500)
-  console.log(reviewStore.detailModel)
 })
 // Methods
 const signDocument = async () => {

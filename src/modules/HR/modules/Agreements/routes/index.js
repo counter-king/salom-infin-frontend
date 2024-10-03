@@ -59,6 +59,15 @@ const Agreements = [
             component: () => import('../views/not-signed.vue'),
           },
           {
+            path: 'not-signed/:id',
+            name: 'AgreementNotSignedShow',
+            meta: {
+              isAuthRequired: true,
+              navigation: false
+            },
+            component: () => import('../views/not-signed-show.vue'),
+          },
+          {
             path: 'signed',
             name: 'AgreementSigned',
             meta: {
