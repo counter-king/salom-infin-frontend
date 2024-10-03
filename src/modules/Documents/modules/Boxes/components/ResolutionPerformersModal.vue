@@ -228,12 +228,22 @@ defineExpose({ buttonLoading, dialog })
           @click="dialog = false"
         />
 
-        <eimzo
+        <base-button
+          label="sign"
+          :loading="buttonLoading"
+          rounded
+          shadow
+          type="button"
+          @click="onSign"
+        />
+
+<!--        <eimzo
           type="sign"
-          input-classes="bg-white rounded-3xl"
+          data="resolution-performer"
+          input-classes="bg-white !rounded-3xl min-w-[200px]"
           :button-loading="buttonLoading"
           @emit:onGetPkcs7="(pkcs7) => onSign(pkcs7)"
-        />
+        />-->
       </div>
     </template>
   </base-dialog>

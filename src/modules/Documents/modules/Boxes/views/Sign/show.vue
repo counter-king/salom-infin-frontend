@@ -117,12 +117,27 @@ onMounted( async () => {
         />
 
         <template v-if="signed === null">
-          <eimzo
+
+          <base-button
+            v-if="signStore.detailModel.type !== SIGNER_TYPES.BASIC_SIGNER"
+            border-color="border-transparent"
+            label="sign"
+            :icon-left="CheckCircleIcon"
+            icon-height="!w-4"
+            icon-width="!h-4"
+            rounded
+            shadow
+            type="button"
+            @click="signTest"
+          />
+
+<!--          <eimzo
             v-if="signStore.detailModel.type !== SIGNER_TYPES.BASIC_SIGNER"
             type="sign"
-            input-classes="bg-white"
+            data="sign-in-basic"
+            input-classes="bg-white !rounded-3xl min-w-[200px]"
             @emit:onGetPkcs7="(pkcs7) => signTest(pkcs7)"
-          />
+          />-->
 
           <resolution-performers-modal
             v-else

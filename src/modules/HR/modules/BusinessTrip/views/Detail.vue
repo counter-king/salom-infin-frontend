@@ -36,7 +36,7 @@ const reportIconClass = computed(() => {
   return route.name === ROUTE_HR_BUSINESS_TRIP_ADVANCE_REPORT_LIST || route.name === ROUTE_HR_BUSINESS_TRIP_ADVANCE_REPORT_CREATE ? 'text-primary-500' : 'text-greyscale-400'
 })
 const isProcessFinished = computed(() => {
-  return BTStore?.detailModel?.verifications?.every(every => every.left_at && every.arrived_at)
+  return BTStore?.detailModel?.verifications?.length && BTStore?.detailModel?.verifications?.every(every => every.left_at && every.arrived_at)
 })
 const certificateRouteClass = computed(() => {
   return route.name === ROUTE_HR_BUSINESS_TRIP_CERTIFICATE  ? 'border-primary-500 text-primary-900' : 'border-greyscale-70 text-greyscale-500'

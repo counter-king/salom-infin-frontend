@@ -6,7 +6,8 @@ const URLS = {
   profile: 'profile/',
   otp: 'send-otp/',
   verify: 'verify-phone/',
-  setPassword: 'set-password/'
+  setPassword: 'set-password/',
+  loginViaERI: 'ldap-login/',
 }
 /**
 *
@@ -19,6 +20,10 @@ export const fetchUserLogin = (body) => {
 * */
 export const fetchLoginWithAd = (body) => {
   return axiosConfig.post(URLS.loginWithAd, body)
+}
+/** **/
+export const fetchLoginViaERI = (body) => {
+  return axiosConfig.post(URLS.loginViaERI, body)
 }
 /**
 *

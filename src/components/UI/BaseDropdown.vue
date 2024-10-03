@@ -98,6 +98,10 @@ const props = defineProps({
   showClear: {
     type: Boolean,
     default: true
+  },
+  errorMessage: {
+    type: Boolean,
+    default: true
   }
 })
 const emit = defineEmits(['update:modelValue', 'update:options', 'emit:change'])
@@ -275,7 +279,7 @@ onMounted(() => {
       </template>
     </Dropdown>
 
-    <template v-if="props.error.$errors.length">
+    <template v-if="props.error.$errors.length && props.errorMessage">
       <div class="space-y-1 mt-2">
         <div
           v-for="element of props.error.$errors"
