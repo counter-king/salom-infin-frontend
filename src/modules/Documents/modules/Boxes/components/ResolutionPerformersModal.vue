@@ -101,7 +101,8 @@ const onSign = async (pkcs7) => {
     })),
     deadline: `${model.value.deadline}T18:00:00+05:00`,
     resolution_text: model.value.resolution_text,
-    resolution_type: model.value.type
+    resolution_type: model.value.type,
+    pkcs7
   }
 
   emit('emit:onSign', body)
@@ -228,6 +229,7 @@ defineExpose({ buttonLoading, dialog })
           @click="dialog = false"
         />
 
+<!--
         <base-button
           label="sign"
           :loading="buttonLoading"
@@ -236,14 +238,15 @@ defineExpose({ buttonLoading, dialog })
           type="button"
           @click="onSign"
         />
+-->
 
-<!--        <eimzo
+        <eimzo
           type="sign"
           data="resolution-performer"
           input-classes="bg-white !rounded-3xl min-w-[200px]"
           :button-loading="buttonLoading"
           @emit:onGetPkcs7="(pkcs7) => onSign(pkcs7)"
-        />-->
+        />
       </div>
     </template>
   </base-dialog>

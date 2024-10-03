@@ -237,7 +237,6 @@ onMounted(() => {
           <div class="card flex justify-content-center">
             <eimzo
               type="login"
-              data="sign-in"
               :button-loading="loading"
               @emit:onGetPkcs7="(pkcs7) => loginViaEri(pkcs7)"
             />

@@ -30,6 +30,7 @@ const { t } = useI18n()
 const rejectModal = ref(false)
 const changeModal = ref(false)
 const resolutionModal = ref(null)
+const buttonLoading = ref(false)
 
 // Computed
 const signed = computed(() => {
@@ -51,10 +52,19 @@ const onChangeDocument = async (text) => {
     name: "SignIndex"
   })
 }
-const signTest = async (pkcs7) => {
-	await fetchSignDocument({ id: route.params.id, body: { pkcs7: pkcs7 } })
-	await signStore.actionGetSignDetail(route.params.id)
-  await countStore.actionDocumentCountList()
+const sign = async (pkcs7) => {
+	try {
+    buttonLoading.value = true
+    await fetchSignDocument({ id: route.params.id, body: { pkcs7 } })
+    await signStore.actionGetSignDetail(route.params.id)
+    await countStore.actionDocumentCountList()
+  }
+  catch (err) {
+
+  }
+  finally {
+    buttonLoading.value = false
+  }
 }
 const signDocumentWithResolution = async (body) => {
   try {
@@ -64,6 +74,9 @@ const signDocumentWithResolution = async (body) => {
     await signStore.actionGetSignDetail(route.params.id)
     await countStore.actionDocumentCountList()
   } catch (err) {
+
+  }
+  finally {
     resolutionModal.value.buttonLoading = false
   }
 }
@@ -118,7 +131,7 @@ onMounted( async () => {
 
         <template v-if="signed === null">
 
-          <base-button
+<!--          <base-button
             v-if="signStore.detailModel.type !== SIGNER_TYPES.BASIC_SIGNER"
             border-color="border-transparent"
             label="sign"
@@ -128,16 +141,17 @@ onMounted( async () => {
             rounded
             shadow
             type="button"
-            @click="signTest"
-          />
+            @click="sign"
+          />-->
 
-<!--          <eimzo
+          <eimzo
             v-if="signStore.detailModel.type !== SIGNER_TYPES.BASIC_SIGNER"
             type="sign"
             data="sign-in-basic"
             input-classes="bg-white !rounded-3xl min-w-[200px]"
-            @emit:onGetPkcs7="(pkcs7) => signTest(pkcs7)"
-          />-->
+            :button-loading="buttonLoading"
+            @emit:onGetPkcs7="(pkcs7) => sign(pkcs7)"
+          />
 
           <resolution-performers-modal
             v-else
