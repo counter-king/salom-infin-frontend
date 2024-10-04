@@ -82,15 +82,15 @@ export const useThemeStore = defineStore("theme", {
         permission: null
       },
       // Настройки
-      {
-        title: 'Настройки',
-        icon: SettingsIcon,
-        link: 'SettingsIndex',
-        children: [],
-        count: null,
-        name: 'settings',
-        permission: 'settings'
-      },
+      // {
+      //   title: 'Настройки',
+      //   icon: SettingsIcon,
+      //   link: 'SettingsIndex',
+      //   children: [],
+      //   count: null,
+      //   name: 'settings',
+      //   permission: 'settings'
+      // },
     ]
   }),
   actions: {
