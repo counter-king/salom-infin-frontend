@@ -20,17 +20,19 @@ export const useUserPermissionStore = defineStore('user-permissions', {
      * @returns { boolean }
      * */
     canAccess(permission) {
-      const authStore = useAuthStore()
+      return true
 
-      // Если юзер суперадмин или
-      // permission не определен или null
-      // пропускаем проверку
-      if(!permission) {
-        // authStore.currentUser.is_superuser ||
-        return true
-      }
+      // const authStore = useAuthStore()
 
-      return this.userPermissions.some(({ value }) => value === permission)
+      // // Если юзер суперадмин или
+      // // permission не определен или null
+      // // пропускаем проверку
+      // if(!permission) {
+      //   // authStore.currentUser.is_superuser ||
+      //   return true
+      // }
+
+      // return this.userPermissions.some(({ value }) => value === permission)
     }
   }
 })
