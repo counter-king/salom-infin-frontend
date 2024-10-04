@@ -7,7 +7,7 @@ const URLS = {
   otp: 'send-otp/',
   verify: 'verify-phone/',
   setPassword: 'set-password/',
-  loginViaERI: 'ldap-login/',
+  loginViaERI: 'eds-login/'
 }
 /**
 *
