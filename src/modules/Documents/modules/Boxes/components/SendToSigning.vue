@@ -84,11 +84,16 @@ const onSendToSigning = async () => {
     resolution_type: model.value.type
   }
 
-  const response = await fetchSendToSigning(route.params.id, body)
-  if (response.status === 200) {
-    emit('emit:onSendToSigning')
+  try {
+    const response = await fetchSendToSigning(route.params.id, body)
+    if (response.status === 200) {
+      emit('emit:onSendToSigning')
+      dialog.value = false
+    }
+  } catch (err) {
+
+  } finally {
     buttonLoading.value = false
-    dialog.value = false
   }
 }
 </script>
