@@ -79,7 +79,7 @@ const onSendToSigning = async () => {
       full_name: item.full_name,
       is_responsible: item.id === responsibleIndex.value
     })),
-    deadline: `${model.value.deadline}T18:00:00+05:00`,
+    deadline: model.value.deadline ? `${model.value.deadline}T18:00:00+05:00` : null,
     resolution_text: model.value.resolution_text,
     resolution_type: model.value.type
   }
