@@ -40,7 +40,7 @@ const props = defineProps({
     type: Array,
     default: () => [
       {
-        label: "Просмотр",
+        label: "preview-text",
         name: "Preview",
         icon: EyeIcon,
         slot: "preview",
@@ -48,7 +48,7 @@ const props = defineProps({
         count: null
       },
       {
-        label: "История",
+        label: "history",
         name: "History",
         icon: ClockCircleIcon,
         slot: "history",
@@ -56,7 +56,7 @@ const props = defineProps({
         count: null
       },
       {
-        label: "Комментарии",
+        label: "comments",
         name: "Comments",
         icon: ChatLineIcon,
         slot: "comments",
@@ -64,14 +64,14 @@ const props = defineProps({
         count: 2
       },
       {
-        label: "Файлы",
+        label: "files",
         name: "Files",
         icon: FileTextIcon,
         slot: "files",
         component: "Files"
       },
       {
-        label: "Связанные документы",
+        label: "linked-documents",
         name: "ConnectedDocuments",
         icon: FolderWithFilesIcon,
         slot: "connected-documents",

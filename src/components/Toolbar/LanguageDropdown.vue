@@ -2,16 +2,20 @@
 // Core
 import { ref, unref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { usePrimeVue } from 'primevue/config'
 // Stores
 import { useCollectRequestsStore } from '@/stores/collect-requests.store'
 // Components
 import { AltArrowDownIcon, CheckCircleBoldIcon, GlobalIcon } from '@/components/Icons'
 // Utils
 import { saveStorageItem, getStorageItem } from '@/utils/storage'
+// Config
+import { localeUz, localeRu } from '../../config/primevue/lang'
 // Const
 import { LANG } from '@/constants/storage'
 // Composable
 const { locale } = useI18n()
+const primevue = usePrimeVue()
 const collectStore = useCollectRequestsStore()
 // Macros
 const props = defineProps({
@@ -43,11 +47,15 @@ const languageSelected = ref({
   value: 'uz'
 })
 // Methods
+const setThemePrimeVue = () => {
+  primevue.config.locale = locale.value === 'uz' ? localeUz : localeRu
+}
 const toggleIconVisibility = async (event, language) => {
   languageSelected.value = language
   locale.value = language.value
   saveStorageItem(LANG, JSON.stringify(language))
   toggle(event)
+  setThemePrimeVue()
 	await collectStore.actionResendRequests()
 }
 const toggle = (event) => {
@@ -62,6 +70,8 @@ onMounted(() => {
       icon: 'FlagsUzIcon',
       value: 'uz'
     }
+
+  setThemePrimeVue()
 })
 </script>
 <template>

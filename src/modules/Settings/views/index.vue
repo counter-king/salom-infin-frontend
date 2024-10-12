@@ -70,7 +70,7 @@ const changeLanguage = () => {
     {
       icon: DocumentTextIcon,
       link: 'ShortDescriptionsIndex',
-      title: 'Краткое описание',
+      title: 'short-description',
       permission: 'settings-short-descriptions-list'
     },
     // profile.routes,

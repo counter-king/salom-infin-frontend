@@ -49,15 +49,15 @@ const daySelect = async (value) => {
       />
 
       <div class="mt-3 pt-3 border-t border-greyscale-200">
-        <h1>Cumque fugiat, magnam?</h1>
-        <h1>Earum laudantium, sequi.</h1>
+        <!-- <h1>Cumque fugiat, magnam?</h1> -->
+        <!-- <h1>Earum laudantium, sequi.</h1> -->
       </div>
 
 
-      <div class="mt-3 pt-3 border-t border-greyscale-200">
+      <!-- <div class="mt-3 pt-3 border-t border-greyscale-200">
         <h1>Dignissimos, mollitia, quis.</h1>
         <h1>Labore, libero, officiis.</h1>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

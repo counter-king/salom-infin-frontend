@@ -66,7 +66,7 @@ const items = ref([
         label: 'create-resolutions',
         icon: AddCircleLinearIcon,
         command: () => props.isResolutionSigned
-          ? dispatchNotify(null, 'Сначало отмените подпись', COLOR_TYPES.SUCCESS)
+          ? dispatchNotify(null, t('first-cancel-sign'), COLOR_TYPES.SUCCESS)
           : createResolutionDialog.value = true
       }
     ]
@@ -173,7 +173,7 @@ const deleteResolution = async (text) => {
               <template v-if="!props.isResolutionSigned">
                 <button
                   v-tooltip.top="{
-                    value: `<h4 class='text-xs text-white -my-1'>Изменить</h4>`,
+                    value: `<h4 class='text-xs text-white -my-1'>${t('edit')}</h4>`,
                     escape: true,
                     autoHide: false
                   }"
@@ -185,7 +185,7 @@ const deleteResolution = async (text) => {
 
                 <button
                   v-tooltip.top="{
-                    value: `<h4 class='text-xs text-white -my-1'>Удалить</h4>`,
+                    value: `<h4 class='text-xs text-white -my-1'>${t('delete')}</h4>`,
                     escape: true,
                     autoHide: false
                   }"
@@ -199,7 +199,7 @@ const deleteResolution = async (text) => {
               <template v-else>
                 <button
                   v-tooltip.top="{
-                    value: `<h4 class='text-xs text-white -my-1'>Просмотр</h4>`,
+                    value: `<h4 class='text-xs text-white -my-1'>${t('preview-text')}</h4>`,
                     escape: true,
                     autoHide: false
                   }"

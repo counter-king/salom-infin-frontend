@@ -1,6 +1,9 @@
 <script setup>
 // Core
 import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+// Composable
+const { t } = useI18n()
 // Components
 import { ResolutionDownload } from '@/components/Resolution'
 // Utils
@@ -50,16 +53,16 @@ onMounted(() => {
 
             <p class="text-greyscale-500 mr-1">
               <template v-if="item.is_controller">
-                Контролирующий
+                {{ t('controller') }}
               </template>
 
               <template v-else>
                 <template v-if="item.is_responsible">
-                  Исполнитель
+                  {{ t('executor') }}
                 </template>
 
                 <template v-else>
-                  Соисполнитель
+                  {{ t('co-executor') }}
                 </template>
               </template>
             </p>
@@ -67,8 +70,8 @@ onMounted(() => {
         </template>
 
         <li class="flex font-semibold">
-          <p class="text-greyscale-500 mr-1">Срок исполнения:</p>
-          <span>{{ props.resolution.deadline ? props.resolution.deadline : 'Без срока исполнений' }}</span>
+          <p class="text-greyscale-500 mr-1">{{ t('deadline') }}:</p>
+          <span>{{ props.resolution.deadline ? props.resolution.deadline : t('without-deadline') }}</span>
         </li>
       </ul>
 
@@ -97,15 +100,15 @@ onMounted(() => {
 
   <ul class="text-greyscale-500 text-sm mt-3">
     <li class="flex font-semibold mb-1">
-      <p class="text-primary-900 mr-1">Рег. номер:</p>
+      <p class="text-primary-900 mr-1">{{ t('reg-number') }}:</p>
       <span>{{ props.resolution.register_number }}</span>
     </li>
     <li class="flex font-semibold mb-1">
-      <p class="text-primary-900 mr-1">Рег. дата:</p>
+      <p class="text-primary-900 mr-1">{{ t('reg-date') }}:</p>
       <span>{{ formatDate(props.resolution.register_date) }}</span>
     </li>
     <li class="flex font-semibold">
-      <p class="text-primary-900 mr-1">Дата. подписания:</p>
+      <p class="text-primary-900 mr-1">{{ t('sign-date') }}:</p>
       <span>{{ props.resolution.receipt_date ? formatDateHour(props.resolution.receipt_date) : 'Еще не подписан' }}</span>
     </li>
   </ul>

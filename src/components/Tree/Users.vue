@@ -76,10 +76,10 @@ const props = defineProps({
                   >
                     {{
                       !!reviewer.read_time === true && (reviewer.status?.id === STATUS_TYPES.TODO || reviewer.status?.id === STATUS_TYPES.IN_PROGRESS)
-                        ? 'Ознакомлен'
+                        ? t('approved')
                         : !!reviewer.read_time === true && reviewer.status?.id === STATUS_TYPES.DONE
-                          ? 'Выполнен'
-                          : 'Еще не ознакомлен'
+                          ? t('done')
+                          : t('not-approved')
                     }}
                   </h1>
 
@@ -103,7 +103,7 @@ const props = defineProps({
 
                   <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-full"></div>
 
-                  <h1 class="font-medium text-greyscale-500">11-59</h1>
+                  <h1 class="font-medium text-greyscale-500">{{ reviewer.user?.cisco }}</h1>
                 </div>
               </div>
             </div>
@@ -163,7 +163,7 @@ const props = defineProps({
           >
             <template #header>
               <div class="flex items-center gap-2 w-full">
-                <h1 class="text-sm font-semibold text-greyscale-500">Резолюция</h1>
+                <h1 class="text-sm font-semibold text-greyscale-500">{{ t('resolution') }}</h1>
 
 <!--                <div class="flex items-center justify-center bg-greyscale-50 w-6 h-5 rounded-[6px] p-1">-->
 <!--                  <span class="text-xs font-semibold text-greyscale-500">2</span>-->

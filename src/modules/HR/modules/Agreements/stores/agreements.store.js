@@ -34,7 +34,7 @@ export const useAgreementsStore = defineStore('agreements-store', {
         active: true
       },
       {
-        header: 'Дата создание',
+        header: 'created-date',
         field: 'created_date',
         active: true
       },
@@ -92,7 +92,7 @@ export const useAgreementsStore = defineStore('agreements-store', {
         active: true
       },
       {
-        header: 'Дата создание',
+        header: 'created-date',
         field: 'created_date',
         active: true
       }

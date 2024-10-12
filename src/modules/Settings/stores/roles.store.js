@@ -28,7 +28,7 @@ export const useRolesStore = defineStore('roles-store', {
         active: true
       },
       {
-        header: 'Дата создание',
+        header: 'created-date',
         field: 'created_date',
         active: true
       },

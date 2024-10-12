@@ -7,7 +7,7 @@ const { t } = useI18n()
 const props = defineProps({
   title: {
     type: String,
-    default: 'Написать заявление'
+    default: 'write-application'
   }
 })
 </script>

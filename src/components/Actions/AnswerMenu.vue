@@ -1,31 +1,41 @@
 <script setup>
 // Core
-import { ref, unref } from 'vue'
+import { ref, unref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 // Components
 import { ArrowRightDownIcon, ArrowRightUpIcon, AltArrowDownIcon } from '@/components/Icons'
 // Composable
 const router = useRouter()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 // Reactive
 const menuRef = ref(null)
-const items = ref([
-  {
-    label: t('inner'),
-    icon: ArrowRightDownIcon,
-    command: () => router.replace({
-      name: 'DashboardIndex'
-    })
+const items = ref([])
+// Watch
+watch(
+  () => locale.value,
+  () => {
+    items.value = [
+      {
+        label: t('inner'),
+        icon: ArrowRightDownIcon,
+        command: () => router.replace({
+          name: 'DashboardIndex'
+        })
+      },
+      {
+        label: t('outgoing'),
+        icon: ArrowRightUpIcon,
+        command: () => router.replace({
+          name: 'DashboardIndex'
+        })
+      },
+    ]
   },
   {
-    label: t('outgoing'),
-    icon: ArrowRightUpIcon,
-    command: () => router.replace({
-      name: 'DashboardIndex'
-    })
-  },
-])
+    immediate: true
+  }
+)
 // Methods
 const toggle = (event) => {
   const _menuRef = unref(menuRef)

@@ -1,5 +1,6 @@
 <script setup>
 // Core
+import { useI18n } from 'vue-i18n'
 import { useVuelidate } from '@vuelidate/core'
 import { helpers, required } from '@vuelidate/validators'
 // Stores
@@ -12,6 +13,8 @@ import { PriorityChip } from '@/components/Chips'
 import { isObject } from '@/utils'
 // import { replaceWithNumbers } from '@/utils/regex'
 import { formatDateReverse } from '@/utils/formatDate'
+// Composable
+const { t } = useI18n()
 // Non-reactive
 const rules = {
   register_number: {
@@ -93,7 +96,7 @@ defineExpose({ $v })
   <div class="incoming-form-view space-y-4">
     <div class="shadow-block border-[0.095rem] border-greyscale-200 rounded-2xl overflow-hidden">
       <div class="bg-greyscale-50 border-b px-5 py-3">
-        <h1 class="text-base font-semibold text-greyscale-900">Основное</h1>
+        <h1 class="text-base font-semibold text-greyscale-900">{{ t('commons') }}</h1>
       </div>
 
       <div class="px-5 py-3">
@@ -192,7 +195,7 @@ defineExpose({ $v })
 
     <div class="shadow-block border-[0.095rem] border-greyscale-200 rounded-2xl overflow-hidden">
       <div class="bg-greyscale-50 border-b px-5 py-3">
-        <h1 class="text-base font-semibold text-greyscale-900">От кого</h1>
+        <h1 class="text-base font-semibold text-greyscale-900">{{ t('from-whom') }}</h1>
       </div>
 
       <div class="px-5 py-3">
@@ -242,7 +245,7 @@ defineExpose({ $v })
 
     <div class="shadow-block border-[0.095rem] border-greyscale-200 rounded-2xl overflow-hidden">
       <div class="bg-greyscale-50 border-b px-5 py-3">
-        <h1 class="text-base font-semibold text-greyscale-900">Кому</h1>
+        <h1 class="text-base font-semibold text-greyscale-900">{{ t('whom') }}</h1>
       </div>
 
       <div class="px-5 py-3">

@@ -96,7 +96,7 @@ onMounted(async () => {
 
       <empty
         v-else class="h-[calc(100vh-255px)]"
-        title="Здесь пока нет информации!"
+        title="empty-text-1"
       />
     </div>
   </template>

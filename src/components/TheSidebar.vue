@@ -1,6 +1,7 @@
 <script setup>
 // Core
 import { watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 // Components
 import { AltArrowLeftIcon } from '@/components/Icons'
@@ -8,6 +9,7 @@ import { AltArrowLeftIcon } from '@/components/Icons'
 import { useUserPermissionStore } from '../stores/user-permissions.store'
 import { useNavigationStore } from '@/stores/navigation.store'
 // Composable
+const { t } = useI18n()
 const route = useRoute()
 const userPermissionStore = useUserPermissionStore()
 const navigationStore = useNavigationStore()
@@ -66,7 +68,7 @@ watch(
     <div class="h-full overflow-y-auto py-6 px-4">
       <template v-for="menu in props.menus">
         <template v-if="menu.prefix">
-          <span class="block truncate font-medium text-sm text-gray-4 mb-3">{{ menu.title }}</span>
+          <span class="block truncate font-medium text-sm text-gray-4 mb-3">{{ t(menu.title) }}</span>
         </template>
 
         <template v-else>
@@ -77,7 +79,7 @@ watch(
               :class="{ 'pointer-events-none' : menu.link === route.name }"
               v-tooltip="navigationStore.sidebarCollapse
                 ? {
-                    value: `<h4 class='text-xs text-white -my-1'>${menu.title}</h4>`,
+                    value: `<h4 class='text-xs text-white -my-1'>${t(menu.title)}</h4>`,
                     escape: true,
                     autoHide: false
                   }
@@ -90,7 +92,7 @@ watch(
                 class="text-gray-1 transition-all duration-[400ms] group-hover:text-primary-500"
               />
 
-              <span class="flex-1 truncate mx-3">{{ menu.title }}</span>
+              <span class="flex-1 truncate mx-3">{{ t(menu.title) }}</span>
 
               <template v-if="menu.count">
                 <div class="badge-count flex items-center justify-center w-5 h-5 rounded-full bg-critic-500 text-[10px] font-semibold text-white ml-auto">{{ menu.count }}</div>

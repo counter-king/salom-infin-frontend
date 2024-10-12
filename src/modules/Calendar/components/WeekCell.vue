@@ -2,12 +2,18 @@
 // Core
 import { computed, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import dayjs from 'dayjs'
 import ru from 'dayjs/locale/ru'
+import uz from 'dayjs/locale/uz-latn'
 // Components
 import { AltArrowLeftIcon, AltArrowRightIcon } from '@/components/Icons'
 // Enums
-import { CALENDAR_TYPES, WEEK_DAYS } from '../enums'
+import { CALENDAR_TYPES, WEEK_DAYS, WEEK_DAYS_UZ } from '../enums'
+// Composable
+const route = useRoute()
+const router = useRouter()
+const { t, locale } = useI18n()
 // Macros
 const props = defineProps({
   type: {
@@ -21,8 +27,6 @@ const props = defineProps({
 // Inject
 const { date } = inject('calendar')
 // Computed
-const route = useRoute()
-const router = useRouter()
 const dateCopy = computed(() => new Date(
   date.value.getFullYear(),
   date.value.getMonth(),
@@ -49,6 +53,7 @@ const gridClass = computed(() => {
     'grid-header-week grid-cols-[90px_1fr_1fr_1fr_1fr_1fr_1fr_1fr]': props.type === CALENDAR_TYPES.WEEKS
   }
 })
+const localeWeekDays = computed(() => locale.value === 'uz' ? WEEK_DAYS_UZ : WEEK_DAYS)
 // Methods
 const nextWeek = async () => {
   let next = dayjs(date.value).add(1, 'week')
@@ -83,8 +88,12 @@ const prevWeek = async () => {
 
 	    <div class="flex items-center px-3">
 		    <h1 class="font-bold text-lg text-primary-900 capitalize">
-          {{ dayjs(date).locale('ru').format('D-MMMM, YYYY') }}
-          <span class="lowercase">год</span>
+          {{
+            dayjs(date)
+            .locale(locale === 'uz' ? uz : ru)
+            .format('D-MMMM, YYYY')
+          }}
+          <span class="lowercase">{{ t('year') }}</span>
         </h1>
 	    </div>
     </template>
@@ -93,7 +102,7 @@ const prevWeek = async () => {
       <div class="flex items-center justify-center gap-2 h-[88px] border-r border-greyscale-200">
         <div
           v-tooltip.top="{
-            value: `<h4 class='text-xs text-white -my-1'>Назад</h4>`,
+            value: `<h4 class='text-xs text-white -my-1'>${locale === 'uz' ? 'Ortga' : 'Назад'}</h4>`,
             escape: true,
             autoHide: false
           }"
@@ -107,7 +116,7 @@ const prevWeek = async () => {
 
         <div
           v-tooltip.top="{
-            value: `<h4 class='text-xs text-white -my-1'>Вперед</h4>`,
+            value: `<h4 class='text-xs text-white -my-1'>${locale === 'uz' ? 'Oldinga' : 'Вперед'}</h4>`,
             escape: true,
             autoHide: false
           }"
@@ -136,7 +145,11 @@ const prevWeek = async () => {
               class="text-sm font-medium capitalize text-gray-2"
               :class="{ 'text-white': week.isDateCurrent }"
             >
-              {{ dayjs(week.date).locale(ru).format('dd') }}
+              {{
+                dayjs(week.date)
+                .locale(locale === 'uz' ? uz : ru)
+                .format('dd')
+              }}
             </span>
           </div>
         </div>
@@ -144,7 +157,7 @@ const prevWeek = async () => {
     </template>
 
     <template v-else>
-      <template v-for="week in WEEK_DAYS">
+      <template v-for="week in localeWeekDays">
         <div class="flex items-center justify-center h-16 [&:not(:last-child)]:border-r border-greyscale-200">
           <span class="text-sm font-medium text-gray-2">{{ week }}</span>
         </div>

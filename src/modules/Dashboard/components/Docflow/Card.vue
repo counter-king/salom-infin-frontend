@@ -1,6 +1,8 @@
 <script setup>
-// Enums
-import { STATUS_TYPES } from '@/enums'
+// Core
+import { useI18n } from 'vue-i18n'
+// Composable
+const { t } = useI18n()
 // Macros
 const props = defineProps({
   list: {
@@ -28,9 +30,6 @@ const props = defineProps({
         :to="{
           name: item.route.name,
           query: props.type === 'new' ? item.route.new.query : props.type === 'in-progress' ? item.route.inProgress.query : null
-          // query: {
-          //   status: props.type === 'new' ? STATUS_TYPES.TODO : props.type === 'in-progress' ? STATUS_TYPES.IN_PROGRESS : undefined
-          // }
         }"
         class="flex gap-3 bg-white shadow-button rounded-[10px] p-4"
       >
@@ -43,7 +42,7 @@ const props = defineProps({
         </div>
 
         <div class="flex-1">
-          <h1 class="text-sm text-greyscale-900 font-semibold">{{ item.name }}</h1>
+          <h1 class="text-sm text-greyscale-900 font-semibold">{{ t(item.name) }}</h1>
           <p class="text-greyscale-500 font-medium">{{ counts[item.key] }}</p>
         </div>
       </router-link>

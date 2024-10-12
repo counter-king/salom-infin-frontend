@@ -27,13 +27,13 @@ import { RESOLUTION_TYPES, RESOLUTION_CREATE_TYPES, COLOR_TYPES } from '@/enums'
 export const useBoxesCommonStore = defineStore('boxes-common', {
   state: () => ({
     routes: {
-      title: 'Ящики',
+      title: 'boxes',
       icon: InboxUnreadIcon,
       link: 'BoxesIndex',
       children: [
         // На рассмотрении
         {
-          title: 'На рассмотрении',
+          title: 'for-review',
           icon: History2Icon,
           link: 'ReviewIndex',
           children: [],
@@ -43,7 +43,7 @@ export const useBoxesCommonStore = defineStore('boxes-common', {
         },
         // Моё поручение
         {
-          title: 'Мои поручение',
+          title: 'my-assignment',
           icon: ArrowRightDownIcon,
           link: 'AssignmentIndex',
           children: [],
@@ -53,7 +53,7 @@ export const useBoxesCommonStore = defineStore('boxes-common', {
         },
         // На подпись
         {
-          title: 'На подпись',
+          title: 'for_signing',
           icon: Pen2Icon,
           link: 'SignIndex',
           children: [],
@@ -63,7 +63,7 @@ export const useBoxesCommonStore = defineStore('boxes-common', {
         },
         // На согласовании
         {
-          title: 'На согласовании',
+          title: 'for-approval',
           icon: EyeIcon,
           link: 'ApprovalIndex',
           children: [],
@@ -73,7 +73,7 @@ export const useBoxesCommonStore = defineStore('boxes-common', {
         },
         // На контроль
         {
-          title: 'На контроль',
+          title: 'to-control',
           icon: CheckCircleIcon,
           link: 'ControlIndex',
           children: [],

@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref, unref, onMounted } from 'vue'
+import { ref, unref, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 // Components
@@ -10,28 +10,38 @@ import WidgetWrapper from '../WidgetWrapper.vue'
 // Composable
 const route = useRoute()
 const router = useRouter()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 // Reactive
 const menuRef = ref(null)
-const items = ref([
-  {
-    label: t('last-seven-days'),
-    command: () => itemSelect('last-seven-days')
-  },
-  {
-    label: t('last-two-weeks'),
-    command: () => itemSelect('last-two-weeks')
-  },
-  {
-    label: t('this-month'),
-    command: () => itemSelect('this-month')
-  },
-  {
-    label: t('last-month'),
-    command: () => itemSelect('last-month')
-  },
-])
+const items = ref([])
 const itemSelected = ref('last-seven-days')
+// Watch
+watch(
+  () => locale.value,
+  () => {
+    items.value = [
+      {
+        label: t('last-seven-days'),
+        command: () => itemSelect('last-seven-days')
+      },
+      {
+        label: t('last-two-weeks'),
+        command: () => itemSelect('last-two-weeks')
+      },
+      {
+        label: t('this-month'),
+        command: () => itemSelect('this-month')
+      },
+      {
+        label: t('last-month'),
+        command: () => itemSelect('last-month')
+      },
+    ]
+  },
+  {
+    immediate: true
+  }
+)
 // Hooks
 onMounted(async () => {
   if(route.query.hasOwnProperty('task')) {
@@ -117,7 +127,7 @@ const toggle = (event) => {
       </div>
 
       <router-link to="/" class="flex items-center justify-center gap-1 h-6 text-sm mt-2">
-        <span class="font-semibold text-primary-500 leading-[1]">Все задачи</span>
+        <span class="font-semibold text-primary-500 leading-[1]">{{ t('all-tasks') }}</span>
 
         <base-icon
           name="AltArrowLeftIcon"

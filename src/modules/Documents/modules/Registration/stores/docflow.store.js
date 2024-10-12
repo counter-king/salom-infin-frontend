@@ -20,7 +20,7 @@ import { COLOR_TYPES, JOURNAL, JOURNAL_CODES } from '@/enums'
 export const useDocFlowStore = defineStore("docFlowStore", {
   state: () => ({
     routes: {
-      title: 'Регистрация',
+      title: 'registration',
       icon: ClipboardAddIcon,
       link: 'RegistrationIndex',
       children: [],

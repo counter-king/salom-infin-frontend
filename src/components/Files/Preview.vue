@@ -14,8 +14,8 @@ const props = defineProps({
 // Computed
 const extension = computed(
   () => isObject(props.file)
-    ? props.file.name.split(".").pop()
-    : props.name.split(".").pop()
+    ? props.file.url.split(".").pop()
+    : props.url.split(".").pop()
 )
 </script>
 

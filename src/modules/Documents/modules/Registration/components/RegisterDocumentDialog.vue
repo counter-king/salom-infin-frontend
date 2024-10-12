@@ -185,10 +185,21 @@ watch(() => docFlowStore.documentMenuType.name, (value) => {
                 </div>
 
                 <div class="flex items-center">
-                  <span class="text-primary-500 block mr-1">Перетащите</span> и <span class="text-primary-500 block mx-1">загрузите</span> свой файл
+                  <i18n-t keypath="upload-text.text" tag="div" class="flex items-center gap-1">
+                    <template v-slot:move>
+                      <span class="text-primary-500 block">
+                        {{ t('upload-text.move') }}
+                      </span>
+                    </template>
+                    <template v-slot:download>
+                      <span class="text-primary-500 block">
+                        {{ t('upload-text.download') }}
+                      </span>
+                    </template>
+                  </i18n-t>
                 </div>
 
-                <span class="block text-center text-greyscale-400 font-regular mt-1">Faylning maksimal hajmi 15 MB</span>
+                <span class="block text-center text-greyscale-400 font-regular mt-1">{{ t('upload-text-1') }}</span>
               </div>
             </template>
           </base-file-upload>

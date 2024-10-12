@@ -500,7 +500,7 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
                               @click="calendarStore.actionTypesMenuSelected.name = ACTION_FORM_TYPES.EVENT"
                             >
                               <div class="w-3 h-3 rounded-full bg-info-200"></div>
-                              <span class="text-sm font-semibold text-primary-900">Мероприятия</span>
+                              <span class="text-sm font-semibold text-primary-900">{{ t('events') }}</span>
                             </div>
 
                             <div
@@ -509,7 +509,7 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
                               @click="calendarStore.actionTypesMenuSelected.name = ACTION_FORM_TYPES.TASK"
                             >
                               <div class="w-3 h-3 rounded-full bg-success-200"></div>
-                              <span class="text-sm font-semibold text-primary-900">Моя задача</span>
+                              <span class="text-sm font-semibold text-primary-900">{{ t('tasks') }}</span>
                             </div>
                           </div>
                         </template>

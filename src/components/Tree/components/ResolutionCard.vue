@@ -70,20 +70,20 @@ const watchResolution = async (event, item) => {
                 <!-- Резолюция не подписан -->
                 <template v-if="!item.is_verified">
                   <status-chip :status="{}">
-                    Резолюция не подписан
+                    {{ t('resolution-not-signed') }}
                   </status-chip>
                 </template>
 
                 <template v-else>
                   <status-chip :status="{ id: STATUS_TYPES.DONE }">
-                    Резолюция подписана
+                    {{ t('resolution-signed') }}
                   </status-chip>
                 </template>
               </template>
             </div>
 
             <div class="flex items-center gap-2 text-sm leading-[20px]">
-              <h1 class="font-semibold text-primary-900">Срок исполнения</h1>
+              <h1 class="font-semibold text-primary-900">{{ t('deadline') }}</h1>
 
               <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-full"></div>
 
@@ -92,7 +92,7 @@ const watchResolution = async (event, item) => {
               </template>
 
               <template v-else>
-                <h1 class="font-medium text-greyscale-500">Без срока исполнений</h1>
+                <h1 class="font-medium text-greyscale-500">{{ t('without-deadline') }}</h1>
               </template>
             </div>
           </div>
@@ -124,7 +124,7 @@ const watchResolution = async (event, item) => {
       >
         <template #header>
           <div class="flex items-center gap-2 w-full">
-            <h1 class="text-sm font-semibold text-greyscale-500">Исполнители</h1>
+            <h1 class="text-sm font-semibold text-greyscale-500">{{ t('performers') }}</h1>
 
             <div class="flex items-center justify-center bg-greyscale-50 w-6 h-5 rounded-[6px] p-1">
               <span class="text-xs font-semibold text-greyscale-500">{{ item.assignees && item.assignees.length }}</span>
@@ -138,7 +138,7 @@ const watchResolution = async (event, item) => {
               class="text-sm font-semibold text-greyscale-500"
               @click="watchResolution($event, item)"
             >
-	            Просмотр резолюция
+	            {{ t('resolution-preview') }}
             </h1>
           </div>
         </template>

@@ -1,6 +1,7 @@
 <script setup>
 // Core
-import { ref, toRaw, unref, onMounted } from 'vue'
+import { ref, toRaw, unref, watch, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import Listbox from 'primevue/listbox'
 // Components
 import {
@@ -19,190 +20,202 @@ import { dispatchNotify } from '@/utils/notify'
 // Enums
 import { COLOR_TYPES } from '@/enums'
 import { DASHBOARD_DOC_FLOW_SETTINGS } from '../../enums'
+// Composable
+const { t, locale } = useI18n()
 // Macros
 const emit = defineEmits(['emit:change'])
 // Reactive
 const menuRef = ref(null)
-const options = ref([
-  {
-    name: 'На рассмотрение',
-    icon: ClockCircleBoldIcon,
-    avatarColor: 'bg-success-50',
-    iconColor: 'text-success-500',
-    status: true,
-    key: 'for_review',
-    route: {
-      name: 'ReviewIndex',
-      new: {
-        query: {
-          is_read: 'False'
-        }
-      },
-      inProgress: {
-        query: {
-          status_type: 'in_progress'
-        }
-      }
-    },
-    order: 1
-  },
-  {
-    name: 'Поручения',
-    icon: RoundArrowRightDownBoldIcon,
-    avatarColor: 'bg-primary-50',
-    iconColor: 'text-primary-500',
-    status: true,
-    key: 'assignments',
-    route: {
-      name: 'AssignmentIndex',
-      new: {
-        query: {
-          is_read: 'False'
-        }
-      },
-      inProgress: {
-        query: {
-          status_type: 'in_progress'
-        }
-      }
-    },
-    order: 2
-  },
-  {
-    name: 'На подпись',
-    icon: PenNewRoundBoldIcon,
-    avatarColor: 'bg-info-50',
-    iconColor: 'text-info-500',
-    status: true,
-    key: 'for_signature',
-    route: {
-      name: 'SignIndex',
-      new: {
-        query: {
-          approved: 'none'
-        }
-      },
-      inProgress: {
-        query: {
-          is_read: false
-        }
-      }
-    },
-    order: 3
-  },
-  {
-    name: 'На согласование',
-    icon: FileCheckBoldIcon,
-    avatarColor: 'bg-primary-50',
-    iconColor: 'text-primary-500',
-    status: true,
-    key: 'for_approval',
-    route: {
-      name: 'ApprovalIndex',
-      new: {
-        query: {
-          signed: 'none'
-        }
-      },
-      inProgress: {
-        query: {
-          signed: false
-        }
-      }
-    },
-    order: 4
-  },
-  {
-    name: 'На обзоре',
-    icon: CursorSquareBoldIcon,
-    avatarColor: 'bg-warning-50',
-    iconColor: 'text-warning-500',
-    status: true,
-    key: null,
-    route: {
-      name: 'ReviewIndex',
-      new: {
-        query: {
-          signed: 'none'
-        }
-      },
-      inProgress: {
-        query: {
-          signed: false
-        }
-      }
-    },
-    order: 5
-  },
-  {
-    name: 'Не выполнено',
-    icon: CloseCircleBoldIcon,
-    avatarColor: 'bg-critic-50',
-    iconColor: 'text-critic-500',
-    status: true,
-    key: null,
-    route: {
-      name: 'AssignmentIndex',
-      new: {
-        query: {
-          signed: 'none'
-        }
-      },
-      inProgress: {
-        query: {
-          signed: false
-        }
-      }
-    },
-    order: 6
-  },
-  {
-    name: 'Просроченный',
-    icon: CalendarDateBoldIcon,
-    avatarColor: 'bg-greyscale-50',
-    iconColor: 'text-greyscale-500',
-    status: true,
-    key: null,
-    route: {
-      name: 'AssignmentIndex',
-      new: {
-        query: {
-          signed: 'none'
-        }
-      },
-      inProgress: {
-        query: {
-          signed: false
-        }
-      }
-    },
-    order: 7
-  },
-  {
-    name: 'Для подтверждения',
-    icon: FolderFavouriteStarBoldIcon,
-    avatarColor: 'bg-success-50',
-    iconColor: 'text-success-500',
-    status: true,
-    key: null,
-    route: {
-      name: 'AssignmentIndex',
-      new: {
-        query: {
-          signed: 'none'
-        }
-      },
-      inProgress: {
-        query: {
-          signed: false
-        }
-      }
-    },
-    order: 8
-  },
-])
+const options = ref([])
 const selected = ref([])
 const active = ref([])
+// Watch
+watch(
+  () => locale.value,
+  () => {
+    options.value = [
+      {
+        name: 'reviewers',
+        icon: ClockCircleBoldIcon,
+        avatarColor: 'bg-success-50',
+        iconColor: 'text-success-500',
+        status: true,
+        key: 'for_review',
+        route: {
+          name: 'ReviewIndex',
+          new: {
+            query: {
+              is_read: 'False'
+            }
+          },
+          inProgress: {
+            query: {
+              status_type: 'in_progress'
+            }
+          }
+        },
+        order: 1
+      },
+      {
+        name: 'assignment',
+        icon: RoundArrowRightDownBoldIcon,
+        avatarColor: 'bg-primary-50',
+        iconColor: 'text-primary-500',
+        status: true,
+        key: 'assignments',
+        route: {
+          name: 'AssignmentIndex',
+          new: {
+            query: {
+              is_read: 'False'
+            }
+          },
+          inProgress: {
+            query: {
+              status_type: 'in_progress'
+            }
+          }
+        },
+        order: 2
+      },
+      {
+        name: 'for_signing',
+        icon: PenNewRoundBoldIcon,
+        avatarColor: 'bg-info-50',
+        iconColor: 'text-info-500',
+        status: true,
+        key: 'for_signature',
+        route: {
+          name: 'SignIndex',
+          new: {
+            query: {
+              approved: 'none'
+            }
+          },
+          inProgress: {
+            query: {
+              is_read: false
+            }
+          }
+        },
+        order: 3
+      },
+      {
+        name: 'for-approval',
+        icon: FileCheckBoldIcon,
+        avatarColor: 'bg-primary-50',
+        iconColor: 'text-primary-500',
+        status: true,
+        key: 'for_approval',
+        route: {
+          name: 'ApprovalIndex',
+          new: {
+            query: {
+              signed: 'none'
+            }
+          },
+          inProgress: {
+            query: {
+              signed: false
+            }
+          }
+        },
+        order: 4
+      },
+      {
+        name: 'on-review',
+        icon: CursorSquareBoldIcon,
+        avatarColor: 'bg-warning-50',
+        iconColor: 'text-warning-500',
+        status: true,
+        key: null,
+        route: {
+          name: 'ReviewIndex',
+          new: {
+            query: {
+              signed: 'none'
+            }
+          },
+          inProgress: {
+            query: {
+              signed: false
+            }
+          }
+        },
+        order: 5
+      },
+      {
+        name: 'not-fulfilled',
+        icon: CloseCircleBoldIcon,
+        avatarColor: 'bg-critic-50',
+        iconColor: 'text-critic-500',
+        status: true,
+        key: null,
+        route: {
+          name: 'AssignmentIndex',
+          new: {
+            query: {
+              signed: 'none'
+            }
+          },
+          inProgress: {
+            query: {
+              signed: false
+            }
+          }
+        },
+        order: 6
+      },
+      {
+        name: 'expired',
+        icon: CalendarDateBoldIcon,
+        avatarColor: 'bg-greyscale-50',
+        iconColor: 'text-greyscale-500',
+        status: true,
+        key: null,
+        route: {
+          name: 'AssignmentIndex',
+          new: {
+            query: {
+              signed: 'none'
+            }
+          },
+          inProgress: {
+            query: {
+              signed: false
+            }
+          }
+        },
+        order: 7
+      },
+      {
+        name: 'to-confirm',
+        icon: FolderFavouriteStarBoldIcon,
+        avatarColor: 'bg-success-50',
+        iconColor: 'text-success-500',
+        status: true,
+        key: null,
+        route: {
+          name: 'AssignmentIndex',
+          new: {
+            query: {
+              signed: 'none'
+            }
+          },
+          inProgress: {
+            query: {
+              signed: false
+            }
+          }
+        },
+        order: 8
+      },
+    ]
+  },
+  {
+    immediate: true
+  }
+)
 // Methods
 const handleSettings = ({ value }) => {
   active.value = options.value.map(setting => ({
@@ -232,7 +245,7 @@ const callback = (state, event) => {
 
   dispatchNotify(
     null,
-    state === 'save' ? 'Фильтр сохранен' : 'Фильтр сброшен',
+    state === 'save' ? t('filter-saved') : t('filter-reset'),
     COLOR_TYPES.SUCCESS
   )
   toggle(event)
@@ -264,7 +277,7 @@ onMounted(() => {
     rounded
     shadow
     size="small"
-    label="Настроить"
+    label="tune"
     :icon-left="SettingsMinimalisticIcon"
     button-class="bg-transparent text-greyscale-500 !text-sm border-none shadow-none !rounded-[6px] !py-1 !px-2 hover:bg-greyscale-50"
     @click="toggle"
@@ -306,7 +319,7 @@ onMounted(() => {
               <div class="unchecked-icon w-5 h-5 border border-greyscale-200 rounded-full"></div>
             </div>
 
-            <span class="flex-1 text-greyscale-900 font-medium">{{ option?.name }}</span>
+            <span class="flex-1 text-greyscale-900 font-medium">{{ t(option?.name) }}</span>
           </div>
         </template>
       </Listbox>

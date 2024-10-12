@@ -1,34 +1,47 @@
 <script setup>
 // Core
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 // Components
 import TheNavigation from '@/components/TheNavigation.vue'
 // Enums
 import { CALENDAR_TYPES } from '../enums'
+// Composable
+const { t, locale } = useI18n()
 // Reactive
-const routes = ref([
-  {
-    title: 'День',
-    link: 'Calendar',
-    params: {
-      type: CALENDAR_TYPES.DAYS
-    }
+const routes = ref([])
+// Watch
+watch(
+  () => locale.value,
+  () => {
+    routes.value = [
+      {
+        title: t('day'),
+        link: 'Calendar',
+        params: {
+          type: CALENDAR_TYPES.DAYS
+        }
+      },
+      {
+        title: t('week'),
+        link: 'Calendar',
+        params: {
+          type: CALENDAR_TYPES.WEEKS
+        }
+      },
+      {
+        title: t('month'),
+        link: 'Calendar',
+        params: {
+          type: CALENDAR_TYPES.MONTHS
+        }
+      },
+    ]
   },
   {
-    title: 'Неделя',
-    link: 'Calendar',
-    params: {
-      type: CALENDAR_TYPES.WEEKS
-    }
-  },
-  {
-    title: 'Месяц',
-    link: 'Calendar',
-    params: {
-      type: CALENDAR_TYPES.MONTHS
-    }
-  },
-])
+    immediate: true
+  }
+)
 </script>
 
 <template>

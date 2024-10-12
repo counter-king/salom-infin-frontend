@@ -4,7 +4,7 @@ import uz from "./locales/uz.json"
 import { getStorageItem } from "@/utils/storage"
 import { LANG } from "@/constants/storage"
 export const SUPPORT_LOCALES = ["uz", "ru"]
-export const CURRENT_LOCALE = "ru"
+export const CURRENT_LOCALE = "uz"
 export const AVAILABLE_LOCALES = [
   {
     label: "Русский",

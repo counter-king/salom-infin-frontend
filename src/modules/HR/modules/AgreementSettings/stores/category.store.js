@@ -22,7 +22,7 @@ export const useAgreementCategory = defineStore('agreements-category', {
         class: 'w-[600px]'
       },
       {
-        header: 'Дата создание',
+        header: 'created-date',
         field: 'created_date',
         active: true,
         class: 'w-[300px]'

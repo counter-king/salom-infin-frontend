@@ -1,6 +1,7 @@
 <script setup>
 // Core
-import { ref, unref, computed } from 'vue'
+import { ref, unref, computed, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 // Components
 import { AltArrowDownIcon } from '@/components/Icons'
 // Store
@@ -8,23 +9,34 @@ import { useCalendarStore } from '../stores/calendar.store'
 // Enums
 import { ACTION_FORM_TYPES } from '../enums'
 // Composable
+const { t, locale } = useI18n()
 const calendarStore = useCalendarStore()
 // Reactive
 const menuRef = ref(null)
-const items = ref([
-  {
-    label: 'Мероприятия',
-    component: ACTION_FORM_TYPES.EVENT,
-    command: () => actionTypesMenu(ACTION_FORM_TYPES.EVENT)
-  },
-  {
-    label: 'Моя задача',
-    component: ACTION_FORM_TYPES.TASK,
-    command: () => actionTypesMenu(ACTION_FORM_TYPES.TASK)
-  }
-])
+const items = ref([])
 // Computed
 const menuActiveText = computed(() => items.value.find(menu => menu.component === calendarStore.actionTypesMenuSelected.name))
+// Watch
+watch(
+  () => locale.value,
+  () => {
+    items.value = [
+      {
+        label: t('events'),
+        component: ACTION_FORM_TYPES.EVENT,
+        command: () => actionTypesMenu(ACTION_FORM_TYPES.EVENT)
+      },
+      {
+        label: t('tasks'),
+        component: ACTION_FORM_TYPES.TASK,
+        command: () => actionTypesMenu(ACTION_FORM_TYPES.TASK)
+      }
+    ]
+  },
+  {
+    immediate: true
+  }
+)
 // Methods
 const toggle = (event) => {
   const _menuRef = unref(menuRef)

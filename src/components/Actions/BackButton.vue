@@ -16,6 +16,7 @@ const router = useRouter()
 <template>
   <base-button
     size="small"
+    label="back"
     :icon-left="AltArrowLeft"
     outlined
     shadow
@@ -24,8 +25,5 @@ const router = useRouter()
     button-class="h-8"
     @click="props.self ? void 0 : router.go(-1)"
   >
-    <template #label>
-      Назад
-    </template>
   </base-button>
 </template>

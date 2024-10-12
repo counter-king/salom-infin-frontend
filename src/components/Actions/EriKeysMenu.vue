@@ -1,37 +1,47 @@
 <script setup>
 // Core
-import { ref, unref } from 'vue'
+import { ref, unref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 // Components
 import { AltArrowDownIcon, KeyMinimalisticIcon } from '@/components/Icons'
 // Composable
-const { t } = useI18n()
+const { t, locale } = useI18n()
 // Macros
 const emit = defineEmits(['emit:sign'])
 // Reactive
 const menuRef = ref(null)
-const items = ref([
-  {
-    label: t('eri-keys'),
-    items: [
+const items = ref([])
+// Watch
+watch(
+  () => locale.value,
+  () => {
+    items.value = [
       {
-        label: 'key #1',
-        icon: KeyMinimalisticIcon,
-        command: () => signDocument()
-      },
-      {
-        label: 'key #2',
-        icon: KeyMinimalisticIcon,
-        command: () => signDocument()
-      },
-      {
-        label: 'key #3',
-        icon: KeyMinimalisticIcon,
-        command: () => signDocument()
+        label: t('eri-keys'),
+        items: [
+          {
+            label: 'key #1',
+            icon: KeyMinimalisticIcon,
+            command: () => signDocument()
+          },
+          {
+            label: 'key #2',
+            icon: KeyMinimalisticIcon,
+            command: () => signDocument()
+          },
+          {
+            label: 'key #3',
+            icon: KeyMinimalisticIcon,
+            command: () => signDocument()
+          }
+        ]
       }
     ]
+  },
+  {
+    immediate: true
   }
-])
+)
 // Methods
 const toggle = (event) => {
   const _menuRef = unref(menuRef)

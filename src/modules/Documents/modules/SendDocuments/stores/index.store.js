@@ -156,12 +156,12 @@ export const useSDStore = defineStore("sd-stores", {
     totalCount: 0,
     headers: [
       {
-        header: "Тип письма",
+        header: "letter-type",
         field: "document_sub_type",
         active: true
       },
       {
-        header: "Дата создание",
+        header: "created-date",
         field: "created_date",
         active: true
       },
@@ -176,7 +176,7 @@ export const useSDStore = defineStore("sd-stores", {
         active: true
       },
       {
-        header: "Подписант",
+        header: "signer",
         field: "signers",
         active: true
       },
@@ -350,12 +350,12 @@ export const useSDStore = defineStore("sd-stores", {
           active: true
         },
         {
-          header: "Тип письма",
+          header: "letter-type",
           field: "document_sub_type",
           active: true
         },
         {
-          header: "Дата создание",
+          header: "created-date",
           field: "created_date",
           active: true
         },
@@ -370,7 +370,7 @@ export const useSDStore = defineStore("sd-stores", {
           active: true
         },
         {
-          header: "Подписант",
+          header: "signer",
           field: "signers",
           active: true
         },

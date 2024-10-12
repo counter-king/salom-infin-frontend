@@ -27,7 +27,7 @@ const current = computed(() => {
 
   if(!active) {
     return {
-      text: 'Не известный приоритет'
+      text: '-'
     }
   }
 

@@ -1,17 +1,17 @@
 <script setup>
 // Core
 import { ref, unref, shallowRef, watch, defineAsyncComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 // Components
 import BaseSpinner from '@/components/UI/BaseSpinner.vue'
 import ActionTypesMenu from './ActionTypesMenu.vue'
 // Stores
-import { useCommonStore } from '@/stores/common'
 import { useCalendarStore } from '../stores/calendar.store'
 // Utils
 import { clearModel } from '@/utils'
 import { EVENT_TYPES, ACTION_FORM_TYPES } from '../enums'
 // Composable
-const commonStore = useCommonStore()
+const { t } = useI18n()
 const calendarStore = useCalendarStore()
 // Reactive
 const sidebarRef = ref(null)
@@ -85,7 +85,7 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
 
       <template v-else>
         <h1 class="text-xl font-semibold text-primary-900">
-          {{ calendarStore.actionTypesMenuSelected.name === ACTION_FORM_TYPES.EVENT ? 'Мероприятия' : 'Моя задача' }}
+          {{ calendarStore.actionTypesMenuSelected.name === ACTION_FORM_TYPES.EVENT ? t('events') : t('tasks') }}
         </h1>
       </template>
     </template>

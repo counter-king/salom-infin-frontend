@@ -1,6 +1,7 @@
 <script setup>
 // Core
 import { ref, provide, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { onClickOutside } from '@vueuse/core'
 import Toolbar from 'primevue/toolbar'
 // Stores
@@ -16,6 +17,7 @@ import Notifications from './Notifications.vue'
 import LanguageDropdown from './LanguageDropdown.vue'
 import UserDropdown from './UserDropdown.vue'
 // Composable
+const { t } = useI18n()
 const themeStore = useThemeStore()
 const userPermissionStore = useUserPermissionStore()
 const authStore = useAuthStore()
@@ -72,7 +74,7 @@ onMounted(() => {
                   class="text-gray-2 transition-all duration-[400ms] group-hover:text-white"
                 />
 
-                {{ menu.title }}
+                {{ t(menu.title) }}
 
                 <template v-if="menu.count">
                   <div class="flex items-center justify-center w-5 h-5 rounded-full bg-critic-500 text-[10px] font-semibold text-white">{{ menu.count }}</div>
@@ -91,7 +93,7 @@ onMounted(() => {
                 class="text-gray-2 transition-all duration-[400ms] group-hover:text-white"
               />
 
-              Настройки
+              {{ t('settings') }}
             </router-link>
           </template>
         </template>

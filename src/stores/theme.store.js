@@ -16,7 +16,7 @@ export const useThemeStore = defineStore("theme", {
     header: [
       // Дашбоард
       {
-        title: 'Дашбоард',
+        title: 'dashboard',
         icon: HomeAngle2Icon,
         link: 'DashboardIndex',
         children: [],
@@ -26,7 +26,7 @@ export const useThemeStore = defineStore("theme", {
       },
       // Календарь
       {
-        title: 'Календарь',
+        title: 'calendar',
         icon: CalendarIcon,
         link: 'CalendarIndex',
         children: [],
@@ -73,7 +73,7 @@ export const useThemeStore = defineStore("theme", {
       },
       // Handbook
       {
-        title: 'Справочник',
+        title: 'handbook',
         icon: NotebookIcon,
         link: 'HandbookIndex',
         children: [],

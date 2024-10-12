@@ -58,7 +58,7 @@ const sendMessage = async (event) => {
       />
 
       <base-button
-        label="Отправить"
+        label="send"
         rounded
         :loading="commentStore.commentSendLoading"
         @click="sendMessage($event)"

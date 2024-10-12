@@ -35,7 +35,7 @@ export const useBoxesSignStore = defineStore("sign-stores", {
         active: true
       },
       {
-        header: "Тип письма",
+        header: "letter-type",
         field: "document_type",
         active: true
       },
@@ -45,17 +45,17 @@ export const useBoxesSignStore = defineStore("sign-stores", {
         active: true
       },
       {
-        header: "Подписант",
+        header: "signer",
         field: "signers",
         active: true
       },
       {
-        header: "Автор",
+        header: "author",
         field: "author",
         active: true
       },
       {
-        header: "Краткое описание",
+        header: "short-description",
         field: "short_description",
         active: true
       },
@@ -80,7 +80,7 @@ export const useBoxesSignStore = defineStore("sign-stores", {
           active: true
         },
         {
-          header: "Тип письма",
+          header: "letter-type",
           field: "document_type",
           active: true
         },
@@ -90,17 +90,17 @@ export const useBoxesSignStore = defineStore("sign-stores", {
           active: true
         },
         {
-          header: "Подписант",
+          header: "signer",
           field: "signers",
           active: true
         },
         {
-          header: "Автор",
+          header: "author",
           field: "author",
           active: true
         },
         {
-          header: "Краткое описание",
+          header: "short-description",
           field: "short_description",
           active: true
         },

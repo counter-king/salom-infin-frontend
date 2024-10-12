@@ -156,12 +156,12 @@ provide('calendar', {
 
 <template>
   <div class="calendar-view flex flex-col flex-1">
-    <action-toolbar title="Календарь" storage-columns-name="asd">
+    <action-toolbar title="calendar" storage-columns-name="asd">
       <template #title-after>
         <base-button
           color="bg-primary-0 text-primary-dark"
           border-color="border-transparent"
-          label="Сегодня"
+          label="today"
           rounded
           shadow
           type="button"

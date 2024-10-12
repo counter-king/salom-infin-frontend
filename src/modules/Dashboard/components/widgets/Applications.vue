@@ -1,7 +1,11 @@
 <script setup>
+// Core
+import { useI18n } from 'vue-i18n'
 // Components
 import WidgetWrapper from '../WidgetWrapper.vue'
 import { AddCircleBoldIcon } from '@/components/Icons'
+// Composable
+const { t } = useI18n()
 // Non-reactive
 const list = [
   'Трудовой отпуск',
@@ -17,7 +21,7 @@ const list = [
   <widget-wrapper>
     <template #header-after>
       <router-link to="/" class="text-primary-500 text-sm font-semibold">
-        Все
+        {{ t('all') }}
       </router-link>
     </template>
 

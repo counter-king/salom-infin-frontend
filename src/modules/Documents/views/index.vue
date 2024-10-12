@@ -1,6 +1,7 @@
 <script setup>
 // Core
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 // Stores
 import { useBoxesCommonStore } from '../modules/Boxes/stores/common.store'
 import { useDocFlowStore } from '../modules/Registration/stores/docflow.store'
@@ -8,27 +9,38 @@ import { useDocFlowStore } from '../modules/Registration/stores/docflow.store'
 import TheSidebar from '@/components/TheSidebar.vue'
 import { ArchiveUpIcon } from '@/components/Icons'
 // Composable
+const { t, locale } = useI18n()
 const boxesStore = useBoxesCommonStore()
 const docFlowStore = useDocFlowStore()
 // Reactive
-const menus = ref([
-  {
-    title: 'Документ',
-    prefix: true
+const menus = ref([])
+// Watch
+watch(
+  () => locale.value,
+  () => {
+    menus.value = [
+      {
+        title: t('document'),
+        prefix: true
+      },
+      // Ящики
+      boxesStore.routes,
+      // Отправка документов
+      {
+        title: t('sending-documents'),
+        icon: ArchiveUpIcon,
+        link: 'SendDocumentsIndex',
+        children: [],
+        permission: 'sending-documents'
+      },
+      // Регистрация
+      docFlowStore.routes
+    ]
   },
-  // Ящики
-  boxesStore.routes,
-  // Отправка документов
   {
-    title: 'Отправка документов',
-    icon: ArchiveUpIcon,
-    link: 'SendDocumentsIndex',
-    children: [],
-    permission: 'sending-documents'
-  },
-  // Регистрация
-  docFlowStore.routes
-])
+    immediate: true
+  }
+)
 </script>
 
 <template>

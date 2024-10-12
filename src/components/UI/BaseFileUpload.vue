@@ -1,6 +1,7 @@
 <script setup>
 // Core
 import {onMounted, ref} from "vue";
+import { useI18n } from 'vue-i18n'
 import axiosConfig from "@/services/axios.config";
 // Components
 import { FilePreview } from '@/components/Files'
@@ -11,6 +12,8 @@ import {
 	RestartIcon,
 	XMarkSolidIcon
 } from '@/components/Icons'
+// Compsable
+const { t } = useI18n()
 
 const fileInput = ref(null);
 const uploadingFiles = ref([]);
@@ -166,17 +169,18 @@ onMounted(() => {
         <div class="flex justify-center items-center w-full text-sm font-semibold select-none">
           <base-iconify :icon="CloudUploadIcon" class="text-primary-500 mr-3" />
 
-          <span class="text-primary-500 block mr-1">
-            Перетащите
-          </span>
-
-          <span class="text-primary-900">или</span>
-
-          <span class="text-primary-500 block mx-1">
-            загрузите
-          </span>
-
-          <span class="text-primary-900">свой файл</span>
+          <i18n-t keypath="upload-text.text" tag="div" class="flex items-center gap-1">
+            <template v-slot:move>
+              <span class="text-primary-500 block">
+                {{ t('upload-text.move') }}
+              </span>
+            </template>
+            <template v-slot:download>
+              <span class="text-primary-500 block">
+                {{ t('upload-text.download') }}
+              </span>
+            </template>
+          </i18n-t>
         </div>
       </slot>
     </div>

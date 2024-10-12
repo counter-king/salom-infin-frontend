@@ -1,11 +1,12 @@
 <script setup>
 // Core
 import { ref, watch, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter, useRoute } from 'vue-router'
 // Stores
 import { useUserPermissionStore } from '../stores/user-permissions.store';
 // Composable
-const router = useRouter()
+const { t } = useI18n()
 const route = useRoute()
 const userPermissionStore = useUserPermissionStore()
 // Macros
@@ -46,7 +47,7 @@ const checkRouteMeta = () => {
                 class="!w-5 !h-5 text-gray-1 transition-all duration-[400ms] group-hover:text-primary-900"
               />
 
-              {{ menu.title }}
+              {{ t(menu.title) }}
 
               <template v-if="menu.count">
                 <div class="flex items-center justify-center w-5 h-5 rounded-full bg-critic-500 text-[10px] font-semibold text-white">{{ menu.count }}</div>

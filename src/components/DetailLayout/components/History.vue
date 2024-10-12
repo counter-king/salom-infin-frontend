@@ -1,6 +1,7 @@
 <script setup>
 // Core
 import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 // Components
 import { CardTable } from '@/components/Table'
 import { FileChip } from '@/components/Chips'
@@ -9,6 +10,8 @@ import axiosConfig from '@/services/axios.config'
 // Utils
 import { formatDateHour } from '@/utils/formatDate'
 import { CONTENT_TYPES } from '@/enums'
+// Composable
+const { t } = useI18n()
 // Macros
 const props = defineProps({
   objectId: {
@@ -86,9 +89,9 @@ onMounted(async () => {
 
             <div class="flex text-xs text-greyscale-500">
               <div class="w-1/3">
-                <h1 class="mb-1">Исходное значение</h1>
+                <h1 class="mb-1">{{ t('original-meaning') }}</h1>
 
-                <p class="text-xs font-semibold text-primary-900">{{ data.old_value ? data.old_value : 'Пусто' }}</p>
+                <p class="text-xs font-semibold text-primary-900">{{ data.old_value ? data.old_value : t('empty') }}</p>
 
                 <!-- Если значение файл -->
 <!--                <div class="flex gap-1">-->
@@ -98,9 +101,9 @@ onMounted(async () => {
               </div>
 
               <div class="flex-1">
-                <h1 class="mb-1">Новое значение</h1>
+                <h1 class="mb-1">{{ t('new-meaning') }}</h1>
 
-                <p class="text-xs font-semibold text-primary-900">{{ data.new_value ? data.new_value : 'Пусто' }}</p>
+                <p class="text-xs font-semibold text-primary-900">{{ data.new_value ? data.new_value : t('empty') }}</p>
               </div>
             </div>
           </div>

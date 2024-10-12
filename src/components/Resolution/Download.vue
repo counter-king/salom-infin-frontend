@@ -1,11 +1,11 @@
 <script setup>
 // Core
-import { ref, unref } from 'vue'
+import { ref, unref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 // Components
 import { CheckCircleIcon, DangerTriangleIcon, AltArrowDownIcon } from '@/components/Icons'
 // Composable
-const { t } = useI18n()
+const { t, locale } = useI18n()
 // Macros
 const props = defineProps({
   signed: {
@@ -14,17 +14,27 @@ const props = defineProps({
 })
 // Reactive
 const menuRef = ref(null)
-const items = ref([
-  {
-    label: 'Формат A4',
+const items = ref([])
+// Watch
+watch(
+  () => locale.value,
+  () => {
+    items.value = [
+      {
+        label: t('paper-format.a4'),
+      },
+      {
+        label: t('paper-format.a5'),
+      },
+      {
+        label: t('paper-format.a6'),
+      }
+    ]
   },
   {
-    label: 'Формат A5',
-  },
-  {
-    label: 'Формат A6',
+    immediate: true
   }
-])
+)
 // Methods
 const toggle = (event) => {
   const _menuRef = unref(menuRef)
@@ -52,7 +62,7 @@ const toggle = (event) => {
       </span>
 
       <base-button
-        label="Загрузить фишку"
+        label="download-fishka"
         size="small"
         rounded
         :icon-right="AltArrowDownIcon"

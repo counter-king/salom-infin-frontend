@@ -1,6 +1,9 @@
 <script setup>
 // Core
 import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+// Composable
+const { t, locale } = useI18n()
 // Components
 import WidgetWrapper from '../WidgetWrapper.vue'
 import SettingMenu from '../Docflow/SettingMenu.vue'
@@ -9,20 +12,7 @@ import DocFlowCard from '../Docflow/Card.vue'
 import axiosConfig from '@/services/axios.config'
 // Reactive
 const tabIndex = ref(0)
-const tabMenus = ref([
-  {
-    label: 'Новые',
-    name: 'Preview',
-  },
-  {
-    label: 'В процессе',
-    name: 'History',
-  },
-  {
-    label: 'Все',
-    name: 'Comments',
-  }
-])
+const tabMenus = ref([])
 const list = ref([])
 const loading = ref(true)
 const counts = ref(null)
@@ -41,6 +31,28 @@ const getCounts = async (url) => {
   }
 }
 // Watch
+watch(
+  () => locale.value,
+  () => {
+    tabMenus.value = [
+      {
+        label: t('new'),
+        name: 'Preview',
+      },
+      {
+        label: t('in-progress'),
+        name: 'History',
+      },
+      {
+        label: t('all'),
+        name: 'Comments',
+      }
+    ]
+  },
+  {
+    immediate: true
+  }
+)
 watch(
   () => tabIndex.value,
   async (newValue) => {

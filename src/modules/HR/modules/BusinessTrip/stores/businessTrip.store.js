@@ -26,12 +26,12 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
         active: true
       },
       {
-        header: "Дата создание",
+        header: "created-date",
         field: "created_date",
         active: true
       },
       {
-        header: "Автор",
+        header: "author",
         field: "author",
         active: true
       },
@@ -143,12 +143,12 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
           active: true
         },
         {
-          header: "Дата создание",
+          header: "created-date",
           field: "created_date",
           active: true
         },
         {
-          header: "Автор",
+          header: "author",
           field: "author",
           active: true
         },

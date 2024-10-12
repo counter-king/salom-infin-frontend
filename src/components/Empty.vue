@@ -1,9 +1,13 @@
 <script setup>
+// Core
+import { useI18n } from 'vue-i18n'
+// Composable
+const { t } = useI18n()
 // Macros
 const props = defineProps({
   title: {
     type: String,
-    default: 'У вас нет данных'
+    default: 'empty-text-2'
   },
   labelClasses: {
     type: String,
@@ -24,7 +28,9 @@ const props = defineProps({
       <h1
         class="text-greyscale-500 font-medium text-sm"
         :class="props.labelClasses"
-      >{{ props.title }}</h1>
+      >
+        {{ t(props.title) }}
+      </h1>
     </div>
   </div>
 </template>

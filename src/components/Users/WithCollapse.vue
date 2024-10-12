@@ -68,12 +68,12 @@ const findAssigneeChildren = (target, assignee) => {
                     >
                       {{
                         assignee.is_read === true && assignee.is_performed === false
-                          ? 'Ознакомлен'
+                          ? t('approved')
                           : assignee.is_read === true && assignee.is_performed === true && assignee.is_controller === false
-                            ? 'Выполнен'
+                            ? t('done')
                             : assignee.is_read === true && assignee.is_performed === true && assignee.is_controller === true
-                              ? 'Снят с контроля'
-                              : 'Еще не ознакомлен'
+                              ? t('remove-from-control-2')
+                              : t('not-approved')
                       }}
                     </h1>
 
@@ -119,7 +119,7 @@ const findAssigneeChildren = (target, assignee) => {
 
                     <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-full"></div>
 
-                    <h1 class="font-medium text-greyscale-500">11-59</h1>
+                    <h1 class="font-medium text-greyscale-500">{{ assignee.user?.cisco }}</h1>
                   </div>
                 </div>
               </div>
@@ -180,7 +180,7 @@ const findAssigneeChildren = (target, assignee) => {
               >
                 <template #header>
                   <div class="flex items-center gap-2 w-full">
-                    <h1 class="text-sm font-semibold text-greyscale-500">Резолюция</h1>
+                    <h1 class="text-sm font-semibold text-greyscale-500">{{ t('resolution') }}</h1>
 
                     <!--                    <div class="flex items-center justify-center bg-greyscale-50 w-6 h-5 rounded-[6px] p-1">-->
                     <!--                      <span class="text-xs font-semibold text-greyscale-500">{{ item.length }}</span>-->

@@ -1,7 +1,10 @@
 <script setup>
 // Core
 import { useModel } from 'vue'
+import { useI18n } from 'vue-i18n'
 import TabMenu from 'primevue/tabmenu'
+// Composable
+const { t } = useI18n()
 // Macros
 const props = defineProps({
   modelValue: {
@@ -82,16 +85,24 @@ const panelClass = (_, state, context) => {
       }
     }"
   >
-    <template #itemicon="{ item }">
-      <base-iconify
-        v-if="item.icon"
-        :icon="item.icon"
-        class="!w-[18px] !h-[18px] mr-2"
-      />
+    <template #item="{ item, label }">
+      <a role="menuitem" class="p-menuitem-link text-greyscale-500 font-medium m-0 border-transparent py-4 px-0 mx-4" aria-label="Ortga" aria-disabled="false" tabindex="-1" data-pc-section="action">
+        <base-iconify
+          v-if="item.icon"
+          :icon="item.icon"
+          class="!w-[18px] !h-[18px] mr-2"
+        />
+
+        <span class="p-menuitem-text text-[15px]" data-pc-section="label">{{ t(label) }}</span>
+      </a>
     </template>
   </TabMenu>
 </template>
 
 <style scoped>
-
+.p-tabmenuitem.p-highlight > a {
+  @apply !text-primary-900;
+  @apply !font-semibold;
+  @apply !border-primary-500
+}
 </style>

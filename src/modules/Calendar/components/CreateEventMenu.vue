@@ -1,6 +1,7 @@
 <script setup>
 // Core
-import { ref, unref } from 'vue'
+import { ref, unref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 // Components
 import { AltArrowDownIcon } from '@/components/Icons'
 import EventSidebar from './EventSidebar.vue'
@@ -9,27 +10,38 @@ import { useCalendarStore } from '../stores/calendar.store'
 // Enums
 import { EVENT_TYPES, ACTION_FORM_TYPES } from '../enums'
 // Composable
+const { t, locale } = useI18n()
 const calendarStore = useCalendarStore()
 // Reactive
 const menuRef = ref(null)
-const items = ref([
-  {
-    label: 'Мероприятия',
-    icon: EVENT_TYPES.EVENT,
-    command: () => {
-      calendarStore.actionTypesMenuSelected.name = ACTION_FORM_TYPES.EVENT
-      calendarStore.eventSidebar = true
-    }
+const items = ref([])
+// Watch
+watch(
+  () => locale.value,
+  () => {
+    items.value = [
+      {
+        label: t('events'),
+        icon: EVENT_TYPES.EVENT,
+        command: () => {
+          calendarStore.actionTypesMenuSelected.name = ACTION_FORM_TYPES.EVENT
+          calendarStore.eventSidebar = true
+        }
+      },
+      {
+        label: t('tasks'),
+        icon: EVENT_TYPES.TASK,
+        command: () => {
+          calendarStore.actionTypesMenuSelected.name = ACTION_FORM_TYPES.TASK
+          calendarStore.eventSidebar = true
+        }
+      }
+    ]
   },
   {
-    label: 'Моя задача',
-    icon: EVENT_TYPES.TASK,
-    command: () => {
-      calendarStore.actionTypesMenuSelected.name = ACTION_FORM_TYPES.TASK
-      calendarStore.eventSidebar = true
-    }
+    immediate: true
   }
-])
+)
 // Methods
 const toggle = (event) => {
   const _menuRef = unref(menuRef)

@@ -10,7 +10,7 @@ const { t } = useI18n()
 const items = [
   {
     id: 1,
-    title: "my-tasks",
+    title: "tasks",
     description: "create-tasks",
     icon: UserCheckBoldDuotoneIcon
   },

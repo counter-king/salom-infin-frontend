@@ -13,7 +13,7 @@ import { ref, computed, onMounted } from 'vue';
 import InputSwitch from 'primevue/inputswitch';
 import { tableConfig, columnConfig, dropdownConfig, paginationConfig, dropdownOptions, overlayConfig } from './config';
 import { useI18n } from "vue-i18n";
-const { locale } = useI18n();
+const { t, locale } = useI18n();
 const defaultFilter = { page: 1, page_size: 10, search: '' };
 const count = ref(1);
 const filter = ref(defaultFilter);
@@ -124,7 +124,7 @@ onMounted(() => {
 </script>
 <template>
   <div class="flex mb-5 justify-between items-center">
-    <h1 class="text-2xl font-bold text-primary-900">Краткое описание</h1>
+    <h1 class="text-2xl font-bold text-primary-900">{{ t('short-description') }}</h1>
     <div class="flex items-center gap-2">
       <span class="p-input-icon-left">
         <i class="pi pi-search pl-1" />

@@ -1,6 +1,7 @@
 <script setup>
 // Core
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { saveAs } from  'file-saver'
 // Components
 import { FileTextBoldIcon, DownloadMinimalisticIcon, EyeIcon } from '@/components/Icons'
@@ -9,6 +10,8 @@ import { FilePreview } from '@/components/Files'
 import Empty from "@/components/Empty.vue"
 // Utils
 import { formatDate } from '@/utils/formatDate'
+// Composable
+const { t } = useI18n()
 // Props
 const props = defineProps({
   files: {
@@ -57,7 +60,7 @@ const download = (event, data) => {
           <template #title="{ data }">
             <div class="flex items-center gap-4">
               <div class="flex items-center justify-center w-10 h-10 bg-[#E8F1FF] p-1 rounded-[10px]">
-                <base-iconify :icon="FileTextBoldIcon" />
+                <base-iconify :icon="FileTextBoldIcon" class="text-primary-500" />
               </div>
 
               <div class="flex-1">
@@ -69,8 +72,8 @@ const download = (event, data) => {
                   <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-full"></div>
 
                   <div class="flex items-center gap-1 text-xs">
-                    <h1 class="text-primary-900">Загружено</h1>
-                    <p class="text-greyscale-500">{{ formatDate(data.created_date) }}</p>
+                    <h1 class="text-primary-900">{{ t('downloaded') }}</h1>
+                    <!-- <p class="text-greyscale-500">{{ formatDate(data.created_date) }}</p> -->
                   </div>
                 </div>
               </div>
@@ -85,10 +88,10 @@ const download = (event, data) => {
                   rounded
                   text
                   v-tooltip.top="{
-                value: `<h4 class='text-xs text-white -my-1'>Скачать файл</h4>`,
-                escape: true,
-                autoHide: false
-              }"
+                    value: `<h4 class='text-xs text-white -my-1'>${t('download-file')}</h4>`,
+                    escape: true,
+                    autoHide: false
+                  }"
                   class="group bg-white text-greyscale-500 hover:text-primary-500"
                   @click="download($event, data)"
                 />
@@ -102,10 +105,10 @@ const download = (event, data) => {
                   rounded
                   text
                   v-tooltip.top="{
-                value: `<h4 class='text-xs text-white -my-1'>Просмотр файла</h4>`,
-                escape: true,
-                autoHide: false
-              }"
+                    value: `<h4 class='text-xs text-white -my-1'>${t('preview-file')}</h4>`,
+                    escape: true,
+                    autoHide: false
+                  }"
                   class="group bg-white text-greyscale-500 hover:text-warning-500"
                   @click="zoomFile($event, data)"
                 />

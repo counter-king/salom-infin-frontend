@@ -40,7 +40,7 @@ const headers = ref([
     width: '200px'
   },
   {
-    header: 'Дата создание',
+    header: 'created-date',
     field: 'created_date',
     active: true,
     width: '100px'

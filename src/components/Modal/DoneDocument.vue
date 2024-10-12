@@ -1,10 +1,13 @@
 <script setup>
 // Core
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useVuelidate } from '@vuelidate/core'
 import { helpers, required } from '@vuelidate/validators'
 // Utils
 import { dispatchNotify } from '@/utils/notify'
+// Composable
+const { t } = useI18n()
 // Macros
 const props = defineProps({
   content: {
@@ -64,8 +67,8 @@ const openModal = () => {
     dispatchNotify(
       null,
       !props.hasResolution
-        ? 'Сначала создайте резолюцию'
-        : 'Сначала подпишите резолюцию',
+        ? t('first-create-resolution')
+        : t('first-sign-resolution'),
       'warn'
     )
   }

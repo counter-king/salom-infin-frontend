@@ -1,4 +1,6 @@
 <script setup>
+// Core
+import { useI18n } from 'vue-i18n'
 // Components
 import { ResolutionDownload } from '@/components/Resolution'
 // Utils
@@ -6,6 +8,8 @@ import { formatNameToShort } from '@/utils'
 import { formatDateHour } from '@/utils/formatDate'
 // Enums
 import { ROLES } from '@/enums'
+// Composable
+const { t } = useI18n()
 // Macros
 const props = defineProps({
   resolution: {
@@ -45,16 +49,16 @@ const props = defineProps({
 
               <p class="text-greyscale-500 mr-1">
                 <template v-if="item.is_controller">
-                  Контролирующий
+                  {{ t('controller') }}
                 </template>
 
                 <template v-else>
                   <template v-if="item.is_responsible">
-                    Исполнитель
+                    {{ t('executor') }}
                   </template>
 
                   <template v-else>
-                    Соисполнитель
+                    {{ t('co-executor') }}
                   </template>
                 </template>
               </p>
@@ -62,8 +66,8 @@ const props = defineProps({
           </template>
 
           <li class="flex font-semibold">
-            <p class="text-greyscale-500 mr-1">Срок исполнения:</p>
-            <span>{{ props.resolution.deadline ? props.resolution.deadline : 'Без срока исполнений' }}</span>
+            <p class="text-greyscale-500 mr-1">{{ t('deadline') }}:</p>
+            <span>{{ props.resolution.deadline ? props.resolution.deadline : t('without-deadline') }}</span>
           </li>
         </ul>
 
@@ -75,7 +79,7 @@ const props = defineProps({
 
     <div class="flex items-center justify-between text-black font-semibold">
       <span>
-        {{ props.resolution.receipt_date ? formatDateHour(props.resolution.receipt_date) : 'Еще не подписан' }}
+        {{ props.resolution.receipt_date ? formatDateHour(props.resolution.receipt_date) : t('resolution-not-signed') }}
       </span>
 
       <div class="w-[50px] h-[50px]">

@@ -11,6 +11,7 @@ import FileTabs from './components/FileTabs.vue'
 // Enums
 import { CONTENT_TYPES } from '@/enums'
 // Composable
+const { t } = useI18n()
 const router = useRouter()
 // Macros
 const props = defineProps({
@@ -26,7 +27,7 @@ const props = defineProps({
     type: Array,
     default: () => [
       {
-        label: 'Фишка',
+        label: 'fishka',
         name: 'Resolution',
         icon: DocumentIcon,
         slot: 'resolution',
@@ -34,7 +35,7 @@ const props = defineProps({
         count: null
       },
       {
-        label: 'Просмотр',
+        label: 'preview-text',
         name: 'Preview',
         icon: EyeIcon,
         slot: 'preview',
@@ -42,7 +43,7 @@ const props = defineProps({
         count: null
       },
       {
-        label: 'История',
+        label: 'history',
         name: 'History',
         icon: ClockCircleIcon,
         slot: 'history',
@@ -50,7 +51,7 @@ const props = defineProps({
         count: null
       },
       {
-        label: 'Комментарии',
+        label: 'comments',
         name: 'Comments',
         icon: ChatLineIcon,
         slot: 'comments',
@@ -58,7 +59,7 @@ const props = defineProps({
         count: 2
       },
       {
-        label: 'Файлы',
+        label: 'files',
         name: 'Files',
         icon: FileTextIcon,
         slot: 'files',
@@ -102,7 +103,6 @@ const props = defineProps({
   }
 })
 const emit = defineEmits(['emit:back-button'])
-const { t } = useI18n();
 // Reactive
 const activeTabMenuIndex = ref(0)
 const activeTabComponent = shallowRef(null)
