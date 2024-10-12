@@ -71,7 +71,6 @@ const emit = defineEmits(['emit:onSendToSigning'])
 
 // Methods
 const onSendToSigning = async () => {
-  console.log(model.value)
   const valid = await $v.value.$validate()
   if (!valid) return
 

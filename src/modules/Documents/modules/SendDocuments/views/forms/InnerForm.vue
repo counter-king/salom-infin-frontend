@@ -112,15 +112,15 @@ const clearForm = () => {
   console.log("Clear Form")
 }
 const onFileUpload = (files) => {
-  SDStoreInner.model.__files = [];
+  SDStoreInner.model.__files = []
   files.forEach(file => {
-    SDStoreInner.model.__files.push(file);
+    SDStoreInner.model.__files.push(file)
   });
 }
 
 onMounted(async () => {
   if (route.params.id) {
-    await SDStoreInner.actionGetDocumentDetailForUpdate(route.params.id);
+    await SDStoreInner.actionGetDocumentDetailForUpdate(route.params.id)
   }
 })
 

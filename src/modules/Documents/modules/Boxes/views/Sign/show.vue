@@ -10,11 +10,12 @@ import { useBoxesSignStore } from "@/modules/Documents/modules/Boxes/stores/sign
 import { useDocumentCountStore } from "@/modules/Documents/stores/count.store"
 import { useSDStore } from "@/modules/Documents/modules/SendDocuments/stores/index.store"
 // Components
-import { CheckCircleIcon, Pen2Icon, XMarkSolidIcon } from '@/components/Icons'
+import { Pen2Icon, XMarkSolidIcon } from '@/components/Icons'
 import { LayoutWithTabsCompose } from "@/components/DetailLayout"
 import { ModalComment } from "@/components/Modal"
 import SigningProcessTimeline from "@/modules/Documents/components/SigningProcessTimeline.vue"
 import ResolutionPerformersModal from "@/modules/Documents/modules/Boxes/components/ResolutionPerformersModal.vue"
+import SendForApproval from "@/modules/Documents/modules/Boxes/components/SendForApproval.vue"
 import { TreeUsers } from '@/components/Tree'
 import Eimzo from "@/components/EIMZO/Eimzo.vue"
 // Enums
@@ -143,6 +144,8 @@ onMounted( async () => {
             type="button"
             @click="sign"
           />-->
+
+<!--          <send-for-approval />-->
 
           <eimzo
             v-if="signStore.detailModel.type !== SIGNER_TYPES.BASIC_SIGNER"

@@ -14,12 +14,10 @@ import { useSDStore } from "@/modules/Documents/modules/SendDocuments/stores/ind
 import { Pen2Icon, XMarkSolidIcon } from '@/components/Icons'
 import Approve from "@/components/Modal/Approve.vue"
 import SendToSigning from "@/modules/Documents/modules/Boxes/components/SendToSigning.vue"
-import CancelSign from "@/components/Modal/CancelSign.vue";
 import { LayoutWithTabsCompose } from "@/components/DetailLayout"
 import { ModalComment } from "@/components/Modal"
 import SigningProcessTimeline from "@/modules/Documents/components/SigningProcessTimeline.vue"
 // Enums
-import { CONTENT_TYPES } from "@/enums"
 import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue"
 import {TreeUsers} from "@/components/Tree"
 
