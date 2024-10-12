@@ -85,7 +85,7 @@ const panelClass = (_, state, context) => {
       }
     }"
   >
-    <template #item="{ item, label }">
+    <template v-if="!(props.segment || props.bricks)" #item="{ item, label }">
       <a role="menuitem" class="p-menuitem-link text-greyscale-500 font-medium m-0 border-transparent py-4 px-0 mx-4" aria-label="Ortga" aria-disabled="false" tabindex="-1" data-pc-section="action">
         <base-iconify
           v-if="item.icon"
