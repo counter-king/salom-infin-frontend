@@ -42,9 +42,9 @@ const languagesList = ref([
   },
 ])
 const languageSelected = ref({
-  text: `O'zbek`,
-  icon: 'FlagsUzIcon',
-  value: 'uz'
+  text: `Русский`,
+  icon: 'FlagsRuIcon',
+  value: 'ru'
 })
 // Methods
 const setThemePrimeVue = () => {
@@ -66,9 +66,9 @@ onMounted(() => {
   languageSelected.value =
     JSON.parse(getStorageItem(LANG)) ??
     {
-      text: `O'zbek`,
-      icon: 'FlagsUzIcon',
-      value: 'uz'
+      text: `Русский`,
+      icon: 'FlagsRuIcon',
+      value: 'ru'
     }
 
   setThemePrimeVue()
