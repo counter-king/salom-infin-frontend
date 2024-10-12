@@ -1,7 +1,9 @@
 <script setup>
 // Core
-import { computed, onMounted, ref } from "vue"
+import { onMounted, ref } from "vue"
 import { useI18n } from "vue-i18n"
+import { useVuelidate } from "@vuelidate/core"
+import {  required } from "@vuelidate/validators"
 // Utils
 import { dispatchNotify } from "@/utils/notify"
 // Enums
@@ -9,8 +11,6 @@ import { COLOR_TYPES } from "@/enums"
 // Components
 import BaseDropdown from "@/components/UI/BaseDropdown.vue"
 import { CheckCircleIcon } from "@/components/Icons"
-import { helpers, required } from "@vuelidate/validators";
-import { useVuelidate } from "@vuelidate/core";
 
 // Composable
 const { t } = useI18n()
@@ -33,6 +33,14 @@ const props = defineProps({
   data: {
     type: [String, Number],
     default: ''
+  },
+  withValidation: {
+    type: Boolean,
+    default: false
+  },
+  validationFunc: {
+    type: Function,
+    default: () => void 0
   }
 })
 
@@ -195,6 +203,23 @@ const getPkcs7 = () => {
     dispatchNotify(null, t('select-pfx'), COLOR_TYPES.WARNING)
   }
 }
+
+// This function is used when some form validation is required before getting pkcs7
+const getWithValidation = async () => {
+  try {
+    await props.validationFunc()
+    await getPkcs7()
+  } catch (err) {
+
+  }
+}
+const manage = async () => {
+  if (props.withValidation) {
+     await getWithValidation()
+  } else {
+    await getPkcs7()
+  }
+}
 // Hooks
 onMounted(() => {
   AppLoad()
@@ -231,7 +256,7 @@ const emit = defineEmits(['emit:onGetPkcs7'])
       shadow
       type="button"
       :loading="props.buttonLoading"
-      @click="getPkcs7"
+      @click="manage"
     />
 
     <base-button

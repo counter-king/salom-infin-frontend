@@ -15,7 +15,7 @@ import {formatDateHour} from "@/utils/formatDate"
 <template>
   <div class="flex flex-col my-4 text-xs font-light">
     <span><span class="font-medium">Ijrochi:</span> {{ formatUserFullName(props.author) }}</span>
-    <span><span class="font-medium">Tel:</span> +99899 777 77 77 (1234)</span>
+    <span><span class="font-medium">Tel:</span> {{ props?.author?.cisco ? props?.author?.cisco : '00-00' }}</span>
     <span>
         <template v-if="props.composeModel?.created_date">
           <span class="font-medium">Kiritildi:</span>

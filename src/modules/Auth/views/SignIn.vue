@@ -134,7 +134,14 @@ const loginViaEri = async (pkcs7) => {
     })
   }
   catch (err) {
-
+    if (err && err.code === '703') {
+      await router.push({
+        name: "VerifyNumber",
+        query: {
+          phone: err.phone
+        }
+      })
+    }
   }
   finally {
     loading.value = false

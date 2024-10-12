@@ -1,5 +1,5 @@
 // Core
-import { defineStore } from 'pinia';
+import { defineStore } from 'pinia'
 // Utils
 import {helpers, required} from "@vuelidate/validators";
 import {withAsync} from "@/utils/withAsync";
@@ -7,12 +7,11 @@ import {withAsync} from "@/utils/withAsync";
 import {
   fetchCreateDocument,
   fetchGetDocumentDetail, fetchUpdateDocument
-} from "@/modules/Documents/modules/SendDocuments/services/index.service";
-import {SD_TYPE_INNER} from "@/modules/Documents/modules/SendDocuments/constants";
-import logger from "quill/core/logger";
-import {adjustDepartmentObjectToArray, adjustUserObjectToArray, setValuesToKeys} from "@/utils";
-import {COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL} from "@/enums";
-import {useAuthStore} from "@/modules/Auth/stores";
+} from "@/modules/Documents/modules/SendDocuments/services/index.service"
+import {SD_TYPE_INNER} from "@/modules/Documents/modules/SendDocuments/constants"
+import {adjustDepartmentObjectToArray, adjustUserObjectToArray, setValuesToKeys} from "@/utils"
+import {COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL} from "@/enums"
+import {useAuthStore} from "@/modules/Auth/stores"
 
 export const useSDStoreInner = defineStore("sd-stores-inner", {
   state: () => ({

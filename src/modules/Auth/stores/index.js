@@ -43,6 +43,7 @@ export const useAuthStore = defineStore("authStore", {
       saveStorageItem(ACCESS, response.data.access)
       saveStorageItem(REFRESH, response.data.refresh)
       saveStorageItem(EXPIRES, response.data.expires_in)
+      return Promise.resolve(response)
     },
     /*
     *

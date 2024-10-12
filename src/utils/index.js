@@ -6,6 +6,7 @@ import {fetchTopSignersList, fetchUsersList} from "@/services/users.service"
 import { fetchCompaniesList, fetchDepartmentList, fetchTagList } from "@/services/common.service"
 // Enums
 import {USER_STATUS_CODES} from "@/enums"
+import axiosConfig from "@/services/axios.config";
 
 /**
  * Проверяет все ключи объекта
@@ -383,4 +384,24 @@ const compareText = (oldText, newText) => {
     }
   })
   return result
+}
+export const adjustObjectToArray = async (api = '', items = [], multiple = true, id = null) => {
+  if (items.length && api && multiple) {
+    const ids = items.map(item => item.hasOwnProperty('user') ? item.user.id : item.id).join(',')
+    const res = await axiosConfig.get(`${api}/`, {ids})
+    if (res && res.status === 200) {
+      return Promise.resolve(res.data.results)
+    } else {
+      return Promise.reject([])
+    }
+  } else if (!multiple && id) {
+    const res = await axiosConfig.get(`${api}/`, {ids: id})
+    if (res && res.status === 200) {
+      return Promise.resolve(res.data.results)
+    } else {
+      return Promise.reject([])
+    }
+  } else {
+    return []
+  }
 }
