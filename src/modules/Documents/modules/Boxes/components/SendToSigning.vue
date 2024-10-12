@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref } from "vue"
+import { computed, ref } from "vue"
 import { useI18n } from "vue-i18n"
 // Components
 import { CheckCircleIcon } from '@/components/Icons'
@@ -31,10 +31,10 @@ const types = [
     title: t("assignment"),
     value: RESOLUTION_TYPES.ASSIGNMENT
   },
-  {
-    title: t("control"),
-    value: RESOLUTION_TYPES.CONTROL
-  },
+  // {
+  //   title: t("control"),
+  //   value: RESOLUTION_TYPES.CONTROL
+  // },
   {
     title: t("for-notice"),
     value: RESOLUTION_TYPES.FOR_NOTICE
@@ -49,7 +49,7 @@ const model = ref({
   __performers: [],
   resolution_text: null
 })
-const rules = {
+const rules = computed(() => ({
   type: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
@@ -58,8 +58,13 @@ const rules = {
   },
   resolution_text: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  deadline: {
+    required: model.value.type === RESOLUTION_TYPES.ASSIGNMENT
+      ? helpers.withMessage(`Поле не должен быть пустым`, required)
+      : {}
   }
-}
+}))
 
 const $v = useVuelidate(rules, model)
 const emit = defineEmits(['emit:onSendToSigning'])
@@ -79,16 +84,21 @@ const onSendToSigning = async () => {
       full_name: item.full_name,
       is_responsible: item.id === responsibleIndex.value
     })),
-    deadline: `${model.value.deadline}T18:00:00+05:00`,
+    deadline: model.value.deadline ? `${model.value.deadline}T18:00:00+05:00` : null,
     resolution_text: model.value.resolution_text,
     resolution_type: model.value.type
   }
 
-  const response = await fetchSendToSigning(route.params.id, body)
-  if (response.status === 200) {
-    emit('emit:onSendToSigning')
+  try {
+    const response = await fetchSendToSigning(route.params.id, body)
+    if (response.status === 200) {
+      emit('emit:onSendToSigning')
+      dialog.value = false
+    }
+  } catch (err) {
+
+  } finally {
     buttonLoading.value = false
-    dialog.value = false
   }
 }
 </script>
@@ -121,13 +131,16 @@ const onSendToSigning = async () => {
         option-value="value"
         label="resolution-type"
         placeholder="choose-resolution-type"
+        @emit:change="() => model.deadline = null"
       />
 
       <base-calendar
-        v-model="model.deadline"
+        v-model="$v.deadline.$model"
+        :error="$v.deadline"
         :min-date="new Date() /* Минимальная дата сегодняшние число */"
         label="deadline"
         placeholder="choose-date"
+        :required="model.type === RESOLUTION_TYPES.ASSIGNMENT"
         @update:modelValue="(value) => model.deadline = formatDateReverse(value)"
         class="mt-4"
       />

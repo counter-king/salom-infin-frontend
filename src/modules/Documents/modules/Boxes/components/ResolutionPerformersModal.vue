@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import {onMounted, ref} from "vue"
+import { computed, onMounted, ref } from "vue"
 // Components
 import { CheckCircleIcon } from '@/components/Icons'
 import UserMultiSelect from "@/components/Select/UserMultiSelect.vue"
@@ -12,8 +12,8 @@ import { useRoute } from "vue-router"
 // Utils
 import { adjustUserObjectToArray, isObject } from "@/utils"
 // Enums
-import { RESOLUTION_TYPES, SIGNER_TYPES, STATUS_TYPES } from "@/enums"
-import { DatetimeFormat, useI18n } from "vue-i18n";
+import { RESOLUTION_TYPES, STATUS_TYPES } from "@/enums"
+import { useI18n } from "vue-i18n";
 import { formatDateReverse } from "@/utils/formatDate";
 import { UserWithSelectableItem } from "@/components/Users";
 import { StatusChip } from "@/components/Chips";
@@ -50,10 +50,10 @@ const types = [
     title: t("assignment"),
     value: RESOLUTION_TYPES.ASSIGNMENT
   },
-  {
-    title: t("control"),
-    value: RESOLUTION_TYPES.CONTROL
-  },
+  // {
+  //   title: t("control"),
+  //   value: RESOLUTION_TYPES.CONTROL
+  // },
   {
     title: t("for-notice"),
     value: RESOLUTION_TYPES.FOR_NOTICE
@@ -68,7 +68,7 @@ const model = ref({
   resolution_text: null
 })
 
-const rules = {
+const rules = computed(() => ({
   type: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
@@ -77,8 +77,13 @@ const rules = {
   },
   resolution_text: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  deadline: {
+    required: model.value.type === RESOLUTION_TYPES.ASSIGNMENT
+      ? helpers.withMessage(`Поле не должен быть пустым`, required)
+      : {}
   }
-}
+}))
 
 const $v = useVuelidate(rules, model)
 const emit = defineEmits(['emit:onSign']);
@@ -99,13 +104,21 @@ const onSign = async (pkcs7) => {
       full_name: item.full_name,
       is_responsible: item.id === responsibleIndex.value
     })),
-    deadline: `${model.value.deadline}T18:00:00+05:00`,
+    deadline: model.value.deadline ? `${model.value.deadline}T18:00:00+05:00` : null,
     resolution_text: model.value.resolution_text,
     resolution_type: model.value.type,
     pkcs7
   }
 
   emit('emit:onSign', body)
+}
+const validateForm = async () => {
+  const valid = await $v.value.$validate()
+  if (!valid) {
+    return Promise.reject()
+  } else {
+    return Promise.resolve()
+  }
 }
 
 // Hooks
@@ -154,15 +167,19 @@ defineExpose({ buttonLoading, dialog })
         option-value="value"
         label="resolution-type"
         placeholder="choose-resolution-type"
+        required
+        @emit:change="() => model.deadline = null"
       />
 
       <base-calendar
-        v-model="model.deadline"
+        v-model="$v.deadline.$model"
+        :error="$v.deadline"
         :min-date="new Date() /* Минимальная дата сегодняшние число */"
         label="deadline"
         placeholder="choose-date"
-        @update:modelValue="(value) => model.deadline = formatDateReverse(value)"
+        :required="model.type === RESOLUTION_TYPES.ASSIGNMENT"
         class="mt-4"
+        @update:modelValue="(value) => model.deadline = formatDateReverse(value)"
       />
 
       <user-multi-select
@@ -171,6 +188,7 @@ defineExpose({ buttonLoading, dialog })
         label="performers"
         placeholder="choose-performers"
         required
+        class="mt-4"
       />
 
       <div class="mt-2">
@@ -244,6 +262,8 @@ defineExpose({ buttonLoading, dialog })
           type="sign"
           data="resolution-performer"
           input-classes="bg-white !rounded-3xl min-w-[200px]"
+          with-validation
+          :validationFunc="validateForm"
           :button-loading="buttonLoading"
           @emit:onGetPkcs7="(pkcs7) => onSign(pkcs7)"
         />
