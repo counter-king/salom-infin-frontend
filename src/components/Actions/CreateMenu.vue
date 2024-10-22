@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import {ref, unref} from "vue"
+import { computed, ref, unref } from "vue"
 import {useRouter} from "vue-router"
 import {useI18n} from "vue-i18n"
 // Enums
@@ -12,11 +12,18 @@ import {AltArrowDownIcon, DocumentAddIcon, CheckCircleIcon} from "@/components/I
 const props = defineProps({
   composeId: {
     type: [String, Number]
+  },
+  document: {
+    type: [Object],
+    default: null
   }
 })
 
 const router = useRouter()
 const { t } = useI18n()
+const docSubTypeId = computed(() => {
+  return props?.document?.document_sub_type?.id
+})
 
 const menuRef = ref(null)
 const items = ref([
@@ -27,7 +34,7 @@ const items = ref([
       name: ROUTE_SD_CREATE,
       params: {
         document_type: COMPOSE_DOCUMENT_TYPES.ORDER,
-        document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER
+        document_sub_type: docSubTypeId.value.toString() === COMPOSE_DOCUMENT_SUB_TYPES.NOTICE_FOR_EMPLOYMENT ? COMPOSE_DOCUMENT_SUB_TYPES.ORDER_FOR_EMPLOYMENT : COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER
       },
       query: {
         compose_id: props.composeId

@@ -76,38 +76,44 @@ const clearForm = () => {
 
 }
 const create = async () => {
-  const response = await orderStore.actionCreateDocument(orderStore.model)
-  await countStore.actionDocumentCountList()
-  if (response) {
-    dialog.value = false
-    dispatchNotify(null, t('document-sent'), COLOR_TYPES.SUCCESS)
-    await router.replace({
-      name: ROUTE_SD_LIST,
-      query: {
-        document_type: COMPOSE_DOCUMENT_TYPES.ORDER
-      }
-    })
-  } else {
-    dispatchNotify(null, t('error-occurred'), COLOR_TYPES.ERROR)
-  }
+ try {
+   const response = await orderStore.actionCreateDocument(orderStore.model)
+   await countStore.actionDocumentCountList()
+   if (response) {
+     dialog.value = false
+     dispatchNotify(null, t('document-sent'), COLOR_TYPES.SUCCESS)
+     await router.replace({
+       name: ROUTE_SD_LIST,
+       query: {
+         document_type: COMPOSE_DOCUMENT_TYPES.ORDER
+       }
+     })
+   }
+ } catch (err) {
+   dispatchNotify(null, t('error-occurred'), COLOR_TYPES.ERROR)
+ }
 }
 const update = async () => {
-  const data = await orderStore.actionUpdateDocument(
-    {
-      id: route.params.id,
-      body: orderStore.model
-    }
-  );
-  await countStore.actionDocumentCountList();
-  dispatchNotify(null, t('changed'), COLOR_TYPES.SUCCESS);
-  await router.replace({
-    name: ROUTE_SD_DETAIL,
-    params: {
-      id: route.params.id,
-      document_type: route.params.document_type,
-      document_sub_type: route.params.document_sub_type
-    }
-  });
+  try {
+    const data = await orderStore.actionUpdateDocument(
+      {
+        id: route.params.id,
+        body: orderStore.model
+      }
+    );
+    await countStore.actionDocumentCountList();
+    dispatchNotify(null, t('changed'), COLOR_TYPES.SUCCESS);
+    await router.replace({
+      name: ROUTE_SD_DETAIL,
+      params: {
+        id: route.params.id,
+        document_type: route.params.document_type,
+        document_sub_type: route.params.document_sub_type
+      }
+    });
+  } catch (err) {
+    dispatchNotify(null, t('error-occurred'), COLOR_TYPES.ERROR)
+  }
 }
 const manage = () => {
   if (props.formType === FORM_TYPE_CREATE) {

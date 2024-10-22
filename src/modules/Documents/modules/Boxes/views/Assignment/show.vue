@@ -29,7 +29,7 @@ const assignmentStore = useAssignmentStore()
 const loading = ref(true)
 // Computed
 const createMenuVisible = computed(() => {
-  return [COMPOSE_DOCUMENT_TYPES.NOTICE, COMPOSE_DOCUMENT_TYPES.APPLICATION].includes(String(assignmentStore.detailModel?.document?.document_type?.id))
+  return [COMPOSE_DOCUMENT_TYPES.NOTICE, COMPOSE_DOCUMENT_TYPES.APPLICATION].includes(String(assignmentStore.detailModel?.document?.document_type?.id)) && !assignmentStore.detailModel?.is_performed
 })
 // Hooks
 onMounted(async () => {
@@ -115,6 +115,7 @@ const updateDocument = async () => {
             <create-menu
               v-if="createMenuVisible"
               :compose-id="assignmentStore.detailModel?.document?.compose.id"
+              :document="assignmentStore.detailModel?.document"
             />
           </template>
         </template>

@@ -407,7 +407,7 @@
   "business-trip-order": "Командировочный приказ",
   "create-order": "Создать приказ",
   "update-order": "Изменить приказ",
-  "approver-signers": "Согласующие подписанты",
+  "approver-signers": "Подписанты",
   "select-approver-signers": "Выберите согласующие подписанты",
   "sending-documents": "Отправка документов",
   "send-documents-on-case": "Отправить документ по делу",
@@ -476,5 +476,7 @@
   "enter-via-eri": "Войти через ЭЦП",
   "select-pfx": "Выберите ключ PFX или запустите E-IMZO",
   "send-for-approval": "Отправить на согласование",
-  "select-employee": "Выбирайте сотрудник"
+  "select-employee": "Выбирайте сотрудник",
+  "notice-for-employment": "Рапорт приеме на работу",
+  "order-for-employment": "Приказ приеме на работу"
 }

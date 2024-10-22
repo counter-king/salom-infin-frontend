@@ -80,7 +80,9 @@ export const COMPOSE_DOCUMENT_SUB_TYPES = {
   ORDERS_BANK_MANAGEMENT:        '18', // Приказ правления банка
   APPLICATION:                   '27', // Заявление
   BUSINESS_TRIP_DECREE_LOCAL:    '28', // Командировочный распоряжение (локальный)
-  BUSINESS_TRIP_ORDER_LOCAL:     '29' // Командировочный приказ (локальный)
+  BUSINESS_TRIP_ORDER_LOCAL:     '29', // Командировочный приказ (локальный)
+  NOTICE_FOR_EMPLOYMENT:         '30', // Рапорт на приеме на работу
+  ORDER_FOR_EMPLOYMENT:          '31' // Приказ на приеме на работу
 }
 export const COLOR_TYPES = {
   PRIMARY: "primary",
