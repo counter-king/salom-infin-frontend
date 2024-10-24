@@ -17,7 +17,7 @@ import { useAuthStore } from "@/modules/Auth/stores"
 import { useDocumentCountStore } from "@/modules/Documents/stores/count.store"
 import { useSDOrderStore } from "@/modules/Documents/modules/SendDocuments/stores/order.store"
 // Components
-import { LayoutWithTabs } from "@/components/DetailLayout"
+import { LayoutWithTabsCompose } from "@/components/DetailLayout"
 import FormContainer from "@/modules/Documents/modules/SendDocuments/components/FormContainer.vue"
 import EditorWithTabs from "@/components/Composed/EditorWithTabs.vue"
 import UserMultiSelect from "@/components/Select/UserMultiSelect.vue"
@@ -147,7 +147,7 @@ onUnmounted(() => {
   </template>
 
   <template v-else>
-    <layout-with-tabs
+    <layout-with-tabs-compose
       :title="props.formType === FORM_TYPE_CREATE ? 'create-order' : 'update-order'"
     >
       <template #content>
@@ -228,7 +228,7 @@ onUnmounted(() => {
           </base-row>
         </form-container>
       </template>
-    </layout-with-tabs>
+    </layout-with-tabs-compose>
 
     <!-- PREVIEW -->
     <preview-dialog

@@ -11,6 +11,7 @@ import { COLOR_TYPES } from "@/enums"
 // Components
 import BaseDropdown from "@/components/UI/BaseDropdown.vue"
 import { CheckCircleIcon } from "@/components/Icons"
+import { useAuthStore } from "@/modules/Auth/stores";
 
 // Composable
 const { t } = useI18n()
@@ -139,16 +140,30 @@ const uiCreateItem = (itmkey, vo) => {
   return itm
 }
 const uiFillCombo = (items) => {
+  const { pinfl: currentUserPinfl } = useAuthStore()?.currentUser || {}
+
   if (items.length) {
-    for (const item in items) {
-      pfxKeys.value.push({
-        name: items[item].text,
-        value: items[item].value,
-        option: items[item]
-      })
+    items.forEach(item => {
+      const itemVo = JSON.parse(item?.getAttribute('vo'))
+      const pinfl = itemVo?.PINFL
+
+      const shouldAdd =
+        (props.type === 'sign' && pinfl && currentUserPinfl && pinfl === currentUserPinfl) ||
+        (props.type === 'login')
+
+      if (shouldAdd) {
+        pfxKeys.value.push({
+          name: item.text,
+          value: item.value,
+          option: item
+        })
+      }
+    })
+
+    if (pfxKeys.value.length) {
+      model.value.selectedKey = pfxKeys.value[0]
+      keyValue.value = pfxKeys.value[0].option
     }
-    model.value.selectedKey = pfxKeys.value[0]
-    keyValue.value = pfxKeys.value[0].option
   }
 }
 const uiLoaded = () => {

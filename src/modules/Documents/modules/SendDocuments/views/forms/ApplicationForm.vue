@@ -14,7 +14,7 @@ import { useSDOrderStore } from "@/modules/Documents/modules/SendDocuments/store
 import EditorWithTabs from "@/components/Composed/EditorWithTabs.vue"
 import FormContainer from "@/modules/Documents/modules/SendDocuments/components/FormContainer.vue"
 import ApplicationLetterTemplate from "@/components/Templates/ApplicationLetterTemplate.vue"
-import {LayoutWithTabs} from "@/components/DetailLayout"
+import {LayoutWithTabsCompose} from "@/components/DetailLayout"
 import UserMultiSelect from "@/components/Select/UserMultiSelect.vue"
 import UserSelect from "@/components/Select/UserSelect.vue";
 import {FORM_TYPE_CREATE} from "@/constants/constants"
@@ -132,7 +132,7 @@ onUnmounted(() => {
   </template>
 
   <template v-else>
-    <layout-with-tabs
+    <layout-with-tabs-compose
       :title="props.formType === FORM_TYPE_CREATE ? 'create-sd-application' : 'update-sd-application'"
     >
       <template #content>
@@ -206,7 +206,7 @@ onUnmounted(() => {
 <!--          <pre>{{ applicationStore.model }}</pre>-->
         </form-container>
       </template>
-    </layout-with-tabs>
+    </layout-with-tabs-compose>
 
     <!-- PREVIEW -->
     <preview-dialog

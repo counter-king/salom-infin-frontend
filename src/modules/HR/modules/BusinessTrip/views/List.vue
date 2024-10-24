@@ -102,12 +102,13 @@ onMounted(() => {
         <span>{{ data?.user?.top_level_department?.name }}</span>
       </template>
 
-      <template #author="{ data }">
-        <base-avatar-group
-          :items="[data?.user]"
-          shape="circle"
-          avatar-classes="w-8 h-8"
-        />
+      <template #employee="{ data }">
+        {{ data?.user?.full_name }}
+<!--        <base-avatar-group-->
+<!--          :items="[data?.user]"-->
+<!--          shape="circle"-->
+<!--          avatar-classes="w-8 h-8"-->
+<!--        />-->
       </template>
 
       <template #destinations="{ data }">

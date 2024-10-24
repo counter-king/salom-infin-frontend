@@ -478,5 +478,6 @@
   "send-for-approval": "Отправить на согласование",
   "select-employee": "Выбирайте сотрудник",
   "notice-for-employment": "Ishga qabul qilish bildirishnomasi",
-  "order-for-employment": "Ishga qabul qilish buyrug'i"
+  "order-for-employment": "Ishga qabul qilish buyrug'i",
+  "employee": "Сотрудник"
 }

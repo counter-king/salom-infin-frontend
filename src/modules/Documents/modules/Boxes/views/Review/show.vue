@@ -8,7 +8,7 @@ import { useDocFlowStore } from '../../../Registration/stores/docflow.store'
 import { useBoxesCommonStore } from '../../stores/common.store'
 import { useReviewStore } from '../../stores/review.store'
 // Components
-import { ActionAnswerMenu, EriKeysMenu, AcquaintButton } from '@/components/Actions'
+import { ActionAnswerMenu, EriKeysMenu, AcquaintButton, CreateMenu } from '@/components/Actions'
 import { LayoutWithTabs } from '@/components/DetailLayout'
 import { ResolutionDropdown } from '@/components/Resolution'
 import { ModalForwardDocument, ModalDoneDocument, ModalCancelSign } from '@/components/Modal'
@@ -26,8 +26,11 @@ const reviewStore = useReviewStore()
 // Reactive
 const loading = ref(true)
 // Computed
-const createOrderVisible = computed(() => {
-  return [COMPOSE_DOCUMENT_TYPES.NOTICE, COMPOSE_DOCUMENT_TYPES.APPLICATION].includes(String(reviewStore.detailModel?.document?.document_type?.id))
+const createMenuVisible = computed(() => {
+  return [COMPOSE_DOCUMENT_TYPES.NOTICE, COMPOSE_DOCUMENT_TYPES.APPLICATION].includes(String(reviewStore.detailModel?.document?.document_type?.id)) && Number(reviewStore.detailModel?.status?.id) !== Number(STATUS_TYPES.DONE)
+})
+const isDone = computed(() => {
+  return Number(reviewStore.detailModel?.status?.id) === Number(STATUS_TYPES.DONE)
 })
 // Hooks
 onMounted(async () => {
@@ -95,55 +98,63 @@ const handleDocumentStatus = async () => {
       >
         <template #header-end>
           <!-- Create order button -->
-          <base-button
-            v-if="createOrderVisible"
-            label="create-order"
-            :icon-left="CheckCircleIcon"
-            rounded
-            type="button"
-            @click="router.push({
-			        name: ROUTE_SD_CREATE,
-			        params: {
-								document_type: COMPOSE_DOCUMENT_TYPES.ORDER,
-								document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER
-							},
-							query: {
-								compose_id: reviewStore.detailModel?.document?.compose.id
-							}
-						})"
-          />
-          <!-- /Create order button -->
+<!--          <base-button-->
+<!--            v-if="createOrderVisible"-->
+<!--            label="create-order"-->
+<!--            :icon-left="CheckCircleIcon"-->
+<!--            rounded-->
+<!--            type="button"-->
+<!--            @click="router.push({-->
+<!--			        name: ROUTE_SD_CREATE,-->
+<!--			        params: {-->
+<!--								document_type: COMPOSE_DOCUMENT_TYPES.ORDER,-->
+<!--								document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER-->
+<!--							},-->
+<!--							query: {-->
+<!--								compose_id: reviewStore.detailModel?.document?.compose.id-->
+<!--							}-->
+<!--						})"-->
+<!--          />-->
 
-          <!-- Если документ ознакомлен -->
-          <template v-if="reviewStore.isDocumentAcquainted">
-            <action-answer-menu />
-          </template>
-
-          <!-- Если документ еще не ознакомлен -->
-          <template v-if="!reviewStore.isDocumentAcquainted">
-            <modal-forward-document />
-          </template>
-
-          <!-- Если документ ознакомлен -->
-          <template v-if="reviewStore.isDocumentAcquainted">
-            <resolution-dropdown
-              :review-id="reviewStore.detailModel.id"
-              :parent-id="null"
-              :resolution-list-id="reviewStore.detailModel.document.id"
-              :is-resolution-signed="reviewStore.isReviewSigned"
-              :register-date="new Date(reviewStore.detailModel.document.register_date)"
+          <template v-if="!isDone">
+            <create-menu
+              v-if="createMenuVisible"
+              :compose-id="reviewStore.detailModel?.document?.compose.id"
+              :document="reviewStore.detailModel?.document"
             />
+            <!-- /Create order button -->
 
-            <!-- Если есть созданные резолюция -->
-            <template v-if="boxesCommonStore.getCreatedResolutionsList">
-              <!-- Если резолюция не подписан -->
-              <template v-if="!reviewStore.isReviewSigned">
-                <eri-keys-menu @emit:sign="signDocument" />
-              </template>
+            <!-- Если документ ознакомлен -->
+            <template v-if="reviewStore.isDocumentAcquainted">
+              <action-answer-menu />
+            </template>
 
-              <!-- Если резолюция подписан -->
-              <template v-if="reviewStore.isReviewSigned">
-                <modal-cancel-sign :create-button-fn="cancelSign" />
+            <!-- Если документ еще не ознакомлен -->
+            <template v-if="!reviewStore.isDocumentAcquainted">
+              <modal-forward-document />
+            </template>
+
+            <!-- Если документ ознакомлен -->
+            <template v-if="reviewStore.isDocumentAcquainted">
+              <resolution-dropdown
+                :review-id="reviewStore.detailModel.id"
+                :parent-id="null"
+                :resolution-list-id="reviewStore.detailModel.document.id"
+                :is-resolution-signed="reviewStore.isReviewSigned"
+                :register-date="new Date(reviewStore.detailModel.document.register_date)"
+              />
+
+              <!-- Если есть созданные резолюция -->
+              <template v-if="boxesCommonStore.getCreatedResolutionsList">
+                <!-- Если резолюция не подписан -->
+                <template v-if="!reviewStore.isReviewSigned">
+                  <eri-keys-menu @emit:sign="signDocument" />
+                </template>
+
+                <!-- Если резолюция подписан -->
+                <template v-if="reviewStore.isReviewSigned">
+                  <modal-cancel-sign :create-button-fn="cancelSign" />
+                </template>
               </template>
             </template>
           </template>

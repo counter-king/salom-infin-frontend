@@ -11,7 +11,7 @@ import BaseMultiSelect from "@/components/UI/BaseMultiSelect.vue"
 import { BusinessTripNoticeTemplate, BusinessTripDecreeTemplate, BusinessTripOrderTemplate } from "@/components/Templates"
 import BranchMultiSelect from "@/components/Select/BranchMultiSelect.vue"
 import FormContainer from "@/modules/Documents/modules/SendDocuments/components/FormContainer.vue"
-import {LayoutWithTabs} from "@/components/DetailLayout"
+import {LayoutWithTabsCompose} from "@/components/DetailLayout"
 import UserMultiSelect from "@/components/Select/UserMultiSelect.vue"
 import UserSelect from "@/components/Select/UserSelect.vue"
 import {UserWithRadio} from "@/components/Users"
@@ -161,6 +161,10 @@ const manage = () => {
 onBeforeMount( async () => {
   if (route.params.id) {
     await BTNoticeStore.actionGetDocumentDetailForUpdate(route.params.id)
+  } else if (route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL
+    && route?.query?.compose_id
+    && route?.query?.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP) {
+    await BTNoticeStore.actionGetDocumentDetailForUpdate(route.query.compose_id)
   }
 })
 
@@ -175,7 +179,7 @@ onUnmounted(() => {
   </template>
 
   <template v-else>
-    <layout-with-tabs
+    <layout-with-tabs-compose
       :title="title"
     >
       <template #content>
@@ -319,7 +323,7 @@ onUnmounted(() => {
           </base-row>
         </form-container>
       </template>
-    </layout-with-tabs>
+    </layout-with-tabs-compose>
 
     <!-- PREVIEW -->
     <preview-dialog
