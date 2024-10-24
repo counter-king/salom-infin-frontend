@@ -497,5 +497,6 @@
   "send-for-approval": "Tasdiqlashga uchun yuborish",
   "select-employee": "Xodimni tanlang",
   "notice-for-employment": "Ishga qabul qilish bildirishnomasi",
-  "order-for-employment": "Ishga qabul qilish buyrug'i"
+  "order-for-employment": "Ishga qabul qilish buyrug'i",
+  "employee": "Сотрудник"
 }

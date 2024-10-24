@@ -9,7 +9,7 @@ import DepartmentMultiSelect from "@/components/Select/DepartmentMultiSelect.vue
 import EditorWithTabs from "@/components/Composed/EditorWithTabs.vue";
 import FormContainer from "@/modules/Documents/modules/SendDocuments/components/FormContainer.vue";
 import InnerLetterTemplate from "@/components/Templates/InnerLetterTemplate.vue";
-import {LayoutWithTabs} from "@/components/DetailLayout";
+import {LayoutWithTabsCompose} from "@/components/DetailLayout";
 import UserMultiSelect from "@/components/Select/UserMultiSelect.vue";
 // Store
 import {useAuthStore} from "@/modules/Auth/stores";
@@ -136,7 +136,7 @@ onUnmounted(() => {
   </template>
 
   <template v-else>
-    <layout-with-tabs
+    <layout-with-tabs-compose
       :title="props.formType === FORM_TYPE_CREATE ? 'create-sd-inner' : 'update-sd-inner'"
     >
       <template #content>
@@ -217,7 +217,7 @@ onUnmounted(() => {
           </base-row>
         </form-container>
       </template>
-    </layout-with-tabs>
+    </layout-with-tabs-compose>
 
 <!--    <pre>{{ SDStoreInner.model.__files }}</pre>-->
 

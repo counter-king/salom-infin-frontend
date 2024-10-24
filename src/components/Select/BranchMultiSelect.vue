@@ -55,7 +55,7 @@ const emit = defineEmits(['update:modelValue'])
     <template #option="{ value }">
       <user-with-radio
         :title="value.name"
-        :text-truncate="props.textTruncate"
+        :text-truncate="false"
       >
       </user-with-radio>
     </template>

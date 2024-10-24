@@ -31,15 +31,15 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
         active: true
       },
       {
-        header: "author",
-        field: "author",
+        header: "employee",
+        field: "employee",
         active: true
       },
-      {
-        header: "status",
-        field: "status",
-        active: true
-      },
+      // {
+      //   header: "Статус",
+      //   field: "status",
+      //   active: true
+      // },
       {
         header: "branch",
         field: "destinations",

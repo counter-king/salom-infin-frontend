@@ -9,7 +9,7 @@ import { UserIcon, SettingsIcon, InfoCircleIcon, Logout2Icon } from '@/component
 import { useAuthStore } from "../../modules/Auth/stores/index"
 import { resetAllPiniaStores } from '@/stores/plugins/resetStores'
 // Utils
-import { formatNameToShort } from '@/utils'
+import { formatNameToShort, returnFirstLetter } from '@/utils'
 import { removeStorageItem } from '@/utils/storage'
 import { ACCESS, EXPIRES, REFRESH, CURRENT_ROUTE } from '@/constants/storage'
 // Composable
@@ -71,12 +71,18 @@ const onSelect = (item) => {
 </script>
 <template>
   <div class="flex items-center gap-3 cursor-pointer" @click="toggle">
-    <base-avatar
-      image="/images/avatars/1.jpg"
-      shape="circle"
-      avatar-classes="w-10 h-10"
-      class="flex"
-    />
+<!--    <base-avatar-->
+<!--      image="/images/avatars/1.jpg"-->
+<!--      shape="circle"-->
+<!--      avatar-classes="w-10 h-10"-->
+<!--      class="flex"-->
+<!--    />-->
+    <div
+      class="flex justify-center items-center rounded-full w-10 h-10 text-base font-bold text-white"
+      :style="{ background: userProfile.color }"
+    >
+      {{ returnFirstLetter(userProfile.full_name) }}
+    </div>
 
     <div>
       <h1 class="text-white text-sm font-semibold mb-1">

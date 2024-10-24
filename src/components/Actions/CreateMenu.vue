@@ -48,10 +48,11 @@ const items = ref([
       name: ROUTE_SD_CREATE,
       params: {
         document_type: COMPOSE_DOCUMENT_TYPES.DECREE,
-        document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_FOREIGN
+        document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL
       },
       query: {
-        compose_id: props.composeId
+        compose_id: props.composeId,
+        document_sub_type: props.document?.document_sub_type.id
       }
     })
   },

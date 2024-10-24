@@ -10,7 +10,7 @@ import {ROUTE_SD_DETAIL, ROUTE_SD_LIST} from "@/modules/Documents/modules/SendDo
 import {COLOR_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL} from "@/enums"
 // Components
 import FormContainer from "@/modules/Documents/modules/SendDocuments/components/FormContainer.vue"
-import {LayoutWithTabs} from "@/components/DetailLayout"
+import {LayoutWithTabsCompose} from "@/components/DetailLayout"
 import UserMultiSelect from "@/components/Select/UserMultiSelect.vue"
 import UserSelect from "@/components/Select/UserSelect.vue"
 import EditorWithTabs from "@/components/Composed/EditorWithTabs.vue"
@@ -133,7 +133,7 @@ onUnmounted(() => {
   </template>
 
   <template v-else>
-    <layout-with-tabs
+    <layout-with-tabs-compose
       :title="props.formType === FORM_TYPE_CREATE ? 'create-decree' : 'update-decree'"
     >
       <template #content>
@@ -194,7 +194,7 @@ onUnmounted(() => {
           </base-row>
         </form-container>
       </template>
-    </layout-with-tabs>
+    </layout-with-tabs-compose>
 
     <!-- PREVIEW -->
     <preview-dialog

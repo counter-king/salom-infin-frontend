@@ -59,11 +59,11 @@ const rules = computed(() => ({
   resolution_text: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
-  deadline: {
-    required: model.value.type === RESOLUTION_TYPES.ASSIGNMENT
-      ? helpers.withMessage(`Поле не должен быть пустым`, required)
-      : {}
-  }
+  // deadline: {
+  //   required: model.value.type === RESOLUTION_TYPES.ASSIGNMENT
+  //     ? helpers.withMessage(`Поле не должен быть пустым`, required)
+  //     : {}
+  // }
 }))
 
 const $v = useVuelidate(rules, model)
@@ -135,12 +135,10 @@ const onSendToSigning = async () => {
       />
 
       <base-calendar
-        v-model="$v.deadline.$model"
-        :error="$v.deadline"
+        v-model="model.deadline"
         :min-date="new Date() /* Минимальная дата сегодняшние число */"
         label="deadline"
         placeholder="choose-date"
-        :required="model.type === RESOLUTION_TYPES.ASSIGNMENT"
         @update:modelValue="(value) => model.deadline = formatDateReverse(value)"
         class="mt-4"
       />
