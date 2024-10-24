@@ -7,19 +7,19 @@ import { BuildingsIcon, UserSpeakRoundedIcon } from '@/components/Icons'
 // Reactive
 const navs = ref([
   {
-    title: "Департаменты",
+    title: "department",
     icon: BuildingsIcon,
     link: "DepartmentsIndex",
     permission: 'settings-structure-departments'
   },
   {
-    title: "Филиалы",
+    title: "branch",
     icon: BuildingsIcon,
     link: "BranchesIndex",
     permission: 'settings-structure-branches'
   },
   {
-    title: "Должность",
+    title: "position",
     icon: UserSpeakRoundedIcon,
     link: "PositionsIndex",
     permission: 'settings-structure-positions'

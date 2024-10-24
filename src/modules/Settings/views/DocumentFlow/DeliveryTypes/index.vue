@@ -13,7 +13,7 @@ import { ref, onMounted, computed } from 'vue';
 import InputSwitch from 'primevue/inputswitch';
 import { tableConfig, columnConfig, dropdownConfig, paginationConfig, dropdownOptions, overlayConfig } from './config';
 import { useI18n } from "vue-i18n";
-const { locale } = useI18n();
+const { t } = useI18n();
 const defaultFilter = { page: 1, page_size: 10, search: '' };
 const count = ref(1);
 const deliveryTypes = ref([]);
@@ -23,26 +23,32 @@ const headers = ref([
     columnKey: 'name_uz',
     disabled: true,
     field: 'name_uz',
-    header: 'Название (UZ)',
+    header: 'name-uz',
     is_active: true,
   },
   {
     columnKey: 'name_ru',
     field: 'name_ru',
-    header: 'Название (РУ)',
+    header: 'name-ru',
     is_active: true,
   },
   {
-    columnKey: 'is_active',
+    columnKey: 'created_date',
+    field: 'created_date',
+    header: 'created-at',
+    is_active: true,
+  },
+  {
+    columnKey: 'status',
     disabled: true,
-    field: 'is_active',
-    header: 'Статус',
+    field: 'status',
+    header: 'status',
     is_active: true,
   },
   {
     columnKey: 'action',
     field: 'action',
-    header: 'Действия',
+    header: 'actions',
     is_active: true,
   },
 ]);
@@ -131,7 +137,7 @@ onMounted(() => {
 </script>
 <template>
   <div class="flex mb-5 justify-between items-center">
-    <h1 class="text-2xl font-bold text-primary-900">Вид подачи</h1>
+    <h1 class="text-2xl font-bold text-primary-900">{{ t('deliver-type') }}</h1>
     <div class="flex items-center gap-2">
       <span class="p-input-icon-left">
         <i class="pi pi-search pl-1" />
@@ -151,7 +157,7 @@ onMounted(() => {
         type="button"
         >
         <base-icon class="mr-2" color="#767994" height="20" name="SettingsMinimalisticIcon" width="20"/>
-        <span>Настроить столбцы</span>
+        <span>{{ t('customize-columns') }}</span>
       </Button>
       <Button
         @click="visible = true"
@@ -160,7 +166,7 @@ onMounted(() => {
         type="button"
         >
         <base-icon class="mr-2" height="20" name="AddIcon" width="20"/>
-        <span>Создать</span>
+        <span>{{ t('create') }}</span>
       </Button>
     </div>
   </div>
@@ -175,7 +181,7 @@ onMounted(() => {
       <Column
         :columnKey="item.columnKey"
         :field="item.field"
-        :header="item.header"
+        :header="t(item.header)"
         :key="index"
         :pt="columnConfig"
         v-for="(item, index) in visibleHeaders"

@@ -27,7 +27,7 @@ const items = ref([
     data: 'Администратор'
   },
   {
-    label: 'Статус',
+    label: 'status',
     data: 'Рабочие'
   },
   {

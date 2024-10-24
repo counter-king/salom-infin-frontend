@@ -95,7 +95,7 @@ const resetToolbarMenu = () => {
 
         <div class="w-2/4 border-l pt-5">
           <div class="flex text-base font-semibold px-8 text-primary-900">
-            {{ t('available=menu') }}
+            {{ t('available-menu') }}
           </div>
 
           <div class="mt-2 overflow-y-auto h-[388px] px-5">

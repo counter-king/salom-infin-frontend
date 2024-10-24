@@ -21,7 +21,7 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
     detailModel: {},
     headers: [
       {
-        header: "Название департамент",
+        header: "department-name",
         field: "department",
         active: true
       },
@@ -36,12 +36,12 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
         active: true
       },
       {
-        header: "Статус",
+        header: "status",
         field: "status",
         active: true
       },
       {
-        header: "Филиалы",
+        header: "branch",
         field: "destinations",
         active: true
       }
@@ -138,7 +138,7 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
     resetHeaders() {
       this.headers = [
         {
-          header: "Название департамент",
+          header: "department-name",
           field: "department",
           active: true
         },
@@ -153,12 +153,12 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
           active: true
         },
         {
-          header: "Статус",
+          header: "status",
           field: "status",
           active: true
         },
         {
-          header: "Филиалы",
+          header: "branch",
           field: "destinations",
           active: true
         }

@@ -8,21 +8,21 @@ import { useAgreementsStore } from './agreements.store'
 export const useAgreementsRoutesStore = defineStore('agreements-routes-store', {
   state: () => ({
     routes: {
-      title: 'Согласия',
+      title: 'agreements',
       icon: NotebookIcon,
       link: 'AgreementsIndex',
       count: null,
       name: 'agreements',
       children: [
         {
-          title: 'Неподписанный',
+          title: 'not-signed',
           icon: DangerCircleIcon,
           link: 'AgreementNotSigned',
           count: null,
           name: 'not-signed'
         },
         {
-          title: 'Подписанный',
+          title: 'signed-2',
           icon: CheckCircleIcon,
           link: 'AgreementSigned',
           name: 'signed'

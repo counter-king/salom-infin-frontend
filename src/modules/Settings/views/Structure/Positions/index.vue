@@ -41,7 +41,7 @@ const headers = ref([
       columnKey: 'is_active',
       disabled: true,
       field: 'is_active',
-      header: 'Статус',
+      header: 'status',
       is_active: true,
    },
    {
@@ -103,17 +103,17 @@ const setVisible = newVisible => {
 const changeLanguage = () => {
    navs.value = [
       {
-         title: "Департаменты",
+         title: "department",
          icon: "BuildingsIcon",
          link: "DepartmentsIndex",
       },
       {
-         title: "Филиалы",
+         title: "branch",
          icon: "BuildingsIcon",
          link: "BranchesIndex",
       },
       {
-         title: "Должность",
+         title: "position",
          icon: "UserSpeakIcon",
          link: "PositionsIndex",
       }

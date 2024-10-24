@@ -23,7 +23,7 @@ export const useBoxesApprovalStore = defineStore("approval-stores", {
       //   active: true
       // },
       {
-        header: "Статус",
+        header: "status",
         field: "status",
         active: true
       },
@@ -68,7 +68,7 @@ export const useBoxesApprovalStore = defineStore("approval-stores", {
         //   active: true
         // },
         {
-          header: "Статус",
+          header: "status",
           field: "status",
           active: true
         },

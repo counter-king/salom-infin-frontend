@@ -3,6 +3,7 @@
 // Core
 import { onMounted, ref, unref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useI18n } from 'vue-i18n'
 // Components
 import { SortIcon } from '@/components/Icons'
 // Services
@@ -42,6 +43,7 @@ const props = defineProps({
 
 const route = useRoute();
 const router = useRouter();
+const { t } = useI18n()
 const filterStore = useFilterStore();
 const opRef = ref(null);
 const paginationStore = usePaginationStore();
@@ -197,7 +199,7 @@ onMounted(async () => {
   >
     <template #header>
       <div class="flex items-center h-[72px] px-6">
-        <span class="text-lg font-semibold">Фильтрация</span>
+        <span class="text-lg font-semibold">{{ t('filtration') }}</span>
       </div>
     </template>
 
@@ -242,6 +244,7 @@ onMounted(async () => {
           <department-multi-select
             v-model="filterStore.filterState.__departments"
             :required="false"
+            label="department"
           />
         </base-col>
 
@@ -250,6 +253,7 @@ onMounted(async () => {
             v-model="filterStore.filterState.__branches"
             :required="false"
             :text-truncate="true"
+            label="branch"
           />
         </base-col>
 
@@ -386,7 +390,7 @@ onMounted(async () => {
 
           <base-button
             border-color="border-transparent"
-            label="filter"
+            label="filtration"
             :rounded="true"
             shadow
             type="button"

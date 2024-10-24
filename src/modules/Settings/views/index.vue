@@ -28,43 +28,43 @@ const menus = ref([])
 const changeLanguage = () => {
   menus.value = [
     {
-      title: 'Настройки',
+      title: 'settings',
       prefix: true
     },
     {
       icon: FolderWithFilesIcon,
       link: 'DocumentFlowIndex',
-      title: 'Документооборот',
+      title: 'document-turnover',
       permission: 'settings-e-docs'
     },
     {
       icon: BuildingsIcon,
       link: 'CorrespondentsIndex',
-      title: 'Корреспонденты',
+      title: 'correspondents',
       permission: 'settings-correspondents'
     },
     {
       icon: BoxMinimalisticIcon,
       link: 'StructureIndex',
-      title: 'Структура',
+      title: 'structure',
       permission: 'settings-structure'
     },
     {
       icon: UsersGroupTwoRoundedIcon,
       link: 'UsersIndex',
-      title: 'Пользователи',
+      title: 'users',
       permission: 'settings-users'
     },
     {
       icon: UserSpeakRoundedIcon,
       link: 'RolesIndex',
-      title: 'Роли',
+      title: 'roles',
       permission: 'settings-roles-list'
     },
     {
       icon: CheckCircleIcon,
       link: 'PermissionsIndex',
-      title: 'Права доступа',
+      title: 'access-rights',
       permission: 'settings-project-permission-list'
     },
     {
@@ -87,7 +87,7 @@ const changeLanguage = () => {
     {
       icon: BellIcon,
       link: 'NotificationsIndex',
-      title: 'Уведомления',
+      title: 'notifications',
     },
     // {
     //   icon: MouseIcon,
@@ -97,7 +97,7 @@ const changeLanguage = () => {
     {
       icon: SettingsMinimalisticIcon,
       link: 'GeneralSettingsIndex',
-      title: 'Общие настройки',
+      title: 'general-settings',
     }
   ];
 };

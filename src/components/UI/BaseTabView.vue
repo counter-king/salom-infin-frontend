@@ -1,11 +1,14 @@
 <script setup>
 // Core
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import TabView from 'primevue/tabview'
 import TabPanel from 'primevue/tabpanel'
 // Components
 import { DownloadMinimalisticIcon, EyeIcon } from '@/components/Icons'
 import { FilePreview } from '@/components/Files'
+// Composable
+const { t } = useI18n()
 // Macros
 const props = defineProps({
   tabView: {
@@ -148,7 +151,7 @@ const zoomFile = (event, pane) => {
                 <button
                   type="button"
                   v-tooltip.top="{
-                    value: `<h4 class='text-xs text-white -my-1'>Просмотр</h4>`,
+                    value: `<h4 class='text-xs text-white -my-1'>${t('preview-text')}</h4>`,
                     escape: true,
                     autoHide: false
                   }"
@@ -161,7 +164,7 @@ const zoomFile = (event, pane) => {
                 <button
                   type="button"
                   v-tooltip.top="{
-                    value: `<h4 class='text-xs text-white -my-1'>Скачать</h4>`,
+                    value: `<h4 class='text-xs text-white -my-1'>${t('download')}</h4>`,
                     escape: true,
                     autoHide: false
                   }"

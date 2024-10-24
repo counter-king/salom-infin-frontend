@@ -15,20 +15,20 @@ const menus = ref([
     prefix: true
   },
   {
-    title: 'Мой профиль',
+    title: 'my-profile',
     icon: UserIcon,
     link: 'ProfileIndex',
     children: []
   },
   {
-    title: "Командировка",
+    title: "business-trip",
     icon: CaseIcon,
     link: "BusinessTripIndex",
     children: []
   },
   agreementsRoutesStore.routes,
   {
-    title: "Настройки согласия",
+    title: "agreement-settings",
     icon: SettingsMinimalisticIcon,
     link: "AgreementSettingsIndex",
     children: []

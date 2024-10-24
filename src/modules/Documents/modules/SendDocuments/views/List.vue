@@ -46,7 +46,6 @@ const onDeleteRow = (data) => {
 }
 const onChangeDocType = (menu) => {
   paginationStore.resetPagination();
-  console.log(menu)
 }
 const manageRoute = () => {
   if (!(route.query && route.query.document_type)){

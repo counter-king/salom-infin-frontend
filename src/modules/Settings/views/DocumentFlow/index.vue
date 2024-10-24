@@ -12,25 +12,25 @@ const navs = ref([])
 const changeLanguage = () => {
   navs.value = [
     {
-      title: 'Тип документа',
+      title: 'document-type',
       icon: ClipboardCheckIcon,
       link: 'DocumentTypesIndex',
       permission: 'settings-e-docs-document-types'
     },
     {
-      title: 'Вид подачи',
+      title: 'deliver-type',
       icon: DocumentTextIcon,
       link: 'DeliveryTypesIndex',
       permission: 'settings-e-docs-delivery-types'
     },
     {
-      title: 'Журнал',
+      title: 'magazine',
       icon: NotebookIcon,
       link: 'MagazinesIndex',
       permission: 'settings-e-docs-journal'
     },
     {
-      title: 'Заголовки',
+      title: 'headers',
       icon: NotebookIcon,
       link: 'DocumentTitlesIndex',
       permission: 'settings-e-docs-document-titles'

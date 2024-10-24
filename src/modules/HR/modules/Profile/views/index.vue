@@ -1,6 +1,7 @@
 <script setup>
 // Core
 import { ref, shallowRef, watch, defineAsyncComponent, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 // Components
 import ScrollPanel from 'primevue/scrollpanel'
 import BaseSpinner from '@/components/UI/BaseSpinner.vue'
@@ -24,13 +25,14 @@ import { useAuthStore } from '@/modules/Auth/stores'
 // Enums
 import { STATUS_TYPES } from '@/enums'
 // Composable
+const { t } = useI18n()
 const authStore = useAuthStore()
 // Reactive
 const activeTabMenuIndex = ref(0)
 const activeTabComponent = shallowRef(null)
 const headerTabItems = ref([
   {
-    label: 'Рабочий',
+    label: 'worker',
     name: 'Worker',
     icon: UserCheckIcon,
     slot: 'worker',
@@ -38,7 +40,7 @@ const headerTabItems = ref([
     count: null
   },
   {
-    label: 'Персональный',
+    label: 'personal',
     name: 'Personal',
     icon: UserSpeakRoundedIcon,
     slot: 'personal',
@@ -46,7 +48,7 @@ const headerTabItems = ref([
     count: null
   },
   {
-    label: 'Мой доход',
+    label: 'my-income',
     name: 'Salary',
     icon: CurrencyDollarIcon,
     slot: 'salary',
@@ -54,7 +56,7 @@ const headerTabItems = ref([
     count: null
   },
   {
-    label: 'Моя команда',
+    label: 'my-team',
     name: 'MyTeam',
     icon: UsersGroupRoundedIcon,
     slot: 'my-team',
@@ -62,7 +64,7 @@ const headerTabItems = ref([
     count: null
   },
   {
-    label: 'Мои техники',
+    label: 'my-devices',
     name: 'Equipments',
     icon: MonitorIcon,
     slot: 'my-techniques',
@@ -70,7 +72,7 @@ const headerTabItems = ref([
     count: null
   },
   {
-    label: 'Интересы',
+    label: 'interests',
     name: 'Interests',
     icon: BasketballIcon,
     slot: 'interests',
@@ -78,7 +80,7 @@ const headerTabItems = ref([
     count: null
   },
   {
-    label: 'Образование',
+    label: 'education',
     name: 'Education',
     icon: SquareAcademicCapIcon,
     slot: 'education',
@@ -168,7 +170,7 @@ watch(activeTabMenu, (value) => {
         </div>
 
         <div class="flex flex-col items-end self-end">
-          <h1 class="text-xs font-medium text-greyscale-500 mb-2">Профскиллы</h1>
+          <h1 class="text-xs font-medium text-greyscale-500 mb-2">{{ t('skills') }}</h1>
 
           <div class="flex gap-2">
             <status-chip :status="{ id: STATUS_TYPES.TODO }" border circle root-class="!py-[6px] !px-3">

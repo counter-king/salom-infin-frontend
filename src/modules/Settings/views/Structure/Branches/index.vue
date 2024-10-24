@@ -13,7 +13,7 @@ import InputSwitch from 'primevue/inputswitch';
 import { ref, watch, onMounted, computed } from 'vue';
 import { tableConfig, columnConfig, dropdownConfig, paginationConfig, dropdownOptions, overlayConfig } from './config';
 import { useI18n } from "vue-i18n";
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const defaultFilter = { page: 1, page_size: 10, search: '' };
 const count = ref(1);
 const branches = ref([]);
@@ -48,7 +48,7 @@ const headers = ref([
     columnKey: 'condition',
     disabled: true,
     field: 'condition',
-    header: 'Статус',
+    header: 'status',
     is_active: true,
   },
   {
@@ -109,17 +109,17 @@ const setVisible = newVisible => {
 const changeLanguage = () => {
   navs.value = [
     {
-      title: "Департаменты",
+      title: "department",
       icon: "BuildingsIcon",
       link: "DepartmentsIndex",
     },
     {
-      title: "Филиалы",
+      title: "branch",
       icon: "BuildingsIcon",
       link: "BranchesIndex",
     },
     {
-      title: "Должность",
+      title: "position",
       icon: "UserSpeakIcon",
       link: "PositionsIndex",
     }
@@ -167,7 +167,7 @@ onMounted(() => {
 </script>
 <template>
   <div class="flex mb-5 justify-between items-center">
-    <h1 class="text-2xl font-bold text-primary-900">Филиалы</h1>
+    <h1 class="text-2xl font-bold text-primary-900">{{ t('branch') }}</h1>
     <div class="flex items-center gap-2">
       <span class="p-input-icon-left">
         <i class="pi pi-search pl-1" />
