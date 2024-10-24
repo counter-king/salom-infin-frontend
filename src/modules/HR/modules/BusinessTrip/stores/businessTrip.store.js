@@ -21,6 +21,11 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
     detailModel: {},
     headers: [
       {
+        header: "employee",
+        field: "employee",
+        active: true
+      },
+      {
         header: "department-name",
         field: "department",
         active: true
@@ -28,11 +33,6 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
       {
         header: "created-date",
         field: "created_date",
-        active: true
-      },
-      {
-        header: "employee",
-        field: "employee",
         active: true
       },
       // {
