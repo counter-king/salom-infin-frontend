@@ -139,7 +139,9 @@ const onSendToSigning = async () => {
         :min-date="new Date() /* Минимальная дата сегодняшние число */"
         label="deadline"
         placeholder="choose-date"
+        clearable
         @update:modelValue="(value) => model.deadline = formatDateReverse(value)"
+        @emit:clear="model.deadline = null"
         class="mt-4"
       />
 

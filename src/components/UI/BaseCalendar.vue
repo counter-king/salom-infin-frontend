@@ -4,7 +4,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Calendar from 'primevue/calendar'
 // Components
-import { CalendarLinearIcon } from '@/components/Icons'
+import { CalendarLinearIcon, CloseSmIcon } from '@/components/Icons'
 // Composable
 const { t } = useI18n()
 // Macros
@@ -68,7 +68,7 @@ const props = defineProps({
     }
   },
 })
-const emit = defineEmits(['update:modelValue', 'emit:month-change', 'emit:day-select'])
+const emit = defineEmits(['update:modelValue', 'emit:month-change', 'emit:day-select', 'emit:clear'])
 // Computed
 const rootClasses = computed(() => {
   return [
@@ -97,7 +97,11 @@ const modelValue = computed({
     return props.modelValue
   },
   set(value) {
-    emit('update:modelValue', value)
+    if (value) {
+      emit('update:modelValue', value)
+    } else {
+      emit('emit:clear')
+    }
   }
 })
 // Methods
@@ -106,6 +110,9 @@ const monthChange = ({ month, year }) => {
 }
 const daySelect = (value) => {
   emit('emit:day-select', value)
+}
+const clear = () => {
+  emit('emit:clear')
 }
 </script>
 
@@ -206,7 +213,13 @@ const daySelect = (value) => {
       }"
     >
       <template #dropdownicon>
-        <base-iconify :icon="CalendarLinearIcon" />
+        <div
+          v-if="modelValue"
+          @click="clear"
+        >
+          <base-iconify :icon="CloseSmIcon" />
+        </div>
+        <base-iconify v-else :icon="CalendarLinearIcon" />
       </template>
     </Calendar>
 

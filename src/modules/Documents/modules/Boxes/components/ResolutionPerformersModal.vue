@@ -177,6 +177,7 @@ defineExpose({ buttonLoading, dialog })
         label="deadline"
         placeholder="choose-date"
         class="mt-4"
+        @emit:clear="model.deadline = null"
         @update:modelValue="(value) => model.deadline = formatDateReverse(value)"
       />
 
