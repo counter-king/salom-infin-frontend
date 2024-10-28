@@ -1,4 +1,5 @@
 <script setup>
+import { useI18n } from "vue-i18n";
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
@@ -7,6 +8,7 @@ import axiosConfig from "@/services/axios.config";
 import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
+const { t } = useI18n();
 const props = defineProps({ getFirstPageDocumentTypes: Function, setVisible: Function, visible: Boolean });
 const defaultDocumentType = { name_uz: '', name_ru: '' }
 const documentType = ref(defaultDocumentType);
@@ -39,7 +41,7 @@ const createDocumentType = () => {
       :closable="!loading"
       :pt="dialogConfig"
       :visible="visible"
-      header="Создать тип документа"
+      :header="t('create-document-type')"
       modal
       @update:visible="() => {
          documentType = defaultDocumentType;
@@ -47,23 +49,23 @@ const createDocumentType = () => {
       }"
       >
       <div class="flex flex-col pb-10 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('name-uz') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             @update:modelValue="name_uz => {
                documentType = { ...documentType, name_uz };
             }"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название"
+            :placeholder="t('enter-naming-2')"
             type="text"
             :modelValue="documentType.name_uz"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('name-ru') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             @update:modelValue="name_ru => {
                documentType = { ...documentType, name_ru };
             }"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название"
+            :placeholder="t('enter-naming-2')"
             type="text"
             :modelValue="documentType.name_ru"
             />
@@ -83,14 +85,14 @@ const createDocumentType = () => {
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
                   type="button">
-                  Отмена
+                  {{ t('cancel') }}
                </Button>
                <Button
                   @click="createDocumentType"
                   class="shadow-none p-button p-component font-semibold text-sm !rounded-full m-0 py-[9px] px-4"
                   rounded
                   type="button"
-               >Создать</Button>
+               >{{ t('create') }}</Button>
             </template>
          </div>
       </template>

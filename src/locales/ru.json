@@ -105,6 +105,18 @@
   "name-uz": "Название (UZ)",
   "name-ru": "Название (РУ)",
   "actions": "Действия",
+  "create-document-type": "Создать тип документа",
+  "update-document-type": "Изменить тип документа",
+  "updated-document-type": "Тип документа обновлен",
+  "not-updated-document-type": "Тип документа не обновлен",
+  "delete-document-type": "Удалить тип документа",
+  "delete-document-type-text": "Вы уверены, что хотите удалить этого тип документа",
+  "deleted-document-type": "Тип документа удален",
+  "not-deleted-document-type": "Тип документа не удален",
+  "enter-naming-2": "Введите название",
+  "active": "Активный",
+  "non-active": "Неактивный",
+  "status-updated": "Статус обновлен",
 
 
 

@@ -145,7 +145,7 @@ onMounted(() => {
           :modelValue="filter.search"
           :pt="{ root: { class: ['w-full rounded-3xl h-[42px] bg-white border-greyscale-50 font-xs focus:border-primary-500'] } }"
           @update:modelValue="searchDocumentTypes"
-          placeholder="Поиск"
+          :placeholder="t('search')"
           size="small"
           type="text"
           />
@@ -237,7 +237,7 @@ onMounted(() => {
   <OverlayPanel ref="settingsOverlay" :pt="overlayConfig">
     <div class="p-3">
       <div v-for="(header, index) in editableHeaders" :key="index" class="w-full h-10 py-3 px-2 flex items-center gap-3 justify-between">
-        <span class="text-primary-900 text-sm font-medium">{{ header.header }}</span>
+        <span class="text-primary-900 text-sm font-medium">{{ t(header.header) }}</span>
         <InputSwitch
           size="small"
           :modelValue="header.is_active"
@@ -258,8 +258,8 @@ onMounted(() => {
       </div>
     </div>
     <div class="flex justify-end border-t bg-greyscale-50 py-3 pr-5 pl-8">
-      <Button @click="resetHeaders" class="p-button p-component font-medium flex justify-center shadow-none rounded-full text-[14px] py-[6px] px-4 bg-white text-primary-900 border-transparent">Сбросить</Button>
-      <Button @click="saveChanges" class="p-button p-component font-medium flex justify-center shadow-none rounded-full text-[14px] py-[6px] px-4 ml-2">Сохранить</Button>
+      <Button @click="resetHeaders" class="p-button p-component font-medium flex justify-center shadow-none rounded-full text-[14px] py-[6px] px-4 bg-white text-primary-900 border-transparent">{{ t('reset') }}</Button>
+      <Button @click="saveChanges" class="p-button p-component font-medium flex justify-center shadow-none rounded-full text-[14px] py-[6px] px-4 ml-2">{{ t('save') }}</Button>
     </div>
   </OverlayPanel>
   <CreateDocumentType

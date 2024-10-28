@@ -105,6 +105,18 @@
   "name-uz": "Nomi (UZ)",
   "name-ru": "Nomi (РУ)",
   "actions": "Harakatlar",
+  "create-document-type": "Hujjat turini yaratish",
+  "update-document-type": "Hujjat turini o'zgartirish",
+  "updated-document-type": "Hujjat turi yangilandi",
+  "not-updated-document-type": "Hujjat turi yangilanmadi",
+  "delete-document-type": "Hujjat turini o'chirish",
+  "delete-document-type-text": "Haqiqatan ham ushbu hujjat turini oʻchirmoqchimisiz?",
+  "deleted-document-type": "Hujjat turi o'chirildi",
+  "not-deleted-document-type": "Hujjat turi ochirildi",
+  "enter-naming-2": "Nomni kiriting",
+  "active": "Faol",
+  "non-active": "Faol emas",
+  "status-updated": "Status yangilandi",
 
 
   "create": "Yaratish",
