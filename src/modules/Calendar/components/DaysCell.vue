@@ -9,6 +9,8 @@ import dayjs from 'dayjs'
 // Components
 import BaseSpinner from '@/components/UI/BaseSpinner.vue'
 import {
+  DoubleAltArrowDownIcon,
+  DoubleAltArrowUpIcon,
 	DoubleAltArrowDownLinearIcon,
 	MaximizeIcon,
 	Plus20SolidIcon,
@@ -64,11 +66,22 @@ const formRef = ref(null)
 const formComponent = shallowRef(null)
 const menuVisible = ref(false)
 const toggleCount = ref(1)
+const currentMonthCellIndex = ref(0)
 const times = ref(generateDayHours(60, 'ru', 0))
 // Computed
 const firstDateOfWeek = computed(() => dateCopy.value.getDate() - dateCopy.value.getDay() + 1)
 const beginOfWeek = computed(() => new Date(dateCopy.value.setDate(firstDateOfWeek.value)))
 const weekInterval = computed(() => {
+  let week = props.interval.filter(interval =>
+    dayjs(beginOfWeek.value).format('D')
+    <= interval.date && interval.date <=
+    dayjs(beginOfWeek.value).add(6, 'day').format('D')
+  )
+
+  if(!week.length) {
+    return props.interval.slice(-7)
+  }
+
   return props.interval.filter(interval =>
     dayjs(beginOfWeek.value).format('D')
     <= interval.date && interval.date <=
@@ -78,21 +91,28 @@ const weekInterval = computed(() => {
 const getOneEvent = computed(() => daysList.value.find(day => day.date === +dayjs(date.value).format('D')))
 // Methods
 const collapseEventList = (index) => {
+  const eventsList = document.querySelectorAll('.events-list')
 	const _eventsListRef = document.querySelector(`#events-list-${index}`)
 	const _eventItemsWrapRef = document.querySelector(`#event-items-wrap-${index}`)
+
+  if(currentMonthCellIndex.value !== index) {
+    toggleCount.value = 1
+  }
+
+  eventsList.forEach(el => {
+    el.classList.remove('shadow-calendar-cell')
+		el.style.height = null
+		el.style.zIndex = null
+  })
 
 	if(toggleCount.value & 1) {
 		_eventsListRef.classList.add('shadow-calendar-cell')
 		_eventsListRef.style.height = `${_eventItemsWrapRef?.clientHeight + 70}px`
 		_eventsListRef.style.zIndex = 3
 	}
-	else {
-		_eventsListRef.classList.remove('shadow-calendar-cell')
-		_eventsListRef.style.height = null
-		_eventsListRef.style.zIndex = null
-	}
 
 	toggleCount.value = toggleCount.value + 1
+  currentMonthCellIndex.value = index
 }
 const cellClick = async (cellIndex, date, month, year, time) => {
 	clearModel(calendarStore.updateEventModel, ['type'])
@@ -413,7 +433,7 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
         >
           <div
             :id="`events-list-${index}`"
-            :class="{ '!bg-greyscale-50': status !== 'now' }"
+            :class="{ '!bg-greyscale-50': status !== 'now', 'bottom-0 top-auto': 35 - index <= 7 }"
             class="events-list flex flex-col bg-white absolute top-0 left-0 w-full h-full border-[2px] border-transparent transition-all rounded-lg p-2 group-hover:border-primary-500"
           >
             <div class="h-7 mb-2">
@@ -460,7 +480,10 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
                 <base-iconify
                   :icon="DoubleAltArrowDownIcon"
                   class="text-white"
-                  :class="{ 'rotate-180' : !(toggleCount & 1) }"
+                  :class="{
+                    'rotate-180' : !(toggleCount & 1),
+                    '-translate-y-[6px]': 35 - index <= 7
+                  }"
                 />
               </button>
             </template>

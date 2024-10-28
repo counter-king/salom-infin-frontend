@@ -2,6 +2,9 @@
 // Core
 import { inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+// Components
+import MyCalendars from './MyCalendars.vue'
+import Categories from './Categories.vue'
 // Composable
 const route = useRoute()
 const router = useRouter()
@@ -48,16 +51,13 @@ const daySelect = async (value) => {
         @emit:day-select="daySelect"
       />
 
-      <div class="mt-3 pt-3 border-t border-greyscale-200">
-        <!-- <h1>Cumque fugiat, magnam?</h1> -->
-        <!-- <h1>Earum laudantium, sequi.</h1> -->
+      <div class="mt-[10px] pt-3 border-t border-greyscale-200">
+        <my-calendars />
       </div>
 
-
-      <!-- <div class="mt-3 pt-3 border-t border-greyscale-200">
-        <h1>Dignissimos, mollitia, quis.</h1>
-        <h1>Labore, libero, officiis.</h1>
-      </div> -->
+      <div class="mt-[10px] pt-3 border-t border-greyscale-200">
+        <Categories />
+      </div>
     </div>
   </div>
 </template>

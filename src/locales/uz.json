@@ -117,6 +117,7 @@
   "active": "Faol",
   "non-active": "Faol emas",
   "status-updated": "Status yangilandi",
+  "my-calendars": "Mening kalendarim",
 
 
   "create": "Yaratish",
@@ -485,7 +486,7 @@
   "referent": "Referent",
   "updated": "O'zgartirildi",
   "add-to-favourites-message": "Hujjat turini tanlanganlar qatoriga qo'shish uchun yulduzcha tugmasini bosing",
-  "tasks": "Vazifa",
+  "tasks": "Mening vazifam",
   "create-tasks": "O'zingizning vazifalaringizni yarating",
   "events": "Tadbir",
   "create-events": "Tadbirlar yaratish",

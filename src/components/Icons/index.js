@@ -35,6 +35,7 @@ export { default as AltArrowRightIcon } from  '~icons/solar/alt-arrow-right-outl
 export { default as AltArrowDownIcon } from  '~icons/solar/alt-arrow-down-outline'
 export { default as AltArrowLeftIcon } from  '~icons/solar/alt-arrow-left-outline'
 export { default as DoubleAltArrowDownIcon } from  '~icons/solar/double-alt-arrow-down-outline'
+export { default as DoubleAltArrowUpIcon } from  '~icons/solar/double-alt-arrow-up-outline'
 export { default as CalendarIcon } from  '~icons/solar/calendar-outline'
 export { default as SettingsMinimalisticIcon } from  '~icons/solar/settings-minimalistic-outline'
 export { default as SortIcon } from  '~icons/solar/sort-outline'
