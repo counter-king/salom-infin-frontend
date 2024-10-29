@@ -239,6 +239,7 @@ onUnmounted(() => {
                 <template #option="{ value }">
                   <user-with-radio
                     :title="value.name"
+                    :text-truncate="false"
                   >
                   </user-with-radio>
                 </template>

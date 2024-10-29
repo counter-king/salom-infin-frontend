@@ -104,6 +104,10 @@ const props = defineProps({
   clearAfterSelect: {
     type: Boolean,
     default: false
+  },
+  textTruncate: {
+    type: Boolean,
+    default: true
   }
 })
 // Reactive
@@ -335,7 +339,12 @@ watch(debounced, async () => {
       </template>
 
       <template #chip="{ value }">
-        <slot name="chip" :value="value" />
+        <div
+          class="text-xs font-semibold text-greyscale-900 max-w-[200px]"
+          :class="{ 'truncate': props.textTruncate }"
+        >
+          <slot name="chip" :value="value" />
+        </div>
       </template>
 
       <template #option="{ option }">
