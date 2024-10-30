@@ -10,7 +10,7 @@ import { useBoxesSignStore } from "@/modules/Documents/modules/Boxes/stores/sign
 import { useDocumentCountStore } from "@/modules/Documents/stores/count.store"
 import { useSDStore } from "@/modules/Documents/modules/SendDocuments/stores/index.store"
 // Components
-import { Pen2Icon, XMarkSolidIcon } from '@/components/Icons'
+import { CheckCircleIcon, Pen2Icon, XMarkSolidIcon } from '@/components/Icons'
 import { LayoutWithTabsCompose } from "@/components/DetailLayout"
 import { ModalComment } from "@/components/Modal"
 import SigningProcessTimeline from "@/modules/Documents/components/SigningProcessTimeline.vue"
@@ -32,6 +32,7 @@ const rejectModal = ref(false)
 const changeModal = ref(false)
 const resolutionModal = ref(null)
 const buttonLoading = ref(false)
+const isHostVercel = ref(null)
 
 // Computed
 const signed = computed(() => {
@@ -84,6 +85,7 @@ const signDocumentWithResolution = async (body) => {
 
 // Hooks
 onMounted( async () => {
+  isHostVercel.value = window.location.host === 'new-side-project.vercel.app' || window.location.host.startsWith('localhost')
   await signStore.actionGetSignDetail(route.params.id)
 })
 </script>
@@ -131,30 +133,31 @@ onMounted( async () => {
         />
 
         <template v-if="signed === null">
+          <template v-if="signStore.detailModel.type !== SIGNER_TYPES.BASIC_SIGNER">
+            <base-button
+              v-if="isHostVercel"
+              border-color="border-transparent"
+              label="sign"
+              :icon-left="CheckCircleIcon"
+              icon-height="!w-4"
+              icon-width="!h-4"
+              rounded
+              shadow
+              type="button"
+              @click="sign('test')"
+            />
 
-<!--          <base-button
-            v-if="signStore.detailModel.type !== SIGNER_TYPES.BASIC_SIGNER"
-            border-color="border-transparent"
-            label="sign"
-            :icon-left="CheckCircleIcon"
-            icon-height="!w-4"
-            icon-width="!h-4"
-            rounded
-            shadow
-            type="button"
-            @click="sign"
-          />-->
+            <!--          <send-for-approval />-->
 
-<!--          <send-for-approval />-->
-
-          <eimzo
-            v-if="signStore.detailModel.type !== SIGNER_TYPES.BASIC_SIGNER"
-            type="sign"
-            data="sign-in-basic"
-            input-classes="bg-white !rounded-3xl min-w-[200px]"
-            :button-loading="buttonLoading"
-            @emit:onGetPkcs7="(pkcs7) => sign(pkcs7)"
-          />
+            <eimzo
+              v-else
+              type="sign"
+              data="sign-in-basic"
+              input-classes="bg-white !rounded-3xl min-w-[200px]"
+              :button-loading="buttonLoading"
+              @emit:onGetPkcs7="(pkcs7) => sign(pkcs7)"
+            />
+          </template>
 
           <resolution-performers-modal
             v-else

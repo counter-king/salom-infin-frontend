@@ -20,10 +20,12 @@ import { StatusChip } from "@/components/Chips";
 import { VueDraggable } from "vue-draggable-plus";
 import Eimzo from "@/components/EIMZO/Eimzo.vue";
 
-const dialog = ref(false)
-const buttonLoading = ref(false)
 const route = useRoute()
 const { t } = useI18n()
+
+const dialog = ref(false)
+const buttonLoading = ref(false)
+const isHostVercel = ref(null)
 
 const props = defineProps({
   performers: {
@@ -123,6 +125,7 @@ const validateForm = async () => {
 
 // Hooks
 onMounted( async () => {
+  isHostVercel.value = window.location.host === 'new-side-project.vercel.app' || window.location.host.startsWith('localhost')
   if (props.performers.length && props.resolutionText && props.resolutionType) {
     let users = props.performers.map(item => ({ ...item, user: item }))
     model.value.__performers = await adjustUserObjectToArray(users)
@@ -246,18 +249,18 @@ defineExpose({ buttonLoading, dialog })
           @click="dialog = false"
         />
 
-<!--
         <base-button
+          v-if="isHostVercel"
           label="sign"
           :loading="buttonLoading"
           rounded
           shadow
           type="button"
-          @click="onSign"
+          @click="onSign('test')"
         />
--->
 
         <eimzo
+          v-else
           type="sign"
           data="resolution-performer"
           input-classes="bg-white !rounded-3xl min-w-[200px]"
