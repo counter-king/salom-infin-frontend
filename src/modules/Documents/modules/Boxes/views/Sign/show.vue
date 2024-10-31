@@ -144,6 +144,7 @@ onMounted( async () => {
               rounded
               shadow
               type="button"
+              :loading="buttonLoading"
               @click="sign('test')"
             />
 
