@@ -2,8 +2,6 @@
 // Core
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-// Components
-import { CheckCircleBoldIcon } from '@/components/Icons'
 // Stores
 import { useCalendarStore } from '../stores/calendar.store'
 // Enums
@@ -12,7 +10,7 @@ import { EVENT_TYPES } from '../enums'
 const { t } = useI18n()
 const calendarStore = useCalendarStore()
 // Reactive
-const test = ref([EVENT_TYPES.EVENT, EVENT_TYPES.TASK])
+const eventMenus = ref([EVENT_TYPES.EVENT, EVENT_TYPES.TASK])
 </script>
 
 <template>
@@ -26,43 +24,63 @@ const test = ref([EVENT_TYPES.EVENT, EVENT_TYPES.TASK])
     <ul>
       <li
         class="flex items-center gap-2 hover:bg-greyscale-50 cursor-pointer rounded-lg py-[10px] px-3"
-        @click="calendarStore.filterEvent(EVENT_TYPES.EVENT)"
       >
-        <!-- <Checkbox
-          v-model="test"
+        <Checkbox
+          v-model="eventMenus"
           :value="EVENT_TYPES.EVENT"
+          input-id="checkbox-event"
           :pt="{
             root: {
               class: 'flex items-center'
             },
             input:{
-              class: 'w-[18px] h-[18px] rounded'
+              class: 'checkbox-event w-[18px] h-[18px] rounded'
             }
           }"
-        /> -->
-        <base-iconify :icon="CheckCircleBoldIcon" class="text-primary-500" />
-        <span class="text-sm font-medium text-primary-900">{{ t('events') }}</span>
+          @change="calendarStore.filterEvent(eventMenus)"
+        />
+        <label for="checkbox-event" class="text-sm font-medium text-primary-900 cursor-pointer">{{ t('events') }}</label>
       </li>
 
       <li
         class="flex items-center gap-2 hover:bg-greyscale-50 cursor-pointer rounded-lg py-[10px] px-3"
-        @click="calendarStore.filterEvent(EVENT_TYPES.TASK)"
       >
-        <!-- <Checkbox
-          v-model="test"
+        <Checkbox
+          v-model="eventMenus"
           :value="EVENT_TYPES.TASK"
+          input-id="checkbox-task"
           :pt="{
             root: {
               class: 'flex items-center'
             },
             input:{
-              class: 'w-[18px] h-[18px] rounded'
+              class: 'checkbox-task w-[18px] h-[18px] rounded'
             }
           }"
-        /> -->
-        <base-iconify :icon="CheckCircleBoldIcon" class="text-primary-500" />
-        <span class="text-sm font-medium text-primary-900">{{ t('tasks') }}</span>
+          @change="calendarStore.filterEvent(eventMenus)"
+        />
+        <label for="checkbox-task" class="text-sm font-medium text-primary-900 cursor-pointer">{{ t('tasks') }}</label>
       </li>
     </ul>
   </div>
 </template>
+
+<style scoped>
+::v-deep(.p-checkbox .checkbox-event.p-highlight) {
+  @apply !bg-info-500;
+  @apply !border-info-500
+}
+
+::v-deep(.p-checkbox:not(.p-checkbox-disabled) .checkbox-event.p-focus) {
+  @apply !border-info-500
+}
+
+::v-deep(.p-checkbox .checkbox-task.p-highlight) {
+  @apply !bg-success-500;
+  @apply !border-success-500
+}
+
+::v-deep(.p-checkbox:not(.p-checkbox-disabled) .checkbox-task.p-focus) {
+  @apply !border-success-500
+}
+</style>

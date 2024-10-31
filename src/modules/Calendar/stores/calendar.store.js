@@ -213,8 +213,8 @@ export const useCalendarStore = defineStore('calendar', {
     /**
      *
      * */
-    filterEvent(type) {
-      // this.eventList = this.eventListCopy.filter(event => ['event', 'task'].includes(event.type !== type))
+    filterEvent(menus) {
+      this.eventList = this.eventListCopy.filter(event => menus.includes(event.type))
     }
   }
 })
