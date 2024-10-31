@@ -16,7 +16,7 @@ let model = {
   __start_time: null,
   end_date: null,
   __end_time: null,
-  priority: null,
+  priority: 5, // medium
   participants: null,
   __participants: [],
   organizer: null,
@@ -24,13 +24,21 @@ let model = {
   description: null,
   attachments: [],
   __attachments: [],
-  type: EVENT_TYPES.EVENT
+  type: EVENT_TYPES.EVENT,
+  source: null, // zoom | cisco
+  link: null,
+  notify_by: 'system', // system | email | sms
+  __formatType: 'offline', // offline | online
+  __tabActiveIndex: 0,
+  __zoomLink: null,
+  __ciscoLink: null
 }
 
 export const useCalendarStore = defineStore('calendar', {
   state: () => ({
     eventSidebar: false,
     eventList: [],
+    eventListCopy: [],
     eventModel: Object.assign({}, model),
     updateEventModel: Object.assign({}, model),
     actionTypesMenuSelected: {
@@ -49,6 +57,7 @@ export const useCalendarStore = defineStore('calendar', {
     async actionGetList(params) {
       let { data } = await fetchEventList(params)
       this.eventList = data.results
+      this.eventListCopy = [...this.eventList]
     },
     /**
      * Создает новое мероприятие
@@ -68,11 +77,11 @@ export const useCalendarStore = defineStore('calendar', {
           attachments: type === EVENT_TYPES.EVENT
             ? this.eventModel.__attachments.map(file => ({ id: file.id }))
             : null,
-          type
+          type,
+          link: this.eventModel.source === 'zoom' ? this.eventModel.__zoomLink : this.eventModel.__ciscoLink
         }
 
         let { data } = await fetchCreateEvent(model)
-        await clearModel(this.eventModel)
         dispatchNotify(
           null,
           EVENT_TYPES.EVENT === type ? 'Мероприятия создана' : 'Задача создана',
@@ -120,7 +129,8 @@ export const useCalendarStore = defineStore('calendar', {
           attachments: type === EVENT_TYPES.EVENT
             ? this.updateEventModel.__attachments.map(file => ({ id: file.id }))
             : null,
-          type
+          type,
+          link: this.eventModel.source === 'zoom' ? this.eventModel.__zoomLink : this.eventModel.__ciscoLink
         }
 
         let { data } = await fetchUpdateEvent(model.id, model)
@@ -131,7 +141,6 @@ export const useCalendarStore = defineStore('calendar', {
             return event
           }
         })
-        await clearModel(this.updateEventModel)
         dispatchNotify(
           null,
           EVENT_TYPES.EVENT === type ? 'Мероприятия изменен' : 'Задача изменен',
@@ -187,7 +196,11 @@ export const useCalendarStore = defineStore('calendar', {
             __userId: item.user.id
           }
         }),
-        __organizer: payload.organizer
+        __organizer: payload.organizer,
+        __formatType: payload.link ? 'online' : 'offline',
+        __tabActiveIndex: payload.source === 'zoom' ? 0 : 1,
+        __zoomLink: payload.source === 'zoom' ? payload.link : null,
+        __ciscoLink: payload.source === 'cisco' ? payload.link : null
       }
       setValuesToKeys(this.updateEventModel, model)
     },
@@ -196,6 +209,12 @@ export const useCalendarStore = defineStore('calendar', {
      * */
     actionToggleEventClick(payload) {
       this.isEventClicked = payload
+    },
+    /**
+     *
+     * */
+    filterEvent(type) {
+      // this.eventList = this.eventListCopy.filter(event => ['event', 'task'].includes(event.type !== type))
     }
   }
 })

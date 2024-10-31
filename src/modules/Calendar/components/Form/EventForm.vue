@@ -1,11 +1,12 @@
 <script setup>
 // Core
 import { computed, ref, inject } from 'vue'
-import { helpers, required } from '@vuelidate/validators'
+import { useI18n } from 'vue-i18n'
+import { helpers, required, requiredIf } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
 // Components
 import { PriorityChip } from '@/components/Chips'
-import { ClockCircleLinearIcon } from '@/components/Icons'
+import { ClockCircleLinearIcon, TextSquareBoldIcon, FileTextBoldIcon } from '@/components/Icons'
 import { UserWithLabel, UserWithSelectable } from '@/components/Users'
 // Stores
 import { useCommonStore } from '@/stores/common'
@@ -18,6 +19,7 @@ import { generateDayHours } from '../../utils'
 // Enums
 import { EVENT_TYPES } from '../../../Calendar/enums'
 // Composable
+const { t } = useI18n()
 const commonStore = useCommonStore()
 const userStore = useUsersStore()
 const calendarStore = useCalendarStore()
@@ -39,12 +41,31 @@ const props = defineProps({
       description: null,
       attachments: [],
       __attachments: [],
-      type: EVENT_TYPES.EVENT
+      type: EVENT_TYPES.EVENT,
+      source: null, // zoom | cisco
+      link: null,
+      notify_by: null, // system | email | sms
+      __formatType: null,
+      __tabActiveIndex: null,
+      __zoomLink: null,
+      __ciscoLink: null
     })
   }
 })
 // Reactive
 const times = ref(generateDayHours(15, 'ru'))
+const formatList = ref([
+  {
+    title: 'Zoom',
+    slot: 'zoom',
+    icon: TextSquareBoldIcon
+  },
+  {
+    title: 'Cisco',
+    slot: 'cisco',
+    icon: FileTextBoldIcon
+  },
+])
 // Composable
 const endTimes = computed(() => {
   let selected = times.value.findIndex(({ time }) => time === props.model.__start_time)
@@ -73,9 +94,6 @@ const rules = {
   __end_time: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
-  priority: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
   __participants: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
@@ -84,6 +102,22 @@ const rules = {
   },
   description: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  __zoomLink: {
+    requiredIf: helpers.withMessage(
+      `Поле не должен быть пустым`,
+      requiredIf(function () {
+        return props.model.__formatType === 'online' && props.model.__tabActiveIndex === 0
+      })
+    )
+  },
+  __ciscoLink: {
+    requiredIf: helpers.withMessage(
+      `Поле не должен быть пустым`,
+      requiredIf(function () {
+        return props.model.__formatType === 'online' && props.model.__tabActiveIndex === 1
+      })
+    )
   },
 }
 // Composable
@@ -105,6 +139,76 @@ const { date } = inject('calendar')
         placeholder="enter-name-event"
       />
     </base-col>
+
+    <base-col col-class="w-1/2">
+      <base-label label="Формат" />
+
+      <div class="flex">
+        <div class="flex flex-1">
+          <base-radio
+            v-model="props.model.__formatType"
+            input-id="offline"
+            name="format"
+            value="offline"
+            @emit:update:modelValue="() => { props.model.source = props.model.link = null  }"
+          />
+
+          <label for="offline" class="text-sm font-medium text-greyscale-900 cursor-pointer">Оффлайн</label>
+        </div>
+
+        <div class="flex flex-1">
+          <base-radio
+            v-model="props.model.__formatType"
+            input-id="online"
+            name="format"
+            value="online"
+            @emit:update:modelValue="() => props.model.source = 'zoom'"
+          />
+
+          <label for="online" class="text-sm font-medium text-greyscale-900 cursor-pointer">Онлайн</label>
+        </div>
+      </div>
+    </base-col>
+
+    <base-col col-class="w-1/2">
+      <template v-if="props.model.__formatType === 'online'">
+        <div class="mt-[10px]">
+          <base-tab-view
+            v-model:active-index="props.model.__tabActiveIndex"
+            :tab-view="formatList"
+            scrollable
+            bricks
+            header-action-class="!p-[4px]"
+            title-class="!h-auto"
+            @emit:tab-click="(value) => props.model.source = value.slot"
+          />
+        </div>
+      </template>
+    </base-col>
+
+    <template v-if="props.model.__formatType === 'online'">
+      <base-col col-class="w-full">
+        <template v-if="props.model.__tabActiveIndex === 0">
+          <base-input
+            v-model="$v.__zoomLink.$model"
+            :error="$v.__zoomLink"
+            required
+            label="Zoom ссылка"
+            placeholder="Вставте zoom cсылку"
+          />
+        </template>
+
+        <template v-if="props.model.__tabActiveIndex === 1">
+          <base-input
+            v-model="$v.__ciscoLink.$model"
+            :error="$v.__ciscoLink"
+            required
+            label="Cisco номер и пароль"
+            placeholder="Введите cisco номер и пароль"
+          />
+        </template>
+      </base-col>
+    </template>
 
     <base-col col-class="w-1/2">
       <base-calendar
@@ -170,10 +274,9 @@ const { date } = inject('calendar')
 
     <base-col col-class="w-full">
       <base-dropdown
-        v-model="$v.priority.$model"
-        :error="$v.priority"
+        v-model="props.model.priority"
         :options="commonStore.prioryList"
-        required
+        :show-clear="false"
         option-value="id"
         label="priority"
       >
@@ -256,6 +359,45 @@ const { date } = inject('calendar')
         label="attach-file"
         @emit:file-upload="(files) => props.model.__attachments = files"
       />
+    </base-col>
+
+    <base-col col-class="w-full">
+      <base-label label="Уведомление" />
+
+      <div class="flex items-center gap-6">
+        <div class="flex items-center">
+          <base-radio
+            v-model="props.model.notify_by"
+            input-id="system"
+            name="notify"
+            value="system"
+          />
+
+          <label for="system" class="text-sm font-medium text-greyscale-900 cursor-pointer">Система</label>
+        </div>
+
+        <div class="flex items-center">
+          <base-radio
+            v-model="props.model.notify_by"
+            input-id="email"
+            name="notify"
+            value="email"
+          />
+
+          <label for="email" class="text-sm font-medium text-greyscale-900 cursor-pointer">Почта</label>
+        </div>
+
+        <div class="flex items-center">
+          <base-radio
+            v-model="props.model.notify_by"
+            input-id="sms"
+            name="notify"
+            value="sms"
+          />
+
+          <label for="sms" class="text-sm font-medium text-greyscale-900 cursor-pointer">SMS сообщения</label>
+        </div>
+      </div>
     </base-col>
   </base-row>
 </template>

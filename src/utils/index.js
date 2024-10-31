@@ -46,7 +46,7 @@ export function clearModel(model, exclude = []) {
 export function setValuesToKeys(model, source) {
   Object.entries(source)
   .forEach(([key, value]) => {
-    if(!value) return
+    if(value === null || value === undefined) return
 
     if(Object.prototype.toString.call(value) === '[object Object]') {
       model[key] = value.id
