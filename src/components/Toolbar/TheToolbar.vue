@@ -124,7 +124,7 @@ onMounted(() => {
 
             <setting-dropdown />
 
-            <notifications />
+<!--            <notifications />-->
 
             <language-dropdown />
           </div>
