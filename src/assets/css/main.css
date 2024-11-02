@@ -134,3 +134,8 @@ body {
 .p-tooltip-text {
   width: fit-content!important;
 }
+
+.pdf-content {
+  padding: 20px; /* Set the desired padding */
+  box-sizing: border-box;
+}

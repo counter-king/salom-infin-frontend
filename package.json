@@ -24,6 +24,7 @@
     "dayjs": "^1.11.10",
     "diff": "^6.0.0-beta",
     "file-saver": "^2.0.5",
+    "html2pdf.js": "^0.10.2",
     "maska": "^2.1.11",
     "pinia": "^2.1.6",
     "primeicons": "^6.0.1",
@@ -42,9 +43,9 @@
   "devDependencies": {
     "@iconify-json/bxl": "^1.1.11",
     "@iconify-json/ci": "^1.1.14",
+    "@iconify-json/fluent": "^1.1.10",
     "@iconify-json/heroicons": "^1.1.24",
     "@iconify-json/solar": "^1.1.10",
-    "@iconify-json/fluent": "^1.1.10",
     "@iconify/vue": "^4.1.2",
     "@vitejs/plugin-vue": "^4.3.4",
     "@vue-macros/volar": "^0.17.1",

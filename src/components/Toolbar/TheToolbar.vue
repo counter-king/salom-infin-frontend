@@ -16,6 +16,7 @@ import SettingDropdown from './SettingDropdown.vue'
 import Notifications from './Notifications.vue'
 import LanguageDropdown from './LanguageDropdown.vue'
 import UserDropdown from './UserDropdown.vue'
+import RefreshButton from "@/components/Toolbar/RefreshButton.vue"
 // Composable
 const { t } = useI18n()
 const themeStore = useThemeStore()
@@ -106,6 +107,9 @@ onMounted(() => {
           <div v-if="openModal" class="bg-greyscale-800 w-[1px] h-[28px]"></div>
 
           <div class="flex gap-2">
+
+            <refresh-button v-if="openModal" />
+
             <base-button
               v-if="openModal"
               color="bg-greyscale-800 hover:bg-greyscale-900"

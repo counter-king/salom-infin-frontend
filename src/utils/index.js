@@ -78,7 +78,8 @@ export const formatNameToShort = (value, separate = '.') => {
   if(!value) return 'Текст не найден'
 
   const [name, firstName, fatherName] = value.split(' ')
-  const firstNameChar = name.slice(0, 2).toLowerCase()
+
+  const firstNameChar = firstName.slice(0, 2).toLowerCase()
   const fatherNameChar = fatherName?.slice(0, 2).toLowerCase()
 
   if (
