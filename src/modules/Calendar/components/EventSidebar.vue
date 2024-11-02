@@ -43,21 +43,25 @@ const createEvent = async () => {
       )
     }
     _sidebarRef.successButtonLoading = false
-    calendarStore.eventSidebar = false
+    emitCancelButton(false)
   }
   catch (error) {
 
   }
   finally {
     _sidebarRef.successButtonLoading = false
+    _actionTypesMenuRef.$v.$reset()
   }
 }
 const emitCancelButton = (value) => {
-	calendarStore.eventSidebar = value
-  calendarStore.actionTypesMenuSelected.name = ACTION_FORM_TYPES.EVENT
   calendarStore.actionToggleEventClick(false)
-  clearModel(calendarStore.eventModel)
-  clearModel(calendarStore.updateEventModel)
+  clearModel(calendarStore.eventModel, ['start_date', 'end_date', 'priority'])
+  clearModel(calendarStore.updateEventModel, ['start_date', 'end_date', 'priority'])
+  calendarStore.eventSidebar = value
+  calendarStore.actionTypesMenuSelected.name = ACTION_FORM_TYPES.EVENT
+  calendarStore.eventModel.notify_by = 'system'
+  calendarStore.eventModel.__formatType = 'offline'
+  calendarStore.eventModel.__tabActiveIndex = 0
 }
 // Watch
 watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {

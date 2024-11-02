@@ -47,7 +47,10 @@ watch(
 <template>
   <div class="calendar-view flex w-full">
     <div class="flex flex-col flex-1 overflow-y-auto p-6">
-      <the-navigation :navs="routes" />
+      <the-navigation
+        :navs="routes"
+        route-include-params="type"
+      />
 
       <router-view />
     </div>

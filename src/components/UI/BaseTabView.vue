@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import TabView from 'primevue/tabview'
 import TabPanel from 'primevue/tabpanel'
@@ -11,6 +11,9 @@ import { FilePreview } from '@/components/Files'
 const { t } = useI18n()
 // Macros
 const props = defineProps({
+  activeIndex: {
+    type: Number
+  },
   tabView: {
     type: Array,
     default: () => []
@@ -32,12 +35,27 @@ const props = defineProps({
   },
   navContainerClass: {
     type: String
+  },
+  headerActionClass: {
+    type: String
+  },
+  titleClass: {
+    type: String
   }
 })
-const emit = defineEmits(['emit:tab-click'])
+const emit = defineEmits(['emit:tab-click', 'update:active-index'])
 // Reactive
 const zoomDialog = ref(false)
 const currentFile = ref(null)
+// Computed
+const activeIndex = computed({
+  get() {
+    return props.activeIndex
+  },
+  set(value) {
+    emit('update:active-index', value)
+  }
+})
 // Methods
 const panelClass = (_, parent, index) => {
   return [
@@ -62,6 +80,7 @@ const zoomFile = (event, pane) => {
 
 <template>
   <TabView
+    v-model:active-index="activeIndex"
     :scrollable="props.scrollable"
     @update:activeIndex="(index) => emit('emit:tab-click', props.tabView[index])"
     :pt="{
@@ -101,6 +120,7 @@ const zoomFile = (event, pane) => {
           },
           header: {
             class: [
+              'flex-1',
               {
                 'flex-none': props.segment
               }
@@ -115,7 +135,8 @@ const zoomFile = (event, pane) => {
                 'max-w-[200px] truncate': props.truncate,
                 'py-2 px-3 rounded-[6px] !bg-greyscale-50 font-semibold mr-2': props.segment,
                 '!m-0 !p-2 !rounded-lg !border-transparent': props.bricks
-              }
+              },
+              props.headerActionClass
             ]
           })
         }"
@@ -133,10 +154,13 @@ const zoomFile = (event, pane) => {
 
             <p
               class="flex items-center text-sm h-6"
-              :class="{
+              :class="[
+                {
                 'truncate': props.truncate,
                 '!text-sm': props.bricks
-              }"
+                },
+                props.titleClass
+              ]"
               v-tooltip.top="{
                 value: props.truncate ? `<h4 class='text-xs text-white -my-1'>${pane.title}</h4>` : null,
                 escape: true,

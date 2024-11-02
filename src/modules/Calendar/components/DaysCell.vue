@@ -62,7 +62,7 @@ const menuTopRef = ref(null)
 const menuContentRef = ref(null)
 const menuBottomRef = ref(null)
 const eventRef = ref(null)
-const formRef = ref(null)
+const actionTypesMenuRef = ref(null)
 const formComponent = shallowRef(null)
 const menuVisible = ref(false)
 const toggleCount = ref(1)
@@ -88,6 +88,18 @@ const weekInterval = computed(() => {
     dayjs(beginOfWeek.value).add(6, 'day').format('D')
   )
 })
+// Watch
+watch(
+  () => route.params,
+  (newRoute, oldRoute) => {
+    if(newRoute.type !== oldRoute.type) {
+      menuVisible.value = false
+    }
+  },
+  {
+    deep: true
+  }
+)
 const getOneEvent = computed(() => daysList.value.find(day => day.date === +dayjs(date.value).format('D')))
 // Methods
 const collapseEventList = (index) => {
@@ -114,7 +126,7 @@ const collapseEventList = (index) => {
 	toggleCount.value = toggleCount.value + 1
   currentMonthCellIndex.value = index
 }
-const cellClick = async (cellIndex, date, month, year, time) => {
+const cellClick = async (cellIndex, date, month, year, time, type) => {
 	clearModel(calendarStore.updateEventModel, ['type'])
   if(time) {
     calendarStore.eventModel.__start_time = time
@@ -130,28 +142,35 @@ const cellClick = async (cellIndex, date, month, year, time) => {
   const _menuContainerRef = unref(menuContainerRef)
   const _menuTopRef = unref(menuTopRef)
 
-  // Right side
-  if(eventLeft - eventWidth < menuWidth) {
-    _menuContainerRef.style.marginLeft = `${eventLeft + eventWidth + 10}px`
-    _menuTopRef.style.maxHeight = `${eventTop}px`
-    _menuTopRef.style.minHeight = `32px`
+  if(type !== CALENDAR_TYPES.DAYS) {
+    // Right side
+    if(eventLeft - eventWidth < menuWidth) {
+      _menuContainerRef.style.marginLeft = `${eventLeft + eventWidth + 10}px`
+      _menuTopRef.style.maxHeight = `${eventTop}px`
+      _menuTopRef.style.minHeight = `32px`
+    }
+    else {
+      // Left side
+      _menuContainerRef.style.marginLeft = `${eventLeft - menuWidth - 10}px`
+      _menuTopRef.style.maxHeight = `${eventTop}px`
+      _menuTopRef.style.minHeight = `32px`
+    }
   }
   else {
-    // Left side
-    _menuContainerRef.style.marginLeft = `${eventLeft - menuWidth - 10}px`
-    _menuTopRef.style.maxHeight = `${eventTop}px`
-    _menuTopRef.style.minHeight = `32px`
+    _menuContainerRef.style.alignItems = `center`
   }
 
-	await router.replace({
-		name: 'CalendarDate',
-		params: {
-			...route.params,
-			y: year,
-			m: month,
-			d: date
-		}
-	})
+	if(date && month && year) {
+    await router.replace({
+      name: 'CalendarDate',
+      params: {
+        ...route.params,
+        y: year,
+        m: month,
+        d: date
+      }
+    })
+  }
 }
 const eventClick = async (event, cellIndex, eventIndex, date, month, year, type) => {
   type === EVENT_TYPES.EVENT
@@ -208,6 +227,11 @@ const maximizeEvent = () => {
   calendarStore.eventSidebar = true
 }
 const createEvent = async (type) => {
+  const _actionTypesMenuRef = unref(actionTypesMenuRef)
+  const valid = await _actionTypesMenuRef.$v.$validate()
+
+  if(!valid) return
+
   try {
     await calendarStore.actionCreateEvent(type)
     menuVisible.value = false
@@ -217,6 +241,11 @@ const createEvent = async (type) => {
   }
 }
 const changeEvent = async (type) => {
+  const _actionTypesMenuRef = unref(actionTypesMenuRef)
+  const valid = await _actionTypesMenuRef.$v.$validate()
+
+  if(!valid) return
+
   try {
     await calendarStore.actionChangeEvent(type)
     menuVisible.value = false
@@ -231,8 +260,14 @@ const closeEvent = () => {
     calendarStore.isEventClicked
       ? calendarStore.updateEventModel
       : calendarStore.eventModel,
-    ['type', 'start_date', 'end_date']
+    ['start_date', 'end_date', 'priority']
   )
+  calendarStore.actionToggleEventClick(false)
+  calendarStore.actionTypesMenuSelected.name = ACTION_FORM_TYPES.EVENT
+  calendarStore.eventModel.type = EVENT_TYPES.EVENT
+  calendarStore.eventModel.notify_by = 'system'
+  calendarStore.eventModel.__formatType = 'offline'
+  calendarStore.eventModel.__tabActiveIndex = 0
 }
 const deleteEvent = async (type) => {
   if(!confirm(`Действительно хотите удалить ?`)) {
@@ -280,7 +315,7 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
           <template v-for="({ time }, index) in times">
             <div
               class="relative h-[120px] p-2 [&:not(:last-child)]:border-b border-greyscale-200"
-              @click="cellClick(index, route.params.d, route.params.m, route.params.y, null)"
+              @click="cellClick(index, route.params.d, route.params.m, route.params.y, null, CALENDAR_TYPES.DAYS)"
             >
               <div
                 :id="`events-list-${index}`"
@@ -459,7 +494,7 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
                       ref="eventRef"
                       :id="`event-item-${index}-${eventIndex}`"
                       :class="[
-                        event.type === EVENT_TYPES.EVENT ? 'bg-info-100' : 'bg-warning-100',
+                        event.type === EVENT_TYPES.EVENT ? 'bg-info-100' : 'bg-success-100',
                         eventIndex + 1 !== events.length ? 'mb-1' : ''
                       ]"
                       class="rounded-[6px] cursor-pointer px-2 py-1"
@@ -510,7 +545,7 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
 							<div class="event-menu-wrapper-content">
 								<div
 									ref="menuContentRef"
-									class="max-w-[460px] w-full bg-white shadow-calendar-menu rounded-2xl overflow-hidden pointer-events-auto"
+									class="max-w-[484px] w-full bg-white shadow-calendar-menu rounded-2xl overflow-hidden pointer-events-auto"
 								>
                   <div class="flex flex-col w-full max-h-[625px]">
                     <div class="flex items-center justify-between gap-3 border-b border-greyscale-200 py-3 pl-5 pr-3">
@@ -577,7 +612,7 @@ watch(() => calendarStore.actionTypesMenuSelected.name, (value) => {
                     <div class="flex flex-1 overflow-hidden p-1">
                       <div class="overflow-y-auto py-2 px-4">
                         <component
-                          ref="formRef"
+                          ref="actionTypesMenuRef"
                           :is="formComponent"
                           :model="calendarStore.isEventClicked
                             ? calendarStore.updateEventModel

@@ -15,7 +15,7 @@ const props = defineProps({
     type: [Boolean, Number, String]
   },
   inputId: {
-    type: [Boolean, Number, String]
+    type: [String]
   },
   bgRadio: {
     type: String,
@@ -44,6 +44,7 @@ const props = defineProps({
     })
   }
 })
+const emit = defineEmits(['update:modelValue', 'emit:update:modelValue'])
 // Composable
 const modelValue = useModel(props, 'modelValue')
 const { t } = useI18n()
@@ -58,15 +59,17 @@ const { t } = useI18n()
       :inputId="props.inputId"
       :name="props.name"
       :value="props.value"
+      @update:modelValue="(value) => emit('emit:update:modelValue', value)"
       :pt="{
         root: {
-          class: ['mr-2 text-sm/[3px] rounded-full',  props.bgRadio]
+          class: ['flex !w-5 !h-5 rounded-full mr-2',  props.bgRadio]
         },
         input: {
-          class: ['border-none', props.bgRadio]
+          class: ['bg-greyscale-50 !w-5 !h-5 border-greyscale-200', props.bgRadio]
         },
         icon: {
-          class: ['text-white my_icon pt-0.5 pl-0.5 pi pi-check', props.iconRadio, props.bgRadio]
+          // class: ['text-white pt-0.5 pl-0.5 pi pi-check', props.iconRadio, props.bgRadio]
+          class: ['!w-[10px] !h-[10px]', props.iconRadio, props.bgRadio]
         }
       }"
     />
@@ -91,5 +94,10 @@ const { t } = useI18n()
 .my_icon::before{
   font-size: 8px !important;
   display: block;
+}
+
+.p-radiobutton .p-radiobutton-box.p-highlight {
+  border-color: #6366F1 !important;
+  background: #6366F1 !important;
 }
 </style>
