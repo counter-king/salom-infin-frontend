@@ -100,7 +100,7 @@ const generatePdf = async () => {
 
   const options = {
     margin: [16, 20], // Set margins (top, bottom, left, right)
-    filename: "document.pdf",
+    filename: author?.value?.full_name,
     image: { type: "jpeg", quality: 0.98 },
     html2canvas: { scale: 2 }, // Increase scale for better quality
     jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
