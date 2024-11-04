@@ -194,6 +194,7 @@ const onSendToSigning = async () => {
         label="enter-content"
         required
         class="mt-4"
+        :set-from-template="true"
       />
 
 <!--      <pre>{{ model }}</pre>-->

@@ -233,6 +233,7 @@ defineExpose({ buttonLoading, dialog })
         label="enter-content"
         required
         class="mt-4"
+        :set-from-template="true"
       />
       <!--      <pre>{{ model }}</pre>-->
     </template>
