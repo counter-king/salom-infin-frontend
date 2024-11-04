@@ -69,9 +69,9 @@ onMounted(() => {
           </li>
         </template>
 
-        <li class="flex font-semibold">
+        <li v-if="props.resolution.deadline" class="flex font-semibold">
           <p class="text-greyscale-500 mr-1">{{ t('deadline') }}:</p>
-          <span>{{ props.resolution.deadline ? props.resolution.deadline : t('without-deadline') }}</span>
+          <span>{{ props.resolution.deadline }}</span>
         </li>
       </ul>
 

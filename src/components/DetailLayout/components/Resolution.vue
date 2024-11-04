@@ -23,7 +23,7 @@ const props = defineProps({
 
 <template>
   <div class="resolution-view">
-    <div class="h-[calc(100vh-240px)] overflow-y-auto p-6">
+    <div class="h-[calc(100vh-297px)] overflow-y-auto p-6">
       <div class="shadow-block min-h-[400px] border-[0.094rem] border-greyscale-200 p-6">
         <template v-if="ROLES.CHAIRMAN === props.resolution.reviewer?.role?.name">
           <resolution-chairman-template :resolution="props.resolution" />
