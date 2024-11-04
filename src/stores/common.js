@@ -280,10 +280,10 @@ export const useCommonStore = defineStore("common", {
      * Возвращает список кратких описаний
      * @returns Array
      * */
-    actionShortDescriptionList() {
+    async actionShortDescriptionList(params = {}) {
       const collectStore = useCollectRequestsStore()
 
-      fetchShortDescriptionList().then(({ data }) => {
+      await fetchShortDescriptionList(params).then(({ data }) => {
         this.shortDescriptionList = data.results
       })
       // Добавляем запрос в коллекцию

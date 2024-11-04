@@ -104,8 +104,8 @@ export const fetchRegionsList = () => {
  * Возвращает список кратких описаний
  * @returns [{Array}]
  * */
-export const fetchShortDescriptionList = () => {
-  return axiosConfig.get(URLS.shortDescription)
+export const fetchShortDescriptionList = (params = {}) => {
+  return axiosConfig.get(URLS.shortDescription, params = { page_size: 50, ...params })
 }
 /**
  * Возвращает список статусов
