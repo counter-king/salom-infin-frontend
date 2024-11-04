@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { computed, ref } from "vue"
+import { computed, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 // Components
 import { CheckCircleIcon } from '@/components/Icons'
@@ -68,6 +68,15 @@ const rules = computed(() => ({
 
 const $v = useVuelidate(rules, model)
 const emit = defineEmits(['emit:onSendToSigning'])
+
+watch(() => model.value.__performers, (newVal) => {
+  if (newVal && newVal.length) {
+    let index = newVal.find(item => item.id === responsibleIndex.value)
+    if (!index) {
+      responsibleIndex.value = newVal[0].id
+    }
+  }
+})
 
 // Methods
 const onSendToSigning = async () => {

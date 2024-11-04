@@ -7,6 +7,7 @@ import BaseFileUpload from "@/components/UI/BaseFileUpload.vue";
 import BaseFroalaEditor from "@/components/UI/BaseFroalaEditor.vue";
 // Components
 import { FileTextBoldIcon, TextSquareBoldIcon } from '@/components/Icons'
+import BaseTinyEditor from "@/components/UI/BaseTinyEditor.vue";
 // Macros
 const props = defineProps({
   modelValue: {
@@ -19,6 +20,13 @@ const props = defineProps({
   files: {
     type: Array,
     default: []
+  },
+  editor: {
+    type: String,
+    default: 'froala',
+    validator(value) {
+      return ['froala', 'tiny'].includes(value)
+    }
   }
 })
 
@@ -46,6 +54,12 @@ const tabPanelList = ref([
   >
     <template #editor>
       <base-froala-editor
+        v-if="editor === 'froala'"
+        v-model="modelValue"
+      />
+
+      <base-tiny-editor
+        v-else
         v-model="modelValue"
       />
     </template>
