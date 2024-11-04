@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useDebounce } from '@vueuse/core'
 // Components
 import { MagniferIcon } from '@/components/Icons'
@@ -13,6 +13,7 @@ const dialog = ref(false)
 const search = ref(null)
 const selected = ref('')
 const loading = ref(false)
+const list = ref([])
 // Composable
 const commonStore = useCommonStore()
 const debounced = useDebounce(search, 750)
@@ -41,19 +42,42 @@ const cancelItem = () => {
     selected.value = ''
   }, 250)
 }
+// Hooks
+onMounted(() => {
+  list.value = commonStore.shortDescriptionList
+})
 </script>
 
 <template>
   <div class="short-description-modal mt-3">
-    <base-button
-      border-color="border-transparent"
-      label="Добавить из шаблона"
-      size="small"
-      type="button"
-      rounded
-      shadow
-      @click="dialog = true"
-    />
+    <div class="flex flex-wrap items-center gap-1">
+      <base-button
+        border-color="border-transparent"
+        label="Поиск по названию"
+        :icon-left="MagniferIcon"
+        icon-width="!w-4"
+        icon-height="!h-4"
+        size="small"
+        type="button"
+        rounded
+        shadow
+        @click="dialog = true"
+      />
+
+      <template v-for="item in list">
+        <div
+          v-tooltip.top="{
+            value: `<h4 class='text-xs text-white -my-1 max-w-[200px] w-full truncate'>${item.description}</h4>`,
+            escape: true,
+            autoHide: false
+          }"
+          class="max-w-[180px] truncate bg-greyscale-50 hover:bg-primary-500 transition-colors border border-greyscale-200 text-greyscale-500 hover:text-white text-sm rounded-[6px] py-[5px] px-2 cursor-pointer"
+          @click="emit('emit:selected', item.description)"
+        >
+          {{ item.description }}
+        </div>
+      </template>
+    </div>
 
     <base-dialog
       v-model="dialog"
