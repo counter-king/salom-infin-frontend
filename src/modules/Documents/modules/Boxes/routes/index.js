@@ -3,7 +3,8 @@ const Boxes = [
     path: "boxes",
     name: "BoxesIndex",
     meta: {
-      isAuthRequired: true
+      isAuthRequired: true,
+      navigation: true
     },
     component: () => import("../views/index.vue"),
     redirect: { name: "ReviewIndex" },

@@ -140,6 +140,7 @@ const redirectRoute = async () => {
     params: { code: docFlowStore.documentMenuType.journalId },
     query: { journal_id: docFlowStore.documentMenuType.__journalId }
   })
+  await docFlowStore.actionGetList(route.query)
 }
 const afterHide = () => {
   docFlowStore.actionLoadFormCreateDocument({
