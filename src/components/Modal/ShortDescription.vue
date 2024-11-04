@@ -50,7 +50,7 @@ onMounted(() => {
 
 <template>
   <div class="short-description-modal mt-3">
-    <div class="flex flex-wrap items-center gap-1">
+    <div class="flex flex-wrap items-center gap-1 max-h-[140px] overflow-hidden">
       <base-button
         border-color="border-transparent"
         label="Поиск по названию"
@@ -67,11 +67,11 @@ onMounted(() => {
       <template v-for="item in list">
         <div
           v-tooltip.top="{
-            value: `<h4 class='text-xs text-white -my-1 max-w-[200px] w-full truncate'>${item.description}</h4>`,
+            value: `<h4 class='text-xs text-white -my-1 text-center line-clamp-4'>${item.description}</h4>`,
             escape: true,
             autoHide: false
           }"
-          class="max-w-[180px] truncate bg-greyscale-50 hover:bg-primary-500 transition-colors border border-greyscale-200 text-greyscale-500 hover:text-white text-sm rounded-[6px] py-[5px] px-2 cursor-pointer"
+          class="max-w-[225px] truncate bg-greyscale-50 hover:bg-primary-500 transition-colors border border-greyscale-200 text-greyscale-500 hover:text-white text-xs rounded-[6px] py-[7px] px-2 cursor-pointer"
           @click="emit('emit:selected', item.description)"
         >
           {{ item.description }}
