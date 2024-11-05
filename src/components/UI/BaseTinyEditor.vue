@@ -36,12 +36,21 @@ const modelValue = useModel(props, 'modelValue')
         plugins: [
            'table', `${pastePlainText ? 'paste' : ''}`
          ],
+        language: 'ru',
         toolbar: 'undo redo | bold italic underline forecolor fontsizeselect lineheight | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table',
         height: `${height}`,
         menubar: '',
         fontsize_formats: `6px 8px 9px 10px 11px 12px 13px 14px 16px 18px 24px 36px`,
+        font_size_input_default_unit: 'px',
         paste_as_text: this.pastePlainText,
-        content_style: `body {font-size: 13px;}`,
+        content_style: `body {font-size: 16px;}`,
+        table_default_attributes: {
+          class: 'tinymce-table'
+        },
+        table_default_styles: {
+          width: '100%',
+          border: '1px solid #000000'
+        },
         // powerpaste_allow_local_images: true,
 			  // powerpaste_word_import: 'prompt',
 			  // powerpaste_html_import: 'prompt',
@@ -53,6 +62,7 @@ const modelValue = useModel(props, 'modelValue')
 <style>
 .tox-tinymce{
   border: none!important;
+  border-radius: 16px!important;
 }
 
 .tox-toolbar__group{

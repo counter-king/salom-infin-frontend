@@ -139,3 +139,11 @@ body {
   padding: 20px; /* Set the desired padding */
   box-sizing: border-box;
 }
+
+.tinymce-table table,
+.tinymce-table th,
+.tinymce-table td {
+  border: 1px solid #000;
+  border-collapse: collapse;
+  padding: 4px
+}
