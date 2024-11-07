@@ -9,7 +9,7 @@ import {useAuthStore} from "@/modules/Auth/stores"
 import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store"
 // Components
 import QrcodeVue from "qrcode.vue"
-import { BaseHeaderTemplate, BasePerformer, BaseSignersTemplate } from "@/components/Templates/components"
+import { BaseHeaderTemplate, BasePerformer, BaseSignersTemplate, BaseDepartmentName } from "@/components/Templates/components"
 
 
 const props = defineProps({
@@ -41,13 +41,13 @@ const SDStore = useSDStore()
 </script>
 
 <template>
-  <div class="inner-letter-template">
+  <div class="inner-letter-template letter-template">
 <!--    <pre>{{ composeModel }}</pre>-->
     <base-header-template />
 
-    <div class="w-full rounded-[6px] bg-greyscale-50 text-sm font-semibold px-3 py-1" style="color: #003D64">
-      {{ author.top_level_department.name }}
-    </div>
+    <base-department-name
+      :dep-name="author?.top_level_department?.name"
+    />
 
     <div class="flex flex-col text-sm font-medium gap-x-2 mt-4">
       <span> № {{ props.composeModel?.register_number }}</span>

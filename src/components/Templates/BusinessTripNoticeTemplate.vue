@@ -11,7 +11,12 @@ import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index
 import {SIGNER_TYPES} from "@/enums"
 // Components
 import QrcodeVue from "qrcode.vue"
-import { BaseHeaderTemplate, BasePerformer, BaseSignersTemplate } from "@/components/Templates/components"
+import {
+  BaseDepartmentName,
+  BaseHeaderTemplate,
+  BasePerformer,
+  BaseSignersTemplate
+} from "@/components/Templates/components"
 
 const props = defineProps({
   composeModel: {
@@ -73,13 +78,13 @@ const author = computed(() => {
 </script>
 
 <template>
-  <div class="business-trip-notice-template-view">
+  <div class="business-trip-notice-template-view letter-template">
 
     <base-header-template />
 
-    <div class="w-full rounded-[6px] bg-greyscale-50 text-sm font-semibold px-3 py-1" style="color: #003D64">
-      {{ author?.top_level_department.name }}
-    </div>
+    <base-department-name
+      :dep-name="author?.top_level_department?.name"
+    />
 
     <div class="flex flex-col text-sm font-medium mt-4">
       <span> № {{ props.composeModel?.register_number }}</span>

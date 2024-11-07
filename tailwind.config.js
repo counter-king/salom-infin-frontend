@@ -41,6 +41,7 @@ export default {
           900: "#191F3F",
         },
         "success": {
+          10: "#EFF9F3",
           50: "#EEFFE7",
           100: "#E6F6DF",
           200: "#CDE7C2",

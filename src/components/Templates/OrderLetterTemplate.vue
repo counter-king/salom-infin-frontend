@@ -46,7 +46,7 @@ const negotiators = computed(() => {
 </script>
 
 <template>
-  <div class="order-template-view">
+  <div class="order-template-view letter-template">
 
     <base-header-template />
 

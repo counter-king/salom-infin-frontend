@@ -23,7 +23,7 @@ const props = defineProps({
   },
   editor: {
     type: String,
-    default: 'froala',
+    default: 'tiny',
     validator(value) {
       return ['froala', 'tiny'].includes(value)
     }

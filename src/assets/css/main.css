@@ -140,9 +140,9 @@ body {
   box-sizing: border-box;
 }
 
-.tinymce-table table,
-.tinymce-table th,
-.tinymce-table td {
+.letter-template table,
+.letter-template th,
+.letter-template td {
   border: 1px solid #000;
   border-collapse: collapse;
   padding: 4px

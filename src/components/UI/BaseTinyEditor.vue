@@ -44,13 +44,13 @@ const modelValue = useModel(props, 'modelValue')
         font_size_input_default_unit: 'px',
         paste_as_text: this.pastePlainText,
         content_style: `body {font-size: 16px;}`,
-        table_default_attributes: {
-          class: 'tinymce-table'
-        },
-        table_default_styles: {
-          width: '100%',
-          border: '1px solid #000000'
-        },
+        // table_default_attributes: {
+        //   class: 'tinymce-table'
+        // },
+        // table_default_styles: {
+        //   width: '100%',
+        //   border: '1px solid #000000'
+        // },
         // powerpaste_allow_local_images: true,
 			  // powerpaste_word_import: 'prompt',
 			  // powerpaste_html_import: 'prompt',

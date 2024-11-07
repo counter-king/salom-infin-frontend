@@ -17,6 +17,7 @@ import Notifications from './Notifications.vue'
 import LanguageDropdown from './LanguageDropdown.vue'
 import UserDropdown from './UserDropdown.vue'
 import RefreshButton from "@/components/Toolbar/RefreshButton.vue"
+import { hostName } from "@/utils";
 // Composable
 const { t } = useI18n()
 const themeStore = useThemeStore()
@@ -52,9 +53,13 @@ onMounted(() => {
     >
       <template #start>
         <router-link to="/" class="flex items-center mr-6">
-          <template v-if="isHostVercel">
+          <template v-if="hostName() === 'localhost'">
             <img src="/images/logo.svg" alt="Logo" />
             <img src="/images/logo-text.svg" alt="Logo text" class="ml-2" />
+          </template>
+
+          <template v-else-if="hostName() === 'vercel'">
+            <img src="/images/hamkorbank_logo.svg" alt="Logo" />
           </template>
 
           <template v-else>

@@ -46,7 +46,7 @@ const signers = computed(() => {
 </script>
 
 <template>
-  <div class="decree-template-view">
+  <div class="decree-template-view letter-template">
 
     <base-header-template />
 
