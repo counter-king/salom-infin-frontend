@@ -42,7 +42,7 @@ const modelValue = useModel(props, 'modelValue')
         menubar: '',
         fontsize_formats: `6px 8px 9px 10px 11px 12px 13px 14px 16px 18px 24px 36px`,
         font_size_input_default_unit: 'px',
-        paste_as_text: this.pastePlainText,
+        paste_as_text: pastePlainText,
         content_style: `body {font-size: 16px;}`,
         // table_default_attributes: {
         //   class: 'tinymce-table'
