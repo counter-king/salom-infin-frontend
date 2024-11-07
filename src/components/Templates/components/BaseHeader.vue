@@ -30,7 +30,7 @@ const bankNameRu = computed(() => {
   <div class="mb-[10px]">
     <div class="flex">
       <img v-if="hostName() === 'localhost'" src="@/assets/img/workzone_logo.png" alt="Logo" class="w-[114px] h-full" />
-      <img v-else-if="hostName() === 'vercel'" src="@/assets/img/hamkorbank_logo.png" alt="Logo" class="w-[160px] h-full" />
+      <img v-else-if="hostName() === 'vercel'" src="/images/hamkorbank_logo_for_letter.svg" alt="Logo" class="w-[160px] h-full" />
       <img v-else src="@/assets/img/sqb_logo.png" alt="Logo" class="w-[114px] h-full" />
       <div class="ml-2">
         <div class="text-[8px] font-bold">{{ bankNameUz }}</div>

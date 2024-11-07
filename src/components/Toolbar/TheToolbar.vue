@@ -52,7 +52,7 @@ onMounted(() => {
       }"
     >
       <template #start>
-        <router-link to="/" class="flex items-center mr-6">
+        <router-link to="/" class="flex items-center mr-4">
           <template v-if="hostName() === 'localhost'">
             <img src="/images/logo.svg" alt="Logo" />
             <img src="/images/logo-text.svg" alt="Logo text" class="ml-2" />
@@ -72,7 +72,7 @@ onMounted(() => {
             <template v-if="userPermissionStore.canAccess(menu.permission)">
               <router-link
                 :to="{ name: menu.link }"
-                class="header-link group flex items-center gap-2 text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full mr-3 transition-all duration-[400ms] hover:bg-primary-800 hover:text-white"
+                class="header-link group flex items-center gap-2 text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full mr-1 transition-all duration-[400ms] hover:bg-primary-800 hover:text-white"
               >
                 <base-iconify
                   v-if="menu.icon"

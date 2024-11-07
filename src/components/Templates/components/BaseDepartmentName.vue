@@ -11,8 +11,7 @@ const props = defineProps({
 
 <template>
   <div
-    class="w-full rounded-[6px] text-sm font-semibold px-3 py-1"
-    :class="hostName() === 'vercel' ? 'bg-success-10' : 'bg-greyscale-50'"
+    class="w-full rounded-[6px] bg-greyscale-50 text-sm font-semibold px-3 py-1"
     :style="{color: hostName() === 'vercel' ? '#174A43' : '#003D64'}"
   >
     {{ depName }}
