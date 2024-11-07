@@ -9,6 +9,7 @@ import { useCollectRequestsStore } from '@/stores/collect-requests.store'
 import { AltArrowDownIcon, CheckCircleBoldIcon, GlobalIcon } from '@/components/Icons'
 // Utils
 import { saveStorageItem, getStorageItem } from '@/utils/storage'
+
 // Config
 import { localeUz, localeRu } from '../../config/primevue/lang'
 // Const
