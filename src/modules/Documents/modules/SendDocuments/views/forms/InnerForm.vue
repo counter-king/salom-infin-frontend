@@ -145,14 +145,14 @@ onUnmounted(() => {
           @emit:clear-form="clearForm"
         >
           <base-row>
-            <base-col col-class="w-1/2">
+<!--            <base-col col-class="w-1/2">
               <base-input
                 v-model="$v.register_number.$model"
                 :error="$v.register_number"
                 required
                 label="reg-number"
               />
-            </base-col>
+            </base-col>-->
 
             <base-col col-class="w-1/2">
               <department-multi-select
