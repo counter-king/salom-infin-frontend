@@ -23,7 +23,7 @@ const filesList = computed(() => props.files.map(file => ({ ...file, title: file
       actions
     >
       <template #file="{ value }">
-        <div class="h-[calc(100vh-240px)]">
+        <div class="h-[calc(100vh-297px)]">
           <template v-if="value">
             <file-preview :file="value" />
           </template>

@@ -140,13 +140,13 @@ watch(activeTabMenu, (value) => {
     <div class="detail-layout-content flex flex-col flex-1 bg-white overflow-hidden shadow-button rounded-2xl">
       <slot name="content">
         <div class="flex h-full">
-          <div class="max-w-[1000px] w-full border-r">
+          <div class="min-w-[900px] flex-1 border-r">
             <slot name="template">
               <file-tabs :files="props.files" />
             </slot>
           </div>
 
-          <div class="flex-1">
+          <div class="max-w-[1050px] w-full">
             <base-tab-menu v-model="activeTabMenuIndex" :tab-items="props.tabItems" />
 
             <slot :name="activeTabMenu.slot">
@@ -178,8 +178,14 @@ watch(activeTabMenu, (value) => {
 
 <style scoped>
 @media (max-width: 1600px) {
-  .max-w-\[1000px\] {
-    max-width: 700px;
+  .min-w-\[900px\] {
+    min-width: 768px;
+  }
+}
+
+@media (max-width: 1440px) {
+  .min-w-\[900px\] {
+    min-width: 650px;
   }
 }
 </style>

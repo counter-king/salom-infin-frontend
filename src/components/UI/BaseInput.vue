@@ -32,8 +32,8 @@ const props = defineProps({
     type: String,
   },
   iconLeft: {
-    type: String,
-    default: null
+    type: Object,
+    default: () => {}
   },
   iconLeftClass:{
     type: String,

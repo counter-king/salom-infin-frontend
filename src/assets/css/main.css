@@ -134,3 +134,16 @@ body {
 .p-tooltip-text {
   width: fit-content!important;
 }
+
+.pdf-content {
+  padding: 20px; /* Set the desired padding */
+  box-sizing: border-box;
+}
+
+.letter-template table,
+.letter-template th,
+.letter-template td {
+  border: 1px solid #000;
+  border-collapse: collapse;
+  padding: 4px
+}

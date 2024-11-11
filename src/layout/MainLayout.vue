@@ -3,19 +3,20 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 // Components
+import TheToolbar from '@/components/Toolbar/TheToolbar.vue'
 import SessionEndMessageBar from '@/components/SessionEndMessageBar.vue'
 // Store
 import { useCommonStore } from '@/stores/common'
+import { useCountStore } from '@/stores/count.store'
 import { useAuthStore } from '../modules/Auth/stores/index'
 import { useAgreementsRoutesStore } from '@/modules/HR/modules/Agreements/stores/routes.store'
-// Components
-import TheToolbar from '@/components/Toolbar/TheToolbar.vue'
 // Utils
 import { getStorageItem } from '@/utils/storage'
 import { ACCESS } from '@/constants/storage'
 // Composable
 const router = useRouter()
 const commonStore = useCommonStore()
+const countStore = useCountStore()
 const authStore = useAuthStore()
 const agreementsRoutesStore = useAgreementsRoutesStore()
 // Reactive
@@ -30,7 +31,8 @@ onMounted(async () => {
     // TODO: uncomment
     await getCurrentUser()
     await commonStore.init()
-    await agreementsRoutesStore.setCounts()
+    await countStore.actionCountList()
+    await agreementsRoutesStore.setCounts() // TODO: Refactor after
     setTimeout(() => {
       appLoading.value = false
     }, 500)

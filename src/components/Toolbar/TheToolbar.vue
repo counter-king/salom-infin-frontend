@@ -16,6 +16,8 @@ import SettingDropdown from './SettingDropdown.vue'
 import Notifications from './Notifications.vue'
 import LanguageDropdown from './LanguageDropdown.vue'
 import UserDropdown from './UserDropdown.vue'
+import RefreshButton from "@/components/Toolbar/RefreshButton.vue"
+import { hostName } from "@/utils";
 // Composable
 const { t } = useI18n()
 const themeStore = useThemeStore()
@@ -50,10 +52,14 @@ onMounted(() => {
       }"
     >
       <template #start>
-        <router-link to="/" class="flex items-center mr-6">
-          <template v-if="isHostVercel">
+        <router-link to="/" class="flex items-center mr-4">
+          <template v-if="hostName() === 'localhost'">
             <img src="/images/logo.svg" alt="Logo" />
             <img src="/images/logo-text.svg" alt="Logo text" class="ml-2" />
+          </template>
+
+          <template v-else-if="hostName() === 'vercel'">
+            <img src="/images/hamkorbank_logo.svg" alt="Logo" />
           </template>
 
           <template v-else>
@@ -66,7 +72,7 @@ onMounted(() => {
             <template v-if="userPermissionStore.canAccess(menu.permission)">
               <router-link
                 :to="{ name: menu.link }"
-                class="header-link group flex items-center gap-2 text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full mr-3 transition-all duration-[400ms] hover:bg-primary-800 hover:text-white"
+                class="header-link group flex items-center gap-2 text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full mr-1 transition-all duration-[400ms] hover:bg-primary-800 hover:text-white"
               >
                 <base-iconify
                   v-if="menu.icon"
@@ -106,6 +112,9 @@ onMounted(() => {
           <div v-if="openModal" class="bg-greyscale-800 w-[1px] h-[28px]"></div>
 
           <div class="flex gap-2">
+
+            <refresh-button v-if="openModal" />
+
             <base-button
               v-if="openModal"
               color="bg-greyscale-800 hover:bg-greyscale-900"
@@ -120,7 +129,7 @@ onMounted(() => {
 
             <setting-dropdown />
 
-            <notifications />
+<!--            <notifications />-->
 
             <language-dropdown />
           </div>

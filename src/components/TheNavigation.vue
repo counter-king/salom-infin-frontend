@@ -44,7 +44,7 @@ const checkRouteMeta = () => {
               :to="{ name: menu.link, params: menu.params, query: menu.query }"
               class="collapse-link group flex items-center gap-2 text-sm font-medium text-greyscale-500 mr-6 py-[10px] relative transition-all duration-[400ms] after:content-[''] after:absolute after:bottom-[-9px] after:w-full after:h-[2px] after:bg-primary-500 after:opacity-0 after:transition-all after:duration-500 hover:text-primary-900 hover:after:opacity-100"
               :class="[
-                { 'router-link-active router-link-exact-active': route.fullPath.includes(menu.params[props.routeIncludeParams]) }
+                { 'router-link-active router-link-exact-active': menu.params && route.fullPath.includes(menu.params[props.routeIncludeParams]) }
               ]"
             >
               <base-iconify

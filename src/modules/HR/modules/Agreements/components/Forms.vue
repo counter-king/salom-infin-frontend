@@ -19,6 +19,7 @@ import { isObject } from '@/utils'
 import { COLOR_TYPES } from '@/enums'
 // Const
 import { FORM_TYPE_CREATE, FORM_TYPE_READ } from '@/constants/constants'
+import BaseTinyEditor from "@/components/UI/BaseTinyEditor.vue";
 // Macros
 const props = defineProps({
   type: {
@@ -217,7 +218,14 @@ onMounted(async () => {
                 <base-col col-class="w-full">
                   <base-label label="Текст документа" :required="true" />
 
-                  <base-froala-editor
+<!--                  <base-froala-editor-->
+<!--                    ref="editor"-->
+<!--                    v-model="$v.content.$model"-->
+<!--                    :error="$v.content"-->
+<!--                    :disabled="props.type === FORM_TYPE_READ"-->
+<!--                  />-->
+
+                  <base-tiny-editor
                     ref="editor"
                     v-model="$v.content.$model"
                     :error="$v.content"

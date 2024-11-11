@@ -3,6 +3,8 @@
 import { useModel } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Textarea from 'primevue/textarea'
+// Components
+import { ModalShortDescription } from '@/components/Modal'
 // Macros
 const props = defineProps({
   modelValue: {
@@ -38,6 +40,9 @@ const props = defineProps({
       $error: false,
       $errors: []
     })
+  },
+  setFromTemplate: {
+    type: Boolean
   }
 })
 // Composable
@@ -88,6 +93,10 @@ const { t } = useI18n()
           <span class="block text-sm font-medium text-red-500">{{ element.$message }}</span>
         </div>
       </div>
+    </template>
+
+    <template v-if="props.setFromTemplate">
+      <modal-short-description @emit:selected="(value) => modelValue = value" />
     </template>
   </div>
 </template>

@@ -237,6 +237,7 @@ const types = [
           v-model="$v.content.$model"
           :error="$v.content"
           :disabled="props.formType === FORM_TYPE_READ"
+          set-from-template
           label="enter-content"
         />
       </base-col>

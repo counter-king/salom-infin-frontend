@@ -26,7 +26,7 @@ const author = computed(() => {
 </script>
 
 <template>
-  <div class="application-letter-template">
+  <div class="application-letter-template letter-template">
     <div class="flex justify-end">
       <div class="flex flex-col items-end" style="width: 70%;">
         <div class="text-sm font-bold text-end">“O‘zsanoatqurilishbank” ATB  </div>

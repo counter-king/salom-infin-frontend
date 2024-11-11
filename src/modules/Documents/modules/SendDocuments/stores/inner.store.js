@@ -39,9 +39,9 @@ export const useSDStoreInner = defineStore("sd-stores-inner", {
       __signers_copy: []
     },
     rules: {
-      register_number: {
-        required: helpers.withMessage(`Поле не должен быть пустым`, required)
-      },
+      // register_number: {
+      //   required: helpers.withMessage(`Поле не должен быть пустым`, required)
+      // },
       short_description: {
         required: helpers.withMessage(`Поле не должен быть пустым`, required)
       },

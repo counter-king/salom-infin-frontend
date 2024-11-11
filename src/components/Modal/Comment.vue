@@ -6,6 +6,7 @@ import {useI18n} from "vue-i18n"
 import { helpers, required } from '@vuelidate/validators'
 // Components
 import {InfoCircleBoldIcon} from "@/components/Icons"
+import { FORM_TYPE_READ } from "@/constants/constants";
 // Macros
 const props = defineProps({
   modelValue: {
@@ -115,7 +116,13 @@ const toggle = (event) => {
     :draggable="false"
   >
     <template #content>
-      <base-froala-editor
+<!--      <base-froala-editor-->
+<!--        v-if="props.editorType === 'editor'"-->
+<!--        v-model="$v.message.$model"-->
+<!--        :error="$v.message"-->
+<!--      />-->
+
+      <base-tiny-editor
         v-if="props.editorType === 'editor'"
         v-model="$v.message.$model"
         :error="$v.message"

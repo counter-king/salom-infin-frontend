@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n'
 // Components
 import { ResolutionDownload } from '@/components/Resolution'
 //Utils
-import { formatNameToShort } from '@/utils'
+import { formatNameToShort, hostName } from '@/utils'
 import { formatDateHour } from '@/utils/formatDate'
 // Composable
 const { t } = useI18n()
@@ -20,7 +20,8 @@ const props = defineProps({
 <template>
   <div class="resolution-deputy-chairman-view">
     <h1 class="text-center text-sm font-semibold uppercase text-primary-dark">
-      <span class="block">"O'ZBEKISTON SANOAT-QURILISH BANKI" ATB</span>
+      <span v-if="hostName() === 'localhost'" class="block">"HAMKORBANK" ATB</span>
+      <span v-else class="block">"O'ZBEKISTON SANOAT-QURILISH BANKI" ATB</span>
       <span class="block">{{ props.resolution?.reviewer?.position?.name }}</span>
     </h1>
 
@@ -55,9 +56,9 @@ const props = defineProps({
             </li>
           </template>
 
-          <li class="flex font-semibold">
+          <li v-if="props.resolution.deadline" class="flex font-semibold">
             <p class="text-greyscale-500 mr-1">{{ t('deadline') }}:</p>
-            <span>{{ props.resolution.deadline ? props.resolution.deadline : t('without-deadline') }}</span>
+            <span>{{ props.resolution.deadline }}</span>
           </li>
         </ul>
 
