@@ -14,7 +14,7 @@ import { dispatchNotify } from "@/utils/notify"
 import { formatDateReverse } from "@/utils/formatDate"
 // Store
 import { useAuthStore } from "@/modules/Auth/stores"
-import { useDocumentCountStore } from "@/modules/Documents/stores/count.store"
+import { useCountStore } from '@/stores/count.store'
 import { useSDOrderStore } from "@/modules/Documents/modules/SendDocuments/stores/order.store"
 // Components
 import { LayoutWithTabsCompose } from "@/components/DetailLayout"
@@ -33,7 +33,7 @@ const props = defineProps({
 })
 
 const orderStore = useSDOrderStore()
-const countStore = useDocumentCountStore()
+const countStore = useCountStore()
 const authStore = useAuthStore()
 const route = useRoute()
 const router = useRouter()
@@ -78,7 +78,7 @@ const clearForm = () => {
 const create = async () => {
  try {
    const response = await orderStore.actionCreateDocument(orderStore.model)
-   await countStore.actionDocumentCountList()
+   await countStore.actionCountList()
    if (response) {
      dialog.value = false
      dispatchNotify(null, t('document-sent'), COLOR_TYPES.SUCCESS)
@@ -101,7 +101,7 @@ const update = async () => {
         body: orderStore.model
       }
     );
-    await countStore.actionDocumentCountList();
+    await countStore.actionCountList();
     dispatchNotify(null, t('changed'), COLOR_TYPES.SUCCESS);
     await router.replace({
       name: ROUTE_SD_DETAIL,

@@ -20,9 +20,9 @@ import PreviewDialog from "@/modules/Documents/modules/SendDocuments/components/
 import {adjustUsersToArray, resetModel} from "@/utils"
 import {dispatchNotify} from "@/utils/notify"
 // Store
+import { useCountStore } from '@/stores/count.store'
 import {useAuthStore} from "@/modules/Auth/stores"
 import {useNoticeStore} from "@/modules/Documents/modules/SendDocuments/stores/notice.store"
-import {useDocumentCountStore} from "@/modules/Documents/stores/count.store"
 import {useCommonStore} from "@/stores/common"
 
 const props = defineProps({
@@ -37,7 +37,7 @@ const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 const noticeStore = useNoticeStore()
-const countStore = useDocumentCountStore()
+const countStore = useCountStore()
 const commonStore = useCommonStore()
 const dialog = ref(false)
 
@@ -73,7 +73,7 @@ const onFileUpload = (files) => {
 }
 const create = async () => {
   const response = await noticeStore.actionCreateDocument(noticeStore.model)
-  await countStore.actionDocumentCountList()
+  await countStore.actionCountList()
   if (response) {
     dialog.value = false
     dispatchNotify(null, t('document-sent'), COLOR_TYPES.SUCCESS)
@@ -94,7 +94,7 @@ const update = async () => {
       body: noticeStore.model
     }
   );
-  await countStore.actionDocumentCountList();
+  await countStore.actionCountList();
   dispatchNotify(null, t('changed'), COLOR_TYPES.SUCCESS);
   await router.replace({
     name: ROUTE_SD_DETAIL,

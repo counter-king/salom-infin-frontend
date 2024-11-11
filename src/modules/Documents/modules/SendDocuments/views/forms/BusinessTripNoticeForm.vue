@@ -21,7 +21,7 @@ import {formatDateReverse} from "@/utils/formatDate"
 // Store
 import {useAuthStore} from "@/modules/Auth/stores"
 import {useCommonStore} from "@/stores/common"
-import {useDocumentCountStore} from "@/modules/Documents/stores/count.store"
+import { useCountStore } from '@/stores/count.store'
 import {useSDBTNoticeStore} from "@/modules/Documents/modules/SendDocuments/stores/businessTripNotice.store"
 import {COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL, ROUTES_TYPE} from "@/enums"
 import PreviewDialog from "@/modules/Documents/modules/SendDocuments/components/PreviewDialog.vue"
@@ -42,7 +42,7 @@ const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 const BTNoticeStore = useSDBTNoticeStore()
-const countStore = useDocumentCountStore()
+const countStore = useCountStore()
 const commonStore = useCommonStore()
 const $v = useVuelidate(BTNoticeStore.rules, BTNoticeStore.model)
 
@@ -116,7 +116,7 @@ const onFileUpload = (files) => {
 }
 const create = async () => {
   const response = await BTNoticeStore.actionCreateDocument(BTNoticeStore.model)
-  await countStore.actionDocumentCountList()
+  await countStore.actionCountList()
   if (response) {
     dialog.value = false
     dispatchNotify(null, t('document-sent'), COLOR_TYPES.SUCCESS)
@@ -138,7 +138,7 @@ const update = async () => {
       body: BTNoticeStore.model
     }
   );
-  await countStore.actionDocumentCountList();
+  await countStore.actionCountList();
   dispatchNotify(null, t('changed'), COLOR_TYPES.SUCCESS)
   await router.replace({
     name: ROUTE_SD_DETAIL,

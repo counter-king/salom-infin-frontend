@@ -20,8 +20,8 @@ import {DecreeTemplate} from "@/components/Templates"
 import {adjustUsersToArray, resetModel} from "@/utils"
 import {dispatchNotify} from "@/utils/notify"
 // Store
+import { useCountStore } from '@/stores/count.store'
 import {useAuthStore} from "@/modules/Auth/stores"
-import {useDocumentCountStore} from "@/modules/Documents/stores/count.store"
 import {useCommonStore} from "@/stores/common"
 import {useDecreeStore} from "@/modules/Documents/modules/SendDocuments/stores/decree.store"
 
@@ -36,7 +36,7 @@ const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
-const countStore = useDocumentCountStore()
+const countStore = useCountStore()
 const commonStore = useCommonStore()
 const dialog = ref(false)
 const decreeStore = useDecreeStore()
@@ -77,7 +77,7 @@ const onFileUpload = (files) => {
 
 const create = async () => {
   const response = await decreeStore.actionCreateDocument(decreeStore.model)
-  await countStore.actionDocumentCountList()
+  await countStore.actionCountList()
   if (response) {
     dialog.value = false
     dispatchNotify(null, t('document-sent'), COLOR_TYPES.SUCCESS)
@@ -98,7 +98,7 @@ const update = async () => {
       body: decreeStore.model
     }
   );
-  await countStore.actionDocumentCountList();
+  await countStore.actionCountList();
   dispatchNotify(null, t('changed'), COLOR_TYPES.SUCCESS);
   await router.replace({
     name: ROUTE_SD_DETAIL,

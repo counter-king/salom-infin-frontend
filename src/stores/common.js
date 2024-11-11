@@ -14,8 +14,7 @@ import { useCorrespondentStore } from './correspondent'
 import { useUsersStore } from './users.store'
 import { useAllUrlStore } from './all-urls.store'
 import { useCollectRequestsStore } from '@/stores/collect-requests.store'
-import { useDocumentCountStore } from '@/modules/Documents/stores/count.store'
-import { usePermissionStore } from '../modules/Settings/stores/permissions.store'
+import { usePermissionStore } from '@/modules/Settings/stores/permissions.store'
 // Services
 import {
   fetchComposeStatusList,
@@ -65,11 +64,9 @@ export const useCommonStore = defineStore("common", {
       const correspondent = useCorrespondentStore()
       const users = useUsersStore()
       const allUrlStore = useAllUrlStore()
-      const documentCount = useDocumentCountStore()
       const permissionStore = usePermissionStore()
 
       await userPermissionStore.getUserPermisission()
-      await documentCount.actionDocumentCountList()
       await correspondent.actionGetList({})
 			await users.actionUsersList()
       await users.actionEmployeeGroupList()

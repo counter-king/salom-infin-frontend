@@ -7,7 +7,7 @@ import {useI18n} from "vue-i18n"
 import {fetchRejectSignDocument, fetchSignDocument} from "@/modules/Documents/modules/Boxes/services/sign.service"
 // Store
 import { useBoxesSignStore } from "@/modules/Documents/modules/Boxes/stores/sign.store"
-import { useDocumentCountStore } from "@/modules/Documents/stores/count.store"
+import { useCountStore } from '@/stores/count.store'
 import { useSDStore } from "@/modules/Documents/modules/SendDocuments/stores/index.store"
 // Components
 import { CheckCircleIcon, Pen2Icon, XMarkSolidIcon } from '@/components/Icons'
@@ -23,7 +23,7 @@ import {SIGNER_TYPES} from "@/enums"
 import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue"
 
 const signStore = useBoxesSignStore()
-const countStore = useDocumentCountStore()
+const countStore = useCountStore()
 const sdStore = useSDStore()
 const route = useRoute()
 const router = useRouter()
@@ -44,12 +44,12 @@ const onReject = async (comment) => {
   await fetchRejectSignDocument({ id: route.params.id, comment })
   rejectModal.value = false;
   await signStore.actionGetSignDetail(route.params.id)
-  await countStore.actionDocumentCountList()
+  await countStore.actionCountList()
 }
 const onChangeDocument = async (text) => {
   await sdStore.actionCustomUpdate({ id: route.query.compose_id, body: { content: text } })
   changeModal.value = false
-  await countStore.actionDocumentCountList()
+  await countStore.actionCountList()
   await router.replace({
     name: "SignIndex"
   })
@@ -59,7 +59,7 @@ const sign = async (pkcs7) => {
     buttonLoading.value = true
     await fetchSignDocument({ id: route.params.id, body: { pkcs7 } })
     await signStore.actionGetSignDetail(route.params.id)
-    await countStore.actionDocumentCountList()
+    await countStore.actionCountList()
   }
   catch (err) {
 
@@ -74,7 +74,7 @@ const signDocumentWithResolution = async (body) => {
     resolutionModal.value.buttonLoading = false
     resolutionModal.value.dialog = false
     await signStore.actionGetSignDetail(route.params.id)
-    await countStore.actionDocumentCountList()
+    await countStore.actionCountList()
   } catch (err) {
 
   }

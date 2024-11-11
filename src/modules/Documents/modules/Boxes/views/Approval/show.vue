@@ -6,9 +6,9 @@ import {useI18n} from "vue-i18n"
 // Service
 import { fetchRejectApprovalDocument } from "@/modules/Documents/modules/Boxes/services/approval.service"
 // Store
+import { useCountStore } from "@/stores/count.store"
 import { useAuthStore } from "@/modules/Auth/stores"
 import { useBoxesApprovalStore } from "@/modules/Documents/modules/Boxes/stores/approval.store"
-import { useDocumentCountStore } from "@/modules/Documents/stores/count.store"
 import { useSDStore } from "@/modules/Documents/modules/SendDocuments/stores/index.store"
 // Components
 import { Pen2Icon, XMarkSolidIcon } from '@/components/Icons'
@@ -26,7 +26,7 @@ const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 const approvalStore = useBoxesApprovalStore()
-const countStore = useDocumentCountStore()
+const countStore = useCountStore()
 const authstore = useAuthStore()
 const sdStore = useSDStore()
 
@@ -50,13 +50,13 @@ const getDetail = async () => {
 }
 const onApprove = async () => {
   await getDetail()
-  await countStore.actionDocumentCountList()
+  await countStore.actionCountList()
 }
 const onReject = async (comment) => {
   await fetchRejectApprovalDocument({ id: route.params.id, comment })
   rejectModal.value = false;
   await getDetail()
-  await countStore.actionDocumentCountList()
+  await countStore.actionCountList()
 }
 const openConfirmModal = () => {
   confirmModal.value = true
@@ -64,7 +64,7 @@ const openConfirmModal = () => {
 const onChangeDocument = async (text) => {
   await sdStore.actionCustomUpdate({ id: route.query.compose_id, body: { content: text } })
   changeModal.value = false
-  await countStore.actionDocumentCountList()
+  await countStore.actionCountList()
   await router.go(-1)
 }
 

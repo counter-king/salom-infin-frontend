@@ -3,7 +3,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 // Store
-import { useDocumentCountStore } from '../../../../stores/count.store'
+import { useCountStore } from '@/stores/count.store'
 import { useDocFlowStore } from '../../../Registration/stores/docflow.store'
 import { useBoxesCommonStore } from '../../stores/common.store'
 import { useControlStore } from '../../stores/control.store'
@@ -16,7 +16,7 @@ import { FORM_TYPE_CREATE, FORM_TYPE_UPDATE } from '@/constants/constants'
 // Composable
 const route = useRoute()
 const router = useRouter()
-const countStore = useDocumentCountStore()
+const countStore = useCountStore()
 const docflowStore = useDocFlowStore()
 const boxesCommonStore = useBoxesCommonStore()
 const controlStore = useControlStore()
@@ -35,7 +35,7 @@ onMounted(async () => {
 const acquaintDocument = async () => {
   await controlStore.actionAcquaintDocument({ id: +route.params.id })
   boxesCommonStore.actionRerenderComponent()
-  await countStore.actionDocumentCountList()
+  await countStore.actionCountList()
 }
 const doneDocument = async () => {
   await controlStore.actionRemoveFromControl({ id: +route.params.id, type: FORM_TYPE_CREATE })

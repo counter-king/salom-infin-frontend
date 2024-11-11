@@ -3,7 +3,7 @@
 import {ref, onMounted, computed} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
 // Store
-import { useDocumentCountStore } from '../../../../stores/count.store'
+import { useCountStore } from '@/stores/count.store'
 import { useDocFlowStore } from '../../../Registration/stores/docflow.store'
 import { useBoxesCommonStore } from '../../stores/common.store'
 import { useAssignmentStore } from '../../stores/assignment.store'
@@ -21,7 +21,7 @@ import { RESOLUTION_CREATE_TYPES } from '@/enums'
 // Composable
 const route = useRoute()
 const router = useRouter()
-const countStore = useDocumentCountStore()
+const countStore = useCountStore()
 const docflowStore = useDocFlowStore()
 const boxesCommonStore = useBoxesCommonStore()
 const assignmentStore = useAssignmentStore()
@@ -44,7 +44,7 @@ onMounted(async () => {
 const acquaintDocument = async () => {
   await assignmentStore.actionAcquaintDocument({ id: +route.params.id })
   boxesCommonStore.actionRerenderComponent()
-  await countStore.actionDocumentCountList()
+  await countStore.actionCountList()
 }
 const doneDocument = async () => {
   await assignmentStore.actionPerformDocument({ id: +route.params.id, performed: true })

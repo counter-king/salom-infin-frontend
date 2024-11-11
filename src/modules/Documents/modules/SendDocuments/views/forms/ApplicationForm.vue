@@ -7,7 +7,7 @@ import {useRoute, useRouter} from "vue-router"
 // Store
 import {useAuthStore} from "@/modules/Auth/stores"
 import {useCommonStore} from "@/stores/common"
-import {useDocumentCountStore} from "@/modules/Documents/stores/count.store"
+import { useCountStore } from '@/stores/count.store'
 import {useSDStoreApplication} from "@/modules/Documents/modules/SendDocuments/stores/application.store"
 import { useSDOrderStore } from "@/modules/Documents/modules/SendDocuments/stores/order.store"
 // Components
@@ -36,7 +36,7 @@ const props = defineProps({
 const authStore = useAuthStore()
 const applicationStore = useSDStoreApplication()
 const commonStore = useCommonStore()
-const countStore = useDocumentCountStore()
+const countStore = useCountStore()
 const orderStore = useSDOrderStore()
 
 const dialog = ref(false)
@@ -76,7 +76,7 @@ const manage = () => {
 }
 const create = async () => {
   const response = await applicationStore.actionCreateDocument(applicationStore.model)
-  await countStore.actionDocumentCountList()
+  await countStore.actionCountList()
   if (response) {
     dialog.value = false;
     dispatchNotify(null, t('document-sent'), COLOR_TYPES.SUCCESS);
@@ -97,7 +97,7 @@ const update = async () => {
       body: applicationStore.model
     }
   );
-  await countStore.actionDocumentCountList();
+  await countStore.actionCountList();
   dispatchNotify(null, t('document-sent'), COLOR_TYPES.SUCCESS);
   await router.replace({
     name: ROUTE_SD_DETAIL,

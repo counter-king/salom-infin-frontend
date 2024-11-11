@@ -3,7 +3,7 @@
 import {ref, onMounted, computed} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
 // Store
-import { useDocumentCountStore } from '../../../../stores/count.store'
+import { useCountStore } from '@/stores/count.store'
 import { useDocFlowStore } from '../../../Registration/stores/docflow.store'
 import { useBoxesCommonStore } from '../../stores/common.store'
 import { useReviewStore } from '../../stores/review.store'
@@ -19,7 +19,7 @@ import {ROUTE_SD_CREATE} from "@/modules/Documents/modules/SendDocuments/constan
 // Composable
 const route = useRoute()
 const router = useRouter()
-const countStore = useDocumentCountStore()
+const countStore = useCountStore()
 const docflowStore = useDocFlowStore()
 const boxesCommonStore = useBoxesCommonStore()
 const reviewStore = useReviewStore()
@@ -59,7 +59,7 @@ const cancelSign = async (text) => {
 }
 const acquaintDocument = async () => {
   await reviewStore.actionAcquaintDocument({ id: route.params.id })
-  await countStore.actionDocumentCountList()
+  await countStore.actionCountList()
 }
 const handleDocumentStatus = async () => {
   // Изменить исполнение

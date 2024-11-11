@@ -8,7 +8,7 @@ import { useVuelidate } from '@vuelidate/core'
 import { helpers, required } from '@vuelidate/validators'
 // Store
 import { useUsersStore } from '@/stores/users.store'
-import { useDocumentCountStore } from '@/modules/Documents/stores/count.store'
+import { useCountStore } from '@/stores/count.store'
 import { useReviewStore } from '@/modules/Documents/modules/Boxes/stores/review.store'
 // Components
 import { RefreshIcon, MagniferIcon } from '@/components/Icons'
@@ -17,7 +17,7 @@ import { UserWithSelectable } from '@/components/Users'
 const route = useRoute()
 const router = useRouter()
 const userStore = useUsersStore()
-const countStore = useDocumentCountStore()
+const countStore = useCountStore()
 const reviewStore = useReviewStore()
 // Macros
 const props = defineProps({
@@ -58,7 +58,7 @@ const send = async () => {
       id: Number(route.params.id),
       body: model.value
     })
-    await countStore.actionDocumentCountList()
+    await countStore.actionCountList()
     await router.replace({ name: 'ReviewIndex' })
   }
   finally {
