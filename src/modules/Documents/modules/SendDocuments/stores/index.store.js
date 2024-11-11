@@ -303,50 +303,50 @@ export const useSDStore = defineStore("sd-stores", {
           },
         ],
       },
-      // {
-      //   id: 4,
-      //   label: 'order',
-      //   icon: DocumentMedicineIcon,
-      //   type: 'menu',
-      //   hasRouterLink: false,
-      //   active: false,
-      //   items: [
-      //     {
-      //       label: 'business-trip-order',
-      //       type: 'submenu',
-      //       hasRouterLink: true,
-      //       routerLinkName: ROUTE_SD_CREATE,
-      //       documentType: COMPOSE_DOCUMENT_TYPES.ORDER,
-      //       documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER
-      //     },
-      //     {
-      //       label: 'business-trip-order-local',
-      //       type: 'submenu',
-      //       hasRouterLink: true,
-      //       routerLinkName: ROUTE_SD_CREATE,
-      //       documentType: COMPOSE_DOCUMENT_TYPES.ORDER,
-      //       documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER_LOCAL
-      //     }
-      //   ],
-      // },
-      // {
-      //   id: 5,
-      //   label: 'decree',
-      //   icon: CheckCircleIcon,
-      //   type: 'menu',
-      //   hasRouterLink: false,
-      //   active: false,
-      //   items: [
-      //     {
-      //       label: 'business-trip-decree-local',
-      //       type: 'submenu',
-      //       hasRouterLink: true,
-      //       routerLinkName: ROUTE_SD_CREATE,
-      //       documentType: COMPOSE_DOCUMENT_TYPES.DECREE,
-      //       documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL
-      //     }
-      //   ],
-      // },
+      {
+        id: 4,
+        label: 'order',
+        icon: DocumentMedicineIcon,
+        type: 'menu',
+        hasRouterLink: false,
+        active: false,
+        items: [
+          {
+            label: 'business-trip-order',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.ORDER,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER
+          },
+          {
+            label: 'business-trip-order-local',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.ORDER,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER_LOCAL
+          }
+        ],
+      },
+      {
+        id: 5,
+        label: 'decree',
+        icon: CheckCircleIcon,
+        type: 'menu',
+        hasRouterLink: false,
+        active: false,
+        items: [
+          {
+            label: 'business-trip-decree-local',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.DECREE,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL
+          }
+        ],
+      },
     ]
   }),
   actions: {
