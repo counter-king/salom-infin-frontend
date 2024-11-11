@@ -108,6 +108,10 @@ const props = defineProps({
   textTruncate: {
     type: Boolean,
     default: true
+  },
+  hideOnChange: {
+    type: Boolean,
+    default: false
   }
 })
 // Reactive
@@ -183,19 +187,23 @@ const toggle = (event) => {
 const onLazyLoad = (event) => {
   console.log('sssssss')
 }
-const onChange = () => {
-  if (props.clearAfterSelect){
-    list.value = []
-    props.options.value = []
-    setTimeout(() => {
-      if (multiselect.value) {
-        multiselect.value.show()  // Open the overlay panel
-      }
-    }, 10)
-  }else {
-    setTimeout(() => {
-      inputRef.value.focus()
-    }, 10)
+const onChange = async () => {
+  if (props.hideOnChange) {
+    multiselect.value.hide()
+  } else {
+    if (props.clearAfterSelect){
+      list.value = []
+      props.options.value = []
+      setTimeout(() => {
+        if (multiselect.value) {
+          multiselect.value.show()  // Open the overlay panel
+        }
+      }, 10)
+    }else {
+      setTimeout(() => {
+        inputRef.value.focus()
+      }, 10)
+    }
   }
 }
 const onShow = () => {
@@ -229,6 +237,7 @@ watch(debounced, async () => {
     })
   }
   else {
+    await loadList(props.apiParams)
     console.log('filter is not done for props options :)')
   }
 })

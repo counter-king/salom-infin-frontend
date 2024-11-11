@@ -44,6 +44,7 @@ const emit = defineEmits(['update:modelValue'])
     :clear-after-select="false"
     :label="props.label"
     :required="props.required"
+    :hide-on-change="true"
     type="user"
   >
     <template #chip="{ value }">
