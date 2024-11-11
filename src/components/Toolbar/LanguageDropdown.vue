@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n'
 import { usePrimeVue } from 'primevue/config'
 // Stores
 import { useCollectRequestsStore } from '@/stores/collect-requests.store'
+
 // Components
 import { AltArrowDownIcon, CheckCircleBoldIcon, GlobalIcon } from '@/components/Icons'
 // Utils
