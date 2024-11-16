@@ -13,7 +13,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="doc-flow-view flex flex-col shadow-button rounded-xl bg-white">
+  <div class="doc-flow-view flex flex-col shadow-button rounded-2xl bg-white">
     <div class="flex items-center gap-4 px-5 pt-4 pb-3">
       <h1 class="text-primary-900 font-semibold">{{ t(props.title) }}</h1>
 

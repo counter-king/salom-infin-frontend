@@ -512,5 +512,6 @@
   "select-employee": "Выбирайте сотрудник",
   "notice-for-employment": "Рапорт приеме на работу",
   "order-for-employment": "Приказ приеме на работу",
-  "employee": "Сотрудник"
+  "employee": "Сотрудник",
+  "tomorrow": "Завтра"
 }

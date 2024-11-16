@@ -7,7 +7,9 @@ import {
   WidgetBirthday,
   WidgetTasks,
   WidgetContacts,
-  WidgetApplications
+  WidgetApplications,
+  WidgetSlider,
+  WidgetSurvey
 } from '../components/widgets'
 // Composable
 const { t } = useI18n()
@@ -29,9 +31,13 @@ const { t } = useI18n()
       </div>
 
       <div class="flex flex-col max-w-[350px] w-full">
-        <widget-birthday class="h-[364px] overflow-y-auto mb-5" />
+        <widget-slider class="h-[155px]" />
 
-        <widget-applications class="flex-1 overflow-y-auto" />
+        <widget-survey class="h-[156px] mb-5" />
+
+        <widget-birthday class="h-[268px] overflow-y-auto mb-5" />
+
+<!--        <widget-applications class="flex-1 overflow-y-auto" />-->
       </div>
     </div>
   </div>
