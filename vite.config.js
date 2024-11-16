@@ -11,7 +11,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 export default defineConfig({
   plugins: [
     VitePWA({
-      // registerType: 'autoUpdate',
+      registerType: 'autoUpdate',
       manifest: {
         name: "Salom SQB",
         short_name: "SQB document flow",
