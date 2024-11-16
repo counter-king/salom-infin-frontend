@@ -8,6 +8,7 @@ import Empty from '@/components/Empty.vue'
 import HandbookTable from '@/modules/Handbook/components/HandbookTable.vue'
 // Stores
 import { usePaginationStore } from '@/stores/pagination.store'
+
 // Composable
 const router = useRouter()
 const route = useRoute()
