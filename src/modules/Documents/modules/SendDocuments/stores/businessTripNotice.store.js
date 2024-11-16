@@ -112,7 +112,7 @@ export const useSDBTNoticeStore = defineStore("sd-notice-store", {
       }
     },
     /** **/
-    async actionGetDocumentDetailForUpdate(id) {
+    async actionGetDocumentDetailForUpdate(id, fill = false) {
       try {
         this.detailLoading = true
         const { data } = await fetchGetDocumentDetail(id)
@@ -120,7 +120,11 @@ export const useSDBTNoticeStore = defineStore("sd-notice-store", {
         this.model.__companies = []
         this.model.__curator = await adjustTopSignerObjectToArray([], data.curator.id, false)
         this.model.__employees = await adjustUserObjectToArray(data.notices)
-        this.model.__approvers =  await adjustUserObjectToArray(data.approvers)
+        if (fill) {
+          this.model.__approvers =  await adjustUserObjectToArray(data.approvers.filter(item => item?.user?.id !== data?.curator?.assistant))
+        } else {
+          this.model.__approvers =  await adjustUserObjectToArray(data.approvers)
+        }
         this.model.__signers =  await adjustUserObjectToArray(data.signers)
         this.model.__companies = await adjustCompanyObjectToArray(data.notices[0].destinations)
         this.model.__tags = await adjustTagObjectToArray(data.tags)
