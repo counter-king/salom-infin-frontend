@@ -13,8 +13,10 @@ import BaseAvatar from "@/components/UI/BaseAvatar.vue";
 
   <Toast />
 
+  <base-avatar color="#ff2200" label="bbbbb" avatar-classes="w-9 h-9" />
   <base-button label="Test button test 111" />
-  <base-avatar color="#ff2200" label="asdasdasd" avatar-classes="w-9 h-9" />
+  <base-button label="Test button test 222" />
+  <base-avatar color="#ff2200" label="cccc" avatar-classes="w-9 h-9" />
 
   <notification />
 
