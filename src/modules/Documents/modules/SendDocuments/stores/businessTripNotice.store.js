@@ -122,6 +122,7 @@ export const useSDBTNoticeStore = defineStore("sd-notice-store", {
         this.model.__employees = await adjustUserObjectToArray(data.notices)
         if (fill) {
           this.model.__approvers =  await adjustUserObjectToArray(data.approvers.filter(item => item?.user?.id !== data?.curator?.assistant))
+          this.model.register_number = null
         } else {
           this.model.__approvers =  await adjustUserObjectToArray(data.approvers)
         }
