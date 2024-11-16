@@ -1,6 +1,7 @@
 <script setup>
 // Core
-import { ref, onMounted, watchEffect } from 'vue'
+import {ref, onMounted, watchEffect, watch} from 'vue'
+import { useDebounce } from '@vueuse/core'
 // Components
 import { ActionToolbar } from '@/components/Actions'
 import HandbookDropdown from './Dropdown.vue'
@@ -8,35 +9,44 @@ import HandbookDropdown from './Dropdown.vue'
 import {
   fetchCompaniesList,
   fetchDepartmentList,
+  fetchDepartmentsUserList,
   fetchDepartmentsWithUserList
 } from '@/services/common.service'
 // Macros
 const emit = defineEmits(['emit:up'])
 // Reactive
+const search = ref(null)
 const branches = ref([])
 const branchSelect = ref(null)
-const deparments = ref([])
-const deparmentSelect = ref(null)
+const departments = ref([])
+const departmentSelect = ref(null)
 const departmentUsers = ref([])
 // Watch
+const debouncedSearch = useDebounce(search, 750)
+watch(debouncedSearch, async (value) => {
+  let { data } = await fetchDepartmentsUserList({ search: value })
+  departmentUsers.value = data.results
+
+  emit('emit:up', departmentUsers.value)
+})
 watchEffect(async () => {
   if(!branchSelect.value) {
-    deparments.value = []
+    departments.value = []
   }
 
   if(branchSelect.value) {
     let { data } = await fetchDepartmentList({ page_size: 100, company: branchSelect.value })
-    deparments.value = data.results
-    deparmentSelect.value = data.results[0] ? data.results[0].id : null
+    departments.value = data.results
+    departmentSelect.value = data.results[0] ? data.results[0].id : null
   }
 })
 watchEffect(async () => {
-  if(!deparmentSelect.value) {
+  if(!departmentSelect.value) {
     return
   }
 
-  if(deparmentSelect.value) {
-    let { data: users } = await fetchDepartmentsWithUserList({ id: deparmentSelect.value })
+  if(departmentSelect.value) {
+    let { data: users } = await fetchDepartmentsWithUserList({ id: departmentSelect.value })
     departmentUsers.value = [users]
 
     emit('emit:up', departmentUsers.value)
@@ -52,6 +62,14 @@ onMounted(async () => {
 
 <template>
   <action-toolbar title="Справочник">
+    <template #title-after>
+<!--      <input-->
+<!--        v-model="search"-->
+<!--        placeholder="Search..."-->
+<!--        class="bg-white w-[350px] h-10 shadow-button leading-[14px] rounded-[80px] outline-0 py-[10px] px-4"-->
+<!--      />-->
+    </template>
+
     <template #filters>
       <div class="max-w-[350px] w-full">
         <handbook-dropdown
@@ -64,8 +82,8 @@ onMounted(async () => {
 
       <div class="max-w-[350px] w-full">
         <handbook-dropdown
-          v-model="deparmentSelect"
-          v-model:options="deparments"
+          v-model="departmentSelect"
+          v-model:options="departments"
           api-url=departments/top-level-departments
           :api-params="{
             company: branchSelect

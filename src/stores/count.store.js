@@ -4,10 +4,7 @@ import { defineStore } from 'pinia'
 import { useThemeStore } from '@/stores/theme.store'
 import { useBoxesCommonStore } from '@/modules/Documents/modules/Boxes/stores/common.store'
 // Services
-import {
-  fetchDocumentCountList,
-  fetchDashboardCountList
-} from '@/services/count.service'
+import { fetchDocumentCountList } from '@/services/count.service'
 
 export const useCountStore = defineStore('count-store', {
   state: () => ({}),
@@ -15,10 +12,8 @@ export const useCountStore = defineStore('count-store', {
     async actionCountList(){
       const { data } = await fetchDocumentCountList()
       const { boxes } = data
-      const { data: dashboard } = await fetchDashboardCountList()
 
       this.actionSetBoxesCount(boxes)
-      this.actionSetDashboardCount(dashboard)
     },
     /**
      *
@@ -34,15 +29,6 @@ export const useCountStore = defineStore('count-store', {
 
         route ? route.count = boxes[key] : boxesStore.routes.count = eDocs.count = boxes.all
       })
-    },
-    /**
-     *
-     *
-     * */
-    actionSetDashboardCount(data) {
-      const themeStore = useThemeStore()
-      const dashboard = themeStore.header.find(route => route.name === 'dashboard')
-      dashboard.count = Object.values(data).reduce((acc, cur) => acc + cur, 0)
     }
   }
 })
