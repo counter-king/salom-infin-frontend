@@ -12,7 +12,9 @@ import BaseButton from "@/components/UI/BaseButton.vue";
 
   <Toast />
 
-  <base-button label="Test button" />
+  <base-button label="Test button test 111" />
+  <base-button label="Test button test 222" />
+  <base-button label="Test button test 333" />
 
   <notification />
 
