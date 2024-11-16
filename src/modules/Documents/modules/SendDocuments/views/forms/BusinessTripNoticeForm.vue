@@ -164,7 +164,7 @@ onBeforeMount( async () => {
   } else if (route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL
     && route?.query?.compose_id
     && route?.query?.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP) {
-    await BTNoticeStore.actionGetDocumentDetailForUpdate(route.query.compose_id)
+    await BTNoticeStore.actionGetDocumentDetailForUpdate(route.query.compose_id, true)
   }
 })
 
