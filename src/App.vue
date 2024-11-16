@@ -15,14 +15,10 @@ import { VerticalCard, VerticalCardItem } from "@/components/Card/Vertical";
 
   <Toast />
 
-  <vertical-card-item title="asdasd" description="bbbb">
-  </vertical-card-item>
-
-  <vertical-card>
-    <template #default>
-      asdasdas
-    </template>
-  </vertical-card>
+  <base-button label="adasdasdasd" />
+  <base-button label="sss123123123" severity="success" />
+  <base-avatar color="#ff2200" label="bbbb" />
+  <base-button label="gggg" severity="info" />
 
   <notification />
 
