@@ -19,6 +19,7 @@ const URLS = {
   documentTitles: 'document-titles/',
   companies: 'companies',
   departmentsWithUser: 'departments-with-users',
+  userSearch: "user-search",
   expenseTypes: 'expense-types',
   tags: 'tags'
 }
@@ -40,8 +41,8 @@ export const fetchDepartmentList = (params) => {
  * Возвращает список сотрудников департаментов
  * @returns [{Array}]
  * */
-export const fetchDepartmentsUserList = ({ params }) => {
-  return axiosConfig.get(`${URLS.departmentsWithUser}/`, { page_size: 50, ...params })
+export const fetchDepartmentsUserListBySearch = (params) => {  
+  return axiosConfig.get(`${URLS.userSearch}/`, { page_size: 50, ...params })
 }
 /**
  * Возвращает список департаментов

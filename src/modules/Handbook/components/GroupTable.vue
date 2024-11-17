@@ -6,6 +6,10 @@ const props = defineProps({
   value: {
     type: Array,
     default: () => []
+  },
+  isSearch: {
+    type : Boolean,
+    default: false
   }
 })
 </script>
@@ -14,6 +18,7 @@ const props = defineProps({
   <group-table
     :value="props.value"
     row-group-mode="subheader"
+    :isSearch="props.isSearch"
   >
   </group-table>
 </template>
