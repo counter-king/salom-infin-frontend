@@ -28,6 +28,7 @@ export { default as NotebookLinearIcon } from  '~icons/solar/notebook-linear'
 export { default as CalendarLinearIcon } from  '~icons/solar/calendar-linear'
 export { default as StarLinearIcon } from  '~icons/solar/star-linear'
 export { default as UnreadLinearIcon } from  '~icons/solar/unread-linear'
+export { default as BookmarkIcon } from '~icons/ci/bookmark'
 // Solar (Outline)
 export { default as CheckCircleIcon } from  '~icons/solar/check-circle-outline'
 export { default as AltArrowUpIcon } from  '~icons/solar/alt-arrow-up-outline'
@@ -105,6 +106,9 @@ export { default as MonitorIcon } from '~icons/solar/monitor-outline'
 export { default as CopyIcon } from  '~icons/solar/copy-outline'
 export { default as BasketballIcon } from  '~icons/solar/basketball-outline'
 export { default as SquareAcademicCapIcon } from  '~icons/solar/square-academic-cap-outline'
+export { default as PostsCarouselVerticalIcon } from '~icons/solar/posts-carousel-vertical-linear'
+export { default as EyeLinearIcon } from '~icons/solar/eye-linear'
+export { default as HeartLinearIcon } from '~icons/solar/heart-linear'
 
 // Solar (Bold)
 export { default as CheckCircleBoldIcon } from  '~icons/solar/check-circle-bold'
@@ -151,3 +155,5 @@ export { default as UserCheckRoundedBrokenIcon } from  '~icons/solar/user-check-
 // Fluent
 export { default as BotFilledIcon } from  '~icons/fluent/bot-20-filled'
 
+//typcn
+export { default as ForwardIcon } from '~icons/typcn/arrow-forward-outline'

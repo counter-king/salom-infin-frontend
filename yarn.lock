@@ -1073,6 +1073,13 @@
   dependencies:
     "@iconify/types" "*"
 
+"@iconify-json/typcn@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@iconify-json/typcn/-/typcn-1.2.1.tgz#4041524f88e071e689d905d0013fd440b221b16c"
+  integrity sha512-qJCcg4TRmmKxaAfu/6odASCbuJjkyPVPMKijqXoY1wJ15KQAvm+ac5yI2xcdzrvFNyAPdxjY1RTA/dEbWsyH1w==
+  dependencies:
+    "@iconify/types" "*"
+
 "@iconify/types@*", "@iconify/types@^2.0.0":
   version "2.0.0"
   resolved "https://registry.npmjs.org/@iconify/types/-/types-2.0.0.tgz"
