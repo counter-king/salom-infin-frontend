@@ -19,7 +19,7 @@ const URLS = {
   documentTitles: 'document-titles/',
   companies: 'companies',
   departmentsWithUser: 'departments-with-users',
-  userSearch: "user-search",
+  userSearch: 'user-search',
   expenseTypes: 'expense-types',
   tags: 'tags'
 }

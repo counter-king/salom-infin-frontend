@@ -1,14 +1,14 @@
 <script setup>
 // Core
-import { useRoute, useRouter } from "vue-router"
+import { useRoute, useRouter } from 'vue-router'
 // Components
-import DataTable from "primevue/datatable"
-import Column from "primevue/column"
-import Empty from "@/components/Empty.vue"
-import HandbookTable from "@/modules/Handbook/components/HandbookTable.vue"
-import HandbookSearchTable from "@/modules/Handbook/components/HandbookSearchTable.vue"
+import DataTable from 'primevue/datatable'
+import Column from 'primevue/column'
+import Empty from '@/components/Empty.vue'
+import HandbookTable from '@/modules/Handbook/components/HandbookTable.vue'
+import HandbookSearchTable from '@/modules/Handbook/components/HandbookSearchTable.vue'
 // Stores
-import { usePaginationStore } from "@/stores/pagination.store"
+import { usePaginationStore } from '@/stores/pagination.store'
 // Composable
 const router = useRouter()
 const route = useRoute()
@@ -40,9 +40,9 @@ const props = defineProps({
   },
   rowGroupMode: {
     type: String,
-    default: "rowspan",
+    default: 'rowspan',
     validator(value) {
-      return ["rowspan", "subheader"].includes(value)
+      return ['rowspan', 'subheader'].includes(value)
     }
   },
   groupRowsBy: {
@@ -54,7 +54,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(["emit:page-change"])
+const emit = defineEmits(['emit:page-change'])
 // Methods
 const pageChange = async (val) => {
   paginationStore.page = Number(val.page + 1)
@@ -70,7 +70,7 @@ const pageChange = async (val) => {
       first_row: paginationStore.firstRow
     }
   })
-  emit("emit:page-change", {
+  emit('emit:page-change', {
     page: paginationStore.page,
     page_size: paginationStore.pageSize
   })

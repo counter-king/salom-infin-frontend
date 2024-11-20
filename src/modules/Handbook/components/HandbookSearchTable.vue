@@ -1,15 +1,16 @@
 <script setup>
 // Core
-import { ref, watchEffect } from "vue"
+import { ref } from 'vue'
 // Components
-import { StatusChip } from "@/components/Chips"
-import { VerticalCard, VerticalCardItem } from "@/components/Card/Vertical"
-// Macros
+import { StatusChip } from '@/components/Chips'
+import { VerticalCard, VerticalCardItem } from '@/components/Card/Vertical'
+
+//props
 const props = defineProps({
   item: {
     type: Object,
     default: () => ({
-      name: "",
+      name: '',
     }),
   },
   topLevel: {
