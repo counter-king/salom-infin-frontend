@@ -6,6 +6,8 @@ import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import Empty from '@/components/Empty.vue'
 import HandbookTable from '@/modules/Handbook/components/HandbookTable.vue'
+// Enum
+import { CONDITION } from '../../modules/Handbook/enums'
 // Stores
 import { usePaginationStore } from '@/stores/pagination.store'
 
@@ -186,19 +188,21 @@ const pageChange = async (val) => {
       </template>
 
       <template #groupheader="{ data }">
-        <handbook-table :item="data">
+        <handbook-table :item="data" v-if="data.condition === CONDITION.A">
           <template #department>
             <span>-</span>
           </template>
         </handbook-table>
 
         <template v-if="data.children && data.children.length > 0">
-          <template v-for="children in data.children">
-            <handbook-table :item="children" :top-level="data.name">
-              <template #top-level>
-                {{ data.name }}
-              </template>
-            </handbook-table>
+          <template v-if="data.condition === CONDITION.A" >
+            <template v-for="children in data.children">
+              <handbook-table :item="children" :top-level="data.name">
+                <template #top-level>
+                  {{ data.name }}
+                </template>
+              </handbook-table>
+            </template>
           </template>
         </template>
       </template>

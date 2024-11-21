@@ -4,6 +4,8 @@ import { ref } from 'vue'
 // Components
 import { StatusChip } from '@/components/Chips'
 import { VerticalCard, VerticalCardItem } from '@/components/Card/Vertical'
+// Enum
+import { CONDITION } from '../enums';
 // Macros
 const props = defineProps({
   item: {
@@ -66,7 +68,7 @@ const select = ref({
       <div class="max-w-[225px] w-full py-[10px] px-4"></div>
     </div>
 
-    <template v-if="!props.item.users.length">
+    <template v-if="!props.item.users.length && props.item.condition !== CONDITION.A">
       <h1 class="text-sm font-medium text-greyscale-900 text-center pt-3 pb-2">Здесь пока нет сотрудников</h1>
     </template>
 
