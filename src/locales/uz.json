@@ -512,5 +512,9 @@
   "notice-for-employment": "Ishga qabul qilish bildirishnomasi",
   "order-for-employment": "Ishga qabul qilish buyrug'i",
   "employee": "Сотрудник",
-  "tomorrow": "Ertaga"
+  "tomorrow": "Ertaga",
+  "thanks-for-participation": "Ishtirokingiz uchun katta rahmat!",
+  "survey": "So'rovnoma",
+  "how-mood-today": "Bugun kayfiyatingiz qanday?",
+  "no-birthdays-today": "Bugun tug'ilgan kunlar yo'q!"
 }

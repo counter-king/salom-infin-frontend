@@ -513,5 +513,9 @@
   "notice-for-employment": "Рапорт приеме на работу",
   "order-for-employment": "Приказ приеме на работу",
   "employee": "Сотрудник",
-  "tomorrow": "Завтра"
+  "tomorrow": "Завтра",
+  "thanks-for-participation": "Большое спасибо за ваше участие!",
+  "survey": "Опросник",
+  "how-mood-today": "Как вы себя чувствуйте сегодня?",
+  "no-birthdays-today": "Дней рождения сегодня нет!"
 }
