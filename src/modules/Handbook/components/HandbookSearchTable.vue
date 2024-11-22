@@ -39,10 +39,10 @@ const select = ref({
   <div class="w-full">
     <div class="table-header flex border-b-[1.5px] border-greyscale-200">
       <div class="flex items-center flex-1 font-semibold truncate py-[10px] px-4">
-        <span class="text-xs text-greyscale-500 mr-1">Департамент: 12</span>
+        <span class="text-xs text-greyscale-500 mr-1">Департамент: </span>
         <span class="max-w-[425px] text-sm text-primary-500 truncate">
           <slot name="top-level" :value="item?.name">
-            {{ item?.name }}
+            {{ item?.name ?? "-" }}
           </slot>
         </span>
       </div>
@@ -52,7 +52,7 @@ const select = ref({
 
         <span class="max-w-[425px] text-sm text-primary-500 truncate">
           <slot name="department" :value="item?.name">
-            {{ item?.name }}
+            {{ item?.name ?? "-" }}
           </slot>
         </span>
       </div>

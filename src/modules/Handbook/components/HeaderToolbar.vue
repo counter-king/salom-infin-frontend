@@ -2,9 +2,13 @@
 // Core
 import { ref, onMounted, watchEffect, watch } from 'vue'
 import { useDebounce } from '@vueuse/core'
+import { useI18n } from "vue-i18n";
 // Components
 import { ActionToolbar } from '@/components/Actions'
 import HandbookDropdown from './Dropdown.vue'
+import BaseInput from '@/components/UI/BaseInput.vue'
+//Icons
+import { MagniferIcon } from '@/components/Icons'
 // Services
 import {
   fetchCompaniesList,
@@ -23,6 +27,7 @@ const departmentSelect = ref(null)
 const departmentUsers = ref([])
 const isSearch = ref(false);
 
+const { t } = useI18n();
 const debouncedSearch = useDebounce(search, 750)
 
 watch(debouncedSearch, async (value) => {
@@ -76,12 +81,17 @@ onMounted(async () => {
 
 <template>
   <action-toolbar title="Справочник">
-    <template #title-after>
-      <input v-model="search" placeholder="Search..."
-        class="bg-white w-[350px] h-10 shadow-button leading-[14px] rounded-[80px] outline-0 py-[10px] px-4" />
-    </template>
-
     <template #filters>
+      <div class="w-full max-w-[316px]">
+        <base-input
+          v-model="search"
+          :icon-left="MagniferIcon"
+         :placeholder="t('search')"
+          class="flex p-input-icon-left items-center"
+          input-class="!pl-10 p-3 bg-white text-xs !rounded-[90px] placeholder:text-xs"
+          icon-left-class="!w-4 !h-4"
+        />
+      </div>
       <div class="max-w-[350px] w-full">
         <handbook-dropdown v-model="branchSelect" v-model:options="branches" api-url="companies" placeholder="Филиал" />
       </div>

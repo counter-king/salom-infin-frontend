@@ -7,6 +7,8 @@ import Column from 'primevue/column'
 import Empty from '@/components/Empty.vue'
 import HandbookTable from '@/modules/Handbook/components/HandbookTable.vue'
 import HandbookSearchTable from '@/modules/Handbook/components/HandbookSearchTable.vue'
+// Enum
+import { CONDITION } from '../../modules/Handbook/enums'
 // Stores
 import { usePaginationStore } from '@/stores/pagination.store'
 // Composable
@@ -191,20 +193,23 @@ const pageChange = async (val) => {
       </template>
 
       <template #groupheader="{ data }">
+        <!-- if search work, this ui redner, -->
         <template v-if="!isSearch">
-          <handbook-table :item="data">
+          <handbook-table :item="data" v-if="data.condition === CONDITION.A">
             <template #department>
               <span>-</span>
             </template>
           </handbook-table>
-
+          
           <template v-if="data.children && data.children.length > 0">
-            <template v-for="children in data.children">
-              <handbook-table :item="children" :top-level="data.name">
-                <template #top-level>
-                  {{ data.name }}
-                </template>
-              </handbook-table>
+            <template v-if="data.condition === CONDITION.A" >
+              <template v-for="children in data.children">
+                <handbook-table :item="children" :top-level="data.name">
+                  <template #top-level>
+                    {{ data.name }}
+                  </template>
+                </handbook-table>
+              </template>
             </template>
           </template>
         </template>
@@ -213,10 +218,10 @@ const pageChange = async (val) => {
           <template v-for="item in props.value" :key="item.id">
             <handbook-search-table :item="item" :top-level="item?.department?.name">
               <template #department>
-                {{ item?.top_level_department?.name }}
+                {{ item?.top_level_department?.name  ?? "-"}}
               </template>
               <template #top-level>
-                {{ item?.department?.name }}
+                {{ item?.department?.name ?? "-" }}
               </template>
             </handbook-search-table>
           </template>
