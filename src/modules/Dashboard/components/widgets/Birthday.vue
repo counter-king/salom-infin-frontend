@@ -99,7 +99,7 @@ onMounted(async () => {
             <div class="flex justify-center items-center w-16 h-16 rounded-[20px] bg-greyscale-50">
               <img src="/images/dashboard/gift-1.svg" alt="Gift" class="w-8 h-8">
             </div>
-            <span class="text-greyscale-400 text-xs font-medium">{{ t('no-birthdays-today') }}</span>
+            <span class="text-greyscale-400 text-xs font-medium">{{ todayActive ? t('no-birthdays-today') : t('no-birthdays-tomorrow') }}</span>
           </div>
         </template>
         <template v-else>
