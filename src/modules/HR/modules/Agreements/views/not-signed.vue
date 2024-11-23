@@ -7,6 +7,7 @@ import { ActionToolbar, ActionBackButton, EriKeysMenu } from '@/components/Actio
 import { EyeIcon } from '@/components/Icons'
 import { LinkableCell } from '@/components/Table'
 // Stores
+import { useCountStore } from '@/stores/count.store'
 import { useAgreementsStore } from '../stores/agreements.store'
 import { useAgreementsRoutesStore } from '../stores/routes.store'
 // Utils
@@ -17,6 +18,7 @@ import { COLOR_TYPES } from '@/enums'
 // Composable
 const route = useRoute()
 const router = useRouter()
+const countStore = useCountStore()
 const agreementsStore = useAgreementsStore()
 const agreementsRoutesStore = useAgreementsRoutesStore()
 // Reactive
@@ -32,7 +34,7 @@ const signDocument = async () => {
   }
 
   await agreementsStore.signNegotiatorsNotSigned(checkedValues.value)
-  await agreementsRoutesStore.setCounts()
+  await countStore.actionCountList()
   dispatchNotify(null, 'Документ успешно подписан', COLOR_TYPES.SUCCESS)
   await agreementsStore.getNegotiatorsNotSigned({
     doc_type: route.params.item,
@@ -43,7 +45,7 @@ const signDocumentWithModal = async () => {
   try {
     loading.value = true
     await signDocument()
-    await agreementsRoutesStore.setCounts()
+    await countStore.actionCountList()
     dialog.value = false
   }
   finally {

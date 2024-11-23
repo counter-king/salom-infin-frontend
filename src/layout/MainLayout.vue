@@ -32,7 +32,6 @@ onMounted(async () => {
     await getCurrentUser()
     await commonStore.init()
     await countStore.actionCountList()
-    await agreementsRoutesStore.setCounts() // TODO: Refactor after
     setTimeout(() => {
       appLoading.value = false
     }, 500)
