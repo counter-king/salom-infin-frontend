@@ -1,13 +1,12 @@
 <script setup>
-import {computed, ref} from 'vue'
-import {useRegisterSW} from 'virtual:pwa-register/vue'
+import { computed, ref } from 'vue'
+import { useRegisterSW } from 'virtual:pwa-register/vue'
 
 // periodic sync is disabled, change the value to enable it, the period is in milliseconds
 // You can remove onRegisteredSW callback and registerPeriodicSync function
 const period = 0
 
 const swActivated = ref(false)
-
 /**
  * This function will register a periodic sync check every hour, you can modify the interval as needed.
  * @param {string} swUrl
@@ -55,9 +54,9 @@ const {offlineReady, needRefresh, updateServiceWorker} = useRegisterSW({
 
 const title = computed(() => {
   if (offlineReady.value)
-    return 'App ready to work offline'
+    return 'Приложение готово к работе офлайн'
   if (needRefresh.value)
-    return 'New content available, click on reload button to update.'
+    return 'Доступен новый контент, нажмите кнопку перезагрузки, чтобы обновить.'
   return ''
 })
 
@@ -81,10 +80,10 @@ function close() {
     </div>
     <div class="buttons">
       <button v-if="needRefresh" type="button" class="reload" @click="updateServiceWorker()">
-        Reload
+        Обновить
       </button>
       <button type="button" @click="close">
-        Close
+        Закрыть
       </button>
     </div>
   </div>
@@ -103,6 +102,7 @@ function close() {
   text-align: left;
   box-shadow: 3px 4px 5px 0 #8885;
   display: grid;
+  background-color: #fff;
 }
 
 .pwa-toast .message {
