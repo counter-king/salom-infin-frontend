@@ -31,15 +31,15 @@ const author = computed(() => {
       <div class="flex flex-col items-end" style="width: 70%;">
         <div class="text-sm font-bold text-end"> {{ hostName() === 'vercel' ? '"Hamkorbank" ATB' : '“O‘zsanoatqurilishbank” ATB' }}</div>
         <div class="text-sm font-bold text-end">{{ props.composeModel?.curator?.position?.name }}</div>
-        <div class="text-sm font-bold text-end">{{ props.composeModel && props.composeModel.curator && formatUserFullName(props.composeModel?.curator) }}га</div>
+        <div class="text-sm font-bold text-end">{{ props.composeModel && props.composeModel.curator && formatUserFullName(props.composeModel?.curator) }}ga</div>
         <div class="text-sm font-bold text-end">{{ props.composeModel?.author?.top_level_department?.name }} </div>
         <div class="text-sm font-bold text-end">{{ props.composeModel?.author?.position?.name }}</div>
-        <div class="text-sm font-bold text-end">{{ props.composeModel && props.composeModel.author && formatUserFullName(props.composeModel?.author) }}дан</div>
+        <div class="text-sm font-bold text-end">{{ props.composeModel && props.composeModel.author && formatUserFullName(props.composeModel?.author) }}dan</div>
       </div>
     </div>
 
     <div class="flex justify-center text-base font-bold my-8">
-      АРИЗА
+      ARIZA
     </div>
 
     <div v-if="SDStore.historyShow" class="text-justify" v-html="SDStore.historyContent"></div>
