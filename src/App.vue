@@ -3,7 +3,7 @@
 import Toast from 'primevue/toast'
 // Components
 import Notification from '@/components/Notification.vue'
-// import ReloadPrompt from '@/components/ReloadPrompt.vue'
+import ReloadPrompt from '@/components/ReloadPrompt.vue'
 </script>
 
 <template>
@@ -11,7 +11,10 @@ import Notification from '@/components/Notification.vue'
 
   <Toast />
 
+  <base-button label="asdasdad" />
+  <base-button label="22222222" />
+
   <notification />
 
-<!--  <reload-prompt />-->
+  <reload-prompt />
 </template>

@@ -5,31 +5,43 @@ import vue from '@vitejs/plugin-vue'
 import svgLoader from 'vite-svg-loader'
 import Components from 'unplugin-vue-components/vite'
 import { PrimeVueResolver } from 'unplugin-vue-components/resolvers'
-// import { VitePWA } from 'vite-plugin-pwa'
+import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    // VitePWA({
-    //   registerType: 'prompt',
-    //   manifest: {
-    //     name: "Salom SQB",
-    //     short_name: "SQB document flow",
-    //     theme_color: "#827BFF",
-    //     icons: [
-    //       {
-    //         src: "/images/sqb-logo.svg",
-    //         sizes: "192x192",
-    //         type: "image/svg+xml"
-    //       }
-    //     ]
-    //   },
-    //   devOptions: {
-    //     enabled: true
-    //   }
-    // }),
-    Icons({ compiler: 'vue3' }),
     vue(),
+    VitePWA({
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.js',
+      registerType: 'prompt',
+      injectRegister: false,
+
+      // pwaAssets: {
+      //   disabled: false,
+      //   config: true,
+      // },
+
+      manifest: {
+        name: 'pwa-test-second',
+        short_name: 'pwa-test-second',
+        description: 'pwa-test-second',
+        theme_color: '#ffffff',
+      },
+
+      injectManifest: {
+        globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
+      },
+
+      devOptions: {
+        enabled: true,
+        navigateFallback: '/',
+        suppressWarnings: true,
+        type: 'module',
+      },
+    }),
+    Icons({ compiler: 'vue3' }),
     svgLoader(),
     Components({
       resolvers: [PrimeVueResolver()],
