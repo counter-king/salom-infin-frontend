@@ -2,7 +2,7 @@
 // Core
 import { computed } from "vue"
 // Utils
-import { formatUserFullName } from "@/utils"
+import { formatUserFullName, hostName } from "@/utils"
 import { formatDateHour } from "@/utils/formatDate"
 // Components
 import { BasePerformer, BaseSignersTemplate } from "@/components/Templates/components"
@@ -29,7 +29,7 @@ const author = computed(() => {
   <div class="application-letter-template letter-template">
     <div class="flex justify-end">
       <div class="flex flex-col items-end" style="width: 70%;">
-        <div class="text-sm font-bold text-end">“O‘zsanoatqurilishbank” ATB  </div>
+        <div class="text-sm font-bold text-end"> {{ hostName() === 'vercel' ? '"Hamkorbank" ATB' : '“O‘zsanoatqurilishbank” ATB' }}</div>
         <div class="text-sm font-bold text-end">{{ props.composeModel?.curator?.position?.name }}</div>
         <div class="text-sm font-bold text-end">{{ props.composeModel && props.composeModel.curator && formatUserFullName(props.composeModel?.curator) }}га</div>
         <div class="text-sm font-bold text-end">{{ props.composeModel?.author?.top_level_department?.name }} </div>
