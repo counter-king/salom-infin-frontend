@@ -17,7 +17,6 @@ function registerPeriodicSync(swUrl, r) {
   if (period <= 0) return
 
   setInterval(async () => {
-    console.log('onLine' in navigator)
     if ('onLine' in navigator && !navigator.onLine)
       return
 
@@ -37,8 +36,6 @@ function registerPeriodicSync(swUrl, r) {
 const {offlineReady, needRefresh, updateServiceWorker} = useRegisterSW({
   immediate: true,
   onRegisteredSW(swUrl, r) {
-    console.log('swUrl', swUrl)
-    console.log('r', r)
 
     if (period <= 0) return
     if (r?.active?.state === 'activated') {
