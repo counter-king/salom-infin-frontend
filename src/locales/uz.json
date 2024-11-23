@@ -516,5 +516,7 @@
   "thanks-for-participation": "Ishtirokingiz uchun katta rahmat!",
   "survey": "So'rovnoma",
   "how-mood-today": "Bugun kayfiyatingiz qanday?",
-  "no-birthdays-today": "Bugun tug'ilgan kunlar yo'q!"
+  "no-birthdays-today": "Bugun tug'ilgan kunlar yo'q!",
+  "application-ready-work-offline": "Ilova oflayn rejimda ishlashga tayyor",
+  "text-new-version-available": "Tizimning yangi versiyasi mavjud, yangilash uchun tugmani bosing"
 }
