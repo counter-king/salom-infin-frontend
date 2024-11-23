@@ -68,7 +68,6 @@ function close() {
 </script>
 
 <template>
-  <pre>{{ offlineReady }}</pre>
   <div
     v-if="offlineReady || needRefresh"
     class="pwa-toast"
