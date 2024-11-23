@@ -17,7 +17,7 @@ const defineIcon = computed(() => {
   if(props.defineAsync) {
     return defineAsyncComponent({
       loader: async () => {
-        const icons = await import.meta.globEager('../Icons/index.store.js')
+        const icons = await import.meta.globEager('../Icons/index.js')
         return Object.values(icons)[0][props.icon]
       },
       loadingComponent: BaseSpinner,
