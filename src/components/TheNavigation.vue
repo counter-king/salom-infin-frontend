@@ -61,9 +61,6 @@ const checkRouteMeta = () => {
             </router-link>
           </template>
         </template>
-
-        <base-button label="222" />
-        <base-avatar label="CCC" color="#ff2200" />
       </div>
     </div>
   </div>
