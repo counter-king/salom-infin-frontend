@@ -69,7 +69,7 @@ function close() {
 <template>
   <div
     v-if="offlineReady || needRefresh"
-    class="pwa-toast"
+    class="pwa-toast grid fixed right-0 bottom-0 bg-white rounded z-50 text-left m-4 p-3"
     aria-labelledby="toast-message"
     role="alert"
   >
@@ -91,18 +91,8 @@ function close() {
 
 <style scoped>
 .pwa-toast {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  margin: 16px;
-  padding: 12px;
   border: 1px solid #8885;
-  border-radius: 4px;
-  z-index: 1;
-  text-align: left;
   box-shadow: 3px 4px 5px 0 #8885;
-  display: grid;
-  background-color: #fff;
 }
 
 .pwa-toast .message {
