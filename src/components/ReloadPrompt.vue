@@ -1,13 +1,12 @@
 <script setup>
-import {computed, ref} from 'vue'
-import {useRegisterSW} from 'virtual:pwa-register/vue'
+import { computed, ref } from 'vue'
+import { useRegisterSW } from 'virtual:pwa-register/vue'
 
 // periodic sync is disabled, change the value to enable it, the period is in milliseconds
 // You can remove onRegisteredSW callback and registerPeriodicSync function
 const period = 0
 
 const swActivated = ref(false)
-
 /**
  * This function will register a periodic sync check every hour, you can modify the interval as needed.
  * @param {string} swUrl
@@ -17,7 +16,6 @@ function registerPeriodicSync(swUrl, r) {
   if (period <= 0) return
 
   setInterval(async () => {
-    console.log('onLine' in navigator)
     if ('onLine' in navigator && !navigator.onLine)
       return
 
@@ -34,11 +32,9 @@ function registerPeriodicSync(swUrl, r) {
   }, period)
 }
 
-const {offlineReady, needRefresh, updateServiceWorker} = useRegisterSW({
+const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW({
   immediate: true,
   onRegisteredSW(swUrl, r) {
-    console.log('swUrl', swUrl)
-    console.log('r', r)
 
     if (period <= 0) return
     if (r?.active?.state === 'activated') {
@@ -58,9 +54,9 @@ const {offlineReady, needRefresh, updateServiceWorker} = useRegisterSW({
 
 const title = computed(() => {
   if (offlineReady.value)
-    return 'App ready to work offline'
+    return 'Приложение готово к работе офлайн'
   if (needRefresh.value)
-    return 'New content available, click on reload button to update.'
+    return 'Доступен новый контент, нажмите кнопку перезагрузки, чтобы обновить.'
   return ''
 })
 
@@ -71,10 +67,9 @@ function close() {
 </script>
 
 <template>
-  <pre>{{ needRefresh }}</pre>
   <div
     v-if="offlineReady || needRefresh"
-    class="pwa-toast"
+    class="pwa-toast grid fixed right-0 bottom-0 bg-white rounded z-[9999] text-left m-4 p-3"
     aria-labelledby="toast-message"
     role="alert"
   >
@@ -85,10 +80,10 @@ function close() {
     </div>
     <div class="buttons">
       <button v-if="needRefresh" type="button" class="reload" @click="updateServiceWorker()">
-        Reload
+        Обновить
       </button>
       <button type="button" @click="close">
-        Close
+        Закрыть
       </button>
     </div>
   </div>
@@ -96,17 +91,8 @@ function close() {
 
 <style scoped>
 .pwa-toast {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  margin: 16px;
-  padding: 12px;
   border: 1px solid #8885;
-  border-radius: 4px;
-  z-index: 1;
-  text-align: left;
   box-shadow: 3px 4px 5px 0 #8885;
-  display: grid;
 }
 
 .pwa-toast .message {

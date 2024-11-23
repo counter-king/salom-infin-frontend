@@ -36,7 +36,7 @@ export default defineConfig({
 
       devOptions: {
         enabled: true,
-        navigateFallback: '/',
+        navigateFallback: 'index.html',
         suppressWarnings: true,
         type: 'module',
       },

@@ -11,9 +11,6 @@ import ReloadPrompt from '@/components/ReloadPrompt.vue'
 
   <Toast />
 
-  <base-button label="asdasdad" />
-  <base-button label="22222222" />
-
   <notification />
 
   <reload-prompt />
