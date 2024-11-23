@@ -1,7 +1,17 @@
 <script setup>
+// Core
 import { computed, ref } from 'vue'
 import { useRegisterSW } from 'virtual:pwa-register/vue'
-
+import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+// Components
+import { RefreshCircleBoldIcon } from '@/components/Icons'
+// Stores
+import { useNavigationStore } from '@/stores/navigation.store'
+// Composable
+const route = useRoute()
+const { t } = useI18n()
+const navigationStore = useNavigationStore()
 // periodic sync is disabled, change the value to enable it, the period is in milliseconds
 // You can remove onRegisteredSW callback and registerPeriodicSync function
 const period = 0
@@ -54,9 +64,9 @@ const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW({
 
 const title = computed(() => {
   if (offlineReady.value)
-    return 'Приложение готово к работе офлайн'
+    return t('application-ready-work-offline')
   if (needRefresh.value)
-    return 'Доступен новый контент, нажмите кнопку перезагрузки, чтобы обновить.'
+    return t('text-new-version-available')
   return ''
 })
 
@@ -69,32 +79,45 @@ function close() {
 <template>
   <div
     v-if="offlineReady || needRefresh"
-    class="pwa-toast grid fixed right-0 bottom-0 bg-white rounded z-[9999] text-left m-4 p-3"
-    aria-labelledby="toast-message"
-    role="alert"
+    class=" flex gap-3 items-center fixed bottom-0 right-0 w-full max-w-[calc(100vw-250px)] bg-success-500 text-white z-[9999] py-[7px] px-6"
+    :class="{
+      'max-w-[calc(100vw-76px)]': navigationStore.sidebarCollapse,
+      'max-w-[100vw]': route.name === 'Calendar' || route.name === 'DashboardIndex' || route.name === 'HandbookIndex'
+    }"
   >
-    <div class="message">
-      <span id="toast-message">
-        {{ title }}
-      </span>
-    </div>
-    <div class="buttons">
-      <button v-if="needRefresh" type="button" class="reload" @click="updateServiceWorker()">
-        Обновить
-      </button>
-      <button type="button" @click="close">
-        Закрыть
-      </button>
-    </div>
+    <base-iconify :icon="RefreshCircleBoldIcon" class="!w-7 !h-7" />
+
+    <span class="font-semibold mr-2">{{ t(title) }}</span>
+
+    <base-button
+      v-if="needRefresh"
+      severity="success"
+      rounded
+      size="small"
+      button-class="!bg-[#8ACB6E] shadow-[0px_1px_3px_0px_#00000026] !border-none"
+      @click="updateServiceWorker()"
+    >
+      <template #label>
+        <span class="!text-sm">{{ t('renew') }}</span>
+      </template>
+    </base-button>
+<!--    <div class="message">-->
+<!--      <span id="toast-message">-->
+<!--        {{ title }}-->
+<!--      </span>-->
+<!--    </div>-->
+<!--    <div class="buttons">-->
+<!--      <button v-if="needRefresh" type="button" class="reload" @click="updateServiceWorker()">-->
+<!--        Обновить-->
+<!--      </button>-->
+<!--      <button type="button" @click="close">-->
+<!--        Закрыть-->
+<!--      </button>-->
+<!--    </div>-->
   </div>
 </template>
 
 <style scoped>
-.pwa-toast {
-  border: 1px solid #8885;
-  box-shadow: 3px 4px 5px 0 #8885;
-}
-
 .pwa-toast .message {
   margin-bottom: 8px;
 }

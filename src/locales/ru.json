@@ -318,7 +318,7 @@
   "repeated-application": "Повторная заявка",
   "status": "Статус",
   "service_letter": "Служебное письмо",
-  "renew":"Обновить",
+  "renew": "Обновить",
   "customize-columns": "Настроить столбцы",
   "incoming": "Входящие",
   "inner": "Внутренний",
@@ -517,5 +517,7 @@
   "thanks-for-participation": "Большое спасибо за ваше участие!",
   "survey": "Опросник",
   "how-mood-today": "Как вы себя чувствуйте сегодня?",
-  "no-birthdays-today": "Дней рождения сегодня нет!"
+  "no-birthdays-today": "Дней рождения сегодня нет!",
+  "application-ready-work-offline": "Приложение готово к работе офлайн",
+  "text-new-version-available": "Доступна новая версия системы, нажмите кнопку чтобы обновить"
 }

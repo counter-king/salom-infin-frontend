@@ -1,7 +1,7 @@
 import axiosConfig from './axios.config'
 
 const URLS = {
-  inbox: 'inbox-unread-count'
+  inbox: 'unread-count'
 }
 /**
  *

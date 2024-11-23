@@ -137,6 +137,7 @@ export { default as LetterBoldIcon } from  '~icons/solar/letter-bold'
 export { default as UserSpeakBoldIcon } from  '~icons/solar/user-speak-bold'
 export { default as TrashBinTrashBoldIcon } from  '~icons/solar/trash-bin-trash-bold'
 export { default as FolderBoldIcon } from  '~icons/solar/folder-bold'
+export { default as RefreshCircleBoldIcon } from  '~icons/solar/refresh-circle-bold'
 // Solar (Bold Duotone)
 export { default as ArchiveUpBoldDuotoneIcon } from  '~icons/solar/archive-up-bold-duotone'
 export { default as StarBoldDuotoneIcon } from  '~icons/solar/star-bold-duotone'
