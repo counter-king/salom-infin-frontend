@@ -98,7 +98,7 @@ function close() {
       @click="updateServiceWorker()"
     >
       <template #label>
-        <span class="!text-sm">Обновить</span>
+        <span class="!text-sm">{{ t('renew') }}</span>
       </template>
     </base-button>
 <!--    <div class="message">-->
