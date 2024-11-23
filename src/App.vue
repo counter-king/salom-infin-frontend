@@ -11,8 +11,10 @@ import ReloadPrompt from '@/components/ReloadPrompt.vue'
 
   <Toast />
 
-  <base-button label="asdasdad" />
-  <base-button label="22222222" />
+  <base-button label="111" />
+  <base-button label="222" />
+  <base-button label="333" />
+  <base-button label="444" />
 
   <notification />
 
