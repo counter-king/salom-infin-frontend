@@ -68,7 +68,7 @@ const select = ref({
       <div class="max-w-[225px] w-full py-[10px] px-4"></div>
     </div>
 
-    <template v-if="!props.item.users.length && props.item.condition !== CONDITION.A">
+    <template v-if="!props.item.users.length">
       <h1 class="text-sm font-medium text-greyscale-900 text-center pt-3 pb-2">Здесь пока нет сотрудников</h1>
     </template>
 
