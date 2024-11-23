@@ -32,7 +32,7 @@ function registerPeriodicSync(swUrl, r) {
   }, period)
 }
 
-const {offlineReady, needRefresh, updateServiceWorker} = useRegisterSW({
+const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW({
   immediate: true,
   onRegisteredSW(swUrl, r) {
 
@@ -69,7 +69,7 @@ function close() {
 <template>
   <div
     v-if="offlineReady || needRefresh"
-    class="pwa-toast grid fixed right-0 bottom-0 bg-white rounded z-50 text-left m-4 p-3"
+    class="pwa-toast grid fixed right-0 bottom-0 bg-white rounded z-[9999] text-left m-4 p-3"
     aria-labelledby="toast-message"
     role="alert"
   >
