@@ -410,3 +410,13 @@ export const adjustObjectToArray = async (api = '', items = [], multiple = true,
 export const hostName = () => {
   return  window.location.host === 'new-side-project.vercel.app' ? 'vercel' : window.location.host.startsWith('localhost') ? 'localhost' : 'sqb'
 }
+
+export const isToday = (date) => {
+  return dayjs(date).isSame(dayjs(), 'day')
+}
+
+export const isBirthdayToday = (date) => {
+  const birthday = dayjs(date)
+  const today = dayjs()
+  return birthday.month() === today.month() && birthday.date() === today.date()
+}

@@ -141,6 +141,10 @@ export { default as LetterBoldIcon } from  '~icons/solar/letter-bold'
 export { default as UserSpeakBoldIcon } from  '~icons/solar/user-speak-bold'
 export { default as TrashBinTrashBoldIcon } from  '~icons/solar/trash-bin-trash-bold'
 export { default as FolderBoldIcon } from  '~icons/solar/folder-bold'
+export { default as RefreshCircleBoldIcon } from  '~icons/solar/refresh-circle-bold'
+export { default as EyeBoldIcon } from  '~icons/solar/eye-bold'
+export { default as HeartBoldIcon } from  '~icons/solar/heart-bold'
+
 // Solar (Bold Duotone)
 export { default as ArchiveUpBoldDuotoneIcon } from  '~icons/solar/archive-up-bold-duotone'
 export { default as StarBoldDuotoneIcon } from  '~icons/solar/star-bold-duotone'
@@ -154,6 +158,9 @@ export { default as CalendarDateBoldDuotoneIcon } from  '~icons/solar/calendar-d
 export { default as UserCheckRoundedBrokenIcon } from  '~icons/solar/user-check-rounded-broken'
 // Fluent
 export { default as BotFilledIcon } from  '~icons/fluent/bot-20-filled'
-
 //typcn
 export { default as ForwardIcon } from '~icons/typcn/arrow-forward-outline'
+export { default as ForwardBoldIcon } from '~icons/typcn/arrow-forward'
+//merge
+export { default as BookmarkBoldIcon } from '~icons/mage/bookmark-fill'
+

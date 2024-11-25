@@ -1,41 +1,41 @@
 <script setup>
 // Core
-import {useI18n} from "vue-i18n";
-import {useRoute, useRouter} from "vue-router";
+import {computed, onMounted, onUnmounted, ref, unref, watch} from "vue"
+import {useI18n} from "vue-i18n"
+import {useRoute, useRouter} from "vue-router"
 // Constants
-import { useSDStore } from "@/modules/Documents/modules/SendDocuments/stores/index.store";
-import {computed, onMounted, onUnmounted, ref, unref, watch} from "vue";
-// Store
-import { useFilterStore } from "@/stores/filter.store";
-import { useUserPermissionStore } from '../../../../../stores/user-permissions.store';
-// Components
-import { AltArrowDownIcon, EllipsisVertical20SolidIcon, SettingsIcon } from '@/components/Icons'
-import CustomizeMenuDialog from "@/modules/Documents/modules/SendDocuments/components/CustomizeMenuDialog.vue";
-// Utils
-import {getStorageItem, saveStorageItem} from "@/utils/storage";
 import {
   SD_TOOLBAR_MENU_LENGTH,
   SD_TOOLBAR_MENU_STORAGE_NAME
-} from "@/modules/Documents/modules/SendDocuments/constants";
+} from "@/modules/Documents/modules/SendDocuments/constants"
+// Store
+import { useSDStore } from "@/modules/Documents/modules/SendDocuments/stores/index.store"
+import { useFilterStore } from "@/stores/filter.store"
+import { useUserPermissionStore } from '@/stores/user-permissions.store'
+// Components
+import { AltArrowDownIcon, EllipsisVertical20SolidIcon, SettingsIcon } from '@/components/Icons'
+import CustomizeMenuDialog from "@/modules/Documents/modules/SendDocuments/components/CustomizeMenuDialog.vue"
+// Utils
+import {getStorageItem, saveStorageItem} from "@/utils/storage"
 // Const
-const route = useRoute();
-const router = useRouter();
-const { t } = useI18n();
-const emit = defineEmits(['emit:changeDocType']);
-const sdStore = useSDStore();
+const route = useRoute()
+const router = useRouter()
+const { t } = useI18n()
+const emit = defineEmits(['emit:changeDocType'])
+const sdStore = useSDStore()
 const userPermissionStore = useUserPermissionStore()
-const opRef = ref(null);
-const moreVisible = ref(false);
-const dialog = ref(false);
-const limitExceeded = ref(false);
-const filterStore = useFilterStore();
+const opRef = ref(null)
+const moreVisible = ref(false)
+const dialog = ref(false)
+const limitExceeded = ref(false)
+const filterStore = useFilterStore()
 
 const selectedMenuItems = computed(() => {
-  return sdStore.SD_TOOLBAR_MENU_LIST.filter(item => item.selected);
+  return sdStore.SD_TOOLBAR_MENU_LIST.filter(item => item.selected)
 })
 
 const unSelectedMenuItems = computed(() => {
-  return sdStore.SD_TOOLBAR_MENU_LIST.filter(item => !item.selected);
+  return sdStore.SD_TOOLBAR_MENU_LIST.filter(item => !item.selected)
 })
 
 // Methods
@@ -47,11 +47,11 @@ const onChangeDocType = async (menu) => {
     query: {
       document_type: menu.document_type
     }
-  });
-  await sdStore.actionGetDocumentList({ ...route.query, document_type: menu.document_type });
-  filterStore.resetFilterState();
-  saveStorageItem(SD_TOOLBAR_MENU_STORAGE_NAME, JSON.stringify(sdStore.SD_TOOLBAR_MENU_LIST));
-  emit('emit:changeDocType', menu);
+  })
+  await sdStore.actionGetDocumentList({ ...route.query, document_type: menu.document_type })
+  filterStore.resetFilterState()
+  saveStorageItem(SD_TOOLBAR_MENU_STORAGE_NAME, JSON.stringify(sdStore.SD_TOOLBAR_MENU_LIST))
+  emit('emit:changeDocType', menu)
 }
 const toggle = (event) => {
   const _opRef = unref(opRef)
@@ -60,28 +60,28 @@ const toggle = (event) => {
 
 const manageStorageMenu = () => {
   if (getStorageItem(SD_TOOLBAR_MENU_STORAGE_NAME)){
-    sdStore.SD_TOOLBAR_MENU_LIST = JSON.parse(getStorageItem(SD_TOOLBAR_MENU_STORAGE_NAME));
+    sdStore.SD_TOOLBAR_MENU_LIST = JSON.parse(getStorageItem(SD_TOOLBAR_MENU_STORAGE_NAME))
 
     watch(sdStore.SD_TOOLBAR_MENU_LIST, (newVal) => {
       if (newVal && newVal.length){
-        limitExceeded.value = newVal.filter(menu => menu.selected).length >= SD_TOOLBAR_MENU_LENGTH;
+        limitExceeded.value = newVal.filter(menu => menu.selected).length >= SD_TOOLBAR_MENU_LENGTH
       }
-    }, { immediate: true });
+    }, { immediate: true })
   }else {
     watch(sdStore.SD_TOOLBAR_MENU_LIST, (newVal) => {
       if (newVal && newVal.length){
-        limitExceeded.value = newVal.filter(menu => menu.selected).length >= SD_TOOLBAR_MENU_LENGTH;
+        limitExceeded.value = newVal.filter(menu => menu.selected).length >= SD_TOOLBAR_MENU_LENGTH
       }
-    }, { immediate: true });
+    }, { immediate: true })
   }
 }
 
 onMounted(() => {
-  manageStorageMenu();
+  manageStorageMenu()
 });
 
 onUnmounted(() => {
-  filterStore.resetFilterState();
+  filterStore.resetFilterState()
 })
 </script>
 

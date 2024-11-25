@@ -6,9 +6,11 @@ import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import Empty from '@/components/Empty.vue'
 import HandbookTable from '@/modules/Handbook/components/HandbookTable.vue'
+import HandbookSearchTable from '@/modules/Handbook/components/HandbookSearchTable.vue'
+// Enum
+import { CONDITION } from '../../modules/Handbook/enums'
 // Stores
 import { usePaginationStore } from '@/stores/pagination.store'
-
 // Composable
 const router = useRouter()
 const route = useRoute()
@@ -28,7 +30,7 @@ const props = defineProps({
   },
   totalCount: {
     type: [String, Number],
-    default: 0,
+    default: 0
   },
   scrollHeight: {
     type: String,
@@ -47,8 +49,13 @@ const props = defineProps({
   },
   groupRowsBy: {
     type: String
+  },
+  isSearch: {
+    type: Boolean,
+    default: false
   }
 })
+
 const emit = defineEmits(['emit:page-change'])
 // Methods
 const pageChange = async (val) => {
@@ -127,7 +134,7 @@ const pageChange = async (val) => {
             },
             list: {
               class: ['p-0']
-            },
+            }
           },
           root: {
             class: ['h-14 rounded-xl']
@@ -155,7 +162,7 @@ const pageChange = async (val) => {
           }),
           nextPageButton: {
             class: ['rounded-[6px] h-6 w-6 min-w-[24px] border border-solid border-border-1']
-          },
+          }
         }
       }"
       class="base-data-table"
@@ -186,23 +193,40 @@ const pageChange = async (val) => {
       </template>
 
       <template #groupheader="{ data }">
-        <handbook-table :item="data">
-          <template #department>
-            <span>-</span>
-          </template>
-        </handbook-table>
-
-        <template v-if="data.children && data.children.length > 0">
-          <template v-for="children in data.children">
-            <handbook-table :item="children" :top-level="data.name">
-              <template #top-level>
-                {{ data.name }}
+        <!-- if search work, this ui redner, -->
+        <template v-if="!isSearch">
+          <handbook-table :item="data" v-if="data.condition === CONDITION.A">
+            <template #department>
+              <span>-</span>
+            </template>
+          </handbook-table>
+          
+          <template v-if="data.children && data.children.length > 0">
+            <template v-if="data.condition === CONDITION.A" >
+              <template v-for="children in data.children">
+                <handbook-table :item="children" :top-level="data.name">
+                  <template #top-level>
+                    {{ data.name }}
+                  </template>
+                </handbook-table>
               </template>
-            </handbook-table>
+            </template>
+          </template>
+        </template>
+
+        <template v-else>
+          <template v-for="item in props.value" :key="item.id">
+            <handbook-search-table :item="item" :top-level="item?.department?.name">
+              <template #department>
+                {{ item?.top_level_department?.name  ?? "-"}}
+              </template>
+              <template #top-level>
+                {{ item?.department?.name ?? "-" }}
+              </template>
+            </handbook-search-table>
           </template>
         </template>
       </template>
-
       <Column v-if="false"></Column>
 
       <template #empty>

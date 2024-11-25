@@ -1,24 +1,26 @@
 <script setup>
 // Core
 import { useI18n } from 'vue-i18n'
+import { RouterLink, useRoute } from 'vue-router'
+import { computed, watch } from 'vue'
+import { useDebounce } from '@vueuse/core'
 // Components
 import HeaderToolbar from '../components/HeaderToolbar.vue'
 import NewCard from '../components/NewsCard.vue'
 import image from '@/assets/img/news.png'
-import { computed, reactive, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useDebounce } from '@vueuse/core'
-// Composable
 
+// route
 const route = useRoute()
 
+// method
 const searchQuery = computed(() => route.query.search)
 let debouncedSearchQuery = useDebounce(searchQuery, 750)
 
 watch(debouncedSearchQuery, (newValue) => {
   console.log('search', newValue)
 })
-//reactive
+
+//mock
 const mockData = {
   image: image,
   status: {
@@ -30,7 +32,6 @@ const mockData = {
   totalViewCount: '1,5k'
 }
 
-const news = reactive([])
 </script>
 
 <template>
@@ -38,7 +39,9 @@ const news = reactive([])
     <header-toolbar />
     <div class="grid grid-cols-[repeat(auto-fit,minmax(328px,328px))] justify-between gap-4">
       <template v-for="i in 10" :key="i">
-        <NewCard :data="mockData" />
+        <RouterLink :to="{ name: 'NewsShow', params: {id: 12}}" class="text-indigo-700 text-sm">
+          <NewCard :data="mockData" />
+        </RouterLink>
       </template>
     </div>
   </div>

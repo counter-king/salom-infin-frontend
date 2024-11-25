@@ -143,6 +143,7 @@ const rootClasses = computed(() => {
               }
             ]"
           />
+          <slot name="badge"></slot>
         </template>
 
         <template v-if="props.loading">

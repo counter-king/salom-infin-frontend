@@ -318,7 +318,7 @@
   "repeated-application": "Повторная заявка",
   "status": "Статус",
   "service_letter": "Служебное письмо",
-  "renew":"Обновить",
+  "renew": "Обновить",
   "customize-columns": "Настроить столбцы",
   "incoming": "Входящие",
   "inner": "Внутренний",
@@ -514,5 +514,15 @@
   "order-for-employment": "Приказ приеме на работу",
   "employee": "Сотрудник",
   "tomorrow": "Завтра",
-   "createNews": "Создать Новости"
+   "createNews": "Создать Новости",
+  "thanks-for-participation": "Большое спасибо за ваше участие!",
+  "survey": "Опросник",
+  "how-mood-today": "Как вы себя чувствуйте сегодня?",
+  "no-birthdays-today": "Дней рождения сегодня нет!",
+  "no-birthdays-tomorrow": "Дней рождения завтра нет!",
+  "application-ready-work-offline": "Приложение готово к работе офлайн",
+  "text-new-version-available": "Доступна новая версия системы, нажмите кнопку чтобы обновить",
+  "enter-answer": "Ввведите Ответ",
+  "answers": "Ответы",
+  "publish":"Публиковать"
 }

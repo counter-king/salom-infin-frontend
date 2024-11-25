@@ -84,7 +84,8 @@ export default {
         'calendar': '0 16px 56px 0 rgba(0, 0, 0, 0.15)',
         'calendar-menu': '0 16px 50px 0 rgba(0, 0, 0, 0.12)',
         'calendar-cell': '0 1px 2px 0 rgba(0, 0, 0, 0.05), 0 12px 32px 0 rgba(0, 0, 0, 0.1)',
-        'block': '0 2px 8px 0 rgba(0, 0, 0, 0.05), 0 1px 3px 0 rgba(0, 0, 0, 0.06)'
+        'block': '0 2px 8px 0 rgba(0, 0, 0, 0.05), 0 1px 3px 0 rgba(0, 0, 0, 0.06)',
+        'slide-button' : '0px 1px 2px 0px rgba(3, 12, 43, 0.05), 0px 3px 6px 0px rgba(47, 61, 87, 0.05)'
       }
     },
   },

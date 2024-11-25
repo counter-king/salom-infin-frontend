@@ -16,7 +16,6 @@ const searchQuery = ref(null)
 
 const { t } = useI18n()
 const router = useRouter()
-
 //watch
 watch(searchQuery, (newValue) => {
   // if newValue is empty, if work
@@ -35,9 +34,9 @@ watch(searchQuery, (newValue) => {
         <base-input
           v-model="searchQuery"
           :icon-left="MagniferIcon"
-          placeholder="Поиск"
+          :placeholder="t('search')"
           class="flex p-input-icon-left items-center"
-          input-class="!pl-10 p-3 bg-white text-xs"
+          input-class="!pl-10 p-3 bg-white text-sm"
           icon-left-class="!w-4 !h-4"
         />
       </div>
@@ -46,11 +45,12 @@ watch(searchQuery, (newValue) => {
           size="large"
           button-class="rounded-[120px]"
           :label="t('createNews')"
-          class="w-full text-xs"
-          icon-color="#FFFFFF"
-          iconWidth="!w-4"
-          iconHeight="!h-4"
+          class="w-full text-sm"
+          icon-color="text-white"
+          iconWidth="!w-5"
+          iconHeight="!h-5"
           :icon-left="AddPlusIcon"
+          @click="()=>{router.push({name:'NewsCreate'})}"
         ></base-button>
       </div>
     </template>
