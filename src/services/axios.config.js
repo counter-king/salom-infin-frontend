@@ -43,7 +43,13 @@ axiosInstance.interceptors.response.use(
 			throw new Error(response.status.toString())
 		}
 	},
-	({ response, config }) => {
+	async ({ response, config }) => {
+    if (!navigator.onLine) {
+      await waitForInternet()
+
+      return axiosInstance.request(config)
+    }
+
     const authStore = useAuthStore()
     console.log("axios response", response, typeof response.data.message)
 
@@ -69,4 +75,17 @@ axiosInstance.interceptors.response.use(
 		return Promise.reject(response)
 	}
 )
+
+// Ожидание восстановления интернета
+function waitForInternet() {
+  return new Promise((resolve) => {
+    function onlineHandler() {
+      console.log('Соединение восстановлено!');
+      window.removeEventListener('online', onlineHandler);
+      resolve();
+    }
+    window.addEventListener('online', onlineHandler);
+  });
+}
+
 export default axiosConfig(axiosInstance)
