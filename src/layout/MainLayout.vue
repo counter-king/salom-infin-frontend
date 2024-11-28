@@ -4,12 +4,12 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 // Components
 import TheToolbar from '@/components/Toolbar/TheToolbar.vue'
+import TheNetwork from '@/components/TheNetwork.vue'
 import SessionEndMessageBar from '@/components/SessionEndMessageBar.vue'
 // Store
 import { useCommonStore } from '@/stores/common'
 import { useCountStore } from '@/stores/count.store'
 import { useAuthStore } from '../modules/Auth/stores/index'
-import { useAgreementsRoutesStore } from '@/modules/HR/modules/Agreements/stores/routes.store'
 // Utils
 import { getStorageItem } from '@/utils/storage'
 import { ACCESS } from '@/constants/storage'
@@ -18,7 +18,6 @@ const router = useRouter()
 const commonStore = useCommonStore()
 const countStore = useCountStore()
 const authStore = useAuthStore()
-const agreementsRoutesStore = useAgreementsRoutesStore()
 // Reactive
 // TODO: false
 const appLoading = ref(true)
@@ -26,16 +25,15 @@ const appLoading = ref(true)
 onMounted(async () => {
   if(!getStorageItem(ACCESS)) {
     await router.push({ name: 'Login' })
+    return
   }
-  else {
-    // TODO: uncomment
-    await getCurrentUser()
-    await commonStore.init()
-    await countStore.actionCountList()
-    setTimeout(() => {
-      appLoading.value = false
-    }, 500)
-  }
+
+  await getCurrentUser()
+  await commonStore.init()
+  await countStore.actionCountList()
+  setTimeout(() => {
+    appLoading.value = false
+  }, 500)
 })
 // Methods
 const getCurrentUser = async () => {
@@ -69,6 +67,8 @@ const getCurrentUser = async () => {
       <session-end-message-bar />
     </template>
   </Transition>
+
+  <the-network />
 </template>
 
 <style scoped>
