@@ -1,5 +1,5 @@
 // Core
-import axios from "axios"
+import axios from 'axios'
 // Stores
 import { useAuthStore } from '@/modules/Auth/stores'
 // Utils
@@ -30,7 +30,7 @@ axiosInstance.interceptors.request.use(
         : 'uz'
 		}
 
-		return config;
+		return config
 	},
 	(error) => Promise.reject(error)
 );
@@ -44,17 +44,15 @@ axiosInstance.interceptors.response.use(
 		}
 	},
 	async ({ response, config }) => {
+    const authStore = useAuthStore()
+
     if (!navigator.onLine) {
       await waitForInternet()
 
       return axiosInstance.request(config)
     }
-
-    const authStore = useAuthStore()
-    console.log("axios response", response, typeof response.data.message)
-
     // Если время токена истек
-    if(response.data?.status_code === "401") {
+    if(response.data?.status_code === '401') {
       removeStorageItem(ACCESS)
       removeStorageItem(REFRESH)
       removeStorageItem(EXPIRES)
@@ -62,7 +60,7 @@ axiosInstance.interceptors.response.use(
       authStore.actionSessionEnd(true)
     }
 
-    if(typeof response.data.message === "string") {
+    if(typeof response.data.message === 'string') {
       console.log("error 123123")
     }
 
@@ -80,12 +78,11 @@ axiosInstance.interceptors.response.use(
 function waitForInternet() {
   return new Promise((resolve) => {
     function onlineHandler() {
-      console.log('Соединение восстановлено!');
-      window.removeEventListener('online', onlineHandler);
-      resolve();
+      window.removeEventListener('online', onlineHandler)
+      resolve()
     }
-    window.addEventListener('online', onlineHandler);
-  });
+    window.addEventListener('online', onlineHandler)
+  })
 }
 
 export default axiosConfig(axiosInstance)
