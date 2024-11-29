@@ -52,7 +52,7 @@ watchEffect(async () => {
   }
 
   if (branchSelect.value) {
-    let { data } = await fetchDepartmentList({ page_size: 100, company: branchSelect.value })
+    let { data } = await fetchDepartmentList({ page_size: 100, company: branchSelect.value, ordering:"name" })
     departments.value = data.results
     departmentSelect.value = data.results[0] ? data.results[0].id : null
   }
