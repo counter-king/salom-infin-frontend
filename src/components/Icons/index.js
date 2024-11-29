@@ -144,6 +144,8 @@ export { default as FolderBoldIcon } from  '~icons/solar/folder-bold'
 export { default as RefreshCircleBoldIcon } from  '~icons/solar/refresh-circle-bold'
 export { default as EyeBoldIcon } from  '~icons/solar/eye-bold'
 export { default as HeartBoldIcon } from  '~icons/solar/heart-bold'
+export { default as TrashBinBoldIcon } from  '~icons/solar/trash-bin-trash-bold'
+
 
 // Solar (Bold Duotone)
 export { default as ArchiveUpBoldDuotoneIcon } from  '~icons/solar/archive-up-bold-duotone'

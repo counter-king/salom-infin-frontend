@@ -9,6 +9,7 @@ const isHostVercel = ref(null)
 onMounted(() => {
   isHostVercel.value = window.location.host === 'new-side-project.vercel.app' || window.location.host.startsWith('localhost')
 })
+
 </script>
 
 <template>

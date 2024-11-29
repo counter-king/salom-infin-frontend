@@ -1,0 +1,65 @@
+import { defineStore } from "pinia";
+import { helpers, required } from "@vuelidate/validators";
+import { fetchGetNewsCategoryList, fetchGetNewsTagsList } from "../services/news.service";
+
+export const useNewsStore = defineStore('newsStore', {
+    state: ()=> ({
+    // form model
+    model: {
+        title: null,
+        description: null,
+        category: null,
+        image: null,
+        dynamicFields: [], 
+        tags_ids:[],
+        images_ids: [],
+    },
+    // form rules
+    rules: {
+        category: {
+            required: helpers.withMessage(`Поле не должен быть пустым`, required)
+        },
+        title: {
+            required: helpers.withMessage(`Поле не должен быть пустым`, required)
+        },
+        description: {
+            required: helpers.withMessage(`Поле не должен быть пустым`, required)
+        },
+        image: {
+            required: helpers.withMessage(`Поле не должен быть пустым`, required)
+        },
+        tags_ids : {
+             required:  false
+        }
+    },
+    categoryList: [],
+    categoryListLoading: false ,
+    tagList: [],
+    tagListLoading: false,
+    loadingSubmitButton: false,
+    }),
+    actions: {
+        async actionGetCategoryList(){
+            this.categoryListLoading = true;
+            try{
+                const response = await fetchGetNewsCategoryList({page_size: 50});
+                this.categoryList = response.data.results;
+            }
+            catch(e){}
+            finally{
+                this.categoryListLoading = false;
+            }
+        },
+        async actionGetTagList(){
+            this.tagListLoading = true;
+            try{
+                const response = await fetchGetNewsTagsList();
+                this.tagList = response.data.results;
+            }
+            catch(e){}
+            finally{
+                this.tagListLoading = false;
+            }
+        }
+    }
+})

@@ -116,6 +116,13 @@ export const STATUS_TYPES = {
   DONE: 13,
   CANCEL: 14,
 }
+
+export const NEWS_STATUS_TYPES = {
+  NEW: 1,
+  BLOG: 2,
+  ANNOUNCEMENT: 3,
+}
+
 export const STATUS_COLORS = {
   TODO: COLOR_TYPES.PRIMARY,            // TO DO
   IN_PROGRESS: COLOR_TYPES.WARNING,     // IN PROGRESS

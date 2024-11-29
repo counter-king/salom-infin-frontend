@@ -1,11 +1,9 @@
 <script setup>
 // Components
-import { StatusChip } from '@/components/Chips'
-
+import { StatusChip } from '@/components/Chips';
 //Icons
-import { BookmarkIcon, EyeLinearIcon, HeartLinearIcon } from '@/components/Icons'
+import { EyeLinearIcon, HeartLinearIcon } from '@/components/Icons'
 import BaseIconify from '@/components/UI/BaseIconify.vue'
-import BaseIcon from '@/components/UI/BaseIcon.vue'
 // Services
 
 const props = defineProps({
@@ -14,9 +12,6 @@ const props = defineProps({
 </script>
 
 <template>
-  <!-- <div
-    class="max-w-[328px] rounded-2xl p-2 bg-white hover:scale-[1.02] transition-transform ease-linear active:scale-[0.98] hover:cursor-pointer duration-200"
-  > -->
   <div
     class="max-w-[328px] rounded-2xl p-2 bg-white select-none"
   >
@@ -25,7 +20,7 @@ const props = defineProps({
     </div>
     <div class="p-2 pt-0">
       <div class="mt-3">
-        <status-chip :status="props.data.status" root-class="!text-xs !font-semibold !rounded-md !mt-3">
+        <status-chip type="news" :status="{name: 'Новости', id: 1}" root-class="!text-xs !font-semibold !rounded-md !mt-3">
           {{ props.data.status.name }}
         </status-chip>
       </div>

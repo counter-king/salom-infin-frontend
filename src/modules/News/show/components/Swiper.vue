@@ -40,7 +40,7 @@ const modules = [Pagination, Autoplay,Navigation]
             <img src="/images/dashboard/slide-3.svg" alt="Slide3" class="w-full  h-full object-cover">
             </div>
         </swiper-slide>
-
+        
         <swiper-slide>
             <div class="w-full h-full ">
             <img src="/images/dashboard/slide-4.svg" alt="Slide4" class="w-full  h-full object-cover">
@@ -55,7 +55,8 @@ const modules = [Pagination, Autoplay,Navigation]
         <div class="custom-next shadow-slide-button cursor-pointer absolute top-0 right-2 w-[42px] h-[42px] rounded-full bg-greyscale-50 flex items-center justify-center hover:scale-[1.02] active:scale-[0.98] transition-transform duration-300">
           <div class="text-primary-500">
             <base-iconify :icon="AltArrowRightIcon" />
-          </div></div>
+          </div>
+        </div>
     </div>
   </div>
 </template>

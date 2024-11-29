@@ -523,5 +523,20 @@
   "text-new-version-available": "Tizimning yangi versiyasi mavjud, yangilash uchun tugmani bosing",
   "enter-answer": "Javobni kiriting",
   "answers": "javoblar",
-  "publish": "Nashr qilish"
+  "publish": "Nashr qilish",
+  "category2": "Kategoriya",
+  "enterCategory": "Категория",
+  "enterName": "Nomini yozing",
+  "definition":"Ta'rifi",
+  "enterDefinition":"Ta'rifni yozing",
+  "tag":"Tag",
+  "selectTag":"Teglarni tanlang",
+  "add-more":"Ko'proq qo'shing",
+  "preview-news":"Ko‘rib chiqish",
+  "allowed-file-info":"Fayl (PNG, JPG yoki JPEG) ning maksimal hajmi 5 MB",
+  "quotes":"Iqtiboslar",
+  "gallery": "Galeriya",
+  "enter-quotes":"Iqtibosni yozing",
+  "image":"Rasim",
+  "error-desciption-field": "Kamida bitta tavsif maydonini qo'shing va uni to'ldiring."
 }

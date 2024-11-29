@@ -524,5 +524,21 @@
   "text-new-version-available": "Доступна новая версия системы, нажмите кнопку чтобы обновить",
   "enter-answer": "Ввведите Ответ",
   "answers": "Ответы",
-  "publish":"Публиковать"
+  "publish":"Публиковать",
+  "category2": "Категория",
+  "enterCategory": "Категория",
+  "enterName": "Напишите название",
+  "definition":"Определение",
+  "enterDefinition":"Напишите определение",
+  "tag":"Теги",
+  "selectTag":"Выберите Теги",
+  "add-more":"Добавить еще",
+  "preview-news":"Превью",
+  "allowed-file-info":"Максимальный размер файла (PNG, JPG или JPEG) — 5 МБ.",
+  "quotes":"Цитаты",
+  "gallery": "Галерея",
+  "enter-quotes":"Напишите цитату",
+  "image":"Изображение",
+  "error-desciption-field": "Добавьте хотя бы одно поле описания и заполните его."
+
 }

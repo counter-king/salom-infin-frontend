@@ -62,8 +62,7 @@ const router = createRouter({
         ...Auth
       ]
     },
-    // /AuthLayout
-
+    //AuthLayout
     // Playground
     ...Playground
   ]

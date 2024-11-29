@@ -13,7 +13,7 @@ const News = [
     meta: {
       isAuthRequired: true
     },
-    component: () => import('../views/show.vue')
+    component: () => import('../views/Show.vue')
   },
   {
     path: 'news/create',
@@ -21,7 +21,7 @@ const News = [
     meta: {
       isAuthRequired: true
     },
-    component: () => import('../views/create.vue')
+    component: () => import('../views/Create.vue')
   }
 ]
 
