@@ -99,7 +99,7 @@ onMounted(async () => {
       <div class="max-w-[350px] w-full">
         <handbook-dropdown v-model="departmentSelect" v-model:options="departments"
           api-url=departments/top-level-departments :api-params="{
-            company: branchSelect
+            company: branchSelect, condition: 'A,K' 
           }" placeholder="Подразделение" />
       </div>
     </template>

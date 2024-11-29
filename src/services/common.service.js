@@ -35,7 +35,7 @@ export const fetchDeliveryTypesList = () => {
  * @returns [{Array}]
  * */
 export const fetchDepartmentList = (params) => {
-  return axiosConfig.get(`${URLS.topDepartments}/`, { page_size: 50, ...params })
+  return axiosConfig.get(`${URLS.topDepartments}/`, { page_size: 50, condition:'A,K',...params })
 }
 /**
  * Возвращает список сотрудников департаментов
