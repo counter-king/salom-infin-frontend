@@ -397,8 +397,8 @@ export const adjustObjectToArray = async (api = '', items = [], multiple = true,
     }
   } else if (!multiple && id) {
     const res = await axiosConfig.get(`${api}/`, {ids: id})
-    if (res && res.status === 200) {
-      return Promise.resolve(res.data.results)
+    if (res && res.status === 200 && res.data.results?.length) {
+      return Promise.resolve(res.data.results[0])
     } else {
       return Promise.reject([])
     }

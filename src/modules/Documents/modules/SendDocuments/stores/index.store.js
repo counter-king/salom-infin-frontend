@@ -14,7 +14,14 @@ import {COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES} from "@
 import {ROUTE_SD_CREATE} from "@/modules/Documents/modules/SendDocuments/constants"
 import {fetchGetTree} from "@/modules/Documents/modules/Registration/services/docflow.service"
 // Components
-import {CheckCircleIcon, DocumentAddIcon, DocumentMedicineIcon, NotebookLinearIcon, NotesIcon} from "@/components/Icons"
+import {
+  CheckCircleIcon,
+  DocumentAddIcon,
+  DocumentIcon,
+  DocumentMedicineIcon,
+  NotebookLinearIcon,
+  NotesIcon
+} from "@/components/Icons"
 
 export const useSDStore = defineStore("sd-stores", {
   state: () => ({
@@ -78,6 +85,18 @@ export const useSDStore = defineStore("sd-stores", {
         disabled: false,
         document_type: COMPOSE_DOCUMENT_TYPES.DECREE,
         permission: 'sending-documents-decree-list'
+      },
+      // Доверенность
+      {
+        label: "power-of-attorney",
+        icon: "DocumentIcon",
+        type: "power-of-attorney",
+        sub_type: "power-of-attorney",
+        active: false,
+        selected: true,
+        disabled: false,
+        document_type: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
+        permission: 'sending-documents-poa-list'
       },
       // // Заключение
       // {
@@ -347,6 +366,24 @@ export const useSDStore = defineStore("sd-stores", {
           }
         ],
       },
+      {
+        id: 6,
+        label: 'power-of-attorney',
+        icon: DocumentIcon,
+        type: 'menu',
+        hasRouterLink: false,
+        active: false,
+        items: [
+          {
+            label: 'for-legal-services',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_FOR_LEGAL_SERVICES
+          }
+        ],
+      },
     ]
   }),
   actions: {
@@ -455,6 +492,18 @@ export const useSDStore = defineStore("sd-stores", {
           disabled: false,
           document_type: COMPOSE_DOCUMENT_TYPES.DECREE,
           permission: 'sending-documents-decree-list'
+        },
+        // Доверенность
+        {
+          label: "power-of-attorney",
+          icon: "DocumentIcon",
+          type: "power-of-attorney",
+          sub_type: "power-of-attorney",
+          active: false,
+          selected: true,
+          disabled: false,
+          document_type: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
+          permission: 'sending-documents-poa-list'
         },
         // // Рапорт
         // {

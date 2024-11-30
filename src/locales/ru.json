@@ -520,5 +520,11 @@
   "no-birthdays-today": "Дней рождения сегодня нет!",
   "no-birthdays-tomorrow": "Дней рождения завтра нет!",
   "application-ready-work-offline": "Приложение готово к работе офлайн",
-  "text-new-version-available": "Доступна новая версия системы, нажмите кнопку чтобы обновить"
+  "text-new-version-available": "Доступна новая версия системы, нажмите кнопку чтобы обновить",
+  "power-of-attorney": "Доверенность",
+  "for-legal-services": "Для юридических услуг",
+  "create-poa": "Создать доверенность",
+  "update-poa": "Изменить доверенность",
+  "bank-leader": "Руководитель банка",
+  "passport-details-error": "Паспортные данные сотрудника неполные!"
 }

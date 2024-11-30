@@ -2,7 +2,16 @@
 // Core
 import {useRoute} from "vue-router"
 // Components
-import { InnerLetterTemplate, ApplicationLetterTemplate, BusinessTripNoticeTemplate, OrderLetterTemplate, OrdinaryNoticeTemplate, DecreeTemplate, BusinessTripDecreeTemplate } from "@/components/Templates/index"
+import {
+  InnerLetterTemplate,
+  ApplicationLetterTemplate,
+  BusinessTripNoticeTemplate,
+  OrderLetterTemplate,
+  OrdinaryNoticeTemplate,
+  DecreeTemplate,
+  BusinessTripDecreeTemplate,
+  BasePOA
+} from "@/components/Templates/index"
 // Enums
 import {computed} from "vue"
 import {COMPOSE_DOCUMENT_SUB_TYPES} from "@/enums"
@@ -30,6 +39,7 @@ const formMap = {
     [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER_LOCAL]: BusinessTripOrderTemplate,
     [COMPOSE_DOCUMENT_SUB_TYPES.NOTICE_FOR_EMPLOYMENT]: OrdinaryNoticeTemplate,
     [COMPOSE_DOCUMENT_SUB_TYPES.ORDER_FOR_EMPLOYMENT]: OrderLetterTemplate,
+    [COMPOSE_DOCUMENT_SUB_TYPES.POA_FOR_LEGAL_SERVICES]: BasePOA,
   },
   APPLICATION: [
     COMPOSE_DOCUMENT_SUB_TYPES.LABOR_LEAVE,

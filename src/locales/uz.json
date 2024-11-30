@@ -519,5 +519,11 @@
   "no-birthdays-today": "Bugun tug'ilgan kunlar yo'q!",
   "no-birthdays-tomorrow": "Ertaga tug'ilgan kunlar yo'q!",
   "application-ready-work-offline": "Ilova oflayn rejimda ishlashga tayyor",
-  "text-new-version-available": "Tizimning yangi versiyasi mavjud, yangilash uchun tugmani bosing"
+  "text-new-version-available": "Tizimning yangi versiyasi mavjud, yangilash uchun tugmani bosing",
+  "power-of-attorney": "Ishonchnoma",
+  "for-legal-services": "Yuridik xizmatlar uchun",
+  "create-poa": "Ishonchnoma yaratish",
+  "update-poa": "Ishonchnomani o'zgartirish",
+  "bank-leader": "Bank rahbari",
+  "passport-details-error": "Xodimning passport ma'lumotlari to'liq emas!"
 }
