@@ -18,10 +18,10 @@ onMounted(async () => {
   await agreementsStore.getNegotiationTypes()
 })
 const icons = [
-  '/images/block-icon-slide-1.svg',
-  '/images/block-icon-slide-2.svg',
-  '/images/block-icon-slide-3.svg',
-  '/images/block-icon-slide-4.svg',
+  '/images/block-icon-1.svg',
+  '/images/block-icon-2.svg',
+  '/images/block-icon-3.svg',
+  '/images/block-icon-4.svg',
   '/images/block-icon-5.svg'
 ]
 </script>

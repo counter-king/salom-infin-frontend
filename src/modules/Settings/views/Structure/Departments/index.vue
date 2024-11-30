@@ -80,7 +80,7 @@ const getDepartments = (newFilter = {}) => {
   loading.value = true;
   filter.value = newFilter;
   const { page, page_size, search } = newFilter;
-  const params = `?page=${page}${page_size ? '&page_size=' + page_size : ''}${search ? '&search=' + search : ''}`;
+  const params = `?page=${page}${page_size ? '&page_size=' + page_size : ''}${search ? '&search=' + search : ''}&condition=A,K`;
   axiosConfig
     .get(`departments/top-level-departments/${params}`)
     .then(response => {

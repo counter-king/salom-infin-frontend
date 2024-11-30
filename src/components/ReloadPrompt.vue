@@ -79,10 +79,10 @@ function close() {
 <template>
   <div
     v-if="offlineReady || needRefresh"
-    class=" flex gap-3 items-center fixed bottom-0 right-0 w-full max-w-[calc(100vw-250px)] bg-success-500 text-white z-[9999] py-[7px] px-6"
+    class="flex gap-3 items-center fixed bottom-0 right-0 w-full transition-all max-w-[calc(100vw-250px)] bg-success-500 text-white z-[9999] py-[7px] px-6"
     :class="{
-      'max-w-[calc(100vw-76px)]': navigationStore.sidebarCollapse,
-      'max-w-[100vw]': route.name === 'Calendar' || route.name === 'DashboardIndex' || route.name === 'HandbookIndex'
+      'max-w-[calc(100vw-76px)] duration-500 delay-500': navigationStore.sidebarCollapse,
+      '!max-w-[100vw] duration-500 delay-500': route.name === 'Calendar' || route.name === 'DashboardIndex' || route.name === 'HandbookIndex'
     }"
   >
     <base-iconify :icon="RefreshCircleBoldIcon" class="!w-7 !h-7" />

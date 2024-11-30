@@ -63,6 +63,12 @@ const title = computed(() => {
   }
 })
 
+const fillOnMount = computed(() => {
+  return route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL
+    && route?.query?.compose_id
+    && route?.query?.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP
+})
+
 // Watch
 watch(() => BTNoticeStore.model.__tags, (newVal) => {
   if (props.formType === FORM_TYPE_CREATE) {
@@ -102,6 +108,9 @@ const preview = async () => {
   BTNoticeStore.model.files = BTNoticeStore.model.__files.map(item => { return { id: item.id } })
   BTNoticeStore.model.document_type = route.params.document_type
   BTNoticeStore.model.document_sub_type = route.params.document_sub_type
+  if (fillOnMount.value) {
+    BTNoticeStore.model.trip_notice_id = route?.query?.compose_id
+  }
 
   dialog.value = true
 }
@@ -161,9 +170,7 @@ const manage = () => {
 onBeforeMount( async () => {
   if (route.params.id) {
     await BTNoticeStore.actionGetDocumentDetailForUpdate(route.params.id)
-  } else if (route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL
-    && route?.query?.compose_id
-    && route?.query?.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP) {
+  } else if (fillOnMount.value) {
     await BTNoticeStore.actionGetDocumentDetailForUpdate(route.query.compose_id, true)
   }
 })

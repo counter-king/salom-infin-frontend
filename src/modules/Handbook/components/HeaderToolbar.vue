@@ -52,7 +52,7 @@ watchEffect(async () => {
   }
 
   if (branchSelect.value) {
-    let { data } = await fetchDepartmentList({ page_size: 100, company: branchSelect.value })
+    let { data } = await fetchDepartmentList({ page_size: 100, company: branchSelect.value, ordering:"name" })
     departments.value = data.results
     departmentSelect.value = data.results[0] ? data.results[0].id : null
   }
@@ -99,7 +99,7 @@ onMounted(async () => {
       <div class="max-w-[350px] w-full">
         <handbook-dropdown v-model="departmentSelect" v-model:options="departments"
           api-url=departments/top-level-departments :api-params="{
-            company: branchSelect
+            company: branchSelect, condition: 'A,K' 
           }" placeholder="Подразделение" />
       </div>
     </template>
