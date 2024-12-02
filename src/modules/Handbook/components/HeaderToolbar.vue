@@ -1,8 +1,9 @@
 <script setup>
 // Core
-import { ref, onMounted, watchEffect, watch } from 'vue'
+import { ref, onMounted, watchEffect, watch, computed } from 'vue'
 import { useDebounce } from '@vueuse/core'
 import { useI18n } from "vue-i18n";
+import { useRoute, useRouter } from 'vue-router';
 // Components
 import { ActionToolbar } from '@/components/Actions'
 import HandbookDropdown from './Dropdown.vue'
@@ -16,7 +17,13 @@ import {
   fetchDepartmentsUserListBySearch,
   fetchDepartmentsWithUserList
 } from '@/services/common.service'
-// Macros
+// constants
+import { pagination } from '../constants';
+
+const { t } = useI18n();
+const route = useRoute()
+const router = useRouter()
+
 const emit = defineEmits(['emit:up', 'emit:search'])
 // Reactive
 const search = ref(null)
@@ -27,22 +34,36 @@ const departmentSelect = ref(null)
 const departmentUsers = ref([])
 const isSearch = ref(false);
 
-const { t } = useI18n();
+// methods
+const paginationQuery = computed(() => ({
+   page: route.query.page || pagination.page,
+   page_size: route.query.page_size || pagination.pageSize,
+   first_row: route.query.firstRow || pagination.firstRow
+  }))
+
+// constants
+const departmentAllOption = {id: "all", name:t('all'),name_uz:t('all'),name_ru:t('all')}
 const debouncedSearch = useDebounce(search, 750)
 
 watch(debouncedSearch, async (value) => {
   // if value is empty if works
   if (!value) {
-    let { data: users } = await fetchDepartmentsWithUserList({ id: departmentSelect.value })
-    departmentUsers.value = [users]
-    isSearch.value = false;
+    if(departmentSelect.value != departmentAllOption.id){
+      let { data: users } = await fetchDepartmentsWithUserList({ id: departmentSelect.value })
+      departmentUsers.value = [users]
+      isSearch.value = false;
+      emit('emit:up', departmentUsers.value)
+    }
+    // when search, clear query to get new values 
+    router.push({ path: router.currentRoute.value.path, query: {} });
   }
   else {
     let { data } = await fetchDepartmentsUserListBySearch({ search: value })
     departmentUsers.value = data.results
     isSearch.value = true
+    emit('emit:up', departmentUsers.value, data?.count)
   }
-  emit('emit:up', departmentUsers.value)
+  
   emit('emit:search', isSearch.value);
 })
 
@@ -52,8 +73,8 @@ watchEffect(async () => {
   }
 
   if (branchSelect.value) {
-    let { data } = await fetchDepartmentList({ page_size: 100, company: branchSelect.value, ordering:"name" })
-    departments.value = data.results
+    let { data } = await fetchDepartmentList({ page_size:100, company: branchSelect.value, ordering:"name" })
+    departments.value = [departmentAllOption,...data.results]
     departmentSelect.value = data.results[0] ? data.results[0].id : null
   }
 })
@@ -64,10 +85,28 @@ watchEffect(async () => {
   }
 
   if (departmentSelect.value) {
-    let { data: users } = await fetchDepartmentsWithUserList({ id: departmentSelect.value })
-    departmentUsers.value = [users]
+    // if all deparement are choosed, then it work
+    if(departmentSelect.value == departmentAllOption.id){
+      let { data } = await fetchDepartmentsUserListBySearch({ ...paginationQuery.value, company: branchSelect.value})
+      departmentUsers.value = data.results
+      isSearch.value = true;
+      emit('emit:search', true);
+      emit('emit:up', departmentUsers.value, data?.count)
+    } else {       
+      let { data: users } = await fetchDepartmentsWithUserList({ id: departmentSelect.value })
+      departmentUsers.value = [users]
+      isSearch.value = false;
+      emit('emit:search', false);
+      emit('emit:up', departmentUsers.value)
+    }
+  
+  }
+})
 
-    emit('emit:up', departmentUsers.value)
+// clearing seach, whene other thing are selected
+watchEffect(()=> {
+  if(!!departmentSelect.value && !isSearch.value && !!branchSelect.value || departmentSelect.value == departmentAllOption.id && isSearch){
+    search.value = ""
   }
 })
 
@@ -77,6 +116,8 @@ onMounted(async () => {
   branches.value = data.results
   branchSelect.value = data.results[0].id
 })
+
+
 </script>
 
 <template>

@@ -42,14 +42,14 @@ export const fetchDepartmentList = (params) => {
  * @returns [{Array}]
  * */
 export const fetchDepartmentsUserListBySearch = (params) => {  
-  return axiosConfig.get(`${URLS.userSearch}/`, { page_size: 50, ...params })
+  return axiosConfig.get(`${URLS.userSearch}/`, { page_size: 200, ...params })
 }
 /**
  * Возвращает список департаментов
  * @returns [{Array}]
  * */
 export const fetchDepartmentsWithUserList = ({ id, params }) => {
-  return axiosConfig.get(`${URLS.departmentsWithUser}/${id}/`, { page_size: 50, ...params })
+  return axiosConfig.get(`${URLS.departmentsWithUser}/${id}/`, { page_size: 200, ...params })
 }
 /**
  * Возвращает список районов
