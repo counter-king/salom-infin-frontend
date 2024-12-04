@@ -1,7 +1,7 @@
 <script setup>
 // Core
 import Editor from '@tinymce/tinymce-vue'
-import { useModel } from "vue"
+import {useModel} from "vue"
 
 const props = defineProps({
   modelValue: {

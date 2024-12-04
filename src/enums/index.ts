@@ -12,22 +12,24 @@ export const FILE_ACTIONS = {
   DONE:     'done',      // Пользователь выполнил
 }
 export const JOURNAL = {
-  INCOMING:         1, // Входящий
-  INNER:            2, // Внутренние
-  OUTGOING:         3, // Исходящие
-  APPEALS:          4, // Обращение
-  ORDERS_PROTOCOLS: 5, // Приказы и распоряжения
-  APPLICATION:      7, // Заявления
+  INCOMING:             1, // Входящий
+  INNER:                2, // Внутренние
+  OUTGOING:             3, // Исходящие
+  APPEALS:              4, // Обращение
+  ORDERS_PROTOCOLS:     5, // Приказы и распоряжения
+  APPLICATION:          7, // Заявления
+  POWER_OF_ATTORNEY:    19, // Заявления
 }
 export const JOURNAL_CODES = {
-  INCOMING:         '100', // Входящий
-  INNER:            '103', // Внутренние
-  OUTGOING:         '101', // Исходящие
-  APPEALS:          '105', // Обращение
-  ORDERS_PROTOCOLS: '104', // Приказы и распоряжения
-  APPLICATION:      '106', // Заявления
-  PROTOCOL:         '107', // Протокол
-  DECISION:         '108', // Указ
+  INCOMING:               '100', // Входящий
+  INNER:                  '103', // Внутренние
+  OUTGOING:               '101', // Исходящие
+  APPEALS:                '105', // Обращение
+  ORDERS_PROTOCOLS:       '104', // Приказы и распоряжения
+  APPLICATION:            '106', // Заявления
+  PROTOCOL:               '107', // Протокол
+  DECISION:               '108', // Указ
+  POWER_OF_ATTORNEY:      '109', // Доверенность
 }
 export const USER_STATUS_CODES = {
   OTHERS:                        'PR', // Прочие
@@ -64,7 +66,8 @@ export const COMPOSE_DOCUMENT_TYPES = {
   ORDER:                         '2', // Приказ
   INNER:                         '3', // Внутренний
   DECREE:                        '4', // Распоряжение
-  APPLICATION:                   '5'  // Заявление
+  APPLICATION:                   '5', // Заявление
+  POWER_OF_ATTORNEY:             '8'  // Доверенность
 }
 export const COMPOSE_DOCUMENT_SUB_TYPES = {
   LABOR_LEAVE:                   '1', // Трудовой отпуск
@@ -82,7 +85,8 @@ export const COMPOSE_DOCUMENT_SUB_TYPES = {
   BUSINESS_TRIP_DECREE_LOCAL:    '28', // Командировочный распоряжение (локальный)
   BUSINESS_TRIP_ORDER_LOCAL:     '29', // Командировочный приказ (локальный)
   NOTICE_FOR_EMPLOYMENT:         '30', // Рапорт на приеме на работу
-  ORDER_FOR_EMPLOYMENT:          '31' // Приказ на приеме на работу
+  ORDER_FOR_EMPLOYMENT:          '31', // Приказ на приеме на работу
+  POA_FOR_LEGAL_SERVICES:        '32'  // Для юридических услуг
 }
 export const COLOR_TYPES = {
   PRIMARY: "primary",

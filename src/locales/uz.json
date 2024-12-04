@@ -543,5 +543,11 @@
   "similar-news": "Bog'liq yangiliklar",
   "our-gallery": "Bizning Galeriyamiz",
   "delete-news-dialog-content": "Ushbu yangilikni o'chirib tashlamoqchimisiz? Bu amalni qaytarib bo'lmaydi.",
-  "edit-news": "Yangilikni tahrirlash"
+  "edit-news": "Yangilikni tahrirlash",
+  "power-of-attorney": "Ishonchnoma",
+  "for-legal-services": "Yuridik xizmatlar uchun",
+  "create-poa": "Ishonchnoma yaratish",
+  "update-poa": "Ishonchnomani o'zgartirish",
+  "bank-leader": "Bank rahbari",
+  "passport-details-error": "Xodimning passport ma'lumotlari to'liq emas!"
 }

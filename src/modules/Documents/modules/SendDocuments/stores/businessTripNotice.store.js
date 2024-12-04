@@ -14,7 +14,9 @@ import {
   adjustUserObjectToArray,
   setValuesToKeys
 } from "@/utils"
+// Enums
 import {COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL} from "@/enums"
+// Store
 import { useAuthStore } from '@/modules/Auth/stores'
 
 export const useSDBTNoticeStore = defineStore("sd-notice-store", {

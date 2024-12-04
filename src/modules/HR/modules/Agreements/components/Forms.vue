@@ -218,14 +218,7 @@ onMounted(async () => {
                 <base-col col-class="w-full">
                   <base-label label="Текст документа" :required="true" />
 
-<!--                  <base-froala-editor-->
-<!--                    ref="editor"-->
-<!--                    v-model="$v.content.$model"-->
-<!--                    :error="$v.content"-->
-<!--                    :disabled="props.type === FORM_TYPE_READ"-->
-<!--                  />-->
-
-                  <base-tiny-editor
+                  <base-froala-editor
                     ref="editor"
                     v-model="$v.content.$model"
                     :error="$v.content"

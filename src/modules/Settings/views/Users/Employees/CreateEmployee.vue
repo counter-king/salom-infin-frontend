@@ -112,7 +112,7 @@ const searchTopLevelDepartments = ({ search, page }) => {
    topLevelDepartmentsLoading.value = true;
    const companyId = company.value?.id;
    axiosConfig
-      .get(`departments/top-level-departments/?condition=A&page=${page}&search=${search}&company=${companyId}`)
+      .get(`departments/top-level-departments/?condition=A,K&page=${page}&search=${search}&company=${companyId}`)
       .then(response => {
          const newPage = response?.data?.next ? page + 1 : null;
          const results = response?.data?.results;

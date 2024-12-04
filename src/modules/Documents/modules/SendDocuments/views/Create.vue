@@ -9,7 +9,8 @@ import {
   ApplicationForm,
   OrderForm,
   OrdinaryNoticeForm,
-  DecreeForm
+  DecreeForm,
+  PowerOfAttorneyForm
 } from "@/modules/Documents/modules/SendDocuments/views/forms/index"
 // Constants
 import {FORM_TYPE_CREATE} from "@/constants/constants"
@@ -38,6 +39,9 @@ const formMap = {
     COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP,
     COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL,
     COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER_LOCAL
+  ],
+  POWER_OF_ATTORNEY: [
+    COMPOSE_DOCUMENT_SUB_TYPES.POA_FOR_LEGAL_SERVICES
   ]
 };
 const selectedComponent = computed(() => {
@@ -47,6 +51,9 @@ const selectedComponent = computed(() => {
   }
   if (formMap.BUSINESS_TRIP.includes(docSubType)) {
     return BusinessTripNoticeForm
+  }
+  if (formMap.POWER_OF_ATTORNEY.includes(docSubType)) {
+    return PowerOfAttorneyForm
   }
   return formMap[docSubType] || InnerForm
 });
