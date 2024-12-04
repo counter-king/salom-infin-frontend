@@ -7,17 +7,17 @@ import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 // Components
 import BackButton from '@/components/Actions/BackButton.vue';
-import CircleWrapper from '../show/components/CircleWrapper.vue';
-import RelatedNewsCard from '../show/components/RelatedNewsCard.vue';
-import Swiper from '../show/components/Swiper.vue';
-import ViewReplayComment from '../show/components/ViewReplayComment.vue';
-import SendComment from '../show/components/SendComment.vue';
+import CircleWrapper from '../components/show/CircleWrapper.vue';
+import RelatedNewsCard from '../components/show/RelatedNewsCard.vue';
+import Swiper from '../components/Swiper.vue';
+import ViewReplayComment from '../components/show/ViewReplayComment.vue';
+import SendComment from '../components/show/SendComment.vue';
 import Divider from '@/components/Divider';
-import MainFileShow from '../create/components/MainFileShow.vue';
-import TitleComponent from '../create/components/Title.vue';
+import MainFileShow from '../components/MainFileShow.vue';
+import TitleComponent from '../components/Title.vue';
 import UserCard from '../components/UserCard.vue';
-import Queto from '../create/components/Queto.vue';
-import Tag from '../show/components/Tag.vue';
+import Queto from '../components/Queto.vue';
+import Tag from '../components/Tag.vue';
 // icons
 import BaseIconify from '@/components/UI/BaseIconify.vue';
 import { BookmarkBoldIcon, EyeBoldIcon, ForwardBoldIcon, HeartBoldIcon } from '@/components/Icons';

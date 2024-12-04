@@ -6,11 +6,11 @@ import { useI18n } from 'vue-i18n';
 import BaseDialog from '@/components/UI/BaseDialog.vue';
 import BaseButton from '@/components/UI/BaseButton.vue';
 import UserCard from '../../components/UserCard.vue';
-import Tag from '../../show/components/Tag.vue';
-import Swiper from '../../show/components/Swiper.vue';
-import TitleComponent from './Title.vue';
-import MainFileShow from './MainFileShow.vue';
-import Queto from './Queto.vue';
+import Tag from '../../components/Tag.vue';
+import Swiper from '../../components/Swiper.vue';
+import TitleComponent from '../Title.vue';
+import MainFileShow from '../MainFileShow.vue';
+import Queto from '../Queto.vue';
 // stores
 import { useNewsStore } from '../../stores';
 import { useAuthStore } from '@/modules/Auth/stores';

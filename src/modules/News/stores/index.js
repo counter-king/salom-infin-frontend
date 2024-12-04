@@ -5,7 +5,7 @@ import { CONTENT_TYPES } from "../constants";
 
 const defaultModel = {
     title: null,
-    description: null,
+    description: "",
     category: null,
     image: null,
     dynamicFields: [], 

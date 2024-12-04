@@ -1,7 +1,7 @@
 <script setup>
 // Core
 import { useRouter } from 'vue-router';
-import { onMounted, ref, watch } from 'vue';
+import { onMounted } from 'vue';
 import { useI18n } from 'vue-i18n'
 import { useVuelidate } from "@vuelidate/core"
 // Components
@@ -11,22 +11,22 @@ import BaseDropdown from '@/components/UI/BaseDropdown.vue';
 import BaseInput from '@/components/UI/BaseInput.vue';
 import BaseTextarea from '@/components/UI/BaseTextarea.vue'
 import BaseMultiSelect from '@/components/UI/BaseMultiSelect.vue';
-import AddCard from '../components/AddCard.vue';
-import BaseFroalaEditor from '../../components/BaseFroalaEditor.vue';
-import FileUpload from '../components/FileUpload.vue';
+import AddCard from '../AddCard.vue';
+import BaseFroalaEditor from '../../BaseFroalaEditor.vue';
+import FileUpload from '../FileUpload.vue';
 import {UserWithRadio} from "@/components/Users"
 //icons
 import BaseIconify from '@/components/UI/BaseIconify.vue';
 import { TrashBinBoldIcon } from '@/components/Icons';
-//stores
-import { useNewsStore } from '../../stores';
+//stores  
+import { useNewsStore } from '../../../stores';
 // utils
 import { dispatchNotify } from '@/utils/notify';
 // services
-import { fetchCreateNews, fetchUpdateNews } from '../../services/news.service';
+import { fetchCreateNews, fetchUpdateNews } from '../../../services/news.service';
 // constants
 import { COLOR_TYPES } from '@/enums';
-import {  allowedAudioTypes, allowedFileTypes, allowedImageTypes, allowedVideoTypes, CONTENT_TYPES } from '../../constants';
+import {  allowedAudioTypes, allowedFileTypes, allowedImageTypes, allowedVideoTypes, CONTENT_TYPES } from '../../../constants';
 
 const newsStore = useNewsStore()
 const router = useRouter()
@@ -128,7 +128,11 @@ const isValidFormValidation = async () => {
 }
 
 const addDynamicField = (type) => {
-  newsStore.model.dynamicFields.push({ type, value: null });
+  if(type === CONTENT_TYPES.TEXT){
+    newsStore.model.dynamicFields.push({ type, value: "" });
+  } else {
+    newsStore.model.dynamicFields.push({ type, value: null });
+  }
 };
 
 const removeDynamicField = (index) => {

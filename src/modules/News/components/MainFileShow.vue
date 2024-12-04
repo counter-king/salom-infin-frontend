@@ -1,6 +1,6 @@
 <script setup>
 
-import { allowedImageTypes, allowedVideoTypes, allowedAudioTypes } from '../../constants';
+import { allowedImageTypes, allowedVideoTypes, allowedAudioTypes } from '../constants';
 
 //props
 const props = defineProps({

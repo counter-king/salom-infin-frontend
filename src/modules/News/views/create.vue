@@ -1,10 +1,10 @@
 <script setup>
-// Core
 
 // Components
 import { ref } from 'vue';
-import HeaderToolbar from '../create/components/HeaderToolbar.vue';
-import CreateForm from '../create/Form/NewForm.vue';
+import HeaderToolbar from '../components/create/HeaderToolbar.vue';
+
+import CreateForm from '../components/create/Form/NewForm.vue';
 
 const createFormRef = ref(null)
 // methods
