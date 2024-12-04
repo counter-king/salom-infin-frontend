@@ -1,18 +1,22 @@
 import { defineStore } from "pinia";
 import { helpers, required } from "@vuelidate/validators";
 import { fetchGetNewsCategoryList, fetchGetNewsTagsList } from "../services/news.service";
+import { CONTENT_TYPES } from "../constants";
 
+const defaultModel = {
+    title: null,
+    description: null,
+    category: null,
+    image: null,
+    dynamicFields: [], 
+    tags_ids:[],
+    images_ids: [],
+}
 export const useNewsStore = defineStore('newsStore', {
     state: ()=> ({
     // form model
     model: {
-        title: null,
-        description: null,
-        category: null,
-        image: null,
-        dynamicFields: [], 
-        tags_ids:[],
-        images_ids: [],
+        ...defaultModel
     },
     // form rules
     rules: {
@@ -63,13 +67,7 @@ export const useNewsStore = defineStore('newsStore', {
         },
         restStore() {
             this.model = {
-                title: null,
-                description: null,
-                category: null,
-                image: null,
-                dynamicFields: [], 
-                tags_ids:[],
-                images_ids: [],
+               ...defaultModel
             }
         }
     }

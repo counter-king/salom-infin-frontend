@@ -63,9 +63,9 @@ const handleDeleteNews = async()=>{
       <div class="flex gap-3 items-center">
         <back-button 
           :self="true" 
-          @click="router.push({name:'NewsIndex'})"
+          @click="router.push({name:'NewsIndex'});newsStore.restStore()"
         />
-        <h2 class="text-xl font-semibold text-greyscale-900">{{ t('createNews') }}</h2>
+        <h2 class="text-xl font-semibold text-greyscale-900">{{t(!!route.params.id ? 'edit-news' : 'createNews') }}</h2>
       </div>
       <div class="flex gap-2">
         <base-button @click="handleOpenDialogPreview" button-class="!px-4 !py-3 text-xs rounded-[120px]" :label="t('preview-news')"/>

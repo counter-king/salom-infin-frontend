@@ -16,7 +16,7 @@ export const fetchCreateNews = (params) => {
 
 // get news list
 export const fetchGetNewsList = (params) => {
-    return axiosConfig.get(`${URLS.news}/`, { page_size: 10, ...params })
+    return axiosConfig.get(`${URLS.news}/`, { page_size: 20, ...params })
 }
 
 // update news

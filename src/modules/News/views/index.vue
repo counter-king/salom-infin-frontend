@@ -80,7 +80,7 @@ onMounted(async() => {
       <template v-if="loading">
          <base-spinner />  
       </template>
-      <div v-else class="grid grid-cols-[repeat(auto-fit,minmax(328px,328px))] justify-between gap-4">
+      <div v-else class="grid grid-cols-[repeat(auto-fit,minmax(328px,328px))] justify-between gap-4" :class="newsList.length < 4 && '!justify-start'">
         <template v-for="item in newsList" :key="item.id">
           <RouterLink :to="{ name: 'NewsShow', params: {id: item.id}}" class="text-indigo-700 text-sm">
             <NewCard :item="item" />

@@ -72,7 +72,7 @@ const handlePublish = async () => {
         </div>
       </template>
       <Swiper v-if="newsStore.model.images_ids.length" :images="newsStore.model.images_ids" />
-      <Tag v-if="newsStore.model.tags_ids.length" :tags="newsStore.model.tags_ids" />
+      <Tag v-if="newsStore.model.tags_ids.length" :tags="newsStore.model.tags_ids" class="pointer-events-none" />
     </template>
     <template #footer>
       <base-button

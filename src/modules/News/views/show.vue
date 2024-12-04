@@ -151,11 +151,10 @@ onMounted( async () => {
         <base-spinner/>
     </template>
     <!-- container -->
-    <!-- <div class="bg-white w-full mt-5 rounded-[20px] p-8 pr-6 flex flex-nowrap justify-between gap-x-12"> -->
     <div v-else class="bg-white w-full h-full mt-5 rounded-[20px] p-8 pr-6 grid grid-cols-[minmax(840px,_3fr)_minmax(300px,_1.5fr)] gap-x-12">
         <!-- right -->
-        <div class="overflow-y-scroll pr-1">
-            <div class="min-w-[840px] h-[382px] rounded-2xl overflow-hidden">
+        <div class="overflow-y-scroll pr-2 overflow-hidden">
+            <div class="min-w-[820px] h-[382px] rounded-2xl overflow-hidden">
                 <img :src="newsOne.image?.url" alt="rasm" class="w-full h-full">
             </div>
             <!-- info -->
@@ -191,17 +190,17 @@ onMounted( async () => {
                         </div>
                     </circle-wrapper>
                     <!-- bookmark -->
-                    <circle-wrapper class="min-w-fit">
+                    <!-- <circle-wrapper class="min-w-fit">
                         <div class="text-greyscale-400">
                             <base-iconify :icon="BookmarkBoldIcon" />
                         </div>
-                    </circle-wrapper>
+                    </circle-wrapper> -->
                     <!-- forward icon-->
-                    <circle-wrapper class="min-w-fit">
+                    <!-- <circle-wrapper class="min-w-fit">
                         <div class="text-greyscale-400">
                             <base-iconify :icon="ForwardBoldIcon" />
                         </div>
-                    </circle-wrapper>
+                    </circle-wrapper> -->
                 </div>  
             </div>
 

@@ -154,10 +154,10 @@ defineExpose({
           :multiple="false" 
           :files="props.imageFile && [props.imageFile]" 
           :allowedFileTypes="allowedImageTypes"
-          @emit:file-upload="(val) => newsStore.model.image = val[0]"
-          @emit:on-file-delete="() => newsStore.model.image = null" 
+          @emit:file-upload="(val) => { newsStore.model.image = val[0]; $v.image.$model = val[0] || null }"
+          @emit:on-file-delete="() => { newsStore.model.image = null; $v.image.$model = null }" 
           :error="$v.image"
-          :allowed-file-info="t('allowed-file-info',{ formats: allowedImageTypes.join(', '), size: '10M' })"
+          :allowed-file-info="t('allowed-file-info',{ formats: allowedImageTypes.map(item => item.split('/')[1]).join(', '), size: '10M' })"
           />
       </base-col>
       <base-col col-class="w-full pt-6">
@@ -178,11 +178,12 @@ defineExpose({
           label="name" 
           placeholder="enterName" />
       </base-col>
-      <base-col col-class="w-full flex flex-col gap-2">
+      <base-col col-class="w-full flex flex-col gap-2 overflow-hidden">
         <label class="block text-sm font-medium text-greyscale-500">{{ t('definition') }}<span class="text-red-500"> *</span></label>
         <base-froala-editor 
           v-model="$v.description.$model" 
           :error="$v.description" />
+        
       </base-col>
       <base-col col-class="w-full pt-6">
           <base-multi-select
@@ -214,17 +215,22 @@ defineExpose({
             :files="props.galleryFiles"
             :allowedFileTypes="allowedImageTypes"
             @emit:file-upload="(val) => newsStore.model.images_ids = val"
-            :allowed-file-info="t('allowed-file-info',{ formats: allowedImageTypes.join(', '), size: '10M' })"
-           />
+            :allowed-file-info="t('allowed-file-info',{ formats: allowedImageTypes.map(item => item.split('/')[1]).join(', '), size: '10M' })"
+            />
       </base-col>
       <!-- dynamic fields -->
       <base-col v-for="(field, index) in newsStore.model.dynamicFields" :key="index"
-        class="w-full pt-6 flex gap-2 items-end">
+        class="w-full pt-6 flex gap-2 items-end overflow-hidden">
         <div class="w-full">
           <label v-if="field.type === CONTENT_TYPES.TEXT" class="block text-sm font-medium text-greyscale-500 mb-2">{{ t('definition') }}</label>
-          <base-froala-editor v-if="field.type === CONTENT_TYPES.TEXT" v-model="field.value" />
-
-          <label v-if="field.type === CONTENT_TYPES.FILE" class="block text-sm font-medium text-greyscale-500 mb-2">{{ t('image') }}</label>
+          <base-froala-editor 
+            v-if="field.type === CONTENT_TYPES.TEXT" 
+            v-model="field.value" />
+          <label 
+            v-if="field.type === CONTENT_TYPES.FILE"
+            class="block text-sm font-medium text-greyscale-500 mb-2">
+            {{ t('image') }}
+          </label>
           <file-upload 
             v-if="field.type === CONTENT_TYPES.FILE"
             :multiple="false" 
@@ -232,11 +238,15 @@ defineExpose({
             :allowedFileTypes="allowedFileTypes"
             @emit:file-upload="(val) => field.value = val[0]"
             @emit:on-file-delete="() => field.value = null" 
-            :allowed-file-info="t('allowed-file-info2',{ formats: allowedFileTypes.map(item => item.split('/')[1]).join(', '), size: '10M' })"
+            :allowed-file-info="t('allowed-file-info',{ formats: allowedFileTypes.map(item => item.split('/')[1]).join(', '), size: '10M' })"
             />
             
-          <base-textarea v-if="field.type === CONTENT_TYPES.QUOTE" v-model="field.value" :label="t('quotes')"  :placeholder="t('enter-quotes')" />
-
+          <base-textarea 
+            v-if="field.type === CONTENT_TYPES.QUOTE"
+            v-model="field.value"
+            :label="t('quotes')"
+            :placeholder="t('enter-quotes')"
+          />
           </div>
         <div @click="removeDynamicField(index)"
           class="text-red-500 bg-greyscale-50 rounded-xl w-11 h-11 min-w-[44px] flex justify-center items-center cursor-pointer">
@@ -248,9 +258,19 @@ defineExpose({
         <h2 class="text-sm font-medium text-greyscale-500">{{ t('add-more') }}</h2>
       </base-col>
       <base-col col-class="w-full flex gap-2">
-        <add-card text="definition" @click="addDynamicField(CONTENT_TYPES.TEXT)" class="w-fit" icon-color="warning-500" />
-        <add-card text="image" @click="addDynamicField(CONTENT_TYPES.FILE)" class="w-fit" icon-color="info-500" />
-        <add-card text="quotes" @click="addDynamicField(CONTENT_TYPES.QUOTE)" class="w-fit" icon-color="critic-500" />
+        <add-card 
+          text="definition"
+          @click="addDynamicField(CONTENT_TYPES.TEXT)" 
+          class="w-fit" icon-color="warning-500"
+        />
+        <add-card text="image"
+         @click="addDynamicField(CONTENT_TYPES.FILE)"
+         class="w-fit" icon-color="info-500" 
+         />
+        <add-card text="quotes"
+          @click="addDynamicField(CONTENT_TYPES.QUOTE)"
+          class="w-fit" icon-color="critic-500" 
+        />
       </base-col>
     </base-row>
   </div>

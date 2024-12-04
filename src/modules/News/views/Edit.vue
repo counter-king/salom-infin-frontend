@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router';
 import { onMounted, ref } from 'vue';
 // Components
 import HeaderToolbar from '../create/components/HeaderToolbar.vue';
-import EditForm  from '../create/Form/CreateForm.vue';
+import EditForm  from '../create/Form/NewForm.vue';
 import { fetchGetNews } from '../services/news.service';
 import BaseSpinner from '@/components/UI/BaseSpinner.vue';
 // stores

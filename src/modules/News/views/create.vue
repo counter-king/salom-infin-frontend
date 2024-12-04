@@ -4,7 +4,7 @@
 // Components
 import { ref } from 'vue';
 import HeaderToolbar from '../create/components/HeaderToolbar.vue';
-import CreateForm from '../create/Form/CreateForm.vue';
+import CreateForm from '../create/Form/NewForm.vue';
 
 const createFormRef = ref(null)
 // methods
@@ -18,7 +18,7 @@ const isValidFormValidation = () => {
 
 </script>
 <template>
-  <div class="py-5 w-full flex flex-col items-center gap-5 overflow-y-auto h-[100%]" >
+  <div class="py-5 w-full flex flex-col items-center gap-5" >
     <div class="w-[900px]">
       <header-toolbar :onSubmitForm="onSubmitForm"  :isValidFormValidation="isValidFormValidation"/>
     </div>

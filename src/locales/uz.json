@@ -533,15 +533,15 @@
   "selectTag":"Teglarni tanlang",
   "add-more":"Ko'proq qo'shing",
   "preview-news":"Ko‘rib chiqish",
-  "allowed-file-info":"Fayl (PNG, JPG yoki JPEG) ning maksimal hajmi 10 MB",
-  "allowed-file-info2":"Максимальный размер файла ({formats}) — {size} МБ.",
+  "allowed-file-info":"Максимальный размер файла ({formats}) — {size} МБ.",
   "quotes":"Iqtiboslar",
   "gallery": "Galeriya",
   "enter-quotes":"Iqtibosni yozing",
   "image":"Rasim",
-  "error-desciption-field": "Kamida bitta tavsif maydonini qo'shing va uni to'ldiring.",
+  "error-desciption-field": "kamida bittasini shu maydonlardan (Ta'rifi, Rasim, Iqtiboslar) bittasini to'ldiring news yartaish uchun. ",
   "cancel-tag-filter": "Teglar filtrini bekor qilish",
   "similar-news": "Bog'liq yangiliklar",
   "our-gallery": "Bizning Galeriyamiz",
-  "delete-news-dialog-content": "Ushbu yangilikni o'chirib tashlamoqchimisiz? Bu amalni qaytarib bo'lmaydi."
+  "delete-news-dialog-content": "Ushbu yangilikni o'chirib tashlamoqchimisiz? Bu amalni qaytarib bo'lmaydi.",
+  "edit-news": "Yangilikni tahrirlash"
 }
