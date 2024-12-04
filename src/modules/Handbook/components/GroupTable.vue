@@ -98,7 +98,7 @@ const filterValueChildren = computed(()=> props.value[0]?.children.filter((child
       :paginator="props.isSearch ? true : props.paginator"
       :total-records="props.isSearch ? totalCount : undefined"
       :first="paginationStore.firstRow"
-      :rows-per-page-options="[100, 200, 300]"
+      :rows-per-page-options="[200, 300]"
       :rows="Number(route.query.page_size) ? Number(route.query.page_size) : paginationStore.pageSize"
       :scroll-height="props.scrollHeight"
       :loading="props.loading"

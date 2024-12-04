@@ -33,6 +33,7 @@ const departments = ref([])
 const departmentSelect = ref(null)
 const departmentUsers = ref([])
 const isSearch = ref(false);
+const mainBarnch = ref(false)
 
 // methods
 const paginationQuery = computed(() => ({
@@ -74,8 +75,13 @@ watchEffect(async () => {
 
   if (branchSelect.value) {
     let { data } = await fetchDepartmentList({ page_size:100, company: branchSelect.value, ordering:"name" })
-    departments.value = [departmentAllOption,...data.results]
-    departmentSelect.value = data.results[0] ? data.results[0].id : null
+    // if selected branch main, then all option is not add to list
+    if (branchSelect.value !== mainBarnch.value.id) {
+      departments.value = [departmentAllOption,...data.results]
+    } else {
+      departments.value = data.results
+    }
+    departmentSelect.value = departments.value[0]?.id 
   }
 })
 
@@ -85,7 +91,7 @@ watchEffect(async () => {
   }
 
   if (departmentSelect.value) {
-    // if all deparement are choosed, then it work
+    // if all deparement are choosed, then it works
     if(departmentSelect.value == departmentAllOption.id){
       let { data } = await fetchDepartmentsUserListBySearch({ ...paginationQuery.value, company: branchSelect.value})
       departmentUsers.value = data.results
@@ -99,11 +105,10 @@ watchEffect(async () => {
       emit('emit:search', false);
       emit('emit:up', departmentUsers.value)
     }
-  
   }
 })
 
-// clearing seach, whene other thing are selected
+// clearing seach, whene other things are selected
 watchEffect(()=> {
   if(!!departmentSelect.value && !isSearch.value && !!branchSelect.value || departmentSelect.value == departmentAllOption.id && isSearch){
     search.value = ""
@@ -114,6 +119,7 @@ watchEffect(()=> {
 onMounted(async () => {
   let { data } = await fetchCompaniesList({ page_size: 100 })
   branches.value = data.results
+  mainBarnch.value = branches.value.find((item)=> item.is_main == true )
   branchSelect.value = data.results[0].id
 })
 
