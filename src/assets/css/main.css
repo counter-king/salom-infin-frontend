@@ -148,3 +148,8 @@ body {
   border-collapse: collapse;
   padding: 4px
 }
+
+.mdl-js {
+  height: 100%;
+  overflow: hidden;
+}
