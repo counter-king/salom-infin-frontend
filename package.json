@@ -54,6 +54,7 @@
     "@vite-pwa/assets-generator": "^0.2.6",
     "@vitejs/plugin-vue": "^4.3.4",
     "@vue-macros/volar": "^0.17.1",
+    "@vue/devtools": "^7.6.7",
     "@vue/test-utils": "^2.4.1",
     "autoprefixer": "^10.4.16",
     "cypress": "^13.2.0",

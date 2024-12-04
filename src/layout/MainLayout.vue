@@ -74,6 +74,6 @@ const getCurrentUser = async () => {
 
 <style scoped>
 .main-layout-content {
-  min-height: calc(100vh - 80px);
+  height: calc(100vh - 80px);
 }
 </style>

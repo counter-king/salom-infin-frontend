@@ -26,3 +26,6 @@ export function formatDateReverse(date, separate = '-') {
   return date ? dayjs(date).format(`YYYY${separate}MM${separate}DD`) : "Не верный формат даты"
 }
 
+export function formatDateNamedMonth(date) {
+  return date ? dayjs(date).format("DD MMMM YYYY г.") : "Не верный формат даты"
+}

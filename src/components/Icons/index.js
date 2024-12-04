@@ -160,9 +160,9 @@ export { default as CalendarDateBoldDuotoneIcon } from  '~icons/solar/calendar-d
 export { default as UserCheckRoundedBrokenIcon } from  '~icons/solar/user-check-rounded-broken'
 // Fluent
 export { default as BotFilledIcon } from  '~icons/fluent/bot-20-filled'
-//typcn
+// typcn
 export { default as ForwardIcon } from '~icons/typcn/arrow-forward-outline'
 export { default as ForwardBoldIcon } from '~icons/typcn/arrow-forward'
-//merge
+// merge
 export { default as BookmarkBoldIcon } from '~icons/mage/bookmark-fill'
 

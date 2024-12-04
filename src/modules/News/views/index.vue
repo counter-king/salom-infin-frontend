@@ -1,16 +1,13 @@
 <script setup>
 // Core
-import { useI18n } from 'vue-i18n'
 import { RouterLink, useRoute } from 'vue-router'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useDebounce } from '@vueuse/core'
 // Components
 import HeaderToolbar from '../components/HeaderToolbar.vue'
 import NewCard from '../components/NewsCard.vue'
-import image from '@/assets/img/news.png'
 import { fetchGetNewsList } from '../services/news.service'
 // store 
-import { usePaginationStore } from '@/stores/pagination.store'
 import { dispatchNotify } from '@/utils/notify'
 import { COLOR_TYPES } from '@/enums'
 
@@ -21,7 +18,7 @@ const newsList = ref([])
 const loading = ref(false)
 const page = ref(1)
 const next = ref(false)
-
+const tagParamId = computed(() => route.query.tag)
 // method
 const searchQuery = computed(() => route.query.search)
 let debouncedSearchQuery = useDebounce(searchQuery, 750)
@@ -31,20 +28,9 @@ watch(debouncedSearchQuery, (newValue) => {
   fetchNewsList(1)
 })
 
-//mock
-const mockData = {
-  image: image,
-  status: {
-    name: 'Новости',
-    id: 1
-  },
-  title: 'Вчера наша команда провела отличный тимбилдинг',
-  date: '28 ноября 2024 г.',
-  totalViewCount: '1,5k'
-}
-
+// getting next gage when scroll reach down.
 const handleScroll = (event) => {
-  const bottom = event.target.scrollHeight === Math.floor(event.target.scrollTop + event.target.clientHeight);
+  const bottom = event.target.scrollHeight >= Math.floor(event.target.scrollTop + event.target.clientHeight);
   if (bottom) {
     if(next.value){
       page.value += 1
@@ -54,27 +40,37 @@ const handleScroll = (event) => {
 };
 
 const fetchNewsList = async (page) => {
+  
   if (loading.value) return;
-  loading.value = true
+  // there is newsList data, then don't show loading 
+  if(!newsList.value.length) {
+    loading.value = true
+  }
  
   try {
-    const data = await fetchGetNewsList({ page: page, search: debouncedSearchQuery.value})    
+    const { data } = await fetchGetNewsList({ page: page, search: debouncedSearchQuery.value, tags: tagParamId.value })    
     next.value = data.next;
-    if(data?.results){
-      newsList.value.push(...data.results)
+    if(!!data.results?.length){
+      newsList.value=[...newsList.value, ...data.results]
     }
   }
-  catch(e){
+ 
+  catch(e) {
     dispatchNotify(null, e?.message, COLOR_TYPES.ERROR)
   }
-  finally{
+  finally {
       loading.value = false
   }
 }
 
+watch(tagParamId, (newValue) => {
+  if(!newValue){
+    fetchNewsList(1)
+  }
+})
 
 onMounted(async() => {
-  fetchNewsList(1)
+  fetchNewsList(page.value)
 })
 
 </script>
@@ -85,9 +81,9 @@ onMounted(async() => {
          <base-spinner />  
       </template>
       <div v-else class="grid grid-cols-[repeat(auto-fit,minmax(328px,328px))] justify-between gap-4">
-        <template v-for="i in 10" :key="i">
-          <RouterLink :to="{ name: 'NewsShow', params: {id: 12}}" class="text-indigo-700 text-sm">
-            <NewCard :data="mockData" />
+        <template v-for="item in newsList" :key="item.id">
+          <RouterLink :to="{ name: 'NewsShow', params: {id: item.id}}" class="text-indigo-700 text-sm">
+            <NewCard :item="item" />
           </RouterLink>
         </template>
       </div>

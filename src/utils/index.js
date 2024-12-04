@@ -420,3 +420,25 @@ export const isBirthdayToday = (date) => {
   const today = dayjs()
   return birthday.month() === today.month() && birthday.date() === today.date()
 }
+
+// Convert hex to rgba
+// like #FFFFFF => rgba(255, 255, 255, 1)
+export const hexToRgba = (hex, alpha)=> {
+  // Remove the '#' if present
+  hex = hex.replace("#", "");
+
+  // Parse the r, g, b values
+  const r = parseInt(hex.slice(0, 2), 16);
+  const g = parseInt(hex.slice(2, 4), 16);
+  const b = parseInt(hex.slice(4, 6), 16);
+
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+// Format number to k
+export function formatToK(number) {
+  if (number >= 1000) {
+      return Math.floor(number / 1000) + 'k';
+  }
+  return number.toString();
+}

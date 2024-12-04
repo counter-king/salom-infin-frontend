@@ -61,12 +61,17 @@ const config = {
 	},
 	tableEditButtons: ['tableStyle', 'tableRows', 'tableColumns', 'tableCells', 'tableCellBackground', 'tableCellVerticalAlign', 'tableCellHorizontalAlign', 'tableRemove'],
   tabSpaces: 8,
+  pasteAllowedStyleProps:[],
   events: {
 		'table.inserted': (table) => {
 			table.classList.add('customTable');
 		},
     'commands.after': (cmd, param1, param2) => {
       commandAfter(cmd, param1, param2);
+    },
+	'paste.afterCleanup':  function (clipboardHTML) {
+      
+      return clipboardHTML;
     }
 	}
 }

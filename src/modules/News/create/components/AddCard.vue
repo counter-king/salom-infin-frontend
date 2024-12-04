@@ -4,8 +4,7 @@ import { useI18n } from 'vue-i18n'
 //Icons
 import BaseIconify from '@/components/UI/BaseIconify.vue';
 import { AddPlusIcon } from '@/components/Icons';
-// enums
-import { PRIORITY_TYPES } from '@/enums';
+
 
 // props
 const props = defineProps({

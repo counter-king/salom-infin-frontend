@@ -60,6 +60,17 @@ export const useNewsStore = defineStore('newsStore', {
             finally{
                 this.tagListLoading = false;
             }
+        },
+        restStore() {
+            this.model = {
+                title: null,
+                description: null,
+                category: null,
+                image: null,
+                dynamicFields: [], 
+                tags_ids:[],
+                images_ids: [],
+            }
         }
     }
 })

@@ -1,41 +1,49 @@
 <script setup>
 // Components
-import { StatusChip } from '@/components/Chips';
+import NewsCategory from '@/components/Chips/NewsCategory.vue';
 //Icons
 import { EyeLinearIcon, HeartLinearIcon } from '@/components/Icons'
+import BaseIcon from '@/components/UI/BaseIcon.vue';
 import BaseIconify from '@/components/UI/BaseIconify.vue'
-// Services
+// utils
+import { formatToK } from '@/utils';
+import { formatDateNamedMonth } from '@/utils/formatDate';
 
 const props = defineProps({
-  data: { type: Object, default: () => {} }
+  item: { type: Object, default: () => {} }
 })
 </script>
 
 <template>
   <div
-    class="max-w-[328px] rounded-2xl p-2 bg-white select-none"
+    class="max-w-[328px] h-[294px] rounded-2xl p-2 bg-white select-none"
   >
     <div class="w-full max-w-[312px] h-full max-h-[158px] rounded-lg overflow-hidden">
-      <img :src="props.data.image" alt="rasm" class="w-full h-full" />
+      <img :src="props.item.image.url" alt="rasm" class="w-full h-full" />
     </div>
-    <div class="p-2 pt-0">
+    <div class="p-2 pt-0 h-[108px]">
       <div class="mt-3">
-        <status-chip type="news" :status="{name: 'Новости', id: 1}" root-class="!text-xs !font-semibold !rounded-md !mt-3">
-          {{ props.data.status.name }}
-        </status-chip>
+        <news-category :category="props.item.category"/>
       </div>
-      <h3 class="font-semibold text-sm text-greyscale-900 mt-2">{{ props.data.title }}</h3>
-      <div class="flex items-center justify-between mt-[10px]">
-        <span class="font-medium text-xs text-[#5F6878]">{{ props.data.date }}</span>
+      <h3 class="font-semibold text-sm text-greyscale-900 mt-2 min-h-[40px] max-h-[40px] leading-5 line-clamp-2 overflow-hidden">{{ props.item.title }}</h3>
+      <div class="flex items-center justify-between mt-2">
+        <span class="font-medium text-xs text-[#5F6878]">{{ formatDateNamedMonth(props.item.created_date) }}</span>
         <div class="flex gap-2 items-center text-greyscale-400">
-          <div class="hover:cursor-pointer">
-            <base-iconify :icon="HeartLinearIcon" />
+          <RouterLink :to="{ name: 'NewsEdit', params: {id: item.id}}" class="text-sm hover:text-warning-500">
+            <base-icon name="PenIcon"/>
+          </RouterLink>
+          <div class="flex gap-1 items-center">
+            <div class="hover:cursor-pointer">
+               <base-iconify :icon="HeartLinearIcon" />
+            </div>
+            <div class="text-xs font-medium text-greyscale-400">{{ formatToK(props.item.like_counts) }}</div>
           </div>
+         
           <div class="flex gap-1 items-center">
             <div class="hover:cursor-pointer">
               <base-iconify :icon="EyeLinearIcon" />
             </div>
-            <div class="text-xs font-medium text-greyscale-400">{{ props.data.totalViewCount }}</div>
+            <div class="text-xs font-medium text-greyscale-400">{{ formatToK(props.item.view_counts) }}</div>
           </div>
         </div>
       </div>

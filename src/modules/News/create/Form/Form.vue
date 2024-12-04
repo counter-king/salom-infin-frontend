@@ -1,6 +1,5 @@
 <script setup>
 // Core
-import { useRouter } from 'vue-router';
 import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n'
 import { useVuelidate } from "@vuelidate/core"
@@ -14,33 +13,41 @@ import BaseMultiSelect from '@/components/UI/BaseMultiSelect.vue';
 import AddCard from '../components/AddCard.vue';
 import BaseFroalaEditor from '@/components/UI/BaseFroalaEditor.vue';
 import FileUpload from '../components/FileUpload.vue';
+import BaseIconify from '@/components/UI/BaseIconify.vue';
 import {UserWithRadio} from "@/components/Users"
 //icons
-import BaseIconify from '@/components/UI/BaseIconify.vue';
 import { TrashBinBoldIcon } from '@/components/Icons';
 //stores
 import { useNewsStore } from '../../stores';
-// utils
 import { dispatchNotify } from '@/utils/notify';
-// services
-import { fetchCreateNews, fetchUpdateNews } from '../../services/news.service';
-// constants
 import { COLOR_TYPES } from '@/enums';
+// services
+import { fetchCreateNews } from '../../services/news.service';
+// constants
 import {  allowedAudioTypes, allowedFileTypes, allowedImageTypes, allowedVideoTypes, CONTENT_TYPES } from '../../constants';
+import { useRouter } from 'vue-router';
 
 const newsStore = useNewsStore()
 const router = useRouter()
 // Macros
 const props = defineProps({
+  model: {
+    type: Object,
+    default: () => ({
+        title: null,
+        description: null,
+        category: null,
+        image: null,
+        dynamicFields: [], 
+        tags_ids:[],
+        images_ids: [],
+    })
+  },
   imageFile: {
     type: Object,
     default: null
   },
-  galleryFiles: { type: Array, default: () => [] },
-  newsId: {
-    type: [Number,String],
-    default: null
-  }
+  galleryFiles: { type: Array, default: () => [] }
 })
 const { t } = useI18n()
 
@@ -49,115 +56,17 @@ const { t } = useI18n()
 const $v = useVuelidate(newsStore.rules, newsStore.model)
 
 
-// methods
-const getMatchFileUploadType = (file) => {
-  if(allowedImageTypes.some(item => item.includes(file.type))){
-    return CONTENT_TYPES.IMAGE
-  }
-  else if(allowedVideoTypes.some(item => item.includes(file.type))){
-    return CONTENT_TYPES.VIDEO
-  }
-  else if(allowedAudioTypes.some(item => item.includes(file.type))){
-    return CONTENT_TYPES.AUDIO
-  }
-}
-
-const onSubmitForm = async () => {
-  newsStore.loadingSubmitButton = true
-  
-    const contents = [];
-    for (let index = 0; index < newsStore.model.dynamicFields.length; index++) {
-      const content = newsStore.model.dynamicFields[index];
-      if (content.type === CONTENT_TYPES.FILE) {
-        if(!!content.id){
-          contents.push({ type: getMatchFileUploadType(content.value), file: content.value.id, id: content.id})
-        }else{
-          contents.push({ type: getMatchFileUploadType(content.value), file: content.value.id})
-        }
-      } else if (content.type === CONTENT_TYPES.TEXT) {
-        if(!!content.id){
-          contents.push({ type: CONTENT_TYPES.TEXT, content: content.value.trim(), id: content.id})
-        } else{
-          contents.push({ type: CONTENT_TYPES.TEXT, content: content.value.trim()})
-        }
-      } else if (content.type === CONTENT_TYPES.QUOTE) {
-        if(!!content.id){
-          contents.push({ type: CONTENT_TYPES.QUOTE, content: content.value.trim(), id: content.id})
-        }else{
-          contents.push({ type: CONTENT_TYPES.QUOTE, content: content.value.trim()})
-        }
-      } 
-    }
-
-    newsStore.model.contents = contents;
-    const formData = {
-      title: newsStore.model.title,
-      description: newsStore.model.description,
-      image: newsStore.model.image.id,
-      category: newsStore.model.category,
-      tags_ids: newsStore.model.tags_ids.map(tag => tag.id),
-      images_ids: newsStore.model.images_ids.map(image => image.id),
-      contents: contents
-    };
-
-    try {
-     if (props.newsId) {
-      await fetchUpdateNews(props.newsId, formData);
-    } else {
-      await fetchCreateNews(formData);
-    }
-
-    newsStore.loadingSubmitButton = false
-    newsStore.restStore()
-    router.push({ name: 'NewsIndex' })
-  } 
-  catch (error) { }
-}
-
-const isValidFormValidation = async () => {
-  const valid = await $v.value.$validate()
-  if (!valid) return false
-  // at least one field must be added
-  if (!newsStore.model.dynamicFields.length){
-      dispatchNotify(null, t('error-desciption-field'), COLOR_TYPES.ERROR)
-      return false
-  }
-  return true
-}
-
-const addDynamicField = (type) => {
-  newsStore.model.dynamicFields.push({ type, value: null });
-};
-
-const removeDynamicField = (index) => {
-  newsStore.model.dynamicFields.splice(index, 1);
-};
-
-onMounted(() => {
-  newsStore.actionGetCategoryList()
-  newsStore.actionGetTagList()
-})
-
-// expose
-defineExpose({
-  onSubmitForm,
-  isValidFormValidation
-})
-
-
 </script>
 <template>
-  <div class="form">
+  <div class="">
     <base-row>
       <base-col col-class="w-full">
         <file-upload 
           :multiple="false" 
           :files="props.imageFile && [props.imageFile]" 
           :allowedFileTypes="allowedImageTypes"
-          @emit:file-upload="(val) => newsStore.model.image = val[0]"
-          @emit:on-file-delete="() => newsStore.model.image = null" 
+          @emit:file-upload="(val) => newsStore.model.image = val[0]" 
           :error="$v.image"
-          :allowed-file-info="t('allowed-file-info',{ formats: allowedImageTypes.join(', '), size: '10M' })"
           />
       </base-col>
       <base-col col-class="w-full pt-6">
@@ -212,10 +121,9 @@ defineExpose({
           <label class="block text-sm font-medium text-greyscale-500 mb-2">{{ t('gallery') }}</label>
           <file-upload :multiple="true" 
             :files="props.galleryFiles"
-            :allowedFileTypes="allowedImageTypes"
+            :allowedFileTypes="['image/png', 'image/jpeg', 'image/jpg']"
             @emit:file-upload="(val) => newsStore.model.images_ids = val"
-            :allowed-file-info="t('allowed-file-info',{ formats: allowedImageTypes.join(', '), size: '10M' })"
-           />
+            />
       </base-col>
       <!-- dynamic fields -->
       <base-col v-for="(field, index) in newsStore.model.dynamicFields" :key="index"
@@ -225,15 +133,9 @@ defineExpose({
           <base-froala-editor v-if="field.type === CONTENT_TYPES.TEXT" v-model="field.value" />
 
           <label v-if="field.type === CONTENT_TYPES.FILE" class="block text-sm font-medium text-greyscale-500 mb-2">{{ t('image') }}</label>
-          <file-upload 
-            v-if="field.type === CONTENT_TYPES.FILE"
-            :multiple="false" 
-            :files="field.value && [field.value]"
+          <file-upload v-if="field.type === CONTENT_TYPES.FILE" :multiple="false" :files="field.value"
             :allowedFileTypes="allowedFileTypes"
-            @emit:file-upload="(val) => field.value = val[0]"
-            @emit:on-file-delete="() => field.value = null" 
-            :allowed-file-info="t('allowed-file-info2',{ formats: allowedFileTypes.map(item => item.split('/')[1]).join(', '), size: '10M' })"
-            />
+            @emit:file-upload="(val) => field.value = val[0]" />
             
           <base-textarea v-if="field.type === CONTENT_TYPES.QUOTE" v-model="field.value" :label="t('quotes')"  :placeholder="t('enter-quotes')" />
 

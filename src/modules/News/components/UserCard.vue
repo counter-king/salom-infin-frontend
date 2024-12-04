@@ -1,32 +1,34 @@
 <script setup>
 
 // Components
-import { StatusChip } from '@/components/Chips';
+import { NewsCategory } from '@/components/Chips';
+import { returnFirstLetter } from '@/utils';
+import { formatDateNamedMonth } from '@/utils/formatDate';
 
 const props = defineProps({
-    user: {type: String, default: '' },
-    status: {type: Object, default: ()=>{} }
+    name: {type: String, default: ''},
+    info: {type: String, default: '' },
+    category: {type: Object, default: ()=>{} },
+    createdDate: {type: String, default: ''},   
+    class: {type: String},
+    avatarColor: {type: String}
 })
-
 </script>
 
 <template>
-     <div class="flex items-center gap-3">
+     <div class="flex items-center gap-3" :class="props.class">
         <base-avatar
-            label="A"
-            color="border-greyscale-300"
+            :color="props.avatarColor"
             avatarClasses="w-10 h-10 cursor-pointer border-greyscale-70 border"
         >
-            <span class="text-xl font-semibold text-white">{{ 'A' }}</span>
+            <span class="text-xl font-semibold text-white"> {{ returnFirstLetter(props.name) }}</span>
         </base-avatar>
         <div class="flex gap-[2px] flex-col">
-            <h3 class="text-base font-semibold text-greyscale-900">Brooklyn Simmons Eduard</h3>
-            <p class="text-sm text-greyscale-500 font-regular font-normal" >28 ноября 2024 г.</p>
+            <h3 class="text-base font-semibold text-greyscale-900">{{ props.name }}</h3>
+            <p class="text-sm text-greyscale-500 font-regular font-normal" >{{ props.createdDate ? formatDateNamedMonth(props.createdDate) : props.info }}</p>
         </div>
-        <template v-if="props.status && Object.keys(props.status).length">
-            <status-chip :status="{name: 'Новости', id: 1}" root-class="!text-xs !font-semibold !rounded-md self-start">
-                Новости
-            </status-chip>
+        <template v-if="props.category && Object.keys(props.category).length">
+            <news-category :category="props.category" class="self-start"/>
         </template>
     </div>
 </template>

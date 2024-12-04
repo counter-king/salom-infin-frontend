@@ -63,6 +63,10 @@ const props = defineProps({
    type: Array,
    default: ()=> []  
   },
+  allowedFileInfo: {
+   type: String,
+   default: () => ({})
+  }
 })
 
 // Methods
@@ -98,22 +102,23 @@ const uploadFiles = async (files) => {
   for (let i = 0; i < files.length; i++) {
     // Fayl formatini tekshirish
     if (!props.allowedFileTypes.includes(files[i].type)) {
+      
       dispatchNotify(null,
-      `Faqat ${props.allowedFileTypes.reduce((acc,type) => acc + type.split("/")[1].toUpperCase() + ", ", "")} formatdagi fayllarga ruxsat beriladi.`,
+      `Faqat ${props.allowedFileTypes.reduce((acc,type) => acc + type.split("/")[1]?.toUpperCase() + ", ", "")} formatdagi fayllarga ruxsat beriladi.`,
         COLOR_TYPES.ERROR);
       continue;
     }
 
     // Fayl hajmini tekshirish
-    if (files[i].size > 5 * 1024 * 1024) {
-      dispatchNotify(null, "Fayl maksimal 5 MB hajmdan oshib ketdi.", COLOR_TYPES.ERROR);
+    if (files[i].size > 10 * 1024 * 1024) {
+      dispatchNotify(null, "Fayl maksimal 10 MB hajmdan oshib ketdi.", COLOR_TYPES.ERROR);
       continue;
     }
-
+    
     let fileName = returnShortFileName(files[i].name);
     let size = files[i].size;
     let fileSize = (size > 1048576) ? (size / 1048576).toFixed(2) + ' MB' : (size <= 1048576 && size > 1024) ? (size / 1024).toFixed(2) + ' KB' : size + ' B'
-    uploadingFiles.value.push({ id: null, name: fileName, size: fileSize, progress: 0, uploaded: null, file: files[i] });
+    uploadingFiles.value.push({ id: null, name: fileName, size: fileSize, progress: 0, uploaded: null, file: files[i], extension: null, type: files[i].type });
   }
 
   for (const item of uploadingFiles.value.filter((obj) => obj.uploaded === null)) {
@@ -128,7 +133,8 @@ const uploadFiles = async (files) => {
       .then(({ data }) => {
         item.id = data.id;
         item.uploaded = true;
-        item.url = data.url
+        item.url = data.url;
+        item.extension = data.extension
       })
       .catch(() => {
         item.uploaded = false;
@@ -136,6 +142,7 @@ const uploadFiles = async (files) => {
   }
   emit("emit:fileUpload", uploadingFiles.value.filter(file => file.uploaded));
 }
+
 const setFiles = () => {
   if (props.files && props.files.length){
     props.files.forEach(file => {
@@ -144,7 +151,10 @@ const setFiles = () => {
         name: returnShortFileName(file.name),
         size: file.file_size > 1 ? file.file_size + ' MB' : (file.file_size * 1024).toFixed(2) + ' KB',
         progress: 0,
-        uploaded: true
+        uploaded: true,
+        url: file?.url,
+        extension: file.extension || '',
+        type: file?.type
       })
     })
   }
@@ -215,7 +225,7 @@ onMounted(() => {
                 </template>
               </i18n-t>
               <div class="text-greyscale-400">
-                    {{ t('allowed-file-info') }}
+                    {{ props.allowedFileInfo }}
               </div>
             </div>
            </div>

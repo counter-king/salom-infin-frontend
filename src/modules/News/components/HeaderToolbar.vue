@@ -1,7 +1,7 @@
 <script setup>
 // Core
-import { ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 // Components
 import BaseButton from '@/components/UI/BaseButton.vue'
@@ -11,11 +11,15 @@ import BaseInput from '@/components/UI/BaseInput.vue'
 import { AddPlusIcon } from '@/components/Icons'
 import { MagniferIcon } from '@/components/Icons'
 
-// Reactive
-const searchQuery = ref(null)
-
 const { t } = useI18n()
 const router = useRouter()
+const route = useRoute()
+
+// Reactive
+const searchQuery = ref(null)
+const tagPramId = computed(() => route.query.tag || undefined)
+
+
 //watch
 watch(searchQuery, (newValue) => {
   // if newValue is empty, if work
@@ -29,6 +33,13 @@ watch(searchQuery, (newValue) => {
 </script>
 <template>
   <action-toolbar title="News">
+    <template #title-after>
+      <base-button 
+        v-if="tagPramId" 
+        @click="router.replace({query:undefined})"
+        class="w-full max-w-[316px] text-xs" label="cancel-tag-filter"
+      />
+    </template>
     <template #filters>
       <div class="w-full max-w-[316px]">
         <base-input

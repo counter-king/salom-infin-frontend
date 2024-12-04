@@ -1,10 +1,11 @@
 import axiosConfig from "@/services/axios.config";
 
-
 const URLS = {
     news:"news",
     newsCategories: "news-categories",
-    newsTags: "news-tags"
+    newsTags: "news-tags",
+    newsLikes: "news-likes",
+    newsComments: "news-comments",
 }
 
 
@@ -15,9 +16,18 @@ export const fetchCreateNews = (params) => {
 
 // get news list
 export const fetchGetNewsList = (params) => {
-    return axiosConfig.get(`${URLS.news}/`, { ...params, page_size: 10 })
+    return axiosConfig.get(`${URLS.news}/`, { page_size: 10, ...params })
 }
 
+// update news
+export const fetchUpdateNews = (id, params) => {
+    return axiosConfig.put(`${URLS.news}/${id}`, params)
+}
+
+// delete news
+export const fetchDeleteNews = (id) => {
+    return axiosConfig.delete(`${URLS.news}/${id}`)
+}
 // get one news
 export const fetchGetNews = (id) => {
     return axiosConfig.get(`${URLS.news}/${id}`)
@@ -31,4 +41,20 @@ export const fetchGetNewsCategoryList = (params) => {
 // get news-tags
 export const fetchGetNewsTagsList = (params) => {
     return axiosConfig.get(`${URLS.newsTags}/`, params)
+}
+
+
+// news-like-create 
+export const fetchCreateNewsLike = (params) => {
+    return axiosConfig.post(`${URLS.newsLikes}/`, params)
+}
+
+// create news-comments
+export const fetchCreateNewsComment = (params) => {
+    return axiosConfig.post(`${URLS.newsComments}/`, params)
+}
+
+// get news-comments-list
+export const fetchGetNewsCommentList = (params) => {
+    return axiosConfig.get(`${URLS.newsComments}/`, params)
 }

@@ -16,6 +16,14 @@ const News = [
     component: () => import('../views/Show.vue')
   },
   {
+    path: 'news/edit/:id',
+    name: 'NewsEdit',
+    meta: {
+      isAuthRequired: true
+    },
+    component: () => import('../views/Edit.vue')
+  },
+  {
     path: 'news/create',
     name: 'NewsCreate',
     meta: {
