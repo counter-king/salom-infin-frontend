@@ -19,7 +19,7 @@ const props = defineProps({
     class="max-w-[328px] h-[294px] rounded-2xl p-2 bg-white select-none"
   >
     <div class="w-full max-w-[312px] h-full max-h-[158px] rounded-lg overflow-hidden">
-      <img :src="props.item.image.url" alt="rasm" class="w-full h-full" />
+      <img :src="props.item.image.url" alt="rasm" class="w-full h-full object-cover" />
     </div>
     <div class="p-2 pt-0 h-[108px]">
       <div class="mt-3">

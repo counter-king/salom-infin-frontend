@@ -87,7 +87,7 @@ const handleSendComment = async ()=>{
         await fetchCreateNewsComment({news: route.params.id, comment: commentValue.value})
         commentValue.value = ''
     } catch (error) {
-        
+        dispatchNotify(null, e?.message, COLOR_TYPES.ERROR)
     } finally {
         commentButtonLoading.value = false
     }
@@ -97,6 +97,7 @@ const handleReplayComment = async (value, replayId) => {
      await fetchCreateNewsComment({news: route.params.id, comment: value, replied_to: replayId})
      getNewCommentList()
     } catch (error) {
+        dispatchNotify(null, e?.message, COLOR_TYPES.ERROR)
     }
 }
 /* comments methods */
@@ -151,11 +152,11 @@ onMounted( async () => {
         <base-spinner/>
     </template>
     <!-- container -->
-    <div v-else class="bg-white w-full h-full mt-5 rounded-[20px] p-8 pr-6 grid grid-cols-[minmax(840px,_3fr)_minmax(300px,_1.5fr)] gap-x-12">
+    <div v-else class="bg-white w-full h-full mt-5 rounded-[20px] p-8 pr-6 grid grid-cols-[minmax(850px,_3fr)_minmax(300px,_1.5fr)] gap-x-10">
         <!-- right -->
-        <div class="overflow-y-scroll pr-2 overflow-hidden">
-            <div class="min-w-[820px] h-[382px] rounded-2xl overflow-hidden">
-                <img :src="newsOne.image?.url" alt="rasm" class="w-full h-full">
+        <div class="overflow-y-auto pr-1 pb-3">
+            <div class="min-w-[840px] w-[840px] h-[382px] rounded-2xl overflow-hidden">
+                <img :src="newsOne.image?.url" alt="rasm" class="w-full h-full object-cover">
             </div>
             <!-- info -->
             <div class="mt-4 flex justify-between">
@@ -245,7 +246,7 @@ onMounted( async () => {
             </div>
         </div>
         <!-- left -->
-        <div class="overflow-y-auto pr-[2px]" @scroll="handleScroll">
+        <div class="overflow-y-auto pr-1 pb-3" @scroll="handleScroll">
             <h2 class="font-semibold text-lg text-greyscale-900">{{t('similar-news')}}</h2>
             <div class="flex flex-col gap-3 mt-3">
             <template v-for="news in relatedNewsList" :key="news.id">

@@ -12,7 +12,7 @@ import BaseInput from '@/components/UI/BaseInput.vue';
 import BaseTextarea from '@/components/UI/BaseTextarea.vue'
 import BaseMultiSelect from '@/components/UI/BaseMultiSelect.vue';
 import AddCard from '../components/AddCard.vue';
-import BaseFroalaEditor from '@/components/UI/BaseFroalaEditor.vue';
+import BaseFroalaEditor from '../../components/BaseFroalaEditor.vue';
 import FileUpload from '../components/FileUpload.vue';
 import {UserWithRadio} from "@/components/Users"
 //icons
@@ -111,7 +111,9 @@ const onSubmitForm = async () => {
     newsStore.restStore()
     router.push({ name: 'NewsIndex' })
   } 
-  catch (error) { }
+  catch (error) { 
+    dispatchNotify(null, error.message, COLOR_TYPES.ERROR)
+  }
 }
 
 const isValidFormValidation = async () => {

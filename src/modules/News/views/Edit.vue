@@ -87,8 +87,10 @@ onMounted(() => {
       <div class="w-[900px]">
         <header-toolbar :onSubmitForm="onSubmitForm"  :isValidFormValidation="isValidFormValidation"/>
       </div>
-      <div class="w-[900px] bg-white rounded-[20px] p-8 overflow-y-auto">
-        <edit-form ref="createFormRef" :news-id="route.params.id" :imageFile="newsStore.model.image" :galleryFiles="newsStore.model.images_ids" />
+      <div class="rounded-[20px] pr-1 overflow-y-auto">
+        <div class="w-[900px] bg-white rounded-[20px] p-8">
+          <edit-form ref="createFormRef" :news-id="route.params.id" :imageFile="newsStore.model.image" :galleryFiles="newsStore.model.images_ids" />
+        </div>
       </div>
     </div>
   </div>

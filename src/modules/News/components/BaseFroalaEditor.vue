@@ -35,6 +35,57 @@ const emit = defineEmits(['update:modelValue']);
 const editor = ref(null)
 // Macros
 defineExpose({ editor })
+
+
+const cleanContent = () => {
+  const editorContent = editor.value?.$el.querySelector('.fr-element')?.innerHTML || '';
+
+  // DOMParser orqali tarkibni manipulyatsiya qilish
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(editorContent, 'text/html');
+
+  // Barcha <p> elementlarni olish
+  const paragraphs = Array.from(doc.body.children);
+
+  // Boshi va oxiridan bo'sh yoki faqat <br> bo'lgan <p> elementlarni olib tashlash
+  while (paragraphs.length && !paragraphs[0].textContent.trim()) {
+    paragraphs.shift(); // Boshi bo'sh bo'lganini olib tashlash
+  }
+
+  while (paragraphs.length && !paragraphs[paragraphs.length - 1].textContent.trim()) {
+    paragraphs.pop(); // Oxiri bo'sh bo'lganini olib tashlash
+  }
+
+  // Tozalangan tarkibni qayta yig'ish
+  const cleanedContent = paragraphs.map((el) => el.outerHTML).join('').trim();
+
+  // Tozalangan tarkibni emit qilish
+  emit('update:modelValue', cleanedContent);
+};
+
+
+const cleanContentPaste = (content) => {
+  if (typeof content !== 'string') return content;
+  
+  // Trim leading and trailing whitespace, including non-breaking spaces
+  content = content.replace(/^[\s\u00A0]+|[\s\u00A0]+$/g, '');
+  
+  // Remove inline styles
+  content = content.replace(/ style="[^"]*"/g, '');
+  
+  // Remove specific style-related tags (e.g., <i>, <b>, <em>, etc.)
+  content = content.replace(/<(i|b|em|strong|u|s|strike)>/g, ''); // Remove opening tags
+  content = content.replace(/<\/(i|b|em|strong|u|s|strike)>/g, ''); // Remove closing tags
+  
+  // Remove empty tags (e.g., <p></p>, <div></div>)
+  content = content.replace(/<([a-z][a-z0-9]*)[^>]*>(\s*)<\/\1>/gi, '');
+  
+  // Trim leading and trailing <br> and &nbsp;
+  content = content.replace(/^(<br\s*\/?>|&nbsp;)+|(<br\s*\/?>|&nbsp;)+$/g, '');
+  
+  return content;
+};
+
 const config = {
 	placeholderText: '',
 	charCounterCount: false,
@@ -69,8 +120,16 @@ const config = {
     'commands.after': (cmd, param1, param2) => {
       commandAfter(cmd, param1, param2);
     },
-
-	}
+	'blur': () => {
+		console.log("running blur");
+		
+		cleanContent();
+	},
+	'paste.afterCleanup': function (clipboardHTML) {
+      return cleanContentPaste(clipboardHTML);
+    },
+	},
+	
 }
 
 // Methods
@@ -118,11 +177,11 @@ onMounted(() => {
 		v-model:value="modelValue"
 		:config="config"
 		ref="editor"
-    :class="{
-      'froala-editor rounded-[10px] border border-transparent': true,
-      'p-invalid': props.error.$error,
-      'opacity-60 pointer-events-none': props.disabled
-    }"
+		:class="{
+		'froala-editor rounded-[10px] border border-transparent': true,
+		'p-invalid': props.error.$error,
+		'opacity-60 pointer-events-none': props.disabled
+		}"
 	></froala>
 
   <template v-if="props.error.$errors.length">
