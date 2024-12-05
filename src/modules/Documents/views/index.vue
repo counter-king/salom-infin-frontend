@@ -7,6 +7,7 @@ import { useBoxesCommonStore } from '../modules/Boxes/stores/common.store'
 import { useDocFlowStore } from '../modules/Registration/stores/docflow.store'
 // Components
 import TheSidebar from '@/components/TheSidebar.vue'
+import TheFooter from '@/components/TheFooter.vue'
 import { ArchiveUpIcon } from '@/components/Icons'
 // Composable
 const { t, locale } = useI18n()
@@ -49,6 +50,8 @@ watch(
 
     <div class="flex flex-col flex-1 overflow-y-auto p-6">
       <router-view />
+
+      <the-footer />
     </div>
   </div>
 </template>

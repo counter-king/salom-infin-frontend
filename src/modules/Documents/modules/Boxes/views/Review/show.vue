@@ -75,7 +75,7 @@ const handleDocumentStatus = async () => {
 </script>
 
 <template>
-  <div class="review-show-view h-full">
+  <div class="review-show-view h-full mb-6">
     <template v-if="loading">
       <base-spinner />
     </template>

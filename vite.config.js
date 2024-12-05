@@ -42,7 +42,9 @@ export default defineConfig({
       },
     }),
     Icons({ compiler: 'vue3' }),
-    svgLoader(),
+    svgLoader({
+      defaultImport: 'url'
+    }),
     Components({
       resolvers: [PrimeVueResolver()],
       dirs: ['src/components/UI'],

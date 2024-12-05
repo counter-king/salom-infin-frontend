@@ -70,6 +70,17 @@ const title = computed(() => {
   return ''
 })
 
+const bannerFullWidth = computed(() => {
+  return route.name === 'Calendar'
+    || route.name === 'DashboardIndex'
+    || route.name === 'HandbookIndex'
+    || route.name === 'Login'
+    || route.name === 'ConfirmNumber'
+    || route.name === 'VerifyNumber'
+    || route.name === 'SetCredentials'
+    || route.name === 'ForgetPassword'
+})
+
 function close() {
   offlineReady.value = false
   needRefresh.value = false
@@ -82,12 +93,25 @@ function close() {
     class="flex gap-3 items-center fixed bottom-0 right-0 w-full transition-all max-w-[calc(100vw-250px)] bg-success-500 text-white z-[9999] py-[7px] px-6"
     :class="{
       'max-w-[calc(100vw-76px)] duration-500 delay-500': navigationStore.sidebarCollapse,
-      '!max-w-[100vw] duration-500 delay-500': route.name === 'Calendar' || route.name === 'DashboardIndex' || route.name === 'HandbookIndex'
+      '!max-w-[100vw] duration-500 delay-500': bannerFullWidth
     }"
   >
     <base-iconify :icon="RefreshCircleBoldIcon" class="!w-7 !h-7" />
 
     <span class="font-semibold mr-2">{{ t(title) }}</span>
+
+    <base-button
+      v-if="needRefresh"
+      severity="success"
+      rounded
+      size="small"
+      button-class="!bg-[#8ACB6E] shadow-[0px_1px_3px_0px_#00000026] !border-none"
+      @click="close"
+    >
+      <template #label>
+        <span class="!text-sm">{{ t('close') }}</span>
+      </template>
+    </base-button>
 
     <base-button
       v-if="needRefresh"
