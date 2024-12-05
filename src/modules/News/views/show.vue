@@ -159,7 +159,7 @@ onMounted( async () => {
                 <img :src="newsOne.image?.url" alt="rasm" class="w-full h-full object-cover">
             </div>
             <!-- info -->
-            <div class="mt-4 flex justify-between">
+            <div class="mt-4 flex justify-between max-w-[840px]">
                 <!-- author -->
                 <user-card 
                     :name="newsOne.created_by?.full_name"
