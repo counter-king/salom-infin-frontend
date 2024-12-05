@@ -39,11 +39,23 @@ jobs:
           # Add your server's SSH key to known hosts (to avoid SSH authenticity warning)
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
-          # Copy the build files to your server
-          rsync -avz --delete dist/ ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }}:/var/www/frontend
+          # SSH into the server and deploy the updated files
+          ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }} << 'EOF'
+            # Go to the project directory
+            cd new-side-project
 
-          # Restart Nginx to serve the updated files
-          ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }} "sudo systemctl restart nginx"
+            # Pull the latest changes from Git
+            git pull origin master
+
+            # Build the project (if needed)
+            # yarn build
+
+            # Copy the build output (dist folder) to the server's frontend directory
+            cp -r dist/* /var/www/frontend/
+
+            # Restart Nginx to serve the updated files
+            sudo systemctl restart nginx
+          EOF
 
       - name: Clean up
         run: rm -f ~/.ssh/id_ed25519  # Clean up SSH private key after the deployment
