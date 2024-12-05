@@ -3,7 +3,7 @@ name: Deploy Frontend to Server
 on:
   push:
     branches:
-      - master  # Trigger deployment when pushing to the `main` branch
+      - main  # Trigger deployment when pushing to the `main` branch
 
 jobs:
   build:
@@ -28,6 +28,9 @@ jobs:
         run: |
           # Install SSH client to deploy files to your server
           sudo apt-get install -y openssh-client
+
+          # Create the .ssh directory if it doesn't exist
+          mkdir -p ~/.ssh
 
           # Set up SSH key for authentication (Use GitHub Secrets for security)
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
