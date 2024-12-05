@@ -135,7 +135,7 @@ onMounted( async () => {
         <template v-if="signed === null">
           <template v-if="signStore.detailModel.type !== SIGNER_TYPES.BASIC_SIGNER">
             <base-button
-              v-if="!isHostVercel"
+              v-if="isHostVercel"
               border-color="border-transparent"
               label="sign"
               :icon-left="CheckCircleIcon"

@@ -51,7 +51,7 @@ jobs:
             # yarn build
 
             # Copy the build output (dist folder) to the server's frontend directory
-            sudo cp -r ./dist/* /var/www/frontend/
+            sudo cp -r dist/* /var/www/frontend/
 
             # Restart Nginx to serve the updated files
             sudo systemctl restart nginx
