@@ -35,14 +35,14 @@ const link = (data) => {
 
     <base-data-table
       :action-list="assignmentStore.actionAssignmentList"
-      :api-params="{ ...route.query } ?? null"
+      :api-params="{ ...route.query, page_size: 15 } ?? null"
       :headers="assignmentStore.headers"
       :value="assignmentStore.list"
       :total-count="assignmentStore.totalCount"
       :loading="assignmentStore.listLoading"
       :storage-columns-name="BOXES_ASSIGNMENT_COLUMNS"
       expandable
-      scroll-height="calc(100vh - 460px)"
+      scroll-height="calc(100vh - 295px)"
       @emit:set-store-headers="(val) => assignmentStore.headers = val"
     >
       <template #count="{ index, data }">

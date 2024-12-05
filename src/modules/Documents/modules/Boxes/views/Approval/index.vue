@@ -70,7 +70,7 @@ onMounted(async () => {
       :storage-columns-name="BOXES_APPROVAL_COLUMNS"
       :total-count="approvalStore.totalCount"
       :value="approvalStore.documentList"
-      scroll-height="calc(100vh - 460px)"
+      scroll-height="calc(100vh - 295px)"
       @emit:set-store-headers="(val) => approvalStore.headers = val"
       @emit:row-click="onRowClick"
     >
