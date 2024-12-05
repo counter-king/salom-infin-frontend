@@ -10,7 +10,7 @@ const boxesStore = useBoxesCommonStore()
 <template>
   <the-navigation :navs="boxesStore.routes.children" />
 
-  <router-view />
+  <router-view class="flex-1" />
 </template>
 
 <style scoped>
