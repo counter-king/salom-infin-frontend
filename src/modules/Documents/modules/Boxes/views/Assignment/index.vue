@@ -42,6 +42,7 @@ const link = (data) => {
       :loading="assignmentStore.listLoading"
       :storage-columns-name="BOXES_ASSIGNMENT_COLUMNS"
       expandable
+      scroll-height="calc(100vh - 460px)"
       @emit:set-store-headers="(val) => assignmentStore.headers = val"
     >
       <template #count="{ index, data }">

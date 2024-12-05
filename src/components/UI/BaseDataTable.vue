@@ -152,7 +152,7 @@ onMounted( async () => {
       table: { class: ['border-separate', 'border-spacing-y-1', '-mt-1'] },
       thead: { class: ['bg-white'] },
       bodyRow: { class: ['cursor-pointer', 'hover:bg-greyscale-50'] },
-      loadingoverlay: { class: ['bg-transparent', 'h-[90%]'] },
+      loadingoverlay: { class: ['bg-transparent overflow-hidden', 'h-[90%]'] },
       emptymessagecell: { class: ['bg-white', '!rounded-xl'] },
       paginator: {
         rowPerPageDropdown: {

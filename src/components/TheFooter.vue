@@ -35,10 +35,11 @@ const handleRate = (rate) => {
         <div class="flex items-center gap-2">
           <template v-for="item in 5">
             <div
-              class="flex items-center justify-center w-10 h-10 bg-success-500 text-white rounded-xl cursor-pointer"
+              class="flex items-center justify-center w-10 h-10 bg-greyscale-800 border border-greyscale-500/20 text-white rounded-xl cursor-pointer"
               :class="{
                 '!bg-critic-500': (count === 1 || count === 2) && count >= item,
-                '!bg-warning-500': count === 3 && count >= item
+                '!bg-warning-500': count === 3 && count >= item,
+                '!bg-success-500': (count === 4 || count === 5) && count >= item,
               }"
               @click="handleRate(item)"
             >

@@ -42,6 +42,7 @@ const link = (data) => {
       :loading="reviewStore.listLoading"
       :storage-columns-name="BOXES_INCOMING_COLUMNS"
       expandable
+      scroll-height="calc(100vh - 460px)"
       @emit:set-store-headers="(val) => reviewStore.headers = val"
     >
       <template #count="{ index, data }">
