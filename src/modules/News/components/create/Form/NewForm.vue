@@ -64,7 +64,8 @@ const getMatchFileUploadType = (file) => {
 
 const onSubmitForm = async () => {
   newsStore.loadingSubmitButton = true
-  
+    // empty data clearing not to send backend
+    newsStore.model.dynamicFields = newsStore.model.dynamicFields.filter((item)=> !!item.value)
     const contents = [];
     for (let index = 0; index < newsStore.model.dynamicFields.length; index++) {
       const content = newsStore.model.dynamicFields[index];
@@ -120,7 +121,8 @@ const isValidFormValidation = async () => {
   const valid = await $v.value.$validate()
   if (!valid) return false
   // at least one field must be added
-  if (!newsStore.model.dynamicFields.length){
+  const filterDynamicFields = newsStore.model.dynamicFields.filter((item)=> !!item.value)
+  if (!filterDynamicFields.length){
       dispatchNotify(null, t('error-desciption-field'), COLOR_TYPES.ERROR)
       return false
   }

@@ -49,6 +49,9 @@ const handlePublish = async () => {
   } 
 }
 
+const dynamicFieldsFilter = computed(() => 
+  newsStore.model.dynamicFields.filter((item) => !!item.value)
+);
 
 </script>
 <template>
@@ -62,7 +65,7 @@ const handlePublish = async () => {
       <user-card :name="userProfile?.full_name" :info="userProfile.top_level_department?.name" class="mt-4"/>
       <title-component :title="newsStore.model.title" class="mt-4 mb-5"/>
       <div v-html="newsStore.model.description" ></div>
-      <template v-for="(field, index) in newsStore.model.dynamicFields" :key="index">
+      <template v-for="(field, index) in dynamicFieldsFilter" :key="index">
         <div v-if="field.type === CONTENT_TYPES.TEXT" v-html="field.value" class="mt-4"></div>
         <div v-if="field.type === CONTENT_TYPES.QUOTE">
           <queto :text="field.value" class="my-10"/>
