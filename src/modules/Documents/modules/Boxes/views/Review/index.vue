@@ -35,14 +35,14 @@ const link = (data) => {
 
     <base-data-table
       :action-list="reviewStore.actionReviewList"
-      :api-params="{ ...route.query } ?? null"
+      :api-params="{ ...route.query, page_size: 15 } ?? null"
       :headers="reviewStore.headers"
       :value="reviewStore.list"
       :total-count="reviewStore.totalCount"
       :loading="reviewStore.listLoading"
       :storage-columns-name="BOXES_INCOMING_COLUMNS"
       expandable
-      scroll-height="calc(100vh - 460px)"
+      scroll-height="calc(100vh - 295px)"
       @emit:set-store-headers="(val) => reviewStore.headers = val"
     >
       <template #count="{ index, data }">

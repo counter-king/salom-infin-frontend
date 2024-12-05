@@ -20,14 +20,14 @@ const handleRate = (rate) => {
 </script>
 
 <template>
-  <footer class="app-footer bg-primary-900 rounded-3xl">
-    <div class="border-b border-b-greyscale-800 p-5 pb-8">
+  <footer class="app-footer rounded-3xl mt-6">
+    <div class="border-b border-b-greyscale-200/90 py-5">
       <div class="flex items-center">
-        <div class="flex items-center justify-center w-11 h-11 rounded-full bg-greyscale-800">
+        <div class="flex items-center justify-center w-11 h-11 rounded-full bg-greyscale-200">
           <base-iconify :icon="QuestionCircleBoldIcon" class="text-success-500 w-7 h-7" />
         </div>
 
-        <div class="max-w-[205px] w-full text-white font-medium ml-4 mr-6">
+        <div class="max-w-[205px] w-full text-greyscale-300 ml-4 mr-6">
           Sahifaning qulayligini va
           dizaynini qanday baholaysiz?
         </div>
@@ -35,7 +35,7 @@ const handleRate = (rate) => {
         <div class="flex items-center gap-2">
           <template v-for="item in 5">
             <div
-              class="flex items-center justify-center w-10 h-10 bg-greyscale-800 border border-greyscale-500/20 text-white rounded-xl cursor-pointer"
+              class="flex items-center justify-center w-10 h-10 bg-greyscale-300 border border-greyscale-500/20 text-white rounded-xl cursor-pointer"
               :class="{
                 '!bg-critic-500': (count === 1 || count === 2) && count >= item,
                 '!bg-warning-500': count === 3 && count >= item,
@@ -50,7 +50,7 @@ const handleRate = (rate) => {
       </div>
     </div>
 
-    <div class="text-xs font-medium text-greyscale-500 text-center p-2 pb-3">
+    <div class="text-xs font-medium text-greyscale-300 text-center p-2 pb-0">
       Copyright ©2024. All Rights Reserved
     </div>
   </footer>
