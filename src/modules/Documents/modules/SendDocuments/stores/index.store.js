@@ -622,6 +622,13 @@ export const useSDStore = defineStore("sd-stores", {
       }
     },
     /** **/
+    async actionGetDocumentDetailForCustomUse(id){
+      const { response, error } = await withAsync(fetchGetDocumentDetail, id)
+      if (response && response.status === 200){
+        return Promise.resolve(response)
+      }
+    },
+    /** **/
     async actionCustomUpdate({ id, body }) {
       this.customUpdateLoading = true;
       const response = await fetchCustomUpdate({ id, body })

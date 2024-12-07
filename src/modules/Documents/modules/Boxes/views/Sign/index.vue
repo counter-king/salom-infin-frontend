@@ -66,6 +66,7 @@ onMounted(async () => {
       :storage-columns-name="BOXES_SIGN_COLUMNS"
       :total-count="signStore.totalCount"
       :value="signStore.documentList"
+      scroll-height="calc(100vh - 295px)"
       @emit:set-store-headers="(val) => signStore.headers = val"
       @emit:row-click="onRowClick"
     >

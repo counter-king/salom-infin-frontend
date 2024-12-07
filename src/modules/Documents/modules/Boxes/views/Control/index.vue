@@ -38,6 +38,7 @@ const link = (data) => {
       :loading="controlStore.listLoading"
       :storage-columns-name="BOXES_CONTROL_COLUMNS"
       expandable
+      scroll-height="calc(100vh - 295px)"
       @emit:set-store-headers="(val) => controlStore.headers = val"
     >
       <template #count="{ index, data }">

@@ -8,7 +8,7 @@ import { getStorageItem, removeStorageItem } from "@/utils/storage"
 import { LANG, ACCESS, REFRESH, EXPIRES, CURRENT_ROUTE } from "@/constants/storage"
 import { COLOR_TYPES } from '@/enums'
 
-const baseURL = process.env.NODE_ENV === 'development' || window.location.host === 'new-side-project.vercel.app' ? import.meta.env.VITE_BASE_TEST_URL : import.meta.env.VITE_BASE_PROD_URL;
+const baseURL = process.env.NODE_ENV === 'development' || window.location.host === 'app.itco.uz' || window.location.host === 'new-side-project.vercel.app' ? import.meta.env.VITE_BASE_TEST_URL : import.meta.env.VITE_BASE_PROD_URL;
 const axiosParams = { baseURL }
 const axiosInstance = axios.create(axiosParams)
 const axiosConfig = (axiosInstance) => {

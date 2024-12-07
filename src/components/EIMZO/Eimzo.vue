@@ -145,6 +145,7 @@ const uiFillCombo = (items) => {
   if (items.length) {
     items.forEach(item => {
       const itemVo = JSON.parse(item?.getAttribute('vo'))
+      const expired = itemVo?.expired
       const pinfl = itemVo?.PINFL
 
       const shouldAdd =
@@ -155,10 +156,13 @@ const uiFillCombo = (items) => {
         pfxKeys.value.push({
           name: item.text,
           value: item.value,
-          option: item
+          option: item,
+          expired
         })
       }
     })
+
+    pfxKeys.value = pfxKeys.value.sort((a, b) => a.expired - b.expired)
 
     if (pfxKeys.value.length) {
       model.value.selectedKey = pfxKeys.value[0]

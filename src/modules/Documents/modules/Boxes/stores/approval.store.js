@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import {fetchApprovalDetail, fetchApprovalList} from "@/modules/Documents/modules/Boxes/services/approval.service";
 import {fetchGetTree} from "@/modules/Documents/modules/Registration/services/docflow.service";
 import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store";
+import { COMPOSE_DOCUMENT_SUB_TYPES } from "@/enums";
 
 export const useBoxesApprovalStore = defineStore("approval-stores", {
   state: () => ({
@@ -124,10 +125,23 @@ export const useBoxesApprovalStore = defineStore("approval-stores", {
           let { data } = await fetchGetTree(response.data?.compose?.registered_document)
           this.tree = data
         }
-        this.detailModel = response.data;
+        if (response?.data?.compose?.document_sub_type?.id === Number(COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL) && response.data.compose.trip_notice_id) {
+          useSDStore().actionGetDocumentDetailForCustomUse(response.data.compose.trip_notice_id)
+            .then(res => {
+              this.detailModel = {
+                ...response.data,
+                compose: {
+                  ...response.data.compose,
+                  notices: res.data.notices
+                }
+              }
+            })
+        } else {
+          this.detailModel = response.data
+        }
         setTimeout(() => {
-          this.detailLoading = false;
-        }, 1000);
+          this.detailLoading = false
+        }, 1000)
       }
     }
   }

@@ -49,18 +49,18 @@ const notices = computed(() => {
   if (props.preview) {
     return props.composeModel?.__employees.map(item => ({
       empFullName: item.full_name,
-      empDepName: item.top_level_department.name,
-      empPositionName: item.position.name,
-      destinations: props.composeModel.__companies,
-      startDate: props.composeModel.start_date,
-      endDate: props.composeModel.end_date
+      empDepName: item.top_level_department?.name,
+      empPositionName: item.position?.name,
+      destinations: props.composeModel?.__companies,
+      startDate: props.composeModel?.start_date,
+      endDate: props.composeModel?.end_date
     }))
   }
   else {
     return props.composeModel?.notices?.map(item => ({
-      empFullName: item.user.full_name,
-      empDepName: item.user.top_level_department.name,
-      empPositionName: item.user.position.name,
+      empFullName: item.user?.full_name,
+      empDepName: item.user?.top_level_department?.name,
+      empPositionName: item.user?.position?.name,
       destinations: item.destinations,
       startDate: item.start_date,
       endDate: item.end_date
@@ -146,7 +146,7 @@ const author = computed(() => {
               <span
                 v-for="(destination, index) in item.destinations"
               >
-                {{ destination.name }} <span v-if="index !== item.destinations.length - 1">,</span>
+                {{ destination.name }}<span v-if="index !== item.destinations.length - 1">,</span>
               </span>
             </div>
           </td>

@@ -12,7 +12,7 @@ import SigningProcessTimeline from "@/modules/Documents/components/SigningProces
 import { EyeIcon, Pen2Icon } from "@/components/Icons"
 import {TreeUsers} from "@/components/Tree"
 // Enums
-import {CONTENT_TYPES} from "@/enums"
+import { COMPOSE_DOCUMENT_SUB_TYPES, CONTENT_TYPES } from "@/enums"
 
 const SDStore = useSDStore()
 const route = useRoute()
@@ -27,6 +27,10 @@ const title = computed(() => {
   return route.params?.document_type ? SDStore.SD_TOOLBAR_MENU_LIST.find(item => item.document_type === route.params?.document_type).label : SDStore.SD_TOOLBAR_MENU_LIST[0].label
 })
 
+const fillOnMount = computed(() => {
+  return route.params?.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL
+})
+
 // Methods
 const openUpdatePage = () => {
   router.push({
@@ -35,6 +39,9 @@ const openUpdatePage = () => {
       id: route.params.id,
       document_type: route.params.document_type,
       document_sub_type: route.params.document_sub_type,
+    },
+    query: {
+      trip_notice_id: SDStore.detailModel.trip_notice_id || null
     }
   })
 }
@@ -43,9 +50,25 @@ onBeforeMount(async () => {
   SDStore.detailLoading = true;
   const response = await SDStore.actionGetDocumentDetail(route.params.id);
   if (response){
-    setTimeout(() => {
-      SDStore.detailLoading = false;
-    }, 1000)
+    if (fillOnMount.value && response?.data?.trip_notice_id) {
+      try {
+        const { data } = await SDStore.actionGetDocumentDetailForCustomUse(response.data.trip_notice_id)
+        SDStore.detailModel = {
+          ...response.data,
+          notices: data.notices
+        }
+      } catch (err) {
+
+      } finally {
+        setTimeout(() => {
+          SDStore.detailLoading = false
+        }, 1000)
+      }
+    } else {
+      setTimeout(() => {
+        SDStore.detailLoading = false
+      }, 1000)
+    }
   }
 })
 </script>

@@ -1,0 +1,61 @@
+name: Deploy Frontend to Server
+
+on:
+  push:
+    branches:
+      - master  # Trigger deployment when pushing to the `main` branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'  # Specify Node.js version you want to use
+
+      - name: Install dependencies
+        run: yarn install  # Install dependencies using Yarn
+
+      - name: Build the project
+        run: yarn build  # Run the build command to generate the `dist` folder
+
+      - name: Deploy to Server
+        run: |
+          # Install SSH client to deploy files to your server
+          sudo apt-get install -y openssh-client
+
+          # Create the .ssh directory if it doesn't exist
+          mkdir -p ~/.ssh
+
+          # Set up SSH key for authentication (Use GitHub Secrets for security)
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+          # Add your server's SSH key to known hosts (to avoid SSH authenticity warning)
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+          # SSH into the server and deploy the updated files
+          ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }} << 'EOF'
+            # Go to the project directory
+            cd new-side-project
+
+            # Pull the latest changes from Git
+            git pull origin master
+
+            # Build the project (if needed)
+            # yarn build
+
+            # Copy the build output (dist folder) to the server's frontend directory
+            sudo cp -r dist/* /var/www/frontend/
+
+            # Restart Nginx to serve the updated files
+            sudo systemctl restart nginx
+          EOF
+
+      - name: Clean up
+        run: rm -f ~/.ssh/id_ed25519  # Clean up SSH private key after the deployment
