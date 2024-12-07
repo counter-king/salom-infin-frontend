@@ -63,16 +63,16 @@ export const useThemeStore = defineStore("theme", {
       //   name: 'chat'
       // },
 
-      //   // News
-      // {
-      //   title: 'News',
-      //   icon: PostsCarouselVerticalIcon,
-      //   link: 'NewsIndex',
-      //   children: [],
-      //   count: null,
-      //   name: 'news',
-      //   permission: 'news'
-      // },
+        // News
+      {
+        title: 'News',
+        icon: PostsCarouselVerticalIcon,
+        link: 'NewsIndex',
+        children: [],
+        count: null,
+        name: 'news',
+        permission: 'news'
+      },
       // HR
       {
         title: 'HR',
