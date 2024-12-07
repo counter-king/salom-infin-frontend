@@ -38,7 +38,7 @@ onClickOutside(
 provide('openModal', openModal)
 // Hooks
 onMounted(() => {
-  isHostVercel.value = window.location.host === 'new-side-project.vercel.app' || window.location.host.startsWith('localhost')
+  isHostVercel.value = window.location.host === 'app.itco.uz' || window.location.host === 'new-side-project.vercel.app' || window.location.host.startsWith('localhost')
 })
 </script>
 
