@@ -16,8 +16,14 @@ const props = defineProps({
 
 </script>
 <template>
-    <div class="w-[840px] min-w-[840px] h-[382px] rounded-2xl overflow-hidden mt-3" :class="{'h-fit': allowedAudioTypes.some(item => item.includes(props.file?.type))}, props.class"  >
-        <img v-if="allowedImageTypes.some(item => item.includes(props.file?.type))" :src="props.file.url" alt="rasm" class="w-full h-full object-cover" >  
+    <div class="rounded-2xl overflow-hidden mt-3 relative" :class="{'h-fit': allowedAudioTypes.some(item => item.includes(props.file?.type))}, props.class"  >
+        <div 
+        v-if="allowedImageTypes.some(item => item.includes(props.file?.type))"
+         class="rounded-lg overflow-hidden aspect-ratio-box relative" 
+         :style="{ '--dynamic-src': `url(${props.file?.url})` }"
+        >
+            <img :src="props.file?.url" alt="rasm" class="w-full h-full object-contain absolute z-2" />
+        </div>        
         <div v-if="allowedAudioTypes.some(item => item.includes(props.file?.type))" class="text-sm text-greyscale-500 mt-2">
             <audio :src="props.file.url" controls>{{ props.file?.name }}</audio>
             <span class="pl-3">{{ props.file?.name }}</span>
@@ -26,3 +32,23 @@ const props = defineProps({
     </div>
     <div v-if="allowedVideoTypes.some(item => item.includes(props.file?.type))" class="text-sm text-greyscale-500 mt-2 pl-3" >{{ props.file?.name }}</div>
 </template>
+
+<style scoped>
+.aspect-ratio-box {
+    aspect-ratio: 3 / 2
+}
+
+.aspect-ratio-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;  
+  width: 100%;
+  height: 100%;
+  background-image: var(--dynamic-src);
+  background-size: cover;
+  filter: blur(10px);
+  background-position: center; 
+  z-index: 0;
+}
+</style>

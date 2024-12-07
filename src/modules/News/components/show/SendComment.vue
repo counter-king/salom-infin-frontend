@@ -49,7 +49,8 @@ const modelValue = useModel(props, 'modelValue')
                 :pt="{
                 root: { 
                 class: [
-                    'w-full text-[14px] min-h-[123px] rounded-2xl bg-primary-50 text-greyscale-400'
+                    'w-full text-[14px] min-h-[123px] rounded-2xl bg-primary-50 text-greyscale-400  focus:text-greyscale-900',
+                    'focus:border-primary-500 focus:ring-primary-500'
                 ]
                 }
                 }"/>

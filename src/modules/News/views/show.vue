@@ -152,14 +152,17 @@ onMounted( async () => {
         <base-spinner/>
     </template>
     <!-- container -->
-    <div v-else class="bg-white w-full h-full mt-5 rounded-[20px] p-8 pr-6 grid grid-cols-[minmax(850px,_3fr)_minmax(300px,_1.5fr)] gap-x-10">
+    <div v-else class="bg-white w-full h-full mt-5 rounded-[20px] p-8 pr-6 grid grid-cols-[minmax(840px,3.11fr)_minmax(416px,_1.54fr)] gap-x-12">
         <!-- right -->
-        <div class="overflow-y-auto pr-1 pb-3">
-            <div class="min-w-[840px] w-[840px] h-[382px] rounded-2xl overflow-hidden">
-                <img :src="newsOne.image?.url" alt="rasm" class="w-full h-full object-cover">
+        <div class="overflow-auto pr-2 pb-3 relative">
+            <div
+             :style="{ '--dynamic-src': `url(${newsOne.image?.url})` }"
+             class="aspect-ratio-box rounded-2xl overflow-hidden relative" 
+            >
+                <img :src="newsOne.image?.url" alt="rasm" class="w-full h-full object-contain absolute z-2">
             </div>
             <!-- info -->
-            <div class="mt-4 flex justify-between max-w-[840px]">
+            <div class="mt-4 flex justify-between">
                 <!-- author -->
                 <user-card 
                     :name="newsOne.created_by?.full_name"
@@ -232,10 +235,10 @@ onMounted( async () => {
                     @emit:submit-comment="handleSendComment" 
                     type="comment"
                     :isButtonLoading="commentButtonLoading"
-                        v-model="commentValue"
+                    v-model="commentValue"
                     :data="{created_by: authStore.currentUser}"
                 />
-                <divider/>
+                <divider v-if="!!newCommentList.length" />
                 <template v-for="(comment,index) in newCommentList" :key="comment.id">
                     <view-replay-comment 
                         @emit:replay-comment="handleReplayComment" 
@@ -246,7 +249,7 @@ onMounted( async () => {
             </div>
         </div>
         <!-- left -->
-        <div class="overflow-y-auto pr-1 pb-3" @scroll="handleScroll">
+        <div class="overflow-auto pr-2 pb-3">
             <h2 class="font-semibold text-lg text-greyscale-900">{{t('similar-news')}}</h2>
             <div class="flex flex-col gap-3 mt-3">
             <template v-for="news in relatedNewsList" :key="news.id">
@@ -258,4 +261,22 @@ onMounted( async () => {
   </div>
 </template>
 
-<style></style>
+<style scoped>
+.aspect-ratio-box {
+    aspect-ratio: 3 / 2
+}
+
+.aspect-ratio-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;  
+  width: 100%;
+  height: 100%;
+  background-image: var(--dynamic-src);
+  background-size: cover;
+  filter: blur(10px);
+  background-position: center; 
+  z-index: 0;
+}
+</style>

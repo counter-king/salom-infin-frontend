@@ -8,9 +8,13 @@ import { Froala } from "vue-froala-wysiwyg/src/vue-froala";
 import 'froala-editor/js/plugins.pkgd.min.js';
 import 'froala-editor/js/plugins/table.min';
 import 'froala-editor/js/languages/ru'
+import "froala-editor/js/plugins/char_counter.min.js"; 
+import "froala-editor/js/plugins/link.min.js"; 
+
 // CSS
 import 'froala-editor/css/froala_editor.pkgd.min.css';
 import 'froala-editor/css/plugins/table.min.css';
+
 
 const props = defineProps({
 	modelValue: {
@@ -25,6 +29,9 @@ const props = defineProps({
       $error: false,
       $errors: []
     })
+  },
+  charMaxList: {
+    type: Number,
   }
 });
 
@@ -90,11 +97,18 @@ const config = {
 	placeholderText: '',
 	charCounterCount: false,
 	immediateVueModelUpdate: true,
-	toolbarButtons: ['bold', 'italic', 'underline', 'fontFamily', 'fontSize', 'lineHeight', 'formatOL', 'formatUL', 'indent', 'outdent', 'alignLeft', 'alignCenter', 'alignRight', 'alignJustify', 'textColor', 'backgroundColor', 'clearFormatting', 'insertTable'],
+	toolbarButtons: ['bold', 'italic', 'underline', 'fontFamily', 'fontSize', 'lineHeight', 'formatOL', 'formatUL', 'indent', 'outdent', 'alignLeft', 'alignCenter', 'alignRight', 'alignJustify', 'textColor', 'backgroundColor', 'clearFormatting', 'insertTable', 'insertLink', "linkRemove"],
 	attribution: false,
 	// enter: 'ENTER_BR',
 	heightMax: 500,
 	heightMin: 300,
+  charCounterMax: props.charMaxList ? props.charMaxList : -1,
+  charCounterCount: !!props.charMaxList,
+  linkAlwaysBlank: true, // Havolalarni yangi tabda ochadi
+  linkEditButtons: ["linkEdit", "linkRemove"], // Havola tahrirlash tugmalari
+  linkAutoPrefix: true, // URL avtomatik to'ldiriladi
+  linkAttributes: {
+  },
 	imagePaste: false,
   fontFamily: {
     'Arial,Helvetica,sans-serif': 'Arial',
@@ -126,9 +140,14 @@ const config = {
 	'paste.afterCleanup': function (clipboardHTML) {
       return cleanContentPaste(clipboardHTML);
     },
+  'charCounter.exceeded': () => {
+      alert('Белгилар чегараси (256) ошиб кетди!')
+  }
 	},
+
 	
 }
+
 
 // Methods
 const commandAfter = (cmd, param1, param2) => {
