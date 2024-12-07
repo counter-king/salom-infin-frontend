@@ -4,6 +4,7 @@ import { ref } from 'vue'
 // Components
 import { CaseIcon, UserIcon, SettingsMinimalisticIcon } from '@/components/Icons'
 import TheSidebar from '@/components/TheSidebar.vue'
+import TheFooter from '@/components/TheFooter.vue';
 // Stores
 import { useAgreementsRoutesStore } from '../modules/Agreements/stores/routes.store'
 // Composable
@@ -42,6 +43,9 @@ const menus = ref([
 
     <div class="flex flex-col flex-1 overflow-y-auto p-6">
       <router-view />
+      <div class="mt-auto">
+        <the-footer/>   
+      </div>
     </div>
   </div>
 </template>

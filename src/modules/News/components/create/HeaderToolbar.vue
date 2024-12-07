@@ -63,7 +63,7 @@ const handleDeleteNews = async()=>{
       <div class="flex gap-3 items-center">
         <back-button 
           :self="true" 
-          @click="router.push({name:'NewsIndex'});newsStore.restStore()"
+          @click="newsStore.restStore(); router.push({name:'NewsIndex'})"
         />
         <h2 class="text-xl font-semibold text-greyscale-900">{{t(!!route.params.id ? 'edit-news' : 'createNews') }}</h2>
       </div>

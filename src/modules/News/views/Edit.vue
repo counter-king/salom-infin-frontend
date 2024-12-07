@@ -7,6 +7,8 @@ import HeaderToolbar from '../components/create/HeaderToolbar.vue';
 import EditForm  from '../components/create/Form/NewForm.vue';
 import { fetchGetNews } from '../services/news.service';
 import BaseSpinner from '@/components/UI/BaseSpinner.vue';
+import TheFooter from '@/components/TheFooter.vue';
+
 // stores
 import { useNewsStore } from '../stores';
 import { allowedAudioTypes, allowedImageTypes, allowedVideoTypes, CONTENT_TYPES } from '../constants';
@@ -79,19 +81,25 @@ onMounted(() => {
 
 </script>
 <template>
-  <div class="w-full">
-    <template v-if="loading">
-      <base-spinner/>
-    </template>
-    <div v-else class="py-5 w-full flex flex-col items-center gap-5 overflow-y-auto h-full" >
-      <div class="w-[900px]">
-        <header-toolbar :onSubmitForm="onSubmitForm"  :isValidFormValidation="isValidFormValidation"/>
-      </div>
-      <div class="rounded-[20px] pr-1 overflow-y-auto">
-        <div class="w-[900px] bg-white rounded-[20px] p-8">
-          <edit-form ref="createFormRef" :news-id="route.params.id" :imageFile="newsStore.model.image" :galleryFiles="newsStore.model.images_ids" />
+  <div class="flex flex-col items-center overflow-y-auto w-full">
+    <div class="w-full">
+      <template v-if="loading">
+        <base-spinner/>
+      </template>
+      <div v-else class="py-5 w-full flex flex-col items-center gap-5 overflow-y-auto h-full" >
+        <div class="w-[900px]">
+          <header-toolbar :onSubmitForm="onSubmitForm"  :isValidFormValidation="isValidFormValidation"/>
+        </div>
+        <div class="rounded-[20px] pr-1 overflow-y-auto">
+          <div class="w-[900px] bg-white rounded-[20px] p-8">
+            <edit-form ref="createFormRef" :news-id="route.params.id" :imageFile="newsStore.model.image" :galleryFiles="newsStore.model.images_ids" />
+          </div>
         </div>
       </div>
+    </div>
+    <div 
+      v-if="!loading" class="w-[900px]">
+      <the-footer/>
     </div>
   </div>
 </template>

@@ -43,6 +43,9 @@ const props = defineProps({
   },
   setFromTemplate: {
     type: Boolean
+  },
+  maxLength : {
+    type: [Number],  
   }
 })
 // Composable
@@ -59,6 +62,7 @@ const { t } = useI18n()
         v-model="modelValue"
         :disabled="props.disabled"
         :rows="props.rows"
+        :maxlength="props.maxLength"
         cols="30"
         :placeholder="t(props.placeholder)"
         auto-resize

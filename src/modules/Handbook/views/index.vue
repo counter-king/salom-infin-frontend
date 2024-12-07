@@ -4,6 +4,8 @@ import { ref } from 'vue'
 // Components
 import HeaderToolbar from '../components/HeaderToolbar.vue'
 import GroupTable from '../components/GroupTable.vue';
+import TheFooter from '@/components/TheFooter.vue';
+
 // Reactive
 const users = ref([])
 const totalCount = ref(null)
@@ -17,10 +19,16 @@ const handleEmitUp = (value,totalCountPage)=>{
 </script>
 
 <template>
-  <div class="handbook-view w-full p-10 pt-7">
-    <header-toolbar @emit:up="handleEmitUp" @emit:search="(value) => isSearch = value" />
-    <div class="h-[calc(100vh-200px)] rounded-2xl bg-white shadow-button p-5">
-      <group-table :value="users" :isSearch="isSearch" row-group-mode="subheader" :totalCount="totalCount"/>
+  <div class="flex flex-col flex-1 overflow-y-auto">
+    <div class="handbook-view w-full p-10 pt-7 pb-0">
+      <header-toolbar @emit:up="handleEmitUp" @emit:search="(value) => isSearch = value" />
+        <div class="h-[calc(100vh-200px)] rounded-2xl bg-white shadow-button p-5">
+          <group-table :value="users" :isSearch="isSearch" row-group-mode="subheader" :totalCount="totalCount"/>
+        </div>
+    </div>
+    <div class="pl-10">
+      <the-footer/>
     </div>
   </div>
+      
 </template>

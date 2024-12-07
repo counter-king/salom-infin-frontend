@@ -31,13 +31,20 @@ const modules = [Pagination, Autoplay,Navigation]
         :slides-per-view="3"
         :space-between="12"
         :autoplay="{ delay: 4000 }"
-         style="width: 840px; height: 158px;"
+         style="width: 100%; min-height: 158px;"
          :navigation="{ nextEl: '.custom-next', prevEl: '.custom-prev' }"
         >
         <template v-for="(item, index) in props.images" :key="index">
           <swiper-slide>
-            <div class="w-full h-full">
-              <img :src="item.url" alt="Slide1" class="w-full h-full object-cover">
+            <div
+                class="w-full h-full rounded-2x relative"
+              >
+                <div 
+                  class="rounded-lg overflow-hidden aspect-ratio-box relative" 
+                  :style="{ '--dynamic-src': `url(${item.url})` }"
+                >
+                  <img :src="item.url" alt="rasm" class="w-full h-full object-contain absolute z-2" />
+                </div>
             </div>
           </swiper-slide>
         </template>
@@ -58,10 +65,28 @@ const modules = [Pagination, Autoplay,Navigation]
   </div>
 </template>
 
-<style>
+<style scoped>
 .swiper-slide  {
   border-radius: 20px;
   overflow: hidden;
   cursor: pointer;
+}
+
+.aspect-ratio-box {
+    aspect-ratio: 3 / 2
+}
+
+.aspect-ratio-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;  
+  width: 100%;
+  height: 100%;
+  background-image: var(--dynamic-src);
+  background-size: cover;
+  filter: blur(10px);
+  background-position: center; 
+  z-index: 0;
 }
 </style>

@@ -21,7 +21,8 @@ const URLS = {
   departmentsWithUser: 'departments-with-users',
   userSearch: 'user-search',
   expenseTypes: 'expense-types',
-  tags: 'tags'
+  tags: 'tags',
+  ratePage: "rate-page"
 }
 /**
  * Возвращает список вид подачи
@@ -158,3 +159,7 @@ export const fetchTagList = (params) => {
   return axiosConfig.get(`${URLS.tags}/`, params)
 }
 
+// create rate page
+export const fetchCreateRatePage = (body) => {
+  return axiosConfig.post(`${URLS.ratePage}/`, body)
+}

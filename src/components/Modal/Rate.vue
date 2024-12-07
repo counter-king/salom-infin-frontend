@@ -74,6 +74,7 @@ const create = async () => {
       <base-textarea
         v-model="$v.message.$model"
         :error="$v.message"
+        :max-length="250"
         label="comment"
         placeholder="enter-comment"
       />

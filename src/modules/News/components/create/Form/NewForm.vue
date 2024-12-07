@@ -157,7 +157,20 @@ defineExpose({
 <template>
   <div class="form">
     <base-row>
-      <base-col col-class="w-full">
+      <base-col col-class="w-full ">
+       <!-- upload image how looks -->
+        <div 
+          class="grid grid-cols-3 gap-4 justify-between mt-2 w-full relative"
+          v-if="!!newsStore.model.image?.url"
+        >
+          <div
+            class="aspect-ratio-box rounded-lg overflow-hidden relative h-full w-full" 
+            :style="{ '--dynamic-src': `url(${newsStore.model.image.url})` }"
+          >
+            <img :src="newsStore.model.image.url" alt="rasm" class="w-full h-full object-contain absolute z-2" />
+          </div>
+        </div>
+        <label class="block text-sm font-medium text-greyscale-500 my-1">{{ t('main-image') }} <span class="text-red-500"> *</span></label>
         <file-upload 
           :multiple="false" 
           :files="props.imageFile && [props.imageFile]" 
@@ -183,12 +196,13 @@ defineExpose({
           v-model="$v.title.$model" 
           :error="$v.title" 
           required 
-          label="name" 
-          placeholder="enterName" />
+          label="news-headline" 
+          placeholder="enter-news-headline" />
       </base-col>
       <base-col col-class="w-full flex flex-col gap-2 overflow-hidden">
-        <label class="block text-sm font-medium text-greyscale-500">{{ t('definition') }}<span class="text-red-500"> *</span></label>
+        <label class="block text-sm font-medium text-greyscale-500">{{ t('new-short-description',{ count: 256 }) }} <span class="text-red-500"> *</span></label>
         <base-froala-editor 
+          :charMaxList="256"
           v-model="$v.description.$model" 
           :error="$v.description" />
         
@@ -217,6 +231,22 @@ defineExpose({
             </template>
           </base-multi-select>
       </base-col>
+      <!-- upload image how looks -->
+      <div 
+        class="grid grid-cols-3 gap-4 justify-between mt-2 w-full relative"
+        :class="newsStore.model.images_ids.length && 'justify-start'"
+        >
+      <template v-if="!!newsStore.model.images_ids.length">
+        <template v-for="(item, index) in newsStore.model.images_ids" :key="index">
+            <div 
+                class="aspect-ratio-box rounded-lg overflow-hidden relative h-full w-full" 
+                :style="{ '--dynamic-src': `url(${item.url})` }"
+              >
+              <img :src="item.url" alt="rasm" class="w-full h-full object-contain absolute z-2" />
+            </div>
+          </template>
+        </template>
+      </div>
       <base-col col-class="w-full pt-6">
           <label class="block text-sm font-medium text-greyscale-500 mb-2">{{ t('gallery') }}</label>
           <file-upload :multiple="true" 
@@ -230,14 +260,27 @@ defineExpose({
       <base-col v-for="(field, index) in newsStore.model.dynamicFields" :key="index"
         class="w-full pt-6 flex gap-2 items-end overflow-hidden">
         <div class="w-full">
-          <label v-if="field.type === CONTENT_TYPES.TEXT" class="block text-sm font-medium text-greyscale-500 mb-2">{{ t('definition') }}</label>
+          <label v-if="field.type === CONTENT_TYPES.TEXT" class="block text-sm font-medium text-greyscale-500 mb-2">{{ t('main-text') }}</label>
           <base-froala-editor 
             v-if="field.type === CONTENT_TYPES.TEXT" 
             v-model="field.value" />
-          <label 
+
+            <!-- upload image how looks -->
+           <div 
+            class="grid grid-cols-3 gap-4 justify-between my-2 w-full relative"
+             v-if="field.type === CONTENT_TYPES.FILE && allowedImageTypes.some(item => item.includes(field.value?.type))"
+            >
+              <div
+                class="aspect-ratio-box rounded-lg overflow-hidden relative h-full w-full" 
+                :style="{ '--dynamic-src': `url(${field.value?.url})` }"
+              >
+                <img :src="field.value?.url" alt="rasm" class="w-full h-full object-contain absolute z-2" />
+              </div>
+            </div>
+            <label 
             v-if="field.type === CONTENT_TYPES.FILE"
             class="block text-sm font-medium text-greyscale-500 mb-2">
-            {{ t('image') }}
+            {{ t('additional-images') }}
           </label>
           <file-upload 
             v-if="field.type === CONTENT_TYPES.FILE"
@@ -267,11 +310,11 @@ defineExpose({
       </base-col>
       <base-col col-class="w-full flex gap-2">
         <add-card 
-          text="definition"
+          text="main-text"
           @click="addDynamicField(CONTENT_TYPES.TEXT)" 
           class="w-fit" icon-color="warning-500"
         />
-        <add-card text="image"
+        <add-card text="additional-images"
          @click="addDynamicField(CONTENT_TYPES.FILE)"
          class="w-fit" icon-color="info-500" 
          />
@@ -283,3 +326,22 @@ defineExpose({
     </base-row>
   </div>
 </template>
+<style scoped>
+.aspect-ratio-box {
+    aspect-ratio: 3 / 2
+}
+
+.aspect-ratio-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;  
+  width: 100%;
+  height: 100%;
+  background-image: var(--dynamic-src);
+  background-size: cover;
+  filter: blur(10px);
+  background-position: center; 
+  z-index: 0;
+}
+</style>

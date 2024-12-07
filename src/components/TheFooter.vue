@@ -1,9 +1,15 @@
 <script setup>
 // Core
 import { ref } from 'vue'
+import { useRoute } from 'vue-router';
 // Components
 import { QuestionCircleBoldIcon } from '@/components/Icons'
 import { ModalRate } from '@/components/Modal'
+import { fetchCreateRatePage } from '@/services/common.service';
+// store
+
+const route = useRoute();
+
 // Reactive
 const count = ref(10)
 const dialog = ref(false)
@@ -17,6 +23,14 @@ const handleRate = (rate) => {
     }, 500)
   }
 }
+
+const postRatePage = async (comment) => {
+  await fetchCreateRatePage({ rank: count.value, comment, page_url: route.fullPath})
+  count.value = 10
+}
+
+console.log(route);
+
 </script>
 
 <template>
@@ -55,7 +69,7 @@ const handleRate = (rate) => {
     </div>
   </footer>
 
-  <modal-rate v-model="dialog" header="comment" label="send" />
+  <modal-rate v-model="dialog" header="comment" label="send" :createButtonFn="postRatePage" />
 </template>
 
 <style scoped>

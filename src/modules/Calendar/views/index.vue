@@ -4,6 +4,8 @@ import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 // Components
 import TheNavigation from '@/components/TheNavigation.vue'
+import TheFooter from '@/components/TheFooter.vue';
+
 // Enums
 import { CALENDAR_TYPES } from '../enums'
 // Composable
@@ -53,6 +55,7 @@ watch(
       />
 
       <router-view />
+      <the-footer/>
     </div>
   </div>
 </template>

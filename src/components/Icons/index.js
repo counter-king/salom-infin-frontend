@@ -166,3 +166,5 @@ export { default as ForwardBoldIcon } from '~icons/typcn/arrow-forward'
 // merge
 export { default as BookmarkBoldIcon } from '~icons/mage/bookmark-fill'
 
+// iconamoon
+export { default as EditLightIcon } from '~icons/iconamoon/edit-light'
