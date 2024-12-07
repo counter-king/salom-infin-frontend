@@ -549,5 +549,9 @@
   "create-poa": "Ishonchnoma yaratish",
   "update-poa": "Ishonchnomani o'zgartirish",
   "bank-leader": "Bank rahbari",
-  "passport-details-error": "Xodimning passport ma'lumotlari to'liq emas!"
+  "passport-details-error": "Xodimning passport ma'lumotlari to'liq emas!",
+  "old-poa": "Eski ishonchnoma",
+  "select-old-poa": "Eski ishonchnomani tanlang",
+  "acting-manager": "BXM boshqaruvchi vazifasini bajaruvchi",
+  "deputy-filial-manager": "BXM boshqaruvchisi o'rinbosari"
 }

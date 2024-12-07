@@ -5,7 +5,11 @@ import { useRoute } from "vue-router"
 // Store
 import { useAuthStore } from "@/modules/Auth/stores"
 // Components
-import { ForLegalServices } from "@/components/Templates/PowerOfAttorney/index"
+import {
+  ForLegalServices,
+  ActingFilialManagerTemplate,
+  DeputyFilialManagerTemplate
+} from "@/components/Templates/PowerOfAttorney/index"
 // Constants
 import { COMPOSE_DOCUMENT_SUB_TYPES, SIGNER_TYPES } from "@/enums"
 import { formatDate } from "@/utils/formatDate"
@@ -22,8 +26,12 @@ const props = defineProps({
     default: false
   }
 })
+
+
 const formMap = {
-  [COMPOSE_DOCUMENT_SUB_TYPES.SERVICE_LETTER]: ForLegalServices
+  [COMPOSE_DOCUMENT_SUB_TYPES.POA_FOR_LEGAL_SERVICES]: ForLegalServices,
+  [COMPOSE_DOCUMENT_SUB_TYPES.POA_ACTING_FILIAL_MANAGER]: ActingFilialManagerTemplate,
+  [COMPOSE_DOCUMENT_SUB_TYPES.POA_DEPUTY_FILIAL_MANAGER]: DeputyFilialManagerTemplate,
 }
 
 // Computed
@@ -62,6 +70,13 @@ const empFullName = computed(() => {
   return props.composeModel?.user?.full_name
 })
 
+const emp = computed(() => {
+  if (props.preview) {
+    return props.composeModel?.__user
+  }
+  return props.composeModel?.user
+})
+
 const empPassportDetails = computed(() => {
   if (props.preview) {
     return `seriyasi va raqami ${props.composeModel?.__user?.passport_seria} ${props.composeModel?.__user?.passport_number}, ${formatDate(props.composeModel?.__user?.passport_issue_date)} yilda ${props.composeModel?.__user?.passport_issued_by} tomonidan berilgan`
@@ -71,6 +86,10 @@ const empPassportDetails = computed(() => {
 
 const author = computed(() => {
   return props.preview ? useAuthStore().currentUser : props.composeModel?.author
+})
+
+const parentDocument = computed(() => {
+  return props.preview ? props.composeModel?.__parent : props.composeModel?.parent
 })
 </script>
 
@@ -86,6 +105,8 @@ const author = computed(() => {
     :emp-full-name="empFullName"
     :emp-passport-details="empPassportDetails"
     :author="author"
+    :parentDocument="parentDocument"
+    :emp="emp"
   />
 </template>
 

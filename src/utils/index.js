@@ -148,9 +148,9 @@ export function resetModel(model){
 			if (Array.isArray(model[key])) {
 				model[key] = [];
 			}
-			else if (Object.prototype.toString.call(model[key]) === '[object Object]') {
-				model[key] = {};
-			}
+			// else if (Object.prototype.toString.call(model[key]) === '[object Object]') {
+			// 	model[key] = {};
+			// }
 			else {
 				model[key] = null;
 			}

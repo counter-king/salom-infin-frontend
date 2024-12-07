@@ -24,6 +24,7 @@ export const usePOAStore = defineStore("power-of-attorney", {
       document_type: null,
       document_sub_type: null,
       journal: null,
+      parent: null,
       signers: [],
       start_date: null,
       end_date: null,
@@ -33,6 +34,7 @@ export const usePOAStore = defineStore("power-of-attorney", {
       __approvers: [],
       __curator: null,
       __files: [],
+      __parent: null,
       __signers: [],
       __user: null
     },
@@ -79,6 +81,8 @@ export const usePOAStore = defineStore("power-of-attorney", {
         this.model.__approvers = await adjustUserObjectToArray(data.approvers)
         this.model.__signers = await adjustUserObjectToArray(data.signers)
         this.model.__user = await adjustObjectToArray('users/personal-information', [], false, data.user.id)
+        this.model.__parent = data.parent
+        return Promise.resolve(data)
       } catch (err) {
 
       } finally {

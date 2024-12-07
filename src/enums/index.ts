@@ -86,7 +86,9 @@ export const COMPOSE_DOCUMENT_SUB_TYPES = {
   BUSINESS_TRIP_ORDER_LOCAL:     '29', // Командировочный приказ (локальный)
   NOTICE_FOR_EMPLOYMENT:         '30', // Рапорт на приеме на работу
   ORDER_FOR_EMPLOYMENT:          '31', // Приказ на приеме на работу
-  POA_FOR_LEGAL_SERVICES:        '32'  // Для юридических услуг
+  POA_FOR_LEGAL_SERVICES:        '32',  // Для юридических услуг
+  POA_ACTING_FILIAL_MANAGER:     '33', // Для юридических услуг
+  POA_DEPUTY_FILIAL_MANAGER:     '34'  // Для юридических услуг
 }
 export const COLOR_TYPES = {
   PRIMARY: "primary",

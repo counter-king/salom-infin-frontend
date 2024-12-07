@@ -381,7 +381,23 @@ export const useSDStore = defineStore("sd-stores", {
             routerLinkName: ROUTE_SD_CREATE,
             documentType: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
             documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_FOR_LEGAL_SERVICES
-          }
+          },
+          {
+            label: 'acting-manager',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_ACTING_FILIAL_MANAGER
+          },
+          {
+            label: 'deputy-filial-manager',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_DEPUTY_FILIAL_MANAGER
+          },
         ],
       },
     ]

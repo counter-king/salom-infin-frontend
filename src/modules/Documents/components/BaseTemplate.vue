@@ -16,6 +16,7 @@ import {
 import {computed} from "vue"
 import {COMPOSE_DOCUMENT_SUB_TYPES} from "@/enums"
 import { BusinessTripOrderTemplate } from "@/components/Templates";
+import Base from "primevue/base";
 
 const props = defineProps({
   composeModel: {
@@ -38,8 +39,7 @@ const formMap = {
     [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL]: BusinessTripDecreeTemplate,
     [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER_LOCAL]: BusinessTripOrderTemplate,
     [COMPOSE_DOCUMENT_SUB_TYPES.NOTICE_FOR_EMPLOYMENT]: OrdinaryNoticeTemplate,
-    [COMPOSE_DOCUMENT_SUB_TYPES.ORDER_FOR_EMPLOYMENT]: OrderLetterTemplate,
-    [COMPOSE_DOCUMENT_SUB_TYPES.POA_FOR_LEGAL_SERVICES]: BasePOA,
+    [COMPOSE_DOCUMENT_SUB_TYPES.ORDER_FOR_EMPLOYMENT]: OrderLetterTemplate
   },
   APPLICATION: [
     COMPOSE_DOCUMENT_SUB_TYPES.LABOR_LEAVE,
@@ -48,12 +48,20 @@ const formMap = {
     COMPOSE_DOCUMENT_SUB_TYPES.EDUCATIONAL_LEAVE,
     COMPOSE_DOCUMENT_SUB_TYPES.MATERIAL_SUPPORT,
     COMPOSE_DOCUMENT_SUB_TYPES.APPLICATION,
+  ],
+  POA: [
+    COMPOSE_DOCUMENT_SUB_TYPES.POA_FOR_LEGAL_SERVICES,
+    COMPOSE_DOCUMENT_SUB_TYPES.POA_ACTING_FILIAL_MANAGER,
+    COMPOSE_DOCUMENT_SUB_TYPES.POA_DEPUTY_FILIAL_MANAGER,
   ]
 }
 const selectedTemplate = computed(() => {
   const docSubType = route.params.document_sub_type
   if (formMap.APPLICATION.includes(docSubType)) {
     return ApplicationLetterTemplate
+  }
+  if (formMap.POA.includes(docSubType)) {
+    return BasePOA
   }
   return formMap[docSubType] || InnerLetterTemplate
 })

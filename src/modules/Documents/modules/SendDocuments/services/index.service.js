@@ -2,9 +2,13 @@ import axiosConfig from "@/services/axios.config"
 
 const URLS = {
   compose: `compose/1`,
+  composeList: `compose-list/1`,
 }
 export const fetchGetDocumentList = (params) => {
   return axiosConfig.get(`${URLS.compose}/`, params)
+}
+export const fetchGetComposeList = (params) => {
+  return axiosConfig.get(`${URLS.composeList}/`, params)
 }
 export const fetchCreateDocument = (body) => {
   return axiosConfig.post(`${URLS.compose}/`, body)
