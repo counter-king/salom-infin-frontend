@@ -140,6 +140,30 @@ export const useSDBTNoticeStore = defineStore("sd-notice-store", {
       } finally {
         this.detailLoading = false
       }
+    },
+    /** **/
+    async actionGetDocumentDetailForUpdateForCustomUse(id, tripNoticeId) {
+      try {
+        this.detailLoading = true
+        const { data } = await fetchGetDocumentDetail(id)
+        const res = await fetchGetDocumentDetail(tripNoticeId)
+        setValuesToKeys(this.model, data)
+        this.model.__companies = []
+        this.model.__curator = await adjustTopSignerObjectToArray([], data.curator.id, false)
+        this.model.__employees = await adjustUserObjectToArray(res.data.notices)
+        this.model.__approvers =  await adjustUserObjectToArray(data.approvers)
+        this.model.__signers =  await adjustUserObjectToArray(data.signers)
+        this.model.__companies = await adjustCompanyObjectToArray(res.data.notices[0].destinations)
+        this.model.__tags = await adjustTagObjectToArray(data.tags)
+        this.model.start_date = res.data.notices[0].start_date
+        this.model.end_date = res.data.notices[0].end_date
+        this.model.__tags = data.tags
+        this.model.route = res.data.notices[0].route
+      } catch (err) {
+
+      } finally {
+        this.detailLoading = false
+      }
     }
   }
 })

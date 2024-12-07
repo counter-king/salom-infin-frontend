@@ -69,6 +69,13 @@ const fillOnMount = computed(() => {
     && route?.query?.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP
 })
 
+const disableFields = computed(() => {
+  return !!(
+    route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL &&
+    BTNoticeStore?.model?.trip_notice_id
+  )
+})
+
 // Watch
 watch(() => BTNoticeStore.model.__tags, (newVal) => {
   if (props.formType === FORM_TYPE_CREATE) {
@@ -124,6 +131,9 @@ const onFileUpload = (files) => {
   })
 }
 const create = async () => {
+  if (fillOnMount.value) {
+    BTNoticeStore.model.notices = []
+  }
   const response = await BTNoticeStore.actionCreateDocument(BTNoticeStore.model)
   await countStore.actionCountList()
   if (response) {
@@ -141,6 +151,9 @@ const create = async () => {
   }
 }
 const update = async () => {
+  if (fillOnMount.value || disableFields.value) {
+    BTNoticeStore.model.notices = []
+  }
   const data = await BTNoticeStore.actionUpdateDocument(
     {
       id: route.params.id,
@@ -168,7 +181,10 @@ const manage = () => {
 
 // Hooks
 onBeforeMount( async () => {
-  if (route.params.id) {
+  if (route.params.id && route.query.trip_notice_id && route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL) {
+    await BTNoticeStore.actionGetDocumentDetailForUpdateForCustomUse(route.params.id, route.query.trip_notice_id)
+  }
+  else if (route.params.id) {
     await BTNoticeStore.actionGetDocumentDetailForUpdate(route.params.id)
   } else if (fillOnMount.value) {
     await BTNoticeStore.actionGetDocumentDetailForUpdate(route.query.compose_id, true)
@@ -214,6 +230,7 @@ onUnmounted(() => {
                 label="employees"
                 placeholder="select-employees"
                 required
+                :disabled="fillOnMount || disableFields"
               />
             </base-col>
 
@@ -222,6 +239,7 @@ onUnmounted(() => {
                 v-model="$v.__companies.$model"
                 :error="$v.__companies"
                 text-truncate
+                :disabled="fillOnMount || disableFields"
               />
             </base-col>
 
@@ -263,6 +281,7 @@ onUnmounted(() => {
                   label="start-date"
                   placeholder="choose-start-time"
                   class="w-1/2"
+                  :disabled="fillOnMount || disableFields"
                   @update:modelValue="(value) => $v.start_date.$model = formatDateReverse(value)"
                 />
                 <base-calendar
@@ -273,6 +292,7 @@ onUnmounted(() => {
                   label="end-date"
                   placeholder="choose-end-time"
                   class="w-1/2"
+                  :disabled="fillOnMount || disableFields"
                   @update:modelValue="(value) => $v.end_date.$model = formatDateReverse(value)"
                 />
               </div>
@@ -288,6 +308,7 @@ onUnmounted(() => {
                 option-value="value"
                 label="transport-type"
                 placeholder="select-transport-type"
+                :disabled="fillOnMount || disableFields"
               />
             </base-col>
 
