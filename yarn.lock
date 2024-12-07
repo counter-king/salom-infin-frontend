@@ -1093,6 +1093,13 @@
   dependencies:
     "@iconify/types" "*"
 
+"@iconify-json/iconamoon@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@iconify-json/iconamoon/-/iconamoon-1.2.1.tgz#332669d8cefc7369c85fd623781f43c88ddf2da9"
+  integrity sha512-r9uuB2kfeLpi3T74fMnoQxfmKiALQ7mW0MoktDLBt70XtDmxGptf5boOmVdXgYQorNOVqEbjyvBEJRu+HR+g6w==
+  dependencies:
+    "@iconify/types" "*"
+
 "@iconify-json/mage@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@iconify-json/mage/-/mage-1.2.1.tgz#bdfd507deb3daf88999662aab7281118533266c8"

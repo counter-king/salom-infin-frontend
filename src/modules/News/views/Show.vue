@@ -18,6 +18,8 @@ import TitleComponent from '../components/Title.vue';
 import UserCard from '../components/UserCard.vue';
 import Queto from '../components/Queto.vue';
 import Tag from '../components/Tag.vue';
+import TheFooter from '@/components/TheFooter.vue';
+
 // icons
 import BaseIconify from '@/components/UI/BaseIconify.vue';
 import { BookmarkBoldIcon, EyeBoldIcon, ForwardBoldIcon, HeartBoldIcon } from '@/components/Icons';
@@ -142,7 +144,7 @@ onMounted( async () => {
 </script>
 
 <template>
-  <div class="w-full p-10 pt-5">
+  <div class="w-full p-10 pt-5 pb-0 overflow-y-auto">
     <div class="back-button">
         <back-button 
         :self="true" 
@@ -258,6 +260,7 @@ onMounted( async () => {
             </div>
         </div>
     </div>
+    <the-footer/>
   </div>
 </template>
 

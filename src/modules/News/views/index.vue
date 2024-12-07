@@ -7,6 +7,8 @@ import { useDebounce } from '@vueuse/core'
 import HeaderToolbar from '../components/HeaderToolbar.vue'
 import NewCard from '../components/NewsCard.vue'
 import { fetchGetNewsList } from '../services/news.service'
+import TheFooter from '@/components/TheFooter.vue';
+
 // store 
 import { dispatchNotify } from '@/utils/notify'
 import { COLOR_TYPES } from '@/enums'
@@ -87,5 +89,6 @@ onMounted(async() => {
           </RouterLink>
         </template>
       </div>
+      <the-footer/>   
     </div>
 </template>

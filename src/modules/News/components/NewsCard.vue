@@ -8,6 +8,7 @@ import BaseIconify from '@/components/UI/BaseIconify.vue'
 // utils
 import { formatToK } from '@/utils';
 import { formatDateNamedMonth } from '@/utils/formatDate';
+import { EditLightIcon } from '../../../components/Icons';
 
 const props = defineProps({
   item: { type: Object, default: () => {} }
@@ -18,7 +19,7 @@ const props = defineProps({
   <div
     class="w-full h-full rounded-2xl p-2 bg-white gap-8 relative hover:shadow-xl duration-300 transition-shadow"
   >
-    <div class="flex flex-col h-full relative">
+    <div class="flex flex-col h-full">
       <div 
         class="rounded-lg overflow-hidden aspect-ratio-box relative" 
         :style="{ '--dynamic-src': `url(${props.item.image.url})` }"
@@ -31,14 +32,14 @@ const props = defineProps({
           <news-category :category="props.item.category"/>
         </div>
         <h3 class="font-semibold text-sm text-greyscale-900 mt-2 line-clamp-2 h-[40px] overflow-hidden">{{ props.item.title }}</h3>
-        <div v-html="props.item.description" class="mt-2 line-clamp-3 text-greyscale-500  text-sm"></div>
+        <div v-html="props.item.description" class="mt-2 line-clamp-3 text-greyscale-600  text-sm"></div>
       </div>
       <!-- bottom -->
       <div class="flex items-center justify-between p-2 mt-auto">
           <span class="font-medium text-xs text-[#5F6878]">{{ formatDateNamedMonth(props.item.created_date) }}</span>
           <div class="flex gap-2 items-center text-greyscale-400">
-            <RouterLink :to="{ name: 'NewsEdit', params: {id: item.id}}" class="text-sm hover:text-warning-500">
-              <base-icon name="PenIcon"/>
+            <RouterLink :to="{ name: 'NewsEdit', params: {id: props.item.id}}" class="text-sm hover:text-warning-500">
+              <base-iconify :icon="EditLightIcon" />
             </RouterLink>
             <div class="flex gap-1 items-center">
               <div class="hover:cursor-pointer">
