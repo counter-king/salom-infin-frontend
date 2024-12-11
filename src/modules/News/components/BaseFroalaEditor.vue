@@ -44,7 +44,7 @@ const editor = ref(null)
 defineExpose({ editor })
 
 
-
+//  froala editorni legal buying stentence is closed
 const parent = document.querySelector('fr-wrapper');
 const child = parent.querySelector('div'); 
 
