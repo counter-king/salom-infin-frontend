@@ -199,15 +199,14 @@ onMounted(() => {
 		}
 	}, 100);
 
-
   setTimeout(() => {
-    const element = document.querySelector('.fr-element');
+    const element = document.querySelector('.fr-wrapper');
      if (element && process.env.NODE_ENV !== 'development') {
        const child = element.querySelector('div')
        const a = child.querySelector('a')
 
        if(child && a && child.style.zIndex === '9999' && child.style.position === 'relative' 
-          && a.style.zIndex === '9999' && a.style.position === 'relative' && child.style.width === '100%')
+           && child.style.width === '100%')
         {
           child.style.display = 'none'
         }
