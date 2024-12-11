@@ -43,20 +43,6 @@ const editor = ref(null)
 // Macros
 defineExpose({ editor })
 
-
-//  froala editorni legal buying stentence is closed
-// const parent = document.querySelector('fr-wrapper');
-// const child = parent.querySelector('div'); 
-
-// if (
-//     child.style.zIndex === '9999' &&
-//     child.style.position === 'relative' &&
-//     child.style.width === '100%'
-// ) {
-//     child.style.display = 'none';
-// } else {
-// }
-
 const cleanContent = (cleanContentPaste) => {
   const editorContent = editor.value?.$el.querySelector('.fr-element')?.innerHTML || '';
 
@@ -212,6 +198,21 @@ onMounted(() => {
 			element.classList.add('production-class');
 		}
 	}, 100);
+
+
+  setTimeout(() => {
+    const element = document.querySelector('.fr-element');
+     if (element && process.env.NODE_ENV !== 'development') {
+       const child = element.querySelector('div')
+       const a = child.querySelector('a')
+
+       if(child && a && child.style.zIndex === '9999' && child.style.position === 'relative' 
+          && a.style.zIndex === '9999' && a.style.position === 'relative' && child.style.width === '100%')
+        {
+          child.style.display = 'none'
+        }
+    }
+  }, 100);
 })
 </script>
 
