@@ -44,6 +44,19 @@ const editor = ref(null)
 defineExpose({ editor })
 
 
+
+const parent = document.querySelector('fr-wrapper');
+const child = parent.querySelector('div'); 
+
+if (
+    child.style.zIndex === '9999' &&
+    child.style.position === 'relative' &&
+    child.style.width === '100%'
+) {
+    child.style.display = 'none';
+} else {
+}
+
 const cleanContent = (cleanContentPaste) => {
   const editorContent = editor.value?.$el.querySelector('.fr-element')?.innerHTML || '';
 
