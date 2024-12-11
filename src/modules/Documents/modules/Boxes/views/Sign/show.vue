@@ -85,7 +85,7 @@ const signDocumentWithResolution = async (body) => {
 
 // Hooks
 onMounted( async () => {
-  isHostVercel.value = window.location.host === 'new-side-project.vercel.app' || window.location.host.startsWith('localhost')
+  isHostVercel.value = window.location.host === 'app.itco.uz' || window.location.host === 'new-side-project.vercel.app' || window.location.host.startsWith('localhost')
   await signStore.actionGetSignDetail(route.params.id)
 })
 </script>

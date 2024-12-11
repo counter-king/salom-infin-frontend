@@ -552,6 +552,9 @@
   "main-text": "Asosiy matn",
   "enter-main-text":"Asosiy matnni kiriting",
   "additional-images":"Qo'shimcha rasmlar",
-  "error-main-text": "Kamida bitta asosiy matn maydonini toʻldiring."
-
+  "error-main-text": "Kamida bitta asosiy matn maydonini toʻldiring.",
+  "old-poa": "Eski ishonchnoma",
+  "select-old-poa": "Eski ishonchnomani tanlang",
+  "acting-manager": "BXM boshqaruvchi vazifasini bajaruvchi",
+  "deputy-filial-manager": "BXM boshqaruvchisi o'rinbosari"
 }

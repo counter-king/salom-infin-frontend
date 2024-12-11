@@ -4,13 +4,18 @@ import { computed, onBeforeMount, onUnmounted, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useVuelidate } from "@vuelidate/core"
 import { useI18n } from "vue-i18n"
+// Services
+import {
+  fetchGetComposeList
+} from "@/modules/Documents/modules/SendDocuments/services/index.service"
 // Store
 import { useAuthStore } from "@/modules/Auth/stores"
 import { useCountStore } from "@/stores/count.store"
 import { usePOAStore } from "@/modules/Documents/modules/SendDocuments/stores/powerOfAttorney.store"
+import { useSDStore } from "@/modules/Documents/modules/SendDocuments/stores/index.store"
 // Enums
 import { FORM_TYPE_CREATE } from "@/constants/constants"
-import { COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL } from "@/enums"
+import { COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL, ROUTES_TYPE } from "@/enums"
 import { ROUTE_SD_DETAIL, ROUTE_SD_LIST } from "@/modules/Documents/modules/SendDocuments/constants"
 // Utils
 import { adjustUsersToArray, resetModel } from "@/utils"
@@ -29,6 +34,7 @@ const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 const store = usePOAStore()
+const SDStore = useSDStore()
 const countStore = useCountStore()
 const { t } = useI18n()
 const $v = useVuelidate(store.rules, store.model)
@@ -43,6 +49,7 @@ const props = defineProps({
 
 // Reactive
 const dialog = ref(false)
+const parentDocuments = ref([])
 
 // Computed
 const title = computed(() => {
@@ -68,6 +75,7 @@ const preview = async () => {
   store.model.document_type = route.params.document_type
   store.model.document_sub_type = route.params.document_sub_type
   store.model.content = '.'
+  store.model.parent = store.model?.__parent?.id
 
   if (!(store?.model?.__user?.passport_seria || store?.model?.__user?.passport_number || store?.model?.__user?.passport_issue_date || store?.model?.__user?.passport_issued_by)){
     dispatchNotify(null, `${store.model?.__user?.full_name}: ${t('passport-details-error')}`, COLOR_TYPES.WARNING)
@@ -120,11 +128,22 @@ const manage = () => {
     update()
   }
 }
+const getOldPoas = async (item) => {
+  const { data } = await fetchGetComposeList({
+    user: item.id,
+    document_sub_type: route.params.document_sub_type,
+    status: 5
+  })
+  parentDocuments.value = data.results
+}
 
 // Hooks
 onBeforeMount( async () => {
   if (route.params.id) {
-    await store.actionGetDocumentDetailForUpdate(route.params.id)
+    const data = await store.actionGetDocumentDetailForUpdate(route.params.id)
+    if (data.parent) {
+      parentDocuments.value = [data.parent]
+    }
   }
 })
 onUnmounted(() => {
@@ -167,6 +186,7 @@ onUnmounted(() => {
                 label="whom"
                 required
                 placeholder="select-employee"
+                @emit:change="item => getOldPoas(item)"
               />
             </base-col>
 
@@ -209,6 +229,16 @@ onUnmounted(() => {
                 label="signers"
                 placeholder="enter-signers"
                 required
+              />
+            </base-col>
+
+            <base-col col-class="w-1/2">
+              <base-dropdown
+                v-model="store.model.__parent"
+                :options="parentDocuments"
+                option-label="register_number"
+                label="old-poa"
+                placeholder="select-old-poa"
               />
             </base-col>
           </base-row>

@@ -42,7 +42,7 @@ const list = ref([])
 
 const modelValue = useModel(props, 'modelValue')
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'emit:change'])
 
 // Methods
 const loadList = async (params) => {
@@ -72,6 +72,7 @@ onMounted(async () => {
       :placeholder="props.placeholder"
       :required="props.required"
       searchable
+      @emit:change="value => emit('emit:change', value)"
     >
       <template #option="{ option }">
         <user-with-selectable :items="[option]" />

@@ -1,1 +1,5 @@
 export { default as ForLegalServices } from "./ForLegalServices.vue"
+export { default as ActingFilialManagerTemplate } from "./ActingFilialManager.vue"
+export { default as DeputyFilialManagerTemplate } from "./DeputyFilialManager.vue"
+export { default as BaseFooter } from "./BaseFooter.vue"
+export { default as BaseCurator } from "./BaseCurator.vue"

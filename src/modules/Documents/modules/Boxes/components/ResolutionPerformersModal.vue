@@ -125,7 +125,7 @@ const validateForm = async () => {
 
 // Hooks
 onMounted( async () => {
-  isHostVercel.value = window.location.host === 'new-side-project.vercel.app' || window.location.host.startsWith('localhost')
+  isHostVercel.value = window.location.host === 'app.itco.uz' || window.location.host === 'new-side-project.vercel.app' || window.location.host.startsWith('localhost')
   if (props.performers.length && props.resolutionText && props.resolutionType) {
     let users = props.performers.map(item => ({ ...item, user: item }))
     model.value.__performers = await adjustUserObjectToArray(users)
