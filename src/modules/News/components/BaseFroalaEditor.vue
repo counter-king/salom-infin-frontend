@@ -44,36 +44,50 @@ const editor = ref(null)
 defineExpose({ editor })
 
 
-const cleanContent = () => {
+const cleanContent = (cleanContentPaste) => {
   const editorContent = editor.value?.$el.querySelector('.fr-element')?.innerHTML || '';
 
   // DOMParser orqali tarkibni manipulyatsiya qilish
   const parser = new DOMParser();
-  const doc = parser.parseFromString(editorContent, 'text/html');
+  const doc = parser.parseFromString(!!cleanContentPaste ? cleanContentPaste : editorContent, 'text/html');
 
-  // Barcha <p> elementlarni olish
-  const paragraphs = Array.from(doc.body.children);
-
-  // Boshi va oxiridan bo'sh yoki faqat <br> bo'lgan <p> elementlarni olib tashlash
-  while (paragraphs.length && !paragraphs[0].textContent.trim()) {
-    paragraphs.shift(); // Boshi bo'sh bo'lganini olib tashlash
+  // Barcha elementlarni olish
+  const elements = Array.from(doc.body.children);
+    
+  // Boshi va oxiridan bo'sh yoki faqat <br> bo'lgan elementlarni olib tashlash
+  while (elements.length && (!elements[0].textContent.trim() || elements[0].innerHTML.trim() === '<br>')) {
+    elements.shift(); // Boshi bo'sh bo'lganini olib tashlash
   }
 
-  while (paragraphs.length && !paragraphs[paragraphs.length - 1].textContent.trim()) {
-    paragraphs.pop(); // Oxiri bo'sh bo'lganini olib tashlash
+  while (elements.length && (!elements[elements.length - 1].textContent.trim() || elements[elements.length - 1].innerHTML.trim() === '<br>')) {
+    elements.pop(); // Oxiri bo'sh bo'lganini olib tashlash
+  }
+
+  // agar birinichi elemetni ichida <br> bo'lsa o'chirib tashlash
+  while (elements[0]?.children.length && elements[0].firstChild.nodeName == "BR") {
+    elements[0].removeChild(elements[0].firstChild);
+  }
+
+  // agar oxirgini elemetni ichida <br> bo'lsa o'chirib tashlash
+  while (elements[elements.length - 1]?.children.length && elements[elements.length - 1]?.lastChild?.nodeName == "BR") {
+    elements[elements.length - 1].removeChild(elements[elements.length - 1].lastChild);
   }
 
   // Tozalangan tarkibni qayta yig'ish
-  const cleanedContent = paragraphs.map((el) => el.outerHTML).join('').trim();
+  const cleanedContent = elements.map((el) => el.outerHTML).join('').trim();
 
-  // Tozalangan tarkibni emit qilish
-  emit('update:modelValue', cleanedContent);
+  if(!!cleanContentPaste){
+    return cleanedContent
+  } else {
+    // Tozalangan tarkibni emit qilish
+    emit('update:modelValue', cleanedContent);
+  }
 };
-
 
 const cleanContentPaste = (content) => {
   if (typeof content !== 'string') return content;
-  
+
+  content = cleanContent(content);
   // Trim leading and trailing whitespace, including non-breaking spaces
   content = content.replace(/^[\s\u00A0]+|[\s\u00A0]+$/g, '');
   
@@ -86,12 +100,16 @@ const cleanContentPaste = (content) => {
   
   // Remove empty tags (e.g., <p></p>, <div></div>)
   content = content.replace(/<([a-z][a-z0-9]*)[^>]*>(\s*)<\/\1>/gi, '');
-  
+
+  // Remove empty <p> tags at the beginning and end
+  content = content.replace(/^<p>\s*<\/p>/g, '').replace(/<p>\s*<\/p>$/g, '');
+
   // Trim leading and trailing <br> and &nbsp;
   content = content.replace(/^(<br\s*\/?>|&nbsp;)+|(<br\s*\/?>|&nbsp;)+$/g, '');
   
   return content;
 };
+
 
 const config = {
 	placeholderText: '',
@@ -137,15 +155,10 @@ const config = {
 	'blur': () => {		
 		cleanContent();
 	},
-	'paste.afterCleanup': function (clipboardHTML) {
+	'paste.afterCleanup': function (clipboardHTML) {    
       return cleanContentPaste(clipboardHTML);
     },
-  'charCounter.exceeded': () => {
-      alert('Белгилар чегараси (256) ошиб кетди!')
-  }
 	},
-
-	
 }
 
 
@@ -264,5 +277,13 @@ p[data-f-id="pbf"] {
 
 .froala-editor.p-invalid {
   border-color: #e24c4c !important;
+}
+
+.fr-sticky-on {
+  position: relative; 
+}
+
+.fr-sticky-dummy {
+  height: 0px!important;
 }
 </style>

@@ -8,7 +8,7 @@ const defaultModel = {
     description: "",
     category: null,
     image: null,
-    dynamicFields: [], 
+    dynamicFields: [{ type:CONTENT_TYPES.TEXT, value: "" }], 
     tags_ids:[],
     images_ids: [],
 }
@@ -67,7 +67,8 @@ export const useNewsStore = defineStore('newsStore', {
         },
         restStore() {
             this.model = {
-               ...defaultModel
+               ...defaultModel,
+               dynamicFields: [{ type:CONTENT_TYPES.TEXT, value: "" }]
             }
         }
     }

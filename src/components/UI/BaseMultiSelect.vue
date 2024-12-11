@@ -112,6 +112,9 @@ const props = defineProps({
   hideOnChange: {
     type: Boolean,
     default: false
+  },
+  wrapperClass: {
+    type: String
   }
 })
 // Reactive
@@ -244,7 +247,7 @@ watch(debounced, async () => {
 </script>
 
 <template>
-  <div class="app-multiselect">
+  <div class="app-multiselect" :class="props.wrapperClass">
     <base-label :label="props.label" :required="props.required" />
 
     <MultiSelect
@@ -255,8 +258,8 @@ watch(debounced, async () => {
       :placeholder="t(props.placeholder)"
       :display="props.display"
       :disabled="props.disabled"
-      :panel-style="{ height: 'auto' }"
-      scroll-height="300px"
+      :panel-style="{ height: 'fit-content!important' }"
+      scroll-height="100px"
       ref="multiselect"
       @show="onShow"
       @change="onChange"

@@ -1,7 +1,7 @@
 <script setup>
 // Core
 import { useRouter } from 'vue-router';
-import { onMounted } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n'
 import { useVuelidate } from "@vuelidate/core"
 // Components
@@ -30,6 +30,7 @@ import {  allowedAudioTypes, allowedFileTypes, allowedImageTypes, allowedVideoTy
 
 const newsStore = useNewsStore()
 const router = useRouter()
+
 // Macros
 const props = defineProps({
   imageFile: {
@@ -44,7 +45,8 @@ const props = defineProps({
 })
 const { t } = useI18n()
 
-
+// reactive
+const countChar = ref(0)
 // form validation
 const $v = useVuelidate(newsStore.rules, newsStore.model)
 
@@ -78,18 +80,18 @@ const onSubmitForm = async () => {
       } else if (content.type === CONTENT_TYPES.TEXT) {
         if(!!content.id){
           contents.push({ type: CONTENT_TYPES.TEXT, content: content.value.trim(), id: content.id})
-        } else{
+        } else {
           contents.push({ type: CONTENT_TYPES.TEXT, content: content.value.trim()})
         }
       } else if (content.type === CONTENT_TYPES.QUOTE) {
         if(!!content.id){
           contents.push({ type: CONTENT_TYPES.QUOTE, content: content.value.trim(), id: content.id})
-        }else{
+        }else {
           contents.push({ type: CONTENT_TYPES.QUOTE, content: content.value.trim()})
         }
       } 
     }
-
+    
     newsStore.model.contents = contents;
     const formData = {
       title: newsStore.model.title,
@@ -126,15 +128,16 @@ const isValidFormValidation = async () => {
       dispatchNotify(null, t('error-desciption-field'), COLOR_TYPES.ERROR)
       return false
   }
+   if(filterDynamicFields.filter((item) => item.type === CONTENT_TYPES.TEXT).length < 1){
+    dispatchNotify(null, t('error-main-text'), COLOR_TYPES.ERROR)
+    return false
+  }
+
   return true
 }
 
 const addDynamicField = (type) => {
-  if(type === CONTENT_TYPES.TEXT){
-    newsStore.model.dynamicFields.push({ type, value: "" });
-  } else {
-    newsStore.model.dynamicFields.push({ type, value: null });
-  }
+    newsStore.model.dynamicFields.push({ type, value: type === CONTENT_TYPES.TEXT ? '' : null });
 };
 
 const removeDynamicField = (index) => {
@@ -152,6 +155,10 @@ defineExpose({
   isValidFormValidation
 })
 
+// counter of short description
+watch(()=>newsStore.model.description, (val) => {
+  countChar.value = val.length
+})
 
 </script>
 <template>
@@ -178,18 +185,8 @@ defineExpose({
           @emit:file-upload="(val) => { newsStore.model.image = val[0]; $v.image.$model = val[0] || null }"
           @emit:on-file-delete="() => { newsStore.model.image = null; $v.image.$model = null }" 
           :error="$v.image"
-          :allowed-file-info="t('allowed-file-info',{ formats: allowedImageTypes.map(item => item.split('/')[1]).join(', '), size: '10M' })"
+          :allowed-file-info="t('allowed-file-info',{ formats: allowedImageTypes.map(item => item.split('/')[1]).join(', '), size: '10' })"
           />
-      </base-col>
-      <base-col col-class="w-full pt-6">
-        <base-dropdown v-model.number="$v.category.$model" 
-            :error="$v.category"
-            :options="newsStore.categoryList"
-            option-value="id"
-            required
-            option-label="name"
-            label="category2"
-            placeholder="enterCategory" />
       </base-col>
       <base-col col-class="w-full pt-6">
         <base-input 
@@ -200,71 +197,21 @@ defineExpose({
           placeholder="enter-news-headline" />
       </base-col>
       <base-col col-class="w-full flex flex-col gap-2 overflow-hidden">
-        <label class="block text-sm font-medium text-greyscale-500">{{ t('new-short-description',{ count: 256 }) }} <span class="text-red-500"> *</span></label>
-        <base-froala-editor 
-          :charMaxList="256"
+        <label class="block text-sm font-medium text-greyscale-500" :class="countChar >= 256 ? 'text-red-500' : ''">{{ t('new-short-description',{ count: 256 }) }} <span class="text-red-500"> *</span> {{ !!countChar ? countChar : ""  }}</label>
+        <base-textarea 
           v-model="$v.description.$model" 
-          :error="$v.description" />
-        
-      </base-col>
-      <base-col col-class="w-full pt-6">
-          <base-multi-select
-            v-model="$v.tags_ids.$model" 
-            api-url="news-tags"
-            :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
-            display="chip"
-            selectable
-            label="tag"
-            type="department"
-            placeholder="selectTag"
-          >
-            <template #chip="{ value }">
-              {{ value.name }}
-            </template>
-
-            <template #option="{ value }">
-              <user-with-radio
-                :title="value.name"
-                :text-truncate="false"
-              >
-              </user-with-radio>
-            </template>
-          </base-multi-select>
-      </base-col>
-      <!-- upload image how looks -->
-      <div 
-        class="grid grid-cols-3 gap-4 justify-between mt-2 w-full relative"
-        :class="newsStore.model.images_ids.length && 'justify-start'"
-        >
-      <template v-if="!!newsStore.model.images_ids.length">
-        <template v-for="(item, index) in newsStore.model.images_ids" :key="index">
-            <div 
-                class="aspect-ratio-box rounded-lg overflow-hidden relative h-full w-full" 
-                :style="{ '--dynamic-src': `url(${item.url})` }"
-              >
-              <img :src="item.url" alt="rasm" class="w-full h-full object-contain absolute z-2" />
-            </div>
-          </template>
-        </template>
-      </div>
-      <base-col col-class="w-full pt-6">
-          <label class="block text-sm font-medium text-greyscale-500 mb-2">{{ t('gallery') }}</label>
-          <file-upload :multiple="true" 
-            :files="props.galleryFiles"
-            :allowedFileTypes="allowedImageTypes"
-            @emit:file-upload="(val) => newsStore.model.images_ids = val"
-            :allowed-file-info="t('allowed-file-info',{ formats: allowedImageTypes.map(item => item.split('/')[1]).join(', '), size: '10M' })"
-            />
+          :error="$v.description" 
+          :required="true" :max-length="256"
+          />
       </base-col>
       <!-- dynamic fields -->
       <base-col v-for="(field, index) in newsStore.model.dynamicFields" :key="index"
         class="w-full pt-6 flex gap-2 items-end overflow-hidden">
-        <div class="w-full">
+        <div class="w-full overflow-hidden relative">
           <label v-if="field.type === CONTENT_TYPES.TEXT" class="block text-sm font-medium text-greyscale-500 mb-2">{{ t('main-text') }}</label>
           <base-froala-editor 
             v-if="field.type === CONTENT_TYPES.TEXT" 
             v-model="field.value" />
-
             <!-- upload image how looks -->
            <div 
             class="grid grid-cols-3 gap-4 justify-between my-2 w-full relative"
@@ -289,9 +236,8 @@ defineExpose({
             :allowedFileTypes="allowedFileTypes"
             @emit:file-upload="(val) => field.value = val[0]"
             @emit:on-file-delete="() => field.value = null" 
-            :allowed-file-info="t('allowed-file-info',{ formats: allowedFileTypes.map(item => item.split('/')[1]).join(', '), size: '10M' })"
+            :allowed-file-info="t('allowed-file-info',{ formats: allowedFileTypes.map(item => item.split('/')[1]).join(', '), size: '10' })"
             />
-            
           <base-textarea 
             v-if="field.type === CONTENT_TYPES.QUOTE"
             v-model="field.value"
@@ -299,10 +245,10 @@ defineExpose({
             :placeholder="t('enter-quotes')"
           />
           </div>
-        <div @click="removeDynamicField(index)"
-          class="text-red-500 bg-greyscale-50 rounded-xl w-11 h-11 min-w-[44px] flex justify-center items-center cursor-pointer">
-          <base-iconify :icon="TrashBinBoldIcon" class="!w-5 !h-5" />
-        </div>
+          <div @click="removeDynamicField(index)"
+            class="text-red-500 bg-greyscale-50 rounded-xl w-11 h-11 min-w-[44px] flex justify-center items-center cursor-pointer">
+            <base-iconify :icon="TrashBinBoldIcon" class="!w-5 !h-5" />
+          </div>
       </base-col>
       <!-- adding new fields -->
       <base-col col-class="w-full pt-6">
@@ -323,6 +269,69 @@ defineExpose({
           class="w-fit" icon-color="critic-500" 
         />
       </base-col>
+      <base-col col-class="w-full pt-6">
+        <base-dropdown v-model.number="$v.category.$model" 
+            :error="$v.category"
+            :options="newsStore.categoryList"
+            option-value="id"
+            required
+            option-label="name"
+            label="category2"
+            placeholder="enterCategory" />
+      </base-col>
+      <base-col col-class="w-full pt-6">
+        <base-multi-select
+          v-model="$v.tags_ids.$model" 
+          wrapper-class="relative"
+          api-url="news-tags"
+          :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
+          display="chip"
+          selectable
+          label="tag"
+          type="department"
+          placeholder="selectTag"
+        >
+          <template #chip="{ value }">
+            {{ value.name }}
+          </template>
+
+          <template #option="{ value }">
+            <user-with-radio
+              :title="value.name"
+              :text-truncate="false"
+            >
+            </user-with-radio>
+          </template>
+        </base-multi-select>
+      </base-col>
+      <!-- upload gallery images how looks -->
+      <div 
+        class="grid grid-cols-3 gap-4 justify-between mt-2 w-full relative"
+        :class="newsStore.model.images_ids.length && 'justify-start'"
+        >
+      <template v-if="!!newsStore.model.images_ids.length">
+        <template v-for="(item, index) in newsStore.model.images_ids" :key="index">
+            <div 
+                class="aspect-ratio-box rounded-lg overflow-hidden relative h-full w-full" 
+                :style="{ '--dynamic-src': `url(${item.url})` }"
+              >
+              <img :src="item.url" alt="rasm" class="w-full h-full object-contain absolute z-2" />
+            </div>
+          </template>
+        </template>
+      </div>
+      <base-col col-class="w-full pt-6">
+        <label class="block text-sm font-medium text-greyscale-500 mb-2">{{ t('gallery') }}</label>
+        <file-upload :multiple="true" 
+          :files="props.galleryFiles"
+          :allowedFileTypes="allowedImageTypes"
+          @emit:file-upload="(val) => newsStore.model.images_ids = val"
+          :allowed-file-info="t('allowed-file-info',{ formats: allowedImageTypes.map(item => item.split('/')[1]).join(', '), size: '10' })"
+          />
+      </base-col>
+      <base-col col-class="w-full pt-6">
+        <slot name="footer"></slot>
+       </base-col>
     </base-row>
   </div>
 </template>

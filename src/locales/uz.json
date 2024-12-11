@@ -551,5 +551,7 @@
   "main-image": "Asosiy rasim",
   "main-text": "Asosiy matn",
   "enter-main-text":"Asosiy matnni kiriting",
-  "additional-images":"Qo'shimcha rasmlar"
+  "additional-images":"Qo'shimcha rasmlar",
+  "error-main-text": "Kamida bitta asosiy matn maydonini toʻldiring."
+
 }

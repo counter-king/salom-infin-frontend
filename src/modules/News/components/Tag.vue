@@ -23,12 +23,11 @@ const handleTagClick = (tag) => {
         }   
     })
 }
-
 </script>
 
 <template>
-    <div class="flex flex-col gap-5" :class="props.class">
-        <h2 class="font-semibold text-2xl">{{t('tag')}}</h2>    
+    <div class="flex flex-col gap-3 mt-5 p-2 bg-primary-50 rounded-xl" :class="props.class">
+        <h2 class="font-semibold text-xl">{{t('tag')}}</h2>    
         <div class="rounded-xl bg-greyscale-50 p-3 flex gap-2">
             <template v-for="(tag, index) in props.tags" :key="index">
                 <div 

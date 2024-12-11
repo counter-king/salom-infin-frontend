@@ -19,7 +19,7 @@ import UserCard from '../components/UserCard.vue';
 import Queto from '../components/Queto.vue';
 import Tag from '../components/Tag.vue';
 import TheFooter from '@/components/TheFooter.vue';
-
+import ShortDescription from '../components/ShortDescription.vue';
 // icons
 import BaseIconify from '@/components/UI/BaseIconify.vue';
 import { BookmarkBoldIcon, EyeBoldIcon, ForwardBoldIcon, HeartBoldIcon } from '@/components/Icons';
@@ -212,7 +212,8 @@ onMounted( async () => {
 
             <!-- contents -->
             <title-component :title="newsOne.title" class="mt-4 mb-5"/>
-            <div v-html="newsOne.description"></div>
+            <short-description wrap-class="text-greyscale-900 text-xl !mt-0" :text="newsOne.description"/>
+
             <template v-for="(content, index) in newsOne.contents" :key="content.id">
                 <div v-if="content.type === CONTENT_TYPES.TEXT" v-html="content.content" class="mt-4"></div>
                 <div v-if="content.type === CONTENT_TYPES.QUOTE" >

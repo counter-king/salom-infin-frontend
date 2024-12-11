@@ -11,6 +11,7 @@ import Swiper from '../../components/Swiper.vue';
 import TitleComponent from '../Title.vue';
 import MainFileShow from '../MainFileShow.vue';
 import Queto from '../Queto.vue';
+import ShortDescription from '../ShortDescription.vue';
 // stores
 import { useNewsStore } from '../../stores';
 import { useAuthStore } from '@/modules/Auth/stores';
@@ -64,7 +65,7 @@ const dynamicFieldsFilter = computed(() =>
       <main-file-show :file="newsStore.model.image"/>
       <user-card :name="userProfile?.full_name" :info="userProfile.top_level_department?.name" class="mt-4"/>
       <title-component :title="newsStore.model.title" class="mt-4 mb-5"/>
-      <div v-html="newsStore.model.description" ></div>
+      <short-description wrap-class="text-greyscale-900 text-xl !mt-0" :text="newsStore.model.description"/>
       <template v-for="(field, index) in dynamicFieldsFilter" :key="index">
         <div v-if="field.type === CONTENT_TYPES.TEXT" v-html="field.value" class="mt-4"></div>
         <div v-if="field.type === CONTENT_TYPES.QUOTE">

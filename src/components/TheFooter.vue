@@ -29,8 +29,6 @@ const postRatePage = async (comment) => {
   count.value = 10
 }
 
-console.log(route);
-
 </script>
 
 <template>

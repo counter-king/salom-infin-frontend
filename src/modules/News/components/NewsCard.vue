@@ -1,14 +1,14 @@
 <script setup>
 // Components
 import NewsCategory from '@/components/Chips/NewsCategory.vue';
+import ShortDescription from './ShortDescription.vue';
 //Icons
 import { EyeLinearIcon, HeartLinearIcon } from '@/components/Icons'
-import BaseIcon from '@/components/UI/BaseIcon.vue';
 import BaseIconify from '@/components/UI/BaseIconify.vue'
+import { EditLightIcon } from '../../../components/Icons';
 // utils
 import { formatToK } from '@/utils';
 import { formatDateNamedMonth } from '@/utils/formatDate';
-import { EditLightIcon } from '../../../components/Icons';
 
 const props = defineProps({
   item: { type: Object, default: () => {} }
@@ -32,7 +32,7 @@ const props = defineProps({
           <news-category :category="props.item.category"/>
         </div>
         <h3 class="font-semibold text-sm text-greyscale-900 mt-2 line-clamp-2 h-[40px] overflow-hidden">{{ props.item.title }}</h3>
-        <div v-html="props.item.description" class="mt-2 line-clamp-3 text-greyscale-600  text-sm"></div>
+        <short-description wrap-class="mt-2 line-clamp-3 !text-greyscale-600 !text-sm" :text="props.item.description"/>
       </div>
       <!-- bottom -->
       <div class="flex items-center justify-between p-2 mt-auto">
