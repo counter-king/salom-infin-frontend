@@ -4,9 +4,10 @@ import axios from 'axios'
 import { useAuthStore } from '@/modules/Auth/stores'
 // Utils
 import { dispatchNotify } from '@/utils/notify'
-import { getStorageItem, removeStorageItem } from "@/utils/storage"
+import { getStorageItem, removeStorageItem, saveStorageItem} from "@/utils/storage"
 import { LANG, ACCESS, REFRESH, EXPIRES, CURRENT_ROUTE } from "@/constants/storage"
 import { COLOR_TYPES } from '@/enums'
+import { REDIRECT_AFTER_LOGIN } from '../constants/storage'
 
 const baseURL = process.env.NODE_ENV === 'development' || window.location.host === 'app.itco.uz' || window.location.host === 'new-side-project.vercel.app' ? import.meta.env.VITE_BASE_TEST_URL : import.meta.env.VITE_BASE_PROD_URL;
 const axiosParams = { baseURL }
@@ -53,6 +54,7 @@ axiosInstance.interceptors.response.use(
     }
     // Если время токена истек
     if(response.data?.status_code === '401') {
+      saveStorageItem(REDIRECT_AFTER_LOGIN, window.location.pathname)
       removeStorageItem(ACCESS)
       removeStorageItem(REFRESH)
       removeStorageItem(EXPIRES)

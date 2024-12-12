@@ -29,7 +29,7 @@ import { fetchCreateNews, fetchUpdateNews } from '../../../services/news.service
 import { COLOR_TYPES } from '@/enums';
 import {  allowedAudioTypes, allowedFileTypes, allowedImageTypes, allowedVideoTypes, CONTENT_TYPES } from '../../../constants';
 
-const newsStore = useNewsStore()
+const newsStore = useNewsStore();
 const router = useRouter()
 
 // Macros
@@ -50,7 +50,6 @@ const { t } = useI18n()
 const countChar = ref(0)
 // form validation
 const $v = useVuelidate(newsStore.rules, newsStore.model)
-
 
 // methods
 const getMatchFileUploadType = (file) => {
