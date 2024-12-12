@@ -22,7 +22,9 @@ const props = defineProps({
 })
 
 const modelValue = useModel(props, 'modelValue')
+
 </script>
+
 
 <template>
   <editor
@@ -34,16 +36,21 @@ const modelValue = useModel(props, 'modelValue')
     :paste_as_text="true"
     :init="{
         plugins: [
-           'table', `${pastePlainText ? 'paste' : ''}`
+           'table', `${pastePlainText ? 'paste' : ''}`, 'link'
          ],
         language: 'ru',
-        toolbar: 'undo redo | bold italic underline forecolor fontsizeselect lineheight | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table',
+        toolbar: 'undo redo | bold italic underline forecolor fontsizeselect lineheight | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table | link | unlink',
         height: `${height}`,
         menubar: '',
         fontsize_formats: `6px 8px 9px 10px 11px 12px 13px 14px 16px 18px 24px 36px`,
         font_size_input_default_unit: 'px',
         paste_as_text: pastePlainText,
         content_style: `body {font-size: 16px;}`,
+        link_protocol: 'https://',
+        link_default_target: '_blank',
+        link_target: '_blank',
+        link_title: false,
+        link_list: undefined  
         // table_default_attributes: {
         //   class: 'tinymce-table'
         // },

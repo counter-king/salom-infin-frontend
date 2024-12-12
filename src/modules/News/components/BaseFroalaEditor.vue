@@ -83,31 +83,31 @@ const cleanContent = (cleanContentPaste) => {
   }
 };
 
-const cleanContentPaste = (content) => {
-  if (typeof content !== 'string') return content;
+// const cleanContentPaste = (content) => {
+//   if (typeof content !== 'string') return content;
 
-  content = cleanContent(content);
-  // Trim leading and trailing whitespace, including non-breaking spaces
-  content = content.replace(/^[\s\u00A0]+|[\s\u00A0]+$/g, '');
+//   content = cleanContent(content);
+//   // Trim leading and trailing whitespace, including non-breaking spaces
+//   content = content.replace(/^[\s\u00A0]+|[\s\u00A0]+$/g, '');
   
-  // Remove inline styles
-  content = content.replace(/ style="[^"]*"/g, '');
+//   // Remove inline styles
+//   content = content.replace(/ style="[^"]*"/g, '');
   
-  // Remove specific style-related tags (e.g., <i>, <b>, <em>, etc.)
-  content = content.replace(/<(i|b|em|strong|u|s|strike)>/g, ''); // Remove opening tags
-  content = content.replace(/<\/(i|b|em|strong|u|s|strike)>/g, ''); // Remove closing tags
+//   // Remove specific style-related tags (e.g., <i>, <b>, <em>, etc.)
+//   content = content.replace(/<(i|b|em|strong|u|s|strike)>/g, ''); // Remove opening tags
+//   content = content.replace(/<\/(i|b|em|strong|u|s|strike)>/g, ''); // Remove closing tags
   
-  // Remove empty tags (e.g., <p></p>, <div></div>)
-  content = content.replace(/<([a-z][a-z0-9]*)[^>]*>(\s*)<\/\1>/gi, '');
+//   // Remove empty tags (e.g., <p></p>, <div></div>)
+//   content = content.replace(/<([a-z][a-z0-9]*)[^>]*>(\s*)<\/\1>/gi, '');
 
-  // Remove empty <p> tags at the beginning and end
-  content = content.replace(/^<p>\s*<\/p>/g, '').replace(/<p>\s*<\/p>$/g, '');
+//   // Remove empty <p> tags at the beginning and end
+//   content = content.replace(/^<p>\s*<\/p>/g, '').replace(/<p>\s*<\/p>$/g, '');
 
-  // Trim leading and trailing <br> and &nbsp;
-  content = content.replace(/^(<br\s*\/?>|&nbsp;)+|(<br\s*\/?>|&nbsp;)+$/g, '');
+//   // Trim leading and trailing <br> and &nbsp;
+//   content = content.replace(/^(<br\s*\/?>|&nbsp;)+|(<br\s*\/?>|&nbsp;)+$/g, '');
   
-  return content;
-};
+//   return content;
+// };
 
 
 const config = {
@@ -144,6 +144,7 @@ const config = {
 	tableEditButtons: ['tableStyle', 'tableRows', 'tableColumns', 'tableCells', 'tableCellBackground', 'tableCellVerticalAlign', 'tableCellHorizontalAlign', 'tableRemove'],
   tabSpaces: 8,
   pasteAllowedStyleProps:[],
+  pastePlain: true,
   events: {
 		'table.inserted': (table) => {
 			table.classList.add('customTable');
@@ -154,9 +155,9 @@ const config = {
 	'blur': () => {		
 		cleanContent();
 	},
-	'paste.afterCleanup': function (clipboardHTML) {    
-      return cleanContentPaste(clipboardHTML);
-    },
+	// 'paste.afterCleanup': function (clipboardHTML) {    
+  //     return cleanContentPaste(clipboardHTML);
+  //   },
 	},
 }
 
@@ -199,19 +200,6 @@ onMounted(() => {
 		}
 	}, 100);
 
-  setTimeout(() => {
-    const element = document.querySelector('.fr-wrapper');
-     if (element && process.env.NODE_ENV !== 'development') {
-       const child = element.querySelector('div')
-       const a = child.querySelector('a')
-
-       if(child && a && child.style.zIndex === '9999' && child.style.position === 'relative' 
-           && child.style.width === '100%')
-        {
-          child.style.display = 'none'
-        }
-    }
-  }, 100);
 })
 </script>
 

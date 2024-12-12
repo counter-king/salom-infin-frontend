@@ -12,7 +12,8 @@ import BaseInput from '@/components/UI/BaseInput.vue';
 import BaseTextarea from '@/components/UI/BaseTextarea.vue'
 import BaseMultiSelect from '@/components/UI/BaseMultiSelect.vue';
 import AddCard from '../AddCard.vue';
-import BaseFroalaEditor from '../../BaseFroalaEditor.vue';
+// import BaseFroalaEditor from '../../BaseFroalaEditor.vue';
+import BaseTinyEditor from "@/components/UI/BaseTinyEditor.vue";
 import FileUpload from '../FileUpload.vue';
 import {UserWithRadio} from "@/components/Users"
 //icons
@@ -209,9 +210,16 @@ watch(()=>newsStore.model.description, (val) => {
         class="w-full pt-6 flex gap-2 items-end overflow-hidden">
         <div class="w-full overflow-hidden relative">
           <label v-if="field.type === CONTENT_TYPES.TEXT" class="block text-sm font-medium text-greyscale-500 mb-2">{{ t('main-text') }}</label>
-          <base-froala-editor 
+          <base-tiny-editor
+          :height="500"
+           v-if="field.type === CONTENT_TYPES.TEXT" 
+            v-model="field.value"
+          />
+          
+          <!-- <base-froala-editor 
             v-if="field.type === CONTENT_TYPES.TEXT" 
-            v-model="field.value" />
+            v-model="field.value" 
+          /> -->
             <!-- upload image how looks -->
            <div 
             class="grid grid-cols-3 gap-4 justify-between my-2 w-full relative"

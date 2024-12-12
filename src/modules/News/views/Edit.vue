@@ -113,7 +113,7 @@ onMounted(() => {
 </script>
 <template>
   <div class="flex flex-col items-center overflow-y-auto w-full">
-    <div class="w-full">
+    <div class="w-full h-full">
       <template v-if="loading">
         <base-spinner/>
       </template>
