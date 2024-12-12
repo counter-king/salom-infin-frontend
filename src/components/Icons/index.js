@@ -11,6 +11,8 @@ export { default as GiftIcon } from  '~icons/heroicons/gift'
 export { default as EllipsisVertical20SolidIcon } from  '~icons/heroicons/ellipsis-vertical-20-solid'
 export { default as CurrencyDollarIcon } from  '~icons/heroicons/currency-dollar'
 export { default as BriefCase20SolidIcon } from '~icons/heroicons/briefcase-20-solid'
+export { default as ChevronDown20SolidIcon } from '~icons/heroicons/chevron-down-20-solid'
+export { default as ChevronUp20SolidIcon } from '~icons/heroicons/chevron-up-20-solid'
 // Ci
 export { default as FileDownloadIcon } from  '~icons/ci/file-download'
 export { default as DragVerticalIcon } from  '~icons/ci/drag-vertical'
