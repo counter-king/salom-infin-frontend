@@ -151,7 +151,7 @@ watch(activeTabMenu, (value) => {
 
             <slot :name="activeTabMenu.slot">
               <div class="flex-1 h-full overflow-y-auto">
-                <div class="h-[1px]">
+                <div class="h-full">
                   <component
                     :is="activeTabComponent"
                     :resolution="props.resolution"

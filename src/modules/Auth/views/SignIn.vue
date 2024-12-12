@@ -13,8 +13,8 @@ import Eimzo from "@/components/EIMZO/Eimzo.vue"
 // Store
 import { useAuthStore } from '../stores'
 // Utils
-import { removeStorageItem } from '@/utils/storage'
-import { ACCESS, REFRESH, EXPIRES } from '@/constants/storage'
+import { removeStorageItem, getStorageItem } from '@/utils/storage'
+import { ACCESS, REFRESH, EXPIRES, REDIRECT_AFTER_LOGIN } from '@/constants/storage'
 // Composable
 const authStore = useAuthStore()
 const router = useRouter()
@@ -79,6 +79,21 @@ const rulesAd = {
 // Methods
 const v = useVuelidate(rules, formModel)
 const v2 = useVuelidate(rulesAd, formModelAd)
+
+
+const handleTokenIsInvalidRedirectWhereUserWas = async() => {
+  // if token is expired, then user will be redirected to where he was
+    const redirectAfterLogin = getStorageItem(REDIRECT_AFTER_LOGIN)
+    if (!!redirectAfterLogin){
+      await router.push(redirectAfterLogin)
+      removeStorageItem(REDIRECT_AFTER_LOGIN)
+    } else {
+      await router.push({
+      name: "DashboardIndex"
+      })
+    }    
+}
+
 const logIn = async () => {
   const valid = await v.value.$validate()
   if (!valid) {
@@ -92,9 +107,7 @@ const logIn = async () => {
       username: formModel.username?.replace(/\D/g, '')
     })
     await authStore.actionUserProfile()
-    await router.push({
-      name: "DashboardIndex"
-    })
+    await handleTokenIsInvalidRedirectWhereUserWas()
   }
   catch (error) {
 
@@ -113,9 +126,7 @@ const logInWithAd = async () => {
     loading.value = true
     await authStore.loginWithAd(formModelAd)
     await authStore.actionUserProfile()
-    await router.push({
-      name: "DashboardIndex"
-    })
+    await handleTokenIsInvalidRedirectWhereUserWas()
   }
   catch (error) {
 
@@ -129,9 +140,7 @@ const loginViaEri = async (pkcs7) => {
     loading.value = true
     await authStore.actionLoginViaERI({pkcs7})
     await authStore.actionUserProfile()
-    await router.push({
-      name: "DashboardIndex"
-    })
+    await handleTokenIsInvalidRedirectWhereUserWas()
   }
   catch (err) {
     if (err && err.code === '703') {
