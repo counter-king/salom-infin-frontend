@@ -10,49 +10,55 @@ const modules = [Pagination, Autoplay]
 </script>
 
 <template>
-  <div class="flex rounded-[20px] mb-5 overflow-hidden">
+  <div class="dashboard-slider flex rounded-[20px] mb-5 overflow-hidden">
     <swiper
       :modules="modules"
       :slides-per-view="1"
       :space-between="4"
       :pagination="{ clickable: true }"
-      :autoplay="{ delay: 4000, disableOnInteraction: false }"
+      :autoplay="{ delay: 15000, disableOnInteraction: false }"
       class="w-full"
     >
       <swiper-slide>
         <router-link :to="{ name: 'ProfileIndex', query: { tab: 2 } }" class="block w-full h-full">
-          <img src="/images/dashboard/slide-salary.svg" alt="slide-salary" class="w-full object-cover">
+          <img src="/images/dashboard/slide-salary.svg" alt="slide-salary" class="w-full h-full object-cover">
         </router-link>
       </swiper-slide>
 
-      <swiper-slide>
-        <div class="w-full h-full">
-          <img src="/images/dashboard/slide-1.svg" alt="Slide1" class="w-full object-cover">
-        </div>
-      </swiper-slide>
+<!--      <swiper-slide>-->
+<!--        <div class="w-full h-full">-->
+<!--          <img src="/images/dashboard/slide-1.svg" alt="Slide1" class="w-full object-cover">-->
+<!--        </div>-->
+<!--      </swiper-slide>-->
 
-      <swiper-slide>
-        <div class="w-full h-full">
-          <img src="/images/dashboard/slide-2.svg" alt="Slide2" class="w-full object-cover">
-        </div>
-      </swiper-slide>
+<!--      <swiper-slide>-->
+<!--        <div class="w-full h-full">-->
+<!--          <img src="/images/dashboard/slide-2.svg" alt="Slide2" class="w-full object-cover">-->
+<!--        </div>-->
+<!--      </swiper-slide>-->
 
-      <swiper-slide>
-        <div class="w-full h-full">
-          <img src="/images/dashboard/slide-3.svg" alt="Slide3" class="w-full object-cover">
-        </div>
-      </swiper-slide>
+<!--      <swiper-slide>-->
+<!--        <div class="w-full h-full">-->
+<!--          <img src="/images/dashboard/slide-3.svg" alt="Slide3" class="w-full object-cover">-->
+<!--        </div>-->
+<!--      </swiper-slide>-->
 
-      <swiper-slide>
-        <div class="w-full h-full">
-          <img src="/images/dashboard/slide-4.svg" alt="Slide4" class="w-full object-cover">
-        </div>
-      </swiper-slide>
+<!--      <swiper-slide>-->
+<!--        <div class="w-full h-full">-->
+<!--          <img src="/images/dashboard/slide-4.svg" alt="Slide4" class="w-full object-cover">-->
+<!--        </div>-->
+<!--      </swiper-slide>-->
     </swiper>
   </div>
 </template>
 
 <style>
+.dashboard-slider .swiper-pagination {
+  width: 125px;
+  left: 50% !important;
+  transform: translateX(-50%);
+}
+
 .swiper-pagination-bullet {
   background: white!important;
   opacity: 0.5!important;
