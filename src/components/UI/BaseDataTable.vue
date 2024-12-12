@@ -69,6 +69,7 @@ const emit = defineEmits([
 const router = useRouter();
 const route = useRoute();
 const paginationStore = usePaginationStore();
+
 // Reactive
 const expandedRowGroups = ref()
 const selection = ref()
@@ -204,7 +205,7 @@ onMounted( async () => {
           :index="index"
           :data="data"
         >
-          <span class="text-sm font-medium text-greyscale-500">{{ index + 1 }}</span>
+          <span class="text-sm font-medium text-greyscale-500">{{ (paginationStore.pageSize * paginationStore.page + 1) - (paginationStore.pageSize - index) }}</span>
         </slot>
       </template>
     </Column>

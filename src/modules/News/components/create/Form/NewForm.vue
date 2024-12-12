@@ -195,7 +195,8 @@ watch(()=>newsStore.model.description, (val) => {
           :error="$v.title" 
           required 
           label="news-headline" 
-          placeholder="enter-news-headline" />
+          placeholder="enter-news-headline"
+          />
       </base-col>
       <base-col col-class="w-full flex flex-col gap-2 overflow-hidden">
         <label class="block text-sm font-medium text-greyscale-500" :class="countChar >= 256 ? 'text-red-500' : ''">{{ t('new-short-description',{ count: 256 }) }} <span class="text-red-500"> *</span> {{ !!countChar ? countChar : ""  }}</label>
