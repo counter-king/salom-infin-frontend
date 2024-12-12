@@ -520,7 +520,8 @@
   "no-birthdays-today": "Bugun tug'ilgan kunlar yo'q!",
   "no-birthdays-tomorrow": "Ertaga tug'ilgan kunlar yo'q!",
   "application-ready-work-offline": "Ilova oflayn rejimda ishlashga tayyor",
-  "text-new-version-available": "Tizimning yangi versiyasi mavjud, yangilash uchun tugmani bosing",
+  "text-new-version-available": "Yangi kontent mavjud, yangilash uchun qayta yuklash tugmasini bosing!",
+  "text-new-version-available-sub": "Yangilash tugmasini bosing va yangi xususiyatlarni o'rnatish uchun dasturni yangilang!",
   "enter-answer": "Javobni kiriting",
   "answers": "javoblar",
   "publish": "Nashr qilish",
@@ -556,5 +557,7 @@
   "old-poa": "Eski ishonchnoma",
   "select-old-poa": "Eski ishonchnomani tanlang",
   "acting-manager": "BXM boshqaruvchi vazifasini bajaruvchi",
-  "deputy-filial-manager": "BXM boshqaruvchisi o'rinbosari"
+  "deputy-filial-manager": "BXM boshqaruvchisi o'rinbosari",
+  "collapse": "Kichraytirmoq",
+  "expand": "Kengaytirmoq"
 }
