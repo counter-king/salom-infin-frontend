@@ -111,139 +111,141 @@ onMounted(async () => {
 </script>
 
 <template>
-  <layout-with-tabs title="Добавить документ">
-    <template #content>
-      <div class="h-full relative overflow-y-auto">
-        <template v-if="agreementsStore.formLoading">
-          <base-spinner content absolute />
-        </template>
+  <div class="agreements-form-view">
+    <layout-with-tabs title="Добавить документ" class="!h-[calc(100vh-125px)]">
+      <template #content>
+        <div class="h-full relative overflow-y-auto">
+          <template v-if="agreementsStore.formLoading">
+            <base-spinner content absolute />
+          </template>
 
-        <template v-else>
-          <div class="flex gap-8 p-6">
-            <div class="flex-1">
-              <base-row class="gap-y-2">
-                <base-col class="w-1/2">
-                  <base-dropdown
-                    v-model="$v.doc_type.$model"
-                    :error="$v.doc_type"
-                    :options="agreementCategory.list"
-                    :disabled="props.type === FORM_TYPE_READ"
-                    required
-                    option-value="id"
-                    option-label="name"
-                    label="Категория документа"
-                    placeholder="Выберите категорию"
-                    @emit:change="handleDocType"
-                  />
-                </base-col>
+          <template v-else>
+            <div class="flex gap-8 p-6">
+              <div class="flex-1">
+                <base-row class="gap-y-2">
+                  <base-col class="w-1/2">
+                    <base-dropdown
+                      v-model="$v.doc_type.$model"
+                      :error="$v.doc_type"
+                      :options="agreementCategory.list"
+                      :disabled="props.type === FORM_TYPE_READ"
+                      required
+                      option-value="id"
+                      option-label="name"
+                      label="Категория документа"
+                      placeholder="Выберите категорию"
+                      @emit:change="handleDocType"
+                    />
+                  </base-col>
 
-                <base-col class="w-1/2">
-                  <base-dropdown
-                    v-model="$v.doc_sub_type.$model"
-                    :error="$v.doc_sub_type"
-                    :options="agreementTypes.list"
-                    :disabled="props.type === FORM_TYPE_READ"
-                    required
-                    option-value="id"
-                    option-label="name"
-                    label="Вид документа"
-                    placeholder="Выберите вид документа"
-                  />
-                </base-col>
+                  <base-col class="w-1/2">
+                    <base-dropdown
+                      v-model="$v.doc_sub_type.$model"
+                      :error="$v.doc_sub_type"
+                      :options="agreementTypes.list"
+                      :disabled="props.type === FORM_TYPE_READ"
+                      required
+                      option-value="id"
+                      option-label="name"
+                      label="Вид документа"
+                      placeholder="Выберите вид документа"
+                    />
+                  </base-col>
 
-                <base-col class="w-full">
-                  <base-input
-                    v-model="$v.title.$model"
-                    :error="$v.title"
-                    :disabled="props.type === FORM_TYPE_READ"
-                    label="Название документа"
-                    placeholder="Введите название документа"
-                  />
-                </base-col>
+                  <base-col class="w-full">
+                    <base-input
+                      v-model="$v.title.$model"
+                      :error="$v.title"
+                      :disabled="props.type === FORM_TYPE_READ"
+                      label="Название документа"
+                      placeholder="Введите название документа"
+                    />
+                  </base-col>
 
-                <!-- <base-col col-class="w-1/2">
-                  <base-calendar
-                    required
-                    label="Дата начала"
-                    placeholder="Выберите дата начала"
-                  />
-                </base-col>
+                  <!-- <base-col col-class="w-1/2">
+                    <base-calendar
+                      required
+                      label="Дата начала"
+                      placeholder="Выберите дата начала"
+                    />
+                  </base-col>
 
-                <base-col col-class="w-1/2">
-                  <base-calendar
-                    required
-                    label="Дата окончания"
-                    placeholder="Выберите дата окончания"
-                  />
-                </base-col> -->
+                  <base-col col-class="w-1/2">
+                    <base-calendar
+                      required
+                      label="Дата окончания"
+                      placeholder="Выберите дата окончания"
+                    />
+                  </base-col> -->
 
-                <base-col col-class="w-full">
-                  <base-multi-select
-                    v-model="$v.__users.$model"
-                    :error="$v.__users"
-                    :disabled="props.type === FORM_TYPE_READ"
-                    api-url="users"
-                    label="reviewers"
-                    display="chip"
-                    placeholder="search-users"
-                    menu-placeholder="search-users"
-                    required
-                  >
-                    <template #chip="{ value }">
-                      <user-with-label
-                        :compact="true"
-                        :label="isObject(value?.user) ? value?.user.full_name : value?.full_name"
-                        :title="isObject(value?.user) ? value?.user.full_name : value?.full_name"
-                        color="#635AFF"
-                        avatar-classes="w-5 h-5"
-                      />
-                    </template>
+                  <base-col col-class="w-full">
+                    <base-multi-select
+                      v-model="$v.__users.$model"
+                      :error="$v.__users"
+                      :disabled="props.type === FORM_TYPE_READ"
+                      api-url="users"
+                      label="reviewers"
+                      display="chip"
+                      placeholder="search-users"
+                      menu-placeholder="search-users"
+                      required
+                    >
+                      <template #chip="{ value }">
+                        <user-with-label
+                          :compact="true"
+                          :label="isObject(value?.user) ? value?.user.full_name : value?.full_name"
+                          :title="isObject(value?.user) ? value?.user.full_name : value?.full_name"
+                          color="#635AFF"
+                          avatar-classes="w-5 h-5"
+                        />
+                      </template>
 
-                    <template #option="{ value }">
-                      <user-with-selectable :items="[value]" />
-                    </template>
+                      <template #option="{ value }">
+                        <user-with-selectable :items="[value]" />
+                      </template>
 
-                    <template #hint="{ value }">
-                      <user-with-label
-                        :label="isObject(value?.user) ? value?.user.full_name : value?.full_name"
-                        :title="isObject(value?.user) ? value?.user.full_name : value?.full_name"
-                        shadow
-                        color="#635AFF"
-                        avatar-classes="w-5 h-5"
-                      />
-                    </template>
-                  </base-multi-select>
-                </base-col>
+                      <template #hint="{ value }">
+                        <user-with-label
+                          :label="isObject(value?.user) ? value?.user.full_name : value?.full_name"
+                          :title="isObject(value?.user) ? value?.user.full_name : value?.full_name"
+                          shadow
+                          color="#635AFF"
+                          avatar-classes="w-5 h-5"
+                        />
+                      </template>
+                    </base-multi-select>
+                  </base-col>
 
-                <base-col col-class="w-full">
-                  <base-label label="Текст документа" :required="true" />
+                  <base-col col-class="w-full">
+                    <base-label label="Текст документа" :required="true" />
 
-                  <base-froala-editor
-                    ref="editor"
-                    v-model="$v.content.$model"
-                    :error="$v.content"
-                    :disabled="props.type === FORM_TYPE_READ"
-                  />
-                </base-col>
+                    <base-froala-editor
+                      ref="editor"
+                      v-model="$v.content.$model"
+                      :error="$v.content"
+                      :disabled="props.type === FORM_TYPE_READ"
+                    />
+                  </base-col>
 
-                <template v-if="props.type === FORM_TYPE_CREATE">
-                  <base-button
-                    label="Просмотр документа"
-                    rounded
-                    @click="preview"
-                  />
-                </template>
-              </base-row>
+                  <template v-if="props.type === FORM_TYPE_CREATE">
+                    <base-button
+                      label="Просмотр документа"
+                      rounded
+                      @click="preview"
+                    />
+                  </template>
+                </base-row>
+              </div>
+
+              <div class="max-w-[420px] w-full">
+                <key-words class="sticky top-6" @emit:up="handleKeyWords" />
+              </div>
             </div>
-
-            <div class="max-w-[420px] w-full">
-              <key-words class="sticky top-6" @emit:up="handleKeyWords" />
-            </div>
-          </div>
-        </template>
-      </div>
-    </template>
-  </layout-with-tabs>
+          </template>
+        </div>
+      </template>
+    </layout-with-tabs>
+  </div>
 
   <!-- preview dialog -->
   <base-dialog v-model="dialog" max-width="max-w-[21cm]">

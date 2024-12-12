@@ -101,7 +101,7 @@ function close() {
     <span class="font-semibold mr-2">{{ t(title) }}</span>
 
     <base-button
-      v-if="needRefresh"
+      v-if="offlineReady"
       severity="success"
       rounded
       size="small"

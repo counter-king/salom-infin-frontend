@@ -35,7 +35,8 @@ watch(
 			await router.replace({
 				query: {
 					...route.query,
-					journal_id: journal.value.id
+					journal_id: journal.value.id,
+          page_size: 15
 				}
 			})
 			_route && await docFlowStore.actionGetList(route.query)
@@ -83,7 +84,8 @@ const link = (data) => {
     <base-data-table
       :action-list="docFlowStore.actionGetList"
       :api-params="{
-        journal_id: route.query.journal_id ?? JOURNAL.INCOMING
+        journal_id: route.query.journal_id ?? JOURNAL.INCOMING,
+        page_size: 15
       }"
       :headers="docFlowStore.headers"
       :value="docFlowStore.list"
@@ -91,6 +93,7 @@ const link = (data) => {
       :loading="docFlowStore.listLoading"
       :storage-columns-name="R_INCOMING_COLUMNS"
       expandable
+      scroll-height="calc(100vh - 295px)"
       @emit:set-store-headers="(val) => docFlowStore.headers = val"
     >
       <template #priority="{ data }">

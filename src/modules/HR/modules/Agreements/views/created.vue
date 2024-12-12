@@ -40,6 +40,7 @@ onMounted(async () => {
     :headers="agreementsStore.createdHeaders"
     :value="agreementsStore.createdList"
     :total-count="agreementsStore.createdCount"
+    scroll-height="calc(100vh - 295px)"
   >
     <template #title="{ data }">
       <linkable-cell :to="{ name: 'AgreementCreatedRead', params: { id: data.id } }" is-not-read>

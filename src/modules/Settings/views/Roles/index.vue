@@ -55,6 +55,7 @@ const link = (data) => {
       :headers="rolesStore.headers"
       :value="rolesStore.list"
       :total-count="rolesStore.totalCount"
+      scroll-height="calc(100vh - 295px)"
     >
       <template #name="{ data }">
         <linkable-cell :to="link(data)">

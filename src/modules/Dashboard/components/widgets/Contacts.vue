@@ -66,41 +66,43 @@ onMounted(async () => {
 
       <template v-else>
         <template v-if="list.length">
-          <template v-for="(item, index) in list" :key="index">
-            <user-with-action
-              :label="item.full_name"
-              :sub-title="item.position?.name"
-              :color="item.color"
-              :class="{ 'mb-2': index !== list.length - 1 }"
-            >
-              <template #sub-title-after>
-                <div class="w-[6px] min-w-[6px] h-[6px] bg-greyscale-400 rounded-full"></div>
-                <span class="flex-1 min-w-[40px] text-xs text-greyscale-500">00-12</span>
-              </template>
+          <div class="max-h-[1px]">
+            <template v-for="(item, index) in list" :key="index">
+              <user-with-action
+                :label="item.full_name"
+                :sub-title="item.position?.name"
+                :color="item.color"
+                :class="{ 'mb-2': index !== list.length - 1 }"
+              >
+                <template #sub-title-after>
+                  <div class="w-[6px] min-w-[6px] h-[6px] bg-greyscale-400 rounded-full"></div>
+                  <span class="flex-1 min-w-[40px] text-xs text-greyscale-500">00-12</span>
+                </template>
 
-              <template #action>
-                <div
-                  v-tooltip.top="{
+                <template #action>
+                  <div
+                    v-tooltip.top="{
                     value: `<h4 class='text-xs text-white -my-1'>Написать сообщение</h4>`,
                     escape: true,
                     autoHide: false
                   }"
-                  class="h-4"
-                >
-                  <base-iconify
-                    :icon="ChatLineIcon"
-                    class="text-greyscale-300 cursor-pointer hover:text-primary-500 !w-5 !h-5"
-                  />
-                </div>
-              </template>
-            </user-with-action>
-          </template>
+                    class="h-4"
+                  >
+                    <base-iconify
+                      :icon="ChatLineIcon"
+                      class="text-greyscale-300 cursor-pointer hover:text-primary-500 !w-5 !h-5"
+                    />
+                  </div>
+                </template>
+              </user-with-action>
+            </template>
 
-          <template v-if="!isResponseEmpty">
-            <div ref="scrollRef" class="my-2">
-              <base-spinner root-classes="!w-7 !h-7" />
-            </div>
-          </template>
+            <template v-if="!isResponseEmpty">
+              <div ref="scrollRef" class="my-2">
+                <base-spinner root-classes="!w-7 !h-7" />
+              </div>
+            </template>
+          </div>
         </template>
 
         <template v-else>

@@ -5,7 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 // Components
 import { StatusChip } from '@/components/Chips'
-import { AltArrowDownIcon, CalendarIcon } from '@/components/Icons'
+import { AltArrowDownIcon, CalendarIcon, AltArrowLeftIcon } from '@/components/Icons'
 import WidgetWrapper from '../WidgetWrapper.vue'
 // Composable
 const route = useRoute()
@@ -129,8 +129,8 @@ const toggle = (event) => {
       <router-link to="/" class="flex items-center justify-center gap-1 h-6 text-sm mt-2">
         <span class="font-semibold text-primary-500 leading-[1]">{{ t('all-tasks') }}</span>
 
-        <base-icon
-          name="AltArrowLeftIcon"
+        <base-iconify
+          :icon="AltArrowLeftIcon"
           width="16"
           height="16"
           class="rotate-180 text-primary-500"

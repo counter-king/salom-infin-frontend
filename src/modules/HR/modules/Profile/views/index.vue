@@ -102,10 +102,11 @@ watch(activeTabMenu, (value) => {
 
 <template>
   <ScrollPanel
-    class="h-full bg-white rounded-[20px] shadow-button overflow-hidden"
+    class="h-full bg-white rounded-[20px] shadow-button"
     :pt="{
       wrapper: {
-        style: { 'border-right': '4px solid var(--surface-ground)' }
+        style: { 'border-right': '4px solid var(--surface-ground)' },
+        class: 'h-[calc(100vh-125px)]'
       },
       bary: 'w-1 hover:bg-primary-400 bg-primary-300'
     }"

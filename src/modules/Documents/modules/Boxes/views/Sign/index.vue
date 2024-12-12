@@ -60,7 +60,7 @@ onMounted(async () => {
 
     <base-data-table
       :action-list="signStore.actionGetSignList"
-      :api-params="{ ...route.query } ?? null"
+      :api-params="{ ...route.query, page_size: 15 } ?? null"
       :headers="signStore.headers"
       :loading="signStore.listLoading"
       :storage-columns-name="BOXES_SIGN_COLUMNS"

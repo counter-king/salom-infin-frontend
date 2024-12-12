@@ -34,7 +34,7 @@ const Registration = [
         name: "RegistrationShow",
         meta: {
           isAuthRequired: true,
-          navigation: false
+          miniSidebar: true
         },
         component: () => import("../views/Show.vue"),
       }

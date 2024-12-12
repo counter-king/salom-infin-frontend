@@ -13,6 +13,7 @@ import InputSwitch from 'primevue/inputswitch';
 import { ref, watch, onMounted, computed } from 'vue';
 import { tableConfig, columnConfig, dropdownConfig, paginationConfig, dropdownOptions, overlayConfig } from './config';
 import { useI18n } from "vue-i18n";
+import { SettingsMinimalisticIcon, AddPlusIcon } from '@/components/Icons'
 const { locale, t } = useI18n();
 const defaultFilter = { page: 1, page_size: 10, search: '' };
 const count = ref(1);
@@ -186,7 +187,7 @@ onMounted(() => {
         rounded
         type="button"
         >
-        <base-icon class="mr-2" color="#767994" height="20" name="SettingsMinimalisticIcon" width="20"/>
+        <base-iconify class="mr-2" color="#767994" height="20" :icon="SettingsMinimalisticIcon" width="20"/>
         <span>Настроить столбцы</span>
       </Button>
       <Button
@@ -195,7 +196,7 @@ onMounted(() => {
         rounded
         type="button"
       >
-        <base-icon class="mr-2" height="20" name="AddIcon" width="20"/>
+        <base-iconify class="mr-2" height="20" :icon="AddPlusIcon" width="20"/>
         <span>Создать</span>
       </Button>
     </div>
@@ -207,6 +208,7 @@ onMounted(() => {
       :value="branches"
       row-hover
       scrollable
+      scroll-height="calc(100vh - 295px)"
       >
       <Column
         :columnKey="item.columnKey"

@@ -264,8 +264,7 @@ onMounted(() => {
                            :value="employees"
                            row-hover
                            scrollable
-                           scrollHeight="100%"
-                           style="height: 100%"
+                           scroll-height="calc(100vh - 295px)"
                            >
                            <Column
                               :columnKey="item.columnKey"
@@ -341,7 +340,7 @@ onMounted(() => {
                               </svg>
                            </div>
                            <p class="text-center text-greyscale-300 mt-3 mb-6">В этом отделе нет Сотрудников. Нажмите кнопку ниже, чтобы добавить.</p>
-                           <Button 
+                           <Button
                               @click="() => {
                                  addEmployeeVisible = true;
                               }"
@@ -359,7 +358,7 @@ onMounted(() => {
                   </template>
                </template>
             </div>
-            <AddEmployee 
+            <AddEmployee
                :activeDepartment="activeDepartment"
                :departmentsList="departmentsList"
                :getFirstPageEmployees="getFirstPageEmployees"

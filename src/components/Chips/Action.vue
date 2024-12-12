@@ -2,7 +2,7 @@
 // Core
 import { computed } from 'vue'
 // Components
-import { QuestionCircleIcon } from '@/components/Icons'
+import { QuestionCircleIcon, CheckCircleIcon } from '@/components/Icons'
 // Enums
 import { FILE_ACTIONS } from '@/enums'
 // Macros
@@ -24,50 +24,50 @@ const current = computed(() => {
     }
   }
 
-  return {
-    icon: props.type.description?.icon_name,
-    color: props.type.description?.color,
-    text: props.type.description?.description
-  }
+  // return {
+  //   icon: props.type.description?.icon_name,
+  //   color: props.type.description?.color,
+  //   text: props.type.description?.description
+  // }
 
-  /*switch(props.type.action) {
+  switch(props.type.action) {
     case FILE_ACTIONS.CREATED: // Файл создан
       return {
-        icon: 'DownloadMinimalistic',
-        color: 'bg-primary-500',
+        icon: CheckCircleIcon,
+        color: props.type.description?.color,
         text: props.type.description?.description
       }
     case FILE_ACTIONS.UPDATED: // Файл изменен
       return {
         icon: 'DownloadMinimalistic',
-        color: 'bg-warning-500',
+        color: props.type.description?.color,
         text: props.type.description?.description
       }
     case FILE_ACTIONS.UPLOADED: // Файл загружен
       return {
         icon: 'DownloadMinimalistic',
-        color: 'bg-warning-500',
+        color: props.type.description?.color,
         text: props.type.description?.description
       }
     case FILE_ACTIONS.DELETED: // Файл удален
       return {
         icon: 'XIcon',
-        color: 'bg-critic-500',
+        color: props.type.description?.color,
         text: props.type.description?.description
       }
     case FILE_ACTIONS.FORWARD: // Документ перенаправлен
       return {
         icon: 'ForwardIcon',
-        color: 'bg-primary-500',
+        color: props.type.description?.color,
         text: props.type.description?.description
       }
     default: // Пользователь выполнил
       return {
         icon: 'UserIcon',
-        color: 'bg-success-500',
+        color: props.type.description?.color,
         text: props.type.description?.description
       }
-  }*/
+  }
 })
 </script>
 
@@ -81,8 +81,8 @@ const current = computed(() => {
       autoHide: false
     }"
   >
-    <base-icon
-      :name="current.icon"
+    <base-iconify
+      :icon="current.icon"
       class="!w-3 !h-3 text-white"
     />
   </div>

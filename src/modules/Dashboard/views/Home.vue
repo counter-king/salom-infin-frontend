@@ -2,8 +2,7 @@
 // Core
 import { useI18n } from 'vue-i18n'
 // Components
-import TheFooter from '@/components/TheFooter.vue';
-
+import TheFooter from '@/components/TheFooter.vue'
 import {
   WidgetDocFlow,
   WidgetBirthday,

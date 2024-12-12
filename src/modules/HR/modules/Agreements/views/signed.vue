@@ -56,6 +56,7 @@ onMounted(async () => {
     :headers="agreementsStore.signedHeaders"
     :value="agreementsStore.signedList"
     :total-count="agreementsStore.signedCount"
+    scroll-height="calc(100vh - 295px)"
   >
     <template #negotiation.doc_type.name="{ data }">
       <span class="font-medium text-greyscale-900">{{ data.negotiation?.doc_type?.name ?? '-' }}</span>
