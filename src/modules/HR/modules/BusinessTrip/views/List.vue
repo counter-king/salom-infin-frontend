@@ -94,7 +94,7 @@ onMounted(() => {
       :value="BTStore.businessTripList"
       :headers="BTStore.headers"
       :storage-columns-name="HR_BUSINESS_TRIP_COLUMNS"
-      scroll-height="calc(100vh - 250px)"
+      scroll-height="calc(100vh - 295px)"
       @emit:set-store-headers="(val) => BTStore.headers = val"
       @emit:row-click="onRowClick"
     >

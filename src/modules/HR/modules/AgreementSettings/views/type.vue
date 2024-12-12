@@ -144,6 +144,7 @@ onMounted(async () => {
       :headers="agreementTypes.headers"
       :value="agreementTypes.list"
       :total-count="agreementTypes.totalCount"
+      scroll-height="calc(100vh - 295px)"
     >
       <template #name="{ data }">
         <span class="font-medium text-greyscale-900 line-clamp-2">{{ data.name ?? '-' }}</span>

@@ -28,7 +28,7 @@ const title = computed(() => {
 })
 
 const apiParams = computed(() => {
-  return route.query?.document_type ? { document_type: route.query.document_type } : { document_type: COMPOSE_DOCUMENT_TYPES.INNER }
+  return route.query?.document_type ? { document_type: route.query.document_type, page_size: 15 } : { document_type: COMPOSE_DOCUMENT_TYPES.INNER, page_size: 15 }
 })
 
 const onClickRow = (data) => {
@@ -98,6 +98,7 @@ onMounted(async () => {
       :total-count="sdStore.totalCount"
       :storage-columns-name="SD_INNER_COLUMNS"
       :loading="sdStore.listLoading"
+      scroll-height="calc(100vh - 295px)"
       @emit:set-store-headers="(val) => sdStore.headers = val"
       @emit:row-click="onClickRow"
     >

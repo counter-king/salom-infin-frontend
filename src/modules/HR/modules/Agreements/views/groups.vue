@@ -67,31 +67,33 @@ const icons = [
     <span class="text-greyscale-900">Докумeнт (нем. — образец, свидетельство, доказательство) — это зафиксированная на материальном носителе информация в виде текста, звукозаписи или изображения с реквизитами, позволяющими её идентифицировать.</span>
   </InlineMessage>
 
-  <div class="grid grid-cols-3 gap-4 mt-4">
-    <template v-for="(item, index) in agreementsStore.negotiationTypes">
-      <router-link
-        :to="{ name: 'AgreementGroupsList', params: { item: item.id } }"
-        class="group flex bg-white shadow-button rounded-2xl p-5 pt-4"
-      >
-        <div class="flex flex-col items-start max-w-[370px] w-full">
-          <h1 class="text-base font-semibold text-greyscale-900 mb-1">{{ item.name }}</h1>
-          <p class="text-sm font-medium text-greyscale-500 line-clamp-2 mb-6">{{ item.description }}</p>
+  <div class="flex-1">
+    <div class="grid grid-cols-3 gap-4 mt-4">
+      <template v-for="(item, index) in agreementsStore.negotiationTypes">
+        <router-link
+          :to="{ name: 'AgreementGroupsList', params: { item: item.id } }"
+          class="group flex bg-white shadow-button rounded-2xl p-5 pt-4"
+        >
+          <div class="flex flex-col items-start max-w-[370px] w-full">
+            <h1 class="text-base font-semibold text-greyscale-900 mb-1">{{ item.name }}</h1>
+            <p class="text-sm font-medium text-greyscale-500 line-clamp-2 mb-6">{{ item.description }}</p>
 
-          <button class="flex items-center gap-1 transition-colors bg-greyscale-50 group-hover:bg-primary-500 rounded-xl border border-greyscale-100 p-2 pl-3 mt-auto">
-            <span class="text-sm font-medium text-greyscale-900 group-hover:text-white transition-colors">Подробнee</span>
+            <button class="flex items-center gap-1 transition-colors bg-greyscale-50 group-hover:bg-primary-500 rounded-xl border border-greyscale-100 p-2 pl-3 mt-auto">
+              <span class="text-sm font-medium text-greyscale-900 group-hover:text-white transition-colors">Подробнee</span>
 
-            <base-iconify :icon="AltArrowRightIcon" class="!w-4 !h-4 text-greyscale-500 group-hover:text-white transition-colors" />
-          </button>
-        </div>
-
-        <div class="flex flex-col justify-between items-end flex-1">
-          <div class="flex items-center justify-center w-8 h-8 rounded-full bg-critic-50">
-            <span class="text-critic-500 font-bold">{{ item.docs_count_to_sign }}</span>
+              <base-iconify :icon="AltArrowRightIcon" class="!w-4 !h-4 text-greyscale-500 group-hover:text-white transition-colors" />
+            </button>
           </div>
 
-          <img :src="icons[index % 6]" alt="icon" />
-        </div>
-      </router-link>
-    </template>
+          <div class="flex flex-col justify-between items-end flex-1">
+            <div class="flex items-center justify-center w-8 h-8 rounded-full bg-critic-50">
+              <span class="text-critic-500 font-bold">{{ item.docs_count_to_sign }}</span>
+            </div>
+
+            <img :src="icons[index % 6]" alt="icon" />
+          </div>
+        </router-link>
+      </template>
+    </div>
   </div>
 </template>

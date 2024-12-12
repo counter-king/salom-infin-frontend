@@ -1,7 +1,7 @@
 <script setup>
 // Core
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 // Store
 import { useDocFlowStore } from '../stores/docflow.store'
 import { useBoxesCommonStore } from '../../Boxes/stores/common.store'
@@ -10,6 +10,7 @@ import { LayoutWithTabs } from '@/components/DetailLayout'
 import ChangeDocument from '../components/ChangeDocument.vue'
 // Composable
 const route = useRoute()
+const router = useRouter()
 const docflowStore = useDocFlowStore()
 const boxesCommonStore = useBoxesCommonStore()
 // Reactive
@@ -45,6 +46,8 @@ onMounted(async () => {
           register_date: docflowStore.detailModel.register_date,
           register_number: docflowStore.detailModel.register_number
         }"
+        self
+        @emit:back-button="() => router.push({ name: 'RegistrationIndex' })"
       >
         <template #preview-actions>
           <change-document />

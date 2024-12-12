@@ -12,7 +12,7 @@ const totalCount = ref(null)
 const isSearch = ref(false)
 
 const handleEmitUp = (value,totalCountPage)=>{
-  users.value = value; 
+  users.value = value;
   totalCount.value = totalCountPage
 }
 // Watch
@@ -30,5 +30,4 @@ const handleEmitUp = (value,totalCountPage)=>{
       <the-footer/>
     </div>
   </div>
-      
 </template>

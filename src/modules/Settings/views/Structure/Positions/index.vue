@@ -13,6 +13,7 @@ import axiosConfig from "@/services/axios.config";
 import { ref, watch, onMounted, computed } from 'vue';
 import { tableConfig, columnConfig, dropdownConfig, paginationConfig, dropdownOptions, overlayConfig } from './config';
 import { useI18n } from "vue-i18n";
+import { SettingsMinimalisticIcon, AddPlusIcon } from '@/components/Icons'
 const { locale } = useI18n();
 const defaultFilter = { page: 1, page_size: 10, search: '' };
 const count = ref(1);
@@ -180,16 +181,16 @@ onMounted(() => {
             rounded
             type="button"
             >
-            <base-icon class="mr-2" color="#767994" height="20" name="SettingsMinimalisticIcon" width="20"/>
+            <base-iconify class="mr-2" color="#767994" height="20" :icon="SettingsMinimalisticIcon" width="20"/>
             <span>Настроить столбцы</span>
          </Button>
          <Button
             @click="visible = true"
-            class="p-button p-component font-medium text-sm rounded-xl !rounded-full py-[9px] px-4"
+            class="p-button p-component font-medium text-sm rounded-full py-[9px] px-4"
             rounded
             type="button"
             >
-            <base-icon class="mr-2" height="20" name="AddIcon" width="20"/>
+            <base-iconify class="mr-2" height="20" :icon="AddPlusIcon" width="20"/>
             <span>Создать</span>
          </Button>
       </div>
@@ -201,6 +202,7 @@ onMounted(() => {
          :value="positions"
          row-hover
          scrollable
+         scroll-height="calc(100vh - 295px)"
          >
             <Column
                :columnKey="item.columnKey"

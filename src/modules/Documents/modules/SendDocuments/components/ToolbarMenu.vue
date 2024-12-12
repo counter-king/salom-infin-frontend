@@ -86,7 +86,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="bg-white border-b border-greyscale-200 py-2 px-6 -mt-6 -mx-6 mb-6 flex justify-between">
+  <div class="sticky -top-6 z-[2] bg-white border-b border-greyscale-200 py-2 px-6 -mt-6 -mx-6 mb-6 flex justify-between">
     <div class="flex items-center">
       <template v-for="menu in selectedMenuItems">
         <template v-if="userPermissionStore.canAccess(menu.permission)">

@@ -1,4 +1,6 @@
 <script setup>
+// Core
+import { useRoute } from 'vue-router'
 // Store
 import { useControlStore } from '../../stores/control.store'
 // Components
@@ -8,6 +10,7 @@ import { LinkableCell } from '@/components/Table'
 // Utils
 import { BOXES_CONTROL_COLUMNS } from '../../constants'
 // Composable
+const route = useRoute()
 const controlStore = useControlStore()
 // Reactive
 const filterKeys = ['approvers', 'author', 'curator', 'signers', 'departments', 'register_number', 'status']
@@ -32,6 +35,7 @@ const link = (data) => {
 
     <base-data-table
       :action-list="controlStore.actionControlList"
+      :api-params="{ ...route.query, page_size: 15 } ?? null"
       :headers="controlStore.headers"
       :value="controlStore.list"
       :total-count="controlStore.totalCount"

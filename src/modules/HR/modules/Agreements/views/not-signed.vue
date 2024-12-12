@@ -99,6 +99,7 @@ onMounted(async () => {
     :value="agreementsStore.notSignedList"
     :total-count="agreementsStore.notSignedCount"
     selectable
+    scroll-height="calc(100vh - 295px)"
     @update:selection="handleSelection"
   >
     <template #negotiation.doc_type.name="{ data }">

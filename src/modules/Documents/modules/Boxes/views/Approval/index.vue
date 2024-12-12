@@ -64,7 +64,7 @@ onMounted(async () => {
 
     <base-data-table
       :action-list="approvalStore.actionGetApprovalList"
-      :api-params="{ ...route.query } ?? null"
+      :api-params="{ ...route.query, page_size: 15 } ?? null"
       :headers="approvalStore.headers"
       :loading="approvalStore.listLoading"
       :storage-columns-name="BOXES_APPROVAL_COLUMNS"

@@ -153,7 +153,7 @@ onMounted( async () => {
       table: { class: ['border-separate', 'border-spacing-y-1', '-mt-1'] },
       thead: { class: ['bg-white'] },
       bodyRow: { class: ['cursor-pointer', 'hover:bg-greyscale-50'] },
-      loadingoverlay: { class: ['bg-transparent overflow-hidden', 'h-[90%]'] },
+      loadingoverlay: { class: ['bg-transparent overflow-hidden', 'h-[calc(100%-56px)]'] },
       emptymessagecell: { class: ['bg-white', '!rounded-xl'] },
       paginator: {
         rowPerPageDropdown: {
@@ -261,7 +261,7 @@ onMounted( async () => {
       <slot name="empty">
         <div
           class="w-full flex justify-center items-center rounded-lg"
-          style="height: calc(100vh - 420px)"
+          style="height: calc(100vh - 390px)"
         >
           <img class="w-[200px] h-[170px]" src="@/assets/img/empty-img-gray.png" alt="EmptyFolder">
         </div>
