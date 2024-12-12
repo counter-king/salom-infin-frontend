@@ -2,6 +2,7 @@
 // Core
 import { ref, shallowRef, watch, defineAsyncComponent, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 // Components
 import ScrollPanel from 'primevue/scrollpanel'
 import BaseSpinner from '@/components/UI/BaseSpinner.vue'
@@ -26,9 +27,10 @@ import { useAuthStore } from '@/modules/Auth/stores'
 import { STATUS_TYPES } from '@/enums'
 // Composable
 const { t } = useI18n()
+const route = useRoute()
 const authStore = useAuthStore()
 // Reactive
-const activeTabMenuIndex = ref(0)
+const activeTabMenuIndex = ref(Number(route.query.tab) || 0)
 const activeTabComponent = shallowRef(null)
 const headerTabItems = ref([
   {

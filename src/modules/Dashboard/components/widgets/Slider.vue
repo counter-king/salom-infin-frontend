@@ -20,6 +20,12 @@ const modules = [Pagination, Autoplay]
       class="w-full"
     >
       <swiper-slide>
+        <router-link :to="{ name: 'ProfileIndex', query: { tab: 2 } }" class="block w-full h-full">
+          <img src="/images/dashboard/slide-salary.svg" alt="slide-salary" class="w-full object-cover">
+        </router-link>
+      </swiper-slide>
+
+      <swiper-slide>
         <div class="w-full h-full">
           <img src="/images/dashboard/slide-1.svg" alt="Slide1" class="w-full object-cover">
         </div>
