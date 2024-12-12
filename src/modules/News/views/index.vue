@@ -77,7 +77,7 @@ onMounted(async() => {
 
 </script>
 <template>
-    <div class="news-view w-full p-10 pt-7 overflow-y-scroll" @scroll="handleScroll">
+    <div class="news-view w-full p-10 pt-7 pb-2 overflow-y-scroll flex flex-col" @scroll="handleScroll">
       <header-toolbar />
       <template v-if="loading">
          <base-spinner />  
@@ -89,6 +89,8 @@ onMounted(async() => {
           </RouterLink>
         </template>
       </div>
-      <the-footer/>   
+      <div class="mt-auto">
+        <the-footer/>   
+      </div>
     </div>
 </template>

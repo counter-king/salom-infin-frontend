@@ -43,7 +43,7 @@ const { t } = useI18n()
         </div>
       </div>
     </div>
-    <div class="pl-10">
+    <div class="pl-10 pb-2">
       <the-footer/>
     </div>
   </div>

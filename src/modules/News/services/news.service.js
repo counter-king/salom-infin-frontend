@@ -6,6 +6,7 @@ const URLS = {
     newsTags: "news-tags",
     newsLikes: "news-likes",
     newsComments: "news-comments",
+    newsPending: "news/pending-news",
 }
 
 

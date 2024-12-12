@@ -144,7 +144,7 @@ onMounted( async () => {
 </script>
 
 <template>
-  <div class="w-full p-10 pt-5 pb-0 overflow-y-auto">
+  <div class="w-full p-10 pt-5 pb-2 overflow-y-auto">
     <div class="back-button">
         <back-button 
         :self="true" 

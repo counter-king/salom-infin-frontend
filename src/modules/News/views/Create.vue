@@ -50,7 +50,7 @@ const handleOpenDialogPreview = async () => {
         </div>
       </div>
     </div>
-    <div class="w-[900px]">
+    <div class="w-[900px] pb-2">
       <the-footer/>
     </div>
     <dialog-preview v-model="dialogisPreviewOpen" :onSubmitForm="onSubmitForm"/>

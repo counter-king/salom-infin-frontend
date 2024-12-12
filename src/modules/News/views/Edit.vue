@@ -141,7 +141,7 @@ onMounted(() => {
       </div>
     </div>
     <div 
-      v-if="!loading" class="w-[900px]">
+      v-if="!loading" class="w-[900px] pb-2">
       <the-footer/>
     </div>
     <dialog-preview v-model="dialogisPreviewOpen" :onSubmitForm="onSubmitForm"/>

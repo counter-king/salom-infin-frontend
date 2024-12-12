@@ -41,7 +41,7 @@ const menus = ref([
   <div class="hr-view flex w-full">
     <the-sidebar :menus="menus" :icon-stroke="false" />
 
-    <div class="flex flex-col flex-1 overflow-y-auto p-6">
+    <div class="flex flex-col flex-1 overflow-y-auto p-6 pb-2">
       <router-view />
       <div class="mt-auto">
         <the-footer/>   
