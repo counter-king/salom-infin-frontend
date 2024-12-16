@@ -559,5 +559,15 @@
   "acting-manager": "BXM boshqaruvchi vazifasini bajaruvchi",
   "deputy-filial-manager": "BXM boshqaruvchisi o'rinbosari",
   "collapse": "Kichraytirmoq",
-  "expand": "Kengaytirmoq"
+  "expand": "Kengaytirmoq",
+  "popular":"Mashhur",
+  "less-read":"Kam o'qilganlar",
+  "time":"Vaqt",
+  "today-last24":"Bugun (oxirgi 24 soat)",
+  "last-week":"Oxirgi hafta",
+  "last-month-2":"O'tgan oy",
+  "social-participation":"Ijtimoiy ishtirok",
+  "many-likes":"Ko'p yoqtirishlar",
+  "more-explanations":"Qo'shimcha tushuntirishlar",
+  "much-in-common": "Ko'p umumiy"
 }

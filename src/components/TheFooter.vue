@@ -29,6 +29,10 @@ const postRatePage = async (comment) => {
   count.value = 10
 }
 
+const onCancelModal = () => {
+  count.value = 10
+}
+
 </script>
 
 <template>
@@ -67,7 +71,7 @@ const postRatePage = async (comment) => {
     </div>
   </footer>
 
-  <modal-rate v-model="dialog" header="comment" label="send" :createButtonFn="postRatePage" />
+  <modal-rate v-model="dialog" header="comment" label="send" :createButtonFn="postRatePage" :onCancelModal="onCancelModal" />
 </template>
 
 <style scoped>

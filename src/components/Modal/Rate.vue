@@ -16,6 +16,10 @@ const props = defineProps({
     type: Function,
     default: () => void 0
   },
+  onCancelModal:{
+    type: Function,
+    default: () => void 0
+  },
   header: {
     type: String,
     default: null
@@ -57,9 +61,14 @@ const create = async () => {
     text.value.message = null
     emit('update:modelValue', false)
   }
-  finally {
 
+  finally {
   }
+}
+
+const handleCancel = async () => {
+  props.onCancelModal()
+  modelValue.value = false
 }
 </script>
 
@@ -88,7 +97,7 @@ const create = async () => {
         shadow
         color="text-primary-900"
         border-color="border-transparent"
-        @click="modelValue = false"
+        @click="handleCancel"
       />
 
       <base-button

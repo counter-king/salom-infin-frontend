@@ -7,6 +7,7 @@ const URLS = {
     newsLikes: "news-likes",
     newsComments: "news-comments",
     newsPending: "news/pending-news",
+    myNews: "news/my-news"
 }
 
 
@@ -34,9 +35,19 @@ export const fetchGetNews = (id) => {
     return axiosConfig.get(`${URLS.news}/${id}`)
 }
 
+// get news list for moderation
+export const fetchGetModerationNewsList = (params) => {
+    return axiosConfig.get(`${URLS.newsPending}/`, { page_size: 20, ...params })
+}
+
+// get my news list 
+export const fetchGetMyNewsList = (params) => {
+    return axiosConfig.get(`${URLS.myNews}/`, { page_size: 20, ...params })
+}
+
 // get news-catefory
 export const fetchGetNewsCategoryList = (params) => {
-    return axiosConfig.get(`${URLS.newsCategories}/`, params)
+    return axiosConfig.get(`${URLS.newsCategories}/`, { page_size: 200, ...params})
 }
 
 // get news-tags
