@@ -4,10 +4,11 @@ import axios from 'axios'
 import { useAuthStore } from '@/modules/Auth/stores'
 // Utils
 import { dispatchNotify } from '@/utils/notify'
-import { getStorageItem, removeStorageItem, saveStorageItem} from "@/utils/storage"
-import { LANG, ACCESS, REFRESH, EXPIRES, CURRENT_ROUTE } from "@/constants/storage"
+import { getStorageItem, removeStorageItem, saveStorageItem} from '@/utils/storage'
+// Const
+import { LANG, ACCESS, REFRESH, EXPIRES, CURRENT_ROUTE } from '@/constants/storage'
+import { REDIRECT_AFTER_LOGIN } from '@/constants/storage'
 import { COLOR_TYPES } from '@/enums'
-import { REDIRECT_AFTER_LOGIN } from '../constants/storage'
 
 const baseURL = process.env.NODE_ENV === 'development' || window.location.host === 'app.itco.uz' || window.location.host === 'new-side-project.vercel.app' ? import.meta.env.VITE_BASE_TEST_URL : import.meta.env.VITE_BASE_PROD_URL;
 const axiosParams = { baseURL }
@@ -60,10 +61,6 @@ axiosInstance.interceptors.response.use(
       removeStorageItem(EXPIRES)
       removeStorageItem(CURRENT_ROUTE)
       authStore.actionSessionEnd(true)
-    }
-
-    if(typeof response.data.message === 'string') {
-      console.log("error 123123")
     }
 
     dispatchNotify(null, response.data.message, COLOR_TYPES.ERROR)
