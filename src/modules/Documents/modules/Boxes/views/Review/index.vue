@@ -1,6 +1,7 @@
 <script setup>
 // Core
 import { useRoute } from 'vue-router'
+import { computed } from 'vue'
 // Store
 import { useReviewStore } from '../../stores/review.store'
 // Components
@@ -9,12 +10,21 @@ import { ActionToolbar } from '@/components/Actions'
 import { LinkableCell } from '@/components/Table'
 // Utils
 import { BOXES_INCOMING_COLUMNS } from '../../constants'
+// Constants
+import { pagination as paginationDefault } from '@/constants/constants'
 // Composable
 const route = useRoute()
 const reviewStore = useReviewStore()
 // Reactive
 const filterKeys = ['approvers', 'author', 'curator', 'signers', 'departments', 'register_number', 'status']
 const keysToIncludeOnClearFilter = ['type']
+
+// computed
+const pagination = computed(()=>({ 
+  page:  route.query.page || paginationDefault.page,
+  pageSize: route.query.page_size || paginationDefault.pageSize,
+  firstRow: route.query.first_row || paginationDefault.firstRow
+}));
 // Methods
 const link = (data) => {
   return { name: 'ReviewShow', params: { id: data.id } }
@@ -47,8 +57,7 @@ const link = (data) => {
     >
       <template #count="{ index, data }">
         <linkable-cell :to="link(data)" :is-not-read="!data.read_time">
-          {{ index + 1 }}
-
+          {{ (pagination.page * pagination.pageSize + 1) - (pagination.pageSize - index) }}
           <template v-if="!data.read_time">
             <div class="absolute top-4 left-0 w-[3px] h-6 rounded-2xl bg-primary-500"></div>
           </template>

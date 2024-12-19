@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted, reactive, ref} from "vue";
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from "vue-router";
 // Components
@@ -12,7 +12,9 @@ import FieldGroups from '@/components/FieldGroups.vue'
 import { formatDateHour } from "@/utils/formatDate";
 import { getStorageItem } from "@/utils/storage";
 // Store
-import { usePaginationStore } from "@/stores/pagination.store";
+// import { usePaginationStore } from "@/stores/pagination.store";
+// constants
+import { pagination } from "@/constants/constants";
 // Composable
 const { t } = useI18n()
 // Macros
@@ -68,11 +70,18 @@ const emit = defineEmits([
 ]);
 const router = useRouter();
 const route = useRoute();
-const paginationStore = usePaginationStore();
+// const paginationStore = usePaginationStore();
 
 // Reactive
 const expandedRowGroups = ref()
 const selection = ref()
+// reactive 
+const paginationStore = reactive({
+  page: pagination.page || route.query.page,
+  pageSize: pagination.pageSize || route.query.page_size,
+  firstRow: pagination.firstRow || route.query.first_row
+});
+
 // Computed
 const headersComputed = computed(() => {
   return props.headers.filter(header => header.active);
