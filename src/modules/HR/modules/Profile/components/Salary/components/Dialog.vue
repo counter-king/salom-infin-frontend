@@ -107,6 +107,7 @@ const verifyNumber = async (cur, next) => {
 provide('step-names', STEP_NAMES)
 provide('next-step', nextRoute)
 </script>
+
 <template>
   <base-dialog
     v-model="dialog"
@@ -117,6 +118,7 @@ provide('next-step', nextRoute)
     <template #content>
       <component :is="component" />
     </template>
+
     <template #footer>
       <base-button
         label="back"
@@ -128,6 +130,7 @@ provide('next-step', nextRoute)
         class="min-w-[105px]"
         @click="router.go(-1)"
       />
+
       <template v-if="step === STEP_NAMES.SET_PASSWORD">
         <base-button
           :loading="loading"
@@ -164,7 +167,7 @@ provide('next-step', nextRoute)
           rounded
           @click="verifyNumber(STEP_NAMES.CONFIRM, STEP_NAMES.SET_PASSWORD)"
         />
-        <!-- Страница Установить новый Парол равен => Установить Парол -->
+        <!-- Страница Установить новый Пароль равен => Установить Пароль -->
       </template>
     </template>
   </base-dialog>
