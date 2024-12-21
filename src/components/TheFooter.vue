@@ -1,15 +1,16 @@
 <script setup>
 // Core
 import { ref } from 'vue'
-import { useRoute } from 'vue-router';
+import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 // Components
 import { QuestionCircleBoldIcon } from '@/components/Icons'
 import { ModalRate } from '@/components/Modal'
-import { fetchCreateRatePage } from '@/services/common.service';
-// store
-
-const route = useRoute();
-
+// Service
+import { fetchCreateRatePage } from '@/services/common.service'
+// Composable
+const route = useRoute()
+const { t } = useI18n()
 // Reactive
 const count = ref(10)
 const dialog = ref(false)
@@ -23,12 +24,10 @@ const handleRate = (rate) => {
     }, 500)
   }
 }
-
 const postRatePage = async (comment) => {
   await fetchCreateRatePage({ rank: count.value, comment, page_url: route.fullPath})
   count.value = 10
 }
-
 </script>
 
 <template>
@@ -40,8 +39,7 @@ const postRatePage = async (comment) => {
         </div>
 
         <div class="max-w-[205px] w-full text-greyscale-300 ml-4 mr-6">
-          Sahifaning qulayligini va
-          dizaynini qanday baholaysiz?
+          {{ t('design-text') }}
         </div>
 
         <div class="flex items-center gap-2">

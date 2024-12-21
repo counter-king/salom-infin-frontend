@@ -14,8 +14,8 @@ import InputSwitch from 'primevue/inputswitch';
 import { tableConfig, columnConfig, paginationConfig, dropdownConfig, dropdownOptions, overlayConfig } from './config';
 import { useI18n } from "vue-i18n";
 import { SettingsMinimalisticIcon, AddPlusIcon } from '@/components/Icons'
-const { locale } = useI18n();
-const defaultFilter = { page: 1, page_size: 10 };
+const { locale, t } = useI18n();
+const defaultFilter = { page: 1, page_size: 15 };
 const assistants = ref([]);
 const count = ref(1);
 const filter = ref(defaultFilter);
@@ -24,26 +24,26 @@ const headers = ref([
     columnKey: 'assistant',
     disabled: true,
     field: 'assistant',
-    header: 'Помощник',
+    header: 'assistants',
     is_active: true,
   },
   {
     columnKey: 'user',
     field: 'user',
-    header: 'Руководитель',
+    header: 'leader',
     is_active: true,
   },
   {
     columnKey: 'is_active',
     disabled: true,
     field: 'is_active',
-    header: 'Состояние',
+    header: 'status',
     is_active: true,
   },
   {
     columnKey: 'action',
     field: 'action',
-    header: 'Действия',
+    header: 'actions',
     is_active: true,
   },
 ]);
@@ -128,7 +128,7 @@ onMounted(() => {
 </script>
 <template>
   <div class="flex mb-5 justify-between items-center">
-    <h1 class="text-2xl font-bold text-primary-900">Помощники</h1>
+    <h1 class="text-2xl font-bold text-primary-900">{{ t('assistants') }}</h1>
     <div class="flex items-center gap-2">
       <Button
         @click="toggle"
@@ -137,7 +137,7 @@ onMounted(() => {
         type="button"
         >
         <base-iconify class="mr-2" color="#767994" height="20" :icon="SettingsMinimalisticIcon" width="20"/>
-        <span>Настроить столбцы</span>
+        <span>{{ t('customize-columns') }}</span>
       </Button>
       <Button
         @click="visible = true"
@@ -146,7 +146,7 @@ onMounted(() => {
         type="button"
       >
       <base-iconify class="mr-2" height="20" :icon="AddPlusIcon" width="20"/>
-      <span>Создать</span>
+      <span>{{ t('create') }}</span>
     </Button>
     </div>
   </div>
@@ -162,7 +162,7 @@ onMounted(() => {
       <Column
         :columnKey="item.columnKey"
         :field="item.field"
-        :header="item.header"
+        :header="t(item.header)"
         :key="index"
         :pt="columnConfig"
         v-for="(item, index) in visibleHeaders"
@@ -212,7 +212,7 @@ onMounted(() => {
   <OverlayPanel ref="settingsOverlay" :pt="overlayConfig">
     <div class="p-3">
       <div v-for="(header, index) in editableHeaders" :key="index" class="w-full h-10 py-3 px-2 flex items-center gap-3 justify-between">
-        <span class="text-primary-900 text-sm font-medium">{{ header.header }}</span>
+        <span class="text-primary-900 text-sm font-medium">{{ t(header.header) }}</span>
         <InputSwitch
           size="small"
           :modelValue="header.is_active"
@@ -233,8 +233,13 @@ onMounted(() => {
       </div>
     </div>
     <div class="flex justify-end border-t bg-greyscale-50 py-3 pr-5 pl-8">
-      <Button @click="resetHeaders" class="p-button p-component shadow-button font-medium flex justify-center shadow-none rounded-full text-[14px] py-[6px] px-4 bg-white text-primary-900 border-transparent">Сбросить</Button>
-      <Button @click="saveChanges" class="p-button p-component font-medium flex justify-center shadow-none rounded-full text-[14px] py-[6px] px-4 ml-2">Сохранить</Button>
+      <Button @click="resetHeaders" class="p-button p-component font-medium flex justify-center shadow-none rounded-full text-[14px] py-[6px] px-4 bg-white text-primary-900 border-transparent">
+        {{ t('reset') }}
+      </Button>
+
+      <Button @click="saveChanges" class="p-button p-component font-medium flex justify-center shadow-none rounded-full text-[14px] py-[6px] px-4 ml-2">
+        {{ t('save') }}
+      </Button>
     </div>
   </OverlayPanel>
   <CreateAssistant

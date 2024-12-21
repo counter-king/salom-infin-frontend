@@ -16,7 +16,7 @@ import { useCommonStore } from '@/stores/common';
 // Enums
 import { COLOR_TYPES } from '@/enums'
 const commonStore = useCommonStore();
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const props = defineProps({ data: Object, field: String, getFirstPageJournals: Function, journals: Array, setJournals: Function });
 const conditionLoading = ref(false);
 const conditions = ref([]);
@@ -114,8 +114,8 @@ const changeOrder = () => {
 }
 const changeLanguage = () => {
    conditions.value = [
-      { label: 'Активный', value: true, },
-      { label: 'Неактивный', value: false }
+     { label: t('active'), value: true, },
+     { label: t('non-active'), value: false }
    ];
 };
 const parseCreateDate = created_date => {
@@ -165,7 +165,7 @@ onMounted(() => {
             @click="toggle"
             :style="{ background: data.is_active ? '#EEFFE7' : '#F7F7F9', color: data.is_active ? '#63BA3D' : '#767994' }"
             class="inline-flex items-center justify-center pr-2 pl-3 py-1 font-medium rounded-[80px] text-sm text-greyscale-500 cursor-pointer">
-            <span class="mr-1">{{ data.is_active ? 'Активный' : 'Неактивный' }}</span>
+            <span class="mr-1">{{ data.is_active ? t('active') : t('non-active') }}</span>
             <svg width="16" height="16" viewBox="0 0 12 12" fill="none">
                <path d="M9 4.5L6 7.5L3 4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>

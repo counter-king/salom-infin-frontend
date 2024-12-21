@@ -8,6 +8,8 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { replaceSpecCharsBracket } from '@/utils/string';
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 const props = defineProps({ data: Object, field: String, getFirstPageShortDescriptions: Function, setShortDescriptions: Function, shortDescriptions: Array });
 const deleteLoading = ref(false);
 const deleteVisible = ref(false);
@@ -33,7 +35,7 @@ const shortDescriptionEdit = () => {
                      return shortDescription;
                   }
                });
-               dispatchNotify(null, 'Краткое описание обновлен', 'success');
+               dispatchNotify(null, t('updated-short-description'), 'success');
                editVisible.value = false;
                props.setShortDescriptions(newShortDescriptions);
             }
@@ -43,7 +45,7 @@ const shortDescriptionEdit = () => {
             editLoading.value = false;
          });
    } else {
-      dispatchNotify(null, 'Введите описание', 'error');
+      dispatchNotify(null, t('enter-context'), 'error');
    }
 };
 const shortDescriptionDelete = () => {
@@ -54,7 +56,7 @@ const shortDescriptionDelete = () => {
       .then(response => {
          if(response?.status === 204) {
             deleteVisible.value = false;
-            dispatchNotify(null, 'Краткое описание удален', 'success')
+            dispatchNotify(null, t('deleted-short-description'), 'success')
             props.getFirstPageShortDescriptions();
          }
       })
@@ -78,7 +80,7 @@ const shortDescriptionDelete = () => {
          v-tooltip.top="{
             autoHide: false,
             escape: true,
-            value: `<h4 class='text-xs text-white -my-1'>Изменить</h4>`,
+            value: `<h4 class='text-xs text-white -my-1'>${ t('update') }</h4>`
          }"
          >
          <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
@@ -95,7 +97,7 @@ const shortDescriptionDelete = () => {
          v-tooltip.top="{
             autoHide: false,
             escape: true,
-            value: `<h4 class='text-xs text-white -my-1'>Удалить</h4>`,
+            value: `<h4 class='text-xs text-white -my-1'>${ t('delete') }</h4>`
          }"
          >
          <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
@@ -113,25 +115,25 @@ const shortDescriptionDelete = () => {
    <Dialog
       :closable="!editLoading"
       :pt="dialogConfig"
-      header="Изменить краткое описание"
+      :header="t('edit-short-description')"
       modal
       v-model:visible="editVisible">
       <div class="flex flex-col pb-10 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Описание (UZ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('context-uz') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editShortDescription.description_uz"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите описание"
+            :placeholder="t('enter-context')"
             type="text"
             @update:modelValue="description_uz => {
                editShortDescription = { ...editShortDescription, description_uz };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Описание (РУ) <span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('context-ru') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editShortDescription.description_ru"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите описание"
+            :placeholder="t('enter-context')"
             type="text"
             @update:modelValue="description_ru => {
                editShortDescription = { ...editShortDescription, description_ru };
@@ -149,15 +151,18 @@ const shortDescriptionDelete = () => {
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
-                  type="button">
-                  Отмена
+                  type="button"
+               >
+                 {{ t('cancel') }}
                </Button>
                <Button
                   @click="shortDescriptionEdit"
                   class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"
-               >Изменить</Button>
+               >
+                 {{ t('update') }}
+               </Button>
             </template>
          </div>
       </template>
@@ -166,7 +171,7 @@ const shortDescriptionDelete = () => {
       :closable="!deleteLoading"
       :pt="dialogConfig"
       dismissableMask
-      header="Удалить краткое описание"
+      :header="t('delete-short-description')"
       modal
       v-model:visible="deleteVisible">
       <div class="flex flex-col items-center pb-10 pt-4">
@@ -177,9 +182,9 @@ const shortDescriptionDelete = () => {
                <path fill-rule="evenodd" clip-rule="evenodd" d="M39.4608 53.3327H40.5392C44.2495 53.3327 46.1046 53.3327 47.3108 52.1514C48.517 50.9702 48.6404 49.0326 48.8872 45.1574L49.2428 39.5735C49.3767 37.4708 49.4437 36.4195 48.8386 35.7533C48.2335 35.0871 47.2116 35.0871 45.1679 35.0871H34.8321C32.7884 35.0871 31.7665 35.0871 31.1614 35.7533C30.5563 36.4195 30.6233 37.4708 30.7572 39.5735L31.1128 45.1574C31.3596 49.0326 31.483 50.9702 32.6892 52.1514C33.8954 53.3327 35.7505 53.3327 39.4608 53.3327ZM37.6617 40.2507C37.6067 39.6722 37.1167 39.2501 36.5672 39.308C36.0176 39.3658 35.6167 39.8817 35.6716 40.4601L36.3383 47.4777C36.3932 48.0561 36.8833 48.4782 37.4328 48.4203C37.9824 48.3625 38.3833 47.8467 38.3284 47.2682L37.6617 40.2507ZM43.4328 39.308C43.9824 39.3658 44.3833 39.8817 44.3284 40.4601L43.6617 47.4777C43.6068 48.0561 43.1167 48.4782 42.5672 48.4203C42.0176 48.3625 41.6167 47.8467 41.6716 47.2682L42.3383 40.2507C42.3933 39.6722 42.8833 39.2501 43.4328 39.308Z" fill="#F3335C"/>
             </svg>
          </div>
-         <h2 class="text-center font-semibold text-3xl text-gray-900 p-0 mt-6">Удалить краткое описание?</h2>
+         <h2 class="text-center font-semibold text-3xl text-gray-900 p-0 mt-6">{{ t('delete-short-description') }}?</h2>
          <p class="text-center py-0 px-6 mt-2 text-gray-400">
-            Вы уверены, что хотите удалить этого краткое описание
+            {{ t('delete-text-short-description') }}
          </p>
       </div>
       <template #footer>
@@ -193,15 +198,18 @@ const shortDescriptionDelete = () => {
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
-                  type="button">
-                  Отмена
+                  type="button"
+               >
+                 {{ t('cancel') }}
                </Button>
                <Button
                   @click="shortDescriptionDelete"
                   class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"
-               >Удалить</Button>
+               >
+                 {{ t('delete') }}
+               </Button>
             </template>
          </div>
       </template>

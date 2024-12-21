@@ -35,7 +35,7 @@ onMounted(() => {
       </template>
 
       <template v-else>
-        <empty title="В этом разделе у вас нет созданные разрешение" class="!h-full !shadow-none" />
+        <empty title="text-permission" class="!h-full !shadow-none" />
       </template>
     </template>
   </div>
