@@ -23,7 +23,7 @@ export const useRolesStore = defineStore('roles-store', {
     list: [],
     headers: [
       {
-        header: 'Наименование',
+        header: 'naming',
         field: 'name',
         active: true
       },
@@ -33,7 +33,7 @@ export const useRolesStore = defineStore('roles-store', {
         active: true
       },
       {
-        header: 'Действия',
+        header: 'actions',
         field: 'actions',
         active: true,
         class: 'w-[150px]'

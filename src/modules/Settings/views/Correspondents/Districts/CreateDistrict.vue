@@ -1,6 +1,7 @@
 <script setup>
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
+import { useI18n } from 'vue-i18n'
 import InputText from 'primevue/inputtext';
 import ProgressSpinner from 'primevue/progressspinner';
 import axiosConfig from "@/services/axios.config";
@@ -8,6 +9,7 @@ import { dialogConfig, selectConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { replaceSpecChars } from '@/utils/string';
+const { t } = useI18n();
 const props = defineProps({ getFirstPageDistricts: Function, setVisible: Function, visible: Boolean });
 const defaultDistrict = { name_uz: '', name_ru: '', code: '' };
 const district = ref(defaultDistrict);
@@ -25,7 +27,7 @@ const createDistrict = () => {
          .post('districts/', { name_ru, name_uz, name: name_uz, region: regionId, is_active: true, code })
          .then(response => {
             if(response?.status === 201) {
-               dispatchNotify(null, 'Район создан', 'success');
+               dispatchNotify(null, t('created-area'), 'success');
                district.value = defaultDistrict;
                props.getFirstPageDistricts();
                props.setVisible(false);
@@ -37,11 +39,11 @@ const createDistrict = () => {
             loading.value = false;
          });
    } else if(!regionId) {
-      dispatchNotify(null, 'Введите регион', 'error')
+      dispatchNotify(null, t('enter-region'), 'error')
    } else if(!name_uz || !name_ru) {
-      dispatchNotify(null, 'Введите название', 'error')
+      dispatchNotify(null, t('enter-naming-2'), 'error')
    } else {
-      dispatchNotify(null, 'Введите код', 'error')
+      dispatchNotify(null, t('enter-code'), 'error')
    }
 };
 const searchRegions = ({ search, page }) => {
@@ -80,7 +82,7 @@ const searchRegions = ({ search, page }) => {
       modal
       >
       <div class="flex flex-col pb-10 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Регион<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('region') }}<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
             :loading="regionLoading"
             :options="regions"
@@ -88,8 +90,8 @@ const searchRegions = ({ search, page }) => {
             :value="region"
             key="id"
             label="name"
-            noOptionsMessage="Регион не найден"
-            placeholder="Введите регион"
+            :noOptionsMessage="t('not-found-area')"
+            :placeholder="t('enter-region')"
             @onInputChange="searchRegions"
             @onChange="value => {
                region = value;
@@ -100,31 +102,31 @@ const searchRegions = ({ search, page }) => {
             </template>
          </base-auto-complete>
          <div class="mb-6"></div>
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('name-uz') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="district.name_uz"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название"
+            :placeholder="t('enter-naming-2')"
             type="text"
             @update:modelValue="value => {
                district = { ...district, name_uz: replaceSpecChars(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('name-ru') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="district.name_ru"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название"
+            :placeholder="t('enter-naming-2')"
             type="text"
             @update:modelValue="value => {
                district = { ...district, name_ru: replaceSpecChars(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('code') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="district.code"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите код"
+            :placeholder="t('enter-code')"
             type="text"
             @update:modelValue="value => {
                district = { ...district, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 8) };
@@ -145,15 +147,18 @@ const searchRegions = ({ search, page }) => {
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
-                  type="button">
-                  Отмена
+                  type="button"
+               >
+                 {{ t('cancel') }}
                </Button>
                <Button
                   @click="createDistrict"
                   class="shadow-none p-button p-component font-semibold text-sm !rounded-full m-0 py-[9px] px-4"
                   rounded
                   type="button"
-               >Создать</Button>
+               >
+                 {{ t('create') }}
+               </Button>
             </template>
          </div>
       </template>

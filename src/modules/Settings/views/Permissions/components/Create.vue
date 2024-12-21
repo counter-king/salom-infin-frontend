@@ -1,6 +1,7 @@
 <script setup>
 // Core
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useVuelidate } from '@vuelidate/core'
 import { helpers, required } from '@vuelidate/validators'
 // Components
@@ -17,6 +18,7 @@ import { COLOR_TYPES } from '@/enums'
 // Constants
 import { FORM_TYPE_CREATE, FORM_TYPE_UPDATE } from '@/constants/constants'
 // Composable
+const { t } = useI18n()
 const commonStore = useCommonStore()
 const allUrlStore = useAllUrlStore()
 const permissionStore = usePermissionStore()
@@ -72,19 +74,19 @@ const loading = ref(false)
 // Non-reactive
 const rules = {
   name_uz: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+    required: helpers.withMessage(t('required-text'), required)
   },
   name_ru: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+    required: helpers.withMessage(t('required-text'), required)
   },
   // __url: {
   //   required: helpers.withMessage(`Поле не должен быть пустым`, required)
   // },
   method: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+    required: helpers.withMessage(t('required-text'), required)
   },
   value: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+    required: helpers.withMessage(t('required-text'), required)
   }
 }
 // Composable
@@ -118,7 +120,7 @@ const submit = async () => {
 const create = async () => {
   let data = await permissionStore.createPermission({ item: props.item, list: props.list })
   modal.value = false
-  dispatchNotify(null, 'Права доступа создана', COLOR_TYPES.SUCCESS)
+  dispatchNotify(null, t('created-permission'), COLOR_TYPES.SUCCESS)
   emit('emit:created', data)
 }
 const update = async () => {
@@ -129,7 +131,7 @@ const update = async () => {
     list: props.list
   })
   modal.value = false
-  dispatchNotify(null, 'Права доступа изменен', COLOR_TYPES.SUCCESS)
+  dispatchNotify(null, t('edited-permission'), COLOR_TYPES.SUCCESS)
 }
 const handleUrlPath = (value) => {
   permissionStore.createModel.url_path = value.url
@@ -172,14 +174,14 @@ const afterHide = () => {
       </div>
 
       <template v-if="!props.onlyIcon">
-        <span class="text-sm font-semibold text-greyscale-900">Добавить разрешение</span>
+        <span class="text-sm font-semibold text-greyscale-900">{{ t('add-permission') }}</span>
       </template>
     </button>
 
     <!-- dialog -->
     <base-dialog
       v-model="modal"
-      :label="props.type === FORM_TYPE_CREATE ? 'Создать права доступа' : props.type === FORM_TYPE_UPDATE ? 'Изменить права доступа' : ''"
+      :label="props.type === FORM_TYPE_CREATE ? t('create-permission') : props.type === FORM_TYPE_UPDATE ? t('edite-permission') : ''"
       max-width="max-w-[544px]"
       @emit:after-hide="afterHide"
     >
@@ -188,7 +190,7 @@ const afterHide = () => {
           <template v-if="props.item?.name_ru && props.type === FORM_TYPE_CREATE">
             <base-input
               v-model="item.name_ru"
-              label="Вы создаете в:"
+              :label="t('you-create-at')"
               required
               disabled
             />
@@ -197,14 +199,14 @@ const afterHide = () => {
           <base-input
             v-model="$v.name_uz.$model"
             :error="$v.name_uz"
-            label="Наименование (UZ)"
+            label="name-uz"
             required
           />
 
           <base-input
             v-model="$v.name_ru.$model"
             :error="$v.name_ru"
-            label="Наименование (RU)"
+            label="name-ru"
             required
           />
 
@@ -215,8 +217,8 @@ const afterHide = () => {
             searchable
             option-label="url"
             custom-search
-            label="АПИ путь"
-            placeholder="АПИ путь"
+            label="api-url"
+            placeholder="api-url"
             @emit:change="handleUrlPath"
           />
 
@@ -226,16 +228,16 @@ const afterHide = () => {
             :options="requests"
             option-label="name"
             option-value="value"
-            label="Методы"
-            placeholder="Методы"
+            label="methods"
+            placeholder="methods"
             required
           />
 
           <base-input
             v-model="$v.value.$model"
             :error="$v.value"
-            label="Значение"
-            placeholder="Значение"
+            label="value"
+            placeholder="value"
             required
           />
 
@@ -279,7 +281,7 @@ const afterHide = () => {
 
       <template #footer>
         <base-button
-          label="Отмена"
+          label="cancel"
           rounded
           outlined
           shadow
@@ -289,7 +291,7 @@ const afterHide = () => {
         />
 
         <base-button
-          :label="props.type === FORM_TYPE_CREATE ? 'Создать' : props.type === FORM_TYPE_UPDATE ? 'Изменить' : ''"
+          :label="props.type === FORM_TYPE_CREATE ? t('create') : props.type === FORM_TYPE_UPDATE ? t('update') : ''"
           rounded
           shadow
           border-color="border-transparent"

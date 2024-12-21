@@ -12,31 +12,31 @@ const navs = ref([])
 const changeLanguage = () => {
   navs.value = [
     {
-      title: 'Физическое лицо',
+      title: 'physical',
       icon: UserCheckRoundedBrokenIcon,
       link: 'PhysicalIndex',
       permission: 'settings-correspondent-physical'
     },
     {
-      title: 'Индивидуальный предприниматель',
+      title: 'individual-entrepreneur',
       icon: UserCheckRoundedBrokenIcon,
       link: 'EntrepreneurIndex',
       permission: 'settings-correspondent-individual'
     },
     {
-      title: 'Юридическое лицо',
+      title: 'legal-entity',
       icon: BuildingsIcon,
       link: 'LegalIndex',
       permission: 'settings-correspondent-legal'
     },
     {
-      title: 'Регионы',
+      title: 'regions',
       icon: MapIcon,
       link: 'RegionsIndex',
       permission: 'settings-correspondent-regions'
     },
     {
-      title: 'Районы',
+      title: 'areas',
       icon: StreetsMapPointIcon,
       link: 'DistrictsIndex',
       permission: 'settings-correspondent-districts'

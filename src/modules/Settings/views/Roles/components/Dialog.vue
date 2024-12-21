@@ -1,6 +1,7 @@
 <script setup>
 // Core
 import { useModel, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useVuelidate } from '@vuelidate/core'
 import { helpers, required } from '@vuelidate/validators'
 // Stores
@@ -12,6 +13,8 @@ import { dispatchNotify } from '@/utils/notify'
 import { COLOR_TYPES } from '@/enums'
 // Const
 import { FORM_TYPE_CREATE, FORM_TYPE_UPDATE } from '@/constants/constants'
+// Composable
+const { t } = useI18n()
 // Macros
 const props = defineProps({
   modelValue: {
@@ -26,7 +29,7 @@ const emit = defineEmits(['update:modelValue', 'emit:success'])
 // Non-reactive
 const rules = {
   name: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+    required: helpers.withMessage(t('required-text'), required)
   },
 }
 // Composable
@@ -65,13 +68,13 @@ const create = async () => {
   await rolesStore.createRole()
   await rolesStore.actionGetList()
   modelValue.value = false
-  dispatchNotify(null, 'Права доступа создана', COLOR_TYPES.SUCCESS)
+  dispatchNotify(null, t('created-permission'), COLOR_TYPES.SUCCESS)
 }
 const update = async () => {
   await rolesStore.updateRole()
   await rolesStore.actionGetList()
   modelValue.value = false
-  dispatchNotify(null, 'Права доступа изменен', COLOR_TYPES.SUCCESS)
+  dispatchNotify(null, t('edited-permission'), COLOR_TYPES.SUCCESS)
 }
 const afterHide = () => {
   clearModel(rolesStore.createModel, ['is_active'])
@@ -83,7 +86,7 @@ const afterHide = () => {
   <base-dialog
     v-model="modelValue"
     max-width="max-w-[545px]"
-    :label="props.type === FORM_TYPE_CREATE ? 'Создать роль' : props.type === FORM_TYPE_UPDATE ? 'Изменить роль' : ''"
+    :label="props.type === FORM_TYPE_CREATE ? t('create-role') : props.type === FORM_TYPE_UPDATE ? t('edit-role') : ''"
     @emit:after-hide="afterHide"
   >
     <template #content>
@@ -92,15 +95,15 @@ const afterHide = () => {
           v-model="$v.name.$model"
           :error="$v.name"
           required
-          label="Наименование"
-          placeholder="Наименование"
+          label="naming"
+          placeholder="naming"
         />
 
         <div class="flex items-center justify-between !mt-7">
-          <span class="text-sm font-medium text-greyscale-500">Статус</span>
+          <span class="text-sm font-medium text-greyscale-500">{{ t('status') }}</span>
 
           <div class="flex items-center gap-3">
-            <span class="text-sm font-medium text-greyscale-900">{{ rolesStore.createModel.is_active ? 'Активный' : 'Не активный' }}</span>
+            <span class="text-sm font-medium text-greyscale-900">{{ rolesStore.createModel.is_active ? t('active') : t('non-active') }}</span>
 
             <base-switch
               v-model="rolesStore.createModel.is_active"
@@ -114,7 +117,7 @@ const afterHide = () => {
 
     <template #footer>
       <base-button
-        label="Отмена"
+        label="cancel"
         rounded
         outlined
         shadow
@@ -124,7 +127,7 @@ const afterHide = () => {
       />
 
       <base-button
-        :label="props.type === FORM_TYPE_CREATE ? 'Создать' : props.type === FORM_TYPE_UPDATE ? 'Изменить' : ''"
+        :label="props.type === FORM_TYPE_CREATE ? t('create') : props.type === FORM_TYPE_UPDATE ? t('update') : ''"
         rounded
         shadow
         border-color="border-transparent"

@@ -15,7 +15,7 @@ import { tableConfig, columnConfig, dropdownConfig, paginationConfig, dropdownOp
 import { useI18n } from "vue-i18n";
 import { SettingsMinimalisticIcon, AddPlusIcon } from '@/components/Icons'
 const { t } = useI18n();
-const defaultFilter = { page: 1, page_size: 10, search: '' };
+const defaultFilter = { page: 1, page_size: 15, search: '' };
 const count = ref(1);
 const documentTitles = ref([]);
 const filter = ref(defaultFilter);

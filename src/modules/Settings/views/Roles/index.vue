@@ -2,6 +2,7 @@
 // Core
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 // Components
 import { ActionToolbar } from '@/components/Actions'
 import { LinkableCell } from '@/components/Table'
@@ -16,6 +17,7 @@ import { FORM_TYPE_CREATE, FORM_TYPE_UPDATE } from '@/constants/constants'
 // Composable
 const route = useRoute()
 const rolesStore = useRolesStore()
+const { t } = useI18n()
 // Reactive
 const modal = ref(false)
 const modalType = ref(FORM_TYPE_CREATE)
@@ -37,7 +39,7 @@ const link = (data) => {
 
 <template>
   <div class="roles-view h-full">
-    <action-toolbar title="Роли">
+    <action-toolbar title="roles">
       <template #filters>
         <base-button
           label="create"
@@ -79,7 +81,7 @@ const link = (data) => {
           v-tooltip.top="{
             autoHide: false,
             escape: true,
-            value: `<h4 class='text-xs text-white -my-1'>Изменить</h4>`,
+            value: `<h4 class='text-xs text-white -my-1'>${ t('update') }</h4>`
           }"
           @click="edit(data, data.id, FORM_TYPE_UPDATE)"
         >

@@ -8,6 +8,8 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { replaceSpecCharsBracket } from '@/utils/string';
+import { useI18n} from 'vue-i18n'
+const { t } = useI18n()
 const props = defineProps({ getFirstPageDepartments: Function, setVisible: Function, visible: Boolean });
 const defaultDepartment = { name_uz: '', name_ru: '', code: '' };
 const department = ref(defaultDepartment);
@@ -28,7 +30,7 @@ const createDepartment = () => {
          .then(response => {
             if(response?.status === 201) {
                department.value = defaultDepartment;
-               dispatchNotify(null, 'Департамент создан', 'success');
+               dispatchNotify(null, t('created-department'), 'success');
                props.getFirstPageDepartments();
                props.setVisible(false);
             }
@@ -38,11 +40,11 @@ const createDepartment = () => {
             loading.value = false;
          });
    } else if(!companyId) {
-      dispatchNotify(null, 'Введите филиал', 'error');
+      dispatchNotify(null, t('enter-branch'), 'error');
    } else if(!name_uz || !name_ru) {
-      dispatchNotify(null, 'Введите название', 'error')
+      dispatchNotify(null, t('enter-naming-2'), 'error')
    } else {
-      dispatchNotify(null, 'Введите код', 'error');
+      dispatchNotify(null, t('enter-code'), 'error');
    }
 };
 const searchCompanies = ({ search, page }) => {
@@ -71,7 +73,7 @@ const searchCompanies = ({ search, page }) => {
       :closable="!loading"
       :pt="dialogConfig"
       :visible="visible"
-      header="Создать департамент"
+      :header="t('create-department')"
       modal
       @update:visible="() => {
          company = '';
@@ -80,7 +82,7 @@ const searchCompanies = ({ search, page }) => {
       }"
       >
       <div class="flex flex-col pb-10 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Филиал<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('branch') }}<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
             :loading="companiesLoading"
             :options="companies"
@@ -89,8 +91,8 @@ const searchCompanies = ({ search, page }) => {
             @onInputChange="searchCompanies"
             key="id"
             label="name"
-            noOptionsMessage="Филиал не найден"
-            placeholder="Введите филиал"
+            :noOptionsMessage="t('not-found-branch')"
+            :placeholder="t('enter-branch')"
             @onChange="value => {
                company = value;
             }"
@@ -99,31 +101,31 @@ const searchCompanies = ({ search, page }) => {
                <div class="flex items-center h-11 px-3 text-base">{{ option.name }}</div>
             </template>
          </base-auto-complete>
-         <p class="text-sm text-greyscale-500 font-medium mb-1 mt-6">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1 mt-6">{{ t('name-u') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="department.name_uz"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название"
+            :placeholder="t('enter-naming-2')"
             type="text"
             @update:modelValue="value => {
                department = { ...department, name_uz: replaceSpecCharsBracket(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ) <span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('name-ru') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="department.name_ru"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название"
+            :placeholder="t('enter-naming-2')"
             type="text"
             @update:modelValue="value => {
                department = { ...department, name_ru: replaceSpecCharsBracket(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('code') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="department.code"
             :pt="{ root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
-            placeholder="Введите код"
+            :placeholder="t('enter-code')"
             type="text"
             @update:modelValue="value => {
                department = { ...department, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 8) };
@@ -145,15 +147,19 @@ const searchCompanies = ({ search, page }) => {
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
-                  type="button">
-                  Отмена
+                  type="button"
+               >
+                 {{ t('reset') }}
                </Button>
+
                <Button
                   @click="createDepartment"
                   class="shadow-none p-button p-component font-semibold text-sm !rounded-full m-0 py-[9px] px-4"
                   rounded
                   type="button"
-               >Создать</Button>
+               >
+                 {{ t('create') }}
+               </Button>
             </template>
          </div>
       </template>

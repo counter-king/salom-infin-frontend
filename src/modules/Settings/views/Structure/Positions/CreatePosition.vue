@@ -7,6 +7,8 @@ import axiosConfig from "@/services/axios.config";
 import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 const props = defineProps({ getFirstPagePositions: Function, setVisible: Function, visible: Boolean });
 const defaultPosition = { name_uz: '', name_ru: '', code: '' };
 const position = ref(defaultPosition);
@@ -16,10 +18,10 @@ const createPosition = () => {
    if(name_uz && name_ru && code) {
       loading.value = true;
       axiosConfig
-         .post('/positions/', { name_ru, name_uz, code, is_active: true, code })
+         .post('/positions/', { name_ru, name_uz, is_active: true, code })
          .then(response => {
             if(response?.status === 201) {
-               dispatchNotify(null, 'Должность создан', 'success');
+               dispatchNotify(null, t('created-position'), 'success');
                position.value = defaultPosition;
                props.getFirstPagePositions();
                props.setVisible(false);
@@ -30,9 +32,9 @@ const createPosition = () => {
             loading.value = false;
          });
    } else if(!name_ru || !name_uz) {
-      dispatchNotify(null, 'Введите название', 'error');
+     dispatchNotify(null, t('enter-naming-2'), 'error');
    } else {
-      dispatchNotify(null, 'Введите код', 'error');
+     dispatchNotify(null, t('enter-code'), 'error');
    }
 };
 </script>
@@ -41,7 +43,7 @@ const createPosition = () => {
       :closable="!loading"
       :pt="dialogConfig"
       :visible="visible"
-      header="Создать должность"
+      :header="t('create-position')"
       modal
       @update:visible="() => {
          position = defaultPosition;
@@ -49,31 +51,31 @@ const createPosition = () => {
       }"
       >
       <div class="flex flex-col pb-10 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('name-uz') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="position.name_uz"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название"
+            :placeholder="t('enter-naming-2')"
             type="text"
             @update:modelValue="name_uz => {
                position = { ...position, name_uz };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('name-ru') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="position.name_ru"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название"
+            :placeholder="t('enter-naming-2')"
             type="text"
             @update:modelValue="name_ru => {
                position = { ...position, name_ru };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('code') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="position.code"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите код"
+            :placeholder="t('enter-code')"
             type="text"
             @update:modelValue="value => {
                position = { ...position, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 8) };
@@ -94,15 +96,19 @@ const createPosition = () => {
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
-                  type="button">
-                  Отмена
+                  type="button"
+               >
+                 {{ t('cancel') }}
                </Button>
+
                <Button
                   @click="createPosition"
                   class="shadow-none p-button p-component font-semibold text-sm !rounded-full m-0 py-[9px] px-4"
                   rounded
                   type="button"
-               >Создать</Button>
+               >
+                 {{ t('create') }}
+               </Button>
             </template>
          </div>
       </template>

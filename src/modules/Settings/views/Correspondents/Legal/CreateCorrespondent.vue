@@ -11,7 +11,7 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { useI18n } from "vue-i18n";
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const props = defineProps({ getFirstPageCorrespondents: Function, setVisible: Function, visible: Boolean });
 const defaultCorrespondent = { legal_name: '', legal_address: '', tin: '', checkpoint: '', email: '', phone: 8, description: '' };
 const correspondent = ref(defaultCorrespondent);
@@ -28,7 +28,7 @@ const createCorrespondent = () => {
          .post('correspondents/', data)
          .then(response => {
             if(response?.status === 201) {
-               dispatchNotify(null, 'Корреспондент создан', 'success');
+               dispatchNotify(null, t('created-correspondents'), 'success');
                correspondent.value = defaultCorrespondent;
                gender.value = null;
                props.getFirstPageCorrespondents();
@@ -40,15 +40,15 @@ const createCorrespondent = () => {
             loading.value = false;
          });
    } else if(!legal_name) {
-      dispatchNotify(null, 'Введите наименование', 'error')
+     dispatchNotify(null, t('enter-naming'), 'error')
    } else if(!legal_address) {
-      dispatchNotify(null, 'Введите адрес', 'error')
+     dispatchNotify(null, t('enter-address'), 'error')
    } else if(String(tin || '').length !== 9) {
-      dispatchNotify(null, 'Введите правильный ИНН', 'error')
+     dispatchNotify(null, t('enter-correct-tin'), 'error')
    } else if(newPhone.length !== 13) {
-      dispatchNotify(null, 'Введите свой номер телефона правильно', 'error')
+     dispatchNotify(null, t('enter-correct-phone-number'), 'error')
    } else {
-      dispatchNotify(null, 'Введите свой адрес электронной почты правильно', 'error')
+     dispatchNotify(null, t('enter-correct-email'), 'error')
    }
 };
 </script>
@@ -61,81 +61,81 @@ const createCorrespondent = () => {
       :closable="!loading"
       :pt="dialogConfig"
       :visible="visible"
-      header="Создать корреспондент"
+      :header="t('create-correspondents')"
       modal
       >
       <div class="flex flex-col pb-0 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Наименование<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('naming') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="correspondent.legal_name"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите наименование"
+            :placeholder="t('enter-naming')"
             type="text"
             @update:modelValue="legal_name => {
                correspondent = { ...correspondent, legal_name };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Адрес<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('address') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="correspondent.legal_address"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите адрес"
+            :placeholder="t('enter-address')"
             type="text"
             @update:modelValue="legal_address => {
                correspondent = { ...correspondent, legal_address };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">ИНН<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('tin') }}<span class="text-red-500 ml-1">*</span></p>
          <InputNumber
             :maxFractionDigits="0"
             :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
             :useGrouping="false"
-            placeholder="Введите ИНН"
+            :placeholder="t('enter-tin')"
             v-model="correspondent.tin"
             @input="({ value }) => {
                const tin = +String(value || '').slice(0, 9)
                correspondent = { ...correspondent, tin }
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">КПП</p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('kpp') }}</p>
          <InputText
             :modelValue="correspondent.checkpoint"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите КПП"
+            :placeholder="t('enter-kpp')"
             type="text"
             @update:modelValue="checkpoint => {
                correspondent = { ...correspondent, checkpoint };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Номер телефона<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('phone-number') }}<span class="text-red-500 ml-1">*</span></p>
          <InputNumber
             :maxFractionDigits="0"
             :pt="{ root: { class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm'] }, input: { class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm'] } }"
             :useGrouping="false"
             v-model="correspondent.phone"
-            placeholder="Введите номер телефона"
+            :placeholder="t('enter-phone-number')"
             prefix="+99"
             @input="({ value }) => {
                const phone = value && value > 7 ? +String(value || '').slice(0, 10) : 8;
                correspondent = { ...correspondent, phone }
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Электронная почта<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('email') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="correspondent.email"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите электронная почта"
+            :placeholder="t('enter-email')"
             type="text"
             @update:modelValue="email => {
                correspondent = { ...correspondent, email };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Содержание</p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('content') }}</p>
          <Textarea
             :modelValue="correspondent.description"
             :pt="{root: {class:['h-[100px] w-[500px] border-transparent focus:border-primary-500 resize-none rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             cols="30"
-            placeholder="Введите содержание"
+            :placeholder="t('enter-content')"
             rows="5"
             @update:modelValue="description => {
                correspondent = { ...correspondent, description };
@@ -156,15 +156,18 @@ const createCorrespondent = () => {
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
-                  type="button">
-                  Отмена
+                  type="button"
+               >
+                  {{ t('cancel') }}
                </Button>
                <Button
                   @click="createCorrespondent"
                   class="shadow-none p-button p-component font-semibold text-sm !rounded-full m-0 py-[9px] px-4"
                   rounded
                   type="button"
-               >Создать</Button>
+               >
+                 {{ t('create') }}
+               </Button>
             </template>
          </div>
       </template>

@@ -1,4 +1,6 @@
 <script setup>
+// Core
+import { useI18n } from 'vue-i18n'
 // Components
 import { TrashBinTrashIcon } from '@/components/Icons'
 import PermissionCreate from './Create.vue'
@@ -7,6 +9,7 @@ import { usePermissionStore } from '../../../stores/permissions.store'
 // Constants
 import { FORM_TYPE_UPDATE } from '@/constants/constants'
 // Composable
+const { t } = useI18n()
 const permissionStore = usePermissionStore()
 // Macros
 const props = defineProps({
@@ -31,7 +34,7 @@ const deletePermission = async (event, id, index, list) => {
   event.preventDefault()
   event.stopImmediatePropagation()
 
-  if(!confirm(`Действительно хотите удалить ?`)) {
+  if(!confirm(t('really-want-delete'))) {
     return
   }
 
@@ -48,7 +51,7 @@ const deletePermission = async (event, id, index, list) => {
   <div class="flex items-center gap-1">
     <button
       v-tooltip.top="{
-        value: `<h4 class='text-xs text-white -my-1'>Удалить</h4>`,
+        value: `<h4 class='text-xs text-white -my-1'>${ t('delete') }</h4>`,
         escape: true,
         autoHide: false
       }"
@@ -59,7 +62,7 @@ const deletePermission = async (event, id, index, list) => {
 
     <permission-create
       v-tooltip.top="{
-        value: `<h4 class='text-xs text-white -my-1'>Изменить</h4>`,
+        value: `<h4 class='text-xs text-white -my-1'>${ t('update') }</h4>`,
         escape: true,
         autoHide: false
       }"
@@ -74,7 +77,7 @@ const deletePermission = async (event, id, index, list) => {
 
     <permission-create
       v-tooltip.top="{
-        value: `<h4 class='text-xs text-white -my-1'>Создать</h4>`,
+        value: `<h4 class='text-xs text-white -my-1'>${ t('create') }</h4>`,
         escape: true,
         autoHide: false
       }"

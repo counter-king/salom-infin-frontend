@@ -11,7 +11,7 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { useI18n } from "vue-i18n";
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const props = defineProps({ data: Object, field: String, getFirstPageCorrespondents: Function, correspondents: Array, setCorrespondents: Function });
 const deleteLoading = ref(false);
 const deleteVisible = ref(false);
@@ -40,7 +40,7 @@ const correspondentEdit = () => {
                      return correspondent;
                   }
                });
-               dispatchNotify(null, 'Корреспондент обновлен', 'success');
+               dispatchNotify(null, t('updated-correspondents'), 'success');
                editVisible.value = false;
                props.setCorrespondents(newCorrespondents);
             }
@@ -50,15 +50,15 @@ const correspondentEdit = () => {
             editLoading.value = false;
          });
    } else if(!legal_name) {
-      dispatchNotify(null, 'Введите наименование', 'error')
+      dispatchNotify(null, t('enter-naming'), 'error')
    } else if(!legal_address) {
-      dispatchNotify(null, 'Введите адрес', '', 'error')
+      dispatchNotify(null, t('enter-address'), 'error')
    } else if(String(tin || '').length !== 9) {
-      dispatchNotify(null, 'Введите правильный ИНН', 'error')
+      dispatchNotify(null, t('enter-correct-tin'), 'error')
    } else if(newPhone.length !== 13) {
-      dispatchNotify(null, 'Введите свой номер телефона правильно', 'error')
+      dispatchNotify(null, t('enter-correct-phone-number'), 'error')
    } else {
-      dispatchNotify(null, 'Введите свой адрес электронной почты правильно', 'error')
+      dispatchNotify(null, t('enter-correct-email'), 'error')
    }
 };
 const correspondentDelete = () => {
@@ -69,7 +69,7 @@ const correspondentDelete = () => {
       .then(response => {
          if(response?.status === 204) {
             deleteVisible.value = false;
-            dispatchNotify(null, 'Корреспондент удален', '', 'success')
+            dispatchNotify(null, t('deleted-correspondents'), 'success')
             props.getFirstPageCorrespondents();
          }
       })
@@ -79,7 +79,7 @@ const correspondentDelete = () => {
       });
 };
 const openEditModal = () => {
-   const phone = +String(props.data?.phone || '').slice(3);;
+   const phone = +String(props.data?.phone || '').slice(3);
    const newGender = genders.value.find(gender => gender?.value === props.data?.gender);
    gender.value = newGender;
    editCorrespondent.value = { ...props.data, phone };
@@ -97,7 +97,7 @@ const openEditModal = () => {
          v-tooltip.top="{
             autoHide: false,
             escape: true,
-            value: `<h4 class='text-xs text-white -my-1'>Изменить</h4>`,
+            value: `<h4 class='text-xs text-white -my-1'>${ t('update') }</h4>`
          }"
          >
          <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
@@ -114,7 +114,7 @@ const openEditModal = () => {
          v-tooltip.top="{
             autoHide: false,
             escape: true,
-            value: `<h4 class='text-xs text-white -my-1'>Удалить</h4>`,
+            value: `<h4 class='text-xs text-white -my-1'>${ t('delete') }</h4>`
          }"
          >
          <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
@@ -132,82 +132,82 @@ const openEditModal = () => {
    <Dialog
       :closable="!editLoading"
       :pt="dialogConfig"
-      header="Изменить корреспондент"
+      :header="t('edit-correspondents')"
       modal
       v-model:visible="editVisible"
       >
       <div class="flex flex-col pb-0 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Наименование<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('naming') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editCorrespondent.legal_name"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите наименование"
+            :placeholder="t('enter-naming')"
             type="text"
             @update:modelValue="legal_name => {
                editCorrespondent = { ...editCorrespondent, legal_name };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Адрес<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('address') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editCorrespondent.legal_address"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите адрес"
+            :placeholder="t('enter-address')"
             type="text"
             @update:modelValue="legal_address => {
                editCorrespondent = { ...editCorrespondent, legal_address };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">ИНН<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('tin') }}<span class="text-red-500 ml-1">*</span></p>
          <InputNumber
             :maxFractionDigits="0"
             :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
             :useGrouping="false"
-            placeholder="Введите ИНН"
+            :placeholder="t('enter-tin')"
             v-model="editCorrespondent.tin"
             @input="({ value }) => {
                const tin = +String(value || '').slice(0, 9)
                editCorrespondent = { ...editCorrespondent, tin }
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">КПП</p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('kpp') }}</p>
          <InputText
             :modelValue="editCorrespondent.checkpoint"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите КПП"
+            :placeholder="t('enter-kpp')"
             type="text"
             @update:modelValue="checkpoint => {
                editCorrespondent = { ...editCorrespondent, checkpoint: checkpoint };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Номер телефона<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('phone-number') }}<span class="text-red-500 ml-1">*</span></p>
          <InputNumber
             :maxFractionDigits="0"
             :pt="{ root: {class:['h-[44px] w-[500px]  rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
             :useGrouping="false"
             v-model="editCorrespondent.phone"
-            placeholder="Введите номер телефона"
+            :placeholder="t('enter-phone-number')"
             prefix="+99"
             @input="({ value }) => {
                const phone = value && value > 7 ? +String(value || '').slice(0, 10) : 8;
                editCorrespondent = { ...editCorrespondent, phone }
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Электронная почта<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('email') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editCorrespondent.email"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите электронная почта"
+            :placeholder="t('enter-email')"
             type="text"
             @update:modelValue="email => {
                editCorrespondent = { ...editCorrespondent, email };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Содержание</p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('content') }}</p>
          <Textarea
             :modelValue="editCorrespondent.description"
             :pt="{root: {class:['h-[100px] w-[500px] border-transparent focus:border-primary-500 resize-none rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
             cols="30"
-            placeholder="Введите содержание"
+            :placeholder="t('enter-content')"
             rows="5"
             @update:modelValue="description => {
                editCorrespondent = { ...editCorrespondent, description };
@@ -225,15 +225,19 @@ const openEditModal = () => {
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
-                  type="button">
-                  Отмена
+                  type="button"
+               >
+                  {{ t('cancel') }}
                </Button>
-               <Button
+
+              <Button
                   @click="correspondentEdit"
                   class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"
-               >Изменить</Button>
+               >
+                {{ t('update') }}
+              </Button>
             </template>
          </div>
       </template>
@@ -242,7 +246,7 @@ const openEditModal = () => {
       :closable="!deleteLoading"
       :pt="dialogConfig"
       dismissableMask
-      header="Удалить корреспондент"
+      :header="t('delete-correspondents')"
       modal
       v-model:visible="deleteVisible">
       <div class="flex flex-col items-center pb-10 pt-4">
@@ -253,9 +257,9 @@ const openEditModal = () => {
                <path fill-rule="evenodd" clip-rule="evenodd" d="M39.4608 53.3327H40.5392C44.2495 53.3327 46.1046 53.3327 47.3108 52.1514C48.517 50.9702 48.6404 49.0326 48.8872 45.1574L49.2428 39.5735C49.3767 37.4708 49.4437 36.4195 48.8386 35.7533C48.2335 35.0871 47.2116 35.0871 45.1679 35.0871H34.8321C32.7884 35.0871 31.7665 35.0871 31.1614 35.7533C30.5563 36.4195 30.6233 37.4708 30.7572 39.5735L31.1128 45.1574C31.3596 49.0326 31.483 50.9702 32.6892 52.1514C33.8954 53.3327 35.7505 53.3327 39.4608 53.3327ZM37.6617 40.2507C37.6067 39.6722 37.1167 39.2501 36.5672 39.308C36.0176 39.3658 35.6167 39.8817 35.6716 40.4601L36.3383 47.4777C36.3932 48.0561 36.8833 48.4782 37.4328 48.4203C37.9824 48.3625 38.3833 47.8467 38.3284 47.2682L37.6617 40.2507ZM43.4328 39.308C43.9824 39.3658 44.3833 39.8817 44.3284 40.4601L43.6617 47.4777C43.6068 48.0561 43.1167 48.4782 42.5672 48.4203C42.0176 48.3625 41.6167 47.8467 41.6716 47.2682L42.3383 40.2507C42.3933 39.6722 42.8833 39.2501 43.4328 39.308Z" fill="#F3335C"/>
             </svg>
          </div>
-         <h2 class="text-center font-semibold text-3xl text-gray-900 p-0 mt-6">Удалить корреспондент?</h2>
+         <h2 class="text-center font-semibold text-3xl text-gray-900 p-0 mt-6">{{ t('delete-correspondents') }}?</h2>
          <p class="text-center py-0 px-6 mt-2 text-gray-400">
-            Вы уверены, что хотите удалить этого корреспондент
+            {{ t('text-correspondents') }}
          </p>
       </div>
       <template #footer>
@@ -269,15 +273,18 @@ const openEditModal = () => {
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
-                  type="button">
-                  Отмена
+                  type="button"
+               >
+                 {{ t('cancel') }}
                </Button>
                <Button
                   @click="correspondentDelete"
                   class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"
-               >Удалить</Button>
+               >
+                 {{ t('delete') }}
+               </Button>
             </template>
          </div>
       </template>

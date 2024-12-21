@@ -1,10 +1,12 @@
 <script setup>
 import Button from 'primevue/button';
 import ProgressSpinner from 'primevue/progressspinner';
+import { useI18n } from 'vue-i18n'
 import axiosConfig from "@/services/axios.config";
 import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
+const { t } = useI18n()
 const props = defineProps({
    activeDepartment: Object,
    departmentsList: Array,
@@ -52,7 +54,7 @@ const addEmployee = () => {
          .then(response => {
             if(response?.status === 200) {
                employee.value = '';
-               dispatchNotify(null, 'Сотрудник добавлен', 'success');
+               dispatchNotify(null, t('added-employee'), 'success');
                props.getFirstPageEmployees();
                props.setVisible(false);
             }
@@ -62,7 +64,7 @@ const addEmployee = () => {
             loading.value = false;
          });
    } else {
-      dispatchNotify(null, 'Введите сотрудник', 'error');
+      dispatchNotify(null, t('enter-employee'), 'error');
    }
 };
 </script>
@@ -71,14 +73,14 @@ const addEmployee = () => {
       :closable="!loading"
       :pt="dialogConfig"
       :visible="visible"
-      header="Добавить сотрудник"
+      :header="t('add-employee')"
       modal
       @update:visible="() => {
          employee = '';
          setVisible(!visible);
       }">
       <div class="flex flex-col">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Сотрудник<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('employee') }}<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
             :loading="employeeLoading"
             :options="employees"
@@ -86,8 +88,8 @@ const addEmployee = () => {
             :value="employee"
             key="id"
             label="full_name"
-            noOptionsMessage="Сотрудник не найден"
-            placeholder="Введите сотрудник"
+            :noOptionsMessage="t('not-found-employee')"
+            :placeholder="t('enter-employee')"
             @onInputChange="searchEmployees"
             @onChange="value => {
                employee = value;
@@ -124,15 +126,18 @@ const addEmployee = () => {
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
-                  type="button">
-                  Отмена
+                  type="button"
+               >
+                  {{ t('cancel') }}
                </Button>
                <Button
                   @click="addEmployee"
                   class="shadow-none p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 mx-0"
                   rounded
-                  type="button">
-                  Добавить</Button>
+                  type="button"
+               >
+                  {{ t('add') }}
+               </Button>
             </template>
          </div>
       </template>
@@ -140,7 +145,7 @@ const addEmployee = () => {
 </template>
 <style>
 .user-search-autocomplete .p-autocomplete-item {
-   transition: background 0s outline 0s !important;
+   transition: background 0s !important;
 }
 .user-search-autocomplete .p-autocomplete-item.p-focus {
    outline: 1px solid var(--primary) !important;

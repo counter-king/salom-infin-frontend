@@ -2,6 +2,7 @@
 // Core
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 // Components
 import { CardTable } from '@/components/Table'
 // Stores
@@ -16,6 +17,7 @@ import { COLOR_TYPES } from '@/enums'
 // Composable
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
 const rolesStore = useRolesStore()
 // Macros
 const emit = defineEmits(['update:selection'])
@@ -121,7 +123,7 @@ onBeforeUnmount(async () => {
         </template>
 
         <template #is_active="{ data }">
-          <span>{{ data.is_active ? 'Активный' : 'Не активный' }}</span>
+          <span>{{ data.is_active ? t('active') : t('non-active') }}</span>
         </template>
 
         <template #created_date="{ data }">

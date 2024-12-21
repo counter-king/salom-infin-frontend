@@ -1,5 +1,5 @@
 <script setup>
-// Cmponents
+// Components
 import PermissionContent from './components/Content.vue'
 </script>
 
