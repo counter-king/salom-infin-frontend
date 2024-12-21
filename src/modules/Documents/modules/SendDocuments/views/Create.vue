@@ -10,7 +10,8 @@ import {
   OrderForm,
   OrdinaryNoticeForm,
   DecreeForm,
-  PowerOfAttorneyForm
+  PowerOfAttorneyForm,
+  BusinessTripForm
 } from "@/modules/Documents/modules/SendDocuments/views/forms/index"
 // Constants
 import {FORM_TYPE_CREATE} from "@/constants/constants"
@@ -20,7 +21,6 @@ const route = useRoute()
 const formMap = {
   ...{
     [COMPOSE_DOCUMENT_SUB_TYPES.SERVICE_LETTER]: InnerForm,
-    [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP]: BusinessTripNoticeForm,
     [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER]: OrderForm,
     [COMPOSE_DOCUMENT_SUB_TYPES.ORDINARY_NOTICE]: OrdinaryNoticeForm,
     [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_FOREIGN]: DecreeForm,

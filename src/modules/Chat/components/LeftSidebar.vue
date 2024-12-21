@@ -23,7 +23,7 @@ const tabPanelList = [
     icon: UserRoundedBoldIcon
   },
   {
-    title: 'group',
+    title: 'groups',
     slot: 'group',
     icon: UsersGroupTwoRoundedBoldIcon
   }

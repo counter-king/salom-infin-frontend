@@ -1079,6 +1079,13 @@
   dependencies:
     "@iconify/types" "*"
 
+"@iconify-json/clarity@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@iconify-json/clarity/-/clarity-1.2.2.tgz#2699842b83e1311f03aabe308038b576e715b3c0"
+  integrity sha512-ShZVAWkcI/OYQSBdGPYKjyCrT1ApACYrenPmWD8VJKY8KGip+tSe0qv1c8+Jsfou8Jx71XS7x+rJQC1ydRygIA==
+  dependencies:
+    "@iconify/types" "*"
+
 "@iconify-json/fluent@^1.1.10":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@iconify-json/fluent/-/fluent-1.2.1.tgz#0a0c3c58d28d9d93c1f4576c0a959bcef6882b0f"
@@ -1104,6 +1111,13 @@
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@iconify-json/mage/-/mage-1.2.1.tgz#bdfd507deb3daf88999662aab7281118533266c8"
   integrity sha512-uMP07KFQNJ3iSl6dgGVkF9pDyLAKgxCVnNqm4metLI58HBhZ+pnGy3FfO0Wd2xlaipZYwjcO6C/V8kdYpTSrPA==
+  dependencies:
+    "@iconify/types" "*"
+
+"@iconify-json/material-symbols@^1.2.12":
+  version "1.2.12"
+  resolved "https://registry.yarnpkg.com/@iconify-json/material-symbols/-/material-symbols-1.2.12.tgz#1ea6e54506080b85fc4c69b8d8e41de3ac197a85"
+  integrity sha512-2p2T13Kccy7R2HNbdiVsIcHxjp4s9a+iKlfbtt29hldG1pVNaPIlMALNA9bjdEwPjwsVFe06INCbjCRc68JysQ==
   dependencies:
     "@iconify/types" "*"
 
