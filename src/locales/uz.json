@@ -559,5 +559,6 @@
   "acting-manager": "BXM boshqaruvchi vazifasini bajaruvchi",
   "deputy-filial-manager": "BXM boshqaruvchisi o'rinbosari",
   "collapse": "Kichraytirmoq",
-  "expand": "Kengaytirmoq"
+  "expand": "Kengaytirmoq",
+  "design-text": "Sahifaning qulayligini va dizaynini qanday baholaysiz?"
 }
