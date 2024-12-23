@@ -7,6 +7,8 @@ import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { useAuthStore } from '../../../../Auth/stores';
 import Avatar from 'primevue/avatar';
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 const props = defineProps({ getFirstPageTopSigners: Function, setVisible: Function, visible: Boolean });
 const authStore = useAuthStore();
 const topSigner = ref('');
@@ -79,7 +81,7 @@ const topSignerCreate = () => {
          .then(response => {
             if(response?.status === 201) {
                topSigner.value = '';
-               dispatchNotify(null, 'Топ подписавший создан', 'success');
+               dispatchNotify(null, t('created-top-signer'), 'success');
                props.getFirstPageTopSigners();
                props.setVisible(false);
                docType.value = '';
@@ -96,9 +98,9 @@ const topSignerCreate = () => {
             loading.value = false;
          });
    } else if(!user) {
-      dispatchNotify(null, 'Введите топ подписавший', 'error');
+     dispatchNotify(null, t('enter-top-signer'), 'error');
    } else {
-      dispatchNotify(null, 'Введите тип документа', 'error');
+     dispatchNotify(null, t('enter-document-type'), 'error');
    }
 };
 </script>
@@ -107,7 +109,7 @@ const topSignerCreate = () => {
       :closable="!loading"
       :pt="dialogConfig"
       :visible="visible"
-      header="Создать топ подписантов"
+      :header="t('create-top-signer')"
       modal
       @update:visible="() => {
          docType = '';
@@ -115,7 +117,7 @@ const topSignerCreate = () => {
          topSigner = '';
       }">
       <div class="flex flex-col">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Топ подписавший<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('top-signer') }}<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
             :loading="topSignersLoading"
             :options="topSigners"
@@ -123,8 +125,8 @@ const topSignerCreate = () => {
             :value="topSigner"
             key="id"
             label="full_name"
-            noOptionMessage="Подписант не найден"
-            placeholder="Введите подписант"
+            :noOptionMessage="t('not-found-top-signers')"
+            :placeholder="t('enter-signers')"
             @onInputChange="searchTopSigners"
             @onChange="value => {
                topSigner = value;
@@ -146,7 +148,7 @@ const topSignerCreate = () => {
                </div>
             </template>
          </base-auto-complete>
-         <p class="text-sm text-greyscale-500 font-medium mt-6 mb-1">Тип документа<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mt-6 mb-1">{{ t('document-type') }}<span class="text-red-500 ml-1">*</span></p>
          <div class="pb-8">
             <base-multi-auto-complete
                :inputValue="docTypeInputValue"
@@ -156,11 +158,11 @@ const topSignerCreate = () => {
                :value="docType"
                @onChange="value => { docType = value }"
                @onInputChange="searchDocTypes"
-               dropdownPlaceholder="Введите тип документа"
+               :dropdownPlaceholder="t('enter-document-type')"
                optionKey="id"
                optionLabel="name"
-               noOptionsMessage="Тип документа не найден"
-               placeholder="Поиск тип документа"
+               :noOptionsMessage="t('not-found-document-type')"
+               :placeholder="t('search-document-type')"
                >
                <template #option="{ option }">
                   <div class="flex items-center w-full h-full py-3 px-4 text-base rounded-xl">{{ option.name }}</div>
@@ -192,15 +194,18 @@ const topSignerCreate = () => {
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
-                  type="button">
-                  Отмена
+                  type="button"
+               >
+                 {{ t('cancel') }}
                </Button>
                <Button
                   @click="topSignerCreate"
                   class="shadow-none p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 mx-0"
                   rounded
-                  type="button">
-                  Создать</Button>
+                  type="button"
+               >
+                 {{ t('create') }}
+               </Button>
             </template>
          </div>
       </template>
@@ -208,7 +213,7 @@ const topSignerCreate = () => {
 </template>
 <style>
 .user-search-autocomplete .p-autocomplete-item {
-   transition: background 0s outline 0s !important;
+   transition: background 0s !important;
 }
 .user-search-autocomplete .p-autocomplete-item.p-focus {
    outline: 1px solid var(--primary) !important;

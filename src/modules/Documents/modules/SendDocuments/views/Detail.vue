@@ -55,7 +55,8 @@ onBeforeMount(async () => {
         const { data } = await SDStore.actionGetDocumentDetailForCustomUse(response.data.trip_notice_id)
         SDStore.detailModel = {
           ...response.data,
-          notices: data.notices
+          notices: data.notices,
+          trip_notice_register_number: data?.register_number
         }
       } catch (err) {
 

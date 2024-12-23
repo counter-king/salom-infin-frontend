@@ -14,8 +14,8 @@ import InputSwitch from 'primevue/inputswitch';
 import { tableConfig, columnConfig, dropdownConfig, paginationConfig, dropdownOptions, overlayConfig } from './config';
 import { useI18n } from "vue-i18n";
 import { SettingsMinimalisticIcon, AddPlusIcon } from '@/components/Icons'
-const { locale } = useI18n();
-const defaultFilter = { page: 1, page_size: 10, search: '' };
+const { locale, t } = useI18n();
+const defaultFilter = { page: 1, page_size: 15, search: '' };
 const count = ref(1);
 const filter = ref(defaultFilter);
 const headers = ref([
@@ -23,31 +23,31 @@ const headers = ref([
     columnKey: 'name',
     disabled: true,
     field: 'name',
-    header: 'Название',
+    header: 'name',
     is_active: true,
   },
   {
     columnKey: 'pinfl',
     field: 'pinfl',
-    header: 'ПИНФЛ',
+    header: 'pinfl',
     is_active: true,
   },
   {
     columnKey: 'phone',
     field: 'phone',
-    header: 'Телефон',
+    header: 'phone-number',
     is_active: true,
   },
   {
     columnKey: 'email',
     field: 'email',
-    header: 'Электронная почта',
+    header: 'email',
     is_active: true,
   },
   {
     columnKey: 'action',
     field: 'action',
-    header: 'Действия',
+    header: 'actions',
     is_active: true,
   },
 ]);
@@ -137,7 +137,7 @@ onMounted(() => {
 </script>
 <template>
   <div class="flex mb-5 justify-between items-center">
-    <h1 class="text-2xl font-bold text-primary-900">Индивидуальный предприниматель</h1>
+    <h1 class="text-2xl font-bold text-primary-900">{{ t('individual-entrepreneur') }}</h1>
     <div class="flex items-center gap-2">
       <span class="p-input-icon-left">
         <i class="pi pi-search pl-1" />
@@ -145,19 +145,19 @@ onMounted(() => {
           :modelValue="filter.search"
           :pt="{ root: { class: ['w-full rounded-3xl h-[42px] bg-white border-greyscale-50 font-xs focus:border-primary-500'] } }"
           @update:modelValue="searchCorrespondents"
-          placeholder="Поиск"
+          :placeholder="t('search')"
           size="small"
           type="text"
           />
       </span>
       <Button
         @click="toggle"
-        class="p-button p-component font-medium text-sm border-transparent bg-primary-0 hover:bg-greyscale-100 text-primary-dark shadow-button rounded-xl !rounded-full py-[9px] px-4"
+        class="p-button p-component font-medium text-sm border-transparent bg-primary-0 hover:bg-greyscale-100 text-primary-dark shadow-button !rounded-full py-[9px] px-4"
         rounded
         type="button"
         >
         <base-iconify class="mr-2" color="#767994" height="20" :icon="SettingsMinimalisticIcon" width="20"/>
-        <span>Настроить столбцы</span>
+        <span>{{ t('customize-columns') }}</span>
       </Button>
       <Button
         @click="visible = true"
@@ -166,7 +166,7 @@ onMounted(() => {
         type="button"
         >
         <base-iconify class="mr-2" height="20" :icon="AddPlusIcon" width="20"/>
-        <span>Создать</span>
+        <span>{{ t('create') }}</span>
       </Button>
     </div>
   </div>
@@ -182,7 +182,7 @@ onMounted(() => {
       <Column
         :columnKey="item.columnKey"
         :field="item.field"
-        :header="item.header"
+        :header="t(item.header)"
         :key="index"
         :pt="columnConfig"
         v-for="(item, index) in visibleHeaders"
@@ -238,7 +238,7 @@ onMounted(() => {
   <OverlayPanel ref="settingsOverlay" :pt="overlayConfig">
     <div class="p-3">
       <div v-for="(header, index) in editableHeaders" :key="index" class="w-full h-10 py-3 px-2 flex items-center gap-3 justify-between">
-        <span class="text-primary-900 text-sm font-medium">{{ header.header }}</span>
+        <span class="text-primary-900 text-sm font-medium">{{ t(header.header) }}</span>
         <InputSwitch
           size="small"
           :modelValue="header.is_active"
@@ -259,8 +259,19 @@ onMounted(() => {
       </div>
     </div>
     <div class="flex justify-end border-t bg-greyscale-50 py-3 pr-5 pl-8">
-      <Button @click="resetHeaders" class="p-button p-component shadow-button font-medium flex justify-center shadow-none rounded-full text-[14px] py-[6px] px-4 bg-white text-primary-900 border-transparent">Сбросить</Button>
-      <Button @click="saveChanges" class="p-button p-component font-medium flex justify-center shadow-none rounded-full text-[14px] py-[6px] px-4 ml-2">Сохранить</Button>
+      <Button
+        @click="resetHeaders"
+        class="p-button p-component font-medium flex justify-center shadow-none rounded-full text-[14px] py-[6px] px-4 bg-white text-primary-900 border-transparent"
+      >
+        {{ t('reset') }}
+      </Button>
+
+      <Button
+        @click="saveChanges"
+        class="p-button p-component font-medium flex justify-center shadow-none rounded-full text-[14px] py-[6px] px-4 ml-2"
+      >
+        {{ t('save') }}
+      </Button>
     </div>
   </OverlayPanel>
   <CreateCorrespondent

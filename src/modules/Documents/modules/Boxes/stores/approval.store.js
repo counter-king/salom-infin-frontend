@@ -132,7 +132,8 @@ export const useBoxesApprovalStore = defineStore("approval-stores", {
                 ...response.data,
                 compose: {
                   ...response.data.compose,
-                  notices: res.data.notices
+                  notices: res.data.notices,
+                  trip_notice_register_number: res?.data?.register_number
                 }
               }
             })

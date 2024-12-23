@@ -45,12 +45,12 @@ const modelValue = useModel(props, 'modelValue')
         fontsize_formats: `6px 8px 9px 10px 11px 12px 13px 14px 16px 18px 20px 24px 36px`,
         font_size_input_default_unit: 'px',
         paste_as_text: pastePlainText,
-        content_style: `body {font-size: 20px;}`,
+        content_style: `body {font-size: 14px;}`,
         link_protocol: 'https://',
         link_default_target: '_blank',
         link_target: '_blank',
         link_title: false,
-        link_list: undefined  
+        link_list: undefined
         // table_default_attributes: {
         //   class: 'tinymce-table'
         // },

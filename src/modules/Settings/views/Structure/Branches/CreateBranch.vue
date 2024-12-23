@@ -9,6 +9,8 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { replaceSpecCharsBracket } from '@/utils/string';
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 const props = defineProps({ getFirstPageBranches: Function, setVisible: Function, visible: Boolean });
 const defaultBranch = { name_uz: '', name_ru: '', address_ru: '', address_uz: '', phone: 8, code: '' };
 const branch = ref(defaultBranch);
@@ -24,7 +26,7 @@ const createBranch = () => {
          .then(response => {
             if(response?.status === 201) {
                branch.value = defaultBranch;
-               dispatchNotify(null, 'Филиал создан', 'success');
+               dispatchNotify(null, t('created-branch'), 'success');
                props.getFirstPageBranches();
                props.setVisible(false);
             }
@@ -34,13 +36,13 @@ const createBranch = () => {
             loading.value = false;
          });
    } else if(!name_ru || !name_uz) {
-      dispatchNotify(null, 'Введите название', 'error');
+     dispatchNotify(null, t('enter-naming-2'), 'error');
    } else if(!address_ru || !address_uz) {
-      dispatchNotify(null, 'Введите адрес', 'error');
+     dispatchNotify(null, t('enter-address'), 'error');
    } else if(newPhone?.length !== 13) {
-      dispatchNotify(null, 'Введите номер телефона', 'error');
+     dispatchNotify(null, t('enter-phone-number'), 'error');
    } else {
-      dispatchNotify(null, 'Введите код', 'error');
+     dispatchNotify(null, t('enter-code'), 'error');
    }
 };
 </script>
@@ -49,7 +51,7 @@ const createBranch = () => {
       :closable="!loading"
       :pt="dialogConfig"
       :visible="visible"
-      header="Создать филиал"
+      :header="t('create-branch')"
       modal
       @update:visible="() => {
          branch = defaultBranch;
@@ -57,52 +59,52 @@ const createBranch = () => {
       }"
       >
       <div class="flex flex-col pb-10 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('name-uz') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="branch.name_uz"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название"
+            :placeholder="t('enter-naming-2')"
             type="text"
             @update:modelValue="value => {
                branch = { ...branch, name_uz: replaceSpecCharsBracket(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ) <span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('name-ru') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="branch.name_ru"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название"
+            :placeholder="t('enter-naming-2')"
             type="text"
             @update:modelValue="value => {
                branch = { ...branch, name_ru: replaceSpecCharsBracket(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Адрес (UZ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('address') }} (UZ)<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="branch.address_uz"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите адрес"
+            :placeholder="t('enter-address')"
             type="text"
             @update:modelValue="address_uz => {
                branch = { ...branch, address_uz };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Адрес (РУ) <span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('address') }} (РУ) <span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="branch.address_ru"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите адрес"
+            :placeholder="t('enter-address')"
             type="text"
             @update:modelValue="address_ru => {
                branch = { ...branch, address_ru };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Номер телефона<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('phone-number') }}<span class="text-red-500 ml-1">*</span></p>
          <InputNumber
             :maxFractionDigits="0"
             :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
             :useGrouping="false"
-            placeholder="Введите номер телефона"
+            :placeholder="t('enter-phone-number')"
             prefix="+99"
             v-model="branch.phone"
             @input="({ value }) => {
@@ -110,11 +112,11 @@ const createBranch = () => {
                branch = { ...branch, phone }
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('code') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="branch.code"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите код"
+            :placeholder="t('enter-code')"
             type="text"
             @update:modelValue="value => {
                branch = { ...branch, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 8) };
@@ -135,15 +137,18 @@ const createBranch = () => {
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
-                  type="button">
-                  Отмена
+                  type="button"
+               >
+                  {{ t('cancel') }}
                </Button>
                <Button
                   @click="createBranch"
                   class="shadow-none p-button p-component font-semibold text-sm !rounded-full m-0 py-[9px] px-4"
                   rounded
                   type="button"
-               >Создать</Button>
+               >
+                 {{ t('create') }}
+               </Button>
             </template>
          </div>
       </template>

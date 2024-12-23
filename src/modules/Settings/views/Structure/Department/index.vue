@@ -2,6 +2,7 @@
 import AddEmployee from './AddEmployee.vue';
 import Button from 'primevue/button';
 import Column from 'primevue/column';
+import { useI18n } from 'vue-i18n'
 import CreateDepartment from './CreateDepartment.vue';
 import DataTable from 'primevue/datatable'
 import Department from './Department.vue';
@@ -14,8 +15,9 @@ import axiosConfig from '@/services/axios.config';
 import { ref, onMounted, watch } from 'vue';
 import { tableConfig, columnConfig, dropdownConfig, paginationConfig, dropdownOptions } from './config'
 import { useRoute } from 'vue-router';
+const { t } = useI18n()
 const route = useRoute();
-const defaultFilter = { page: 1, page_size: 10, department: '' };
+const defaultFilter = { page: 1, page_size: 15, department: '' };
 const activeDepartment = ref(null);
 const addEmployeeVisible = ref(false);
 const count = ref(1);
@@ -36,17 +38,17 @@ const headers = ref([
    {
       columnKey: 'full_name',
       field: 'full_name',
-      header: 'ФИО Сотрудника',
+      header: 'employee-fio',
    },
    {
       columnKey: 'position',
       field: 'position',
-      header: 'Должность',
+      header: 'position',
    },
    {
       columnKey: 'action',
       field: 'action',
-      header: 'Действия',
+      header: 'actions',
    },
 ]);
 const setCreateVisible = visible => {
@@ -157,7 +159,7 @@ onMounted(() => {
                   v-tooltip.left="{
                      autoHide: false,
                      escape: true,
-                     value: `<h4 class='text-xs text-white -my-1'>Департаменты</h4>`,
+                     value: `<h4 class='text-xs text-white -my-1'>${ t('departments') }</h4>`,
                   }"
                   >
                   <div class="flex items-center justify-center w-full">
@@ -180,7 +182,7 @@ onMounted(() => {
                   <template v-if="subDepartments.length">
                      <div class="h-full w-full">
                         <div class="px-3 pt-3">
-                           <div class="text-sm font-semibold rounded-xl px-3 py-3 duration-[400ms] text-greyscale-500 bg-greyscale-100">Субдепартаменти</div>
+                           <div class="text-sm font-semibold rounded-xl px-3 py-3 duration-[400ms] text-greyscale-500 bg-greyscale-100">Субдепартаменты</div>
                         </div>
                         <div class="flex flex-col overflow-y-scroll settings-structure-departments" style="height: calc(100% - 112px)">
                            <div class="pl-3 pr-[6px]">
@@ -269,7 +271,7 @@ onMounted(() => {
                            <Column
                               :columnKey="item.columnKey"
                               :field="item.field"
-                              :header="item.header"
+                              :header="t(item.header)"
                               :key="index"
                               :pt="columnConfig"
                               v-for="(item, index) in headers"
@@ -299,7 +301,7 @@ onMounted(() => {
                                  <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5003 18.3307C15.1027 18.3307 18.8337 14.5998 18.8337 9.9974C18.8337 5.39502 15.1027 1.66406 10.5003 1.66406C5.89795 1.66406 2.16699 5.39502 2.16699 9.9974C2.16699 14.5998 5.89795 18.3307 10.5003 18.3307ZM11.1253 7.4974C11.1253 7.15222 10.8455 6.8724 10.5003 6.8724C10.1551 6.8724 9.87533 7.15222 9.87533 7.4974L9.87532 9.37242H8.00033C7.65515 9.37242 7.37533 9.65224 7.37533 9.99742C7.37533 10.3426 7.65515 10.6224 8.00033 10.6224H9.87532V12.4974C9.87532 12.8426 10.1551 13.1224 10.5003 13.1224C10.8455 13.1224 11.1253 12.8426 11.1253 12.4974L11.1253 10.6224H13.0003C13.3455 10.6224 13.6253 10.3426 13.6253 9.99742C13.6253 9.65224 13.3455 9.37242 13.0003 9.37242H11.1253V7.4974Z" fill="#635AFF"/>
                               </svg>
                            </span>
-                           <span>Добавить сотрудник</span>
+                           <span>{{ t('add-employee') }}</span>
                         </Button>
                      </div>
                      <div class="flex">
@@ -339,7 +341,7 @@ onMounted(() => {
                                  <path d="M30.5526 30.986C32.4826 30.8538 33.9999 29.8044 33.9999 28.5294C33.9999 27.2662 32.5088 26.2245 30.6041 26.0767C31.1433 26.744 31.4999 27.5558 31.4999 28.5C31.4999 29.474 31.1205 30.3071 30.5526 30.986Z" fill="#ADB7C2"/>
                               </svg>
                            </div>
-                           <p class="text-center text-greyscale-300 mt-3 mb-6">В этом отделе нет Сотрудников. Нажмите кнопку ниже, чтобы добавить.</p>
+                           <p class="text-center text-greyscale-300 mt-3 mb-6">{{ t('employee-text-2') }}</p>
                            <Button
                               @click="() => {
                                  addEmployeeVisible = true;
@@ -351,7 +353,7 @@ onMounted(() => {
                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5003 18.3307C15.1027 18.3307 18.8337 14.5998 18.8337 9.9974C18.8337 5.39502 15.1027 1.66406 10.5003 1.66406C5.89795 1.66406 2.16699 5.39502 2.16699 9.9974C2.16699 14.5998 5.89795 18.3307 10.5003 18.3307ZM11.1253 7.4974C11.1253 7.15222 10.8455 6.8724 10.5003 6.8724C10.1551 6.8724 9.87533 7.15222 9.87533 7.4974L9.87532 9.37242H8.00033C7.65515 9.37242 7.37533 9.65224 7.37533 9.99742C7.37533 10.3426 7.65515 10.6224 8.00033 10.6224H9.87532V12.4974C9.87532 12.8426 10.1551 13.1224 10.5003 13.1224C10.8455 13.1224 11.1253 12.8426 11.1253 12.4974L11.1253 10.6224H13.0003C13.3455 10.6224 13.6253 10.3426 13.6253 9.99742C13.6253 9.65224 13.3455 9.37242 13.0003 9.37242H11.1253V7.4974Z" fill="#635AFF"/>
                                  </svg>
                               </span>
-                              <span>Добавить сотрудник</span>
+                              <span>{{ t('add-employee') }}</span>
                            </Button>
                         </div>
                      </div>

@@ -8,7 +8,7 @@ import { dialogConfig, menuConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref, onMounted, watch } from 'vue';
 import { useI18n } from "vue-i18n";
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const props = defineProps({
    data: Object,
    field: String,
@@ -40,7 +40,7 @@ const transferEmployee = () => {
          .then(response => {
             if(response?.status === 200) {
                editVisible.value = false;
-               dispatchNotify(null, 'Сотрудник удален', 'success')
+               dispatchNotify(null, t('deleted-employee'), 'success')
                props.getFirstPageEmployees();
             }
          })
@@ -49,7 +49,7 @@ const transferEmployee = () => {
             editLoading.value = false;
          });
    } else {
-      dispatchNotify(null, 'Введите департаментa', 'error');
+      dispatchNotify(null, t('enter-department'), 'error');
    }
 };
 const searchTopLevelDepartments = ({ search, page }) => {
@@ -84,7 +84,7 @@ const employeeDelete = () => {
       .then(response => {
          if(response?.status === 200) {
             deleteVisible.value = false;
-            dispatchNotify(null, 'Сотрудник удален', 'success')
+            dispatchNotify(null, t('deleted-employee'), 'success')
             props.getFirstPageEmployees();
          }
       })
@@ -95,8 +95,8 @@ const employeeDelete = () => {
 };
 const changeLanguage = () => {
    conditions.value = [
-      { label: 'Перевод', value: 'transfer' },
-      { label: 'Удалить', value: 'delete', },
+      { label: t('transfer'), value: 'transfer' },
+      { label: t('delete'), value: 'delete', },
    ];
 };
 const toggle = event => {
@@ -170,25 +170,25 @@ onMounted(() => {
    <Dialog
       :closable="!editLoading"
       :pt="dialogConfig"
-      header="Перевод сотрудник"
+      :header="t('transfer-employee')"
       modal
       v-model:visible="editVisible">
       <div class="flex flex-col pb-10 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">ФИО Сотрудника</p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('employee-fio') }}</p>
          <InputText
             :modelValue="data.full_name"
             :pt="{ root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-4 text-sm']} }"
             type="text"
             disabled
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Должность</p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('position') }}</p>
          <InputText
             :modelValue="data.position.name"
             :pt="{ root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-4 text-sm']} }"
             type="text"
             disabled
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Текущий департамент</p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('current-department') }}</p>
          <InputText
             :modelValue="data.top_level_department.name"
             :pt="{ root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-4 text-sm']} }"
@@ -202,7 +202,7 @@ onMounted(() => {
             type="text"
             disabled
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Департамент<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('department') }}<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
             :loading="topLevelDepartmentsLoading"
             :options="topLevelDepartments"
@@ -211,8 +211,8 @@ onMounted(() => {
             @onInputChange="searchTopLevelDepartments"
             key="id"
             label="name"
-            noOptionsMessage="Департамент не найден"
-            placeholder="Введите департамент"
+            :noOptionsMessage="t('department-not-found')"
+            :placeholder="t('enter-department')"
             @onChange="value => {
                topLevelDepartment = value;
             }"
@@ -244,15 +244,19 @@ onMounted(() => {
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
-                  type="button">
-                  Отмена
+                  type="button"
+               >
+                  {{ t('cancel') }}
                </Button>
+
                <Button
                   @click="transferEmployee"
                   class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4"
                   rounded
                   type="button"
-               >Перевод</Button>
+               >
+                 {{ t('transfer') }}
+               </Button>
             </template>
          </div>
       </template>
@@ -260,7 +264,7 @@ onMounted(() => {
    <Dialog
       :closable="!deleteLoading"
       :pt="dialogConfig"
-      header="Удалить сотрудник"
+      :header="t('delete-employee')"
       modal
       v-model:visible="deleteVisible">
       <div class="flex flex-col items-center pb-10 pt-4">
@@ -271,9 +275,9 @@ onMounted(() => {
                <path fill-rule="evenodd" clip-rule="evenodd" d="M39.4608 53.3327H40.5392C44.2495 53.3327 46.1046 53.3327 47.3108 52.1514C48.517 50.9702 48.6404 49.0326 48.8872 45.1574L49.2428 39.5735C49.3767 37.4708 49.4437 36.4195 48.8386 35.7533C48.2335 35.0871 47.2116 35.0871 45.1679 35.0871H34.8321C32.7884 35.0871 31.7665 35.0871 31.1614 35.7533C30.5563 36.4195 30.6233 37.4708 30.7572 39.5735L31.1128 45.1574C31.3596 49.0326 31.483 50.9702 32.6892 52.1514C33.8954 53.3327 35.7505 53.3327 39.4608 53.3327ZM37.6617 40.2507C37.6067 39.6722 37.1167 39.2501 36.5672 39.308C36.0176 39.3658 35.6167 39.8817 35.6716 40.4601L36.3383 47.4777C36.3932 48.0561 36.8833 48.4782 37.4328 48.4203C37.9824 48.3625 38.3833 47.8467 38.3284 47.2682L37.6617 40.2507ZM43.4328 39.308C43.9824 39.3658 44.3833 39.8817 44.3284 40.4601L43.6617 47.4777C43.6068 48.0561 43.1167 48.4782 42.5672 48.4203C42.0176 48.3625 41.6167 47.8467 41.6716 47.2682L42.3383 40.2507C42.3933 39.6722 42.8833 39.2501 43.4328 39.308Z" fill="#F3335C"/>
             </svg>
          </div>
-         <h2 class="text-center font-semibold text-3xl text-gray-900 p-0 mt-6">Удалить сотрудник?</h2>
+         <h2 class="text-center font-semibold text-3xl text-gray-900 p-0 mt-6">{{ t('delete-employee') }}?</h2>
          <p class="text-center py-0 px-6 mt-2 text-gray-400">
-            Вы уверены, что хотите удалить этого сотрудник
+            {{ t('delete-text-employee') }}
          </p>
       </div>
       <template #footer>
@@ -287,15 +291,19 @@ onMounted(() => {
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
-                  type="button">
-                  Отмена
+                  type="button"
+               >
+                  {{ t('cancel') }}
                </Button>
+
                <Button
                   @click="employeeDelete"
                   class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4"
                   rounded
                   type="button"
-               >Удалить</Button>
+               >
+                 {{ t('delete') }}
+               </Button>
             </template>
          </div>
       </template>

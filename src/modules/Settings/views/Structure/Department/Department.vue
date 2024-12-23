@@ -1,5 +1,6 @@
 <script setup>
-const { locale } = useI18n();
+import { useI18n } from 'vue-i18n'
+const { locale, t } = useI18n();
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputNumber from 'primevue/inputnumber';
@@ -11,7 +12,6 @@ import { defineProps, ref, watch, onMounted } from 'vue';
 import { dialogConfig, menuConfig, menu2Config } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { replaceSpecCharsBracket } from '@/utils/string';
-import { useI18n } from "vue-i18n";
 const props = defineProps({
    activeDepartment: Object,
    defaultFilter: Object,
@@ -58,15 +58,15 @@ const departmentEdit = () => {
             editLoading.value = false;
          });
    } else if(!name_ru || !name_uz) {
-      dispatchNotify(null, 'Введите название', 'error');
+      dispatchNotify(null, t('enter-naming-2'), 'error');
    } else {
-      dispatchNotify(null, 'Введите код', 'error')
+      dispatchNotify(null, t('enter-code'), 'error')
    }
 };
 const deleteDepartment = () => {
    const department = props?.department;
    if(department.employee_count > 0) {
-      dispatchNotify(null, 'В этом отделе есть сотрудники, сначала удалите сотрудников', 'error')
+      dispatchNotify(null, t('employee-text'), 'error')
    } else {
       deleteLoading.value = true;
       axiosConfig
@@ -91,19 +91,19 @@ const updateCondition = value => {
       .then(response => {
          if(response?.status === 200) {
             props.getSubDepartments();
-            dispatchNotify(null, 'Статус обновлен', 'success');
+            dispatchNotify(null, t('status-updated'), 'success');
          }
       });
 };
 const changeLanguage = () => {
    conditions.value = [
-      { label: 'Добавить', value: 'create', },
-      { label: 'Изменить', value: 'edit' },
-      { label: 'Удалить', value: 'delete', },
+      { label: t('add'), value: 'create', },
+      { label: t('update'), value: 'edit' },
+      { label: t('delete'), value: 'delete', },
    ];
    conditions2.value = [
-      { label: 'Активный', value: 'A', },
-      { label: 'Неактивный', value: 'P' }
+      { label: t('active'), value: 'A', },
+      { label: t('non-active'), value: 'P' }
    ];
 };
 const toggle = e => {
@@ -262,7 +262,7 @@ onMounted(() => {
       modal
       v-model:visible="editVisible">
       <div class="flex flex-col pb-10 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Департамент</p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('department') }}</p>
          <InputText
             :modelValue="topLevelDepartment.name"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
@@ -278,38 +278,38 @@ onMounted(() => {
                disabled
                />
             </div>
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (UZ)<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('name-uz') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editDepartment.name_uz"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название"
+            :placeholder="t('enter-naming-2')"
             type="text"
             @update:modelValue="value => {
                editDepartment = { ...editDepartment, name_uz: replaceSpecCharsBracket(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Название (РУ) <span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('name-ru') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editDepartment.name_ru"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"
-            placeholder="Введите название"
+            :placeholder="t('enter-naming-2')"
             type="text"
             @update:modelValue="value => {
                editDepartment = { ...editDepartment, name_ru: replaceSpecCharsBracket(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Код верхнего уровня</p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('top-level-code') }}</p>
          <InputNumber
             :pt="{ root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
             :useGrouping="false"
             disabled
             v-model="editDepartment.parent_code"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Код<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('code') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editDepartment.code"
             :pt="{ root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
-            placeholder="Введите код"
+            :placeholder="t('enter-code')"
             type="text"
             @update:modelValue="value => {
                editDepartment = { ...editDepartment, code: String(parseInt(value.replace(/[^0-9]/g, '')) || '').slice(0, 8) };
@@ -327,15 +327,19 @@ onMounted(() => {
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
-                  type="button">
-                  Отмена
+                  type="button"
+               >
+                  {{ t('cancel') }}
                </Button>
+
                <Button
                   @click="departmentEdit"
                   class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"
-               >Изменить</Button>
+               >
+                 {{ t('update') }}
+               </Button>
             </template>
          </div>
       </template>
@@ -371,15 +375,19 @@ onMounted(() => {
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
-                  type="button">
-                  Отмена
+                  type="button"
+               >
+                  {{ t('cancel') }}
                </Button>
-               <Button
+
+              <Button
                   @click="deleteDepartment"
                   class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 m-0"
                   rounded
                   type="button"
-               >Удалить</Button>
+               >
+                {{ t('delete') }}
+              </Button>
             </template>
          </div>
       </template>

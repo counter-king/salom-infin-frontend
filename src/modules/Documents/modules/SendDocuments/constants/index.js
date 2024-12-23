@@ -7,4 +7,7 @@ export const SD_TYPE_APPLICATION = "application"
 export const ROUTE_SD_LIST = "SendDocumentsList"
 export const ROUTE_SD_DETAIL = "SendDocumentsDetail"
 export const ROUTE_SD_CREATE = "SendDocumentsCreate"
+export const STEPPER_TRIP_INFO = "trip_info"
+export const STEPPER_WORK_PLAN = "work_plan"
+export const STEPPER_ROUTE = "route"
 

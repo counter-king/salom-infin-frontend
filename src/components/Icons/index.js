@@ -20,6 +20,7 @@ export { default as CloseSmIcon } from  '~icons/ci/close-sm'
 export { default as CircleIcon } from  '~icons/ci/circle'
 export { default as RemoveMinusIcon } from  '~icons/ci/remove-minus'
 export { default as AddPlusIcon } from  '~icons/ci/add-plus'
+export { default as BookmarkIcon } from '~icons/ci/bookmark'
 // Solar (Linear)
 export { default as AltArrowDownLinearIcon } from  '~icons/solar/alt-arrow-down-linear'
 export { default as DoubleAltArrowDownLinearIcon } from  '~icons/solar/double-alt-arrow-down-linear'
@@ -30,7 +31,7 @@ export { default as NotebookLinearIcon } from  '~icons/solar/notebook-linear'
 export { default as CalendarLinearIcon } from  '~icons/solar/calendar-linear'
 export { default as StarLinearIcon } from  '~icons/solar/star-linear'
 export { default as UnreadLinearIcon } from  '~icons/solar/unread-linear'
-export { default as BookmarkIcon } from '~icons/ci/bookmark'
+export { default as CaseBoldIcon } from  '~icons/solar/case-bold'
 // Solar (Outline)
 export { default as CheckCircleIcon } from  '~icons/solar/check-circle-outline'
 export { default as AltArrowUpIcon } from  '~icons/solar/alt-arrow-up-outline'
@@ -148,6 +149,7 @@ export { default as HeartBoldIcon } from  '~icons/solar/heart-bold'
 export { default as EyeBoldIcon } from  '~icons/solar/eye-bold'
 export { default as TrashBinBoldIcon } from  '~icons/solar/trash-bin-trash-bold'
 export { default as QuestionCircleBoldIcon } from  '~icons/solar/question-circle-bold'
+export { default as Routing2BoldIcon } from  '~icons/solar/routing-2-bold'
 // Solar (Bold Duotone)
 export { default as ArchiveUpBoldDuotoneIcon } from  '~icons/solar/archive-up-bold-duotone'
 export { default as StarBoldDuotoneIcon } from  '~icons/solar/star-bold-duotone'
@@ -170,3 +172,8 @@ export { default as BookmarkBoldIcon } from '~icons/mage/bookmark-fill'
 
 // iconamoon
 export { default as EditLightIcon } from '~icons/iconamoon/edit-light'
+// Clarity
+export { default as PlaneIcon } from '~icons/clarity/airplane-solid'
+// Material symbols
+export { default as TrainIcon } from '~icons/material-symbols/train'
+export { default as LocalTaxiIcon } from '~icons/material-symbols/local-taxi'

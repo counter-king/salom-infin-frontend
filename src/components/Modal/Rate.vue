@@ -78,6 +78,7 @@ const handleCancel = async () => {
     :label="props.header"
     :max-width="props.maxWidth"
     :draggable="false"
+    
   >
     <template #content>
       <base-textarea
@@ -99,7 +100,6 @@ const handleCancel = async () => {
         border-color="border-transparent"
         @click="handleCancel"
       />
-
       <base-button
         :label="props.label"
         :loading="loading"

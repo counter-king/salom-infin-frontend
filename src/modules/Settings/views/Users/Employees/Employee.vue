@@ -13,7 +13,7 @@ import { dispatchNotify } from '@/utils/notify';
 import { ref, onMounted, watch } from 'vue';
 import { replaceSpecChars } from '@/utils/string';
 import { useI18n } from "vue-i18n";
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const props = defineProps({ data: Object, employees: Array, field: String, getFirstPageEmployees: Function, setEmployees: Function });
 const deleteLoading = ref(false);
 const deleteVisible = ref(false);
@@ -70,7 +70,7 @@ const employeeEdit = () => {
          .put(`users/${employeeId}/`, data)
          .then(response => {
             if(response?.status === 200) {
-               dispatchNotify(null, 'Сотрудник изменен', 'success');
+               dispatchNotify(null, t('updated-employee'), 'success');
                editVisible.value = false;
                props.getFirstPageEmployees();
             }
@@ -80,21 +80,21 @@ const employeeEdit = () => {
             editLoading.value = false;
          });
    } else if(!first_name) {
-      dispatchNotify(null, 'Введите имя', 'error');
+      dispatchNotify(null, t('enter-first-name'), 'error');
    } else if(!last_name) {
-      dispatchNotify(null, 'Введите фамилия', 'error');
+      dispatchNotify(null, t('enter-last-name'), 'error');
    } else if(String(pinfl || '')?.length !== 14) {
-      dispatchNotify(null, 'Введите ПИНФЛ', 'error');
+      dispatchNotify(null, t('enter-pinfl'), 'error');
    } else if(phone?.length !== 12) {
-      dispatchNotify(null, 'Введите номер телефона', 'error');
+      dispatchNotify(null, t('enter-phone-number'), 'error');
    } else if(!companyId) {
-      dispatchNotify(null, 'Введите филиал', 'error');
+      dispatchNotify(null, t('enter-branch'), 'error');
    } else if(!top_level_department) {
-      dispatchNotify(null, 'Введите департаментa', 'error');
+      dispatchNotify(null, t('enter-department'), 'error');
    } else if(!positionId) {
-      dispatchNotify(null, 'Введите должность', 'error');
+      dispatchNotify(null, t('enter-position'), 'error');
    } else if(!statusId) {
-      dispatchNotify(null, 'Введите статус', 'error');
+      dispatchNotify(null, t('enter-status'), 'error');
    }
 };
 const searchCompanies = ({ search, page }) => {
@@ -199,7 +199,7 @@ const updateStatus = value => {
                }
             });
             props.setEmployees(newEmployees);
-            dispatchNotify(null, 'Состояние обновлен', 'success');
+            dispatchNotify(null, t('state-updated'), 'success');
          }
       })
       .catch(() => {})
@@ -214,7 +214,7 @@ const employeeDelete = () => {
       .then(response => {
          if(response?.status === 204) {
             deleteVisible.value = false;
-            dispatchNotify(null, 'Сотрудник удален', 'success')
+            dispatchNotify(null, t('deleted-employee'), 'success')
             props.getFirstPageEmployees();
          }
       })
@@ -225,8 +225,8 @@ const employeeDelete = () => {
 };
 const changeLanguage = () => {
    items.value = [
-      { label: 'Активный', value: true, },
-      { label: 'Неактивный', value: false }
+      { label: t('active'), value: true, },
+      { label: t('non-active'), value: false }
    ];
 };
 const toggle = event => {
@@ -313,7 +313,7 @@ onMounted(() => {
           v-tooltip.top="{
             autoHide: false,
             escape: true,
-            value: `<h4 class='text-xs text-white -my-1'>Задать роль</h4>`,
+            value: `<h4 class='text-xs text-white -my-1'>${ t('set-role') }</h4>`
           }"
         >
           <!-- @click="() => openEditModal(data)" -->
@@ -353,58 +353,58 @@ onMounted(() => {
    <Dialog
       :closable="!editLoading"
       :pt="dialogConfig"
-      header="Изменить сотрудник"
+      :header="t('edit-employee')"
       modal
       v-model:visible="editVisible">
       <div class="flex flex-col pb-10 pt-4">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Имя<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('first-name') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editEmployee.first_name"
             :pt="{ root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
-            placeholder="Введите имя"
+            :placeholder="t('enter-first-name')"
             type="text"
             @update:modelValue="value => {
                editEmployee = { ...editEmployee, first_name: replaceSpecChars(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Фамилия<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('last-name') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="editEmployee.last_name"
             :pt="{ root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
-            placeholder="Введите фамилия"
+            :placeholder="t('enter-last-name')"
             type="text"
             @update:modelValue="value => {
                editEmployee = { ...editEmployee, last_name: replaceSpecChars(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Отчество</p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('father-name') }}</p>
          <InputText
             :modelValue="editEmployee.father_name"
             :pt="{ root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
-            placeholder="Введите отчество"
+            :placeholder="t('enter-father-name')"
             type="text"
             @update:modelValue="value => {
                editEmployee = { ...editEmployee, father_name: replaceSpecChars(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">ПИНФЛ<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('pinfl') }}<span class="text-red-500 ml-1">*</span></p>
          <InputNumber
             :maxFractionDigits="0"
             :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
             :useGrouping="false"
-            placeholder="Введите ПИНФЛ"
+            :placeholder="t('enter-pinfl')"
             v-model="editEmployee.pinfl"
             @input="({ value }) => {
                const pinfl = +value.toString().slice(0, 14)
                editEmployee = { ...editEmployee, pinfl }
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Номер телефона<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('phone-number') }}<span class="text-red-500 ml-1">*</span></p>
          <InputNumber
             :maxFractionDigits="0"
             :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
             :useGrouping="false"
-            placeholder="Введите номер телефона"
+            :placeholder="t('enter-phone-number')"
             prefix="+99"
             v-model="editEmployee.phone"
             @input="({ value }) => {
@@ -412,7 +412,7 @@ onMounted(() => {
                editEmployee = { ...editEmployee, phone }
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Филиал<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('last-name') }}<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
             :loading="companiesLoading"
             :options="companies"
@@ -421,8 +421,8 @@ onMounted(() => {
             @onInputChange="searchCompanies"
             key="id"
             label="name"
-            noOptionsMessage="Филиал не найден"
-            placeholder="Введите филиал"
+            :noOptionsMessage="t('not-found-branch')"
+            :placeholder="t('enter-branch')"
             @onChange="value => {
                company = value;
                departments = [''];
@@ -434,7 +434,7 @@ onMounted(() => {
             </template>
          </base-auto-complete>
          <template v-if="company && company.id">
-            <p class="text-sm text-greyscale-500 font-medium mb-1 mt-6">Департамент<span class="text-red-500 ml-1">*</span></p>
+            <p class="text-sm text-greyscale-500 font-medium mb-1 mt-6">{{ t('department') }}<span class="text-red-500 ml-1">*</span></p>
             <base-auto-complete
                :loading="topLevelDepartmentsLoading"
                :options="topLevelDepartments"
@@ -443,8 +443,8 @@ onMounted(() => {
                @onInputChange="searchTopLevelDepartments"
                key="id"
                label="name"
-               noOptionsMessage="Департамент не найден"
-               placeholder="Введите департамент"
+               :noOptionsMessage="t('department-not-found')"
+               :placeholder="t('enter-department')"
                @onChange="value => {
                   topLevelDepartment = value;
                }"
@@ -465,7 +465,7 @@ onMounted(() => {
                v-for="(department, index) in departments"
             />
          </template>
-         <p class="text-sm text-greyscale-500 font-medium mb-1 mt-6">Должность<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1 mt-6">{{ t('position') }}<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
             :loading="positionsLoading"
             :options="positions"
@@ -474,8 +474,8 @@ onMounted(() => {
             @onInputChange="searchPositions"
             key="id"
             label="name"
-            noOptionsMessage="Должность не найден"
-            placeholder="Введите должность"
+            :noOptionsMessage="t('not-found-position')"
+            :placeholder="t('enter-position')"
             @onChange="value => {
                position = value;
             }"
@@ -484,7 +484,7 @@ onMounted(() => {
                <div class="flex items-center h-11 px-3 text-base">{{ option.name }}</div>
             </template>
          </base-auto-complete>
-         <p class="text-sm text-greyscale-500 font-medium mb-1 mt-6">Статусь<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1 mt-6">{{ t('status') }}<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
             :loading="statusesLoading"
             :options="statuses"
@@ -493,8 +493,8 @@ onMounted(() => {
             @onInputChange="searchStatuses"
             key="id"
             label="name"
-            noOptionsMessage="Статусь не найден"
-            placeholder="Введите статусь"
+            :noOptionsMessage="t('not-found-status')"
+            :placeholder="t('enter-status')"
             @onChange="value => {
                status = value
             }"
@@ -515,15 +515,18 @@ onMounted(() => {
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
-                  type="button">
-                  Отмена
+                  type="button"
+               >
+                 {{ t('cancel') }}
                </Button>
                <Button
                   @click="employeeEdit"
                   class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4"
                   rounded
                   type="button"
-               >Изменить</Button>
+               >
+                 {{ t('update') }}
+               </Button>
             </template>
          </div>
       </template>
@@ -531,7 +534,7 @@ onMounted(() => {
    <Dialog
       :closable="!deleteLoading"
       :pt="dialogConfig"
-      header="Удалить сотрудник"
+      :header="t('delete-employee')"
       modal
       v-model:visible="deleteVisible">
       <div class="flex flex-col items-center pb-10 pt-4">
@@ -542,9 +545,9 @@ onMounted(() => {
                <path fill-rule="evenodd" clip-rule="evenodd" d="M39.4608 53.3327H40.5392C44.2495 53.3327 46.1046 53.3327 47.3108 52.1514C48.517 50.9702 48.6404 49.0326 48.8872 45.1574L49.2428 39.5735C49.3767 37.4708 49.4437 36.4195 48.8386 35.7533C48.2335 35.0871 47.2116 35.0871 45.1679 35.0871H34.8321C32.7884 35.0871 31.7665 35.0871 31.1614 35.7533C30.5563 36.4195 30.6233 37.4708 30.7572 39.5735L31.1128 45.1574C31.3596 49.0326 31.483 50.9702 32.6892 52.1514C33.8954 53.3327 35.7505 53.3327 39.4608 53.3327ZM37.6617 40.2507C37.6067 39.6722 37.1167 39.2501 36.5672 39.308C36.0176 39.3658 35.6167 39.8817 35.6716 40.4601L36.3383 47.4777C36.3932 48.0561 36.8833 48.4782 37.4328 48.4203C37.9824 48.3625 38.3833 47.8467 38.3284 47.2682L37.6617 40.2507ZM43.4328 39.308C43.9824 39.3658 44.3833 39.8817 44.3284 40.4601L43.6617 47.4777C43.6068 48.0561 43.1167 48.4782 42.5672 48.4203C42.0176 48.3625 41.6167 47.8467 41.6716 47.2682L42.3383 40.2507C42.3933 39.6722 42.8833 39.2501 43.4328 39.308Z" fill="#F3335C"/>
             </svg>
          </div>
-         <h2 class="text-center font-semibold text-3xl text-gray-900 p-0 mt-6">Удалить сотрудник?</h2>
+         <h2 class="text-center font-semibold text-3xl text-gray-900 p-0 mt-6">{{ t('delete-employee') }}?</h2>
          <p class="text-center py-0 px-6 mt-2 text-gray-400">
-            Вы уверены, что хотите удалить этого сотрудник
+            {{ t('delete-text-employee') }}
          </p>
       </div>
       <template #footer>
@@ -558,15 +561,18 @@ onMounted(() => {
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
-                  type="button">
-                  Отмена
+                  type="button"
+               >
+                 {{ t('cancel') }}
                </Button>
                <Button
                   @click="employeeDelete"
                   class="p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4"
                   rounded
                   type="button"
-               >Удалить</Button>
+               >
+                 {{ t('delete') }}
+               </Button>
             </template>
          </div>
       </template>

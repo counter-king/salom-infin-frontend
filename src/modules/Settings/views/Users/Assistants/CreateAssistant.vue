@@ -6,6 +6,8 @@ import { dialogConfig } from './config';
 import { dispatchNotify } from '@/utils/notify';
 import { ref } from 'vue';
 import { useAuthStore } from '../../../../Auth/stores';
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 const props = defineProps({ getFirstPageAssistants: Function, setVisible: Function, visible: Boolean });
 const assistant = ref('');
 const assistantLoading = ref(false);
@@ -72,7 +74,7 @@ const assistantCreate = () => {
          .then(response => {
             if(response?.status === 201) {
                assistant.value = '';
-               dispatchNotify(null, 'Помощник создан', 'success');
+               dispatchNotify(null, t('created-assistants'), 'success');
                props.getFirstPageAssistants();
                props.setVisible(false);
                supervisor.value = '';
@@ -83,9 +85,9 @@ const assistantCreate = () => {
             loading.value = false;
          });
    } else if(!supervisorId) {
-      dispatchNotify(null, 'Введите руководитель', 'error');
+      dispatchNotify(null, t('enter-leader'), 'error');
    } else {
-      dispatchNotify(null, 'Введите помощника', 'error');
+      dispatchNotify(null, t('enter-assistants'), 'error');
    }
 };
 </script>
@@ -94,7 +96,7 @@ const assistantCreate = () => {
       :closable="!loading"
       :pt="dialogConfig"
       :visible="visible"
-      header="Создать помощник"
+      :header="t('create-assistants')"
       modal
       @update:visible="() => {
          assistant = '';
@@ -102,7 +104,7 @@ const assistantCreate = () => {
          supervisor = '';
       }">
       <div class="flex flex-col">
-         <p class="text-sm text-greyscale-500 font-medium mb-1">Руководитель<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('leader') }}<span class="text-red-500 ml-1">*</span></p>
          <base-auto-complete
             :loading="supervisorLoading"
             :options="supervisors"
@@ -110,8 +112,8 @@ const assistantCreate = () => {
             :value="supervisor"
             key="id"
             label="full_name"
-            noOptionsMessage="Сотрудник не найден"
-            placeholder="Введите сотрудник"
+            :noOptionsMessage="t('not-found-employee')"
+            :placeholder="t('enter-employee')"
             @onInputChange="searchSupervisors"
             @onChange="value => {
                supervisor = value;
@@ -133,7 +135,7 @@ const assistantCreate = () => {
                </div>
             </template>
          </base-auto-complete>
-         <p class="text-sm text-greyscale-500 font-medium mt-6 mb-1">Помощник<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mt-6 mb-1">{{ t('assistants') }}<span class="text-red-500 ml-1">*</span></p>
          <div class="pb-8">
             <base-auto-complete
                :loading="assistantLoading"
@@ -142,8 +144,8 @@ const assistantCreate = () => {
                :value="assistant"
                key="id"
                label="full_name"
-               noOptionsMessage="Сотрудник не найден"
-               placeholder="Введите сотрудник"
+               :noOptionsMessage="t('not-found-employee')"
+               :placeholder="t('enter-employee')"
                @onInputChange="searchAssistants"
                @onChange="value => {
                   assistant = value;
@@ -182,15 +184,18 @@ const assistantCreate = () => {
                   class="bg-white border-0 shadow-1 text-greyscale-900 p-component font-semibold text-sm !rounded-full py-[10px] px-4 ml-0 mr-3"
                   rounded
                   style="box-shadow: 0px 1px 1px 0px rgba(95, 110, 169, 0.03), 0px 2px 4px 0px rgba(47, 61, 87, 0.03)"
-                  type="button">
-                  Отмена
+                  type="button"
+               >
+                 {{ t('cancel') }}
                </Button>
                <Button
                   @click="assistantCreate"
                   class="shadow-none p-button p-component font-semibold text-sm !rounded-full py-[9px] px-4 mx-0"
                   rounded
-                  type="button">
-                  Создать</Button>
+                  type="button"
+               >
+                 {{ t('create') }}
+               </Button>
             </template>
          </div>
       </template>
@@ -198,7 +203,7 @@ const assistantCreate = () => {
 </template>
 <style>
 .user-search-autocomplete .p-autocomplete-item {
-   transition: background 0s outline 0s !important;
+   transition: background 0s !important;
 }
 .user-search-autocomplete .p-autocomplete-item.p-focus {
    outline: 1px solid var(--primary) !important;

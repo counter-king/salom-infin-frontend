@@ -12,8 +12,16 @@ import {
   WidgetSlider,
   WidgetSurvey
 } from '../components/widgets'
+import { onMounted } from "vue";
+import axios from "axios";
 // Composable
 const { t } = useI18n()
+
+onMounted(() => {
+  axios.get(`https://wft-geo-db.p.rapidapi.com/v1/geo/countries?offset=0&limit=10`).then(data => {
+    console.log(data)
+  })
+})
 </script>
 
 <template>

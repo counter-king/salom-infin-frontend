@@ -14,7 +14,7 @@ const permissionStore = usePermissionStore()
 
 <template>
   <div class="permissions-view h-full">
-    <action-toolbar title="Права доступа">
+    <action-toolbar title="access-rights">
       <template #filters>
         <span></span>
       </template>
@@ -29,7 +29,7 @@ const permissionStore = usePermissionStore()
 
       <template v-else>
         <div class="flex-1">
-          <empty title="Выберите разришение из списка" class="!h-full !shadow-none"  />
+          <empty title="choose-access-right-from-list" class="!h-full !shadow-none"  />
         </div>
       </template>
     </div>
