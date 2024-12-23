@@ -78,6 +78,7 @@ const handleCancel = async () => {
     :label="props.header"
     :max-width="props.maxWidth"
     :draggable="false"
+    
   >
     <template #content>
       <base-textarea

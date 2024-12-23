@@ -1,7 +1,7 @@
 <script setup>
 // Core
-import { ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 // Components
 import { QuestionCircleBoldIcon } from '@/components/Icons'
@@ -13,14 +13,17 @@ import Button  from 'primevue/button'
 import { dispatchNotify } from '@/utils/notify'
 // enums
 import { COLOR_TYPES } from '@/enums'
+import { computed } from 'vue'
 
 // Composable
 const route = useRoute()
+const router = useRouter()
 const { t } = useI18n()
 // Reactive
 const count = ref(10)
 const dialog = ref(false)
 const isLoading = ref(false)
+const rankingQuery = computed(()=> route.query.rank || null)
 // Methods
 const handleRate = async (rate) => {
   count.value = rate
@@ -38,20 +41,30 @@ const handleRate = async (rate) => {
 const postRatePage = async (comment) => {
   isLoading.value = true
   try{      
-     await fetchCreateRatePage({ rank: count.value, comment, page_url: route.fullPath})
+    const { data } = await fetchCreateRatePage({ rank: count.value, comment, page_url: route.fullPath})
+    await router.replace({ path: route.path, query: { ...router.currentRoute.value.query, rank: data.rank} })
   }
   catch(e) {
     dispatchNotify(null, e?.message, COLOR_TYPES.ERROR)
+    count.value = 10
   } finally {
-        isLoading.value = false
-        count.value = 10
+      isLoading.value = false
   }
 }
 
 const onCancelModal = () => {
-  count.value = 10
 }
 
+const handleHide = () => {
+  if(!rankingQuery.value) {    
+    count.value = 10 
+  }
+}
+onMounted(() => {
+  if(count.value == 10) {
+    router.replace({ path: route.path, query: { ...router.currentRoute.value.query, rank: undefined} })
+  }
+})
 </script>
 
 <template>
@@ -70,24 +83,24 @@ const onCancelModal = () => {
           <template v-for="item in 5">
             <Button
               :loading="item === count && isLoading"
-              :disabled="item !== count && isLoading"
+              :disabled="item !== count && isLoading || rankingQuery"
               :pt="{
                   root: {
-                           class:'flex items-center justify-center w-10 h-10 bg-greyscale-300 border border-greyscale-500/20 text-white rounded-xl cursor-pointer hover:bg-greyscale-400 relative focus:!shodow-none custom-button'
+                          class:['flex items-center justify-center w-10 h-10 bg-greyscale-300 border border-greyscale-500/20 text-white rounded-xl cursor-pointer hover:bg-greyscale-400 relative focus:!shodow-none custom-button',
+                           {
+                              '!bg-critic-500': (count === 1 || count === 2) && count >= item,
+                              '!bg-warning-500': count === 3 && count >= item,
+                              '!bg-success-500': (count === 4 || count === 5) && count >= item,
+                            }
+                           ]
                         }
-              }"
-              :class="{
-                '!bg-critic-500': (count === 1 || count === 2) && count >= item,
-                '!bg-warning-500': count === 3 && count >= item,
-                '!bg-success-500': (count === 4 || count === 5) && count >= item,
               }"
               @click="handleRate(item)"
             >
-              {{ count !== item ||  [1,2,3].includes(count) && !isLoading ? item : ""}}
+              {{ count !== item || !isLoading ? item : ""}}
               <template v-if="item === count && isLoading">
                 <div
                   class="absolute top-0 left-0 flex items-center justify-center w-full h-full"
-                  :class="bg-primary-500"
                 >
                   <base-spinner root-classes="!w-6 !h-6" />
                 </div>
@@ -102,7 +115,7 @@ const onCancelModal = () => {
       Copyright ©2024. All Rights Reserved
     </div>
   </footer>
-  <modal-rate v-model="dialog" header="comment" label="send" :createButtonFn="postRatePage" :onCancelModal="onCancelModal" :loading="isLoading" />
+  <modal-rate @hide="handleHide" v-model="dialog" header="comment" label="send" :createButtonFn="postRatePage" :onCancelModal="onCancelModal" :loading="isLoading" />
 </template>
 
 <style scoped>
