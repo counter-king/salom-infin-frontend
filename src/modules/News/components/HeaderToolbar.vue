@@ -1,25 +1,29 @@
 <script setup>
 // Core
-import { computed, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { computed, onMounted, ref, watch, watchEffect } from 'vue'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 // Components
 import BaseButton from '@/components/UI/BaseButton.vue'
 import { ActionToolbar } from '@/components/Actions'
 import BaseInput from '@/components/UI/BaseInput.vue'
-//Icons
+// Icons
 import { AddPlusIcon } from '@/components/Icons'
 import { MagniferIcon } from '@/components/Icons'
+// Constants
+import { newsMenuItems } from '../constants'
+// store
+import { useAuthStore } from '@/modules/Auth/stores'
 
 const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
-
+const authStore = useAuthStore()
 // Reactive
-const searchQuery = ref(null)
+const searchQuery = ref(route.query.search || null)
 const tagPramId = computed(() => route.query.tag || undefined)
-
-
+const activeMenu = ref(route.query.activeMenu ||'all')
+const isUserModerator = computed(() => authStore.currentUser.roles.some(role => role.name === 'moderator'))
 //watch
 watch(searchQuery, (newValue) => {
   // if newValue is empty, if work
@@ -30,15 +34,46 @@ watch(searchQuery, (newValue) => {
     router.replace({ query: { search: newValue } })
   }
 })
+
+const handleClickMenu=(item)=>{  
+  activeMenu.value = item.title
+
+  if(!!tagPramId.value){
+    activeMenu.value = null
+    router.push({ name:item.link, query: {...router.currentRoute.value.query, activeMenu: item.title, tag:undefined}})
+  } else {
+    router.push({ name:item.link, query: {...router.currentRoute.value.query, activeMenu: item.title}})
+  }
+}
+
+onMounted(() => {
+  if(tagPramId.value){
+    activeMenu.value = null
+  }
+})
 </script>
 <template>
   <action-toolbar title="News">
     <template #title-after>
-      <base-button 
+      <div class="flex gap-3">
+          <div
+            v-for="item in newsMenuItems"  
+            v-if="isUserModerator"
+            :key="item.link"
+            @click="handleClickMenu(item)"
+            class="py-1 px-4 bg-white rounded-[32px] text-sm font-medium text-greyscale-900 cursor-pointer"
+            :class="{ '!bg-primary-500 text-white': activeMenu === item.title }"
+          >
+            {{  t(item.title) }}
+          </div>
+      </div>
+      <div
         v-if="tagPramId" 
-        @click="router.replace({query:undefined})"
-        class="w-full max-w-[316px] text-xs" label="cancel-tag-filter"
-      />
+          @click="router.replace({query: {...router.currentRoute.value.query, tag: undefined}})"
+        class="py-1 px-4 !bg-primary-500 rounded-[32px] text-sm font-medium text-white cursor-pointer"
+      >
+        {{  t('cancel-tag-filter') }}
+      </div>
     </template>
     <template #filters>
       <div class="w-full max-w-[316px]">

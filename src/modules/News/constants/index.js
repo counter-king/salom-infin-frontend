@@ -37,8 +37,10 @@ export const EOMOJI_TYPES = {
 
 export const popularityRadiosValues = [
     {id: "1", title:"all"},
-    {id: "2", title:"popular"},
-    {id: "3", title:"less-read"}
+    {id: "-like_counts", title:"popular"},
+    {id: "view_counts", title:"less-read"},
+    {id: "-view_counts", title:"many-views"},
+
 ]
 
 export const timeRadiosValues = [
@@ -47,15 +49,6 @@ export const timeRadiosValues = [
     {id: "6", title:"last-week"},
     {id: "7", title:"last-month-2"},
 ]
-
-export const socialPartitipationRadiosValues = [
-    {id: "8", title:"all"},
-    {id: "10", title:"many-likes"},
-    {id: "9", title:"social-participation"},
-    {id: "11", title:"more-explanations"},
-    {id: "12", title:"much-in-common"},
-]
-
 
 export const getDateRange = (selectedRange) => {
     const now = dayjs()
@@ -90,3 +83,37 @@ export const getDateRange = (selectedRange) => {
 
     return {startDate, endDate}
 }
+
+export const newsMenuItems = [
+    {
+        link: "NewsList",
+        title: "all",
+    },
+    // {
+    //     link: "MySaveNewsList",
+    //     title: "my-save-news",
+    // },
+    {
+        link: "MyNewsList",
+        title: "my-posts",
+    },
+    {
+        link: "NewsModerationList",
+        title: "for-moderation",
+    },
+
+]
+
+
+export const getMatchFileUploadType = (content) => {
+    if(allowedImageTypes.some(item => item.includes(content.type))){
+      return {type: CONTENT_TYPES.FILE,  value: { ...content.file,type: content.type}, id: content.id}
+    }
+    else if(allowedVideoTypes.some(item => item.includes(content.type))){
+      return {type: CONTENT_TYPES.FILE, value: {...content.file, type: content.type}, id: content.id}
+    }
+    else if(allowedAudioTypes.some(item => item.includes(content.type))){
+      return {type: CONTENT_TYPES.FILE, value: {...content.file,type: content.type}, id: content.id}
+    }
+  }
+  

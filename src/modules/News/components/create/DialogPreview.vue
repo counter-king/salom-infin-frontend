@@ -24,10 +24,10 @@ const props = defineProps({
     modelValue: {
         type: Boolean,
       },
-      onSubmitForm: {
-        type: Function,
-        required: true
-      }
+    onSubmitForm: {
+      type: Function,
+      required: true
+    }
     })
 
 const authStore = useAuthStore()

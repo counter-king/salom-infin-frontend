@@ -2,13 +2,8 @@
 // Core
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { ref } from 'vue'
 // Components
-import BaseButton from '@/components/UI/BaseButton.vue'
 import BackButton from '@/components/Actions/BackButton.vue'
-import DialogPreview from './DialogPreview.vue'
-import BaseDialog from '@/components/UI/BaseDialog.vue'
-import { fetchDeleteNews } from '../../services/news.service'
 // stores
 import { useNewsStore } from '../../stores'
 

@@ -25,6 +25,9 @@ const props = defineProps({
   contentClasses: {
     type: String,
     default: 'py-6 px-8'
+  },
+  footerClasses: {
+    type: String
   }
 })
 const emit = defineEmits(['update:modelValue', 'emit:after-hide'])
@@ -63,7 +66,7 @@ const rootClasses = computed(() => {
         class: [props.contentClasses, { 'rounded-b-2xl' : !slots.footer }]
       },
       footer: {
-        class: ['rounded-b-2xl bg-greyscale-50 border border-solid border-t-greyscale-200 py-5 pl-6 pr-4']
+        class: ['rounded-b-2xl bg-greyscale-50 border border-solid border-t-greyscale-200 py-5 pl-6 pr-4',props.footerClasses]
       },
       mask: {
         class: [

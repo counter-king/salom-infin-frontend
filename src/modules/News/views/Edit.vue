@@ -77,7 +77,6 @@ const fetchOneNews = async() => {
     else if(allowedAudioTypes.some(item => item.includes(content.type))){
       return {type: CONTENT_TYPES.FILE, value: {...content.file,type: content.type}, id: content.id}
     }
-  
   }
 
    try {

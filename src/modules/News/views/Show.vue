@@ -20,6 +20,7 @@ import Queto from '../components/Queto.vue';
 import Tag from '../components/Tag.vue';
 import TheFooter from '@/components/TheFooter.vue';
 import ShortDescription from '../components/ShortDescription.vue';
+// import ShareDialog from '../components/show/ShareDialog.vue';
 // icons
 import BaseIconify from '@/components/UI/BaseIconify.vue';
 import { BookmarkBoldIcon, EyeBoldIcon, ForwardBoldIcon, HeartBoldIcon } from '@/components/Icons';
@@ -47,7 +48,7 @@ const commentValue = ref('')
 const newCommentList = ref([])
 const authStore = useAuthStore()
 const relatedNewsList = ref([])
-
+// const shareDialogVisible = ref(false)
 // methods
 const fetchOneNews = async() => {
    loading.value = true
@@ -202,7 +203,7 @@ onMounted( async () => {
                         </div>
                     </circle-wrapper> -->
                     <!-- forward icon-->
-                    <!-- <circle-wrapper class="min-w-fit">
+                    <!-- <circle-wrapper @click="shareDialogVisible = true" class="min-w-fit">
                         <div class="text-greyscale-400">
                             <base-iconify :icon="ForwardBoldIcon" />
                         </div>
@@ -262,6 +263,7 @@ onMounted( async () => {
         </div>
     </div>
     <the-footer/>
+    <!-- <share-dialog v-model="shareDialogVisible"/> -->
   </div>
 </template>
 
