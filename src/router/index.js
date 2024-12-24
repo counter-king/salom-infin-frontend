@@ -46,7 +46,7 @@ const router = createRouter({
         // Handbook
         ...Handbook,
          // News
-          // ...News
+          ...News
       ]
     },
     // /MainLayout
