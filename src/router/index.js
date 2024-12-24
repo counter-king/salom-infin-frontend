@@ -11,7 +11,7 @@ import HR from "../modules/HR/routes"
 import Settings from "../modules/Settings/routes"
 import Search from "../modules/Search/routes"
 import Handbook from '../modules/Handbook/routes'
-// import News from "../modules/News/routes"
+import News from "../modules/News/routes"
 
 // Utils
 import { getStorageItem } from "@/utils/storage"
@@ -46,7 +46,7 @@ const router = createRouter({
         // Handbook
         ...Handbook,
          // News
-         //  ...News
+          ...News
       ]
     },
     // /MainLayout

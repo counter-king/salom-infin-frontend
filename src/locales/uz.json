@@ -732,5 +732,10 @@
   "there-is-no-news-description": "Agar siz post yoki yangilik yaratmoqchi bo'lsangiz,'Yangiliklar yaratish' tugmasini bosing",
   "no-news-found-filter":"Yangilik topilmadi",
   "no-news-found-filter-description":"Siz foydalangan filtrlar uchun hech qanday yangilik topilmadi.",
-  "share-employee": "Xabarni baham ko'rmoqchi bo'lgan xodimlarni toping"
+  "share-employee": "Xabarni baham ko'rmoqchi bo'lgan xodimlarni toping",
+  "reject-news-reason": "Rad etish sababi",
+  "enter-reject-news-reason": "Rad etish sababini kiriting",
+  "there-is-no-related-news-data": "Hozircha bog'liq yangiliklar yo'q",
+  "reason-reject": "Rad etish sababi",
+  "refuse":"Rad etish"
 }

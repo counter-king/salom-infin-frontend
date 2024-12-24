@@ -12,7 +12,7 @@ import BaseButton from '@/components/UI/BaseButton.vue';
 import DialogPreview from '../components/create/DialogPreview.vue';
 import BaseDialog from '@/components/UI/BaseDialog.vue'
 // services 
-import { fetchDeleteNews, fetchGetNews } from '../services/news.service';
+import { fetchGetMyNewsDelete, fetchGetMyNews } from '../services/news.service';
 // stores
 import { useNewsStore } from '../stores';
 // constants
@@ -55,10 +55,10 @@ const handleDeleteDialog = () => {
 const handleDeleteNews = async()=>{
   isDeleteLoading.value = true
   if(!!route.params.id){
-   await fetchDeleteNews(route.params.id)
+   await fetchGetMyNewsDelete(route.params.id)
    isDeleteLoading.value = false
    dialogDeleteOpen.value = false
-   router.push({name:'NewsIndex'})
+   router.push({name:'MyNewsList', query: {...router.currentRoute.value.query, activeMenu: 'my-posts'}})
    newsStore.restStore()
   }
 }
@@ -80,7 +80,7 @@ const fetchOneNews = async() => {
   }
 
    try {
-      const { data }  = await fetchGetNews(route.params.id)   
+      const { data }  = await fetchGetMyNews(route.params.id)   
       newsStore.model.title = data.title    
       newsStore.model.description = data.description
       newsStore.model.category = data.category.id

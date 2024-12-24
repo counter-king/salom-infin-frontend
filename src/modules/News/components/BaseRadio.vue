@@ -46,13 +46,13 @@ const { t } = useI18n()
   </div>
 </template>
 
-<style>
-.p-radiobutton .p-radiobutton-box.p-highlight {
+<style scoped>
+::v-deep(.p-radiobutton .p-radiobutton-box.p-highlight) {
   border-color: #635AFF !important;
   background: #FFFFFF !important;
 }
 
-.p-radiobutton-icon {
+::v-deep(.p-radiobutton-icon) {
   background: #635AFF !important;
 }
 </style>

@@ -24,7 +24,7 @@ const { t } = useI18n()
 </script>
 <template>
     <div class="rounded-2xl bg-greyscale-50 min-w-[203px] h-[112px] p-4 cursor-pointer" :class="class">
-        <div class="w-9 h-9 min-w-[36px] min-h-[36px] rounded-full p-2" :class="`bg-${iconColor}`">
+        <div class="w-9 h-9 min-w-[36px] min-h-[36px] rounded-full p-2" :class="`!bg-${iconColor}`">
             <div class="w-5 h-5 min-w-[20px] min-h-[20px] rounded-full bg-white">
                 <div :class="`text-${iconColor}`">
                     <base-iconify 

@@ -24,7 +24,7 @@ import { useNewsStore } from '../../../stores';
 // utils
 import { dispatchNotify } from '@/utils/notify';
 // services
-import { fetchCreateNews, fetchUpdateNews } from '../../../services/news.service';
+import { fetchCreateMyNews, fetchUpdateMyNews } from '../../../services/news.service';
 // constants
 import { COLOR_TYPES } from '@/enums';
 import {  allowedAudioTypes, allowedFileTypes, allowedImageTypes, allowedVideoTypes, CONTENT_TYPES } from '../../../constants';
@@ -105,14 +105,14 @@ const onSubmitForm = async () => {
 
     try {
      if (props.newsId) {
-      await fetchUpdateNews(props.newsId, formData);
+      await fetchUpdateMyNews(props.newsId, formData);
     } else {
-      await fetchCreateNews(formData);
+      await fetchCreateMyNews(formData);
     }
 
     newsStore.loadingSubmitButton = false
     newsStore.restStore()
-    router.push({ name: 'NewsIndex' })
+    router.push({ name: 'MyNewsList', query: {...router.currentRoute.value.query, activeMenu: 'my-posts'}})
   } 
   catch (error) { 
     dispatchNotify(null, error.message, COLOR_TYPES.ERROR)
@@ -214,6 +214,7 @@ watch(()=>newsStore.model.description, (val) => {
           :height="500"
            v-if="field.type === CONTENT_TYPES.TEXT" 
             v-model="field.value"
+            :default-font-size="20"
           />
           
           <!-- <base-froala-editor 
@@ -270,7 +271,7 @@ watch(()=>newsStore.model.description, (val) => {
         />
         <add-card text="additional-images"
          @click="addDynamicField(CONTENT_TYPES.FILE)"
-         class="w-fit" icon-color="info-500" 
+         class="w-fit" icon-color="success-500" 
          />
         <add-card text="quotes"
           @click="addDynamicField(CONTENT_TYPES.QUOTE)"

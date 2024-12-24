@@ -1,21 +1,25 @@
 <script setup>
 // core
+import { useI18n } from 'vue-i18n';
 import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 // components
 import ShowNewsDialog from '../components/ShowNewsDialog.vue';
 import BaseDataTable from '@/components/UI/BaseDataTable.vue';
-import { PenIcon, TrashBinTrashIcon } from '@/components/Icons';
+import { AltArrowRightIcon, PenIcon, TrashBinTrashIcon } from '@/components/Icons';
 import BaseIconify from '@/components/UI/BaseIconify.vue';
 import NewsStatus from '../components/NewsStatus.vue';
 import DeleteNewsDialog from '../components/DeleteNewsDialog.vue';
+import RejectNewsDialog from '../components/RejectNewsDialog.vue';
 // composable
 import { useMyNewsList } from '../composibles/useMyNewsList';
 import { useSearchNews } from '../composibles/useSearchNews';
 // utils
 import { formatDate } from '@/utils/formatDate';
 import { fetchGetMyNewsDelete } from '../services/news.service';
+import { NEWS_STATUS } from '../enums';
 
+const { t } = useI18n();
 const router = useRouter();
 const {headers, list, totalCount, loading , getMyNewsList } = useMyNewsList();
 const {debouncedSearchQuery } = useSearchNews();
@@ -25,6 +29,8 @@ const  newsId = ref(null);
 const  newsData = ref(null);
 const  dialogDeleteIsOpen = ref(false)
 const  isDeleteLoading = ref(false)
+const  isRejectReasonVisible = ref(false)
+const  rejectReason = ref(null)
 
 // methods
 const onRowClick = (data) => {
@@ -50,7 +56,7 @@ const handleDeleteNews = async ()=>{
   isDeleteLoading.value = true
   if(!!newsId.value){
    await fetchGetMyNewsDelete(newsId.value)
-   getMyNewsList({page:1, page_size: 15})
+   getMyNewsList({page:1, page_size: 15, search: debouncedSearchQuery.value})
    isDeleteLoading.value = false
    dialogDeleteIsOpen.value = false
   }
@@ -79,7 +85,16 @@ watch(debouncedSearchQuery, () => {
          </div>
         </template>
         <template #status="{ data }">
-          <news-status :status="data.status"/>
+          <div class="flex gap-[100px] items-center">
+            <news-status :status="data.status"/>
+            <div 
+              @click.stop="isRejectReasonVisible = true; rejectReason = data.cancelled_reason"
+              v-if="data.status === NEWS_STATUS.DECLINED" class="flex items-center pl-2 pr-1 py-1 rounded-full bg-greyscale-50 hover:bg-white"
+              >
+                <p class="text-xs text-greyscale-500 font-semibold"> {{ t('reason') }}</p>
+                 <BaseIconify :icon="AltArrowRightIcon" class="!w-4 !h-4 !text-greyscale-500"/>
+            </div>
+          </div>
         </template>
         <template #created_date="{ data }">
           {{ formatDate(data.created_date) }}
@@ -101,5 +116,7 @@ watch(debouncedSearchQuery, () => {
      </base-data-table>
      <show-news-dialog :id="newsId" :data="newsData" v-if="showNewsDialog" v-model="showNewsDialog"/>
      <delete-news-dialog v-if="dialogDeleteIsOpen" :isLoading="isDeleteLoading" v-model="dialogDeleteIsOpen" :onClose="handleCloseDeleteDialog" :onDeleteNews="handleDeleteNews"/>
+     <reject-news-dialog  v-if="isRejectReasonVisible" v-model="isRejectReasonVisible"  :value="rejectReason" max-width="max-w-[700px]" type="show-reason" :headerLable="t('reason-reject')" :disabled="true"/>
+
   </div>
 </template>

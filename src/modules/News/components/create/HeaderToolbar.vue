@@ -18,7 +18,7 @@ const { t } = useI18n()
     <div class="flex gap-3 items-center">
       <back-button 
         :self="true" 
-        @click="newsStore.restStore(); router.push({name:'NewsIndex'})"
+        @click="newsStore.restStore(); router.go(-1);"
       />
       <h2 class="text-xl font-semibold text-greyscale-900">{{t(!!route.params.id ? 'edit-news' : 'createNews') }}</h2>
     </div>

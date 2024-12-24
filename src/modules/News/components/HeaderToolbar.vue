@@ -1,7 +1,7 @@
 <script setup>
 // Core
-import { computed, onMounted, ref, watch, watchEffect } from 'vue'
-import { RouterLink, useRoute, useRouter } from 'vue-router'
+import { computed, ref, watch, watchEffect } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 // Components
 import BaseButton from '@/components/UI/BaseButton.vue'
@@ -22,7 +22,13 @@ const authStore = useAuthStore()
 // Reactive
 const searchQuery = ref(route.query.search || null)
 const tagPramId = computed(() => route.query.tag || undefined)
-const activeMenu = ref(route.query.activeMenu ||'all')
+
+const activeMenu = computed({
+  get: () => ( route.query.activeMenu || !tagPramId.value && 'all'),
+  set: (value) => {
+    router.replace({ query: { ...router.currentRoute.value.query, activeMenu: value } })
+  }
+})
 const isUserModerator = computed(() => authStore.currentUser.roles.some(role => role.name === 'moderator'))
 //watch
 watch(searchQuery, (newValue) => {
@@ -36,21 +42,21 @@ watch(searchQuery, (newValue) => {
 })
 
 const handleClickMenu=(item)=>{  
-  activeMenu.value = item.title
 
   if(!!tagPramId.value){
-    activeMenu.value = null
-    router.push({ name:item.link, query: {...router.currentRoute.value.query, activeMenu: item.title, tag:undefined}})
+    router.push({ name:item.link, query: { activeMenu: item.title, tag:undefined}})
   } else {
-    router.push({ name:item.link, query: {...router.currentRoute.value.query, activeMenu: item.title}})
+    router.push({ name:item.link, query: { activeMenu: item.title}})
   }
 }
 
-onMounted(() => {
-  if(tagPramId.value){
+watchEffect(() => {
+  if (!!tagPramId.value) {
     activeMenu.value = null
+    router.replace({ query: { ...router.currentRoute.value.query, activeMenu: undefined } })
   }
-})
+});
+
 </script>
 <template>
   <action-toolbar title="News">

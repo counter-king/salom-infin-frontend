@@ -17,7 +17,7 @@ const props = defineProps({
 // methods
 const handleTagClick = (tag) => {
     router.push({
-        name: 'NewsIndex',
+        name: 'NewsList',
         query: {
             tag: tag.id
         }   

@@ -5,7 +5,7 @@ import ShortDescription from './ShortDescription.vue';
 //Icons
 import { EyeLinearIcon, HeartLinearIcon } from '@/components/Icons'
 import BaseIconify from '@/components/UI/BaseIconify.vue'
-import { EditLightIcon } from '../../../components/Icons';
+// import { EditLightIcon } from '../../../components/Icons';
 // utils
 import { formatToK } from '@/utils';
 import { formatDateNamedMonth } from '@/utils/formatDate';
@@ -38,9 +38,9 @@ const props = defineProps({
       <div class="flex items-center justify-between p-2 mt-auto">
           <span class="font-medium text-xs text-[#5F6878]">{{ formatDateNamedMonth(props.item.created_date) }}</span>
           <div class="flex gap-2 items-center text-greyscale-400">
-            <RouterLink :to="{ name: 'NewsEdit', params: {id: props.item.id}}" class="text-sm hover:text-warning-500">
+            <!-- <RouterLink :to="{ name: 'NewsEdit', params: {id: props.item.id}}" class="text-sm hover:text-warning-500">
               <base-iconify :icon="EditLightIcon" />
-            </RouterLink>
+            </RouterLink> -->
             <div class="flex gap-1 items-center">
               <div class="hover:cursor-pointer">
                 <base-iconify :icon="HeartLinearIcon" />

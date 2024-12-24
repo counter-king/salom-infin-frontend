@@ -42,17 +42,20 @@ const handleModerationApprove = async () => {
   isLoadingApprove.value = true
   try {
     await fetchModerationApproveNews(newsId.value, { status: NEWS_STATUS.PUBLISHED })
+    getModerationNewsList({page:1, page_size: 15, search: debouncedSearchQuery.value})
   } finally{
     isLoadingApprove.value = false
   }
 }
 
-const handleRejectModeration = async ( comment) => {
+const handleRejectModeration = async (reason) => {
   isLoadingReject.value = true
   try {
-    await fetchModerationApproveNews(newsId.value, {comment, status: NEWS_STATUS.DECLINED})
+    await fetchModerationApproveNews(newsId.value, {cancelled_reason: reason, status: NEWS_STATUS.DECLINED})
+    getModerationNewsList({page:1, page_size: 15, search: debouncedSearchQuery.value})
   } finally{
     isLoadingReject.value = false
+    showNewsDialog.value = false
   }
 }
 
@@ -60,14 +63,14 @@ const handleRejectModeration = async ( comment) => {
 <template>
   <div class="w-full">
       <base-data-table 
-         :action-list="getModerationNewsList"
-         :api-params="{ page_size: 15 }"
-         :headers="headers"
-         :total-count="totalCount"
-         :value="list"
-         :loading="loading"
-         scroll-height="calc(100vh - 295px)"
-         @emit:row-click="onRowClick"
+        :action-list="getModerationNewsList"
+        :api-params="{ page_size: 15 }"
+        :headers="headers"
+        :total-count="totalCount"
+        :value="list"
+        :loading="loading"
+        scroll-height="calc(100vh - 295px)"
+        @emit:row-click="onRowClick"
       >
         <template #image="{ data }">
          <div class="w-[38px] h-[38px] min-w-[38px] min-h-[38px] rounded-lg overflow-hidden">

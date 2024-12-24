@@ -17,17 +17,18 @@ import { useSearchNews } from '../composibles/useSearchNews'
 const route = useRoute()
 // reactive
 const newsList = ref([])
-const loading = ref(false)
+const initialLoading = ref(false)
+const loadingMore = ref(false)
 const page = ref(1)
 const next = ref(false)
 const isFilterApplied = ref(false)
 
-const showSidebarFilter = computed(() => 
-  newsList.value.length > 0 || isFilterApplied.value || loading.value
+const showSidebarFilter = computed(() =>
+  newsList.value.length > 0 || isFilterApplied.value 
 )
 
 const queryParams = computed(() => ({
-  tags: route.query.tag,
+  tag: route.query.tag,
   category: route.query.category,
   start_date: route.query.startDate,
   end_date: route.query.endDate,
@@ -37,10 +38,16 @@ const  {debouncedSearchQuery, searchQuery } = useSearchNews();
 
 
 const fetchNewsList = async (currentPage, resetList = false) => {
-  if (loading.value) return
-  loading.value = true
+
+  if (resetList) {
+    if (initialLoading.value) return
+    initialLoading.value = true
+  } else {
+    if (loadingMore.value) return
+    loadingMore.value = true
+  }
+
   try {
-    
     const { data } = await fetchGetNewsList({ 
       page: currentPage, 
       search: debouncedSearchQuery.value,
@@ -56,7 +63,11 @@ const fetchNewsList = async (currentPage, resetList = false) => {
   } catch (e) {
     dispatchNotify(null, e?.message, COLOR_TYPES.ERROR)
   } finally {
-    loading.value = false
+   if (resetList) {
+      initialLoading.value = false
+    } else {
+      loadingMore.value = false
+    }
   }
 }
 
@@ -74,24 +85,26 @@ watch(
   () => queryParams.value.end_date,
   () => queryParams.value.start_date,
   () => queryParams.value.ordering,
+  () => queryParams.value.tag,
   debouncedSearchQuery
 ],
   () => {
-    isFilterApplied.value = Object.values(queryParams.value).some(Boolean) || !!debouncedSearchQuery.value
+    isFilterApplied.value = Object.values(queryParams.value).some(Boolean) || !!debouncedSearchQuery.value && !!newsList.value.length
+    console.log(isFilterApplied.value);
     newsList.value = []
     fetchNewsList(1, true)
   },
 )
 
 onMounted(() => {
-  isFilterApplied.value = Object.values(queryParams.value).some(Boolean) || !!searchQuery.value
+  isFilterApplied.value = Object.values(queryParams.value).some(Boolean) || !!searchQuery.value && !!newsList.value.length
   fetchNewsList(1, true)
 })
 </script>
 
 <template>
     <div class="flex gap-[10px] h-full">
-      <template v-if="loading">
+      <template v-if="initialLoading">
         <base-spinner />  
       </template>
       <template v-else-if="newsList.length === 0">
@@ -104,14 +117,17 @@ onMounted(() => {
         />
       </template>
       <div v-else
-         class="overflow-y-auto h-full grid 2xl:grid-cols-4 2xl:gap-4 xl:grid-cols-3 xl:gap-3 justify-between place-items-start self-start pr-1 pb-1" :class="newsList.length < 4 && '!justify-start'"
+         class="overflow-y-auto h-full w-full grid 2xl:grid-cols-4 2xl:gap-4 xl:grid-cols-3 xl:gap-3 justify-between place-items-start self-start pr-1 pb-1" :class="newsList.length < 4 && '!justify-start'"
           @scroll="handleScroll"
          >
         <template v-for="item in newsList" :key="item.id">
-          <RouterLink :to="{ name: 'NewsShow', params: {id: item.id}}">
+          <RouterLink :to="{ name: 'NewsShow', params: {id: item.id}}" class="w-full">
             <NewCard :item="item" />
           </RouterLink>
         </template>
+        <div v-if="loadingMore" class="flex justify-center items-center h-full w-full">
+          <base-spinner />
+        </div>
       </div>
       <div v-if="showSidebarFilter" class="w-[325px] min-w-[325px] h-full overflow-y-auto pr-1 pb-1 place-self-stretch">
         <news-filter-bar />

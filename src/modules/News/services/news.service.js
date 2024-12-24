@@ -6,18 +6,15 @@ const URLS = {
     newsTags: "news-tags",
     newsLikes: "news-likes",
     newsComments: "news-comments",
-    newsPending: "news/pending-news",
-    myNews: "news/my-news",
-    myNewsDetail: "my-news-detail",
-    pendingNewsDetail:"pending-news-detail",
-    myNewsDelete: "my-news-delete",
+    newsPending: "pending-news",
+    myNews: "my-news",
     approve:"approve"
 }
 
 
 // create a news
-export const fetchCreateNews = (params) => {
-    return axiosConfig.post(`${URLS.news}/`, params)
+export const fetchCreateMyNews = (params) => {
+    return axiosConfig.post(`${URLS.myNews}/`, params)
 }
 
 // get news list
@@ -26,14 +23,10 @@ export const fetchGetNewsList = (params) => {
 }
 
 // update news
-export const fetchUpdateNews = (id, params) => {
-    return axiosConfig.put(`${URLS.news}/${id}`, params)
+export const fetchUpdateMyNews = (id, params) => {
+    return axiosConfig.put(`${URLS.myNews}/${id}`, params)
 }
 
-// delete news
-export const fetchDeleteNews = (id) => {
-    return axiosConfig.delete(`${URLS.news}/${id}`)
-}
 // get one news
 export const fetchGetNews = (id) => {
     return axiosConfig.get(`${URLS.news}/${id}`)
@@ -41,32 +34,32 @@ export const fetchGetNews = (id) => {
 
 // get news list for moderation
 export const fetchGetModerationNewsList = (params) => {
-    return axiosConfig.get(`${URLS.newsPending}/`, { page_size: 15, ...params })
+    return axiosConfig.get(`${URLS.newsPending}/`, { page:1, page_size: 15, ...params })
 }
 
 // get my news list 
 export const fetchGetMyNewsList = (params) => {
-    return axiosConfig.get(`${URLS.myNews}/`, { page_size: 15, ...params })
+    return axiosConfig.get(`${URLS.myNews}/`, { page:1, page_size: 15, ...params })
 }
 
 // get my news one
 export const fetchGetMyNews = (id)=>{
-    return axiosConfig.get(`${URLS.news}/${id}/${URLS.myNewsDetail}`)
+    return axiosConfig.get(`${URLS.myNews}/${id}/`)
 }
 
 // get my news delete one
 export const fetchGetMyNewsDelete = (id)=>{
-    return axiosConfig.delete(`${URLS.news}/${id}/${URLS.myNewsDelete}`)
+    return axiosConfig.delete(`${URLS.myNews}/${id}/`)
 }
 
 // get pending news one
 export const fetchGetPendingNews = (id)=>{
-    return axiosConfig.get(`${URLS.news}/${id}/${URLS.pendingNewsDetail}`)
+    return axiosConfig.get(`${URLS.newsPending}/${id}/`)
 }
 
 // get pending news one
 export const fetchModerationApproveNews = (id, body)=>{
-    return axiosConfig.put(`${URLS.news}/${id}/${URLS.approve}`, body)
+    return axiosConfig.put(`${URLS.newsPending}/${id}/${URLS.approve}`, body)
 }
 
 // get news-catefory

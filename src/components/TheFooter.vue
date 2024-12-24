@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 // Components
@@ -13,7 +13,6 @@ import Button  from 'primevue/button'
 import { dispatchNotify } from '@/utils/notify'
 // enums
 import { COLOR_TYPES } from '@/enums'
-import { computed } from 'vue'
 
 // Composable
 const route = useRoute()
@@ -85,15 +84,15 @@ onMounted(() => {
               :loading="item === count && isLoading"
               :disabled="item !== count && isLoading || rankingQuery"
               :pt="{
-                  root: {
-                          class:['flex items-center justify-center w-10 h-10 bg-greyscale-300 border border-greyscale-500/20 text-white rounded-xl cursor-pointer hover:bg-greyscale-400 relative focus:!shodow-none custom-button',
-                           {
-                              '!bg-critic-500': (count === 1 || count === 2) && count >= item,
-                              '!bg-warning-500': count === 3 && count >= item,
-                              '!bg-success-500': (count === 4 || count === 5) && count >= item,
-                            }
-                           ]
-                        }
+                root: {
+                  class:['flex items-center justify-center w-10 h-10 bg-greyscale-300 border border-greyscale-500/20 text-white rounded-xl cursor-pointer hover:bg-greyscale-400 relative focus:!shodow-none custom-button',
+                    {
+                      '!bg-critic-500': (count === 1 || count === 2) && count >= item,
+                      '!bg-warning-500': count === 3 && count >= item,
+                      '!bg-success-500': (count === 4 || count === 5) && count >= item,
+                    }
+                    ]
+                }
               }"
               @click="handleRate(item)"
             >
