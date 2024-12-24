@@ -46,16 +46,13 @@ const rest = computed(() => props.items.slice(props.max))
       <base-avatar
         :label="isObject(avatar.user) ? avatar.user.full_name : avatar.full_name"
         :color="isObject(avatar.user) ? avatar.user.color : avatar.color"
+        :meta="isObject(avatar.user) ? avatar.user : avatar"
         :image="avatar.image"
         :size="props.size"
         :shape="props.shape"
         :avatar-classes="props.avatarClasses"
-        v-tooltip.top="{
-          value: `<h4 class='text-xs text-white -my-1'>${ isObject(avatar.user) ? avatar.user.full_name : avatar.full_name }</h4>`,
-          escape: true,
-          autoHide: false
-        }"
         type="group"
+        class="-mr-2"
       />
     </template>
 
@@ -66,11 +63,6 @@ const rest = computed(() => props.items.slice(props.max))
         :shape="props.shape"
         :avatar-classes="props.avatarClasses"
         type="group"
-        v-tooltip.top="{
-          value: '123',
-          escape: true,
-          autoHide: false
-        }"
       >
         <template #default>
           <span class="text-sm leading-none font-semibold text-primary-900">
