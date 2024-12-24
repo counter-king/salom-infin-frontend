@@ -88,6 +88,7 @@ export const newsMenuItems = [
     {
         link: "NewsList",
         title: "all",
+        roles: ['user']
     },
     // {
     //     link: "MySaveNewsList",
@@ -96,10 +97,12 @@ export const newsMenuItems = [
     {
         link: "MyNewsList",
         title: "my-posts",
+        roles: ['user']
     },
     {
         link: "NewsModerationList",
         title: "for-moderation",
+        roles: ['moderator']
     },
 
 ]
