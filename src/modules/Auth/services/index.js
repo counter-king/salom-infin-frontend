@@ -41,6 +41,7 @@ export const fetchSendOtp = async (body) => {
 *
 * */
 export const fetchVerifyNumber = async (body) => {
+  console.log('body', body)
   return axiosConfig.post(URLS.verify, body)
 }
 /*
