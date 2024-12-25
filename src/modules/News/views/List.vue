@@ -117,11 +117,11 @@ onMounted(() => {
         />
       </template>
       <div v-else
-         class="overflow-y-auto h-full w-full grid 2xl:grid-cols-4 2xl:gap-4 xl:grid-cols-3 xl:gap-3 justify-between place-items-start self-start pr-1 pb-1" :class="newsList.length < 4 && '!justify-start'"
+         class="overflow-y-auto h-full w-full grid 2xl:grid-cols-4 2xl:gap-4 xl:grid-cols-3 xl:gap-3 justify-between auto-rows-max place-items-start self-start pr-1 pb-1" :class="newsList.length < 4 && '!justify-start'"
           @scroll="handleScroll"
          >
         <template v-for="item in newsList" :key="item.id">
-          <RouterLink :to="{ name: 'NewsShow', params: {id: item.id}}" class="w-full">
+          <RouterLink :to="{ name: 'NewsShow', params: {id: item.id}}" class="w-full h-full">
             <NewCard :item="item" />
           </RouterLink>
         </template>
