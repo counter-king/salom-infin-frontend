@@ -223,10 +223,10 @@ onMounted( async () => {
 
             <!-- contents -->
             <title-component :title="newsOne.title" class="mt-4 mb-5"/>
-            <short-description wrap-class="text-greyscale-900 text-xl !mt-0" :text="newsOne.description"/>
+            <short-description wrap-class="text-greyscale-800 text-xl !mt-0" :text="newsOne.description"/>
 
             <template v-for="(content, index) in newsOne.contents" :key="content.id">
-                <div v-if="content.type === CONTENT_TYPES.TEXT" v-html="content.content" class="mt-4"></div>
+                <div v-if="content.type === CONTENT_TYPES.TEXT" v-html="content.content" class="mt-4 text-greyscale-800"></div>
                 <div v-if="content.type === CONTENT_TYPES.QUOTE" >
                     <queto :text="content.content" class="my-10"/>
                 </div>

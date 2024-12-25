@@ -103,9 +103,9 @@ onMounted(() => {
           <main-file-show :file="newsOne.image"/>
           <user-card :name="newsOne.created_by?.full_name" :created-date="newsOne.created_date" :category="newsOne.category" class="mt-4"/>
           <title-component :title="newsOne.title" class="mt-4 mb-5"/>
-          <short-description wrap-class="text-greyscale-900 text-xl !mt-0" :text="newsOne.description"/>
+          <short-description wrap-class="text-greyscale-800 text-xl !mt-0" :text="newsOne.description"/>
           <template v-for="(field, index) in dynamicFieldsFilter" :key="index">
-            <div v-if="field.type === CONTENT_TYPES.TEXT" v-html="field.value" class="mt-4"></div>
+            <div v-if="field.type === CONTENT_TYPES.TEXT" v-html="field.value" class="mt-4 text-greyscale-800"></div>
             <div v-if="field.type === CONTENT_TYPES.QUOTE">
               <queto :text="field.value" class="my-10"/>
             </div>

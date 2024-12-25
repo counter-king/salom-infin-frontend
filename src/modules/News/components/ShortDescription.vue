@@ -13,7 +13,7 @@ const props = defineProps({
 
 </script>
 <template>
-    <h2 class="mt-2 text-base text-greyscale-900" :class="props.wrapClass">
+    <h2 class="mt-2 text-base text-greyscale-800" :class="props.wrapClass">
         {{  props.text }}
     </h2>
 </template>

@@ -131,9 +131,9 @@ const config = {
     'commands.after': (cmd, param1, param2) => {
       commandAfter(cmd, param1, param2);
     },
-	'blur': () => {		
-		cleanContent();
-	  },
+	  // 'blur': () => {		
+		//   cleanContent();
+	  // },
 	},
 }
 

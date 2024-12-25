@@ -111,7 +111,7 @@ onMounted(() => {
         <Empty 
           :title="isFilterApplied ? 'no-news-found-filter' : 'there-is-no-news-data'"
           :description="isFilterApplied ? 'no-news-found-filter-description' : 'there-is-no-news-data-description'"
-          label-classes="text-greyscale-900 !text-lg font-semibold"
+          label-classes="text-greyscale-800 !text-lg font-semibold"
           wrapper-class="w-full h-full !bg-primary-50 shadow-none"
           inner-wrapper-class="w-[335px]"
         />
