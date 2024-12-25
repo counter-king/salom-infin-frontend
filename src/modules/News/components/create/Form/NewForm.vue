@@ -12,8 +12,8 @@ import BaseInput from '@/components/UI/BaseInput.vue';
 import BaseTextarea from '@/components/UI/BaseTextarea.vue'
 import BaseMultiSelect from '@/components/UI/BaseMultiSelect.vue';
 import AddCard from '../AddCard.vue';
-// import BaseFroalaEditor from '../../BaseFroalaEditor.vue';
-import BaseTinyEditor from "@/components/UI/BaseTinyEditor.vue";
+import BaseFroalaEditor from '../../BaseFroalaEditor.vue';
+// import BaseTinyEditor from "@/components/UI/BaseTinyEditor.vue";
 import FileUpload from '../FileUpload.vue';
 import {UserWithRadio} from "@/components/Users"
 //icons
@@ -162,7 +162,7 @@ watch(()=>newsStore.model.description, (val) => {
 
 </script>
 <template>
-  <div class="form">
+  <div class="form overflow-hidden">
     <base-row>
       <base-col col-class="w-full ">
        <!-- upload image how looks -->
@@ -207,20 +207,19 @@ watch(()=>newsStore.model.description, (val) => {
       </base-col>
       <!-- dynamic fields -->
       <base-col v-for="(field, index) in newsStore.model.dynamicFields" :key="index"
-        class="w-full pt-6 flex gap-2 items-end overflow-hidden">
-        <div class="w-full overflow-hidden relative">
+        class="w-full pt-6 flex gap-2 items-end">
+        <div class="w-full relative">
           <label v-if="field.type === CONTENT_TYPES.TEXT" class="block text-sm font-medium text-greyscale-500 mb-2">{{ t('main-text') }}</label>
-          <base-tiny-editor
-          :height="500"
-           v-if="field.type === CONTENT_TYPES.TEXT" 
-            v-model="field.value"
-            :default-font-size="20"
-          />
-          
-          <!-- <base-froala-editor 
+            <!-- <base-tiny-editor
+            :height="500"
             v-if="field.type === CONTENT_TYPES.TEXT" 
-            v-model="field.value" 
-          /> -->
+              v-model="field.value"
+              :default-font-size="20"
+            /> -->
+            <base-froala-editor 
+              v-if="field.type === CONTENT_TYPES.TEXT" 
+              v-model="field.value" 
+            />
             <!-- upload image how looks -->
            <div 
             class="grid grid-cols-3 gap-4 justify-between my-2 w-full relative"

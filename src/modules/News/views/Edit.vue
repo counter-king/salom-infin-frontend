@@ -125,12 +125,12 @@ onMounted(() => {
             <edit-form ref="createFormRef" :news-id="route.params.id" :imageFile="newsStore.model.image" :galleryFiles="newsStore.model.images_ids" >
               <template #footer>
                 <div class="flex gap-2 justify-end">
-                  <base-button @click="handleOpenDialogPreview" button-class="!px-4 !py-3 text-xs rounded-[120px]" :label="t('preview-news')"/>
                   <base-button 
-                  v-if="!!route.params.id"
-                  @click="handleDeleteDialog"
-                  button-class="!px-4 !py-3 text-xs rounded-[120px] border-critic-500 bg-critic-500" :label="t('delete')"
+                    v-if="!!route.params.id"
+                    @click="handleDeleteDialog"
+                    button-class="!px-4 !py-3 text-xs rounded-[120px] border-critic-500 bg-critic-500" :label="t('delete')"
                   />
+                  <base-button @click="handleOpenDialogPreview" button-class="!px-4 !py-3 text-xs rounded-[120px]" :label="t('preview-news')"/>
                 </div>
                 </template>
               </edit-form>
@@ -169,7 +169,7 @@ onMounted(() => {
             rounded
             color="border-critic-500 bg-critic-500 text-white"
             @click="handleDeleteNews"
-      />
+          />
     </template>
     </base-dialog>
   </div>
