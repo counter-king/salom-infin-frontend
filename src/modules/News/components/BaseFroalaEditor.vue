@@ -122,7 +122,7 @@ const config = {
   pasteAllowedStyleProps:[],
   pastePlain: true,
   events: {
-    'link.beforeInsert': function (attrs) {
+    'link.beforeInsert': function (link, text, attrs) {
       attrs.class = this.opts.linkStyles.className1; 
     },
 		'table.inserted': (table) => {
@@ -133,7 +133,7 @@ const config = {
     },
 	'blur': () => {		
 		cleanContent();
-	},
+	  },
 	},
 }
 
