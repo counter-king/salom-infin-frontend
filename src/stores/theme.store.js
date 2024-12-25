@@ -64,15 +64,15 @@ export const useThemeStore = defineStore("theme", {
       // },
 
         // News
-      // {
-      //   title: 'News',
-      //   icon: PostsCarouselVerticalIcon,
-      //   link: 'NewsIndex',
-      //   children: [],
-      //   count: null,
-      //   name: 'news',
-      //   permission: 'news'
-      // },
+      {
+        title: 'News',
+        icon: PostsCarouselVerticalIcon,
+        link: 'NewsIndex',
+        children: [],
+        count: null,
+        name: 'news',
+        permission: 'news'
+      },
       // HR
       {
         title: 'HR',
