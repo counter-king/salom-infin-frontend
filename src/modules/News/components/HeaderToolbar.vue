@@ -27,7 +27,7 @@ const rules = ref([])
 
 
 const activeMenu = computed({
-  get: () => ( route.query.activeMenu || !tagPramId.value && 'all'),
+  get: () => ( route.query.activeMenu || !tagPramId.value && 'all-news'),
   set: (value) => {
     router.replace({ query: { ...router.currentRoute.value.query, activeMenu: value } })
   }
@@ -103,7 +103,7 @@ onMounted(() => {
           icon-left-class="!w-4 !h-4"
         />
       </div>
-      <div class="w-fit w-min-[148px] max-w-[168px]">
+      <div class="w-fit w-min-[148px]">
         <base-button
           size="large"
           button-class="rounded-[120px]"

@@ -72,6 +72,10 @@ export const fetchGetNewsTagsList = (params) => {
     return axiosConfig.get(`${URLS.newsTags}/`, params)
 }
 
+// create news-tags
+export const fetchCreateNewsTags = (params) => {
+    return axiosConfig.post(`${URLS.newsTags}/`, params)
+}
 
 // news-like-create 
 export const fetchCreateNewsLike = (params) => {

@@ -87,7 +87,7 @@ export const getDateRange = (selectedRange) => {
 export const newsMenuItems = [
     {
         link: "NewsList",
-        title: "all",
+        title: "all-news",
         roles: ['user']
     },
     // {

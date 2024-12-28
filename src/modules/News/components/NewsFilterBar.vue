@@ -1,12 +1,14 @@
 <script setup>
 // core
 import { useI18n } from 'vue-i18n';
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref, nextTick } from 'vue';
 // components
 import { useRoute, useRouter } from 'vue-router';
 import BaseRadio from './BaseRadio.vue';
 import Divider from '@/components/Divider/Divider.vue';
 import BaseButton from '@/components/UI/BaseButton.vue';
+import { CloseCircleBoldIcon } from '@/components/Icons';
+import BaseIconify from '@/components/UI/BaseIconify.vue';
 // services
 import { fetchGetNewsCategoryList } from '../services/news.service';
 import { getDateRange, popularityRadiosValues, timeRadiosValues } from '../constants';
@@ -16,16 +18,15 @@ const router  = useRouter()
 const route  = useRoute()
 
 const filterInitailValues = {
-    category : route.query.category || null,
+    category : (route.query.category || [])?.map(Number),
     ordering : route.query.ordering || null,
     time : route.query.time || null,
 }
 // reactive
 const activeValues = reactive({...filterInitailValues })
-
 const previosValues = reactive({...filterInitailValues})
-
 const categoryList = ref([])
+const listContainer = ref(null)
 
 const handleClickActive = (key, value) => {
     if(previosValues[key] === value){
@@ -39,9 +40,29 @@ const handleClickActive = (key, value) => {
     }
 }
 
+const handleClickCategory = (category, index) => {
+
+    if(activeValues.category.includes(category.id)){
+        activeValues.category = activeValues.category.filter(item => item !== category.id)
+        categoryList.value.splice(index, 1)
+        categoryList.value.splice(activeValues.category.length, 0, category) 
+        router.replace({ name: 'NewsList', query: { ...router.currentRoute.value.query, category: activeValues.category } });
+    } else {
+        activeValues.category = [...activeValues.category, category.id]   
+        categoryList.value.splice(index, 1)
+        categoryList.value = [category,...categoryList.value]
+        nextTick(() => {
+            if (listContainer.value) {
+                listContainer.value.scrollTop = 0
+            }
+         })
+        router.replace({ name: 'NewsList', query: { ...router.currentRoute.value.query, category: activeValues.category } });
+    }   
+}
+
 const handleClickTimeRadio = (id) => {
 
-    if(previosValues.time === id){
+    if(previosValues.time === id) {
         activeValues.time = null
         previosValues.time = null
         router.replace({ name: 'NewsList', query: {...router.currentRoute.value.query, startDate: undefined, endDate: undefined, time: undefined } });
@@ -55,30 +76,58 @@ const handleClickTimeRadio = (id) => {
 const handleClearRoute = () => {
     router.replace({ name: 'NewsList', query: { ...router.currentRoute.value.query, category: undefined, ordering: undefined, startDate: undefined, endDate: undefined, time: undefined } });
     Object.keys(activeValues).forEach(key => {
-        activeValues[key] = null
+        if(key === 'category') {
+            activeValues[key] = []
+        } else{
+            activeValues[key] = null
+        }
         previosValues[key] = null
+
     });
 }
 
 onMounted(async() => {   
-   const {data} = await fetchGetNewsCategoryList({page_size: 200})    
+   const { data } = await fetchGetNewsCategoryList({ page_size: 200 })    
    categoryList.value = data.results
+   const filteredCategory = categoryList.value?.filter(item => activeValues.category.includes(item.id))
+   categoryList.value = [...filteredCategory, ...categoryList.value.filter(item => !activeValues.category.includes(item.id))]
+   const remainActiveCategory = activeValues.value?.filter(item => !categoryList.value.includes(item.id))
+   activeValues.value = activeValues.value?.filter(item => !remainActiveCategory.includes(item.id))
 });
 
 </script>
 <template>
- <div class="news-filter-bar-view bg-white w-full h-full flex flex-col gap-5 rounded-2xl p-6">
+ <div class="news-filter-bar-view w-full h-full overflow-y-auto bg-white flex flex-col gap-5 rounded-2xl p-6 ">
     <!-- categories -->
      <div class="flex flex-col gap-5">
         <div class="flex flex-col gap-3">
+            <!-- <div class="flex flex-col gap-1 overflow-y-auto pr-2 max-h-[100px]">
+                <template v-for="category in selectedCategory" :key="category.id">
+                    <div
+                        class="flex items-center gap-2 text-sm text-greyscale-900 font-medium  rounded-[32px] border border-[] px-3 py-2 bg-white cursor-pointer w-fit  hover:text-primary-500  transition-all duration-300 active:scale-[0.98] select-none"
+                        :class="{'!bg-primary-30 text-primary-500' : true }"
+                        >
+                        <span>{{category.name}}</span>
+                        <BaseIconify 
+                        @click="handleClickCategory(category)"
+                        :icon="CloseCircleBoldIcon"
+                        />
+                    </div>
+                </template>
+            </div> -->
             <h2 class="font-semibold text-lg text-greyscale-900 select-none">{{ t('category') }}</h2>
-            <div class="flex flex-wrap gap-3">
-            <template v-for="category in categoryList" :key="category.id">
-                <div @click="()=>handleClickActive('category', category.id)" 
-                    class="text-sm text-greyscale-900 font-medium  rounded-[32px] border border-[] px-3 py-2 bg-white cursor-pointer w-fit  hover:text-primary-500  transition-all duration-300 active:scale-[0.98] select-none"
-                    :class="{'!bg-primary-30 text-primary-500' : activeValues.category === category.id }"
+            <div  ref="listContainer" class="flex flex-wrap gap-1 h-[200px] overflow-y-auto pr-2">
+            <template v-for="(category, index) in categoryList" :key="category.id">
+                <div 
+                    @click="()=>handleClickCategory(category,index)" 
+                    class="flex items-center justify-between gap-2 text-sm text-greyscale-900 font-medium  rounded-[32px] border border-[] px-3 py-2 bg-white cursor-pointer w-full  hover:text-primary-500  transition-all duration-300 active:scale-[0.98] select-none"
+                    :class="{'!bg-primary-30 text-primary-500' : activeValues.category.includes(category.id) }"
                     >
-                    {{category.name}}
+                    <span>{{category.name}}</span>
+                    <BaseIconify 
+                        v-if="activeValues.category.includes(category.id)"
+                        :icon="CloseCircleBoldIcon"
+                    />
                 </div>
             </template>
             </div>
@@ -125,7 +174,7 @@ onMounted(async() => {
     <!-- clear filter button -->
     <base-button    
         @click="handleClearRoute"
-        buttonClass="mt-auto w-full p-4 flex justify-center items-center text-xs font-medium text-greyscale-900 rounded-[90px] border-greyscale-70 border bg-greyscale-50"
+        buttonClass="mt-auto !p-4  w-full flex justify-center items-center text-xs font-medium text-greyscale-900 rounded-[90px] border-greyscale-70 border bg-greyscale-50"
         label="clear"
     />
  </div> 

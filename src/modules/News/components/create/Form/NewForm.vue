@@ -24,7 +24,7 @@ import { useNewsStore } from '../../../stores';
 // utils
 import { dispatchNotify } from '@/utils/notify';
 // services
-import { fetchCreateMyNews, fetchUpdateMyNews } from '../../../services/news.service';
+import { fetchCreateMyNews, fetchCreateNewsTags, fetchUpdateMyNews } from '../../../services/news.service';
 // constants
 import { COLOR_TYPES } from '@/enums';
 import {  allowedAudioTypes, allowedFileTypes, allowedImageTypes, allowedVideoTypes, CONTENT_TYPES } from '../../../constants';
@@ -44,7 +44,7 @@ const props = defineProps({
     default: null
   }
 })
-const { t } = useI18n()
+const { t, locale} = useI18n()
 
 // reactive
 const countChar = ref(0)
@@ -93,21 +93,36 @@ const onSubmitForm = async () => {
     }
     
     newsStore.model.contents = contents;
+
+    const existTagsListIds = newsStore.model.tags_ids.filter(tag => tag.id !== tag.name).map(tag => tag.id)
+    const newCreatedTagsIds = newsStore.model.tags_ids.filter(tag => tag.id === tag.name).map(tag => ({name: tag.name}))
+
+    const newTagsIdsResults = await Promise.all(
+      newCreatedTagsIds.map(async (tag) => {
+        try {
+          const { data } = await fetchCreateNewsTags(tag);
+          return data.id;
+        } catch(e){
+          dispatchNotify(null, e?.message, COLOR_TYPES.ERROR)
+        }
+      })
+    );
+    
     const formData = {
       title: newsStore.model.title,
       description: newsStore.model.description,
       image: newsStore.model.image.id,
       category: newsStore.model.category,
-      tags_ids: newsStore.model.tags_ids.map(tag => tag.id),
+      tags_ids: [...existTagsListIds, ...newTagsIdsResults],
       images_ids: newsStore.model.images_ids.map(image => image.id),
       contents: contents
     };
 
     try {
      if (props.newsId) {
-      await fetchUpdateMyNews(props.newsId, formData);
+      // await fetchUpdateMyNews(props.newsId, formData);
     } else {
-      await fetchCreateMyNews(formData);
+      // await fetchCreateMyNews(formData);
     }
 
     newsStore.loadingSubmitButton = false
@@ -143,6 +158,11 @@ const addDynamicField = (type) => {
 const removeDynamicField = (index) => {
   newsStore.model.dynamicFields.splice(index, 1);
 };
+
+watch(locale, () => {
+  newsStore.actionGetTagList()
+  newsStore.actionGetCategoryList()
+})
 
 onMounted(() => {
   newsStore.actionGetCategoryList()
@@ -198,7 +218,7 @@ watch(()=>newsStore.model.description, (val) => {
           />
       </base-col>
       <base-col col-class="w-full flex flex-col gap-2 overflow-hidden">
-        <label class="block text-sm font-medium text-greyscale-500" :class="countChar >= 256 ? 'text-red-500' : ''">{{ t('new-short-description',{ count: 256 }) }} <span class="text-red-500"> *</span> {{ !!countChar ? countChar : ""  }}</label>
+        <label class="block text-sm font-medium text-greyscale-500" :class="countChar >= 257 ? 'text-red-500' : ''">{{ t('new-short-description',{ count: 256 }) }} <span class="text-red-500"> *</span> {{ !!countChar ? countChar : ""  }}</label>
         <base-textarea 
           v-model="$v.description.$model" 
           :error="$v.description" 
@@ -279,25 +299,27 @@ watch(()=>newsStore.model.description, (val) => {
       </base-col>
       <base-col col-class="w-full pt-6">
         <base-dropdown v-model.number="$v.category.$model" 
-            :error="$v.category"
-            :options="newsStore.categoryList"
-            option-value="id"
-            required
-            option-label="name"
-            label="category2"
-            placeholder="enterCategory" />
+          :error="$v.category"
+          :options="newsStore.categoryList"
+          option-value="id"
+          required
+          option-label="name"
+          label="category2"
+          placeholder="enterCategory" />
       </base-col>
       <base-col col-class="w-full pt-6">
         <base-multi-select
           v-model="$v.tags_ids.$model" 
           wrapper-class="relative"
           api-url="news-tags"
+          :options="newsStore.tagList"
           :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
           display="chip"
           selectable
           label="tag"
           type="department"
           placeholder="selectTag"
+          list-class="py-3 flex flex-wrap gap-2"
         >
           <template #chip="{ value }">
             {{ value.name }}

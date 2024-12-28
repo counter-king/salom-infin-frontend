@@ -90,7 +90,7 @@ const dynamicFieldsFilter = computed(() =>
       />
       <base-button
         :loading="newsStore.loadingSubmitButton"
-        label="publish"
+        label="submit-for-moderation"
         rounded
         @click="handlePublish"
       />

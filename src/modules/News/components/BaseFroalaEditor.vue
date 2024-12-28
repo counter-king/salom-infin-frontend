@@ -266,9 +266,7 @@ p[data-f-id="pbf"] {
 
 .className1 {
   color: #0d1ebb;
-}
-.className1:hover {
   text-decoration: underline;
-}
 
+}
 </style>

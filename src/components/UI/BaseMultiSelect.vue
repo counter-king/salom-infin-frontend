@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref, computed, onMounted, useModel, unref, watch } from 'vue'
+import { ref, computed, onMounted, useModel, unref, watch, onUnmounted } from 'vue'
 import { useDebounce } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
 import MultiSelect from 'primevue/multiselect'
@@ -114,6 +114,13 @@ const props = defineProps({
     default: false
   },
   wrapperClass: {
+    type: String
+  },
+  tagSelect: {
+    type: Boolean,
+    default: false
+  },
+  listClass: {
     type: String
   }
 })
@@ -244,6 +251,13 @@ watch(debounced, async () => {
     console.log('filter is not done for props options :)')
   }
 })
+const  handleEnterPress = () => {
+  if (!!search.value.trim() && props.tagSelect) {
+    modelValue.value.push({name: search.value, id: search.value})
+    search.value = ''
+  }
+} 
+
 </script>
 
 <template>
@@ -301,7 +315,8 @@ watch(debounced, async () => {
             'py-0',
             {
               'py-1 px-2': props.selectable
-            }
+            },
+            props.listClass
           ]
         },
         checkboxContainer: {
@@ -330,6 +345,7 @@ watch(debounced, async () => {
           <input
             ref="inputRef"
             v-model="search"
+            @keyup.enter="handleEnterPress"
             type="text"
             :placeholder="t(props.menuPlaceholder)"
             class="flex-1 p-3 block outline-none font-medium text-sm text-gray-1"

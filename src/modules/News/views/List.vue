@@ -29,7 +29,7 @@ const showSidebarFilter = computed(() =>
 
 const queryParams = computed(() => ({
   tag: route.query.tag,
-  category: route.query.category,
+  category: route.query.category || [],
   start_date: route.query.startDate,
   end_date: route.query.endDate,
   ordering: route.query.ordering,
@@ -51,7 +51,7 @@ const fetchNewsList = async (currentPage, resetList = false) => {
     const { data } = await fetchGetNewsList({ 
       page: currentPage, 
       search: debouncedSearchQuery.value,
-      ...queryParams.value 
+      ...queryParams.value, categories: queryParams.value?.category?.join(',')
     })
     next.value = data.next
     if (resetList) {
@@ -129,7 +129,7 @@ onMounted(() => {
           <base-spinner />
         </div>
       </div>
-      <div v-if="showSidebarFilter" class="w-[325px] min-w-[325px] h-full overflow-y-auto pr-1 pb-1 place-self-stretch">
+      <div v-if="showSidebarFilter" class="w-[325px] min-w-[325px] h-full pr-1 pb-1 rounded-2xl">
         <news-filter-bar />
       </div>
     </div>  
