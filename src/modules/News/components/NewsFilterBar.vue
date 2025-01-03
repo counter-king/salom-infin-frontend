@@ -1,32 +1,42 @@
 <script setup>
 // core
 import { useI18n } from 'vue-i18n';
-import { onMounted, reactive, ref, nextTick } from 'vue';
-// components
+import { onMounted, reactive, ref, nextTick, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+// components
 import BaseRadio from './BaseRadio.vue';
 import Divider from '@/components/Divider/Divider.vue';
 import BaseButton from '@/components/UI/BaseButton.vue';
-import { CloseCircleBoldIcon } from '@/components/Icons';
 import BaseIconify from '@/components/UI/BaseIconify.vue';
+import BaseSpinner from '@/components/UI/BaseSpinner.vue';
+// icons
+import { CloseCircleBoldIcon } from '@/components/Icons';
 // services
-import { fetchGetNewsCategoryList } from '../services/news.service';
 import { getDateRange, popularityRadiosValues, timeRadiosValues } from '../constants';
+// composables
+import { useCategoryList } from '../composibles/useCategoryList';
 
-const { t } = useI18n()
+const { t, locale} = useI18n()
 const router  = useRouter()
 const route  = useRoute()
 
 const filterInitailValues = {
-    category : (route.query.category || [])?.map(Number),
+    category : Array.isArray(route.query.category)
+    ? route.query.category.map(Number)
+    : route.query.category
+    ? [Number(route.query.category)]
+    : [],
     ordering : route.query.ordering || null,
     time : route.query.time || null,
 }
 // reactive
 const activeValues = reactive({...filterInitailValues })
 const previosValues = reactive({...filterInitailValues})
-const categoryList = ref([])
 const listContainer = ref(null)
+
+const {loading: categoryListLoading, hasMoreLoading: hasMoreLoadingCategory, list: categoryList, getCategoryList, handleScrollCategory, initCategoryList } = useCategoryList(activeValues)
+
+
 
 const handleClickActive = (key, value) => {
     if(previosValues[key] === value){
@@ -86,13 +96,21 @@ const handleClearRoute = () => {
     });
 }
 
-onMounted(async() => {   
-   const { data } = await fetchGetNewsCategoryList({ page_size: 200 })    
-   categoryList.value = data.results
+// when category list initialize, activeValues url change accoring to exist values, if not exist category values in activeValues, then removed that values from activeValues
+const handlingCategoryFilter = async () => {
+   await initCategoryList()
    const filteredCategory = categoryList.value?.filter(item => activeValues.category.includes(item.id))
    categoryList.value = [...filteredCategory, ...categoryList.value.filter(item => !activeValues.category.includes(item.id))]
-   const remainActiveCategory = activeValues.value?.filter(item => !categoryList.value.includes(item.id))
-   activeValues.value = activeValues.value?.filter(item => !remainActiveCategory.includes(item.id))
+   activeValues.category = activeValues.category?.filter(item => categoryList.value.some(catrgory=> catrgory.id === item))
+   router.replace({ name: 'NewsList', query: {...router.currentRoute.value.query, category: activeValues.category } });
+}
+
+watch(locale, async () => {
+    await handlingCategoryFilter()
+})
+
+onMounted(async () => {   
+    await handlingCategoryFilter()
 });
 
 </script>
@@ -101,35 +119,27 @@ onMounted(async() => {
     <!-- categories -->
      <div class="flex flex-col gap-5">
         <div class="flex flex-col gap-3">
-            <!-- <div class="flex flex-col gap-1 overflow-y-auto pr-2 max-h-[100px]">
-                <template v-for="category in selectedCategory" :key="category.id">
-                    <div
-                        class="flex items-center gap-2 text-sm text-greyscale-900 font-medium  rounded-[32px] border border-[] px-3 py-2 bg-white cursor-pointer w-fit  hover:text-primary-500  transition-all duration-300 active:scale-[0.98] select-none"
-                        :class="{'!bg-primary-30 text-primary-500' : true }"
+            <h2 class="font-semibold text-lg text-greyscale-900 select-none">{{ t('category') }}</h2>
+            <div  ref="listContainer" @scroll="handleScrollCategory" class="flex flex-wrap gap-1 h-[200px] overflow-y-auto pr-2">
+                <template v-if="categoryListLoading">
+                    <base-spinner />  
+                </template>
+                <template v-else v-for="(category, index) in categoryList" :key="category.id">
+                    <div 
+                        @click="()=>handleClickCategory(category,index)" 
+                        class="flex items-center justify-between gap-2 text-sm text-greyscale-900 font-medium  rounded-[32px] border border-[] px-3 py-2 bg-white cursor-pointer w-full  hover:text-primary-500  transition-all duration-300 active:scale-[0.98] select-none"
+                        :class="{'!bg-primary-30 text-primary-500' : activeValues.category.includes(category.id) }"
                         >
                         <span>{{category.name}}</span>
                         <BaseIconify 
-                        @click="handleClickCategory(category)"
-                        :icon="CloseCircleBoldIcon"
+                            v-if="activeValues.category.includes(category.id)"
+                            :icon="CloseCircleBoldIcon"
                         />
                     </div>
                 </template>
-            </div> -->
-            <h2 class="font-semibold text-lg text-greyscale-900 select-none">{{ t('category') }}</h2>
-            <div  ref="listContainer" class="flex flex-wrap gap-1 h-[200px] overflow-y-auto pr-2">
-            <template v-for="(category, index) in categoryList" :key="category.id">
-                <div 
-                    @click="()=>handleClickCategory(category,index)" 
-                    class="flex items-center justify-between gap-2 text-sm text-greyscale-900 font-medium  rounded-[32px] border border-[] px-3 py-2 bg-white cursor-pointer w-full  hover:text-primary-500  transition-all duration-300 active:scale-[0.98] select-none"
-                    :class="{'!bg-primary-30 text-primary-500' : activeValues.category.includes(category.id) }"
-                    >
-                    <span>{{category.name}}</span>
-                    <BaseIconify 
-                        v-if="activeValues.category.includes(category.id)"
-                        :icon="CloseCircleBoldIcon"
-                    />
+                <div v-if="hasMoreLoadingCategory" class="flex justify-center items-center h-[40px] w-full">
+                    <base-spinner />  
                 </div>
-            </template>
             </div>
         </div>
         <divider class="!border-[#E7EAEE]"/>

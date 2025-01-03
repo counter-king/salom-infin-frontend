@@ -47,6 +47,9 @@ const props = defineProps({
     type: String,
     default: null
   },
+  maxlength: {
+    type: Number,
+  },
   error: {
     type: Object,
     default: () => ({
@@ -81,6 +84,7 @@ const { t } = useI18n()
       :disabled="props.disabled"
       :data-maska="props.maskRule"
       :placeholder="t(props.placeholder)"
+      :maxlength="props.maxlength"
       v-maska
       type="text"
       size="small"

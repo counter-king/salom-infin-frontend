@@ -81,7 +81,8 @@ watch(debouncedSearchQuery, () => {
       >
         <template #image="{ data }">
          <div class="w-[38px] h-[38px] min-w-[38px] min-h-[38px] rounded-lg overflow-hidden">
-           <img :src="data.image?.url" class="w-full h-full object-cover" alt="rasm">
+           <img v-if="data.image?.url" :src="data.image?.url" class="w-full h-full object-cover" alt="rasm">
+           <div v-else class="flex justify-center items-center h-full w-full">-</div>
          </div>
         </template>
         <template #status="{ data }">

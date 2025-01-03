@@ -14,8 +14,10 @@ const props = defineProps({
 
 const statusClass = computed(() => {
   switch (props.status) {
-    case NEWS_STATUS.DRAFT:
+    case NEWS_STATUS.PANDING:
       return 'bg-greyscale-50 text-greyscale-500'
+    case NEWS_STATUS.DRAFT:
+      return 'bg-info-50 text-info-500'
     case NEWS_STATUS.PUBLISHED:
       return 'bg-success-50 text-success-500'
     case NEWS_STATUS.ARCHIVED:
@@ -32,6 +34,6 @@ const statusClass = computed(() => {
    class="flex justify-center items-center px-2 py-1 text-xs font-semibold rounded-[80px] w-fit"
    :class="statusClass"
   >
-   {{ t(props.status) }}
+   {{ t(props.status === NEWS_STATUS.PANDING ? 'news-pending' : props.status) }}
   </div>
 </template>

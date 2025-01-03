@@ -54,10 +54,10 @@ export const useNewsStore = defineStore('newsStore', {
                 this.categoryListLoading = false;
             }
         },
-        async actionGetTagList(){
+        async actionGetTagList(params){
             this.tagListLoading = true;
             try{
-                const response = await fetchGetNewsTagsList();
+                const response = await fetchGetNewsTagsList(params);
                 this.tagList = response.data.results;
             }
             catch(e){}

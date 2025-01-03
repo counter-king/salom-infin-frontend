@@ -2,6 +2,7 @@
 // core
 import { computed, onMounted, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 // components
 import NewCard from '../components/NewsCard.vue'
 import NewsFilterBar from '../components/NewsFilterBar.vue'
@@ -14,7 +15,9 @@ import { COLOR_TYPES } from '@/enums'
 import { fetchGetNewsList } from '../services/news.service'
 // composables
 import { useSearchNews } from '../composibles/useSearchNews'
+
 const route = useRoute()
+const { locale } = useI18n()
 // reactive
 const newsList = ref([])
 const initialLoading = ref(false)
@@ -90,18 +93,21 @@ watch(
 ],
   () => {
     isFilterApplied.value = Object.values(queryParams.value).some(Boolean) || !!debouncedSearchQuery.value && !!newsList.value.length
-    console.log(isFilterApplied.value);
     newsList.value = []
     fetchNewsList(1, true)
   },
 )
 
+watch(locale, () => {
+  fetchNewsList(1, true)
+})
+
 onMounted(() => {
   isFilterApplied.value = Object.values(queryParams.value).some(Boolean) || !!searchQuery.value && !!newsList.value.length
   fetchNewsList(1, true)
 })
-</script>
 
+</script>
 <template>
     <div class="flex gap-[10px] h-full">
       <template v-if="initialLoading">

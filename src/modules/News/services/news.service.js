@@ -69,7 +69,7 @@ export const fetchGetNewsCategoryList = (params) => {
 
 // get news-tags
 export const fetchGetNewsTagsList = (params) => {
-    return axiosConfig.get(`${URLS.newsTags}/`, params)
+    return axiosConfig.get(`${URLS.newsTags}/`, {page_size: 100, ...params})
 }
 
 // create news-tags

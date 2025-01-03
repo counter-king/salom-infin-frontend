@@ -10,7 +10,7 @@ import BaseRow from '@/components/UI/BaseRow.vue';
 import BaseDropdown from '@/components/UI/BaseDropdown.vue';
 import BaseInput from '@/components/UI/BaseInput.vue';
 import BaseTextarea from '@/components/UI/BaseTextarea.vue'
-import BaseMultiSelect from '@/components/UI/BaseMultiSelect.vue';
+import BaseMultiSelect from '../../BaseMultiSelect.vue';
 import AddCard from '../AddCard.vue';
 import BaseFroalaEditor from '../../BaseFroalaEditor.vue';
 // import BaseTinyEditor from "@/components/UI/BaseTinyEditor.vue";
@@ -24,10 +24,11 @@ import { useNewsStore } from '../../../stores';
 // utils
 import { dispatchNotify } from '@/utils/notify';
 // services
-import { fetchCreateMyNews, fetchCreateNewsTags, fetchUpdateMyNews } from '../../../services/news.service';
+import { fetchCreateMyNews, fetchUpdateMyNews } from '../../../services/news.service';
 // constants
 import { COLOR_TYPES } from '@/enums';
 import {  allowedAudioTypes, allowedFileTypes, allowedImageTypes, allowedVideoTypes, CONTENT_TYPES } from '../../../constants';
+import { NEWS_STATUS } from '@/modules/News/enums';
 
 const newsStore = useNewsStore();
 const router = useRouter()
@@ -48,6 +49,7 @@ const { t, locale} = useI18n()
 
 // reactive
 const countChar = ref(0)
+const countCharNewsHeadline = ref(0)
 // form validation
 const $v = useVuelidate(newsStore.rules, newsStore.model)
 
@@ -64,11 +66,13 @@ const getMatchFileUploadType = (file) => {
   }
 }
 
-const onSubmitForm = async () => {
-  newsStore.loadingSubmitButton = true
+const onSubmitForm = async (isDraft = false) => {
+
+    newsStore.loadingSubmitButton = true
     // empty data clearing not to send backend
     newsStore.model.dynamicFields = newsStore.model.dynamicFields.filter((item)=> !!item.value)
     const contents = [];
+
     for (let index = 0; index < newsStore.model.dynamicFields.length; index++) {
       const content = newsStore.model.dynamicFields[index];
       if (content.type === CONTENT_TYPES.FILE) {
@@ -93,36 +97,23 @@ const onSubmitForm = async () => {
     }
     
     newsStore.model.contents = contents;
-
-    const existTagsListIds = newsStore.model.tags_ids.filter(tag => tag.id !== tag.name).map(tag => tag.id)
-    const newCreatedTagsIds = newsStore.model.tags_ids.filter(tag => tag.id === tag.name).map(tag => ({name: tag.name}))
-
-    const newTagsIdsResults = await Promise.all(
-      newCreatedTagsIds.map(async (tag) => {
-        try {
-          const { data } = await fetchCreateNewsTags(tag);
-          return data.id;
-        } catch(e){
-          dispatchNotify(null, e?.message, COLOR_TYPES.ERROR)
-        }
-      })
-    );
     
     const formData = {
       title: newsStore.model.title,
       description: newsStore.model.description,
-      image: newsStore.model.image.id,
+      image: newsStore.model.image?.id,
       category: newsStore.model.category,
-      tags_ids: [...existTagsListIds, ...newTagsIdsResults],
-      images_ids: newsStore.model.images_ids.map(image => image.id),
-      contents: contents
+      tags_ids: newsStore.model.tags_ids?.map(tag => tag?.id),
+      images_ids: newsStore.model.images_ids?.map(image => image?.id),
+      contents: contents,
+      status: isDraft ? NEWS_STATUS.DRAFT : NEWS_STATUS.PANDING
     };
 
     try {
      if (props.newsId) {
-      // await fetchUpdateMyNews(props.newsId, formData);
+      await fetchUpdateMyNews(props.newsId, formData);
     } else {
-      // await fetchCreateMyNews(formData);
+      await fetchCreateMyNews(formData);
     }
 
     newsStore.loadingSubmitButton = false
@@ -160,13 +151,20 @@ const removeDynamicField = (index) => {
 };
 
 watch(locale, () => {
-  newsStore.actionGetTagList()
   newsStore.actionGetCategoryList()
 })
 
-onMounted(() => {
-  newsStore.actionGetCategoryList()
-  newsStore.actionGetTagList()
+watch(()=>newsStore.model.category, async (val) => {
+    await newsStore.actionGetTagList({categories: val})  
+})
+
+// counter of short description
+watch(()=>newsStore.model.description, (val) => {
+  countChar.value = val?.length
+})
+
+watch(()=>newsStore.model.title, (val) => {
+  countCharNewsHeadline.value = val?.length
 })
 
 // expose
@@ -175,9 +173,9 @@ defineExpose({
   isValidFormValidation
 })
 
-// counter of short description
-watch(()=>newsStore.model.description, (val) => {
-  countChar.value = val.length
+onMounted(() => {
+  newsStore.actionGetCategoryList()
+  newsStore.actionGetTagList()
 })
 
 </script>
@@ -208,13 +206,14 @@ watch(()=>newsStore.model.description, (val) => {
           :allowed-file-info="t('allowed-file-info',{ formats: allowedImageTypes.map(item => item.split('/')[1]).join(', '), size: '10' })"
           />
       </base-col>
-      <base-col col-class="w-full pt-6">
+      <base-col col-class="w-full pt-6 flex flex-col gap-2">
+        <label class="block text-sm font-medium text-greyscale-500" :class="countCharNewsHeadline >= 257 ? 'text-red-500' : ''">{{ t('news-headline',{ count: 256 }) }} <span class="text-red-500"> *</span> {{ !!countCharNewsHeadline ? countCharNewsHeadline : ""  }}</label>
         <base-input 
           v-model="$v.title.$model" 
           :error="$v.title" 
           required 
-          label="news-headline" 
           placeholder="enter-news-headline"
+          :maxlength="256"
           />
       </base-col>
       <base-col col-class="w-full flex flex-col gap-2 overflow-hidden">
@@ -253,9 +252,9 @@ watch(()=>newsStore.model.description, (val) => {
               </div>
             </div>
             <label 
-            v-if="field.type === CONTENT_TYPES.FILE"
-            class="block text-sm font-medium text-greyscale-500 mb-2">
-            {{ t('additional-images') }}
+              v-if="field.type === CONTENT_TYPES.FILE"
+              class="block text-sm font-medium text-greyscale-500 mb-2">
+              {{ t('additional-images') }}
           </label>
           <file-upload 
             v-if="field.type === CONTENT_TYPES.FILE"
@@ -312,14 +311,15 @@ watch(()=>newsStore.model.description, (val) => {
           v-model="$v.tags_ids.$model" 
           wrapper-class="relative"
           api-url="news-tags"
-          :options="newsStore.tagList"
+          :error="$v.tags_ids"
+          :api-params="{ categories: newsStore.model.category, page_size: 100 }"
           :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
           display="chip"
           selectable
           label="tag"
           type="department"
           placeholder="selectTag"
-          list-class="py-3 flex flex-wrap gap-2"
+          list-class="py-3 flex flex-wrap gap-2  w-[836px]"
         >
           <template #chip="{ value }">
             {{ value.name }}

@@ -83,10 +83,10 @@ const fetchOneNews = async() => {
       const { data }  = await fetchGetMyNews(route.params.id)   
       newsStore.model.title = data.title    
       newsStore.model.description = data.description
-      newsStore.model.category = data.category.id
+      newsStore.model.category = data.category?.id
       newsStore.model.tags_ids = data.tags
       newsStore.model.images_ids = data.galleries
-      newsStore.model.image = {...data.image, type:CONTENT_TYPES.IMAGE} 
+      newsStore.model.image = data.image ? {...data.image, type:CONTENT_TYPES.IMAGE} : null 
       newsStore.model.dynamicFields = data.contents.map(content=> {
         if (content.type === CONTENT_TYPES.TEXT) {
           return { type: CONTENT_TYPES.TEXT, value: content.content,id: content.id }
