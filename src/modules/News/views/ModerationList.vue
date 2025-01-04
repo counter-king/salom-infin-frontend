@@ -1,5 +1,6 @@
 <script setup>
 // core
+import { useI18n } from 'vue-i18n';
 import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 // components
@@ -15,6 +16,7 @@ import { formatDate } from '@/utils/formatDate';
 import { fetchModerationApproveNews } from '../services/news.service';
 import { NEWS_STATUS } from '../enums';
 
+const { t } = useI18n();
 const router = useRouter();
 // reactive
 const  showNewsDialog = ref(false);
@@ -76,6 +78,13 @@ const handleRejectModeration = async (reason) => {
          <div class="w-[38px] h-[38px] min-w-[38px] min-h-[38px] rounded-lg overflow-hidden">
            <img :src="data.image?.url" class="w-full h-full object-cover" alt="rasm">
          </div>
+        </template>
+        <template #author="{ data }">
+          <div class="font-semibold text-xs text-greyscale-900">
+            <div>{{ data.created_by?.full_name }}</div>  
+            <div><span class="text-greyscale-500">{{ t('department') }}</span> : <span class="text-geyscale-800">{{ data.created_by?.top_level_department?.name }}</span></div>  
+            <div><span class="text-greyscale-500">{{ t('position') }}</span> : <span class="text-geyscale-800">{{  data.created_by?.position?.name }}</span></div>
+          </div>
         </template>
         <template #status="{ data }">
           <news-status :status="data.status"/>

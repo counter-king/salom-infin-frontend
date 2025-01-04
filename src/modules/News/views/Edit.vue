@@ -104,6 +104,9 @@ const fetchOneNews = async() => {
    }
 }
 
+const handleNewsDraft = async() => {
+  await createFormRef.value?.onSubmitForm(true)
+}
 
 onMounted(() => {
     fetchOneNews()
@@ -130,6 +133,7 @@ onMounted(() => {
                     @click="handleDeleteDialog"
                     button-class="!px-4 !py-3 text-xs rounded-[120px] border-critic-500 bg-critic-500" :label="t('delete')"
                   />
+                  <base-button @click="handleNewsDraft" color="text-primary" outlined shadow button-class="!px-4 !py-3 text-xs rounded-[120px]" :label="t('draft')"/>
                   <base-button @click="handleOpenDialogPreview" button-class="!px-4 !py-3 text-xs rounded-[120px]" :label="t('preview-news')"/>
                 </div>
                 </template>

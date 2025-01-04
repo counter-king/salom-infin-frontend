@@ -15,8 +15,13 @@ export const useModerationNewsList = () => {
    {
      header: "news-title",
      field: "title",
-     class: "!w-[60%]",
+     class: "!w-[50%]",
      active: true
+   },
+   {
+      header: "author",
+      field: "author",
+      active:true
    },
    {
      header: "status",

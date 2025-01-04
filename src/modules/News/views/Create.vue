@@ -47,7 +47,7 @@ const handleNewsDraft = async() => {
           <create-form ref="createFormRef">
             <template #footer>
               <div class="flex gap-2 justify-end">
-                <base-button @click="handleNewsDraft"  outlined shadow button-class="!px-4 !py-3 text-xs rounded-[120px] !text-greyscale-900" :label="t('draft')"/>
+                <base-button @click="handleNewsDraft" color="text-primary" outlined shadow button-class="!px-4 !py-3 text-xs rounded-[120px]" :label="t('draft')"/>
                 <base-button @click="handleOpenDialogPreview" button-class="!px-4 !py-3 text-xs rounded-[120px]" :label="t('preview-news')"/>
               </div>
             </template>
