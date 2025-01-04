@@ -47,11 +47,13 @@ watch(
 <template>
   <div class="document-view flex w-full">
     <the-sidebar :menus="menus" />
-
-    <div class="document-view-aside flex flex-col flex-1 overflow-y-auto p-6 pb-2">
-      <router-view />
-
-      <the-footer />
+    <div class="flex flex-col overflow-y-auto flex-1 p-6 pb-2">
+      <div class="document-view-aside flex flex-col">
+        <router-view />
+      </div>
+      <div class="mt-auto">
+        <the-footer/>
+      </div>
     </div>
   </div>
 </template>
