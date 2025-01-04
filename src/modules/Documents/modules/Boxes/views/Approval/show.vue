@@ -155,7 +155,7 @@ onMounted(  () => {
           class="p-4 overflow-y-auto"
           style="height: calc(100vh - 250px)"
         >
-          <div class="p-10 pl-[80px] min-h-full shadow-block border-[0.095rem] border-greyscale-200">
+          <div class="p-10 min-h-full shadow-block border-[0.095rem] border-greyscale-200">
             <base-template
               v-if="approvalStore.detailModel && approvalStore.detailModel.compose"
               :compose-model="approvalStore.detailModel?.compose"
