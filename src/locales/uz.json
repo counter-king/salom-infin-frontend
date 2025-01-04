@@ -710,5 +710,18 @@
   "one-way": "Bir tomonga",
   "where-from": "Qayerdan",
   "where-to": "Qayerga",
-  "route-warning": "To'g'ri marshrut turini tanlaganingizga ishonch hosil qiling, aks holda ma'lumotlar saqlanmaydi!"
+  "route-warning": "To'g'ri marshrut turini tanlaganingizga ishonch hosil qiling, aks holda ma'lumotlar saqlanmaydi!",
+  "select-trip-place": "Xizmat safari hududini tanlang",
+  "fill-required-fields": "Majburiy maydonlarni to'ldiring!",
+  "previous-stage": "Oldingi",
+  "class": "Klass",
+  "time": "Vaqt",
+  "select-time": "Vaqtni tanlang",
+  "economy-class": "Ekonom klass",
+  "business-class": "Biznes klass",
+  "first-class": "Birinchi klass",
+  "sleeper-class": "Kupe",
+  "seat-class": "umumiy vagon",
+  "add-line": "Qator qo'shish",
+  "business-trip-v2": "Komandirovka 2"
 }

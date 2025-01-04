@@ -1,9 +1,12 @@
 <script setup>
 // Core
 import { useI18n } from "vue-i18n"
-import { ref, watch, nextTick, onMounted } from "vue"
+import { ref, watch, nextTick, onMounted, useModel } from "vue"
 
 const props = defineProps({
+  modelValue: {
+    type: [Number, String],
+  },
   items: {
     type: Array,
     default: () => [],
@@ -12,7 +15,8 @@ const props = defineProps({
 
 // Composable
 const { t } = useI18n()
-const emit = defineEmits(["emit:onChange"])
+const emit = defineEmits(['emit:onChange', 'update:modelValue'])
+const modelValue = useModel(props, 'modelValue')
 
 const activeTabStyle = ref({})
 const rootRef = ref(null)
@@ -27,11 +31,16 @@ const updateActiveTabPosition = () => {
           width: `${activeTab.offsetWidth}px`,
           transform: `translateX(${activeTab.offsetLeft}px)`,
           transition: "transform 0.3s ease, width 0.3s ease",
-        };
+        }
       }
     }
-  });
-};
+  })
+}
+
+const onChange = (item) => {
+  modelValue.value = item.value
+  emit('emit:onChange', item)
+}
 
 watch(
   () => props.items,
@@ -39,11 +48,11 @@ watch(
     updateActiveTabPosition()
   },
   { deep: true }
-);
+)
 
 onMounted(() => {
   updateActiveTabPosition()
-});
+})
 </script>
 
 <template>
@@ -60,18 +69,18 @@ onMounted(() => {
       v-for="(item, index) in props.items"
       :key="item.id"
       class="tab flex rounded-[90px] h-8 items-center px-4 gap-x-2 cursor-pointer relative z-10"
-      :class="item.active ? 'tab-active' : ''"
-      @click="emit('emit:onChange', item)"
+      :class="{ 'tab-active': modelValue === item.value }"
+      @click="onChange(item)"
     >
       <base-iconify
         v-if="item.icon"
         :icon="item.icon"
         class="!w-[18px] !h-[18px]"
-        :class="item.active ? 'text-primary-500' : 'text-greyscale-400'"
+        :class="modelValue === item.value ? 'text-primary-500' : 'text-greyscale-400'"
       />
       <span
         class="text-sm font-semibold"
-        :class="item.active ? 'text-greyscale-900' : 'text-greyscale-500'"
+        :class="modelValue === item.value ? 'text-greyscale-900' : 'text-greyscale-500'"
       >
           {{ t(item.title) }}
       </span>

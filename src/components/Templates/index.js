@@ -4,6 +4,7 @@ export { default as BusinessTripNoticeTemplate } from "./BusinessTripNoticeTempl
 export { default as BusinessTripDecreeTemplate } from "./BusinessTripDecreeTemplate.vue"
 export { default as BusinessTripOrderTemplate } from "./BusinessTripOrderTemplate.vue"
 export { default as OrdinaryNoticeTemplate } from "./OrdinaryNoticeTemplate.vue"
+export { default as BusinessTripTemplate } from "./BusinessTripTemplate.vue"
 export { default as OrderLetterTemplate } from "./OrderLetterTemplate.vue"
 export { default as DecreeTemplate } from "./DecreeTemplate.vue"
 export { default as ResolutionChairmanTemplate } from "./ResolutionChairman.vue"

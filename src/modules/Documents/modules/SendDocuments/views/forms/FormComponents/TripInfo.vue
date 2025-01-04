@@ -1,25 +1,40 @@
 <script setup>
 // Core
+import { ref } from "vue"
 import { useI18n } from "vue-i18n"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { useVuelidate } from "@vuelidate/core"
 // Store
 import { useBusinessTripStore } from "@/modules/Documents/modules/SendDocuments/stores/businessTrip.store"
 // Utils
 import { formatDateReverse } from "@/utils/formatDate"
 // Components
-import BranchMultiSelect from "@/components/Select/BranchMultiSelect.vue"
 import UserSelect from "@/components/Select/UserSelect.vue"
 import UserMultiSelect from "@/components/Select/UserMultiSelect.vue"
 import { UserWithRadio } from "@/components/Users"
-import { AddPlusIcon } from "@/components/Icons"
+import { AddPlusIcon, TrashBinTrashBoldIcon } from "@/components/Icons"
 import EditorWithTabs from "@/components/Composed/EditorWithTabs.vue"
+import { dispatchNotify } from "@/utils/notify";
+import { COLOR_TYPES } from "@/enums";
+import { STEPPER_WORK_PLAN } from "@/modules/Documents/modules/SendDocuments/constants";
 
 // Composable
 const route = useRoute()
+const router = useRouter()
 const store = useBusinessTripStore()
 const { t } = useI18n()
 const $v = useVuelidate(store.rules, store.model)
+
+// Props
+const props = defineProps({
+  onStepClick: {
+    type: Function,
+    default: () => void 0
+  }
+})
+
+// Reactive
+const showNestedError = ref(false)
 
 // Methods
 const onFileUpload = () => {
@@ -28,6 +43,23 @@ const onFileUpload = () => {
     store.model.__files.push(file)
   })
 }
+const addGroupBlock = () => {
+  store.actionAddGroupBlock()
+}
+const stepClick = async (step) => {
+  // const valid = await $v.value.$validate()
+  // showNestedError.value = true
+  // if (!valid) {
+  //   dispatchNotify(null, t('fill-required-fields'), COLOR_TYPES.WARNING)
+  //   return
+  // }
+
+  await store.actionStepClick(router, route, step)
+}
+
+defineExpose({
+  stepClick
+})
 </script>
 
 <template>
@@ -55,34 +87,67 @@ const onFileUpload = () => {
         />
       </base-col>
 
-      <base-col col-class="w-full mb-2">
-        <div class="border-[1.5px] border-greyscale-200 rounded-2xl px-5 py-4">
-          <span class="text-base text-primary-900 font-semibold mb-1">{{ t('group') }}-1</span>
+      <base-col col-class="w-full mb-2 flex flex-col gap-y-3">
+        <div
+          v-for="(group, index) in store.model.__groups"
+          class="border-[1.5px] border-greyscale-200 rounded-2xl px-5 py-4"
+        >
+          <div class="flex justify-between">
+            <span class="text-base text-primary-900 font-semibold mb-1">{{ t('group') }}-{{ index + 1 }}</span>
+
+            <div
+              v-if="index !== 0"
+              class="flex justify-center items-center bg-critic-50 hover:bg-critic-100 rounded-lg w-7 h-7 cursor-pointer"
+              @click="store.actionDeleteGroupBlock(index)"
+            >
+              <base-iconify :icon="TrashBinTrashBoldIcon" class="text-critic-500 !w-4 !h-4" />
+            </div>
+          </div>
 
           <base-row>
             <base-col col-class="w-1/2">
               <user-multi-select
-                v-model="$v.__employees.$model"
-                :error="$v.__employees"
+                v-model="group.__users"
+                :error="$v.__groups.$each.$response.$data[index].__users"
                 label="who-is-going-to-business-trip"
                 placeholder="select-employees"
                 required
-              />
-            </base-col>
-
-            <base-col col-class="w-1/2">
-              <branch-multi-select
-                v-model="$v.__companies.$model"
-                :error="$v.__companies"
-                text-truncate
-                label="trip-place"
+                :show-nested-error="showNestedError"
               />
             </base-col>
 
             <base-col col-class="w-1/2">
               <base-multi-select
-                v-model="$v.__tags.$model"
-                :error="$v.__tags"
+                v-model="group.__regions"
+                :error="$v.__groups.$each.$response.$data[index].__regions"
+                api-url="regions"
+                :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
+                display="chip"
+                selectable
+                label="trip-place"
+                type="department"
+                placeholder="select-trip-place"
+                required
+                :show-nested-error="showNestedError"
+              >
+                <template #chip="{ value }">
+                  {{ value.name }}
+                </template>
+
+                <template #option="{ value }">
+                  <user-with-radio
+                    :title="value.name"
+                    :text-truncate="false"
+                  >
+                  </user-with-radio>
+                </template>
+              </base-multi-select>
+            </base-col>
+
+            <base-col col-class="w-1/2">
+              <base-multi-select
+                v-model="group.__tags"
+                :error="$v.__groups.$each.$response.$data[index].__tags"
                 api-url="tags"
                 :api-params="{ document_sub_type: route.params. document_sub_type}"
                 :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
@@ -92,6 +157,7 @@ const onFileUpload = () => {
                 type="department"
                 placeholder="select-targets"
                 required
+                :show-nested-error="showNestedError"
               >
                 <template #chip="{ value }">
                   {{ value.name }}
@@ -110,24 +176,26 @@ const onFileUpload = () => {
             <base-col col-class="w-1/2">
               <div class="flex w-full gap-x-4">
                 <base-calendar
-                  v-model="$v.start_date.$model"
-                  :error="$v.start_date"
+                  v-model="group.__start_date"
+                  :error="$v.__groups.$each.$response.$data[index].__start_date"
                   :min-date="new Date()"
                   required
                   label="start-date"
                   placeholder="choose-start-time"
                   class="w-1/2"
-                  @update:modelValue="(value) => $v.start_date.$model = formatDateReverse(value)"
+                  :show-nested-error="showNestedError"
+                  @update:modelValue="(value) => group.__start_date = formatDateReverse(value)"
                 />
                 <base-calendar
-                  v-model="$v.end_date.$model"
-                  :error="$v.end_date"
+                  v-model="group.__end_date"
+                  :error="$v.__groups.$each.$response.$data[index].__end_date"
                   :min-date="new Date()"
                   required
                   label="end-date"
                   placeholder="choose-end-time"
                   class="w-1/2"
-                  @update:modelValue="(value) => $v.end_date.$model = formatDateReverse(value)"
+                  :show-nested-error="showNestedError"
+                  @update:modelValue="(value) => group.__end_date = formatDateReverse(value)"
                 />
               </div>
             </base-col>
@@ -143,7 +211,8 @@ const onFileUpload = () => {
           root-classes=""
           type="button"
           shadow
-          class="mt-3 rounded-[10px]"
+          class="rounded-[10px] w-[195px]"
+          @click="addGroupBlock"
         />
       </base-col>
 
@@ -191,6 +260,7 @@ const onFileUpload = () => {
         shadow
         border-color="border-transparent"
         class="ml-2"
+        @click="stepClick(STEPPER_WORK_PLAN)"
       />
     </div>
   </div>

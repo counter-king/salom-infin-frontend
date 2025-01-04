@@ -26,7 +26,11 @@ const props = defineProps({
   clearAfterSelect: {
     type: Boolean,
     default: true
-  }
+  },
+  options: {
+    type: Array,
+    default: () => []
+  },
 });
 const modelValue = useModel(props, 'modelValue')
 
@@ -36,6 +40,7 @@ const emit = defineEmits(['update:modelValue'])
 <template>
   <base-multi-select
     v-model="modelValue"
+    :options="options"
     api-url="users"
     :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
     :api-params="props.apiParams"

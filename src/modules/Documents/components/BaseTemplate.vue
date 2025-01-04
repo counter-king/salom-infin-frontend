@@ -10,13 +10,13 @@ import {
   OrdinaryNoticeTemplate,
   DecreeTemplate,
   BusinessTripDecreeTemplate,
-  BasePOA
+  BasePOA,
+  BusinessTripTemplate
 } from "@/components/Templates/index"
 // Enums
 import {computed} from "vue"
 import {COMPOSE_DOCUMENT_SUB_TYPES} from "@/enums"
 import { BusinessTripOrderTemplate } from "@/components/Templates";
-import Base from "primevue/base";
 
 const props = defineProps({
   composeModel: {
@@ -39,7 +39,8 @@ const formMap = {
     [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL]: BusinessTripDecreeTemplate,
     [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER_LOCAL]: BusinessTripOrderTemplate,
     [COMPOSE_DOCUMENT_SUB_TYPES.NOTICE_FOR_EMPLOYMENT]: OrdinaryNoticeTemplate,
-    [COMPOSE_DOCUMENT_SUB_TYPES.ORDER_FOR_EMPLOYMENT]: OrderLetterTemplate
+    [COMPOSE_DOCUMENT_SUB_TYPES.ORDER_FOR_EMPLOYMENT]: OrderLetterTemplate,
+    [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2]: BusinessTripTemplate
   },
   APPLICATION: [
     COMPOSE_DOCUMENT_SUB_TYPES.LABOR_LEAVE,

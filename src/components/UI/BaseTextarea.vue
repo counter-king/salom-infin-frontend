@@ -45,7 +45,11 @@ const props = defineProps({
     type: Boolean
   },
   maxLength : {
-    type: [Number],  
+    type: [Number],
+  },
+  showNestedError: {
+    type: Boolean,
+    default: true
   }
 })
 // Composable
@@ -72,7 +76,7 @@ const { t } = useI18n()
               'flex w-full text-greyscale-900 rounded-xl bg-greyscale-50 text-sm border-greyscale-50 focus:border-primary-500 placeholder:text-sm placeholder:font-regular placeholder:text-greyscale-400',
               props.rootClass,
               {
-                'p-invalid !shadow-none': props.error.$error
+                'p-invalid !shadow-none': props.error.$error && props.showNestedError
               }
             ]
           }
@@ -88,7 +92,7 @@ const { t } = useI18n()
       </div>
     </div>
 
-    <template v-if="props.error.$errors.length">
+    <template v-if="props.error?.$errors?.length">
       <div class="space-y-1 mt-1">
         <div
           v-for="element of props.error.$errors"

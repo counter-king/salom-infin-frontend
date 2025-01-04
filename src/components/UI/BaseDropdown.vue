@@ -102,6 +102,14 @@ const props = defineProps({
   errorMessage: {
     type: Boolean,
     default: true
+  },
+  showNestedError: {
+    type: Boolean,
+    default: true
+  },
+  translatable: {
+    type: Boolean,
+    default: false
   }
 })
 const emit = defineEmits(['update:modelValue', 'update:options', 'emit:change'])
@@ -121,7 +129,7 @@ const rootClasses = computed(() => {
     props.borderColor,
     // Validation
     {
-      'p-invalid !shadow-none': props.error.$error,
+      'p-invalid !shadow-none': props.error.$error && props.showNestedError,
     },
     // Size
     {
@@ -138,6 +146,15 @@ const options = computed({
 		emit('update:options', value)
 	}
 })
+const translatedOptions = computed(() => {
+  if (props.translatable) {
+    return props.options.map(option => ({
+      ...option,
+      [props.optionLabel]: t(option[props.optionLabel]),
+    }));
+  }
+  return props.options;
+});
 // Watch
 watch(debounced, async () => {
   if(props.customSearch) {
@@ -160,9 +177,12 @@ const loadList = async (params) => {
 	options.value = data.results
 }
 // Hooks
-onMounted(() => {
+onMounted(async () => {
   if(props.customSearch) {
     list.value = props.options
+  }
+  if (!props.options.length){
+    // await loadList()
   }
 })
 </script>
@@ -170,10 +190,9 @@ onMounted(() => {
 <template>
   <div class="app-input">
     <base-label :label="props.label" :required="props.required" />
-
     <Dropdown
       v-model="modelValue"
-      :options="customSearch ? list : options"
+      :options="customSearch ? list : translatedOptions"
       :option-label="props.optionLabel"
       :option-value="props.optionValue"
       :option-disabled="props.optionDisabled"
@@ -279,7 +298,7 @@ onMounted(() => {
       </template>
     </Dropdown>
 
-    <template v-if="props.error.$errors.length && props.errorMessage">
+    <template v-if="props.error?.$errors?.length && props.errorMessage">
       <div class="space-y-1 mt-2">
         <div
           v-for="element of props.error.$errors"

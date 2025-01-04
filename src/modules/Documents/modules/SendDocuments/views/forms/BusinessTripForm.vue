@@ -1,11 +1,11 @@
 <script setup>
 // Core
-import { computed, onMounted } from "vue"
+import { computed, onBeforeMount, onMounted, onUnmounted, ref, unref } from "vue"
 import {useVuelidate} from "@vuelidate/core"
 import {useRoute, useRouter} from "vue-router"
 import {useI18n} from "vue-i18n"
 // Enums
-import { FORM_TYPE_CREATE } from "@/constants/constants"
+import { FORM_TYPE_CREATE, FORM_TYPE_UPDATE } from "@/constants/constants"
 // Components
 import {LayoutWithTabsCompose} from "@/components/DetailLayout"
 import { TripInfo, WorkPlan, Route } from "@/modules/Documents/modules/SendDocuments/views/forms/FormComponents"
@@ -30,6 +30,9 @@ const authStore = useAuthStore()
 const store = useBusinessTripStore()
 const $v = useVuelidate(store.rules, store.model)
 
+// Reactive
+const childComponent = ref(null)
+
 // Computed
 const title = computed(() => {
   const isCreate = props.formType === FORM_TYPE_CREATE
@@ -51,14 +54,9 @@ const selectedComponent = computed(() => {
 
 // Methods
 const onStepClick = async (item) => {
+  const _childComponent = unref(childComponent)
   if (route.query?.step !== item.value) {
-    store.stepperItems.forEach(step => step.active = step.id === item.id)
-    await router.replace({
-      query: {
-        ...route.query,
-        step: item.value
-      }
-    })
+    await _childComponent.stepClick(item.value)
   }
 }
 const init = async () => {
@@ -75,13 +73,23 @@ const init = async () => {
 }
 
 // Hooks
-onMounted(async () => {
+onBeforeMount(async () => {
   await init()
+  if (props.formType === FORM_TYPE_UPDATE) {
+    await store.actionGetDocumentDetailForUpdate(route.params.id)
+  }
+})
+
+onUnmounted(() => {
+  store.actionResetBTModel()
 })
 </script>
 
 <template>
-  <div class="business-trip-form-v2">
+  <div
+    class="business-trip-form-v2"
+    :class="{'h-[calc(100vh-200px)]' : store.detailLoading}"
+  >
     <template v-if="store.detailLoading">
       <base-spinner/>
     </template>
@@ -101,6 +109,8 @@ onMounted(async () => {
           <div class="px-6 py-4">
             <component
               :is="selectedComponent"
+              :form-type="formType"
+              ref="childComponent"
             />
           </div>
         </template>

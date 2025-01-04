@@ -67,6 +67,10 @@ const props = defineProps({
       return ['x-small', 'small', 'normal', 'large'].includes(value)
     }
   },
+  showNestedError: {
+    type: Boolean,
+    default: true
+  }
 })
 const emit = defineEmits(['update:modelValue', 'emit:month-change', 'emit:day-select', 'emit:clear'])
 // Computed
@@ -78,7 +82,7 @@ const rootClasses = computed(() => {
     props.borderColor,
     // Validation
     {
-      'p-invalid !shadow-none': props.error.$error,
+      'p-invalid !shadow-none': props.error.$error && props.showNestedError,
     },
   ]
 })
@@ -223,7 +227,7 @@ const clear = () => {
       </template>
     </Calendar>
 
-    <template v-if="props.error.$errors.length">
+    <template v-if="props.error?.$errors?.length">
       <div class="space-y-1 mt-2">
         <div
           v-for="element of props.error.$errors"

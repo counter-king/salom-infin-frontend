@@ -255,7 +255,7 @@ export const removeKeysWithDoubleUnderscore = (obj) => {
 
 export const adjustUserObjectToArray = async (items = [], userId = null, multiple = true) => {
   if (items && items.length && multiple) {
-    const userIds = items.map(item => item.user.id).join(',')
+    const userIds = items.map(item => item.hasOwnProperty('user') ? item.user.id : item.id).join(',')
     const res = await fetchUsersList({ ids: userIds })
     if (res && res.status === 200) {
       return Promise.resolve(res.data.results)

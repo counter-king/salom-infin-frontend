@@ -1,9 +1,9 @@
 <script setup>
 // Core
-import { ref, useModel } from "vue";
-import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css';
-import { useI18n } from "vue-i18n";
+import { ref, useModel } from "vue"
+import VueDatePicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
+import { useI18n } from "vue-i18n"
 
 const { t } = useI18n();
 

@@ -88,7 +88,8 @@ export const COMPOSE_DOCUMENT_SUB_TYPES = {
   ORDER_FOR_EMPLOYMENT:          '31', // Приказ на приеме на работу
   POA_FOR_LEGAL_SERVICES:        '32',  // Для юридических услуг
   POA_ACTING_FILIAL_MANAGER:     '33', // Для юридических услуг
-  POA_DEPUTY_FILIAL_MANAGER:     '34'  // Для юридических услуг
+  POA_DEPUTY_FILIAL_MANAGER:     '34',  // Для юридических услуг
+  BUSINESS_TRIP_NOTICE_V2:       '35'  // Для юридических услуг
 }
 export const COLOR_TYPES = {
   PRIMARY: "primary",

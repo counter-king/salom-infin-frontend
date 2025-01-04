@@ -115,6 +115,10 @@ const props = defineProps({
   },
   wrapperClass: {
     type: String
+  },
+  showNestedError: {
+    type: Boolean,
+    default: true
   }
 })
 // Reactive
@@ -152,7 +156,7 @@ const rootClasses = computed(() => {
     props.borderColor,
     // Validation
     {
-      'p-invalid !shadow-none': props.error.$error,
+      'p-invalid !shadow-none': props.error.$error && props.showNestedError,
     },
     // Size
     {
@@ -444,7 +448,7 @@ watch(debounced, async () => {
       </base-menu>
     </div>-->
 
-    <template v-if="props.error.$errors.length">
+    <template v-if="props.error?.$errors?.length">
       <div class="space-y-1 mt-2">
         <div
           v-for="element of props.error.$errors"

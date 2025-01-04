@@ -10,7 +10,8 @@ import {
   OrderForm,
   OrdinaryNoticeForm,
   DecreeForm,
-  PowerOfAttorneyForm
+  PowerOfAttorneyForm,
+  BusinessTripForm
 } from "@/modules/Documents/modules/SendDocuments/views/forms/index"
 // Constants
 import {FORM_TYPE_UPDATE} from "@/constants/constants";
@@ -26,6 +27,7 @@ const formMap = {
     [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_FOREIGN]: DecreeForm,
     [COMPOSE_DOCUMENT_SUB_TYPES.NOTICE_FOR_EMPLOYMENT]: OrdinaryNoticeForm,
     [COMPOSE_DOCUMENT_SUB_TYPES.ORDER_FOR_EMPLOYMENT]: OrderForm,
+    [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2]: BusinessTripForm,
   },
   APPLICATION: [
     COMPOSE_DOCUMENT_SUB_TYPES.LABOR_LEAVE,

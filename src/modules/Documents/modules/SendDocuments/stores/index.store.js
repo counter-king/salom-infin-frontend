@@ -255,6 +255,14 @@ export const useSDStore = defineStore("sd-stores", {
             documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP
           },
           {
+            label: 'business-trip-v2',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.NOTICE,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2
+          },
+          {
             label: 'notice-for-employment',
             type: 'submenu',
             hasRouterLink: true,

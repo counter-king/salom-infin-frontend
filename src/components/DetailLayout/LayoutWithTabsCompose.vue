@@ -150,7 +150,7 @@ const closeHistoryDetail = () => {
       </div>
     </template>
 
-    <div class="detail-layout-content flex flex-col flex-1 bg-white overflow-hidden shadow-button rounded-2xl">
+    <div class="detail-layout-content flex flex-col flex-1 bg-white shadow-button rounded-2xl">
       <slot name="content">
         <div class="flex justify-between border-b">
           <base-tab-menu v-model="activeTabMenuIndex" :tab-items="props.tabItems" />
