@@ -57,7 +57,8 @@ export const useSalaryStore = defineStore('salary-store', {
           passcode: AES256.encrypt(
             this.setPasscodeModel.passcode,
             'ZuOa1haz0BcpadBJ2wKQlnNbYt3BP38CZpGmDJxTlfFtYrMUOd'
-          )
+          ),
+          phone_number: authStore.currentUser.phone
         }
 
         await fetchSetPasscode(model)
@@ -98,7 +99,7 @@ export const useSalaryStore = defineStore('salary-store', {
       try {
         let model = {
           ...this.verifyNumberModel,
-          phone_number: authStore.phone
+          phone_number: authStore.currentUser.phone
         }
 
         await fetchVerifyNumber(model)

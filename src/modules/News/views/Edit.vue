@@ -12,7 +12,7 @@ import BaseButton from '@/components/UI/BaseButton.vue';
 import DialogPreview from '../components/create/DialogPreview.vue';
 import BaseDialog from '@/components/UI/BaseDialog.vue'
 // services 
-import { fetchDeleteNews, fetchGetNews } from '../services/news.service';
+import { fetchGetMyNewsDelete, fetchGetMyNews } from '../services/news.service';
 // stores
 import { useNewsStore } from '../stores';
 // constants
@@ -55,10 +55,10 @@ const handleDeleteDialog = () => {
 const handleDeleteNews = async()=>{
   isDeleteLoading.value = true
   if(!!route.params.id){
-   await fetchDeleteNews(route.params.id)
+   await fetchGetMyNewsDelete(route.params.id)
    isDeleteLoading.value = false
    dialogDeleteOpen.value = false
-   router.push({name:'NewsIndex'})
+   router.push({name:'MyNewsList', query: {...router.currentRoute.value.query, activeMenu: 'my-posts'}})
    newsStore.restStore()
   }
 }
@@ -77,17 +77,16 @@ const fetchOneNews = async() => {
     else if(allowedAudioTypes.some(item => item.includes(content.type))){
       return {type: CONTENT_TYPES.FILE, value: {...content.file,type: content.type}, id: content.id}
     }
-  
   }
 
    try {
-      const { data }  = await fetchGetNews(route.params.id)   
+      const { data }  = await fetchGetMyNews(route.params.id)   
       newsStore.model.title = data.title    
       newsStore.model.description = data.description
-      newsStore.model.category = data.category.id
+      newsStore.model.category = data.category?.id
       newsStore.model.tags_ids = data.tags
       newsStore.model.images_ids = data.galleries
-      newsStore.model.image = {...data.image, type:CONTENT_TYPES.IMAGE} 
+      newsStore.model.image = data.image ? {...data.image, type:CONTENT_TYPES.IMAGE} : null 
       newsStore.model.dynamicFields = data.contents.map(content=> {
         if (content.type === CONTENT_TYPES.TEXT) {
           return { type: CONTENT_TYPES.TEXT, value: content.content,id: content.id }
@@ -105,6 +104,9 @@ const fetchOneNews = async() => {
    }
 }
 
+const handleNewsDraft = async() => {
+  await createFormRef.value?.onSubmitForm(true)
+}
 
 onMounted(() => {
     fetchOneNews()
@@ -126,12 +128,13 @@ onMounted(() => {
             <edit-form ref="createFormRef" :news-id="route.params.id" :imageFile="newsStore.model.image" :galleryFiles="newsStore.model.images_ids" >
               <template #footer>
                 <div class="flex gap-2 justify-end">
-                  <base-button @click="handleOpenDialogPreview" button-class="!px-4 !py-3 text-xs rounded-[120px]" :label="t('preview-news')"/>
                   <base-button 
-                  v-if="!!route.params.id"
-                  @click="handleDeleteDialog"
-                  button-class="!px-4 !py-3 text-xs rounded-[120px] border-critic-500 bg-critic-500" :label="t('delete')"
+                    v-if="!!route.params.id"
+                    @click="handleDeleteDialog"
+                    button-class="!px-4 !py-3 text-xs rounded-[120px] border-critic-500 bg-critic-500" :label="t('delete')"
                   />
+                  <base-button @click="handleNewsDraft" color="text-primary" outlined shadow button-class="!px-4 !py-3 text-xs rounded-[120px]" :label="t('draft')"/>
+                  <base-button @click="handleOpenDialogPreview" button-class="!px-4 !py-3 text-xs rounded-[120px]" :label="t('preview-news')"/>
                 </div>
                 </template>
               </edit-form>
@@ -170,7 +173,7 @@ onMounted(() => {
             rounded
             color="border-critic-500 bg-critic-500 text-white"
             @click="handleDeleteNews"
-      />
+          />
     </template>
     </base-dialog>
   </div>

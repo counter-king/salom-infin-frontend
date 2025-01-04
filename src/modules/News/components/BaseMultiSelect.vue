@@ -1,19 +1,20 @@
 <script setup>
 // Core
-import { ref, computed, onMounted, useModel, unref, watch, onUnmounted } from 'vue'
+import { ref, computed, onMounted, useModel, unref, watch } from 'vue'
 import { useDebounce } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
 import MultiSelect from 'primevue/multiselect'
 import axiosConfig from "@/services/axios.config"
 // Components
-import { AltArrowDownIcon, MagniferIcon, TrashBinTrashIcon, XMarkSolidIcon } from '@/components/Icons'
+import { AltArrowDownIcon, MagniferIcon, XMarkSolidIcon } from '@/components/Icons'
 // Utils
 import { isObject } from '@/utils'
 // Composable
 const modelValue = useModel(props, 'modelValue')
-const { t } = useI18n()
+const { t, locale } = useI18n()
 // Macros
 const emit = defineEmits(['update:modelValue', 'emit:select-item'])
+
 const props = defineProps({
   modelValue: {
     type: Array,
@@ -122,10 +123,6 @@ const props = defineProps({
   },
   listClass: {
     type: String
-  },
-  showNestedError: {
-    type: Boolean,
-    default: true
   }
 })
 // Reactive
@@ -163,7 +160,7 @@ const rootClasses = computed(() => {
     props.borderColor,
     // Validation
     {
-      'p-invalid !shadow-none': props.error.$error && props.showNestedError,
+      'p-invalid !shadow-none': props.error.$error,
     },
     // Size
     {
@@ -177,7 +174,7 @@ const loadList = async (params) => {
   let { data } = await axiosConfig.get(`${props.apiUrl}/`, params)
   if (data.hasOwnProperty('results')){
     list.value = data.results
-  }else {
+  } else {
     list.value = data
   }
 }
@@ -241,13 +238,15 @@ onMounted(async () => {
     await loadList(props.apiParams)
   }
 })
+
 // Watch
 watch(debounced, async () => {
   // Если не переданы props.options
   if(!props.options.length && search.value) {
     await loadList({
       ...props.apiParams,
-      search: search.value
+      search: search.value,
+      categories: undefined,
     })
   }
   else {
@@ -255,19 +254,28 @@ watch(debounced, async () => {
     console.log('filter is not done for props options :)')
   }
 })
-const  handleEnterPress = () => {
+
+watch(()=> props.apiParams.categories, async () => {
+  await loadList(props.apiParams)
+})
+
+watch(locale, async () => {
+  await loadList(props.apiParams)
+})
+
+const handleEnterPress = () => {
   if (!!search.value.trim() && props.tagSelect) {
     modelValue.value.push({name: search.value, id: search.value})
     search.value = ''
   }
-}
+} 
 
 </script>
 
 <template>
   <div class="app-multiselect" :class="props.wrapperClass">
     <base-label :label="props.label" :required="props.required" />
-
+    
     <MultiSelect
       v-model="modelValue"
       :options="options"
@@ -406,65 +414,7 @@ const  handleEnterPress = () => {
       </template>
     </MultiSelect>
 
-<!--    <div v-if="modelValue && modelValue.length >= props.selectionLength" class="flex items-center gap-2">
-      <div class="flex items-center flex-1 gap-2 py-2 truncate">
-        <template v-for="user in modelValue">
-          <slot name="hint" :value="user" />
-        </template>
-      </div>
-
-      <base-button
-        :icon-right="AltArrowDownIcon"
-        icon-width="!w-4"
-        icon-height="!h-4"
-        button-class="shadow-md border-t border-r border-l border-greyscale-100"
-        rounded
-        outlined
-        size="small"
-        aria-haspopup="true"
-        aria-controls="overlay_menu"
-        @click="toggle"
-      >
-        <template #label>
-          <span class="text-sm">+{{ modelValue.length }}</span>
-        </template>
-      </base-button>
-
-      <base-menu
-        ref="menuRef"
-        id="overlay_menu"
-        :items="optionsRest"
-        width="w-52"
-      >
-        <template #item="{ item }">
-          <div class="flex items-center gap-2 cursor-pointer py-[0.375rem] px-2">
-            <base-avatar
-              v-if="item.image"
-              color="#635AFF"
-              shape="circle"
-              avatar-classes="w-5 h-5"
-            />
-
-            <h1 class="flex-1 text-xs font-semibold text-primary-900 mr-auto">{{ item.label }}</h1>
-
-            <template v-if="!props.disabled">
-              <button
-                v-tooltip.right="{
-                  value: `<h4 class='text-xs text-white -my-1'>Удалить</h4>`,
-                  escape: true,
-                  autoHide: false
-                }"
-                @click="(event) => removeItem(event, item)"
-              >
-                <base-iconify :icon="TrashBinTrashIcon" class="!w-4 !h-4 text-critic-500" />
-              </button>
-            </template>
-          </div>
-        </template>
-      </base-menu>
-    </div>-->
-
-    <template v-if="props.error?.$errors?.length">
+    <template v-if="props.error.$errors.length">
       <div class="space-y-1 mt-2">
         <div
           v-for="element of props.error.$errors"

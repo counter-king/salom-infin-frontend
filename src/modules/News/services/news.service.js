@@ -6,13 +6,15 @@ const URLS = {
     newsTags: "news-tags",
     newsLikes: "news-likes",
     newsComments: "news-comments",
-    newsPending: "news/pending-news",
+    newsPending: "pending-news",
+    myNews: "my-news",
+    approve:"approve"
 }
 
 
 // create a news
-export const fetchCreateNews = (params) => {
-    return axiosConfig.post(`${URLS.news}/`, params)
+export const fetchCreateMyNews = (params) => {
+    return axiosConfig.post(`${URLS.myNews}/`, params)
 }
 
 // get news list
@@ -21,29 +23,59 @@ export const fetchGetNewsList = (params) => {
 }
 
 // update news
-export const fetchUpdateNews = (id, params) => {
-    return axiosConfig.put(`${URLS.news}/${id}`, params)
+export const fetchUpdateMyNews = (id, params) => {
+    return axiosConfig.put(`${URLS.myNews}/${id}`, params)
 }
 
-// delete news
-export const fetchDeleteNews = (id) => {
-    return axiosConfig.delete(`${URLS.news}/${id}`)
-}
 // get one news
 export const fetchGetNews = (id) => {
     return axiosConfig.get(`${URLS.news}/${id}`)
 }
 
+// get news list for moderation
+export const fetchGetModerationNewsList = (params) => {
+    return axiosConfig.get(`${URLS.newsPending}/`, { page:1, page_size: 15, ...params })
+}
+
+// get my news list 
+export const fetchGetMyNewsList = (params) => {
+    return axiosConfig.get(`${URLS.myNews}/`, { page:1, page_size: 15, ...params })
+}
+
+// get my news one
+export const fetchGetMyNews = (id)=>{
+    return axiosConfig.get(`${URLS.myNews}/${id}/`)
+}
+
+// get my news delete one
+export const fetchGetMyNewsDelete = (id)=>{
+    return axiosConfig.delete(`${URLS.myNews}/${id}/`)
+}
+
+// get pending news one
+export const fetchGetPendingNews = (id)=>{
+    return axiosConfig.get(`${URLS.newsPending}/${id}/`)
+}
+
+// get pending news one
+export const fetchModerationApproveNews = (id, body)=>{
+    return axiosConfig.put(`${URLS.newsPending}/${id}/${URLS.approve}`, body)
+}
+
 // get news-catefory
 export const fetchGetNewsCategoryList = (params) => {
-    return axiosConfig.get(`${URLS.newsCategories}/`, params)
+    return axiosConfig.get(`${URLS.newsCategories}/`, { page_size: 200, ...params})
 }
 
 // get news-tags
 export const fetchGetNewsTagsList = (params) => {
-    return axiosConfig.get(`${URLS.newsTags}/`, params)
+    return axiosConfig.get(`${URLS.newsTags}/`, {page_size: 100, ...params})
 }
 
+// create news-tags
+export const fetchCreateNewsTags = (params) => {
+    return axiosConfig.post(`${URLS.newsTags}/`, params)
+}
 
 // news-like-create 
 export const fetchCreateNewsLike = (params) => {

@@ -5,6 +5,7 @@ import { ref, watch } from 'vue';
 import { onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
+
 // Components
 import BackButton from '@/components/Actions/BackButton.vue';
 import CircleWrapper from '../components/show/CircleWrapper.vue';
@@ -20,6 +21,8 @@ import Queto from '../components/Queto.vue';
 import Tag from '../components/Tag.vue';
 import TheFooter from '@/components/TheFooter.vue';
 import ShortDescription from '../components/ShortDescription.vue';
+import Empty from '@/components/Empty.vue';
+// import ShareDialog from '../components/show/ShareDialog.vue';
 // icons
 import BaseIconify from '@/components/UI/BaseIconify.vue';
 import { BookmarkBoldIcon, EyeBoldIcon, ForwardBoldIcon, HeartBoldIcon } from '@/components/Icons';
@@ -33,6 +36,7 @@ import { CONTENT_TYPES, EOMOJI_TYPES } from '../constants';
 import { COLOR_TYPES } from '@/enums';
 // stores
 import { useAuthStore } from '@/modules/Auth/stores';
+
 const  { t } = useI18n()
 const  route = useRoute()
 const  router = useRouter()
@@ -47,7 +51,8 @@ const commentValue = ref('')
 const newCommentList = ref([])
 const authStore = useAuthStore()
 const relatedNewsList = ref([])
-
+const realatedNewsListLoading = ref(false)
+// const shareDialogVisible = ref(false)
 // methods
 const fetchOneNews = async() => {
    loading.value = true
@@ -110,13 +115,19 @@ const getNewCommentList =  async () =>{
 }
 
 const getRelatedNewsList =  async (page = 1) =>{
-   const { data } = await fetchGetNewsList({
-    tags: newsOne.value.tags.map(item => item.id).join(','), 
-    exclude_id: route.params.id, 
-    page: page, 
-    page_size: 50})
-
-    relatedNewsList.value = data.results
+   realatedNewsListLoading.value = true
+    try {
+        const { data } = await fetchGetNewsList({
+        tags: newsOne.value.tags.map(item => item.id).join(','), 
+        exclude_id: route.params.id, 
+        page: page, 
+        page_size: 50})
+        relatedNewsList.value = data.results
+    }
+    finally{
+        realatedNewsListLoading.value = false
+    }
+   
 }
 
 
@@ -148,7 +159,7 @@ onMounted( async () => {
     <div class="back-button">
         <back-button 
         :self="true" 
-        @click="router.push({name:'NewsIndex'})"/>
+        @click="router.push({name:'NewsList'})"/>
     </div>
     <template v-if="loading">
         <base-spinner/>
@@ -202,7 +213,7 @@ onMounted( async () => {
                         </div>
                     </circle-wrapper> -->
                     <!-- forward icon-->
-                    <!-- <circle-wrapper class="min-w-fit">
+                    <!-- <circle-wrapper @click="shareDialogVisible = true" class="min-w-fit">
                         <div class="text-greyscale-400">
                             <base-iconify :icon="ForwardBoldIcon" />
                         </div>
@@ -212,10 +223,10 @@ onMounted( async () => {
 
             <!-- contents -->
             <title-component :title="newsOne.title" class="mt-4 mb-5"/>
-            <short-description wrap-class="text-greyscale-900 text-xl !mt-0" :text="newsOne.description"/>
+            <short-description wrap-class="text-greyscale-800 text-xl !mt-0" :text="newsOne.description"/>
 
             <template v-for="(content, index) in newsOne.contents" :key="content.id">
-                <div v-if="content.type === CONTENT_TYPES.TEXT" v-html="content.content" class="mt-4"></div>
+                <div v-if="content.type === CONTENT_TYPES.TEXT" v-html="content.content" class="mt-4 text-greyscale-800"></div>
                 <div v-if="content.type === CONTENT_TYPES.QUOTE" >
                     <queto :text="content.content" class="my-10"/>
                 </div>
@@ -254,14 +265,27 @@ onMounted( async () => {
         <!-- left -->
         <div class="overflow-auto pr-2 pb-3">
             <h2 class="font-semibold text-lg text-greyscale-900">{{t('similar-news')}}</h2>
-            <div class="flex flex-col gap-3 mt-3">
+            <div class="flex flex-col gap-3 mt-3 h-full">
             <template v-for="news in relatedNewsList" :key="news.id">
                 <related-news-card :news="news"/>
             </template>
+            <div class="flex justify-center items-center h-full">
+                <template v-if="realatedNewsListLoading">
+                    <base-spinner />  
+                </template>
+                <Empty 
+                    v-else-if="!relatedNewsList.length"
+                    title="there-is-no-related-news-data"
+                    label-classes="text-greyscale-900 !text-lg font-semibold"
+                    wrapper-class="w-full h-full shadow-none"
+                    inner-wrapper-class="w-[335px]"
+                />
+            </div>
             </div>
         </div>
     </div>
     <the-footer/>
+    <!-- <share-dialog v-model="shareDialogVisible"/> -->
   </div>
 </template>
 

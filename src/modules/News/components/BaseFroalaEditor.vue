@@ -10,6 +10,7 @@ import 'froala-editor/js/plugins/table.min';
 import 'froala-editor/js/languages/ru'
 import "froala-editor/js/plugins/char_counter.min.js"; 
 import "froala-editor/js/plugins/link.min.js"; 
+import "froala-editor/css/froala_style.min.css";
 
 // CSS
 import 'froala-editor/css/froala_editor.pkgd.min.css';
@@ -32,6 +33,10 @@ const props = defineProps({
   },
   charMaxList: {
     type: Number,
+  },
+  defaultFontSize: {
+    type: Number,
+    default: 20
   }
 });
 
@@ -43,72 +48,41 @@ const editor = ref(null)
 // Macros
 defineExpose({ editor })
 
-const cleanContent = (cleanContentPaste) => {
-  const editorContent = editor.value?.$el.querySelector('.fr-element')?.innerHTML || '';
+// const cleanContent = () => {
+//   const editorContent = editor.value?.$el.querySelector('.fr-element')?.innerHTML || '';
 
-  // DOMParser orqali tarkibni manipulyatsiya qilish
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(!!cleanContentPaste ? cleanContentPaste : editorContent, 'text/html');
+//   // DOMParser orqali tarkibni ma nipulyatsiya qilish
+//   const parser = new DOMParser();
+//   const doc = parser.parseFromString(editorContent, 'text/html');
 
-  // Barcha elementlarni olish
-  const elements = Array.from(doc.body.children);
+//   // Barcha elementlarni olish
+//   const elements = Array.from(doc.body.children);
     
-  // Boshi va oxiridan bo'sh yoki faqat <br> bo'lgan elementlarni olib tashlash
-  while (elements.length && (!elements[0].textContent.trim() || elements[0].innerHTML.trim() === '<br>')) {
-    elements.shift(); // Boshi bo'sh bo'lganini olib tashlash
-  }
+//   // Boshi va oxiridan bo'sh yoki faqat <br> bo'lgan elementlarni olib tashlash
+//   while (elements.length && (!elements[0].textContent.trim() || elements[0].innerHTML.trim() === '<br>')) {
+//     elements.shift(); // Boshi bo'sh bo'lganini olib tashlash
+//   }
 
-  while (elements.length && (!elements[elements.length - 1].textContent.trim() || elements[elements.length - 1].innerHTML.trim() === '<br>')) {
-    elements.pop(); // Oxiri bo'sh bo'lganini olib tashlash
-  }
+//   while (elements.length && (!elements[elements.length - 1].textContent.trim() || elements[elements.length - 1].innerHTML.trim() === '<br>')) {
+//     elements.pop(); // Oxiri bo'sh bo'lganini olib tashlash
+//   }
 
-  // agar birinichi elemetni ichida <br> bo'lsa o'chirib tashlash
-  while (elements[0]?.children.length && elements[0].firstChild.nodeName == "BR") {
-    elements[0].removeChild(elements[0].firstChild);
-  }
+//   // agar birinichi elemetni ichida <br> bo'lsa o'chirib tashlash
+//   while (elements[0]?.children.length && elements[0].firstChild.nodeName == "BR") {
+//     elements[0].removeChild(elements[0].firstChild);
+//   }
 
-  // agar oxirgini elemetni ichida <br> bo'lsa o'chirib tashlash
-  while (elements[elements.length - 1]?.children.length && elements[elements.length - 1]?.lastChild?.nodeName == "BR") {
-    elements[elements.length - 1].removeChild(elements[elements.length - 1].lastChild);
-  }
+//   // agar oxirgini elemetni ichida <br> bo'lsa o'chirib tashlash
+//   while (elements[elements.length - 1]?.children.length && elements[elements.length - 1]?.lastChild?.nodeName == "BR") {
+//     elements[elements.length - 1].removeChild(elements[elements.length - 1].lastChild);
+//   }
 
-  // Tozalangan tarkibni qayta yig'ish
-  const cleanedContent = elements.map((el) => el.outerHTML).join('').trim();
+//   // Tozalangan tarkibni qayta yig'ish
+//   const cleanedContent = elements.map((el) => el.outerHTML).join('').trim();
 
-  if(!!cleanContentPaste){
-    return cleanedContent
-  } else {
-    // Tozalangan tarkibni emit qilish
-    emit('update:modelValue', cleanedContent);
-  }
-};
+//   emit('update:modelValue', cleanedContent);
 
-// const cleanContentPaste = (content) => {
-//   if (typeof content !== 'string') return content;
-
-//   content = cleanContent(content);
-//   // Trim leading and trailing whitespace, including non-breaking spaces
-//   content = content.replace(/^[\s\u00A0]+|[\s\u00A0]+$/g, '');
-  
-//   // Remove inline styles
-//   content = content.replace(/ style="[^"]*"/g, '');
-  
-//   // Remove specific style-related tags (e.g., <i>, <b>, <em>, etc.)
-//   content = content.replace(/<(i|b|em|strong|u|s|strike)>/g, ''); // Remove opening tags
-//   content = content.replace(/<\/(i|b|em|strong|u|s|strike)>/g, ''); // Remove closing tags
-  
-//   // Remove empty tags (e.g., <p></p>, <div></div>)
-//   content = content.replace(/<([a-z][a-z0-9]*)[^>]*>(\s*)<\/\1>/gi, '');
-
-//   // Remove empty <p> tags at the beginning and end
-//   content = content.replace(/^<p>\s*<\/p>/g, '').replace(/<p>\s*<\/p>$/g, '');
-
-//   // Trim leading and trailing <br> and &nbsp;
-//   content = content.replace(/^(<br\s*\/?>|&nbsp;)+|(<br\s*\/?>|&nbsp;)+$/g, '');
-  
-//   return content;
 // };
-
 
 const config = {
 	placeholderText: '',
@@ -123,9 +97,10 @@ const config = {
   charCounterCount: !!props.charMaxList,
   linkAlwaysBlank: true, // Havolalarni yangi tabda ochadi
   linkEditButtons: ["linkEdit", "linkRemove"], // Havola tahrirlash tugmalari
-  linkAutoPrefix: true, // URL avtomatik to'ldiriladi
-  linkAttributes: {
+  linkStyles: {
+  	className1: 'className1',
   },
+  linkAutoPrefix: true, // URL avtomatik to'ldiriladi
 	imagePaste: false,
   fontFamily: {
     'Arial,Helvetica,sans-serif': 'Arial',
@@ -133,7 +108,8 @@ const config = {
   },
   fontFamilyDefaultSelection: 'Arial',
   fontFamilySelection: true,
-	fontSize: ['8', '10', '12', '13', '14', '16', '18', '30', '60', '96'],
+  fontSizeDefaultSelection: `${props.defaultFontSize}`,
+	fontSize: ['8', '10', '12', '13', '14', '16', '18', '20','30', '60', '96'],
   fontSizeSelection: true,
 	language: 'ru',
 	quickInsertEnabled: false,
@@ -146,21 +122,20 @@ const config = {
   pasteAllowedStyleProps:[],
   pastePlain: true,
   events: {
+    'link.beforeInsert': function (link, text, attrs) {
+      attrs.class = this.opts.linkStyles.className1; 
+    },
 		'table.inserted': (table) => {
 			table.classList.add('customTable');
 		},
     'commands.after': (cmd, param1, param2) => {
       commandAfter(cmd, param1, param2);
     },
-	'blur': () => {		
-		cleanContent();
-	},
-	// 'paste.afterCleanup': function (clipboardHTML) {    
-  //     return cleanContentPaste(clipboardHTML);
-  //   },
+	  // 'blur': () => {		
+		//   cleanContent();
+	  // },
 	},
 }
-
 
 // Methods
 const commandAfter = (cmd, param1, param2) => {
@@ -199,8 +174,8 @@ onMounted(() => {
 			element.classList.add('production-class');
 		}
 	}, 100);
-
 })
+
 </script>
 
 <template>
@@ -236,6 +211,7 @@ onMounted(() => {
 .customParagraph {
   margin-left: 48px;
 }
+
 .fr-wrapper, .fr-second-toolbar {
 	background: var(--greyscale-50)!important;
 	border: none!important;
@@ -286,5 +262,11 @@ p[data-f-id="pbf"] {
 
 .fr-sticky-dummy {
   height: 0px!important;
+}
+
+.className1 {
+  color: #0d1ebb;
+  text-decoration: underline;
+
 }
 </style>

@@ -31,6 +31,10 @@ const handleOpenDialogPreview = async () => {
   }
 }
 
+const handleNewsDraft = async() => {
+  await createFormRef.value?.onSubmitForm(true)
+}
+
 </script>
 <template>
   <div class="flex flex-col overflow-y-auto w-full items-center">
@@ -43,6 +47,7 @@ const handleOpenDialogPreview = async () => {
           <create-form ref="createFormRef">
             <template #footer>
               <div class="flex gap-2 justify-end">
+                <base-button @click="handleNewsDraft" color="text-primary" outlined shadow button-class="!px-4 !py-3 text-xs rounded-[120px]" :label="t('draft')"/>
                 <base-button @click="handleOpenDialogPreview" button-class="!px-4 !py-3 text-xs rounded-[120px]" :label="t('preview-news')"/>
               </div>
             </template>

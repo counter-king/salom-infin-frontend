@@ -44,7 +44,7 @@ const items = [
     icon: BuildingsBoldIcon
   },
   {
-    title: 'Табелный номер',
+    title: 'Табельный номер',
     description: authStore.currentUser?.table_number ?? '-',
     icon: HashtagCircleBoldIcon
   },

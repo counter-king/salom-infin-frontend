@@ -12,13 +12,29 @@ const props = defineProps({
   labelClasses: {
     type: String,
     default: ''
+  },
+  description: {
+    type: String,
+    default: ''
+  },
+  descClass: {
+    type: String,
+    default: ''
+  },
+  wrapperClass: {
+    type: String,
+    default: ''
+  },
+  innerWrapperClass: {
+    type: String,
+    default: ''
   }
 })
 </script>
 
 <template>
-  <div class="flex justify-center items-center bg-white shadow-button rounded-xl">
-    <div class="text-center">
+  <div class="flex justify-center items-center bg-white shadow-button rounded-xl" :class="props.wrapperClass">
+    <div class="text-center" :class="props.innerWrapperClass">
       <img
         src="/images/cloud-table-empty.svg"
         alt="EmptyFolder"
@@ -31,6 +47,9 @@ const props = defineProps({
       >
         {{ t(props.title) }}
       </h1>
+      <p v-if="props.description" class="text-sm font-medium text-greyscale-500" :class="props.descClass">
+        {{ t(props.description) }}
+      </p>
     </div>
   </div>
 </template>

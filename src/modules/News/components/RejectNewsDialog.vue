@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref, useModel } from 'vue'
+import { onMounted, ref, useModel } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { helpers, required } from '@vuelidate/validators'
 // Macros
@@ -8,21 +8,12 @@ const props = defineProps({
   modelValue: {
     type: Boolean
   },
-  label: {
-    type: String,
-    default: 'delete-resolutions'
-  },
   createButtonFn: {
     type: Function,
-    default: () => void 0
   },
   onCancelModal:{
     type: Function,
     default: () => void 0
-  },
-  header: {
-    type: String,
-    default: null
   },
   maxWidth: {
     type: String,
@@ -31,8 +22,26 @@ const props = defineProps({
   loading: {
     type: Boolean,
     default: false
+  },
+  headerLable: {
+    type: String
+  },
+  disabled : {
+    type: Boolean,
+    default: false
+  },
+  type: {
+    type: String,
+    default: 'reject-reason',
+    validator: (value) => {
+      return ['show-reason', 'reject-reason'].includes(value)
+    }
+  },
+  value: {
+    type: String,
   }
 })
+
 const emit = defineEmits(['update:modelValue'])
 // Composable
 const modelValue = useModel(props, 'modelValue')
@@ -66,44 +75,42 @@ const create = async () => {
   }
 }
 
-const handleCancel = async () => {
-  props.onCancelModal()
-  modelValue.value = false
-}
+onMounted(() => { 
+  if(!!props.value){    
+    text.value.message = props.value
+  }
+})
 </script>
 
 <template>
   <base-dialog
     v-model="modelValue"
-    :label="props.header"
+    :label="props.headerLable"
     :max-width="props.maxWidth"
     :draggable="false"
-    
+    :content-classes="props.type === 'show-reason' ? 'pt-6 pb-[78px]' : 'pt-6'"
+
   >
     <template #content>
       <base-textarea
         v-model="$v.message.$model"
         :error="$v.message"
         :max-length="250"
-        label="comment"
-        placeholder="enter-comment"
+        :disabled="props.type === 'show-reason' && props.disabled"
+        :label="props.type === 'show-reason' ? 'reason' : 'reject-news-reason'"
+        placeholder="enter-reject-news-reason"
       />
     </template>
 
-    <template #footer>
+    <template #footer v-if="props.type === 'reject-reason'">
       <base-button
-        label="cancel"
+        :loading="props.loading"
+        label="refuse"
         rounded
         outlined
         shadow
-        color="text-primary-900"
+        color="!text-critic-500"
         border-color="border-transparent"
-        @click="handleCancel"
-      />
-      <base-button
-        :label="props.label"
-        :loading="loading"
-        rounded
         @click="create"
       />
     </template>

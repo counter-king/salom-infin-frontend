@@ -19,9 +19,23 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  defaultFontSize: {
+    type: Number,
+    default: 14
+  }
 })
 
 const modelValue = useModel(props, 'modelValue')
+
+// default font size o'rnatish uchun ishlatildi.
+const applyDefaultFontSize = (editor) => {
+  const paragraphs = editor.getBody().querySelectorAll('p')
+  paragraphs.forEach(p => {
+    if (!p.style.fontSize) {
+      p.style.fontSize = `${props.defaultFontSize}px`
+    }
+  })
+}
 
 </script>
 
@@ -45,12 +59,19 @@ const modelValue = useModel(props, 'modelValue')
         fontsize_formats: `6px 8px 9px 10px 11px 12px 13px 14px 16px 18px 20px 24px 36px`,
         font_size_input_default_unit: 'px',
         paste_as_text: pastePlainText,
-        content_style: `body {font-size: 14px;}`,
+        content_style: `body {font-size: ${props.defaultFontSize}px;}`,
         link_protocol: 'https://',
         link_default_target: '_blank',
         link_target: '_blank',
         link_title: false,
-        link_list: undefined
+        link_list: undefined,
+        setup: function(editor) {
+          editor.on('NodeChange', function(e) {
+            if (e.element.nodeName === 'P' && !e.element.style.fontSize) {
+                applyDefaultFontSize(editor);
+              }
+            })
+        },
         // table_default_attributes: {
         //   class: 'tinymce-table'
         // },

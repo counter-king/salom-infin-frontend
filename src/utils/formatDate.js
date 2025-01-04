@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import 'dayjs/locale/ru'; // Ruscha lokalni qo'shish
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 dayjs.extend(customParseFormat)
 
@@ -27,5 +28,5 @@ export function formatDateReverse(date, separate = '-') {
 }
 
 export function formatDateNamedMonth(date) {
-  return date ? dayjs(date).format("DD MMMM YYYY г.") : "Не верный формат даты"
+  return date ? dayjs(date).locale('ru').format("DD MMMM YYYY г.") : "Не верный формат даты"
 }
