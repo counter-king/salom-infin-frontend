@@ -753,5 +753,7 @@
   "seat-class": "umumiy vagon",
   "add-line": "Qator qo'shish",
   "business-trip-v2": "Komandirovka 2",
-  "news": "Yangiliklar"
+  "news": "Yangiliklar",
+  "save-news-as-draft": "Maʼlumotlarni qoralama sifatida saqlamoqchimisiz?"
+  
 }

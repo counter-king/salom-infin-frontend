@@ -29,6 +29,8 @@ const loading = ref(false)
 const dialogisPreviewOpen = ref(false) 
 const dialogDeleteOpen = ref(false)
 const isDeleteLoading = ref(false)
+const isDraftLoading = ref(false)
+const isDraftDialogVisible = ref(false)
 
 const createFormRef = ref(null)
 // methods
@@ -105,7 +107,13 @@ const fetchOneNews = async() => {
 }
 
 const handleNewsDraft = async() => {
-  await createFormRef.value?.onSubmitForm(true)
+  isDraftLoading.value = true
+  try{
+    await createFormRef.value?.onSubmitForm(true)
+  } finally{
+    isDraftDialogVisible.value = false
+    isDraftLoading.value = false
+  }
 }
 
 onMounted(() => {
@@ -133,7 +141,7 @@ onMounted(() => {
                     @click="handleDeleteDialog"
                     button-class="!px-4 !py-3 text-xs rounded-[120px] border-critic-500 bg-critic-500" :label="t('delete')"
                   />
-                  <base-button @click="handleNewsDraft" color="text-primary" outlined shadow button-class="!px-4 !py-3 text-xs rounded-[120px]" :label="t('draft')"/>
+                  <base-button @click="isDraftDialogVisible = true" color="text-primary" outlined shadow button-class="!px-4 !py-3 text-xs rounded-[120px]" :label="t('draft')"/>
                   <base-button @click="handleOpenDialogPreview" button-class="!px-4 !py-3 text-xs rounded-[120px]" :label="t('preview-news')"/>
                 </div>
                 </template>
@@ -174,7 +182,35 @@ onMounted(() => {
             color="border-critic-500 bg-critic-500 text-white"
             @click="handleDeleteNews"
           />
-    </template>
+         </template>
+    </base-dialog>
+    <base-dialog
+      :label="t('draft')"
+       maxWidth="!w-[450px]"
+       v-model="isDraftDialogVisible"
+      >
+        <template #content>
+          <div class="text-xl font-semibold text-primary-500">
+            {{ t("save-news-as-draft") }}
+          </div>
+        </template>
+        <template #footer>
+          <base-button
+            label="cancel"
+            rounded
+            color="text-primary-900"
+            border-color="border-transparent"
+            outlined
+            @click="isDraftDialogVisible = false"
+          />
+          <base-button
+            :loading="isDraftLoading"
+            label="draft"
+            rounded
+            color="border-primary-500 bg-primary-500 text-white"
+            @click="handleNewsDraft"
+          />
+        </template>
     </base-dialog>
   </div>
 </template>
