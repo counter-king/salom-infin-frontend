@@ -246,14 +246,14 @@ export const useSDStore = defineStore("sd-stores", {
             documentType: COMPOSE_DOCUMENT_TYPES.NOTICE,
             documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.ORDINARY_NOTICE
           },
-          {
-            label: 'business-trip',
-            type: 'submenu',
-            hasRouterLink: true,
-            routerLinkName: ROUTE_SD_CREATE,
-            documentType: COMPOSE_DOCUMENT_TYPES.NOTICE,
-            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP
-          },
+          // {
+          //   label: 'business-trip',
+          //   type: 'submenu',
+          //   hasRouterLink: true,
+          //   routerLinkName: ROUTE_SD_CREATE,
+          //   documentType: COMPOSE_DOCUMENT_TYPES.NOTICE,
+          //   documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP
+          // },
           {
             label: 'business-trip-v2',
             type: 'submenu',
