@@ -69,7 +69,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <action-toolbar title="News">
+  <action-toolbar title="news">
     <template #title-after>
       <div class="flex gap-3">
         <template v-for="item in newsMenuItems" :key="item.link">

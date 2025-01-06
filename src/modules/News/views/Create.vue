@@ -8,13 +8,15 @@ import CreateForm from '../components/create/Form/NewForm.vue';
 import TheFooter from '@/components/TheFooter.vue';
 import BaseButton from '@/components/UI/BaseButton.vue';
 import DialogPreview from '../components/create/DialogPreview.vue';
+import BaseDialog from '@/components/UI/BaseDialog.vue';
 
 const { t } = useI18n()
 const createFormRef = ref(null)
 
 // reactive
 const dialogisPreviewOpen = ref(false) 
-
+const isDraftLoading = ref(false)
+const isDraftDialogVisible = ref(false)
 // methods
 const onSubmitForm = () => {
   return createFormRef.value?.onSubmitForm()
@@ -32,7 +34,13 @@ const handleOpenDialogPreview = async () => {
 }
 
 const handleNewsDraft = async() => {
-  await createFormRef.value?.onSubmitForm(true)
+  isDraftLoading.value = true
+  try{
+    await createFormRef.value?.onSubmitForm(true)
+  } finally{
+    isDraftDialogVisible.value = false
+    isDraftLoading.value = false
+  }
 }
 
 </script>
@@ -47,7 +55,7 @@ const handleNewsDraft = async() => {
           <create-form ref="createFormRef">
             <template #footer>
               <div class="flex gap-2 justify-end">
-                <base-button @click="handleNewsDraft" color="text-primary" outlined shadow button-class="!px-4 !py-3 text-xs rounded-[120px]" :label="t('draft')"/>
+                <base-button @click="isDraftDialogVisible = true" color="text-primary" outlined shadow button-class="!px-4 !py-3 text-xs rounded-[120px]" :label="t('draft')"/>
                 <base-button @click="handleOpenDialogPreview" button-class="!px-4 !py-3 text-xs rounded-[120px]" :label="t('preview-news')"/>
               </div>
             </template>
@@ -59,6 +67,34 @@ const handleNewsDraft = async() => {
       <the-footer/>
     </div>
     <dialog-preview v-model="dialogisPreviewOpen" :onSubmitForm="onSubmitForm"/>
+    <base-dialog
+      :label="t('draft')"
+       maxWidth="!w-[450px]"
+       v-model="isDraftDialogVisible"
+      >
+        <template #content>
+          <div class="text-xl font-semibold text-primary-500">
+            {{ t("save-news-as-draft") }}
+          </div>
+        </template>
+        <template #footer>
+          <base-button
+            label="cancel"
+            rounded
+            color="text-primary-900"
+            border-color="border-transparent"
+            outlined
+            @click="isDraftDialogVisible = false"
+          />
+          <base-button
+            :loading="isDraftLoading"
+            label="draft"
+            rounded
+            color="border-primary-500 bg-primary-500 text-white"
+            @click="handleNewsDraft"
+          />
+        </template>
+    </base-dialog>
   </div>
 </template>
 
