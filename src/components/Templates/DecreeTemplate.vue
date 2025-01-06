@@ -11,7 +11,7 @@ import { useAuthStore } from "@/modules/Auth/stores"
 import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store"
 // Components
 import QrcodeVue from "qrcode.vue"
-import { BaseHeaderTemplate, BasePerformer } from "@/components/Templates/components"
+import { BaseBusinessTripTables, BaseHeaderTemplate, BasePerformer } from "@/components/Templates/components"
 
 const props = defineProps({
   composeModel: {
@@ -62,14 +62,48 @@ const signers = computed(() => {
     <div v-if="SDStore.historyShow" class="text-justify" v-html="SDStore.historyContent"></div>
     <div v-else class="text-justify" v-html="props.composeModel?.content"></div>
 
+    <template v-if="composeModel.notices?.length && composeModel.trip_plans?.length && composeModel.bookings?.length">
+      <base-business-trip-tables :compose-model="composeModel" :preview="false" />
+
+      <div class="indent-8 mt-2 text-sm text-justify">
+        <div>
+          Xizmat safarida bo‘lgan xodimga u yuborilgan Bank tarmog‘i/tashkilotdagi ish vaqti rejimi va dam olish vaqtlari tadbiq etilsin.
+        </div>
+
+        <div>
+          Xizmat safariga yuborilgan xodim safardan qaytgandan so‘ng 3 ish kuni ichida xizmat safari natijalari to‘g‘risida xisobot topshirsin.
+        </div>
+
+        <div>
+          Buxgalteriya hisobi va moliyaviy menejment departamenti tomonidan xizmat safari bilan bog‘liq xarajatlar uchun to‘lovlar belgilangan tartibda amalga oshirilsin.
+        </div>
+
+        <div v-if="composeModel?.trip_notice_register_number">
+          <span class="font-semibold">Asos: </span>{{ composeModel?.trip_notice_register_number }}-sonli bildirishnnoma;
+        </div>
+
+        <div>
+          “O‘zsanoatqurilishbank” ATB xodimlarini xizmat safariga yuborish to‘g‘risidagi Tartib;
+        </div>
+
+        <div>
+          O‘zR MKning 287-moddasi;
+        </div>
+
+        <div>
+          Vazirlar Mahkamasining 2022-yil 2-avgustdagi “O‘zbekiston Respublikasi hududida xizmat safarlari to‘g‘risidagi” 424-sonli Nizom.
+        </div>
+      </div>
+    </template>
+
     <div class="mt-6 pb-2 px-4">
       <template v-for="item in curators" :key="item.id">
         <base-row class="mb-2 items-center">
-          <base-col col-class="w-1/2">
+          <base-col col-class="w-1/3">
             <span class="text-sm font-semibold block">{{ item.user ? item.user.position.name : item.position.name }}</span>
           </base-col>
 
-          <base-col col-class="w-1/4">
+          <base-col col-class="w-1/3">
             <qrcode-vue
               v-if="item.is_signed"
               :value="'Work Zone'"
@@ -79,7 +113,7 @@ const signers = computed(() => {
             />
           </base-col>
 
-          <base-col col-class="w-1/4">
+          <base-col col-class="w-1/3">
             <span class="text-sm font-semibold block">{{ formatUserFullName(item) }}</span>
           </base-col>
         </base-row>

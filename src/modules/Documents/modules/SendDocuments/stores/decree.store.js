@@ -49,8 +49,16 @@ export const useDecreeStore = defineStore("decree-store", {
   }),
   actions: {
     async actionCreateDocument(body) {
+
+      const requestBody = { ...body }
+
+      // Remove keys from the copied object
+      delete requestBody.bookings
+      delete requestBody.notices
+      delete requestBody.trip_plans
+
       this.buttonLoading = true
-      const {response, error} = await withAsync(fetchCreateDocument, body)
+      const {response, error} = await withAsync(fetchCreateDocument, requestBody)
       if (response) {
         this.buttonLoading = false
         return Promise.resolve(response)
@@ -61,18 +69,26 @@ export const useDecreeStore = defineStore("decree-store", {
     },
     /** **/
     async actionUpdateDocument({id, body}) {
+
+      const requestBody = { ...body }
+
+      // Remove keys from the copied object
+      delete requestBody.bookings
+      delete requestBody.notices
+      delete requestBody.trip_plans
+
       try {
         this.buttonLoading = true;
-        const {data} = await fetchUpdateDocument({id, body});
-        return Promise.resolve(data);
+        const {data} = await fetchUpdateDocument({id, body: requestBody})
+        return Promise.resolve(data)
       } catch (err) {
 
       } finally {
-        this.buttonLoading = false;
+        this.buttonLoading = false
       }
     },
     /** **/
-    async actionGetDocumentDetailForUpdate(id) {
+    async actionGetDocumentDetailForUpdate(id, composeId) {
       try {
         this.detailLoading = true
         const {data} = await fetchGetDocumentDetail(id)

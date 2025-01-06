@@ -5,7 +5,7 @@ import {useVuelidate} from "@vuelidate/core"
 import {useRoute, useRouter} from "vue-router"
 import {useI18n} from "vue-i18n"
 // Enums
-import { FORM_TYPE_CREATE } from "@/constants/constants"
+import { FORM_TYPE_CREATE, FORM_TYPE_UPDATE } from "@/constants/constants"
 import {ROUTE_SD_DETAIL, ROUTE_SD_LIST} from "@/modules/Documents/modules/SendDocuments/constants"
 import {COLOR_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL} from "@/enums"
 // Components
@@ -24,6 +24,7 @@ import { useCountStore } from '@/stores/count.store'
 import {useAuthStore} from "@/modules/Auth/stores"
 import {useCommonStore} from "@/stores/common"
 import {useDecreeStore} from "@/modules/Documents/modules/SendDocuments/stores/decree.store"
+import { useSDStore } from "@/modules/Documents/modules/SendDocuments/stores/index.store";
 
 const props = defineProps({
   formType: {
@@ -40,8 +41,11 @@ const countStore = useCountStore()
 const commonStore = useCommonStore()
 const dialog = ref(false)
 const decreeStore = useDecreeStore()
-
+const SDStore = useSDStore()
 const $v = useVuelidate(decreeStore.rules, decreeStore.model)
+
+// Computed
+
 
 // Methods
 const preview = async () => {
@@ -116,10 +120,23 @@ const manage = () => {
     update()
   }
 }
+const init = async (composeId) => {
+  const { data } =  await SDStore.actionGetDocumentDetail(composeId)
+  decreeStore.model.notices = data?.notices
+  decreeStore.model.trip_plans = data?.trip_plans
+  decreeStore.model.bookings = data?.bookings
+  decreeStore.model.short_description = data?.short_description
+  decreeStore.model.trip_notice_register_number = data?.register_number
+}
 // Hooks
 onBeforeMount( async () => {
-  if (route.params.id) {
-    await decreeStore.actionGetDocumentDetailForUpdate(route.params.id)
+  if (props.formType === FORM_TYPE_CREATE && route.query.compose_id) {
+    await init(route.query.compose_id)
+  } else if (props.formType === FORM_TYPE_UPDATE && route.query.trip_notice_id && route.params.id) {
+    await decreeStore.actionGetDocumentDetailForUpdate(route.params.id, null)
+    await init(route.query.trip_notice_id)
+  } else if (props.formType === FORM_TYPE_UPDATE &&  route.params.id) {
+    await decreeStore.actionGetDocumentDetailForUpdate(route.params.id, null)
   }
 })
 onUnmounted(() => {

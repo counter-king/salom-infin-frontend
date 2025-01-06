@@ -127,7 +127,7 @@ export const useBoxesSignStore = defineStore("sign-stores", {
           let { data } = await fetchGetTree(response.data?.compose?.registered_document)
           this.tree = data
         }
-        if (response?.data?.compose?.document_sub_type?.id === Number(COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL) && response.data.compose.trip_notice_id) {
+        if (response?.data?.compose?.document_sub_type?.id === Number(COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_V2) && response.data.compose.trip_notice_id) {
           useSDStore().actionGetDocumentDetailForCustomUse(response.data.compose.trip_notice_id)
             .then(res => {
               this.detailModel = {
@@ -135,7 +135,9 @@ export const useBoxesSignStore = defineStore("sign-stores", {
                 compose: {
                   ...response.data.compose,
                   notices: res.data.notices,
-                  trip_notice_register_number: res?.data?.register_number
+                  trip_notice_register_number: res?.data?.register_number,
+                  bookings: res?.data?.bookings,
+                  trip_plans: res?.data?.trip_plans
                 }
               }
             })

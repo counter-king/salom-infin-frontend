@@ -28,7 +28,7 @@ const title = computed(() => {
 })
 
 const fillOnMount = computed(() => {
-  return route.params?.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL
+  return route.params?.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_V2
 })
 
 // Methods
@@ -56,7 +56,9 @@ onBeforeMount(async () => {
         SDStore.detailModel = {
           ...response.data,
           notices: data.notices,
-          trip_notice_register_number: data?.register_number
+          trip_notice_register_number: data?.register_number,
+          bookings: data?.bookings,
+          trip_plans: data?.trip_plans
         }
       } catch (err) {
 

@@ -3,7 +3,7 @@ import {
   BY_CAR,
   BY_PLANE,
   BY_TRAIN,
-  ECONOMY_CLASS, FIRST_CLASS, SEAT_CLASS, SLEEPER_CLASS
+  ECONOMY_CLASS, FIRST_CLASS, MULTI_CITY, ONE_WAY, ROUND_TRIP, SEAT_CLASS, SLEEPER_CLASS
 } from "@/modules/Documents/modules/SendDocuments/constants"
 import { formatDate } from "@/utils/formatDate";
 import dayjs from "dayjs";
@@ -23,6 +23,18 @@ export const returnBTRoute = (route) => {
       return 'Taksi'
     default:
       return 'Samolyot'
+  }
+}
+export const returnBTRouteType = (type) => {
+  switch (type) {
+    case ROUND_TRIP:
+      return 'Borish-kelish'
+    case MULTI_CITY:
+      return 'Ko\'p shaharli'
+    case ONE_WAY:
+      return 'Bir tomonlama'
+    default:
+      return 'Borish-kelish'
   }
 }
 export const returnBTClass = (className) => {
