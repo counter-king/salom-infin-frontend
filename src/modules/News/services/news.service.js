@@ -24,12 +24,12 @@ export const fetchGetNewsList = (params) => {
 
 // update news
 export const fetchUpdateMyNews = (id, params) => {
-    return axiosConfig.put(`${URLS.myNews}/${id}`, params)
+    return axiosConfig.put(`${URLS.myNews}/${id}/`, params)
 }
 
 // get one news
 export const fetchGetNews = (id) => {
-    return axiosConfig.get(`${URLS.news}/${id}`)
+    return axiosConfig.get(`${URLS.news}/${id}/`)
 }
 
 // get news list for moderation
@@ -37,7 +37,7 @@ export const fetchGetModerationNewsList = (params) => {
     return axiosConfig.get(`${URLS.newsPending}/`, { page:1, page_size: 15, ...params })
 }
 
-// get my news list 
+// get my news list
 export const fetchGetMyNewsList = (params) => {
     return axiosConfig.get(`${URLS.myNews}/`, { page:1, page_size: 15, ...params })
 }
@@ -59,7 +59,7 @@ export const fetchGetPendingNews = (id)=>{
 
 // get pending news one
 export const fetchModerationApproveNews = (id, body)=>{
-    return axiosConfig.put(`${URLS.newsPending}/${id}/${URLS.approve}`, body)
+    return axiosConfig.put(`${URLS.newsPending}/${id}/${URLS.approve}/`, body)
 }
 
 // get news-catefory
@@ -77,7 +77,7 @@ export const fetchCreateNewsTags = (params) => {
     return axiosConfig.post(`${URLS.newsTags}/`, params)
 }
 
-// news-like-create 
+// news-like-create
 export const fetchCreateNewsLike = (params) => {
     return axiosConfig.post(`${URLS.newsLikes}/`, params)
 }
