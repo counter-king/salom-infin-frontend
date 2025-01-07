@@ -19,12 +19,18 @@ const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
+
 // Reactive
-const searchQuery = ref(route.query.search || null)
+const searchQuery = computed({
+  get:() => route.query.search || undefined,
+  set:(value) =>{
+    router.replace({ query: value ? {...router.currentRoute.value.query, search: value } : {...router.currentRoute.value.query, search: undefined} })
+  }
+})
+
 const tagPramId = computed(() => route.query.tag || undefined)
 const isUserModerator = computed(() => authStore.currentUser.roles.some(role => role.name === 'moderator'))
 const rules = ref([])
-
 
 const activeMenu = computed({
   get: () => ( route.query.activeMenu || !tagPramId.value && 'all-news'),
@@ -33,6 +39,7 @@ const activeMenu = computed({
   }
 })
 
+
 //watch
 watch(searchQuery, (newValue) => {
   // if newValue is empty, if work
@@ -40,7 +47,7 @@ watch(searchQuery, (newValue) => {
     const { search, ...rest } = router.currentRoute.value.query
     router.replace({ query: rest })
   } else {
-    router.replace({ query: { search: newValue } })
+    router.replace({ query: {...router.currentRoute.value.query, search: newValue } })
   }
 })
 

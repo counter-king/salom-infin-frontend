@@ -24,12 +24,12 @@ export const fetchGetNewsList = (params) => {
 
 // update news
 export const fetchUpdateMyNews = (id, params) => {
-    return axiosConfig.put(`${URLS.myNews}/${id}`, params)
+    return axiosConfig.put(`${URLS.myNews}/${id}/`, params)
 }
 
 // get one news
 export const fetchGetNews = (id) => {
-    return axiosConfig.get(`${URLS.news}/${id}`)
+    return axiosConfig.get(`${URLS.news}/${id}/`)
 }
 
 // get news list for moderation
@@ -59,7 +59,7 @@ export const fetchGetPendingNews = (id)=>{
 
 // get pending news one
 export const fetchModerationApproveNews = (id, body)=>{
-    return axiosConfig.put(`${URLS.newsPending}/${id}/${URLS.approve}`, body)
+    return axiosConfig.put(`${URLS.newsPending}/${id}/${URLS.approve}/`, body)
 }
 
 // get news-catefory
