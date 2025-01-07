@@ -37,7 +37,7 @@ export const fetchGetModerationNewsList = (params) => {
     return axiosConfig.get(`${URLS.newsPending}/`, { page:1, page_size: 15, ...params })
 }
 
-// get my news list 
+// get my news list
 export const fetchGetMyNewsList = (params) => {
     return axiosConfig.get(`${URLS.myNews}/`, { page:1, page_size: 15, ...params })
 }
@@ -77,7 +77,7 @@ export const fetchCreateNewsTags = (params) => {
     return axiosConfig.post(`${URLS.newsTags}/`, params)
 }
 
-// news-like-create 
+// news-like-create
 export const fetchCreateNewsLike = (params) => {
     return axiosConfig.post(`${URLS.newsLikes}/`, params)
 }

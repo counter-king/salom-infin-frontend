@@ -149,7 +149,7 @@ defineExpose({
                 v-model="group.__tags"
                 :error="$v.__groups.$each.$response.$data[index].__tags"
                 api-url="tags"
-                :api-params="{ document_sub_type: route.params. document_sub_type}"
+                :api-params="{ document_sub_type: route.params. document_sub_type, page_size: 500}"
                 :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
                 display="chip"
                 selectable
