@@ -10,12 +10,8 @@ import { useSalaryStore } from '../../../stores/salary.store'
 import { formatNumberWithFloat } from '@/utils'
 // Composable
 const salaryStore = useSalaryStore()
-// Watch
-watch(
-  () => salaryStore.isLoggedIn,
-  async () => salaryStore.isLoggedIn && await salaryStore.getSalaryStatistic()
-)
 // Reactive
+const date = ref(new Date().getFullYear().toString())
 const options = ref({
   chart: {
     height: 275,
@@ -81,10 +77,19 @@ const options = ref({
     }
   }
 })
+// Watch
+watch(
+  () => salaryStore.isLoggedIn,
+  async () => salaryStore.isLoggedIn && await salaryStore.getSalaryStatistic()
+)
 // Methods
-const dateSelect = async (value) => {
-  const [_, __, year] = value.split('.')
-  await salaryStore.getSalaryStatistic(year)
+const dateSelect = async () => {
+  date.value = new Date(date.value).getFullYear().toString()
+  await salaryStore.getSalaryStatistic(date.value)
+}
+const clear = () => {
+  date.value = new Date().getFullYear().toString()
+  salaryStore.getSalaryStatistic()
 }
 </script>
 
@@ -94,10 +99,12 @@ const dateSelect = async (value) => {
       <export-button root-class="!bg-greyscale-50 !border !border-greyscale-70 !shadow-none" />
 
       <base-calendar-button
+        v-model="date"
         view="year"
         date-format="yyyy"
         root-class="!bg-greyscale-50 !border !border-greyscale-70 !shadow-none"
         @emit:date-select="dateSelect"
+        @emit:clear="clear"
       />
     </template>
   </action-toolbar>

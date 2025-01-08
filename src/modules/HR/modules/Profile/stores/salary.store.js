@@ -135,7 +135,7 @@ export const useSalaryStore = defineStore('salary-store', {
     /**
      *
      * */
-    async getSalaryStatistic(date = new Date().getFullYear()) {
+    async getSalaryStatistic(date = new Date().getFullYear().toString()) {
       try {
         this.statisticContentLoading = true
 

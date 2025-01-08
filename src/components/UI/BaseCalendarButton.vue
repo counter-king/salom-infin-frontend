@@ -1,12 +1,18 @@
 <script setup>
 // Core
-import { ref, unref } from 'vue'
+import { ref, unref, computed } from 'vue'
 // Components
 import { AltArrowDownLinearIcon, CalendarIcon, CloseCircleBoldIcon } from '@/components/Icons'
-// Utils
-import { formatDate } from '@/utils/formatDate'
+import BaseOverlayPanel from "@/components/UI/BaseOverlayPanel.vue";
 // Macros
 const props = defineProps({
+  modelValue: {
+    type: [String, Number, Date],
+    default: ""
+  },
+  parsedText: {
+    type: String
+  },
   view: {
     type: String,
     default: 'date',
@@ -22,26 +28,37 @@ const props = defineProps({
     type: String
   }
 })
-const emit = defineEmits(['emit:date-select', 'emit:date-clear'])
+const emit = defineEmits(['update:modelValue', 'emit:date-select', 'emit:clear'])
 // Reactive
 const panelRef = ref(null)
 const date = ref(null)
 const dispatchEvent = ref(null)
+// Computed
+const modelValue = computed({
+  get() {
+    return props.modelValue
+  },
+  set(value) {
+    if (value) {
+      emit('update:modelValue', value)
+    } else {
+      emit('emit:clear')
+    }
+  }
+})
 // Methods
 const toggle = (event) => {
   const _panelRef = unref(panelRef)
   _panelRef.opRef.toggle(event)
   dispatchEvent.value = event
 }
-const dateSelect = (value) => {
-  date.value = formatDate(value)
+const dateSelect = () => {
   toggle(dispatchEvent.value)
-  emit('emit:date-select', date.value)
+  emit('emit:date-select')
 }
 const clear = (event) => {
   event.stopImmediatePropagation()
-  date.value = null
-  emit('emit:date-select', formatDate(new Date()))
+  emit('emit:clear')
 }
 </script>
 
@@ -53,9 +70,9 @@ const clear = (event) => {
   >
     <base-iconify :icon="CalendarIcon" class="text-greyscale-500 mr-2" />
 
-    <span>{{ date ?? 'Дата' }}</span>
+    <span>{{ parsedText ?? modelValue }}</span>
 
-    <template v-if="!date">
+    <template v-if="!modelValue">
       <base-iconify :icon="AltArrowDownLinearIcon" class="text-greyscale-500 ml-1" />
     </template>
 
@@ -74,6 +91,7 @@ const clear = (event) => {
     no-angle
   >
     <base-calendar
+      v-model="modelValue"
       inline
       :view="props.view"
       :date-format="props.dateFormat"

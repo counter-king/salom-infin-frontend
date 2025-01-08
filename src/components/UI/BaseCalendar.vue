@@ -10,7 +10,7 @@ const { t } = useI18n()
 // Macros
 const props = defineProps({
   modelValue: {
-    type: [String, Date],
+    type: [String, Number, Date],
     default: ""
   },
   inline: {

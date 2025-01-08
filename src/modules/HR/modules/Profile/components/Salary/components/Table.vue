@@ -1,24 +1,38 @@
 <script setup>
 // Core
-import { watch } from 'vue'
+import { ref, watch } from 'vue'
 // Components
 import { ActionToolbar, ExportButton } from '@/components/Actions'
 import Empty from '@/components/Empty.vue'
 // Stores
 import { useSalaryStore } from '../../../stores/salary.store'
 // Utils
+import { firstLetterCapitalize } from '@/utils'
 import { numberFormat } from '@/utils/formatIntl'
+import { formatDateMonth } from '@/utils/formatDate'
 // Composable
 const salaryStore = useSalaryStore()
+// Reactive
+const date = ref(firstLetterCapitalize(formatDateMonth(new Date())))
+const year = ref()
+const monthName = ref()
 // Watch
 watch(
   () => salaryStore.isLoggedIn,
   async () => salaryStore.isLoggedIn && await salaryStore.getSalary()
 )
 // Methods
-const dateSelect = async (value) => {
-  const [_, month, year] = value.split('.')
-  await salaryStore.getSalary(new Date(year, month - 1, 1))
+const dateSelect = async () => {
+  monthName.value = firstLetterCapitalize(formatDateMonth(date.value))
+  year.value = new Date(date.value).getFullYear().toString()
+  date.value = new Date(date.value).getMonth().toString()
+
+  await salaryStore.getSalary(new Date(year.value, date.value, 1))
+}
+const clear = () => {
+  date.value = formatDateMonth(new Date())
+  monthName.value = firstLetterCapitalize(date.value)
+  salaryStore.getSalary()
 }
 </script>
 
@@ -28,10 +42,13 @@ const dateSelect = async (value) => {
       <export-button root-class="!bg-greyscale-50 !border !border-greyscale-70 !shadow-none" />
 
       <base-calendar-button
+        v-model="date"
+        :parsed-text="monthName"
         view="month"
-        date-format="dd-mm-yyyy"
-        @emit:date-select="dateSelect"
+        date-format="mm"
         root-class="!bg-greyscale-50 !border !border-greyscale-70 !shadow-none"
+        @emit:date-select="dateSelect"
+        @emit:clear="clear"
       />
     </template>
   </action-toolbar>
