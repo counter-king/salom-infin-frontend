@@ -3,6 +3,7 @@
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Pagination, Autoplay, Navigation } from 'swiper/modules'
 import { useI18n } from 'vue-i18n';
+import { ref } from 'vue';
 // Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/pagination'
@@ -18,8 +19,16 @@ const props = defineProps({
     required: true
   }
 })
-
 const modules = [Pagination, Autoplay,Navigation]
+// reactive
+const activeIndex = ref(0);
+const isGalleriaVisible = ref(false);
+
+// methods
+const handleImageClick = (index) => {
+    activeIndex.value = index;
+    isGalleriaVisible.value = true;
+};
 </script>
 
 <template>
@@ -40,6 +49,7 @@ const modules = [Pagination, Autoplay,Navigation]
                 class="w-full h-full rounded-2x relative"
               >
                 <div 
+                  @click="handleImageClick(index)"
                   class="rounded-lg overflow-hidden aspect-ratio-box relative" 
                   :style="{ '--dynamic-src': `url(${item.url})` }"
                 >
@@ -62,6 +72,20 @@ const modules = [Pagination, Autoplay,Navigation]
           </div>
         </template>
     </div>
+  </div>
+  <div class="galerry flex justify-center">
+    <Galleria v-model:activeIndex="activeIndex" v-model:visible="isGalleriaVisible" :value="props.images"
+        containerStyle="max-width: 850px" :circular="true" :fullScreen="true" :showItemNavigators="true" :showThumbnails="false">
+        <template #item="slotProps">
+          <div class="h-[500px] rounded-xl overflow-hidden">
+            <img
+              :src="slotProps.item.url"
+              :alt="slotProps.item.alt"
+              class="w-full h-full object-contain"
+            />
+          </div>
+        </template>
+    </Galleria>
   </div>
 </template>
 

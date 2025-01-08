@@ -32,7 +32,11 @@ const showSidebarFilter = computed(() =>
 
 const queryParams = computed(() => ({
   tag: route.query.tag,
-  category: route.query.category || [],
+  category:  Array.isArray(route.query.category)
+    ? route.query.category.map(Number)
+    : route.query.category
+    ? [Number(route.query.category)]
+    : [],
   start_date: route.query.startDate,
   end_date: route.query.endDate,
   ordering: route.query.ordering,
@@ -54,7 +58,7 @@ const fetchNewsList = async (currentPage, resetList = false) => {
     const { data } = await fetchGetNewsList({ 
       page: currentPage, 
       search: debouncedSearchQuery.value,
-      ...queryParams.value, categories: queryParams.value?.category?.join(',')
+      ...queryParams.value, category: undefined, categories: !!queryParams.value.category?.length ? queryParams.value?.category?.join(',') : undefined
     })
     next.value = data.next
     if (resetList) {
@@ -82,9 +86,26 @@ const handleScroll = (event) => {
   }
 }
 
+// methods
+function arraysEqual(arr1, arr2) {
+  if (arr1.length !== arr2.length) return false;
+  return arr1.every((val, index) => val === arr2[index]);
+}
+
+// category is arraay, so every time is empty [] but, its reference is different, so value is changed every time, to avoid this, we use deep watch this 
+watch(() => queryParams.value.category, async(newValue, oldValue) => {
+  if(Array.isArray(newValue) && Array.isArray(oldValue) && !arraysEqual(newValue, oldValue)) {
+    await fetchNewsList(1, true)
+  }
+  // when one is array and second is undefined or null, this work 
+  else if(Array.isArray(newValue) && !oldValue){
+    await fetchNewsList(1, true)
+  }
+  isFilterApplied.value = Object.values(queryParams.value).some(Boolean) || !!debouncedSearchQuery.value && !!newsList.value.length
+})
+
 watch(
   [
-  () => queryParams.value.category,
   () => queryParams.value.end_date,
   () => queryParams.value.start_date,
   () => queryParams.value.ordering,
@@ -92,9 +113,8 @@ watch(
   debouncedSearchQuery
 ],
   () => {
-    isFilterApplied.value = Object.values(queryParams.value).some(Boolean) || !!debouncedSearchQuery.value && !!newsList.value.length
-    newsList.value = []
     fetchNewsList(1, true)
+    isFilterApplied.value = Object.values(queryParams.value).some(Boolean) || !!debouncedSearchQuery.value && !!newsList.value.length
   },
 )
 

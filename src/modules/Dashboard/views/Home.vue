@@ -6,11 +6,11 @@ import TheFooter from '@/components/TheFooter.vue'
 import {
   WidgetDocFlow,
   WidgetBirthday,
-  WidgetTasks,
   WidgetContacts,
   WidgetApplications,
   WidgetSlider,
-  WidgetSurvey
+  WidgetSurvey,
+  WidgetNewsList
 } from '../components/widgets'
 import { onMounted } from "vue";
 import axios from "axios";
@@ -34,7 +34,7 @@ onMounted(() => {
           <widget-doc-flow class="h-[272px] mb-5" />
 
           <div class="flex flex-1 gap-5 overflow-y-auto">
-            <widget-tasks class="flex-1" />
+            <widget-news-list class="flex-1" />
 
             <widget-contacts class="w-[356px]" />
           </div>
