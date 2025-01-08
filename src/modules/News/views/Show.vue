@@ -157,9 +157,7 @@ onMounted( async () => {
 <template>
   <div class="w-full p-10 pt-5 pb-2 overflow-y-auto">
     <div class="back-button">
-        <back-button 
-        :self="true" 
-        @click="router.push({name:'NewsList'})"/>
+        <back-button />
     </div>
     <template v-if="loading">
         <base-spinner/>
