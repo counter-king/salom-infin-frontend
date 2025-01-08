@@ -6,6 +6,7 @@ import { onMounted, ref } from 'vue';
 import WidgetWrapper from '../WidgetWrapper.vue'
 import NewsCard from '../NewsCard.vue';
 import { AltArrowLeftIcon } from '@/components/Icons';
+import Empty from '@/components/Empty.vue';
 // Services
 import { fetchGetNewsList } from '@/modules/News/services/news.service';
 // Utils
@@ -41,11 +42,22 @@ onMounted(() => {
     <template #content>
       <div class="bg-greyscale-50 h-[calc(100%-32px)] p-3 rounded-xl">
         <div class="flex flex-col gap-2 h-full pr-2 pb-2 overflow-y-auto">
+          <template v-if="loading">
+            <base-spinner />  
+          </template>
+          <template v-else-if="!newsList.length">
+            <empty 
+              title="there-is-no-news-data"
+              label-classes="text-greyscale-800 !text-base font-semibold"
+              wrapper-class="w-full h-full shadow-none"
+            />
+          </template>
           <template v-for="item in newsList" :key="item.id">
             <RouterLink :to="{ name: 'NewsShow', params: {id: item.id}}" class="w-full !h-fit">
               <NewsCard :item="item" />
             </RouterLink>
           </template>
+          
         </div>
       </div>
       <router-link :to="{name: 'NewsList'}" class="flex items-center justify-center gap-1 h-6 text-sm mt-2">
@@ -62,6 +74,3 @@ onMounted(() => {
   </widget-wrapper>
 </template>
 
-<style scoped>
-
-</style>
