@@ -112,6 +112,10 @@ export const formatNumberWithFloat = (number) => {
  * @param { string } number номер телефона
  * */
 export const maskNumbers = (number) => number.replace(/\D/g, '').replace( /(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})/, '$1 $2 *** ** $5' )
+/**
+ * Сделает первую букву заглавный
+ * */
+export const firstLetterCapitalize = (value) => value.charAt(0).toUpperCase() + value.slice(1)
 /*
 *
 * */

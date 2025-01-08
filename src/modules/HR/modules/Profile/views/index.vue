@@ -57,14 +57,14 @@ const headerTabItems = ref([
     component: 'Salary',
     count: null
   },
-  {
-    label: 'my-team',
-    name: 'MyTeam',
-    icon: UsersGroupRoundedIcon,
-    slot: 'my-team',
-    component: 'MyTeam',
-    count: null
-  },
+  // {
+  //   label: 'my-team',
+  //   name: 'MyTeam',
+  //   icon: UsersGroupRoundedIcon,
+  //   slot: 'my-team',
+  //   component: 'MyTeam',
+  //   count: null
+  // },
   {
     label: 'my-devices',
     name: 'Equipments',
