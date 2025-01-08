@@ -25,9 +25,10 @@ const loadingMore = ref(false)
 const page = ref(1)
 const next = ref(false)
 const isFilterApplied = ref(false)
+const newsDataExist = ref(false)
 
 const showSidebarFilter = computed(() =>
-  newsList.value.length > 0 || isFilterApplied.value 
+  newsDataExist.value || isFilterApplied.value
 )
 
 const queryParams = computed(() => ({
@@ -96,13 +97,22 @@ function arraysEqual(arr1, arr2) {
 watch(() => queryParams.value.category, async(newValue, oldValue) => {
   if(Array.isArray(newValue) && Array.isArray(oldValue) && !arraysEqual(newValue, oldValue)) {
     await fetchNewsList(1, true)
+    isFilterApplied.value = true
   }
   // when one is array and second is undefined or null, this work 
   else if(Array.isArray(newValue) && !oldValue){
     await fetchNewsList(1, true)
+    isFilterApplied.value = true
+
   }
-  isFilterApplied.value = Object.values(queryParams.value).some(Boolean) || !!debouncedSearchQuery.value && !!newsList.value.length
 })
+
+watch(
+  ()=>debouncedSearchQuery.value,
+  async () => {
+    await fetchNewsList(1, true)
+  },
+)
 
 watch(
   [
@@ -110,11 +120,10 @@ watch(
   () => queryParams.value.start_date,
   () => queryParams.value.ordering,
   () => queryParams.value.tag,
-  debouncedSearchQuery
 ],
-  () => {
-    fetchNewsList(1, true)
-    isFilterApplied.value = Object.values(queryParams.value).some(Boolean) || !!debouncedSearchQuery.value && !!newsList.value.length
+  async () => {
+    await fetchNewsList(1, true)
+    isFilterApplied.value = true
   },
 )
 
@@ -122,9 +131,12 @@ watch(locale, () => {
   fetchNewsList(1, true)
 })
 
-onMounted(() => {
-  isFilterApplied.value = Object.values(queryParams.value).some(Boolean) || !!searchQuery.value && !!newsList.value.length
-  fetchNewsList(1, true)
+onMounted(async() => {
+ await fetchNewsList(1, true)
+ if(newsList.value.length > 0) {
+  newsDataExist.value = true
+ }
+ isFilterApplied.value = Object.values(queryParams.value).some((item)=> Array.isArray(item) ? !!item.length : !!item) || !!searchQuery.value && !!newsList.value.length
 })
 
 </script>
