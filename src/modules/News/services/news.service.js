@@ -7,6 +7,7 @@ const URLS = {
     newsLikes: "news-likes",
     newsComments: "news-comments",
     newsPending: "pending-news",
+    newsPendingCount:"pending-news/count",
     myNews: "my-news",
     approve:"approve"
 }
@@ -90,4 +91,9 @@ export const fetchCreateNewsComment = (params) => {
 // get news-comments-list
 export const fetchGetNewsCommentList = (params) => {
     return axiosConfig.get(`${URLS.newsComments}/`, params)
+}
+
+// get news-pending-count
+export const fetchGetNewsPendingCount = (params) => {
+    return axiosConfig.get(`${URLS.newsPendingCount}/`, params)
 }

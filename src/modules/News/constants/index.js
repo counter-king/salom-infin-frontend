@@ -84,30 +84,6 @@ export const getDateRange = (selectedRange) => {
     return {startDate, endDate}
 }
 
-export const newsMenuItems = [
-    {
-        link: "NewsList",
-        title: "all-news",
-        roles: ['user']
-    },
-    // {
-    //     link: "MySaveNewsList",
-    //     title: "my-save-news",
-    // },
-    {
-        link: "MyNewsList",
-        title: "my-posts",
-        roles: ['user']
-    },
-    {
-        link: "NewsModerationList",
-        title: "for-moderation",
-        roles: ['moderator']
-    },
-
-]
-
-
 export const getMatchFileUploadType = (content) => {
     if(allowedImageTypes.some(item => item.includes(content.type))){
       return {type: CONTENT_TYPES.FILE,  value: { ...content.file,type: content.type}, id: content.id}
