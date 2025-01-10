@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 // Components
 import TheToolbar from '@/components/Toolbar/TheToolbar.vue'
@@ -42,6 +42,9 @@ const getCurrentUser = async () => {
     getStorageItem(ACCESS) && await authStore.actionUserProfile()
   }
 }
+
+const isNewsShowPage = computed(() => router.currentRoute.value.name === 'NewsShow')
+
 </script>
 
 <template>
@@ -57,7 +60,7 @@ const getCurrentUser = async () => {
   >
 		<the-toolbar />
 
-		<div class="main-layout-content flex overflow-hidden">
+		<div class="main-layout-content flex" :class="{'overflow-auto w-full flex-col': isNewsShowPage, 'overflow-hidden': !isNewsShowPage}">
       <router-view class="bg-primary-50" />
 		</div>
 	</div>
