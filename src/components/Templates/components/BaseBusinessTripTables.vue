@@ -9,6 +9,7 @@ import {
   returnBTRouteType
 } from "@/modules/Documents/modules/SendDocuments/utils"
 import { formatDate } from "@/utils/formatDate"
+import { COMPOSE_DOCUMENT_SUB_TYPES } from "@/enums";
 
 const props = defineProps({
   composeModel: {
@@ -175,103 +176,105 @@ const bookings = computed(() => {
   </div>
   <!-- /Loop according to groups -->
 
-  <divider class="my-4 border border-greyscale-300" />
+  <template v-if="composeModel?.type !== 'decree'">
+    <divider class="my-4 border border-greyscale-300" />
 
-  <table class="business-trip-table w-full text-sm text-center">
-    <tr class="bg-greyscale-100 font-semibold">
-      <td class="w-1/3 text-start">
-        Xizmat safari rejasi:
-      </td>
-      <td class="w-1/3">
-        Reja
-      </td>
-      <td class="w-1/3">
-        Ijrochilar
-      </td>
-    </tr>
+    <table class="business-trip-table w-full text-sm text-center">
+      <tr class="bg-greyscale-100 font-semibold">
+        <td class="w-1/3 text-start">
+          Xizmat safari rejasi:
+        </td>
+        <td class="w-1/3">
+          Reja
+        </td>
+        <td class="w-1/3">
+          Ijrochilar
+        </td>
+      </tr>
 
-    <!-- Loop according to trip plans -->
-    <tr
-      v-for="(plan, index) in trip_plans"
-      :key="index"
-    >
-      <td></td>
-      <td>{{ plan?.text }}</td>
-      <td>
-        <!-- Loop according to trip plan users-->
-        <span v-for="(user, index) in plan?.users">{{ user?.full_name }}<span v-if="index < plan?.users.length - 1">,</span> <br></span>
-        <!-- /Loop according to trip plan users-->
-      </td>
-    </tr>
-    <!-- /Loop according to trip plans -->
-  </table>
-
-  <divider class="my-4 border border-greyscale-300" />
-
-  <table class="booking-table w-full text-sm text-center">
-    <tr class="bg-greyscale-100 font-semibold">
-      <td>
-        Marshrut
-      </td>
-      <td>
-        Transport
-      </td>
-      <td>
-        Qayerdan
-      </td>
-      <td>
-        Qayerga
-      </td>
-      <td>
-        Klass
-      </td>
-      <td>
-        Jo'nash vaqti
-      </td>
-      <td>
-        Yo'lovchilar
-      </td>
-    </tr>
-
-    <!-- Loop according to booking segments -->
-    <template v-for="(item, bookingIndex) in bookings">
-      <tr>
-        <td :rowspan="item.segments.length" class="w-[80px]">{{ returnBTRouteType(item?.type) }}</td>
-        <td :rowspan="item.segments.length">{{ returnBTRoute(item?.route) }}</td>
+      <!-- Loop according to trip plans -->
+      <tr
+        v-for="(plan, index) in trip_plans"
+        :key="index"
+      >
+        <td></td>
+        <td>{{ plan?.text }}</td>
         <td>
-          {{ item.segments[0]?.departure_city?.name }}
+          <!-- Loop according to trip plan users-->
+          <span v-for="(user, index) in plan?.users">{{ user?.full_name }}<span v-if="index < plan?.users.length - 1">,</span> <br></span>
+          <!-- /Loop according to trip plan users-->
+        </td>
+      </tr>
+      <!-- /Loop according to trip plans -->
+    </table>
+
+    <divider class="my-4 border border-greyscale-300" />
+
+    <table class="booking-table w-full text-sm text-center">
+      <tr class="bg-greyscale-100 font-semibold">
+        <td>
+          Marshrut
         </td>
         <td>
-          {{ item.segments[0]?.arrival_city?.name }}
+          Transport
         </td>
         <td>
-          {{ returnBTClass(item.segments[0]?.segment_class) }}
+          Qayerdan
         </td>
-        <td v-html="returnBTDepartureTime(item.segments[0]?.departure_date, item.segments[0]?.departure_end_date)"></td>
-        <td :rowspan="item.segments.length">
-          <!-- Loop according to booking segment users-->
-          <span v-for="(passenger, passengerIndex) in item.passengers" :key="passengerIndex">
+        <td>
+          Qayerga
+        </td>
+        <td>
+          Klass
+        </td>
+        <td>
+          Jo'nash vaqti
+        </td>
+        <td>
+          Yo'lovchilar
+        </td>
+      </tr>
+
+      <!-- Loop according to booking segments -->
+      <template v-for="(item, bookingIndex) in bookings">
+        <tr>
+          <td :rowspan="item.segments.length" class="w-[80px]">{{ returnBTRouteType(item?.type) }}</td>
+          <td :rowspan="item.segments.length">{{ returnBTRoute(item?.route) }}</td>
+          <td>
+            {{ item.segments[0]?.departure_city?.name }}
+          </td>
+          <td>
+            {{ item.segments[0]?.arrival_city?.name }}
+          </td>
+          <td>
+            {{ returnBTClass(item.segments[0]?.segment_class) }}
+          </td>
+          <td v-html="returnBTDepartureTime(item.segments[0]?.departure_date, item.segments[0]?.departure_end_date)"></td>
+          <td :rowspan="item.segments.length">
+            <!-- Loop according to booking segment users-->
+            <span v-for="(passenger, passengerIndex) in item.passengers" :key="passengerIndex">
               {{ passenger?.user?.full_name }}<span v-if="passengerIndex < item.passengers.length - 1">,</span> <br />
             </span>
-          <!-- /Loop according to booking segment users-->
-        </td>
-      </tr>
+            <!-- /Loop according to booking segment users-->
+          </td>
+        </tr>
 
-      <tr v-for="(segment, segmentIndex) in item.segments.slice(1)" :key="`${bookingIndex}-${segmentIndex}`">
-        <td>
-          {{ segment?.departure_city?.name }}
-        </td>
-        <td>
-          {{ segment?.arrival_city?.name }}
-        </td>
-        <td>
-          {{ returnBTClass(segment?.segment_class) }}
-        </td>
-        <td v-html="returnBTDepartureTime(segment?.departure_date, segment?.departure_end_date)"></td>
-      </tr>
-    </template>
-    <!-- /Loop according to booking segments -->
-  </table>
+        <tr v-for="(segment, segmentIndex) in item.segments.slice(1)" :key="`${bookingIndex}-${segmentIndex}`">
+          <td>
+            {{ segment?.departure_city?.name }}
+          </td>
+          <td>
+            {{ segment?.arrival_city?.name }}
+          </td>
+          <td>
+            {{ returnBTClass(segment?.segment_class) }}
+          </td>
+          <td v-html="returnBTDepartureTime(segment?.departure_date, segment?.departure_end_date)"></td>
+        </tr>
+      </template>
+      <!-- /Loop according to booking segments -->
+    </table>
+  </template>
 </template>
 
 <style scoped>

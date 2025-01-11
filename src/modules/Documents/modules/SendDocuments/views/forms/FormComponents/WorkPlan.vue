@@ -46,12 +46,12 @@ const users = computed(() => {
 
 // Methods
 const stepClick = async (step) => {
-  // const valid = await $v.value.$validate()
-  // showNestedError.value = true
-  // if (!valid) {
-  //   dispatchNotify(null, t('fill-required-fields'), COLOR_TYPES.WARNING)
-  //   return
-  // }
+  const valid = await $v.value.$validate()
+  showNestedError.value = true
+  if (!valid) {
+    dispatchNotify(null, t('fill-required-fields'), COLOR_TYPES.WARNING)
+    return
+  }
 
   await store.actionStepClick(router, route, step)
 }

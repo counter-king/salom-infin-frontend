@@ -37,7 +37,7 @@ const props = defineProps({
 const showNestedError = ref(false)
 
 // Methods
-const onFileUpload = () => {
+const onFileUpload = (files) => {
   store.model.__files = []
   files.forEach(file => {
     store.model.__files.push(file)
@@ -47,12 +47,12 @@ const addGroupBlock = () => {
   store.actionAddGroupBlock()
 }
 const stepClick = async (step) => {
-  // const valid = await $v.value.$validate()
-  // showNestedError.value = true
-  // if (!valid) {
-  //   dispatchNotify(null, t('fill-required-fields'), COLOR_TYPES.WARNING)
-  //   return
-  // }
+  const valid = await $v.value.$validate()
+  showNestedError.value = true
+  if (!valid) {
+    dispatchNotify(null, t('fill-required-fields'), COLOR_TYPES.WARNING)
+    return
+  }
 
   await store.actionStepClick(router, route, step)
 }

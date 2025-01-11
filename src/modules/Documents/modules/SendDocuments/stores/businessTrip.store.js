@@ -18,7 +18,7 @@ import {
   BY_TRAIN,
   MULTI_CITY,
   ONE_WAY,
-  ROUND_TRIP,
+  ROUND_TRIP, STEPPER_DECREE,
   STEPPER_ROUTE,
   STEPPER_TRIP_INFO,
   STEPPER_WORK_PLAN, TRANSPORT_CLASS_LIST
@@ -27,7 +27,7 @@ import { nextTick } from "vue";
 import { withAsync } from "@/utils/withAsync";
 import {
   fetchCreateDocument,
-  fetchGetDocumentDetail,
+  fetchGetDocumentDetail, fetchGetLinkedDocumentsList,
   fetchUpdateDocument
 } from "@/modules/Documents/modules/SendDocuments/services/index.service";
 import {
@@ -75,6 +75,15 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
       __approvers: [],
       __signers: [],
       __files: []
+    },
+    decreeModel: {
+      content: null,
+      __files: []
+    },
+    decreeRules: {
+      content: {
+        required: helpers.withMessage(`Поле не должен быть пустым`, required)
+      }
     },
     rules: {
       content: {
@@ -210,6 +219,13 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
         icon: Routing2BoldIcon,
         active: false,
         value: STEPPER_ROUTE
+      },
+      {
+        id: 4,
+        label: 'decree',
+        icon: DocumentTextBoldIcon,
+        active: true,
+        value: STEPPER_DECREE
       }
     ],
     routeTabItems: [
@@ -284,6 +300,8 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
       try {
         this.detailLoading = true
         const { data } = await fetchGetDocumentDetail(id)
+        const res = await fetchGetLinkedDocumentsList(data.id)
+        this.decreeModel = res?.data?.to_composes[0]?.from_compose
         setValuesToKeys(this.model, data)
         this.model.__curator = await adjustTopSignerObjectToArray([], data.curator.id, false)
         this.model.__signers =  await adjustUserObjectToArray(data.signers)
@@ -515,6 +533,11 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
             passengers: null
           }
         ]
+      }
+
+      this.decreeModel = {
+        content: null,
+          __files: []
       }
     }
   }

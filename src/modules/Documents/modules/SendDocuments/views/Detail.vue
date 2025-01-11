@@ -31,6 +31,10 @@ const fillOnMount = computed(() => {
   return route.params?.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_V2
 })
 
+const updateButtonVisible = computed(() => {
+  return !SDStore.detailModel?.registered_document && route.params.document_sub_type !== COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_V2
+})
+
 // Methods
 const openUpdatePage = () => {
   router.push({
@@ -104,7 +108,7 @@ onBeforeMount(async () => {
 <!--        />-->
 
         <base-button
-          v-if="!SDStore.detailModel?.registered_document"
+          v-if="updateButtonVisible"
           color="bg-white hover:bg-greyscale-100 text-primary-dark"
           border-color="border-transparent"
           label="update"
@@ -142,7 +146,10 @@ onBeforeMount(async () => {
           class="p-4 overflow-y-auto"
           style="height: calc(100vh - 250px)"
         >
-          <div class="p-10 min-h-full shadow-block border-[0.095rem] border-greyscale-200">
+          <div
+            class="min-h-full shadow-block border-[0.095rem] border-greyscale-200"
+            :class="SDStore.detailModel.document_sub_type.id === Number(COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2) ? '' : 'p-10'"
+          >
             <base-template
               :compose-model="SDStore.detailModel"
               class="overflow-hidden"

@@ -4,6 +4,7 @@ import {fetchApprovalDetail, fetchApprovalList} from "@/modules/Documents/module
 import {fetchGetTree} from "@/modules/Documents/modules/Registration/services/docflow.service";
 import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store";
 import { COMPOSE_DOCUMENT_SUB_TYPES } from "@/enums";
+import { fetchGetLinkedDocumentsList } from "@/modules/Documents/modules/SendDocuments/services/index.service";
 
 export const useBoxesApprovalStore = defineStore("approval-stores", {
   state: () => ({
@@ -119,6 +120,7 @@ export const useBoxesApprovalStore = defineStore("approval-stores", {
     async actionGetApprovalDetail(id) {
       this.detailLoading = true;
       const response = await fetchApprovalDetail(id)
+      const decreeCompose = await fetchGetLinkedDocumentsList(response.data?.compose?.id)
       if (response.status === 200) {
         await useSDStore().actionVersionHistory(response.data?.compose?.id)
         if (response.data?.compose?.registered_document){
@@ -140,7 +142,14 @@ export const useBoxesApprovalStore = defineStore("approval-stores", {
               }
             })
         } else {
-          this.detailModel = response.data
+          this.detailModel = {
+            ...response.data,
+            compose: {
+              ...response.data.compose,
+              decree_content: decreeCompose?.data?.to_composes[0]?.from_compose?.content,
+              decree_register_number: decreeCompose?.data?.to_composes[0]?.from_compose?.register_number
+            }
+          }
         }
         setTimeout(() => {
           this.detailLoading = false
