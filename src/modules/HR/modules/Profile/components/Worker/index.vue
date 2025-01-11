@@ -1,4 +1,7 @@
 <script setup>
+// Core
+import { ref, unref, nextTick } from 'vue'
+import {onClickOutside} from "@vueuse/core";
 // Components
 import {
   UserRoundedBoldIcon,
@@ -10,80 +13,222 @@ import {
   UsersGroupTwoRoundedBoldIcon,
   BriefCase20SolidIcon,
   UserHandsBoldIcon,
-  LetterBoldIcon
+  LetterBoldIcon,
+  MapPointBoldIcon,
+  GarageBoldIcon,
+  PenIcon,
+  UnreadLinearIcon
 } from '@/components/Icons'
 // Stores
 import { useAuthStore } from '@/modules/Auth/stores'
+// Utils
+import { dispatchNotify } from '@/utils/notify'
+// Enums
+import { COLOR_TYPES } from '@/enums'
 // Composable
 const authStore = useAuthStore()
-// Non-reactive
-const items = [
+// Reactive
+const inputRef = ref(null)
+const ignoreRef = ref(null)
+const editIndex = ref(null)
+const editValue = ref(null)
+const loadingSave = ref(false)
+const items = ref([
   {
     title: 'ФИО Сотрудника',
-    description: authStore.currentUser?.full_name,
-    icon: UserRoundedBoldIcon
-  },
-  {
-    title: 'Должность',
-    description: authStore.currentUser?.position?.name,
-    icon: UserSpeakBoldIcon
-  },
-  {
-    title: 'Филиал',
-    description: authStore.currentUser?.company?.name,
-    icon: CityBoldIcon
-  },
-  {
-    title: 'IP-телефона',
-    description: authStore.currentUser?.cisco,
-    icon: CallMedicineRoundedBoldIcon
-  },
-  {
-    title: 'Департамент',
-    description: authStore.currentUser?.top_level_department?.name,
-    icon: BuildingsBoldIcon
+    description: authStore.currentUser?.full_name ?? '-',
+    icon: UserRoundedBoldIcon,
+    editable: false
   },
   {
     title: 'Табельный номер',
     description: authStore.currentUser?.table_number ?? '-',
-    icon: HashtagCircleBoldIcon
+    icon: HashtagCircleBoldIcon,
+    editable: false
+  },
+  {
+    title: 'Филиал',
+    description: authStore.currentUser?.company?.name ?? '-',
+    icon: CityBoldIcon,
+    editable: false
+  },
+  {
+    key: 'work_address',
+    title: 'Местонахождение',
+    description: authStore.currentUser?.work_address ?? '-',
+    icon: MapPointBoldIcon,
+    editable: true
+  },
+  {
+    title: 'Департамент',
+    description: authStore.currentUser?.top_level_department?.name ?? '-',
+    icon: BuildingsBoldIcon,
+    editable: false
+  },
+  {
+    key: 'floor',
+    title: 'Этаж',
+    description: authStore.currentUser?.floor ?? '-',
+    icon: GarageBoldIcon,
+    editable: true
   },
   {
     title: 'Отдел',
     description: authStore.currentUser.department?.name ?? '-',
-    icon: UsersGroupTwoRoundedBoldIcon
+    icon: UsersGroupTwoRoundedBoldIcon,
+    editable: false
   },
   {
-    title: 'Опыт работы',
-    description: authStore.currentUser.begin_work_date ?? '-',
-    icon: BriefCase20SolidIcon
+    key: 'room_number',
+    title: 'Номер комнаты',
+    description: authStore.currentUser.room_number ?? '-',
+    icon: HashtagCircleBoldIcon,
+    editable: true
   },
   {
     title: 'Управления',
     description: authStore.currentUser.parent_dept_name?.name ?? '-',
-    icon: UserHandsBoldIcon
+    icon: UserHandsBoldIcon,
+    editable: false
   },
   {
+    key: 'cisco',
+    title: 'IP-телефона',
+    description: authStore.currentUser?.cisco ?? '-',
+    icon: CallMedicineRoundedBoldIcon,
+    editable: true
+  },
+  {
+    title: 'Должность',
+    description: authStore.currentUser?.position?.name ?? '-',
+    icon: UserSpeakBoldIcon,
+    editable: false
+  },
+  // {
+  //   title: 'Опыт работы',
+  //   description: authStore.currentUser.begin_work_date ?? '-',
+  //   icon: BriefCase20SolidIcon
+  // },
+  {
+    key: 'email',
     title: 'Корп. почта',
     description: authStore.currentUser.email ?? '-',
-    icon: LetterBoldIcon
+    icon: LetterBoldIcon,
+    editable: true
   },
-]
+])
+// Composable
+// onClickOutside(
+//   inputRef,
+//   () => editIndex.value = null,
+//   { ignore: [ignoreRef] }
+// )
+// Methods
+const handleEdit = async (index, value) => {
+  editIndex.value = index
+  await nextTick()
+  const input = unref(inputRef)
+  input[0].focus()
+  editValue.value = value
+}
+const handleSave = async (key) => {
+  try {
+    const model = {
+      [key]: editValue.value
+    }
+
+    loadingSave.value = true
+
+    await authStore.actionCurrentUserUpdate(model)
+    setNewItem(key, editValue.value)
+    dispatchNotify(null, 'Успешно изменен', COLOR_TYPES.SUCCESS)
+    editIndex.value = null
+  }
+  catch (error) {
+
+  }
+  finally {
+    setTimeout(() => {
+      loadingSave.value = false
+    }, 500)
+  }
+}
+const setNewItem = (key, value) => {
+  let item = items.value.find((item) => item['key'] === key)
+  item.description = value
+}
 </script>
 <template>
   <div class="worker-view px-4">
     <div class="grid grid-cols-2 gap-x-6 gap-y-2">
-      <template v-for="item in items">
+      <template v-for="(item, index) in items">
         <div class="group col-span-1 flex transition-colors hover:bg-primary-10 h-20 relative rounded-xl p-4 after:hover:bg-transparent after:content after:transition-colors after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:bg-greyscale-70">
           <div class="w-9 h-9">
             <base-iconify :icon="item.icon" class="!w-6 !h-6 transition-colors text-greyscale-400 group-hover:text-primary-500" />
           </div>
-          <div class="flex-1">
-            <h1 class="text-sm font-medium text-greyscale-500 mb-1">{{ item.title }}</h1>
-            <p class="font-semibold text-greyscale-900">{{ item.description }}</p>
+          <div class="flex-1 relative">
+            <div class="relative z-[2] mr-14">
+              <h1 class="text-sm font-medium text-greyscale-500 mb-1">{{ item.title }}</h1>
+
+              <template v-if="editIndex === index">
+                <input
+                  v-model="editValue"
+                  ref="inputRef"
+                  type="text"
+                  class="w-full border-b-[2px] border-b-primary-500 bg-transparent outline-none"
+                />
+              </template>
+
+              <template v-else>
+                <p class="font-semibold text-greyscale-900">{{ item.description }}</p>
+              </template>
+            </div>
+
+            <template v-if="item.editable">
+              <template v-if="editIndex === index">
+                <button
+                  type="button"
+                  class="flex items-center justify-center w-8 h-8 bg-primary-500 rounded-full absolute right-0 top-2 z-[2] cursor-pointer"
+                  @click="handleSave(item.key)"
+                >
+                  <base-spinner
+                    v-if="loadingSave"
+                    app-classes="bg-white rounded-full"
+                    root-classes="!w-5 !h-5"
+                  />
+
+                  <base-iconify
+                    v-else
+                    :icon="UnreadLinearIcon"
+                    class="!w-6 !h-6 text-white"
+                  />
+                </button>
+
+                <div ref="ignoreRef" class="fixed top-0 left-0 w-full h-full"></div>
+              </template>
+
+              <template v-else>
+                <div
+                  class="edit-group flex items-center justify-center w-8 h-8 bg-greyscale-50 border border-greyscale-100 rounded-full absolute right-0 top-2 cursor-pointer"
+                  @click="handleEdit(index, item.description)"
+                >
+                  <base-iconify :icon="PenIcon" class="!w-4 !h-4 text-primary-500" />
+                </div>
+              </template>
+            </template>
           </div>
         </div>
       </template>
     </div>
   </div>
 </template>
+
+<style scoped>
+.edit-group:hover {
+  @apply bg-primary-500
+}
+
+.edit-group:hover svg {
+  color: #fff;
+}
+</style>

@@ -19,7 +19,7 @@ import SendForApproval from "@/modules/Documents/modules/Boxes/components/SendFo
 import { TreeUsers } from '@/components/Tree'
 import Eimzo from "@/components/EIMZO/Eimzo.vue"
 // Enums
-import {SIGNER_TYPES} from "@/enums"
+import { COMPOSE_DOCUMENT_SUB_TYPES, SIGNER_TYPES } from "@/enums"
 import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue"
 
 const signStore = useBoxesSignStore()
@@ -199,7 +199,10 @@ onMounted( async () => {
           class="p-4 overflow-y-auto"
           style="height: calc(100vh - 250px)"
         >
-          <div class="p-10 min-h-full shadow-block border-[0.095rem] border-greyscale-200">
+          <div
+            class="min-h-full shadow-block border-[0.095rem] border-greyscale-200"
+            :class="signStore?.detailModel?.compose?.document_sub_type?.id === Number(COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2) ? '' : 'p-10'"
+          >
             <base-template
               v-if="signStore.detailModel && signStore.detailModel.compose"
               :compose-model="signStore.detailModel?.compose"

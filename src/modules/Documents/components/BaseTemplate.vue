@@ -11,7 +11,8 @@ import {
   DecreeTemplate,
   BusinessTripDecreeTemplate,
   BasePOA,
-  BusinessTripTemplate
+  BusinessTripTemplate,
+  MultipleTemplates
 } from "@/components/Templates/index"
 // Enums
 import {computed} from "vue"
@@ -40,7 +41,7 @@ const formMap = {
     [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_ORDER_LOCAL]: BusinessTripOrderTemplate,
     [COMPOSE_DOCUMENT_SUB_TYPES.NOTICE_FOR_EMPLOYMENT]: OrdinaryNoticeTemplate,
     [COMPOSE_DOCUMENT_SUB_TYPES.ORDER_FOR_EMPLOYMENT]: OrderLetterTemplate,
-    [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2]: BusinessTripTemplate
+    [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2]: MultipleTemplates
   },
   APPLICATION: [
     COMPOSE_DOCUMENT_SUB_TYPES.LABOR_LEAVE,

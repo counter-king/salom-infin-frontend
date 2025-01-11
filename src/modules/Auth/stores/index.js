@@ -1,7 +1,13 @@
 // Core
 import { defineStore } from 'pinia'
 // Services
-import { fetchUserLogin, fetchCurrentUser, fetchLoginWithAd, fetchLoginViaERI } from "../services/index"
+import {
+  fetchUserLogin,
+  fetchCurrentUser,
+  fetchCurrentUserUpdate,
+  fetchLoginWithAd,
+  fetchLoginViaERI
+} from "../services/index"
 // Utils
 import { withAsync } from "@/utils/withAsync"
 import { saveStorageItem } from "@/utils/storage"
@@ -50,6 +56,13 @@ export const useAuthStore = defineStore("authStore", {
     * */
     actionSessionEnd(payload) {
       this.sessionEnd = payload
+    },
+    /**
+     *
+     * */
+    async actionCurrentUserUpdate(body) {
+      await fetchCurrentUserUpdate(body)
+      await this.actionUserProfile()
     },
     /**
      *

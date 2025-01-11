@@ -4,6 +4,9 @@ import { computed } from "vue"
 import ProgressSpinner from "primevue/progressspinner"
 // Macros
 const props = defineProps({
+  appClasses: {
+    type: String
+  },
   rootClasses: {
     type: String
   },
@@ -20,6 +23,7 @@ const props = defineProps({
 const classes = computed(() => {
   return [
     'flex items-center justify-center w-full h-full',
+    props.appClasses,
     {
       'absolute': props.absolute
     },

@@ -1,4 +1,5 @@
 {
+  "division": "Отдел",
   "context-uz": "Описание (UZ)",
   "context-ru": "Описание (РУ)",
   "enter-context": "Введите описание",
@@ -755,5 +756,6 @@
   "business-trip-v2": "Командировка 2.0",
   "news": "Новости банка",
   "save-news-as-draft": "Хотите сохранить данные как черновик?",
-  "reply-to-moderator": "Ответить модератору"
+  "reply-to-moderator": "Ответить модератору",
+  "notice-saved-successfully": "Рапорт успешно сохранен!"
 }

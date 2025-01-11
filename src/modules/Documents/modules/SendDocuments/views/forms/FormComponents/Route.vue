@@ -6,12 +6,13 @@ import { useRoute, useRouter } from "vue-router"
 import { useVuelidate } from "@vuelidate/core"
 // Enums
 import {
-  MULTI_CITY,
-  ROUND_TRIP, ROUTE_SD_DETAIL, ROUTE_SD_LIST,
-  STEPPER_WORK_PLAN,
-  TRANSPORT_CLASS_LIST
+  BY_CAR, BY_PLANE,
+  CAR_CLASS_LIST,
+  MULTI_CITY, PLANE_CLASS_LIST,
+  ROUND_TRIP, ROUTE_SD_DETAIL, ROUTE_SD_LIST, STEPPER_DECREE,
+  STEPPER_WORK_PLAN, TRAIN_CLASS_LIST
 } from "@/modules/Documents/modules/SendDocuments/constants"
-import { COLOR_TYPES, JOURNAL } from "@/enums"
+import { COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL } from "@/enums"
 import { FORM_TYPE_CREATE } from "@/constants/constants"
 // Store
 import { useAuthStore } from "@/modules/Auth/stores"
@@ -29,7 +30,7 @@ import BaseTimePicker from "@/components/UI/BaseTimePicker.vue"
 import PreviewDialog from "@/modules/Documents/modules/SendDocuments/components/PreviewDialog.vue"
 import UserMultiSelect from "@/components/Select/UserMultiSelect.vue"
 import { AddPlusIcon, InfoCircleBoldIcon, TrashBinTrashBoldIcon } from "@/components/Icons"
-import { BusinessTripTemplate } from "@/components/Templates"
+import { BusinessTripTemplate, MultipleTemplates } from "@/components/Templates"
 import { UserWithRadio } from "@/components/Users"
 import BaseIconify from "@/components/UI/BaseIconify.vue"
 
@@ -50,8 +51,6 @@ const commonStore = useCommonStore()
 const authStore = useAuthStore()
 const countStore = useCountStore()
 const $v = useVuelidate(store.booking_model_rules, store.booking_model)
-const $vTripInfo = useVuelidate(store.rules, store.model)
-const $vWorkPlan = useVuelidate(store.trip_plan_rules, store.trip_plan_model)
 
 // Reactive
 const dialog = ref(false)
@@ -85,12 +84,12 @@ const onRouteTypeTabChange = (item, index) => {
   store.actionChangeRouteSegment(item.value, index)
 }
 const stepClick = async (step) => {
-  // const valid = await $v.value.$validate()
-  // showNestedError.value = true
-  // if (!valid) {
-  //   dispatchNotify(null, t('fill-required-fields'), COLOR_TYPES.WARNING)
-  //   return
-  // }
+  const valid = await $v.value.$validate()
+  showNestedError.value = true
+  if (!valid) {
+    dispatchNotify(null, t('fill-required-fields'), COLOR_TYPES.WARNING)
+    return
+  }
 
   await store.actionStepClick(router, route, step)
 }
@@ -108,119 +107,14 @@ const onArrivalRegionChange = (value, parentIndex, childIndex, booking) => {
     store.booking_model.bookings[parentIndex].segments[childIndex + 1].departure_city = value
   }
 }
-const preview = async () => {
-  const valid = await $v.value.$validate()
-  showNestedError.value = true
-  const validTripInfo = await $vTripInfo.value.$validate()
-  const validWorkPlan = await $vWorkPlan.value.$validate()
-  if (!valid) {
-    dispatchNotify(null, t('fill-required-fields'), COLOR_TYPES.WARNING)
-    return
-  }
-  if (!validTripInfo) {
-    dispatchNotify(null, `${t('trip-info')} - ${t('fill-required-fields')}`, COLOR_TYPES.WARNING)
-    return
-  }
-  if (!validWorkPlan) {
-    dispatchNotify(null, `${t('work-plan')} - ${t('fill-required-fields')}`, COLOR_TYPES.WARNING)
-    return
-  }
 
-  store.model.approvers = []
-  store.model.signers = []
-  store.model.notices = []
-  store.model.bookings = []
-  store.model.trip_plans = []
-  store.model.approvers = adjustUsersToArray(store.model.__approvers)
-  store.model.signers = adjustUsersToArray(store.model.__signers)
-  store.model.curator = store.model?.__curator?.user_id
-  store.model.journal = JOURNAL.INNER
-  store.model.company = authStore.currentUser?.company?.id
-
-  store.model.__groups.forEach((group, index) => {
-    const group_id = index + 1
-    store.model.notices.push(
-      ...group.__users.map(user => ({
-        start_date: group.__start_date,
-        end_date: group.__end_date,
-        user: user.id,
-        regions: group.__regions.map(r => r.id),
-        tags: group.__tags.map(t => ({ id: t.id })),
-        group_id
-      }))
-    )
-  })
-
-  store.model.sender = authStore?.currentUser?.top_level_department?.id
-  store.model.files = store.model.__files.map(item => { return { id: item.id } })
-  store.model.document_type = route.params.document_type
-  store.model.document_sub_type = route.params.document_sub_type
-
-  store.model.bookings = store.booking_model.bookings.map(item => ({
-    ...item,
-    segments: item.segments.map(segment => ({
-      departure_city: segment.departure_city.id,
-      arrival_city: segment.arrival_city.id,
-      departure_date: adjustDateTime(segment.date, segment.time, 0),
-      departure_end_date: adjustDateTime(segment.date, segment.time, 1),
-      segment_class: segment.segment_class.value
-    })),
-    passengers: item.passengers.map(passenger => ({ user: passenger.id }))
-  }))
-
-  store.model.trip_plans = store.trip_plan_model.trip_plans.map(plan => ({
-    users: plan.users.map(user => ({ id: user.id })),
-    text: plan.text
-  }))
-
-  dialog.value = true
+const validateAndSend = () => {
+  stepClick(STEPPER_DECREE)
+  emit('emit:onValidateAndSend')
 }
 
-const create = async () => {
-  const response = await store.actionCreateDocument(store.model)
-  if (response) {
-    dialog.value = false
-    dispatchNotify(null, t('document-sent'), COLOR_TYPES.SUCCESS)
-    await router.replace({
-      name: ROUTE_SD_LIST,
-      query: {
-        document_type: route.query.document_type
-      }
-    })
-  }
-  else {
-    dispatchNotify(null, t('error-occurred'), COLOR_TYPES.ERROR)
-  }
-}
-const update = async () => {
-  try {
-    await store.actionUpdateDocument(
-      {
-        id: route.params.id,
-        body: store.model
-      }
-    )
-    await countStore.actionCountList();
-    dispatchNotify(null, t('changed'), COLOR_TYPES.SUCCESS)
-    await router.replace({
-      name: ROUTE_SD_DETAIL,
-      params: {
-        id: route.params.id,
-        document_type: route.params.document_type,
-        document_sub_type: route.params.document_sub_type
-      }
-    })
-  } catch (err) {
-
-  }
-}
-const manage = () => {
-  if (props.formType === FORM_TYPE_CREATE) {
-    create()
-  } else {
-    update()
-  }
-}
+// Emits
+const emit = defineEmits(['emit:onValidateAndSend'])
 
 // Expose
 defineExpose({
@@ -326,7 +220,7 @@ defineExpose({
             <base-dropdown
               v-model="subItem.segment_class"
               :error="$v.bookings.$each.$response.$data[index].segments.$each.$data[subIndex].segment_class"
-              v-model:options="TRANSPORT_CLASS_LIST"
+              :options="item.route === BY_CAR ? CAR_CLASS_LIST : item.route === BY_PLANE ? PLANE_CLASS_LIST : TRAIN_CLASS_LIST"
               required
               label="class"
               placeholder="choose-one"
@@ -435,33 +329,16 @@ defineExpose({
         />
 
         <base-button
-          label="preview"
+          label="next-step"
           rounded
           shadow
           border-color="border-transparent"
           class="ml-2"
-          @click="preview"
+          :loading="store.buttonLoading"
+          @click="validateAndSend"
         />
       </div>
     </div>
-
-    <!-- PREVIEW -->
-    <preview-dialog
-      v-model="dialog"
-      :send-button-loading="store.buttonLoading"
-      @emit:send="manage"
-    >
-      <template #content>
-        <business-trip-template
-          :compose-model="{
-            ...store.model,
-            bookings: store.booking_model.bookings,
-            trip_plans: store.trip_plan_model.trip_plans
-          }"
-          :preview="true"
-        />
-      </template>
-    </preview-dialog>
   </div>
 </template>
 

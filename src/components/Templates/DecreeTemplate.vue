@@ -59,8 +59,8 @@ const signers = computed(() => {
       FARMOYISH
     </div>
 
-    <div v-if="SDStore.historyShow" class="text-justify" v-html="SDStore.historyContent"></div>
-    <div v-else class="text-justify" v-html="props.composeModel?.content"></div>
+<!--    <div v-if="SDStore.historyShow" class="text-justify" v-html="SDStore.historyContent"></div>-->
+    <div class="text-justify" v-html="props.composeModel?.content"></div>
 
     <template v-if="composeModel.notices?.length && composeModel.trip_plans?.length && composeModel.bookings?.length">
       <base-business-trip-tables :compose-model="composeModel" :preview="false" />
@@ -78,8 +78,8 @@ const signers = computed(() => {
           Buxgalteriya hisobi va moliyaviy menejment departamenti tomonidan xizmat safari bilan bog‘liq xarajatlar uchun to‘lovlar belgilangan tartibda amalga oshirilsin.
         </div>
 
-        <div v-if="composeModel?.trip_notice_register_number">
-          <span class="font-semibold">Asos: </span>{{ composeModel?.trip_notice_register_number }}-sonli bildirishnnoma;
+        <div>
+          <span class="font-semibold">Asos: </span>{{ composeModel?.trip_notice_register_number || '__' }}-sonli bildirishnnoma;
         </div>
 
         <div>

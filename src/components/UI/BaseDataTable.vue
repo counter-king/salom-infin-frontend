@@ -75,11 +75,11 @@ const route = useRoute();
 // Reactive
 const expandedRowGroups = ref()
 const selection = ref()
-// reactive 
+// reactive
 const paginationStore = reactive({
   page: pagination.page || route.query.page,
   pageSize: pagination.pageSize || route.query.page_size,
-  firstRow: pagination.firstRow || route.query.first_row
+  firstRow: pagination.firstRow || +route.query.firstRow,
 });
 
 // Computed

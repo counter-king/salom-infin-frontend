@@ -4,7 +4,7 @@ import { defineStore } from 'pinia'
 import {
   fetchCustomUpdate,
   fetchGetDocumentDetail,
-  fetchGetDocumentList, fetchVersionHistory
+  fetchGetDocumentList, fetchGetLinkedDocumentsList, fetchVersionHistory
 } from "@/modules/Documents/modules/SendDocuments/services/index.service"
 // Utils
 import { withAsync } from "@/utils/withAsync"
@@ -635,13 +635,18 @@ export const useSDStore = defineStore("sd-stores", {
     /** **/
     async actionGetDocumentDetail(id){
       const { response, error } = await withAsync(fetchGetDocumentDetail, id)
+      const res = await fetchGetLinkedDocumentsList(response.data.id)
       if (response && response.status === 200){
         if (response.data?.registered_document){
           let { data } = await fetchGetTree(response.data?.registered_document)
           this.tree = data
         }
         await this.actionVersionHistory(id)
-        this.detailModel = response.data
+        this.detailModel = {
+          ...response.data,
+          decree_content: res?.data?.to_composes[0]?.from_compose?.content,
+          decree_register_number: res?.data?.to_composes[0]?.from_compose?.register_number
+        }
         return Promise.resolve(response)
       }
     },
