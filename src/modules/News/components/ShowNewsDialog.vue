@@ -55,8 +55,8 @@ const props = defineProps({
     }
   })
 
-const { newsOne, getNewsOne, loading} = useGetOneNewsModal()
-const footerClasses = computed(() => props.type === 'moderation' ? '!py-4': 'hidden' )
+const { newsOne, getNewsOne, loading } = useGetOneNewsModal()
+const footerClasses = computed(() => props.type === 'moderation' ? '!py-4': 'hidden')
 // internalitaion
 const { t } = useI18n()
 // reactive
@@ -118,7 +118,7 @@ onMounted(() => {
         </template>
       </template>
       <template #footer>
-        <template v-if="type === 'moderation'">
+        <template v-if="props.type === 'moderation'">
           <base-button
             :disabled="props.isLoadingModeration"
             label="refuse"

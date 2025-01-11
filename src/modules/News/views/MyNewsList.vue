@@ -4,7 +4,6 @@ import { useI18n } from 'vue-i18n';
 import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 // components
-import ShowNewsDialog from '../components/ShowNewsDialog.vue';
 import BaseDataTable from '@/components/UI/BaseDataTable.vue';
 import { AltArrowRightIcon, PenIcon, TrashBinTrashIcon } from '@/components/Icons';
 import BaseIconify from '@/components/UI/BaseIconify.vue';
@@ -24,9 +23,7 @@ const router = useRouter();
 const {headers, list, totalCount, loading , getMyNewsList } = useMyNewsList();
 const {debouncedSearchQuery } = useSearchNews();
 // reactive
-const  showNewsDialog = ref(false);
 const  newsId = ref(null);
-const  newsData = ref(null);
 const  dialogDeleteIsOpen = ref(false)
 const  isDeleteLoading = ref(false)
 const  isRejectReasonVisible = ref(false)
@@ -34,9 +31,7 @@ const  rejectReason = ref(null)
 
 // methods
 const onRowClick = (data) => {
-  showNewsDialog.value = true
-  newsId.value = data.id
-  newsData.value = data
+  router.push({ name: 'NewsDetails', params: {id: data.id, type:"show"}})
 }
 
 const handleClickEdit = (id) => {
@@ -115,9 +110,7 @@ watch(debouncedSearchQuery, () => {
          </div>
         </template>
      </base-data-table>
-     <show-news-dialog :id="newsId" :data="newsData" v-if="showNewsDialog" v-model="showNewsDialog"/>
      <delete-news-dialog v-if="dialogDeleteIsOpen" :isLoading="isDeleteLoading" v-model="dialogDeleteIsOpen" :onClose="handleCloseDeleteDialog" :onDeleteNews="handleDeleteNews"/>
      <reject-news-dialog  v-if="isRejectReasonVisible" v-model="isRejectReasonVisible"  :value="rejectReason" max-width="max-w-[700px]" type="show-reason" :headerLable="t('reason-reject')" :disabled="true"/>
-
   </div>
 </template>

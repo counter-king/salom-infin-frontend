@@ -23,7 +23,7 @@ const props = defineProps({
         >
             <span class="text-xl font-semibold text-white"> {{ returnFirstLetter(props.name) }}</span>
         </base-avatar>
-        <div class="flex gap-[2px] flex-col">
+        <div class="flex flex-col">
             <h3 class="text-base font-semibold text-greyscale-900">{{ props.name }}</h3>
             <p class="text-sm text-greyscale-500 font-regular font-normal" >{{ props.createdDate ? formatDateNamedMonth(props.createdDate) : props.info }}</p>
         </div>

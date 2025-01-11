@@ -17,14 +17,6 @@ const News = [
         },
         component: () => import('../views/List.vue')
       },
-      // {
-      //   path: 'my-save-news-list',
-      //   name: 'MySaveNewsList',
-      //   meta: {
-      //     isAuthRequired: true
-      //   },
-      //   component: () => import('../views/MySaveNewsList.vue')
-      // },
       {
         path: 'my-news-list',
         name: 'MyNewsList',
@@ -50,6 +42,15 @@ const News = [
       isAuthRequired: true
     },
     component: () => import('../views/Show.vue')
+  },
+  // it is used to see news details in my news and moderation list
+  {
+    path: 'news-details/:id/:type',
+    name: 'NewsDetails',
+    meta: {
+      isAuthRequired: true
+    },
+    component: () => import('../views/Details.vue')
   },
   {
     path: 'news/edit/:id',
