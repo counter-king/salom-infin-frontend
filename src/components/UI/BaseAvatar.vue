@@ -156,6 +156,12 @@ const handleMouseEnter = async (event) => {
 
                 <div class="space-y-3 mt-4">
                   <div class="flex items-center gap-[10px]">
+                    <base-iconify :icon="BuildingsBoldIcon" class="text-greyscale-400" />
+
+                    <span class="text-sm font-medium text-greyscale-900">{{ props.meta?.company?.name ?? '-' }}</span>
+                  </div>
+
+                  <div class="flex items-center gap-[10px]">
                     <base-iconify :icon="CityBoldIcon" class="text-greyscale-400" />
 
                     <span class="text-sm font-medium text-greyscale-900">{{ props.meta?.top_level_department?.name ?? '-' }}</span>
@@ -165,12 +171,6 @@ const handleMouseEnter = async (event) => {
                     <base-iconify :icon="UsersGroupTwoRoundedBoldIcon" class="text-greyscale-400" />
 
                     <span class="text-sm font-medium text-greyscale-900">{{ props.meta?.department?.name ?? '-' }}</span>
-                  </div>
-
-                  <div class="flex items-center gap-[10px]">
-                    <base-iconify :icon="BuildingsBoldIcon" class="text-greyscale-400" />
-
-                    <span class="text-sm font-medium text-greyscale-900">{{ props.meta?.company?.name ?? '-' }}</span>
                   </div>
 
                   <div class="flex items-center gap-[10px]">

@@ -147,22 +147,22 @@ const select = ref({
           <div class="mt-1">
             <div>
               <h1 class="text-greyscale-900 font-bold text-base mb-1">{{ select.full_name }}</h1>
-              <span class="block text-xs font-medium text-greyscale-500">{{ select.position }}</span>
+              <span class="block text-xs font-medium text-greyscale-500">{{ select.position?.name }}</span>
             </div>
           </div>
         </div>
 
         <div class="mt-4">
           <vertical-card>
-            <vertical-card-item title="Департамент" :description="props.topLevel" />
+            <vertical-card-item title="Филиал" :description="select?.company?.name" />
 
-            <vertical-card-item title="Отдел" :description="props.item.name" />
+            <vertical-card-item title="Департамент" :description="select?.top_level_department?.name" />
 
-            <!-- <vertical-card-item title="Filial" description="Головной офис" /> -->
-
-            <vertical-card-item title="IP-телефона" :description="select.cisco" />
+            <vertical-card-item title="Отдел" :description="select?.department?.name" />
 
             <vertical-card-item title="Корп. почта" :description="select.email" />
+
+            <vertical-card-item title="IP-телефона" :description="select.cisco" />
           </vertical-card>
         </div>
       </div>

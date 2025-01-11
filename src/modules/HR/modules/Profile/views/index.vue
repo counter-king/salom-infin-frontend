@@ -103,16 +103,7 @@ watch(activeTabMenu, (value) => {
 </script>
 
 <template>
-  <ScrollPanel
-    class="h-full bg-white rounded-[20px] shadow-button"
-    :pt="{
-      wrapper: {
-        style: { 'border-right': '4px solid var(--surface-ground)' },
-        class: 'h-[calc(100vh-125px)]'
-      },
-      bary: 'w-1 hover:bg-primary-400 bg-primary-300'
-    }"
-  >
+  <div class="bg-white rounded-[20px] shadow-button">
     <!-- header -->
     <div class="p-[5px]">
       <div class="h-[165px] relative rounded-2xl">
@@ -213,7 +204,7 @@ watch(activeTabMenu, (value) => {
         v-model="activeTabMenuIndex"
         :tab-items="headerTabItems"
         menu-class="!px-6"
-        class="sticky top-0 z-10 mt-6"
+        class="sticky -top-6 z-10 mt-6"
       />
 
       <div class="p-6">
@@ -221,5 +212,5 @@ watch(activeTabMenu, (value) => {
       </div>
     </div>
     <!-- /body -->
-  </ScrollPanel>
+  </div>
 </template>
