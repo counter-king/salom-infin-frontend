@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
-import 'dayjs/locale/ru'; // Ruscha lokalni qo'shish
+import 'dayjs/locale/ru' // Ruscha lokalni qo'shish
+import 'dayjs/locale/uz-latn'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 dayjs.extend(customParseFormat)
 
@@ -17,8 +18,8 @@ export const isDateHour = (date) => {
 export function formatDateHour(date) {
   return date ? dayjs(date).format("DD.MM.YYYY HH:mm") : "Не верный формат даты"
 }
-export function formatDateMonth(date) {
-  return date ? dayjs(date).locale('ru').format('MMMM') : 'Не верный формат даты'
+export function formatDateMonth(date, locale = 'ru') {
+  return date ? dayjs(date).locale(locale).format('MMMM') : 'Не верный формат даты'
 }
 export function formatHour(date) {
   return date ? dayjs(date).format("HH:mm") : "Не верный формат даты"

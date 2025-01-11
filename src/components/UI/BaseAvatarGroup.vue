@@ -17,6 +17,9 @@ const props = defineProps({
     type: Number,
     default: 3
   },
+  detailDialog: {
+    type: Boolean
+  },
   size: {
     type: String,
     default: 'normal',
@@ -50,6 +53,7 @@ const rest = computed(() => props.items.slice(props.max))
         :image="avatar.image"
         :size="props.size"
         :shape="props.shape"
+        :detail-dialog="props.detailDialog"
         :avatar-classes="props.avatarClasses"
         type="group"
         class="-mr-2"

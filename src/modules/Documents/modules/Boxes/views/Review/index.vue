@@ -20,7 +20,7 @@ const filterKeys = ['approvers', 'author', 'curator', 'signers', 'departments', 
 const keysToIncludeOnClearFilter = ['type']
 
 // computed
-const pagination = computed(()=>({ 
+const pagination = computed(()=>({
   page:  route.query.page || paginationDefault.page,
   pageSize: route.query.page_size || paginationDefault.pageSize,
   firstRow: route.query.first_row || paginationDefault.firstRow
@@ -140,6 +140,7 @@ const link = (data) => {
         <linkable-cell :to="link(data)" :is-not-read="!data.read_time">
           <base-avatar-group
             :items="data?.for_reviewers"
+            detail-dialog
             shape="circle"
             avatar-classes="w-8 h-8"
           />

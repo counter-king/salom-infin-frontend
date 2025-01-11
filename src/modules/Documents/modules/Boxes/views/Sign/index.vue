@@ -93,6 +93,7 @@ onMounted(async () => {
         <base-avatar-group
           :items="data.compose.signers"
           shape="circle"
+          detail-dialog
           avatar-classes="w-8 h-8"
         />
       </template>
@@ -101,6 +102,7 @@ onMounted(async () => {
         <base-avatar-group
           :items="[data.compose.author]"
           shape="circle"
+          detail-dialog
           avatar-classes="w-8 h-8"
         />
       </template>

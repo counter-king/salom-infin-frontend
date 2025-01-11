@@ -112,7 +112,7 @@ export const useSalaryStore = defineStore('salary-store', {
     /**
      *
      * */
-    async getSalary(date = new Date().setDate('01')) {
+    async getSalary(date = new Date(new Date().setDate('01'))) {
       try {
         this.contentLoading = true
 

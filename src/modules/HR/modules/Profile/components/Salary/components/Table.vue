@@ -17,10 +17,10 @@ const date = ref(firstLetterCapitalize(formatDateMonth(new Date())))
 const year = ref()
 const monthName = ref()
 // Watch
-watch(
-  () => salaryStore.isLoggedIn,
-  async () => salaryStore.isLoggedIn && await salaryStore.getSalary()
-)
+// watch(
+//   () => salaryStore.isLoggedIn,
+//   async () => salaryStore.isLoggedIn && await salaryStore.getSalary()
+// )
 // Methods
 const dateSelect = async () => {
   monthName.value = firstLetterCapitalize(formatDateMonth(date.value))
@@ -37,19 +37,20 @@ const clear = () => {
 </script>
 
 <template>
-  <action-toolbar title="Ежемесячная зарплата">
+  <action-toolbar title="Детализация">
     <template #filters>
-      <export-button root-class="!bg-greyscale-50 !border !border-greyscale-70 !shadow-none" />
+      <span></span>
+<!--      <export-button root-class="!bg-greyscale-50 !border !border-greyscale-70 !shadow-none" />-->
 
-      <base-calendar-button
-        v-model="date"
-        :parsed-text="monthName"
-        view="month"
-        date-format="mm"
-        root-class="!bg-greyscale-50 !border !border-greyscale-70 !shadow-none"
-        @emit:date-select="dateSelect"
-        @emit:clear="clear"
-      />
+<!--      <base-calendar-button-->
+<!--        v-model="date"-->
+<!--        :parsed-text="monthName"-->
+<!--        view="month"-->
+<!--        date-format="mm"-->
+<!--        root-class="!bg-greyscale-50 !border !border-greyscale-70 !shadow-none"-->
+<!--        @emit:date-select="dateSelect"-->
+<!--        @emit:clear="clear"-->
+<!--      />-->
     </template>
   </action-toolbar>
 
@@ -74,7 +75,7 @@ const clear = () => {
       scroll-height="calc(100vh - 470px)"
     >
       <template #empty>
-        <empty class="h-[calc(100vh-470px)]" />
+        <empty class="h-[350px]" />
       </template>
 
       <template #pay_name="{ data }">

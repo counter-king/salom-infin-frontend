@@ -4,10 +4,10 @@ import { ref, shallowRef, watch, defineAsyncComponent, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 // Components
-import ScrollPanel from 'primevue/scrollpanel'
 import BaseSpinner from '@/components/UI/BaseSpinner.vue'
 import { StatusChip } from '@/components/Chips'
 import {
+  PenBoldIcon,
   PenIcon,
   UserCheckIcon,
   UserSpeakRoundedIcon,
@@ -21,6 +21,7 @@ import {
   InstagramAltIcon,
   FacebookCircleIcon
 } from '@/components/Icons'
+import AvatarModal from '../components/AvatarModal.vue'
 // Stores
 import { useAuthStore } from '@/modules/Auth/stores'
 // Enums
@@ -103,16 +104,7 @@ watch(activeTabMenu, (value) => {
 </script>
 
 <template>
-  <ScrollPanel
-    class="h-full bg-white rounded-[20px] shadow-button"
-    :pt="{
-      wrapper: {
-        style: { 'border-right': '4px solid var(--surface-ground)' },
-        class: 'h-[calc(100vh-125px)]'
-      },
-      bary: 'w-1 hover:bg-primary-400 bg-primary-300'
-    }"
-  >
+  <div class="bg-white rounded-[20px] shadow-button">
     <!-- header -->
     <div class="p-[5px]">
       <div class="h-[165px] relative rounded-2xl">
@@ -141,17 +133,14 @@ watch(activeTabMenu, (value) => {
         <div class="flex items-center justify-center w-[106px] h-[106px] relative rounded-full bg-white z-10">
           <base-avatar
             :label="authStore.currentUser?.full_name"
+            :image="authStore.currentUser?.avatar?.url"
             :color="authStore.currentUser?.color"
             avatarClasses="w-24 h-24"
           >
             <span class="text-4xl font-semibold text-white">{{ authStore.currentUser?.full_name[0] }}</span>
           </base-avatar>
 
-          <div class="flex items-center justify-center w-6 h-6 absolute bottom-0 right-[10px] rounded-full overflow-hidden bg-white z-20">
-            <div class="flex items-center justify-center w-4 h-4 bg-primary-500 rounded-full">
-              <div class="w-[6px] h-[6px] rounded-full bg-white"></div>
-            </div>
-          </div>
+          <avatar-modal />
         </div>
 
         <div class="flex self-end flex-1 gap-4">
@@ -213,7 +202,7 @@ watch(activeTabMenu, (value) => {
         v-model="activeTabMenuIndex"
         :tab-items="headerTabItems"
         menu-class="!px-6"
-        class="sticky top-0 z-10 mt-6"
+        class="sticky -top-6 z-10 mt-6"
       />
 
       <div class="p-6">
@@ -221,5 +210,5 @@ watch(activeTabMenu, (value) => {
       </div>
     </div>
     <!-- /body -->
-  </ScrollPanel>
+  </div>
 </template>

@@ -60,6 +60,7 @@ const props = defineProps({
                 :label="reviewer.user?.full_name"
                 :color="reviewer.user?.color"
                 :image="reviewer.user?.image"
+                detail-dialog
                 avatarClasses="w-10 h-10"
               />
 
