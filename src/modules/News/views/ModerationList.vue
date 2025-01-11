@@ -1,7 +1,7 @@
 <script setup>
 // core
 import { useI18n } from 'vue-i18n';
-import { onMounted, ref, watch } from 'vue';
+import {  ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 // components
 import ShowNewsDialog from '../components/ShowNewsDialog.vue';
@@ -15,9 +15,13 @@ import { formatDate } from '@/utils/formatDate';
 // services
 import { fetchModerationApproveNews } from '../services/news.service';
 import { NEWS_STATUS } from '../enums';
+// stores
+import { useNewsCountStore } from '../stores/news.count.store';
 
 const { t } = useI18n();
 const router = useRouter();
+const newsCountStore = useNewsCountStore()
+
 // reactive
 const  showNewsDialog = ref(false);
 const  newsId = ref(null);
@@ -48,6 +52,8 @@ const handleModerationApprove = async () => {
   } finally{
     isLoadingApprove.value = false
   }
+
+  newsCountStore.actionGetNewsPandingCountList()
 }
 
 const handleRejectModeration = async (reason) => {
@@ -59,6 +65,8 @@ const handleRejectModeration = async (reason) => {
     isLoadingReject.value = false
     showNewsDialog.value = false
   }
+
+  newsCountStore.actionGetNewsPandingCountList()
 }
 
 </script>

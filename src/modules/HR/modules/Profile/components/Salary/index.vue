@@ -12,7 +12,6 @@ import SalaryDialog from './components/Dialog.vue'
 // Hooks
 onBeforeUnmount(() => {
   salaryStore.resetStore()
-  console.log(salaryStore)
 })
 </script>
 

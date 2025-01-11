@@ -155,137 +155,139 @@ onMounted( async () => {
 </script>
 
 <template>
-  <div class="w-full p-10 pt-5 pb-2 overflow-y-auto">
-    <div class="back-button">
-        <back-button 
-        :self="true" 
-        @click="router.push({name:'NewsList'})"/>
-    </div>
-    <template v-if="loading">
-        <base-spinner/>
-    </template>
-    <!-- container -->
-    <div v-else class="bg-white w-full h-full mt-5 rounded-[20px] p-8 pr-6 grid grid-cols-[minmax(840px,3.11fr)_minmax(416px,_1.54fr)] gap-x-12">
-        <!-- right -->
-        <div class="overflow-auto pr-2 pb-3 relative">
-            <div
-             :style="{ '--dynamic-src': `url(${newsOne.image?.url})` }"
-             class="aspect-ratio-box rounded-2xl overflow-hidden relative" 
-            >
-                <img :src="newsOne.image?.url" alt="rasm" class="w-full h-full object-contain absolute z-2">
-            </div>
-            <!-- info -->
-            <div class="mt-4 flex justify-between">
-                <!-- author -->
-                <user-card 
-                    :name="newsOne.created_by?.full_name"
-                    :category="newsOne.category"
-                    :created-date="newsOne.created_date"
-                    :avatar-color="newsOne.created_by?.color"
-                    />
-                <div class="flex gap-3">
-                    <!-- eyes -->
-                    <circle-wrapper class="min-w-fit">
-                        <div class="flex gap-1 items-center">
-                            <div class="text-greyscale-400">
-                                <base-iconify :icon="EyeBoldIcon" />
-                            </div>
-                            <div class="text-xs font-medium text-greyscale-400 select-none">
-                                {{ newsOne.view_counts && formatToK(newsOne.view_counts) }}
-                            </div>
-                        </div>
-                    </circle-wrapper>
-                    <!-- heart -->
-                    <circle-wrapper @click="handleClickLike" :class="`min-w-fit ${viewHeartIsLike && '!bg-critic-30'}`">   
-                        <div class="flex gap-1 items-center">
-                            <div class="text-greyscale-400" :class="`${viewHeartIsLike && '!text-critic-500'}`">
-                                <base-iconify :icon="HeartBoldIcon" />
-                            </div>
-                            <div class="text-xs font-medium text-greyscale-400 select-none">
-                                {{ viewHeartLikeCounts && formatToK(viewHeartLikeCounts) }}
-                            </div>
-                        </div>
-                    </circle-wrapper>
-                    <!-- bookmark -->
-                    <!-- <circle-wrapper class="min-w-fit">
-                        <div class="text-greyscale-400">
-                            <base-iconify :icon="BookmarkBoldIcon" />
-                        </div>
-                    </circle-wrapper> -->
-                    <!-- forward icon-->
-                    <!-- <circle-wrapper @click="shareDialogVisible = true" class="min-w-fit">
-                        <div class="text-greyscale-400">
-                            <base-iconify :icon="ForwardBoldIcon" />
-                        </div>
-                    </circle-wrapper> -->
-                </div>  
-            </div>
-
-            <!-- contents -->
-            <title-component :title="newsOne.title" class="mt-4 mb-5"/>
-            <short-description wrap-class="text-greyscale-800 text-xl !mt-0" :text="newsOne.description"/>
-
-            <template v-for="(content, index) in newsOne.contents" :key="content.id">
-                <div v-if="content.type === CONTENT_TYPES.TEXT" v-html="content.content" class="mt-4 text-greyscale-800"></div>
-                <div v-if="content.type === CONTENT_TYPES.QUOTE" >
-                    <queto :text="content.content" class="my-10"/>
+  <div class="flex grow flex-col p-10 pt-5 pb-2">
+    <div class="w-full grow">
+        <div class="back-button">
+            <back-button />
+        </div>
+        <template v-if="loading" class="w-full h-full">
+            <base-spinner/>
+        </template>
+        <!-- container -->
+        <div v-else class="bg-white w-full h-full mt-5 rounded-[20px] p-8 pr-6 grid grid-cols-[minmax(840px,3.11fr)_minmax(416px,_1.54fr)] gap-x-12">
+            <!-- right -->
+            <div class="pb-3 relative">
+                <div
+                :style="{ '--dynamic-src': `url(${newsOne.image?.url})` }"
+                class="aspect-ratio-box rounded-2xl overflow-hidden relative" 
+                >
+                    <img :src="newsOne.image?.url" alt="rasm" class="w-full h-full object-contain absolute z-2">
                 </div>
-                <div v-if="[CONTENT_TYPES.IMAGE,CONTENT_TYPES.AUDIO, CONTENT_TYPES.VIDEO].includes(content.type)">
-                    <main-file-show :file="{...content.file, type: content.type}" class="mt-3"/>
-                </div>
-            </template>
-            <Swiper v-if="!!newsOne.galleries?.length" :images="newsOne.galleries" />
-            <Tag v-if="!!newsOne.tags?.length" :tags="newsOne.tags" /> 
-
-            <!-- conments -->
-            <div class="">
-                <!-- title -->
-                <div class="mt-10 mb-5 flex items-center gap-2">
-                    <h2 class="font-semibold text-2xl">{{ t("comments") }}</h2>
-                    <div class="w-8 h-8 min-w-8 min-h-8 text-base text-critic-500 bg-critic-30 rounded-full flex justify-center items-center font-semibold">{{ newCommentList.length}}</div>
-                </div>
-                <!-- comment enter -->
-                <send-comment 
-                    @emit:submit-comment="handleSendComment" 
-                    type="comment"
-                    :isButtonLoading="commentButtonLoading"
-                    v-model="commentValue"
-                    :data="{created_by: authStore.currentUser}"
-                />
-                <divider v-if="!!newCommentList.length" />
-                <template v-for="(comment,index) in newCommentList" :key="comment.id">
-                    <view-replay-comment 
-                        @emit:replay-comment="handleReplayComment" 
-                        :data="comment"
-                        :isDiveiderVisible="newCommentList.length != index + 1"
+                <!-- info -->
+                <div class="mt-4 flex justify-between">
+                    <!-- author -->
+                    <user-card 
+                        :name="newsOne.created_by?.full_name"
+                        :category="newsOne.category"
+                        :created-date="newsOne.created_date"
+                        :avatar-color="newsOne.created_by?.color"
                         />
+                    <div class="flex gap-3">
+                        <!-- eyes -->
+                        <circle-wrapper class="min-w-fit">
+                            <div class="flex gap-1 items-center">
+                                <div class="text-greyscale-400">
+                                    <base-iconify :icon="EyeBoldIcon" />
+                                </div>
+                                <div class="text-xs font-medium text-greyscale-400 select-none">
+                                    {{ newsOne.view_counts && formatToK(newsOne.view_counts) }}
+                                </div>
+                            </div>
+                        </circle-wrapper>
+                        <!-- heart -->
+                        <circle-wrapper @click="handleClickLike" :class="`min-w-fit ${viewHeartIsLike && '!bg-critic-30'}`">   
+                            <div class="flex gap-1 items-center">
+                                <div class="text-greyscale-400" :class="`${viewHeartIsLike && '!text-critic-500'}`">
+                                    <base-iconify :icon="HeartBoldIcon" />
+                                </div>
+                                <div class="text-xs font-medium text-greyscale-400 select-none">
+                                    {{ viewHeartLikeCounts && formatToK(viewHeartLikeCounts) }}
+                                </div>
+                            </div>
+                        </circle-wrapper>
+                        <!-- bookmark -->
+                        <!-- <circle-wrapper class="min-w-fit">
+                            <div class="text-greyscale-400">
+                                <base-iconify :icon="BookmarkBoldIcon" />
+                            </div>
+                        </circle-wrapper> -->
+                        <!-- forward icon-->
+                        <!-- <circle-wrapper @click="shareDialogVisible = true" class="min-w-fit">
+                            <div class="text-greyscale-400">
+                                <base-iconify :icon="ForwardBoldIcon" />
+                            </div>
+                        </circle-wrapper> -->
+                    </div>  
+                </div>
+
+                <!-- contents -->
+                <title-component :title="newsOne.title" class="mt-4 mb-5"/>
+                <short-description wrap-class="text-greyscale-800 text-xl !mt-0" :text="newsOne.description"/>
+
+                <template v-for="(content, index) in newsOne.contents" :key="content.id">
+                    <div v-if="content.type === CONTENT_TYPES.TEXT" v-html="content.content" class="mt-4 text-greyscale-800"></div>
+                    <div v-if="content.type === CONTENT_TYPES.QUOTE" >
+                        <queto :text="content.content" class="my-10"/>
+                    </div>
+                    <div v-if="[CONTENT_TYPES.IMAGE,CONTENT_TYPES.AUDIO, CONTENT_TYPES.VIDEO].includes(content.type)">
+                        <main-file-show :file="{...content.file, type: content.type}" class="mt-3"/>
+                    </div>
                 </template>
+                <Swiper v-if="!!newsOne.galleries?.length" :images="newsOne.galleries" />
+                <Tag v-if="!!newsOne.tags?.length" :tags="newsOne.tags" /> 
+
+                <!-- conments -->
+                <div class="">
+                    <!-- title -->
+                    <div class="mt-10 mb-5 flex items-center gap-2">
+                        <h2 class="font-semibold text-2xl">{{ t("comments") }}</h2>
+                        <div class="w-8 h-8 min-w-8 min-h-8 text-base text-critic-500 bg-critic-30 rounded-full flex justify-center items-center font-semibold">{{ newCommentList.length}}</div>
+                    </div>
+                    <!-- comment enter -->
+                    <send-comment 
+                        @emit:submit-comment="handleSendComment" 
+                        type="comment"
+                        :isButtonLoading="commentButtonLoading"
+                        v-model="commentValue"
+                        :data="{created_by: authStore.currentUser}"
+                    />
+                    <divider v-if="!!newCommentList.length" />
+                    <template v-for="(comment,index) in newCommentList" :key="comment.id">
+                        <view-replay-comment 
+                            @emit:replay-comment="handleReplayComment" 
+                            :data="comment"
+                            :isDiveiderVisible="newCommentList.length != index + 1"
+                            />
+                    </template>
+                </div>
+            </div>
+            <!-- left -->
+            <div class="pb-3">
+                <h2 class="font-semibold text-lg text-greyscale-900">{{t('similar-news')}}</h2>
+                <div class="flex flex-col gap-3 mt-3 h-full">
+                    <template v-for="news in relatedNewsList" :key="news.id">
+                        <related-news-card :news="news"/>
+                    </template>
+                    <div class="flex mt-[120px]">
+                        <template v-if="realatedNewsListLoading">
+                            <base-spinner />  
+                        </template>
+                        <Empty 
+                            v-else-if="!relatedNewsList.length"
+                            title="there-is-no-related-news-data"
+                            label-classes="text-greyscale-900 !text-lg font-semibold"
+                            wrapper-class="w-full h-full shadow-none"
+                            inner-wrapper-class="w-[335px]"
+                        />
+                    </div>
+                </div>
             </div>
         </div>
-        <!-- left -->
-        <div class="overflow-auto pr-2 pb-3">
-            <h2 class="font-semibold text-lg text-greyscale-900">{{t('similar-news')}}</h2>
-            <div class="flex flex-col gap-3 mt-3 h-full">
-            <template v-for="news in relatedNewsList" :key="news.id">
-                <related-news-card :news="news"/>
-            </template>
-            <div class="flex justify-center items-center h-full">
-                <template v-if="realatedNewsListLoading">
-                    <base-spinner />  
-                </template>
-                <Empty 
-                    v-else-if="!relatedNewsList.length"
-                    title="there-is-no-related-news-data"
-                    label-classes="text-greyscale-900 !text-lg font-semibold"
-                    wrapper-class="w-full h-full shadow-none"
-                    inner-wrapper-class="w-[335px]"
-                />
-            </div>
-            </div>
-        </div>
+        <!-- <share-dialog v-model="shareDialogVisible"/> -->
     </div>
-    <the-footer/>
-    <!-- <share-dialog v-model="shareDialogVisible"/> -->
+    <div class="mt-6">
+        <the-footer/>
+    </div>
   </div>
 </template>
 

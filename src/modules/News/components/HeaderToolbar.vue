@@ -10,21 +10,28 @@ import BaseInput from '@/components/UI/BaseInput.vue'
 // Icons
 import { AddPlusIcon } from '@/components/Icons'
 import { MagniferIcon } from '@/components/Icons'
-// Constants
-import { newsMenuItems } from '../constants'
 // store
 import { useAuthStore } from '@/modules/Auth/stores'
+import { useNewsHeaderStore } from '../stores/news.header.store'
+import { useNewsCountStore } from '../stores/news.count.store'
 
 const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
+const newsHeaderStore = useNewsHeaderStore()
+const newsCountStore = useNewsCountStore()
 // Reactive
-const searchQuery = ref(route.query.search || null)
+const searchQuery = computed({
+  get:() => route.query.search || undefined,
+  set:(value) =>{
+    router.replace({ query: value ? {...router.currentRoute.value.query, search: value } : {...router.currentRoute.value.query, search: undefined} })
+  }
+})
+
 const tagPramId = computed(() => route.query.tag || undefined)
 const isUserModerator = computed(() => authStore.currentUser.roles.some(role => role.name === 'moderator'))
 const rules = ref([])
-
 
 const activeMenu = computed({
   get: () => ( route.query.activeMenu || !tagPramId.value && 'all-news'),
@@ -40,7 +47,7 @@ watch(searchQuery, (newValue) => {
     const { search, ...rest } = router.currentRoute.value.query
     router.replace({ query: rest })
   } else {
-    router.replace({ query: { search: newValue } })
+    router.replace({ query: {...router.currentRoute.value.query, search: newValue } })
   }
 })
 
@@ -60,27 +67,31 @@ watchEffect(() => {
 });
 
 onMounted(() => {
-    if(isUserModerator.value) {
-      rules.value = ['user','moderator']
-    } else {
-      rules.value = ['user']
-    }
-  })
+  if(isUserModerator.value) {
+    rules.value = ['user','moderator']
+  } else {
+    rules.value = ['user']
+  }
+
+  newsCountStore.actionGetNewsPandingCountList()
+})
+
 </script>
 
 <template>
   <action-toolbar title="news">
     <template #title-after>
       <div class="flex gap-3">
-        <template v-for="item in newsMenuItems" :key="item.link">
+        <template v-for="item in newsHeaderStore.header" :key="item.link">
           <div
             v-if="rules.some(role => !!item.roles?.includes(role))"
             :key="item.link"
             @click="handleClickMenu(item)"
-            class="py-1 px-4 bg-white rounded-[32px] text-sm font-medium text-greyscale-900 cursor-pointer"
+            class="flex items-center gap-2 py-1 px-4 bg-white rounded-[32px] text-sm font-medium text-greyscale-900 cursor-pointer"
             :class="{ '!bg-primary-500 text-white': activeMenu === item.title }"
           >
-            {{  t(item.title) }}
+            <span>{{ t(item.title) }}</span>
+            <div  v-if="item.count" class="flex items-center justify-center w-5 h-5 rounded-full bg-critic-500 text-[10px] font-semibold text-white">{{ item.count }}</div>
           </div>
         </template>
       </div>
