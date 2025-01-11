@@ -1,6 +1,7 @@
 <script setup>
 // Core
 import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 // Components
 import { ActionToolbar, ExportButton } from '@/components/Actions'
 import Empty from '@/components/Empty.vue'
@@ -8,10 +9,13 @@ import Empty from '@/components/Empty.vue'
 import { useSalaryStore } from '../../../stores/salary.store'
 // Utils
 import { formatNumberWithFloat } from '@/utils'
+import { formatDateMonth } from '@/utils/formatDate'
 // Composable
+const { locale } = useI18n()
 const salaryStore = useSalaryStore()
 // Reactive
 const date = ref(new Date().getFullYear().toString())
+const month = ref(new Date().getMonth())
 const options = ref({
   chart: {
     height: 275,
@@ -68,6 +72,9 @@ const options = ref({
   },
   xaxis: {
     categories: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь ', 'Ноябрь', 'Декабрь'],
+    labels: {
+      show: false,
+    }
   },
   yaxis: {
     labels: {
@@ -80,23 +87,32 @@ const options = ref({
 // Watch
 watch(
   () => salaryStore.isLoggedIn,
-  async () => salaryStore.isLoggedIn && await salaryStore.getSalaryStatistic()
+  async () => {
+    salaryStore.isLoggedIn && await salaryStore.getSalaryStatistic()
+    await handleYearMonth(0)
+  }
 )
 // Methods
 const dateSelect = async () => {
   date.value = new Date(date.value).getFullYear().toString()
   await salaryStore.getSalaryStatistic(date.value)
+  await handleYearMonth(0)
 }
 const clear = () => {
   date.value = new Date().getFullYear().toString()
   salaryStore.getSalaryStatistic()
+  handleYearMonth(0)
+}
+const handleYearMonth = async (index) => {
+  month.value = index
+  await salaryStore.getSalary(new Date(parseInt(date.value), month.value, 1))
 }
 </script>
 
 <template>
   <action-toolbar title="Годовая статистика зарплаты">
     <template #filters>
-      <export-button root-class="!bg-greyscale-50 !border !border-greyscale-70 !shadow-none" />
+<!--      <export-button root-class="!bg-greyscale-50 !border !border-greyscale-70 !shadow-none" />-->
 
       <base-calendar-button
         v-model="date"
@@ -128,7 +144,7 @@ const clear = () => {
     </template>
 
     <template v-else>
-      <div class="salary-chart-view bg-primary-10 rounded-2xl pt-4 pb-3 px-5">
+      <div class="salary-chart-view bg-primary-10 rounded-2xl pt-4 pb-3 px-3">
         <div class="-mx-1">
           <apexchart
             :options="options"
@@ -136,6 +152,20 @@ const clear = () => {
             type="line"
             height="275"
           ></apexchart>
+
+          <div class="flex gap-6 -mx-2 pb-1 px-6">
+            <template v-for="(_, index) in 12">
+              <div class="flex justify-center flex-1">
+                <button
+                  class="flex justify-center items-center h-7 bg-greyscale-70 text-sm text-greyscale-900 capitalize font-medium rounded-full px-3"
+                  :class="{ 'bg-primary-500 text-white': month === index }"
+                  @click="handleYearMonth(index)"
+                >
+                  {{ formatDateMonth(new Date().setMonth(index), locale) }}
+                </button>
+              </div>
+            </template>
+          </div>
         </div>
       </div>
     </template>
@@ -146,16 +176,19 @@ const clear = () => {
 .apexcharts-title-text {
   transform: translateX(3px);
 }
+
 .apexcharts-text {
   font-family: 'SFProDisplay-Medium', serif !important;
   font-size: 12px;
   color: #767994;
 }
+
 .apexcharts-toolbar,
 .apexcharts-xaxis-tick,
 .apexcharts-xaxistooltip {
   display: none !important;
 }
+
 .apexcharts-grid-borders > line:last-child {
   display: none;
 }
