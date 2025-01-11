@@ -1,6 +1,7 @@
 <script setup>
 // Core
 import { ref, unref, nextTick } from 'vue'
+import {onClickOutside} from "@vueuse/core";
 // Components
 import {
   UserRoundedBoldIcon,
@@ -28,11 +29,11 @@ import { COLOR_TYPES } from '@/enums'
 const authStore = useAuthStore()
 // Reactive
 const inputRef = ref(null)
+const ignoreRef = ref(null)
 const editIndex = ref(null)
 const editValue = ref(null)
 const loadingSave = ref(false)
-// Non-reactive
-const items = [
+const items = ref([
   {
     title: 'ФИО Сотрудника',
     description: authStore.currentUser?.full_name ?? '-',
@@ -115,7 +116,13 @@ const items = [
     icon: LetterBoldIcon,
     editable: true
   },
-]
+])
+// Composable
+// onClickOutside(
+//   inputRef,
+//   () => editIndex.value = null,
+//   { ignore: [ignoreRef] }
+// )
 // Methods
 const handleEdit = async (index, value) => {
   editIndex.value = index
@@ -125,22 +132,30 @@ const handleEdit = async (index, value) => {
   editValue.value = value
 }
 const handleSave = async (key) => {
-  loadingSave.value = true
-  // try {
-  //   const model = {
-  //     [key]: editValue.value
-  //   }
-  //
-  //   await authStore.actionCurrentUserUpdate(model)
-  //   dispatchNotify(null, 'Успешно изменен', COLOR_TYPES.SUCCESS)
-  //   editIndex.value = null
-  // }
-  // catch (error) {
-  //
-  // }
-  // finally {
-  //
-  // }
+  try {
+    const model = {
+      [key]: editValue.value
+    }
+
+    loadingSave.value = true
+
+    await authStore.actionCurrentUserUpdate(model)
+    setNewItem(key, editValue.value)
+    dispatchNotify(null, 'Успешно изменен', COLOR_TYPES.SUCCESS)
+    editIndex.value = null
+  }
+  catch (error) {
+
+  }
+  finally {
+    setTimeout(() => {
+      loadingSave.value = false
+    }, 500)
+  }
+}
+const setNewItem = (key, value) => {
+  let item = items.value.find((item) => item['key'] === key)
+  item.description = value
 }
 </script>
 <template>
@@ -152,7 +167,7 @@ const handleSave = async (key) => {
             <base-iconify :icon="item.icon" class="!w-6 !h-6 transition-colors text-greyscale-400 group-hover:text-primary-500" />
           </div>
           <div class="flex-1 relative">
-            <div class="mr-14">
+            <div class="relative z-[2] mr-14">
               <h1 class="text-sm font-medium text-greyscale-500 mb-1">{{ item.title }}</h1>
 
               <template v-if="editIndex === index">
@@ -173,7 +188,7 @@ const handleSave = async (key) => {
               <template v-if="editIndex === index">
                 <button
                   type="button"
-                  class="flex items-center justify-center w-8 h-8 bg-primary-500 rounded-full absolute right-0 top-2 cursor-pointer"
+                  class="flex items-center justify-center w-8 h-8 bg-primary-500 rounded-full absolute right-0 top-2 z-[2] cursor-pointer"
                   @click="handleSave(item.key)"
                 >
                   <base-spinner
@@ -182,8 +197,14 @@ const handleSave = async (key) => {
                     root-classes="!w-5 !h-5"
                   />
 
-                  <base-iconify :icon="UnreadLinearIcon" class="!w-6 !h-6 text-white" />
+                  <base-iconify
+                    v-else
+                    :icon="UnreadLinearIcon"
+                    class="!w-6 !h-6 text-white"
+                  />
                 </button>
+
+                <div ref="ignoreRef" class="fixed top-0 left-0 w-full h-full"></div>
               </template>
 
               <template v-else>
