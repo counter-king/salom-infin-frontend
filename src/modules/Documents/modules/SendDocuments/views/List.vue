@@ -114,6 +114,7 @@ onMounted(async () => {
         <base-avatar-group
           :items="data.signers"
           shape="circle"
+          detail-dialog
           avatar-classes="w-8 h-8"
         />
       </template>

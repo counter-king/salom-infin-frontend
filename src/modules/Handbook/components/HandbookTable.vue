@@ -87,6 +87,7 @@ const select = ref({
                 :label="user.full_name"
                 :color="user.color ?? '#635AFF'"
                 shape="circle"
+                detail-dialog
                 avatar-classes="w-6 h-6"
               />
 

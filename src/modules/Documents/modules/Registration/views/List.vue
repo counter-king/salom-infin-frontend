@@ -173,6 +173,7 @@ const link = (data) => {
           <base-avatar-group
             :items="data?.reviewers"
             shape="circle"
+            detail-dialog
             avatar-classes="w-8 h-8"
           />
         </linkable-cell>
