@@ -86,6 +86,7 @@ const select = ref({
               <base-avatar
                 :label="user.full_name"
                 :color="user.color ?? '#635AFF'"
+                :meta="user"
                 shape="circle"
                 detail-dialog
                 avatar-classes="w-6 h-6"
@@ -96,7 +97,7 @@ const select = ref({
           </div>
 
           <div class="flex-1 py-3 px-4 cursor-pointer" @click="modal = true; select = user">
-            <span class="text-sm font-medium text-greyscale-900">{{ user.position }}</span>
+            <span class="text-sm font-medium text-greyscale-900">{{ user.position?.name ?? '-' }}</span>
           </div>
 
           <div class="max-w-[150px] w-full py-3 px-4 cursor-pointer" @click="modal = true; select = user">
