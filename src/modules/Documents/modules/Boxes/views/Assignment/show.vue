@@ -112,11 +112,11 @@ const updateDocument = async () => {
 						})"
 	          />-->
 
-            <create-menu
-              v-if="createMenuVisible"
-              :compose-id="assignmentStore.detailModel?.document?.compose.id"
-              :document="assignmentStore.detailModel?.document"
-            />
+<!--            <create-menu-->
+<!--              v-if="createMenuVisible"-->
+<!--              :compose-id="assignmentStore.detailModel?.document?.compose.id"-->
+<!--              :document="assignmentStore.detailModel?.document"-->
+<!--            />-->
           </template>
         </template>
 
