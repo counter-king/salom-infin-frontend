@@ -14,9 +14,6 @@ const props = defineProps({
       name: '',
       users: []
     })
-  },
-  topLevel: {
-    type: String
   }
 })
 // Reactive
@@ -101,7 +98,7 @@ const select = ref({
           </div>
 
           <div class="max-w-[150px] w-full py-3 px-4 cursor-pointer" @click="modal = true; select = user">
-            <!-- TODO: испавить потом -->
+            <!-- TODO: исправить потом -->
             <status-chip type="handbook" :status="user.status">
               {{ user.status.name }}
             </status-chip>
@@ -154,15 +151,15 @@ const select = ref({
 
         <div class="mt-4">
           <vertical-card>
-            <vertical-card-item title="Филиал" :description="select?.company?.name" />
+            <vertical-card-item title="branch" :description="select?.company?.name" />
 
-            <vertical-card-item title="Департамент" :description="select?.top_level_department?.name" />
+            <vertical-card-item title="department" :description="select?.top_level_department?.name" />
 
-            <vertical-card-item title="Отдел" :description="select?.department?.name" />
+            <vertical-card-item title="division" :description="select?.department?.name" />
 
-            <vertical-card-item title="Корп. почта" :description="select.email" />
+            <vertical-card-item title="corp-mail" :description="select.email" />
 
-            <vertical-card-item title="IP-телефона" :description="select.cisco" />
+            <vertical-card-item title="ip-phone" :description="select.cisco" />
           </vertical-card>
         </div>
       </div>
