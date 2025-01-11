@@ -5,6 +5,7 @@ import {fetchSignDetail, fetchSignList} from "@/modules/Documents/modules/Boxes/
 import {fetchGetTree} from "@/modules/Documents/modules/Registration/services/docflow.service";
 import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store";
 import { COMPOSE_DOCUMENT_SUB_TYPES } from "@/enums";
+import { fetchGetLinkedDocumentsList } from "@/modules/Documents/modules/SendDocuments/services/index.service";
 
 
 export const useBoxesSignStore = defineStore("sign-stores", {
@@ -121,6 +122,7 @@ export const useBoxesSignStore = defineStore("sign-stores", {
     async actionGetSignDetail(id) {
       this.detailLoading = true;
       const response = await fetchSignDetail(id)
+      const decreeCompose = await fetchGetLinkedDocumentsList(response.data?.compose?.id)
       if (response.status === 200) {
         await useSDStore().actionVersionHistory(response.data?.compose?.id)
         if (response.data?.compose?.registered_document){
@@ -142,7 +144,14 @@ export const useBoxesSignStore = defineStore("sign-stores", {
               }
             })
         } else {
-          this.detailModel = response.data
+          this.detailModel = {
+            ...response.data,
+            compose: {
+              ...response.data.compose,
+              decree_content: decreeCompose?.data?.to_composes[0]?.from_compose?.content,
+              decree_register_number: decreeCompose?.data?.to_composes[0]?.from_compose?.register_number
+            }
+          }
         }
         this.detailLoading = false
       }

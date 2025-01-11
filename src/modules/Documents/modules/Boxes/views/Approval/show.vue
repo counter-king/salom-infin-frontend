@@ -20,6 +20,7 @@ import SigningProcessTimeline from "@/modules/Documents/components/SigningProces
 // Enums
 import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue"
 import {TreeUsers} from "@/components/Tree"
+import { COMPOSE_DOCUMENT_SUB_TYPES } from "@/enums";
 
 // Composable
 const route = useRoute()
@@ -155,7 +156,10 @@ onMounted(  () => {
           class="p-4 overflow-y-auto"
           style="height: calc(100vh - 250px)"
         >
-          <div class="p-10 min-h-full shadow-block border-[0.095rem] border-greyscale-200">
+          <div
+            class="min-h-full shadow-block border-[0.095rem] border-greyscale-200"
+            :class="approvalStore?.detailModel?.compose?.document_sub_type?.id === Number(COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2) ? '' : 'p-10'"
+          >
             <base-template
               v-if="approvalStore.detailModel && approvalStore.detailModel.compose"
               :compose-model="approvalStore.detailModel?.compose"

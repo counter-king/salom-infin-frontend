@@ -8,6 +8,7 @@ export const ROUTE_SD_LIST = "SendDocumentsList"
 export const ROUTE_SD_DETAIL = "SendDocumentsDetail"
 export const ROUTE_SD_CREATE = "SendDocumentsCreate"
 export const STEPPER_TRIP_INFO = "trip_info"
+export const STEPPER_DECREE = "decree"
 export const STEPPER_WORK_PLAN = "work_plan"
 export const STEPPER_ROUTE = "route"
 export const BY_PLANE = "by_plane"
@@ -42,6 +43,42 @@ export const TRANSPORT_CLASS_LIST = [
   {
     name: 'Umumiy vagon',
     value: SEAT_CLASS
+  }
+]
+export const PLANE_CLASS_LIST = [
+  {
+    name: 'Ekonom klass',
+    value: ECONOMY_CLASS
+  },
+  {
+    name: 'Biznes klass',
+    value: BUSINESS_CLASS
+  },
+  {
+    name: 'Birinchi klass',
+    value: FIRST_CLASS
+  }
+]
+
+export const TRAIN_CLASS_LIST = [
+  {
+    name: 'Kupe',
+    value: SLEEPER_CLASS
+  },
+  {
+    name: 'Umumiy vagon',
+    value: SEAT_CLASS
+  }
+]
+
+export const CAR_CLASS_LIST = [
+  {
+    name: 'Ekonom klass',
+    value: ECONOMY_CLASS
+  },
+  {
+    name: 'Biznes klass',
+    value: BUSINESS_CLASS
   }
 ]
 

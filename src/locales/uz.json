@@ -699,7 +699,7 @@
   "work-plan": "Ish reja",
   "work-plan-content": "Ish reja mazmuni",
   "enter-work-plan-content": "sh reja mazmunini kiriting",
-  "trip-info": "xizmat safari haqida ma'lumot",
+  "trip-info": "Xizmat safari haqida ma'lumot",
   "group": "Guruh",
   "plan": "Reja",
   "next-step": "Keyingi",
@@ -755,5 +755,6 @@
   "add-line": "Qator qo'shish",
   "business-trip-v2": "Komandirovka 2.0",
   "news": "Bank yangiliklari",
-  "save-news-as-draft": "Maʼlumotlarni qoralama sifatida saqlamoqchimisiz?"
+  "save-news-as-draft": "Maʼlumotlarni qoralama sifatida saqlamoqchimisiz?",
+  "notice-saved-successfully": "Bildirishnoma muvaffaqiyatli saqlandi!"
 }
