@@ -31,6 +31,12 @@ export const fetchLoginViaERI = (body) => {
 export const fetchCurrentUser = () => {
   return axiosConfig.get(URLS.profile)
 }
+/**
+ *
+ * */
+export const fetchCurrentUserUpdate = (body) => {
+  return axiosConfig.put(URLS.profile, body)
+}
 /*
 *
 * */
@@ -41,7 +47,6 @@ export const fetchSendOtp = async (body) => {
 *
 * */
 export const fetchVerifyNumber = async (body) => {
-  console.log('body', body)
   return axiosConfig.post(URLS.verify, body)
 }
 /*

@@ -4,10 +4,10 @@ import { ref, shallowRef, watch, defineAsyncComponent, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 // Components
-import ScrollPanel from 'primevue/scrollpanel'
 import BaseSpinner from '@/components/UI/BaseSpinner.vue'
 import { StatusChip } from '@/components/Chips'
 import {
+  PenBoldIcon,
   PenIcon,
   UserCheckIcon,
   UserSpeakRoundedIcon,
@@ -21,6 +21,7 @@ import {
   InstagramAltIcon,
   FacebookCircleIcon
 } from '@/components/Icons'
+import AvatarModal from '../components/AvatarModal.vue'
 // Stores
 import { useAuthStore } from '@/modules/Auth/stores'
 // Enums
@@ -132,17 +133,14 @@ watch(activeTabMenu, (value) => {
         <div class="flex items-center justify-center w-[106px] h-[106px] relative rounded-full bg-white z-10">
           <base-avatar
             :label="authStore.currentUser?.full_name"
+            :image="authStore.currentUser?.avatar?.url"
             :color="authStore.currentUser?.color"
             avatarClasses="w-24 h-24"
           >
             <span class="text-4xl font-semibold text-white">{{ authStore.currentUser?.full_name[0] }}</span>
           </base-avatar>
 
-          <div class="flex items-center justify-center w-6 h-6 absolute bottom-0 right-[10px] rounded-full overflow-hidden bg-white z-20">
-            <div class="flex items-center justify-center w-4 h-4 bg-primary-500 rounded-full">
-              <div class="w-[6px] h-[6px] rounded-full bg-white"></div>
-            </div>
-          </div>
+          <avatar-modal />
         </div>
 
         <div class="flex self-end flex-1 gap-4">

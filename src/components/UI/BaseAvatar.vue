@@ -96,7 +96,7 @@ const handleMouseEnter = async (event) => {
       :image="props.image"
       :size="props.size"
       :shape="props.shape"
-      :label="props.label[0]"
+      :label="props.image ? undefined : props.label[0]"
       :pt="{
         root: {
           style: {
@@ -114,7 +114,7 @@ const handleMouseEnter = async (event) => {
         }
       }"
     >
-      <slot />
+      <slot v-if="!props.image" />
     </Avatar>
 
     <template v-if="detailDialog">
