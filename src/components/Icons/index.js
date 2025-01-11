@@ -150,6 +150,8 @@ export { default as EyeBoldIcon } from  '~icons/solar/eye-bold'
 export { default as TrashBinBoldIcon } from  '~icons/solar/trash-bin-trash-bold'
 export { default as QuestionCircleBoldIcon } from  '~icons/solar/question-circle-bold'
 export { default as Routing2BoldIcon } from  '~icons/solar/routing-2-bold'
+export { default as MapPointBoldIcon } from  '~icons/solar/map-point-bold'
+export { default as GarageBoldIcon } from  '~icons/solar/garage-bold'
 // Solar (Bold Duotone)
 export { default as ArchiveUpBoldDuotoneIcon } from  '~icons/solar/archive-up-bold-duotone'
 export { default as StarBoldDuotoneIcon } from  '~icons/solar/star-bold-duotone'
