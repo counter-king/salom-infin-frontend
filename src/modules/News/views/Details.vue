@@ -338,7 +338,7 @@ onMounted( async () => {
             </div>
         </div>
     </div>
-    <div class="mt-10">
+    <div class="mt-6 mx-auto w-[904px]">
         <the-footer/>
     </div>
     <reject-news-dialog  
