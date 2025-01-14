@@ -107,6 +107,11 @@ const onArrivalRegionChange = (value, parentIndex, childIndex, booking) => {
     store.booking_model.bookings[parentIndex].segments[childIndex + 1].departure_city = value
   }
 }
+const onSegmentClassChange = (value, parentIndex, childIndex, booking) => {
+  if (booking.type === ROUND_TRIP) {
+    store.booking_model.bookings[parentIndex].segments[childIndex + 1].segment_class = value
+  }
+}
 
 const validateAndSend = () => {
   stepClick(STEPPER_DECREE)
@@ -225,6 +230,8 @@ defineExpose({
               option-label="name"
               :show-nested-error="showNestedError"
               translatable
+              :disabled="item.type === ROUND_TRIP && subIndex % 2 !== 0"
+              @emit:change="value => onSegmentClassChange(value, index, subIndex, item)"
             >
               <template #option="{ option }">
                 <user-with-radio
