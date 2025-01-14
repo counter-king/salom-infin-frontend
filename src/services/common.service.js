@@ -42,7 +42,7 @@ export const fetchDepartmentList = (params) => {
  * Возвращает список сотрудников департаментов
  * @returns [{Array}]
  * */
-export const fetchDepartmentsUserListBySearch = (params) => {  
+export const fetchDepartmentsUserListBySearch = (params) => {
   return axiosConfig.get(`${URLS.userSearch}/`, { page_size: 200, ...params })
 }
 /**
@@ -107,7 +107,9 @@ export const fetchPrioryList = () => {
  * @returns [{Array}]
  */
 export const fetchRegionsList = () => {
-  return axiosConfig.get(URLS.regions)
+  return axiosConfig.get(URLS.regions, {
+    page_size: 50
+  })
 }
 /**
  * Возвращает список кратких описаний

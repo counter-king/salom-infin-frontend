@@ -170,7 +170,6 @@ defineExpose({
               :error="$v.bookings.$each.$response.$data[index].segments.$each.$data[subIndex].departure_city"
               v-model:options="commonStore.regionsList"
               required
-              searchable
               api-url="regions"
               label="where-from"
               placeholder="choose-one"
@@ -196,7 +195,6 @@ defineExpose({
               :error="$v.bookings.$each.$response.$data[index].segments.$each.$data[subIndex].arrival_city"
               v-model:options="commonStore.regionsList"
               required
-              searchable
               api-url="regions"
               label="where-to"
               placeholder="choose-one"
