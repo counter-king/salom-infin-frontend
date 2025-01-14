@@ -1,7 +1,8 @@
 <script setup >
 // core
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
 // component 
 import BaseDialog from '@/components/UI/BaseDialog.vue';
 import BaseButton from '@/components/UI/BaseButton.vue';
@@ -12,13 +13,15 @@ import TitleComponent from '../Title.vue';
 import MainFileShow from '../MainFileShow.vue';
 import Queto from '../Queto.vue';
 import ShortDescription from '../ShortDescription.vue';
+import RejectNewsDialog from '../RejectNewsDialog.vue';
 // stores
 import { useNewsStore } from '../../stores';
 import { useAuthStore } from '@/modules/Auth/stores';
-
 // contants
 import { CONTENT_TYPES } from '../../constants';
-
+import { NEWS_STATUS } from '../../enums';
+// services
+import { fetchCreateNewsModerationHistory } from '../../services/news.service';
 // props  
 const props = defineProps({
     modelValue: {
@@ -30,16 +33,17 @@ const props = defineProps({
     }
     })
 
+const route = useRoute()
 const authStore = useAuthStore()
 const newsStore = useNewsStore()
-const userProfile = computed(() => authStore.getCurrentUser)
-
 // internalitaion
 const { t } = useI18n()
-
+// reactive
+const isRejectModalVisible = ref(false)
+const isLoadingRejectModeration = ref(false)
+const userProfile = computed(() => authStore.getCurrentUser)
 // emits
 const emit = defineEmits(['update:modelValue'])
-
 
 // methods
 const handlePublish = async () => {
@@ -50,9 +54,30 @@ const handlePublish = async () => {
   } 
 }
 
+const handleRejectDialog = () => {
+  if(newsStore.model.status === NEWS_STATUS.DECLINED){
+    isRejectModalVisible.value = true
+  } else {
+    handlePublish()
+  }
+}
+
+
 const dynamicFieldsFilter = computed(() => 
   newsStore.model.dynamicFields.filter((item) => !!item.value)
 );
+
+const handleRejectModeration = async (reason)=> {
+  isLoadingRejectModeration.value = true
+  try {
+    await fetchCreateNewsModerationHistory({ news: route.params.id, status: NEWS_STATUS.PANDING, description: reason })
+    isRejectModalVisible.value = false
+    await handlePublish()
+  }
+  finally {
+    isLoadingRejectModeration.value = false
+  }
+}
 
 </script>
 <template>
@@ -81,6 +106,7 @@ const dynamicFieldsFilter = computed(() =>
     <template #footer>
       <base-button
         label="cancel"
+        :disabled="newsStore.loadingSubmitButton"
         rounded
         outlined
         shadow
@@ -92,8 +118,16 @@ const dynamicFieldsFilter = computed(() =>
         :loading="newsStore.loadingSubmitButton"
         label="submit-for-moderation"
         rounded
-        @click="handlePublish"
+        @click="handleRejectDialog"
       />
     </template>
     </base-dialog>
+    <reject-news-dialog  
+      header-lable="reply-to-moderator"
+      v-model="isRejectModalVisible"
+      :createButtonFn="handleRejectModeration"
+      :loading="isLoadingRejectModeration"
+      max-width="max-w-[700px]"
+      type="answer"
+      />
 </template>

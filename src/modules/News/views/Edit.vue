@@ -15,10 +15,13 @@ import BaseDialog from '@/components/UI/BaseDialog.vue'
 import { fetchGetMyNewsDelete, fetchGetMyNews } from '../services/news.service';
 // stores
 import { useNewsStore } from '../stores';
+// utils
+import { dispatchNotify } from '@/utils/notify';
 // constants
 import { allowedAudioTypes, allowedImageTypes, allowedVideoTypes, CONTENT_TYPES } from '../constants';
-import { dispatchNotify } from '@/utils/notify';
+// enums
 import { COLOR_TYPES } from '@/enums';
+import { NEWS_STATUS } from '../enums';
 
 const { t } = useI18n()
 const route = useRoute()
@@ -84,6 +87,7 @@ const fetchOneNews = async() => {
    try {
       const { data }  = await fetchGetMyNews(route.params.id)   
       newsStore.model.title = data.title    
+      newsStore.model.status = data.status    
       newsStore.model.description = data.description
       newsStore.model.category = data.category?.id
       newsStore.model.tags_ids = data.tags
@@ -122,7 +126,7 @@ onMounted(() => {
 
 </script>
 <template>
-  <div class="flex flex-col items-center overflow-y-auto w-full">
+  <div class="flex flex-col grow items-center w-full">
     <div class="w-full h-full">
       <template v-if="loading">
         <base-spinner/>
@@ -141,7 +145,7 @@ onMounted(() => {
                     @click="handleDeleteDialog"
                     button-class="!px-4 !py-3 text-xs rounded-[120px] border-critic-500 bg-critic-500" :label="t('delete')"
                   />
-                  <base-button @click="isDraftDialogVisible = true" color="text-primary" outlined shadow button-class="!px-4 !py-3 text-xs rounded-[120px]" :label="t('draft')"/>
+                  <base-button v-if="newsStore.model.status !== NEWS_STATUS.PUBLISHED" @click="isDraftDialogVisible = true" color="text-primary" outlined shadow button-class="!px-4 !py-3 text-xs rounded-[120px]" :label="t('draft')"/>
                   <base-button @click="handleOpenDialogPreview" button-class="!px-4 !py-3 text-xs rounded-[120px]" :label="t('preview-news')"/>
                 </div>
                 </template>

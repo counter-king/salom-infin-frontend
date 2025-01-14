@@ -34,7 +34,7 @@ const props = defineProps({
     type: String,
     default: 'reject-reason',
     validator: (value) => {
-      return ['show-reason', 'reject-reason'].includes(value)
+      return ['show-reason', 'reject-reason', "answer"].includes(value)
     }
   },
   value: {
@@ -97,15 +97,15 @@ onMounted(() => {
         :error="$v.message"
         :max-length="250"
         :disabled="props.type === 'show-reason' && props.disabled"
-        :label="props.type === 'show-reason' ? 'reason' : 'reject-news-reason'"
-        placeholder="enter-reject-news-reason"
+        :label="props.type === 'show-reason' ? 'reason' : props.type === 'answer' ? 'answer' : 'reject-news-reason'"
+        :placeholder="props.type === 'answer' ? 'answer' : 'reject-news-reason'"
       />
     </template>
 
-    <template #footer v-if="props.type === 'reject-reason'">
+    <template #footer v-if="props.type !== 'show-reason'">
       <base-button
         :loading="props.loading"
-        label="refuse"
+        :label="props.type === 'answer' ? 'answer' : 'refuse'"
         rounded
         outlined
         shadow

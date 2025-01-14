@@ -8,6 +8,8 @@ import Textarea from 'primevue/textarea';
 import UserCard from '../../components/UserCard.vue';
 import Divider from '@/components/Divider';
 import { AltArrowDownIcon, AltArrowUpIcon } from '@/components/Icons';
+// Utils
+import { formatDate, formatHour } from '@/utils/formatDate';
 
 // internalization
 const { t } = useI18n()
@@ -29,6 +31,10 @@ const props = defineProps({
     isDiveiderVisible: {
         type: Boolean,
         default: false
+    },
+    replayButtonVisible: {
+        type: Boolean,
+        default: true
     }
 })
 
@@ -54,10 +60,14 @@ const handleReplayComment = () => {
 <template>
     <div class="py-5">
         <!-- user info -->
-        <user-card  
-             :avatar-color="props.data?.created_by?.color" 
-             :name="props.data?.created_by?.full_name"
-             :created-date="props.data?.created_date" />
+        <div class="flex justify-between">
+            <user-card  
+                :avatar-color="props.data?.created_by?.color" 
+                :name="props.data?.created_by?.full_name"
+                :info="props.data?.created_by?.top_level_department?.name || props.data?.created_by?.position?.name"
+            />
+            <div class="text-sm text-greyscale-500">{{ formatHour(props.data?.created_date) }} , {{ formatDate(props.data?.created_date) }}</div>
+        </div>
         <div class="ml-[52px] mt-4 relative">
             <!-- commment info -->
             <p class="text-lg font-medium text-greyscale-800">
@@ -87,6 +97,7 @@ const handleReplayComment = () => {
                     </template>
                 </base-button>
                 <base-button 
+                    v-if="props.replayButtonVisible"
                     @click="replayCommentVisible = !replayCommentVisible"
                     :label="t('answer')" 
                     class="px-3 py-1 rounded-[80px] bg-greyscale-50 text-sm font-medium text-greyscale-900 border-none focus:shadow-none focus:outline-none"  />
@@ -116,11 +127,12 @@ const handleReplayComment = () => {
              <template v-if="toggleComment">
                  <view-replay-comment 
                     v-for="(reply, index) in props.data?.replies"
+                    :replay-button-visible="props.replayButtonVisible"
                     :key="reply.id"
                     :data="reply"
                     @emit:replay-comment="handleReplayCommentRecursive" 
                     :replay-to="props.data"
-                    :isDiveiderVisible="true"
+                    :isDiveiderVisible="index != props.data?.replies.length - 1"
                  />
             </template>
         </div>
