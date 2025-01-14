@@ -101,7 +101,7 @@ export const fetchGetNewsPendingCount = (params) => {
 
 // get news-moderation-history
 export const fetchGetNewsModerationHistoryList = (params) => {
-    return axiosConfig.get(`${URLS.newsModerationHistory}/`, params)
+    return axiosConfig.get(`${URLS.newsModerationHistory}/`, { page_size: 200,...params })
 }
 
 // create news-moderation-history
