@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 // Components
 import { PenBoldIcon, UnreadLinearIcon, TrashBinTrashIcon } from '@/components/Icons'
 // Stores
@@ -19,6 +19,19 @@ const avatars = ref([])
 const avatarSelected = ref(authStore.currentUser?.avatar?.id ?? null)
 const loading = ref(false)
 const loadingDelete = ref(false)
+// Computed
+const avatarUrls = computed(() => {
+  let avatars = []
+
+  for (let i = 1; i <= 25; i++) {
+    avatars.push({
+      id: 972 + i,
+      url: `/images/avatars/${i}.png`
+    })
+  }
+
+  return avatars
+})
 // Methods
 const handleAvatar = async (id) => {
   avatarSelected.value = id
@@ -107,7 +120,7 @@ onMounted(async () => {
   >
     <template #content>
       <div class="grid grid-cols-5 gap-x-3 gap-y-4">
-        <template v-for="avatar in avatars">
+        <template v-for="avatar in avatarUrls">
           <div
             class="w-[98px] h-[98px] relative rounded-full cursor-pointer"
             :class="{ 'ring-4 ring-primary-500': avatarSelected === avatar.id }"

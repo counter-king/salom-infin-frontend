@@ -366,6 +366,8 @@ export const returnStatusColor = (code) => {
   switch (code) {
     case USER_STATUS_CODES.WORKERS:
       return 'text-success-500'
+    case USER_STATUS_CODES.LABOR_LEAVE:
+      return 'text-critic-500'
     default:
       return 'text-warning-500'
   }

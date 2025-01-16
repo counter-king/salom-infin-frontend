@@ -1,7 +1,8 @@
 <script setup>
 // Core
-import { ref, unref, nextTick } from 'vue'
-import {onClickOutside} from "@vueuse/core";
+import { ref, unref, nextTick, watch } from 'vue'
+import { vMaska } from 'maska'
+import { onClickOutside } from '@vueuse/core'
 // Components
 import {
   UserRoundedBoldIcon,
@@ -23,6 +24,7 @@ import {
 import { useAuthStore } from '@/modules/Auth/stores'
 // Utils
 import { dispatchNotify } from '@/utils/notify'
+import { replaceWithNumbers } from '@/utils/regex'
 // Enums
 import { COLOR_TYPES } from '@/enums'
 // Composable
@@ -117,7 +119,29 @@ const items = ref([
     editable: true
   },
 ])
-// Composable
+// Watch
+watch(
+  () => editValue.value,
+  (__value) => {
+    if(editIndex.value === 11) {
+      const atIndex = __value.indexOf('@')
+
+      if (atIndex !== -1) {
+        const localPart = __value.slice(0, atIndex).replace(/[^a-zA-Z0-9._%+-]/g, '')
+        const domainPart = __value
+        .slice(atIndex + 1)
+        .replace(/[^sqbuz.]/g, '')
+        .replace(/(s+|q+|b+|u+|z+|\.{2,})/g, match => match[0])
+
+        const validDomain = "sqb.uz".slice(0, domainPart.length)
+
+        editValue.value = `${localPart}@${validDomain}`
+      } else {
+        editValue.value = __value.replace(/[^a-zA-Z0-9._%+-]/g, '')
+      }
+    }
+  }
+)
 // onClickOutside(
 //   inputRef,
 //   () => editIndex.value = null,
@@ -133,8 +157,12 @@ const handleEdit = async (index, value) => {
 }
 const handleSave = async (key) => {
   try {
-    const model = {
+    let model = {
       [key]: editValue.value
+    }
+
+    if(key === 'cisco') {
+      Object.assign(model, { normalized_cisco: replaceWithNumbers(editValue.value) })
     }
 
     loadingSave.value = true
@@ -172,8 +200,10 @@ const setNewItem = (key, value) => {
 
               <template v-if="editIndex === index">
                 <input
-                  v-model="editValue"
                   ref="inputRef"
+                  v-model="editValue"
+                  v-maska
+                  :data-maska="item.key === 'cisco' ? '##-##' : undefined"
                   type="text"
                   class="w-full border-b-[2px] border-b-primary-500 bg-transparent outline-none"
                 />
@@ -203,8 +233,6 @@ const setNewItem = (key, value) => {
                     class="!w-6 !h-6 text-white"
                   />
                 </button>
-
-                <div ref="ignoreRef" class="fixed top-0 left-0 w-full h-full"></div>
               </template>
 
               <template v-else>

@@ -62,8 +62,18 @@ axiosInstance.interceptors.response.use(
       removeStorageItem(CURRENT_ROUTE)
       authStore.actionSessionEnd(true)
     }
+    // Проверка если это объект
+    if(response.data instanceof Object) {
+      let values = Object.values(response.data)
 
-    dispatchNotify(null, response.data.message, COLOR_TYPES.ERROR)
+      for (let key in values) {
+        let value = values[key]
+        dispatchNotify(null, value.join(''), COLOR_TYPES.ERROR)
+      }
+    }
+    else {
+      dispatchNotify(null, response.data.message, COLOR_TYPES.ERROR)
+    }
 
 		return Promise.reject(response)
 	}

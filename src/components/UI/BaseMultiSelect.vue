@@ -9,6 +9,8 @@ import axiosConfig from "@/services/axios.config"
 import { AltArrowDownIcon, MagniferIcon, TrashBinTrashIcon, XMarkSolidIcon } from '@/components/Icons'
 // Utils
 import { isObject } from '@/utils'
+// Enums
+import { USER_STATUS_CODES } from '@/enums'
 // Composable
 const modelValue = useModel(props, 'modelValue')
 const { t } = useI18n()
@@ -191,6 +193,12 @@ const removeItem = (event, value) => {
   )
 }
 const selectItem = (event, value) => {
+  // Если это статус не Рабочие
+  if(value.status.code !== USER_STATUS_CODES.WORKERS) {
+    event.stopPropagation()
+    return
+  }
+
   search.value = null
   emit('emit:select-item', value)
 }
@@ -261,7 +269,6 @@ const  handleEnterPress = () => {
     search.value = ''
   }
 }
-
 </script>
 
 <template>
@@ -382,6 +389,7 @@ const  handleEnterPress = () => {
       <template #option="{ option }">
         <div
           class="absolute top-0 left-0 w-full h-full"
+          :class="{ 'bg-greyscale-50/50 cursor-not-allowed': option.status.code !== USER_STATUS_CODES.WORKERS }"
           @click="(event) => selectItem(event, option)"
         ></div>
         <slot name="option" :value="option" />
