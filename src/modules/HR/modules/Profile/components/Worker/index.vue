@@ -120,28 +120,28 @@ const items = ref([
   },
 ])
 // Watch
-watch(
-  () => editValue.value,
-  (__value) => {
-    if(editIndex.value === 11) {
-      const atIndex = __value.indexOf('@')
-
-      if (atIndex !== -1) {
-        const localPart = __value.slice(0, atIndex).replace(/[^a-zA-Z0-9._%+-]/g, '')
-        const domainPart = __value
-        .slice(atIndex + 1)
-        .replace(/[^sqbuz.]/g, '')
-        .replace(/(s+|q+|b+|u+|z+|\.{2,})/g, match => match[0])
-
-        const validDomain = "sqb.uz".slice(0, domainPart.length)
-
-        editValue.value = `${localPart}@${validDomain}`
-      } else {
-        editValue.value = __value.replace(/[^a-zA-Z0-9._%+-]/g, '')
-      }
-    }
-  }
-)
+// watch(
+//   () => editValue.value,
+//   (__value) => {
+//     if(editIndex.value === 11) {
+//       const atIndex = __value.indexOf('@')
+//
+//       if (atIndex !== -1) {
+//         const localPart = __value.slice(0, atIndex).replace(/[^a-zA-Z0-9._%+-]/g, '')
+//         const domainPart = __value
+//         .slice(atIndex + 1)
+//         .replace(/[^sqbuz.]/g, '')
+//         .replace(/(s+|q+|b+|u+|z+|\.{2,})/g, match => match[0])
+//
+//         const validDomain = "sqb.uz".slice(0, domainPart.length)
+//
+//         editValue.value = `${localPart}@${validDomain}`
+//       } else {
+//         editValue.value = __value.replace(/[^a-zA-Z0-9._%+-]/g, '')
+//       }
+//     }
+//   }
+// )
 // onClickOutside(
 //   inputRef,
 //   () => editIndex.value = null,
@@ -156,6 +156,20 @@ const handleEdit = async (index, value) => {
   editValue.value = value
 }
 const handleSave = async (key) => {
+  if(key === 'cisco') {
+    if(editValue.value.length < 5) {
+      dispatchNotify(null, 'Номер должен быть не менее 4 символа', COLOR_TYPES.ERROR)
+      return
+    }
+  }
+
+  if(key === 'email') {
+    if(!editValue.value.includes('@sqb.uz')) {
+      dispatchNotify(null, 'В почте должен содержать @sqb.uz', COLOR_TYPES.ERROR)
+      return
+    }
+  }
+
   try {
     let model = {
       [key]: editValue.value
