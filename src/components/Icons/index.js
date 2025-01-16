@@ -32,6 +32,8 @@ export { default as CalendarLinearIcon } from  '~icons/solar/calendar-linear'
 export { default as StarLinearIcon } from  '~icons/solar/star-linear'
 export { default as UnreadLinearIcon } from  '~icons/solar/unread-linear'
 export { default as CaseBoldIcon } from  '~icons/solar/case-bold'
+export { default as ClapperboardPlayLinearIcon } from  '~icons/solar/clapperboard-play-linear'
+
 // Solar (Outline)
 export { default as CheckCircleIcon } from  '~icons/solar/check-circle-outline'
 export { default as AltArrowUpIcon } from  '~icons/solar/alt-arrow-up-outline'
@@ -112,6 +114,8 @@ export { default as SquareAcademicCapIcon } from  '~icons/solar/square-academic-
 export { default as PostsCarouselVerticalIcon } from '~icons/solar/posts-carousel-vertical-linear'
 export { default as EyeLinearIcon } from '~icons/solar/eye-linear'
 export { default as HeartLinearIcon } from '~icons/solar/heart-linear'
+export { default as GalleryIcon } from  '~icons/solar/gallery-outline'
+export { default as DocumentsMinimalisticIcon } from  '~icons/solar/documents-minimalistic-outline'
 
 // Solar (Bold)
 export { default as CheckCircleBoldIcon } from  '~icons/solar/check-circle-bold'
@@ -152,6 +156,9 @@ export { default as QuestionCircleBoldIcon } from  '~icons/solar/question-circle
 export { default as Routing2BoldIcon } from  '~icons/solar/routing-2-bold'
 export { default as MapPointBoldIcon } from  '~icons/solar/map-point-bold'
 export { default as GarageBoldIcon } from  '~icons/solar/garage-bold'
+export { default as ClapperboardPlayBoldIcon } from  '~icons/solar/clapperboard-play-bold'
+export { default as DocumentsMinimalisticBoldIcon } from  '~icons/solar/documents-minimalistic-bold'
+
 // Solar (Bold Duotone)
 export { default as ArchiveUpBoldDuotoneIcon } from  '~icons/solar/archive-up-bold-duotone'
 export { default as StarBoldDuotoneIcon } from  '~icons/solar/star-bold-duotone'

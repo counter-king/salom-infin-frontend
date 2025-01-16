@@ -25,7 +25,8 @@ const { t } = useI18n();
       <template v-else>
         <div class="flex flex-col justify-center items-center w-full h-full bg-greyscale-50">
           <img src="@/assets/img/chat-default-1.png" alt="no chat" class="w-[142px]">
-          <span class="block text-lg font-semibold mt-4">{{ t('select-chat') }}</span>
+          <span class="block text-lg font-semibold mt-4 text-greyscale-900">{{ t('select-chat') }}</span>
+          <span class="block text-sm font-semibold mt-2 text-greyscale-500">{{ t('select-chat-user') }}</span>
         </div>
       </template>
 

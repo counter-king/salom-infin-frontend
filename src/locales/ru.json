@@ -551,7 +551,6 @@
   "select-application-type": "Выберите тип заявления",
   "select-approver-signers": "Выберите согласующие подписанты",
   "select-assistant": "Выбирайте ассистента",
-  "select-chat": "Выберите чат, чтобы начать общение",
   "select-date": "Выберите дату",
   "select-employee": "Выбирайте сотрудник",
   "select-employees": "Выбирайте сотрудников",
@@ -757,5 +756,9 @@
   "news": "Новости банка",
   "save-news-as-draft": "Хотите сохранить данные как черновик?",
   "reply-to-moderator": "Ответить модератору",
-  "notice-saved-successfully": "Рапорт успешно сохранен!"
+  "notice-saved-successfully": "Рапорт успешно сохранен!",
+  "select-chat": "Выберите, кому хотели бы написать",
+  "select-chat-user": "Вы можете написать тому, кому хотите, нажав на этот контакт.",
+  "create-groups": "Создать группы"
+
 }

@@ -12,7 +12,6 @@ const props = defineProps({
     <base-avatar
       :label="user?.last_name"
       :color="user?.color"
-      shape="circle"
       avatar-classes="w-10 h-10"
       label-classes="text-sm font-medium text-white"
     />

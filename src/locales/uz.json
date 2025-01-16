@@ -492,7 +492,6 @@
   "global-search-results": "Global qidiruv natijalari",
   "find-users": "Foydalanuvchilarni toping va suhbatni boshlang",
   "find-users-start-chat": "Foydalanuvchilarni toping va suhbatni boshlamoqchi bo'lganlardan birini bosing",
-  "select-chat": "Suhbatni boshlash uchun chatni tanlang",
   "birthday": "Tug‘ilgan kunlar",
   "contacts": "Kontaktlar",
   "upcoming-tasks": "Kelgusi vazifalar",
@@ -757,5 +756,9 @@
   "news": "Bank yangiliklari",
   "save-news-as-draft": "Maʼlumotlarni qoralama sifatida saqlamoqchimisiz?",
   "reply-to-moderator": "Moderatorga javob",
-  "notice-saved-successfully": "Bildirishnoma muvaffaqiyatli saqlandi!"
+  "notice-saved-successfully": "Bildirishnoma muvaffaqiyatli saqlandi!",
+  "select-chat": "Kimga yozishni xohlayotganingizni tanlang",
+  "select-chat-user": "Siz o'sha kontaktni bosish orqali istalgan odamga yozishingiz mumkin.",
+  "create-groups": "Guruhlar yaratish"
+
 }

@@ -11,11 +11,14 @@ import { MagniferIcon, Plus20SolidIcon, UserRoundedBoldIcon, UsersGroupTwoRounde
 import GroupItem from "@/modules/Chat/components/GroupItem.vue";
 import UserItem from "@/modules/Chat/components/UserItem.vue";
 import UserItemSearch from "@/modules/Chat/components/UserItemSearch.vue";
+import CreateGroupDialog from "./CreateGroupDialog.vue";
 
 const { t } = useI18n();
 const authStore = useAuthStore();
 const chatStore = useChatStore();
+// reactive
 const search = ref(null);
+const createGroupDialogVisible = ref(false);
 const tabPanelList = [
   {
     title: 'personal',
@@ -64,15 +67,16 @@ onMounted(async () => {
         :icon-left="MagniferIcon"
         placeholder="search"
         class="p-input-icon-left w-[270px] mr-2"
-        input-class="h-10"
+        input-class="h-10 pl-10"
       />
 
       <div class="flex justify-center items-center bg-greyscale-50 hover:bg-primary-100 rounded-3xl h-8 w-8 cursor-pointer mt-1">
-        <base-icon
-          :name="Plus20SolidIcon"
+        <base-iconify
+          :icon="Plus20SolidIcon"
           width="20"
           height="20"
           class="text-primary-500"
+          @click="createGroupDialogVisible = true"
         />
       </div>
     </div>
@@ -117,16 +121,17 @@ onMounted(async () => {
               <base-spinner />
             </template>
             <template v-else>
-              <template v-if="!chatStore.privateChatList.length">
+              <template v-if="chatStore.privateChatList.length">
                 <div class="flex flex-col justify-center items-center h-full text-center px-4">
                   <img src="@/assets/img/chat-default.png" alt="chat-default">
                   <span class="text-sm font-semibold block mt-5">{{ t('find-users') }}</span>
                   <span class="text-xs font-medium text-greyscale-500 block mt-1">{{ t('find-users-start-chat') }}</span>
                 </div>
               </template>
-              <template>
+              <template v-else>
                 <user-item
                   v-for="i in 30"
+                  :key="i"
                 />
               </template>
             </template>
@@ -134,7 +139,7 @@ onMounted(async () => {
         </template>
 
         <template #group>
-
+      
           <div class="overflow-hidden overflow-y-auto px-4" style="height: calc(100vh - 332px)">
             <group-item />
           </div>
@@ -142,6 +147,8 @@ onMounted(async () => {
 
       </base-brick-tab>
     </template>
+
+    <create-group-dialog v-model="createGroupDialogVisible"/>
   </div>
 
 </template>
