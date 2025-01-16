@@ -56,6 +56,7 @@ export const useDashboardBirthdayStore = defineStore('dashboardBirthdayStore', {
   }),
   actions: {
     async actionGetBirthdayList(params) {
+      this.allBirthdays = []
       try {
         const res = await fetchGetBirthdayList(params)
         if (res) {
