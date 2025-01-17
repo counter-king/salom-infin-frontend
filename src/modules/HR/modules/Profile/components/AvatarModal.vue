@@ -120,7 +120,7 @@ onMounted(async () => {
   >
     <template #content>
       <div class="grid grid-cols-5 gap-x-3 gap-y-4">
-        <template v-for="avatar in avatarUrls">
+        <template v-for="avatar in avatars">
           <div
             class="w-[98px] h-[98px] relative rounded-full cursor-pointer"
             :class="{ 'ring-4 ring-primary-500': avatarSelected === avatar.id }"
