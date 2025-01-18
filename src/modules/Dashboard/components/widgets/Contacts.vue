@@ -10,6 +10,7 @@ import WidgetWrapper from '../WidgetWrapper.vue'
 import { useAuthStore } from '@/modules/Auth/stores'
 // Services
 import axiosConfig from '@/services/axios.config'
+import { returnStatusColor } from "@/utils";
 // Composable
 const authStore = useAuthStore()
 // Reactive
@@ -35,7 +36,7 @@ const getList = async () => {
 }
 const getListService = async () => {
   let { data } = await axiosConfig.get(
-    `dashboard/my-department-users/${authStore.currentUser.top_level_department.id}/`,
+    `dashboard/users/`,
     {
       page: page.value
     }
@@ -75,8 +76,19 @@ onMounted(async () => {
                 :class="{ 'mb-2': index !== list.length - 1 }"
               >
                 <template #sub-title-after>
-                  <div class="w-[6px] min-w-[6px] h-[6px] bg-greyscale-400 rounded-full"></div>
-                  <span class="flex-1 min-w-[40px] text-xs text-greyscale-500">00-12</span>
+<!--                  <div class="w-1 min-w-1 h-1 bg-greyscale-400 rounded-full"></div>-->
+<!--                  <div-->
+<!--                    v-tooltip.top="{-->
+<!--                    value: `<h4 class='text-xs text-white -my-1'>${item.status?.name}</h4>`,-->
+<!--                    escape: true,-->
+<!--                    autoHide: false-->
+<!--                  }"-->
+<!--                    class="text-xs truncate" :class="returnStatusColor(item?.status?.code)"-->
+<!--                  >-->
+<!--                    {{ item.status?.name }}-->
+<!--                  </div>-->
+                  <div class="w-1 min-w-1 h-1 bg-greyscale-400 rounded-full"></div>
+                  <span class="flex-1 min-w-[40px] text-xs text-greyscale-500">{{ item.cisco || '00-00' }}</span>
                 </template>
 
                 <template #action>

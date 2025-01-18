@@ -160,6 +160,7 @@ const onSendToSigning = async () => {
         label="performers"
         placeholder="choose-performers"
         required
+        has-disabled-item
         class="mt-4"
       />
 

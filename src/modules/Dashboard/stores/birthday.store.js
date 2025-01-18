@@ -6,18 +6,39 @@ import {
   fetchGetBirthdayReactionCounts
 } from "@/modules/Dashboard/services/index.service";
 import { isBirthdayToday } from "@/utils";
+import { useAuthStore } from "@/modules/Auth/stores";
 export const useDashboardBirthdayStore = defineStore('dashboardBirthdayStore', {
   state: () => ({
     tabItems: [
       {
         id: 1,
         label: 'today',
+        title: 'today',
+        value: 'today',
         active: true,
         count: null
       },
       {
         id: 2,
         label: 'tomorrow',
+        title: 'tomorrow',
+        value: 'tomorrow',
+        active: false,
+        count: null
+      }
+    ],
+    filialItems: [
+      {
+        id: 1,
+        label: 'our-office',
+        value: 'our_office',
+        active: true,
+        count: null
+      },
+      {
+        id: 2,
+        label: 'all',
+        value: 'all',
         active: false,
         count: null
       }
@@ -76,13 +97,16 @@ export const useDashboardBirthdayStore = defineStore('dashboardBirthdayStore', {
             })
           }
 
-          this.birthdayList = this.todayBornList = this.allBirthdays?.filter(item => isBirthdayToday(item.birth_date))
+          this.birthdayList = this.allBirthdays?.filter(item => isBirthdayToday(item.birth_date) && item?.company?.id === useAuthStore().currentUser?.company?.id)
+          this.todayBornList = this.allBirthdays?.filter(item => isBirthdayToday(item.birth_date))
           this.tomorrowBornList = this.allBirthdays?.filter(item => !isBirthdayToday(item.birth_date)).map(i => ({
             ...i,
             gifts: i.gifts.map(g => ({ ...g, disable: true }))
           }))
           this.tabItems[0].count = this.todayBornList.length || null
           this.tabItems[1].count = this.tomorrowBornList.length || null
+          this.filialItems[0].count = this.todayBornList.filter(item => item?.company?.id === useAuthStore().currentUser?.company?.id).length || null
+          this.filialItems[1].count = this.todayBornList.length || null
           this.loading = false
           return Promise.resolve(res.data)
         }

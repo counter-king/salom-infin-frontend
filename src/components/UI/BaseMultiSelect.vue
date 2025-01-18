@@ -128,6 +128,10 @@ const props = defineProps({
   showNestedError: {
     type: Boolean,
     default: true
+  },
+  hasDisabledItem: {
+    type: Boolean,
+    default: false
   }
 })
 // Reactive
@@ -194,7 +198,7 @@ const removeItem = (event, value) => {
 }
 const selectItem = (event, value) => {
   // Если это статус не Рабочие
-  if(value.status.code !== USER_STATUS_CODES.WORKERS) {
+  if(value?.status?.code !== USER_STATUS_CODES.WORKERS && props.hasDisabledItem) {
     event.stopPropagation()
     return
   }
@@ -389,7 +393,7 @@ const  handleEnterPress = () => {
       <template #option="{ option }">
         <div
           class="absolute top-0 left-0 w-full h-full"
-          :class="{ 'bg-greyscale-50/50 cursor-not-allowed': option.status.code !== USER_STATUS_CODES.WORKERS }"
+          :class="{ 'bg-greyscale-50/50 cursor-not-allowed': option?.status?.code !== USER_STATUS_CODES.WORKERS && hasDisabledItem }"
           @click="(event) => selectItem(event, option)"
         ></div>
         <slot name="option" :value="option" />

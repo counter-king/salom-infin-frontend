@@ -191,6 +191,7 @@ defineExpose({ buttonLoading, dialog })
         placeholder="choose-performers"
         required
         class="mt-4"
+        has-disabled-item
       />
 
       <div class="mt-2">
