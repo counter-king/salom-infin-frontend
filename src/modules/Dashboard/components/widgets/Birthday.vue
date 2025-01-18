@@ -268,57 +268,68 @@ onMounted(async () => {
           />
         </div>
 
-        <div class="flex flex-col mt-2 max-h-[calc(100vh-500px)] overflow-y-auto">
-          <div
-            v-for="item in birthdayStore.birthdayList"
-            :key="item.id"
-            class="flex items-center justify-between border-b-[1.5px] border-greyscale-100 py-3"
-          >
-            <div class="flex items-center gap-x-3 w-[294px]">
-              <base-avatar
-                v-if="item.avatar"
-                :label="item?.full_name"
-                :image="item.avatar?.url"
-                :color="item?.color"
-                avatarClasses="w-11 h-11"
-              />
-              <div v-else class="flex flex-col w-11 h-11 justify-center items-center text-base font-semibold text-white bg-primary-500 rounded-full">{{ returnFirstLetter(item.full_name) }}</div>
-
-              <div class="flex flex-col gap-y-1 truncate">
-                <span class="text-sm text-greyscale-900 font-semibold">{{ item.full_name }}</span>
-                <span class="text-xs text-greyscale-400 font-medium">{{ item.position?.name }}</span>
-              </div>
+        <template v-if="!birthdayStore.birthdayList.length">
+          <div class="flex flex-col gap-y-3 justify-center items-center w-full h-full min-h-[200px]">
+            <div class="flex justify-center items-center w-16 h-16 rounded-[20px] bg-greyscale-50">
+              <img src="/images/dashboard/gift-1.svg" alt="Gift" class="w-8 h-8">
             </div>
+            <span class="text-greyscale-400 text-sm font-medium">{{ todayActive ? t('no-birthdays-today') : t('no-birthdays-tomorrow') }}</span>
+          </div>
+        </template>
 
-            <div class="flex flex-col gap-y-1 ml-6">
-              <span class="text-xs font-semibold" :class="returnStatusColor(item?.status?.code)">{{ item.status?.name }}</span>
-              <span class="text-xs font-medium text-greyscale-500">{{ item.cisco || '00-00' }}</span>
-            </div>
+        <template v-else>
+          <div class="flex flex-col mt-2 max-h-[calc(100vh-500px)] overflow-y-auto">
+            <div
+              v-for="item in birthdayStore.birthdayList"
+              :key="item.id"
+              class="flex items-center justify-between border-b-[1.5px] border-greyscale-100 py-3"
+            >
+              <div class="flex items-center gap-x-3 w-[294px]">
+                <base-avatar
+                  v-if="item.avatar"
+                  :label="item?.full_name"
+                  :image="item.avatar?.url"
+                  :color="item?.color"
+                  avatarClasses="w-11 h-11"
+                />
+                <div v-else class="flex flex-col w-11 h-11 justify-center items-center text-base font-semibold text-white bg-primary-500 rounded-full">{{ returnFirstLetter(item.full_name) }}</div>
 
-            <div class="flex items-center flex-1 justify-end gap-x-4">
-              <div
-                v-for="gift in item.gifts"
-                :key="gift.id"
-                class="flex flex-col items-center gap-y-1"
-              >
-                <div
-                  class="flex flex-col justify-center items-center w-11 h-11 bg-greyscale-50 rounded-xl"
-                  :class="returnGiftClass(gift)"
-                  @click="onGiftClick(gift)"
-                >
-                  <img
-                    :src="gift.image"
-                    alt="Gift"
-                    class="w-6 h-6"
-                    :class="{ 'opacity-50' : gift.disable && !gift.selected }"
-                  >
+                <div class="flex flex-col gap-y-1 truncate">
+                  <span class="text-sm text-greyscale-900 font-semibold">{{ item.full_name }}</span>
+                  <span class="text-xs text-greyscale-400 font-medium">{{ item.position?.name }}</span>
                 </div>
+              </div>
 
-                <span class="text-greyscale-400 text-xs font-medium">{{ gift.count }}</span>
+              <div class="flex flex-col gap-y-1 ml-6">
+                <span class="text-xs font-semibold" :class="returnStatusColor(item?.status?.code)">{{ item.status?.name }}</span>
+                <span class="text-xs font-medium text-greyscale-500">{{ item.cisco || '00-00' }}</span>
+              </div>
+
+              <div class="flex items-center flex-1 justify-end gap-x-4">
+                <div
+                  v-for="gift in item.gifts"
+                  :key="gift.id"
+                  class="flex flex-col items-center gap-y-1"
+                >
+                  <div
+                    class="flex flex-col justify-center items-center w-11 h-11 bg-greyscale-50 rounded-xl"
+                    :class="returnGiftClass(gift)"
+                    @click="onGiftClick(gift)"
+                  >
+                    <img
+                      :src="gift.image"
+                      alt="Gift"
+                      class="w-6 h-6"
+                      :class="{ 'opacity-50' : gift.disable && !gift.selected }"
+                    >
+                  </div>
+
+                  <span class="text-greyscale-400 text-xs font-medium">{{ gift.count }}</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </template>
       </template>
     </base-dialog>
     <!-- /All birthday users dialog -->
