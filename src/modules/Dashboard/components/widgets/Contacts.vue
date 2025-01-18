@@ -70,6 +70,7 @@ onMounted(async () => {
           <div class="max-h-[1px]">
             <template v-for="(item, index) in list" :key="index">
               <user-with-action
+                :item="item"
                 :label="item.full_name"
                 :sub-title="item.position?.name"
                 :color="item.color"
