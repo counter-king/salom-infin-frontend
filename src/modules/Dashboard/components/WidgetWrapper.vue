@@ -22,6 +22,8 @@ const props = defineProps({
       <slot name="header-after"></slot>
     </div>
 
+    <slot name="content-top" />
+
     <div class="relative h-full overflow-y-auto pr-2 mr-2 mb-4 ml-5">
       <slot name="content" />
     </div>

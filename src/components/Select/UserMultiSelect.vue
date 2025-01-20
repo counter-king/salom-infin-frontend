@@ -30,10 +30,6 @@ const props = defineProps({
   options: {
     type: Array,
     default: () => []
-  },
-  hasDisabledItem: {
-    type: Boolean,
-    default: false
   }
 });
 const modelValue = useModel(props, 'modelValue')
@@ -54,7 +50,6 @@ const emit = defineEmits(['update:modelValue'])
     :label="props.label"
     :required="props.required"
     :hide-on-change="true"
-    :has-disabled-item="hasDisabledItem"
     type="user"
   >
     <template #chip="{ value }">

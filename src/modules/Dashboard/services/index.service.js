@@ -5,7 +5,9 @@ const URLS = {
   birthdayReactionCounts: `birthday-reactions/counts`,
   birthdayReactions: `birthday-reactions`,
   moodReactionCounts: `mood-reactions/counts`,
-  moodReactions: `mood-reactions`
+  moodReactions: `mood-reactions`,
+  dashboardContacts: `dashboard/users`,
+  dashboardFavouriteContacts: `my-selected-contacts`
 }
 
 export const fetchGetBirthdayList = (params) => {
@@ -23,3 +25,16 @@ export const fetchGetMoodReactionCounts = (params) => {
 export const fetchSelectMood = (body) => {
   return axiosConfig.post(`${URLS.moodReactions}/`, body)
 }
+export const fetchDashboardContacts = (params) => {
+  return axiosConfig.get(`${URLS.dashboardContacts}/`, params)
+}
+export const fetchDashboardFavouriteContacts = (params) => {
+  return axiosConfig.get(`${URLS.dashboardFavouriteContacts}/`, params)
+}
+export const fetchAddContactToFavourites = (body) => {
+  return axiosConfig.post(`${URLS.dashboardFavouriteContacts}/`, body)
+}
+export const fetchDeleteContactFromFavourites = (id) => {
+  return axiosConfig.delete(`${URLS.dashboardFavouriteContacts}/${id}/`)
+}
+

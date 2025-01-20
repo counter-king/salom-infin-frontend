@@ -112,7 +112,6 @@ const types = [
             api-url="users"
             display="chip"
             selectable
-            has-disabled-item
           >
             <template #chip="{ value }">
               <user-with-label
@@ -169,7 +168,6 @@ const types = [
           api-url="users"
           display="chip"
           selectable
-          has-disabled-item
           :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
         >
           <template #chip="{ value }">

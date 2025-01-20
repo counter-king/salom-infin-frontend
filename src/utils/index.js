@@ -373,6 +373,17 @@ export const returnStatusColor = (code) => {
   }
 }
 
+export const returnStatusBgColor = (code) => {
+  switch (code) {
+    case USER_STATUS_CODES.WORKERS:
+      return 'bg-success-500'
+    case USER_STATUS_CODES.LABOR_LEAVE:
+      return 'bg-critic-500'
+    default:
+      return 'bg-warning-500'
+  }
+}
+
 export const textDifference = (oldText, newText) => {
   return compareText(oldText, newText)
 }

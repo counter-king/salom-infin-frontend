@@ -759,5 +759,10 @@
   "reply-to-moderator": "Ответить модератору",
   "notice-saved-successfully": "Рапорт успешно сохранен!",
   "all-birthdays": "Все именинники",
-  "our-office": "Наш офис"
+  "our-office": "Наш офис",
+  "compose-message": "Написать сообщение",
+  "add-to-favourites": "Добавить в избранное",
+  "remove-from-favourites": "Удалить из избранного",
+  "no-favourite-contacts": "Нет избранных контактов",
+  "no-data": "Нет данных"
 }
