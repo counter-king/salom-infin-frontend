@@ -1,4 +1,6 @@
 <script setup>
+//
+import { useRouter } from 'vue-router';
 // Components
 import { SidebarMinimalisticIcon } from '@/components/Icons'
 // Store
@@ -23,8 +25,8 @@ const chatStore = useChatStore();
         </div>
 
         <div class="flex flex-col ml-3">
-          <div class="text-base font-semibold select-none">Turg'unov Bahodir</div>
-          <div class="text-sm font-medium text-greyscale-500 select-none">HR manager</div>
+          <div class="text-base font-semibold select-none">{{ chatStore.groupChatActive ? "Наша команда" : "Тургунов Бахадир"}}</div>
+          <div class="text-sm font-medium text-greyscale-500 select-none">{{ chatStore.groupChatActive ? "23 участника, 9 онлайн" : "HR менеджер"}}</div>
         </div>
       </div>
 

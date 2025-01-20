@@ -16,7 +16,7 @@ const { t } = useI18n();
 
       <left-sidebar />
 
-      <template v-if="false">
+      <template v-if="true">
         <chat-are-wrapper />
 
         <right-sidebar />

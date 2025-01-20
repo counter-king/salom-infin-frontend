@@ -759,6 +759,14 @@
   "notice-saved-successfully": "Рапорт успешно сохранен!",
   "select-chat": "Выберите, кому хотели бы написать",
   "select-chat-user": "Вы можете написать тому, кому хотите, нажав на этот контакт.",
-  "create-groups": "Создать группы"
-
+  "create-group": "Создать групу",
+  "group-name": "Названия группы",
+  "search-employees": "Поиск сотрудников",
+  "total-files":"Всего файлов",
+  "total-links":"Всего ссылок",
+  "file-types":"Типы файлов",
+  "video":"Видео",
+  "images":"Картинки",
+  "chat-info-file":"{count} файлов, {size} MB",
+  "members":"Участников"
 }

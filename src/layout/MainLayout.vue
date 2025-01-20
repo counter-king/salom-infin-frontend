@@ -43,7 +43,7 @@ const getCurrentUser = async () => {
   }
 }
 
-const expectionPages = ['NewsShow', 'NewsDetails', 'NewsEdit'] 
+const expectionPages = ['NewsShow', 'NewsDetails', 'NewsEdit',"ChatIndex"] 
 const isNewsShowPage = computed(() => expectionPages.includes(router.currentRoute.value.name))
 
 </script>

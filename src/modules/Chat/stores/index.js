@@ -16,7 +16,9 @@ export const useChatStore = defineStore("chat-stores", {
     userSearchLoading: false,
     chatList: [],
     privateChatList: [],
-    userList: []
+    userList: [],
+    privateChatActive: true,
+    groupChatActive: false
   }),
   actions: {
     toggleRightSidebar() {

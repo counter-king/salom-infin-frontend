@@ -158,8 +158,7 @@ export { default as MapPointBoldIcon } from  '~icons/solar/map-point-bold'
 export { default as GarageBoldIcon } from  '~icons/solar/garage-bold'
 export { default as ClapperboardPlayBoldIcon } from  '~icons/solar/clapperboard-play-bold'
 export { default as DocumentsMinimalisticBoldIcon } from  '~icons/solar/documents-minimalistic-bold'
-
-// Solar (Bold Duotone)
+export { default as CameraBoldIcon } from  '~icons/solar/camera-bold'
 export { default as ArchiveUpBoldDuotoneIcon } from  '~icons/solar/archive-up-bold-duotone'
 export { default as StarBoldDuotoneIcon } from  '~icons/solar/star-bold-duotone'
 export { default as CalendarBoldDuotoneIcon } from  '~icons/solar/calendar-bold-duotone'
@@ -169,6 +168,8 @@ export { default as UsersGroupBoldDuotoneIcon } from  '~icons/solar/users-group-
 export { default as UserCheckBoldDuotoneIcon } from  '~icons/solar/user-check-bold-duotone'
 export { default as CalendarDateBoldDuotoneIcon } from  '~icons/solar/calendar-date-bold-duotone'
 export { default as QuestionCircleBoldDuotoneIcon } from  '~icons/solar/question-circle-bold-duotone'
+export { default as PaperclipRoundedBoldIcon } from  '~icons/solar/paperclip-rounded-bold'
+export { default as GalleryBoldIcon } from  '~icons/solar/gallery-bold'
 // Solar (Bold Broken)
 export { default as UserCheckRoundedBrokenIcon } from  '~icons/solar/user-check-rounded-broken'
 // Fluent
@@ -178,6 +179,8 @@ export { default as ForwardIcon } from '~icons/typcn/arrow-forward-outline'
 export { default as ForwardBoldIcon } from '~icons/typcn/arrow-forward'
 // merge
 export { default as BookmarkBoldIcon } from '~icons/mage/bookmark-fill'
+export { default as FacebookSquareIcon } from '~icons/mage/facebook-square'
+export { default as WhatsappIcon } from '~icons/mage/whatsapp-filled'
 
 // iconamoon
 export { default as EditLightIcon } from '~icons/iconamoon/edit-light'

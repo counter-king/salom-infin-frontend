@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import {onMounted, ref, watch} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import { useI18n } from "vue-i18n";
 // Store
 import { useAuthStore } from "@/modules/Auth/stores";
@@ -12,6 +12,7 @@ import GroupItem from "@/modules/Chat/components/GroupItem.vue";
 import UserItem from "@/modules/Chat/components/UserItem.vue";
 import UserItemSearch from "@/modules/Chat/components/UserItemSearch.vue";
 import CreateGroupDialog from "./CreateGroupDialog.vue";
+import { RouterLink } from "vue-router";
 
 const { t } = useI18n();
 const authStore = useAuthStore();
@@ -19,6 +20,11 @@ const chatStore = useChatStore();
 // reactive
 const search = ref(null);
 const createGroupDialogVisible = ref(false);
+const formModal = reactive({
+  group_name: null,
+  users: [],
+});
+
 const tabPanelList = [
   {
     title: 'personal',
@@ -50,9 +56,19 @@ const createChat = async (user) => {
 const onTabChange = async (val) => {
   if (val.index === 0) {
     await chatStore.actionGetPrivateChatList({});
+    chatStore.privateChatActive = true;
+    chatStore.groupChatActive = false;
+
+  } else if(val.index === 1){
+    chatStore.privateChatActive = false;
+    chatStore.groupChatActive = true;
   }
 }
 
+watch(formModal, async (val) => {
+  console.log(val);
+},{
+  deep: true})
 // Hooks
 onMounted(async () => {
   await chatStore.actionGetPrivateChatList({});
@@ -127,28 +143,30 @@ onMounted(async () => {
                   <span class="text-sm font-semibold block mt-5">{{ t('find-users') }}</span>
                   <span class="text-xs font-medium text-greyscale-500 block mt-1">{{ t('find-users-start-chat') }}</span>
                 </div>
-              </template>
+              </template> 
               <template v-else>
-                <user-item
-                  v-for="i in 30"
-                  :key="i"
-                />
+                <template v-for="i in 30" :key="i">
+                  <RouterLink :to="{ name: 'ChatPrivate' }">
+                    <user-item />
+                  </RouterLink>
+                </template>
               </template>
             </template>
           </div>
         </template>
 
         <template #group>
-      
           <div class="overflow-hidden overflow-y-auto px-4" style="height: calc(100vh - 332px)">
-            <group-item />
+            <RouterLink :to="{ name: 'ChatGroup' }">
+              <group-item />
+            </RouterLink>
           </div>
         </template>
 
       </base-brick-tab>
     </template>
 
-    <create-group-dialog v-model="createGroupDialogVisible"/>
+    <create-group-dialog v-model="createGroupDialogVisible" :form-modal="formModal"/>
   </div>
 
 </template>
