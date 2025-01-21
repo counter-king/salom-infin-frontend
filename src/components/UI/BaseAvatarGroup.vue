@@ -50,7 +50,7 @@ const rest = computed(() => props.items.slice(props.max))
         :label="isObject(avatar.user) ? avatar.user.full_name : avatar.full_name"
         :color="isObject(avatar.user) ? avatar.user.color : avatar.color"
         :meta="isObject(avatar.user) ? avatar.user : avatar"
-        :image="avatar.image"
+        :image="isObject(avatar.user) ? avatar.user?.avatar?.url : avatar?.avatar?.url"
         :size="props.size"
         :shape="props.shape"
         :detail-dialog="props.detailDialog"

@@ -11,7 +11,8 @@ const props = defineProps({
     category: {type: Object, default: ()=>{} },
     createdDate: {type: String, default: ''},   
     class: {type: String},
-    avatarColor: {type: String}
+    avatarColor: {type: String},
+    avatarImage: {type: String}
 })
 </script>
 
@@ -19,6 +20,7 @@ const props = defineProps({
      <div class="flex items-center gap-3" :class="props.class">
         <base-avatar
             :color="props.avatarColor"
+            :image="props.avatarImage"
             avatarClasses="w-10 h-10 cursor-pointer border-greyscale-70 border"
         >
             <span class="text-xl font-semibold text-white"> {{ returnFirstLetter(props.name) }}</span>

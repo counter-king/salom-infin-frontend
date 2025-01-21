@@ -65,6 +65,7 @@ const handleReplayComment = () => {
                 :avatar-color="props.data?.created_by?.color" 
                 :name="props.data?.created_by?.full_name"
                 :info="props.data?.created_by?.top_level_department?.name || props.data?.created_by?.position?.name"
+                :avatar-image="props.data?.created_by?.avatar?.url"
             />
             <div class="text-sm text-greyscale-500">{{ formatHour(props.data?.created_date) }} , {{ formatDate(props.data?.created_date) }}</div>
         </div>

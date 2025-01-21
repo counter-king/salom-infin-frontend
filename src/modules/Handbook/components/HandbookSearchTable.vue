@@ -80,6 +80,7 @@ const select = ref({
           <base-avatar
             :label="item.full_name"
             :color="item.color ?? '#635AFF'"
+            :image="item?.avatar?.url"
             shape="circle"
             avatar-classes="w-6 h-6"
           />
@@ -152,7 +153,7 @@ const select = ref({
       <div>
         <div class="relative -mt-10 pl-4">
           <div class="flex justify-center items-center w-[90px] h-[90px] rounded-full bg-white">
-            <base-avatar :label="select.full_name" :color="select.color ?? '#635AFF'" avatarClasses="w-20 h-20">
+            <base-avatar :label="select.full_name" :color="select.color ?? '#635AFF'" avatarClasses="w-20 h-20" :image="select?.avatar?.url">
               <span class="text-3xl font-semibold text-white">{{ select.full_name[0] }}</span>
             </base-avatar>
           </div>
