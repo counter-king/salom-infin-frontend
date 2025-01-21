@@ -42,7 +42,8 @@
     "vue-i18n": "^9.5.0",
     "vue-rewards": "^1.0.1",
     "vue-router": "^4.2.4",
-    "vue3-apexcharts": "^1.5.3"
+    "vue3-apexcharts": "^1.5.3",
+    "vue3-emoji-picker": "^1.1.8"
   },
   "devDependencies": {
     "@iconify-json/bxl": "^1.1.11",

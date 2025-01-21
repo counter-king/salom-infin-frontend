@@ -21,6 +21,7 @@ export { default as CircleIcon } from  '~icons/ci/circle'
 export { default as RemoveMinusIcon } from  '~icons/ci/remove-minus'
 export { default as AddPlusIcon } from  '~icons/ci/add-plus'
 export { default as BookmarkIcon } from '~icons/ci/bookmark'
+export { default as CheckBigIcon } from '~icons/ci/check-big'
 // Solar (Linear)
 export { default as AltArrowDownLinearIcon } from  '~icons/solar/alt-arrow-down-linear'
 export { default as DoubleAltArrowDownLinearIcon } from  '~icons/solar/double-alt-arrow-down-linear'
@@ -33,7 +34,8 @@ export { default as StarLinearIcon } from  '~icons/solar/star-linear'
 export { default as UnreadLinearIcon } from  '~icons/solar/unread-linear'
 export { default as CaseBoldIcon } from  '~icons/solar/case-bold'
 export { default as ClapperboardPlayLinearIcon } from  '~icons/solar/clapperboard-play-linear'
-
+export { default as PaperclipLinearIcon } from  '~icons/solar/paperclip-linear'
+export { default as SmileCircleLinearIcon } from  '~icons/solar/smile-circle-linear'
 // Solar (Outline)
 export { default as CheckCircleIcon } from  '~icons/solar/check-circle-outline'
 export { default as AltArrowUpIcon } from  '~icons/solar/alt-arrow-up-outline'
@@ -170,6 +172,7 @@ export { default as CalendarDateBoldDuotoneIcon } from  '~icons/solar/calendar-d
 export { default as QuestionCircleBoldDuotoneIcon } from  '~icons/solar/question-circle-bold-duotone'
 export { default as PaperclipRoundedBoldIcon } from  '~icons/solar/paperclip-rounded-bold'
 export { default as GalleryBoldIcon } from  '~icons/solar/gallery-bold'
+export { default as PlainBoldIcon } from  '~icons/solar/plain-bold'
 // Solar (Bold Broken)
 export { default as UserCheckRoundedBrokenIcon } from  '~icons/solar/user-check-rounded-broken'
 // Fluent

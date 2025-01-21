@@ -768,5 +768,7 @@
   "video":"Video",
   "images":"Rasmlar",
   "chat-info-file":"{count} fayllar, {size} MB",
-  "members": "Xodimlar"
+  "members": "Xodimlar",
+  "copy":"Nusxalash",
+  "enter-your-message": "Xabaringizni kiriting..."
 }

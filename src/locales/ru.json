@@ -768,5 +768,7 @@
   "video":"Видео",
   "images":"Картинки",
   "chat-info-file":"{count} файлов, {size} MB",
-  "members":"Участников"
+  "members":"Участников",
+  "copy":"Копиравать",
+  "enter-your-message": "Введите свое сообщение..."
 }

@@ -3,13 +3,15 @@
 import { useI18n } from "vue-i18n";
 // Components
 import { ChatAreWrapper, LeftSidebar, RightSidebar } from "@/modules/Chat/components";
+// css
+import 'vue3-emoji-picker/css'
 
 
 const { t } = useI18n();
 </script>
 
 <template>
-  <div class="chat-home flex flex-col w-full py-6 px-10">
+  <div class="chat-home flex flex-col w-full py-6 px-10" style="height: calc(100vh - 80px)">
     <span class="text-2xl font-semibold">{{ t('chat-messenger') }}</span>
 
     <div class="flex justify-between h-full mt-5 rounded-2xl shadow-lg bg-white overflow-hidden">
