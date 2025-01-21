@@ -37,7 +37,7 @@ const props = defineProps({
       </div>
     </div>
 
-    <div class="flex gap-2">
+    <div class="flex gap-2 mt-1">
       <slot name="action" />
     </div>
   </div>
