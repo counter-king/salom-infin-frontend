@@ -99,7 +99,7 @@ onMounted(async () => {
 
       <template v-else>
         <template v-if="store.dashboardContactList.length">
-          <div class="max-h-[1px]">
+          <div class="max-h-[1px] flex flex-col gap-y-1">
             <template v-for="(item, index) in store.dashboardContactList" :key="index">
               <user-with-action
                 :item="item"
