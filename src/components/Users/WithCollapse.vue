@@ -51,7 +51,7 @@ const findAssigneeChildren = (target, assignee) => {
                 <base-avatar
                   :label="assignee.user?.full_name"
                   :color="assignee.user?.color"
-                  :image="assignee.user?.image"
+                  :image="assignee.user?.avatar?.url"
                   detail-dialog
                   avatarClasses="w-10 h-10"
                 />

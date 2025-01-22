@@ -30,6 +30,7 @@ const props = defineProps({
     <base-avatar
       :label="props.item.created_by.full_name"
       :color="props.item.created_by.color"
+      :image="props.item.created_by?.avatar?.url"
       shape="circle"
       avatar-classes="w-8 h-8"
     />

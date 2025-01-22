@@ -84,7 +84,7 @@ const handleSelect = (item) => {
       <base-avatar
         :label="isObject(item.user) ? item.user?.full_name : item.full_name"
         :color="isObject(item.user) ? item.user?.color : item.color"
-        :image="isObject(item.user) ? item.user?.image : item.image"
+        :image="isObject(item.user) ? item.user?.avatar?.url : item?.avatar?.url"
         :type="props.type"
         :size="props.size"
         :shape="props.shape"
