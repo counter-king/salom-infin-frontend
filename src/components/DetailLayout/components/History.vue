@@ -68,6 +68,7 @@ onMounted(async () => {
               :action-chip-type="data"
               :label="data?.created_by.first_name"
               :color="data?.created_by.color"
+              :image="data?.created_by?.avatar?.url"
               shape="circle"
               avatar-classes="w-8 h-8"
             />

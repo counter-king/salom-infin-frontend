@@ -770,5 +770,12 @@
   "chat-info-file":"{count} файлов, {size} MB",
   "members":"Участников",
   "copy":"Копиравать",
-  "enter-your-message": "Введите свое сообщение..."
+  "enter-your-message": "Введите свое сообщение...",
+  "all-birthdays": "Все именинники",
+  "our-office": "Наш офис",
+  "compose-message": "Написать сообщение",
+  "add-to-favourites": "Добавить в избранное",
+  "remove-from-favourites": "Удалить из избранного",
+  "no-favourite-contacts": "Нет избранных контактов",
+  "no-data": "Нет данных"
 }

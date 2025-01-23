@@ -71,18 +71,14 @@ const onSelect = (item) => {
 </script>
 <template>
   <div class="flex items-center gap-3 cursor-pointer" @click="toggle">
-<!--    <base-avatar-->
-<!--      image="/images/avatars/1.jpg"-->
-<!--      shape="circle"-->
-<!--      avatar-classes="w-10 h-10"-->
-<!--      class="flex"-->
-<!--    />-->
-    <div
-      class="flex justify-center items-center rounded-full w-10 h-10 text-base font-bold text-white"
-      :style="{ background: userProfile.color }"
+    <base-avatar
+      :label="authStore.currentUser?.full_name"
+      :image="authStore.currentUser?.avatar?.url"
+      :color="authStore.currentUser?.color"
+      avatarClasses="w-10 h-10"
     >
-      {{ returnFirstLetter(userProfile.full_name) }}
-    </div>
+      <span class="text-lg font-semibold text-white">{{ authStore.currentUser?.full_name[0] }}</span>
+    </base-avatar>
 
     <div>
       <h1 class="text-white text-sm font-semibold mb-1">

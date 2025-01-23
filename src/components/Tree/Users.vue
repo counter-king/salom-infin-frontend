@@ -59,7 +59,7 @@ const props = defineProps({
               <base-avatar
                 :label="reviewer.user?.full_name"
                 :color="reviewer.user?.color"
-                :image="reviewer.user?.image"
+                :image="reviewer.user?.avatar?.url"
                 detail-dialog
                 avatarClasses="w-10 h-10"
               />

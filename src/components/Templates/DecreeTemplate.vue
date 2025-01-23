@@ -63,7 +63,7 @@ const signers = computed(() => {
     <div class="text-justify" v-html="props.composeModel?.content"></div>
 
     <template v-if="composeModel.notices?.length && composeModel.trip_plans?.length && composeModel.bookings?.length">
-      <base-business-trip-tables :compose-model="composeModel" :preview="false" />
+      <base-business-trip-tables :compose-model="composeModel" :preview="preview" />
 
       <div class="indent-8 mt-2 text-sm text-justify">
         <div>

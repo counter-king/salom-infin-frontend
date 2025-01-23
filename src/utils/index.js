@@ -366,8 +366,21 @@ export const returnStatusColor = (code) => {
   switch (code) {
     case USER_STATUS_CODES.WORKERS:
       return 'text-success-500'
+    case USER_STATUS_CODES.LABOR_LEAVE:
+      return 'text-critic-500'
     default:
       return 'text-warning-500'
+  }
+}
+
+export const returnStatusBgColor = (code) => {
+  switch (code) {
+    case USER_STATUS_CODES.WORKERS:
+      return 'bg-success-500'
+    case USER_STATUS_CODES.LABOR_LEAVE:
+      return 'bg-critic-500'
+    default:
+      return 'bg-warning-500'
   }
 }
 

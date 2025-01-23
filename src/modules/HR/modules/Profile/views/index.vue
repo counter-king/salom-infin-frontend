@@ -149,7 +149,7 @@ watch(activeTabMenu, (value) => {
             <p class="text-sm font-medium text-greyscale-500">{{ authStore.currentUser?.position?.name }}</p>
           </div>
 
-          <!-- TODO: испавить потом -->
+          <!-- TODO: исправить потом -->
           <status-chip
             type="handbook"
             :status="authStore.currentUser?.status"

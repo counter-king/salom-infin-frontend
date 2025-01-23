@@ -27,7 +27,7 @@ const { t } = useI18n()
         <div class="flex flex-col flex-1">
           <widget-doc-flow class="h-[272px] mb-5" />
 
-          <div class="flex flex-1 gap-5 overflow-y-auto">
+          <div class="flex flex-1 gap-5 overflow-y-auto min-h-[calc(100vh-480px)]">
             <widget-news-list class="flex-1" />
 
             <widget-contacts class="w-[356px]" />
@@ -39,7 +39,7 @@ const { t } = useI18n()
 
           <widget-survey class="h-[156px] mb-5" />
 
-          <widget-birthday class="h-[268px] overflow-y-auto mb-5" />
+          <widget-birthday class="h-[364px] overflow-y-auto mb-5" />
 
   <!--        <widget-applications class="flex-1 overflow-y-auto" />-->
         </div>

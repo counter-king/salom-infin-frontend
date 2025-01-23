@@ -161,6 +161,8 @@ export { default as GarageBoldIcon } from  '~icons/solar/garage-bold'
 export { default as ClapperboardPlayBoldIcon } from  '~icons/solar/clapperboard-play-bold'
 export { default as DocumentsMinimalisticBoldIcon } from  '~icons/solar/documents-minimalistic-bold'
 export { default as CameraBoldIcon } from  '~icons/solar/camera-bold'
+export { default as StarBoldIcon } from  '~icons/solar/star-bold'
+// Solar (Bold Duotone)
 export { default as ArchiveUpBoldDuotoneIcon } from  '~icons/solar/archive-up-bold-duotone'
 export { default as StarBoldDuotoneIcon } from  '~icons/solar/star-bold-duotone'
 export { default as CalendarBoldDuotoneIcon } from  '~icons/solar/calendar-bold-duotone'

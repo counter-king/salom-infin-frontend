@@ -279,6 +279,7 @@ defineExpose({ $v })
                 <user-with-label
                   :label="isObject(value?.user) ? value?.user.full_name : value?.full_name"
                   :title="isObject(value?.user) ? value?.user.full_name : value?.full_name"
+                  :image="isObject(value?.user) ? value?.user?.avatar?.url : value?.avatar?.url"
                   shadow
                   color="#635AFF"
                   avatar-classes="w-5 h-5"

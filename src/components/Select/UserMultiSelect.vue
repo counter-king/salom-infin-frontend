@@ -30,7 +30,7 @@ const props = defineProps({
   options: {
     type: Array,
     default: () => []
-  },
+  }
 });
 const modelValue = useModel(props, 'modelValue')
 

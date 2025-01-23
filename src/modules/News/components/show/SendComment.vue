@@ -39,6 +39,7 @@ const modelValue = useModel(props, 'modelValue')
             :name="props.data?.created_by?.full_name"
             :info="props.data?.created_by?.top_level_department?.name"
             :avatar-color="props.data?.created_by?.color" 
+            :avatar-image="props.data?.created_by?.avatar?.url"
             />
         <div class="ml-[52px] mt-4 relative">
             <!-- comment enter -->

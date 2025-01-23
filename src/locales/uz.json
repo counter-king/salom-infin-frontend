@@ -770,5 +770,12 @@
   "chat-info-file":"{count} fayllar, {size} MB",
   "members": "Xodimlar",
   "copy":"Nusxalash",
-  "enter-your-message": "Xabaringizni kiriting..."
+  "enter-your-message": "Xabaringizni kiriting...",
+  "all-birthdays": "Barcha tug'ilgan kunlar",
+  "our-office": "Bizning ofis",
+  "compose-message": "Xabar yozish",
+  "add-to-favourites": "Tanlanganlarga qo'shish",
+  "remove-from-favourites": "Tanlangandan olib tashlash",
+  "no-favourite-contacts": "Tanlangan kontaktlar yo'q",
+  "no-data": "Ma'lumot yo'q"
 }
