@@ -88,7 +88,7 @@ const handleRejectModeration = async (reason)=> {
     >
     <template #content>
       <main-file-show :file="newsStore.model.image"/>
-      <user-card :name="userProfile?.full_name" :info="userProfile.top_level_department?.name" class="mt-4"/>
+      <user-card :name="userProfile?.full_name" :info="userProfile.top_level_department?.name" :avatar-color="userProfile.color" :avatar-image="userProfile?.avatar?.url" class="mt-4"/>
       <title-component :title="newsStore.model.title" class="mt-4 mb-5"/>
       <short-description wrap-class="text-greyscale-800 text-xl !mt-0" :text="newsStore.model.description"/>
       <template v-for="(field, index) in dynamicFieldsFilter" :key="index">

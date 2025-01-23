@@ -83,6 +83,7 @@ const select = ref({
               <base-avatar
                 :label="user.full_name"
                 :color="user.color ?? '#635AFF'"
+                :image="user?.avatar?.url"
                 :meta="user"
                 shape="circle"
                 detail-dialog
@@ -136,6 +137,7 @@ const select = ref({
               :label="select.full_name"
               :color="select.color ?? '#635AFF'"
               avatarClasses="w-20 h-20"
+              :image="select?.avatar?.url"
             >
               <span class="text-3xl font-semibold text-white">{{ select.full_name[0] }}</span>
             </base-avatar>
