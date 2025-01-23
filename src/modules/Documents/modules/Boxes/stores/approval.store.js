@@ -146,6 +146,7 @@ export const useBoxesApprovalStore = defineStore("approval-stores", {
             ...response.data,
             compose: {
               ...response.data.compose,
+              decree_id: decreeCompose?.data?.to_composes[0]?.from_compose?.id,
               decree_content: decreeCompose?.data?.to_composes[0]?.from_compose?.content,
               decree_register_number: decreeCompose?.data?.to_composes[0]?.from_compose?.register_number
             }

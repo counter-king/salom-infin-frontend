@@ -32,12 +32,19 @@ const tabs = ref([
     active: false
   }
 ])
+// Methods
+const onItemClick = (item) => {
+  emit('emit:onItemClick', item)
+}
+// Emits
+const emit = defineEmits(['emit:onItemClick'])
 </script>
 
 <template>
   <div class="multiple-templates-component bg-greyscale-50 pt-2">
     <custom-tabs
       :items="tabs"
+      @emit:on-item-click="onItemClick"
     >
       <template #notice>
         <business-trip-template :compose-model="composeModel" :preview="preview" class="p-6" />
