@@ -100,7 +100,7 @@ onUnmounted(() => {
       :model="items"
       :pt="
         { 
-         root: { class: ['dropdown-menu rounded-xl p-1 absolute top-[38px] right-0 w-[180px]', { 'hidden': !showDropDown} ]},
+         root: { class: ['dropdown-menu rounded-xl p-1 !absolute top-[38px] right-0 w-[180px] z-[10]', { 'hidden': !showDropDown} ]},
          content: { class: 'rounded-lg overflow-hidden cursor-pointer' },
         }
       "

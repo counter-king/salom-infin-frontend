@@ -10,7 +10,7 @@ const chatStore = useChatStore();
 <template>
   <div class="h-full flex-1">
     <chat-area-toolbar /> 
-    <div class="bg-greyscale-50 h-full w-full px-6 py-4 overflow-y-auto"> 
+    <div class="bg-greyscale-50 h-full w-full"> 
       <router-view />
     </div>
   </div>
