@@ -231,7 +231,7 @@ onMounted(async () => {
     <!-- All birthday users dialog -->
     <base-dialog
       v-model="dialog"
-      max-width="max-w-[793px]"
+      max-width="max-w-[893px]"
       label="all-birthdays"
       :draggable="false"
     >
@@ -284,7 +284,7 @@ onMounted(async () => {
               :key="item.id"
               class="flex items-center justify-between border-b-[1.5px] border-greyscale-100 py-3"
             >
-              <div class="flex items-center gap-x-3 w-[294px]">
+              <div class="flex items-center gap-x-3 w-[394px]">
                 <base-avatar
                   v-if="item.avatar"
                   :label="item?.full_name"
@@ -296,7 +296,7 @@ onMounted(async () => {
 
                 <div class="flex flex-col gap-y-1 truncate">
                   <span class="text-sm text-greyscale-900 font-semibold">{{ item.full_name }}</span>
-                  <span class="text-xs text-greyscale-400 font-medium">{{ item.position?.name }}</span>
+                  <span class="text-xs text-greyscale-400 font-medium">{{ item.position?.name }} &nbsp; - &nbsp; {{ item?.company?.name }}</span>
                 </div>
               </div>
 

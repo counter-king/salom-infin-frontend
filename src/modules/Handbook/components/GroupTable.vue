@@ -56,12 +56,12 @@ const props = defineProps({
   }
 })
 
-// reactive 
+// reactive
 const paginationStore = ref({
   page: pagination.page,
   pageSize: pagination.pageSize,
   firstRow: pagination.firstRow
-}) 
+})
 
 const emit = defineEmits(['emit:page-change'])
 // Methods
@@ -85,7 +85,7 @@ const pageChange = async (val) => {
   })
 }
 
-// left only item codiation is A 
+// left only item codiation is A
 const filterValueChildren = computed(()=> props.value[0]?.children.filter((child)=> child.condition === CONDITION.A))
 
 </script>
