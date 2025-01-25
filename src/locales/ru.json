@@ -757,6 +757,13 @@
   "save-news-as-draft": "Хотите сохранить данные как черновик?",
   "reply-to-moderator": "Ответить модератору",
   "notice-saved-successfully": "Рапорт успешно сохранен!",
+  "all-birthdays": "Все именинники",
+  "our-office": "Наш офис",
+  "compose-message": "Написать сообщение",
+  "add-to-favourites": "Добавить в избранное",
+  "remove-from-favourites": "Удалить из избранного",
+  "no-favourite-contacts": "Нет избранных контактов",
+  "no-data": "Нет данных",
   "select-chat": "Выберите, кому хотели бы написать",
   "select-chat-user": "Вы можете написать тому, кому хотите, нажав на этот контакт.",
   "create-group": "Создать групу",
@@ -771,11 +778,5 @@
   "members":"Участников",
   "copy":"Копиравать",
   "enter-your-message": "Введите свое сообщение...",
-  "all-birthdays": "Все именинники",
-  "our-office": "Наш офис",
-  "compose-message": "Написать сообщение",
-  "add-to-favourites": "Добавить в избранное",
-  "remove-from-favourites": "Удалить из избранного",
-  "no-favourite-contacts": "Нет избранных контактов",
-  "no-data": "Нет данных"
+  "select-image":"Выбрать картинку"
 }

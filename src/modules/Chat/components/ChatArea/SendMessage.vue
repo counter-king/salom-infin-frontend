@@ -8,11 +8,13 @@ import EmojiStikers from './EmojiStikers.vue';
 import { PaperclipLinearIcon, PlainBoldIcon, SmileCircleLinearIcon } from '@/components/Icons';
 
 // reactives
-const message = ref(null);
+const message = ref("");
 const refInput = ref(null); 
+const refFileInput = ref(null);
 const showSendIcon = ref(false);
 const isSimleStikerHovered = ref(false);
 // methods
+// when massage is sent
 const handleSendMessage = () => {
  if(!!message.value) {
   console.log('send message', message.value);
@@ -20,10 +22,20 @@ const handleSendMessage = () => {
  message.value = '';
 }
 
+// when emoji selected
 const handleSelectEmoji = (e) => {
-  console.log(e);
+    message.value +=e.i;
 }
 
+const handleAttachmentClick = () => {
+  refFileInput.value.click();
+}
+
+const handleFileInputChange = (event) => {
+  console.log(event.target.files);  
+}
+
+// showSend icon show or hide
 watch(message, (val) => {
  if(!!val) {
    showSendIcon.value = true;
@@ -61,20 +73,27 @@ onMounted(() => {
         />
      </div>
      <base-iconify
+      @click="handleAttachmentClick"
       :icon="PaperclipLinearIcon"
       class="!h-5 !w-5 text-greyscale-300 cursor-pointer"
      />
      <div
-      :disabled="!showSendIcon"
        class=" bg-primary-500 rounded-xl w-10 h-10 min-h-[40px] min-w-[40px] max-w-[40px] max-h-[40px] flex items-center justify-center cursor-pointer"
       :class="{'!bg-greyscale-300 pointer-events-none': !showSendIcon}"
       >
        <base-iconify
+        @click="handleSendMessage"
         :icon="PlainBoldIcon"
         class="!h-5 !w-5 text-white"
        />
      </div>
    </div>
+   <input 
+      type="file" 
+      ref="refFileInput" 
+      class="hidden" 
+      @change="handleFileInputChange" 
+    />
  </div>
 </template>
 <style scoped>

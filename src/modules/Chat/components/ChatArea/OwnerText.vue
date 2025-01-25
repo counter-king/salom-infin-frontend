@@ -1,14 +1,12 @@
 <script setup>
 // cores
 import { useI18n } from 'vue-i18n';
-import { onUnmounted, ref } from 'vue';
 // componennts
-import { CheckBigIcon, CheckReadIcon, ForwardIcon, Pen2Icon, CopyIcon, TrashBinBoldIcon, TrashBinTrashIcon } from '@/components/Icons';
-import Menu from 'primevue/menu';
+import { CheckBigIcon, CheckReadIcon } from '@/components/Icons';
 import BaseIconify from '@/components/UI/BaseIconify.vue';
+import ClickedStiker from './ClickedStiker.vue';
 // utils
 import { formatHour } from '@/utils/formatDate';
-import { onMounted } from 'vue';
 
 const { t } = useI18n(); 
 // props
@@ -22,99 +20,42 @@ const props = defineProps({
   isReaded: {
     type: Boolean,
     default: false
+  },
+  stiker : {
+    icon: {
+      type: String
+    },
+    info: {
+      type: Object
+    }
+  },
+  onShowContextMenu: {
+    type: Function
   }
 })
 // reactives
-const showDropDown = ref(false)
-const menuContainer = ref(null);
-const items = ref([
-    { 
-      label: 'New', iconName: CheckReadIcon,
-      command: () => {
-        showDropDown.value = false 
-      }
-    },
-    { 
-      label: 'answer',
-      iconName: ForwardIcon,
-      command: () => {
-        showDropDown.value = false 
-      } 
-    },
-    { 
-      label: 'update',
-      iconName: Pen2Icon,
-      command: () => {
-        showDropDown.value = false 
-      } 
-    },
-    { 
-      label: 'copy',
-      iconName: CopyIcon,
-      command: () => {
-        showDropDown.value = false 
-      } 
-    },
-    { 
-      label: 'delete',
-      iconName: TrashBinTrashIcon,
-      command: () => {
-        showDropDown.value = false 
-      },
-      class: "!text-critic-500"
-    }
-]);
-const handleDropDown = (event) => {
- const menuElement = event.target
- showDropDown.value = !showDropDown.value
-}
+const onContextMenuClick = (event) => {
+  props.onShowContextMenu(event)
+};
 
-const handleOutsideClick = (event) => {
- const menuElement = document.querySelector('.dropdown-menu');
-   if (menuElement && !menuElement.contains(event.target)) {
-     showDropDown.value = false;
-   }
- };
-
-onMounted(() => {
-  document.addEventListener('click', handleOutsideClick);
-});
-
-onUnmounted(() => {
-  document.removeEventListener('click', handleOutsideClick);
-});
 </script>
 
 <template>
-  <div class="flex gap-3 justify-end items-end select-none relative">
-   <div class="flex gap-1 items-end">
-    <span class="text-xs font-medium text-greyscale-500">{{ formatHour(props.date) }}</span>
-    <base-iconify
-      :icon="props.isReaded ? CheckReadIcon : CheckBigIcon"
-      class="!w-5 !h-5 !text-success-500"
-    />
-   </div> 
-   <p @contextmenu.prevent="handleDropDown" class="text-sm font-medium text-white bg-primary-400 rounded-xl rounded-br-[4px] px-4 py-2">{{ props.text }}</p>
-    <Menu 
-       ref="menuContainer"
-      :model="items"
-      :pt="
-        { 
-         root: { class: ['dropdown-menu rounded-xl p-1 !absolute top-[38px] right-0 w-[180px] z-[10]', { 'hidden': !showDropDown} ]},
-         content: { class: 'rounded-lg overflow-hidden cursor-pointer' },
-        }
-      "
-    >
-     <template #item="{ item }">
-      <div 
-        class="flex gap-3 items-center text-greyscale-500 px-3 py-3 rounded-lg hover:bg-greyscale-50"
-        :class="item.class"
-      >
-        <base-iconify class="!w-4 !h-4" :icon="(item.iconName)" />
-        <span class="text-xs font-medium">{{t(item.label) }}</span>
-      </div>
-     </template>
-   </Menu>
+  <div class="flex flex-col gap-2 items-end">
+    <div class="flex gap-3 justify-end items-end relative">
+    <div class="flex gap-1 items-end">
+      <span class="text-xs font-medium text-greyscale-500">{{ formatHour(props.date) }}</span>
+      <base-iconify
+        :icon="props.isReaded ? CheckReadIcon : CheckBigIcon"
+        class="!w-5 !h-5 !text-success-500"
+      />
+    </div> 
+      <p @contextmenu.prevent="onContextMenuClick" class="text-sm font-medium text-white bg-primary-400 rounded-xl rounded-br-[4px] px-4 py-2" >{{ props.text }}</p>
+    </div>
+    <div class="flex gap-1">
+      <ClickedStiker />
+      <ClickedStiker />
+    </div>
   </div>
 </template>
 <style scoped>

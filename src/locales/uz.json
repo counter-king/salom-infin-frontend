@@ -757,6 +757,13 @@
   "save-news-as-draft": "Maʼlumotlarni qoralama sifatida saqlamoqchimisiz?",
   "reply-to-moderator": "Moderatorga javob",
   "notice-saved-successfully": "Bildirishnoma muvaffaqiyatli saqlandi!",
+  "all-birthdays": "Barcha tug'ilgan kunlar",
+  "our-office": "Bizning ofis",
+  "compose-message": "Xabar yozish",
+  "add-to-favourites": "Tanlanganlarga qo'shish",
+  "remove-from-favourites": "Tanlangandan olib tashlash",
+  "no-favourite-contacts": "Tanlangan kontaktlar yo'q",
+  "no-data": "Ma'lumot yo'q",
   "select-chat": "Kimga yozishni xohlayotganingizni tanlang",
   "select-chat-user": "Siz o'sha kontaktni bosish orqali istalgan odamga yozishingiz mumkin.",
   "create-group": "Guruh yaratish",
@@ -771,11 +778,5 @@
   "members": "Xodimlar",
   "copy":"Nusxalash",
   "enter-your-message": "Xabaringizni kiriting...",
-  "all-birthdays": "Barcha tug'ilgan kunlar",
-  "our-office": "Bizning ofis",
-  "compose-message": "Xabar yozish",
-  "add-to-favourites": "Tanlanganlarga qo'shish",
-  "remove-from-favourites": "Tanlangandan olib tashlash",
-  "no-favourite-contacts": "Tanlangan kontaktlar yo'q",
-  "no-data": "Ma'lumot yo'q"
+  "select-image":"Rasm tanlang"
 }

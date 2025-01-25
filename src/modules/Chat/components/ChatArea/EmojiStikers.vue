@@ -1,14 +1,20 @@
 <script setup>
-import EmojiPicker from 'vue3-emoji-picker'
+// cores
+import { ref } from 'vue';
+import EmojiPicker, {} from 'vue3-emoji-picker'
 const props = defineProps({
   stikerClass: {
     type: String
   },
+  selectEmoji: {
+    type: Function
+  }
 })
+
 </script>
 <template>
   <div class="absolute right-0 top-[-420px] pb-[30px]">
-    <EmojiPicker @select="props.selectEmoji" class="stiker !w-[320px] !min-h-[400px] " :class="props.stikerClass"/>
+    <EmojiPicker :native="true"  @select="props.selectEmoji" class="stiker !w-[320px] !min-h-[400px] " :class="props.stikerClass"/>
   </div>
 </template>
 <style scoped>

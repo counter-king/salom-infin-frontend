@@ -1,13 +1,14 @@
 <script setup>
 // core 
-import { useModel } from 'vue';
+import { ref, useModel } from 'vue';
 import { helpers, required } from '@vuelidate/validators';
 import useVuelidate from '@vuelidate/core';
 // components
 import BaseDialog from '@/components/UI/BaseDialog.vue';
-import { CameraBoldIcon } from '@/components/Icons';
+import { CameraBoldIcon, Pen2Icon, PenIcon, TrashBinTrashIcon } from '@/components/Icons';
 import { UserWithLabel, UserWithSelectable } from '@/components/Users';
 import BaseMultiSelect from '@/components/UI/BaseMultiSelect.vue';
+import { ContextMenu } from './ChatArea';
 // utils
 import { isObject } from '@/utils'
 // props
@@ -23,6 +24,11 @@ const props = defineProps({
   }),
  }
 });
+
+// reactives
+const refContextMenu = ref(null);
+const refFileInput = ref(null);
+
 // rules
 const rules = {
   group_name: {
@@ -38,7 +44,6 @@ const modelValue = useModel(props, 'modelValue');
 
 // emits
 const emit = defineEmits(['update:modelValue']);
-
 // methods
 const onSubmit = async () => {
   const isValid = await $v.value.$validate();
@@ -51,6 +56,39 @@ const resetForm = () => {
   props.formModal.group_name = null;
   props.formModal.users = [];
 }
+
+
+const onShowContextMenu = (event) => {
+  console.log(event,refContextMenu.value);
+  if (refContextMenu.value && refContextMenu.value.menu) {    
+    refContextMenu.value.menu.show(event);
+  } else {
+    console.error("ContextMenu yoki menu topilmadi.");
+  }
+}
+
+const menuItems = ref([
+   { 
+     label: 'select-image',
+     iconName: PenIcon,
+     command: () => {
+      refFileInput.value.click();
+     } 
+   },
+   { 
+     label: 'delete',
+     iconName: TrashBinTrashIcon,
+     class:"bg-red",
+     command: () => {
+     },
+     class: "!text-critic-500"
+   }
+]);
+
+const handleFileInputChange = (event) => {
+  console.log(event.target.files);
+};
+
 </script>
 <template>
   <base-dialog
@@ -70,7 +108,9 @@ const resetForm = () => {
               shape="circle"
               avatar-classes="w-20 h-20"
             /> 
-            <div class="absolute bottom-0 right-0 border-[2px] border-white bg-primary-500 rounded-full p-1 cursor-pointer">
+            <div
+              @contextmenu.prevent="onShowContextMenu" 
+              class="absolute bottom-0 right-0 border-[2px] border-white bg-primary-500 rounded-full p-1 cursor-pointer">
               <base-iconify
                 :icon="CameraBoldIcon"
                 class="!w-4 !h-4 text-white"
@@ -142,4 +182,11 @@ const resetForm = () => {
       </div>
     </template>
   </base-dialog>
+  <input 
+      type="file" 
+      ref="refFileInput" 
+      class="hidden" 
+      @change="handleFileInputChange" 
+    />
+  <ContextMenu ref="refContextMenu" :menu-items="menuItems" />
 </template>
