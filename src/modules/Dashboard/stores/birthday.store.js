@@ -1,9 +1,9 @@
 // Core
 import { defineStore } from 'pinia'
 import {
-  fetchCongratulateUser,
-  fetchGetBirthdayList,
-  fetchGetBirthdayReactionCounts
+  fetchCongratulateUser, fetchGetBirthdayCongratulations,
+  fetchGetBirthdayList, fetchGetBirthdayReactionComments,
+  fetchGetBirthdayReactionCounts, fetchSendBirthdayComment, fetchUpdateBirthdayComment
 } from "@/modules/Dashboard/services/index.service";
 import { isBirthdayToday } from "@/utils";
 import { useAuthStore } from "@/modules/Auth/stores";
@@ -62,15 +62,17 @@ export const useDashboardBirthdayStore = defineStore('dashboardBirthdayStore', {
         value: 'gift_box',
         count: 45
       },
-      {
-        id: 4,
-        image: '/images/dashboard/gift-4.svg',
-        value: 'champagne',
-        count: 24
-      }
+      // {
+      //   id: 4,
+      //   image: '/images/dashboard/gift-4.svg',
+      //   value: 'champagne',
+      //   count: 24
+      // }
     ],
     loading: true,
+    birthdayCongratulationLoading: true,
     birthdayList: [],
+    birthdayCongratulations: [],
     todayBornList: [],
     tomorrowBornList: [],
     allBirthdays: []
@@ -80,20 +82,37 @@ export const useDashboardBirthdayStore = defineStore('dashboardBirthdayStore', {
       this.allBirthdays = []
       try {
         const res = await fetchGetBirthdayList(params)
+        const filteredBirthdays = res.data?.filter(item => item.id !== useAuthStore().currentUser.id)
         if (res) {
-          for (const item of res.data) {
+          for (const item of filteredBirthdays) {
             const response = await this.actionBirthdayReactionCounts(item.id)
+            const commentResponse = await this.actionBirthdayReactionComments(item.id)
             this.allBirthdays.push({
               ...item,
-              gifts: response.data.counts.map((gift, index) => ({
-                id: index + 1,
-                image: `/images/dashboard/gift-${index + 1}.svg`,
-                value: gift.reaction,
-                count: gift.count,
-                user_id: item.id,
-                disable: !!response.data.current_user_reaction,
-                selected: response.data.current_user_reaction === gift.reaction
-              }))
+              comment_open: false,
+              button_loading: false,
+              comment: commentResponse?.data?.current_user_comment || null,
+              comment_id: commentResponse?.data?.current_user_comment_id || null,
+              gifts: [
+                {
+                  id: 1,
+                  comment: true,
+                  icon: '',
+                  count: commentResponse?.data?.comment_count,
+                  user_id: item.id,
+                  disable: commentResponse?.data?.current_user_commented
+                },
+                ...response.data.counts.map((gift, index) => ({
+                  id: index + 2,
+                  comment: false,
+                  image: `/images/dashboard/gift-${index + 1}.svg`,
+                  value: gift.reaction,
+                  count: gift.count,
+                  user_id: item.id,
+                  disable: !!response.data.current_user_reaction,
+                  selected: response.data.current_user_reaction === gift.reaction
+                }))
+              ]
             })
           }
 
@@ -111,7 +130,7 @@ export const useDashboardBirthdayStore = defineStore('dashboardBirthdayStore', {
           return Promise.resolve(res.data)
         }
       } catch (err) {
-
+        return Promise.reject()
       }
     },
     async actionBirthdayReactionCounts(userId) {
@@ -121,9 +140,20 @@ export const useDashboardBirthdayStore = defineStore('dashboardBirthdayStore', {
           return Promise.resolve(res)
         }
       } catch (err) {
-
+        return Promise.reject()
       }
     },
+    async actionBirthdayReactionComments(userId) {
+      try {
+        const res = await fetchGetBirthdayReactionComments(userId)
+        if (res) {
+          return Promise.resolve(res)
+        }
+      } catch (err) {
+        return Promise.reject()
+      }
+    },
+    /** **/
     async actionCongratulateUser(body) {
       try {
         const res = await fetchCongratulateUser(body)
@@ -131,8 +161,44 @@ export const useDashboardBirthdayStore = defineStore('dashboardBirthdayStore', {
           return Promise.resolve(res)
         }
       } catch (err) {
-
+        return Promise.reject()
       }
-    }
+    },
+    /** **/
+    async actionSendBirthdayComment(body) {
+      try {
+        const res = await fetchSendBirthdayComment(body)
+        if (res) {
+          return Promise.resolve(res)
+        }
+      } catch (err) {
+        return Promise.reject()
+      }
+    },
+    /** **/
+    async actionGetBirthdayCongratulations() {
+      this.birthdayCongratulationLoading = true
+      try {
+        const res = await fetchGetBirthdayCongratulations()
+        this.birthdayCongratulations = res.data
+        return Promise.resolve(res)
+      } catch (err){
+        return Promise.reject()
+      }
+      finally {
+        this.birthdayCongratulationLoading = false
+      }
+    },
+    /** **/
+    async actionUpdateBirthdayComment({ id, body }) {
+      try {
+        const res = await fetchUpdateBirthdayComment({ id, body })
+        if (res) {
+          return Promise.resolve(res)
+        }
+      } catch (err) {
+          return Promise.reject()
+      }
+    },
   }
 })
