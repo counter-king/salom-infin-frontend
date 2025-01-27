@@ -32,6 +32,7 @@ const dialog = ref(false)
 const commentDialog = ref(false)
 const commentingUserId = ref(null)
 const commentButtonLoading = ref(false)
+const birthdayItem = ref(null)
 const updatingCommentId = ref(null)
 const birthdayCongratulationModal = ref(false)
 const selectedTab = ref('today')
@@ -121,22 +122,32 @@ const manageComment = async () => {
     comment: comment.value
   }
 
-  try {
-    formType.value === FORM_TYPE_CREATE ?
-      await birthdayStore.actionSendBirthdayComment(body) :
-      await birthdayStore.actionUpdateBirthdayComment({
+  if (formType.value === FORM_TYPE_CREATE) {
+    try {
+      await birthdayStore.actionSendBirthdayComment(body)
+      await birthdayStore.actionGetBirthdayList({})
+      commentDialog.value = false
+      dialog.value = false
+      birthdayStore.filialItems.forEach(item => item.active = item.id === 1)
+      commentButtonLoading.value = false
+      dispatchNotify(null, t('successfully-send'), COLOR_TYPES.SUCCESS)
+    } catch (err) {
+      commentButtonLoading.value = false
+    }
+  } else {
+    try {
+      const { data } = await birthdayStore.actionUpdateBirthdayComment({
         id: updatingCommentId.value,
         body
       })
-    await birthdayStore.actionGetBirthdayList({})
-    commentButtonLoading.value = false
-    commentDialog.value = false
-    comment.value = null
-    dialog.value = false
-    birthdayStore.filialItems.forEach(item => item.active = item.id === 1)
-    dispatchNotify(null, t('successfully-send'), COLOR_TYPES.SUCCESS)
-  } catch (err) {
-    commentButtonLoading.value = false
+      birthdayStore.allBirthdays.find(item => item.id === birthdayItem?.value?.id).comment = data?.comment
+      commentDialog.value = false
+      comment.value = null
+      commentButtonLoading.value = false
+      dispatchNotify(null, t('updated'), COLOR_TYPES.SUCCESS)
+    } catch (err) {
+      commentButtonLoading.value = false
+    }
   }
 }
 const sendComment = async (item) => {
@@ -147,27 +158,27 @@ const sendComment = async (item) => {
 
   item.button_loading = true
   try {
-    await birthdayStore.actionSendBirthdayComment({
+    const { data } = await birthdayStore.actionSendBirthdayComment({
       birthday_user: item.id,
       comment: comment.value
     })
-    item.button_loading = false
     item.comment_open = false
     item.comment = comment.value
     item.comment_id =
     item.gifts[0].disable = true
     item.gifts[0].count++
+    item.comment_id = data.id
     dispatchNotify(null, t('successfully-send'), COLOR_TYPES.SUCCESS)
     comment.value = null
-    dialog.value = false
-    birthdayStore.filialItems.forEach(item => item.active = item.id === 1)
-  } catch (err) {
+  } catch (err) {}
+  finally {
     item.button_loading = false
   }
 }
 const openCommentDialog = (item, comment) => {
   if (!comment.disable) {
     formType.value = FORM_TYPE_CREATE
+    birthdayItem.value = item
     commentingUserId.value = item.id
     commentDialog.value = true
   }
@@ -178,6 +189,7 @@ const cancelComment = () => {
 }
 const openCommentModalForUpdate = (item) => {
   formType.value = FORM_TYPE_UPDATE
+  birthdayItem.value = item
   updatingCommentId.value = item.comment_id
   comment.value = item.comment
   commentDialog.value = true
@@ -557,6 +569,7 @@ onMounted(async () => {
             label="send"
             rounded
             shadow
+            :loading="commentButtonLoading"
             @click="manageComment"
           />
         </div>
