@@ -778,5 +778,10 @@
   "members": "Xodimlar",
   "copy":"Nusxalash",
   "enter-your-message": "Xabaringizni kiriting...",
-  "select-image":"Rasm tanlang"
+  "select-image":"Rasm tanlang",
+  "error": "Xato",
+  "delete-chat-dialog-content": "bu xabarni o'chirmoqchimisiz ?",
+  "delete-chat-avatar-dialog-content": "bu rasmni o'chirmoqchimisiz ?",
+  "you-dont-have-any-messages": "Sizda hali hech qanday xabar yo‘q.",
+  "you-dont-have-any-messages-description": "Ushbu kontaktga xabar yuborish uchun pastga xabaringizni yozing!"
 }

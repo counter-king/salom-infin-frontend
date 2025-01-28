@@ -9,6 +9,7 @@ import { CameraBoldIcon, Pen2Icon, PenIcon, TrashBinTrashIcon } from '@/componen
 import { UserWithLabel, UserWithSelectable } from '@/components/Users';
 import BaseMultiSelect from '@/components/UI/BaseMultiSelect.vue';
 import { ContextMenu } from './ChatArea';
+import DeleteDialog from './DeleteDialog.vue';
 // utils
 import { isObject } from '@/utils'
 // props
@@ -28,6 +29,7 @@ const props = defineProps({
 // reactives
 const refContextMenu = ref(null);
 const refFileInput = ref(null);
+const deleteDialog = ref(false);
 
 // rules
 const rules = {
@@ -80,6 +82,7 @@ const menuItems = ref([
      iconName: TrashBinTrashIcon,
      class:"bg-red",
      command: () => {
+      deleteDialog.value = true;
      },
      class: "!text-critic-500"
    }
@@ -88,6 +91,10 @@ const menuItems = ref([
 const handleFileInputChange = (event) => {
   console.log(event.target.files);
 };
+
+const onDeleteAvatar = () => {
+  console.log('delete avatar');
+}
 
 </script>
 <template>
@@ -110,6 +117,7 @@ const handleFileInputChange = (event) => {
             /> 
             <div
               @contextmenu.prevent="onShowContextMenu" 
+              @click="onShowContextMenu"
               class="absolute bottom-0 right-0 border-[2px] border-white bg-primary-500 rounded-full p-1 cursor-pointer">
               <base-iconify
                 :icon="CameraBoldIcon"
@@ -189,4 +197,9 @@ const handleFileInputChange = (event) => {
       @change="handleFileInputChange" 
     />
   <ContextMenu ref="refContextMenu" :menu-items="menuItems" />
+  <DeleteDialog
+    v-model="deleteDialog" 
+    :onDelete="onDeleteAvatar" 
+    :onClose="() => deleteDialog = false"
+  />
 </template>

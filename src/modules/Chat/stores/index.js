@@ -17,8 +17,13 @@ export const useChatStore = defineStore("chat-stores", {
     chatList: [],
     privateChatList: [],
     userList: [],
-    privateChatActive: true,
-    groupChatActive: false
+    contextMenu: {
+      tempData: null,
+      data: null,
+      edit: false,
+      replay: false,
+      deleteDialog: false
+    }
   }),
   actions: {
     toggleRightSidebar() {

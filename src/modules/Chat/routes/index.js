@@ -17,8 +17,16 @@ const Chat = [
         component: () => import("../views/PrivateChat.vue")
       },
       {
-        path: "group",
-        name: "ChatGroup",
+        path: "private/:id",
+        name: "ChatPrivateDetail",
+        meta: {
+          isAuthRequired: true
+        },
+        component: () => import("../views/PrivateChat.vue")
+      },
+      {
+        path: "group/:id",
+        name: "ChatGroupDetail",
         meta: {
           isAuthRequired: true
         },

@@ -1,6 +1,7 @@
 <script setup>
 // Core
 import {onMounted, reactive, ref, watch} from "vue";
+import { RouterLink } from "vue-router";
 import { useI18n } from "vue-i18n";
 // Store
 import { useAuthStore } from "@/modules/Auth/stores";
@@ -12,7 +13,6 @@ import GroupItem from "@/modules/Chat/components/GroupItem.vue";
 import UserItem from "@/modules/Chat/components/UserItem.vue";
 import UserItemSearch from "@/modules/Chat/components/UserItemSearch.vue";
 import CreateGroupDialog from "./CreateGroupDialog.vue";
-import { RouterLink } from "vue-router";
 
 const { t } = useI18n();
 const authStore = useAuthStore();
@@ -56,12 +56,6 @@ const createChat = async (user) => {
 const onTabChange = async (val) => {
   if (val.index === 0) {
     await chatStore.actionGetPrivateChatList({});
-    chatStore.privateChatActive = true;
-    chatStore.groupChatActive = false;
-
-  } else if(val.index === 1){
-    chatStore.privateChatActive = false;
-    chatStore.groupChatActive = true;
   }
 }
 
@@ -106,7 +100,7 @@ onMounted(async () => {
         <div class="overflow-hidden overflow-y-auto p-4 pt-0" style="height: calc(100vh - 260px)">
           <span class="text-sm font-medium text-greyscale-500">Найдено <span class="font-semibold text-greyscale-900">2</span> результата</span>
 
-          <pre>{{ chatStore.chatList }}</pre>
+          <!-- <pre>{{ chatStore.chatList }}</pre> -->
 
           <span class="text-sm font-medium text-greyscale-500">{{ t('global-search-results') }}</span>
 
@@ -128,7 +122,7 @@ onMounted(async () => {
         header-classes="h-8 w-full"
         nav-classes="w-full"
         nav-container-classes="mx-4"
-        class="mt-2"
+        class="mt-4"
         :on-tab-change="onTabChange"
       >
         <template #personal>
@@ -157,9 +151,7 @@ onMounted(async () => {
 
         <template #group>
           <div class="overflow-hidden overflow-y-auto px-4" style="height: calc(100vh - 332px)">
-            <RouterLink :to="{ name: 'ChatGroup' }">
-              <group-item />
-            </RouterLink>
+             <group-item />
           </div>
         </template>
 

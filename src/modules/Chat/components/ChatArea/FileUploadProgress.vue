@@ -7,6 +7,9 @@ const props = defineProps({
  progress: {
   type: Number,
   default: 0
+ },
+ abortController: {
+  type: AbortController,
  }
 })
 </script>
@@ -23,7 +26,7 @@ const props = defineProps({
      ></div>
    </div>
    <div class="p-2 rounded-full bg-critic-50 cursor-pointer">
-    <base-iconify :icon="XMarkSolidIcon" class="!w-3 !h-3 text-critic-300" />
+    <base-iconify @click="props.abortController.abort()" :icon="XMarkSolidIcon" class="!w-3 !h-3 text-critic-300" />
    </div>
 
  </div>

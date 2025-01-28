@@ -51,10 +51,15 @@ defineExpose({
        :class="[{'!py-2': !item.iconName}, item.class]"
        >
         <slot :item="item">
-          <base-iconify class="!w-4 !h-4" :icon="(item.iconName)" v-if="item.iconName" />
+          <base-iconify class="!w-4 !h-4" :icon="(item.iconName)" v-if="item.iconName" :class="item.iconClass" />
           <span class="text-xs font-medium">{{t(item.label)}}</span>
         </slot>
      </div>
    </template>
    </ContextMenu>
 </template>
+<style scoped>
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+</style>

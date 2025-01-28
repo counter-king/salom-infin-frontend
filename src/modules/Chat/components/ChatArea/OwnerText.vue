@@ -2,11 +2,12 @@
 // cores
 import { useI18n } from 'vue-i18n';
 // componennts
-import { CheckBigIcon, CheckReadIcon } from '@/components/Icons';
+import { CheckBigIcon, CheckReadIcon, DangerCircleIcon } from '@/components/Icons';
 import BaseIconify from '@/components/UI/BaseIconify.vue';
 import ClickedStiker from './ClickedStiker.vue';
 // utils
 import { formatHour } from '@/utils/formatDate';
+import { collectionStikers } from '../../constatns';
 
 const { t } = useI18n(); 
 // props
@@ -35,15 +36,21 @@ const props = defineProps({
 })
 // reactives
 const onContextMenuClick = (event) => {
-  props.onShowContextMenu(event)
+  props.onShowContextMenu(event, { text: props.text})
 };
-
 </script>
 
 <template>
   <div class="flex flex-col gap-2 items-end">
     <div class="flex gap-3 justify-end items-end relative">
-    <div class="flex gap-1 items-end">
+    <div v-if="true" class="flex items-center justify-end text-critic-500 gap-[6px]">
+      <span class="text-xs font-medium">{{ t('error') }}</span>
+      <base-iconify
+        :icon="DangerCircleIcon"
+        class="!w-5 !h-5"
+      />
+    </div>
+    <div v-else class="flex gap-1 items-end">
       <span class="text-xs font-medium text-greyscale-500">{{ formatHour(props.date) }}</span>
       <base-iconify
         :icon="props.isReaded ? CheckReadIcon : CheckBigIcon"
@@ -53,8 +60,9 @@ const onContextMenuClick = (event) => {
       <p @contextmenu.prevent="onContextMenuClick" class="text-sm font-medium text-white bg-primary-400 rounded-xl rounded-br-[4px] px-4 py-2" >{{ props.text }}</p>
     </div>
     <div class="flex gap-1">
-      <ClickedStiker />
-      <ClickedStiker />
+      <template v-if="props.stiker">
+        <ClickedStiker :stiker="props.stiker"/>
+      </template>
     </div>
   </div>
 </template>

@@ -778,5 +778,10 @@
   "members":"Участников",
   "copy":"Копиравать",
   "enter-your-message": "Введите свое сообщение...",
-  "select-image":"Выбрать картинку"
+  "select-image":"Выбрать картинку",
+  "error":"Ошибка",
+  "delete-chat-dialog-content": "Вы хотите удалить это сообщение ?",
+  "delete-chat-avatar-dialog-content": "Вы хотите удалить это фото ?",
+  "you-dont-have-any-messages": "У вас пока нет сообщений",
+  "you-dont-have-any-messages-description": "Чтобы отправить сообщение этому контакту, напишите свое сообщение ниже!"
 }

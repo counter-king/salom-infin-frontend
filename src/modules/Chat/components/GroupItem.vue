@@ -1,5 +1,6 @@
 <script setup>
 // constants
+import { RouterLink } from 'vue-router';
 import { fileTypes } from '../constatns';
 const props = defineProps({
   user: {
@@ -14,7 +15,9 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="flex px-4 py-[14px] hover:bg-greyscale-50  w-full rounded-xl cursor-pointer relative"
+  <RouterLink
+    :to="{ name: 'ChatGroupDetail', params: { id: 1} }"
+     class="flex px-4 py-[14px] hover:bg-greyscale-50  w-full rounded-xl cursor-pointer relative"
     :class="{ 'bg-greyscale-50': !active }"
     >
     <base-avatar
@@ -24,7 +27,6 @@ const props = defineProps({
       avatar-classes="w-10 h-10"
       label-classes="text-lg font-semibold text-greyscale-900"
     />
-
     <div class="flex flex-col w-full ml-3">
       <div class="flex justify-between w-full">
         <span class="text-sm font-semibold">Doclines Project</span>
@@ -47,7 +49,7 @@ const props = defineProps({
       </div>
     </div>
     <div v-if="active" class="absolute bg-primary-500 left-0 w-[3px] h-[36px] top-4"></div>
-  </div>
+  </RouterLink>
 </template>
 
 <style scoped>

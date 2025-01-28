@@ -1,7 +1,15 @@
 // cores
-import { CopyIcon, ForwardIcon, PenIcon, TrashBinTrashIcon } from "@/components/Icons";
 import { ref } from "vue";
+// components
+import { CopyIcon, ForwardIcon, PenIcon, TrashBinTrashIcon } from "@/components/Icons";
+// stores
+import { useChatStore } from '../stores';
+// utils
+import { dispatchNotify } from "@/utils/notify";
+// enums
+import { COLOR_TYPES } from "@/enums";
 
+const chatStore = useChatStore()
 export const useContextMenu = () => {
 // reactives
 const refContextMenu = ref(null);
@@ -30,31 +38,40 @@ const menuItems = ref([
      action: (value, type)=>{
       handleClickStiker(value, type)
      },
-     command: () => {
+     command: (data) => {
      }  
    },
    { 
      label: 'answer',
      iconName: ForwardIcon,
-     command: () => {
+     iconClass:"rotate-y-180 transform rotate-y-180", 
+     command: (data) => {
+      chatStore.contextMenu = { data: chatStore.contextMenu.tempData, replay: true, edit: false }
      } 
    },
    { 
      label: 'update',
      iconName: PenIcon,
      command: () => {
+      chatStore.contextMenu = { data: chatStore.contextMenu.tempData, replay: false, edit: true }
      } 
    },
    { 
      label: 'copy',
      iconName: CopyIcon,
-     command: () => {
+     command: async () => {      
+      try {
+        await navigator.clipboard.writeText(chatStore.contextMenu.tempData.text);
+      } catch (err) {
+        dispatchNotify(null, err, COLOR_TYPES.ERROR)
+      }
      } 
    },
    { 
      label: 'delete',
      iconName: TrashBinTrashIcon,
      command: () => {
+      chatStore.contextMenu = { data: chatStore.contextMenu.tempData, replay: false, edit: false, deleteDialog: true }
      },
      class: "!text-critic-500"
    }

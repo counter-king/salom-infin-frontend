@@ -32,7 +32,7 @@ const props = defineProps({
         shape="circle"
         avatar-classes="w-8 h-8"
       />
-      <div @contextmenu.prevent="onShowContextMenu" class="flex flex-col gap-1 bg-white rounded-xl rounded-bl-[4px] px-4 py-2 cursor-pointer">
+      <div @contextmenu.prevent="onShowContextMenu($event, { text: props.text})" class="flex flex-col gap-1 bg-white rounded-xl rounded-bl-[4px] px-4 py-2 cursor-pointer">
         <div 
           v-if="true"
           class="flex flex-col gap-1 pl-2 border-l-[2px] border-warning-500"

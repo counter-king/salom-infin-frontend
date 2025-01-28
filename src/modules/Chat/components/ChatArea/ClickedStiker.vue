@@ -4,8 +4,19 @@ import { ref } from 'vue';
 // components
 import ContextMenu from './ContextMenu.vue';
 import BaseAvatar from '@/components/UI/BaseAvatar.vue';
+
+const props = defineProps({
+  stiker : {
+    type: Object,
+  },
+  users: {
+    type: Array,
+  }
+})
+
 // reactives
 const refContextMenu = ref(null);
+
 const menuItems = ref([
    { 
      label: 'select-image',
@@ -30,7 +41,7 @@ const onContextMenuClick = (event) => {
   <div 
     @contextmenu.prevent="onContextMenuClick"
     class="w-fit py-[6px] px-3 border border-primary-300 bg-primary-50 rounded-[90px] text-sm text-greyscale-900 text-medium cursor-pointer select-none"
-   >😁 <span v-if="true" class="ml-1">2</span></div>
+   >{{ props.stiker }}<span v-if="true" class="ml-1">{{ props.users.length }}</span></div>
   <ContextMenu ref="refContextMenu" :menu-items="menuItems" class-menu="w-[210px]">
    <template  #default="{ item }">
      <base-avatar

@@ -1,12 +1,15 @@
 <script setup>
 //
-import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 // Components
 import { SidebarMinimalisticIcon } from '@/components/Icons'
 // Store
 import { useChatStore } from "@/modules/Chat/stores";
 
+
 const chatStore = useChatStore();
+const route = useRoute();
+
 </script>
 
 <template>
@@ -23,10 +26,10 @@ const chatStore = useChatStore();
           />
           <div class="absolute w-4 h-4 bg-success-500 rounded-lg right-0 bottom-0 border-[3px] border-white"></div>
         </div>
-
         <div class="flex flex-col ml-3">
-          <div class="text-base font-semibold select-none">{{ chatStore.groupChatActive ? "Наша команда" : "Тургунов Бахадир"}}</div>
-          <div class="text-sm font-medium text-greyscale-500 select-none">{{ chatStore.groupChatActive ? "23 участника, 9 онлайн" : "HR менеджер"}}</div>
+          <div class="text-base font-semibold select-none">{{ route.name == "ChatGroupDetail" ? "Наша команда" : "Тургунов Бахадир"}}</div>
+          <div v-if="true" class="text-sm font-medium text-greyscale-500 select-none">{{ route.name == "ChatGroupDetail" ? "   участника, 9 онлайн" : "HR менеджер"}}</div>
+          <div v-else class="text-sm font-medium text-success-500 select-none">typing ... </div>
         </div>
       </div>
 

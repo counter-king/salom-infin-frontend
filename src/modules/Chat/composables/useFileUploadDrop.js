@@ -21,6 +21,9 @@ export const useFileUploadDrop = () => {
   return (fileName.split('.')[0].length >= 12) ? fileName.substring(0, 13) + '... .' + fileName.split('.')[1] : fileName
 }
 
+const abortController = new AbortController();
+const signal = abortController.signal;
+
 const uploadFiles = async (files) => {
   if (files.length === 0) return;
   for (let i = 0; i < files.length; i++) {
@@ -37,7 +40,8 @@ const uploadFiles = async (files) => {
     await axiosConfig.post(`/upload/`, formData, {
       onUploadProgress: ({ loaded, total }) => {
         item.progress = Math.floor((loaded / total) * 100) - 1;
-      }
+      },
+      signal
     })
       .then(({ data }) => {
         item.id = data.id;
@@ -50,5 +54,5 @@ const uploadFiles = async (files) => {
   }
 }
 
- return { onDragOver, onDragLeave, onDrop, uploadingFiles } 
+ return { onDragOver, onDragLeave, onDrop, uploadingFiles, abortController } 
 }

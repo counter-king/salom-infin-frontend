@@ -33,3 +33,30 @@ export const downloadFile = async () => {
     console.error('Download failed:', error)
   }
 }
+
+export const collectionStikers = [
+  {
+    type: 'fire', 
+    value: '🔥' 
+  },
+  {
+    type: 'lough',
+    value: '😄'
+  },
+  {
+    type: 'heart',
+    value: '❤️'
+  },
+  {
+    type: 'like',
+    value: '👍'
+  },
+  {
+    type: 'angry',
+    value: '😡'
+  },
+  {
+    type: 'love',
+    value: '😍'
+  }
+]

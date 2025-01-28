@@ -1,6 +1,8 @@
 <script setup>
 // Core
 import { useI18n } from "vue-i18n";
+import { computed } from "vue";
+import { useRoute } from "vue-router";
 // Components
 import { ChatAreWrapper, LeftSidebar, RightSidebar } from "@/modules/Chat/components";
 // css
@@ -8,8 +10,11 @@ import 'vue3-emoji-picker/css'
 
 
 const { t } = useI18n();
-</script>
+const router = useRoute()
+const allowedPages = ['ChatPrivateDetail','ChatGroupDetail']
+const isShowChat = computed(() => allowedPages.includes(router.name))
 
+</script>
 <template>
   <div class="chat-home flex flex-col w-full py-6 px-10" style="height: calc(100vh - 80px)">
     <span class="text-2xl font-semibold">{{ t('chat-messenger') }}</span>
@@ -18,7 +23,7 @@ const { t } = useI18n();
 
       <left-sidebar />
 
-      <template v-if="true">
+      <template v-if="isShowChat">
         <chat-are-wrapper />
 
         <right-sidebar />

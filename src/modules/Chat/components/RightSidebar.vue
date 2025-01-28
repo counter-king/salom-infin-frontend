@@ -2,6 +2,7 @@
 // Core
 import { useI18n } from "vue-i18n";
 import { computed, ref } from "vue";
+import { useRoute } from "vue-router";
 // Components
 import FileTypes from "./FileTypes.vue";
 import FileTypeLink from "./FileTypeLink.vue";
@@ -17,6 +18,7 @@ import { useChatStore } from "@/modules/Chat/stores";
 import GroupUserList from "./GroupUserList.vue";
 
 const chatStore = useChatStore();
+const route = useRoute();
 const { t } = useI18n();
 const components = {
   [COMPONENT_TYPES.FILES]: FileTypes,
@@ -74,12 +76,12 @@ const handleClickGroupUsers = () => {
               shape="circle"
               avatar-classes="w-20 h-20"
             />
-            <h2 class="mt-1 text-base font-semibold select-none text-greyscale-900">{{ chatStore.groupChatActive ? "Наша команда" : "Тургунов Бахадир"}}</h2>
-            <p class="text-sm font-medium select-none text-greyscale-500">{{ chatStore.groupChatActive ? "23 участника" : "HR менеджер"}}</p>
+            <h2 class="mt-1 text-base font-semibold select-none text-greyscale-900">{{ route.name == "ChatGroupDetail" ? "Наша команда" : "Тургунов Бахадир"}}</h2>
+            <p class="text-sm font-medium select-none text-greyscale-500">{{ route.name == "ChatGroupDetail" ? "23 участника" : "HR менеджер"}}</p>
           </div>
           <!-- users  -->
           <div 
-            v-if="chatStore.groupChatActive"
+            v-if="route.name == 'ChatGroupDetail'"
             @click="handleClickGroupUsers"
             class="flex items-center gap-[10px] select-none p-6 py-0 cursor-pointer"
             >

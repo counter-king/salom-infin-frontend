@@ -1,9 +1,12 @@
 <script setup>
+// cores
+import { useRouter } from 'vue-router';
+// components
 import { CheckReadIcon } from '@/components/Icons';
-
 // constants
 import { fileTypes } from '../constatns';
 
+const router = useRouter()
 // props
 const props = defineProps({
   user: {
@@ -19,12 +22,14 @@ const props = defineProps({
     default: false
   }
 })
+
 </script>
 
 <template>
-  <div 
+  <RouterLink 
+    :to="{ name: 'ChatPrivateDetail', params: { id: 1} }" 
     class="flex px-4 py-[14px] items-center hover:bg-greyscale-50 w-full rounded-xl cursor-pointer relative"
-    :class="{ 'bg-greyscale-50': active }"  
+    :class="{ 'bg-greyscale-50': active }" 
   >
     <div class="relative">
       <base-avatar
@@ -65,7 +70,7 @@ const props = defineProps({
 
     <!-- active indicator -->
     <div v-if="active" class="absolute bg-primary-500 left-0 w-[3px] h-[36px] top-4"></div>
-  </div>
+  </RouterLink>
 </template>
 
 <style scoped>

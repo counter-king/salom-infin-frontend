@@ -1,6 +1,6 @@
 <script setup>
 // cores
-import { ChevronUp20SolidIcon, ClapperboardPlayBoldIcon, FileTextBoldIcon, GalleryBoldIcon, GalleryIcon } from '@/components/Icons';
+import { ChevronUp20SolidIcon, ClapperboardPlayBoldIcon, FileTextBoldIcon, GalleryBoldIcon, MenuDotsBoldIcon } from '@/components/Icons';
 import { useI18n } from 'vue-i18n';
 // components
 import FileItem from './FileItem.vue';
