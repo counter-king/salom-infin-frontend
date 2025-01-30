@@ -67,7 +67,8 @@ const stepperIcon = computed(() => {
 <!--        />-->
       </div>
 
-      <div class="flex flex-col items-center w-8">
+      <div
+        class="flex flex-col items-center w-8">
         <div
           class="flex justify-center items-center rounded-full w-8 h-8"
           :class="stepperColor"
