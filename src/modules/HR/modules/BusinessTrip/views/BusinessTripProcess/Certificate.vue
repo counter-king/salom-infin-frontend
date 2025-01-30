@@ -122,7 +122,7 @@ const generatePdf = async () => {
 </script>
 
 <template>
-  <div v-if="verifications && verifications.length" class="flex justify-center px-6 py-6 overflow-y-auto"
+  <div class="flex justify-center px-6 py-6 overflow-y-auto"
        style="height: calc(100% - 100px)">
     <div class="w-[600px] h-fit border shadow py-10 px-8" ref="contentToPrint">
       <div class="element-to-download">
@@ -169,7 +169,7 @@ const generatePdf = async () => {
           belgilari:
         </div>
 
-        <div>
+        <div v-if="verifications && verifications.length">
           <base-row>
             <base-col
               v-for="item in verifications"
