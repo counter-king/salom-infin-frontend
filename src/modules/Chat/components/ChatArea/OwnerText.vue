@@ -1,13 +1,14 @@
 <script setup>
 // cores
 import { useI18n } from 'vue-i18n';
+import { ref } from 'vue';
 // componennts
 import { CheckBigIcon, CheckReadIcon, DangerCircleIcon } from '@/components/Icons';
 import BaseIconify from '@/components/UI/BaseIconify.vue';
 import ClickedStiker from './ClickedStiker.vue';
 // utils
 import { formatHour } from '@/utils/formatDate';
-import { collectionStikers } from '../../constatns';
+import ContextMenu from './ContextMenu.vue';
 
 const { t } = useI18n(); 
 // props
@@ -22,24 +23,42 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-  stiker : {
-    icon: {
-      type: String
-    },
-    info: {
-      type: Object
-    }
+  reactions : {
+    type: Array
   },
   onShowContextMenu: {
+    type: Function
+  },
+  onShowEmojiContextMenu: {
     type: Function
   }
 })
 // reactives
+const refContextMenu = ref(null);
+// const emojiMenuItems = ref([
+//    { 
+//      label: 'select-image',
+//      iconName: true,
+//      command: () => {
+//      } 
+//    },
+//    { 
+//      label: 'delete',
+//      iconName: true,
+//      command: () => {
+//      },
+//    }
+// ]);
+
 const onContextMenuClick = (event) => {
   props.onShowContextMenu(event, { text: props.text})
 };
-</script>
 
+const onEmojiContextMenuClick = (event) => {
+  props.onShowEmojiContextMenu(event);
+}
+
+</script>
 <template>
   <div class="flex flex-col gap-2 items-end">
     <div class="flex gap-3 justify-end items-end relative">
@@ -60,11 +79,26 @@ const onContextMenuClick = (event) => {
       <p @contextmenu.prevent="onContextMenuClick" class="text-sm font-medium text-white bg-primary-400 rounded-xl rounded-br-[4px] px-4 py-2" >{{ props.text }}</p>
     </div>
     <div class="flex gap-1">
-      <template v-if="props.stiker">
-        <ClickedStiker :stiker="props.stiker"/>
+      <template v-for="reaction in props.reactions">
+        <ClickedStiker :onContextMenuClick="onEmojiContextMenuClick" :reaction="reaction" />
       </template>
+      <ClickedStiker :onContextMenuClick="onEmojiContextMenuClick" :reaction="reaction" />
+      <ClickedStiker :onContextMenuClick="onEmojiContextMenuClick" :reaction="reaction" />
     </div>
   </div>
+  <!-- reaction menu -->
+  <!-- <ContextMenu ref="refContextMenu" :menu-items="emojiMenuItems" class-menu="w-[229px]">
+   <template  #default="{ item }">
+     <base-avatar
+       label="Doclines Project"
+       color="#E2E8F0"
+       shape="circle"
+       avatar-classes="w-6 h-6"
+       label-classes="text-lg font-semibold text-greyscale-900"
+     />
+     <span class="text-xs font-medium">{{ item.label }}</span>
+   </template>
+  </ContextMenu> -->
 </template>
 <style scoped>
 .dropdown-menu {

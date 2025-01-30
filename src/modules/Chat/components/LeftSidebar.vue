@@ -53,6 +53,7 @@ watch(search, async (val) => {
 const createChat = async (user) => {
   await chatStore.actionCreatePrivateChat({ member_id: user.id });
 }
+
 const onTabChange = async (val) => {
   if (val.index === 0) {
     await chatStore.actionGetPrivateChatList({});
@@ -98,11 +99,8 @@ onMounted(async () => {
       </template>
       <template v-else>
         <div class="overflow-hidden overflow-y-auto p-4 pt-0" style="height: calc(100vh - 260px)">
-          <span class="text-sm font-medium text-greyscale-500">Найдено <span class="font-semibold text-greyscale-900">2</span> результата</span>
-
-          <!-- <pre>{{ chatStore.chatList }}</pre> -->
-
-          <span class="text-sm font-medium text-greyscale-500">{{ t('global-search-results') }}</span>
+          <p class="text-sm font-medium text-greyscale-500 my-4">Найдено <span class="font-semibold text-greyscale-900">2</span> результата</p>
+          <p class="text-sm font-medium text-greyscale-500">{{ t('global-search-results') }}</p>
 
           <user-item-search
             v-for="user in chatStore.userList"
@@ -164,5 +162,7 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-
+::v-deep(.p-tabview-panels) {
+  padding-top: 16px!important;
+}
 </style>

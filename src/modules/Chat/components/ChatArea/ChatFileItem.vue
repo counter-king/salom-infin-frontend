@@ -1,17 +1,13 @@
 <script setup>
 // core
-import { useI18n } from 'vue-i18n';
 import { downloadFile } from '../../constatns';
-
-const { t } = useI18n();
 
 const props = defineProps({
   info: {
    type: Object,
    default: () => ({
-    title: 'default',
-    count: 0,
-    size: 0 
+    name: '',
+    size: ''
    })
   },
   rightIcon: {
@@ -48,9 +44,10 @@ const props = defineProps({
   class="flex"
   :class="{'justify-end': props.type === 'owner'}"
   >
+  <!-- <pre>{{ props.info }}</pre> -->
   <div 
     @contextmenu.prevent="props.onShowContextMenu"
-    class="flex gap-4 items-center p-2 pr-4 min-w-[243px] group bg-white cursor-pointer rounded-xl"
+    class="flex gap-4 items-center p-2 pr-4 min-w-[243px] max-w-[400px] w-full group bg-white cursor-pointer rounded-xl"
     :class="{'!bg-primary-400': props.type === 'owner'}"
     >
       <div 
@@ -67,15 +64,15 @@ const props = defineProps({
         <h3   
            class="text-sm font-semibold text-greyscale-900 capitalize"
           :class="{'!text-white': props.type === 'owner'}"
-          >{{t(props.info.title) }}</h3>
+          >{{ props.info.name }}</h3>
         <p 
          :class="{'text-primary-100': props.type === 'owner'}"
           class="text-xs text-greyscale-500"
-        >{{ t('chat-info-file',{count: props.info.count, size: props.info.size}) }}</p>
+        >{{ props.info.size }}</p>
       </div>
       <base-iconify 
         @click="downloadFile" 
-        v-if="!!props.rightIcon"
+        v-if="!!props.info.uploaded"
         :icon="props.rightIcon.name"
         class="!h-5 !w-5" 
         :class="[{'text-greyscale-90': props.type === 'owner'} ,props.rightIcon.class]"

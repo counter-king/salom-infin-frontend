@@ -23,12 +23,14 @@ import Empty from '@/components/Empty.vue';
 const chatStore = useChatStore()
 // composables
 const { menuItems, refContextMenu } = useContextMenu();
-const { onDragOver, onDragLeave, onDrop, uploadingFiles, abortController } = useFileUploadDrop();
+const { onDragOver, onDragLeave, onDrop } = useFileUploadDrop();
 
 const { t } = useI18n();
 // reactives
 const showScrollDownButton = ref(false);
 const refChatArea = ref(null);
+const refSendMessage = ref(null);
+const refEmojiContextMenu = ref(null);
 
 // methods
 // when scroll down, scrollDwonButton will be visible
@@ -50,9 +52,35 @@ const onShowContextMenu = (event, data) => {
   chatStore.contextMenu.tempData = data
 }
 
+const onShowEmojiContextMenu = (event) => {
+  refEmojiContextMenu.value.menu.show(event);
+}
+
 const onHandleDeleteMessage = () => {
   console.log("log");
 }
+
+const onClickChatArea = () => {
+  if(refSendMessage.value){
+    refSendMessage.value.refInput.$el.focus()
+  }
+}
+
+const emojiMenuItems = ref([
+   { 
+     label: 'select-image',
+     iconName: true,
+     command: () => {
+     } 
+   },
+   { 
+     label: 'delete',
+     iconName: true,
+     command: () => {
+     },
+   }
+]); 
+
 </script>
 <template>
  <!-- style="height: calc(100% - 135px)"  -->
@@ -61,27 +89,43 @@ const onHandleDeleteMessage = () => {
     ref="refChatArea" class="flex flex-col gap-2 px-6 py-4 overflow-y-auto relative"
     @scroll="handleScroll"
     :style="`height: calc(100% - ${chatStore.contextMenu.edit || chatStore.contextMenu.replay ? '170px' : '135px'})`" 
+    @click="onClickChatArea"
     @dragover.prevent="onDragOver"
     @dragleave.prevent="onDragLeave"
     @drop.prevent="onDrop"
     >
-    <template v-if="false">
+    <template v-if="true">
       <ShowDate :date="'2024-10-20T10:20:30'" />
-      <OwnerText :onShowContextMenu="onShowContextMenu"  isReaded :text="'Привет, хорошо, спасибо!'" :date="'2024-10-20T10:20:30'" />
+      <OwnerText :onShowContextMenu="onShowContextMenu" :onShowEmojiContextMenu="onShowEmojiContextMenu"  isReaded :text="'Привет, хорошо, спасибо!'" :date="'2024-10-20T10:20:30'" />
       <FriendText :onShowContextMenu="onShowContextMenu"  :text="'Привет, хорошо, спасибо!'" :date="'2024-10-20T10:20:30'" />
-      <template  v-for="file in uploadingFiles" :key="file.id">
-        <FileUploadProgress :abortController="abortController" :progress="file.progress" />
+      <FriendText :onShowContextMenu="onShowContextMenu" :avatarVisible="true"  :text="'Привет, хорошо, спасибо!'" :date="'2024-10-20T10:20:30'" />
+      <!-- <ChatFileItem :onShowContextMenu="onShowContextMenu"  :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-warning-500' }"/> -->
+      <!-- <ChatFileItem :onShowContextMenu="onShowContextMenu"  :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-warning-500' }"/> -->
+      <!-- <ChatFileItem type="owner" :onShowContextMenu="onShowContextMenu"  :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-white' }"/> -->
+      <!-- <ChatFileItem type="owner" :onShowContextMenu="onShowContextMenu"  :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-white' }"/> -->
+      <!-- <div class="h-[2px]">1</div> -->
+      <template v-for="item in chatStore.uploadingFiles" :key="item.id"> 
+        <ChatFileItem 
+          :info="item"
+          type="owner"
+          :onShowContextMenu="onShowContextMenu"
+          :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" 
+          :left-icon="{ name: FileTextBoldIcon, class: 'text-white' }"
+        />
       </template>
-      <ChatFileItem :onShowContextMenu="onShowContextMenu"  :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-warning-500' }"/>
-      <ChatFileItem :onShowContextMenu="onShowContextMenu"  :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-warning-500' }"/>
-      <ChatFileItem type="owner" :onShowContextMenu="onShowContextMenu"  :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-white' }"/>
-      <ChatFileItem type="owner" :onShowContextMenu="onShowContextMenu"  :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-white' }"/>
-      <div class="h-[2px]">1</div>
+      <!-- file uploads progress -->
+      <div v-if="true" class="sticky bottom-0 flex flex-col gap-1 mt-auto">
+        <template  v-for="(file, index) in chatStore.uploadingFiles" :key="index">
+          <FileUploadProgress :progress="file.progress" :file="file" :index="index" />
+        </template>
+      </div>
+      <!-- scroll down button -->
       <div v-if="showScrollDownButton" class="sticky bottom-0 flex justify-end">
-        <ScrollDownButton @click="handleClickScrollDown"  />
+        <ScrollDownButton @click="handleClickScrollDown"/>
       </div>
     </template>
-    <div v-if="true" class="h-full">
+     <!-- not start yet chat  -->
+    <div v-if="false" class="h-full">
       <Empty 
         title="you-dont-have-any-messages"
         description="you-dont-have-any-messages-description"
@@ -92,9 +136,22 @@ const onHandleDeleteMessage = () => {
     </div>
   </div>
   <div class="px-6">
-      <SendMessage  />
+      <SendMessage ref="refSendMessage" />
   </div>
   <ContextMenu :menu-items="menuItems" ref="refContextMenu" />
+  <!-- emoji context menu -->
+  <ContextMenu ref="refEmojiContextMenu" :menu-items="emojiMenuItems" class-menu="w-[229px]">
+   <template  #default="{ item }">
+     <base-avatar
+       label="Doclines Project"
+       color="#E2E8F0"
+       shape="circle"
+       avatar-classes="w-6 h-6"
+       label-classes="text-lg font-semibold text-greyscale-900"
+     />
+     <span class="text-xs font-medium">{{ item.label }}</span>
+   </template>
+  </ContextMenu>
   <DeleteDialog 
     v-model="chatStore.contextMenu.deleteDialog" 
     :onDelete="onHandleDeleteMessage" 

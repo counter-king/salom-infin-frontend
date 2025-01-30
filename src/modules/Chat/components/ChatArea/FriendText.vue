@@ -12,8 +12,9 @@ const props = defineProps({
   date: {
     type: String 
   },
-  avatar: {
-    type: String
+  avatarVisible: {
+    type: Boolean,
+    default: false
   },
   onShowContextMenu: {
     type: Function
@@ -25,14 +26,18 @@ const props = defineProps({
   <div class="">
     <div class="flex gap-2 select-none">
       <base-avatar 
-        v-if="!props.avatar"
         :avatar="props.avatar"
         label="Kirgizboev"
         color="#E2E8F0"
         shape="circle"
         avatar-classes="w-8 h-8"
+        :class="{'invisible': props.avatarVisible}"
       />
-      <div @contextmenu.prevent="onShowContextMenu($event, { text: props.text})" class="flex flex-col gap-1 bg-white rounded-xl rounded-bl-[4px] px-4 py-2 cursor-pointer">
+      <div 
+        @contextmenu.prevent="onShowContextMenu($event, { text: props.text})"
+         class="friend-text flex flex-col gap-1 bg-white rounded-2xl rounded-bl-[4px] px-4 py-2 cursor-pointer"
+         :class="[{'!rounded-2xl !rounded-tl-[4px]': props.avatarVisible}]"
+        >
         <div 
           v-if="true"
           class="flex flex-col gap-1 pl-2 border-l-[2px] border-warning-500"
@@ -40,8 +45,12 @@ const props = defineProps({
           <span class="text-xs font-semibold text-warning-500">Абдуллаев Рустам</span>
           <span class="text-xs font-medium text-greyscale-500">Привет, хорошо, спасибо!</span>
         </div>
-        <p class="friend-text text-sm font-medium text-greyscale-900">{{ props.text }}</p>
+        <p 
+          class="text-sm font-medium text-greyscale-900"
+        >
+          {{ props.text }}</p>
       </div>
+      <p class="text-xs font-medium text-greyscale-500 self-end">{{ formatHour(props.date) }}</p>
     </div>
   </div>
 </template>

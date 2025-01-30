@@ -2,13 +2,20 @@
 // cores
 import { onMounted, ref, watch } from 'vue';
 import InputText from 'primevue/inputtext';
+import { useI18n } from 'vue-i18n';
 // components
 import EmojiStikers from './EmojiStikers.vue';
 // icons
 import { ForwardIcon, PaperclipLinearIcon, PenIcon, PlainBoldIcon, SmileCircleLinearIcon, XMarkSolidIcon } from '@/components/Icons';
 import { useChatStore } from '../../stores';
+// composables
+import { useFileUpload } from '../../composables/useFileUpload';
 // stores
 const chatStore = useChatStore()
+
+const { t } = useI18n();
+const { uploadFiles } = useFileUpload();
+
 // reactives
 const message = ref("");
 const refInput = ref(null); 
@@ -34,7 +41,7 @@ const handleAttachmentClick = () => {
 }
 
 const handleFileInputChange = (event) => {
-  console.log(event.target.files);  
+    uploadFiles(event.target.files);
 }
 
 const onCancelIconReplay = () => {
@@ -47,6 +54,10 @@ watch(message, (val) => {
  } else {
    showSendIcon.value = false;
  }
+})
+
+defineExpose({
+  refInput
 })
 
 onMounted(() => {
@@ -93,6 +104,8 @@ onMounted(() => {
       v-model="message"
       type="text"
       size="small"
+      :placeholder="t('enter-your-message')"
+      @keydown.enter="handleSendMessage"
       :pt="{
         root: {
           class: [
@@ -137,6 +150,7 @@ onMounted(() => {
       type="file" 
       ref="refFileInput" 
       class="hidden" 
+      :multiple="true"
       @change="handleFileInputChange" 
     />
   </div>

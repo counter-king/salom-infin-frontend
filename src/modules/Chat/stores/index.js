@@ -23,7 +23,8 @@ export const useChatStore = defineStore("chat-stores", {
       edit: false,
       replay: false,
       deleteDialog: false
-    }
+    },
+    uploadingFiles: []
   }),
   actions: {
     toggleRightSidebar() {
