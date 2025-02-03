@@ -14,6 +14,7 @@ export const useChatStore = defineStore("chat-stores", {
     rightSidebarVisible: true,
     userSearching: false,
     userSearchLoading: false,
+    activeUser: null,
     chatList: [],
     privateChatList: [],
     userList: [],

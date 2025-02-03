@@ -137,9 +137,9 @@ onMounted(async () => {
                 </div>
               </template> 
               <template v-else>
-                <template v-for="i in 30" :key="i">
-                  <RouterLink :to="{ name: 'ChatPrivate' }">
-                    <user-item />
+                <template v-for="user in chatStore.privateChatList" :key="user.id">
+                  <RouterLink :to="{ name: 'ChatPrivate', params: { id: user.id } }">
+                    <user-item :user="user" />
                   </RouterLink>
                 </template>
               </template>

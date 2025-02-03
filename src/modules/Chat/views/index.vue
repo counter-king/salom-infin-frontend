@@ -1,18 +1,27 @@
 <script setup>
 // Core
 import { useI18n } from "vue-i18n";
-import { computed } from "vue";
+import { computed, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 // Components
 import { ChatAreWrapper, LeftSidebar, RightSidebar } from "@/modules/Chat/components";
+// Socket
+import { socket } from "@/services/socket";
 // css
 import 'vue3-emoji-picker/css'
-
 
 const { t } = useI18n();
 const router = useRoute()
 const allowedPages = ['ChatPrivateDetail','ChatGroupDetail']
 const isShowChat = computed(() => allowedPages.includes(router.name))
+
+// onMounted(() => {
+//   socket.connect()
+// })
+
+// onUnmounted(() => {
+//   socket.disconnect()
+// })
 
 </script>
 <template>
