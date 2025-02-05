@@ -5,6 +5,8 @@ import {
   fetchUserLogin,
   fetchCurrentUser,
   fetchCurrentUserUpdate,
+  fetchUpdateUserAvatar,
+  fetchDeleteUserAvatar,
   fetchLoginWithAd,
   fetchLoginViaERI
 } from "../services/index"
@@ -62,6 +64,20 @@ export const useAuthStore = defineStore("authStore", {
      * */
     async actionCurrentUserUpdate(body) {
       await fetchCurrentUserUpdate(body)
+      await this.actionUserProfile()
+    },
+    /**
+     *
+     * */
+    async actionUpdateUserAvatar(body) {
+      await fetchUpdateUserAvatar(body)
+      await this.actionUserProfile()
+    },
+    /**
+     *
+     * */
+    async actionDeleteUserAvatar(id) {
+      await fetchDeleteUserAvatar(id)
       await this.actionUserProfile()
     },
     /**

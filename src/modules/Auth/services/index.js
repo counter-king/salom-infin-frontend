@@ -7,7 +7,8 @@ const URLS = {
   otp: 'send-otp/',
   verify: 'verify-phone/',
   setPassword: 'set-password/',
-  loginViaERI: 'eds-login/'
+  loginViaERI: 'eds-login/',
+  customAvatars: 'custom-avatars'
 }
 /**
 *
@@ -36,6 +37,18 @@ export const fetchCurrentUser = () => {
  * */
 export const fetchCurrentUserUpdate = (body) => {
   return axiosConfig.put(URLS.profile, body)
+}
+/**
+ *
+ * */
+export const fetchUpdateUserAvatar = (body) => {
+  return axiosConfig.post(`${URLS.customAvatars}/`, body)
+}
+/**
+ *
+ * */
+export const fetchDeleteUserAvatar = (id) => {
+  return axiosConfig.delete(`${URLS.customAvatars}/${id}/`)
 }
 /*
 *
