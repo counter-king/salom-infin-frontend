@@ -33,6 +33,7 @@ const changeModal = ref(false)
 const resolutionModal = ref(null)
 const buttonLoading = ref(false)
 const isHostVercel = ref(null)
+const tabValue = ref('notice')
 
 // Computed
 const signed = computed(() => {
@@ -47,7 +48,8 @@ const onReject = async (comment) => {
   await countStore.actionCountList()
 }
 const onChangeDocument = async (text) => {
-  await sdStore.actionCustomUpdate({ id: route.query.compose_id, body: { content: text } })
+  const id = tabValue.value === 'decree' ? signStore.detailModel?.compose?.decree_id : route.query.compose_id
+  await sdStore.actionCustomUpdate({ id, body: { content: text } })
   changeModal.value = false
   await countStore.actionCountList()
   await router.replace({
@@ -81,6 +83,9 @@ const signDocumentWithResolution = async (body) => {
   finally {
     resolutionModal.value.buttonLoading = false
   }
+}
+const onItemClick = (item) => {
+  tabValue.value = item.slot
 }
 
 // Hooks
@@ -207,6 +212,7 @@ onMounted( async () => {
               v-if="signStore.detailModel && signStore.detailModel.compose"
               :compose-model="signStore.detailModel?.compose"
               class="overflow-hidden"
+              @emit:on-item-click="onItemClick"
             />
           </div>
         </div>
@@ -230,7 +236,7 @@ onMounted( async () => {
       :create-button-fn="onChangeDocument"
       editor-type="editor"
       max-width="max-w-[750px]"
-      :editor-value="signStore.detailModel?.compose?.content"
+      :editor-value="tabValue === 'decree' ? signStore.detailModel?.compose?.decree_content : signStore.detailModel?.compose?.content"
       :loading="sdStore.customUpdateLoading"
     />
     <!-- /CHANGE TEXT MODAL -->

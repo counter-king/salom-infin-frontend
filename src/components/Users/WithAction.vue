@@ -6,6 +6,10 @@ const props = defineProps({
   ...avatarProps,
   subTitle: {
     type: String
+  },
+  item: {
+    type: Object,
+    default:() => {}
   }
 })
 </script>
@@ -13,8 +17,10 @@ const props = defineProps({
 <template>
   <div class="user-with-action-view flex gap-2 bg-greyscale-50 rounded-lg py-[10px] px-3">
     <base-avatar
-      :label="props.label"
-      :color="props.color"
+      :label="item?.full_name"
+      :image="item.avatar?.url"
+      :color="item?.color"
+      avatarClasses="w-8 h-8"
     />
 
     <div class="flex-1 min-w-0">
@@ -31,7 +37,7 @@ const props = defineProps({
       </div>
     </div>
 
-    <div class="flex gap-2">
+    <div class="flex gap-2 mt-1">
       <slot name="action" />
     </div>
   </div>

@@ -91,7 +91,7 @@ const handleTokenIsInvalidRedirectWhereUserWas = async() => {
       await router.push({
       name: "DashboardIndex"
       })
-    }    
+    }
 }
 
 const logIn = async () => {

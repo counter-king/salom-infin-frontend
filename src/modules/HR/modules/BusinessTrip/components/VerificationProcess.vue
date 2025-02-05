@@ -53,21 +53,22 @@ const stepperIcon = computed(() => {
     <div class="flex gap-x-3">
       <div class="w-[350px] min-h-[130px]">
         <verification-process-card
-          v-if="props.item.direction === 'left' && itemVisible"
+          v-if="props.item.direction === 'left' && props.item.arrived_at"
           :item="props.item"
           :verifications="props.verifications"
           :index="props.index"
         />
 
-        <verification-disabled-card
-          v-else-if="props.item.direction === 'left' && disabledCardVisible"
-          :item="props.item"
-          :verifications="props.verifications"
-          :index="props.index"
-        />
+<!--        <verification-disabled-card-->
+<!--          v-else-if="props.item.direction === 'left' && disabledCardVisible"-->
+<!--          :item="props.item"-->
+<!--          :verifications="props.verifications"-->
+<!--          :index="props.index"-->
+<!--        />-->
       </div>
 
-      <div class="flex flex-col items-center w-8">
+      <div
+        class="flex flex-col items-center w-8">
         <div
           class="flex justify-center items-center rounded-full w-8 h-8"
           :class="stepperColor"
@@ -90,18 +91,18 @@ const stepperIcon = computed(() => {
 
       <div class="w-[350px] min-h-[130px]">
         <verification-process-card
-          v-if="props.item.direction === 'right' && itemVisible"
+          v-if="props.item.direction === 'right' && props.item.arrived_at"
           :item="props.item"
           :verifications="props.verifications"
           :index="props.index"
         />
 
-        <verification-disabled-card
-          v-else-if="props.item.direction === 'right' && disabledCardVisible"
-          :item="props.item"
-          :verifications="props.verifications"
-          :index="props.index"
-        />
+<!--        <verification-disabled-card-->
+<!--          v-else-if="props.item.direction === 'right' && disabledCardVisible"-->
+<!--          :item="props.item"-->
+<!--          :verifications="props.verifications"-->
+<!--          :index="props.index"-->
+<!--        />-->
       </div>
     </div>
   </div>

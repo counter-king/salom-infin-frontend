@@ -152,6 +152,8 @@ export { default as QuestionCircleBoldIcon } from  '~icons/solar/question-circle
 export { default as Routing2BoldIcon } from  '~icons/solar/routing-2-bold'
 export { default as MapPointBoldIcon } from  '~icons/solar/map-point-bold'
 export { default as GarageBoldIcon } from  '~icons/solar/garage-bold'
+export { default as StarBoldIcon } from  '~icons/solar/star-bold'
+export { default as DialogBoldIcon } from  '~icons/solar/dialog-bold'
 // Solar (Bold Duotone)
 export { default as ArchiveUpBoldDuotoneIcon } from  '~icons/solar/archive-up-bold-duotone'
 export { default as StarBoldDuotoneIcon } from  '~icons/solar/star-bold-duotone'

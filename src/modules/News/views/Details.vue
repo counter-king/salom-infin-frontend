@@ -205,6 +205,7 @@ onMounted( async () => {
                         :category="newsOne.category"
                         :created-date="newsOne.created_date"
                         :avatar-color="newsOne.created_by?.color"
+                        :avatar-image="newsOne.created_by?.avatar?.url"
                         />
                     <div class="flex gap-3">
                         <!-- eyes -->

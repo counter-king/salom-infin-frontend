@@ -35,6 +35,7 @@ const sdStore = useSDStore()
 const rejectModal = ref(false)
 const changeModal = ref(false)
 const confirmModal = ref(false)
+const tabValue = ref('notice')
 
 // Computed
 const approved = computed(() => {
@@ -63,10 +64,14 @@ const openConfirmModal = () => {
   confirmModal.value = true
 }
 const onChangeDocument = async (text) => {
-  await sdStore.actionCustomUpdate({ id: route.query.compose_id, body: { content: text } })
+  const id = tabValue.value === 'decree' ? approvalStore.detailModel?.compose?.decree_id : route.query.compose_id
+  await sdStore.actionCustomUpdate({ id, body: { content: text } })
   changeModal.value = false
   await countStore.actionCountList()
   await router.go(-1)
+}
+const onItemClick = (item) => {
+  tabValue.value = item.slot
 }
 
 // Hooks
@@ -164,6 +169,7 @@ onMounted(  () => {
               v-if="approvalStore.detailModel && approvalStore.detailModel.compose"
               :compose-model="approvalStore.detailModel?.compose"
               class="overflow-hidden"
+              @emit:on-item-click="onItemClick"
             />
           </div>
         </div>
@@ -187,7 +193,7 @@ onMounted(  () => {
 		  :create-button-fn="onChangeDocument"
 		  editor-type="editor"
 		  max-width="max-w-[750px]"
-		  :editor-value="approvalStore.detailModel?.compose?.content"
+		  :editor-value="tabValue === 'decree' ? approvalStore.detailModel?.compose?.decree_content : approvalStore.detailModel?.compose?.content"
       :loading="sdStore.customUpdateLoading"
 	  />
 	  <!-- /CHANGE TEXT MODAL -->

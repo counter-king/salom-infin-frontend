@@ -87,13 +87,17 @@ const zoomFile = (event, file) => {
         </div>
       </div>
 
-<!--      <verification-process
+      <template
         v-if="verificationList && verificationList.length"
         v-for="(item, index) in verificationList"
-        :item="item"
-        :verifications="verificationList"
-        :index="index"
-      />
+      >
+        <verification-process
+          v-if="item.arrived_at"
+          :item="item"
+          :verifications="verificationList"
+          :index="index"
+        />
+      </template>
 
       <sender-process
         v-if="verificationList && verificationList.length"
@@ -103,7 +107,7 @@ const zoomFile = (event, file) => {
       <report-process
         v-if="isProcessFinished && verificationList && verificationList.length"
         :verifications="verificationList"
-      />-->
+      />
 
     </div>
   </div>

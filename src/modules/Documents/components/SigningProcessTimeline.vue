@@ -170,6 +170,7 @@ const showReason = (item) => {
               :color="item?.user.color"
               shape="circle"
               avatar-classes="w-10 h-10"
+              :image="item?.user?.avatar?.url"
             />
             <div
               class="absolute left-6 top-6 border-2 rounded-3xl border-white p-1"
