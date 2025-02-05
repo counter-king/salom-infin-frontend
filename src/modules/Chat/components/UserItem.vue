@@ -1,12 +1,10 @@
 <script setup>
 // cores
-import { useRouter } from 'vue-router';
 // components
 import { CheckReadIcon } from '@/components/Icons';
 // constants
 import { fileTypes } from '../constatns';
 
-const router = useRouter()
 // props
 const props = defineProps({
   user: {
@@ -26,16 +24,16 @@ const props = defineProps({
 </script>
 
 <template>
-  <RouterLink 
-    :to="{ name: 'ChatPrivateDetail', params: { id: 1} }" 
+  <div 
     class="flex px-4 py-[14px] items-center hover:bg-greyscale-50 w-full rounded-xl cursor-pointer relative"
     :class="{ 'bg-greyscale-50': active }" 
   >
     <div class="relative">
       <base-avatar
-        label="Kirgizboev"
-        color="#E2E8F0"
+        :label="user?.first_name"
+        :color="user?.color"
         shape="circle"
+        :image="user?.avatar?.url"
         avatar-classes="w-10 h-10"
         label-classes="text-lg font-semibold text-greyscale-900"
       />
@@ -44,7 +42,7 @@ const props = defineProps({
 
     <div class="flex flex-col w-full ml-3">
       <div class="flex justify-between w-full items-center">
-        <span class="text-sm font-semibold">Turg'unov Bahodir</span>
+        <span class="text-sm font-semibold">{{ user?.full_name }}</span>
         <span class="text-xs font-medium text-greyscale-500">17:25</span>
       </div>
       <div class="flex justify-between items-center mt-1">
@@ -70,7 +68,7 @@ const props = defineProps({
 
     <!-- active indicator -->
     <div v-if="active" class="absolute bg-primary-500 left-0 w-[3px] h-[36px] top-4"></div>
-  </RouterLink>
+  </div>
 </template>
 
 <style scoped>

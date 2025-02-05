@@ -13,7 +13,7 @@ import FileTypeImage from "./FileTypeImage.vue";
 import { ChevronUp20SolidIcon, FolderFavouriteStarBoldIcon, PaperclipRoundedBoldIcon, UsersGroupTwoRoundedBoldIcon, XMarkSolidIcon } from '@/components/Icons'
 // constants 
 import { COMPONENT_TYPES } from "../constatns";
-// Store
+// store
 import { useChatStore } from "@/modules/Chat/stores";
 import GroupUserList from "./GroupUserList.vue";
 
@@ -50,6 +50,8 @@ const handleClickGroupUsers = () => {
     componentType.value = COMPONENT_TYPES.GROUP_USERS
   }
 }
+
+const isGroupDetail = computed(() => route.name == 'ChatGroupDetail')
 </script>
 
 <template>
@@ -70,18 +72,19 @@ const handleClickGroupUsers = () => {
           <!-- avatar -->
           <div class="flex flex-col items-center gap-1 w-full my-12 mx-auto">
             <base-avatar
-              label="Kirgizboev"
-              label-classes="text-4xl font-semibold select-none text-greyscale-900"
-              color="#E2E8F0"
+              :label="isGroupDetail ? chatStore.selectedGroup?.title : chatStore.selectedUser?.user?.first_name"
+              :color="isGroupDetail ? '#E2E8F0' : chatStore.selectedUser?.user?.color"
+              :image="isGroupDetail ? chatStore.selectedGroup?.image?.url : chatStore.selectedUser?.user?.avatar?.url"
               shape="circle"
               avatar-classes="w-20 h-20"
+              label-classes="text-2xl font-semibold select-none text-greyscale-900"
             />
-            <h2 class="mt-1 text-base font-semibold select-none text-greyscale-900">{{ route.name == "ChatGroupDetail" ? "Наша команда" : "Тургунов Бахадир"}}</h2>
-            <p class="text-sm font-medium select-none text-greyscale-500">{{ route.name == "ChatGroupDetail" ? "23 участника" : "HR менеджер"}}</p>
+            <h2 class="mt-1 text-base font-semibold select-none text-greyscale-900">{{ isGroupDetail ? chatStore.selectedGroup?.title : chatStore.selectedUser?.user?.full_name}}</h2>
+            <p class="text-sm font-medium select-none text-greyscale-500">{{ isGroupDetail ? t('members', { count: chatStore.selectedGroup?.members?.length}) : chatStore.selectedUser?.user?.position?.name}}</p>
           </div>
           <!-- users  -->
           <div 
-            v-if="route.name == 'ChatGroupDetail'"
+            v-if="isGroupDetail"
             @click="handleClickGroupUsers"
             class="flex items-center gap-[10px] select-none p-6 py-0 cursor-pointer"
             >

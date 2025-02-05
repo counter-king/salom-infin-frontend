@@ -775,7 +775,7 @@
   "video":"Видео",
   "images":"Картинки",
   "chat-info-file":"{count} файлов, {size} MB",
-  "members":"Участников",
+  "members":"{count} Участников",
   "copy":"Копиравать",
   "enter-your-message": "Введите свое сообщение...",
   "select-image":"Выбрать картинку",
@@ -783,5 +783,6 @@
   "delete-chat-dialog-content": "Вы хотите удалить это сообщение ?",
   "delete-chat-avatar-dialog-content": "Вы хотите удалить это фото ?",
   "you-dont-have-any-messages": "У вас пока нет сообщений",
-  "you-dont-have-any-messages-description": "Чтобы отправить сообщение этому контакту, напишите свое сообщение ниже!"
+  "you-dont-have-any-messages-description": "Чтобы отправить сообщение этому контакту, напишите свое сообщение ниже!",
+  "edit-group": "Редактировать группу"
 }

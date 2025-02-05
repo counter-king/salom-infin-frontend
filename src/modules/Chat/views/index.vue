@@ -34,7 +34,6 @@ const isShowChat = computed(() => allowedPages.includes(router.name))
 
       <template v-if="isShowChat">
         <chat-are-wrapper />
-
         <right-sidebar />
       </template>
 

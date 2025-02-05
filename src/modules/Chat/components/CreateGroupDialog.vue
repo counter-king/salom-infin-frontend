@@ -1,6 +1,6 @@
 <script setup>
 // core 
-import { ref, useModel } from 'vue';
+import { reactive, ref, useModel } from 'vue';
 import { helpers, required } from '@vuelidate/validators';
 import useVuelidate from '@vuelidate/core';
 // components
@@ -14,25 +14,33 @@ import DeleteDialog from './DeleteDialog.vue';
 import { isObject } from '@/utils'
 // services
 import axiosConfig from '@/services/axios.config';
+import { fetchCreateGroupChat } from '../services';
+// store
+import { useChatStore } from '../stores';
+
 // props
 const props = defineProps({
  modelValue: {
   type: Boolean,
  },
- formModal: {
-  type: Object,
-  default: () => ({
-    group_name: null,
-    users: [],
-  }),
+ modalLabel: {
+  type: String,
+  default: 'create-group'
  }
 });
+
+const chatStore = useChatStore();
 
 // reactives
 const refContextMenu = ref(null);
 const refFileInput = ref(null);
 const deleteDialog = ref(false);
-const uploadingFiles = ref([]);
+const uploadingFiles = ref(chatStore.selectedGroup?.image ? [chatStore.selectedGroup?.image] : []);
+const formModal = reactive({
+  group_name: chatStore.selectedGroup?.title || "",
+  users: chatStore.selectedGroup?.members.map(member => member.user) || [],
+})
+
 // rules
 const rules = {
   group_name: {
@@ -43,24 +51,24 @@ const rules = {
   }
 }
 
-const $v = useVuelidate(rules, props.formModal);
+const $v = useVuelidate(rules, formModal);
 const modelValue = useModel(props, 'modelValue');
-
 // emits
 const emit = defineEmits(['update:modelValue']);
 // methods
 const onSubmit = async () => {
   const isValid = await $v.value.$validate();
+    
   if(!isValid) return;
-  // console.log(props.formModal);
-  // emit('update:modelValue', false);
-}
-const resetForm = () => {
-  $v.value.$reset();
-  props.formModal.group_name = null;
-  props.formModal.users = [];
+  fetchCreateGroupChat({image: uploadingFiles.value[0]?.id, title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
+  emit('update:modelValue', false);
 }
 
+const resetForm = () => {
+  $v.value.$reset();
+  formModal.group_name = null;
+  formModal.users = [];
+}
 
 const onShowContextMenu = (event) => {
   console.log(event,refContextMenu.value);
@@ -82,18 +90,17 @@ const menuItems = ref([
    { 
      label: 'delete',
      iconName: TrashBinTrashIcon,
-     class:"bg-red",
      command: () => {
       deleteDialog.value = true;
      },
-     class: "!text-critic-500"
+     class: ["!text-critic-500", {"!pointer-events-none !text-critic-200": !uploadingFiles.length}]
    }
 ]);
 
-const handleFileInputChange = (event) => {
-  // console.log(event.target.files);
+const handleFileInputChange = (event) => {  
   uploadFiles(event.target.files);
 };
+
 const returnShortFileName = (fileName) => {
   return (fileName.split('.')[0].length >= 12) ? fileName.substring(0, 13) + '... .' + fileName.split('.')[1] : fileName
 }
@@ -128,14 +135,14 @@ const uploadFiles = async (files) => {
 }
 
 const onDeleteAvatar = () => {
-  console.log('delete avatar');
+  uploadingFiles.value = []
 }
 
 </script>
 <template>
   <base-dialog
     v-model="modelValue"
-    label="create-group"
+   :label="props.modalLabel"
     max-width="max-w-[608px]"
   >
     <template #content>
@@ -144,12 +151,18 @@ const onDeleteAvatar = () => {
         <div class="flex gap-4 items-center">
           <div class="relative">
             <base-avatar
-              label="A"
+              :label="formModal.group_name || '-'"
+              :image="!!uploadingFiles?.length ? uploadingFiles[0]?.url : undefined"
               label-classes="text-4xl"
               color="bg-primary-50"
               shape="circle"
               avatar-classes="w-20 h-20"
-            /> 
+            >
+              <base-iconify
+               :icon="CameraBoldIcon"
+                class="!w-9 !h-9 text-white"
+              />
+            </base-avatar> 
             <div
               @contextmenu.prevent="onShowContextMenu" 
               @click="onShowContextMenu"
@@ -202,7 +215,7 @@ const onDeleteAvatar = () => {
                   avatar-classes="w-5 h-5"
                 />
               </template>
-            </base-multi-select>
+          </base-multi-select>
          </div>
       </div>
     </template>

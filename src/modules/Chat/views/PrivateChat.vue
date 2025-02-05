@@ -1,7 +1,8 @@
 <script setup>
 // cores
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
 // componennts
 import OwnerText from '../components/ChatArea/OwnerText.vue';
 import FriendText from '../components/ChatArea/FriendText.vue';
@@ -16,16 +17,17 @@ import { useContextMenu } from '../composables/useContextMenu';
 import { useFileUploadDrop } from '../composables/useFileUploadDrop';  
 import ChatFileItem from '../components/ChatArea/ChatFileItem.vue';
 import { DownloadMinimalisticIcon, FileTextBoldIcon } from '@/components/Icons';
+import Empty from '@/components/Empty.vue';
 // stores
 import { useChatStore } from '../stores';
-import Empty from '@/components/Empty.vue';
 
-const chatStore = useChatStore()
 // composables
 const { menuItems, refContextMenu } = useContextMenu();
 const { onDragOver, onDragLeave, onDrop } = useFileUploadDrop();
 
 const { t } = useI18n();
+const route = useRoute();
+const chatStore = useChatStore()
 // reactives
 const showScrollDownButton = ref(false);
 const refChatArea = ref(null);
@@ -79,8 +81,12 @@ const emojiMenuItems = ref([
      command: () => {
      },
    }
-]); 
+]);
 
+onMounted(() => {
+  console.log(route.params.id);
+  chatStore.actionGetPrivateChatById(route.params.id);
+})
 </script>
 <template>
  <!-- style="height: calc(100% - 135px)"  -->
@@ -95,10 +101,10 @@ const emojiMenuItems = ref([
     @drop.prevent="onDrop"
     >
     <template v-if="true">
-      <ShowDate :date="'2024-10-20T10:20:30'" />
+      <!-- <ShowDate :date="'2024-10-20T10:20:30'" />
       <OwnerText :onShowContextMenu="onShowContextMenu" :onShowEmojiContextMenu="onShowEmojiContextMenu"  isReaded :text="'Привет, хорошо, спасибо!'" :date="'2024-10-20T10:20:30'" />
       <FriendText :onShowContextMenu="onShowContextMenu"  :text="'Привет, хорошо, спасибо!'" :date="'2024-10-20T10:20:30'" />
-      <FriendText :onShowContextMenu="onShowContextMenu" :avatarVisible="true"  :text="'Привет, хорошо, спасибо!'" :date="'2024-10-20T10:20:30'" />
+      <FriendText :onShowContextMenu="onShowContextMenu" :avatarVisible="true"  :text="'Привет, хорошо, спасибо!'" :date="'2024-10-20T10:20:30'" /> -->
       <!-- <ChatFileItem :onShowContextMenu="onShowContextMenu"  :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-warning-500' }"/> -->
       <!-- <ChatFileItem :onShowContextMenu="onShowContextMenu"  :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-warning-500' }"/> -->
       <!-- <ChatFileItem type="owner" :onShowContextMenu="onShowContextMenu"  :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-white' }"/> -->

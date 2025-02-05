@@ -4,6 +4,8 @@ import { defineStore } from "pinia"
 import {
   fetchChatUsersSearch,
   fetchCreatePrivateChat,
+  fetchGetGroupChatList,
+  fetchGetPrivateChatById,
   fetchGetPrivateChatList,
   fetchUsersSearch
 } from "@/modules/Chat/services";
@@ -13,11 +15,15 @@ export const useChatStore = defineStore("chat-stores", {
     privateChatLoading: false,
     rightSidebarVisible: true,
     userSearching: false,
-    userSearchLoading: false,
-    activeUser: null,
-    chatList: [],
+    chatUserSearchListLoading: false,
+    userSearchListLoading: false,
+    groupChatLoading: false,
+    selectedUser: null,
+    selectedGroup: null,
+    chatUserSearchList: [],
     privateChatList: [],
-    userList: [],
+    userSearchList: [],
+    groupChatList: [],
     contextMenu: {
       tempData: null,
       data: null,
@@ -31,29 +37,29 @@ export const useChatStore = defineStore("chat-stores", {
     toggleRightSidebar() {
       this.rightSidebarVisible = !this.rightSidebarVisible;
     },
-    /** **/
+    /** */
     async actionChatUsersSearchList(params) {
-      this.userSearchLoading = true;
+      this.chatUserSearchListLoading = true;
       const response = await fetchChatUsersSearch(params);
       if (response) {
-        this.chatList = response.data.results;
-        this.userSearchLoading = false;
+        this.chatUserSearchList = response.data.results;
+        this.chatUserSearchListLoading = false;
       } else {
-        this.userSearchLoading = false;
+        this.chatUserSearchListLoading = false;
       }
     },
-    /** **/
+    /** */
     async actionUsersList(params){
-      this.userSearchLoading = true;
+      this.userSearchListLoading = true;
       const response = await fetchUsersSearch(params);
       if (response) {
-        this.userList = response.data.results;
-        this.userSearchLoading = false;
+        this.userSearchList = response.data.results;
+        this.userSearchListLoading = false;
       } else {
-        this.userSearchLoading = false;
+        this.userSearchListLoading = false;
       }
     },
-    /** **/
+    /** */
     async actionGetPrivateChatList(params) {
       this.privateChatLoading = true;
       const response = await fetchGetPrivateChatList(params);
@@ -68,6 +74,24 @@ export const useChatStore = defineStore("chat-stores", {
     async actionCreatePrivateChat(body) {
       const response = await fetchCreatePrivateChat(body);
       console.log(response)
+    },
+    /** */
+    async actionGetPrivateChatById(id) {
+      const response = await fetchGetPrivateChatById(id);
+      console.log(response)
+    },
+    /** */
+    /** */
+    async actionGetGroupChatList(body) {
+      this.groupChatLoading = true;
+      const response = await fetchGetGroupChatList(body);
+      if (response){
+        this.groupChatList = response.data.results;
+        this.groupChatLoading = false;
+      } else {
+        this.groupChatLoading = false;
+      }
     }
+    /** */
   }
 })

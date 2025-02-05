@@ -1,7 +1,7 @@
 <script setup>
 // Core
 import {onMounted, reactive, ref, watch} from "vue";
-import { RouterLink } from "vue-router";
+import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 // Store
 import { useAuthStore } from "@/modules/Auth/stores";
@@ -17,13 +17,10 @@ import CreateGroupDialog from "./CreateGroupDialog.vue";
 const { t } = useI18n();
 const authStore = useAuthStore();
 const chatStore = useChatStore();
+const router = useRouter();
 // reactive
 const search = ref(null);
 const createGroupDialogVisible = ref(false);
-const formModal = reactive({
-  group_name: null,
-  users: [],
-});
 
 const tabPanelList = [
   {
@@ -38,7 +35,39 @@ const tabPanelList = [
   }
 ];
 
+// Methods
+const onTabChange = async (val) => {
+  if (val.index === 0) {
+    await chatStore.actionGetPrivateChatList({});
+  }
+  else if (val.index === 1) {
+    await chatStore.actionGetGroupChatList({});
+  }
+}
 
+const onCreateChat = async (user) => {
+  await chatStore.actionCreatePrivateChat({ member_id: user.id });
+}
+
+const onClickSearchedUser = (user) => {
+  router.push({ name: 'ChatPrivateDetail', params: { id: user.id }})
+  chatStore.selectedUser = user
+  chatStore.privateChatList = [user, ...chatStore.privateChatList]
+  chatStore.userSearching = false;
+}
+
+const onClickChatPrivateUser = (user) => {
+  user = user.members.find(member => member.user?.id !== authStore.currentUser.id)
+  router.push({ name: 'ChatPrivateDetail', params: { id: user.chat }})
+  chatStore.selectedUser = user
+}
+
+const onClickChatGroup = (group) => {
+  router.push({ name: 'ChatGroupDetail', params: { id: group.id }})
+  chatStore.selectedGroup = group
+}
+
+// hooks
 watch(search, async (val) => {
   if (val) {
     chatStore.userSearching = true;
@@ -49,25 +78,11 @@ watch(search, async (val) => {
   }
 })
 
-// Methods
-const createChat = async (user) => {
-  await chatStore.actionCreatePrivateChat({ member_id: user.id });
-}
-
-const onTabChange = async (val) => {
-  if (val.index === 0) {
-    await chatStore.actionGetPrivateChatList({});
-  }
-}
-
-watch(formModal, async (val) => {
-  console.log(val);
-},{
-  deep: true})
-// Hooks
 onMounted(async () => {
   await chatStore.actionGetPrivateChatList({});
+  await chatStore.actionGetGroupChatList({});
 })
+
 </script>
 
 <template>
@@ -94,19 +109,26 @@ onMounted(async () => {
 
     <!-- WHEN SEARCHING -->
     <template v-if="chatStore.userSearching">
-      <template v-if="chatStore.userSearchLoading">
+      <template v-if="chatStore.chatUserSearchListLoading">
         <base-spinner />
       </template>
       <template v-else>
         <div class="overflow-hidden overflow-y-auto p-4 pt-0" style="height: calc(100vh - 260px)">
+          <!-- chat users who have chat with current user -->
           <p class="text-sm font-medium text-greyscale-500 my-4">Найдено <span class="font-semibold text-greyscale-900">2</span> результата</p>
+          <template v-for="user in chatStore.chatUserSearchList" :key="user.id">
+            <user-item
+              @click="onClickSearchedUser(user)"
+              :user="user.members?.find(member => member.user?.id !== authStore.currentUser.id)?.user" 
+            />
+          </template>
+          <!-- users who don't have chat with current user -->
           <p class="text-sm font-medium text-greyscale-500">{{ t('global-search-results') }}</p>
-
           <user-item-search
-            v-for="user in chatStore.userList"
+            v-for="user in chatStore.userSearchList"
             :key="user.id"
             :user="user"
-            @click="createChat(user)"
+            @click="onCreateChat(user)"
           />
         </div>
       </template>
@@ -129,7 +151,7 @@ onMounted(async () => {
               <base-spinner />
             </template>
             <template v-else>
-              <template v-if="chatStore.privateChatList.length">
+              <template v-if="!chatStore.privateChatList.length">
                 <div class="flex flex-col justify-center items-center h-full text-center px-4">
                   <img src="@/assets/img/chat-default.png" alt="chat-default">
                   <span class="text-sm font-semibold block mt-5">{{ t('find-users') }}</span>
@@ -138,9 +160,11 @@ onMounted(async () => {
               </template> 
               <template v-else>
                 <template v-for="user in chatStore.privateChatList" :key="user.id">
-                  <RouterLink :to="{ name: 'ChatPrivate', params: { id: user.id } }">
-                    <user-item :user="user" />
-                  </RouterLink>
+                  <user-item
+                    @click="onClickChatPrivateUser(user)"
+                    :active="user.id === chatStore.selectedUser?.id" 
+                    :user="user.members?.find(member => member.user?.id !== authStore.currentUser.id)?.user" 
+                  />
                 </template>
               </template>
             </template>
@@ -149,14 +173,34 @@ onMounted(async () => {
 
         <template #group>
           <div class="overflow-hidden overflow-y-auto px-4" style="height: calc(100vh - 332px)">
-             <group-item />
+            <template v-if="chatStore.groupChatLoading">
+              <base-spinner />
+            </template>
+            <template v-else>
+              <template v-if="!chatStore.groupChatList.length">
+                <div class="flex flex-col justify-center items-center h-full text-center px-4">
+                  <img src="@/assets/img/chat-default.png" alt="chat-default">
+                  <span class="text-sm font-semibold block mt-5">{{ t('find-users') }}</span>
+                  <span class="text-xs font-medium text-greyscale-500 block mt-1">{{ t('find-users-start-chat') }}</span>
+                </div>
+              </template> 
+              <template v-else>
+                <template v-for="group in chatStore.groupChatList" :key="group.id">
+                  <group-item
+                    @click="onClickChatGroup(group)"
+                    :group="group"
+                    :active="group.id === chatStore.selectedGroup?.id"
+                  />
+                </template>
+              </template>
+            </template>
           </div>
         </template>
 
       </base-brick-tab>
     </template>
 
-    <create-group-dialog v-model="createGroupDialogVisible" :form-modal="formModal"/>
+    <create-group-dialog v-model="createGroupDialogVisible"/>
   </div>
 
 </template>
