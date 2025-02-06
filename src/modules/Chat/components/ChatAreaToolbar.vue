@@ -1,14 +1,17 @@
 <script setup>
 // cores
-import { computed, ref, unref, watch } from 'vue';
+import { computed, ref} from 'vue';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-// Components
+// components
 import CreateGroupDialog from './CreateGroupDialog.vue';
-import { MenuDotsBoldIcon, PenIcon, SidebarMinimalisticIcon, TrashBinTrashIcon } from '@/components/Icons'
-// Store
-import { useChatStore } from "@/modules/Chat/stores";
+import { MenuDotsBoldIcon, PenIcon, SidebarMinimalisticIcon, TrashBinTrashBoldIcon, TrashBinTrashIcon } from '@/components/Icons'
+import DeleteDialog from './DeleteDialog.vue';
 import BaseMenu from '@/components/UI/BaseMenu.vue';
+// services
+import { fetchDeleteGroupChatById } from '../services';
+// store
+import { useChatStore } from "@/modules/Chat/stores";
 // import BaseMenu from './BaseMenu.vue';
 
 const chatStore = useChatStore();
@@ -17,25 +20,30 @@ const { t } = useI18n();
 
 // reactives
 const createGroupDialogVisible = ref(false);
+const deleteDialog = ref(false);
 const menu = ref();
+const isGroupDetail = computed(() => route.name == 'ChatGroupDetail')
 const menuItems = ref([
    { 
-     label: 'image',
+     label: 'edit',
      icon: PenIcon,
      command: () => {
-      
-     } 
+      createGroupDialogVisible.value = true
+     },
+     iconClass: "!text-greyscale-500 !w-4 !h-4"
    },
    { 
      label: 'delete',
-     iconName: TrashBinTrashIcon,
+     labelClass: '!text-critic-500',
+     icon: TrashBinTrashBoldIcon,
      command: () => {
-     
+      deleteDialog.value = true
      },
-     class: ["!text-critic-500"]
+     iconClass: "!text-critic-500 !w-4 !h-4"
    }
 ]);
 
+// methods
 const toggle = (event) => {
   menu.value.menuRef.toggle(event);
 };
@@ -46,7 +54,11 @@ function focussed() {
   }, 0)
 }
 
-const isGroupDetail = computed(() => route.name == 'ChatGroupDetail')
+const onDeleteChat = () => {
+  deleteDialog.value = false
+  fetchDeleteGroupChatById(chatStore.selectedGroup?.id)
+}
+
 </script>
 <template>
   <div @click="createGroupDialogVisible = false" class="flex items-center w-full h-[72px] border-b px-6 pr-3 cursor-pointer">
@@ -84,9 +96,26 @@ const isGroupDetail = computed(() => route.name == 'ChatGroupDetail')
           class="!w-6 !h-6 text-greyscale-300 cursor-pointer transform rotate-90"    
           />
         </div>
-        <BaseMenu ref="menu" :items="menuItems"  width="w-[171px]" class="!top-10" @focus="focussed" />         
+        <BaseMenu ref="menu" :items="menuItems"  width="w-[171px]" @focus="focussed" menu-class="rounded-xl p-1"  label-class="!text-sm font-medium" >
+          <template #item="{item}">
+            <div
+             class="flex gap-2 items-center text-greyscale-500 px-3 py-2 rounded-lg hover:bg-greyscale-50 cursor-pointer"
+            >
+              <slot :item="item">
+                <base-iconify class="!w-4 !h-4" :icon="(item.icon)" :class="item.iconClass" />
+                <span class="text-xs font-medium" :class="item?.labelClass">{{t(item.label)}}</span>
+              </slot>
+          </div>
+          </template>
+        </BaseMenu>         
       </div>
     </div>
   </div>
-  <create-group-dialog v-if="createGroupDialogVisible" modal-label="edit-group" v-model="createGroupDialogVisible"/>
+  <create-group-dialog v-if="createGroupDialogVisible" modal-label="edit-group" v-model="createGroupDialogVisible" type="edit" />
+  <DeleteDialog
+   v-model="deleteDialog" 
+   :onDelete="onDeleteChat" 
+   :onClose="() => deleteDialog = false"
+   conetentText="delete-chat-group-dialog-content"
+  />
 </template>

@@ -23,6 +23,10 @@ const props = defineProps({
  maxWidth: {
   type: String,
   default: '!w-[450px]'
+ },
+ conetentText: {
+  type: String,
+  default: 'delete-chat-dialog-content'
  }
 })
 
@@ -37,7 +41,7 @@ const modelValue = useModel(props, 'modelValue')
  >
  <template #content>
    <div class="text-xl font-semibold text-critic-500">
-     {{ t("delete-chat-dialog-content") }}
+     {{ t(props.conetentText) }}
    </div>
  </template>
  <template #footer>

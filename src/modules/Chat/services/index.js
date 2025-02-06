@@ -38,3 +38,7 @@ export const fetchGetGroupChatList = (params) => {
 export const fetchGetGroupChatById = (id) => {
   return axiosConfig.get(`${URLS.chatGroup}${id}/`);
 }
+// delete group chat by id
+export const fetchDeleteGroupChatById = (id) => {
+  return axiosConfig.delete(`${URLS.chatGroup}${id}/`);
+}

@@ -102,6 +102,7 @@ const rootClasses = computed(() => {
         v-if="item.icon"
         :icon="item.icon"
         class="!w-[18px] !h-[18px] mr-2"
+        :class="item.iconClass"
       />
     </template>
   </Menu>

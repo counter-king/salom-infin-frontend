@@ -4,6 +4,7 @@ import { defineStore } from "pinia"
 import {
   fetchChatUsersSearch,
   fetchCreatePrivateChat,
+  fetchGetGroupChatById,
   fetchGetGroupChatList,
   fetchGetPrivateChatById,
   fetchGetPrivateChatList,
@@ -91,7 +92,13 @@ export const useChatStore = defineStore("chat-stores", {
       } else {
         this.groupChatLoading = false;
       }
-    }
+    },
+    /** */
+    /** */
+    async actionGetGroupChatById(id) {
+      
+      const response = await fetchGetGroupChatById(id);
+    },
     /** */
   }
 })

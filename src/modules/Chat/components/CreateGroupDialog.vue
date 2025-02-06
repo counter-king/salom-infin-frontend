@@ -1,6 +1,6 @@
 <script setup>
 // core 
-import { reactive, ref, useModel } from 'vue';
+import { computed, reactive, ref, useModel } from 'vue';
 import { helpers, required } from '@vuelidate/validators';
 import useVuelidate from '@vuelidate/core';
 // components
@@ -26,6 +26,13 @@ const props = defineProps({
  modalLabel: {
   type: String,
   default: 'create-group'
+ },
+ type: {
+  type: String,
+  default: 'create',
+  validator(value) {
+    return ['create', 'edit'].includes(value);
+  }
  }
 });
 
@@ -60,7 +67,11 @@ const onSubmit = async () => {
   const isValid = await $v.value.$validate();
     
   if(!isValid) return;
-  fetchCreateGroupChat({image: uploadingFiles.value[0]?.id, title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
+  if(formModal.type === 'create') {
+    fetchCreateGroupChat({image: uploadingFiles.value[0]?.id, title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
+  } else if(formModal.type === 'edit') {
+    fetchEditGroupChat({image: uploadingFiles.value[0]?.id, title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
+  }
   emit('update:modelValue', false);
 }
 
@@ -79,7 +90,7 @@ const onShowContextMenu = (event) => {
   }
 }
 
-const menuItems = ref([
+const menuItems = computed(() => [
    { 
      label: 'select-image',
      iconName: PenIcon,
@@ -93,7 +104,7 @@ const menuItems = ref([
      command: () => {
       deleteDialog.value = true;
      },
-     class: ["!text-critic-500", {"!pointer-events-none !text-critic-200": !uploadingFiles.length}]
+     class: [{"!text-critic-500": !!uploadingFiles.value.length}, {"pointer-events-none !text-critic-200": !uploadingFiles.value.length}]
    }
 ]);
 
@@ -136,6 +147,7 @@ const uploadFiles = async (files) => {
 
 const onDeleteAvatar = () => {
   uploadingFiles.value = []
+  deleteDialog.value = false
 }
 
 </script>
@@ -247,8 +259,9 @@ const onDeleteAvatar = () => {
   />
   <ContextMenu ref="refContextMenu" :menu-items="menuItems" />
   <DeleteDialog
-    v-model="deleteDialog" 
-    :onDelete="onDeleteAvatar" 
-    :onClose="() => deleteDialog = false"
+   v-model="deleteDialog" 
+   :onDelete="onDeleteAvatar" 
+   :onClose="() => deleteDialog = false"
+   conetentText="delete-chat-avatar-dialog-content"
   />
 </template>

@@ -782,6 +782,7 @@
   "error":"Ошибка",
   "delete-chat-dialog-content": "Вы хотите удалить это сообщение ?",
   "delete-chat-avatar-dialog-content": "Вы хотите удалить это фото ?",
+  "delete-chat-group-dialog-content": "Вы хотите удалить эту группу ?",  
   "you-dont-have-any-messages": "У вас пока нет сообщений",
   "you-dont-have-any-messages-description": "Чтобы отправить сообщение этому контакту, напишите свое сообщение ниже!",
   "edit-group": "Редактировать группу"

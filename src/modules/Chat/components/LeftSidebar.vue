@@ -1,7 +1,7 @@
 <script setup>
 // Core
 import {onMounted, reactive, ref, watch} from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 // Store
 import { useAuthStore } from "@/modules/Auth/stores";
@@ -18,6 +18,7 @@ const { t } = useI18n();
 const authStore = useAuthStore();
 const chatStore = useChatStore();
 const router = useRouter();
+const route = useRoute();
 // reactive
 const search = ref(null);
 const createGroupDialogVisible = ref(false);
@@ -81,6 +82,12 @@ watch(search, async (val) => {
 onMounted(async () => {
   await chatStore.actionGetPrivateChatList({});
   await chatStore.actionGetGroupChatList({});
+  if(route.name == 'ChatGroupDetail'){
+    chatStore.selectedGroup = chatStore.groupChatList.find(group => group.id == route.params.id)
+  }
+  if(route.name == 'ChatPrivateDetail'){
+    chatStore.selectedUser = chatStore.privateChatList.find(user => user.id == route.params.id)
+  }
 })
 
 </script>
