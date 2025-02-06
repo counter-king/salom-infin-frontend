@@ -27,19 +27,23 @@ const rankingQuery = computed(()=> route.query.rank || null)
 const handleRate = async (rate) => {
   count.value = rate
 
-  if(count.value <= 3) {
-    setTimeout(() => {
-      dialog.value = true
-    }, 500)
-  }
-  if(count.value > 3) {
-      await postRatePage()
-  }
+  setTimeout(() => {
+    dialog.value = true
+  }, 100)
+
+  // if(count.value <= 3) {
+  //   setTimeout(() => {
+  //     dialog.value = true
+  //   }, 500)
+  // }
+  // if(count.value > 3) {
+  //     await postRatePage()
+  // }
 }
 
 const postRatePage = async (comment) => {
   isLoading.value = true
-  try{      
+  try{
     const { data } = await fetchCreateRatePage({ rank: count.value, comment, page_url: route.fullPath})
     await router.replace({ path: route.path, query: { ...router.currentRoute.value.query, rank: data.rank} })
   }
@@ -55,8 +59,8 @@ const onCancelModal = () => {
 }
 
 const handleHide = () => {
-  if(!rankingQuery.value) {    
-    count.value = 10 
+  if(!rankingQuery.value) {
+    count.value = 10
   }
 }
 onMounted(() => {
