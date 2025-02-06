@@ -4,7 +4,7 @@ import { RefreshIcon } from "@/components/Icons"
 
 // Methods
 const refresh = () => {
-  window.location.reload()
+  window.location.href = window.location.pathname + "?t=" + new Date().getTime()
 }
 </script>
 

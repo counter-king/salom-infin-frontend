@@ -139,7 +139,7 @@ const logInWithAd = async () => {
 }
 const reload = () => {
   setTimeout(() => {
-    window.location.reload()
+    window.location.href = window.location.pathname + "?t=" + new Date().getTime()
   }, 2000)
 }
 const loginViaEri = async (pkcs7) => {
