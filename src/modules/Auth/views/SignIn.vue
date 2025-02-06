@@ -108,6 +108,7 @@ const logIn = async () => {
     })
     await authStore.actionUserProfile()
     await handleTokenIsInvalidRedirectWhereUserWas()
+    reload()
   }
   catch (error) {
 
@@ -127,6 +128,7 @@ const logInWithAd = async () => {
     await authStore.loginWithAd(formModelAd)
     await authStore.actionUserProfile()
     await handleTokenIsInvalidRedirectWhereUserWas()
+    reload()
   }
   catch (error) {
 
@@ -135,12 +137,18 @@ const logInWithAd = async () => {
     loading.value = false
   }
 }
+const reload = () => {
+  setTimeout(() => {
+    window.location.reload()
+  }, 2000)
+}
 const loginViaEri = async (pkcs7) => {
   try {
     loading.value = true
     await authStore.actionLoginViaERI({pkcs7})
     await authStore.actionUserProfile()
     await handleTokenIsInvalidRedirectWhereUserWas()
+    reload()
   }
   catch (err) {
     if (err && err.code === '703') {

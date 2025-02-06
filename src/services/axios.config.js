@@ -63,17 +63,18 @@ axiosInstance.interceptors.response.use(
       authStore.actionSessionEnd(true)
     }
     // Проверка если это объект
-    if(response.data instanceof Object) {
-      let values = Object.values(response.data)
-
-      for (let key in values) {
-        let value = values[key]
-        dispatchNotify(null, value.join(''), COLOR_TYPES.ERROR)
-      }
-    }
-    else {
-      dispatchNotify(null, response.data.message, COLOR_TYPES.ERROR)
-    }
+    // if(response.data instanceof Object) {
+    //   let values = Object.values(response.data)
+    //
+    //   for (let key in values) {
+    //     let value = values[key]
+    //     dispatchNotify(null, value.join(''), COLOR_TYPES.ERROR)
+    //   }
+    // }
+    // else {
+    //   dispatchNotify(null, response.data.message, COLOR_TYPES.ERROR)
+    // }
+    dispatchNotify(null, response?.data?.message, COLOR_TYPES.ERROR)
 
 		return Promise.reject(response)
 	}
