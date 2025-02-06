@@ -10,7 +10,7 @@ const { locale } = useI18n()
 
 // Methods
 const refresh = () => {
-  location.reload(true)
+  location.replace(location.href)
 }
 </script>
 
