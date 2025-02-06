@@ -10,7 +10,23 @@ const { locale } = useI18n()
 
 // Methods
 const refresh = () => {
-  location.replace(location.href)
+  if ('caches' in window) {
+    caches.keys().then((names) => {
+      names.forEach((name) => {
+        caches.delete(name);
+      });
+    });
+  }
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      registrations.forEach((registration) => {
+        registration.unregister();
+      });
+    });
+  }
+
+  location.reload(true)
 }
 </script>
 

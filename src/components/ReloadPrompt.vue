@@ -1,76 +1,76 @@
 <script setup>
-// Core
-import { ref, watch } from 'vue'
-import { useRegisterSW } from 'virtual:pwa-register/vue'
-import { useRoute } from 'vue-router'
-import { useI18n } from 'vue-i18n'
-// Components
-import { RefreshCircleBoldIcon, ChevronDown20SolidIcon, ChevronUp20SolidIcon } from '@/components/Icons'
-// Composable
-const route = useRoute()
-const { t } = useI18n()
-// Reactive
-const isMinimized = ref(false)
-// Watch
-watch(() => route.fullPath, () => isMinimized.value = false)
-// Methods
-const minimize = () => {
-  isMinimized.value = !isMinimized.value
-}
-
-// periodic sync is disabled, change the value to enable it, the period is in milliseconds
-// You can remove onRegisteredSW callback and registerPeriodicSync function
-const period = 0
-
-const swActivated = ref(false)
-/**
- * This function will register a periodic sync check every hour, you can modify the interval as needed.
- * @param {string} swUrl
- * @param {ServiceWorkerRegistration} r
- */
-function registerPeriodicSync(swUrl, r) {
-  if (period <= 0) return
-
-  setInterval(async () => {
-    if ('onLine' in navigator && !navigator.onLine)
-      return
-
-    const resp = await fetch(swUrl, {
-      cache: 'no-store',
-      headers: {
-        'cache': 'no-store',
-        'cache-control': 'no-cache',
-      },
-    })
-
-    if (resp?.status === 200)
-      await r.update()
-  }, period)
-}
-
-const { needRefresh, updateServiceWorker } = useRegisterSW({
-  immediate: true,
-  onRegisteredSW(swUrl, r) {
-
-    if (period <= 0) return
-    if (r?.active?.state === 'activated') {
-      swActivated.value = true
-      registerPeriodicSync(swUrl, r)
-    } else if (r?.installing) {
-      r.installing.addEventListener('statechange', (e) => {
-        /** @type {ServiceWorker} */
-        const sw = e.target
-        swActivated.value = sw.state === 'activated'
-        if (swActivated.value)
-          registerPeriodicSync(swUrl, r)
-      })
-    }
-  },
-})
+// // Core
+// import { ref, watch } from 'vue'
+// import { useRegisterSW } from 'virtual:pwa-register/vue'
+// import { useRoute } from 'vue-router'
+// import { useI18n } from 'vue-i18n'
+// // Components
+// import { RefreshCircleBoldIcon, ChevronDown20SolidIcon, ChevronUp20SolidIcon } from '@/components/Icons'
+// // Composable
+// const route = useRoute()
+// const { t } = useI18n()
+// // Reactive
+// const isMinimized = ref(false)
+// // Watch
+// watch(() => route.fullPath, () => isMinimized.value = false)
+// // Methods
+// const minimize = () => {
+//   isMinimized.value = !isMinimized.value
+// }
+//
+// // periodic sync is disabled, change the value to enable it, the period is in milliseconds
+// // You can remove onRegisteredSW callback and registerPeriodicSync function
+// const period = 0
+//
+// const swActivated = ref(false)
+// /**
+//  * This function will register a periodic sync check every hour, you can modify the interval as needed.
+//  * @param {string} swUrl
+//  * @param {ServiceWorkerRegistration} r
+//  */
+// function registerPeriodicSync(swUrl, r) {
+//   if (period <= 0) return
+//
+//   setInterval(async () => {
+//     if ('onLine' in navigator && !navigator.onLine)
+//       return
+//
+//     const resp = await fetch(swUrl, {
+//       cache: 'no-store',
+//       headers: {
+//         'cache': 'no-store',
+//         'cache-control': 'no-cache',
+//       },
+//     })
+//
+//     if (resp?.status === 200)
+//       await r.update()
+//   }, period)
+// }
+//
+// const { needRefresh, updateServiceWorker } = useRegisterSW({
+//   immediate: true,
+//   onRegisteredSW(swUrl, r) {
+//
+//     if (period <= 0) return
+//     if (r?.active?.state === 'activated') {
+//       swActivated.value = true
+//       registerPeriodicSync(swUrl, r)
+//     } else if (r?.installing) {
+//       r.installing.addEventListener('statechange', (e) => {
+//         /** @type {ServiceWorker} */
+//         const sw = e.target
+//         swActivated.value = sw.state === 'activated'
+//         if (swActivated.value)
+//           registerPeriodicSync(swUrl, r)
+//       })
+//     }
+//   },
+// })
 </script>
 
 <template>
-  <div
+<!--  <div
     v-if="needRefresh"
     class="flex items-center justify-center fixed bottom-0 right-0 w-full transition-all duration-500 delay-500 max-w-[100vw] h-[156px] bg-greyscale-50 border-t border-t-greyscale-200 z-[99] p-3"
     :class="{
@@ -134,7 +134,7 @@ const { needRefresh, updateServiceWorker } = useRegisterSW({
         class="group-hover:text-white text-primary-500"
       />
     </div>
-  </div>
+  </div>-->
 </template>
 
 <style scoped>

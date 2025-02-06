@@ -139,7 +139,23 @@ const logInWithAd = async () => {
 }
 const reload = () => {
   setTimeout(() => {
-    location.replace(location.href)
+    if ('caches' in window) {
+      caches.keys().then((names) => {
+        names.forEach((name) => {
+          caches.delete(name);
+        });
+      });
+    }
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        registrations.forEach((registration) => {
+          registration.unregister();
+        });
+      });
+    }
+
+    location.reload(true)
   }, 2000)
 }
 const loginViaEri = async (pkcs7) => {
