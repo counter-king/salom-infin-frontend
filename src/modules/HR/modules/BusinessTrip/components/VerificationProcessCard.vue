@@ -40,8 +40,7 @@ const isLeft = computed(() => {
   return props.item.left_at
 })
 const isSenderOffice = computed(() => {
-  return props.verifications.find(item => item.is_sender).company?.id === currentUser?.company.id
-    && props.item.is_sender
+  return props.item.is_sender
 })
 const buttonText = computed(() => {
   return 'left'
@@ -74,7 +73,7 @@ const onConfirm = async () => {
   <div class="flex flex-col rounded-xl border border-greyscale-100 py-[10px] px-3 bg-greyscale-50 mb-[6px] gap-y-2">
 <!--    <pre>{{ props.item }}</pre>-->
     <span class="text-primary-900 text-sm font-semibold">
-      {{ props.item?.is_sender ? props.item?.company?.name : props.item?.region?.name }}
+      {{ props.item?.is_sender ? props.item?.company?.name : props.item?.region?.name_uz }}
     </span>
 
     <div
@@ -137,7 +136,6 @@ const onConfirm = async () => {
     </div>
 
     <div
-      v-if="!isSenderOffice"
       class="flex items-center gap-x-[6px]"
     >
       <div
