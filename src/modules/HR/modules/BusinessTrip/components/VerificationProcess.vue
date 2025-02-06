@@ -91,7 +91,7 @@ const stepperIcon = computed(() => {
 
       <div class="w-[350px] min-h-[130px]">
         <verification-process-card
-          v-if="props.item.direction === 'right' && props.item.arrived_at"
+          v-if="props.item.direction === 'right' && (props.item.arrived_at || (props.item.left_at && props.item.is_sender))"
           :item="props.item"
           :verifications="props.verifications"
           :index="props.index"

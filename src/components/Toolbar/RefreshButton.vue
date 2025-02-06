@@ -10,7 +10,7 @@ const { locale } = useI18n()
 
 // Methods
 const refresh = () => {
-  window.location.href = window.location.pathname + "?t=" + new Date().getTime()
+  window.location.href = window.location.origin + window.location.pathname + "?_=" + new Date().getTime()
 }
 </script>
 
