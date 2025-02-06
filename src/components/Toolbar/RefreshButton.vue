@@ -1,6 +1,12 @@
 <script setup>
+// Core
+import { useI18n } from "vue-i18n"
 // Components
 import { RefreshIcon } from "@/components/Icons"
+
+
+// Composable
+const { locale } = useI18n()
 
 // Methods
 const refresh = () => {

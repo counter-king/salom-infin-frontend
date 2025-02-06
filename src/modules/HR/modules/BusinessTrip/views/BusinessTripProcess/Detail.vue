@@ -92,7 +92,7 @@ const zoomFile = (event, file) => {
         v-for="(item, index) in verificationList"
       >
         <verification-process
-          v-if="item.arrived_at"
+          v-if="(!item.is_sender && item.arrived_at) || (item.is_sender && item.left_at)"
           :item="item"
           :verifications="verificationList"
           :index="index"

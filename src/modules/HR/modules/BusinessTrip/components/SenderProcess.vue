@@ -19,6 +19,18 @@ const alignment = computed(() => {
 const isAllReceiversVerified = computed(() => {
   return props.verifications.filter(item => !item.is_sender)?.every(every => every.left_at && every.arrived_at)
 })
+const isNextDestinationVisible = computed(() => {
+  const filteredArray = props.verifications.filter(item => item.arrived_at || item.is_sender)
+  const lastItem = filteredArray.length > 0 ? filteredArray[filteredArray.length - 1] : null
+
+  if (!lastItem) return false // Ensure safe access to lastItem properties
+
+  if (lastItem.left_at && !lastItem.is_sender) {
+    return true
+  }
+
+  return lastItem.is_sender && !lastItem.left_at
+})
 const sender = computed(() => {
   return props.verifications.find(item => item.is_sender)
 })
@@ -50,7 +62,7 @@ const stepperIcon = computed(() => {
       />
 
       <next-destination-disabled-card
-        v-if="alignment === 'left' && !isAllReceiversVerified"
+        v-if="alignment === 'left' && !isAllReceiversVerified && isNextDestinationVisible"
         :verifications="props.verifications"
       />
     </div>
@@ -82,7 +94,7 @@ const stepperIcon = computed(() => {
       />
 
       <next-destination-disabled-card
-        v-if="alignment === 'right' && !isAllReceiversVerified"
+        v-if="alignment === 'right' && !isAllReceiversVerified && isNextDestinationVisible"
         :verifications="props.verifications"
       />
     </div>
