@@ -13,5 +13,5 @@ import ReloadPrompt from '@/components/ReloadPrompt.vue'
 
   <notification />
 
-  <reload-prompt />
+<!--  <reload-prompt />-->
 </template>

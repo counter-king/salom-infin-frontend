@@ -113,7 +113,7 @@ onMounted(() => {
 
           <div class="flex gap-2">
 
-<!--            <refresh-button v-if="openModal" />-->
+            <refresh-button v-if="openModal" />
 
             <base-button
               v-if="openModal"
