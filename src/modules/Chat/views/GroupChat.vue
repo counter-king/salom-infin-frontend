@@ -9,13 +9,13 @@ import { ShowDate } from '../components/ChatArea';
 import SendMessage from '../components/ChatArea/SendMessage.vue';
 import ScrollDownButton from '../components/ChatArea/ScrollDownButton.vue';
 import DeleteDialog from '../components/DeleteDialog.vue';
-// services 
-import FileUploadProgress from '../components/ChatArea/FileUploadProgress.vue';
+import { DownloadMinimalisticIcon, FileTextBoldIcon } from '@/components/Icons';
+import ChatFileItem from '../components/ChatArea/ChatFileItem.vue';
 import ContextMenu from '../components/ChatArea/ContextMenu.vue';
+import FileUploadProgress from '../components/ChatArea/FileUploadProgress.vue';
+// composables 
 import { useContextMenu } from '../composables/useContextMenu';
 import { useFileUploadDrop } from '../composables/useFileUploadDrop';  
-import ChatFileItem from '../components/ChatArea/ChatFileItem.vue';
-import { DownloadMinimalisticIcon, FileTextBoldIcon } from '@/components/Icons';
 // stores
 import { useChatStore } from '../stores';
 import Empty from '@/components/Empty.vue';

@@ -131,7 +131,7 @@ onMounted(() => {
       </div>
     </template>
      <!-- not start yet chat  -->
-    <div v-if="false" class="h-full">
+    <div v-if="true" class="h-full">
       <Empty 
         title="you-dont-have-any-messages"
         description="you-dont-have-any-messages-description"

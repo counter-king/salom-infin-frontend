@@ -28,6 +28,10 @@ const props = defineProps({
   onTabChange: {
     type: Function,
     default: () => void 0
+  },
+  activeIndex : {
+    type: Number,
+    default: 0
   }
 });
 
@@ -49,6 +53,7 @@ const { t } = useI18n()
 
 <template>
   <TabView
+    :active-index="activeIndex"
     :pt="{
       nav: { class: ['border-0', 'w-fit', 'bg-greyscale-50', 'rounded-[90px]', 'p-[2px]', props.navClasses] },
       panelcontainer: { class: [props.panelContainerClass] },

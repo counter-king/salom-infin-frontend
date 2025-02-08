@@ -1,7 +1,9 @@
 <script setup>
-
 // constants
+import { UsersGroupBoldDuotoneIcon, UsersGroupRoundedIcon, UsersGroupTwoRoundedBoldIcon } from '@/components/Icons';
 import { fileTypes } from '../constatns';
+// utils
+import { formatHour } from '@/utils/formatDate';
 // props
 const props = defineProps({
   group: {
@@ -12,7 +14,6 @@ const props = defineProps({
     default: false
   }
 })
-
 </script>
 
 <template>
@@ -30,22 +31,29 @@ const props = defineProps({
     />
     <div class="flex flex-col w-full ml-3">
       <div class="flex justify-between w-full">
-        <span class="text-sm font-semibold">{{ group?.title }}</span>
-        <span class="text-xs font-medium text-greyscale-500">09:12</span>
+        <span class="text-sm font-semibold truncate max-w-[180px]">
+           <base-iconify
+              :icon="UsersGroupTwoRoundedBoldIcon"
+              class="!w-4 !h-4 mr-1 inline-block align-middle text-greyscale-900"
+            /> 
+            {{ props.group?.title }}
+          </span>
+        <span class="text-xs font-medium text-greyscale-500">{{ props.group?.last_message_time && formatHour(props.group?.last_message_time) }}</span>
       </div>
 
       <div class="flex justify-between items-center mt-1">
         <div class="text-xs font-medium text-greyscale-500 truncate max-w-[200px]">
-          <span class="text-primary-500 font-semibold">Alimov: </span>
-          <base-iconify
-              v-if="false"
-              :icon="fileTypes.file"
+          <span class="text-primary-500 font-semibold">{{ props.group?.last_message?.sender?.first_name }}{{props.group?.last_message?.sender?.first_name && ':'}} </span>
+            <template v-if="fileTypes[props.group?.last_message?.type]">
+              <base-iconify
+              :icon="fileTypes[props.group?.last_message?.type]"
               class="!w-4 !h-4 mr-1 inline-block align-middle"
-            />
-            Привет! Как дела? Где ты ходишь...
+              />
+            </template>
+            {{ props.group?.last_message?.text }}
         </div>
-        <div v-if="true" class="flex justify-center items-center bg-critic-500 w-5 h-5 rounded-3xl">
-          <span class="text-xs font-semibold text-white">2</span>
+        <div v-if="props.group?.unread_count" class="flex justify-center items-center bg-critic-500 w-5 h-5 rounded-3xl">
+          <span class="text-xs font-semibold text-white">{{ props.group?.unread_count }}</span>
         </div>
       </div>
     </div>

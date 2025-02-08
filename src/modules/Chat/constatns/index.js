@@ -1,11 +1,15 @@
-import { ClapperboardPlayLinearIcon, DocumentsMinimalisticIcon, FileTextIcon, GalleryIcon } from "@/components/Icons"
+import { ClapperboardPlayLinearIcon, FileTextIcon, GalleryIcon } from "@/components/Icons"
 import axiosConfig from "@/services/axios.config"
 
+export const CHAT_TYPES = {
+  PRIVATE: "private",
+  GROUP: "group",
+}
 export const fileTypes = {
   image: GalleryIcon,
   video: ClapperboardPlayLinearIcon,
-  document: DocumentsMinimalisticIcon,
-  file: FileTextIcon
+  file: FileTextIcon,
+  text: false,
 }
 
 export const COMPONENT_TYPES = {

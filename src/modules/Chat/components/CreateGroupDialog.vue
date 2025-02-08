@@ -14,7 +14,7 @@ import DeleteDialog from './DeleteDialog.vue';
 import { isObject } from '@/utils'
 // services
 import axiosConfig from '@/services/axios.config';
-import { fetchCreateGroupChat } from '../services';
+import { fetchCreateGroupChat, fetchEditGroupChat } from '../services';
 // store
 import { useChatStore } from '../stores';
 
@@ -45,7 +45,7 @@ const deleteDialog = ref(false);
 const uploadingFiles = ref(chatStore.selectedGroup?.image ? [chatStore.selectedGroup?.image] : []);
 const formModal = reactive({
   group_name: chatStore.selectedGroup?.title || "",
-  users: chatStore.selectedGroup?.members.map(member => member.user) || [],
+  users: chatStore.selectedGroup?.members?.map(member => member.user) || [],
 })
 
 // rules
@@ -67,10 +67,10 @@ const onSubmit = async () => {
   const isValid = await $v.value.$validate();
     
   if(!isValid) return;
-  if(formModal.type === 'create') {
-    fetchCreateGroupChat({image: uploadingFiles.value[0]?.id, title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
-  } else if(formModal.type === 'edit') {
-    fetchEditGroupChat({image: uploadingFiles.value[0]?.id, title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
+  if(props.type === 'create') {
+    fetchCreateGroupChat({images:[{image: uploadingFiles.value[0]?.id}], title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
+  } else if(props.type === 'edit') {
+    fetchEditGroupChat(chatStore.selectedGroup?.id, {images:[{image: uploadingFiles.value[0]?.id}], title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
   }
   emit('update:modelValue', false);
 }

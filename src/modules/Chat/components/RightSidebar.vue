@@ -72,15 +72,15 @@ const isGroupDetail = computed(() => route.name == 'ChatGroupDetail')
           <!-- avatar -->
           <div class="flex flex-col items-center gap-1 w-full my-12 mx-auto">
             <base-avatar
-              :label="isGroupDetail ? chatStore.selectedGroup?.title : chatStore.selectedUser?.user?.first_name"
-              :color="isGroupDetail ? '#E2E8F0' : chatStore.selectedUser?.user?.color"
-              :image="isGroupDetail ? chatStore.selectedGroup?.image?.url : chatStore.selectedUser?.user?.avatar?.url"
+              :label="isGroupDetail ? chatStore.selectedGroup?.title : chatStore.selectedUser?.first_name"
+              :color="isGroupDetail ? '#E2E8F0' : chatStore.selectedUser?.color"
+              :image="isGroupDetail ? chatStore.selectedGroup?.image?.url : chatStore.selectedUser?.avatar?.url"
               shape="circle"
               avatar-classes="w-20 h-20"
               label-classes="text-2xl font-semibold select-none text-greyscale-900"
             />
-            <h2 class="mt-1 text-base font-semibold select-none text-greyscale-900">{{ isGroupDetail ? chatStore.selectedGroup?.title : chatStore.selectedUser?.user?.full_name}}</h2>
-            <p class="text-sm font-medium select-none text-greyscale-500">{{ isGroupDetail ? t('members', { count: chatStore.selectedGroup?.members?.length}) : chatStore.selectedUser?.user?.position?.name}}</p>
+            <h2 class="mt-1 text-base font-semibold select-none text-greyscale-900">{{ isGroupDetail ? chatStore.selectedGroup?.title : chatStore.selectedUser?.full_name}}</h2>
+            <p class="text-sm font-medium select-none text-greyscale-500">{{ isGroupDetail ? t('members', { count: chatStore.selectedGroup?.members?.length}) : chatStore.selectedUser?.position}}</p>
           </div>
           <!-- users  -->
           <div 

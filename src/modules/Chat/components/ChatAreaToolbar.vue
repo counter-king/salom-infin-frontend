@@ -12,7 +12,6 @@ import BaseMenu from '@/components/UI/BaseMenu.vue';
 import { fetchDeleteGroupChatById } from '../services';
 // store
 import { useChatStore } from "@/modules/Chat/stores";
-// import BaseMenu from './BaseMenu.vue';
 
 const chatStore = useChatStore();
 const route = useRoute();
@@ -66,9 +65,9 @@ const onDeleteChat = () => {
       <div class="flex">
         <div class="relative">
           <base-avatar
-            :label="isGroupDetail ? chatStore.selectedGroup?.title : chatStore.selectedUser?.user?.first_name"
+            :label="isGroupDetail ? chatStore.selectedGroup?.title : chatStore.selectedUser?.first_name"
             :color="isGroupDetail ? '#E2E8F0' : chatStore.selectedUser?.user?.color"
-            :image="isGroupDetail ? chatStore.selectedGroup?.image?.url : chatStore.selectedUser?.user?.avatar?.url"
+            :image="isGroupDetail ? chatStore.selectedGroup?.image?.url : chatStore.selectedUser?.avatar?.url"
             avatar-classes="w-11 h-11"
             label-classes="text-lg font-semibold select-none text-greyscale-900"
           />  
@@ -78,8 +77,8 @@ const onDeleteChat = () => {
           ></div>
         </div>
         <div class="flex flex-col ml-3">
-          <div class="text-base font-semibold select-none">{{ isGroupDetail ? chatStore.selectedGroup?.title : chatStore.selectedUser?.user?.full_name}}</div>
-          <div v-if="true" class="text-sm font-medium text-greyscale-500 select-none">{{ isGroupDetail ? t('members', { count: chatStore.selectedGroup?.members?.length}) : chatStore.selectedUser?.user?.position?.name}}</div>
+          <div class="text-base font-semibold select-none">{{ isGroupDetail ? chatStore.selectedGroup?.title : chatStore.selectedUser?.full_name}}</div>
+          <div v-if="true" class="text-sm font-medium text-greyscale-500 select-none">{{ isGroupDetail ? t('members', { count: chatStore.selectedGroup?.members?.length}) : chatStore.selectedUser?.position}}</div>
           <div v-else class="text-sm font-medium text-success-500 select-none">typing ... </div>
         </div>
       </div>

@@ -3,16 +3,18 @@
 import {onMounted, reactive, ref, watch} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-// Store
-import { useAuthStore } from "@/modules/Auth/stores";
-import { useChatStore } from "@/modules/Chat/stores";
 // Components
 import BaseBrickTab from "@/components/UI/BaseBrickTab.vue";
-import { MagniferIcon, Plus20SolidIcon, UserRoundedBoldIcon, UsersGroupTwoRoundedBoldIcon } from '@/components/Icons'
 import GroupItem from "@/modules/Chat/components/GroupItem.vue";
 import UserItem from "@/modules/Chat/components/UserItem.vue";
 import UserItemSearch from "@/modules/Chat/components/UserItemSearch.vue";
 import CreateGroupDialog from "./CreateGroupDialog.vue";
+import { MagniferIcon, Plus20SolidIcon, UserRoundedBoldIcon, UsersGroupTwoRoundedBoldIcon } from '@/components/Icons'
+// Store
+import { useAuthStore } from "@/modules/Auth/stores";
+import { useChatStore } from "@/modules/Chat/stores";
+// constatns
+import { CHAT_TYPES } from "../constatns";
 
 const { t } = useI18n();
 const authStore = useAuthStore();
@@ -20,7 +22,7 @@ const chatStore = useChatStore();
 const router = useRouter();
 const route = useRoute();
 // reactive
-const search = ref(null);
+const searchInput = ref(null);
 const createGroupDialogVisible = ref(false);
 
 const tabPanelList = [
@@ -47,33 +49,45 @@ const onTabChange = async (val) => {
 }
 
 const onCreateChat = async (user) => {
-  await chatStore.actionCreatePrivateChat({ member_id: user.id });
+  const data = await chatStore.actionCreatePrivateChat({ member_id: user.id });  
+  chatStore.selectedUser = data
+  router.push({ name: 'ChatPrivateDetail', params: { id: data.chat_id }})
+  searchInput.value = null;
 }
 
-const onClickSearchedUser = (user) => {
-  router.push({ name: 'ChatPrivateDetail', params: { id: user.id }})
-  chatStore.selectedUser = user
-  chatStore.privateChatList = [user, ...chatStore.privateChatList]
-  chatStore.userSearching = false;
+const onClickSearchedUser = (item) => {  
+  if(item.type == CHAT_TYPES.PRIVATE){
+    router.push({ name: 'ChatPrivateDetail', params: { id: item.chat_id }})
+    chatStore.selectedUser = item
+    chatStore.userSearching = false;
+    searchInput.value = null;
+  }else if(item.type == CHAT_TYPES.GROUP){
+    router.push({ name: 'ChatGroupDetail', params: { id: item.chat_id }})
+    chatStore.selectedGroup = item
+    chatStore.userSearching = false;
+    searchInput.value = null;
+  }
 }
 
 const onClickChatPrivateUser = (user) => {
-  user = user.members.find(member => member.user?.id !== authStore.currentUser.id)
-  router.push({ name: 'ChatPrivateDetail', params: { id: user.chat }})
+  router.push({ name: 'ChatPrivateDetail', params: { id: user.chat_id }})
   chatStore.selectedUser = user
 }
 
 const onClickChatGroup = (group) => {
-  router.push({ name: 'ChatGroupDetail', params: { id: group.id }})
+  router.push({ name: 'ChatGroupDetail', params: { id: group.chat_id }})
   chatStore.selectedGroup = group
+  chatStore.userSearching = false;
+  searchInput.value = null;
 }
 
 // hooks
-watch(search, async (val) => {
+watch(searchInput, async (val) => {
   if (val) {
     chatStore.userSearching = true;
     await chatStore.actionChatUsersSearchList({ search: val });
-    await chatStore.actionUsersList({ search: val });
+    await chatStore.actionUsersSearchList({ search: val });
+    await chatStore.actionUsersSearchByMessageList({ search: val });
   } else {
     chatStore.userSearching = false;
   }
@@ -83,10 +97,10 @@ onMounted(async () => {
   await chatStore.actionGetPrivateChatList({});
   await chatStore.actionGetGroupChatList({});
   if(route.name == 'ChatGroupDetail'){
-    chatStore.selectedGroup = chatStore.groupChatList.find(group => group.id == route.params.id)
+    chatStore.selectedGroup = await chatStore.actionGetGroupChatById(route.params.id)
   }
   if(route.name == 'ChatPrivateDetail'){
-    chatStore.selectedUser = chatStore.privateChatList.find(user => user.id == route.params.id)
+    chatStore.selectedUser = await chatStore.actionGetPrivateChatById(route.params.id)
   }
 })
 
@@ -96,7 +110,7 @@ onMounted(async () => {
   <div class="w-[352px] h-full border-r select-none">
     <div class="flex m-4 mb-0">
       <base-input
-        v-model="search"
+        v-model="searchInput"
         :icon-left="MagniferIcon"
         placeholder="search"
         class="p-input-icon-left w-[270px] mr-2"
@@ -122,21 +136,37 @@ onMounted(async () => {
       <template v-else>
         <div class="overflow-hidden overflow-y-auto p-4 pt-0" style="height: calc(100vh - 260px)">
           <!-- chat users who have chat with current user -->
-          <p class="text-sm font-medium text-greyscale-500 my-4">Найдено <span class="font-semibold text-greyscale-900">2</span> результата</p>
-          <template v-for="user in chatStore.chatUserSearchList" :key="user.id">
-            <user-item
-              @click="onClickSearchedUser(user)"
-              :user="user.members?.find(member => member.user?.id !== authStore.currentUser.id)?.user" 
-            />
+          <p class="text-sm font-medium text-greyscale-500 my-4">Найдено <span class="font-semibold text-greyscale-900">{{ chatStore.chatUserSearchList.length }}</span> результата</p>
+          <template v-for="item in chatStore.chatUserSearchList" :key="item.id">
+            <template v-if="item.type === 'private'">
+              <user-item
+              @click="onClickSearchedUser(item)"
+              :user="item" 
+              />
+            </template>
+            <template v-else>
+              <group-item
+                @click="onClickChatGroup(item)"
+                :group="item"
+              />
+            </template>
           </template>
           <!-- users who don't have chat with current user -->
-          <p class="text-sm font-medium text-greyscale-500">{{ t('global-search-results') }}</p>
+          <p class="text-sm font-medium text-greyscale-500 my-4">{{ t('global-search-results') }}</p>
           <user-item-search
             v-for="user in chatStore.userSearchList"
             :key="user.id"
             :user="user"
             @click="onCreateChat(user)"
           />
+          <!-- users who sent messages to current user -->
+          <p class="text-sm font-medium text-greyscale-500 my-4">{{ t('message-found',{count: chatStore.usersSearchListByMessage.length })}}</p>
+          <template v-for="item in chatStore.usersSearchListByMessage" :key="item.id">
+            <user-item
+            @click="onClickSearchedUser(item)"
+            :user="item" 
+            />
+          </template>
         </div>
       </template>
     </template>
@@ -166,11 +196,11 @@ onMounted(async () => {
                 </div>
               </template> 
               <template v-else>
-                <template v-for="user in chatStore.privateChatList" :key="user.id">
+                <template v-for="item in chatStore.privateChatList" :key="item.id">
                   <user-item
-                    @click="onClickChatPrivateUser(user)"
-                    :active="user.id === chatStore.selectedUser?.id" 
-                    :user="user.members?.find(member => member.user?.id !== authStore.currentUser.id)?.user" 
+                    @click="onClickChatPrivateUser(item)"
+                    :user="item" 
+                    :active="item.chat_id === chatStore.selectedUser?.chat_id"
                   />
                 </template>
               </template>
@@ -196,18 +226,16 @@ onMounted(async () => {
                   <group-item
                     @click="onClickChatGroup(group)"
                     :group="group"
-                    :active="group.id === chatStore.selectedGroup?.id"
+                    :active="group.chat_id === chatStore.selectedGroup?.chat_id"
                   />
                 </template>
               </template>
             </template>
           </div>
         </template>
-
       </base-brick-tab>
     </template>
-
-    <create-group-dialog v-model="createGroupDialogVisible"/>
+    <create-group-dialog v-model="createGroupDialogVisible" type="create"/>
   </div>
 
 </template>
