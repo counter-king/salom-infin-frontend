@@ -6,6 +6,7 @@ import {
   fetchCreatePrivateChat,
   fetchGetGroupChatById,
   fetchGetGroupChatList,
+  fetchGetMessagesByChatId,
   fetchGetPrivateChatById,
   fetchGetPrivateChatList,
   fetchUsersSearch,
@@ -30,6 +31,8 @@ export const useChatStore = defineStore("chat-stores", {
     selectedGroup: null,
     chatUserSearchList: [],
     usersSearchListByMessage: [],
+    messageListByChatIdLoading: false,
+    messageListByChatId: [],
     privateChatList: [],
     userSearchList: [],
     groupChatList: [],
@@ -71,6 +74,7 @@ export const useChatStore = defineStore("chat-stores", {
             return {
               title: item.chat_title,
               image: item.avatar,
+              chat_id: item.id,
               last_message: item.last_message,
               last_message_time: item.last_message_date,
               last_message_type: item.last_message_type,
@@ -223,6 +227,12 @@ export const useChatStore = defineStore("chat-stores", {
         type: data.type,
         unread_count: data.unread_count
       }
+    },
+    /** */
+    /** */
+    async actionGetMessageListByChatId(id) {
+      const { data } = await fetchGetMessagesByChatId({chat:id});
+      this.messageListByChatId = data?.results
     },
     /** */
   }

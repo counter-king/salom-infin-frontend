@@ -12,7 +12,7 @@ import FileTypeImage from "./FileTypeImage.vue";
 // icons
 import { ChevronUp20SolidIcon, FolderFavouriteStarBoldIcon, PaperclipRoundedBoldIcon, UsersGroupTwoRoundedBoldIcon, XMarkSolidIcon } from '@/components/Icons'
 // constants 
-import { COMPONENT_TYPES } from "../constatns";
+import { CHAT_ROUTE_NAMES, COMPONENT_TYPES } from "../constatns";
 // store
 import { useChatStore } from "@/modules/Chat/stores";
 import GroupUserList from "./GroupUserList.vue";
@@ -51,7 +51,7 @@ const handleClickGroupUsers = () => {
   }
 }
 
-const isGroupDetail = computed(() => route.name == 'ChatGroupDetail')
+const isGroupDetail = computed(() => route.name == CHAT_ROUTE_NAMES.GROUP)
 </script>
 
 <template>

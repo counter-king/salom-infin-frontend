@@ -1,29 +1,82 @@
 <script setup>
 // Core
 import { useI18n } from "vue-i18n";
-import { computed, onMounted } from "vue";
+import { computed, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 // Components
 import { ChatAreWrapper, LeftSidebar, RightSidebar } from "@/modules/Chat/components";
 // Socket
 import { socket } from "@/services/socket";
+// contants
+import { CHAT_ROUTE_NAMES, CHAT_TYPES, WEBCOCKET_EVENTS } from "../constatns";
 // css
 import 'vue3-emoji-picker/css'
 
 const { t } = useI18n();
-const router = useRoute();
+const route = useRoute();
 const allowedPages = ['ChatPrivateDetail','ChatGroupDetail']
-const isShowChat = computed(() => allowedPages.includes(router.name))
+const { status, data, send } = socket
+// reactives
+const isShowChat = computed(() => allowedPages.includes(route.name))
+const routeId = computed(() => route.params.id)
+// methods
+const sendUserHandshake = ()=> {
+  const payload = { command: 'user_handshake' }
+  send(JSON.stringify(payload))
+}
 
-onMounted(() => {
-  socket.on('chat_handshake',()=>{
-    console.log('connect')
-  } )
+const sendChatHandshake = (id, chat_type)=> {
+  console.log("run");
+  
+  const payload = { command: 'chat_handshake', chat_type, chat_id: id }
+  send(JSON.stringify(payload))
+}
+
+const sendNewMessageEvent = ()=> {
+  const payload = { command: 'new_message', chat_type: CHAT_TYPES.PRIVATE, chat_id: route.params.id, text:"yaxshi ishladi", message_type:"text" } 
+  send(JSON.stringify(payload))
+}
+
+// WebSocket holatini kuzatish
+watch(status, (newStatus) => {
+  console.log('WebSocket status changed:', newStatus);
+});
+
+// Kelgan ma'lumotlarni kuzatish
+watch(data, (newData) => {
+  newData = JSON.parse(newData);
+  
+  if(newData.command == WEBCOCKET_EVENTS.USER_HANDSHAKE) {
+    console.log("user hand",newData);
+  }
+  else if(newData.command == WEBCOCKET_EVENTS.CHAT_HANDSHAKE) {
+    console.log("chat hand",newData);
+  }
+  else if(newData.type == WEBCOCKET_EVENTS.NEW_MESSAGE) {
+    console.log("new message", newData);
+  }
+});
+
+watch(routeId, (newRouteId) => {  
+  console.log("routeId",newRouteId);
+  
+  if(route.name == CHAT_ROUTE_NAMES.PRIVATE) {
+    sendChatHandshake(newRouteId, CHAT_TYPES.PRIVATE)
+  }
+  else if(route.name == CHAT_ROUTE_NAMES.GROUP) {
+    sendChatHandshake(newRouteId, CHAT_TYPES.GROUP)
+  }
 })
 
-// onUnmounted(() => {
-//   socket.disconnect()
-// })
+onMounted(() => {
+    sendUserHandshake()
+    if(route.name == CHAT_ROUTE_NAMES.PRIVATE) {
+      sendChatHandshake(route.params.id, CHAT_TYPES.PRIVATE)
+    }
+    else if(route.name == CHAT_ROUTE_NAMES.GROUP) {
+      sendChatHandshake(route.params.id, CHAT_TYPES.GROUP)
+    }
+})
 
 </script>
 <template>

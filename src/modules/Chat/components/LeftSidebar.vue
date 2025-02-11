@@ -1,20 +1,21 @@
 <script setup>
-// Core
-import {onMounted, reactive, ref, watch} from "vue";
+// core
+import {computed, onMounted, ref, watch} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-// Components
+// components
 import BaseBrickTab from "@/components/UI/BaseBrickTab.vue";
 import GroupItem from "@/modules/Chat/components/GroupItem.vue";
 import UserItem from "@/modules/Chat/components/UserItem.vue";
 import UserItemSearch from "@/modules/Chat/components/UserItemSearch.vue";
 import CreateGroupDialog from "./CreateGroupDialog.vue";
+// icons
 import { MagniferIcon, Plus20SolidIcon, UserRoundedBoldIcon, UsersGroupTwoRoundedBoldIcon } from '@/components/Icons'
-// Store
+// store
 import { useAuthStore } from "@/modules/Auth/stores";
 import { useChatStore } from "@/modules/Chat/stores";
 // constatns
-import { CHAT_TYPES } from "../constatns";
+import { CHAT_ROUTE_NAMES, CHAT_TYPES } from "../constatns";
 
 const { t } = useI18n();
 const authStore = useAuthStore();
@@ -24,6 +25,7 @@ const route = useRoute();
 // reactive
 const searchInput = ref(null);
 const createGroupDialogVisible = ref(false);
+const activeTabIndex= computed(() => route.name == CHAT_ROUTE_NAMES.PRIVATE ? 0 : route.name == CHAT_ROUTE_NAMES.GROUP ? 1 : 0);
 
 const tabPanelList = [
   {
@@ -51,18 +53,19 @@ const onTabChange = async (val) => {
 const onCreateChat = async (user) => {
   const data = await chatStore.actionCreatePrivateChat({ member_id: user.id });  
   chatStore.selectedUser = data
-  router.push({ name: 'ChatPrivateDetail', params: { id: data.chat_id }})
+  router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: data.chat_id }})
   searchInput.value = null;
 }
 
 const onClickSearchedUser = (item) => {  
   if(item.type == CHAT_TYPES.PRIVATE){
-    router.push({ name: 'ChatPrivateDetail', params: { id: item.chat_id }})
+    console.log("ishlamoqda", item)
+    router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: item.chat_id }})
     chatStore.selectedUser = item
     chatStore.userSearching = false;
     searchInput.value = null;
-  }else if(item.type == CHAT_TYPES.GROUP){
-    router.push({ name: 'ChatGroupDetail', params: { id: item.chat_id }})
+  } else if(item.type == CHAT_TYPES.GROUP) {
+    router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: item.chat_id }})
     chatStore.selectedGroup = item
     chatStore.userSearching = false;
     searchInput.value = null;
@@ -70,12 +73,12 @@ const onClickSearchedUser = (item) => {
 }
 
 const onClickChatPrivateUser = (user) => {
-  router.push({ name: 'ChatPrivateDetail', params: { id: user.chat_id }})
+  router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: user.chat_id }})
   chatStore.selectedUser = user
 }
 
 const onClickChatGroup = (group) => {
-  router.push({ name: 'ChatGroupDetail', params: { id: group.chat_id }})
+  router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: group.chat_id }})
   chatStore.selectedGroup = group
   chatStore.userSearching = false;
   searchInput.value = null;
@@ -96,10 +99,10 @@ watch(searchInput, async (val) => {
 onMounted(async () => {
   await chatStore.actionGetPrivateChatList({});
   await chatStore.actionGetGroupChatList({});
-  if(route.name == 'ChatGroupDetail'){
+  if(route.name == CHAT_ROUTE_NAMES.GROUP){
     chatStore.selectedGroup = await chatStore.actionGetGroupChatById(route.params.id)
   }
-  if(route.name == 'ChatPrivateDetail'){
+  if(route.name == CHAT_ROUTE_NAMES.PRIVATE){
     chatStore.selectedUser = await chatStore.actionGetPrivateChatById(route.params.id)
   }
 })
@@ -174,6 +177,7 @@ onMounted(async () => {
 
     <template v-else>
       <base-brick-tab
+        :active-index="activeTabIndex"
         :tab-panel-list="tabPanelList"
         panel-container-class="px-0"
         header-classes="h-8 w-full"

@@ -5,6 +5,27 @@ export const CHAT_TYPES = {
   PRIVATE: "private",
   GROUP: "group",
 }
+
+export const CHAT_ROUTE_NAMES = {
+  PRIVATE: "ChatPrivateDetail",
+  GROUP: "ChatGroupDetail",
+  CHAT_INDEX: "ChatIndex",
+}
+
+
+export const WEBCOCKET_EVENTS = {
+  NEW_MESSAGE: "new_message",
+  USER_HANDSHAKE: "user_handshake",
+  CHAT_HANDSHAKE: "chat_handshake",
+}
+
+export const MESSAGE_TYPES = {
+  TEXT: "text",
+  IMAGE: "image",
+  VIDEO: "video",
+  AUDIO: "audio",
+  FILE: "file",
+}
 export const fileTypes = {
   image: GalleryIcon,
   video: ClapperboardPlayLinearIcon,

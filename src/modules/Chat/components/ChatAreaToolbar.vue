@@ -1,7 +1,7 @@
 <script setup>
 // cores
 import { computed, ref} from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 // components
 import CreateGroupDialog from './CreateGroupDialog.vue';
@@ -9,19 +9,22 @@ import { MenuDotsBoldIcon, PenIcon, SidebarMinimalisticIcon, TrashBinTrashBoldIc
 import DeleteDialog from './DeleteDialog.vue';
 import BaseMenu from '@/components/UI/BaseMenu.vue';
 // services
-import { fetchDeleteGroupChatById } from '../services';
+import { fetchDeleteGroupChatById, fetchDeletePrivateChatById } from '../services';
 // store
 import { useChatStore } from "@/modules/Chat/stores";
+import { CHAT_ROUTE_NAMES } from '../constatns';
 
 const chatStore = useChatStore();
 const route = useRoute();
+const router = useRouter();
 const { t } = useI18n();
-
 // reactives
 const createGroupDialogVisible = ref(false);
-const deleteDialog = ref(false);
+const deleteDialogVisible = ref(false);
+const isDeleteLoading = ref(false);
+
 const menu = ref();
-const isGroupDetail = computed(() => route.name == 'ChatGroupDetail')
+const isGroupDetail = computed(() => route.name == CHAT_ROUTE_NAMES.GROUP)
 const menuItems = ref([
    { 
      label: 'edit',
@@ -36,7 +39,7 @@ const menuItems = ref([
      labelClass: '!text-critic-500',
      icon: TrashBinTrashBoldIcon,
      command: () => {
-      deleteDialog.value = true
+      deleteDialogVisible.value = true
      },
      iconClass: "!text-critic-500 !w-4 !h-4"
    }
@@ -53,10 +56,24 @@ function focussed() {
   }, 0)
 }
 
-const onDeleteChat = () => {
-  deleteDialog.value = false
-  fetchDeleteGroupChatById(chatStore.selectedGroup?.id)
+const onDeleteChat = async () => {
+  isDeleteLoading.value = true
+  
+  if(route.name == CHAT_ROUTE_NAMES.GROUP){
+    await fetchDeleteGroupChatById(chatStore.selectedGroup?.chat_id)
+    chatStore.selectedGroup = null
+    router.push({name: CHAT_ROUTE_NAMES.CHAT_INDEX})
+
+  } else if(route.name == CHAT_ROUTE_NAMES.PRIVATE){
+    await fetchDeletePrivateChatById(chatStore.selectedUser?.chat_id)
+    chatStore.selectedUser = null
+    router.push({name: CHAT_ROUTE_NAMES.CHAT_INDEX})
+  }
+  
+  isDeleteLoading.value = false
+  deleteDialogVisible.value = false
 }
+
 
 </script>
 <template>
@@ -112,9 +129,10 @@ const onDeleteChat = () => {
   </div>
   <create-group-dialog v-if="createGroupDialogVisible" modal-label="edit-group" v-model="createGroupDialogVisible" type="edit" />
   <DeleteDialog
-   v-model="deleteDialog" 
+   v-model="deleteDialogVisible" 
    :onDelete="onDeleteChat" 
-   :onClose="() => deleteDialog = false"
+   :onClose="() => deleteDialogVisible = false"
    conetentText="delete-chat-group-dialog-content"
+   :isDeleteLoading="isDeleteLoading"
   />
 </template>

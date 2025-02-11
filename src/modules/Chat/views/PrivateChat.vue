@@ -1,6 +1,6 @@
 <script setup>
 // cores
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 // componennts
@@ -83,10 +83,13 @@ const emojiMenuItems = ref([
    }
 ]);
 
+
 onMounted(() => {
   console.log(route.params.id);
   chatStore.actionGetPrivateChatById(route.params.id);
+  chatStore.actionGetMessageListByChatId(route.params.id);
 })
+
 </script>
 <template>
  <!-- style="height: calc(100% - 135px)"  -->
@@ -100,8 +103,13 @@ onMounted(() => {
     @dragleave.prevent="onDragLeave"
     @drop.prevent="onDrop"
     >
-    <template v-if="true">
-      <!-- <ShowDate :date="'2024-10-20T10:20:30'" />
+    <template v-if="!!chatStore.messageListByChatId.length">
+      <template v-for="(message, index) in chatStore.messageListByChatId" :key="message.id">
+          <template v-if="index==0">
+            <ShowDate :date="message.created_date" />
+          </template>
+      </template>
+      <!-- 
       <OwnerText :onShowContextMenu="onShowContextMenu" :onShowEmojiContextMenu="onShowEmojiContextMenu"  isReaded :text="'Привет, хорошо, спасибо!'" :date="'2024-10-20T10:20:30'" />
       <FriendText :onShowContextMenu="onShowContextMenu"  :text="'Привет, хорошо, спасибо!'" :date="'2024-10-20T10:20:30'" />
       <FriendText :onShowContextMenu="onShowContextMenu" :avatarVisible="true"  :text="'Привет, хорошо, спасибо!'" :date="'2024-10-20T10:20:30'" /> -->
@@ -131,7 +139,7 @@ onMounted(() => {
       </div>
     </template>
      <!-- not start yet chat  -->
-    <div v-if="true" class="h-full">
+    <div v-else class="h-full">
       <Empty 
         title="you-dont-have-any-messages"
         description="you-dont-have-any-messages-description"

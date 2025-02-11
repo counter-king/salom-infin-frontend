@@ -5,7 +5,8 @@ const URLS = {
   users: "chat-user-search/",
   chatPrivate: "chat/private/",
   chatGroup: "chat/group/",
-  chatMessage: "chat/message/search/"
+  chatMessageSearch: "chat/message/search/",
+  chatMessages: "chat/messages/"
 }
 /** Returns created personal and group chats list in searching **/
 export const fetchChatUsersSearch = (params) => {
@@ -17,7 +18,7 @@ export const fetchUsersSearch = (params) => {
 }
 /** Returns users by messages list **/
 export const fetchUsersSearchByMessage = (params) => {
-  return axiosConfig.get(`${URLS.chatMessage}`, params);
+  return axiosConfig.get(`${URLS.chatMessageSearch}`, params);
 }
 /** Returns private chat list **/
 export const fetchGetPrivateChatList = (params) => {
@@ -30,6 +31,11 @@ export const fetchCreatePrivateChat = (body) => {
 /** get private chat by id **/
 export const fetchGetPrivateChatById = (id) => {
   return axiosConfig.get(`${URLS.chatPrivate}${id}/`);
+}
+
+// delete private chat by id
+export const fetchDeletePrivateChatById = (id) => {
+  return axiosConfig.delete(`${URLS.chatPrivate}${id}/`);
 }
 // create group chat
 export const fetchCreateGroupChat = (body) => {
@@ -50,4 +56,9 @@ export const fetchEditGroupChat = (id, body) => {
 // delete group chat by id
 export const fetchDeleteGroupChatById = (id) => {
   return axiosConfig.delete(`${URLS.chatGroup}${id}/`);
+}
+
+// get messages by chat id
+export const fetchGetMessagesByChatId = (params) => {
+  return axiosConfig.get(`${URLS.chatMessages}`, params);
 }

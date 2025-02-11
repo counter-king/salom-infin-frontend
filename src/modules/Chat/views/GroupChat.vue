@@ -1,7 +1,8 @@
 <script setup>
 // cores
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
 // componennts
 import OwnerText from '../components/ChatArea/OwnerText.vue';
 import FriendText from '../components/ChatArea/FriendText.vue';
@@ -25,6 +26,7 @@ const chatStore = useChatStore()
 const { menuItems, refContextMenu } = useContextMenu();
 const { onDragOver, onDragLeave, onDrop, uploadingFiles, abortController } = useFileUploadDrop();
 
+const route = useRoute();
 const { t } = useI18n();
 // reactives
 const showScrollDownButton = ref(false);
@@ -53,6 +55,13 @@ const onShowContextMenu = (event, data) => {
 const onHandleDeleteMessage = () => {
   console.log("log");
 }
+
+onMounted(() => {
+  console.log(route.params.id);
+  chatStore.actionGetGroupChatById(route.params.id);
+  chatStore.actionGetMessageListByChatId(route.params.id);
+})
+
 </script>
 <template>
  <!-- style="height: calc(100% - 135px)"  -->

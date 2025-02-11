@@ -3,18 +3,25 @@
 import { onMounted, ref, watch } from 'vue';
 import InputText from 'primevue/inputtext';
 import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
 // components
 import EmojiStikers from './EmojiStikers.vue';
 // icons
 import { ForwardIcon, PaperclipLinearIcon, PenIcon, PlainBoldIcon, SmileCircleLinearIcon, XMarkSolidIcon } from '@/components/Icons';
-import { useChatStore } from '../../stores';
 // composables
 import { useFileUpload } from '../../composables/useFileUpload';
 // stores
-const chatStore = useChatStore()
+import { useChatStore } from '../../stores';
+// utils
+import { CHAT_ROUTE_NAMES, CHAT_TYPES, MESSAGE_TYPES } from '../../constatns';
+// webocket
+import { socket } from "@/services/socket";
 
 const { t } = useI18n();
 const { uploadFiles } = useFileUpload();
+const { send } = socket
+const chatStore = useChatStore()
+const route = useRoute();
 
 // reactives
 const message = ref("");
@@ -22,11 +29,22 @@ const refInput = ref(null);
 const refFileInput = ref(null);
 const showSendIcon = ref(false);
 const isSimleStikerHovered = ref(false);
+
 // methods
-// when massage is sent
+const sendNewMessageEvent = (data)=> {
+  if(route.name == CHAT_ROUTE_NAMES.PRIVATE){
+    const payload = { command: 'new_message', chat_type: CHAT_TYPES.PRIVATE, chat_id: route.params.id, text: data.text, message_type: data.message_type } 
+    send(JSON.stringify(payload))
+  }
+  else{
+    const payload = { command: 'new_message', chat_type: CHAT_TYPES.GROUP, chat_id: route.params.id, text: data.text, message_type: data.message_type }
+    send(JSON.stringify(payload))
+  }
+}
+
 const handleSendMessage = () => {
  if(!!message.value) {
-  console.log('send message', message.value);
+  sendNewMessageEvent({text: message.value, message_type: MESSAGE_TYPES.TEXT})
  }
  message.value = '';
 }

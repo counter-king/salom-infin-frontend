@@ -47,6 +47,7 @@ const modelValue = useModel(props, 'modelValue')
  <template #footer>
    <base-button
      label="cancel"
+     :disabled="props.isDeleteLoading"
      rounded
      color="text-primary-900"
      border-color="border-transparent"
@@ -54,7 +55,7 @@ const modelValue = useModel(props, 'modelValue')
      @click="onClose()"
    />
    <base-button
-     :loading="isDeleteLoading"
+     :loading="props.isDeleteLoading"
      label="delete"
      rounded
      color="border-critic-500 bg-critic-500 text-white"
