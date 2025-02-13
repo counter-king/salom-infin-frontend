@@ -144,7 +144,7 @@ const generatePdf = async () => {
 
           <div>
             <span class="font-semibold">Safarga boradigan joylari: </span>
-            <span v-for="(location, index) in BTStore.detailModel?.locations">{{ location.name }}<span
+            <span v-for="(location, index) in BTStore.detailModel?.locations">{{ location.name_uz }}<span
               v-if="index !== BTStore.detailModel?.locations.length - 1">,</span> &nbsp; </span>
           </div>
 
