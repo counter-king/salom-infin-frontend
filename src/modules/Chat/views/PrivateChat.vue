@@ -20,6 +20,9 @@ import { DownloadMinimalisticIcon, FileTextBoldIcon } from '@/components/Icons';
 import Empty from '@/components/Empty.vue';
 // stores
 import { useChatStore } from '../stores';
+import { useAuthStore } from '@/modules/Auth/stores';
+import { formatDay } from '@/utils/formatDate';
+import { CHAT_ROUTE_NAMES } from '../constatns';
 
 // composables
 const { menuItems, refContextMenu } = useContextMenu();
@@ -28,11 +31,14 @@ const { onDragOver, onDragLeave, onDrop } = useFileUploadDrop();
 const { t } = useI18n();
 const route = useRoute();
 const chatStore = useChatStore()
+const authStore = useAuthStore()
 // reactives
 const showScrollDownButton = ref(false);
 const refChatArea = ref(null);
 const refSendMessage = ref(null);
 const refEmojiContextMenu = ref(null);
+const messageCreatedDate = ref(null);
+const friendTextMessageIndex = ref(null);
 
 // methods
 // when scroll down, scrollDwonButton will be visible
@@ -84,10 +90,46 @@ const emojiMenuItems = ref([
 ]);
 
 
-onMounted(() => {
-  console.log(route.params.id);
-  chatStore.actionGetPrivateChatById(route.params.id);
-  chatStore.actionGetMessageListByChatId(route.params.id);
+const showDateByCalculate = (index) => {
+  const previouMessageCreatedDate = chatStore.messageListByChatId[index - 1]?.created_date
+  const nowMessageCreatedDate = chatStore.messageListByChatId[index]?.created_date
+  if(formatDay(nowMessageCreatedDate) != formatDay(previouMessageCreatedDate)){
+    return true
+  } else {
+    return false
+  }
+}
+
+
+
+const showFriendTextAvatar = (index) => {
+  // Joriy xabar va oldingi xabarni olish
+  const nowMessage = chatStore.messageListByChatId[index]
+  const perviousMessage = chatStore.messageListByChatId[index - 1]
+  
+  // Avatar quyidagi hollarda ko'rsatiladi:
+  // 1. Agar bu birinchi xabar bo'lsa (oldingi xabar yo'q)
+  // 2. Agar oldingi xabar boshqa foydalanuvchidan bo'lsa
+  // 3. Agar xabar boshqa kunda yuborilgan bo'lsa
+  return !perviousMessage || 
+         perviousMessage.sender?.id !== nowMessage.sender?.id ||
+         formatDay(perviousMessage.created_date) !== formatDay(nowMessage.created_date)
+}
+
+// error bor
+watch(
+  () => route.params?.id,
+  async (newId, oldId) => {
+    if (newId !== oldId && route.name === CHAT_ROUTE_NAMES.PRIVATE) {
+      chatStore.actionGetMessageListByChatId(newId);
+      chatStore.selectedUser = await chatStore.actionGetPrivateChatById(newId);
+    }
+  }
+);
+
+onMounted(async () => {
+  chatStore.selectedUser = await chatStore.actionGetPrivateChatById(route.params?.id);
+  await chatStore.actionGetMessageListByChatId(route.params?.id);
 })
 
 </script>
@@ -103,51 +145,82 @@ onMounted(() => {
     @dragleave.prevent="onDragLeave"
     @drop.prevent="onDrop"
     >
-    <template v-if="!!chatStore.messageListByChatId.length">
-      <template v-for="(message, index) in chatStore.messageListByChatId" :key="message.id">
-          <template v-if="index==0">
-            <ShowDate :date="message.created_date" />
+    <template v-if="chatStore.messageListByChatIdLoading">
+        <base-spinner />
+    </template>
+    <template v-else>
+      <template v-if="!!chatStore.messageListByChatId.length">
+        <template v-for="(message, index) in chatStore.messageListByChatId" :key="message?.id">
+          <template v-if="showDateByCalculate(index)">
+              <ShowDate :date="message.created_date" />
           </template>
-      </template>
-      <!-- 
-      <OwnerText :onShowContextMenu="onShowContextMenu" :onShowEmojiContextMenu="onShowEmojiContextMenu"  isReaded :text="'Привет, хорошо, спасибо!'" :date="'2024-10-20T10:20:30'" />
-      <FriendText :onShowContextMenu="onShowContextMenu"  :text="'Привет, хорошо, спасибо!'" :date="'2024-10-20T10:20:30'" />
-      <FriendText :onShowContextMenu="onShowContextMenu" :avatarVisible="true"  :text="'Привет, хорошо, спасибо!'" :date="'2024-10-20T10:20:30'" /> -->
-      <!-- <ChatFileItem :onShowContextMenu="onShowContextMenu"  :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-warning-500' }"/> -->
-      <!-- <ChatFileItem :onShowContextMenu="onShowContextMenu"  :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-warning-500' }"/> -->
-      <!-- <ChatFileItem type="owner" :onShowContextMenu="onShowContextMenu"  :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-white' }"/> -->
-      <!-- <ChatFileItem type="owner" :onShowContextMenu="onShowContextMenu"  :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-white' }"/> -->
-      <!-- <div class="h-[2px]">1</div> -->
-      <template v-for="item in chatStore.uploadingFiles" :key="item.id"> 
-        <ChatFileItem 
-          :info="item"
-          type="owner"
-          :onShowContextMenu="onShowContextMenu"
-          :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" 
-          :left-icon="{ name: FileTextBoldIcon, class: 'text-white' }"
-        />
-      </template>
-      <!-- file uploads progress -->
-      <div v-if="true" class="sticky bottom-0 flex flex-col gap-1 mt-auto">
-        <template  v-for="(file, index) in chatStore.uploadingFiles" :key="index">
-          <FileUploadProgress :progress="file.progress" :file="file" :index="index" />
+          <!-- owner chat -->
+          <template v-if="message?.sender?.id == authStore.currentUser?.id" >
+            <template v-if="false">
+              <ChatFileItem type="owner" :onShowContextMenu="onShowContextMenu"  :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-white' }"/> 
+            </template>
+            <template v-else>
+              <OwnerText 
+                :onShowContextMenu="onShowContextMenu" 
+                :onShowEmojiContextMenu="onShowEmojiContextMenu" 
+                :isReaded="message.is_read" 
+                :text="message.text" 
+                :date="message.created_date" 
+                :reactions="message?.reactions"
+                :index="index"
+              />          
+            </template>
+          </template>
+          <!-- friend chat -->
+          <template v-else>
+            <template v-if="false">
+              <ChatFileItem :onShowContextMenu="onShowContextMenu"  :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-white' }"/> 
+            </template>
+            <template v-else>
+              <FriendText 
+                :onShowContextMenu="onShowContextMenu" 
+                :avatarVisible="showFriendTextAvatar(index)" 
+                :isReaded="message.is_read" 
+                :text="message.text" 
+                :date="message.created_date" 
+                :user="message.sender"
+              />
+          </template>
         </template>
-      </div>
-      <!-- scroll down button -->
-      <div v-if="showScrollDownButton" class="sticky bottom-0 flex justify-end">
-        <ScrollDownButton @click="handleClickScrollDown"/>
+        </template>
+        <template v-for="item in chatStore.uploadingFiles" :key="item?.id"> 
+          <ChatFileItem 
+            :info="item"
+            type="owner"
+            :onShowContextMenu="onShowContextMenu"
+            :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" 
+            :left-icon="{ name: FileTextBoldIcon, class: 'text-white' }"
+          />
+        </template>
+        <!-- file uploads progress -->
+        <div v-if="true" class="sticky bottom-0 flex flex-col gap-1 mt-auto">
+          <template  v-for="(file, index) in chatStore.uploadingFiles" :key="index">
+            <FileUploadProgress :progress="file.progress" :file="file" :index="index" />
+          </template>
+        </div>
+        <!-- scroll down button -->
+        <div v-if="showScrollDownButton" class="sticky bottom-0 flex justify-end">
+          <ScrollDownButton @click="handleClickScrollDown"/>
+        </div>
+      
+      </template>
+      
+      <!-- not start yet chat  -->
+      <div v-else class="h-full">
+        <Empty 
+          title="you-dont-have-any-messages"
+          description="you-dont-have-any-messages-description"
+          label-classes="text-greyscale-900 !text-lg font-semibold"
+          wrapper-class="w-full h-full !bg-transparent shadow-none"
+          inner-wrapper-class="w-[335px]"
+        />
       </div>
     </template>
-     <!-- not start yet chat  -->
-    <div v-else class="h-full">
-      <Empty 
-        title="you-dont-have-any-messages"
-        description="you-dont-have-any-messages-description"
-        label-classes="text-greyscale-900 !text-lg font-semibold"
-        wrapper-class="w-full h-full !bg-transparent shadow-none"
-        inner-wrapper-class="w-[335px]"
-      />
-    </div>
   </div>
   <div class="px-6">
       <SendMessage ref="refSendMessage" />

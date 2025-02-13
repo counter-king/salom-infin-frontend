@@ -28,6 +28,9 @@ const props = defineProps({
   },
   footerClasses: {
     type: String
+  },
+  dismissableMask: {
+    type: Boolean,
   }
 })
 const emit = defineEmits(['update:modelValue', 'emit:after-hide'])
@@ -47,6 +50,7 @@ const rootClasses = computed(() => {
 <template>
   <Dialog
     v-model:visible="modelValue"
+    :dismissableMask="props.dismissableMask"
     modal
     :header="t(props.label)"
     :pt="{

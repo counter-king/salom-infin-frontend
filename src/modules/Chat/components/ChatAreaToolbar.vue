@@ -83,7 +83,7 @@ const onDeleteChat = async () => {
         <div class="relative">
           <base-avatar
             :label="isGroupDetail ? chatStore.selectedGroup?.title : chatStore.selectedUser?.first_name"
-            :color="isGroupDetail ? '#E2E8F0' : chatStore.selectedUser?.user?.color"
+            :color="isGroupDetail ? '#E2E8F0' : chatStore.selectedUser?.color"
             :image="isGroupDetail ? chatStore.selectedGroup?.image?.url : chatStore.selectedUser?.avatar?.url"
             avatar-classes="w-11 h-11"
             label-classes="text-lg font-semibold select-none text-greyscale-900"

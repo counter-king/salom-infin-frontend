@@ -17,6 +17,7 @@ const onContextMenuClick = (event) => {
 <template>
   <div 
     @contextmenu.prevent="onContextMenuClick"
-    class="w-fit py-[6px] px-3 border border-primary-300 bg-primary-50 rounded-[90px] text-sm text-greyscale-900 text-medium cursor-pointer select-none"
-   >{{ props.reaction?.stiker }}<span v-if="true" class="ml-1">{{ props.reaction?.users?.length }}</span></div>
+    class="min-w-[36px] py-[6px] px-3 border border-primary-300 bg-primary-50 rounded-[90px] text-sm text-greyscale-900 text-medium cursor-pointer select-none"
+   >{{ props.reaction?.value }}<span v-if="false" class="ml-1">2</span>
+  </div>
 </template>

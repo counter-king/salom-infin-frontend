@@ -14,22 +14,32 @@ export const useContextMenu = () => {
 // reactives
 const refContextMenu = ref(null);
 const handleClickStiker = (value, type)=> {
-  console.log(value, type);
-  
-  switch(type){
-   case 'fire':
-    return value 
-   case 'lough':
-    return value
-   case 'heart':
-    return value
-   case 'like':
-    return value
-   case 'angry':
-    return value
-   case 'love':
-    return value
+  let index = chatStore.contextMenu.tempData.index
+  if (index !== undefined && index !== null && chatStore.messageListByChatId[index]) {
+    const reactionIndex = chatStore.messageListByChatId[index].reactions.findIndex((item)=> item.type === type)
+    if(reactionIndex !== -1){
+      chatStore.messageListByChatId[index].reactions.splice(reactionIndex, 1);
+    } else{
+      chatStore.messageListByChatId[index].reactions.push({ type, value });
+    }
+  } else {
+    console.error("Index not found or invalid");
   }
+
+  // switch(type){
+  //  case 'fire':
+  //   return value 
+  //  case 'lough':
+  //   return value
+  //  case 'heart':
+  //   return value
+  //  case 'like':
+  //   return value
+  //  case 'angry':
+  //   return value
+  //  case 'love':
+  //   return value
+  // }
 }
 
 const menuItems = ref([
@@ -38,14 +48,14 @@ const menuItems = ref([
      action: (value, type)=>{
       handleClickStiker(value, type)
      },
-     command: (data) => {
+     command: () => {
      }  
    },
    { 
      label: 'answer',
      iconName: ForwardIcon,
      iconClass:"rotate-y-180 transform rotate-y-180", 
-     command: (data) => {
+     command: () => {
       chatStore.contextMenu = { data: chatStore.contextMenu.tempData, replay: true, edit: false }
      } 
    },

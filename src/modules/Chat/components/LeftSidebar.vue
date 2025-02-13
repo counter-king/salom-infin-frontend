@@ -58,13 +58,12 @@ const onCreateChat = async (user) => {
 }
 
 const onClickSearchedUser = (item) => {  
-  if(item.type == CHAT_TYPES.PRIVATE){
-    console.log("ishlamoqda", item)
+  if(item.type == CHAT_TYPES.PRIVATE && item.chat_id != route.params.id){
     router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: item.chat_id }})
     chatStore.selectedUser = item
     chatStore.userSearching = false;
     searchInput.value = null;
-  } else if(item.type == CHAT_TYPES.GROUP) {
+  } else if(item.type == CHAT_TYPES.GROUP && item.chat_id != route.params.id) {
     router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: item.chat_id }})
     chatStore.selectedGroup = item
     chatStore.userSearching = false;
@@ -73,15 +72,19 @@ const onClickSearchedUser = (item) => {
 }
 
 const onClickChatPrivateUser = (user) => {
-  router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: user.chat_id }})
-  chatStore.selectedUser = user
+  if(route.params.id != user.chat_id){
+    router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: user.chat_id }})
+    chatStore.selectedUser = user
+  }
 }
 
 const onClickChatGroup = (group) => {
-  router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: group.chat_id }})
-  chatStore.selectedGroup = group
-  chatStore.userSearching = false;
-  searchInput.value = null;
+  if(route.params.id != group.chat_id){    
+    router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: group.chat_id }})
+    chatStore.selectedGroup = group
+    chatStore.userSearching = false;
+    searchInput.value = null;
+  }
 }
 
 // hooks
@@ -204,7 +207,7 @@ onMounted(async () => {
                   <user-item
                     @click="onClickChatPrivateUser(item)"
                     :user="item" 
-                    :active="item.chat_id === chatStore.selectedUser?.chat_id"
+                    :active="item.chat_id == route.params.id"
                   />
                 </template>
               </template>
@@ -230,7 +233,7 @@ onMounted(async () => {
                   <group-item
                     @click="onClickChatGroup(group)"
                     :group="group"
-                    :active="group.chat_id === chatStore.selectedGroup?.chat_id"
+                    :active="group.chat_id == route.params.id"
                   />
                 </template>
               </template>

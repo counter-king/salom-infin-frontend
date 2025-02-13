@@ -13,7 +13,7 @@ import {
   fetchUsersSearchByMessage
 } from "@/modules/Chat/services";
 // constants  
-import { CHAT_TYPES } from "../constatns";
+import { CHAT_TYPES, collectionStikers } from "../constatns";
 import { useAuthStore } from "@/modules/Auth/stores";
 
 const authStore = useAuthStore();
@@ -27,11 +27,13 @@ export const useChatStore = defineStore("chat-stores", {
     userSearchListLoading: false,
     groupChatLoading: false,
     usersSearchByMessageListLoading: false,
+    groupChatByIdLoading: false,
+    privateChatByIdLoading: false,
+    messageListByChatIdLoading: false,
     selectedUser: null,
     selectedGroup: null,
     chatUserSearchList: [],
     usersSearchListByMessage: [],
-    messageListByChatIdLoading: false,
     messageListByChatId: [],
     privateChatList: [],
     userSearchList: [],
@@ -164,10 +166,10 @@ export const useChatStore = defineStore("chat-stores", {
       return {
         first_name: data?.title,
         full_name: data?.title,
-        position: data.members?.find((item) => item.id !== body.member_id)?.position?.name,
+        position: data.members?.find((item) => item.user?.id !== body.member_id)?.user?.position?.name,
         chat_id: data.id,
-        color: data.members?.find((item) => item.id !== body.member_id)?.color,
-        avatar: data.members?.find((item) => item.id !== body.member_id)?.avatar,
+        color: data.members?.find((item) => item.user?.id !== body.member_id)?.user?.color,
+        avatar: data.members?.find((item) => item.user?.id !== body.member_id)?.user?.avatar,
         last_message: data?.last_message?.text,
         last_message_date: data?.last_message?.created_date,
         last_message_type: data?.last_message?.type,
@@ -177,14 +179,16 @@ export const useChatStore = defineStore("chat-stores", {
     },
     /** */
     async actionGetPrivateChatById(id) {
+      this.privateChatByIdLoading = true;
       const { data } = await fetchGetPrivateChatById(id);
+      this.privateChatByIdLoading = false;      
       return {
         first_name: data?.title,
         full_name: data?.title,
-        position: data.members?.find((item) => item.id !== authStore.currentUser.id)?.position?.name,
+        position: data.members?.find((item) => item.user?.id !== authStore.currentUser.id)?.user?.position?.name,
         chat_id: data.id,
-        color: data.members?.find((item) => item.id !== authStore.currentUser.id)?.color,
-        avatar: data.members?.find((item) => item.id !== authStore.currentUser.id)?.avatar,
+        color: data.members?.find((item) => item.user?.id !== authStore.currentUser.id)?.user?.color,
+        avatar: data.members?.find((item) => item.user?.id !== authStore.currentUser.id)?.user?.avatar,
         last_message: data?.last_message?.text,
         last_message_date: data?.last_message?.created_date,
         last_message_type: data?.last_message?.type,
@@ -199,10 +203,11 @@ export const useChatStore = defineStore("chat-stores", {
       const response = await fetchGetGroupChatList(body);
       if (response){
         this.groupChatList = response.data.results?.map((item) => ({
+          last_message: item.last_message,
           title: item.title,
-          image: item.images,
+          image: item.images[0]?.image,
           chat_id: item.id,
-          last_message: item.last_message?.message_text,
+          members: item?.members || [],
           last_message_time: item.last_message?.created_date,
           last_message_type: item.last_message?.type,
           type: item.type,
@@ -216,23 +221,42 @@ export const useChatStore = defineStore("chat-stores", {
     /** */
     /** */
     async actionGetGroupChatById(id) {
-      const { data } = await fetchGetGroupChatById(id);      
-      return {
-        title: data?.title,
-        image: data.images,
-        chat_id: data.id,
-        last_message: data?.last_message?.message_text,
-        last_message_time: data?.last_message?.created_date,
-        last_message_type: data?.last_message?.type,
-        type: data.type,
-        unread_count: data.unread_count
+      this.groupChatByIdLoading = true;
+      const { data } = await fetchGetGroupChatById(id);
+      this.groupChatByIdLoading = false;
+      if(data){
+        return {
+          title: data?.title,
+          image: data.images[0]?.image,
+          chat_id: data.id,
+          members: data?.members || [],
+          last_message: data?.last_message?.message_text,
+          last_message_time: data?.last_message?.created_date,
+          last_message_type: data?.last_message?.type,
+          type: data.type,
+          unread_count: data.unread_count
+        }
       }
     },
     /** */
     /** */
     async actionGetMessageListByChatId(id) {
+      this.messageListByChatIdLoading = true;
       const { data } = await fetchGetMessagesByChatId({chat:id});
-      this.messageListByChatId = data?.results
+      this.messageListByChatIdLoading = false;
+      this.messageListByChatId = data?.results?.map((item) => ({
+        attachments: item.attachments || [],
+        chat_id: item.chat,
+        created_date: item.created_date,
+        edited: item.edited,
+        message_id: item.id,
+        modified_date: item.modified_date,
+        replied_to: item.replied_to,
+        sender: item.sender,
+        text: item.text,
+        message_type: item.type,
+        reactions: [{type: 'fire', value:"🔥"}],
+      }));
     },
     /** */
   }

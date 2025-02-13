@@ -9,11 +9,14 @@ import { ChatAreWrapper, LeftSidebar, RightSidebar } from "@/modules/Chat/compon
 import { socket } from "@/services/socket";
 // contants
 import { CHAT_ROUTE_NAMES, CHAT_TYPES, WEBCOCKET_EVENTS } from "../constatns";
+// store
+import { useChatStore } from "../stores";
 // css
 import 'vue3-emoji-picker/css'
 
 const { t } = useI18n();
 const route = useRoute();
+const chatStore = useChatStore();
 const allowedPages = ['ChatPrivateDetail','ChatGroupDetail']
 const { status, data, send } = socket
 // reactives
@@ -29,11 +32,6 @@ const sendChatHandshake = (id, chat_type)=> {
   console.log("run");
   
   const payload = { command: 'chat_handshake', chat_type, chat_id: id }
-  send(JSON.stringify(payload))
-}
-
-const sendNewMessageEvent = ()=> {
-  const payload = { command: 'new_message', chat_type: CHAT_TYPES.PRIVATE, chat_id: route.params.id, text:"yaxshi ishladi", message_type:"text" } 
   send(JSON.stringify(payload))
 }
 
@@ -53,7 +51,39 @@ watch(data, (newData) => {
     console.log("chat hand",newData);
   }
   else if(newData.type == WEBCOCKET_EVENTS.NEW_MESSAGE) {
-    console.log("new message", newData);
+    if(newData.chat_type == CHAT_TYPES.PRIVATE){
+      chatStore.messageListByChatId.push({
+        attachments: newData.attachments || [],
+        chat_id: newData.chat_id,
+        created_date: newData.created_date,
+        edited: newData.edited,
+        message_id: newData.id,
+        modified_date: newData.modified_date,
+        replied_to: newData.replied_to,
+        sender: newData.sender,
+        text: newData.text,
+        message_type: newData.message_type,
+        chat_type: newData.chat_type
+      })
+      // set last message to privatelist chat
+      chatStore.privateChatList.find(item=> item.chat_id == newData.chat_id).last_message = newData.text
+    } else {
+      chatStore.messageListByChatId.push({
+        attachments: newData.attachments || [],
+        chat_id: newData.chat_id,
+        created_date: newData.created_date,
+        edited: newData.edited,
+        message_id: newData.id,
+        modified_date: newData.modified_date,
+        replied_to: newData.replied_to,
+        sender: newData.sender,
+        text: newData.text,
+        message_type: newData.message_type,
+        chat_type: newData.chat_type
+      })
+      // set last message to grouplist chat
+      chatStore.groupChatList.find(item=> item.chat_id == newData.chat_id).last_message = newData
+    }
   }
 });
 

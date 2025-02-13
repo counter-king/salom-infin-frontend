@@ -31,6 +31,9 @@ const props = defineProps({
   },
   onShowEmojiContextMenu: {
     type: Function
+  },
+  index: {
+    type: Number
   }
 })
 // reactives
@@ -51,7 +54,7 @@ const refContextMenu = ref(null);
 // ]);
 
 const onContextMenuClick = (event) => {
-  props.onShowContextMenu(event, { text: props.text})
+  props.onShowContextMenu(event, { text: props.text, index: props.index })
 };
 
 const onEmojiContextMenuClick = (event) => {
@@ -62,28 +65,28 @@ const onEmojiContextMenuClick = (event) => {
 <template>
   <div class="flex flex-col gap-2 items-end">
     <div class="flex gap-3 justify-end items-end relative">
-    <div v-if="true" class="flex items-center justify-end text-critic-500 gap-[6px]">
-      <span class="text-xs font-medium">{{ t('error') }}</span>
-      <base-iconify
-        :icon="DangerCircleIcon"
-        class="!w-5 !h-5"
-      />
-    </div>
-    <div v-else class="flex gap-1 items-end">
-      <span class="text-xs font-medium text-greyscale-500">{{ formatHour(props.date) }}</span>
-      <base-iconify
-        :icon="props.isReaded ? CheckReadIcon : CheckBigIcon"
-        class="!w-5 !h-5 !text-success-500"
-      />
-    </div> 
+      <!-- error text -->
+      <div v-if="false" class="flex items-center justify-end text-critic-500 gap-[6px]">
+        <span class="text-xs font-medium">{{ t('error') }}</span>
+        <base-iconify
+          :icon="DangerCircleIcon"
+          class="!w-5 !h-5"
+        />
+      </div>
+      <div v-else class="flex gap-1 items-end">
+        <span class="text-xs font-medium text-greyscale-500">{{ formatHour(props.date) }}</span>
+        <base-iconify
+          :icon="props.isReaded ? CheckReadIcon : CheckBigIcon"
+          class="!w-5 !h-5 !text-success-500"
+        />
+      </div>
       <p @contextmenu.prevent="onContextMenuClick" class="text-sm font-medium text-white bg-primary-400 rounded-xl rounded-br-[4px] px-4 py-2" >{{ props.text }}</p>
     </div>
-    <div class="flex gap-1">
+    <!-- reactions -->
+    <div v-if="!!props.reactions?.length" class="flex gap-1">
       <template v-for="reaction in props.reactions">
         <ClickedStiker :onContextMenuClick="onEmojiContextMenuClick" :reaction="reaction" />
       </template>
-      <ClickedStiker :onContextMenuClick="onEmojiContextMenuClick" :reaction="reaction" />
-      <ClickedStiker :onContextMenuClick="onEmojiContextMenuClick" :reaction="reaction" />
     </div>
   </div>
   <!-- reaction menu -->

@@ -38,6 +38,7 @@ const handleClickCalendar = (date) => {
     <div class="w-[72px] bg-greyscale-200 h-[1px]"></div>
   </div>
   <base-dialog
+   :dismissable-mask="true"
    v-model="showDialog"
    max-width="max-w-[354px]" 
    header-classes="hidden"

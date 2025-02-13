@@ -33,11 +33,11 @@ const isSimleStikerHovered = ref(false);
 // methods
 const sendNewMessageEvent = (data)=> {
   if(route.name == CHAT_ROUTE_NAMES.PRIVATE){
-    const payload = { command: 'new_message', chat_type: CHAT_TYPES.PRIVATE, chat_id: route.params.id, text: data.text, message_type: data.message_type } 
+    const payload = { command: 'new_message', chat_type: CHAT_TYPES.PRIVATE, chat_id: route.params.id, text: data?.text, message_type: data.message_type } 
     send(JSON.stringify(payload))
   }
   else{
-    const payload = { command: 'new_message', chat_type: CHAT_TYPES.GROUP, chat_id: route.params.id, text: data.text, message_type: data.message_type }
+    const payload = { command: 'new_message', chat_type: CHAT_TYPES.GROUP, chat_id: route.params.id, text: data?.text, message_type: data.message_type }
     send(JSON.stringify(payload))
   }
 }
@@ -47,6 +47,7 @@ const handleSendMessage = () => {
   sendNewMessageEvent({text: message.value, message_type: MESSAGE_TYPES.TEXT})
  }
  message.value = '';
+ chatStore.contextMenu = {}
 }
 
 // when emoji selected
@@ -74,6 +75,12 @@ watch(message, (val) => {
  }
 })
 
+watch(() => chatStore.contextMenu?.data?.text, (val) => {
+    if(chatStore.contextMenu?.edit){
+      message.value = chatStore.contextMenu?.data?.text
+    }
+})
+
 defineExpose({
   refInput
 })
@@ -98,7 +105,9 @@ onMounted(() => {
         :icon="chatStore.contextMenu?.edit ? PenIcon : ForwardIcon"
         class="!h-4 !w-4 rotate-y-180 text-primary-500"
       />
-      <p class="text-xs h-[16px] font-medium text-primary-500 pl-2 border-l-[2px] border-warning-500 line-clamp-1">{{ chatStore.contextMenu?.data?.text }}</p>
+      <p class="text-xs h-[16px] font-medium text-primary-500 pl-2 border-l-[2px] border-warning-500 line-clamp-1">
+        {{ chatStore.contextMenu?.data?.text }}
+      </p>
     </div>
     <div class="p-1 cursor-pointer">
       <base-iconify 

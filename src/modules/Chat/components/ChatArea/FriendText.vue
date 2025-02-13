@@ -18,6 +18,9 @@ const props = defineProps({
   },
   onShowContextMenu: {
     type: Function
+  },
+  user: {
+    type: Object
   }
 })
 </script>
@@ -26,12 +29,12 @@ const props = defineProps({
   <div class="">
     <div class="flex gap-2 select-none">
       <base-avatar 
-        :avatar="props.avatar"
-        label="Kirgizboev"
-        color="#E2E8F0"
+        :image="props.user?.avatar?.url"
+        :label="props.user?.first_name"
+        :color="props.user?.color"
         shape="circle"
         avatar-classes="w-8 h-8"
-        :class="{'invisible': props.avatarVisible}"
+        :class="{'!visible': props.avatarVisible, '!invisible': !props.avatarVisible}"
       />
       <div 
         @contextmenu.prevent="onShowContextMenu($event, { text: props.text})"
@@ -39,16 +42,15 @@ const props = defineProps({
          :class="[{'!rounded-2xl !rounded-tl-[4px]': props.avatarVisible}]"
         >
         <div 
-          v-if="true"
+          v-if="false"
           class="flex flex-col gap-1 pl-2 border-l-[2px] border-warning-500"
           >
           <span class="text-xs font-semibold text-warning-500">Абдуллаев Рустам</span>
           <span class="text-xs font-medium text-greyscale-500">Привет, хорошо, спасибо!</span>
         </div>
-        <p 
-          class="text-sm font-medium text-greyscale-900"
-        >
-          {{ props.text }}</p>
+        <p class="text-sm font-medium text-greyscale-900">
+          {{ props.text }}
+        </p>
       </div>
       <p class="text-xs font-medium text-greyscale-500 self-end">{{ formatHour(props.date) }}</p>
     </div>
