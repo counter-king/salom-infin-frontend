@@ -26,6 +26,8 @@ export const MESSAGE_TYPES = {
   AUDIO: "audio",
   FILE: "file",
 }
+
+
 export const fileTypes = {
   image: GalleryIcon,
   video: ClapperboardPlayLinearIcon,

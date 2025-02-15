@@ -8,7 +8,7 @@ import BaseBrickTab from "@/components/UI/BaseBrickTab.vue";
 import GroupItem from "@/modules/Chat/components/GroupItem.vue";
 import UserItem from "@/modules/Chat/components/UserItem.vue";
 import UserItemSearch from "@/modules/Chat/components/UserItemSearch.vue";
-import CreateGroupDialog from "./CreateGroupDialog.vue";
+import CreateEditGroupDialog from "./CreateEditGroupDialog.vue";
 // icons
 import { MagniferIcon, Plus20SolidIcon, UserRoundedBoldIcon, UsersGroupTwoRoundedBoldIcon } from '@/components/Icons'
 // store
@@ -18,7 +18,6 @@ import { useChatStore } from "@/modules/Chat/stores";
 import { CHAT_ROUTE_NAMES, CHAT_TYPES } from "../constatns";
 
 const { t } = useI18n();
-const authStore = useAuthStore();
 const chatStore = useChatStore();
 const router = useRouter();
 const route = useRoute();
@@ -242,7 +241,7 @@ onMounted(async () => {
         </template>
       </base-brick-tab>
     </template>
-    <create-group-dialog v-model="createGroupDialogVisible" type="create"/>
+    <create-edit-group-dialog v-model="createGroupDialogVisible" type="create"/>
   </div>
 
 </template>

@@ -7,7 +7,8 @@ const props = defineProps({
    type: Object,
    default: () => ({
     name: '',
-    size: ''
+    size: '',
+    uploaded: false
    })
   },
   rightIcon: {

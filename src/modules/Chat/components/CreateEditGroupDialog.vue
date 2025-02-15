@@ -1,6 +1,6 @@
 <script setup>
 // core 
-import { computed, reactive, ref, useModel } from 'vue';
+import { computed, onMounted, reactive, ref, useModel } from 'vue';
 import { helpers, required } from '@vuelidate/validators';
 import useVuelidate from '@vuelidate/core';
 // components
@@ -17,7 +17,6 @@ import axiosConfig from '@/services/axios.config';
 import { fetchCreateGroupChat, fetchEditGroupChat } from '../services';
 // store
 import { useChatStore } from '../stores';
-
 // props
 const props = defineProps({
  modelValue: {
@@ -42,10 +41,10 @@ const chatStore = useChatStore();
 const refContextMenu = ref(null);
 const refFileInput = ref(null);
 const deleteDialog = ref(false);
-const uploadingFiles = ref(chatStore.selectedGroup?.image ? [chatStore.selectedGroup?.image] : []);
+const uploadingFiles = ref([]);
 const formModal = reactive({
-  group_name: chatStore.selectedGroup?.title || "",
-  users: chatStore.selectedGroup?.members?.map(member => member.user) || [],
+  group_name: "",
+  users: [],
 })
 
 // rules
@@ -69,9 +68,13 @@ const onSubmit = async () => {
   if(!isValid) return;
   if(props.type === 'create') {
     fetchCreateGroupChat({images:[{image: uploadingFiles.value[0]?.id}], title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
+    chatStore.actionGetGroupChatList();
   } else if(props.type === 'edit') {
     fetchEditGroupChat(chatStore.selectedGroup?.id, {images:[{image: uploadingFiles.value[0]?.id}], title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
   }
+  uploadingFiles.value = [];
+  formModal.group_name = null;
+  formModal.users = [];
   emit('update:modelValue', false);
 }
 
@@ -82,11 +85,8 @@ const resetForm = () => {
 }
 
 const onShowContextMenu = (event) => {
-  console.log(event,refContextMenu.value);
   if (refContextMenu.value && refContextMenu.value.menu) {    
     refContextMenu.value.menu.show(event);
-  } else {
-    console.error("ContextMenu yoki menu topilmadi.");
   }
 }
 
@@ -150,6 +150,13 @@ const onDeleteAvatar = () => {
   deleteDialog.value = false
 }
 
+onMounted(() => {
+  if(props.type === 'edit') {
+    formModal.group_name = chatStore.selectedGroup?.title
+    formModal.users = chatStore.selectedGroup?.members?.map(member => member.user) || []
+    uploadingFiles.value = chatStore.selectedGroup?.image ? [chatStore.selectedGroup?.image] : []
+  }
+})
 </script>
 <template>
   <base-dialog

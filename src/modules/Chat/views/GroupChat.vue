@@ -13,8 +13,6 @@ import DeleteDialog from '../components/DeleteDialog.vue';
 // services 
 import FileUploadProgress from '../components/ChatArea/FileUploadProgress.vue';
 import ContextMenu from '../components/ChatArea/ContextMenu.vue';
-import { useContextMenu } from '../composables/useContextMenu';
-import { useFileUploadDrop } from '../composables/useFileUploadDrop';  
 import ChatFileItem from '../components/ChatArea/ChatFileItem.vue';
 import { DownloadMinimalisticIcon, FileTextBoldIcon } from '@/components/Icons';
 import Empty from '@/components/Empty.vue';
@@ -22,8 +20,11 @@ import Empty from '@/components/Empty.vue';
 import { useChatStore } from '../stores';
 import { useAuthStore } from '@/modules/Auth/stores';
 import { formatDay } from '@/utils/formatDate';
-import { CHAT_ROUTE_NAMES } from '../constatns';
-
+// composables
+import { useContextMenu } from '../composables/useContextMenu';
+import { useFileUploadDrop } from '../composables/useFileUploadDrop';  
+// constatns
+import { CHAT_ROUTE_NAMES, MESSAGE_TYPES } from '../constatns';
 // composables
 const { menuItems, refContextMenu } = useContextMenu();
 const { onDragOver, onDragLeave, onDrop } = useFileUploadDrop();
@@ -37,7 +38,6 @@ const showScrollDownButton = ref(false);
 const refChatArea = ref(null);
 const refSendMessage = ref(null);
 const refEmojiContextMenu = ref(null);
-const messageCreatedDate = ref(null);
 
 // methods
 // when scroll down, scrollDwonButton will be visible
@@ -100,7 +100,7 @@ const showDateByCalculate = (index) => {
 }
 
 const showFriendTextAvatar = (index) => {
-  // Joriy xabar va oldingi xabarni olish
+  // hozirgi xabar va oldingi xabarni olish
   const nowMessage = chatStore.messageListByChatId[index]
   const perviousMessage = chatStore.messageListByChatId[index - 1]
   
@@ -117,7 +117,7 @@ watch(
   () => route.params?.id,
   async (newId, oldId) => {
     if (newId !== oldId && route.name === CHAT_ROUTE_NAMES.GROUP) {
-      await chatStore.actionGetMessageListByChatId(newId);
+      await chatStore.actionGetMessageListByChatId({chat:newId}, true);
       chatStore.selectedGroup = await chatStore.actionGetGroupChatById(newId);
     }
   }
@@ -125,7 +125,7 @@ watch(
 
 onMounted(async () => {
   chatStore.selectedGroup = await chatStore.actionGetGroupChatById(route.params?.id);
-  await chatStore.actionGetMessageListByChatId(route.params?.id);
+  await chatStore.actionGetMessageListByChatId({chat:route.params?.id}, true);
 })
 
 </script>
@@ -152,7 +152,7 @@ onMounted(async () => {
           </template>
           <!-- owner chat -->
           <template v-if="message?.sender?.id == authStore.currentUser?.id" >
-            <template v-if="false">
+            <template v-if="message.message_type != MESSAGE_TYPES.TEXT">
               <ChatFileItem type="owner" :onShowContextMenu="onShowContextMenu"  :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-white' }"/> 
             </template>
             <template v-else>
@@ -167,7 +167,7 @@ onMounted(async () => {
           </template>
           <!-- friend chat -->
           <template v-else>
-            <template v-if="false">
+            <template v-if="message.message_type != MESSAGE_TYPES.TEXT">
               <ChatFileItem :onShowContextMenu="onShowContextMenu"  :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-white' }"/> 
             </template>
             <template v-else>

@@ -1,11 +1,11 @@
 <script setup>
-// Core
+// core
 import { useI18n } from "vue-i18n";
 import { computed, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
-// Components
+// components
 import { ChatAreWrapper, LeftSidebar, RightSidebar } from "@/modules/Chat/components";
-// Socket
+// socket
 import { socket } from "@/services/socket";
 // contants
 import { CHAT_ROUTE_NAMES, CHAT_TYPES, WEBCOCKET_EVENTS } from "../constatns";
@@ -29,8 +29,6 @@ const sendUserHandshake = ()=> {
 }
 
 const sendChatHandshake = (id, chat_type)=> {
-  console.log("run");
-  
   const payload = { command: 'chat_handshake', chat_type, chat_id: id }
   send(JSON.stringify(payload))
 }
@@ -42,6 +40,8 @@ watch(status, (newStatus) => {
 
 // Kelgan ma'lumotlarni kuzatish
 watch(data, (newData) => {
+  console.log("ewasd",newData);
+  
   newData = JSON.parse(newData);
   
   if(newData.command == WEBCOCKET_EVENTS.USER_HANDSHAKE) {
@@ -51,6 +51,8 @@ watch(data, (newData) => {
     console.log("chat hand",newData);
   }
   else if(newData.type == WEBCOCKET_EVENTS.NEW_MESSAGE) {
+    console.log("new_message",newData);
+    
     if(newData.chat_type == CHAT_TYPES.PRIVATE){
       chatStore.messageListByChatId.push({
         attachments: newData.attachments || [],

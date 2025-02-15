@@ -7,9 +7,7 @@ import { useChatStore } from '../stores';
 const chatStore = useChatStore()
 
 const onClickChatPrivateUser = (user) => {
-
 }
-
 </script>
 <template>
  <div class="px-6 overflow-y-auto"  style="height: calc(100vh - 540px)">

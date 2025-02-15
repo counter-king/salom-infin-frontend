@@ -15,7 +15,6 @@ const props = defineProps({
   }
 })
 </script>
-
 <template>
   <div
      class="flex px-4 py-[14px] hover:bg-greyscale-50  w-full rounded-xl cursor-pointer relative"

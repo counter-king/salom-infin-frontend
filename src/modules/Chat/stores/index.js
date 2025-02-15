@@ -30,6 +30,7 @@ export const useChatStore = defineStore("chat-stores", {
     groupChatByIdLoading: false,
     privateChatByIdLoading: false,
     messageListByChatIdLoading: false,
+    messageListByChatIdAddMoreLoading: false,
     selectedUser: null,
     selectedGroup: null,
     chatUserSearchList: [],
@@ -240,11 +241,14 @@ export const useChatStore = defineStore("chat-stores", {
     },
     /** */
     /** */
-    async actionGetMessageListByChatId(id) {
-      this.messageListByChatIdLoading = true;
-      const { data } = await fetchGetMessagesByChatId({chat:id});
-      this.messageListByChatIdLoading = false;
-      this.messageListByChatId = data?.results?.map((item) => ({
+    async actionGetMessageListByChatId(params, resetList = true) {
+      if(resetList){
+        this.messageListByChatIdLoading = true;
+      } else {
+        this.messageListByChatIdAddMoreLoading = true;
+      }
+      const { data } = await fetchGetMessagesByChatId(params);
+      const messageList = data?.results?.reverse()?.map((item) => ({
         attachments: item.attachments || [],
         chat_id: item.chat,
         created_date: item.created_date,
@@ -257,6 +261,13 @@ export const useChatStore = defineStore("chat-stores", {
         message_type: item.type,
         reactions: [{type: 'fire', value:"🔥"}],
       }));
+      if(resetList){
+        this.messageListByChatId = messageList;
+        this.messageListByChatIdLoading = false;
+      } else {
+        this.messageListByChatIdAddMoreLoading = false;
+        this.messageListByChatId = [...messageList, ...this.messageListByChatId]
+      }
     },
     /** */
   }

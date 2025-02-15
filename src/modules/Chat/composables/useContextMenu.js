@@ -10,6 +10,7 @@ import { dispatchNotify } from "@/utils/notify";
 import { COLOR_TYPES } from "@/enums";
 
 const chatStore = useChatStore()
+
 export const useContextMenu = () => {
 // reactives
 const refContextMenu = ref(null);
@@ -25,21 +26,6 @@ const handleClickStiker = (value, type)=> {
   } else {
     console.error("Index not found or invalid");
   }
-
-  // switch(type){
-  //  case 'fire':
-  //   return value 
-  //  case 'lough':
-  //   return value
-  //  case 'heart':
-  //   return value
-  //  case 'like':
-  //   return value
-  //  case 'angry':
-  //   return value
-  //  case 'love':
-  //   return value
-  // }
 }
 
 const menuItems = ref([

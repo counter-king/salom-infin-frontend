@@ -13,18 +13,20 @@ import DeleteDialog from '../components/DeleteDialog.vue';
 // services 
 import FileUploadProgress from '../components/ChatArea/FileUploadProgress.vue';
 import ContextMenu from '../components/ChatArea/ContextMenu.vue';
-import { useContextMenu } from '../composables/useContextMenu';
-import { useFileUploadDrop } from '../composables/useFileUploadDrop';  
 import ChatFileItem from '../components/ChatArea/ChatFileItem.vue';
 import { DownloadMinimalisticIcon, FileTextBoldIcon } from '@/components/Icons';
 import Empty from '@/components/Empty.vue';
+// contants
+import { CHAT_ROUTE_NAMES, MESSAGE_TYPES } from '../constatns';
+// utils
+import { formatDay } from '@/utils/formatDate';
 // stores
 import { useChatStore } from '../stores';
 import { useAuthStore } from '@/modules/Auth/stores';
-import { formatDay } from '@/utils/formatDate';
-import { CHAT_ROUTE_NAMES } from '../constatns';
-
 // composables
+import { useContextMenu } from '../composables/useContextMenu';
+import { useFileUploadDrop } from '../composables/useFileUploadDrop';  
+
 const { menuItems, refContextMenu } = useContextMenu();
 const { onDragOver, onDragLeave, onDrop } = useFileUploadDrop();
 
@@ -37,8 +39,6 @@ const showScrollDownButton = ref(false);
 const refChatArea = ref(null);
 const refSendMessage = ref(null);
 const refEmojiContextMenu = ref(null);
-const messageCreatedDate = ref(null);
-const friendTextMessageIndex = ref(null);
 
 // methods
 // when scroll down, scrollDwonButton will be visible
@@ -47,6 +47,12 @@ const handleScroll = (event) => {
     showScrollDownButton.value = true
   } else{
     showScrollDownButton.value = false
+  }
+}
+
+const handleScrollReachUp = (event) => {
+  if(event.target.scrollTop == 0){
+    chatStore.actionGetMessageListByChatId({chat:route.params?.id}, false);
   }
 }
 
@@ -121,7 +127,7 @@ watch(
   () => route.params?.id,
   async (newId, oldId) => {
     if (newId !== oldId && route.name === CHAT_ROUTE_NAMES.PRIVATE) {
-      chatStore.actionGetMessageListByChatId(newId);
+      chatStore.actionGetMessageListByChatId({chat:newId}, true);
       chatStore.selectedUser = await chatStore.actionGetPrivateChatById(newId);
     }
   }
@@ -129,7 +135,7 @@ watch(
 
 onMounted(async () => {
   chatStore.selectedUser = await chatStore.actionGetPrivateChatById(route.params?.id);
-  await chatStore.actionGetMessageListByChatId(route.params?.id);
+  await chatStore.actionGetMessageListByChatId({ chat:route.params?.id }, true);
 })
 
 </script>
@@ -138,7 +144,7 @@ onMounted(async () => {
  <div class="h-full relative">
   <div
     ref="refChatArea" class="flex flex-col gap-2 px-6 py-4 overflow-y-auto relative"
-    @scroll="handleScroll"
+    @scroll="(e)=>{handleScroll(e); handleScrollReachUp(e)}"
     :style="`height: calc(100% - ${chatStore.contextMenu.edit || chatStore.contextMenu.replay ? '170px' : '135px'})`" 
     @click="onClickChatArea"
     @dragover.prevent="onDragOver"
@@ -156,7 +162,7 @@ onMounted(async () => {
           </template>
           <!-- owner chat -->
           <template v-if="message?.sender?.id == authStore.currentUser?.id" >
-            <template v-if="false">
+            <template v-if="message.message_type != MESSAGE_TYPES.TEXT">
               <ChatFileItem type="owner" :onShowContextMenu="onShowContextMenu"  :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-white' }"/> 
             </template>
             <template v-else>
@@ -207,7 +213,6 @@ onMounted(async () => {
         <div v-if="showScrollDownButton" class="sticky bottom-0 flex justify-end">
           <ScrollDownButton @click="handleClickScrollDown"/>
         </div>
-      
       </template>
       
       <!-- not start yet chat  -->

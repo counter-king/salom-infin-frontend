@@ -1,14 +1,12 @@
 <script setup>
 // cores
 import { useI18n } from 'vue-i18n';
-import { ref } from 'vue';
 // componennts
 import { CheckBigIcon, CheckReadIcon, DangerCircleIcon } from '@/components/Icons';
 import BaseIconify from '@/components/UI/BaseIconify.vue';
 import ClickedStiker from './ClickedStiker.vue';
 // utils
 import { formatHour } from '@/utils/formatDate';
-import ContextMenu from './ContextMenu.vue';
 
 const { t } = useI18n(); 
 // props
@@ -36,22 +34,6 @@ const props = defineProps({
     type: Number
   }
 })
-// reactives
-const refContextMenu = ref(null);
-// const emojiMenuItems = ref([
-//    { 
-//      label: 'select-image',
-//      iconName: true,
-//      command: () => {
-//      } 
-//    },
-//    { 
-//      label: 'delete',
-//      iconName: true,
-//      command: () => {
-//      },
-//    }
-// ]);
 
 const onContextMenuClick = (event) => {
   props.onShowContextMenu(event, { text: props.text, index: props.index })
@@ -89,19 +71,6 @@ const onEmojiContextMenuClick = (event) => {
       </template>
     </div>
   </div>
-  <!-- reaction menu -->
-  <!-- <ContextMenu ref="refContextMenu" :menu-items="emojiMenuItems" class-menu="w-[229px]">
-   <template  #default="{ item }">
-     <base-avatar
-       label="Doclines Project"
-       color="#E2E8F0"
-       shape="circle"
-       avatar-classes="w-6 h-6"
-       label-classes="text-lg font-semibold text-greyscale-900"
-     />
-     <span class="text-xs font-medium">{{ item.label }}</span>
-   </template>
-  </ContextMenu> -->
 </template>
 <style scoped>
 .dropdown-menu {
