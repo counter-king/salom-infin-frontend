@@ -51,7 +51,9 @@ const updateDocument = async () => {
 <template>
   <div class="control-show-view h-full">
     <template v-if="loading">
-      <base-spinner />
+      <div class="min-h-[calc(100vh-300px)] flex items-center">
+        <base-spinner />
+      </div>
     </template>
 
     <template v-else>

@@ -90,7 +90,7 @@ const orderRegisteredDate = computed(() => {
   return BTStore.detailModel?.compose?.find(item => item.doc_type === docType.value)?.register_date
 })
 const curatorFullName = computed(() => {
-  return BTStore.detailModel?.compose[0].curator
+  return BTStore.detailModel?.compose && BTStore.detailModel?.compose[0]?.curator
 })
 
 // Methods

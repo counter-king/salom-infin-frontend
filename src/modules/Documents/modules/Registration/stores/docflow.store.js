@@ -17,6 +17,7 @@ import {
 import { clearModel, setValuesToKeys } from '@/utils'
 import { dispatchNotify } from '@/utils/notify'
 import { COLOR_TYPES, JOURNAL, JOURNAL_CODES } from '@/enums'
+import { useBlobFileStore } from "@/stores/file.store";
 export const useDocFlowStore = defineStore("docFlowStore", {
   state: () => ({
     routes: {
@@ -334,7 +335,19 @@ export const useDocFlowStore = defineStore("docFlowStore", {
       }
       // Если есть файлы
       if(data.files && data.files.length) {
-        this.detailModel.__files = data.files.map(file => file.file)
+        this.detailModel.__files = await Promise.all(
+          data.files.map(async item => {
+            if (!item.file.url) {
+              const blobFile = await useBlobFileStore().actionGetBlobFile(item?.file?.id)
+              return {
+                ...item.file,
+                ...blobFile
+              }
+            } else {
+              return item.file
+            }
+          })
+        )
       }
 
       // Добавляем запрос в коллекцию

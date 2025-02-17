@@ -6,6 +6,7 @@ import {
   fetchGetDocumentDetail,
   fetchGetDocumentList, fetchGetLinkedDocumentsList, fetchVersionHistory
 } from "@/modules/Documents/modules/SendDocuments/services/index.service"
+import { fetchBlobFile } from "@/services/file.service"
 // Utils
 import { withAsync } from "@/utils/withAsync"
 import { dispatchNotify } from "@/utils/notify"
@@ -642,6 +643,17 @@ export const useSDStore = defineStore("sd-stores", {
           this.tree = data
         }
         await this.actionVersionHistory(id)
+        // let files = []
+        // if (response.data.files.length) {
+        //   for (const file of response.data.files) {
+        //     const blobFile = await fetchBlobFile(file.id)
+        //     files.push({
+        //       ...file,
+        //       ...blobFile
+        //     })
+        //   }
+        // }
+
         this.detailModel = {
           ...response.data,
           decree_content: res?.data?.to_composes[0]?.from_compose?.content,

@@ -4,6 +4,7 @@ import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import TabView from 'primevue/tabview'
 import TabPanel from 'primevue/tabpanel'
+import { saveAs } from 'file-saver'
 // Components
 import { DownloadMinimalisticIcon, EyeIcon } from '@/components/Icons'
 import { FilePreview } from '@/components/Files'
@@ -75,6 +76,12 @@ const zoomFile = (event, pane) => {
   event.stopImmediatePropagation()
   zoomDialog.value = true
   currentFile.value = pane
+}
+const download = (event, data) => {
+  event.stopImmediatePropagation()
+  data.url ?
+    saveAs(data.url, data.url.name) :
+    saveAs(data.blobUrl, data.name)
 }
 </script>
 
@@ -193,6 +200,7 @@ const zoomFile = (event, pane) => {
                     autoHide: false
                   }"
                   class="group flex items-center justify-center w-6 h-6 rounded-[6px] bg-greyscale-50"
+                  @click="download($event, pane)"
                 >
                   <base-iconify :icon="DownloadMinimalisticIcon" class="!w-4 !h-4 text-greyscale-500 group-hover:text-primary-500" />
                 </button>

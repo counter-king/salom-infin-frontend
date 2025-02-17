@@ -97,7 +97,9 @@ onMounted( async () => {
 
 <template>
   <template v-if="signStore.detailLoading">
-    <base-spinner />
+    <div class="min-h-[calc(100vh-300px)] flex items-center">
+      <base-spinner />
+    </div>
   </template>
 
   <template v-else>

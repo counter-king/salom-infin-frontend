@@ -1,17 +1,19 @@
 <script setup>
 // Core
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { saveAs } from  'file-saver'
+import { saveAs } from 'file-saver'
+// Store
+import { useBlobFileStore } from "@/stores/file.store"
 // Components
-import { FileTextBoldIcon, DownloadMinimalisticIcon, EyeIcon } from '@/components/Icons'
+import { DownloadMinimalisticIcon, EyeIcon, FileTextBoldIcon } from '@/components/Icons'
 import { CardTable } from '@/components/Table'
 import { FilePreview } from '@/components/Files'
 import Empty from "@/components/Empty.vue"
 // Utils
-import { formatDate } from '@/utils/formatDate'
 // Composable
 const { t } = useI18n()
+const store = useBlobFileStore()
 // Props
 const props = defineProps({
   files: {
@@ -27,6 +29,8 @@ const header = ref([
 ])
 const zoomDialog = ref(false)
 const currentFile = ref({})
+const blobFiles = ref([])
+const loading = ref(true)
 // Methods
 const zoomFile = (event, file) => {
   event.stopImmediatePropagation()
@@ -35,20 +39,46 @@ const zoomFile = (event, file) => {
 }
 const download = (event, data) => {
   event.stopImmediatePropagation()
-  saveAs(data.url, data.name)
+  data.url ? saveAs(data.url, data.name) : saveAs(data.blobUrl, data.name)
 }
+
+// Hooks
+onMounted(async () => {
+  if (props.files.length) {
+    try {
+      blobFiles.value = await Promise.all(
+        props.files.map(async (file) => {
+          if (!file.url) {
+            const blobFile = await store.actionGetBlobFile(file.id)
+            return {
+              ...file,
+              ...blobFile,
+            }
+          } else {
+            return file
+          }
+        })
+      )
+    } catch (err) {}
+    finally {
+      loading.value = false
+    }
+  } else {
+    loading.value = false
+  }
+})
 </script>
 
 <template>
-  <template v-if="false">
+  <template v-if="loading">
     <base-spinner />
   </template>
   <template v-else>
     <div class="layout-files-view">
-      <template v-if="props.files.length">
+      <template v-if="blobFiles.length">
         <card-table
           :headers="header"
-          :value="props.files"
+          :value="blobFiles"
           :shadow="false"
           scroll-height="calc(100vh - 297px)"
           table-class="border-spacing-y-2"
@@ -120,7 +150,7 @@ const download = (event, data) => {
         <base-dialog v-model="zoomDialog" max-width="max-w-[820px]">
           <template #header>
             <div class="flex-1 truncate mr-2">
-              <h1 class="text-xl font-semibold truncate">{{ currentFile.title }}</h1>
+              <h1 class="text-xl font-semibold truncate">{{ currentFile.name }}</h1>
             </div>
           </template>
 

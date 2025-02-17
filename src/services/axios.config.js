@@ -91,4 +91,5 @@ function waitForInternet() {
   })
 }
 
+export { baseURL }
 export default axiosConfig(axiosInstance)

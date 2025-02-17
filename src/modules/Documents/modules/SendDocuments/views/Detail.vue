@@ -82,7 +82,9 @@ onBeforeMount(async () => {
 
 <template>
   <template v-if="SDStore.detailLoading">
-    <base-spinner />
+    <div class="min-h-[calc(100vh-300px)] flex items-center">
+      <base-spinner />
+    </div>
   </template>
 
   <template v-else>
