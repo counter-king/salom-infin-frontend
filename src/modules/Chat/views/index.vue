@@ -18,7 +18,7 @@ const { t } = useI18n();
 const route = useRoute();
 const chatStore = useChatStore();
 const allowedPages = ['ChatPrivateDetail','ChatGroupDetail']
-const { status, data, send } = socket
+const { status, data, send, open } = socket
 // reactives
 const isShowChat = computed(() => allowedPages.includes(route.name))
 const routeId = computed(() => route.params.id)
@@ -35,14 +35,16 @@ const sendChatHandshake = (id, chat_type)=> {
 
 // WebSocket holatini kuzatish
 watch(status, (newStatus) => {
-  console.log('WebSocket status changed:', newStatus);
+  if(newStatus == "OPEN"){
+    initializeHandshake()
+  }
 });
 
 // Kelgan ma'lumotlarni kuzatish
 watch(data, (newData) => {
-  console.log("ewasd",newData);
   
   newData = JSON.parse(newData);
+  console.log("ewasd",newData);
   
   if(newData.command == WEBCOCKET_EVENTS.USER_HANDSHAKE) {
     console.log("user hand",newData);
@@ -50,10 +52,8 @@ watch(data, (newData) => {
   else if(newData.command == WEBCOCKET_EVENTS.CHAT_HANDSHAKE) {
     console.log("chat hand",newData);
   }
-  else if(newData.type == WEBCOCKET_EVENTS.NEW_MESSAGE) {
-    console.log("new_message",newData);
-    
-    if(newData.chat_type == CHAT_TYPES.PRIVATE){
+  else if(newData.type == WEBCOCKET_EVENTS.NEW_MESSAGE) {    
+    if(newData.chat_type == CHAT_TYPES.PRIVATE){      
       chatStore.messageListByChatId.push({
         attachments: newData.attachments || [],
         chat_id: newData.chat_id,
@@ -68,7 +68,7 @@ watch(data, (newData) => {
         chat_type: newData.chat_type
       })
       // set last message to privatelist chat
-      chatStore.privateChatList.find(item=> item.chat_id == newData.chat_id).last_message = newData.text
+      // chatStore.privateChatList.find(item=> item.chat_id == newData.chat_id).last_message = newData.text
     } else {
       chatStore.messageListByChatId.push({
         attachments: newData.attachments || [],
@@ -84,8 +84,12 @@ watch(data, (newData) => {
         chat_type: newData.chat_type
       })
       // set last message to grouplist chat
-      chatStore.groupChatList.find(item=> item.chat_id == newData.chat_id).last_message = newData
+      // chatStore.groupChatList.find(item=> item.chat_id == newData.chat_id).last_message = newData.text
     }
+  }
+  else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_DELETED) {    
+    chatStore.messageListByChatId = chatStore.messageListByChatId.filter(item=> item.message_id != newData?.content?.message_id)
+    chatStore.contextMenu.deleteDialog = false
   }
 });
 
@@ -100,14 +104,18 @@ watch(routeId, (newRouteId) => {
   }
 })
 
-onMounted(() => {
-    sendUserHandshake()
+
+function initializeHandshake(){
+  sendUserHandshake()
     if(route.name == CHAT_ROUTE_NAMES.PRIVATE) {
       sendChatHandshake(route.params.id, CHAT_TYPES.PRIVATE)
     }
     else if(route.name == CHAT_ROUTE_NAMES.GROUP) {
       sendChatHandshake(route.params.id, CHAT_TYPES.GROUP)
     }
+}
+onMounted(() => {
+  initializeHandshake()
 })
 
 </script>

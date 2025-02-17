@@ -14,9 +14,18 @@ export const socket = useWebSocket(`wss://${baseURL}/ws/?token=${getStorageItem(
   autoReconnect: {
     retries: 3,
     delay: 1000,
-    onFailed() {
-      dispatchNotify(null, 'error happened', COLOR_TYPES.ERROR)
+    onFailed(err) {
+      dispatchNotify(null, `error happened ${err}`, COLOR_TYPES.ERROR)
     },
   },
 })
 
+const checkAndReconnectWebSocket = ()=> {
+  if(socket.status.value == 'CLOSED') {
+    console.log('reconnecting...')
+    socket.open()
+  }
+}
+
+const RECONNECT_INTERVAL = 5000
+setInterval(checkAndReconnectWebSocket, RECONNECT_INTERVAL)

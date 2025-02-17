@@ -17,6 +17,8 @@ export const WEBCOCKET_EVENTS = {
   NEW_MESSAGE: "new_message",
   USER_HANDSHAKE: "user_handshake",
   CHAT_HANDSHAKE: "chat_handshake",
+  MESSAGE_DELETED: "message_deleted",
+  MESSAGE_REACTION: "message_reaction",
 }
 
 export const MESSAGE_TYPES = {

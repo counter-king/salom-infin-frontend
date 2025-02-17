@@ -30,15 +30,16 @@ const isDeleteLoading = ref(false);
 const menu = ref();
 const isGroupDetail = computed(() => route.name == CHAT_ROUTE_NAMES.GROUP)
 const menuItems = computed(() => [
-   { 
+   ...(route.name == CHAT_ROUTE_NAMES.GROUP ? [{ 
      label: 'edit',
      icon: PenIcon,
      command: () => {
       createGroupDialogVisible.value = true
      },
      iconClass: "!text-greyscale-500 !w-4 !h-4"
-   },
-   ...(chatStore.selectedGroup?.members.find((item) => item.user?.id == authStore.currentUser.id)?.role == 'owner' ? 
+   }] : []),
+  
+   ...(chatStore.selectedGroup?.members.find((item) => item.user?.id == authStore.currentUser.id)?.role == 'owner' || chatStore.selectedUser?.members?.find((item) => item.user?.id == authStore.currentUser?.id)?.role == 'owner' ? 
     [{
      label: 'delete',
      labelClass: '!text-critic-500',

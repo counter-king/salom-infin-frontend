@@ -15,7 +15,9 @@ export const useContextMenu = () => {
 // reactives
 const refContextMenu = ref(null);
 const handleClickStiker = (value, type)=> {
-  let index = chatStore.contextMenu.tempData.index
+  chatStore.contextMenu.message = chatStore.contextMenu.tempMessage
+  let index = chatStore.contextMenu?.index
+  console.log(index, chatStore.contextMenu.message);  
   if (index !== undefined && index !== null && chatStore.messageListByChatId[index]) {
     const reactionIndex = chatStore.messageListByChatId[index].reactions.findIndex((item)=> item.type === type)
     if(reactionIndex !== -1){
@@ -42,14 +44,14 @@ const menuItems = ref([
      iconName: ForwardIcon,
      iconClass:"rotate-y-180 transform rotate-y-180", 
      command: () => {
-      chatStore.contextMenu = { data: chatStore.contextMenu.tempData, replay: true, edit: false }
+      chatStore.contextMenu = { ...chatStore.contextMenu, message: chatStore.contextMenu.tempMessage, replay: true, edit: false }
      } 
    },
    { 
      label: 'update',
      iconName: PenIcon,
      command: () => {
-      chatStore.contextMenu = { data: chatStore.contextMenu.tempData, replay: false, edit: true }
+      chatStore.contextMenu = { ...chatStore.contextMenu, message: chatStore.contextMenu.tempMessage, replay: false, edit: true }
      } 
    },
    { 
@@ -57,7 +59,7 @@ const menuItems = ref([
      iconName: CopyIcon,
      command: async () => {      
       try {
-        await navigator.clipboard.writeText(chatStore.contextMenu.tempData.text);
+        await navigator.clipboard.writeText(chatStore.contextMenu.tempMessage?.text);
       } catch (err) {
         dispatchNotify(null, err, COLOR_TYPES.ERROR)
       }
@@ -67,7 +69,7 @@ const menuItems = ref([
      label: 'delete',
      iconName: TrashBinTrashIcon,
      command: () => {
-      chatStore.contextMenu = { data: chatStore.contextMenu.tempData, replay: false, edit: false, deleteDialog: true }
+      chatStore.contextMenu = { message: chatStore.contextMenu.tempMessage, replay: false, edit: false, deleteDialog: true }
      },
      class: "!text-critic-500"
    }

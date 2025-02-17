@@ -54,9 +54,10 @@ const handleClickScrollDown = () => {
   refChatArea.value.behavior = 'smooth'
 }
 
-const onShowContextMenu = (event, data) => {
+const onShowContextMenu = (event, message, index) => {
   refContextMenu.value.menu.show(event);
-  chatStore.contextMenu.tempData = data
+  chatStore.contextMenu.tempMessage = message
+  chatStore.contextMenu.index = index
 }
 
 const onShowEmojiContextMenu = (event) => {
@@ -159,9 +160,8 @@ onMounted(async () => {
               <OwnerText 
                 :onShowContextMenu="onShowContextMenu" 
                 :onShowEmojiContextMenu="onShowEmojiContextMenu" 
-                :isReaded="message.is_read" 
-                :text="message.text" 
-                :date="message.created_date" 
+                :message="message"
+                :index="index"
               />          
             </template>
           </template>
@@ -174,10 +174,8 @@ onMounted(async () => {
               <FriendText 
                 :onShowContextMenu="onShowContextMenu" 
                 :avatarVisible="showFriendTextAvatar(index)" 
-                :isReaded="message.is_read" 
-                :text="message.text" 
-                :date="message.created_date" 
-                :user="message.sender"
+                :message="message"
+                :index="index"  
               />
           </template>
         </template>

@@ -4,6 +4,7 @@ import { defineStore } from "pinia"
 import {
   fetchChatUsersSearch,
   fetchCreatePrivateChat,
+  fetchDeleteMessageById,
   fetchGetGroupChatById,
   fetchGetGroupChatList,
   fetchGetMessagesByChatId,
@@ -15,6 +16,8 @@ import {
 // constants  
 import { CHAT_TYPES, collectionStikers } from "../constatns";
 import { useAuthStore } from "@/modules/Auth/stores";
+import { dispatchNotify } from "@/utils/notify";
+import { COLOR_TYPES } from "@/enums";
 
 const authStore = useAuthStore();
 
@@ -40,8 +43,9 @@ export const useChatStore = defineStore("chat-stores", {
     userSearchList: [],
     groupChatList: [],
     contextMenu: {
-      tempData: null,
-      data: null,
+      tempMessage: null,
+      message: null,
+      index: null,
       edit: false,
       replay: false,
       deleteDialog: false
@@ -190,6 +194,7 @@ export const useChatStore = defineStore("chat-stores", {
         chat_id: data.id,
         color: data.members?.find((item) => item.user?.id !== authStore.currentUser.id)?.user?.color,
         avatar: data.members?.find((item) => item.user?.id !== authStore.currentUser.id)?.user?.avatar,
+        members: data.members,
         last_message: data?.last_message?.text,
         last_message_date: data?.last_message?.created_date,
         last_message_type: data?.last_message?.type,
@@ -242,33 +247,42 @@ export const useChatStore = defineStore("chat-stores", {
     /** */
     /** */
     async actionGetMessageListByChatId(params, resetList = true) {
-      if(resetList){
-        this.messageListByChatIdLoading = true;
-      } else {
-        this.messageListByChatIdAddMoreLoading = true;
-      }
-      const { data } = await fetchGetMessagesByChatId(params);
-      const messageList = data?.results?.reverse()?.map((item) => ({
-        attachments: item.attachments || [],
-        chat_id: item.chat,
-        created_date: item.created_date,
-        edited: item.edited,
-        message_id: item.id,
-        modified_date: item.modified_date,
-        replied_to: item.replied_to,
-        sender: item.sender,
-        text: item.text,
-        message_type: item.type,
-        reactions: [{type: 'fire', value:"🔥"}],
-      }));
-      if(resetList){
-        this.messageListByChatId = messageList;
-        this.messageListByChatIdLoading = false;
-      } else {
-        this.messageListByChatIdAddMoreLoading = false;
-        this.messageListByChatId = [...messageList, ...this.messageListByChatId]
+      try {
+        if(resetList){
+          this.messageListByChatIdLoading = true;
+        } else {
+          this.messageListByChatIdAddMoreLoading = true;
+        }
+        const { data } = await fetchGetMessagesByChatId(params);
+        const messageList = data?.results?.reverse()?.map((item) => ({
+          attachments: item.attachments || [],
+          chat_id: item.chat,
+          created_date: item.created_date,
+          edited: item.edited,
+          message_id: item.id,
+          modified_date: item.modified_date,
+          replied_to: item.replied_to,
+          sender: item.sender,
+          text: item.text,
+          message_type: item.type,
+          reactions: item.reactions || [],
+        }));
+        if(resetList){
+          this.messageListByChatId = messageList;
+          this.messageListByChatIdLoading = false;
+        } else {
+          this.messageListByChatIdAddMoreLoading = false;
+          this.messageListByChatId = [...messageList, ...this.messageListByChatId]
+        }
+        // checking has next page
+        return data
+      } catch(e){
+        dispatchNotify(null,e,COLOR_TYPES.ERROR)
       }
     },
     /** */
+    async actionDeleteMessageById(id) {
+      await fetchDeleteMessageById(id)
+    }
   }
 })

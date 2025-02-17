@@ -11,8 +11,9 @@ const chatStore = useChatStore()
 
 const { send } = socket
 
-const sendChatFileEmit = (file_id, chat_id, message_type, chat_type)=> {
-  const payload = { command: 'new_message', chat_type, chat_id, files: [file_id], message_type }
+const sendChatFileEmit = (file_id, file_name, chat_id, message_type, chat_type)=> {
+  console.log("ishlmoqda")
+  const payload = { command: 'new_message', chat_type, chat_id, files: [file_id],message_type, text: file_name }
   send(JSON.stringify(payload))
 }
 
@@ -50,9 +51,10 @@ const returnShortFileName = (fileName) => {
        signal: item.signal
      })
        .then(({ data }) => {
-        // sending file to websocket  
+        console.log("ishlmoqda",data.name)
+        // sending file to websocket          
         const currentMessageType =  messageTypes.find(type=>type === item.file.type.split("/")[0]) || MESSAGE_TYPES.FILE     
-         sendChatFileEmit(data.id, route.params.id, currentMessageType, route.name == CHAT_ROUTE_NAMES.PRIVATE ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP); 
+         sendChatFileEmit(data.id, data.name, route.params.id, currentMessageType, route.name == CHAT_ROUTE_NAMES.PRIVATE ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP); 
          
          item.id = data.id;
          item.uploaded = true;

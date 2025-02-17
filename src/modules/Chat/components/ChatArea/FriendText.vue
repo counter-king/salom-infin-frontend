@@ -6,11 +6,8 @@ import { CheckBigIcon, CheckReadIcon } from '@/components/Icons';
 import { formatHour } from '@/utils/formatDate';
 // props
 const props = defineProps({
-  text: {
-    type: String
-  },
-  date: {
-    type: String 
+  message: {
+    type: Object
   },
   avatarVisible: {
     type: Boolean,
@@ -19,9 +16,6 @@ const props = defineProps({
   onShowContextMenu: {
     type: Function
   },
-  user: {
-    type: Object
-  }
 })
 </script>
 
@@ -29,16 +23,16 @@ const props = defineProps({
   <div class="">
     <div class="flex gap-2 select-none">
       <base-avatar 
-        :image="props.user?.avatar?.url"
-        :label="props.user?.first_name"
-        :color="props.user?.color"
+        :image="props.message?.sender?.avatar?.url"
+        :label="props.message?.sender?.first_name"
+        :color="props.message?.sender?.color"
         shape="circle"
         avatar-classes="w-8 h-8"
         :class="{'!visible': props.avatarVisible, '!invisible': !props.avatarVisible}"
       />
       <div 
-        @contextmenu.prevent="onShowContextMenu($event, { text: props.text})"
-         class="friend-text flex flex-col gap-1 bg-white rounded-2xl rounded-bl-[4px] px-4 py-2 cursor-pointer"
+        @contextmenu.prevent="onShowContextMenu($event, props.message, props.index)"
+         class="friend-text flex flex-col gap-1 bg-white rounded-2xl rounded-bl-[4px] px-4 py-2 cursor-pointer  max-w-[400px]"
          :class="[{'!rounded-2xl !rounded-tl-[4px]': props.avatarVisible}]"
         >
         <div 
@@ -49,10 +43,10 @@ const props = defineProps({
           <span class="text-xs font-medium text-greyscale-500">Привет, хорошо, спасибо!</span>
         </div>
         <p class="text-sm font-medium text-greyscale-900">
-          {{ props.text }}
+          {{ props.message?.text }}
         </p>
       </div>
-      <p class="text-xs font-medium text-greyscale-500 self-end">{{ formatHour(props.date) }}</p>
+      <p class="text-xs font-medium text-greyscale-500 self-end">{{ formatHour(props.message.created_date) }}</p>
     </div>
   </div>
 </template>

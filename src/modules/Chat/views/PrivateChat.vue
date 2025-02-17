@@ -26,9 +26,12 @@ import { useAuthStore } from '@/modules/Auth/stores';
 // composables
 import { useContextMenu } from '../composables/useContextMenu';
 import { useFileUploadDrop } from '../composables/useFileUploadDrop';  
+import { useScrollReachUp } from '../composables/useScrollReachUp';
+import { fetchDeleteMessageById } from '../services';
 
 const { menuItems, refContextMenu } = useContextMenu();
 const { onDragOver, onDragLeave, onDrop } = useFileUploadDrop();
+const { handleScrollReachUp, hasNext, page, pageSize } = useScrollReachUp();
 
 const { t } = useI18n();
 const route = useRoute();
@@ -45,15 +48,14 @@ const refEmojiContextMenu = ref(null);
 const handleScroll = (event) => {
   if(event.target.scrollTop + event.target.clientHeight + 300 < event.target.scrollHeight ) {
     showScrollDownButton.value = true
-  } else{
+  } else {
     showScrollDownButton.value = false
   }
 }
 
-const handleScrollReachUp = (event) => {
-  if(event.target.scrollTop == 0){
-    chatStore.actionGetMessageListByChatId({chat:route.params?.id}, false);
-  }
+const handleScrollUp = () => {
+  refChatArea.value.scrollTop = 150
+  refChatArea.value.behavior = 'smooth'
 }
 
 const handleClickScrollDown = () => {
@@ -61,9 +63,10 @@ const handleClickScrollDown = () => {
   refChatArea.value.behavior = 'smooth'
 }
 
-const onShowContextMenu = (event, data) => {
+const onShowContextMenu = (event, message, index) => {
   refContextMenu.value.menu.show(event);
-  chatStore.contextMenu.tempData = data
+  chatStore.contextMenu.tempMessage = message
+  chatStore.contextMenu.index = index
 }
 
 const onShowEmojiContextMenu = (event) => {
@@ -71,7 +74,8 @@ const onShowEmojiContextMenu = (event) => {
 }
 
 const onHandleDeleteMessage = () => {
-  console.log("log");
+  chatStore.actionDeleteMessageById(chatStore.contextMenu?.message?.message_id)
+  chatStore.contextMenu.deleteDialog = false
 }
 
 const onClickChatArea = () => {
@@ -106,8 +110,6 @@ const showDateByCalculate = (index) => {
   }
 }
 
-
-
 const showFriendTextAvatar = (index) => {
   // Joriy xabar va oldingi xabarni olish
   const nowMessage = chatStore.messageListByChatId[index]
@@ -135,7 +137,11 @@ watch(
 
 onMounted(async () => {
   chatStore.selectedUser = await chatStore.actionGetPrivateChatById(route.params?.id);
-  await chatStore.actionGetMessageListByChatId({ chat:route.params?.id }, true);
+  
+  const { count } = await chatStore.actionGetMessageListByChatId({ chat:route.params?.id }, true);
+  hasNext.value = count > page.value * pageSize.value
+  page.value += 1
+  refChatArea.value.scrollTop = refChatArea.value?.scrollHeight
 })
 
 </script>
@@ -144,7 +150,7 @@ onMounted(async () => {
  <div class="h-full relative">
   <div
     ref="refChatArea" class="flex flex-col gap-2 px-6 py-4 overflow-y-auto relative"
-    @scroll="(e)=>{handleScroll(e); handleScrollReachUp(e)}"
+    @scroll="(e)=>{handleScroll(e); handleScrollReachUp(e,handleScrollUp)}"
     :style="`height: calc(100% - ${chatStore.contextMenu.edit || chatStore.contextMenu.replay ? '170px' : '135px'})`" 
     @click="onClickChatArea"
     @dragover.prevent="onDragOver"
@@ -155,6 +161,13 @@ onMounted(async () => {
         <base-spinner />
     </template>
     <template v-else>
+      <!-- get more Message loading -->
+      <div class="flex justify-center items-center mb-5" v-if="chatStore.messageListByChatIdAddMoreLoading">
+        <div class="w-9 h-9 bg-white p-1 rounded-full" style="box-shadow: 0px 2px 4px 0px rgba(47, 61, 87, 0.03), 0px 1px 1px 0px rgba(95, 110, 169, 0.03)">
+          <base-spinner />
+        </div>
+      </div>
+      <!-- message list -->
       <template v-if="!!chatStore.messageListByChatId.length">
         <template v-for="(message, index) in chatStore.messageListByChatId" :key="message?.id">
           <template v-if="showDateByCalculate(index)">
@@ -162,17 +175,14 @@ onMounted(async () => {
           </template>
           <!-- owner chat -->
           <template v-if="message?.sender?.id == authStore.currentUser?.id" >
-            <template v-if="message.message_type != MESSAGE_TYPES.TEXT">
+            <template v-if="message?.message_type != MESSAGE_TYPES.TEXT">
               <ChatFileItem type="owner" :onShowContextMenu="onShowContextMenu"  :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-white' }"/> 
             </template>
             <template v-else>
               <OwnerText 
                 :onShowContextMenu="onShowContextMenu" 
                 :onShowEmojiContextMenu="onShowEmojiContextMenu" 
-                :isReaded="message.is_read" 
-                :text="message.text" 
-                :date="message.created_date" 
-                :reactions="message?.reactions"
+                :message="message"
                 :index="index"
               />          
             </template>
@@ -186,10 +196,7 @@ onMounted(async () => {
               <FriendText 
                 :onShowContextMenu="onShowContextMenu" 
                 :avatarVisible="showFriendTextAvatar(index)" 
-                :isReaded="message.is_read" 
-                :text="message.text" 
-                :date="message.created_date" 
-                :user="message.sender"
+                :message="message"
               />
           </template>
         </template>
@@ -214,7 +221,6 @@ onMounted(async () => {
           <ScrollDownButton @click="handleClickScrollDown"/>
         </div>
       </template>
-      
       <!-- not start yet chat  -->
       <div v-else class="h-full">
         <Empty 

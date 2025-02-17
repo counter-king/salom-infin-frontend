@@ -62,3 +62,8 @@ export const fetchDeleteGroupChatById = (id) => {
 export const fetchGetMessagesByChatId = (params) => {
   return axiosConfig.get(`${URLS.chatMessages}`, { page: 1, page_size: 10, ...params});
 }
+
+// delete message by id
+export const fetchDeleteMessageById = (id) => {
+  return axiosConfig.delete(`${URLS.chatMessages}${id}/`);
+}
