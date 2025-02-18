@@ -235,13 +235,17 @@ defineExpose({
       </base-col>
 
       <base-col col-class="w-full">
-        <editor-with-tabs
-          v-model="$v.content.$model"
-          :error="$v.content"
-          file-upload-container-classes="w-1/2 pr-2"
-          :files="store.model.__files"
-          @emit:file-upload="onFileUpload"
-        />
+        <div class="border-[1.5px] border-greyscale-200 rounded-2xl px-5 py-4">
+          <div class="text-base text-primary-900 font-semibold mb-2">{{ t('notice') }}</div>
+
+          <editor-with-tabs
+            v-model="$v.content.$model"
+            :error="$v.content"
+            file-upload-container-classes="w-1/2 pr-2"
+            :files="store.model.__files"
+            @emit:file-upload="onFileUpload"
+          />
+        </div>
       </base-col>
     </base-row>
 
