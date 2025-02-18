@@ -42,7 +42,7 @@ const props = defineProps({
           <span class="text-xs font-semibold text-warning-500">Абдуллаев Рустам</span>
           <span class="text-xs font-medium text-greyscale-500">Привет, хорошо, спасибо!</span>
         </div>
-        <p class="text-sm font-medium text-greyscale-900">
+        <p class="text-sm font-medium text-greyscale-900 whitespace-normal break-all">
           {{ props.message?.text }}
         </p>
       </div>

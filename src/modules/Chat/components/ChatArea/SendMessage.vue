@@ -6,6 +6,7 @@ import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 // components
 import EmojiStikers from './EmojiStikers.vue';
+import FileTypeIcon from '../FileTypeIcon.vue';
 // icons
 import { ForwardIcon, PaperclipLinearIcon, PenIcon, PlainBoldIcon, SmileCircleLinearIcon, XMarkSolidIcon } from '@/components/Icons';
 // composables
@@ -45,7 +46,9 @@ const handleSendMessage = () => {
  if(!!message.value) {
     if(chatStore.contextMenu?.replay) {
       sendReplayNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.TEXT })
-    } else{
+    } else if(chatStore.contextMenu?.edit){
+      chatStore.actionEditMessageById(chatStore.contextMenu?.message?.message_id, {chat: chatStore.contextMenu?.message.chat_id, replied_to: chatStore.contextMenu?.message?.replied_to?.id, text: message.value})
+    } else {
       sendNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.TEXT })
     }
  }
@@ -103,14 +106,17 @@ onMounted(() => {
     v-if="chatStore.contextMenu?.edit || chatStore.contextMenu?.replay"
     class="flex justify-between absolute gap-2 items-center px-2 pt-2 pb-10 top-[0px] bg-white w-full rounded-t-xl select-none"
     >
-    <div class="flex items-center gap-2">
+    <div class="flex items-center gap-2 w-[95%]">
       <base-iconify 
         :icon="chatStore.contextMenu?.edit ? PenIcon : ForwardIcon"
         class="!h-4 !w-4 rotate-y-180 text-primary-500"
       />
-      <p class="text-xs h-[16px] font-medium text-primary-500 pl-2 border-l-[2px] border-warning-500 line-clamp-1">
-        {{ chatStore.contextMenu?.message?.text }}
-      </p>
+      <div class="flex items-center gap-2 w-[95%] text-xs h-[16px] font-medium text-primary-500 pl-2 border-l-[2px] border-warning-500">
+        <template v-if="chatStore.contextMenu?.message?.message_type !='text'">
+          <FileTypeIcon :type="chatStore.contextMenu?.message?.message_type" />
+        </template>
+        <p class="truncate w-full">{{ chatStore.contextMenu?.message?.text  }}</p>
+      </div>
     </div>
     <div class="p-1 cursor-pointer">
       <base-iconify 
@@ -139,7 +145,7 @@ onMounted(() => {
       :pt="{
         root: {
           class: [
-            'w-full p-[6px] pl-5 h-[52px] bg-white w-full rounded-xl  text-sm font-medium text-greyscale-900 placeholder:text-sm placeholder:font-medium placeholder:text-greyscale-300',
+            'w-full p-[6px] pl-5 pr-[130px] h-[52px] bg-white w-full rounded-xl  text-sm font-medium text-greyscale-900 placeholder:text-sm placeholder:font-medium placeholder:text-greyscale-300',
           ]
         }
       }"

@@ -18,7 +18,7 @@ const { t } = useI18n();
 const route = useRoute();
 const chatStore = useChatStore();
 const allowedPages = ['ChatPrivateDetail','ChatGroupDetail']
-const { status, data, send, open } = socket
+const { status, data, send } = socket
 // reactives
 const isShowChat = computed(() => allowedPages.includes(route.name))
 const routeId = computed(() => route.params.id)
@@ -90,6 +90,17 @@ watch(data, (newData) => {
   else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_DELETED) {    
     chatStore.messageListByChatId = chatStore.messageListByChatId.filter(item=> item.message_id != newData?.content?.message_id)
     chatStore.contextMenu.deleteDialog = false
+  } else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_UPDATE) {
+    chatStore.messageListByChatId.find(item=> item.message_id == newData?.content?.message_id).text = newData?.content?.text
+  } else if(newData.type == WEBCOCKET_EVENTS.NEW_GROUP_CHAT) {
+    if(chatStore.groupChatList.some(item=> item.chat_id == newData?.content?.chat_id)){
+      chatStore.groupChatList.unshift({
+        chat_id: newData?.content?.chat_id,
+        title: newData?.content?.title,
+        image: newData?.content?.image,
+        members: newData?.content?.members,
+      })
+    }
   }
 });
 

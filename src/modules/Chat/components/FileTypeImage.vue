@@ -1,6 +1,6 @@
 <script setup>
 // cores
-import { ChevronDown20SolidIcon, DownloadMinimalisticIcon, FileTextBoldIcon } from '@/components/Icons';
+import { ChevronDown20SolidIcon, DownloadMinimalisticIcon, FileTextBoldIcon, GalleryBoldIcon } from '@/components/Icons';
 import { useI18n } from 'vue-i18n';
 // components
 import FileItem from './FileItem.vue';
@@ -35,10 +35,10 @@ const props = defineProps({
    <!-- data -->
     <div class="flex flex-col gap-1">
       <div class="pl-2 text-sm font-medium text-greyscale-500">{{ formatDateMonthWithDay('2025-01-12T00:03:18.155650+05:00') }}</div>
-      <FileItem :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-warning-500' }"/>
-      <FileItem :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-warning-500' }"/>
-      <FileItem :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-warning-500' }"/>
-      <FileItem :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-warning-500' }"/>
+      <FileItem :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: GalleryBoldIcon, class: 'text-warning-500' }"/>
+      <FileItem :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: GalleryBoldIcon, class: 'text-warning-500' }"/>
+      <FileItem :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: GalleryBoldIcon, class: 'text-warning-500' }"/>
+      <FileItem :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: GalleryBoldIcon, class: 'text-warning-500' }"/>
     </div>
   </div>
 </template>

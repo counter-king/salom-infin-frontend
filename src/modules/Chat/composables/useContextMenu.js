@@ -14,10 +14,10 @@ const chatStore = useChatStore()
 export const useContextMenu = () => {
 // reactives
 const refContextMenu = ref(null);
+
 const handleClickStiker = (value, type)=> {
   chatStore.contextMenu.message = chatStore.contextMenu.tempMessage
   let index = chatStore.contextMenu?.index
-  console.log(index, chatStore.contextMenu.message);  
   if (index !== undefined && index !== null && chatStore.messageListByChatId[index]) {
     const reactionIndex = chatStore.messageListByChatId[index].reactions.findIndex((item)=> item.type === type)
     if(reactionIndex !== -1){
@@ -51,6 +51,7 @@ const menuItems = ref([
      label: 'update',
      iconName: PenIcon,
      command: () => {
+      console.log(chatStore.contextMenu)
       chatStore.contextMenu = { ...chatStore.contextMenu, message: chatStore.contextMenu.tempMessage, replay: false, edit: true }
      } 
    },
@@ -68,7 +69,7 @@ const menuItems = ref([
    { 
      label: 'delete',
      iconName: TrashBinTrashIcon,
-     command: () => {
+     command: () => {      
       chatStore.contextMenu = { message: chatStore.contextMenu.tempMessage, replay: false, edit: false, deleteDialog: true }
      },
      class: "!text-critic-500"

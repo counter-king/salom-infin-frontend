@@ -5,6 +5,7 @@ import {
   fetchChatUsersSearch,
   fetchCreatePrivateChat,
   fetchDeleteMessageById,
+  fetchEditMessageById,
   fetchGetGroupChatById,
   fetchGetGroupChatList,
   fetchGetMessagesByChatId,
@@ -34,6 +35,7 @@ export const useChatStore = defineStore("chat-stores", {
     privateChatByIdLoading: false,
     messageListByChatIdLoading: false,
     messageListByChatIdAddMoreLoading: false,
+    deleteMessageByIdLoading: false,
     selectedUser: null,
     selectedGroup: null,
     chatUserSearchList: [],
@@ -282,7 +284,25 @@ export const useChatStore = defineStore("chat-stores", {
     },
     /** */
     async actionDeleteMessageById(id) {
-      await fetchDeleteMessageById(id)
+      try {
+        this.deleteMessageByIdLoading = true;
+        await fetchDeleteMessageById(id)
+        this.contextMenu.deleteDialog = false;
+      } catch(e) {
+        dispatchNotify(null, e, COLOR_TYPES.ERROR)
+      } finally{
+        this.deleteMessageByIdLoading = false;
+      }
+    },
+    /** */
+    async actionEditMessageById(id, body) {
+      try { 
+        await fetchEditMessageById(id, body)
+        this.contextMenu.edit = false;
+      } catch(e) {
+        dispatchNotify(null, e, COLOR_TYPES.ERROR)
+      } finally {  
+      }
     }
   }
 })

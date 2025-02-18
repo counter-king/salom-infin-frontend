@@ -27,7 +27,6 @@ import { useAuthStore } from '@/modules/Auth/stores';
 import { useContextMenu } from '../composables/useContextMenu';
 import { useFileUploadDrop } from '../composables/useFileUploadDrop';  
 import { useScrollReachUp } from '../composables/useScrollReachUp';
-import { fetchDeleteMessageById } from '../services';
 
 const { menuItems, refContextMenu } = useContextMenu();
 const { onDragOver, onDragLeave, onDrop } = useFileUploadDrop();
@@ -75,7 +74,6 @@ const onShowEmojiContextMenu = (event) => {
 
 const onHandleDeleteMessage = () => {
   chatStore.actionDeleteMessageById(chatStore.contextMenu?.message?.message_id)
-  chatStore.contextMenu.deleteDialog = false
 }
 
 const onClickChatArea = () => {
@@ -176,7 +174,13 @@ onMounted(async () => {
           <!-- owner chat -->
           <template v-if="message?.sender?.id == authStore.currentUser?.id" >
             <template v-if="message?.message_type != MESSAGE_TYPES.TEXT">
-              <ChatFileItem type="owner" :onShowContextMenu="onShowContextMenu"  :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-white' }"/> 
+              <ChatFileItem 
+                type="owner"
+                :message="message"
+                :onShowContextMenu="onShowContextMenu"
+                :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }"
+                :left-icon="{ name: FileTextBoldIcon, class: 'text-white' }"
+              /> 
             </template>
             <template v-else>
               <OwnerText 
@@ -190,7 +194,12 @@ onMounted(async () => {
           <!-- friend chat -->
           <template v-else>
             <template v-if="false">
-              <ChatFileItem :onShowContextMenu="onShowContextMenu"  :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-white' }"/> 
+              <ChatFileItem 
+                :message="message"
+                :onShowContextMenu="onShowContextMenu"
+                :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }"
+                :left-icon="{ name: FileTextBoldIcon, class: 'text-white' }"
+              /> 
             </template>
             <template v-else>
               <FriendText 
@@ -233,6 +242,7 @@ onMounted(async () => {
       </div>
     </template>
   </div>
+
   <div class="px-6">
       <SendMessage ref="refSendMessage" />
   </div>
@@ -254,6 +264,7 @@ onMounted(async () => {
     v-model="chatStore.contextMenu.deleteDialog" 
     :onDelete="onHandleDeleteMessage" 
     :onClose="() => chatStore.contextMenu.deleteDialog = false"
+    :isDeleteLoading="chatStore.deleteMessageByIdLoading"
   />
 </div>
 </template>

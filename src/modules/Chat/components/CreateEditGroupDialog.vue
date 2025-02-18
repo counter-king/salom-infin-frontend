@@ -70,8 +70,9 @@ const onSubmit = async () => {
     fetchCreateGroupChat({images:[{image: uploadingFiles.value[0]?.id}], title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
     chatStore.actionGetGroupChatList();
   } else if(props.type === 'edit') {
-    fetchEditGroupChat(chatStore.selectedGroup?.id, {images:[{image: uploadingFiles.value[0]?.id}], title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
+    fetchEditGroupChat(chatStore.selectedGroup?.chat_id, { images: uploadingFiles.value[0]?.id ?[{ image: uploadingFiles.value[0]?.id }]: undefined, title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
   }
+
   uploadingFiles.value = [];
   formModal.group_name = null;
   formModal.users = [];

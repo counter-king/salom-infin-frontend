@@ -60,7 +60,7 @@ const onEmojiContextMenuClick = (event) => {
           <span class="text-xs font-semibold text-white truncate">{{ props.message.replied_to?.user?.first_name }} {{ props.message.replied_to?.user?.last_name }}</span>
           <span class="text-xs font-medium text-white/[65%] truncate">{{ props.message.replied_to?.text }}</span>
         </div>
-        <p class="text-sm font-medium text-white bg-primary-400" >{{ props.message?.text }}</p> 
+        <p class="text-sm font-medium text-white bg-primary-400 whitespace-normal break-all" >{{ props.message?.text }}</p> 
       </div>
       <!-- <p @contextmenu.prevent="onContextMenuClick" class="text-sm font-medium text-white bg-primary-400 rounded-xl rounded-br-[4px] px-4 py-2" >{{ props.text }}</p> -->
     </div>

@@ -3,13 +3,8 @@
 import { downloadFile } from '../../constatns';
 
 const props = defineProps({
-  info: {
-   type: Object,
-   default: () => ({
-    name: '',
-    size: '',
-    uploaded: false
-   })
+  message: {
+    type: Object
   },
   rightIcon: {
    name: {
@@ -45,9 +40,8 @@ const props = defineProps({
   class="flex"
   :class="{'justify-end': props.type === 'owner'}"
   >
-  <!-- <pre>{{ props.info }}</pre> -->
   <div 
-    @contextmenu.prevent="props.onShowContextMenu"
+    @contextmenu.prevent="(e)=>props.onShowContextMenu(e, props.message)"
     class="flex gap-4 items-center p-2 pr-4 min-w-[243px] max-w-[400px] w-full group bg-white cursor-pointer rounded-xl"
     :class="{'!bg-primary-400': props.type === 'owner'}"
     >
@@ -65,15 +59,15 @@ const props = defineProps({
         <h3   
            class="text-sm font-semibold text-greyscale-900 capitalize"
           :class="{'!text-white': props.type === 'owner'}"
-          >{{ props.info.name }}</h3>
+          >{{ props.message?.text }}</h3>
         <p 
          :class="{'text-primary-100': props.type === 'owner'}"
           class="text-xs text-greyscale-500"
-        >{{ props.info.size }}</p>
+        >{{ props.message?.size }}</p>
       </div>
       <base-iconify 
         @click="downloadFile" 
-        v-if="!!props.info.uploaded"
+        v-if="!!props.message?.uploaded"
         :icon="props.rightIcon.name"
         class="!h-5 !w-5" 
         :class="[{'text-greyscale-90': props.type === 'owner'} ,props.rightIcon.class]"
