@@ -6,6 +6,7 @@ import {
   fetchBusinessTripDetail,
   fetchBusinessTripList, fetchMarkBusinessTripArrived, fetchMarkBusinessTripLeft,
 } from "@/modules/HR/modules/BusinessTrip/services"
+import { fetchBlobFile } from "@/services/file.service";
 
 export const useBusinessTripStore = defineStore("business-trip-store", {
   state: () => ({
@@ -73,7 +74,20 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
       this.detailLoading = true
       const response = await fetchBusinessTripDetail(id)
       if (response && response.status === 200) {
-        this.detailModel = response.data
+        const compose = await Promise.all(
+          response.data.compose.map(async item => {
+            if (!item.url){
+              const blobFiles = await fetchBlobFile(item.file_id)
+              return {
+                ...item,
+                ...blobFiles
+              }
+            } else {
+              return item
+            }
+          })
+        )
+        this.detailModel = { ...response.data, compose }
         this.detailLoading = false
       }
     },

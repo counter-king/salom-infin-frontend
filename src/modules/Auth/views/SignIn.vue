@@ -91,7 +91,7 @@ const handleTokenIsInvalidRedirectWhereUserWas = async() => {
       await router.push({
       name: "DashboardIndex"
       })
-    }    
+    }
 }
 
 const logIn = async () => {
@@ -108,6 +108,7 @@ const logIn = async () => {
     })
     await authStore.actionUserProfile()
     await handleTokenIsInvalidRedirectWhereUserWas()
+    reload()
   }
   catch (error) {
 
@@ -127,6 +128,7 @@ const logInWithAd = async () => {
     await authStore.loginWithAd(formModelAd)
     await authStore.actionUserProfile()
     await handleTokenIsInvalidRedirectWhereUserWas()
+    reload()
   }
   catch (error) {
 
@@ -135,12 +137,34 @@ const logInWithAd = async () => {
     loading.value = false
   }
 }
+const reload = () => {
+  setTimeout(() => {
+    if ('caches' in window) {
+      caches.keys().then((names) => {
+        names.forEach((name) => {
+          caches.delete(name);
+        });
+      });
+    }
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        registrations.forEach((registration) => {
+          registration.unregister();
+        });
+      });
+    }
+
+    location.reload(true)
+  }, 2000)
+}
 const loginViaEri = async (pkcs7) => {
   try {
     loading.value = true
     await authStore.actionLoginViaERI({pkcs7})
     await authStore.actionUserProfile()
     await handleTokenIsInvalidRedirectWhereUserWas()
+    reload()
   }
   catch (err) {
     if (err && err.code === '703') {

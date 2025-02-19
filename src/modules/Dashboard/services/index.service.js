@@ -3,6 +3,9 @@ import axiosConfig from "@/services/axios.config"
 const URLS = {
   birthday: `user-birthdays`,
   birthdayReactionCounts: `birthday-reactions/counts`,
+  birthdayCongratulations: `birthday-congratulations`,
+  birthdayReactionComments: `birthday-reactions/comments`,
+  birthdayComments: `birthday-comments`,
   birthdayReactions: `birthday-reactions`,
   moodReactionCounts: `mood-reactions/counts`,
   moodReactions: `mood-reactions`,
@@ -15,6 +18,18 @@ export const fetchGetBirthdayList = (params) => {
 }
 export const fetchGetBirthdayReactionCounts = (userId) => {
   return axiosConfig.get(`${URLS.birthdayReactionCounts}/${userId}/`)
+}
+export const fetchGetBirthdayCongratulations = () => {
+  return axiosConfig.get(`${URLS.birthdayCongratulations}/`)
+}
+export const fetchSendBirthdayComment = (body) => {
+  return axiosConfig.post(`${URLS.birthdayComments}/`, body)
+}
+export const fetchUpdateBirthdayComment = ({ id, body }) => {
+  return axiosConfig.put(`${URLS.birthdayComments}/${id}/`, body)
+}
+export const fetchGetBirthdayReactionComments = (userId) => {
+  return axiosConfig.get(`${URLS.birthdayComments}/${userId}/comments/`)
 }
 export const fetchCongratulateUser = (body) => {
   return axiosConfig.post(`${URLS.birthdayReactions}/`, body)

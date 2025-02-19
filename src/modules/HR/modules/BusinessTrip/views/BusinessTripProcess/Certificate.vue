@@ -46,7 +46,7 @@ const verifications = computed(() => {
       arr.push({
         label: 'Jo\'nadi',
         actionTime: item.left_at,
-        filial: item.company?.name,
+        filial: item.is_sender ? item.company?.name : item.region?.name_uz,
         responsible: formatUserFullName(item.left_verified_by)
       })
     }
@@ -54,7 +54,7 @@ const verifications = computed(() => {
       arr.push({
         label: 'Jo\'nadi',
         actionTime: item.left_at,
-        filial: item.company?.name,
+        filial: item.is_sender ? item.company?.name : item.region?.name_uz,
         responsible: formatUserFullName(item.left_verified_by)
       })
     }
@@ -62,7 +62,7 @@ const verifications = computed(() => {
       arr.push({
         label: 'Keldi',
         actionTime: item.arrived_at,
-        filial: item.company?.name,
+        filial: item.is_sender ? item.company?.name : item.region?.name_uz,
         responsible: formatUserFullName(item.arrived_verified_by)
       })
     }
@@ -70,7 +70,7 @@ const verifications = computed(() => {
       arr.push({
         label: 'Keldi',
         actionTime: item.arrived_at,
-        filial: item.company?.name,
+        filial: item.is_sender ? item.company?.name : item.region?.name_uz,
         responsible: formatUserFullName(item.arrived_verified_by)
       })
     }
@@ -84,13 +84,13 @@ const docType = computed(() => {
   return BTStore.detailModel?.compose?.find(item => item.doc_type === 'order') ? 'order' : 'decree'
 })
 const orderRegisteredNumber = computed(() => {
-  return BTStore.detailModel?.compose?.find(item => item.doc_type === docType.value).register_number
+  return BTStore.detailModel?.compose?.find(item => item.doc_type === docType.value)?.register_number
 })
 const orderRegisteredDate = computed(() => {
-  return BTStore.detailModel?.compose?.find(item => item.doc_type === docType.value).register_date
+  return BTStore.detailModel?.compose?.find(item => item.doc_type === docType.value)?.register_date
 })
 const curatorFullName = computed(() => {
-  return BTStore.detailModel?.compose?.find(item => item.doc_type === docType.value).curator
+  return BTStore.detailModel?.compose && BTStore.detailModel?.compose[0]?.curator
 })
 
 // Methods
@@ -122,7 +122,7 @@ const generatePdf = async () => {
 </script>
 
 <template>
-  <div v-if="verifications && verifications.length" class="flex justify-center px-6 py-6 overflow-y-auto"
+  <div class="flex justify-center px-6 py-6 overflow-y-auto"
        style="height: calc(100% - 100px)">
     <div class="w-[600px] h-fit border shadow py-10 px-8" ref="contentToPrint">
       <div class="element-to-download">
@@ -144,13 +144,13 @@ const generatePdf = async () => {
 
           <div>
             <span class="font-semibold">Safarga boradigan joylari: </span>
-            <span v-for="(filial, index) in BTStore.detailModel?.destinations">{{ filial.name }}<span
-              v-if="index !== BTStore.detailModel?.destinations.length - 1">,</span> &nbsp; </span>
+            <span v-for="(location, index) in BTStore.detailModel?.locations">{{ location.name_uz }}<span
+              v-if="index !== BTStore.detailModel?.locations.length - 1">,</span> &nbsp; </span>
           </div>
 
           <div>
-            <span class="font-semibold">Asos: </span> {{ formatDate(orderRegisteredDate) }} dagi {{
-              orderRegisteredNumber
+            <span class="font-semibold">Asos: </span> {{ orderRegisteredDate ? formatDate(orderRegisteredDate) : '__.__.____' }} dagi {{
+              orderRegisteredNumber ? orderRegisteredNumber : '__'
             }}-sonli {{ docType === 'order' ? 'buyruq' : 'farmoyish' }}
           </div>
         </div>
@@ -169,7 +169,7 @@ const generatePdf = async () => {
           belgilari:
         </div>
 
-        <div>
+        <div v-if="verifications && verifications.length">
           <base-row>
             <base-col
               v-for="item in verifications"
@@ -177,7 +177,7 @@ const generatePdf = async () => {
             >
               <div class="text-sm flex flex-col">
                 <div><span class="font-semibold">{{ item.label }}:</span> {{ formatDate(item.actionTime) }}</div>
-                <div><span class="font-semibold">Filial:</span> {{ item.filial }}</div>
+                <div><span class="font-semibold">Hudud:</span> {{ item.filial }}</div>
                 <div><span class="font-semibold">Mas'ul xodim: </span> {{ item.responsible }}</div>
                 <div class="mt-3">
                   <qrcode-vue

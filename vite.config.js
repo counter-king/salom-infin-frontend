@@ -56,5 +56,14 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
-  }
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        entryFileNames: `assets/[name].[hash].${Math.floor(Math.random() * 9999)}.js`,
+        chunkFileNames: `assets/[name].[hash].${Math.floor(Math.random() * 9999)}.js`,
+        assetFileNames: `assets/[name].[hash].${Math.floor(Math.random() * 9999)}.[ext]`,
+      },
+    },
+  },
 })

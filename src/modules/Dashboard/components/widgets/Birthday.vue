@@ -9,12 +9,17 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 // Utils
 import { returnFirstLetter, returnStatusColor } from "@/utils"
+import { dispatchNotify } from "@/utils/notify"
 // Store
 import { useDashboardBirthdayStore } from "@/modules/Dashboard/stores/birthday.store"
 import { useAuthStore } from "@/modules/Auth/stores"
+// Enums
+import { COLOR_TYPES } from "@/enums"
 // Components
-import { AltArrowRightIcon } from "@/components/Icons"
+import { AltArrowRightIcon, DialogBoldIcon, PenBoldIcon } from "@/components/Icons"
 import BaseBrickRadio from "@/components/UI/BaseBrickRadio.vue"
+import BirthdayCongratulationsModal from "@/modules/Dashboard/components/BirthdayCongratulationsModal.vue"
+import { FORM_TYPE_CREATE, FORM_TYPE_UPDATE } from "@/constants/constants";
 // Non-reactive
 const modules = [Autoplay, Navigation]
 const config = {
@@ -24,7 +29,15 @@ const config = {
 }
 // Reactive
 const dialog = ref(false)
+const commentDialog = ref(false)
+const commentingUserId = ref(null)
+const commentButtonLoading = ref(false)
+const birthdayItem = ref(null)
+const updatingCommentId = ref(null)
+const birthdayCongratulationModal = ref(false)
 const selectedTab = ref('today')
+const comment= ref(null)
+const formType = ref(FORM_TYPE_CREATE)
 // Composable
 const { reward } = useReward('confetti', 'confetti', config)
 const { t } = useI18n()
@@ -71,7 +84,11 @@ const onGiftClick = async (gift) => {
     gift.count += 1
     gift.disable = true
     gift.selected = true
-    birthdayStore.todayBornList?.find(item => item.id === gift.user_id)?.gifts?.forEach(g => g.disable = true)
+    birthdayStore.todayBornList?.find(item => item.id === gift.user_id)?.gifts?.forEach(g => {
+      if (!g.comment){
+        g.disable = true
+      }
+    })
     await birthdayStore.actionCongratulateUser({
       birthday_user: gift.user_id,
       reaction: gift.value
@@ -87,6 +104,96 @@ const returnGiftClass = (gift) => {
   } else {
     return 'cursor-pointer hover:bg-greyscale-100'
   }
+}
+const toggleCommentField = (item, comment) => {
+  if (!comment.disable) {
+    comment.value = null
+    item.comment_open = !item.comment_open
+  }
+}
+const manageComment = async () => {
+  if (!comment.value) {
+    dispatchNotify(null, t('required-text'), COLOR_TYPES.WARNING)
+    return
+  }
+  commentButtonLoading.value = true
+  const body = {
+    birthday_user: commentingUserId.value,
+    comment: comment.value
+  }
+
+  if (formType.value === FORM_TYPE_CREATE) {
+    try {
+      await birthdayStore.actionSendBirthdayComment(body)
+      await birthdayStore.actionGetBirthdayList({})
+      commentDialog.value = false
+      dialog.value = false
+      birthdayStore.filialItems.forEach(item => item.active = item.id === 1)
+      commentButtonLoading.value = false
+      dispatchNotify(null, t('successfully-send'), COLOR_TYPES.SUCCESS)
+    } catch (err) {
+      commentButtonLoading.value = false
+    }
+  } else {
+    try {
+      const { data } = await birthdayStore.actionUpdateBirthdayComment({
+        id: updatingCommentId.value,
+        body
+      })
+      birthdayStore.allBirthdays.find(item => item.id === birthdayItem?.value?.id).comment = data?.comment
+      commentDialog.value = false
+      comment.value = null
+      commentButtonLoading.value = false
+      dispatchNotify(null, t('updated'), COLOR_TYPES.SUCCESS)
+    } catch (err) {
+      commentButtonLoading.value = false
+    }
+  }
+}
+const sendComment = async (item) => {
+  if (!comment.value) {
+    dispatchNotify(null, t('required-text'), COLOR_TYPES.WARNING)
+    return
+  }
+
+  item.button_loading = true
+  try {
+    const { data } = await birthdayStore.actionSendBirthdayComment({
+      birthday_user: item.id,
+      comment: comment.value
+    })
+    item.comment_open = false
+    item.comment = comment.value
+    item.comment_id =
+    item.gifts[0].disable = true
+    item.gifts[0].count++
+    item.comment_id = data.id
+    dispatchNotify(null, t('successfully-send'), COLOR_TYPES.SUCCESS)
+    comment.value = null
+  } catch (err) {}
+  finally {
+    item.button_loading = false
+  }
+}
+const openCommentDialog = (item, comment) => {
+  if (!comment.disable) {
+    formType.value = FORM_TYPE_CREATE
+    birthdayItem.value = item
+    commentingUserId.value = item.id
+    commentDialog.value = true
+  }
+}
+const cancelComment = () => {
+  comment.value = null
+  commentDialog.value = false
+}
+const openCommentModalForUpdate = (item) => {
+  formType.value = FORM_TYPE_UPDATE
+  birthdayItem.value = item
+  updatingCommentId.value = item.comment_id
+  comment.value = item.comment
+  commentDialog.value = true
+  commentingUserId.value = item.id
 }
 // Hooks
 onMounted(async () => {
@@ -129,12 +236,12 @@ onMounted(async () => {
         class="flex items-center gap-x-1 cursor-pointer select-none"
         @click="onFilialTabChange(item)"
       >
-              <span
-                class="text-xs font-semibold"
-                :class="item.active ? 'text-greyscale-900' : 'text-greyscale-400'"
-              >
-                {{ t(item.label) }}
-              </span>
+        <span
+          class="text-xs font-semibold"
+          :class="item.active ? 'text-greyscale-900' : 'text-greyscale-400'"
+        >
+          {{ t(item.label) }}
+        </span>
 
         <div
           v-if="item.count"
@@ -167,7 +274,7 @@ onMounted(async () => {
             :space-between="4"
             navigation
             :autoplay="{ delay: 60000, disableOnInteraction: false }"
-            class="w-full"
+            class="w-full h-full"
           >
             <swiper-slide
               v-for="item in birthdayStore.birthdayList"
@@ -192,6 +299,7 @@ onMounted(async () => {
                     class="flex flex-col items-center gap-y-1"
                   >
                     <div
+                      v-if="!gift.comment"
                       class="flex flex-col justify-center items-center w-12 h-12 bg-greyscale-50 rounded-2xl"
                       :class="returnGiftClass(gift)"
                       @click="onGiftClick(gift)"
@@ -204,6 +312,19 @@ onMounted(async () => {
                       >
                     </div>
 
+                    <div
+                      v-else
+                      class="flex flex-col justify-center items-center w-12 h-12 bg-greyscale-50 rounded-2xl"
+                      :class="gift.disable ? '' : 'cursor-pointer hover:bg-greyscale-100'"
+                      @click="openCommentDialog(item, gift)"
+                    >
+                      <base-iconify
+                        :icon="DialogBoldIcon"
+                        class="!w-6 !h-6"
+                        :class="gift.disable ? 'text-primary-500' : 'text-greyscale-400'"
+                      />
+                    </div>
+
                     <span class="text-greyscale-400 text-xs font-medium">{{ gift.count }}</span>
                   </div>
                 </div>
@@ -211,27 +332,38 @@ onMounted(async () => {
             </swiper-slide>
             <span id="confetti" class="absolute top-0 right-1/2 w-0 h-full"></span>
           </swiper>
-
-          <div class="flex justify-center mt-6">
-            <div
-              class="flex items-center gap-x-1 text-sm text-primary-500 font-semibold cursor-pointer select-none"
-              @click="dialog = true"
-            >
-              <span>{{ t('all-birthdays') }}</span>
-              <base-iconify
-                :icon="AltArrowRightIcon"
-                class="text-primary-500 !h-4 !w-4"
-              />
-            </div>
-          </div>
         </template>
+
+        <div class="flex justify-around mt-6 items-end">
+          <div
+            class="flex items-center gap-x-1 text-sm text-primary-500 font-semibold cursor-pointer select-none"
+            @click="dialog = true"
+          >
+            <span>{{ t('all-birthdays') }}</span>
+            <base-iconify
+              :icon="AltArrowRightIcon"
+              class="text-primary-500 !h-4 !w-4"
+            />
+          </div>
+
+          <div
+            class="flex items-center gap-x-1 text-sm text-primary-500 font-semibold cursor-pointer select-none"
+            @click="birthdayCongratulationModal = true"
+          >
+            <span>{{ t('congratulatory') }}</span>
+            <base-iconify
+              :icon="AltArrowRightIcon"
+              class="text-primary-500 !h-4 !w-4"
+            />
+          </div>
+        </div>
       </template>
     </div>
 
     <!-- All birthday users dialog -->
     <base-dialog
       v-model="dialog"
-      max-width="max-w-[793px]"
+      max-width="max-w-[893px]"
       label="all-birthdays"
       :draggable="false"
     >
@@ -282,57 +414,181 @@ onMounted(async () => {
             <div
               v-for="item in birthdayStore.birthdayList"
               :key="item.id"
-              class="flex items-center justify-between border-b-[1.5px] border-greyscale-100 py-3"
+              class="flex flex-col border-b-[1.5px] border-greyscale-100 py-3"
             >
-              <div class="flex items-center gap-x-3 w-[294px]">
-                <base-avatar
-                  v-if="item.avatar"
-                  :label="item?.full_name"
-                  :image="item.avatar?.url"
-                  :color="item?.color"
-                  avatarClasses="w-11 h-11"
-                />
-                <div v-else class="flex flex-col w-11 h-11 justify-center items-center text-base font-semibold text-white bg-primary-500 rounded-full">{{ returnFirstLetter(item.full_name) }}</div>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-x-3 w-[394px]">
+                  <base-avatar
+                    v-if="item.avatar"
+                    :label="item?.full_name"
+                    :image="item.avatar?.url"
+                    :color="item?.color"
+                    avatarClasses="w-11 h-11"
+                  />
+                  <div v-else class="flex flex-col w-11 h-11 justify-center items-center text-base font-semibold text-white bg-primary-500 rounded-full">{{ returnFirstLetter(item.full_name) }}</div>
 
-                <div class="flex flex-col gap-y-1 truncate">
-                  <span class="text-sm text-greyscale-900 font-semibold">{{ item.full_name }}</span>
-                  <span class="text-xs text-greyscale-400 font-medium">{{ item.position?.name }}</span>
-                </div>
-              </div>
-
-              <div class="flex flex-col gap-y-1 ml-6">
-                <span class="text-xs font-semibold" :class="returnStatusColor(item?.status?.code)">{{ item.status?.name }}</span>
-                <span class="text-xs font-medium text-greyscale-500">{{ item.cisco || '00-00' }}</span>
-              </div>
-
-              <div class="flex items-center flex-1 justify-end gap-x-4">
-                <div
-                  v-for="gift in item.gifts"
-                  :key="gift.id"
-                  class="flex flex-col items-center gap-y-1"
-                >
-                  <div
-                    class="flex flex-col justify-center items-center w-11 h-11 bg-greyscale-50 rounded-xl"
-                    :class="returnGiftClass(gift)"
-                    @click="onGiftClick(gift)"
-                  >
-                    <img
-                      :src="gift.image"
-                      alt="Gift"
-                      class="w-6 h-6"
-                      :class="{ 'opacity-50' : gift.disable && !gift.selected }"
-                    >
+                  <div class="flex flex-col gap-y-1 truncate">
+                    <span class="text-sm text-greyscale-900 font-semibold">{{ item.full_name }}</span>
+                    <span class="text-xs text-greyscale-400 font-medium">{{ item.position?.name }} &nbsp; - &nbsp; {{ item?.company?.name }}</span>
                   </div>
+                </div>
 
-                  <span class="text-greyscale-400 text-xs font-medium">{{ gift.count }}</span>
+                <div class="flex flex-col gap-y-1 ml-6">
+                  <span class="text-xs font-semibold" :class="returnStatusColor(item?.status?.code)">{{ item.status?.name }}</span>
+                  <span class="text-xs font-medium text-greyscale-500">{{ item.cisco || '00-00' }}</span>
+                </div>
+
+                <div class="flex items-center flex-1 justify-end gap-x-4">
+                  <div
+                    v-for="gift in item.gifts"
+                    :key="gift.id"
+                    class="flex flex-col items-center gap-y-1"
+                  >
+                    <div
+                      v-if="!gift.comment"
+                      class="flex flex-col justify-center items-center w-12 h-12 bg-greyscale-50 rounded-2xl"
+                      :class="returnGiftClass(gift)"
+                      @click="onGiftClick(gift)"
+                    >
+                      <img
+                        :src="gift.image"
+                        alt="Gift"
+                        class="w-7 h-7"
+                        :class="{ 'opacity-50' : gift.disable && !gift.selected }"
+                      >
+                    </div>
+
+                    <div
+                      v-else
+                      class="flex flex-col justify-center items-center w-12 h-12 bg-greyscale-50 rounded-2xl"
+                      :class="gift.disable ? '' : 'cursor-pointer hover:bg-greyscale-100'"
+                      @click="toggleCommentField(item, gift)"
+                    >
+                      <base-iconify
+                        :icon="DialogBoldIcon"
+                        class="!w-6 !h-6"
+                        :class="gift.disable && todayActive ? 'text-primary-500' : 'text-greyscale-400'"
+                      />
+                    </div>
+
+                    <span class="text-greyscale-400 text-xs font-medium">{{ gift.count }}</span>
+                  </div>
                 </div>
               </div>
+
+              <div
+                v-if="item.comment"
+                class="flex gap-x-2 mt-2"
+              >
+                <div
+                  class="flex bg-greyscale-50 rounded-lg py-2 px-[10px] gap-x-2 w-full"
+                >
+                  <base-iconify
+                    :icon="DialogBoldIcon"
+                    class="text-greyscale-400"
+                  />
+
+                  <span class="flex-1 text-primary-500 text-xs font-medium">
+                  {{ item.comment }}
+                </span>
+                </div>
+
+                <div
+                  class="flex justify-center items-center rounded-lg bg-greyscale-50 w-9 h-9 cursor-pointer"
+                  @click="openCommentModalForUpdate(item)"
+                >
+                  <base-iconify
+                    :icon="PenBoldIcon"
+                    class="text-greyscale-400"
+                  />
+                </div>
+              </div>
+
+
+              <div
+                class="overflow-hidden transition-all duration-700 ease-in-out"
+                :class="{'max-h-96': item.comment_open, 'max-h-0': !item.comment_open}"
+              >
+                <!-- Child div that will fade in smoothly -->
+                <div
+                  v-show="item.comment_open"
+                  class="flex items-center gap-x-2 transition-opacity duration-700 ease-in-out opacity-0 mt-5"
+                  :class="{'opacity-100': item.comment_open, 'opacity-0': !item.comment_open}"
+                >
+                <base-input
+                  v-model="comment"
+                  placeholder="comment"
+                  class="w-full"
+                  input-class="outline-0 border-transparent shadow-none border-primary-500"
+                />
+
+                <base-button
+                  label="send"
+                  shadow
+                  rounded
+                  :loading="item.button_loading"
+                  @click="sendComment(item)"
+                />
+              </div>
+            </div>
             </div>
           </div>
         </template>
       </template>
     </base-dialog>
     <!-- /All birthday users dialog -->
+
+    <!-- Birthday comment dialog -->
+    <base-dialog
+      v-model="commentDialog"
+      max-width="max-w-[688px]"
+      label="comment"
+      :draggable="false"
+      @emit:after-hide="cancelComment"
+    >
+      <template #content>
+        <base-textarea
+          v-model="comment"
+          required
+          placeholder="comment"
+        />
+      </template>
+
+      <template #footer>
+        <div class="flex items-center justify-end  w-full">
+          <base-button
+            label="cancel"
+            rounded
+            outlined
+            shadow
+            color="text-primary-900"
+            border-color="border-transparent"
+            @click="cancelComment"
+          />
+          <base-button
+            label="send"
+            rounded
+            shadow
+            :loading="commentButtonLoading"
+            @click="manageComment"
+          />
+        </div>
+      </template>
+    </base-dialog>
+    <!-- /Birthday comment dialog -->
+
+    <!-- Birthday congratulations modal -->
+    <base-dialog
+      v-model="birthdayCongratulationModal"
+      max-width="max-w-[893px]"
+      label="congratulatory"
+      :draggable="false"
+    >
+      <template #content>
+        <birthday-congratulations-modal />
+      </template>
+    </base-dialog>
+    <!-- /Birthday congratulations modal -->
   </div>
 </template>
 

@@ -81,7 +81,9 @@ const select = ref({
             :label="item.full_name"
             :color="item.color ?? '#635AFF'"
             :image="item?.avatar?.url"
+            :meta="item"
             shape="circle"
+            detail-dialog
             avatar-classes="w-6 h-6"
           />
 

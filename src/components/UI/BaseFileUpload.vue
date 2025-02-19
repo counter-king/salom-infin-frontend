@@ -12,6 +12,7 @@ import {
 	RestartIcon,
 	XMarkSolidIcon
 } from '@/components/Icons'
+import { fetchBlobFile } from "@/services/file.service";
 // Compsable
 const { t } = useI18n()
 
@@ -95,10 +96,13 @@ const uploadFiles = async (files) => {
         item.progress = Math.floor((loaded / total) * 100) - 1;
       }
     })
-      .then(({ data }) => {
+      .then(async ({ data }) => {
         item.id = data.id;
         item.uploaded = true;
         item.url = data.url
+        const fileBlob = await fetchBlobFile(data.id)
+        item.blobUrl = fileBlob.blobUrl
+        item.extension = data.extension
       })
       .catch(() => {
         item.uploaded = false;

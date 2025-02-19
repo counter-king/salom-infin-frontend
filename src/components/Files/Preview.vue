@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue'
+import { saveAs } from 'file-saver'
 // Components
 import { FileDownloadIcon } from '@/components/Icons'
 // Utils
@@ -12,24 +13,26 @@ const props = defineProps({
   }
 })
 // Computed
-const extension = computed(
-  () => isObject(props.file)
-    ? props.file.url.split(".").pop()
-    : props.url.split(".").pop()
-)
+const extension = computed(() => props.file?.extension?.toLowerCase() || '')
+// Methods
+const download = () => {
+  if (props.file) {
+    saveAs(props.file.url || props.file.blobUrl, props.file.name)
+  }
+}
 </script>
 
 <template>
   <div v-if="props.file" class="h-full overflow-y-auto">
     <template v-if="extension === 'pdf' || extension === 'PDF'">
       <object
-        :data="props.file?.url"
+        :data="file.url ? file.url : file?.blobUrl"
         type="application/pdf"
         width="100%"
         height="100%"
       >
 	      <iframe
-          :src="isObject(props.file) ? props.file?.url : props.url"
+          :src="file.url ? file.url : file?.blobUrl"
           width="500px"
           height="500px"
         />
@@ -38,7 +41,7 @@ const extension = computed(
 
     <template v-else-if="extension === 'jpg' || extension === 'jpeg' || extension === 'png'">
       <img
-        :src="isObject(props.file) ? props.file?.url : props.url"
+        :src="file.url ? file.url : file?.blobUrl"
         alt="Document image"
         class="max-w-full mx-auto block"
       />
@@ -48,16 +51,14 @@ const extension = computed(
       <div class="flex flex-col items-center justify-center h-full">
         <h3 class="text-lg font-bold text-primary-900">{{ $t('unsupported-file-type') }}</h3>
 
-        <a
-          :href="isObject(props.file) ? props.file?.url : props.url"
-          :download="isObject(props.file) ? props.file?.url : props.url"
-          target="_blank"
-          class="flex gap-2 bg-primary-500 text-sm font-medium text-white rounded-full py-2 px-4 mt-2"
+        <div
+          class="flex gap-2 bg-primary-500 text-sm font-medium text-white rounded-full py-2 px-4 mt-2 cursor-pointer"
+          @click="download"
         >
           {{ $t('upload-file') }}
 
           <base-iconify :icon="FileDownloadIcon" />
-        </a>
+        </div>
       </div>
     </template>
   </div>

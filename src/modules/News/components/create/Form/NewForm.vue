@@ -19,7 +19,7 @@ import {UserWithRadio} from "@/components/Users"
 //icons
 import BaseIconify from '@/components/UI/BaseIconify.vue';
 import { TrashBinBoldIcon } from '@/components/Icons';
-//stores  
+//stores
 import { useNewsStore } from '../../../stores';
 // utils
 import { dispatchNotify } from '@/utils/notify';
@@ -93,11 +93,11 @@ const onSubmitForm = async (isDraft = false) => {
         }else {
           contents.push({ type: CONTENT_TYPES.QUOTE, content: content.value.trim()})
         }
-      } 
+      }
     }
-    
+
     newsStore.model.contents = contents;
-    
+
     const formData = {
       title: newsStore.model.title,
       description: newsStore.model.description,
@@ -119,8 +119,8 @@ const onSubmitForm = async (isDraft = false) => {
     newsStore.loadingSubmitButton = false
     newsStore.restStore()
     router.push({ name: 'MyNewsList', query: {...router.currentRoute.value.query, activeMenu: 'my-posts'}})
-  } 
-  catch (error) { 
+  }
+  catch (error) {
     dispatchNotify(null, error.message, COLOR_TYPES.ERROR)
   }
 }
@@ -155,7 +155,7 @@ watch(locale, () => {
 })
 
 watch(()=>newsStore.model.category, async (val) => {
-    await newsStore.actionGetTagList({categories: val})  
+    await newsStore.actionGetTagList({categories: val})
 })
 
 // counter of short description
@@ -184,43 +184,43 @@ onMounted(() => {
     <base-row>
       <base-col col-class="w-full ">
        <!-- upload image how looks -->
-        <div 
+        <div
           class="grid grid-cols-3 gap-4 justify-between mt-2 w-full relative"
           v-if="!!newsStore.model.image?.url"
         >
           <div
-            class="aspect-ratio-box rounded-lg overflow-hidden relative h-full w-full" 
+            class="aspect-ratio-box rounded-lg overflow-hidden relative h-full w-full"
             :style="{ '--dynamic-src': `url(${newsStore.model.image.url})` }"
           >
             <img :src="newsStore.model.image.url" alt="rasm" class="w-full h-full object-contain absolute z-2" />
           </div>
         </div>
         <label class="block text-sm font-medium text-greyscale-500 my-1">{{ t('main-image') }} <span class="text-red-500"> *</span></label>
-        <file-upload 
-          :multiple="false" 
-          :files="props.imageFile && [props.imageFile]" 
+        <file-upload
+          :multiple="false"
+          :files="props.imageFile && [props.imageFile]"
           :allowedFileTypes="allowedImageTypes"
           @emit:file-upload="(val) => { newsStore.model.image = val[0]; $v.image.$model = val[0] || null }"
-          @emit:on-file-delete="() => { newsStore.model.image = null; $v.image.$model = null }" 
+          @emit:on-file-delete="() => { newsStore.model.image = null; $v.image.$model = null }"
           :error="$v.image"
           :allowed-file-info="t('allowed-file-info',{ formats: allowedImageTypes.map(item => item.split('/')[1]).join(', '), size: '10' })"
           />
       </base-col>
       <base-col col-class="w-full pt-6 flex flex-col gap-2">
         <label class="block text-sm font-medium text-greyscale-500" :class="countCharNewsHeadline >= 257 ? 'text-red-500' : ''">{{ t('news-headline',{ count: 256 }) }} <span class="text-red-500"> *</span> {{ !!countCharNewsHeadline ? countCharNewsHeadline : ""  }}</label>
-        <base-input 
-          v-model="$v.title.$model" 
-          :error="$v.title" 
-          required 
+        <base-input
+          v-model="$v.title.$model"
+          :error="$v.title"
+          required
           placeholder="enter-news-headline"
           :maxlength="256"
           />
       </base-col>
       <base-col col-class="w-full flex flex-col gap-2 overflow-hidden">
         <label class="block text-sm font-medium text-greyscale-500" :class="countChar >= 257 ? 'text-red-500' : ''">{{ t('new-short-description',{ count: 256 }) }} <span class="text-red-500"> *</span> {{ !!countChar ? countChar : ""  }}</label>
-        <base-textarea 
-          v-model="$v.description.$model" 
-          :error="$v.description" 
+        <base-textarea
+          v-model="$v.description.$model"
+          :error="$v.description"
           :required="true" :max-length="256"
           />
       </base-col>
@@ -231,41 +231,41 @@ onMounted(() => {
           <label v-if="field.type === CONTENT_TYPES.TEXT" class="block text-sm font-medium text-greyscale-500 mb-2">{{ t('main-text') }}</label>
             <!-- <base-tiny-editor
             :height="500"
-            v-if="field.type === CONTENT_TYPES.TEXT" 
+            v-if="field.type === CONTENT_TYPES.TEXT"
               v-model="field.value"
               :default-font-size="20"
             /> -->
-            <base-froala-editor 
-              v-if="field.type === CONTENT_TYPES.TEXT" 
-              v-model="field.value" 
+            <base-froala-editor
+              v-if="field.type === CONTENT_TYPES.TEXT"
+              v-model="field.value"
             />
             <!-- upload image how looks -->
-           <div 
+           <div
             class="grid grid-cols-3 gap-4 justify-between my-2 w-full relative"
              v-if="field.type === CONTENT_TYPES.FILE && allowedImageTypes.some(item => item.includes(field.value?.type))"
             >
               <div
-                class="aspect-ratio-box rounded-lg overflow-hidden relative h-full w-full" 
+                class="aspect-ratio-box rounded-lg overflow-hidden relative h-full w-full"
                 :style="{ '--dynamic-src': `url(${field.value?.url})` }"
               >
                 <img :src="field.value?.url" alt="rasm" class="w-full h-full object-contain absolute z-2" />
               </div>
             </div>
-            <label 
+            <label
               v-if="field.type === CONTENT_TYPES.FILE"
               class="block text-sm font-medium text-greyscale-500 mb-2">
               {{ t('additional-images') }}
           </label>
-          <file-upload 
+          <file-upload
             v-if="field.type === CONTENT_TYPES.FILE"
-            :multiple="false" 
+            :multiple="false"
             :files="field.value && [field.value]"
             :allowedFileTypes="allowedFileTypes"
             @emit:file-upload="(val) => field.value = val[0]"
-            @emit:on-file-delete="() => field.value = null" 
+            @emit:on-file-delete="() => field.value = null"
             :allowed-file-info="t('allowed-file-info',{ formats: allowedFileTypes.map(item => item.split('/')[1]).join(', '), size: '10' })"
             />
-          <base-textarea 
+          <base-textarea
             v-if="field.type === CONTENT_TYPES.QUOTE"
             v-model="field.value"
             :label="t('quotes')"
@@ -282,22 +282,22 @@ onMounted(() => {
         <h2 class="text-sm font-medium text-greyscale-500">{{ t('add-more') }}</h2>
       </base-col>
       <base-col col-class="w-full flex gap-2">
-        <add-card 
+        <add-card
           text="main-text"
-          @click="addDynamicField(CONTENT_TYPES.TEXT)" 
+          @click="addDynamicField(CONTENT_TYPES.TEXT)"
           class="w-fit" icon-color="warning-500"
         />
         <add-card text="additional-images"
          @click="addDynamicField(CONTENT_TYPES.FILE)"
-         class="w-fit" icon-color="success-500" 
+         class="w-fit" icon-color="success-500"
          />
         <add-card text="quotes"
           @click="addDynamicField(CONTENT_TYPES.QUOTE)"
-          class="w-fit" icon-color="critic-500" 
+          class="w-fit" icon-color="critic-500"
         />
       </base-col>
       <base-col col-class="w-full pt-6">
-        <base-dropdown v-model.number="$v.category.$model" 
+        <base-dropdown v-model.number="$v.category.$model"
           :error="$v.category"
           :options="newsStore.categoryList"
           option-value="id"
@@ -308,7 +308,7 @@ onMounted(() => {
       </base-col>
       <base-col col-class="w-full pt-6">
         <base-multi-select
-          v-model="$v.tags_ids.$model" 
+          v-model="$v.tags_ids.$model"
           wrapper-class="relative"
           api-url="news-tags"
           :error="$v.tags_ids"
@@ -335,24 +335,24 @@ onMounted(() => {
         </base-multi-select>
       </base-col>
       <!-- upload gallery images how looks -->
-      <div 
+      <div
         class="grid grid-cols-3 gap-4 justify-between mt-2 w-full relative"
         :class="newsStore.model.images_ids.length && 'justify-start'"
         >
       <template v-if="!!newsStore.model.images_ids.length">
         <template v-for="(item, index) in newsStore.model.images_ids" :key="index">
-            <div 
-                class="aspect-ratio-box rounded-lg overflow-hidden relative h-full w-full" 
+            <div
+                class="aspect-ratio-box rounded-lg overflow-hidden relative h-full w-full"
                 :style="{ '--dynamic-src': `url(${item.url})` }"
               >
-              <img :src="item.url" alt="rasm" class="w-full h-full object-contain absolute z-2" />
+              <img :src="item.url" alt="rasm" class="w-full h-full object-contain absolute z-2" />s
             </div>
           </template>
         </template>
       </div>
       <base-col col-class="w-full pt-6">
         <label class="block text-sm font-medium text-greyscale-500 mb-2">{{ t('gallery') }}</label>
-        <file-upload :multiple="true" 
+        <file-upload :multiple="true"
           :files="props.galleryFiles"
           :allowedFileTypes="allowedImageTypes"
           @emit:file-upload="(val) => newsStore.model.images_ids = val"
@@ -374,13 +374,13 @@ onMounted(() => {
   content: '';
   position: absolute;
   top: 0;
-  left: 0;  
+  left: 0;
   width: 100%;
   height: 100%;
   background-image: var(--dynamic-src);
   background-size: cover;
   filter: blur(10px);
-  background-position: center; 
+  background-position: center;
   z-index: 0;
 }
 </style>

@@ -3,7 +3,7 @@
 import {computed} from "vue"
 // Components
 import {RemoveMinusIcon, UnreadLinearIcon} from "@/components/Icons"
-import { SenderProcessCard } from "@/modules/HR/modules/BusinessTrip/components/index"
+import { SenderProcessCard, NextDestinationDisabledCard } from "@/modules/HR/modules/BusinessTrip/components/index"
 
 const props = defineProps({
   verifications: {
@@ -14,10 +14,22 @@ const props = defineProps({
 
 // Computed
 const alignment = computed(() => {
-  return props.verifications.length % 2 === 0 ? 'right' : 'left'
+  return props.verifications.filter(item => item.arrived_at).length % 2 === 0 ? 'right' : 'left'
 })
 const isAllReceiversVerified = computed(() => {
   return props.verifications.filter(item => !item.is_sender)?.every(every => every.left_at && every.arrived_at)
+})
+const isNextDestinationVisible = computed(() => {
+  const filteredArray = props.verifications.filter(item => item.arrived_at || item.is_sender)
+  const lastItem = filteredArray.length > 0 ? filteredArray[filteredArray.length - 1] : null
+
+  if (!lastItem) return false // Ensure safe access to lastItem properties
+
+  if (lastItem.left_at && !lastItem.is_sender) {
+    return true
+  }
+
+  return lastItem.is_sender && !lastItem.left_at
 })
 const sender = computed(() => {
   return props.verifications.find(item => item.is_sender)
@@ -48,6 +60,11 @@ const stepperIcon = computed(() => {
         v-if="alignment === 'left' && isAllReceiversVerified"
         :verifications="props.verifications"
       />
+
+      <next-destination-disabled-card
+        v-if="alignment === 'left' && !isAllReceiversVerified && isNextDestinationVisible"
+        :verifications="props.verifications"
+      />
     </div>
 
     <div class="flex flex-col items-center w-8">
@@ -73,6 +90,11 @@ const stepperIcon = computed(() => {
     <div class="w-[350px] min-h-[80px]">
       <sender-process-card
         v-if="alignment === 'right' && isAllReceiversVerified"
+        :verifications="props.verifications"
+      />
+
+      <next-destination-disabled-card
+        v-if="alignment === 'right' && !isAllReceiversVerified && isNextDestinationVisible"
         :verifications="props.verifications"
       />
     </div>

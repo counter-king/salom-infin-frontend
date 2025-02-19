@@ -96,22 +96,22 @@ const onConfirm = async () => {
       </span>
     </div>
 
-    <div class="flex justify-end items-center">
+<!--    <div class="flex justify-end items-center">-->
 
-      <base-button
-        v-if="!isArrived && isSenderOffice"
-        size="small"
-        label="arrived"
-        @click="dialog = true"
-      >
-      </base-button>
-    </div>
+<!--      <base-button-->
+<!--        v-if="!isArrived && isSenderOffice"-->
+<!--        size="small"-->
+<!--        label="arrived"-->
+<!--        @click="dialog = true"-->
+<!--      >-->
+<!--      </base-button>-->
+<!--    </div>-->
 
-    <verification-confirmation-modal
-      v-model="dialog"
-      ref="confirmModal"
-      @emit:on-confirm="onConfirm"
-    />
+<!--    <verification-confirmation-modal-->
+<!--      v-model="dialog"-->
+<!--      ref="confirmModal"-->
+<!--      @emit:on-confirm="onConfirm"-->
+<!--    />-->
   </div>
 </template>
 

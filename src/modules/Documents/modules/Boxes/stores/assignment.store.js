@@ -10,6 +10,7 @@ import { fetchPerformList } from '../services/review.service'
 import { dispatchNotify } from '@/utils/notify'
 import { COLOR_TYPES, JOURNAL } from '@/enums'
 import { useCollectRequestsStore } from "@/stores/collect-requests.store";
+import { useBlobFileStore } from "@/stores/file.store";
 
 export const useAssignmentStore = defineStore("assignment", {
   state: () => ({
@@ -235,7 +236,22 @@ export const useAssignmentStore = defineStore("assignment", {
       let { data: performers } = await fetchPerformList({ id: data.assignment.id })
 
       this.detailModel = data
-      this.detailModel.document.__files = data.document.files.map(file => file.file)
+      // Если есть файлы
+      if(data.document.files && data.document.files.length) {
+        this.detailModel.document.__files = await Promise.all(
+          data.document.files.map(async item => {
+            if (!item.file.url) {
+              const blobFile = await useBlobFileStore().actionGetBlobFile(item?.file?.id)
+              return {
+                ...item.file,
+                ...blobFile
+              }
+            } else {
+              return item.file
+            }
+          })
+        )
+      }
 
       this.actionSetPerform({
         content: data.content,
