@@ -19,14 +19,14 @@ const props = defineProps({
   onShowEmojiContextMenu: {
     type: Function
   },
+  handleClickEmoji: {
+    type: Function
+  },
   index: {
     type: Number
   }
 })
 
-const onEmojiContextMenuClick = (event) => {
-  props.onShowEmojiContextMenu(event);
-}
 
 </script>
 <template>
@@ -57,7 +57,7 @@ const onEmojiContextMenuClick = (event) => {
           v-if="!!props.message.replied_to"
           class="flex flex-col gap-1 pl-2 pr-2 border-l-[2px] rounded-r-[8px] bg-white/[12%]"
           >
-          <span class="text-xs font-semibold text-white truncate">{{ props.message.replied_to?.user?.first_name }} {{ props.message.replied_to?.user?.last_name }}</span>
+          <span class="text-xs font-semibold text-white truncate">{{ props.message.replied_to?.sender?.first_name }} {{ props.message.replied_to?.sender?.last_name }}</span>
           <span class="text-xs font-medium text-white/[65%] truncate">{{ props.message.replied_to?.text }}</span>
         </div>
         <p class="text-sm font-medium text-white bg-primary-400 whitespace-normal break-all" >{{ props.message?.text }}</p> 
@@ -65,9 +65,13 @@ const onEmojiContextMenuClick = (event) => {
       <!-- <p @contextmenu.prevent="onContextMenuClick" class="text-sm font-medium text-white bg-primary-400 rounded-xl rounded-br-[4px] px-4 py-2" >{{ props.text }}</p> -->
     </div>
     <!-- reactions -->
-    <div v-if="!!props.message.reactions?.length" class="flex gap-1">
-      <template v-for="reaction in props.message.reactions">
-        <ClickedStiker :onContextMenuClick="onEmojiContextMenuClick" :reaction="reaction" />
+    <div v-if="Object.keys(props.message.reactions).length" class="flex gap-1">
+      <template v-for="reaction in Object.keys(props.message.reactions)" :key="reaction">
+        <ClickedStiker 
+          @click="props.handleClickEmoji(reaction, message.message_id)"
+          :onContextMenuClick="(e)=>props.onShowEmojiContextMenu(e, props.message.reactions[reaction])" 
+          :emoji="reaction"
+          :userReactionList="props.message.reactions[reaction]" />
       </template>
     </div>
   </div>

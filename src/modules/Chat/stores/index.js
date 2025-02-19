@@ -256,7 +256,18 @@ export const useChatStore = defineStore("chat-stores", {
           this.messageListByChatIdAddMoreLoading = true;
         }
         const { data } = await fetchGetMessagesByChatId(params);
-        const messageList = data?.results?.reverse()?.map((item) => ({
+        const messageList = data?.results?.reverse()?.map((item) => {
+          const groupedReactions = {};
+          item.reactions?.forEach(reaction => {
+            const emoji = reaction.emoji;
+            const user = reaction.user;
+            if (!groupedReactions[emoji]) {
+                groupedReactions[emoji] = [];
+            }
+            groupedReactions[emoji].push(user);
+          });
+
+          return {
           attachments: item.attachments || [],
           chat_id: item.chat,
           created_date: item.created_date,
@@ -267,8 +278,8 @@ export const useChatStore = defineStore("chat-stores", {
           sender: item.sender,
           text: item.text,
           message_type: item.type,
-          reactions: item.reactions || [],
-        }));
+          reactions: groupedReactions,
+        }});
         if(resetList){
           this.messageListByChatId = messageList;
           this.messageListByChatIdLoading = false;

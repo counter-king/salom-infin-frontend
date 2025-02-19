@@ -38,8 +38,8 @@ const sendNewMessageEvent = (data)=> {
 }
 
 const sendReplayNewMessageEvent = (data)=> {
-    const payload = { command: 'new_message', chat_type: route.name == CHAT_ROUTE_NAMES.PRIVATE ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: route.params.id, text: data?.text, message_type: data.message_type, replied_to_id: chatStore.contextMenu?.message?.message_id } 
-    send(JSON.stringify(payload))  
+  const payload = { command: 'new_message', chat_type: route.name == CHAT_ROUTE_NAMES.PRIVATE ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: route.params.id, text: data?.text, message_type: data.message_type, replied_to_id: chatStore.contextMenu?.message?.message_id } 
+  send(JSON.stringify(payload))  
 }
 
 const handleSendMessage = () => {

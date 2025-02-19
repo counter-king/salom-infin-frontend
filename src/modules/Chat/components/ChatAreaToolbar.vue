@@ -16,7 +16,6 @@ import { useAuthStore } from '@/modules/Auth/stores';
 // constatns
 import { CHAT_ROUTE_NAMES } from '../constatns';
 
-
 const chatStore = useChatStore();
 const authStore = useAuthStore()
 const route = useRoute();

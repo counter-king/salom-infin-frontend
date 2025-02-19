@@ -90,9 +90,11 @@ watch(data, (newData) => {
   else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_DELETED) {    
     chatStore.messageListByChatId = chatStore.messageListByChatId.filter(item=> item.message_id != newData?.content?.message_id)
     chatStore.contextMenu.deleteDialog = false
-  } else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_UPDATE) {
+  }
+  else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_UPDATE) {
     chatStore.messageListByChatId.find(item=> item.message_id == newData?.content?.message_id).text = newData?.content?.text
-  } else if(newData.type == WEBCOCKET_EVENTS.NEW_GROUP_CHAT) {
+  }
+  else if(newData.type == WEBCOCKET_EVENTS.NEW_GROUP_CHAT) {
     if(chatStore.groupChatList.some(item=> item.chat_id == newData?.content?.chat_id)){
       chatStore.groupChatList.unshift({
         chat_id: newData?.content?.chat_id,
@@ -102,11 +104,45 @@ watch(data, (newData) => {
       })
     }
   }
+  else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_REACTION) {
+    const message = chatStore.messageListByChatId.find(item=> item.message_id == newData?.message_id)
+    if(newData?.action == "created") {
+      if (!message.reactions[newData.emoji]) {
+        message.reactions[newData.emoji] = [];
+      }
+      message.reactions[newData.emoji]?.push(newData?.user)
+    }
+    else if(newData?.action == "deleted"){
+      message.reactions[newData.emoji] = message.reactions[newData?.emoji].filter(user=> user.id != newData?.user?.id)
+      if(message.reactions[newData.emoji].length == 0) {
+        delete message.reactions[newData.emoji]
+      }
+    }
+    else if(newData?.action == "updated") {
+        // Eski emojini o‘chirib, yangisini qo‘shish
+        Object.keys(message.reactions).forEach(emoji => {
+          message.reactions[emoji] = message.reactions[emoji].filter(user => {
+            if (user.id === newData?.user?.id) {
+              // Foydalanuvchi eski emojida bo‘lsa, uni o‘chiramiz
+              return false;
+            }
+            return true;
+          });
+          // Agar eski emoji bo‘sh bo‘lib qolsa, uni o‘chiramiz
+          if (message.reactions[emoji].length === 0) {
+            delete message.reactions[emoji];
+          }
+        });
+        // Yangi emojini qo‘shish
+        if (!message.reactions[newData?.emoji]) {
+          message.reactions[newData?.emoji] = [];
+        }
+        message.reactions[newData?.emoji].push(newData?.user);
+    }
+  }
 });
 
-watch(routeId, (newRouteId) => {  
-  console.log("routeId",newRouteId);
-  
+watch(routeId, (newRouteId) => {    
   if(route.name == CHAT_ROUTE_NAMES.PRIVATE) {
     sendChatHandshake(newRouteId, CHAT_TYPES.PRIVATE)
   }

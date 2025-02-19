@@ -66,7 +66,16 @@ export const downloadFile = async () => {
   }
 }
 
-export const collectionStikers = [
+export const collectionStikers = {
+  fire: '🔥',
+  lough: '😄',
+  heart: '❤️',
+  like: '👍',
+  angry: '😡',
+  love: '😍'
+}
+
+export const stikersTypes = [
   {
     type: 'fire', 
     value: '🔥' 

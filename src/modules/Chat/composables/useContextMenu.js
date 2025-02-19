@@ -1,5 +1,6 @@
 // cores
 import { ref } from "vue";
+import { useRoute } from "vue-router";
 // components
 import { CopyIcon, ForwardIcon, PenIcon, TrashBinTrashIcon } from "@/components/Icons";
 // stores
@@ -8,26 +9,26 @@ import { useChatStore } from '../stores';
 import { dispatchNotify } from "@/utils/notify";
 // enums
 import { COLOR_TYPES } from "@/enums";
+// socket
+import { socket } from "@/services/socket";
+// constants
+import { CHAT_ROUTE_NAMES, CHAT_TYPES } from "../constatns";
 
 const chatStore = useChatStore()
 
 export const useContextMenu = () => {
+const route = useRoute()
+const { send } = socket
 // reactives
 const refContextMenu = ref(null);
 
+const sendReactionEvent = (type) => {
+  const payload = { command: "message_reaction", chat_id: route.params.id, chat_type: route.name == CHAT_ROUTE_NAMES.PRIVATE ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, message_id: chatStore.contextMenu?.tempMessage?.message_id, emoji: type }
+  send(JSON.stringify(payload))
+}
+
 const handleClickStiker = (value, type)=> {
-  chatStore.contextMenu.message = chatStore.contextMenu.tempMessage
-  let index = chatStore.contextMenu?.index
-  if (index !== undefined && index !== null && chatStore.messageListByChatId[index]) {
-    const reactionIndex = chatStore.messageListByChatId[index].reactions.findIndex((item)=> item.type === type)
-    if(reactionIndex !== -1){
-      chatStore.messageListByChatId[index].reactions.splice(reactionIndex, 1);
-    } else{
-      chatStore.messageListByChatId[index].reactions.push({ type, value });
-    }
-  } else {
-    console.error("Index not found or invalid");
-  }
+  sendReactionEvent(type)  
 }
 
 const menuItems = ref([
@@ -37,6 +38,7 @@ const menuItems = ref([
       handleClickStiker(value, type)
      },
      command: () => {
+
      }  
    },
    { 
@@ -44,6 +46,7 @@ const menuItems = ref([
      iconName: ForwardIcon,
      iconClass:"rotate-y-180 transform rotate-y-180", 
      command: () => {
+      console.log(chatStore.contextMenu.tempMessage);
       chatStore.contextMenu = { ...chatStore.contextMenu, message: chatStore.contextMenu.tempMessage, replay: true, edit: false }
      } 
    },

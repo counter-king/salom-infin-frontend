@@ -41,7 +41,7 @@ const showScrollDownButton = ref(false);
 const refChatArea = ref(null);
 const refSendMessage = ref(null);
 const refEmojiContextMenu = ref(null);
-
+const emojiMenuItems = ref([]);
 // methods
 // when scroll down, scrollDwonButton will be visible
 const handleScroll = (event) => {
@@ -68,7 +68,22 @@ const onShowContextMenu = (event, message, index) => {
   chatStore.contextMenu.index = index
 }
 
-const onShowEmojiContextMenu = (event) => {
+const handleClickEmoji = (emojiType, messageId) => {
+  chatStore.contextMenu.tempMessage = { message_id: messageId }
+  menuItems.value[0].action(emojiType, emojiType)
+}
+
+const onShowEmojiContextMenu = (event, userReactionList) => {
+  console.log(userReactionList);
+  emojiMenuItems.value = userReactionList.map((item)=>({
+      label: `${item?.first_name} ${item?.last_name}`,
+      avatar: item?.avatar,
+      color: item?.color,
+      iconName: true,
+      command: () => {
+      } 
+   }))
+  
   refEmojiContextMenu.value.menu.show(event);
 }
 
@@ -82,20 +97,20 @@ const onClickChatArea = () => {
   }
 }
 
-const emojiMenuItems = ref([
-   { 
-     label: 'select-image',
-     iconName: true,
-     command: () => {
-     } 
-   },
-   { 
-     label: 'delete',
-     iconName: true,
-     command: () => {
-     },
-   }
-]);
+// const emojiMenuItems = ref([
+//    { 
+//      label: 'select-image',
+//      iconName: true,
+//      command: () => {
+//      } 
+//    },
+//    { 
+//      label: 'delete',
+//      iconName: true,
+//      command: () => {
+//      },
+//    }
+// ]);
 
 
 const showDateByCalculate = (index) => {
@@ -184,6 +199,7 @@ onMounted(async () => {
             </template>
             <template v-else>
               <OwnerText 
+                :handleClickEmoji="handleClickEmoji"
                 :onShowContextMenu="onShowContextMenu" 
                 :onShowEmojiContextMenu="onShowEmojiContextMenu" 
                 :message="message"
@@ -203,7 +219,9 @@ onMounted(async () => {
             </template>
             <template v-else>
               <FriendText 
+                :handleClickEmoji="handleClickEmoji"
                 :onShowContextMenu="onShowContextMenu" 
+                :onShowEmojiContextMenu="onShowEmojiContextMenu" 
                 :avatarVisible="showFriendTextAvatar(index)" 
                 :message="message"
               />
@@ -251,13 +269,13 @@ onMounted(async () => {
   <ContextMenu ref="refEmojiContextMenu" :menu-items="emojiMenuItems" class-menu="w-[229px]">
    <template  #default="{ item }">
      <base-avatar
-       label="Doclines Project"
-       color="#E2E8F0"
-       shape="circle"
-       avatar-classes="w-6 h-6"
-       label-classes="text-lg font-semibold text-greyscale-900"
+       :label="item?.label"
+       :image="item?.avatar?.url"
+       :color="item?.color"
+       avatar-classes="!w-6 !h-6"
+       label-classes="text-sm font-semibold text-greyscale-900"
      />
-     <span class="text-xs font-medium">{{ item.label }}</span>
+     <span class="text-xs font-medium">{{ item?.label }}</span>
    </template>
   </ContextMenu>
   <DeleteDialog 

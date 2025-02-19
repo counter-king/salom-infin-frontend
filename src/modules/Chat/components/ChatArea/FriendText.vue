@@ -2,12 +2,19 @@
 // cores
 // componennts
 import { CheckBigIcon, CheckReadIcon } from '@/components/Icons';
+import ClickedStiker from './ClickedStiker.vue';
 // utils
 import { formatHour } from '@/utils/formatDate';
 // props
 const props = defineProps({
   message: {
     type: Object
+  },
+  handleClickEmoji: {
+    type: Function
+  },
+  onShowEmojiContextMenu: {
+    type: Function
   },
   avatarVisible: {
     type: Boolean,
@@ -30,21 +37,34 @@ const props = defineProps({
         avatar-classes="w-8 h-8"
         :class="{'!visible': props.avatarVisible, '!invisible': !props.avatarVisible}"
       />
-      <div 
-        @contextmenu.prevent="onShowContextMenu($event, props.message, props.index)"
-         class="friend-text flex flex-col gap-1 bg-white rounded-2xl rounded-bl-[4px] px-4 py-2 cursor-pointer  max-w-[400px]"
-         :class="[{'!rounded-2xl !rounded-tl-[4px]': props.avatarVisible}]"
-        >
+      <div class="flex flex-col gap-2">
+        <!-- message -->
         <div 
-          v-if="false"
-          class="flex flex-col gap-1 pl-2 border-l-[2px] border-warning-500"
+          @contextmenu.prevent="onShowContextMenu($event, props.message, props.index)"
+          class="friend-text flex flex-col gap-1 bg-white rounded-2xl rounded-bl-[4px] px-4 py-2 cursor-pointer w-fit  max-w-[400px]"
+          :class="[{'!rounded-2xl !rounded-tl-[4px]': props.avatarVisible}]"
           >
-          <span class="text-xs font-semibold text-warning-500">Абдуллаев Рустам</span>
-          <span class="text-xs font-medium text-greyscale-500">Привет, хорошо, спасибо!</span>
+          <div 
+            v-if="!!props.message.replied_to"
+            class="flex flex-col gap-1 pl-2 border-l-[2px] border-warning-500"
+            >
+            <span class="text-xs font-semibold text-warning-500">{{ props.message.replied_to?.sender?.first_name }} {{ props.message.replied_to?.sender?.last_name }}</span>
+            <span class="text-xs font-medium text-greyscale-500">{{ props.message.replied_to?.text }}</span>
+          </div>
+          <p class="text-sm font-medium text-greyscale-900 whitespace-normal break-all">
+            {{ props.message?.text }}
+          </p>
         </div>
-        <p class="text-sm font-medium text-greyscale-900 whitespace-normal break-all">
-          {{ props.message?.text }}
-        </p>
+        <!-- reactions -->
+        <div v-if="Object.keys(props.message.reactions).length" class="flex gap-1">
+          <template v-for="reaction in Object.keys(props.message.reactions)" :key="reaction">
+            <ClickedStiker 
+              @click="props.handleClickEmoji(reaction, message.message_id)"
+              :onContextMenuClick="(e)=>props.onShowEmojiContextMenu(e, props.message.reactions[reaction])" 
+              :emoji="reaction"
+              :userReactionList="props.message.reactions[reaction]" />
+          </template>
+        </div>
       </div>
       <p class="text-xs font-medium text-greyscale-500 self-end">{{ formatHour(props.message.created_date) }}</p>
     </div>
