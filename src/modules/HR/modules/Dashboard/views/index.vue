@@ -232,21 +232,8 @@ const genderOptions = ref({
     }
   }
 })
-const genderSeries = ref([1706, 2654])
-const genderList = ref([
-  {
-    title: 'Женщины',
-    // count: `${100 * (1706 + 2654) / 1706}%`,
-    number: 1706,
-    class: 'bg-[#FF7290]'
-  },
-  {
-    title: 'Мужчины',
-    // count: `${100 * (1706 + 2654) / 2654}%`,
-    number: 2654,
-    class: 'bg-[#5EC1E7]'
-  },
-])
+const genderSeries = ref([])
+const genderList = ref([])
 
 watchEffect(async () => {
   if(!branchSelect.value) {
@@ -268,9 +255,27 @@ const getGenderList = async () => {
     })
 
     console.log('BY GENDER', data)
+
+    genderSeries.value = data.map(item => item['COUNT'])
+    genderList.value = data.map(item => {
+      return {
+        title: item['GENDER'] === 'F' ? 'Женщины' : 'Мужчины',
+        number: item['COUNT'],
+        class: item['GENDER'] === 'F' ? 'bg-[#FF7290]' : 'bg-[#5EC1E7]'
+      }
+    })
   }
   catch (error) {
-
+    let mock = [
+      {
+        "GENDER": "F",
+        "COUNT": 1706
+      },
+      {
+        "GENDER": "M",
+        "COUNT": 2654
+      }
+    ]
   }
   finally {
     setTimeout(() => {
@@ -593,28 +598,34 @@ onMounted(async () => {
       <card>
         <h1 class="font-semibold text-greyscale-900 mb-2">Пол</h1>
 
-        <div class="flex items-center relative pb-3">
-          <div class="max-w-[280px] w-full">
-            <apexchart type="donut" :options="genderOptions" :series="genderSeries"></apexchart>
+        <template v-if="genderLoading">
+          <base-spinner />
+        </template>
+
+        <template v-else>
+          <div class="flex items-center relative pb-3">
+            <div class="max-w-[280px] w-full">
+              <apexchart type="donut" :options="genderOptions" :series="genderSeries"></apexchart>
+            </div>
+
+            <div class="flex-1 max-w-[275px] w-full absolute right-0">
+              <template v-for="item in genderList">
+                <div class="group flex items-center gap-2 font-medium text-greyscale-500 rounded-xl hover:bg-greyscale-50 px-3 py-[6px]">
+                  <div
+                    class="w-[10px] h-[10px] rounded"
+                    :class="item.class"
+                  ></div>
+
+                  <h1 class="flex-1 text-[13px] group-hover:text-greyscale-900">{{ item.title }}</h1>
+
+                  <span class="text-greyscale-900 text-sm font-semibold">{{ item.number }}</span>
+
+                  <!--                <span class="w-9 text-right text-sm group-hover:text-greyscale-900">{{ item.count }}</span>-->
+                </div>
+              </template>
+            </div>
           </div>
-
-          <div class="flex-1 max-w-[275px] w-full absolute right-0">
-            <template v-for="item in genderList">
-              <div class="group flex items-center gap-2 font-medium text-greyscale-500 rounded-xl hover:bg-greyscale-50 px-3 py-[6px]">
-                <div
-                  class="w-[10px] h-[10px] rounded"
-                  :class="item.class"
-                ></div>
-
-                <h1 class="flex-1 text-[13px] group-hover:text-greyscale-900">{{ item.title }}</h1>
-
-                <span class="text-greyscale-900 text-sm font-semibold">{{ item.number }}</span>
-
-<!--                <span class="w-9 text-right text-sm group-hover:text-greyscale-900">{{ item.count }}</span>-->
-              </div>
-            </template>
-          </div>
-        </div>
+        </template>
       </card>
     </div>
   </div>
