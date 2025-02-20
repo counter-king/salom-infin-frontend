@@ -128,7 +128,7 @@ watch(
   () => route.params?.id,
   async (newId, oldId) => {
     if (newId !== oldId && route.name === CHAT_ROUTE_NAMES.GROUP) {
-      await chatStore.actionGetMessageListByChatId({chat:newId}, true);
+      chatStore.actionGetMessageListByChatId({chat:newId}, true);
       chatStore.selectedGroup = await chatStore.actionGetGroupChatById(newId);
     }
   }
@@ -136,9 +136,12 @@ watch(
 
 onMounted(async () => {
   chatStore.selectedGroup = await chatStore.actionGetGroupChatById(route.params?.id);
-  await chatStore.actionGetMessageListByChatId({chat:route.params?.id}, true);
-  chatStore.contextMenu = {}
+  const { count } = await chatStore.actionGetMessageListByChatId({ chat:route.params?.id }, true);
+  hasNext.value = count > page.value * pageSize.value
+  page.value += 1
+  refChatArea.value.scrollTop = refChatArea.value?.scrollHeight
 })
+
 </script>
 <template>
  <!-- style="height: calc(100% - 135px)"  -->
