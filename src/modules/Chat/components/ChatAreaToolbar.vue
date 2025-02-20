@@ -67,12 +67,12 @@ const onDeleteChat = async () => {
   if(route.name == CHAT_ROUTE_NAMES.GROUP){
     await fetchDeleteGroupChatById(chatStore.selectedGroup?.chat_id)
     chatStore.selectedGroup = null
-    router.push({name: CHAT_ROUTE_NAMES.CHAT_INDEX})
-    chatStore.actionGetPrivateChatList()
+    router.push({name: CHAT_ROUTE_NAMES.GROUP})
+    chatStore.actionGetGroupChatList()  
   } else if(route.name == CHAT_ROUTE_NAMES.PRIVATE){
     await fetchDeletePrivateChatById(chatStore.selectedUser?.chat_id)
     chatStore.selectedUser = null
-    router.push({name: CHAT_ROUTE_NAMES.CHAT_INDEX})
+    router.push({name: CHAT_ROUTE_NAMES.PRIVATE})
     chatStore.actionGetPrivateChatList()
   }
   
@@ -83,7 +83,7 @@ const onDeleteChat = async () => {
 
 </script>
 <template>
-  <div @click="createGroupDialogVisible = false" class="flex items-center w-full h-[72px] border-b px-6 pr-3 cursor-pointer">
+  <div @click="createGroupDialogVisible = true" class="flex items-center w-full h-[72px] border-b px-6 pr-3 cursor-pointer">
     <div class="flex justify-between items-center w-full">
       <div class="flex">
         <div class="relative">
@@ -112,7 +112,7 @@ const onDeleteChat = async () => {
          :class="chatStore.rightSidebarVisible ? 'text-primary-500' : 'text-greyscale-500'"
          @click.stop="chatStore.toggleRightSidebar"
         />
-        <div @click="toggle"   class="relative flex justify-center">
+        <div @click.stop="toggle"   class="relative flex justify-center">
           <base-iconify
           :icon="MenuDotsBoldIcon"
           class="!w-6 !h-6 text-greyscale-300 cursor-pointer transform rotate-90"    

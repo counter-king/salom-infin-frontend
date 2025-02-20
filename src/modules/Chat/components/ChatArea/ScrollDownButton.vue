@@ -17,6 +17,6 @@ const props = defineProps({
      :icon="ChevronDown20SolidIcon"
      class="!w-5 !h-5 text-greyscale-900"
     />
-    <div class="flex items-center justify-center text-[10px] text-white font-semibold h-4 w-4 bg-critic-500 rounded-full absolute top-[-2px] right-0 z-10">2</div>
+    <!-- <div class="flex items-center justify-center text-[10px] text-white font-semibold h-4 w-4 bg-critic-500 rounded-full absolute top-[-2px] right-0 z-10">2</div> -->
  </div>
 </template>

@@ -48,13 +48,13 @@ const props = defineProps({
       </div>
       <div class="flex justify-between items-center mt-1">
         <div class="text-xs font-medium text-greyscale-500 truncate max-w-[200px]">
-          <template v-if="fileTypes[props.user?.last_message_type]">
+          <template v-if="fileTypes[props.user?.last_message_type]?.icon">
             <base-iconify
-              :icon="fileTypes[props.user?.last_message_type]"
+              :icon="fileTypes[props.user?.last_message_type]?.icon"
               class="!w-4 !h-4 mr-1 inline-block align-middle"
+              :class="fileTypes[props.user?.last_message_type]?.class"
             />
           </template>
-          
           {{ props.user?.last_message }}
         </div>
         <div v-if="false" class="flex justify-center items-center bg-critic-500 w-5 h-5 rounded-3xl">

@@ -36,29 +36,42 @@ const returnShortFileName = (fileName) => {
      let fileName = returnShortFileName(files[i].name);
      let size = files[i].size;
      let fileSize = (size > 1048576) ? (size / 1048576).toFixed(2) + ' MB' : (size <= 1048576 && size > 1024) ? (size / 1024).toFixed(2) + ' KB' : size + ' B'
-     chatStore.uploadingFiles.push({ id: null, name: fileName, size: fileSize, progress: 0, uploaded: null, file: files[i], abortController: abortController, signal: signal});
-    
+     const message = { 
+                    attachments: { 
+                      file: {
+                        size: fileSize,
+                        id: null,
+                        abortController: abortController,
+                        signal: signal,
+                        process: 0,
+                        file: files[i]
+                    }},
+                    message_type: MESSAGE_TYPES.FILE,
+                    reactions: [],
+                    text: fileName,
+                    uploaded: false,
+                    progress: 0,
+                  }
+     chatStore.uploadingFiles.push(message);
     }
 
-   for (const item of chatStore.uploadingFiles.filter((obj) => obj.uploaded === null)) {
+   for (const item of chatStore.uploadingFiles) {
      let formData = new FormData();
-     formData.append("file", item.file);
+     formData.append("file", item.attachments?.file?.file);
 
      await axiosConfig.post(`/upload/`, formData, {
        onUploadProgress: ({ loaded, total }) => {
          item.progress = Math.floor((loaded / total) * 100) - 1;
        },
-       signal: item.signal
+       signal: item.attachments?.file?.signal
      })
        .then(({ data }) => {
-        console.log("ishlmoqda",data.name)
         // sending file to websocket          
-        const currentMessageType =  messageTypes.find(type=>type === item.file.type.split("/")[0]) || MESSAGE_TYPES.FILE     
+        const currentMessageType =  messageTypes.find(type=>type === item.attachments?.file?.file?.type.split("/")[0]) || MESSAGE_TYPES.FILE     
          sendChatFileEmit(data.id, data.name, route.params.id, currentMessageType, route.name == CHAT_ROUTE_NAMES.PRIVATE ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP); 
-         
-         item.id = data.id;
-         item.uploaded = true;
-         item.url = data.url
+         item.attachments.file.id = data.id;
+         item.uploaded = false;
+         item.attachments.file.url = data.url
        })
        .catch(() => {
          item.uploaded = false;

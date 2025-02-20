@@ -1,5 +1,4 @@
 import { ClapperboardPlayLinearIcon, FileTextIcon, GalleryIcon } from "@/components/Icons"
-import axiosConfig from "@/services/axios.config"
 
 export const CHAT_TYPES = {
   PRIVATE: "private",
@@ -34,10 +33,10 @@ export const MESSAGE_TYPES = {
 
 
 export const fileTypes = {
-  image: GalleryIcon,
-  video: ClapperboardPlayLinearIcon,
-  file: FileTextIcon,
-  text: false,
+  image: {icon: GalleryIcon, class: '!text-critic-500', class2: '!text-white'},
+  video: {icon: ClapperboardPlayLinearIcon, class: '!text-success-500', class2: '!text-white'},
+  file: { icon: FileTextIcon, class: '!text-warning-500', class2: '!text-white'},
+  text: {icon: false, class: '!text-greyscale-500', class2: '!text-white'},
 }
 
 export const COMPONENT_TYPES = {
@@ -47,23 +46,6 @@ export const COMPONENT_TYPES = {
   VIDEOS: "videos",
   IMAGES: "images",
   GROUP_USERS: "group-users",
-}
-
-export const downloadFile = async () => {
-  try {
-    const response = await axiosConfig.get('path/to/your/document.pdf')
-    const blob = await response.blob()
-    const url = window.URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = 'document.pdf'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    window.URL.revokeObjectURL(url)
-  } catch (error) {
-    console.error('Download failed:', error)
-  }
 }
 
 export const collectionStikers = {

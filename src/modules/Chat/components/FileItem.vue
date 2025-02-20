@@ -1,9 +1,7 @@
 <script setup>
 // core
 import { useI18n } from 'vue-i18n';
-import { downloadFile } from '../constatns';
-
-const { t } = useI18n();
+import { downloadFile } from '../services/file.service';
 
 const props = defineProps({
   info: {
@@ -44,13 +42,13 @@ const props = defineProps({
        />
     </div>
     <div class="grow flex flex-col gap-1 select-none">
-      <h3 class="text-sm font-semibold text-greyscale-900 capitalize">{{t(props.info.title) }}</h3>
-      <p class="text-xs text-greyscale-500">{{ t('chat-info-file',{count: props.info.count, size: props.info.size}) }}</p>
+      <h3 class="text-sm font-semibold text-greyscale-900 capitalize">{{props.info.title }}</h3>
+      <!-- <p class="text-xs text-greyscale-500">{{ t('chat-info-file',{count: props.info.count, size: props.info.size}) }}</p> -->
     </div>
     <slot name="right-icon">
      <base-iconify 
-      @click="downloadFile" 
-      v-if="!!props.rightIcon"
+     @click="downloadFile(props.message?.attachments?.file)" 
+       v-if="!!props.rightIcon"
        :icon="props.rightIcon.name"
         class="!h-5 !w-5" 
        :class="props.rightIcon.class"

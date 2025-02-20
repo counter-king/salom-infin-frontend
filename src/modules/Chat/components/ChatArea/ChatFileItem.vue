@@ -1,83 +1,88 @@
 <script setup>
 // core
-import { downloadFile } from '../../constatns';
+// components
+import ClickedStiker from './ClickedStiker.vue';
+import { DownloadMinimalisticIcon } from '@/components/Icons';
+// contants
+import { fileTypes } from '../../constatns';
+// utils
+import { formatHour } from '@/utils/formatDate';
+// services
+import { downloadFile } from '../../services/file.service';
 
 const props = defineProps({
   message: {
     type: Object
   },
-  rightIcon: {
-   name: {
-    type: String,
-   },
-   class: {
-    type: String,
-   }
+  handleClickEmoji: {
+    type: Function
   },
-  leftIcon: {
-   name: {
-    type: String,
-   },
-   class: {
-    type: String,
-   }
+  onShowEmojiContextMenu: {
+    type: Function
   },
   onShowContextMenu: {
     type: Function
   },
-  type: {
-   type: String,
-   default: 'friend',
-   validator: (value) => {
-    return ['owner', 'friend'].includes(value)
-   }
+  classNames: {
+    type: [String, Array, Object] 
   }
 })
 
 </script>
 <template>
  <div 
-  class="flex"
-  :class="{'justify-end': props.type === 'owner'}"
+  class="flex gap-2 justify-end"
+  :class="classNames"
   >
-  <div 
-    @contextmenu.prevent="(e)=>props.onShowContextMenu(e, props.message)"
-    class="flex gap-4 items-center p-2 pr-4 min-w-[243px] max-w-[400px] w-full group bg-white cursor-pointer rounded-xl"
-    :class="{'!bg-primary-400': props.type === 'owner'}"
-    >
-      <div 
-        class="p-[10px] bg-greyscale-50 rounded-lg"
-        :class="{'!bg-primary-300': props.type === 'owner'}"
-        >
-        <base-iconify 
-        :icon="props.leftIcon.name"
-         class="!h-5 !w-5" 
-        :class="props.leftIcon.class"
-        />
+    <div class="flex flex-col gap-2">
+      <div class="flex gap-3">
+        <p class="text-xs font-medium text-greyscale-500 self-end">{{ props.message?.created_date && formatHour(props.message?.created_date) }}</p>
+        <div class="flex flex-col gap-2">
+          <div 
+            @contextmenu.prevent="(e)=>props.onShowContextMenu(e, props.message)"
+            @click=""
+            class="flex gap-4 items-center p-2 pr-4 min-w-[243px] max-w-[400px] w-full group bg-primary-400 cursor-pointer rounded-xl"
+            >
+              <div class="p-[10px] rounded-lg !bg-primary-300">
+                <base-iconify 
+                :icon="fileTypes[props.message?.message_type].icon"
+                class="!h-5 !w-5" 
+                :class="fileTypes[props.message?.message_type].class2"
+                />
+              </div>
+              <div class="grow flex flex-col gap-1 select-none">
+                <h3   
+                  class="text-sm font-semibold capitalize text-white"
+                  >{{ props.message?.text }}</h3>
+                <p 
+                  class="text-xs text-primary-100"
+                >{{ props.message?.size }}</p>
+              </div>
+              <base-iconify 
+                @click="downloadFile(props.message?.attachments?.file)" 
+                v-if="props.message?.uploaded"
+                :icon="DownloadMinimalisticIcon"
+                class="!h-5 !w-5 !text-greyscale-90" 
+              />
+              <BaseSpinner 
+                v-else
+                class="!w-4 !h-4 text-greyscale-500 animate-spin" 
+                :style="{'--spinner-stroke-color': 'white'}" 
+              />
+          </div>
+          <!-- reactions -->
+          <div v-if="Object.keys(props.message.reactions).length" class="flex gap-1">
+            <template v-for="reaction in Object.keys(props.message.reactions)" :key="reaction">
+              <ClickedStiker 
+                @click="props.handleClickEmoji(reaction, message.message_id)"
+                :onContextMenuClick="(e)=>props.onShowEmojiContextMenu(e, props.message.reactions[reaction])" 
+                :emoji="reaction"
+                :userReactionList="props.message.reactions[reaction]" />
+            </template>
+          </div>
+        </div>
       </div>
-      <div class="grow flex flex-col gap-1 select-none">
-        <h3   
-           class="text-sm font-semibold text-greyscale-900 capitalize"
-          :class="{'!text-white': props.type === 'owner'}"
-          >{{ props.message?.text }}</h3>
-        <p 
-         :class="{'text-primary-100': props.type === 'owner'}"
-          class="text-xs text-greyscale-500"
-        >{{ props.message?.size }}</p>
-      </div>
-      <base-iconify 
-        @click="downloadFile" 
-        v-if="!!props.message?.uploaded"
-        :icon="props.rightIcon.name"
-        class="!h-5 !w-5" 
-        :class="[{'text-greyscale-90': props.type === 'owner'} ,props.rightIcon.class]"
-      />
-      <BaseSpinner 
-        v-else
-        class="!w-4 !h-4 text-greyscale-500 animate-spin" 
-        :style="{'--spinner-stroke-color': props.type === 'owner' ? 'white' : 'var(--success-500)'}" 
-      />
-  </div>
+    </div>
  </div>
 </template>
 <style scoped>

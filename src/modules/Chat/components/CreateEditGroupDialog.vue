@@ -64,13 +64,14 @@ const emit = defineEmits(['update:modelValue']);
 // methods
 const onSubmit = async () => {
   const isValid = await $v.value.$validate();
-    
+  
   if(!isValid) return;
   if(props.type === 'create') {
-    fetchCreateGroupChat({images:[{image: uploadingFiles.value[0]?.id}], title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
+   await fetchCreateGroupChat({images:[{image: uploadingFiles.value[0]?.id}], title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
     chatStore.actionGetGroupChatList();
   } else if(props.type === 'edit') {
-    fetchEditGroupChat(chatStore.selectedGroup?.chat_id, { images: uploadingFiles.value[0]?.id ?[{ image: uploadingFiles.value[0]?.id }]: undefined, title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
+    await fetchEditGroupChat(chatStore.selectedGroup?.chat_id, { images: uploadingFiles.value[0]?.id ?[{ image: uploadingFiles.value[0]?.id }]: undefined, title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
+    chatStore.actionGetGroupChatList();
   }
 
   uploadingFiles.value = [];

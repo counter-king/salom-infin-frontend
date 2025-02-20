@@ -44,28 +44,31 @@ watch(status, (newStatus) => {
 watch(data, (newData) => {
   
   newData = JSON.parse(newData);
-  console.log("ewasd",newData);
+  // console.log("ewasd",newData);
   
   if(newData.command == WEBCOCKET_EVENTS.USER_HANDSHAKE) {
-    console.log("user hand",newData);
+    // console.log("user hand",newData);
   }
   else if(newData.command == WEBCOCKET_EVENTS.CHAT_HANDSHAKE) {
-    console.log("chat hand",newData);
+    // console.log("chat hand",newData);
   }
   else if(newData.type == WEBCOCKET_EVENTS.NEW_MESSAGE) {    
-    if(newData.chat_type == CHAT_TYPES.PRIVATE){      
+    if(newData.chat_type == CHAT_TYPES.PRIVATE){     
+      chatStore.uploadingFiles = chatStore.uploadingFiles.filter(item=> item?.attachments?.file?.id != newData?.files[0]?.id) 
       chatStore.messageListByChatId.push({
-        attachments: newData.attachments || [],
+        attachments: { file: newData.files[0] },
         chat_id: newData.chat_id,
         created_date: newData.created_date,
         edited: newData.edited,
-        message_id: newData.id,
+        message_id: newData.message_id,
         modified_date: newData.modified_date,
         replied_to: newData.replied_to,
         sender: newData.sender,
         text: newData.text,
         message_type: newData.message_type,
-        chat_type: newData.chat_type
+        reactions: [],
+        chat_type: newData.chat_type,
+        uploaded: true,
       })
       // set last message to privatelist chat
       // chatStore.privateChatList.find(item=> item.chat_id == newData.chat_id).last_message = newData.text
@@ -93,6 +96,7 @@ watch(data, (newData) => {
   }
   else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_UPDATE) {
     chatStore.messageListByChatId.find(item=> item.message_id == newData?.content?.message_id).text = newData?.content?.text
+    chatStore.messageListByChatId.find(item=> item.message_id == newData?.content?.message_id).message_id = newData?.content?.message_id
   }
   else if(newData.type == WEBCOCKET_EVENTS.NEW_GROUP_CHAT) {
     if(chatStore.groupChatList.some(item=> item.chat_id == newData?.content?.chat_id)){

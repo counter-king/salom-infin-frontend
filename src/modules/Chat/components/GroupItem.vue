@@ -41,12 +41,13 @@ const props = defineProps({
       </div>
 
       <div class="flex justify-between items-center mt-1">
-        <div class="text-xs font-medium text-greyscale-500 truncate max-w-[200px]">
-          <span class="text-primary-500 font-semibold">{{ props.group?.last_message?.sender?.first_name }}{{props.group?.last_message?.sender?.first_name && ':'}} </span>
-            <template v-if="fileTypes[props.group?.last_message?.type]">
+        <div class="flex gap-[1px] items-center text-xs font-medium text-greyscale-500 truncate max-w-[200px]">
+          <span class="flex items-center text-primary-500 font-semibold">{{ props.group?.last_message?.sender?.first_name }}{{props.group?.last_message?.sender?.first_name && ':'}} </span>
+            <template v-if="fileTypes[props.group?.last_message?.type]?.icon">
               <base-iconify
-              :icon="fileTypes[props.group?.last_message?.type]"
+              :icon="fileTypes[props.group?.last_message?.type]?.icon"
               class="!w-4 !h-4 mr-1 inline-block align-middle"
+              :class="fileTypes[props.group?.last_message?.type]?.class"
               />
             </template>
             {{ props.group?.last_message?.text }}

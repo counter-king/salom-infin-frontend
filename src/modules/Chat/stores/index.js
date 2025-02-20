@@ -15,10 +15,11 @@ import {
   fetchUsersSearchByMessage
 } from "@/modules/Chat/services";
 // constants  
-import { CHAT_TYPES, collectionStikers } from "../constatns";
+import { CHAT_TYPES, collectionStikers, MESSAGE_TYPES } from "../constatns";
 import { useAuthStore } from "@/modules/Auth/stores";
 import { dispatchNotify } from "@/utils/notify";
 import { COLOR_TYPES } from "@/enums";
+import { fetchBlobFile } from "@/services/file.service";
 
 const authStore = useAuthStore();
 
@@ -256,7 +257,8 @@ export const useChatStore = defineStore("chat-stores", {
           this.messageListByChatIdAddMoreLoading = true;
         }
         const { data } = await fetchGetMessagesByChatId(params);
-        const messageList = data?.results?.reverse()?.map((item) => {
+        const messageList =  await Promise.all(data?.results?.reverse()?.map( async (item) => {
+          // reactions grouping
           const groupedReactions = {};
           item.reactions?.forEach(reaction => {
             const emoji = reaction.emoji;
@@ -266,9 +268,14 @@ export const useChatStore = defineStore("chat-stores", {
             }
             groupedReactions[emoji].push(user);
           });
+                  // image fetch blob URL
+          if (item.type == MESSAGE_TYPES.IMAGE && item.attachments[0]?.file?.id) {
+            const { blobUrl } = await fetchBlobFile(item.attachments[0]?.file?.id);
+            item.attachments[0].file.url = blobUrl;
+          }
 
           return {
-          attachments: item.attachments || [],
+          attachments: item.attachments[0],
           chat_id: item.chat,
           created_date: item.created_date,
           edited: item.edited,
@@ -277,9 +284,11 @@ export const useChatStore = defineStore("chat-stores", {
           replied_to: item.replied_to,
           sender: item.sender,
           text: item.text,
-          message_type: item.type,
+          message_type: item.type || MESSAGE_TYPES.TEXT,
           reactions: groupedReactions,
-        }});
+          uploaded: true,
+        }}));
+
         if(resetList){
           this.messageListByChatId = messageList;
           this.messageListByChatIdLoading = false;
@@ -290,8 +299,8 @@ export const useChatStore = defineStore("chat-stores", {
         // checking has next page
         return data
       } catch(e){
-        dispatchNotify(null,e,COLOR_TYPES.ERROR)
-      }
+        dispatchNotify(null, e, COLOR_TYPES.ERROR)
+      } 
     },
     /** */
     async actionDeleteMessageById(id) {

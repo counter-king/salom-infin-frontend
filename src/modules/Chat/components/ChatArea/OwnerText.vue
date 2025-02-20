@@ -2,7 +2,7 @@
 // cores
 import { useI18n } from 'vue-i18n';
 // componennts
-import { CheckBigIcon, CheckReadIcon, DangerCircleIcon } from '@/components/Icons';
+import { CheckBigIcon, CheckReadIcon, DangerCircleIcon, Pen2Icon, PenBoldIcon, PenIcon } from '@/components/Icons';
 import BaseIconify from '@/components/UI/BaseIconify.vue';
 import ClickedStiker from './ClickedStiker.vue';
 // utils
@@ -24,13 +24,16 @@ const props = defineProps({
   },
   index: {
     type: Number
+  },
+  classNames: {
+    type: [String , Array, Object] 
   }
 })
 
 
 </script>
 <template>
-  <div class="flex flex-col gap-2 items-end">
+  <div class="flex flex-col gap-2 items-end" :class="classNames">
     <div class="flex gap-3 justify-end items-end relative">
       <!-- error text -->
       <div v-if="false" class="flex items-center justify-end text-critic-500 gap-[6px]">
@@ -60,12 +63,21 @@ const props = defineProps({
           <span class="text-xs font-semibold text-white truncate">{{ props.message.replied_to?.sender?.first_name }} {{ props.message.replied_to?.sender?.last_name }}</span>
           <span class="text-xs font-medium text-white/[65%] truncate">{{ props.message.replied_to?.text }}</span>
         </div>
+        <!-- text -->
         <p class="text-sm font-medium text-white bg-primary-400 whitespace-normal break-all" >{{ props.message?.text }}</p> 
+        <!-- edit -->
+        <div v-if="props.message?.edited" class="flex gap-1 items-center text-[10px] font-medium text-white/[70%] self-end">
+          <base-iconify
+            :icon="PenBoldIcon"
+            class="!w-3 !h-3"
+          />
+          <span>{{ t('edited') }}</span>
+        </div>   
       </div>
       <!-- <p @contextmenu.prevent="onContextMenuClick" class="text-sm font-medium text-white bg-primary-400 rounded-xl rounded-br-[4px] px-4 py-2" >{{ props.text }}</p> -->
     </div>
     <!-- reactions -->
-    <div v-if="Object.keys(props.message.reactions).length" class="flex gap-1">
+    <div v-if="props.message.reactions &&Object.keys(props.message.reactions).length" class="flex gap-1">
       <template v-for="reaction in Object.keys(props.message.reactions)" :key="reaction">
         <ClickedStiker 
           @click="props.handleClickEmoji(reaction, message.message_id)"
