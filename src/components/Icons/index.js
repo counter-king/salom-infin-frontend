@@ -79,6 +79,7 @@ export { default as RoundAltArrowDownIcon } from  '~icons/solar/round-alt-arrow-
 export { default as DocumentTextIcon } from  '~icons/solar/document-text-outline'
 export { default as NotesIcon } from  '~icons/solar/notes-outline'
 export { default as HomeAngle2Icon } from  '~icons/solar/home-angle-2-outline'
+export { default as HomeSmileAngleIcon } from  '~icons/solar/home-smile-angle-outline'
 export { default as FolderWithFilesIcon } from  '~icons/solar/folder-with-files-outline'
 export { default as UserCheckIcon } from  '~icons/solar/user-check-outline'
 export { default as CloudUploadIcon } from  '~icons/solar/cloud-upload-outline'
@@ -164,6 +165,9 @@ export { default as UsersGroupBoldDuotoneIcon } from  '~icons/solar/users-group-
 export { default as UserCheckBoldDuotoneIcon } from  '~icons/solar/user-check-bold-duotone'
 export { default as CalendarDateBoldDuotoneIcon } from  '~icons/solar/calendar-date-bold-duotone'
 export { default as QuestionCircleBoldDuotoneIcon } from  '~icons/solar/question-circle-bold-duotone'
+export { default as NoteBookBoldDuotoneIcon } from  '~icons/solar/notebook-bold-duotone'
+export { default as CaseRoundBoldDuotoneIcon } from  '~icons/solar/case-round-bold-duotone'
+export { default as UserSpeakBoldDuotoneIcon } from  '~icons/solar/user-speak-bold-duotone'
 // Solar (Bold Broken)
 export { default as UserCheckRoundedBrokenIcon } from  '~icons/solar/user-check-rounded-broken'
 // Fluent
