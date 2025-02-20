@@ -2,7 +2,7 @@
 // Core
 import { ref } from 'vue'
 // Components
-import { CaseIcon, UserIcon, SettingsMinimalisticIcon } from '@/components/Icons'
+import { CaseIcon, UserIcon, SettingsMinimalisticIcon, HomeSmileAngleIcon } from '@/components/Icons'
 import TheSidebar from '@/components/TheSidebar.vue'
 import TheFooter from '@/components/TheFooter.vue';
 // Stores
@@ -34,6 +34,12 @@ const menus = ref([
     link: "AgreementSettingsIndex",
     children: []
   },
+  {
+    title: "dashboard",
+    icon: HomeSmileAngleIcon,
+    link: "HrDashboardIndex",
+    children: []
+  },
 ])
 </script>
 
@@ -44,7 +50,7 @@ const menus = ref([
     <div class="flex flex-col flex-1 overflow-y-auto p-6 pb-2">
       <router-view />
       <div class="mt-auto">
-        <the-footer/>   
+        <the-footer/>
       </div>
     </div>
   </div>

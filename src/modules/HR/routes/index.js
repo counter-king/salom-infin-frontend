@@ -2,6 +2,7 @@ import Profile from '../modules/Profile/routes'
 import BusinessTrip from "@/modules/HR/modules/BusinessTrip/routes"
 import Agreements from '../modules/Agreements/routes'
 import AgreementSettings from '../modules/AgreementSettings/routes'
+import Dashboard from '../modules/Dashboard/routes'
 
 const HR = [
   {
@@ -20,7 +21,9 @@ const HR = [
       // Agreements
       ...Agreements,
       // AgreementSettings
-      ...AgreementSettings
+      ...AgreementSettings,
+      // Dashboard
+      ...Dashboard
     ]
   }
 ]
