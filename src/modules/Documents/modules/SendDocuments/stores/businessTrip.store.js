@@ -40,6 +40,7 @@ import {
 } from "@/utils";
 import { formatDateReverse } from "@/utils/formatDate";
 import { adjustBTDateToTimeArray } from "@/modules/Documents/modules/SendDocuments/utils";
+import { useCountStore } from "@/stores/count.store";
 
 export const useBusinessTripStore = defineStore("sd-business-trip-store", {
   state: () => ({
@@ -276,6 +277,7 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
       const {response, error} = await withAsync(fetchCreateDocument, model)
       if (response) {
         this.buttonLoading = false
+        await useCountStore().actionCountList()
         return Promise.resolve(response)
       } else {
         this.buttonLoading = false
@@ -292,6 +294,7 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
       } catch (err) {
         return Promise.reject(err)
       } finally {
+        await useCountStore().actionCountList()
         this.buttonLoading = false
       }
     },
