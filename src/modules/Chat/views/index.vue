@@ -99,7 +99,7 @@ watch(data, (newData) => {
     chatStore.messageListByChatId.find(item=> item.message_id == newData?.content?.message_id).message_id = newData?.content?.message_id
   }
   else if(newData.type == WEBCOCKET_EVENTS.NEW_GROUP_CHAT) {
-    if(chatStore.groupChatList.some(item=> item.chat_id == newData?.content?.chat_id)){
+    if(!chatStore.groupChatList.find(item=> item.chat_id == newData?.content?.chat_id)){
       chatStore.groupChatList.unshift({
         chat_id: newData?.content?.chat_id,
         title: newData?.content?.title,

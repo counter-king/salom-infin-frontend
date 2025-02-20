@@ -241,7 +241,7 @@ onMounted(async () => {
         </template>
       </base-brick-tab>
     </template>
-    <create-edit-group-dialog v-model="createGroupDialogVisible" type="create"/>
+    <create-edit-group-dialog v-if="createGroupDialogVisible" v-model="createGroupDialogVisible" type="create"/>
   </div>
 
 </template>
