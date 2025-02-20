@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
+import axiosConfig from '@/services/axios.config'
 import { fetchCompaniesList, fetchDepartmentList } from '@/services/common.service'
 import {
   UsersGroupBoldDuotoneIcon,
@@ -10,7 +11,7 @@ import {
 } from '@/components/Icons'
 import HandbookDropdown from '@/modules/Handbook/components/Dropdown.vue'
 import Card from '../components/Card.vue'
-import axiosConfig from "@/services/axios.config";
+import { USER_STATUS_CODES } from '@/enums'
 
 const { t } = useI18n()
 
@@ -254,8 +255,6 @@ const getGenderList = async () => {
       query_type: 'by_gender',
     })
 
-    console.log('BY GENDER', data)
-
     genderSeries.value = data.map(item => item['COUNT'])
     genderList.value = data.map(item => {
       return {
@@ -265,18 +264,7 @@ const getGenderList = async () => {
       }
     })
   }
-  catch (error) {
-    let mock = [
-      {
-        "GENDER": "F",
-        "COUNT": 1706
-      },
-      {
-        "GENDER": "M",
-        "COUNT": 2654
-      }
-    ]
-  }
+  catch (error) {}
   finally {
     setTimeout(() => {
       genderLoading.value = false
@@ -284,8 +272,418 @@ const getGenderList = async () => {
   }
 }
 
+const conditionLoading = ref(true)
+const conditionOptions = ref({
+  chart: {
+    type: 'donut',
+    offsetX: -45,
+  },
+  dataLabels: {
+    enabled: false
+  },
+  tooltip: {
+    enabled: false
+  },
+  legend: {
+    show: false,
+  },
+  fill: {
+    colors: [
+      '#29CD74',
+      '#5EC1E7',
+      '#FF7290',
+      '#FDC031',
+      '#827BFF',
+      '#FF72D5',
+      '#635AFF',
+      '#767994',
+      '#63BA3D',
+      '#FFC352',
+      '#11A5ED'
+    ],
+  },
+  stroke: {
+    width: 8
+  },
+  plotOptions: {
+    pie: {
+      customScale: 1,
+      donut: {
+        size: '75%',
+        labels: {
+          show: true,
+          value: {
+            show: true,
+            fontSize: '22px',
+            fontFamily: 'SFProDisplay-Semibold',
+            fontWeight: 600,
+            color: '#191F3F',
+            offsetY: 8,
+          },
+          total: {
+            show: true,
+            label: 'Сотрудники',
+            fontSize: '18px',
+            color: '#9CA8B9',
+            fontFamily: 'SFProDisplay-Regular',
+            showAlways: true
+          }
+        }
+      },
+      expandOnClick: false
+    }
+  }
+})
+const conditionSeries = ref([])
+const conditionList = ref([])
+const getConditionList = async () => {
+  try {
+    conditionLoading.value = true
+    let { data } = await axiosConfig.get(`sql-query/`, {
+      query_type: 'by_condition',
+    })
+
+    conditionSeries.value = data.map(item => item['COUNT'])
+    conditionList.value = data.map(item => {
+      return {
+        title: item['CONDITION_NOTE'],
+        number: item['COUNT'],
+        class: conditionColors(item['CONDITION'])
+      }
+    })
+  }
+  catch (error) {
+    let mock = [
+      {
+        "CONDITION_NOTE": "Академик отп.",
+        "COUNT": 1,
+        "CONDITION": "AO"
+      },
+      {
+        "CONDITION_NOTE": "Без содержания",
+        "COUNT": 13,
+        "CONDITION": "OB"
+      },
+      {
+        "CONDITION_NOTE": "Болничные",
+        "COUNT": 26,
+        "CONDITION": "B"
+      },
+      {
+        "CONDITION_NOTE": "Воинская служба",
+        "COUNT": 6,
+        "CONDITION": "I"
+      },
+      {
+        "CONDITION_NOTE": "Декрет больничный",
+        "COUNT": 37,
+        "CONDITION": "DB"
+      },
+      {
+        "CONDITION_NOTE": "Декрет_2",
+        "COUNT": 172,
+        "CONDITION": "OD"
+      },
+      {
+        "CONDITION_NOTE": "Декрет_3",
+        "COUNT": 68,
+        "CONDITION": "OF"
+      },
+      {
+        "CONDITION_NOTE": "Командировка",
+        "COUNT": 14,
+        "CONDITION": "K"
+      },
+      {
+        "CONDITION_NOTE": "Рабочие",
+        "COUNT": 3821,
+        "CONDITION": "A"
+      },
+      {
+        "CONDITION_NOTE": "Трудовой отп.",
+        "COUNT": 152,
+        "CONDITION": "OT"
+      },
+      {
+        "CONDITION_NOTE": "Ученический отп.",
+        "COUNT": 50,
+        "CONDITION": "OU"
+      }
+
+    ]
+  }
+  finally {
+    setTimeout(() => {
+      conditionLoading.value = false
+    }, 500)
+  }
+}
+const conditionColors = (condition) => {
+  switch (condition) {
+    case USER_STATUS_CODES.ACADEMICIAN_VACATION:
+      return '#29CD74'
+    case USER_STATUS_CODES.NO_CONTENT:
+      return '#5EC1E7'
+    case USER_STATUS_CODES.SICK_LEAVES:
+      return '#FF7290'
+    case USER_STATUS_CODES.MILITARY_SERVICE:
+      return '#FDC031'
+    case USER_STATUS_CODES.SICK_LEAVE_DECREE:
+      return '#827BFF'
+    case USER_STATUS_CODES.DECREE_2:
+      return '#FF72D5'
+    case USER_STATUS_CODES.DECREE_3:
+      return '#635AFF'
+    case USER_STATUS_CODES.BUSINESS_TRIP:
+      return '#767994'
+    case USER_STATUS_CODES.WORKERS:
+      return '#63BA3D'
+    case USER_STATUS_CODES.LABOR_LEAVE:
+      return '#FFC352'
+    case USER_STATUS_CODES.STUDY_LEAVE:
+      return '#11A5ED'
+  }
+}
+
+const experienceLoading = ref(true)
+const experienceOptions = ref({
+  chart: {
+    type: 'donut',
+    offsetX: -45,
+  },
+  dataLabels: {
+    enabled: false
+  },
+  tooltip: {
+    enabled: false
+  },
+  legend: {
+    show: false,
+  },
+  fill: {
+    colors: [
+      '#29CD74',
+      '#5EC1E7',
+      '#FF7290',
+      '#FDC031',
+      '#827BFF'
+    ],
+  },
+  stroke: {
+    width: 8
+  },
+  plotOptions: {
+    pie: {
+      customScale: 1,
+      donut: {
+        size: '75%',
+        labels: {
+          show: true,
+          value: {
+            show: true,
+            fontSize: '22px',
+            fontFamily: 'SFProDisplay-Semibold',
+            fontWeight: 600,
+            color: '#191F3F',
+            offsetY: 8,
+          },
+          total: {
+            show: true,
+            label: 'Сотрудники',
+            fontSize: '18px',
+            color: '#9CA8B9',
+            fontFamily: 'SFProDisplay-Regular',
+            showAlways: true
+          }
+        }
+      },
+      expandOnClick: false
+    }
+  }
+})
+const experienceSeries = ref([])
+const experienceList = ref([])
+
+const getExperienceList = async () => {
+  try {
+    experienceLoading.value = true
+    let { data } = await axiosConfig.get(`sql-query/`, {
+      query_type: 'by_experience',
+    })
+
+    experienceSeries.value = data.map(item => item['COUNT'])
+    experienceList.value = data.map((item, index) => {
+      return {
+        title: item['CATEGORY'],
+        number: item['COUNT'],
+        class: experienceColors(index)
+      }
+    })
+  }
+  catch (error) {
+    let mock = [
+      {
+        "CATEGORY": "Более 5 лет",
+        "COUNT": 3378
+      },
+      {
+        "CATEGORY": "До 3 месяцев",
+        "COUNT": 126
+      },
+      {
+        "CATEGORY": "От 1 года до 3 лет",
+        "COUNT": 336
+      },
+      {
+        "CATEGORY": "От 3 до 12 месяцев",
+        "COUNT": 215
+      },
+      {
+        "CATEGORY": "От 3 лет до 5 лет",
+        "COUNT": 305
+      }
+    ]
+  }
+  finally {
+    setTimeout(() => {
+      experienceLoading.value = false
+    }, 500)
+  }
+}
+const experienceColors = (index) => {
+  switch (index) {
+    case 0:
+      return '#29CD74'
+    case 1:
+      return '#5EC1E7'
+    case 2:
+      return '#FF7290'
+    case 3:
+      return '#FDC031'
+    case 4:
+      return '#827BFF'
+  }
+}
+
+const agesLoading = ref(true)
+const agesOptions = ref({
+  chart: {
+    type: 'donut',
+    offsetX: -45,
+  },
+  dataLabels: {
+    enabled: false
+  },
+  tooltip: {
+    enabled: false
+  },
+  legend: {
+    show: false,
+  },
+  fill: {
+    colors: [
+      '#29CD74',
+      '#5EC1E7',
+      '#FF7290',
+      '#FDC031'
+    ],
+  },
+  stroke: {
+    width: 8
+  },
+  plotOptions: {
+    pie: {
+      customScale: 1,
+      donut: {
+        size: '75%',
+        labels: {
+          show: true,
+          value: {
+            show: true,
+            fontSize: '22px',
+            fontFamily: 'SFProDisplay-Semibold',
+            fontWeight: 600,
+            color: '#191F3F',
+            offsetY: 8,
+          },
+          total: {
+            show: true,
+            label: 'Сотрудники',
+            fontSize: '18px',
+            color: '#9CA8B9',
+            fontFamily: 'SFProDisplay-Regular',
+            showAlways: true
+          }
+        }
+      },
+      expandOnClick: false
+    }
+  }
+})
+const agesSeries = ref([])
+const agesList = ref([])
+
+const getAgesList = async () => {
+  try {
+    agesLoading.value = true
+    let { data } = await axiosConfig.get(`sql-query/`, {
+      query_type: 'by_ages',
+    })
+
+    agesSeries.value = data.map(item => item['COUNT'])
+    agesList.value = data.map((item, index) => {
+      return {
+        title: item['AGE_GROUP'],
+        number: item['COUNT'],
+        class: agesColors(index)
+      }
+    })
+  }
+  catch (error) {
+    let mock = [
+      {
+        "AGE_GROUP": "20-30",
+        "COUNT": 1172
+      },
+      {
+        "AGE_GROUP": "31-40",
+        "COUNT": 1918
+      },
+      {
+        "AGE_GROUP": "41-50",
+        "COUNT": 967
+      },
+      {
+        "AGE_GROUP": "50+",
+        "COUNT": 303
+      }
+    ]
+  }
+  finally {
+    setTimeout(() => {
+      agesLoading.value = false
+    }, 500)
+  }
+}
+const agesColors = (index) => {
+  switch (index) {
+    case 0:
+      return '#29CD74'
+    case 1:
+      return '#5EC1E7'
+    case 2:
+      return '#FF7290'
+    case 3:
+      return '#FDC031'
+  }
+}
+
 onMounted(async () => {
   await getGenderList()
+  await getConditionList()
+  await getExperienceList()
+  await getAgesList()
+
   // let { data } = await fetchCompaniesList({ page_size: 100 })
   // branches.value = data.results
   // branchSelect.value = data.results[0].id
@@ -432,82 +830,100 @@ onMounted(async () => {
       <card>
         <h1 class="font-semibold text-greyscale-900 mb-2">Присутствие</h1>
 
-        <div class="flex relative pb-3">
-          <div class="max-w-[280px] w-full">
-            <apexchart type="donut" :options="option3" :series="series3"></apexchart>
+        <template v-if="conditionLoading">
+          <base-spinner />
+        </template>
+
+        <template v-else>
+          <div class="flex items-center relative pb-3">
+            <div class="max-w-[280px] w-full">
+              <apexchart type="donut" :options="conditionOptions" :series="conditionSeries"></apexchart>
+            </div>
+
+            <div class="flex-1 max-w-[275px] w-full absolute right-0 max-h-[200px] overflow-y-auto">
+              <template v-for="item in conditionList">
+                <div class="group flex items-center gap-2 font-medium text-greyscale-500 rounded-xl hover:bg-greyscale-50 px-3 py-[6px]">
+                  <div
+                    class="w-[10px] h-[10px] rounded"
+                    :style="{ backgroundColor: item.class }"
+                  ></div>
+
+                  <h1 class="flex-1 text-[13px] group-hover:text-greyscale-900">{{ item.title }}</h1>
+
+                  <span class="text-greyscale-900 text-sm font-semibold">{{ item.number }}</span>
+
+                  <!--                <span class="w-9 text-right text-sm group-hover:text-greyscale-900">{{ item.count }}</span>-->
+                </div>
+              </template>
+            </div>
           </div>
-
-          <div class="flex-1 max-w-[275px] w-full absolute right-0">
-            <template v-for="item in presence">
-              <div class="group flex items-center gap-2 font-medium text-greyscale-500 rounded-xl hover:bg-greyscale-50 px-3 py-[6px]">
-                <div
-                  class="w-[10px] h-[10px] rounded"
-                  :class="item.class"
-                ></div>
-
-                <h1 class="flex-1 text-[13px] group-hover:text-greyscale-900">{{ item.title }}</h1>
-
-                <span class="text-greyscale-900 text-sm font-semibold">{{ item.number }}</span>
-
-                <span class="w-9 text-right text-sm group-hover:text-greyscale-900">{{ item.count }}</span>
-              </div>
-            </template>
-          </div>
-        </div>
+        </template>
       </card>
 
       <card>
         <h1 class="font-semibold text-greyscale-900 mb-2">Возраст</h1>
 
-        <div class="flex relative pb-3">
-          <div class="max-w-[280px] w-full">
-            <apexchart type="donut" :options="option3" :series="series3"></apexchart>
+        <template v-if="agesLoading">
+          <base-spinner />
+        </template>
+
+        <template v-else>
+          <div class="flex items-center relative pb-3">
+            <div class="max-w-[280px] w-full">
+              <apexchart type="donut" :options="agesOptions" :series="agesSeries"></apexchart>
+            </div>
+
+            <div class="flex-1 max-w-[275px] w-full absolute right-0">
+              <template v-for="item in agesList">
+                <div class="group flex items-center gap-2 font-medium text-greyscale-500 rounded-xl hover:bg-greyscale-50 px-3 py-[6px]">
+                  <div
+                    class="w-[10px] h-[10px] rounded"
+                    :style="{ backgroundColor: item.class }"
+                  ></div>
+
+                  <h1 class="flex-1 text-[13px] group-hover:text-greyscale-900">{{ item.title }}</h1>
+
+                  <span class="text-greyscale-900 text-sm font-semibold">{{ item.number }}</span>
+
+<!--                  <span class="w-9 text-right text-sm group-hover:text-greyscale-900">{{ item.count }}</span>-->
+                </div>
+              </template>
+            </div>
           </div>
-
-          <div class="flex-1 max-w-[275px] w-full absolute right-0">
-            <template v-for="item in presence">
-              <div class="group flex items-center gap-2 font-medium text-greyscale-500 rounded-xl hover:bg-greyscale-50 px-3 py-[6px]">
-                <div
-                  class="w-[10px] h-[10px] rounded"
-                  :class="item.class"
-                ></div>
-
-                <h1 class="flex-1 text-[13px] group-hover:text-greyscale-900">{{ item.title }}</h1>
-
-                <span class="text-greyscale-900 text-sm font-semibold">{{ item.number }}</span>
-
-                <span class="w-9 text-right text-sm group-hover:text-greyscale-900">{{ item.count }}</span>
-              </div>
-            </template>
-          </div>
-        </div>
+        </template>
       </card>
 
       <card>
         <h1 class="font-semibold text-greyscale-900 mb-2">Стаж</h1>
 
-        <div class="flex relative pb-3">
-          <div class="max-w-[280px] w-full">
-            <apexchart type="donut" :options="option3" :series="series3"></apexchart>
+        <template v-if="experienceLoading">
+          <base-spinner />
+        </template>
+
+        <template v-else>
+          <div class="flex items-center relative pb-3">
+            <div class="max-w-[280px] w-full">
+              <apexchart type="donut" :options="experienceOptions" :series="experienceSeries"></apexchart>
+            </div>
+
+            <div class="flex-1 max-w-[275px] w-full absolute right-0">
+              <template v-for="item in experienceList">
+                <div class="group flex items-center gap-2 font-medium text-greyscale-500 rounded-xl hover:bg-greyscale-50 px-3 py-[6px]">
+                  <div
+                    class="w-[10px] h-[10px] rounded"
+                    :style="{ backgroundColor: item.class }"
+                  ></div>
+
+                  <h1 class="flex-1 text-[13px] group-hover:text-greyscale-900">{{ item.title }}</h1>
+
+                  <span class="text-greyscale-900 text-sm font-semibold">{{ item.number }}</span>
+
+<!--                  <span class="w-9 text-right text-sm group-hover:text-greyscale-900">{{ item.count }}</span>-->
+                </div>
+              </template>
+            </div>
           </div>
-
-          <div class="flex-1 max-w-[275px] w-full absolute right-0">
-            <template v-for="item in presence">
-              <div class="group flex items-center gap-2 font-medium text-greyscale-500 rounded-xl hover:bg-greyscale-50 px-3 py-[6px]">
-                <div
-                  class="w-[10px] h-[10px] rounded"
-                  :class="item.class"
-                ></div>
-
-                <h1 class="flex-1 text-[13px] group-hover:text-greyscale-900">{{ item.title }}</h1>
-
-                <span class="text-greyscale-900 text-sm font-semibold">{{ item.number }}</span>
-
-                <span class="w-9 text-right text-sm group-hover:text-greyscale-900">{{ item.count }}</span>
-              </div>
-            </template>
-          </div>
-        </div>
+        </template>
       </card>
     </div>
 
@@ -571,7 +987,7 @@ onMounted(async () => {
       <card>
         <h1 class="font-semibold text-greyscale-900 mb-2">Руководители / Специалисты</h1>
 
-        <div class="flex relative pb-3">
+        <div class="flex items-center relative pb-3">
           <div class="max-w-[280px] w-full">
             <apexchart type="donut" :options="option3" :series="series3"></apexchart>
           </div>
