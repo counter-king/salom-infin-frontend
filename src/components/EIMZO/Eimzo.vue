@@ -182,7 +182,7 @@ const getPkcs7 = () => {
     const itm = keyValue.value
     if (itm) {
       const vo = JSON.parse(itm.getAttribute('vo'))
-      const data = 'salom.sqb.uz'
+      const data = props.data || 'salom.sqb.uz'
       const keyId = keyIdTemp.value
       if (keyId) {
         EIMZOClient.createPkcs7(keyId, data, null, (pkcs7) => {
