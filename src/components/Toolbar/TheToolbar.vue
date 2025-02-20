@@ -69,7 +69,7 @@ onMounted(() => {
 
         <template v-if="openModal">
           <template v-for="menu in themeStore.header">
-            <template v-if="userPermissionStore.canAccess(menu.permission)">
+            <template v-if="userPermissionStore.canAccess(menu)">
               <router-link
                 :to="{ name: menu.link }"
                 class="header-link group flex items-center gap-2 text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full mr-1 transition-all duration-[400ms] hover:bg-primary-800 hover:text-white"

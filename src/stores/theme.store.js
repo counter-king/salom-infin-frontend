@@ -60,7 +60,8 @@ export const useThemeStore = defineStore("theme", {
         link: 'ChatIndex',
         children: [],
         count: null,
-        name: 'chat'
+        name: 'chat',
+        permission: 'hr'
       },
 
         // News
