@@ -343,8 +343,10 @@ const getConditionList = async () => {
       query_type: 'by_condition',
     })
 
-    conditionSeries.value = data.map(item => item['COUNT'])
-    conditionList.value = data.map(item => {
+    conditionSeries.value = data.data.map(item => item['COUNT'])
+    conditionList.value = data.data
+    .sort((prev, next) => next['COUNT'] - prev['COUNT'])
+    .map(item => {
       return {
         title: item['CONDITION_NOTE'],
         number: item['COUNT'],
@@ -353,64 +355,66 @@ const getConditionList = async () => {
     })
   }
   catch (error) {
-    let mock = [
-      {
-        "CONDITION_NOTE": "Академик отп.",
-        "COUNT": 1,
-        "CONDITION": "AO"
-      },
-      {
-        "CONDITION_NOTE": "Без содержания",
-        "COUNT": 13,
-        "CONDITION": "OB"
-      },
-      {
-        "CONDITION_NOTE": "Болничные",
-        "COUNT": 26,
-        "CONDITION": "B"
-      },
-      {
-        "CONDITION_NOTE": "Воинская служба",
-        "COUNT": 6,
-        "CONDITION": "I"
-      },
-      {
-        "CONDITION_NOTE": "Декрет больничный",
-        "COUNT": 37,
-        "CONDITION": "DB"
-      },
-      {
-        "CONDITION_NOTE": "Декрет_2",
-        "COUNT": 172,
-        "CONDITION": "OD"
-      },
-      {
-        "CONDITION_NOTE": "Декрет_3",
-        "COUNT": 68,
-        "CONDITION": "OF"
-      },
-      {
-        "CONDITION_NOTE": "Командировка",
-        "COUNT": 14,
-        "CONDITION": "K"
-      },
-      {
-        "CONDITION_NOTE": "Рабочие",
-        "COUNT": 3821,
-        "CONDITION": "A"
-      },
-      {
-        "CONDITION_NOTE": "Трудовой отп.",
-        "COUNT": 152,
-        "CONDITION": "OT"
-      },
-      {
-        "CONDITION_NOTE": "Ученический отп.",
-        "COUNT": 50,
-        "CONDITION": "OU"
-      }
-
-    ]
+    let mock = {
+      data: [
+        {
+          "CONDITION_NOTE": "Академик отп.",
+          "COUNT": 1,
+          "CONDITION": "AO"
+        },
+        {
+          "CONDITION_NOTE": "Без содержания",
+          "COUNT": 13,
+          "CONDITION": "OB"
+        },
+        {
+          "CONDITION_NOTE": "Болничные",
+          "COUNT": 26,
+          "CONDITION": "B"
+        },
+        {
+          "CONDITION_NOTE": "Воинская служба",
+          "COUNT": 6,
+          "CONDITION": "I"
+        },
+        {
+          "CONDITION_NOTE": "Декрет больничный",
+          "COUNT": 37,
+          "CONDITION": "DB"
+        },
+        {
+          "CONDITION_NOTE": "Декрет_2",
+          "COUNT": 172,
+          "CONDITION": "OD"
+        },
+        {
+          "CONDITION_NOTE": "Декрет_3",
+          "COUNT": 68,
+          "CONDITION": "OF"
+        },
+        {
+          "CONDITION_NOTE": "Командировка",
+          "COUNT": 14,
+          "CONDITION": "K"
+        },
+        {
+          "CONDITION_NOTE": "Рабочие",
+          "COUNT": 3821,
+          "CONDITION": "A"
+        },
+        {
+          "CONDITION_NOTE": "Трудовой отп.",
+          "COUNT": 152,
+          "CONDITION": "OT"
+        },
+        {
+          "CONDITION_NOTE": "Ученический отп.",
+          "COUNT": 50,
+          "CONDITION": "OU"
+        }
+      ],
+      median_age: 33
+    }
   }
   finally {
     setTimeout(() => {
@@ -489,7 +493,7 @@ const experienceOptions = ref({
           },
           total: {
             show: true,
-            label: 'Сотрудники',
+            label: 'лет в среднее',
             fontSize: '18px',
             color: '#9CA8B9',
             fontFamily: 'SFProDisplay-Regular',
@@ -508,7 +512,7 @@ const getExperienceList = async () => {
   try {
     experienceLoading.value = true
     let { data } = await axiosConfig.get(`sql-query/`, {
-      query_type: 'by_experience',
+      query_type: 'employee_experience',
     })
 
     experienceSeries.value = data.map(item => item['COUNT'])
@@ -608,7 +612,7 @@ const agesOptions = ref({
           },
           total: {
             show: true,
-            label: 'Сотрудники',
+            label: 'лет в среднее',
             fontSize: '18px',
             color: '#9CA8B9',
             fontFamily: 'SFProDisplay-Regular',
