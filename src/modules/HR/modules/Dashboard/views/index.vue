@@ -264,9 +264,7 @@ const getGenderList = async () => {
   try {
     genderLoading.value = true
     let { data } = await axiosConfig.get(`sql-query/`, {
-      params: {
-        query_type: 'by_gender',
-      }
+      query_type: 'by_gender',
     })
 
     console.log('BY GENDER', data)
