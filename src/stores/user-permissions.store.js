@@ -20,7 +20,6 @@ export const useUserPermissionStore = defineStore('user-permissions', {
      * @returns { boolean }
      * */
     canAccess(menu) {
-      console.log('canAccess', menu)
       if(menu?.name === "chat"){
         return authStore.currentUser.roles.some(role => role.name === 'hr')
       }
