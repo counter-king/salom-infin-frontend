@@ -28,6 +28,7 @@ export const fetchBlobFile = async (id) => {
     const blobUrl = URL.createObjectURL(blob)
 
     return Promise.resolve({
+      blob,
       blobUrl,
       contentType: response.headers['content-type']
     })

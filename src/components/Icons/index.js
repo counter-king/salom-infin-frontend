@@ -21,6 +21,7 @@ export { default as CircleIcon } from  '~icons/ci/circle'
 export { default as RemoveMinusIcon } from  '~icons/ci/remove-minus'
 export { default as AddPlusIcon } from  '~icons/ci/add-plus'
 export { default as BookmarkIcon } from '~icons/ci/bookmark'
+export { default as CheckBigIcon } from '~icons/ci/check-big'
 // Solar (Linear)
 export { default as AltArrowDownLinearIcon } from  '~icons/solar/alt-arrow-down-linear'
 export { default as DoubleAltArrowDownLinearIcon } from  '~icons/solar/double-alt-arrow-down-linear'
@@ -32,6 +33,9 @@ export { default as CalendarLinearIcon } from  '~icons/solar/calendar-linear'
 export { default as StarLinearIcon } from  '~icons/solar/star-linear'
 export { default as UnreadLinearIcon } from  '~icons/solar/unread-linear'
 export { default as CaseBoldIcon } from  '~icons/solar/case-bold'
+export { default as ClapperboardPlayLinearIcon } from  '~icons/solar/clapperboard-play-linear'
+export { default as PaperclipLinearIcon } from  '~icons/solar/paperclip-linear'
+export { default as SmileCircleLinearIcon } from  '~icons/solar/smile-circle-linear'
 // Solar (Outline)
 export { default as CheckCircleIcon } from  '~icons/solar/check-circle-outline'
 export { default as AltArrowUpIcon } from  '~icons/solar/alt-arrow-up-outline'
@@ -113,6 +117,8 @@ export { default as SquareAcademicCapIcon } from  '~icons/solar/square-academic-
 export { default as PostsCarouselVerticalIcon } from '~icons/solar/posts-carousel-vertical-linear'
 export { default as EyeLinearIcon } from '~icons/solar/eye-linear'
 export { default as HeartLinearIcon } from '~icons/solar/heart-linear'
+export { default as GalleryIcon } from  '~icons/solar/gallery-outline'
+export { default as DocumentsMinimalisticIcon } from  '~icons/solar/documents-minimalistic-outline'
 
 // Solar (Bold)
 export { default as CheckCircleBoldIcon } from  '~icons/solar/check-circle-bold'
@@ -153,7 +159,11 @@ export { default as QuestionCircleBoldIcon } from  '~icons/solar/question-circle
 export { default as Routing2BoldIcon } from  '~icons/solar/routing-2-bold'
 export { default as MapPointBoldIcon } from  '~icons/solar/map-point-bold'
 export { default as GarageBoldIcon } from  '~icons/solar/garage-bold'
+export { default as ClapperboardPlayBoldIcon } from  '~icons/solar/clapperboard-play-bold'
+export { default as DocumentsMinimalisticBoldIcon } from  '~icons/solar/documents-minimalistic-bold'
+export { default as CameraBoldIcon } from  '~icons/solar/camera-bold'
 export { default as StarBoldIcon } from  '~icons/solar/star-bold'
+export { default as LinkCircleBoldIcon } from  '~icons/solar/link-circle-bold'
 export { default as DialogBoldIcon } from  '~icons/solar/dialog-bold'
 // Solar (Bold Duotone)
 export { default as ArchiveUpBoldDuotoneIcon } from  '~icons/solar/archive-up-bold-duotone'
@@ -165,6 +175,9 @@ export { default as UsersGroupBoldDuotoneIcon } from  '~icons/solar/users-group-
 export { default as UserCheckBoldDuotoneIcon } from  '~icons/solar/user-check-bold-duotone'
 export { default as CalendarDateBoldDuotoneIcon } from  '~icons/solar/calendar-date-bold-duotone'
 export { default as QuestionCircleBoldDuotoneIcon } from  '~icons/solar/question-circle-bold-duotone'
+export { default as PaperclipRoundedBoldIcon } from  '~icons/solar/paperclip-rounded-bold'
+export { default as GalleryBoldIcon } from  '~icons/solar/gallery-bold'
+export { default as PlainBoldIcon } from  '~icons/solar/plain-bold'
 export { default as NoteBookBoldDuotoneIcon } from  '~icons/solar/notebook-bold-duotone'
 export { default as CaseRoundBoldDuotoneIcon } from  '~icons/solar/case-round-bold-duotone'
 export { default as UserSpeakBoldDuotoneIcon } from  '~icons/solar/user-speak-bold-duotone'
@@ -177,6 +190,8 @@ export { default as ForwardIcon } from '~icons/typcn/arrow-forward-outline'
 export { default as ForwardBoldIcon } from '~icons/typcn/arrow-forward'
 // merge
 export { default as BookmarkBoldIcon } from '~icons/mage/bookmark-fill'
+export { default as FacebookSquareIcon } from '~icons/mage/facebook-square'
+export { default as WhatsappIcon } from '~icons/mage/whatsapp-filled'
 
 // iconamoon
 export { default as EditLightIcon } from '~icons/iconamoon/edit-light'

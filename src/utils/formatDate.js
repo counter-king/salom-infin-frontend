@@ -30,7 +30,12 @@ export function formatDate(date) {
 export function formatDateReverse(date, separate = '-') {
   return date ? dayjs(date).format(`YYYY${separate}MM${separate}DD`) : "Не верный формат даты"
 }
-
 export function formatDateNamedMonth(date) {
   return date ? dayjs(date).locale('ru').format("DD MMMM YYYY г.") : "Не верный формат даты"
+}
+export function formatDateMonthWithDay(date, locale = 'ru') {
+  return date ? dayjs(date).locale(locale).format('DD MMMM') : 'Не верный формат даты'
+}
+export function formatDay(date) {
+  return date ? dayjs(date).format("DD") : "Не верный формат даты"
 }

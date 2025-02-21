@@ -123,6 +123,7 @@ const setFiles = () => {
     })
   }
 }
+
 const deleteFile = (file) => {
   fileInput.value.value = ""
   const index = uploadingFiles.value.findIndex(x => x.id === file.id);

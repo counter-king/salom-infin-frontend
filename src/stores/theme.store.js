@@ -54,14 +54,15 @@ export const useThemeStore = defineStore("theme", {
       //   name: 'kanban'
       // },
       // Чат
-      // {
-      //   title: 'Чат',
-      //   icon: ChatLineIcon,
-      //   link: 'ChatIndex',
-      //   children: [],
-      //   count: null,
-      //   name: 'chat'
-      // },
+      {
+        title: 'Чат',
+        icon: ChatLineIcon,
+        link: 'ChatIndex',
+        children: [],
+        count: null,
+        name: 'chat',
+        permission: 'hr'
+      },
 
         // News
       {

@@ -4,7 +4,7 @@ import { defineStore } from 'pinia'
 import { fetchUserPermissions } from '../services/user.permissions.service'
 // Stores
 import { useAuthStore } from '../modules/Auth/stores'
-
+const authStore = useAuthStore()
 export const useUserPermissionStore = defineStore('user-permissions', {
   state: () => ({
     userPermissions: []
@@ -19,7 +19,10 @@ export const useUserPermissionStore = defineStore('user-permissions', {
      * @param { string } permission
      * @returns { boolean }
      * */
-    canAccess(permission) {
+    canAccess(menu) {
+      if(menu.name == "chat"){
+        return authStore.currentUser.roles.some(role => role.name === 'hr')
+      }
       return true
 
       // const authStore = useAuthStore()
