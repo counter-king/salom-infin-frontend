@@ -34,12 +34,12 @@ const menus = ref([
     link: "AgreementSettingsIndex",
     children: []
   },
-  {
-    title: "dashboard",
-    icon: HomeSmileAngleIcon,
-    link: "HrDashboardIndex",
-    children: []
-  },
+  // {
+  //   title: "dashboard",
+  //   icon: HomeSmileAngleIcon,
+  //   link: "HrDashboardIndex",
+  //   children: []
+  // },
 ])
 </script>
 

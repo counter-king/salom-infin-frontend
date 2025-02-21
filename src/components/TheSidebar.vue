@@ -4,13 +4,15 @@ import { watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 // Components
-import { AltArrowLeftIcon } from '@/components/Icons'
+import { AltArrowLeftIcon, HomeSmileAngleIcon } from '@/components/Icons'
 // Stores
-import { useUserPermissionStore } from '../stores/user-permissions.store'
+import { useAuthStore } from '@/modules/Auth/stores'
+import { useUserPermissionStore } from '@/stores/user-permissions.store'
 import { useNavigationStore } from '@/stores/navigation.store'
 // Composable
 const { t } = useI18n()
 const route = useRoute()
+const userStore = useAuthStore()
 const userPermissionStore = useUserPermissionStore()
 const navigationStore = useNavigationStore()
 // Macros
@@ -34,6 +36,9 @@ watch(
     deep: true
   }
 )
+const findHrRole = () => {
+  return userStore.currentUser.roles.find(role => role.name === 'hr') ?? null
+}
 </script>
 
 <template>
@@ -100,6 +105,29 @@ watch(
             </router-link>
           </template>
         </template>
+      </template>
+
+      <template v-if="findHrRole()">
+        <router-link
+          :to="{ name: 'HrDashboardIndex' }"
+          class="sidebar-link group flex items-center text-sm font-medium text-gray-1 rounded-xl p-3 pr-4 mb-1 border-b-2 border-transparent transition-all duration-[400ms] hover:text-primary-500 hover:border-gray-3 hover:bg-primary-50"
+          :class="{ 'pointer-events-none' : 'HrDashboardIndex' === route.name }"
+          v-tooltip="navigationStore.sidebarCollapse
+                ? {
+                    value: `<h4 class='text-xs text-white -my-1'>${t('dashboard')}</h4>`,
+                    escape: true,
+                    autoHide: false
+                  }
+                : null
+              "
+        >
+          <base-iconify
+            :icon="HomeSmileAngleIcon"
+            class="text-gray-1 transition-all duration-[400ms] group-hover:text-primary-500"
+          />
+
+          <span class="flex-1 truncate mx-3">{{ t('dashboard') }}</span>
+        </router-link>
       </template>
     </div>
   </div>

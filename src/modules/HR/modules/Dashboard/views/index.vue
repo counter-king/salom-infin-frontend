@@ -143,42 +143,42 @@ const option3 = ref({
     }
   }
 })
-const series3 = ref([65, 55, 40, 25, 15, 100])
+const series3 = ref([0, 0, 0, 0, 0, 0])
 const presence = ref([
   {
     title: 'В работе',
     count: '59%',
-    number: 704,
+    number: 0,
     class: 'bg-[#29CD74]'
   },
   {
     title: 'В отпуске',
     count: '12%',
-    number: 1280,
+    number: 0,
     class: 'bg-[#5EC1E7]'
   },
   {
     title: 'В декретном отпуске',
     count: '8%',
-    number: 490,
+    number: 0,
     class: 'bg-[#FF7290]'
   },
   {
     title: 'В больничной',
     count: '18%',
-    number: 249,
+    number: 0,
     class: 'bg-[#FDC031]'
   },
   {
     title: 'Удаленный',
     count: '25%',
-    number: 1790,
+    number: 0,
     class: 'bg-[#827BFF]'
   },
   {
     title: 'В командировке',
     count: '3%',
-    number: 268,
+    number: 0,
     class: 'bg-[#FF72D5]'
   }
 ])
@@ -255,8 +255,8 @@ const getGenderList = async () => {
       query_type: 'by_gender',
     })
 
-    genderSeries.value = data.map(item => item['COUNT'])
-    genderList.value = data.map(item => {
+    genderSeries.value = data.data.map(item => item['COUNT'])
+    genderList.value = data.data.map(item => {
       return {
         title: item['GENDER'] === 'F' ? 'Женщины' : 'Мужчины',
         number: item['COUNT'],
@@ -489,7 +489,7 @@ const experienceOptions = ref({
             fontFamily: 'SFProDisplay-Semibold',
             fontWeight: 600,
             color: '#191F3F',
-            offsetY: 8,
+            offsetY: 8
           },
           total: {
             show: true,
@@ -497,7 +497,10 @@ const experienceOptions = ref({
             fontSize: '18px',
             color: '#9CA8B9',
             fontFamily: 'SFProDisplay-Regular',
-            showAlways: true
+            showAlways: true,
+            formatter: function (w) {
+              return '2.8 год'
+            }
           }
         }
       },
@@ -515,8 +518,8 @@ const getExperienceList = async () => {
       query_type: 'employee_experience',
     })
 
-    experienceSeries.value = data.map(item => item['COUNT'])
-    experienceList.value = data.map((item, index) => {
+    experienceSeries.value = data.data.map(item => item['COUNT'])
+    experienceList.value = data.data.map((item, index) => {
       return {
         title: item['CATEGORY'],
         number: item['COUNT'],
@@ -525,28 +528,31 @@ const getExperienceList = async () => {
     })
   }
   catch (error) {
-    let mock = [
-      {
-        "CATEGORY": "Более 5 лет",
-        "COUNT": 3378
-      },
-      {
-        "CATEGORY": "До 3 месяцев",
-        "COUNT": 126
-      },
-      {
-        "CATEGORY": "От 1 года до 3 лет",
-        "COUNT": 336
-      },
-      {
-        "CATEGORY": "От 3 до 12 месяцев",
-        "COUNT": 215
-      },
-      {
-        "CATEGORY": "От 3 лет до 5 лет",
-        "COUNT": 305
-      }
-    ]
+    let mock = {
+      data: [
+        {
+          "CATEGORY": "Более 5 лет",
+          "COUNT": 3378
+        },
+        {
+          "CATEGORY": "До 3 месяцев",
+          "COUNT": 126
+        },
+        {
+          "CATEGORY": "От 1 года до 3 лет",
+          "COUNT": 336
+        },
+        {
+          "CATEGORY": "От 3 до 12 месяцев",
+          "COUNT": 215
+        },
+        {
+          "CATEGORY": "От 3 лет до 5 лет",
+          "COUNT": 305
+        }
+      ],
+      avg: 2.5
+    }
   }
   finally {
     setTimeout(() => {
@@ -616,7 +622,10 @@ const agesOptions = ref({
             fontSize: '18px',
             color: '#9CA8B9',
             fontFamily: 'SFProDisplay-Regular',
-            showAlways: true
+            showAlways: true,
+            formatter: function (w) {
+              return '31-40'
+            }
           }
         }
       },
@@ -634,8 +643,8 @@ const getAgesList = async () => {
       query_type: 'by_ages',
     })
 
-    agesSeries.value = data.map(item => item['COUNT'])
-    agesList.value = data.map((item, index) => {
+    agesSeries.value = data.data.map(item => item['COUNT'])
+    agesList.value = data.data.map((item, index) => {
       return {
         title: item['AGE_GROUP'],
         number: item['COUNT'],
@@ -644,24 +653,26 @@ const getAgesList = async () => {
     })
   }
   catch (error) {
-    let mock = [
-      {
-        "AGE_GROUP": "20-30",
-        "COUNT": 1172
-      },
-      {
-        "AGE_GROUP": "31-40",
-        "COUNT": 1918
-      },
-      {
-        "AGE_GROUP": "41-50",
-        "COUNT": 967
-      },
-      {
-        "AGE_GROUP": "50+",
-        "COUNT": 303
-      }
-    ]
+    let mock = {
+      data: [
+        {
+          "AGE_GROUP": "20-30",
+          "COUNT": 1172
+        },
+        {
+          "AGE_GROUP": "31-40",
+          "COUNT": 1918
+        },
+        {
+          "AGE_GROUP": "41-50",
+          "COUNT": 967
+        },
+        {
+          "AGE_GROUP": "50+",
+          "COUNT": 303
+        }
+      ]
+    }
   }
   finally {
     setTimeout(() => {
@@ -738,7 +749,7 @@ onMounted(async () => {
 
               <div class="font-medium">
                 <h1 class="text-sm text-greyscale-500">Всего людей</h1>
-                <p class="text-2xl text-greyscale-900">5480</p>
+                <p class="text-2xl text-greyscale-900">0</p>
               </div>
             </div>
 
@@ -752,7 +763,7 @@ onMounted(async () => {
 
               <div class="font-medium">
                 <h1 class="text-sm text-greyscale-500">Факт. численность</h1>
-                <p class="text-2xl text-greyscale-900">5230</p>
+                <p class="text-2xl text-greyscale-900">0</p>
               </div>
             </div>
 
@@ -766,7 +777,7 @@ onMounted(async () => {
 
               <div class="font-medium">
                 <h1 class="text-sm text-greyscale-500">Штатная численность</h1>
-                <p class="text-2xl text-greyscale-900">4800</p>
+                <p class="text-2xl text-greyscale-900">0</p>
               </div>
             </div>
 
@@ -780,7 +791,7 @@ onMounted(async () => {
 
               <div class="font-medium">
                 <h1 class="text-sm text-greyscale-500">Вакансии</h1>
-                <p class="text-2xl text-greyscale-900">26</p>
+                <p class="text-2xl text-greyscale-900">0</p>
               </div>
             </div>
           </div>
@@ -802,7 +813,7 @@ onMounted(async () => {
 
               <div class="font-medium absolute -right-2">
                 <h1 class="text-sm text-greyscale-500">Активность</h1>
-                <p class="text-2xl text-greyscale-900">45%</p>
+                <p class="text-2xl text-greyscale-900">0</p>
               </div>
             </div>
 
@@ -822,7 +833,7 @@ onMounted(async () => {
 
               <div class="font-medium absolute -right-1">
                 <h1 class="text-sm text-greyscale-500">Заполненность</h1>
-                <p class="text-2xl text-greyscale-900">76%</p>
+                <p class="text-2xl text-greyscale-900">0</p>
               </div>
             </div>
           </div>
@@ -940,50 +951,50 @@ onMounted(async () => {
             <span class="text-[13px] w-16">15+</span>
 
             <div class="flex-1 bg-greyscale-50 h-4 rounded overflow-hidden">
-              <div class="bg-primary-100 h-full border-r-2 border-r-primary-500" style="width: 70%"></div>
+              <div class="bg-primary-100 h-full border-r-2 border-r-primary-500" style="width: 0%"></div>
             </div>
 
-            <span class="text-sm w-10 text-center">59%</span>
+            <span class="text-sm w-10 text-center">0</span>
           </div>
 
           <div class="flex items-center gap-5 font-medium text-greyscale-500 px-1 py-[6px]">
             <span class="text-[13px] w-16">13-14</span>
 
             <div class="flex-1 bg-greyscale-50 h-4 rounded overflow-hidden">
-              <div class="bg-primary-100 h-full border-r-2 border-r-primary-500" style="width: 14%"></div>
+              <div class="bg-primary-100 h-full border-r-2 border-r-primary-500" style="width: 0%"></div>
             </div>
 
-            <span class="text-sm w-10 text-center">12%</span>
+            <span class="text-sm w-10 text-center">0</span>
           </div>
 
           <div class="flex items-center gap-5 font-medium text-greyscale-500 px-1 py-[6px]">
             <span class="text-[13px] w-16">11-12</span>
 
             <div class="flex-1 bg-greyscale-50 h-4 rounded overflow-hidden">
-              <div class="bg-primary-100 h-full border-r-2 border-r-primary-500" style="width: 10%"></div>
+              <div class="bg-primary-100 h-full border-r-2 border-r-primary-500" style="width: 0%"></div>
             </div>
 
-            <span class="text-sm w-10 text-center">8%</span>
+            <span class="text-sm w-10 text-center">0</span>
           </div>
 
           <div class="flex items-center gap-5 font-medium text-greyscale-500 px-1 py-[6px]">
             <span class="text-[13px] w-16">9-10</span>
 
             <div class="flex-1 bg-greyscale-50 h-4 rounded overflow-hidden">
-              <div class="bg-primary-100 h-full border-r-2 border-r-primary-500" style="width: 20%"></div>
+              <div class="bg-primary-100 h-full border-r-2 border-r-primary-500" style="width: 0%"></div>
             </div>
 
-            <span class="text-sm w-10 text-center">18%</span>
+            <span class="text-sm w-10 text-center">0</span>
           </div>
 
           <div class="flex items-center gap-5 font-medium text-greyscale-500 px-1 py-[6px]">
             <span class="text-[13px] w-16">Другие</span>
 
             <div class="flex-1 bg-greyscale-50 h-4 rounded overflow-hidden">
-              <div class="bg-primary-100 h-full border-r-2 border-r-primary-500" style="width: 20%"></div>
+              <div class="bg-primary-100 h-full border-r-2 border-r-primary-500" style="width: 0%"></div>
             </div>
 
-            <span class="text-sm w-10 text-center">18%</span>
+            <span class="text-sm w-10 text-center">0</span>
           </div>
         </div>
       </card>
@@ -1008,7 +1019,7 @@ onMounted(async () => {
 
                 <span class="text-greyscale-900 text-sm font-semibold">{{ item.number }}</span>
 
-                <span class="w-9 text-right text-sm group-hover:text-greyscale-900">{{ item.count }}</span>
+<!--                <span class="w-9 text-right text-sm group-hover:text-greyscale-900">{{ item.count }}</span>-->
               </div>
             </template>
           </div>
