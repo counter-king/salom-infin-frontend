@@ -80,10 +80,14 @@ const onDeleteChat = async () => {
   deleteDialogVisible.value = false
 }
 
-
+const handleEditDialogGroupVisible = () => {
+  if(route.name == CHAT_ROUTE_NAMES.GROUP){
+    createGroupDialogVisible.value = true
+  }
+}
 </script>
 <template>
-  <div @click="createGroupDialogVisible = true" class="flex items-center w-full h-[72px] border-b px-6 pr-3 cursor-pointer">
+  <div @click="handleEditDialogGroupVisible" class="flex items-center w-full h-[72px] border-b px-6 pr-3 cursor-pointer">
     <div class="flex justify-between items-center w-full">
       <div class="flex">
         <div class="relative">
