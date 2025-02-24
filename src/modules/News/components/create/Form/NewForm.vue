@@ -337,9 +337,9 @@ onMounted(() => {
       <!-- upload gallery images how looks -->
       <div
         class="grid grid-cols-3 gap-4 justify-between mt-2 w-full relative"
-        :class="newsStore.model.images_ids.length && 'justify-start'"
+        :class="newsStore.model.images_ids?.length && 'justify-start'"
         >
-      <template v-if="!!newsStore.model.images_ids.length">
+      <template v-if="!!newsStore.model.images_ids?.length">
         <template v-for="(item, index) in newsStore.model.images_ids" :key="index">
             <div
                 class="aspect-ratio-box rounded-lg overflow-hidden relative h-full w-full"

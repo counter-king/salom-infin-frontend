@@ -21,12 +21,25 @@ export const useGetOneNewsModal = () => {
   loading.value = true
     try{
       const { data }  = await actionApi(id)
+      const galleriesWithUrlBlob = await Promise.all(data.galleries.map(async(item) => {
+        if(!item.url){
+          const { blobUrl } = await fetchBlobFile(item.id)
+          return { ...item, blobUrl }
+        }
+        return item
+      }))
+      
+      if(!data.image.url){
+        const { blobUrl } = await fetchBlobFile(data.image.id)
+        data.image.blobUrl = blobUrl
+      }
+      data.galleries = galleriesWithUrlBlob
       newsOne.title = data.title    
       newsOne.description = data.description
       newsOne.category = data.category
       newsOne.tags_ids = data.tags
       newsOne.created_by = data.created_by
-      newsOne.images_ids = data.galleries
+      newsOne.images_ids = galleriesWithUrlBlob
       newsOne.created_date = data.created_date
       newsOne.image = {...data.image, type:CONTENT_TYPES.IMAGE} 
       newsOne.dynamicFields = data.contents.map(content=> {

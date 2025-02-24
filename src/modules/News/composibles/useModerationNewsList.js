@@ -1,7 +1,12 @@
-import { dispatchNotify } from "@/utils/notify"
-import { fetchGetModerationNewsList } from "../services/news.service"
-import { COLOR_TYPES } from "@/enums"
+// core
 import { ref } from "vue"
+// utils
+import { dispatchNotify } from "@/utils/notify"
+// services
+import { fetchGetModerationNewsList } from "../services/news.service"
+import { fetchBlobFile } from "../../../services/file.service"
+// enums
+import { COLOR_TYPES } from "@/enums"
 
 export const useModerationNewsList = () => {
 
@@ -43,7 +48,13 @@ export const useModerationNewsList = () => {
   loading.value = true
   try {
    const { data }  = await fetchGetModerationNewsList(params)
-   list.value = data.results
+   list.value = await Promise.all( data.results.map(async (item) => {
+   if(!item.image?.url){
+     const { blobUrl } = await fetchBlobFile(item.image.id)
+     item.image.blobUrl = blobUrl
+   }
+   return item
+   }))
    totalCount.value = data.count
   } catch (error) {
     dispatchNotify(null, error, COLOR_TYPES.ERROR)

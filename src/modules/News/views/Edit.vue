@@ -11,10 +11,11 @@ import TheFooter from '@/components/TheFooter.vue';
 import BaseButton from '@/components/UI/BaseButton.vue';
 import DialogPreview from '../components/create/DialogPreview.vue';
 import BaseDialog from '@/components/UI/BaseDialog.vue'
-// services 
-import { fetchGetMyNewsDelete, fetchGetMyNews } from '../services/news.service';
 // stores
 import { useNewsStore } from '../stores';
+// services 
+import { fetchGetMyNewsDelete, fetchGetMyNews } from '../services/news.service';
+import { fetchBlobFile } from '../../../services/file.service'; 
 // utils
 import { dispatchNotify } from '@/utils/notify';
 // constants
@@ -86,12 +87,25 @@ const fetchOneNews = async() => {
 
    try {
       const { data }  = await fetchGetMyNews(route.params.id)   
+      const galleriesWithUrlBlob = await Promise.all(data.galleries.map(async(item) => {
+        if(!item.url){
+          const { blobUrl } = await fetchBlobFile(item.id)
+          return { ...item, blobUrl }
+        }
+        return item
+      }))
+      
+      if(!data.image.url){
+        const { blobUrl } = await fetchBlobFile(data.image.id)
+        data.image.blobUrl = blobUrl
+      }
+
+      newsStore.model.images_ids = galleriesWithUrlBlob
       newsStore.model.title = data.title    
       newsStore.model.status = data.status    
       newsStore.model.description = data.description
       newsStore.model.category = data.category?.id
       newsStore.model.tags_ids = data.tags
-      newsStore.model.images_ids = data.galleries
       newsStore.model.image = data.image ? {...data.image, type:CONTENT_TYPES.IMAGE} : null 
       newsStore.model.dynamicFields = data.contents.map(content=> {
         if (content.type === CONTENT_TYPES.TEXT) {

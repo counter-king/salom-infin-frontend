@@ -5,6 +5,7 @@ import { dispatchNotify } from "@/utils/notify"
 // services
 import { fetchGetMyNewsList } from "../services/news.service"
 // constants
+import { fetchBlobFile } from "../../../services/file.service"
 import { COLOR_TYPES } from "@/enums"
 
 export const useMyNewsList = () => {
@@ -48,9 +49,15 @@ export const useMyNewsList = () => {
   loading.value = true
   try {
    const { data }  = await fetchGetMyNewsList(params)
-   list.value = data.results
+   list.value = await Promise.all(data.results?.map(async(item) => {
+    if(!item.image?.url){
+      const { blobUrl } = await fetchBlobFile(item.image.id)
+      item.image.blobUrl = blobUrl
+    }
+    return item
+   }))
    totalCount.value = data.count
-  }catch (error) {
+  } catch (error) {
     dispatchNotify(null, error, COLOR_TYPES.ERROR)
   }
   finally {
