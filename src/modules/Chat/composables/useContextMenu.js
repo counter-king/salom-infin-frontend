@@ -47,7 +47,6 @@ const menuItems = computed(()=> ([
      iconName: ForwardIcon,
      iconClass:"rotate-y-180 transform rotate-y-180", 
      command: () => {
-      console.log(chatStore.contextMenu.tempMessage);
       chatStore.contextMenu = { ...chatStore.contextMenu, message: chatStore.contextMenu.tempMessage, replay: true, edit: false }
      } 
    },
@@ -63,9 +62,7 @@ const menuItems = computed(()=> ([
      { 
      label: 'save-as',
      iconName: DownloadMinimalisticIcon,
-     command: () => {
-      console.log("ishla", chatStore.contextMenu.tempMessage?.attachments?.file?.id);
-      
+     command: () => {      
       downloadFile(chatStore.contextMenu.tempMessage?.attachments?.file)
       }
      } 
@@ -74,7 +71,8 @@ const menuItems = computed(()=> ([
    { 
      label: 'copy',
      iconName: CopyIcon,
-     command: async () => {      
+     command: async () => {   
+      chatStore.contextMenu = { ...chatStore.contextMenu, message: chatStore.contextMenu.tempMessage, replay: false, edit: false }   
       try {
         await navigator.clipboard.writeText(chatStore.contextMenu.tempMessage?.text);
       } catch (err) {
@@ -86,6 +84,7 @@ const menuItems = computed(()=> ([
      label: 'delete',
      iconName: TrashBinTrashIcon,
      command: () => {      
+      chatStore.contextMenu = { ...chatStore.contextMenu, message: chatStore.contextMenu.tempMessage, replay: false, edit: false }
       chatStore.contextMenu = { message: chatStore.contextMenu.tempMessage, replay: false, edit: false, deleteDialog: true }
      },
      class: "!text-critic-500"

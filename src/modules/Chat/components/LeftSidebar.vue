@@ -1,6 +1,6 @@
 <script setup>
 // core
-import {computed, onMounted, ref, watch} from "vue";
+import {computed, inject, onMounted, ref, watch} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 // components
@@ -12,7 +12,6 @@ import CreateEditGroupDialog from "./CreateEditGroupDialog.vue";
 // icons
 import { MagniferIcon, Plus20SolidIcon, UserRoundedBoldIcon, UsersGroupTwoRoundedBoldIcon } from '@/components/Icons'
 // store
-import { useAuthStore } from "@/modules/Auth/stores";
 import { useChatStore } from "@/modules/Chat/stores";
 // constatns
 import { CHAT_ROUTE_NAMES, CHAT_TYPES } from "../constatns";
@@ -25,6 +24,9 @@ const route = useRoute();
 const searchInput = ref(null);
 const createGroupDialogVisible = ref(false);
 const activeTabIndex= computed(() => route.name == CHAT_ROUTE_NAMES.PRIVATE ? 0 : route.name == CHAT_ROUTE_NAMES.GROUP ? 1 : 0);
+
+// provides/injects
+const inputSendMessasgeRef = inject("inputSendMessasgeRef");
 
 const tabPanelList = [
   {
@@ -85,7 +87,6 @@ const onClickChatGroup = (group) => {
     searchInput.value = null;
   }
 }
-
 // hooks
 watch(searchInput, async (val) => {
   if (val) {
@@ -98,21 +99,19 @@ watch(searchInput, async (val) => {
   }
 })
 
+// set inputSendMessasgeRef focus when createGroupDialogVisible
+watch(createGroupDialogVisible, () => {
+  inputSendMessasgeRef.value?.$el?.focus()
+})
+
 onMounted(async () => {
   await chatStore.actionGetPrivateChatList({});
   await chatStore.actionGetGroupChatList({});
-  if(route.name == CHAT_ROUTE_NAMES.GROUP){
-    chatStore.selectedGroup = await chatStore.actionGetGroupChatById(route.params.id)
-  }
-  if(route.name == CHAT_ROUTE_NAMES.PRIVATE){
-    chatStore.selectedUser = await chatStore.actionGetPrivateChatById(route.params.id)
-  }
 })
-
 </script>
 
 <template>
-  <div class="w-[352px] h-full border-r select-none">
+  <div  class="w-[352px] h-full border-r select-none">
     <div class="flex m-4 mb-0">
       <base-input
         v-model="searchInput"

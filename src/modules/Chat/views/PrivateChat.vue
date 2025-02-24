@@ -14,7 +14,6 @@ import DeleteDialog from '../components/DeleteDialog.vue';
 import FileUploadProgress from '../components/ChatArea/FileUploadProgress.vue';
 import ContextMenu from '../components/ChatArea/ContextMenu.vue';
 import ChatFileItem from '../components/ChatArea/ChatFileItem.vue';
-import { DownloadMinimalisticIcon, FileTextBoldIcon } from '@/components/Icons';
 import Empty from '@/components/Empty.vue';
 import ChatImageItem from '../components/ChatArea/ChatImageItem.vue';
 import FriendChatFileItem from '../components/ChatArea/FriendChatFileItem.vue';
@@ -130,13 +129,14 @@ watch(
     if (newId !== oldId && route.name === CHAT_ROUTE_NAMES.PRIVATE) {
       chatStore.actionGetMessageListByChatId({chat:newId}, true);
       chatStore.selectedUser = await chatStore.actionGetPrivateChatById(newId);
+      // every route change, reset context menu
+      chatStore.contextMenu = {}
     }
   }
 );
 
 onMounted(async () => {
   chatStore.selectedUser = await chatStore.actionGetPrivateChatById(route.params?.id);
-  
   const { count } = await chatStore.actionGetMessageListByChatId({ chat:route.params?.id }, true);
   hasNext.value = count > page.value * pageSize.value
   page.value += 1

@@ -1,7 +1,7 @@
 <script setup>
 // Core
 import { useI18n } from "vue-i18n";
-import { computed, ref } from "vue";
+import { computed, inject, ref } from "vue";
 import { useRoute } from "vue-router";
 // Components
 import FileTypes from "./FileTypes.vue";
@@ -19,7 +19,9 @@ import GroupUserList from "./GroupUserList.vue";
 
 const chatStore = useChatStore();
 const route = useRoute();
-const { t } = useI18n();
+const { t } = useI18n(); 
+const inputSendMessasgeRef = inject("inputSendMessasgeRef");
+
 const components = {
   [COMPONENT_TYPES.FILES]: FileTypes,
   [COMPONENT_TYPES.LINKS]: FileTypeLink,
@@ -42,20 +44,24 @@ const activeFileMenu = computed(() => {
     return false;
   }
 });
-
+const isGroupDetail = computed(() => route.name == CHAT_ROUTE_NAMES.GROUP)
+// methods
 const handleClickGroupUsers = () => {
   if(componentType.value === COMPONENT_TYPES.GROUP_USERS){
     componentType.value = COMPONENT_TYPES.FILES;
-  }else {
+  } else {
     componentType.value = COMPONENT_TYPES.GROUP_USERS
   }
 }
 
-const isGroupDetail = computed(() => route.name == CHAT_ROUTE_NAMES.GROUP)
-</script>
+const handleClickWrapper = () => {  
+  inputSendMessasgeRef.value.$el.focus()
+}
 
+</script>
 <template>
   <div
+    @click="handleClickWrapper"
     class="h-full transition-all duration-500 ease-in-out overflow-hidden"
     :class="chatStore.rightSidebarVisible ? 'w-[336px] border-l' : 'w-0'"
   >

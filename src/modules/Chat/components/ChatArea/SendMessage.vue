@@ -1,6 +1,6 @@
 <script setup>
 // cores
-import { onMounted, ref, watch } from 'vue';
+import { inject, onMounted, ref, watch } from 'vue';
 import InputText from 'primevue/inputtext';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
@@ -26,7 +26,7 @@ const route = useRoute();
 
 // reactives
 const message = ref("");
-const refInput = ref(null); 
+const refInput = inject("inputSendMessasgeRef"); 
 const refFileInput = ref(null);
 const showSendIcon = ref(false);
 const isSimleStikerHovered = ref(false);
@@ -36,12 +36,10 @@ const sendNewMessageEvent = (data)=> {
     const payload = { command: 'new_message', chat_type: route.name == CHAT_ROUTE_NAMES.PRIVATE ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: route.params.id, text: data?.text, message_type: data.message_type } 
     send(JSON.stringify(payload))  
 }
-
 const sendReplayNewMessageEvent = (data)=> {
   const payload = { command: 'new_message', chat_type: route.name == CHAT_ROUTE_NAMES.PRIVATE ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: route.params.id, text: data?.text, message_type: data.message_type, replied_to_id: chatStore.contextMenu?.message?.message_id } 
   send(JSON.stringify(payload))  
 }
-
 const handleSendMessage = () => {
  if(!!message.value) {
     if(chatStore.contextMenu?.replay) {
@@ -72,6 +70,10 @@ const handleFileInputChange = (event) => {
 const onCancelIconReplay = () => {
   chatStore.contextMenu = { edit: false, replay: false }
 }
+
+const onClickSendMessage = () => {
+  refInput.value.$el.focus()
+}
 // showSend icon show or hide
 watch(message, (val) => {
  if(!!val) {
@@ -80,17 +82,20 @@ watch(message, (val) => {
    showSendIcon.value = false;
  }
 })
-
+// when edit, set message value from store
 watch(() => chatStore.contextMenu?.message?.text, (val) => {
     if(chatStore.contextMenu?.edit){
       message.value = chatStore.contextMenu?.message?.text
     }
 })
+watch([()=> chatStore.contextMenu], () => {
+  refInput.value.$el.focus()
+}, { deep: true })
 
+// expose
 defineExpose({
   refInput
 })
-
 onMounted(() => {
   refInput.value.$el.focus()
 })
@@ -98,6 +103,7 @@ onMounted(() => {
 </script>
 <template>
  <div 
+  @click="onClickSendMessage"
   class="relative pt-1"
   :class="{'pt-[36px]': chatStore.contextMenu?.edit || chatStore.contextMenu?.replay}"
   >

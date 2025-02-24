@@ -1,7 +1,7 @@
 <script setup>
 // core
 import { useI18n } from "vue-i18n";
-import { computed, onMounted, watch } from "vue";
+import { computed, onMounted, provide, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 // components
 import { ChatAreWrapper, LeftSidebar, RightSidebar } from "@/modules/Chat/components";
@@ -22,6 +22,9 @@ const { status, data, send } = socket
 // reactives
 const isShowChat = computed(() => allowedPages.includes(route.name))
 const routeId = computed(() => route.params.id)
+const inputSendMessasgeRef = ref(null)
+// privder
+provide("inputSendMessasgeRef", inputSendMessasgeRef) 
 // methods
 const sendUserHandshake = ()=> {
   const payload = { command: 'user_handshake' }
@@ -42,10 +45,8 @@ watch(status, (newStatus) => {
 
 // Kelgan ma'lumotlarni kuzatish
 watch(data, (newData) => {
-  
   newData = JSON.parse(newData);
   // console.log("ewasd",newData);
-  
   if(newData.command == WEBCOCKET_EVENTS.USER_HANDSHAKE) {
     // console.log("user hand",newData);
   }

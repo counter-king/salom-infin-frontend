@@ -1,6 +1,6 @@
 <script setup>
 // cores
-import { computed, ref} from 'vue';
+import { computed, inject, ref, watch} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 // components
@@ -29,15 +29,14 @@ const isDeleteLoading = ref(false);
 const menu = ref();
 const isGroupDetail = computed(() => route.name == CHAT_ROUTE_NAMES.GROUP)
 const menuItems = computed(() => [
-   ...(route.name == CHAT_ROUTE_NAMES.GROUP ? [{ 
-     label: 'edit',
-     icon: PenIcon,
-     command: () => {
+  ...(route.name == CHAT_ROUTE_NAMES.GROUP ? [{ 
+    label: 'edit',
+    icon: PenIcon,
+    command: () => {
       createGroupDialogVisible.value = true
-     },
-     iconClass: "!text-greyscale-500 !w-4 !h-4"
-   }] : []),
-  
+    },
+    iconClass: "!text-greyscale-500 !w-4 !h-4"
+  }] : []),  
    ...(chatStore.selectedGroup?.members.find((item) => item.user?.id == authStore.currentUser.id)?.role == 'owner' || chatStore.selectedUser?.members?.find((item) => item.user?.id == authStore.currentUser?.id)?.role == 'owner' ? 
     [{
      label: 'delete',
@@ -49,10 +48,13 @@ const menuItems = computed(() => [
      iconClass: "!text-critic-500 !w-4 !h-4"
     }] :  [])
 ]);
-
+// injects
+const inputSendMessasgeRef = inject("inputSendMessasgeRef")
 // methods
 const toggle = (event) => {
   menu.value.menuRef.toggle(event);
+  // set inputSendMessasgeRef focus when createGroupDialogVisible
+  inputSendMessasgeRef.value?.$el?.focus()
 };
 
 function focussed() {
@@ -81,10 +83,17 @@ const onDeleteChat = async () => {
 }
 
 const handleEditDialogGroupVisible = () => {
+  inputSendMessasgeRef.value?.$el?.focus()
   if(route.name == CHAT_ROUTE_NAMES.GROUP){
     createGroupDialogVisible.value = true
   }
 }
+
+// set inputSendMessasgeRef focus when createGroupDialogVisible
+watch(createGroupDialogVisible, () => {
+  inputSendMessasgeRef.value?.$el?.focus()
+})
+
 </script>
 <template>
   <div @click="handleEditDialogGroupVisible" class="flex items-center w-full h-[72px] border-b px-6 pr-3 cursor-pointer">
