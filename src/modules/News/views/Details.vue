@@ -192,10 +192,10 @@ onMounted( async () => {
                 :class="{ 'rounded-b-none pb-0': type === 'moderation' }"
                 >
                 <div
-                :style="{ '--dynamic-src': `url(${newsOne.image?.url})` }"
+                :style="{ '--dynamic-src': `url(${newsOne.image?.url ? newsOne.image?.url : newsOne.image?.blobUrl})` }"
                 class="aspect-ratio-box rounded-2xl overflow-hidden relative" 
                 >
-                    <img :src="newsOne.image?.url" alt="rasm" class="w-full h-full object-contain absolute z-2">
+                    <img :src="newsOne.image?.url ? newsOne.image?.url : newsOne.image?.blobUrl" alt="rasm" class="w-full h-full object-contain absolute z-2">
                 </div>
                 <!-- info -->
                 <div class="mt-4 flex justify-between">

@@ -51,7 +51,7 @@ onMounted(() => {
       >
         <template #image="{ data }">
          <div class="w-[38px] h-[38px] min-w-[38px] min-h-[38px] rounded-lg overflow-hidden">
-           <img :src="data.image?.url" class="w-full h-full object-cover" alt="rasm">
+           <img :src="data.image?.url ? data.image?.url : data.image?.blobUrl" class="w-full h-full object-cover" alt="rasm">
          </div>
         </template>
         <template #author="{ data }">

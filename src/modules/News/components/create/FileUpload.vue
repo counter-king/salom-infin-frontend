@@ -3,6 +3,7 @@
 import {onMounted, ref} from "vue";
 import { useI18n } from 'vue-i18n'
 import axiosConfig from "@/services/axios.config";
+
 // Components
 import { FilePreview } from '@/components/Files'
 import {
@@ -16,6 +17,7 @@ import {
 import { dispatchNotify } from "@/utils/notify";
 // Enums
 import { COLOR_TYPES } from "@/enums";
+import { fetchBlobFile } from "../../../../services/file.service";
 
 const { t } = useI18n()
 
@@ -130,10 +132,12 @@ const uploadFiles = async (files) => {
         item.progress = Math.floor((loaded / total) * 100) - 1;
       }
     })
-      .then(({ data }) => {
+      .then(async ({ data }) => {
         item.id = data.id;
         item.uploaded = true;
         item.url = data.url;
+        const fileBlob = await fetchBlobFile(data.id)
+        item.blobUrl = fileBlob.blobUrl
         item.extension = data.extension
       })
       .catch(() => {

@@ -19,9 +19,9 @@ const props = defineProps({
      >
         <div 
             class="aspect-ratio-box rounded-lg overflow-hidden relative" 
-            :style="{ '--dynamic-src': `url(${props.news.image.url})` }"
+            :style="{ '--dynamic-src': `url(${props.news.image.url ? props.news.image.url : props.news.image.blobUrl})` }"
             >
-          <img :src="props.news.image.url" alt="rasm" class="w-full h-full object-contain absolute z-2" />
+          <img :src="props.news.image.url ? props.news.image.url : props.news.image.blobUrl" alt="rasm" class="w-full h-full object-contain absolute z-2" />
         </div>
         <div class="flex flex-col gap-3 justify-center">
             <div class=" font-semibold text-[15px] text-greyscale-900 line-clamp-2" >

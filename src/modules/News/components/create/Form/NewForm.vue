@@ -186,13 +186,13 @@ onMounted(() => {
        <!-- upload image how looks -->
         <div
           class="grid grid-cols-3 gap-4 justify-between mt-2 w-full relative"
-          v-if="!!newsStore.model.image?.url"
+          v-if="!!newsStore.model.image?.url || !!newsStore.model.image?.blobUrl"
         >
           <div
             class="aspect-ratio-box rounded-lg overflow-hidden relative h-full w-full"
-            :style="{ '--dynamic-src': `url(${newsStore.model.image.url})` }"
+            :style="{ '--dynamic-src': `url(${newsStore.model.image.url ? newsStore.model.image.url : newsStore.model.image.blobUrl})` }"
           >
-            <img :src="newsStore.model.image.url" alt="rasm" class="w-full h-full object-contain absolute z-2" />
+            <img :src="newsStore.model.image.url ? newsStore.model.image.url : newsStore.model.image.blobUrl" alt="rasm" class="w-full h-full object-contain absolute z-2" />
           </div>
         </div>
         <label class="block text-sm font-medium text-greyscale-500 my-1">{{ t('main-image') }} <span class="text-red-500"> *</span></label>
@@ -246,9 +246,9 @@ onMounted(() => {
             >
               <div
                 class="aspect-ratio-box rounded-lg overflow-hidden relative h-full w-full"
-                :style="{ '--dynamic-src': `url(${field.value?.url})` }"
+                :style="{ '--dynamic-src': `url(${field.value?.url ? field.value?.url : field.value?.blobUrl})` }"
               >
-                <img :src="field.value?.url" alt="rasm" class="w-full h-full object-contain absolute z-2" />
+                <img :src="field.value?.url ? field.value?.url : field.value?.blobUrl" alt="rasm" class="w-full h-full object-contain absolute z-2" />
               </div>
             </div>
             <label
@@ -343,9 +343,9 @@ onMounted(() => {
         <template v-for="(item, index) in newsStore.model.images_ids" :key="index">
             <div
                 class="aspect-ratio-box rounded-lg overflow-hidden relative h-full w-full"
-                :style="{ '--dynamic-src': `url(${item.url})` }"
+                :style="{ '--dynamic-src': `url(${item.url ? item.url : item.blobUrl})` }"
               >
-              <img :src="item.url" alt="rasm" class="w-full h-full object-contain absolute z-2" />s
+              <img :src="item.url ? item.url : item.blobUrl" alt="rasm" class="w-full h-full object-contain absolute z-2" />
             </div>
           </template>
         </template>
