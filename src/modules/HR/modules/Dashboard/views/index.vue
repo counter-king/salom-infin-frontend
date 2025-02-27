@@ -94,44 +94,6 @@ const option2 = ref({
   },
 })
 const series = ref([76])
-const presence = ref([
-  {
-    title: 'В работе',
-    count: '59%',
-    number: 0,
-    class: 'bg-[#29CD74]'
-  },
-  {
-    title: 'В отпуске',
-    count: '12%',
-    number: 0,
-    class: 'bg-[#5EC1E7]'
-  },
-  {
-    title: 'В декретном отпуске',
-    count: '8%',
-    number: 0,
-    class: 'bg-[#FF7290]'
-  },
-  {
-    title: 'В больничной',
-    count: '18%',
-    number: 0,
-    class: 'bg-[#FDC031]'
-  },
-  {
-    title: 'Удаленный',
-    count: '25%',
-    number: 0,
-    class: 'bg-[#827BFF]'
-  },
-  {
-    title: 'В командировке',
-    count: '3%',
-    number: 0,
-    class: 'bg-[#FF72D5]'
-  }
-])
 
 const genderLoading = ref(true)
 const genderOptions = ref({
@@ -152,7 +114,7 @@ const genderOptions = ref({
     colors: ['#FF7290', '#5EC1E7']
   },
   stroke: {
-    width: 8
+    width: 6
   },
   plotOptions: {
     pie: {
@@ -245,11 +207,12 @@ const conditionOptions = ref({
       '#767994',
       '#63BA3D',
       '#FFC352',
-      '#11A5ED'
+      '#11A5ED',
+      '#090F33'
     ],
   },
   stroke: {
-    width: 8
+    width: 6
   },
   plotOptions: {
     pie: {
@@ -428,7 +391,7 @@ const experienceOptions = ref({
     ],
   },
   stroke: {
-    width: 8
+    width: 6
   },
   plotOptions: {
     pie: {
@@ -561,7 +524,7 @@ const agesOptions = ref({
     ],
   },
   stroke: {
-    width: 8
+    width: 6
   },
   plotOptions: {
     pie: {
@@ -682,7 +645,7 @@ const managersOptions = ref({
     colors: ['#29CD74', '#5EC1E7', '#FF7290'],
   },
   stroke: {
-    width: 8
+    width: 6
   },
   plotOptions: {
     pie: {
