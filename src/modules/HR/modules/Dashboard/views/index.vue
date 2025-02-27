@@ -788,6 +788,48 @@ const getPositionRankList = async () => {
   }
 }
 
+const activityLoading = ref(true)
+const activitySeries = ref([0])
+const activityPercent = ref(0)
+
+const getActivityPercent = async () => {
+  try {
+    activityLoading.value = true
+    let { data } = await axiosConfig.get(`weekly-activity-percent/`)
+
+    activityPercent.value = data.weekly_activity_percentage
+    activitySeries.value = [activityPercent.value]
+  }
+  catch (error) {
+  }
+  finally {
+    setTimeout(() => {
+      activityLoading.value = false
+    }, 500)
+  }
+}
+
+const formCompletionLoading = ref(true)
+const formCompletionSeries = ref([0])
+const formCompletionPercent = ref(0)
+
+const getFormCompletionPercent = async () => {
+  try {
+    formCompletionLoading.value = true
+    let { data } = await axiosConfig.get(`form-completion-percent/`)
+
+    formCompletionPercent.value = data.form_completion_percentage
+    formCompletionSeries.value = [formCompletionPercent.value]
+  }
+  catch (error) {
+  }
+  finally {
+    setTimeout(() => {
+      formCompletionLoading.value = false
+    }, 500)
+  }
+}
+
 watchEffect(async () => {
   if(!branchSelect.value) {
     departments.value = []
@@ -801,6 +843,8 @@ watchEffect(async () => {
 })
 
 onMounted(async () => {
+  await getActivityPercent()
+  await getFormCompletionPercent()
   await getGenderList()
   await getConditionList()
   await getExperienceList()
@@ -910,41 +954,53 @@ onMounted(async () => {
       <div class="col-span-1">
         <card>
           <div class="flex p-1">
-            <div class="flex items-center flex-1 relative">
-              <div class="w-[150px] h-[52px] relative">
-                <apexchart
-                  type="radialBar"
-                  :options="option"
-                  :series="series"
-                  class="absolute"
-                ></apexchart>
-              </div>
+            <template v-if="activityLoading">
+              <base-spinner />
+            </template>
 
-              <div class="font-medium absolute -right-2">
-                <h1 class="text-sm text-greyscale-500">Активность</h1>
-                <p class="text-2xl text-greyscale-900">0</p>
+            <template v-else>
+              <div class="flex items-center flex-1 relative">
+                <div class="w-[150px] h-[52px] relative">
+                  <apexchart
+                    type="radialBar"
+                    :options="option"
+                    :series="activitySeries"
+                    class="absolute"
+                  ></apexchart>
+                </div>
+
+                <div class="font-medium absolute -right-2">
+                  <h1 class="text-sm text-greyscale-500">Активность</h1>
+                  <p class="text-2xl text-greyscale-900">{{ activityPercent }}%</p>
+                </div>
               </div>
-            </div>
+            </template>
 
             <div class="w-20">
               <div class="h-[52px] w-[1px] bg-greyscale-200 m-auto"></div>
             </div>
 
-            <div class="flex items-center flex-1 relative">
-              <div class="w-[150px] h-[52px] relative">
-                <apexchart
-                  type="radialBar"
-                  :options="option2"
-                  :series="series"
-                  class="absolute"
-                ></apexchart>
-              </div>
+            <template v-if="formCompletionLoading">
+              <base-spinner />
+            </template>
 
-              <div class="font-medium absolute -right-1">
-                <h1 class="text-sm text-greyscale-500">Заполненность</h1>
-                <p class="text-2xl text-greyscale-900">0</p>
+            <template v-else>
+              <div class="flex items-center flex-1 relative">
+                <div class="w-[150px] h-[52px] relative">
+                  <apexchart
+                    type="radialBar"
+                    :options="option2"
+                    :series="formCompletionSeries"
+                    class="absolute"
+                  ></apexchart>
+                </div>
+
+                <div class="font-medium absolute -right-1">
+                  <h1 class="text-sm text-greyscale-500">Заполненность</h1>
+                  <p class="text-2xl text-greyscale-900">{{ formCompletionPercent }}%</p>
+                </div>
               </div>
-            </div>
+            </template>
           </div>
         </card>
       </div>
@@ -1078,7 +1134,7 @@ onMounted(async () => {
                   ></div>
                 </div>
 
-                <span class="text-sm w-10 text-center">{{ item.style }}</span>
+                <span class="text-sm w-10 text-center">{{ item.style }}%</span>
               </div>
             </template>
           </div>
