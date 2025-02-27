@@ -94,56 +94,6 @@ const option2 = ref({
   },
 })
 const series = ref([76])
-const option3 = ref({
-  chart: {
-    type: 'donut',
-    offsetX: -45,
-  },
-  dataLabels: {
-    enabled: false
-  },
-  tooltip: {
-    enabled: false
-  },
-  legend: {
-    show: false,
-  },
-  fill: {
-    colors: ['#29CD74', '#5EC1E7', '#FF7290', '#FDC031', '#827BFF', '#FF72D5']
-  },
-  stroke: {
-    width: 8
-  },
-  plotOptions: {
-    pie: {
-      customScale: 1,
-      donut: {
-        size: '75%',
-        labels: {
-          show: true,
-          value: {
-            show: true,
-            fontSize: '22px',
-            fontFamily: 'SFProDisplay-Semibold',
-            fontWeight: 600,
-            color: '#191F3F',
-            offsetY: 8,
-          },
-          total: {
-            show: true,
-            label: 'Сотрудники',
-            fontSize: '18px',
-            color: '#9CA8B9',
-            fontFamily: 'SFProDisplay-Regular',
-            showAlways: true
-          }
-        }
-      },
-      expandOnClick: false
-    }
-  }
-})
-const series3 = ref([0, 0, 0, 0, 0, 0])
 const presence = ref([
   {
     title: 'В работе',
@@ -713,6 +663,108 @@ const agesColors = (index) => {
   }
 }
 
+const managersLoading = ref(true)
+const managersOptions = ref({
+  chart: {
+    type: 'donut',
+    offsetX: -45,
+  },
+  dataLabels: {
+    enabled: false
+  },
+  tooltip: {
+    enabled: false
+  },
+  legend: {
+    show: false,
+  },
+  fill: {
+    colors: ['#29CD74', '#5EC1E7', '#FF7290'],
+  },
+  stroke: {
+    width: 8
+  },
+  plotOptions: {
+    pie: {
+      customScale: 1,
+      donut: {
+        size: '75%',
+        labels: {
+          show: true,
+          value: {
+            show: true,
+            fontSize: '22px',
+            fontFamily: 'SFProDisplay-Semibold',
+            fontWeight: 600,
+            color: '#191F3F',
+            offsetY: 8,
+          },
+          total: {
+            show: true,
+            label: 'сотрудники',
+            fontSize: '18px',
+            color: '#9CA8B9',
+            fontFamily: 'SFProDisplay-Regular',
+            showAlways: true
+          }
+        }
+      },
+      expandOnClick: false
+    }
+  }
+})
+const managersSeries = ref([])
+const managersList = ref({
+  list: [],
+  counts: 0
+})
+
+const getManagersList = async () => {
+  try {
+    managersLoading.value = true
+    let { data } = await axiosConfig.get(`sql-query/`, {
+      query_type: 'by_rank',
+    })
+
+    let list = data.data.map((item, index) => {
+      return {
+        title: item['CODE_RANGE'] === 'SPEC' ? 'Специалисты' : item['CODE_RANGE'] === 'BOSS' ? 'Руководители' : 'Рабочие',
+        number: item['CNT'],
+        class: agesColors(index)
+      }
+    })
+
+    managersSeries.value = data.data.map(item => item['CNT'])
+    managersList.value = {
+      list: [list[2], list[0], list[1]],
+      counts: list.reduce((acc, cur) => acc + cur.number, 0)
+    }
+  }
+  catch (error) {
+    let mock = {
+      data: [
+        {
+          "CODE_RANGE": "SPEC",
+          "CNT": 1172
+        },
+        {
+          "CODE_RANGE": "ISHCHI",
+          "CNT": 1918
+        },
+        {
+          "CODE_RANGE": "BOSS",
+          "CNT": 967
+        }
+      ]
+    }
+  }
+  finally {
+    setTimeout(() => {
+      managersLoading.value = false
+    }, 500)
+  }
+}
+
 watchEffect(async () => {
   if(!branchSelect.value) {
     departments.value = []
@@ -730,6 +782,7 @@ onMounted(async () => {
   await getConditionList()
   await getExperienceList()
   await getAgesList()
+  await getManagersList()
 
   // let { data } = await fetchCompaniesList({ page_size: 100 })
   // branches.value = data.results
@@ -1042,22 +1095,24 @@ onMounted(async () => {
 
         <div class="flex items-center relative pb-3">
           <div class="max-w-[280px] w-full">
-            <apexchart type="donut" :options="option3" :series="series3"></apexchart>
+            <apexchart type="donut" :options="managersOptions" :series="managersSeries"></apexchart>
           </div>
 
           <div class="flex-1 max-w-[275px] w-full absolute right-0">
-            <template v-for="item in presence">
+            <template v-for="item in managersList.list">
               <div class="group flex items-center gap-2 font-medium text-greyscale-500 rounded-xl hover:bg-greyscale-50 px-3 py-[6px]">
                 <div
                   class="w-[10px] h-[10px] rounded"
-                  :class="item.class"
+                  :style="{ backgroundColor: item.class }"
                 ></div>
 
                 <h1 class="flex-1 text-[13px] group-hover:text-greyscale-900">{{ item.title }}</h1>
 
                 <span class="text-greyscale-900 text-sm font-semibold">{{ item.number }}</span>
 
-<!--                <span class="w-9 text-right text-sm group-hover:text-greyscale-900">{{ item.count }}</span>-->
+                <span class="w-9 text-right text-sm group-hover:text-greyscale-900">
+                  {{ `${(item.number / managersList.counts * 100).toFixed(1)}%` }}
+                </span>
               </div>
             </template>
           </div>
@@ -1082,7 +1137,7 @@ onMounted(async () => {
                 <div class="group flex items-center gap-2 font-medium text-greyscale-500 rounded-xl hover:bg-greyscale-50 px-3 py-[6px]">
                   <div
                     class="w-[10px] h-[10px] rounded"
-                    :class="item.class"
+                    :style="{ backgroundColor: item.class }"
                   ></div>
 
                   <h1 class="flex-1 text-[13px] group-hover:text-greyscale-900">{{ item.title }}</h1>
