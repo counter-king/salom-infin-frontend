@@ -24,7 +24,7 @@ const defaultStore = {
       active: true
     },
     {
-      header: 'В руки',
+      header: 'Описания',
       field: 'paid',
       active: true
     },

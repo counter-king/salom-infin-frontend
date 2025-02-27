@@ -79,13 +79,21 @@ const clear = () => {
       </template>
 
       <template #pay_name="{ data }">
-        <span class="text-sm font-medium text-greyscale-900">{{ data.pay_name }}</span>
+        <span v-html="data.pay_name" class="text-sm font-medium text-greyscale-900"></span>
       </template>
 
       <template #paid="{ data }">
-        <span class="text-sm font-medium text-greyscale-900">
-          {{ numberFormat(data.paid) }} сум
-        </span>
+        <template v-if="data.paid === 0 && data.summ === 0">
+          <span class="text-sm font-medium text-greyscale-900">
+            -
+          </span>
+        </template>
+
+        <template v-else>
+          <span class="text-sm font-medium text-greyscale-900">
+            {{ data.paid === 0 ? numberFormat(data.summ) : numberFormat(data.paid) }} сум
+          </span>
+        </template>
       </template>
     </base-data-table>
   </template>

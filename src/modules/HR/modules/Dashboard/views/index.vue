@@ -234,18 +234,9 @@ const genderOptions = ref({
   }
 })
 const genderSeries = ref([])
-const genderList = ref([])
-
-watchEffect(async () => {
-  if(!branchSelect.value) {
-    departments.value = []
-  }
-
-  if(branchSelect.value) {
-    let { data } = await fetchDepartmentList({ page_size:100, company: branchSelect.value, ordering:"name" })
-
-    departments.value = data.results
-  }
+const genderList = ref({
+  list: [],
+  counts: 0
 })
 
 const getGenderList = async () => {
@@ -255,14 +246,19 @@ const getGenderList = async () => {
       query_type: 'by_gender',
     })
 
-    genderSeries.value = data.data.map(item => item['COUNT'])
-    genderList.value = data.data.map(item => {
+    let list = data.data.map(item => {
       return {
         title: item['GENDER'] === 'F' ? 'Женщины' : 'Мужчины',
         number: item['COUNT'],
         class: item['GENDER'] === 'F' ? 'bg-[#FF7290]' : 'bg-[#5EC1E7]'
       }
     })
+
+    genderSeries.value = data.data.map(item => item['COUNT'])
+    genderList.value = {
+      list,
+      counts: list.reduce((acc, cur) => acc + cur.number, 0)
+    }
   }
   catch (error) {}
   finally {
@@ -335,7 +331,10 @@ const conditionOptions = ref({
   }
 })
 const conditionSeries = ref([])
-const conditionList = ref([])
+const conditionList = ref({
+  list: [],
+  counts: 0
+})
 const getConditionList = async () => {
   try {
     conditionLoading.value = true
@@ -343,8 +342,7 @@ const getConditionList = async () => {
       query_type: 'by_condition',
     })
 
-    conditionSeries.value = data.data.map(item => item['COUNT'])
-    conditionList.value = data.data
+    let list = data.data
     .sort((prev, next) => next['COUNT'] - prev['COUNT'])
     .map(item => {
       return {
@@ -353,6 +351,12 @@ const getConditionList = async () => {
         class: conditionColors(item['CONDITION'])
       }
     })
+
+    conditionSeries.value = data.data.map(item => item['COUNT'])
+    conditionList.value = {
+      list,
+      counts: list.reduce((acc, cur) => acc + cur.number, 0)
+    }
   }
   catch (error) {
     let mock = {
@@ -509,7 +513,10 @@ const experienceOptions = ref({
   }
 })
 const experienceSeries = ref([])
-const experienceList = ref([])
+const experienceList = ref({
+  list: [],
+  counts: 0
+})
 
 const getExperienceList = async () => {
   try {
@@ -518,14 +525,19 @@ const getExperienceList = async () => {
       query_type: 'employee_experience',
     })
 
-    experienceSeries.value = data.data.map(item => item['COUNT'])
-    experienceList.value = data.data.map((item, index) => {
+    let list = data.data.map((item, index) => {
       return {
         title: item['CATEGORY'],
         number: item['COUNT'],
         class: experienceColors(index)
       }
     })
+
+    experienceSeries.value = data.data.map(item => item['COUNT'])
+    experienceList.value = {
+      list,
+      counts: list.reduce((acc, cur) => acc + cur.number, 0)
+    }
   }
   catch (error) {
     let mock = {
@@ -634,7 +646,10 @@ const agesOptions = ref({
   }
 })
 const agesSeries = ref([])
-const agesList = ref([])
+const agesList = ref({
+  list: [],
+  counts: 0
+})
 
 const getAgesList = async () => {
   try {
@@ -643,14 +658,19 @@ const getAgesList = async () => {
       query_type: 'by_ages',
     })
 
-    agesSeries.value = data.data.map(item => item['COUNT'])
-    agesList.value = data.data.map((item, index) => {
+    let list = data.data.map((item, index) => {
       return {
         title: item['AGE_GROUP'],
         number: item['COUNT'],
         class: agesColors(index)
       }
     })
+
+    agesSeries.value = data.data.map(item => item['COUNT'])
+    agesList.value = {
+      list,
+      counts: list.reduce((acc, cur) => acc + cur.number, 0)
+    }
   }
   catch (error) {
     let mock = {
@@ -692,6 +712,18 @@ const agesColors = (index) => {
       return '#FDC031'
   }
 }
+
+watchEffect(async () => {
+  if(!branchSelect.value) {
+    departments.value = []
+  }
+
+  if(branchSelect.value) {
+    let { data } = await fetchDepartmentList({ page_size:100, company: branchSelect.value, ordering:"name" })
+
+    departments.value = data.results
+  }
+})
 
 onMounted(async () => {
   await getGenderList()
@@ -856,7 +888,7 @@ onMounted(async () => {
             </div>
 
             <div class="flex-1 max-w-[275px] w-full absolute right-0 max-h-[200px] overflow-y-auto">
-              <template v-for="item in conditionList">
+              <template v-for="item in conditionList.list">
                 <div class="group flex items-center gap-2 font-medium text-greyscale-500 rounded-xl hover:bg-greyscale-50 px-3 py-[6px]">
                   <div
                     class="w-[10px] h-[10px] rounded"
@@ -867,7 +899,9 @@ onMounted(async () => {
 
                   <span class="text-greyscale-900 text-sm font-semibold">{{ item.number }}</span>
 
-                  <!--                <span class="w-9 text-right text-sm group-hover:text-greyscale-900">{{ item.count }}</span>-->
+                  <span class="w-9 text-right text-sm group-hover:text-greyscale-900">
+                    {{ `${(item.number / conditionList.counts * 100).toFixed(1)}%` }}
+                  </span>
                 </div>
               </template>
             </div>
@@ -889,7 +923,7 @@ onMounted(async () => {
             </div>
 
             <div class="flex-1 max-w-[275px] w-full absolute right-0">
-              <template v-for="item in agesList">
+              <template v-for="item in agesList.list">
                 <div class="group flex items-center gap-2 font-medium text-greyscale-500 rounded-xl hover:bg-greyscale-50 px-3 py-[6px]">
                   <div
                     class="w-[10px] h-[10px] rounded"
@@ -900,7 +934,9 @@ onMounted(async () => {
 
                   <span class="text-greyscale-900 text-sm font-semibold">{{ item.number }}</span>
 
-<!--                  <span class="w-9 text-right text-sm group-hover:text-greyscale-900">{{ item.count }}</span>-->
+                  <span class="w-9 text-right text-sm group-hover:text-greyscale-900">
+                    {{ `${(item.number / agesList.counts * 100).toFixed(1)}%` }}
+                  </span>
                 </div>
               </template>
             </div>
@@ -922,7 +958,7 @@ onMounted(async () => {
             </div>
 
             <div class="flex-1 max-w-[275px] w-full absolute right-0">
-              <template v-for="item in experienceList">
+              <template v-for="item in experienceList.list">
                 <div class="group flex items-center gap-2 font-medium text-greyscale-500 rounded-xl hover:bg-greyscale-50 px-3 py-[6px]">
                   <div
                     class="w-[10px] h-[10px] rounded"
@@ -933,7 +969,9 @@ onMounted(async () => {
 
                   <span class="text-greyscale-900 text-sm font-semibold">{{ item.number }}</span>
 
-<!--                  <span class="w-9 text-right text-sm group-hover:text-greyscale-900">{{ item.count }}</span>-->
+                  <span class="w-9 text-right text-sm group-hover:text-greyscale-900">
+                    {{ `${(item.number / experienceList.counts * 100).toFixed(1)}%` }}
+                  </span>
                 </div>
               </template>
             </div>
@@ -1040,7 +1078,7 @@ onMounted(async () => {
             </div>
 
             <div class="flex-1 max-w-[275px] w-full absolute right-0">
-              <template v-for="item in genderList">
+              <template v-for="item in genderList.list">
                 <div class="group flex items-center gap-2 font-medium text-greyscale-500 rounded-xl hover:bg-greyscale-50 px-3 py-[6px]">
                   <div
                     class="w-[10px] h-[10px] rounded"
@@ -1051,7 +1089,9 @@ onMounted(async () => {
 
                   <span class="text-greyscale-900 text-sm font-semibold">{{ item.number }}</span>
 
-                  <!--                <span class="w-9 text-right text-sm group-hover:text-greyscale-900">{{ item.count }}</span>-->
+                  <span class="w-9 text-right text-sm group-hover:text-greyscale-900">
+                    {{ `${(item.number / genderList.counts * 100).toFixed(1)}%` }}
+                  </span>
                 </div>
               </template>
             </div>
