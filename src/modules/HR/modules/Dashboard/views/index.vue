@@ -765,6 +765,64 @@ const getManagersList = async () => {
   }
 }
 
+const positionRankLoading = ref(true)
+const positionRankList = ref({
+  list: []
+})
+
+const getPositionRankList = async () => {
+  try {
+    positionRankLoading.value = true
+    let { data } = await axiosConfig.get(`sql-query/`, {
+      query_type: 'by_position_rank',
+    })
+
+    let counts = data.data.reduce((acc, cur) => acc + cur['CNT'], 0)
+    let list = data.data.map((item, index) => {
+      return {
+        title: item['CODE_RANGE'],
+        number: item['CNT'],
+        style: `${(item['CNT'] / counts * 100).toFixed(1)}%`
+      }
+    })
+
+    positionRankList.value = {
+      list
+    }
+  }
+  catch (error) {
+    let mock = {
+      data: [
+        {
+          "CODE_RANGE": "0-6",
+          "CNT": 1755
+        },
+        {
+          "CODE_RANGE": "16+",
+          "CNT": 326
+        },
+        {
+          "CODE_RANGE": "13-15",
+          "CNT": 1111
+        },
+        {
+          "CODE_RANGE": "10-12",
+          "CNT": 1722
+        },
+        {
+          "CODE_RANGE": "1-5",
+          "CNT": 481
+        }
+      ]
+    }
+  }
+  finally {
+    setTimeout(() => {
+      positionRankLoading.value = false
+    }, 500)
+  }
+}
+
 watchEffect(async () => {
   if(!branchSelect.value) {
     departments.value = []
@@ -783,6 +841,7 @@ onMounted(async () => {
   await getExperienceList()
   await getAgesList()
   await getManagersList()
+  await getPositionRankList()
 
   // let { data } = await fetchCompaniesList({ page_size: 100 })
   // branches.value = data.results
@@ -1037,86 +1096,63 @@ onMounted(async () => {
       <card>
         <h1 class="font-semibold text-greyscale-900 mb-2">Разряды</h1>
 
-        <div class="space-y-1">
-          <div class="flex items-center gap-5 font-medium text-greyscale-500 px-1 py-[6px]">
-            <span class="text-[13px] w-16">15+</span>
+        <template v-if="positionRankLoading">
+          <base-spinner />
+        </template>
 
-            <div class="flex-1 bg-greyscale-50 h-4 rounded overflow-hidden">
-              <div class="bg-primary-100 h-full border-r-2 border-r-primary-500" style="width: 0%"></div>
-            </div>
+        <template v-else>
+          <div class="space-y-1">
+            <template v-for="item in positionRankList.list">
+              <div class="flex items-center gap-5 font-medium text-greyscale-500 px-1 py-[6px]">
+                <span class="text-[13px] w-16">{{ item.title }}</span>
 
-            <span class="text-sm w-10 text-center">0</span>
+                <div class="flex-1 bg-greyscale-50 h-4 rounded overflow-hidden">
+                  <div
+                    class="bg-primary-100 h-full border-r-2 border-r-primary-500"
+                    :style="{ 'width': item.style }"
+                  ></div>
+                </div>
+
+                <span class="text-sm w-10 text-center">{{ item.style }}</span>
+              </div>
+            </template>
           </div>
-
-          <div class="flex items-center gap-5 font-medium text-greyscale-500 px-1 py-[6px]">
-            <span class="text-[13px] w-16">13-14</span>
-
-            <div class="flex-1 bg-greyscale-50 h-4 rounded overflow-hidden">
-              <div class="bg-primary-100 h-full border-r-2 border-r-primary-500" style="width: 0%"></div>
-            </div>
-
-            <span class="text-sm w-10 text-center">0</span>
-          </div>
-
-          <div class="flex items-center gap-5 font-medium text-greyscale-500 px-1 py-[6px]">
-            <span class="text-[13px] w-16">11-12</span>
-
-            <div class="flex-1 bg-greyscale-50 h-4 rounded overflow-hidden">
-              <div class="bg-primary-100 h-full border-r-2 border-r-primary-500" style="width: 0%"></div>
-            </div>
-
-            <span class="text-sm w-10 text-center">0</span>
-          </div>
-
-          <div class="flex items-center gap-5 font-medium text-greyscale-500 px-1 py-[6px]">
-            <span class="text-[13px] w-16">9-10</span>
-
-            <div class="flex-1 bg-greyscale-50 h-4 rounded overflow-hidden">
-              <div class="bg-primary-100 h-full border-r-2 border-r-primary-500" style="width: 0%"></div>
-            </div>
-
-            <span class="text-sm w-10 text-center">0</span>
-          </div>
-
-          <div class="flex items-center gap-5 font-medium text-greyscale-500 px-1 py-[6px]">
-            <span class="text-[13px] w-16">Другие</span>
-
-            <div class="flex-1 bg-greyscale-50 h-4 rounded overflow-hidden">
-              <div class="bg-primary-100 h-full border-r-2 border-r-primary-500" style="width: 0%"></div>
-            </div>
-
-            <span class="text-sm w-10 text-center">0</span>
-          </div>
-        </div>
+        </template>
       </card>
 
       <card>
         <h1 class="font-semibold text-greyscale-900 mb-2">Руководители / Специалисты / Рабочие</h1>
 
-        <div class="flex items-center relative pb-3">
-          <div class="max-w-[280px] w-full">
-            <apexchart type="donut" :options="managersOptions" :series="managersSeries"></apexchart>
-          </div>
+        <template v-if="managersLoading">
+          <base-spinner />
+        </template>
 
-          <div class="flex-1 max-w-[275px] w-full absolute right-0">
-            <template v-for="item in managersList.list">
-              <div class="group flex items-center gap-2 font-medium text-greyscale-500 rounded-xl hover:bg-greyscale-50 px-3 py-[6px]">
-                <div
-                  class="w-[10px] h-[10px] rounded"
-                  :style="{ backgroundColor: item.class }"
-                ></div>
+        <template v-else>
+          <div class="flex items-center relative pb-3">
+            <div class="max-w-[280px] w-full">
+              <apexchart type="donut" :options="managersOptions" :series="managersSeries"></apexchart>
+            </div>
 
-                <h1 class="flex-1 text-[13px] group-hover:text-greyscale-900">{{ item.title }}</h1>
+            <div class="flex-1 max-w-[275px] w-full absolute right-0">
+              <template v-for="item in managersList.list">
+                <div class="group flex items-center gap-2 font-medium text-greyscale-500 rounded-xl hover:bg-greyscale-50 px-3 py-[6px]">
+                  <div
+                    class="w-[10px] h-[10px] rounded"
+                    :style="{ backgroundColor: item.class }"
+                  ></div>
 
-                <span class="text-greyscale-900 text-sm font-semibold">{{ item.number }}</span>
+                  <h1 class="flex-1 text-[13px] group-hover:text-greyscale-900">{{ item.title }}</h1>
 
-                <span class="w-9 text-right text-sm group-hover:text-greyscale-900">
+                  <span class="text-greyscale-900 text-sm font-semibold">{{ item.number }}</span>
+
+                  <span class="w-9 text-right text-sm group-hover:text-greyscale-900">
                   {{ `${(item.number / managersList.counts * 100).toFixed(1)}%` }}
                 </span>
-              </div>
-            </template>
+                </div>
+              </template>
+            </div>
           </div>
-        </div>
+        </template>
       </card>
 
       <card>
