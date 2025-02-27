@@ -1091,7 +1091,7 @@ onMounted(async () => {
       </card>
 
       <card>
-        <h1 class="font-semibold text-greyscale-900 mb-2">Руководители / Специалисты</h1>
+        <h1 class="font-semibold text-greyscale-900 mb-2">Руководители / Специалисты / Рабочие</h1>
 
         <div class="flex items-center relative pb-3">
           <div class="max-w-[280px] w-full">
