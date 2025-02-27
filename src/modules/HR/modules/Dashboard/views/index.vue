@@ -363,6 +363,8 @@ const conditionColors = (condition) => {
       return '#FFC352'
     case USER_STATUS_CODES.STUDY_LEAVE:
       return '#11A5ED'
+    case USER_STATUS_CODES.FROM_THE_CONTENT:
+      return '#090F33'
   }
 }
 
@@ -448,7 +450,7 @@ const getExperienceList = async () => {
 
     experienceSeries.value = data.data.map(item => item['COUNT'])
     experienceList.value = {
-      list,
+      list: [list[0], list[4], list[2], list[3], list[1]],
       counts: list.reduce((acc, cur) => acc + cur.number, 0)
     }
   }
@@ -750,7 +752,7 @@ const getPositionRankList = async () => {
     })
 
     positionRankList.value = {
-      list
+      list: [list[1], list[2], list[3], list[0], list[4]]
     }
   }
   catch (error) {
