@@ -747,7 +747,7 @@ const getPositionRankList = async () => {
       return {
         title: item['CODE_RANGE'],
         number: item['CNT'],
-        style: `${(item['CNT'] / counts * 100).toFixed(1)}%`
+        style: (item['CNT'] / counts * 100).toFixed(1)
       }
     })
 
@@ -1074,7 +1074,7 @@ onMounted(async () => {
                 <div class="flex-1 bg-greyscale-50 h-4 rounded overflow-hidden">
                   <div
                     class="bg-primary-100 h-full border-r-2 border-r-primary-500"
-                    :style="{ 'width': item.style }"
+                    :style="{ 'width': `${parseFloat(item.style) + 12}%` }"
                   ></div>
                 </div>
 
