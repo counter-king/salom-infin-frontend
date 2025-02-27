@@ -1,7 +1,6 @@
 <script setup>
 // cores
 import { inject, onMounted, ref, watch } from 'vue';
-import InputText from 'primevue/inputtext';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 // components
@@ -17,41 +16,73 @@ import { useChatStore } from '../../stores';
 import { CHAT_ROUTE_NAMES, CHAT_TYPES, MESSAGE_TYPES } from '../../constatns';
 // webocket
 import { socket } from "@/services/socket";
+import Textarea from 'primevue/textarea';
 
 const { t } = useI18n();
 const { uploadFiles } = useFileUpload();
 const { send } = socket
 const chatStore = useChatStore()
 const route = useRoute();
-
 // reactives
 const message = ref("");
 const refInput = inject("inputSendMessasgeRef"); 
 const refFileInput = ref(null);
 const showSendIcon = ref(false);
 const isSimleStikerHovered = ref(false);
+const isFocused = ref(false);
+const isCtrlAllPressed = ref(false);
+const InputSendMessageWrapperRef = ref(null);
+const rows = ref(1);
 
 // methods
 const sendNewMessageEvent = (data)=> {
     const payload = { command: 'new_message', chat_type: route.name == CHAT_ROUTE_NAMES.PRIVATE ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: route.params.id, text: data?.text, message_type: data.message_type } 
     send(JSON.stringify(payload))  
 }
+
 const sendReplayNewMessageEvent = (data)=> {
   const payload = { command: 'new_message', chat_type: route.name == CHAT_ROUTE_NAMES.PRIVATE ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: route.params.id, text: data?.text, message_type: data.message_type, replied_to_id: chatStore.contextMenu?.message?.message_id } 
   send(JSON.stringify(payload))  
 }
-const handleSendMessage = () => {
- if(!!message.value) {
-    if(chatStore.contextMenu?.replay) {
-      sendReplayNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.TEXT })
-    } else if(chatStore.contextMenu?.edit){
-      chatStore.actionEditMessageById(chatStore.contextMenu?.message?.message_id, {chat: chatStore.contextMenu?.message.chat_id, replied_to: chatStore.contextMenu?.message?.replied_to?.id, text: message.value})
-    } else {
-      sendNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.TEXT })
+
+const handleSendMessage = (event) => {
+ if(event.key == "Enter"){
+    // when shift or ctrl pressed with enter
+    if(event.shiftKey || event.ctrlKey){
+      if(rows.value < 9){
+        rows.value += 1;
+      }
+    }
+    else if(!message.value.trim()){
+      event.preventDefault();
+      message.value = '';
+      rows.value = 1;
+    }
+    else if(!!message.value.trim()){
+        if(chatStore.contextMenu?.replay) {
+        sendReplayNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.TEXT })
+        } else if(chatStore.contextMenu?.edit){
+          chatStore.actionEditMessageById(chatStore.contextMenu?.message?.message_id, {chat: chatStore.contextMenu?.message.chat_id, replied_to: chatStore.contextMenu?.message?.replied_to?.id, text: message.value})
+        } else {
+          sendNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.TEXT })
+        }
+        message.value = '';
+        rows.value = 1;
+        chatStore.contextMenu = {}
+    }
+ } 
+ // when ctrl + all is pressed, that works
+ else if (event.ctrlKey && (event.key === 'A' || event.key === 'a')){
+  isCtrlAllPressed.value = true
+ }
+ else if(event.key == "Backspace" && rows.value > 1 && message.value.endsWith("\n")) {
+    rows.value -= 1;
+    // if ctrl + all is pressed, reset    
+    if(isCtrlAllPressed.value){
+      rows.value = 1
+      isCtrlAllPressed.value = false
     }
  }
- message.value = '';
- chatStore.contextMenu = {}
 }
 
 // when emoji selected
@@ -74,6 +105,7 @@ const onCancelIconReplay = () => {
 const onClickSendMessage = () => {
   refInput.value.$el.focus()
 }
+
 // showSend icon show or hide
 watch(message, (val) => {
  if(!!val) {
@@ -82,20 +114,27 @@ watch(message, (val) => {
    showSendIcon.value = false;
  }
 })
+
 // when edit, set message value from store
 watch(() => chatStore.contextMenu?.message?.text, (val) => {
     if(chatStore.contextMenu?.edit){
       message.value = chatStore.contextMenu?.message?.text
     }
 })
+
+// tracking input focues when context menu is open 
 watch([()=> chatStore.contextMenu], () => {
   refInput.value.$el.focus()
 }, { deep: true })
 
+
 // expose
 defineExpose({
-  refInput
+  refInput,
+  InputSendMessageWrapperRef,
+  InputSendMessageRows: rows
 })
+
 onMounted(() => {
   refInput.value.$el.focus()
 })
@@ -105,6 +144,7 @@ onMounted(() => {
  <div 
   @click="onClickSendMessage"
   class="relative pt-1"
+  ref="InputSendMessageWrapperRef"
   :class="{'pt-[36px]': chatStore.contextMenu?.edit || chatStore.contextMenu?.replay}"
   >
   <!-- chat replay and edit -->
@@ -133,30 +173,28 @@ onMounted(() => {
     </div>
   </div>
   <!-- seding input -->
-  <div class="relative w-full bg-transparent">
-    <!-- <base-input 
-      ref="refInput"
-      v-model="message"  
-      input-class="p-[6px] pl-5 h-[52px] bg-white w-full text-sm font-medium text-greyscale-900 placeholder:text-sm placeholder:font-medium placeholder:text-greyscale-300"
-      placeholder="Ввведите свое сообщение..."
-      @keydown.enter="handleSendMessage"
-    /> -->
-    <InputText
-      ref="refInput"
+  <div 
+    class="relative w-full border flex items-center min-h-[52px] max-h-[150px] p-[6px] pl-5 pr-[130px] bg-white rounded-xl"
+    :class="{'border-primary-500': isFocused }"
+    > 
+    <Textarea
       v-model="message"
-      type="text"
-      size="small"
-      :placeholder="t('enter-your-message')"
-      @keydown.enter="handleSendMessage"
+      @keydown="handleSendMessage"
+      ref="refInput"
+      @focus="isFocused = true"
+      @blur="isFocused = false"
+      size="large"
       :pt="{
         root: {
           class: [
-            'w-full p-[6px] pl-5 pr-[130px] h-[52px] bg-white w-full rounded-xl  text-sm font-medium text-greyscale-900 placeholder:text-sm placeholder:font-medium placeholder:text-greyscale-300',
+            'custom-scroll w-full max-h-[130px] overflow-y-auto border-none resize-none !shadow-none !p-0 text-sm font-medium text-greyscale-900 placeholder:text-sm placeholder:font-medium placeholder:text-greyscale-300',
           ]
         }
       }"
-    />
-    <div class="flex gap-3 items-center absolute right-[10px] top-[6px] ">
+      :placeholder="t('enter-your-message')"
+      :rows="rows"
+    ></Textarea>
+    <div class="flex gap-3 items-center absolute right-[10px] top-[6px]" :class="{'!top-auto bottom-[6px]': rows > 1}">
       <div
         @mouseover="isSimleStikerHovered = true" 
         @mouseleave="isSimleStikerHovered = false"
@@ -204,5 +242,14 @@ onMounted(() => {
 }
 .rotate-y-180 {
   transform: rotateY(180deg);
+}
+
+.custom-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.custom-scroll {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 </style>

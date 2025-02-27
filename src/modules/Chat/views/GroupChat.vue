@@ -1,6 +1,6 @@
 <script setup>
 // cores
-import { onMounted, ref, watch } from 'vue';
+import { nextTick, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 // componennts
@@ -14,7 +14,6 @@ import DeleteDialog from '../components/DeleteDialog.vue';
 import FileUploadProgress from '../components/ChatArea/FileUploadProgress.vue';
 import ContextMenu from '../components/ChatArea/ContextMenu.vue';
 import ChatFileItem from '../components/ChatArea/ChatFileItem.vue';
-import { DownloadMinimalisticIcon, FileTextBoldIcon } from '@/components/Icons';
 import Empty from '@/components/Empty.vue';
 import ChatImageItem from '../components/ChatArea/ChatImageItem.vue';
 import FriendChatFileItem from '../components/ChatArea/FriendChatFileItem.vue';
@@ -45,6 +44,8 @@ const refChatArea = ref(null);
 const refSendMessage = ref(null);
 const refEmojiContextMenu = ref(null);
 const emojiMenuItems = ref([]);
+const inputSendMessageHeight = ref(90);
+const inputSendMessageRows = ref(1);
 // methods
 // when scroll down, scrollDwonButton will be visible
 const handleScroll = (event) => {
@@ -142,14 +143,23 @@ onMounted(async () => {
   refChatArea.value.scrollTop = refChatArea.value?.scrollHeight
 })
 
+onMounted(() => {
+  // tracking inputSendMessage when div's height change 
+  if(!!refSendMessage.value?.InputSendMessageRows) {    
+    watch([()=> refSendMessage.value?.InputSendMessageRows, () => chatStore.contextMenu], async() => {
+      await nextTick(); 
+      inputSendMessageHeight.value = refSendMessage.value.InputSendMessageWrapperRef.scrollHeight
+    }, { immediate: true })
+  }
+})
+
 </script>
 <template>
- <!-- style="height: calc(100% - 135px)"  -->
  <div class="h-full relative">
   <div
     ref="refChatArea" class="flex flex-col gap-2 px-6 py-4 overflow-y-auto relative"
-    @scroll="(e)=>{handleScroll(e); handleScrollReachUp(e,handleScrollUp)}"
-    :style="`height: calc(100% - ${chatStore.contextMenu.edit || chatStore.contextMenu.replay ? '170px' : '135px'})`" 
+    :style="`height: calc(100% - ${inputSendMessageHeight + 90}px)`" 
+    @scroll="(e)=>{ handleScroll(e); handleScrollReachUp(e,handleScrollUp) }"
     @click="onClickChatArea"
     @dragover.prevent="onDragOver"
     @dragleave.prevent="onDragLeave"
@@ -166,7 +176,7 @@ onMounted(async () => {
         </div>
       </div>
       <!-- message list -->
-      <div class="flex flex-col gap-1" v-if="!!chatStore.messageListByChatId.length">
+      <div class="flex flex-col gap-1 h-full" v-if="!!chatStore.messageListByChatId.length">
         <template v-for="(message, index) in chatStore.messageListByChatId" :key="message?.message_id">
           <template v-if="showDateByCalculate(index)">
               <ShowDate :classNames="{ 'mb-5': index == 0, 'my-5': index != 0}" :date="message.created_date" />
@@ -238,6 +248,7 @@ onMounted(async () => {
           </template>
         </template>
         </template>
+       
         <template v-for="(message, index) in chatStore.uploadingFiles" :key="index"> 
           <ChatFileItem 
             :message="message"

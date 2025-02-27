@@ -53,7 +53,7 @@ const props = defineProps({
       <!-- replay message -->
       <div 
         @contextmenu.prevent="onShowContextMenu($event, props.message, props.index)"
-         class="flex flex-col gap-1 bg-primary-400 rounded-2xl rounded-br-[4px] px-4 py-3 cursor-pointer max-w-[400px]"
+         class="flex flex-col gap-1 bg-primary-400 rounded-2xl rounded-br-[4px] px-4 py-3 cursor-pointer  max-w-[400px]"
          :class="[{'!rounded-xl !rounded-br-[4px]': false}]"
         >
         <div 
@@ -64,7 +64,7 @@ const props = defineProps({
           <span class="text-xs font-medium text-white/[65%] truncate">{{ props.message.replied_to?.text }}</span>
         </div>
         <!-- text -->
-        <p class="text-sm font-medium text-white bg-primary-400 whitespace-normal break-all" >{{ props.message?.text }}</p> 
+        <p class="text-sm font-medium text-white bg-primary-400 whitespace-pre-line break-all" >{{ props.message?.text }}</p> 
         <!-- edit -->
         <div v-if="props.message?.edited" class="flex gap-1 items-center text-[10px] font-medium text-white/[70%] self-end">
           <base-iconify

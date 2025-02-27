@@ -55,11 +55,11 @@ const { t } = useI18n();
               v-if="!!props.message.replied_to"
               class="flex flex-col gap-1 pl-2 border-l-[2px] border-warning-500"
               >
-              <span class="text-xs font-semibold text-warning-500">{{ props.message.replied_to?.sender?.first_name }} {{ props.message.replied_to?.sender?.last_name }}</span>
-              <span class="text-xs font-medium text-greyscale-500">{{ props.message.replied_to?.text }}</span>
+              <span class="text-xs font-semibold text-warning-500 truncate">{{ props.message.replied_to?.sender?.first_name }} {{ props.message.replied_to?.sender?.last_name }}</span>
+              <span class="text-xs font-medium text-greyscale-500 truncate">{{ props.message.replied_to?.text }}</span>
             </div>
             <!-- text -->
-            <p class="text-sm font-medium text-greyscale-900 whitespace-normal break-all">
+            <p class="text-sm font-medium text-greyscale-900 whitespace-pre-line break-all">
               {{ props.message?.text }}
             </p>
              <!-- edit -->
