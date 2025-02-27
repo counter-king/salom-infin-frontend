@@ -20,15 +20,15 @@ const props = defineProps({
         <div 
         v-if="allowedImageTypes.some(item => item.includes(props.file?.type))"
          class="rounded-lg overflow-hidden aspect-ratio-box relative" 
-         :style="{ '--dynamic-src': `url(${props.file?.url})` }"
+         :style="{ '--dynamic-src': `url(${props.file?.url ? props.file?.url : props.file?.blobUrl})` }"
         >
-            <img :src="props.file?.url" alt="rasm" class="w-full h-full object-contain absolute z-2" />
+            <img :src="props.file?.url ? props.file?.url : props.file?.blobUrl" alt="rasm" class="w-full h-full object-contain absolute z-2" />
         </div>        
         <div v-if="allowedAudioTypes.some(item => item.includes(props.file?.type))" class="text-sm text-greyscale-500 mt-2">
-            <audio :src="props.file.url" controls>{{ props.file?.name }}</audio>
+            <audio :src="props.file.url ? props.file.url : props.file.blobUrl" controls>{{ props.file?.name }}</audio>
             <span class="pl-3">{{ props.file?.name }}</span>
         </div>
-        <video v-if="allowedVideoTypes.some(item => item.includes(props.file?.type))" :src="props.file.url" controls class="w-full h-full object-cover"></video>
+        <video v-if="allowedVideoTypes.some(item => item.includes(props.file?.type))" :src="props.file.url ? props.file.url : props.file.blobUrl" controls class="w-full h-full object-cover"></video>
     </div>
     <div v-if="allowedVideoTypes.some(item => item.includes(props.file?.type))" class="text-sm text-greyscale-500 mt-2 pl-3" >{{ props.file?.name }}</div>
 </template>

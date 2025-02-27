@@ -24,6 +24,7 @@ import BaseIconify from '@/components/UI/BaseIconify.vue';
 import { EyeBoldIcon, HeartBoldIcon } from '@/components/Icons';
 // services
 import { fetchCreateNewsComment, fetchCreateNewsLike, fetchCreateNewsModerationHistory, fetchGetMyNews, fetchGetNewsCommentList, fetchGetNewsModerationHistoryList, fetchModerationApproveNews } from '../services/news.service';
+import { fetchBlobFile } from '../../../services/file.service';
 // utils
 import { formatToK } from '@/utils';
 import { dispatchNotify } from '@/utils/notify';
@@ -57,7 +58,18 @@ const newsId = computed(() => route.params.id)
 const fetchOneNews = async() => {
    loading.value = true
    try {
-       const { data }  = await fetchGetMyNews(route.params.id)       
+       const { data }  = await fetchGetMyNews(route.params.id)   
+       if(!data.image?.url){
+        const { blobUrl } = await fetchBlobFile(data.image.id)
+        data.image.blobUrl = blobUrl
+       }
+       data.galleries = await Promise.all(data.galleries.map(async(item) => {
+        if(!item.url){
+            const { blobUrl } = await fetchBlobFile(item.id)
+            return { ...item, blobUrl }
+        }
+        return item
+       }))
        newsOne.value = data
        viewHeartIsLike.value = data.is_liked
        viewHeartLikeCounts.value = data.like_counts 
@@ -192,10 +204,10 @@ onMounted( async () => {
                 :class="{ 'rounded-b-none pb-0': type === 'moderation' }"
                 >
                 <div
-                :style="{ '--dynamic-src': `url(${newsOne.image?.url})` }"
+                :style="{ '--dynamic-src': `url(${newsOne.image?.url ? newsOne.image?.url : newsOne.image?.blobUrl})` }"
                 class="aspect-ratio-box rounded-2xl overflow-hidden relative" 
                 >
-                    <img :src="newsOne.image?.url" alt="rasm" class="w-full h-full object-contain absolute z-2">
+                    <img :src="newsOne.image?.url ? newsOne.image?.url : newsOne.image?.blobUrl" alt="rasm" class="w-full h-full object-contain absolute z-2">
                 </div>
                 <!-- info -->
                 <div class="mt-4 flex justify-between">

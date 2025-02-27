@@ -51,9 +51,9 @@ const handleImageClick = (index) => {
                 <div 
                   @click="handleImageClick(index)"
                   class="rounded-lg overflow-hidden aspect-ratio-box relative" 
-                  :style="{ '--dynamic-src': `url(${item.url})` }"
+                  :style="{ '--dynamic-src': `url(${item.url ? item.url : item.blobUrl})` }"
                 >
-                  <img :src="item.url" alt="rasm" class="w-full h-full object-contain absolute z-2" />
+                  <img :src="item.url ? item.url : item.blobUrl" alt="rasm" class="w-full h-full object-contain absolute z-2" />
                 </div>
             </div>
           </swiper-slide>
@@ -79,7 +79,7 @@ const handleImageClick = (index) => {
         <template #item="slotProps">
           <div class="h-[500px] rounded-xl overflow-hidden">
             <img
-              :src="slotProps.item.url"
+              :src="slotProps.item.url ? slotProps.item.url : slotProps.item.blobUrl"
               :alt="slotProps.item.alt"
               class="w-full h-full object-contain"
             />

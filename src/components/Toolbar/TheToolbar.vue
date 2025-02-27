@@ -127,7 +127,7 @@ onMounted(() => {
 
             <search v-else ref="modalRef" />
 
-            <setting-dropdown />
+<!--            <setting-dropdown />-->
 
 <!--            <notifications />-->
 

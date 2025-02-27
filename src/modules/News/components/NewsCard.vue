@@ -22,9 +22,9 @@ const props = defineProps({
     <div class="flex flex-col h-full">
       <div 
         class="rounded-lg overflow-hidden aspect-ratio-box relative" 
-        :style="{ '--dynamic-src': `url(${props.item.image.url})` }"
+        :style="{ '--dynamic-src': `url(${props.item.image.url ? props.item.image.url : props.item.image.blobUrl})` }"
       >
-        <img :src="props.item.image.url" alt="rasm" class="w-full h-full object-contain absolute z-2" />
+        <img :src="props.item.image.url ? props.item.image.url : props.item.image.blobUrl" alt="rasm" class="w-full h-full object-contain absolute z-2" />
       </div>
       <!-- content -->
       <div class="p-2 pt-0 flex flex-col">

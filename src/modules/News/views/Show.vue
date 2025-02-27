@@ -92,6 +92,7 @@ const handleSendComment = async ()=>{
     commentButtonLoading.value = true
     try {
         await fetchCreateNewsComment({news: route.params.id, comment: commentValue.value})
+        await getNewCommentList()
         commentValue.value = ''
     } catch (error) {
         dispatchNotify(null, e?.message, COLOR_TYPES.ERROR)
@@ -122,7 +123,13 @@ const getRelatedNewsList =  async (page = 1) =>{
         exclude_id: route.params.id, 
         page: page, 
         page_size: 50})
-        relatedNewsList.value = data.results
+        relatedNewsList.value = await Promise.all(data.results?.map(async(item) => {
+            if(!item.image?.url){
+              const { blobUrl } = await fetchBlobFile(item.image.id)
+              item.image.blobUrl = blobUrl
+            }
+            return item
+          }) || [])
     }
     finally{
         realatedNewsListLoading.value = false
@@ -141,10 +148,6 @@ watch(() => route.params.id, async(newsId) => {
     if(newsId){
         await fetchAllApi() 
     }
-})
-
-watch(() => commentValue.value, async() => {
-    await getNewCommentList()
 })
 
 onMounted( async () => {
@@ -168,10 +171,10 @@ onMounted( async () => {
             <!-- right -->
             <div class="pb-3 relative">
                 <div
-                :style="{ '--dynamic-src': `url(${newsOne.image?.url})` }"
+                :style="{ '--dynamic-src': `url(${newsOne.image?.url ? newsOne.image?.url : newsOne.image?.blobUrl})` }"
                 class="aspect-ratio-box rounded-2xl overflow-hidden relative" 
                 >
-                    <img :src="newsOne.image?.url" alt="rasm" class="w-full h-full object-contain absolute z-2">
+                    <img :src="newsOne.image?.url ? newsOne.image?.url : newsOne.image?.blobUrl" alt="rasm" class="w-full h-full object-contain absolute z-2">
                 </div>
                 <!-- info -->
                 <div class="mt-4 flex justify-between">

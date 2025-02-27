@@ -63,7 +63,13 @@ const fetchNewsList = async (currentPage, resetList = false) => {
     })
     next.value = data.next
     if (resetList) {
-      newsList.value = data.results
+      newsList.value = await Promise.all(data.results.map(async(item) => {
+        if(!item.image?.url){
+          const { blobUrl } = await fetchBlobFile(item.image.id)
+          item.image.blobUrl = blobUrl
+        }
+        return item
+      }))
     } else {
       newsList.value = [...newsList.value, ...data.results]
     }

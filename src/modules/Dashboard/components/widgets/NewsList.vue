@@ -23,7 +23,13 @@ const getNewsList = async () => {
   loading.value = true
   try {
     const { data } = await fetchGetNewsList({ page_size: 10 })
-    newsList.value = data?.results || []
+    newsList.value = await Promise.all(data.results.map(async(item) => {
+        if(!item.image?.url){
+          const { blobUrl } = await fetchBlobFile(item.image.id)
+          item.image.blobUrl = blobUrl
+        }
+        return item
+    }))
   } catch (e) {
     dispatchNotify(null, e?.message, COLOR_TYPES.ERROR)
   } finally {
