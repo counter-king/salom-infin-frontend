@@ -55,6 +55,22 @@ watch(data, (newData) => {
   }
   else if(newData.type == WEBCOCKET_EVENTS.NEW_MESSAGE) {    
     if(newData.chat_type == CHAT_TYPES.PRIVATE){     
+      // if user doen't exist in the list then add it
+      if(!chatStore.privateChatList.some(item=> item.chat_id == newData.chat_id)){
+        chatStore.privateChatList.unshift({
+          first_name: newData.sender?.first_name,
+          full_name: newData.sender?.full_name,
+          position: newData.sender?.position?.name,
+          chat_id: newData.chat_id,
+          color: newData.sender?.color,
+          avatar: newData.sender?.avatar,
+          last_message: newData.text,
+          last_message_date: newData.created_date,
+          last_message_type: newData.message_type,
+          type: CHAT_TYPES.PRIVATE,
+          unread_count: 0
+        })
+      }
       chatStore.uploadingFiles = chatStore.uploadingFiles.filter(item=> item?.attachments?.file?.id != newData?.files[0]?.id) 
       chatStore.messageListByChatId.push({
         attachments: { file: newData.files[0] },
@@ -72,8 +88,25 @@ watch(data, (newData) => {
         uploaded: true,
       })
       // set last message to privatelist chat
-      // chatStore.privateChatList.find(item=> item.chat_id == newData.chat_id).last_message = newData.text
+      chatStore.privateChatList.find(item=> item.chat_id == newData.chat_id).last_message = newData.text
+      // set group chat last message
     } else {
+      // if user doen't exist in the list then add it
+      if(!chatStore.groupChatList.some(item=> item.chat_id == newData.chat_id)){
+        chatStore.groupChatList.unshift({
+          first_name: newData.sender?.first_name,
+          full_name: newData.sender?.full_name,
+          position: newData.sender?.position?.name,
+          chat_id: newData.chat_id,
+          color: newData.sender?.color,
+          avatar: newData.sender?.avatar,
+          last_message: newData.text,
+          last_message_date: newData.created_date,
+          last_message_type: newData.message_type,
+          type: CHAT_TYPES.PRIVATE,
+          unread_count: 0
+        })
+      }
       chatStore.messageListByChatId.push({
         attachments: newData.attachments || [],
         chat_id: newData.chat_id,
@@ -88,7 +121,7 @@ watch(data, (newData) => {
         chat_type: newData.chat_type
       })
       // set last message to grouplist chat
-      // chatStore.groupChatList.find(item=> item.chat_id == newData.chat_id).last_message = newData.text
+      chatStore.groupChatList.find(item=> item.chat_id == newData.chat_id).last_message = newData.text
     }
   }
   else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_DELETED) {    

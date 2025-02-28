@@ -775,7 +775,7 @@
   "file-types":"Fayl turlari",
   "video":"Video",
   "images":"Rasmlar",
-  "chat-info-file":"{count} fayllar, {size} MB",
+  "chat-info-file":"{count} fayllar",
   "members": "Xodimlar",
   "copy":"Nusxalash",
   "enter-your-message": "Xabaringizni kiriting...",

@@ -5,8 +5,11 @@ import { useI18n } from 'vue-i18n';
 // components
 import FileItem from './FileItem.vue';
 import { COMPONENT_TYPES } from '../constatns';
+import { useChatStore } from '../stores';
 // utils
 const { t } = useI18n();
+
+const chatStore = useChatStore()
 // props
 const props = defineProps({
  onClickFun: {
@@ -26,37 +29,40 @@ const props = defineProps({
      />
    </div>
    <!-- data -->
-   <div class="flex flex-col gap-1">
-     <FileItem 
-      @click="()=>props.onClickFun(COMPONENT_TYPES.DOCUMENTS)"
-      :info="{
-       title: 'documents',
-       count: 4,
-       size: '11'
+    <template v-if="chatStore.messageFilesListLoading">
+      <base-spinner />
+    </template>
+    <template v-else>
+      <div class="flex flex-col gap-1">
+        <FileItem 
+         @click="()=>props.onClickFun(COMPONENT_TYPES.DOCUMENTS)"
+         :info="{
+          title: 'documents',
+          count: chatStore.messageFileList.results?.length,
       }"
       :left-icon="{ name: FileTextBoldIcon, class: 'text-warning-500' }"
       :right-icon="{ name: ChevronUp20SolidIcon, class: 'text-greyscale-500 transform rotate-90' }"
-     />
-     <FileItem 
+    />
+    <FileItem 
       @click="()=>props.onClickFun(COMPONENT_TYPES.VIDEOS)"
       :info="{
         title: 'video',
-        count: 4,
+        count: chatStore.messageVideoFileList.results?.length,
         size: '11'
-       }"
-       :left-icon="{ name: ClapperboardPlayBoldIcon, class: 'text-success-500' }"
-       :right-icon="{ name: ChevronUp20SolidIcon, class: 'text-greyscale-500 transform rotate-90' }"
-     />
-     <FileItem 
+      }"
+      :left-icon="{ name: ClapperboardPlayBoldIcon, class: 'text-success-500' }"
+      :right-icon="{ name: ChevronUp20SolidIcon, class: 'text-greyscale-500 transform rotate-90' }"
+    />
+    <FileItem 
       @click="()=>props.onClickFun(COMPONENT_TYPES.IMAGES)"
       :info="{
-         title: 'images',
-         count: 4,
-         size: '11'
-        }"
+        title: 'images',
+        count: chatStore.messageImageFileList.results?.length,
+      }"
       :left-icon="{ name: GalleryBoldIcon, class: 'text-critic-500' }"
       :right-icon="{ name: ChevronUp20SolidIcon, class: 'text-greyscale-500 transform rotate-90' }"
-     />
-   </div>
+    />
+      </div>
+    </template>
   </div>
 </template>

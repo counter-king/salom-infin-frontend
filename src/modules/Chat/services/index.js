@@ -6,7 +6,9 @@ const URLS = {
   chatPrivate: "chat/private/",
   chatGroup: "chat/group/",
   chatMessageSearch: "chat/message/search/",
-  chatMessages: "chat/messages/"
+  chatMessages: "chat/messages/",
+  chatMessageLink: "chat/message/links/",
+  chatMessageFiles: "chat/message/files/"
 }
 /** Returns created personal and group chats list in searching **/
 export const fetchChatUsersSearch = (params) => {
@@ -69,4 +71,13 @@ export const fetchEditMessageById = (id, body) => {
 // delete message by id
 export const fetchDeleteMessageById = (id) => {
   return axiosConfig.delete(`${URLS.chatMessages}${id}/`);
+}
+
+// get message link list
+export const fetchGetMessageLinkList = (params) => {
+  return axiosConfig.get(`${URLS.chatMessageLink}`, params);
+}
+// get message files list
+export const fetchGetMessageFilesList = (params) => {
+  return axiosConfig.get(`${URLS.chatMessageFiles}`, params);
 }

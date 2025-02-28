@@ -29,6 +29,7 @@ export const MESSAGE_TYPES = {
   VIDEO: "video",
   AUDIO: "audio",
   FILE: "file",
+  LINK: "link",
 }
 
 

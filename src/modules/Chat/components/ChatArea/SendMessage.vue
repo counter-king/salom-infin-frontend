@@ -34,6 +34,9 @@ const isCtrlAllPressed = ref(false);
 const InputSendMessageWrapperRef = ref(null);
 const rows = ref(1);
 
+// checking there are http or https regex
+const urlRegex = /(^|\s)(https?:\/\/[^\s]+)/g;
+
 // methods
 const sendNewMessageEvent = (data)=> {
     const payload = { command: 'new_message', chat_type: route.name == CHAT_ROUTE_NAMES.PRIVATE ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: route.params.id, text: data?.text, message_type: data.message_type } 
@@ -46,6 +49,7 @@ const sendReplayNewMessageEvent = (data)=> {
 }
 
 const handleSendMessage = (event) => {
+  console.log("event",event.key);
  if(event.key == "Enter"){
     // when shift or ctrl pressed with enter
     if(event.shiftKey || event.ctrlKey){
@@ -59,13 +63,30 @@ const handleSendMessage = (event) => {
       rows.value = 1;
     }
     else if(!!message.value.trim()){
+        // replay message
         if(chatStore.contextMenu?.replay) {
-        sendReplayNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.TEXT })
+          if(urlRegex.test(message.value)){
+            sendReplayNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.LINK })
+          } else {
+            sendReplayNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.TEXT })
+          }
+        // edit message
         } else if(chatStore.contextMenu?.edit){
-          chatStore.actionEditMessageById(chatStore.contextMenu?.message?.message_id, {chat: chatStore.contextMenu?.message.chat_id, replied_to: chatStore.contextMenu?.message?.replied_to?.id, text: message.value})
+          if(urlRegex.test(message.value)){
+            chatStore.actionEditMessageById(chatStore.contextMenu?.message?.message_id, {chat: chatStore.contextMenu?.message.chat_id, replied_to: chatStore.contextMenu?.message?.replied_to?.id, text: message.value, message_type: MESSAGE_TYPES.LINK })
+          } else {
+            chatStore.actionEditMessageById(chatStore.contextMenu?.message?.message_id, {chat: chatStore.contextMenu?.message.chat_id, replied_to: chatStore.contextMenu?.message?.replied_to?.id, text: message.value, message_type: MESSAGE_TYPES.TEXT})
+          }
+        // new message
         } else {
-          sendNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.TEXT })
+          // link message
+          if(urlRegex.test(message.value)){
+            sendNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.LINK })
+          } else {
+            sendNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.TEXT })
+          } 
         }
+        // reset values
         message.value = '';
         rows.value = 1;
         chatStore.contextMenu = {}
@@ -119,6 +140,7 @@ watch(message, (val) => {
 watch(() => chatStore.contextMenu?.message?.text, (val) => {
     if(chatStore.contextMenu?.edit){
       message.value = chatStore.contextMenu?.message?.text
+      rows.value = chatStore.contextMenu?.message?.text.split("\n").length
     }
 })
 
@@ -179,6 +201,7 @@ onMounted(() => {
     > 
     <Textarea
       v-model="message"
+      @input="handleSendMessage"
       @keydown="handleSendMessage"
       ref="refInput"
       @focus="isFocused = true"

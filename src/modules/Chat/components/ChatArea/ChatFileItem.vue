@@ -45,9 +45,9 @@ const props = defineProps({
             >
               <div class="p-[10px] rounded-lg !bg-primary-300">
                 <base-iconify 
-                :icon="fileTypes[props.message?.message_type].icon"
+                :icon="fileTypes[props.message?.message_type]?.icon"
                 class="!h-5 !w-5" 
-                :class="fileTypes[props.message?.message_type].class2"
+                :class="fileTypes[props.message?.message_type]?.class2"
                 />
               </div>
               <div class="grow flex flex-col gap-1 select-none">

@@ -20,6 +20,7 @@ import { useAuthStore } from "@/modules/Auth/stores";
 import { dispatchNotify } from "@/utils/notify";
 import { COLOR_TYPES } from "@/enums";
 import { fetchBlobFile } from "@/services/file.service";
+import { fetchGetMessageFilesList, fetchGetMessageLinkList } from "../services";
 
 const authStore = useAuthStore();
 
@@ -37,14 +38,21 @@ export const useChatStore = defineStore("chat-stores", {
     messageListByChatIdLoading: false,
     messageListByChatIdAddMoreLoading: false,
     deleteMessageByIdLoading: false,
+    messageLinkListLoading: false,
+    messageFilesListLoading: false,
     selectedUser: null,
     selectedGroup: null,
     chatUserSearchList: [],
     usersSearchListByMessage: [],
+    messageVideoFileList: [],
+    messageImageFileList: [],
+    messageFileList: [],
+    messageAudioFileList: [],
     messageListByChatId: [],
     privateChatList: [],
     userSearchList: [],
     groupChatList: [],
+    messageLinkList: [],
     contextMenu: {
       tempMessage: null,
       message: null,
@@ -170,14 +178,14 @@ export const useChatStore = defineStore("chat-stores", {
     },
     /** */
     async actionCreatePrivateChat(body) {
-      const {data} = await fetchCreatePrivateChat(body);
+      const { data } = await fetchCreatePrivateChat(body);
       return {
         first_name: data?.title,
         full_name: data?.title,
-        position: data.members?.find((item) => item.user?.id !== body.member_id)?.user?.position?.name,
+        position: data.members?.find((item) => item.user?.id == body.member_id)?.user?.position?.name,
         chat_id: data.id,
-        color: data.members?.find((item) => item.user?.id !== body.member_id)?.user?.color,
-        avatar: data.members?.find((item) => item.user?.id !== body.member_id)?.user?.avatar,
+        color: data.members?.find((item) => item.user?.id == body.member_id)?.user?.color,
+        avatar: data.members?.find((item) => item.user?.id == body.member_id)?.user?.avatar,
         last_message: data?.last_message?.text,
         last_message_date: data?.last_message?.created_date,
         last_message_type: data?.last_message?.type,
@@ -322,6 +330,69 @@ export const useChatStore = defineStore("chat-stores", {
       } catch(e) {
         dispatchNotify(null, e, COLOR_TYPES.ERROR)
       } finally {  
+      }
+    },
+    /** */
+    async actionGetMessageLinkList(params) {
+      this.messageLinkListLoading = true;
+      try {
+        const { data } = await fetchGetMessageLinkList(params);
+        this.messageLinkList = data.results
+        this.messageLinkListLoading = false;
+      } catch(e) {
+        dispatchNotify(null, e, COLOR_TYPES.ERROR)
+      } finally {
+        this.messageLinkListLoading = false;
+      }
+    },
+    /** */
+    async actionGetMessageVideoFileList(params) {
+      try {
+        const { data } = await fetchGetMessageFilesList(params);
+        this.messageVideoFileList = data
+      } catch(e) {
+        dispatchNotify(null, e, COLOR_TYPES.ERROR)
+      } finally {
+      }
+    },
+    /** */
+    async actionGetMessageImageFileList(params) {
+      try {
+        const { data } = await fetchGetMessageFilesList(params);
+        this.messageImageFileList = data
+      } catch(e) {
+        dispatchNotify(null, e, COLOR_TYPES.ERROR)
+      } finally {
+      }
+    },
+    /** */
+    async actionGetMessageFileList(params) {
+      try {
+        const { data } = await fetchGetMessageFilesList(params);
+        this.messageFileList = data
+      } catch(e) {
+        dispatchNotify(null, e, COLOR_TYPES.ERROR)
+      } finally {
+      }
+    },
+    /** */
+    async actionGetMessageAudioFileList(params) {
+      try {
+        const { data } = await fetchGetMessageFilesList(params);
+        this.messageAudioFileList = data
+      } catch(e) {
+        dispatchNotify(null, e, COLOR_TYPES.ERROR)
+      } finally {
+      }
+    },
+    /** */
+    async actionGetMessageAudioFileList(params) {
+      try {
+        const { data } = await fetchGetMessageFilesList(params);
+        return data
+      } catch(e) {
+        dispatchNotify(null, e, COLOR_TYPES.ERROR)
+      } finally {
       }
     }
   }

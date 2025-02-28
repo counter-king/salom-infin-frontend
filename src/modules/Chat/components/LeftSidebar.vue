@@ -54,35 +54,49 @@ const onTabChange = async (val) => {
 const onCreateChat = async (user) => {
   const data = await chatStore.actionCreatePrivateChat({ member_id: user.id });  
   chatStore.selectedUser = data
+  // if user don't exist in the list then add it
+  if(!chatStore.privateChatList.some(item => item.chat_id == data.chat_id)){
+    chatStore.privateChatList.unshift(data)
+  }
   router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: data.chat_id }})
   searchInput.value = null;
 }
 
+// when searched privete chat is clicked, work
 const onClickSearchedUser = (item) => {  
-  if(item.type == CHAT_TYPES.PRIVATE && item.chat_id != route.params.id){
     router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: item.chat_id }})
-    chatStore.selectedUser = item
+    // if user don't exist in the list then add it
+    if(!chatStore.privateChatList.some(user => user.chat_id == item.chat_id)){
+      chatStore.privateChatList.unshift(item)
+      chatStore.selectedUser = item
+    }
     chatStore.userSearching = false;
     searchInput.value = null;
-  } else if(item.type == CHAT_TYPES.GROUP && item.chat_id != route.params.id) {
-    router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: item.chat_id }})
-    chatStore.selectedGroup = item
-    chatStore.userSearching = false;
-    searchInput.value = null;
-  }
 }
 
+// when private chat list  is clicked, work
 const onClickChatPrivateUser = (user) => {
+  // if user is already selected then don't do anything, becouse no full data, just it is getting from  api id
   if(route.params.id != user.chat_id){
     router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: user.chat_id }})
-    chatStore.selectedUser = user
+    // if user don't exist in the list then add it
+    if(!chatStore.privateChatList.some(user => user.chat_id == user.chat_id)){
+      chatStore.privateChatList.unshift(user)
+      chatStore.selectedUser = user
+    }
   }
 }
 
+// when group chat list  is clicked, work
 const onClickChatGroup = (group) => {
+  // if group is already selected then don't do anything, becouse no full data, just it is getting from  api id
   if(route.params.id != group.chat_id){    
     router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: group.chat_id }})
-    chatStore.selectedGroup = group
+    // if group don't exist in the list then add it
+    if(!chatStore.groupChatList.some(item => item.chat_id == group.chat_id)){
+      chatStore.groupChatList.unshift(group)
+      chatStore.selectedGroup = group
+    }
     chatStore.userSearching = false;
     searchInput.value = null;
   }

@@ -136,7 +136,6 @@ watch(
   }
 );
 
-
 onMounted(async () => {
   chatStore.selectedUser = await chatStore.actionGetPrivateChatById(route.params?.id);
   const { count } = await chatStore.actionGetMessageListByChatId({ chat:route.params?.id }, true);
@@ -185,7 +184,7 @@ onMounted(() => {
           </template>
           <!-- owner chat -->
           <template v-if="message?.sender?.id == authStore.currentUser?.id" >
-            <template v-if="message?.message_type != MESSAGE_TYPES.TEXT">
+            <template v-if="message?.message_type != MESSAGE_TYPES.TEXT && message?.message_type != MESSAGE_TYPES.LINK">
               <template v-if="message?.message_type == MESSAGE_TYPES.IMAGE">
                 <ChatImageItem
                   :index="index"
@@ -209,14 +208,14 @@ onMounted(() => {
                 :handleClickEmoji="handleClickEmoji"
                 :onShowContextMenu="onShowContextMenu" 
                 :onShowEmojiContextMenu="onShowEmojiContextMenu" 
-                :message="message"
+                :message="{...message, message_type: MESSAGE_TYPES.LINK}"
                 :index="index"
               />          
             </template>
           </template>
           <!-- friend chat -->
           <template v-else>
-            <template v-if="message?.message_type != MESSAGE_TYPES.TEXT">
+            <template v-if="message?.message_type != MESSAGE_TYPES.TEXT && message?.message_type != MESSAGE_TYPES.LINK">
               <template v-if="message?.message_type == MESSAGE_TYPES.IMAGE">
                 <FriendChatImageItem
                   :message="message"

@@ -1,11 +1,14 @@
 <script setup>
 // cores
+import { useI18n } from 'vue-i18n';
 // componennts
 import { PenBoldIcon } from '@/components/Icons';
 import ClickedStiker from './ClickedStiker.vue';
+import LinkMessage from './LinkMessage.vue';
 // utils
 import { formatHour } from '@/utils/formatDate';
-import { useI18n } from 'vue-i18n';
+// contants
+import { MESSAGE_TYPES } from '../../constatns';
 // props
 const props = defineProps({
   message: {
@@ -60,7 +63,8 @@ const { t } = useI18n();
             </div>
             <!-- text -->
             <p class="text-sm font-medium text-greyscale-900 whitespace-pre-line break-all">
-              {{ props.message?.text }}
+              <LinkMessage v-if="props.message?.message_type == MESSAGE_TYPES.LINK" :message="props.message" />
+              <span v-else>{{ props.message?.text }}</span>
             </p>
              <!-- edit -->
             <div v-if="props.message?.edited" class="flex gap-1 items-center text-[10px] font-medium text-greyscale-300 self-end">
@@ -74,7 +78,7 @@ const { t } = useI18n();
           <p class="text-xs font-medium text-greyscale-500 self-end">{{ formatHour(props.message?.created_date) }}</p>
         </div>
         <!-- reactions -->
-        <div v-if="Object.keys(props.message.reactions).length" class="flex gap-1">
+        <div v-if="props.message.reactions && Object.keys(props.message.reactions).length" class="flex gap-1">
           <template v-for="reaction in Object.keys(props.message.reactions)" :key="reaction">
             <ClickedStiker 
               @click="props.handleClickEmoji(reaction, message.message_id)"

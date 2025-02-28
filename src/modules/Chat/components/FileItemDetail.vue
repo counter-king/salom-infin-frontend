@@ -6,12 +6,8 @@ import { downloadFile } from '../services/file.service';
 const { t } = useI18n();
 
 const props = defineProps({
-  info: {
+  message: {
    type: Object,
-   default: () => ({
-    title: '',
-    count: 0,
-   })
   },
   rightIcon: {
    name: {
@@ -34,8 +30,9 @@ const props = defineProps({
 <template>
  <div 
    class="flex gap-4 items-center p-2 pr-1 group hover:bg-greyscale-50 cursor-pointer rounded-xl"
+   @click.stop
    >
-    <div class="p-[10px] group-hover:bg-white bg-greyscale-50 rounded-lg">
+    <div  @click="downloadFile(props.message?.attachments[0]?.file)"  class="p-[10px] group-hover:bg-white bg-greyscale-50 rounded-lg">
       <base-iconify 
        :icon="props.leftIcon.name"
        class="!h-5 !w-5" 
@@ -43,18 +40,18 @@ const props = defineProps({
        />
     </div>
     <div class="grow flex flex-col gap-1 select-none">
-      <h3 class="text-sm font-semibold text-greyscale-900 capitalize">{{t(props.info.title) }}</h3>
-      <p class="text-xs text-greyscale-500">{{ t('chat-info-file',{count: props.info.count}) }}</p>
+      <h3 class="text-sm font-semibold text-greyscale-900 capitalize line-clamp-1 max-w-[188px]">{{t(props.message?.text) }} {{ props.message?.text }}{{ props.message?.text }}</h3>
+      <!-- <p class="text-xs text-greyscale-500">{{ t('chat-info-file',{count: props.file.count}) }}</p> -->
     </div>
-    <slot name="right-icon">
-     <base-iconify 
-     @click="downloadFile(props.message?.attachments?.file)" 
-       v-if="!!props.rightIcon"
-       :icon="props.rightIcon.name"
+    <div class="p-2" @click="downloadFile(props.message?.attachments[0]?.file)" >
+      <slot name="right-icon">
+        <base-iconify 
+        v-if="!!props.rightIcon"
+        :icon="props.rightIcon.name"
         class="!h-5 !w-5" 
-       :class="props.rightIcon.class"
-       />
-       
-    </slot>
+        :class="props.rightIcon.class"
+        />
+      </slot>
+    </div>
  </div>
 </template>

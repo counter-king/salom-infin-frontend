@@ -1,7 +1,7 @@
 <script setup>
 // Core
 import { useI18n } from "vue-i18n";
-import { computed, inject, ref } from "vue";
+import { computed, inject, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 // Components
 import FileTypes from "./FileTypes.vue";
@@ -9,13 +9,13 @@ import FileTypeLink from "./FileTypeLink.vue";
 import FileTypeDocument from "./FileTypeDocument.vue";
 import FileTypeVideo from "./FileTypeVideo.vue";
 import FileTypeImage from "./FileTypeImage.vue";
+import GroupUserList from "./GroupUserList.vue";
 // icons
 import { ChevronUp20SolidIcon, FolderFavouriteStarBoldIcon, PaperclipRoundedBoldIcon, UsersGroupTwoRoundedBoldIcon, XMarkSolidIcon } from '@/components/Icons'
 // constants 
-import { CHAT_ROUTE_NAMES, COMPONENT_TYPES } from "../constatns";
+import { CHAT_ROUTE_NAMES, COMPONENT_TYPES, MESSAGE_TYPES } from "../constatns";
 // store
-import { useChatStore } from "@/modules/Chat/stores";
-import GroupUserList from "./GroupUserList.vue";
+import { useChatStore } from "../stores";
 
 const chatStore = useChatStore();
 const route = useRoute();
@@ -58,6 +58,22 @@ const handleClickWrapper = () => {
   inputSendMessasgeRef.value.$el.focus()
 }
 
+watch([() => route.params?.id], async () => {
+  // when route change other than private or group, don't work only work on private or group
+  if(route.name == CHAT_ROUTE_NAMES.PRIVATE || route.name == CHAT_ROUTE_NAMES.GROUP){
+    chatStore.actionGetMessageLinkList({ chat:route.params?.id})
+    chatStore.messageFilesListLoading = true
+    await Promise.all([
+      chatStore.actionGetMessageFileList({ chat:route.params?.id, type: MESSAGE_TYPES.FILE }),
+      chatStore.actionGetMessageImageFileList({ chat:route.params?.id, type: MESSAGE_TYPES.IMAGE }),
+      chatStore.actionGetMessageVideoFileList({ chat:route.params?.id, type: MESSAGE_TYPES.VIDEO }),
+      chatStore.actionGetMessageAudioFileList({ chat:route.params?.id, type: MESSAGE_TYPES.AUDIO })
+    ]).finally(()=>{
+      chatStore.messageFilesListLoading = false
+    })
+  }
+},{ immediate: true })
+  
 </script>
 <template>
   <div
