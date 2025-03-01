@@ -12,7 +12,6 @@ import { formatDateMonthWithDay, formatDay } from '@/utils/formatDate';
 import { useChatStore } from '../stores';
 // composables
 import { useInfiniteScroll } from '../composables/useInfiniteScroll';
-import { fetchGetMessageLinkList } from '../services';
 
 const route = useRoute()
 const chatStore = useChatStore()

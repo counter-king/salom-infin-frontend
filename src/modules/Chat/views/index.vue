@@ -1,7 +1,7 @@
 <script setup>
 // core
 import { useI18n } from "vue-i18n";
-import { computed, onMounted, provide, ref, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, provide, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 // components
 import { ChatAreWrapper, LeftSidebar, RightSidebar } from "@/modules/Chat/components";
@@ -23,6 +23,8 @@ const { status, data, send } = socket
 const isShowChat = computed(() => allowedPages.includes(route.name))
 const routeId = computed(() => route.params.id)
 const inputSendMessasgeRef = ref(null)
+let typingTimeouts = {};
+
 // privder
 provide("inputSendMessasgeRef", inputSendMessasgeRef) 
 // methods
@@ -46,7 +48,7 @@ watch(status, (newStatus) => {
 // Kelgan ma'lumotlarni kuzatish
 watch(data, (newData) => {
   newData = JSON.parse(newData);
-  // console.log("ewasd",newData);
+  console.log("ewasd",newData);
   if(newData.command == WEBCOCKET_EVENTS.USER_HANDSHAKE) {
     // console.log("user hand",newData);
   }
@@ -178,6 +180,18 @@ watch(data, (newData) => {
         message.reactions[newData?.emoji].push(newData?.user);
     }
   }
+  else if(newData.type == WEBCOCKET_EVENTS.TYPING) {
+    console.log("typing",newData);
+    chatStore.typingUsers[newData?.user?.id] = newData
+    // Clear any existing timeout for this user
+    if (typingTimeouts[newData?.user?.id]) {
+      clearTimeout(typingTimeouts[newData?.user?.id]);
+    }
+    // Set a new timeout for this user
+    typingTimeouts[newData?.user?.id] = setTimeout(() => {
+      delete chatStore.typingUsers[newData?.user?.id];
+    }, 3000);
+  }
 });
 
 watch(routeId, (newRouteId) => {    
@@ -203,6 +217,11 @@ function initializeHandshake(){
 onMounted(() => {
   initializeHandshake()
 })
+
+// Clean up on component unmount
+onBeforeUnmount(() => {
+  Object.values(typingTimeouts).forEach(timeout => clearTimeout(timeout));
+});
 </script>
 <template>
   <div class="chat-home flex flex-col w-full py-6 px-10" style="height: calc(100vh - 80px)">

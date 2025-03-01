@@ -24,7 +24,7 @@ export const fetchUsersSearchByMessage = (params) => {
 }
 /** Returns private chat list **/
 export const fetchGetPrivateChatList = (params) => {
-  return axiosConfig.get(`${URLS.chatPrivate}`, { page: 1, page_size: 100, ...params });
+  return axiosConfig.get(`${URLS.chatPrivate}`, { page: 1, page_size: 20, ...params });
 }
 /** Creates private chat **/
 export const fetchCreatePrivateChat = (body) => {
@@ -45,7 +45,7 @@ export const fetchCreateGroupChat = (body) => {
 }
 // get group chat list
 export const fetchGetGroupChatList = (params) => {
-  return axiosConfig.get(`${URLS.chatGroup}`,  { page: 1, page_size: 100, ...params });
+  return axiosConfig.get(`${URLS.chatGroup}`,  { page: 1, page_size: 20, ...params });
 }
 // get group chat by id
 export const fetchGetGroupChatById = (id) => {

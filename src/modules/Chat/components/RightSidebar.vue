@@ -36,6 +36,7 @@ const componentType = ref(COMPONENT_TYPES.FILES);
 const activeComponent = computed(() => {
   return components[componentType.value]
 });
+
 const activeFileMenu = computed(() => {
   if(componentType.value !== COMPONENT_TYPES.LINKS){
     return true;
@@ -44,6 +45,8 @@ const activeFileMenu = computed(() => {
     return false;
   }
 });
+
+const allFileCount = computed(() => (chatStore.messageFileList.results ?.length || 0) + (chatStore.messageImageFileList.results?.length || 0) + (chatStore.messageVideoFileList.results?.length || 0))
 const isGroupDetail = computed(() => route.name == CHAT_ROUTE_NAMES.GROUP)
 // methods
 const handleClickGroupUsers = () => {
@@ -156,7 +159,7 @@ watch([() => route.params?.id], async () => {
                 </span>
               </div>
               <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-semibold text-greyscale-900">238</h2>
+                <h2 class="text-2xl font-semibold text-greyscale-900">{{ allFileCount }}</h2>
                 <div v-if="activeFileMenu" class="absolute right-3 border-[6px] border-white bg-primary-500 w-4 h-4 rounded-full shadow-md"></div>
               </div>
             </div>
@@ -179,7 +182,7 @@ watch([() => route.params?.id], async () => {
                 </span>
               </div>
               <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-semibold text-greyscale-900">164</h2>
+                <h2 class="text-2xl font-semibold text-greyscale-900">{{ chatStore.messageLinkList?.length || 0 }}</h2>
                 <div v-if="!activeFileMenu" class="absolute right-3 border-[6px] border-white bg-primary-500 w-4 h-4 rounded-full shadow-md"></div>
               </div>
             </div>

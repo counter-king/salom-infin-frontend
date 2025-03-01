@@ -17,6 +17,7 @@ import { CHAT_ROUTE_NAMES, CHAT_TYPES, MESSAGE_TYPES } from '../../constatns';
 // webocket
 import { socket } from "@/services/socket";
 import Textarea from 'primevue/textarea';
+import { useDebounceFn } from '@vueuse/core';
 
 const { t } = useI18n();
 const { uploadFiles } = useFileUpload();
@@ -48,7 +49,13 @@ const sendReplayNewMessageEvent = (data)=> {
   send(JSON.stringify(payload))  
 }
 
+const sendMessageIsTyping = useDebounceFn(()=>{
+  const payload = { command: 'typing', chat_type: route.name == CHAT_ROUTE_NAMES.PRIVATE ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: route.params.id } 
+  send(JSON.stringify(payload))  
+}, 100);
+
 const handleSendMessage = (event) => {
+
  if(event.key == "Enter"){
     // when shift or ctrl pressed with enter
     if(event.shiftKey || event.ctrlKey){
@@ -102,9 +109,44 @@ const handleSendMessage = (event) => {
       rows.value = 1
       isCtrlAllPressed.value = false
     }
- }
+ } 
 }
 
+const handleMessageByIcon = () => {
+ if(!!message.value.trim()){
+        // replay message
+        if(chatStore.contextMenu?.replay) {
+          if(urlRegex.test(message.value)){
+            sendReplayNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.LINK })
+          } else {
+            sendReplayNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.TEXT })
+          }
+        // edit message
+        } else if(chatStore.contextMenu?.edit){
+          if(urlRegex.test(message.value)){
+            chatStore.actionEditMessageById(chatStore.contextMenu?.message?.message_id, {chat: chatStore.contextMenu?.message.chat_id, replied_to: chatStore.contextMenu?.message?.replied_to?.id, text: message.value, message_type: MESSAGE_TYPES.LINK })
+          } else {
+            chatStore.actionEditMessageById(chatStore.contextMenu?.message?.message_id, {chat: chatStore.contextMenu?.message.chat_id, replied_to: chatStore.contextMenu?.message?.replied_to?.id, text: message.value, message_type: MESSAGE_TYPES.TEXT})
+          }
+        // new message
+        } else {
+          // link message
+          if(urlRegex.test(message.value)){
+            sendNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.LINK })
+          } else {
+            sendNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.TEXT })
+          } 
+        }
+        // reset values
+        message.value = '';
+        rows.value = 1;
+        chatStore.contextMenu = {}
+    }
+}
+
+const onChangeInput = () => {
+  sendMessageIsTyping()
+}
 // when emoji selected
 const handleSelectEmoji = (e) => {
     message.value +=e.i;
@@ -200,7 +242,7 @@ onMounted(() => {
     > 
     <Textarea
       v-model="message"
-      @input="handleSendMessage"
+      @input="onChangeInput"
       @keydown="handleSendMessage"
       ref="refInput"
       @focus="isFocused = true"
@@ -237,11 +279,11 @@ onMounted(() => {
         class="!h-5 !w-5 text-greyscale-300 cursor-pointer"
       />
       <div
+        @click="handleMessageByIcon"
         class=" bg-primary-500 rounded-xl w-10 h-10 min-h-[40px] min-w-[40px] max-w-[40px] max-h-[40px] flex items-center justify-center cursor-pointer"
         :class="{'!bg-greyscale-300 pointer-events-none': !showSendIcon}"
         >
         <base-iconify
-          @click="handleSendMessage"
           :icon="PlainBoldIcon"
           class="!h-5 !w-5 text-white"
         />

@@ -48,6 +48,18 @@ const menuItems = computed(() => [
      iconClass: "!text-critic-500 !w-4 !h-4"
     }] :  [])
 ]);
+
+// Computed property to check if someone is typing in current chat
+const isUserTypingInCurrentChat = computed(() => {
+  return Object.values(chatStore.typingUsers).some(item => item.chat_id == route.params?.id && authStore.currentUser?.id != item?.user?.id);
+});
+
+// Get the name of typing user
+const typingUserName = computed(() => {
+  const typingUser = Object.values(chatStore.typingUsers).find(item => item.chat_id == route.params?.id);
+  return typingUser ? typingUser.user?.full_name : '';
+});
+
 // injects
 const inputSendMessasgeRef = inject("inputSendMessasgeRef")
 // methods
@@ -114,8 +126,8 @@ watch(createGroupDialogVisible, () => {
         </div>
         <div class="flex flex-col ml-3">
           <div class="text-base font-semibold select-none">{{ isGroupDetail ? chatStore.selectedGroup?.title : chatStore.selectedUser?.full_name}}</div>
-          <div v-if="true" class="text-sm font-medium text-greyscale-500 select-none">{{ isGroupDetail ? t('members', { count: chatStore.selectedGroup?.members?.length}) : chatStore.selectedUser?.position}}</div>
-          <div v-else class="text-sm font-medium text-success-500 select-none">typing ... </div>
+          <div v-if="isUserTypingInCurrentChat" class="text-sm font-medium text-success-500 select-none">{{route.name == CHAT_ROUTE_NAMES.GROUP ? typingUserName : ''}} typing... </div>
+          <div v-else class="text-sm font-medium text-greyscale-500 select-none">{{ isGroupDetail ? t('members', { count: chatStore.selectedGroup?.members?.length}) : chatStore.selectedUser?.position}}</div>
         </div>
       </div>
       <div class="flex items-center gap-1 ">

@@ -14,7 +14,9 @@ import { MagniferIcon, Plus20SolidIcon, UserRoundedBoldIcon, UsersGroupTwoRounde
 // store
 import { useChatStore } from "@/modules/Chat/stores";
 // constatns
-import { CHAT_ROUTE_NAMES, CHAT_TYPES } from "../constatns";
+import { CHAT_ROUTE_NAMES, CHAT_TYPES, MESSAGE_TYPES } from "../constatns";
+// composables
+import { useInfiniteScroll } from "../composables/useInfiniteScroll";
 
 const { t } = useI18n();
 const chatStore = useChatStore();
@@ -27,6 +29,12 @@ const activeTabIndex= computed(() => route.name == CHAT_ROUTE_NAMES.PRIVATE ? 0 
 
 // provides/injects
 const inputSendMessasgeRef = inject("inputSendMessasgeRef");
+
+const containerPersionalRef = ref(null)
+const containerGroupRef = ref(null)
+// composibles
+useInfiniteScroll({ fetchFn: chatStore.actionGetPrivateChatList, containerRef: containerPersionalRef, params: { page: 1, page_size: 20}})
+useInfiniteScroll({ fetchFn: chatStore.actionGetGroupChatList, containerRef: containerGroupRef, params: { page: 1, page_size: 20, chat:route.params?.id}})
 
 const tabPanelList = [
   {
@@ -118,10 +126,6 @@ watch(createGroupDialogVisible, () => {
   inputSendMessasgeRef.value?.$el?.focus()
 })
 
-onMounted(async () => {
-  await chatStore.actionGetPrivateChatList({});
-  await chatStore.actionGetGroupChatList({});
-})
 </script>
 
 <template>
@@ -202,7 +206,7 @@ onMounted(async () => {
         :on-tab-change="onTabChange"
       >
         <template #personal>
-          <div class="overflow-hidden overflow-y-auto px-4" style="height: calc(100vh - 332px)">
+          <div ref="containerPersionalRef" class="overflow-hidden overflow-y-auto px-4" style="height: calc(100vh - 332px)">
             <template v-if="chatStore.privateChatLoading">
               <base-spinner />
             </template>
@@ -228,7 +232,7 @@ onMounted(async () => {
         </template>
 
         <template #group>
-          <div class="overflow-hidden overflow-y-auto px-4" style="height: calc(100vh - 332px)">
+          <div ref="containerGroupRef" class="overflow-hidden overflow-y-auto px-4" style="height: calc(100vh - 332px)">
             <template v-if="chatStore.groupChatLoading">
               <base-spinner />
             </template>

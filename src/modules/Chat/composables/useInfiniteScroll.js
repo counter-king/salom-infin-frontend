@@ -8,7 +8,7 @@ export function useInfiniteScroll(options) {
   const {
     fetchFn,
     containerRef,
-    params
+    params,
   } = options;
 
   const list = ref([]);
@@ -18,7 +18,7 @@ export function useInfiniteScroll(options) {
   const hasNext = ref(false);
   const hasMoreLoading = ref(false);
   // Keyingi sahifani yuklash
-  const fetchNextPage = async (resetList=false) => {
+  const fetchNextPage = async (resetList = true) => {
     if(isLoading.value || hasMoreLoading.value) return;
     if(resetList){
       isLoading.value = true;
@@ -27,7 +27,7 @@ export function useInfiniteScroll(options) {
     }
 
     try {
-        const { data } = await fetchFn({...params, page: page.value, page_size: pageSize.value});
+        const { data } = await fetchFn({...params, page: page.value, page_size: pageSize.value }, resetList);
         if(resetList) {
           list.value = data?.results || [];
         } else{
@@ -35,9 +35,7 @@ export function useInfiniteScroll(options) {
         }
         hasNext.value = data?.count > page.value * pageSize.value;
         hasMoreLoading.value = false;
-        page.value++;
-        console.log(list.list);
-        
+        page.value++;        
 
     } catch (err) {
       dispatchNotify(null, err?.message, COLOR_TYPES.ERROR)
@@ -61,7 +59,7 @@ export function useInfiniteScroll(options) {
   },300);
 
   onMounted(async() => {
-    fetchNextPage();
+    await fetchNextPage(true);
     
     const container = containerRef.value;
     if (container) {

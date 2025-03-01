@@ -60,7 +60,6 @@ const handleClickIcon = () => {
         >
           {{ url }}
         </a>
-      <!-- <a :href="props.message.link" target="_blank" class="text-xs text-primary-500" >{{ props.message.link }}</a> -->
     </div>
  </div>
 </template>

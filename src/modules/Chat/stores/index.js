@@ -27,11 +27,13 @@ const authStore = useAuthStore();
 export const useChatStore = defineStore("chat-stores", {
   state: () => ({
     privateChatLoading: false,
+    privateChatMoreLoading: false,
     rightSidebarVisible: true,
     userSearching: false,
     chatUserSearchListLoading: false,
     userSearchListLoading: false,
     groupChatLoading: false,
+    groupChatMoreLoading: false,
     usersSearchByMessageListLoading: false,
     groupChatByIdLoading: false,
     privateChatByIdLoading: false,
@@ -39,6 +41,7 @@ export const useChatStore = defineStore("chat-stores", {
     messageListByChatIdAddMoreLoading: false,
     deleteMessageByIdLoading: false,
     messageLinkListLoading: false,
+    messageLinkListMoreLoading: false,
     messageFilesListLoading: false,
     selectedUser: null,
     selectedGroup: null,
@@ -53,6 +56,8 @@ export const useChatStore = defineStore("chat-stores", {
     userSearchList: [],
     groupChatList: [],
     messageLinkList: [],
+    messageLinkList: [],
+    typingUsers: {},
     contextMenu: {
       tempMessage: null,
       message: null,
@@ -154,11 +159,17 @@ export const useChatStore = defineStore("chat-stores", {
       }
     },
     /** */
-    async actionGetPrivateChatList(params) {
-      this.privateChatLoading = true;
-      const response = await fetchGetPrivateChatList(params);
-      if (response){
-        this.privateChatList = response.data.results?.map((item) => ({
+    async actionGetPrivateChatList(params, resetList = true) {
+      if(this.privateChatLoading || this.privateChatMoreLoading) return;
+      if(resetList){
+        this.privateChatLoading = true;
+      }
+      else {
+        this.privateChatMoreLoading = true;
+      }
+      try {  
+        const response = await fetchGetPrivateChatList(params);
+        const results = response.data.results?.map((item) => ({
           first_name: item?.title,
           full_name: item?.title,
           position: item?.position?.name,
@@ -171,9 +182,17 @@ export const useChatStore = defineStore("chat-stores", {
           type: item.type,
           unread_count: item.unread_count
         }));
+
+        if(resetList){
+          this.privateChatList = results
+        } else {
+          this.privateChatList = [...this.privateChatList, ...results]
+        }
+        response.data.results = results
+        return response
+      } finally {
         this.privateChatLoading = false;
-      } else {
-        this.privateChatLoading = false;
+        this.privateChatMoreLoading = false;
       }
     },
     /** */
@@ -215,11 +234,16 @@ export const useChatStore = defineStore("chat-stores", {
     },
     /** */
     /** */
-    async actionGetGroupChatList(body) {
-      this.groupChatLoading = true;
-      const response = await fetchGetGroupChatList(body);
-      if (response){
-        this.groupChatList = response.data.results?.map((item) => ({
+    async actionGetGroupChatList(params, resetList = true) {
+      if(resetList){
+        this.groupChatLoading = true;
+      }
+      else {
+        this.groupChatMoreLoading = true;
+      }
+      try {
+      const response = await fetchGetGroupChatList(params);
+        const results = response.data.results?.map((item) => ({
           last_message: item.last_message,
           title: item.title,
           image: item.images[0]?.image,
@@ -230,9 +254,17 @@ export const useChatStore = defineStore("chat-stores", {
           type: item.type,
           unread_count: item.unread_count
         }));
+        if(resetList){
+          this.groupChatList = results
+        } else {
+          this.groupChatList = [...this.groupChatList, ...results]
+        }
+        response.data.results = results
+        return response
+      }
+      finally {
         this.groupChatLoading = false;
-      } else {
-        this.groupChatLoading = false;
+        this.groupChatMoreLoading = false;
       }
     },
     /** */
@@ -333,17 +365,26 @@ export const useChatStore = defineStore("chat-stores", {
       }
     },
     /** */
-    async actionGetMessageLinkList(params) {
-      this.messageLinkListLoading = true;
+    async actionGetMessageLinkList(params, resetList = true) {
+      if(resetList){
+        this.messageLinkListLoading = true;
+      } else {
+        this.messageLinkListMoreLoading = true;
+      }
       try {
         const response= await fetchGetMessageLinkList(params);
-        this.messageLinkList = response?.data?.results
-        this.messageLinkListLoading = false;
+        if(resetList){
+          this.messageLinkList = response?.data?.results
+        } else{
+          this.messageLinkList = [...this.messageLinkList, ...response?.data?.results]
+        }
+        this.messageLinkListMoreLoading = false;
         return response
       } catch(e) {
         dispatchNotify(null, e, COLOR_TYPES.ERROR)
       } finally {
-        this.messageLinkListLoading = false;
+          this.messageLinkListLoading = false;
+          this.messageLinkListMoreLoading = false;
       }
     },
     /** */
