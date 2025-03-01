@@ -160,7 +160,7 @@ onMounted(() => {
   <div
     ref="refChatArea" class="flex flex-col gap-2 px-6 py-4 overflow-y-auto relative"
     :style="`height: calc(100% - ${inputSendMessageHeight + 90}px)`" 
-    @scroll="(e)=>{ handleScroll(e); handleScrollReachUp(e,handleScrollUp) }"
+    @scroll="(e)=> { handleScroll(e); handleScrollReachUp(e,handleScrollUp) }"
     @click="onClickChatArea"
     @dragover.prevent="onDragOver"
     @dragleave.prevent="onDragLeave"

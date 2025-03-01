@@ -1,6 +1,8 @@
 <script setup>
 // cores
 import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
+import { ref } from 'vue';
 // components
 import FileItemLink from './FileItemLink.vue';
 import Empty from '@/components/Empty.vue';
@@ -8,11 +10,19 @@ import Empty from '@/components/Empty.vue';
 import { formatDateMonthWithDay, formatDay } from '@/utils/formatDate';
 // stores
 import { useChatStore } from '../stores';
+// composables
+import { useInfiniteScroll } from '../composables/useInfiniteScroll';
+import { fetchGetMessageLinkList } from '../services';
 
+const route = useRoute()
 const chatStore = useChatStore()
 // props
 const props = defineProps({
 })
+// reactives
+const containerRef = ref(null)
+
+useInfiniteScroll({ fetchFn: chatStore.actionGetMessageLinkList, containerRef, params: { page: 1, page_size: 10, chat:route.params?.id }})
 
 const showDateByCalculate = (index) => {
   const previouMessageCreatedDate = chatStore.messageLinkList[index - 1]?.created_date
@@ -26,11 +36,11 @@ const showDateByCalculate = (index) => {
 
 </script>
 <template>
-  <div class="flex flex-col gap-4 p-4 overflow-auto h-[260px]">
+  <div ref="containerRef" class="flex flex-col gap-4 p-4 overflow-auto h-[260px]" >
    <!-- data -->
     <div class="flex flex-col gap-1">
-       <template v-if="chatStore.messageFilesListLoading">
-         <base-spinner />
+       <template v-if="chatStore.messageLinkListLoading">
+         <base-spinner class="mt-5" />
        </template>
        <template v-else>
         <Empty 

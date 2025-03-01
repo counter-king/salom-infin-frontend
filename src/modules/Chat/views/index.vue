@@ -199,10 +199,10 @@ function initializeHandshake(){
       sendChatHandshake(route.params.id, CHAT_TYPES.GROUP)
     }
 }
+
 onMounted(() => {
   initializeHandshake()
 })
-
 </script>
 <template>
   <div class="chat-home flex flex-col w-full py-6 px-10" style="height: calc(100vh - 80px)">

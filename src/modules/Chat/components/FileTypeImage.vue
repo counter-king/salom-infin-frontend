@@ -2,15 +2,19 @@
 // cores
 import { ChevronDown20SolidIcon, DownloadMinimalisticIcon, FileTextBoldIcon, GalleryBoldIcon } from '@/components/Icons';
 import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
 // components
 import FileItemDetail from './FileItemDetail.vue';
 import Empty from '@/components/Empty.vue';
 // utils
 import { formatDateMonthWithDay, formatDay } from '@/utils/formatDate';
 // contants
-import { COMPONENT_TYPES } from '../constatns';
+import { COMPONENT_TYPES, MESSAGE_TYPES } from '../constatns';
 // stores
 import { useChatStore } from '../stores';
+import { ref } from 'vue';
+// composables
+import { useInfiniteScroll } from '../composables/useInfiniteScroll';
 
 const { t } = useI18n();
 // props
@@ -21,6 +25,12 @@ const props = defineProps({
 })
 
 const chatStore = useChatStore();
+
+const route = useRoute()
+// reactives
+const containerRef = ref(null)
+// composables
+useInfiniteScroll({ fetchFn: chatStore.actionGetMessageImageFileList, containerRef, params: { page: 1, page_size: 10, chat:route.params?.id, type: MESSAGE_TYPES.IMAGE }})
 
 const showDateByCalculate = (index) => {
   const previouMessageCreatedDate = chatStore.messageImageFileList.results[index - 1]?.created_date
@@ -34,7 +44,7 @@ const showDateByCalculate = (index) => {
 
 </script>
 <template>
-  <div class="flex flex-col gap-4 p-4">
+  <div class="flex flex-col gap-4 p-4 overflow-auto h-[260px]" ref="containerRef">
    <!-- control title -->
    <div class="flex items-center gap-3 pl-2">
      <div class="flex bg-greyscale-50 rounded-full p-1">

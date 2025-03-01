@@ -49,7 +49,6 @@ const sendReplayNewMessageEvent = (data)=> {
 }
 
 const handleSendMessage = (event) => {
-  console.log("event",event.key);
  if(event.key == "Enter"){
     // when shift or ctrl pressed with enter
     if(event.shiftKey || event.ctrlKey){

@@ -83,10 +83,10 @@ const onDeleteChat = async () => {
 }
 
 const handleEditDialogGroupVisible = () => {
-  inputSendMessasgeRef.value?.$el?.focus()
   if(route.name == CHAT_ROUTE_NAMES.GROUP){
     createGroupDialogVisible.value = true
   }
+  inputSendMessasgeRef.value?.$el?.focus()
 }
 
 // set inputSendMessasgeRef focus when createGroupDialogVisible

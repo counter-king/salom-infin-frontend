@@ -37,7 +37,10 @@ const props = defineProps({
 
 </script>
 <template>
-  <div @selectstart.stop="" class="flex flex-col gap-2 items-end" :class="classNames">
+  <div 
+     @selectstart.stop="$event.stopPropagation()"
+     class="flex flex-col gap-2 items-end"
+     :class="classNames">
     <div class="flex gap-3 justify-end items-end relative">
       <!-- error text -->
       <div v-if="false" class="flex items-center justify-end text-critic-500 gap-[6px]">

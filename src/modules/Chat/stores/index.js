@@ -336,9 +336,10 @@ export const useChatStore = defineStore("chat-stores", {
     async actionGetMessageLinkList(params) {
       this.messageLinkListLoading = true;
       try {
-        const { data } = await fetchGetMessageLinkList(params);
-        this.messageLinkList = data.results
+        const response= await fetchGetMessageLinkList(params);
+        this.messageLinkList = response?.data?.results
         this.messageLinkListLoading = false;
+        return response
       } catch(e) {
         dispatchNotify(null, e, COLOR_TYPES.ERROR)
       } finally {
@@ -348,8 +349,9 @@ export const useChatStore = defineStore("chat-stores", {
     /** */
     async actionGetMessageVideoFileList(params) {
       try {
-        const { data } = await fetchGetMessageFilesList(params);
-        this.messageVideoFileList = data
+        const response = await fetchGetMessageFilesList(params);
+        this.messageVideoFileList = response?.data
+        return response
       } catch(e) {
         dispatchNotify(null, e, COLOR_TYPES.ERROR)
       } finally {
@@ -358,8 +360,9 @@ export const useChatStore = defineStore("chat-stores", {
     /** */
     async actionGetMessageImageFileList(params) {
       try {
-        const { data } = await fetchGetMessageFilesList(params);
-        this.messageImageFileList = data
+        const response= await fetchGetMessageFilesList(params);
+        this.messageImageFileList = response?.data
+        return response
       } catch(e) {
         dispatchNotify(null, e, COLOR_TYPES.ERROR)
       } finally {
@@ -368,8 +371,9 @@ export const useChatStore = defineStore("chat-stores", {
     /** */
     async actionGetMessageFileList(params) {
       try {
-        const { data } = await fetchGetMessageFilesList(params);
-        this.messageFileList = data
+        const response= await fetchGetMessageFilesList(params);
+        this.messageFileList = response?.data
+        return response
       } catch(e) {
         dispatchNotify(null, e, COLOR_TYPES.ERROR)
       } finally {
@@ -378,8 +382,9 @@ export const useChatStore = defineStore("chat-stores", {
     /** */
     async actionGetMessageAudioFileList(params) {
       try {
-        const { data } = await fetchGetMessageFilesList(params);
-        this.messageAudioFileList = data
+        const response= await fetchGetMessageFilesList(params);
+        this.messageAudioFileList = response?.data
+        return response
       } catch(e) {
         dispatchNotify(null, e, COLOR_TYPES.ERROR)
       } finally {
@@ -388,8 +393,9 @@ export const useChatStore = defineStore("chat-stores", {
     /** */
     async actionGetMessageAudioFileList(params) {
       try {
-        const { data } = await fetchGetMessageFilesList(params);
-        return data
+        const response= await fetchGetMessageFilesList(params);
+        this.messageAudioFileList = response?.data
+        return response
       } catch(e) {
         dispatchNotify(null, e, COLOR_TYPES.ERROR)
       } finally {
