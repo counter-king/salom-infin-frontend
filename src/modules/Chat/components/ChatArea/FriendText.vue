@@ -1,11 +1,16 @@
 <script setup>
 // cores
+import { useI18n } from 'vue-i18n';
 // componennts
 import { PenBoldIcon } from '@/components/Icons';
 import ClickedStiker from './ClickedStiker.vue';
+import LinkMessage from './LinkMessage.vue';
 // utils
 import { formatHour } from '@/utils/formatDate';
-import { useI18n } from 'vue-i18n';
+// contants
+import { MESSAGE_TYPES } from '../../constatns';
+// composables
+import { useTextSelection } from '../../composables/useTextSelection';
 // props
 const props = defineProps({
   message: {
@@ -30,11 +35,12 @@ const props = defineProps({
 })
 
 const { t } = useI18n();
+const { handleSelectStart, handleClick } = useTextSelection();
 
 </script>
 <template>
-  <div class="">
-    <div class="flex gap-2 select-none" :class="classNames">
+  <div class="" @selectstart="handleSelectStart" @click="handleClick">
+    <div class="flex gap-2" :class="classNames">
       <base-avatar 
         :image="props.message?.sender?.avatar?.url"
         :label="props.message?.sender?.first_name"
@@ -55,12 +61,13 @@ const { t } = useI18n();
               v-if="!!props.message.replied_to"
               class="flex flex-col gap-1 pl-2 border-l-[2px] border-warning-500"
               >
-              <span class="text-xs font-semibold text-warning-500">{{ props.message.replied_to?.sender?.first_name }} {{ props.message.replied_to?.sender?.last_name }}</span>
-              <span class="text-xs font-medium text-greyscale-500">{{ props.message.replied_to?.text }}</span>
+              <span class="text-xs font-semibold text-warning-500 truncate">{{ props.message.replied_to?.sender?.first_name }} {{ props.message.replied_to?.sender?.last_name }}</span>
+              <span class="text-xs font-medium text-greyscale-500 truncate">{{ props.message.replied_to?.text }}</span>
             </div>
             <!-- text -->
-            <p class="text-sm font-medium text-greyscale-900 whitespace-normal break-all">
-              {{ props.message?.text }}
+            <p class="text-sm font-medium text-greyscale-900 whitespace-pre-line break-all">
+              <LinkMessage v-if="props.message?.message_type == MESSAGE_TYPES.LINK" :message="props.message" />
+              <span v-else>{{ props.message?.text }}</span>
             </p>
              <!-- edit -->
             <div v-if="props.message?.edited" class="flex gap-1 items-center text-[10px] font-medium text-greyscale-300 self-end">
@@ -74,7 +81,7 @@ const { t } = useI18n();
           <p class="text-xs font-medium text-greyscale-500 self-end">{{ formatHour(props.message?.created_date) }}</p>
         </div>
         <!-- reactions -->
-        <div v-if="Object.keys(props.message.reactions).length" class="flex gap-1">
+        <div v-if="props.message.reactions && Object.keys(props.message.reactions).length" class="flex gap-1">
           <template v-for="reaction in Object.keys(props.message.reactions)" :key="reaction">
             <ClickedStiker 
               @click="props.handleClickEmoji(reaction, message.message_id)"

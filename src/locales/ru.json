@@ -775,7 +775,7 @@
   "file-types":"Типы файлов",
   "video":"Видео",
   "images":"Картинки",
-  "chat-info-file":"{count} файлов, {size} MB",
+  "chat-info-file":"{count} файлов",
   "members":"{count} Участников",
   "copy":"Копиравать",
   "enter-your-message": "Введите свое сообщение...",

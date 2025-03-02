@@ -15,6 +15,7 @@ import { isObject } from '@/utils'
 // services
 import axiosConfig from '@/services/axios.config';
 import { fetchCreateGroupChat, fetchEditGroupChat } from '../services';
+import { fetchBlobFile } from '@/services/file.service';
 // store
 import { useChatStore } from '../stores';
 // props
@@ -136,9 +137,11 @@ const uploadFiles = async (files) => {
         item.progress = Math.floor((loaded / total) * 100) - 1;
       }
     })
-      .then(({ data }) => {
+      .then(async({ data }) => {
         item.id = data.id;
         item.uploaded = true;
+        const { blobUrl } = await fetchBlobFile(data.id) 
+        item.blobUrl = blobUrl
         item.url = data.url
       })
       .catch(() => {
@@ -173,7 +176,7 @@ onMounted(() => {
           <div class="relative">
             <base-avatar
               :label="formModal.group_name || '-'"
-              :image="!!uploadingFiles?.length ? uploadingFiles[0]?.url : undefined"
+              :image="!!uploadingFiles?.length ? uploadingFiles[0]?.blobUrl ? uploadingFiles[0]?.blobUrl : uploadingFiles[0]?.url : undefined"
               label-classes="text-4xl"
               color="bg-primary-50"
               shape="circle"

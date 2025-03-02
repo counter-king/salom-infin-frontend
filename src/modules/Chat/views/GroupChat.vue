@@ -1,6 +1,6 @@
 <script setup>
 // cores
-import { onMounted, ref, watch } from 'vue';
+import { inject, nextTick, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 // componennts
@@ -14,7 +14,6 @@ import DeleteDialog from '../components/DeleteDialog.vue';
 import FileUploadProgress from '../components/ChatArea/FileUploadProgress.vue';
 import ContextMenu from '../components/ChatArea/ContextMenu.vue';
 import ChatFileItem from '../components/ChatArea/ChatFileItem.vue';
-import { DownloadMinimalisticIcon, FileTextBoldIcon } from '@/components/Icons';
 import Empty from '@/components/Empty.vue';
 import ChatImageItem from '../components/ChatArea/ChatImageItem.vue';
 import FriendChatFileItem from '../components/ChatArea/FriendChatFileItem.vue';
@@ -41,10 +40,13 @@ const chatStore = useChatStore()
 const authStore = useAuthStore()
 // reactives
 const showScrollDownButton = ref(false);
-const refChatArea = ref(null);
 const refSendMessage = ref(null);
 const refEmojiContextMenu = ref(null);
 const emojiMenuItems = ref([]);
+const inputSendMessageHeight = ref(90);
+const initialRenderComplete = ref(false);
+// inject
+const refChatArea = inject("refChatArea");
 // methods
 // when scroll down, scrollDwonButton will be visible
 const handleScroll = (event) => {
@@ -53,18 +55,31 @@ const handleScroll = (event) => {
   } else {
     showScrollDownButton.value = false
   }
+
+   // Only run handleScrollReachUp if initial render is complete
+   if (initialRenderComplete.value) {
+    handleScrollReachUp(event, handleScrollUp);
+  }
 }
 
 const handleScrollUp = () => {
-  refChatArea.value.scrollTop = 150
-  refChatArea.value.behavior = 'smooth'
+  refChatArea.value.scrollTo({
+    top: 150,
+  });
 }
 
-const handleClickScrollDown = () => {
-  refChatArea.value.scrollTop = refChatArea.value.scrollHeight
-  refChatArea.value.behavior = 'smooth'
+const handleScrollDown = () => {
+  refChatArea.value.scrollTo({
+    top: refChatArea.value.scrollHeight,
+    // behavior: 'smooth'
+  });
 }
-
+const handleScrollDownSmooth = () => {
+  refChatArea.value.scrollTo({
+    top: refChatArea.value.scrollHeight,
+    behavior: 'smooth'
+  });
+}
 const onShowContextMenu = (event, message, index) => {
   chatStore.contextMenu.tempMessage = message
   chatStore.contextMenu.index = index
@@ -123,12 +138,16 @@ const showFriendTextAvatar = (index) => {
          formatDay(perviousMessage.created_date) !== formatDay(nowMessage.created_date)
 }
 
-// error bor
 watch(
   () => route.params?.id,
   async (newId, oldId) => {
     if (newId !== oldId && route.name === CHAT_ROUTE_NAMES.GROUP) {
-      chatStore.actionGetMessageListByChatId({chat:newId}, true);
+      await chatStore.actionGetMessageListByChatId({chat:newId}, true);
+      // make scroll down after loading new data
+      setTimeout(() => {
+        handleScrollDown()
+      },10)
+      
       chatStore.selectedGroup = await chatStore.actionGetGroupChatById(newId);
     }
   }
@@ -140,16 +159,30 @@ onMounted(async () => {
   hasNext.value = count > page.value * pageSize.value
   page.value += 1
   refChatArea.value.scrollTop = refChatArea.value?.scrollHeight
+  handleScrollDown()
+})
+
+onMounted(() => {
+  // tracking inputSendMessage when div's height change 
+  if(!!refSendMessage.value?.InputSendMessageRows) {    
+    watch([()=> refSendMessage.value?.InputSendMessageRows, () => chatStore.contextMenu], async() => {
+      await nextTick(); 
+      inputSendMessageHeight.value = refSendMessage.value.InputSendMessageWrapperRef.scrollHeight
+    }, { immediate: true })
+  }
+  // Set flag to true after initial data load and scroll
+    setTimeout(() => {
+    initialRenderComplete.value = true;
+  }, 500);
 })
 
 </script>
 <template>
- <!-- style="height: calc(100% - 135px)"  -->
  <div class="h-full relative">
   <div
     ref="refChatArea" class="flex flex-col gap-2 px-6 py-4 overflow-y-auto relative"
-    @scroll="(e)=>{handleScroll(e); handleScrollReachUp(e,handleScrollUp)}"
-    :style="`height: calc(100% - ${chatStore.contextMenu.edit || chatStore.contextMenu.replay ? '170px' : '135px'})`" 
+    :style="`height: calc(100% - ${inputSendMessageHeight + 94}px)`" 
+    @scroll="handleScroll"
     @click="onClickChatArea"
     @dragover.prevent="onDragOver"
     @dragleave.prevent="onDragLeave"
@@ -166,14 +199,14 @@ onMounted(async () => {
         </div>
       </div>
       <!-- message list -->
-      <div class="flex flex-col gap-1" v-if="!!chatStore.messageListByChatId.length">
+      <div class="flex flex-col gap-1 h-full" v-if="!!chatStore.messageListByChatId.length">
         <template v-for="(message, index) in chatStore.messageListByChatId" :key="message?.message_id">
           <template v-if="showDateByCalculate(index)">
               <ShowDate :classNames="{ 'mb-5': index == 0, 'my-5': index != 0}" :date="message.created_date" />
           </template>
           <!-- owner chat -->
           <template v-if="message?.sender?.id == authStore.currentUser?.id" >
-            <template v-if="message?.message_type != MESSAGE_TYPES.TEXT">
+            <template v-if="message?.message_type != MESSAGE_TYPES.TEXT && message?.message_type != MESSAGE_TYPES.LINK">
               <template v-if="message?.message_type == MESSAGE_TYPES.IMAGE">
                 <ChatImageItem
                   :index="index"
@@ -204,7 +237,7 @@ onMounted(async () => {
           </template>
           <!-- friend chat -->
           <template v-else>
-            <template v-if="message?.message_type != MESSAGE_TYPES.TEXT">
+            <template v-if="message?.message_type != MESSAGE_TYPES.TEXT && message?.message_type != MESSAGE_TYPES.LINK">
               <template v-if="message?.message_type == MESSAGE_TYPES.IMAGE">
                 <FriendChatImageItem
                   :message="message"
@@ -238,6 +271,7 @@ onMounted(async () => {
           </template>
         </template>
         </template>
+       
         <template v-for="(message, index) in chatStore.uploadingFiles" :key="index"> 
           <ChatFileItem 
             :message="message"
@@ -254,7 +288,7 @@ onMounted(async () => {
         </div>
         <!-- scroll down button -->
         <div v-if="showScrollDownButton" class="sticky bottom-0 flex justify-end">
-          <ScrollDownButton @click="handleClickScrollDown"/>
+          <ScrollDownButton @click="handleScrollDownSmooth"/>
         </div>
       </div>
       <!-- not start yet chat  -->
@@ -269,7 +303,7 @@ onMounted(async () => {
       </div>
     </template>
   </div>
-  <div class="px-6">
+  <div class="px-6 mt-2">
       <SendMessage ref="refSendMessage" />
   </div>
   <ContextMenu :menu-items="menuItems" ref="refContextMenu" />

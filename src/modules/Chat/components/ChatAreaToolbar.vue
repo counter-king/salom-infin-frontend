@@ -1,6 +1,6 @@
 <script setup>
 // cores
-import { computed, ref} from 'vue';
+import { computed, inject, ref, watch} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 // components
@@ -29,16 +29,15 @@ const isDeleteLoading = ref(false);
 const menu = ref();
 const isGroupDetail = computed(() => route.name == CHAT_ROUTE_NAMES.GROUP)
 const menuItems = computed(() => [
-   ...(route.name == CHAT_ROUTE_NAMES.GROUP ? [{ 
-     label: 'edit',
-     icon: PenIcon,
-     command: () => {
+  ...(route.name == CHAT_ROUTE_NAMES.GROUP ? [{ 
+    label: 'edit',
+    icon: PenIcon,
+    command: () => {
       createGroupDialogVisible.value = true
-     },
-     iconClass: "!text-greyscale-500 !w-4 !h-4"
-   }] : []),
-  
-   ...(chatStore.selectedGroup?.members.find((item) => item.user?.id == authStore.currentUser.id)?.role == 'owner' || chatStore.selectedUser?.members?.find((item) => item.user?.id == authStore.currentUser?.id)?.role == 'owner' ? 
+    },
+    iconClass: "!text-greyscale-500 !w-4 !h-4"
+  }] : []),  
+   ...(chatStore.selectedGroup?.members?.find((item) => item.user?.id == authStore.currentUser.id)?.role == 'owner' || chatStore.selectedUser?.members?.find((item) => item.user?.id == authStore.currentUser?.id)?.role == 'owner' ? 
     [{
      label: 'delete',
      labelClass: '!text-critic-500',
@@ -50,9 +49,24 @@ const menuItems = computed(() => [
     }] :  [])
 ]);
 
+// Computed property to check if someone is typing in current chat
+const isUserTypingInCurrentChat = computed(() => {
+  return Object.values(chatStore.typingUsers).some(item => item.chat_id == route.params?.id && authStore.currentUser?.id != item?.user?.id);
+});
+
+// Get the name of typing user
+const typingUserName = computed(() => {
+  const typingUser = Object.values(chatStore.typingUsers).find(item => item.chat_id == route.params?.id);
+  return typingUser ? typingUser.user?.full_name : '';
+});
+
+// injects
+const inputSendMessasgeRef = inject("inputSendMessasgeRef")
 // methods
 const toggle = (event) => {
   menu.value.menuRef.toggle(event);
+  // set inputSendMessasgeRef focus when createGroupDialogVisible
+  inputSendMessasgeRef.value?.$el?.focus()
 };
 
 function focussed() {
@@ -67,12 +81,12 @@ const onDeleteChat = async () => {
   if(route.name == CHAT_ROUTE_NAMES.GROUP){
     await fetchDeleteGroupChatById(chatStore.selectedGroup?.chat_id)
     chatStore.selectedGroup = null
-    router.push({name: CHAT_ROUTE_NAMES.GROUP})
+    router.push({name: CHAT_ROUTE_NAMES.CHAT_INDEX})
     chatStore.actionGetGroupChatList()  
   } else if(route.name == CHAT_ROUTE_NAMES.PRIVATE){
     await fetchDeletePrivateChatById(chatStore.selectedUser?.chat_id)
     chatStore.selectedUser = null
-    router.push({name: CHAT_ROUTE_NAMES.PRIVATE})
+    router.push({name: CHAT_ROUTE_NAMES.CHAT_INDEX})
     chatStore.actionGetPrivateChatList()
   }
   
@@ -80,17 +94,28 @@ const onDeleteChat = async () => {
   deleteDialogVisible.value = false
 }
 
+const handleEditDialogGroupVisible = () => {
+  if(route.name == CHAT_ROUTE_NAMES.GROUP){
+    createGroupDialogVisible.value = true
+  }
+  inputSendMessasgeRef.value?.$el?.focus()
+}
+
+// set inputSendMessasgeRef focus when createGroupDialogVisible
+watch(createGroupDialogVisible, () => {
+  inputSendMessasgeRef.value?.$el?.focus()
+})
 
 </script>
 <template>
-  <div @click="createGroupDialogVisible = true" class="flex items-center w-full h-[72px] border-b px-6 pr-3 cursor-pointer">
+  <div @click="handleEditDialogGroupVisible" class="flex items-center w-full h-[72px] border-b px-6 pr-3 cursor-pointer">
     <div class="flex justify-between items-center w-full">
       <div class="flex">
         <div class="relative">
           <base-avatar
             :label="isGroupDetail ? chatStore.selectedGroup?.title : chatStore.selectedUser?.first_name"
             :color="isGroupDetail ? '#E2E8F0' : chatStore.selectedUser?.color"
-            :image="isGroupDetail ? chatStore.selectedGroup?.image?.url : chatStore.selectedUser?.avatar?.url"
+            :image="isGroupDetail ? chatStore.selectedGroup?.image?.blobUrl : chatStore.selectedUser?.avatar?.url"
             avatar-classes="w-11 h-11"
             label-classes="text-lg font-semibold select-none text-greyscale-900"
           />  
@@ -101,8 +126,8 @@ const onDeleteChat = async () => {
         </div>
         <div class="flex flex-col ml-3">
           <div class="text-base font-semibold select-none">{{ isGroupDetail ? chatStore.selectedGroup?.title : chatStore.selectedUser?.full_name}}</div>
-          <div v-if="true" class="text-sm font-medium text-greyscale-500 select-none">{{ isGroupDetail ? t('members', { count: chatStore.selectedGroup?.members?.length}) : chatStore.selectedUser?.position}}</div>
-          <div v-else class="text-sm font-medium text-success-500 select-none">typing ... </div>
+          <div v-if="isUserTypingInCurrentChat" class="text-sm font-medium text-success-500 select-none">{{route.name == CHAT_ROUTE_NAMES.GROUP ? typingUserName : ''}} typing ... </div>
+          <div v-else class="text-sm font-medium text-greyscale-500 select-none">{{ isGroupDetail ? t('members', { count: chatStore.selectedGroup?.members?.length}) : chatStore.selectedUser?.position}}</div>
         </div>
       </div>
       <div class="flex items-center gap-1 ">

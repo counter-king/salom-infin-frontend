@@ -1,6 +1,6 @@
 <script setup>
 // cores
-import { ref } from 'vue';
+import { inject, ref, watch } from 'vue';
 // utils
 import { formatDate } from '@/utils/formatDate';
 import BaseDialog from '@/components/UI/BaseDialog.vue';
@@ -17,16 +17,22 @@ const props = defineProps({
 
 // reactives
 const showDialog = ref(false)
+// injects
+const inputSendMessasgeRef = inject("inputSendMessasgeRef");
+
 // methods
 const handleDateClick = () => {
  showDialog.value = true
 }
 
 const handleClickCalendar = (date) => {
- console.log("date",date);
  showDialog.value = false
 }
 
+// set inputSendMessasgeRef focus when createGroupDialogVisible
+watch(showDialog, () => {
+  inputSendMessasgeRef.value?.$el?.focus()
+})
 </script>
 
 <template>

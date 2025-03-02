@@ -37,8 +37,6 @@ const props = defineProps({
       <div class="pl-2 text-sm font-medium text-greyscale-500">{{ formatDateMonthWithDay('2025-01-12T00:03:18.155650+05:00') }}</div>
       <FileItem :right-icon="{ name: ChevronUp20SolidIcon, class: 'text-greyscale-500 transform rotate-90' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-warning-500' }"/>
       <FileItem :right-icon="{ name: ChevronUp20SolidIcon, class: 'text-greyscale-500 transform rotate-90' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-warning-500' }"/>
-      <FileItem :right-icon="{ name: ChevronUp20SolidIcon, class: 'text-greyscale-500 transform rotate-90' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-warning-500' }"/>
-      <FileItem :right-icon="{ name: ChevronUp20SolidIcon, class: 'text-greyscale-500 transform rotate-90' }" :left-icon="{ name: FileTextBoldIcon, class: 'text-warning-500' }"/>
     </div>
   </div>
 </template>

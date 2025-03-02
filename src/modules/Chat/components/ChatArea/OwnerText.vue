@@ -4,9 +4,15 @@ import { useI18n } from 'vue-i18n';
 // componennts
 import { CheckBigIcon, CheckReadIcon, DangerCircleIcon, Pen2Icon, PenBoldIcon, PenIcon } from '@/components/Icons';
 import BaseIconify from '@/components/UI/BaseIconify.vue';
+import LinkMessage from './LinkMessage.vue';
 import ClickedStiker from './ClickedStiker.vue';
 // utils
 import { formatHour } from '@/utils/formatDate';
+// constatns
+import { MESSAGE_TYPES } from '../../constatns';
+// composables
+import { useTextSelection } from '../../composables/useTextSelection';
+
 const { t } = useI18n(); 
 // props
 const props = defineProps({
@@ -30,10 +36,12 @@ const props = defineProps({
   }
 })
 
-
+const { handleSelectStart, handleClick } = useTextSelection();
 </script>
 <template>
-  <div class="flex flex-col gap-2 items-end" :class="classNames">
+  <div 
+     class="flex flex-col gap-2 items-end"
+     :class="classNames">
     <div class="flex gap-3 justify-end items-end relative">
       <!-- error text -->
       <div v-if="false" class="flex items-center justify-end text-critic-500 gap-[6px]">
@@ -43,7 +51,7 @@ const props = defineProps({
           class="!w-5 !h-5"
         />
       </div>
-      <div v-else class="flex gap-1 items-end">
+      <div v-else class="flex gap-1 items-end select-none">
         <span class="text-xs font-medium text-greyscale-500">{{ formatHour(props.message?.created_date) }}</span>
         <base-iconify
           :icon="props.message?.is_read ? CheckReadIcon : CheckBigIcon"
@@ -53,7 +61,9 @@ const props = defineProps({
       <!-- replay message -->
       <div 
         @contextmenu.prevent="onShowContextMenu($event, props.message, props.index)"
-         class="flex flex-col gap-1 bg-primary-400 rounded-2xl rounded-br-[4px] px-4 py-3 cursor-pointer max-w-[400px]"
+        @selectstart="handleSelectStart"
+        @click="handleClick"  
+         class="flex flex-col gap-1 bg-primary-400 rounded-2xl rounded-br-[4px] px-4 py-3 cursor-pointer  max-w-[400px]"
          :class="[{'!rounded-xl !rounded-br-[4px]': false}]"
         >
         <div 
@@ -64,7 +74,10 @@ const props = defineProps({
           <span class="text-xs font-medium text-white/[65%] truncate">{{ props.message.replied_to?.text }}</span>
         </div>
         <!-- text -->
-        <p class="text-sm font-medium text-white bg-primary-400 whitespace-normal break-all" >{{ props.message?.text }}</p> 
+        <p class="text-sm font-medium text-white bg-primary-400 whitespace-pre-line break-all" >
+          <LinkMessage v-if="props.message?.message_type == MESSAGE_TYPES.LINK" :message="props.message" />
+          <span v-else>{{ props.message?.text }}</span>
+        </p> 
         <!-- edit -->
         <div v-if="props.message?.edited" class="flex gap-1 items-center text-[10px] font-medium text-white/[70%] self-end">
           <base-iconify
@@ -74,7 +87,6 @@ const props = defineProps({
           <span>{{ t('edited') }}</span>
         </div>   
       </div>
-      <!-- <p @contextmenu.prevent="onContextMenuClick" class="text-sm font-medium text-white bg-primary-400 rounded-xl rounded-br-[4px] px-4 py-2" >{{ props.text }}</p> -->
     </div>
     <!-- reactions -->
     <div v-if="props.message.reactions &&Object.keys(props.message.reactions).length" class="flex gap-1">

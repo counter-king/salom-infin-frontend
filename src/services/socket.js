@@ -13,7 +13,10 @@ const baseURL = url.replace(/^https?:\/\//, '').replace(/\/api\/v1\/?/, '');
 export const socket = useWebSocket(`wss://${baseURL}/ws/?token=${getStorageItem(ACCESS)}`, {
   autoReconnect: {
     retries: 3,
-    delay: 1000,
+    heartbeat: {
+      message: 'ping',
+      interval: 1000,
+    },
     onFailed(err) {
       dispatchNotify(null, `error happened ${err}`, COLOR_TYPES.ERROR)
     },

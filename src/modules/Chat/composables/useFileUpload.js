@@ -12,7 +12,6 @@ const chatStore = useChatStore()
 const { send } = socket
 
 const sendChatFileEmit = (file_id, file_name, chat_id, message_type, chat_type)=> {
-  console.log("ishlmoqda")
   const payload = { command: 'new_message', chat_type, chat_id, files: [file_id],message_type, text: file_name }
   send(JSON.stringify(payload))
 }

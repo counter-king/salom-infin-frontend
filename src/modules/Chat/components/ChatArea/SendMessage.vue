@@ -1,7 +1,6 @@
 <script setup>
 // cores
-import { onMounted, ref, watch } from 'vue';
-import InputText from 'primevue/inputtext';
+import { inject, nextTick, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 // components
@@ -17,19 +16,27 @@ import { useChatStore } from '../../stores';
 import { CHAT_ROUTE_NAMES, CHAT_TYPES, MESSAGE_TYPES } from '../../constatns';
 // webocket
 import { socket } from "@/services/socket";
+import Textarea from 'primevue/textarea';
+import { useDebounceFn } from '@vueuse/core';
 
 const { t } = useI18n();
 const { uploadFiles } = useFileUpload();
 const { send } = socket
 const chatStore = useChatStore()
 const route = useRoute();
-
 // reactives
 const message = ref("");
-const refInput = ref(null); 
+const refInput = inject("inputSendMessasgeRef"); 
 const refFileInput = ref(null);
 const showSendIcon = ref(false);
 const isSimleStikerHovered = ref(false);
+const isFocused = ref(false);
+const isCtrlAllPressed = ref(false);
+const InputSendMessageWrapperRef = ref(null);
+const rows = ref(1);
+
+// checking there are http or https regex
+const urlRegex = /(^|\s)(https?:\/\/[^\s]+)/g;
 
 // methods
 const sendNewMessageEvent = (data)=> {
@@ -42,20 +49,118 @@ const sendReplayNewMessageEvent = (data)=> {
   send(JSON.stringify(payload))  
 }
 
-const handleSendMessage = () => {
- if(!!message.value) {
-    if(chatStore.contextMenu?.replay) {
-      sendReplayNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.TEXT })
-    } else if(chatStore.contextMenu?.edit){
-      chatStore.actionEditMessageById(chatStore.contextMenu?.message?.message_id, {chat: chatStore.contextMenu?.message.chat_id, replied_to: chatStore.contextMenu?.message?.replied_to?.id, text: message.value})
-    } else {
-      sendNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.TEXT })
-    }
- }
- message.value = '';
- chatStore.contextMenu = {}
+const sendMessageIsTyping = useDebounceFn(()=>{
+  const payload = { command: 'typing', chat_type: route.name == CHAT_ROUTE_NAMES.PRIVATE ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: route.params.id } 
+  send(JSON.stringify(payload))  
+}, 100);
+
+const sendChatHandshake = ()=> {
+  const payload = { command: 'chat_handshake',  chat_type: route.name == CHAT_ROUTE_NAMES.PRIVATE ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: route.params.id }
+  send(JSON.stringify(payload))
 }
 
+
+const resetInputProperties = (event) => {
+  message.value = '';
+  rows.value = 1;
+  if(event){
+    event.preventDefault();
+  }
+}
+
+const handleSendMessage = (event) => {
+
+ if(event.key == "Enter"){
+    // when shift or ctrl pressed with enter
+    if(event.shiftKey || event.ctrlKey){
+      if(rows.value < 9){
+        rows.value += 1;
+      }
+    }
+    else if(!message.value.trim()){
+      event.preventDefault();
+      resetInputProperties()
+    }
+    else if(!!message.value.trim()){
+        // replay message
+        if(chatStore.contextMenu?.replay) {
+          if(urlRegex.test(message.value)){
+            sendReplayNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.LINK })
+          } else {
+            sendReplayNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.TEXT })
+          }
+        // edit message
+        } else if(chatStore.contextMenu?.edit){
+          if(urlRegex.test(message.value)){
+            chatStore.actionEditMessageById(chatStore.contextMenu?.message?.message_id, {chat: chatStore.contextMenu?.message.chat_id, replied_to: chatStore.contextMenu?.message?.replied_to?.id, text: message.value, message_type: MESSAGE_TYPES.LINK })
+          } else {
+            chatStore.actionEditMessageById(chatStore.contextMenu?.message?.message_id, {chat: chatStore.contextMenu?.message.chat_id, replied_to: chatStore.contextMenu?.message?.replied_to?.id, text: message.value, message_type: MESSAGE_TYPES.TEXT})
+          }
+        // new message
+        } else {
+          // link message
+          if(urlRegex.test(message.value)){
+            sendNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.LINK })
+          } else {
+            sendNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.TEXT })
+          } 
+        }
+        // reset values
+        resetInputProperties(event)
+        // replay or edit reset, not show them in ui
+        chatStore.contextMenu = {}
+    }
+ } 
+ // when ctrl + all is pressed, that works
+ else if (event.ctrlKey && (event.key === 'A' || event.key === 'a')){
+  isCtrlAllPressed.value = true
+ }
+ else if(event.key == "Backspace" && rows.value > 1) {
+    rows.value -= 1;
+    // if ctrl + all is pressed, reset    
+    if(isCtrlAllPressed.value){
+      rows.value = 1
+      isCtrlAllPressed.value = false
+    }
+ } 
+}
+
+const handleMessageByIcon = () => {
+ if(!!message.value.trim()){
+        // replay message
+        if(chatStore.contextMenu?.replay) {
+          if(urlRegex.test(message.value)){
+            sendReplayNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.LINK })
+          } else {
+            sendReplayNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.TEXT })
+          }
+        // edit message
+        } else if(chatStore.contextMenu?.edit){
+          if(urlRegex.test(message.value)){
+            chatStore.actionEditMessageById(chatStore.contextMenu?.message?.message_id, {chat: chatStore.contextMenu?.message.chat_id, replied_to: chatStore.contextMenu?.message?.replied_to?.id, text: message.value, message_type: MESSAGE_TYPES.LINK })
+          } else {
+            chatStore.actionEditMessageById(chatStore.contextMenu?.message?.message_id, {chat: chatStore.contextMenu?.message.chat_id, replied_to: chatStore.contextMenu?.message?.replied_to?.id, text: message.value, message_type: MESSAGE_TYPES.TEXT})
+          }
+        // new message
+        } else {
+          // link message
+          if(urlRegex.test(message.value)){
+            sendNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.LINK })
+          } else {
+            sendNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.TEXT })
+          } 
+        }
+        // reset values
+        message.value = '';
+        rows.value = 1;
+        chatStore.contextMenu = {}
+    }
+}
+
+const onChangeInput = () => {
+  sendMessageIsTyping()
+  sendChatHandshake()
+}
 // when emoji selected
 const handleSelectEmoji = (e) => {
     message.value +=e.i;
@@ -71,7 +176,21 @@ const handleFileInputChange = (event) => {
 
 const onCancelIconReplay = () => {
   chatStore.contextMenu = { edit: false, replay: false }
+  resetInputProperties()
 }
+
+const onClickSendMessage = () => {
+  refInput.value.$el.focus()
+}
+
+const handlePaste = async() => {
+  await nextTick(); 
+  setTimeout(() => {
+    rows.value = message.value.split("\n").length
+  }, 10);
+  
+}
+
 // showSend icon show or hide
 watch(message, (val) => {
  if(!!val) {
@@ -81,14 +200,36 @@ watch(message, (val) => {
  }
 })
 
-watch(() => chatStore.contextMenu?.message?.text, (val) => {
+// when edit, set message value from store
+watch(() => chatStore.contextMenu.edit, (val) => {
     if(chatStore.contextMenu?.edit){
       message.value = chatStore.contextMenu?.message?.text
+      rows.value = chatStore.contextMenu?.message?.text.split("\n").length
+    }
+})
+// when replay, set message value from store
+watch(() => chatStore.contextMenu.replay, (val) => {
+    if(chatStore.contextMenu?.replay){
+      resetInputProperties()
     }
 })
 
+// tracking input focues when context menu is open 
+watch([()=> chatStore.contextMenu], () => {
+  refInput.value.$el.focus()
+}, { deep: true })
+
+// every route chnage, rest message value
+watch(() => route.params?.id, async (old, newOne) => {
+  if(old !== newOne){
+    resetInputProperties()
+  }
+})
+// expose
 defineExpose({
-  refInput
+  refInput,
+  InputSendMessageWrapperRef,
+  InputSendMessageRows: rows
 })
 
 onMounted(() => {
@@ -98,7 +239,9 @@ onMounted(() => {
 </script>
 <template>
  <div 
+  @click="onClickSendMessage"
   class="relative pt-1"
+  ref="InputSendMessageWrapperRef"
   :class="{'pt-[36px]': chatStore.contextMenu?.edit || chatStore.contextMenu?.replay}"
   >
   <!-- chat replay and edit -->
@@ -112,7 +255,7 @@ onMounted(() => {
         class="!h-4 !w-4 rotate-y-180 text-primary-500"
       />
       <div class="flex items-center gap-2 w-[95%] text-xs h-[16px] font-medium text-primary-500 pl-2 border-l-[2px] border-warning-500">
-        <template v-if="chatStore.contextMenu?.message?.message_type !='text'">
+        <template v-if="chatStore.contextMenu?.message?.message_type != MESSAGE_TYPES.TEXT">
           <FileTypeIcon :type="chatStore.contextMenu?.message?.message_type" />
         </template>
         <p class="truncate w-full">{{ chatStore.contextMenu?.message?.text  }}</p>
@@ -127,30 +270,30 @@ onMounted(() => {
     </div>
   </div>
   <!-- seding input -->
-  <div class="relative w-full bg-transparent">
-    <!-- <base-input 
-      ref="refInput"
-      v-model="message"  
-      input-class="p-[6px] pl-5 h-[52px] bg-white w-full text-sm font-medium text-greyscale-900 placeholder:text-sm placeholder:font-medium placeholder:text-greyscale-300"
-      placeholder="Ввведите свое сообщение..."
-      @keydown.enter="handleSendMessage"
-    /> -->
-    <InputText
-      ref="refInput"
+  <div 
+    class="relative w-full border flex items-center min-h-[52px] max-h-[150px] p-[6px] pl-5 pr-[130px] bg-white rounded-xl"
+    :class="{'border-primary-500': isFocused }"
+    > 
+    <Textarea
       v-model="message"
-      type="text"
-      size="small"
-      :placeholder="t('enter-your-message')"
-      @keydown.enter="handleSendMessage"
+      @input="onChangeInput"
+      @keydown="handleSendMessage"
+      @paste="handlePaste"
+      ref="refInput"
+      @focus="isFocused = true"
+      @blur="isFocused = false"
+      size="large"
       :pt="{
         root: {
           class: [
-            'w-full p-[6px] pl-5 pr-[130px] h-[52px] bg-white w-full rounded-xl  text-sm font-medium text-greyscale-900 placeholder:text-sm placeholder:font-medium placeholder:text-greyscale-300',
+            'custom-scroll w-full max-h-[130px] overflow-y-auto border-none resize-none !shadow-none !p-0 text-sm font-medium text-greyscale-900 placeholder:text-sm placeholder:font-medium placeholder:text-greyscale-300',
           ]
         }
       }"
-    />
-    <div class="flex gap-3 items-center absolute right-[10px] top-[6px] ">
+      :placeholder="t('enter-your-message')"
+      :rows="rows"
+    ></Textarea>
+    <div class="flex gap-3 items-center absolute right-[10px] top-[6px]" :class="{'!top-auto bottom-[6px]': rows > 1}">
       <div
         @mouseover="isSimleStikerHovered = true" 
         @mouseleave="isSimleStikerHovered = false"
@@ -171,11 +314,11 @@ onMounted(() => {
         class="!h-5 !w-5 text-greyscale-300 cursor-pointer"
       />
       <div
+        @click="handleMessageByIcon"
         class=" bg-primary-500 rounded-xl w-10 h-10 min-h-[40px] min-w-[40px] max-w-[40px] max-h-[40px] flex items-center justify-center cursor-pointer"
         :class="{'!bg-greyscale-300 pointer-events-none': !showSendIcon}"
         >
         <base-iconify
-          @click="handleSendMessage"
           :icon="PlainBoldIcon"
           class="!h-5 !w-5 text-white"
         />
@@ -198,5 +341,14 @@ onMounted(() => {
 }
 .rotate-y-180 {
   transform: rotateY(180deg);
+}
+
+.custom-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.custom-scroll {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 </style>

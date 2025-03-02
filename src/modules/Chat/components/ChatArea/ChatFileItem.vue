@@ -9,6 +9,8 @@ import { fileTypes } from '../../constatns';
 import { formatHour } from '@/utils/formatDate';
 // services
 import { downloadFile } from '../../services/file.service';
+// composables
+import { useTextSelection } from '../../composables/useTextSelection';
 
 const props = defineProps({
   message: {
@@ -27,12 +29,15 @@ const props = defineProps({
     type: [String, Array, Object] 
   }
 })
+const { handleSelectStart, handleClick } = useTextSelection();
 
 </script>
 <template>
  <div 
   class="flex gap-2 justify-end"
   :class="classNames"
+  @selectstart="handleSelectStart"
+  @click="handleClick"
   >
     <div class="flex flex-col gap-2">
       <div class="flex gap-3">
@@ -43,14 +48,16 @@ const props = defineProps({
             @click=""
             class="flex gap-4 items-center p-2 pr-4 min-w-[243px] max-w-[400px] w-full group bg-primary-400 cursor-pointer rounded-xl"
             >
-              <div class="p-[10px] rounded-lg !bg-primary-300">
+              <div 
+                @click="downloadFile(props.message?.attachments?.file)" 
+                class="p-[10px] rounded-lg !bg-primary-300">
                 <base-iconify 
-                :icon="fileTypes[props.message?.message_type].icon"
+                :icon="fileTypes[props.message?.message_type]?.icon"
                 class="!h-5 !w-5" 
-                :class="fileTypes[props.message?.message_type].class2"
+                :class="fileTypes[props.message?.message_type]?.class2"
                 />
               </div>
-              <div class="grow flex flex-col gap-1 select-none">
+              <div class="grow flex flex-col gap-1">
                 <h3   
                   class="text-sm font-semibold capitalize text-white"
                   >{{ props.message?.text }}</h3>

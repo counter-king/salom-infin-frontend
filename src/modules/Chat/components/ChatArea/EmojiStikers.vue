@@ -1,5 +1,4 @@
 <script setup>
-import { ref } from 'vue';
 // cores
 import EmojiPicker, {} from 'vue3-emoji-picker'
 const props = defineProps({
