@@ -1,6 +1,6 @@
 <script setup>
 // cores
-import { nextTick, onMounted, ref, watch } from 'vue';
+import { inject, nextTick, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 // componennts
@@ -40,12 +40,13 @@ const chatStore = useChatStore()
 const authStore = useAuthStore()
 // reactives
 const showScrollDownButton = ref(false);
-const refChatArea = ref(null);
 const refSendMessage = ref(null);
 const refEmojiContextMenu = ref(null);
 const emojiMenuItems = ref([]);
 const inputSendMessageHeight = ref(90);
-const inputSendMessageRows = ref(1);
+const initialRenderComplete = ref(false);
+// inject
+const refChatArea = inject("refChatArea");
 // methods
 // when scroll down, scrollDwonButton will be visible
 const handleScroll = (event) => {
@@ -54,18 +55,31 @@ const handleScroll = (event) => {
   } else {
     showScrollDownButton.value = false
   }
+
+   // Only run handleScrollReachUp if initial render is complete
+   if (initialRenderComplete.value) {
+    handleScrollReachUp(event, handleScrollUp);
+  }
 }
 
 const handleScrollUp = () => {
-  refChatArea.value.scrollTop = 150
-  refChatArea.value.behavior = 'smooth'
+  refChatArea.value.scrollTo({
+    top: 150,
+  });
 }
 
-const handleClickScrollDown = () => {
-  refChatArea.value.scrollTop = refChatArea.value.scrollHeight
-  refChatArea.value.behavior = 'smooth'
+const handleScrollDown = () => {
+  refChatArea.value.scrollTo({
+    top: refChatArea.value.scrollHeight,
+    // behavior: 'smooth'
+  });
 }
-
+const handleScrollDownSmooth = () => {
+  refChatArea.value.scrollTo({
+    top: refChatArea.value.scrollHeight,
+    behavior: 'smooth'
+  });
+}
 const onShowContextMenu = (event, message, index) => {
   chatStore.contextMenu.tempMessage = message
   chatStore.contextMenu.index = index
@@ -124,12 +138,16 @@ const showFriendTextAvatar = (index) => {
          formatDay(perviousMessage.created_date) !== formatDay(nowMessage.created_date)
 }
 
-// error bor
 watch(
   () => route.params?.id,
   async (newId, oldId) => {
     if (newId !== oldId && route.name === CHAT_ROUTE_NAMES.GROUP) {
-      chatStore.actionGetMessageListByChatId({chat:newId}, true);
+      await chatStore.actionGetMessageListByChatId({chat:newId}, true);
+      // make scroll down after loading new data
+      setTimeout(() => {
+        handleScrollDown()
+      },10)
+      
       chatStore.selectedGroup = await chatStore.actionGetGroupChatById(newId);
     }
   }
@@ -141,6 +159,7 @@ onMounted(async () => {
   hasNext.value = count > page.value * pageSize.value
   page.value += 1
   refChatArea.value.scrollTop = refChatArea.value?.scrollHeight
+  handleScrollDown()
 })
 
 onMounted(() => {
@@ -151,6 +170,10 @@ onMounted(() => {
       inputSendMessageHeight.value = refSendMessage.value.InputSendMessageWrapperRef.scrollHeight
     }, { immediate: true })
   }
+  // Set flag to true after initial data load and scroll
+    setTimeout(() => {
+    initialRenderComplete.value = true;
+  }, 500);
 })
 
 </script>
@@ -158,8 +181,8 @@ onMounted(() => {
  <div class="h-full relative">
   <div
     ref="refChatArea" class="flex flex-col gap-2 px-6 py-4 overflow-y-auto relative"
-    :style="`height: calc(100% - ${inputSendMessageHeight + 90}px)`" 
-    @scroll="(e)=>{ handleScroll(e); handleScrollReachUp(e,handleScrollUp) }"
+    :style="`height: calc(100% - ${inputSendMessageHeight + 94}px)`" 
+    @scroll="handleScroll"
     @click="onClickChatArea"
     @dragover.prevent="onDragOver"
     @dragleave.prevent="onDragLeave"
@@ -265,7 +288,7 @@ onMounted(() => {
         </div>
         <!-- scroll down button -->
         <div v-if="showScrollDownButton" class="sticky bottom-0 flex justify-end">
-          <ScrollDownButton @click="handleClickScrollDown"/>
+          <ScrollDownButton @click="handleScrollDownSmooth"/>
         </div>
       </div>
       <!-- not start yet chat  -->
@@ -280,7 +303,7 @@ onMounted(() => {
       </div>
     </template>
   </div>
-  <div class="px-6">
+  <div class="px-6 mt-2">
       <SendMessage ref="refSendMessage" />
   </div>
   <ContextMenu :menu-items="menuItems" ref="refContextMenu" />

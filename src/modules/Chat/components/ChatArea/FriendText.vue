@@ -9,6 +9,8 @@ import LinkMessage from './LinkMessage.vue';
 import { formatHour } from '@/utils/formatDate';
 // contants
 import { MESSAGE_TYPES } from '../../constatns';
+// composables
+import { useTextSelection } from '../../composables/useTextSelection';
 // props
 const props = defineProps({
   message: {
@@ -33,11 +35,12 @@ const props = defineProps({
 })
 
 const { t } = useI18n();
+const { handleSelectStart, handleClick } = useTextSelection();
 
 </script>
 <template>
-  <div class="">
-    <div class="flex gap-2 select-none" :class="classNames">
+  <div class="" @selectstart="handleSelectStart" @click="handleClick">
+    <div class="flex gap-2" :class="classNames">
       <base-avatar 
         :image="props.message?.sender?.avatar?.url"
         :label="props.message?.sender?.first_name"

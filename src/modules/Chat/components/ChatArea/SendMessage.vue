@@ -1,6 +1,6 @@
 <script setup>
 // cores
-import { inject, onMounted, ref, watch } from 'vue';
+import { inject, nextTick, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 // components
@@ -54,6 +54,20 @@ const sendMessageIsTyping = useDebounceFn(()=>{
   send(JSON.stringify(payload))  
 }, 100);
 
+const sendChatHandshake = ()=> {
+  const payload = { command: 'chat_handshake',  chat_type: route.name == CHAT_ROUTE_NAMES.PRIVATE ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: route.params.id }
+  send(JSON.stringify(payload))
+}
+
+
+const resetInputProperties = (event) => {
+  message.value = '';
+  rows.value = 1;
+  if(event){
+    event.preventDefault();
+  }
+}
+
 const handleSendMessage = (event) => {
 
  if(event.key == "Enter"){
@@ -65,8 +79,7 @@ const handleSendMessage = (event) => {
     }
     else if(!message.value.trim()){
       event.preventDefault();
-      message.value = '';
-      rows.value = 1;
+      resetInputProperties()
     }
     else if(!!message.value.trim()){
         // replay message
@@ -93,8 +106,8 @@ const handleSendMessage = (event) => {
           } 
         }
         // reset values
-        message.value = '';
-        rows.value = 1;
+        resetInputProperties(event)
+        // replay or edit reset, not show them in ui
         chatStore.contextMenu = {}
     }
  } 
@@ -102,7 +115,7 @@ const handleSendMessage = (event) => {
  else if (event.ctrlKey && (event.key === 'A' || event.key === 'a')){
   isCtrlAllPressed.value = true
  }
- else if(event.key == "Backspace" && rows.value > 1 && message.value.endsWith("\n")) {
+ else if(event.key == "Backspace" && rows.value > 1) {
     rows.value -= 1;
     // if ctrl + all is pressed, reset    
     if(isCtrlAllPressed.value){
@@ -146,6 +159,7 @@ const handleMessageByIcon = () => {
 
 const onChangeInput = () => {
   sendMessageIsTyping()
+  sendChatHandshake()
 }
 // when emoji selected
 const handleSelectEmoji = (e) => {
@@ -162,10 +176,19 @@ const handleFileInputChange = (event) => {
 
 const onCancelIconReplay = () => {
   chatStore.contextMenu = { edit: false, replay: false }
+  resetInputProperties()
 }
 
 const onClickSendMessage = () => {
   refInput.value.$el.focus()
+}
+
+const handlePaste = async() => {
+  await nextTick(); 
+  setTimeout(() => {
+    rows.value = message.value.split("\n").length
+  }, 10);
+  
 }
 
 // showSend icon show or hide
@@ -178,10 +201,16 @@ watch(message, (val) => {
 })
 
 // when edit, set message value from store
-watch(() => chatStore.contextMenu?.message?.text, (val) => {
+watch(() => chatStore.contextMenu.edit, (val) => {
     if(chatStore.contextMenu?.edit){
       message.value = chatStore.contextMenu?.message?.text
       rows.value = chatStore.contextMenu?.message?.text.split("\n").length
+    }
+})
+// when replay, set message value from store
+watch(() => chatStore.contextMenu.replay, (val) => {
+    if(chatStore.contextMenu?.replay){
+      resetInputProperties()
     }
 })
 
@@ -190,7 +219,12 @@ watch([()=> chatStore.contextMenu], () => {
   refInput.value.$el.focus()
 }, { deep: true })
 
-
+// every route chnage, rest message value
+watch(() => route.params?.id, async (old, newOne) => {
+  if(old !== newOne){
+    resetInputProperties()
+  }
+})
 // expose
 defineExpose({
   refInput,
@@ -221,7 +255,7 @@ onMounted(() => {
         class="!h-4 !w-4 rotate-y-180 text-primary-500"
       />
       <div class="flex items-center gap-2 w-[95%] text-xs h-[16px] font-medium text-primary-500 pl-2 border-l-[2px] border-warning-500">
-        <template v-if="chatStore.contextMenu?.message?.message_type !='text'">
+        <template v-if="chatStore.contextMenu?.message?.message_type != MESSAGE_TYPES.TEXT">
           <FileTypeIcon :type="chatStore.contextMenu?.message?.message_type" />
         </template>
         <p class="truncate w-full">{{ chatStore.contextMenu?.message?.text  }}</p>
@@ -244,6 +278,7 @@ onMounted(() => {
       v-model="message"
       @input="onChangeInput"
       @keydown="handleSendMessage"
+      @paste="handlePaste"
       ref="refInput"
       @focus="isFocused = true"
       @blur="isFocused = false"

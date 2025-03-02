@@ -1,6 +1,6 @@
 <script setup>
 // core
-import {computed, inject, onMounted, ref, watch} from "vue";
+import {computed, inject, nextTick, onMounted, ref, watch} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 // components
@@ -71,10 +71,11 @@ const onCreateChat = async (user) => {
 }
 
 // when searched privete chat is clicked, work
-const onClickSearchedUser = (item) => {  
+// addlist is ture, when user hasn't chat with this user 
+const onClickSearchedUser = (item, addlist=true) => {  
     router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: item.chat_id }})
     // if user don't exist in the list then add it
-    if(!chatStore.privateChatList.some(user => user.chat_id == item.chat_id)){
+    if(!chatStore.privateChatList.some(user => user.chat_id == item.chat_id) && addlist){
       chatStore.privateChatList.unshift(item)
       chatStore.selectedUser = item
     }
@@ -83,7 +84,7 @@ const onClickSearchedUser = (item) => {
 }
 
 // when private chat list  is clicked, work
-const onClickChatPrivateUser = (user) => {
+const onClickChatPrivateUser = async (user) => {
   // if user is already selected then don't do anything, becouse no full data, just it is getting from  api id
   if(route.params.id != user.chat_id){
     router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: user.chat_id }})
@@ -185,7 +186,7 @@ watch(createGroupDialogVisible, () => {
           <p class="text-sm font-medium text-greyscale-500 my-4">{{ t('message-found',{count: chatStore.usersSearchListByMessage.length })}}</p>
           <template v-for="item in chatStore.usersSearchListByMessage" :key="item.id">
             <user-item
-            @click="onClickSearchedUser(item)"
+            @click="onClickSearchedUser(item, false)"
             :user="item" 
             />
           </template>

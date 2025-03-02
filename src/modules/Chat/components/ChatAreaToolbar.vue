@@ -81,12 +81,12 @@ const onDeleteChat = async () => {
   if(route.name == CHAT_ROUTE_NAMES.GROUP){
     await fetchDeleteGroupChatById(chatStore.selectedGroup?.chat_id)
     chatStore.selectedGroup = null
-    router.push({name: CHAT_ROUTE_NAMES.GROUP})
+    router.push({name: CHAT_ROUTE_NAMES.CHAT_INDEX})
     chatStore.actionGetGroupChatList()  
   } else if(route.name == CHAT_ROUTE_NAMES.PRIVATE){
     await fetchDeletePrivateChatById(chatStore.selectedUser?.chat_id)
     chatStore.selectedUser = null
-    router.push({name: CHAT_ROUTE_NAMES.PRIVATE})
+    router.push({name: CHAT_ROUTE_NAMES.CHAT_INDEX})
     chatStore.actionGetPrivateChatList()
   }
   
@@ -115,7 +115,7 @@ watch(createGroupDialogVisible, () => {
           <base-avatar
             :label="isGroupDetail ? chatStore.selectedGroup?.title : chatStore.selectedUser?.first_name"
             :color="isGroupDetail ? '#E2E8F0' : chatStore.selectedUser?.color"
-            :image="isGroupDetail ? chatStore.selectedGroup?.image?.url : chatStore.selectedUser?.avatar?.url"
+            :image="isGroupDetail ? chatStore.selectedGroup?.image?.blobUrl : chatStore.selectedUser?.avatar?.url"
             avatar-classes="w-11 h-11"
             label-classes="text-lg font-semibold select-none text-greyscale-900"
           />  
@@ -126,7 +126,7 @@ watch(createGroupDialogVisible, () => {
         </div>
         <div class="flex flex-col ml-3">
           <div class="text-base font-semibold select-none">{{ isGroupDetail ? chatStore.selectedGroup?.title : chatStore.selectedUser?.full_name}}</div>
-          <div v-if="isUserTypingInCurrentChat" class="text-sm font-medium text-success-500 select-none">{{route.name == CHAT_ROUTE_NAMES.GROUP ? typingUserName : ''}} typing... </div>
+          <div v-if="isUserTypingInCurrentChat" class="text-sm font-medium text-success-500 select-none">{{route.name == CHAT_ROUTE_NAMES.GROUP ? typingUserName : ''}} typing ... </div>
           <div v-else class="text-sm font-medium text-greyscale-500 select-none">{{ isGroupDetail ? t('members', { count: chatStore.selectedGroup?.members?.length}) : chatStore.selectedUser?.position}}</div>
         </div>
       </div>

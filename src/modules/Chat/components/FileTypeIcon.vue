@@ -8,7 +8,7 @@ const props = defineProps({
     type: String,
     default: 'file',
     validator: (value) => {
-      return ['file', 'image', 'audio', 'video'].includes(value)
+      return ['file', 'image', 'audio', 'video','text', 'link'].includes(value)
     }
   }
 })
@@ -17,6 +17,8 @@ const iconList = {
  image: {class: 'text-critic-500', name:GalleryBoldIcon},
  audio: {class: 'text-greyscale-500', name:FileTextBoldIcon},
  video: {class: 'text-success-500', name:ClapperboardPlayBoldIcon},
+ text: false,
+ link: false,
 }
 </script>
 <template>

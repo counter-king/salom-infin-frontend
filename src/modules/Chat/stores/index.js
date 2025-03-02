@@ -274,9 +274,13 @@ export const useChatStore = defineStore("chat-stores", {
       const { data } = await fetchGetGroupChatById(id);
       this.groupChatByIdLoading = false;
       if(data){
+        if(data.images[0]?.image?.id){
+        const { blobUrl } = await fetchBlobFile(data.images[0]?.image?.id)
+        data.images[0].image.blobUrl = blobUrl
+        }
         return {
           title: data?.title,
-          image: data.images[0]?.image,
+          image: data?.images[0]?.image,
           chat_id: data.id,
           members: data?.members || [],
           last_message: data?.last_message?.message_text,

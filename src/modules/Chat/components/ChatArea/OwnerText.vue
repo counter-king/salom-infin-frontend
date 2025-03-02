@@ -10,6 +10,8 @@ import ClickedStiker from './ClickedStiker.vue';
 import { formatHour } from '@/utils/formatDate';
 // constatns
 import { MESSAGE_TYPES } from '../../constatns';
+// composables
+import { useTextSelection } from '../../composables/useTextSelection';
 
 const { t } = useI18n(); 
 // props
@@ -34,11 +36,10 @@ const props = defineProps({
   }
 })
 
-
+const { handleSelectStart, handleClick } = useTextSelection();
 </script>
 <template>
   <div 
-     @selectstart.stop="$event.stopPropagation()"
      class="flex flex-col gap-2 items-end"
      :class="classNames">
     <div class="flex gap-3 justify-end items-end relative">
@@ -50,7 +51,7 @@ const props = defineProps({
           class="!w-5 !h-5"
         />
       </div>
-      <div v-else class="flex gap-1 items-end">
+      <div v-else class="flex gap-1 items-end select-none">
         <span class="text-xs font-medium text-greyscale-500">{{ formatHour(props.message?.created_date) }}</span>
         <base-iconify
           :icon="props.message?.is_read ? CheckReadIcon : CheckBigIcon"
@@ -60,6 +61,8 @@ const props = defineProps({
       <!-- replay message -->
       <div 
         @contextmenu.prevent="onShowContextMenu($event, props.message, props.index)"
+        @selectstart="handleSelectStart"
+        @click="handleClick"  
          class="flex flex-col gap-1 bg-primary-400 rounded-2xl rounded-br-[4px] px-4 py-3 cursor-pointer  max-w-[400px]"
          :class="[{'!rounded-xl !rounded-br-[4px]': false}]"
         >

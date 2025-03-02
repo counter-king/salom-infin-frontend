@@ -23,10 +23,12 @@ const { status, data, send } = socket
 const isShowChat = computed(() => allowedPages.includes(route.name))
 const routeId = computed(() => route.params.id)
 const inputSendMessasgeRef = ref(null)
-let typingTimeouts = {};
+const refChatArea = ref(null)
 
+let typingTimeouts = {};
 // privder
 provide("inputSendMessasgeRef", inputSendMessasgeRef) 
+provide('refChatArea', refChatArea)
 // methods
 const sendUserHandshake = ()=> {
   const payload = { command: 'user_handshake' }
@@ -38,6 +40,12 @@ const sendChatHandshake = (id, chat_type)=> {
   send(JSON.stringify(payload))
 }
 
+const handleScrollDownSmooth =()=> {
+  refChatArea.value.scrollTo({
+    top: refChatArea.value.scrollHeight,
+    behavior: 'smooth'
+  })
+}
 // WebSocket holatini kuzatish
 watch(status, (newStatus) => {
   if(newStatus == "OPEN"){
@@ -75,7 +83,7 @@ watch(data, (newData) => {
       }
       chatStore.uploadingFiles = chatStore.uploadingFiles.filter(item=> item?.attachments?.file?.id != newData?.files[0]?.id) 
       chatStore.messageListByChatId.push({
-        attachments: { file: newData.files[0] },
+        attachments: { file: newData?.files[0] },
         chat_id: newData.chat_id,
         created_date: newData.created_date,
         edited: newData.edited,
@@ -89,10 +97,16 @@ watch(data, (newData) => {
         chat_type: newData.chat_type,
         uploaded: true,
       })
+    
       // set last message to privatelist chat
-      chatStore.privateChatList.find(item=> item.chat_id == newData.chat_id).last_message = newData.text
+      const privateChat = chatStore.privateChatList.find(item=> item.chat_id == newData.chat_id)
+      if(privateChat){
+        privateChat.last_message = newData.text
+      }
       // set group chat last message
-    } else {
+    } 
+    // chat_type == group
+    else {
       // if user doen't exist in the list then add it
       if(!chatStore.groupChatList.some(item=> item.chat_id == newData.chat_id)){
         chatStore.groupChatList.unshift({
@@ -105,38 +119,51 @@ watch(data, (newData) => {
           last_message: newData.text,
           last_message_date: newData.created_date,
           last_message_type: newData.message_type,
-          type: CHAT_TYPES.PRIVATE,
+          type: CHAT_TYPES.GROUP,
           unread_count: 0
         })
       }
+      // remove uploaded file from uploading skeleton list
+      chatStore.uploadingFiles = chatStore.uploadingFiles.filter(item=> item?.attachments?.file?.id != newData?.files[0]?.id) 
+      // add new message to message list
       chatStore.messageListByChatId.push({
-        attachments: newData.attachments || [],
+        attachments: { file: newData?.files[0] },
         chat_id: newData.chat_id,
         created_date: newData.created_date,
         edited: newData.edited,
-        message_id: newData.id,
+        message_id: newData.message_id,
         modified_date: newData.modified_date,
         replied_to: newData.replied_to,
         sender: newData.sender,
         text: newData.text,
         message_type: newData.message_type,
-        chat_type: newData.chat_type
+        chat_type: newData.chat_type,
+        uploaded: true,
+        reactions: [],
       })
       // set last message to grouplist chat
-      chatStore.groupChatList.find(item=> item.chat_id == newData.chat_id).last_message = newData.text
+      let groupChat = chatStore.messageListByChatId.find(item=> item.message_id == newData.message_id)
+      if(groupChat){
+        groupChat.last_message = newData.text
+      }
     }
+    setTimeout(() => {
+      handleScrollDownSmooth()
+    }, 1);
   }
   else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_DELETED) {    
     chatStore.messageListByChatId = chatStore.messageListByChatId.filter(item=> item.message_id != newData?.content?.message_id)
     chatStore.contextMenu.deleteDialog = false
   }
   else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_UPDATE) {
-    chatStore.messageListByChatId.find(item=> item.message_id == newData?.content?.message_id).text = newData?.content?.text
-    chatStore.messageListByChatId.find(item=> item.message_id == newData?.content?.message_id).message_id = newData?.content?.message_id
+    let message = chatStore.messageListByChatId.find(item=> item.message_id == newData?.content?.message_id)
+    message.text = newData?.content?.text
+    message.edited = true
   }
   else if(newData.type == WEBCOCKET_EVENTS.NEW_GROUP_CHAT) {
     if(!chatStore.groupChatList.find(item=> item.chat_id == newData?.content?.chat_id)){
       chatStore.groupChatList.unshift({
+        chat_id: newData?.content?.chat_id,
         chat_id: newData?.content?.chat_id,
         title: newData?.content?.title,
         image: newData?.content?.image,
@@ -181,7 +208,6 @@ watch(data, (newData) => {
     }
   }
   else if(newData.type == WEBCOCKET_EVENTS.TYPING) {
-    console.log("typing",newData);
     chatStore.typingUsers[newData?.user?.id] = newData
     // Clear any existing timeout for this user
     if (typingTimeouts[newData?.user?.id]) {
@@ -190,7 +216,7 @@ watch(data, (newData) => {
     // Set a new timeout for this user
     typingTimeouts[newData?.user?.id] = setTimeout(() => {
       delete chatStore.typingUsers[newData?.user?.id];
-    }, 3000);
+    }, 1000);
   }
 });
 

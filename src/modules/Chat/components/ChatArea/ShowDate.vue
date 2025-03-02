@@ -26,7 +26,6 @@ const handleDateClick = () => {
 }
 
 const handleClickCalendar = (date) => {
- console.log("date",date);
  showDialog.value = false
 }
 

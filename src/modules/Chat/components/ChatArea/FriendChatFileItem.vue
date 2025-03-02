@@ -7,6 +7,8 @@ import { formatHour } from '@/utils/formatDate';
 import { DownloadMinimalisticIcon } from '@/components/Icons';
 import { downloadFile } from '../../services/file.service';
 import { fileTypes } from '../../constatns';
+// composables
+import { useTextSelection } from '../../composables/useTextSelection';
 
 const props = defineProps({
   message: {
@@ -29,10 +31,11 @@ const props = defineProps({
     type: [String , Array, Object] 
   }
 })
+const { handleSelectStart, handleClick } = useTextSelection();
 
 </script>
 <template>
- <div class="flex gap-2" :class="classNames" >
+ <div class="flex gap-2" :class="classNames" @selectstart="handleSelectStart" @click="handleClick">
     <base-avatar 
       :image="props.message?.sender?.avatar?.url"
       :label="props.message?.sender?.first_name"
@@ -53,7 +56,7 @@ const props = defineProps({
                 :class="fileTypes[props.message?.message_type]?.class"
               />
             </div>
-            <div class="grow flex flex-col gap-1 select-none">
+            <div class="grow flex flex-col gap-1">
               <h3   
                 class="text-sm font-semibold text-greyscale-900 capitalize"
                 >{{ props.message?.text }}
