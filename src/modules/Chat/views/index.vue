@@ -56,7 +56,7 @@ watch(status, (newStatus) => {
 // Kelgan ma'lumotlarni kuzatish
 watch(data, (newData) => {
   newData = JSON.parse(newData);
-  console.log("ewasd",newData);
+  // console.log("ewasd",newData);
   if(newData.command == WEBCOCKET_EVENTS.USER_HANDSHAKE) {
     // console.log("user hand",newData);
   }
