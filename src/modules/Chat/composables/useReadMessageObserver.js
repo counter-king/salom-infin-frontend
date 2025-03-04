@@ -13,35 +13,23 @@ const route = useRoute()
 // Reactives
 const refMessagesContainer = ref(null);
 const refMessageElements = ref([]);
-const readMessageIds = ref([]);
 
 // socket sending readed massageIds to backend
 const { send } = socket
+
 // mark message as read
 function markMessageAsRead(messageId) {
-    const messageIndex = chatStore.messageListByChatId.findIndex(msg => msg.message_id === messageId);
-    if (messageIndex !== -1 && !chatStore.messageListByChatId[messageIndex].is_read) {
-      chatStore.messageListByChatId[messageIndex].is_read = true;
-      
-      // add message id to readMessageIds
-      if (!readMessageIds.value.includes(messageId)) {
-        readMessageIds.value.push(messageId);
-        // send read status to backend
-        sendReadStatusToBackend(messageId);
-      }
-    }
+    sendMessageIdEvent(messageId);
 }
 
 // send read message ids to backend
-function sendReadStatusToBackend(messageId) {
+function sendMessageIdEvent(messageId) {
     const payload = { command: 'message_read', chat_id: route.params?.id, chat_type: route.name == CHAT_ROUTE_NAMES.PRIVATE ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, message_id: messageId }
     send(JSON.stringify(payload))
 }
 
 let observer;
 const initializeReadMessageObserver = ()=> {   
-    console.log(chatStore.messageListByChatId.length)
-    console.log(refMessageElements.value.length)
     if (refMessageElements.value.length) {
         refMessageElements.value.forEach(component => {
         const el = component?.forwardedRef;
@@ -52,7 +40,7 @@ const initializeReadMessageObserver = ()=> {
     } 
 }
 
-// // Watch for changes in the message list
+// Watch for changes in the message list, then observer new messages
 watch(() => chatStore.messageListByChatId, async () => {
     await nextTick();
     initializeReadMessageObserver();
@@ -65,14 +53,13 @@ onMounted(() => {
             if (entry.isIntersecting) {
                 const messageId = parseInt(entry.target.dataset.messageId);
                 if (messageId) {
-                    console.log("messageId",messageId)
-                  markMessageAsRead(messageId);
+                   markMessageAsRead(messageId);
                 }
             }
         });
-    }, { threshold: 0.5 });
+    }, { threshold: 0.5, root: refMessagesContainer.value  });
   });
 
-return { refMessagesContainer, refMessageElements, readMessageIds, initializeReadMessageObserver }
+return { refMessagesContainer, refMessageElements, initializeReadMessageObserver }
 
 }

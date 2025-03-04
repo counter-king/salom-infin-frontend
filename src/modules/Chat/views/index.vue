@@ -218,6 +218,12 @@ watch(data, (newData) => {
       delete chatStore.typingUsers[newData?.user?.id];
     }, 1000);
   }
+  else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_READ) {
+    const message = chatStore.messageListByChatId.find(item=> item.message_id == newData?.message_id)
+    if(message.sender?.id != newData?.user?.id){
+      message.is_read = true
+    }
+  }
 });
 
 watch(routeId, (newRouteId) => {    

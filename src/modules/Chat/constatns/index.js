@@ -22,6 +22,7 @@ export const WEBCOCKET_EVENTS = {
   NEW_GROUP_CHAT: "new_group_chat",
   CHAT_DELETED: "chat_deleted",
   TYPING: "typing",
+  MESSAGE_READ: "message_read"
 }
 
 export const MESSAGE_TYPES = {

@@ -131,6 +131,7 @@ const uploadFiles = async (files) => {
   for (const item of uploadingFiles.value.filter((obj) => obj.uploaded === null)) {
     let formData = new FormData();
     formData.append("file", item.file);
+    formData.append("module", "chat");
 
     await axiosConfig.post(`/upload/`, formData, {
       onUploadProgress: ({ loaded, total }) => {

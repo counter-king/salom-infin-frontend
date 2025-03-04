@@ -57,6 +57,7 @@ const returnShortFileName = (fileName) => {
    for (const item of chatStore.uploadingFiles) {
      let formData = new FormData();
      formData.append("file", item.attachments?.file?.file);
+     formData.append("module", "chat");
 
      await axiosConfig.post(`/upload/`, formData, {
        onUploadProgress: ({ loaded, total }) => {

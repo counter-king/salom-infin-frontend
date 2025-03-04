@@ -61,6 +61,7 @@ defineExpose({
           class="!w-5 !h-5"
         />
       </div>
+      <!-- time and check icon -->
       <div v-else class="flex gap-1 items-end select-none">
         <span class="text-xs font-medium text-greyscale-500">{{ formatHour(props.message?.created_date) }}</span>
         <base-iconify
