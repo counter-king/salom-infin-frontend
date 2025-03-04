@@ -1,5 +1,6 @@
 <script setup>
 // core
+import { ref, useAttrs } from 'vue';
 // components
 import ClickedStiker from './ClickedStiker.vue';
 import { DownloadMinimalisticIcon } from '@/components/Icons';
@@ -30,6 +31,13 @@ const props = defineProps({
   }
 })
 const { handleSelectStart, handleClick } = useTextSelection();
+// reactives
+const attrs = useAttrs();
+const forwardedRef = ref(null);
+
+defineExpose({
+  forwardedRef
+})
 
 </script>
 <template>
@@ -38,6 +46,8 @@ const { handleSelectStart, handleClick } = useTextSelection();
   :class="classNames"
   @selectstart="handleSelectStart"
   @click="handleClick"
+  v-bind="attrs"
+  ref="forwardedRef"
   >
     <div class="flex flex-col gap-2">
       <div class="flex gap-3">

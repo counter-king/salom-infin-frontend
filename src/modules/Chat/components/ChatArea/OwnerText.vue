@@ -1,6 +1,7 @@
 <script setup>
 // cores
 import { useI18n } from 'vue-i18n';
+import { ref, useAttrs } from 'vue';
 // componennts
 import { CheckBigIcon, CheckReadIcon, DangerCircleIcon, Pen2Icon, PenBoldIcon, PenIcon } from '@/components/Icons';
 import BaseIconify from '@/components/UI/BaseIconify.vue';
@@ -37,9 +38,18 @@ const props = defineProps({
 })
 
 const { handleSelectStart, handleClick } = useTextSelection();
+// reactives
+const attrs = useAttrs();
+const forwardedRef = ref  (null);
+
+defineExpose({
+  forwardedRef
+})
 </script>
 <template>
   <div 
+    v-bind="attrs"
+    ref="forwardedRef"  
      class="flex flex-col gap-2 items-end"
      :class="classNames">
     <div class="flex gap-3 justify-end items-end relative">

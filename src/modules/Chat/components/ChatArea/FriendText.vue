@@ -1,6 +1,7 @@
 <script setup>
 // cores
 import { useI18n } from 'vue-i18n';
+import { ref, useAttrs } from 'vue';
 // componennts
 import { PenBoldIcon } from '@/components/Icons';
 import ClickedStiker from './ClickedStiker.vue';
@@ -36,10 +37,20 @@ const props = defineProps({
 
 const { t } = useI18n();
 const { handleSelectStart, handleClick } = useTextSelection();
+// reactives
+const attrs = useAttrs();
+const forwardedRef = ref(null);
 
+defineExpose({
+  forwardedRef
+})
 </script>
 <template>
-  <div class="" @selectstart="handleSelectStart" @click="handleClick">
+  <div
+     v-bind="attrs"
+     ref="forwardedRef"  
+     @selectstart="handleSelectStart"
+     @click="handleClick">
     <div class="flex gap-2" :class="classNames">
       <base-avatar 
         :image="props.message?.sender?.avatar?.url"

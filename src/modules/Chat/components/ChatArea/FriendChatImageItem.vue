@@ -1,6 +1,6 @@
 <script setup>
 // core
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, useAttrs } from 'vue';
 // components
 import ClickedStiker from './ClickedStiker.vue';
 // contants
@@ -50,7 +50,13 @@ const props = defineProps({
 const loading = ref(false);
 const activeIndex = ref(0);
 const isGalleriaVisible = ref(false);
+const attrs = useAttrs();
+const forwardedRef = ref(null);
 
+
+defineExpose({
+  forwardedRef
+})
 
 onMounted(async() => {
   if(!props.message?.attachments?.file?.url){
@@ -66,10 +72,11 @@ onMounted(async() => {
     }
   }
 })
-
 </script>
 <template>
  <div 
+  v-bind="attrs"
+  ref="forwardedRef"
   class="flex gap-2"
   :class="classNames"
   >

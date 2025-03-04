@@ -326,6 +326,7 @@ export const useChatStore = defineStore("chat-stores", {
           message_id: item.id,
           modified_date: item.modified_date,
           replied_to: item.replied_to,
+          is_read: item.is_read,
           sender: item.sender,
           text: item.text,
           message_type: item.type || MESSAGE_TYPES.TEXT,

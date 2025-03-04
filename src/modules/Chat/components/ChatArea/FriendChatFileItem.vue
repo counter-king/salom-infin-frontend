@@ -1,5 +1,6 @@
 <script setup>
 // core
+import { ref, useAttrs } from 'vue';
 // components
 import ClickedStiker from './ClickedStiker.vue';
 // contants
@@ -32,10 +33,24 @@ const props = defineProps({
   }
 })
 const { handleSelectStart, handleClick } = useTextSelection();
+// reactives
+const attrs = useAttrs();
+const forwardedRef = ref(null);
+
+defineExpose({
+  forwardedRef
+})
 
 </script>
 <template>
- <div class="flex gap-2" :class="classNames" @selectstart="handleSelectStart" @click="handleClick">
+ <div 
+    v-bind="attrs"
+    ref="forwardedRef"
+    class="flex gap-2"
+    :class="classNames"
+    @selectstart="handleSelectStart"
+    @click="handleClick"
+    >
     <base-avatar 
       :image="props.message?.sender?.avatar?.url"
       :label="props.message?.sender?.first_name"

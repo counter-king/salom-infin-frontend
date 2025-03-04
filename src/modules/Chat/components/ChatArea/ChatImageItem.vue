@@ -1,6 +1,6 @@
 <script setup>
 // core
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, useAttrs } from 'vue';
 // components
 import ClickedStiker from './ClickedStiker.vue';
 // contants
@@ -46,7 +46,8 @@ const props = defineProps({
 const loading = ref(false);
 const activeIndex = ref(0);
 const isGalleriaVisible = ref(false);
-
+const forwardedRef = ref(null);
+const attrs = useAttrs();
 
 onMounted(async() => {
   if(!props.message?.attachments?.file?.url){    
@@ -63,11 +64,17 @@ onMounted(async() => {
   }
 })
 
+defineExpose({
+  forwardedRef
+})
+
 </script>
 <template>
  <div 
   class="flex gap-2 justify-end"
   :class="classNames"
+  v-bind="attrs"
+  ref="forwardedRef"
   >
    <div class="flex gap-3">
      <p class="text-xs font-medium text-greyscale-500 self-end">{{ formatHour(props.message?.created_date) }}</p>
