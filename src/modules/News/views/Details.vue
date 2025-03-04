@@ -58,21 +58,31 @@ const newsId = computed(() => route.params.id)
 const fetchOneNews = async() => {
    loading.value = true
    try {
+
        const { data }  = await fetchGetMyNews(route.params.id)   
-       if(!data.image?.url){
-        const { blobUrl } = await fetchBlobFile(data.image.id)
-        data.image.blobUrl = blobUrl
-       }
-       data.galleries = await Promise.all(data.galleries.map(async(item) => {
-        if(!item.url){
-            const { blobUrl } = await fetchBlobFile(item.id)
-            return { ...item, blobUrl }
+       const { blobUrl } = await fetchBlobFile(data.image.id)
+       data.image.blobUrl = blobUrl
+
+       data.contents = await Promise.all(data.contents.map(async(item) => {
+        if([CONTENT_TYPES.AUDIO, CONTENT_TYPES.VIDEO, CONTENT_TYPES.IMAGE].includes(item.type)){
+            const { blobUrl } = await fetchBlobFile(item.file?.id)
+            item.file.blobUrl = blobUrl
+            return item
+        } else {
+           return item
         }
+       }))
+
+       data.galleries = await Promise.all(data.galleries.map(async(item) => {
+        const { blobUrl } = await fetchBlobFile(item.id)
+        item.blobUrl = blobUrl
         return item
        }))
+
        newsOne.value = data
        viewHeartIsLike.value = data.is_liked
        viewHeartLikeCounts.value = data.like_counts 
+
    } catch(e) {
     dispatchNotify(null, e?.message, COLOR_TYPES.ERROR)
    } finally {

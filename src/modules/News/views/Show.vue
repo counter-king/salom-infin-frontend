@@ -28,6 +28,7 @@ import BaseIconify from '@/components/UI/BaseIconify.vue';
 import { BookmarkBoldIcon, EyeBoldIcon, ForwardBoldIcon, HeartBoldIcon } from '@/components/Icons';
 // services
 import { fetchCreateNewsComment, fetchCreateNewsLike, fetchGetNews, fetchGetNewsCommentList, fetchGetNewsList } from '../services/news.service';
+import { fetchBlobFile } from '@/services/file.service';
 // utils
 import { formatToK } from '@/utils';
 import { dispatchNotify } from '@/utils/notify';
@@ -53,11 +54,30 @@ const authStore = useAuthStore()
 const relatedNewsList = ref([])
 const realatedNewsListLoading = ref(false)
 // const shareDialogVisible = ref(false)
+
 // methods
 const fetchOneNews = async() => {
    loading.value = true
    try {
-       const { data }  = await fetchGetNews(route.params.id)       
+       const { data }  = await fetchGetNews(route.params.id)    
+       const { blobUrl } = await fetchBlobFile(data.image.id)
+       data.image.blobUrl = blobUrl  
+       data.galleries = await Promise.all(data.galleries.map(async(item) => {
+        const { blobUrl } = await fetchBlobFile(item.id)
+        item.blobUrl = blobUrl
+        return item
+       }))
+
+       data.contents = await Promise.all(data.contents.map(async(item) => {
+        if([CONTENT_TYPES.AUDIO, CONTENT_TYPES.VIDEO, CONTENT_TYPES.IMAGE].includes(item.type)){
+            const { blobUrl } = await fetchBlobFile(item.file?.id)
+            item.file.blobUrl = blobUrl
+            return item
+        } else {
+           return item
+        }
+       }))
+
        newsOne.value = data
        viewHeartIsLike.value = data.is_liked
        viewHeartLikeCounts.value = data.like_counts 
@@ -66,7 +86,7 @@ const fetchOneNews = async() => {
    } finally {
     loading.value = false
    }
- }
+}
 
  /* user click like, dislike operation */
 const handleClickLike = async() => {
@@ -124,17 +144,14 @@ const getRelatedNewsList =  async (page = 1) =>{
         page: page, 
         page_size: 50})
         relatedNewsList.value = await Promise.all(data.results?.map(async(item) => {
-            if(!item.image?.url){
-              const { blobUrl } = await fetchBlobFile(item.image.id)
-              item.image.blobUrl = blobUrl
-            }
+            const { blobUrl } = await fetchBlobFile(item.image.id)
+            item.image.blobUrl = blobUrl
             return item
           }) || [])
     }
     finally{
         realatedNewsListLoading.value = false
     }
-   
 }
 
 

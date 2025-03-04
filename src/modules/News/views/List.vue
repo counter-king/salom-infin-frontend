@@ -15,6 +15,7 @@ import { COLOR_TYPES } from '@/enums'
 import { fetchGetNewsList } from '../services/news.service'
 // composables
 import { useSearchNews } from '../composibles/useSearchNews'
+import { fetchBlobFile } from '@/services/file.service'
 
 const route = useRoute()
 const { locale } = useI18n()
@@ -64,10 +65,8 @@ const fetchNewsList = async (currentPage, resetList = false) => {
     next.value = data.next
     if (resetList) {
       newsList.value = await Promise.all(data.results.map(async(item) => {
-        if(!item.image?.url){
-          const { blobUrl } = await fetchBlobFile(item.image.id)
-          item.image.blobUrl = blobUrl
-        }
+        const { blobUrl } = await fetchBlobFile(item.image.id)
+        item.image.blobUrl = blobUrl
         return item
       }))
     } else {
@@ -77,11 +76,8 @@ const fetchNewsList = async (currentPage, resetList = false) => {
   } catch (e) {
     dispatchNotify(null, e?.message, COLOR_TYPES.ERROR)
   } finally {
-   if (resetList) {
       initialLoading.value = false
-    } else {
       loadingMore.value = false
-    }
   }
 }
 
@@ -109,7 +105,6 @@ watch(() => queryParams.value.category, async(newValue, oldValue) => {
   else if(Array.isArray(newValue) && !oldValue){
     await fetchNewsList(1, true)
     isFilterApplied.value = true
-
   }
 })
 

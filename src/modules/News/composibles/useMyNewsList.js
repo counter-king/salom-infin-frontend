@@ -50,10 +50,8 @@ export const useMyNewsList = () => {
   try {
    const { data }  = await fetchGetMyNewsList(params)
    list.value = await Promise.all(data.results?.map(async(item) => {
-    if(!item.image?.url){
-      const { blobUrl } = await fetchBlobFile(item.image.id)
-      item.image.blobUrl = blobUrl
-    }
+    const { blobUrl } = await fetchBlobFile(item.image.id)
+    item.image.blobUrl = blobUrl
     return item
    }))
    totalCount.value = data.count

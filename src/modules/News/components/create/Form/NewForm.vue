@@ -1,7 +1,7 @@
 <script setup>
 // Core
 import { useRouter } from 'vue-router';
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n'
 import { useVuelidate } from "@vuelidate/core"
 // Components
@@ -178,6 +178,10 @@ onMounted(() => {
   newsStore.actionGetTagList()
 })
 
+onUnmounted(() => {
+  newsStore.restStore()
+})
+
 </script>
 <template>
   <div class="form overflow-hidden">
@@ -190,9 +194,9 @@ onMounted(() => {
         >
           <div
             class="aspect-ratio-box rounded-lg overflow-hidden relative h-full w-full"
-            :style="{ '--dynamic-src': `url(${newsStore.model.image.url ? newsStore.model.image.url : newsStore.model.image.blobUrl})` }"
+            :style="{ '--dynamic-src': `url(${newsStore.model.image?.url ? newsStore.model.image?.url : newsStore.model.image?.blobUrl})` }"
           >
-            <img :src="newsStore.model.image.url ? newsStore.model.image.url : newsStore.model.image.blobUrl" alt="rasm" class="w-full h-full object-contain absolute z-2" />
+            <img :src="newsStore.model.image?.url ? newsStore.model.image?.url : newsStore.model.image?.blobUrl" alt="rasm" class="w-full h-full object-contain absolute z-2" />
           </div>
         </div>
         <label class="block text-sm font-medium text-greyscale-500 my-1">{{ t('main-image') }} <span class="text-red-500"> *</span></label>
@@ -345,7 +349,7 @@ onMounted(() => {
                 class="aspect-ratio-box rounded-lg overflow-hidden relative h-full w-full"
                 :style="{ '--dynamic-src': `url(${item.url ? item.url : item.blobUrl})` }"
               >
-              <img :src="item.url ? item.url : item.blobUrl" alt="rasm" class="w-full h-full object-contain absolute z-2" />
+              <img :src="item.url ? item?.url : item?.blobUrl" alt="rasm" class="w-full h-full object-contain absolute z-2" />
             </div>
           </template>
         </template>
