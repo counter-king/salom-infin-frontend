@@ -1,6 +1,7 @@
 <script setup>
 // core
 import { onMounted, ref, useAttrs } from 'vue';
+import { useI18n } from 'vue-i18n';
 // components
 import ClickedStiker from './ClickedStiker.vue';
 // contants
@@ -14,6 +15,7 @@ import Galleria from 'primevue/galleria';
 // store
 import { useChatStore } from '../../stores';
 import { MESSAGE_TYPES } from '../../constatns';
+import { PenBoldIcon } from '@/components/Icons';
 // services
 
 const chatStore = useChatStore();
@@ -46,6 +48,8 @@ const props = defineProps({
     type: [String , Array, Object] 
   }
 })
+
+const { t } = useI18n();
 // reactives
 const loading = ref(false);
 const activeIndex = ref(0);
@@ -87,38 +91,59 @@ onMounted(async() => {
     avatar-classes="w-8 h-8"
     :class="{'!visible': props.avatarVisible, '!invisible': !props.avatarVisible}"
    />
-   <div class="flex gap-3">
-     <div class="flex flex-col gap-2">
+   <div class="flex flex-col gap-2">
+    <div class="flex gap-3">
       <!-- images -->
-      <div
-        @click="isGalleriaVisible = true"
+      <div 
         @contextmenu.prevent="(e)=>props.onShowContextMenu(e, props.message)"
-        class="cursor-pointer rounded-xl max-w-[300px] min-w-[200px]  gap-2 p-2 bg-white"
+        class="flex flex-col gap-2 p-2 cursor-pointer rounded-xl max-w-[300px] min-w-[200px] bg-white"
         >
-        <BaseSpinner 
-          v-if="loading"
-          class="!w-4 !h-4 text-greyscale-500" 
-        />
-         <img
-          v-else
-           :src="props.message?.attachments?.file?.url"
-           class="w-full h-full object-cover rounded-lg"
-         />
+         <!-- replay to message -->
+         <div 
+            v-if="!!props.message.replied_to"
+            class="flex flex-col gap-1 pl-2 border-l-[2px] border-warning-500"
+            >
+            <span class="text-xs font-semibold text-warning-500 truncate">{{ props.message.replied_to?.sender?.first_name }} {{ props.message.replied_to?.sender?.last_name }}</span>
+            <span class="text-xs font-medium text-greyscale-500 truncate">{{ props.message.replied_to?.text }} </span>
+        </div>
+        <!-- image -->
+        <div
+          @click="isGalleriaVisible = true"
+          class=""
+          >
+          <BaseSpinner 
+            v-if="loading"
+            class="!w-4 !h-4 text-greyscale-500" 
+          />
+          <img
+            v-else
+            :src="props.message?.attachments?.file?.url"
+            class="w-full h-full object-cover rounded-lg"
+          />
+        </div>
+        <!-- edit -->
+        <div v-if="props.message?.edited" class="flex gap-1 items-center text-[10px] font-medium text-greyscale-300 self-end">
+          <base-iconify
+            :icon="PenBoldIcon"
+            class="!w-3 !h-3"
+          />
+          <span>{{ t('edited') }}</span>
+        </div>   
       </div>
-      <!-- reactions -->
-      <div v-if="Object.keys(props.message.reactions).length" class="flex gap-1">
-        <template v-for="reaction in Object.keys(props.message.reactions)" :key="reaction">
-          <ClickedStiker 
-            @click="props.handleClickEmoji(reaction, message.message_id)"
-            :onContextMenuClick="(e)=>props.onShowEmojiContextMenu(e, props.message.reactions[reaction])" 
-            :emoji="reaction"
-            :userReactionList="props.message.reactions[reaction]" 
-           />
-        </template>
-      </div>
-     </div>
-     <p  class="text-xs font-medium text-greyscale-500 self-end">{{ formatHour(props.message?.created_date) }}</p>
-   </div>
+      <p  class="text-xs font-medium text-greyscale-500 self-end">{{ formatHour(props.message?.created_date) }}</p>
+    </div>
+    <!-- reactions -->
+    <div v-if="Object.keys(props.message.reactions).length" class="flex gap-1">
+      <template v-for="reaction in Object.keys(props.message.reactions)" :key="reaction">
+        <ClickedStiker 
+          @click="props.handleClickEmoji(reaction, message.message_id)"
+          :onContextMenuClick="(e)=>props.onShowEmojiContextMenu(e, props.message.reactions[reaction])" 
+          :emoji="reaction"
+          :userReactionList="props.message.reactions[reaction]" 
+          />
+      </template>
+    </div>
+  </div>
  </div>
  <Galleria
     v-model:activeIndex="activeIndex"

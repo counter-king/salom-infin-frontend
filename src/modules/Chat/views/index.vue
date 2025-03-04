@@ -90,6 +90,7 @@ watch(data, (newData) => {
         message_id: newData.message_id,
         modified_date: newData.modified_date,
         replied_to: newData.replied_to,
+        is_read: newData.is_read,
         sender: newData.sender,
         text: newData.text,
         message_type: newData.message_type,
@@ -135,6 +136,7 @@ watch(data, (newData) => {
         modified_date: newData.modified_date,
         replied_to: newData.replied_to,
         sender: newData.sender,
+        is_read: newData.is_read,
         text: newData.text,
         message_type: newData.message_type,
         chat_type: newData.chat_type,
@@ -254,6 +256,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   Object.values(typingTimeouts).forEach(timeout => clearTimeout(timeout));
 });
+
 </script>
 <template>
   <div class="chat-home flex flex-col w-full py-6 px-10" style="height: calc(100vh - 80px)">

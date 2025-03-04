@@ -200,3 +200,4 @@ export { default as PlaneIcon } from '~icons/clarity/airplane-solid'
 // Material symbols
 export { default as TrainIcon } from '~icons/material-symbols/train'
 export { default as LocalTaxiIcon } from '~icons/material-symbols/local-taxi'
+export { default as CheckIcon } from '~icons/material-symbols/check'

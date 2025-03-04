@@ -68,6 +68,7 @@ defineExpose({
             class="friend-text flex flex-col gap-1 bg-white rounded-2xl rounded-bl-[4px] px-4 py-2 cursor-pointer w-fit  max-w-[400px]"
             :class="[{'!rounded-2xl !rounded-tl-[4px]': props.avatarVisible}]"
             >
+            <!-- replay to message -->
             <div 
               v-if="!!props.message.replied_to"
               class="flex flex-col gap-1 pl-2 border-l-[2px] border-warning-500"

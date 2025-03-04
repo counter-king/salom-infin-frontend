@@ -1,11 +1,12 @@
 <script setup>
 // core
 import { ref, useAttrs } from 'vue';
+import { useI18n } from 'vue-i18n';
 // components
 import ClickedStiker from './ClickedStiker.vue';
 // contants
 import { formatHour } from '@/utils/formatDate';
-import { DownloadMinimalisticIcon } from '@/components/Icons';
+import { DownloadMinimalisticIcon, CheckIcon, PenBoldIcon } from '@/components/Icons';
 import { downloadFile } from '../../services/file.service';
 import { fileTypes } from '../../constatns';
 // composables
@@ -33,6 +34,7 @@ const props = defineProps({
   }
 })
 const { handleSelectStart, handleClick } = useTextSelection();
+const { t } = useI18n();
 // reactives
 const attrs = useAttrs();
 const forwardedRef = ref(null);
@@ -48,9 +50,8 @@ defineExpose({
     ref="forwardedRef"
     class="flex gap-2"
     :class="classNames"
-    @selectstart="handleSelectStart"
-    @click="handleClick"
     >
+    <!-- avatat -->
     <base-avatar 
       :image="props.message?.sender?.avatar?.url"
       :label="props.message?.sender?.first_name"
@@ -59,40 +60,66 @@ defineExpose({
       :class="{'!visible': props.avatarVisible, '!invisible': !props.avatarVisible}"
     />
     <div class="flex flex-col gap-2">
+      <!-- file -->
       <div class="flex gap-3">
-        <div 
+        <div
           @contextmenu.prevent="(e)=>props.onShowContextMenu(e, props.message)"
-          class="flex gap-4 items-center p-2 pr-4 min-w-[243px] max-w-[400px] w-full group bg-white cursor-pointer rounded-xl"
-          >
-            <div class="p-[10px] bg-greyscale-50 rounded-lg">
+          @selectstart="handleSelectStart"
+          @click="handleClick"
+          class="flex flex-col gap-2 p-2 pr-4 min-w-[243px] max-w-[400px] bg-white cursor-pointer rounded-xl"
+          :class="[{'!p-0': !props.message.replied_to }]"
+        >
+          <!-- reply to message -->
+          <div 
+            v-if="!!props.message.replied_to"
+            class="flex flex-col gap-1 pl-2 border-l-[2px] border-warning-500"
+            >
+            <span class="text-xs font-semibold text-warning-500 truncate">{{ props.message.replied_to?.sender?.first_name }} {{ props.message.replied_to?.sender?.last_name }}</span>
+            <span class="text-xs font-medium text-greyscale-500 truncate">{{ props.message.replied_to?.text }}</span>
+          </div>
+          <!-- file info -->
+          <div 
+            class="flex gap-4 p-2 pr-4 rounded-xl items-center w-full bg-white-400/[40%]"
+            >
+              <div class="p-[10px] bg-greyscale-50 rounded-lg">
+                <base-iconify 
+                  :icon="fileTypes[props.message?.message_type]?.icon"
+                  class="!h-5 !w-5" 
+                  :class="fileTypes[props.message?.message_type]?.class"
+                />
+              </div>
+              <div class="grow flex flex-col gap-1">
+                <h3   
+                  class="text-sm font-semibold text-greyscale-900 capitalize"
+                  >{{ props.message?.text }}
+                </h3>
+                <p 
+                  class="text-xs text-greyscale-500"
+                >{{ props.message?.size }}
+                </p>
+              </div>
               <base-iconify 
-                :icon="fileTypes[props.message?.message_type]?.icon"
-                class="!h-5 !w-5" 
-                :class="fileTypes[props.message?.message_type]?.class"
+                @click="downloadFile(props.message?.attachments?.file)" 
+                v-if="props.message?.uploaded"
+                :icon="DownloadMinimalisticIcon"
+                class="!h-5 !w-5 text-greyscale-500" 
               />
-            </div>
-            <div class="grow flex flex-col gap-1">
-              <h3   
-                class="text-sm font-semibold text-greyscale-900 capitalize"
-                >{{ props.message?.text }}
-              </h3>
-              <p 
-                class="text-xs text-greyscale-500"
-              >{{ props.message?.size }}
-              </p>
-            </div>
-            <base-iconify 
-             @click="downloadFile(props.message?.attachments?.file)" 
-              v-if="props.message?.uploaded"
-              :icon="DownloadMinimalisticIcon"
-              class="!h-5 !w-5 text-greyscale-500" 
+              <BaseSpinner 
+                v-else
+                class="!w-4 !h-4 text-greyscale-500 animate-spin" 
+                :style="{'--spinner-stroke-color': 'var(--success-500)'}" 
+              />
+          </div>
+          <!-- edit -->
+          <div v-if="props.message?.edited" class="flex gap-1 items-center text-[10px] font-medium text-greyscale-300 self-end">
+            <base-iconify
+              :icon="PenBoldIcon"
+              class="!w-3 !h-3"
             />
-            <BaseSpinner 
-              v-else
-              class="!w-4 !h-4 text-greyscale-500 animate-spin" 
-              :style="{'--spinner-stroke-color': 'var(--success-500)'}" 
-            />
+            <span>{{ t('edited') }}</span>
+          </div>   
         </div>
+        <!-- time -->
         <p  class="text-xs font-medium text-greyscale-500 self-end">{{ formatHour(props.message?.created_date) }}</p>
       </div>
       <!-- reactions -->

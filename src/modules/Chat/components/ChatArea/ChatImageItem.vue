@@ -3,7 +3,7 @@
 import { onMounted, ref, useAttrs } from 'vue';
 // components
 import ClickedStiker from './ClickedStiker.vue';
-import { CheckBigIcon, CheckReadIcon, DangerCircleIcon, PenBoldIcon } from '@/components/Icons';
+import { CheckBigIcon, CheckReadIcon, DangerCircleIcon, PenBoldIcon, CheckIcon } from '@/components/Icons';
 // contants
 import { formatHour } from '@/utils/formatDate';
 // utils
@@ -79,7 +79,7 @@ defineExpose({
   v-bind="attrs"
   ref="forwardedRef"
   >
-   <div class="flex gap-3  justify-end items-end relative">
+   <div class="flex gap-3 justify-end items-end relative">
       <!-- error text -->
       <div v-if="false" class="flex items-center justify-end text-critic-500 gap-[6px]">
         <span class="text-xs font-medium">{{ t('error') }}</span>
@@ -88,6 +88,7 @@ defineExpose({
           class="!w-5 !h-5"
         />
       </div>
+      <!-- time and check icon -->
       <div v-else class="flex gap-1 items-end select-none">
         <span class="text-xs font-medium text-greyscale-500">{{ formatHour(props.message?.created_date) }}</span>
         <base-iconify
@@ -95,20 +96,19 @@ defineExpose({
           class="!w-5 !h-5 !text-success-500"
         />
       </div>
-     <div class="flex flex-col gap-2">
       <!-- image -->
       <div
         @click="isGalleriaVisible = true"
         @contextmenu.prevent="(e)=>props.onShowContextMenu(e, props.message)"
-        class="cursor-pointer rounded-xl max-w-[300px] min-w-[64px] gap-2 p-2 bg-white"
+        class="flex flex-col gap-2 p-2 cursor-pointer rounded-xl max-w-[300px] min-w-[64px] bg-white"
         >
         <!-- reply to message -->
         <div 
           v-if="!!props.message.replied_to"
-          class="flex flex-col gap-1 pl-2 pr-2 border-l-[2px] rounded-r-[8px] bg-white/[12%]"
+          class="flex flex-col gap-1 pl-2 border-l-[2px] border-warning-500"
           >
-          <span class="text-xs font-semibold text-white truncate">{{ props.message.replied_to?.sender?.first_name }} {{ props.message.replied_to?.sender?.last_name }}</span>
-          <span class="text-xs font-medium text-white/[65%] truncate">{{ props.message.replied_to?.text }}</span>
+          <span class="text-xs font-semibold text-warning-500 truncate">{{ props.message.replied_to?.sender?.first_name }} {{ props.message.replied_to?.sender?.last_name }}</span>
+          <span class="text-xs font-medium text-greyscale-500 truncate">{{ props.message.replied_to?.text }} </span>
         </div>
         <!-- image loading -->
         <BaseSpinner 
@@ -116,13 +116,20 @@ defineExpose({
           class="!w-4 !h-4 text-greyscale-500" 
         />
         <!-- image -->
-         <img
+        <img
           v-else
-           :src="props.message?.attachments?.file?.url"
-           class="w-full h-full object-cover rounded-lg"
-         />
+          :src="props.message?.attachments?.file?.url"
+          class="w-full h-full object-cover rounded-lg"
+        />
+          <!-- edit -->
+        <div v-if="props.message?.edited" class="flex gap-1 items-center text-[10px] font-medium text-greyscale-300 self-end">
+          <base-iconify
+            :icon="PenBoldIcon"
+            class="!w-3 !h-3"
+          />
+          <span>{{ t('edited') }}</span>
+        </div>   
       </div>
-     </div>
    </div>
     <!-- reactions -->
    <div v-if="props.message?.reactions && Object.keys(props.message.reactions).length" class="flex gap-1">

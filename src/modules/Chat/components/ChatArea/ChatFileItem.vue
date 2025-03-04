@@ -1,9 +1,10 @@
 <script setup>
 // core
 import { ref, useAttrs } from 'vue';
+import { useI18n } from 'vue-i18n';
 // components
 import ClickedStiker from './ClickedStiker.vue';
-import { DownloadMinimalisticIcon } from '@/components/Icons';
+import { DownloadMinimalisticIcon , CheckIcon, CheckReadIcon, PenBoldIcon, DangerCircleIcon} from '@/components/Icons';
 // contants
 import { fileTypes } from '../../constatns';
 // utils
@@ -30,6 +31,8 @@ const props = defineProps({
     type: [String, Array, Object] 
   }
 })
+
+const { t } = useI18n();
 const { handleSelectStart, handleClick } = useTextSelection();
 // reactives
 const attrs = useAttrs();
@@ -42,63 +45,96 @@ defineExpose({
 </script>
 <template>
  <div 
-  class="flex gap-2 justify-end"
+  class="flex flex-col gap-2 items-end"
   :class="classNames"
   @selectstart="handleSelectStart"
   @click="handleClick"
   v-bind="attrs"
   ref="forwardedRef"
   >
-    <div class="flex flex-col gap-2">
-      <div class="flex gap-3">
-        <p class="text-xs font-medium text-greyscale-500 self-end">{{ props.message?.created_date && formatHour(props.message?.created_date) }}</p>
-        <div class="flex flex-col gap-2">
-          <div 
-            @contextmenu.prevent="(e)=>props.onShowContextMenu(e, props.message)"
-            @click=""
-            class="flex gap-4 items-center p-2 pr-4 min-w-[243px] max-w-[400px] w-full group bg-primary-400 cursor-pointer rounded-xl"
-            >
-              <div 
-                @click="downloadFile(props.message?.attachments?.file)" 
-                class="p-[10px] rounded-lg !bg-primary-300">
-                <base-iconify 
-                :icon="fileTypes[props.message?.message_type]?.icon"
-                class="!h-5 !w-5" 
-                :class="fileTypes[props.message?.message_type]?.class2"
-                />
-              </div>
-              <div class="grow flex flex-col gap-1">
-                <h3   
-                  class="text-sm font-semibold capitalize text-white"
-                  >{{ props.message?.text }}</h3>
-                <p 
-                  class="text-xs text-primary-100"
-                >{{ props.message?.size }}</p>
-              </div>
-              <base-iconify 
-                @click="downloadFile(props.message?.attachments?.file)" 
-                v-if="props.message?.uploaded"
-                :icon="DownloadMinimalisticIcon"
-                class="!h-5 !w-5 !text-greyscale-90" 
-              />
-              <BaseSpinner 
-                v-else
-                class="!w-4 !h-4 text-greyscale-500 animate-spin" 
-                :style="{'--spinner-stroke-color': 'white'}" 
-              />
-          </div>
-          <!-- reactions -->
-          <div v-if="Object.keys(props.message.reactions).length" class="flex gap-1">
-            <template v-for="reaction in Object.keys(props.message.reactions)" :key="reaction">
-              <ClickedStiker 
-                @click="props.handleClickEmoji(reaction, message.message_id)"
-                :onContextMenuClick="(e)=>props.onShowEmojiContextMenu(e, props.message.reactions[reaction])" 
-                :emoji="reaction"
-                :userReactionList="props.message.reactions[reaction]" />
-            </template>
-          </div>
-        </div>
+    <div class="flex gap-3 justify-end items-end relative">
+      <!-- error text -->
+      <div v-if="false" class="flex items-center justify-end text-critic-500 gap-[6px]">
+        <span class="text-xs font-medium">{{ t('error') }}</span>
+        <base-iconify
+          :icon="DangerCircleIcon"
+          class="!w-5 !h-5"
+        />
       </div>
+      <!-- time and check icon -->
+      <div v-else class="flex gap-1 items-end select-none">
+        <span class="text-xs font-medium text-greyscale-500">{{ formatHour(props.message?.created_date) }}</span>
+        <base-iconify
+          :icon="props.message?.is_read ? CheckReadIcon : CheckIcon"
+          class="!w-5 !h-5 !text-success-500"
+        />
+      </div>
+      <!-- files -->
+      <div
+         @contextmenu.prevent="(e)=>props.onShowContextMenu(e, props.message)"
+         class="flex flex-col gap-1 bg-primary-400 rounded-2xl rounded-br-[4px] px-4 py-3 cursor-pointer  max-w-[400px]  min-w-[243px]"
+         :class="[{'!rounded-xl !rounded-br-[4px] !p-2 !pr-4  ': !props.message.replied_to }]"
+        >
+        <!-- reply to message -->
+        <div 
+          v-if="!!props.message.replied_to"
+          class="flex flex-col gap-1 pl-2 pr-2 border-l-[2px] rounded-r-[8px] bg-white/[12%]"
+          >
+          <span class="text-xs font-semibold text-white truncate">{{ props.message.replied_to?.sender?.first_name }} {{ props.message.replied_to?.sender?.last_name }}</span>
+          <span class="text-xs font-medium text-white/[65%] truncate">{{ props.message.replied_to?.text }}</span>
+        </div>
+        <!-- file -->
+        <div          
+          class="flex gap-4 items-center w-full bg-primary-400"
+          >
+            <div 
+              @click="downloadFile(props.message?.attachments?.file)" 
+              class="p-[10px] rounded-lg !bg-primary-300">
+              <base-iconify 
+              :icon="fileTypes[props.message?.message_type]?.icon"
+              class="!h-5 !w-5" 
+              :class="fileTypes[props.message?.message_type]?.class2"
+              />
+            </div>
+            <div class="grow flex flex-col gap-1">
+              <h3   
+                class="text-sm font-semibold capitalize text-white"
+                >{{ props.message?.text }}</h3>
+              <p 
+                class="text-xs text-primary-100"
+              >{{ props.message?.size }}</p>
+            </div>
+            <base-iconify 
+              @click="downloadFile(props.message?.attachments?.file)" 
+              v-if="props.message?.uploaded"
+              :icon="DownloadMinimalisticIcon"
+              class="!h-5 !w-5 !text-greyscale-90" 
+            />
+            <BaseSpinner 
+              v-else
+              class="!w-4 !h-4 text-greyscale-500 animate-spin" 
+              :style="{'--spinner-stroke-color': 'white'}" 
+            />
+        </div>
+        <!-- edit -->
+        <div v-if="props.message?.edited" class="flex gap-1 items-center text-[10px] font-medium text-white/[70%] self-end">
+          <base-iconify
+            :icon="PenBoldIcon"
+            class="!w-3 !h-3"
+          />
+          <span>{{ t('edited') }}</span>
+        </div>   
+      </div>
+    </div>
+    <!-- reactions -->
+    <div v-if="Object.keys(props.message.reactions).length" class="flex gap-1">
+      <template v-for="reaction in Object.keys(props.message.reactions)" :key="reaction">
+        <ClickedStiker 
+          @click="props.handleClickEmoji(reaction, message.message_id)"
+          :onContextMenuClick="(e)=>props.onShowEmojiContextMenu(e, props.message.reactions[reaction])" 
+          :emoji="reaction"
+          :userReactionList="props.message.reactions[reaction]" />
+      </template>
     </div>
  </div>
 </template>

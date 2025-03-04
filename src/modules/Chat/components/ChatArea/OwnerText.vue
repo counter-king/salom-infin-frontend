@@ -3,7 +3,7 @@
 import { useI18n } from 'vue-i18n';
 import { ref, useAttrs } from 'vue';
 // componennts
-import { CheckBigIcon, CheckReadIcon, DangerCircleIcon, Pen2Icon, PenBoldIcon, PenIcon } from '@/components/Icons';
+import { CheckBigIcon, CheckReadIcon, DangerCircleIcon, Pen2Icon, PenBoldIcon, PenIcon, CheckIcon} from '@/components/Icons';
 import BaseIconify from '@/components/UI/BaseIconify.vue';
 import LinkMessage from './LinkMessage.vue';
 import ClickedStiker from './ClickedStiker.vue';
@@ -65,18 +65,19 @@ defineExpose({
       <div v-else class="flex gap-1 items-end select-none">
         <span class="text-xs font-medium text-greyscale-500">{{ formatHour(props.message?.created_date) }}</span>
         <base-iconify
-          :icon="props.message?.is_read ? CheckReadIcon : CheckBigIcon"
+          :icon="props.message?.is_read ? CheckReadIcon : CheckIcon"
           class="!w-5 !h-5 !text-success-500"
         />
       </div>
-      <!-- replay message -->
+      <!-- message -->
       <div 
         @contextmenu.prevent="onShowContextMenu($event, props.message, props.index)"
         @selectstart="handleSelectStart"
         @click="handleClick"  
          class="flex flex-col gap-1 bg-primary-400 rounded-2xl rounded-br-[4px] px-4 py-3 cursor-pointer  max-w-[400px]"
-         :class="[{'!rounded-xl !rounded-br-[4px]': false}]"
+         :class="[{'!rounded-xl !rounded-br-[4px]': false }]"
         >
+        <!-- reply to message -->
         <div 
           v-if="!!props.message.replied_to"
           class="flex flex-col gap-1 pl-2 pr-2 border-l-[2px] rounded-r-[8px] bg-white/[12%]"
