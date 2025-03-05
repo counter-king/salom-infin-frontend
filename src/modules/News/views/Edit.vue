@@ -88,18 +88,22 @@ const fetchOneNews = async() => {
    try {
       const { data }  = await fetchGetMyNews(route.params.id)   
       const galleriesWithUrlBlob = await Promise.all(data.galleries.map(async(item) => {
-        if(!item.url){
-          const { blobUrl } = await fetchBlobFile(item.id)
-          return { ...item, blobUrl }
-        }
+        const { blobUrl } = await fetchBlobFile(item.id)
+        item.blobUrl = blobUrl
         return item
       }))
-      
-      if(!data.image.url){
-        const { blobUrl } = await fetchBlobFile(data.image.id)
-        data.image.blobUrl = blobUrl
-      }
 
+      const { blobUrl } = await fetchBlobFile(data.image?.id)
+      data.image.blobUrl = blobUrl
+      data.contents = await Promise.all(data.contents.map(async(item) => {
+        if([CONTENT_TYPES.AUDIO, CONTENT_TYPES.VIDEO, CONTENT_TYPES.IMAGE].includes(item.type)){
+          const { blobUrl } = await fetchBlobFile(item.file?.id)
+          item.file.blobUrl = blobUrl
+          return item
+        } else {
+           return item
+        }
+      }))
       newsStore.model.images_ids = galleriesWithUrlBlob
       newsStore.model.title = data.title    
       newsStore.model.status = data.status    
@@ -116,7 +120,7 @@ const fetchOneNews = async() => {
           return getMatchFileUploadType(content)
         } 
       })
-
+      
    } catch(e) {
       dispatchNotify(null, e?.message, COLOR_TYPES.ERROR)
    } finally {

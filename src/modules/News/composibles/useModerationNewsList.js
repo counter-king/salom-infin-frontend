@@ -4,7 +4,7 @@ import { ref } from "vue"
 import { dispatchNotify } from "@/utils/notify"
 // services
 import { fetchGetModerationNewsList } from "../services/news.service"
-import { fetchBlobFile } from "../../../services/file.service"
+import { fetchBlobFile } from "@/services/file.service"
 // enums
 import { COLOR_TYPES } from "@/enums"
 
@@ -49,10 +49,8 @@ export const useModerationNewsList = () => {
   try {
    const { data }  = await fetchGetModerationNewsList(params)
    list.value = await Promise.all( data.results.map(async (item) => {
-   if(!item.image?.url){
-     const { blobUrl } = await fetchBlobFile(item.image.id)
-     item.image.blobUrl = blobUrl
-   }
+   const { blobUrl } = await fetchBlobFile(item.image.id)
+   item.image.blobUrl = blobUrl
    return item
    }))
    totalCount.value = data.count

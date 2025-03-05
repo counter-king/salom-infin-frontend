@@ -126,6 +126,7 @@ const uploadFiles = async (files) => {
   for (const item of uploadingFiles.value.filter((obj) => obj.uploaded === null)) {
     let formData = new FormData();
     formData.append("file", item.file);
+    formData.append("module", "news");
 
     await axiosConfig.post(`/upload/`, formData, {
       onUploadProgress: ({ loaded, total }) => {
@@ -136,8 +137,8 @@ const uploadFiles = async (files) => {
         item.id = data.id;
         item.uploaded = true;
         item.url = data.url;
-        const fileBlob = await fetchBlobFile(data.id)
-        item.blobUrl = fileBlob.blobUrl
+        const { blobUrl } = await fetchBlobFile(data.id)
+        item.blobUrl = blobUrl
         item.extension = data.extension
       })
       .catch(() => {
@@ -157,6 +158,7 @@ const setFiles = () => {
         progress: 0,
         uploaded: true,
         url: file?.url,
+        blobUrl: file?.blobUrl,
         extension: file.extension || '',
         type: file?.type
       })

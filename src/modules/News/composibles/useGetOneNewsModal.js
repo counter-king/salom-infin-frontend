@@ -4,7 +4,6 @@ import { reactive, ref } from "vue"
 import { CONTENT_TYPES, getMatchFileUploadType } from "../constants"
 
 export const useGetOneNewsModal = () => {
-
  // reactive
  const loading = ref(false)
  const newsOne = reactive({
@@ -22,17 +21,21 @@ export const useGetOneNewsModal = () => {
     try{
       const { data }  = await actionApi(id)
       const galleriesWithUrlBlob = await Promise.all(data.galleries.map(async(item) => {
-        if(!item.url){
-          const { blobUrl } = await fetchBlobFile(item.id)
-          return { ...item, blobUrl }
-        }
+        const { blobUrl } = await fetchBlobFile(item.id)
+        item.blobUrl = blobUrl
         return item
       }))
-      
-      if(!data.image.url){
-        const { blobUrl } = await fetchBlobFile(data.image.id)
-        data.image.blobUrl = blobUrl
-      }
+      const { blobUrl } = await fetchBlobFile(data.image.id)
+      data.contents = await Promise.all(data.contents.map(async(item) => {
+        if([CONTENT_TYPES.AUDIO, CONTENT_TYPES.VIDEO, CONTENT_TYPES.IMAGE].includes(item.type)){
+          const { blobUrl } = await fetchBlobFile(item.file?.id)
+          item.file.blobUrl = blobUrl
+          return item
+        } else {
+          return item
+        }
+      }))
+      data.image.blobUrl = blobUrl
       data.galleries = galleriesWithUrlBlob
       newsOne.title = data.title    
       newsOne.description = data.description

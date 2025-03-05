@@ -18,9 +18,9 @@ const props = defineProps({
       <!-- images -->
       <div 
         class="rounded-lg overflow-hidden aspect-ratio-box relative h-[116px]" 
-        :style="{ '--dynamic-src': `url(${props.item.image.url})` }"
+        :style="{ '--dynamic-src': `url(${props.item.image.url ? props.item.image.url : props.item.image?.blobUrl})` }"
       >
-        <img :src="props.item.image.url" alt="rasm" class="w-full h-full object-contain absolute z-2" />
+        <img :src="props.item.image.url ? props.item.image?.url : props.item.image?.blobUrl" alt="rasm" class="w-full h-full object-contain absolute z-2" />
       </div>
       <!-- content -->
       <div class="flex-1 flex flex-col justify-between gap-2">
@@ -37,7 +37,6 @@ const props = defineProps({
         </div>
       </div>
       <!-- view-likes -->
-      
       <div class="min-w-fit flex gap-2 items-center text-greyscale-400 self-end justify-end">
          <div class="flex gap-1 items-center">
            <div class="hover:cursor-pointer">
@@ -51,7 +50,7 @@ const props = defineProps({
            </div>
            <div class="text-xs font-medium text-greyscale-400">{{ formatToK(props.item.view_counts) }}</div>
          </div>
-       </div>
+      </div>
   </div>
 </template>
 <style scoped>

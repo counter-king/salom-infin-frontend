@@ -9,9 +9,8 @@ import { AltArrowLeftIcon } from '@/components/Icons';
 import Empty from '@/components/Empty.vue';
 // Services
 import { fetchGetNewsList } from '@/modules/News/services/news.service';
+import { fetchBlobFile } from '@/services/file.service';
 // Utils
-import { dispatchNotify } from '@/utils/notify';
-// Composable
 const { t } = useI18n()
 
 // reactive
@@ -23,15 +22,12 @@ const getNewsList = async () => {
   loading.value = true
   try {
     const { data } = await fetchGetNewsList({ page_size: 10 })
-    newsList.value = await Promise.all(data.results.map(async(item) => {
-        if(!item.image?.url){
-          const { blobUrl } = await fetchBlobFile(item.image.id)
-          item.image.blobUrl = blobUrl
-        }
+    newsList.value = await Promise.all(data.results?.map(async(item) => {
+        const { blobUrl } = await fetchBlobFile(item.image.id)
+        item.image.blobUrl = blobUrl
         return item
     }))
   } catch (e) {
-    dispatchNotify(null, e?.message, COLOR_TYPES.ERROR)
   } finally {
     loading.value = false
   }
