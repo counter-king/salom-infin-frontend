@@ -29,10 +29,12 @@ import { useAuthStore } from '@/modules/Auth/stores';
 import { useContextMenu } from '../composables/useContextMenu';
 import { useFileUploadDrop } from '../composables/useFileUploadDrop';  
 import { useScrollReachUp } from '../composables/useScrollReachUp';
+import { useReadMessageObserver } from '../composables/useReadMessageObserver';
 
 const { menuItems, refContextMenu } = useContextMenu();
 const { onDragOver, onDragLeave, onDrop } = useFileUploadDrop();
 const { handleScrollReachUp, hasNext, page, pageSize } = useScrollReachUp();
+const { refMessagesContainer, refMessageElements, initializeReadMessageObserver } = useReadMessageObserver();
 
 const { t } = useI18n();
 const route = useRoute();
@@ -45,8 +47,10 @@ const refEmojiContextMenu = ref(null);
 const emojiMenuItems = ref([]);
 const inputSendMessageHeight = ref(90);
 const initialRenderComplete = ref(false);
+
 // inject
 const refChatArea = inject("refChatArea");
+
 // methods
 // when scroll down, scrollDwonButton will be visible
 const handleScroll = (event) => {
@@ -58,13 +62,13 @@ const handleScroll = (event) => {
 
    // Only run handleScrollReachUp if initial render is complete
    if (initialRenderComplete.value) {
-    handleScrollReachUp(event, handleScrollUp);
+      handleScrollReachUp(event, handleScrollUp);
   }
 }
 
 const handleScrollUp = () => {
   refChatArea.value.scrollTo({
-    top: 150,
+    top: refChatArea.value.clientHeight,
   });
 }
 
@@ -144,11 +148,13 @@ watch(
     if (newId !== oldId && route.name === CHAT_ROUTE_NAMES.GROUP) {
       await chatStore.actionGetMessageListByChatId({chat:newId}, true);
       // make scroll down after loading new data
-      setTimeout(() => {
+       setTimeout(() => {
         handleScrollDown()
-      },10)
-      
+        initializeReadMessageObserver()
+      }, 10)
+      // every route change, reset context menu
       chatStore.selectedGroup = await chatStore.actionGetGroupChatById(newId);
+      chatStore.contextMenu = {}
     }
   }
 );
@@ -158,8 +164,10 @@ onMounted(async () => {
   const { count } = await chatStore.actionGetMessageListByChatId({ chat:route.params?.id }, true);
   hasNext.value = count > page.value * pageSize.value
   page.value += 1
-  refChatArea.value.scrollTop = refChatArea.value?.scrollHeight
-  handleScrollDown()
+   // make scroll down after loading new data
+   handleScrollDown()
+  // initialize read message observer to get correct ref values
+  initializeReadMessageObserver()
 })
 
 onMounted(() => {
@@ -175,7 +183,6 @@ onMounted(() => {
     initialRenderComplete.value = true;
   }, 500);
 })
-
 </script>
 <template>
  <div class="h-full relative">
@@ -199,7 +206,7 @@ onMounted(() => {
         </div>
       </div>
       <!-- message list -->
-      <div class="flex flex-col gap-1 h-full" v-if="!!chatStore.messageListByChatId.length">
+      <div ref="refMessagesContainer" class="flex flex-col gap-1 h-full" v-if="!!chatStore.messageListByChatId.length">
         <template v-for="(message, index) in chatStore.messageListByChatId" :key="message?.message_id">
           <template v-if="showDateByCalculate(index)">
               <ShowDate :classNames="{ 'mb-5': index == 0, 'my-5': index != 0}" :date="message.created_date" />
@@ -209,6 +216,8 @@ onMounted(() => {
             <template v-if="message?.message_type != MESSAGE_TYPES.TEXT && message?.message_type != MESSAGE_TYPES.LINK">
               <template v-if="message?.message_type == MESSAGE_TYPES.IMAGE">
                 <ChatImageItem
+                   ref="refMessageElements"
+                  :data-message-id="message?.message_id"
                   :index="index"
                   :message="message"
                   :handleClickEmoji="handleClickEmoji"
@@ -218,21 +227,25 @@ onMounted(() => {
               </template>
               <template v-else>
                 <ChatFileItem 
+                 ref="refMessageElements"
+                :data-message-id="message?.message_id"
                 :message="message"
                 :handleClickEmoji="handleClickEmoji"
                 :onShowContextMenu="onShowContextMenu" 
                 :onShowEmojiContextMenu="onShowEmojiContextMenu" 
-              /> 
+              />
               </template>
             </template>
             <template v-else>
               <OwnerText 
+                ref="refMessageElements"
+                :data-message-id="message?.message_id"
                 :handleClickEmoji="handleClickEmoji"
                 :onShowContextMenu="onShowContextMenu" 
                 :onShowEmojiContextMenu="onShowEmojiContextMenu" 
                 :message="message"
                 :index="index"
-              />          
+              />
             </template>
           </template>
           <!-- friend chat -->
@@ -240,6 +253,8 @@ onMounted(() => {
             <template v-if="message?.message_type != MESSAGE_TYPES.TEXT && message?.message_type != MESSAGE_TYPES.LINK">
               <template v-if="message?.message_type == MESSAGE_TYPES.IMAGE">
                 <FriendChatImageItem
+                  ref="refMessageElements"
+                  :data-message-id="message?.message_id"
                   :message="message"
                   :handleClickEmoji="handleClickEmoji"
                   :onShowContextMenu="onShowContextMenu"
@@ -250,6 +265,8 @@ onMounted(() => {
               </template>
               <template v-else>
                 <FriendChatFileItem 
+                  ref="refMessageElements"
+                 :data-message-id="message?.message_id"
                   :message="message"
                   :handleClickEmoji="handleClickEmoji"
                   :onShowContextMenu="onShowContextMenu"
@@ -261,6 +278,8 @@ onMounted(() => {
             </template>
             <template v-else>
               <FriendText 
+                ref="refMessageElements"
+                :data-message-id="message?.message_id"
                 :handleClickEmoji="handleClickEmoji"
                 :onShowContextMenu="onShowContextMenu" 
                 :onShowEmojiContextMenu="onShowEmojiContextMenu" 
