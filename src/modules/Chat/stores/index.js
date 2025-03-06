@@ -395,7 +395,13 @@ export const useChatStore = defineStore("chat-stores", {
     async actionGetMessageVideoFileList(params) {
       try {
         const response = await fetchGetMessageFilesList(params);
-        this.messageVideoFileList = response?.data
+        this.messageVideoFileList = response?.data.results?.map(item=>({
+          attachments: item?.attachments[0],
+          id: item?.id,
+          created_date: item?.created_date,
+          text: item?.text,
+          uploaded: true,
+        }))
         return response
       } catch(e) {
         console.log(e)
@@ -406,7 +412,13 @@ export const useChatStore = defineStore("chat-stores", {
     async actionGetMessageImageFileList(params) {
       try {
         const response= await fetchGetMessageFilesList(params);
-        this.messageImageFileList = response?.data
+        this.messageImageFileList = response?.data?.results?.map(item=>({
+          attachments: item?.attachments[0],
+          id: item?.id,
+          created_date: item?.created_date,
+          text: item?.text,
+          uploaded: true,
+        }))
         return response
       } catch(e) {
         console.log(e)
@@ -417,7 +429,13 @@ export const useChatStore = defineStore("chat-stores", {
     async actionGetMessageFileList(params) {
       try {
         const response= await fetchGetMessageFilesList(params);
-        this.messageFileList = response?.data
+        this.messageFileList = response?.data?.results?.map(item=>({
+          attachments: item?.attachments[0],
+          id: item?.id,
+          created_date: item?.created_date,
+          text: item?.text,
+          uploaded: true,
+        }))
         return response
       } catch(e) {
         console.log(e)
@@ -428,23 +446,18 @@ export const useChatStore = defineStore("chat-stores", {
     async actionGetMessageAudioFileList(params) {
       try {
         const response= await fetchGetMessageFilesList(params);
-        this.messageAudioFileList = response?.data
+        this.messageAudioFileList = response?.data?.results?.map(item=>({
+          attachments: item?.attachments[0],
+          id: item?.id,
+          created_date: item?.created_date,
+          text: item?.text,
+          uploaded: true,
+        }))
         return response
       } catch(e) {
         console.log(e)
       } finally {
       }
     },
-    /** */
-    async actionGetMessageAudioFileList(params) {
-      try {
-        const response= await fetchGetMessageFilesList(params);
-        this.messageAudioFileList = response?.data
-        return response
-      } catch(e) {
-        console.log(e)
-      } finally {
-      }
-    }
   }
 })

@@ -88,7 +88,7 @@ defineExpose({
           class="flex gap-4 items-center w-full bg-primary-400"
           >
             <div 
-              @click="downloadFile(props.message?.attachments?.file)" 
+              @click="downloadFile(props.message)" 
               class="p-[10px] rounded-lg !bg-primary-300">
               <base-iconify 
               :icon="fileTypes[props.message?.message_type]?.icon"
@@ -105,7 +105,7 @@ defineExpose({
               >{{ props.message?.size }}</p>
             </div>
             <base-iconify 
-              @click="downloadFile(props.message?.attachments?.file)" 
+              @click="downloadFile(props.message)" 
               v-if="props.message?.uploaded"
               :icon="DownloadMinimalisticIcon"
               class="!h-5 !w-5 !text-greyscale-90" 

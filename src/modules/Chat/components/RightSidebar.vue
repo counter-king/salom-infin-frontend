@@ -46,7 +46,7 @@ const activeFileMenu = computed(() => {
   }
 });
 
-const allFileCount = computed(() => (chatStore.messageFileList.results ?.length || 0) + (chatStore.messageImageFileList.results?.length || 0) + (chatStore.messageVideoFileList.results?.length || 0))
+const allFileCount = computed(() => (chatStore.messageFileList?.length || 0) + (chatStore.messageImageFileList?.length || 0) + (chatStore.messageVideoFileList?.length || 0))
 const isGroupDetail = computed(() => route.name == CHAT_ROUTE_NAMES.GROUP)
 // methods
 const handleClickGroupUsers = () => {

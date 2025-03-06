@@ -66,7 +66,7 @@ const menuItems = computed(()=> ([
      label: 'save-as',
      iconName: DownloadMinimalisticIcon,
      command: () => {      
-      downloadFile(chatStore.contextMenu.tempMessage?.attachments?.file)
+      downloadFile(chatStore.contextMenu.tempMessage)
       }
      } 
     ] : []

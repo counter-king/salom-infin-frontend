@@ -32,8 +32,8 @@ const containerRef = ref(null)
 useInfiniteScroll({ fetchFn: chatStore.actionGetMessageFileList, containerRef, params: { page: 1, page_size: 10, chat:route.params?.id, type: MESSAGE_TYPES.FILE }})
 
 const showDateByCalculate = (index) => {
-  const previouMessageCreatedDate = chatStore.messageFileList.results[index - 1]?.created_date
-  const nowMessageCreatedDate = chatStore.messageFileList.results[index]?.created_date
+  const previouMessageCreatedDate = chatStore.messageFileList[index - 1]?.created_date
+  const nowMessageCreatedDate = chatStore.messageFileList[index]?.created_date
   if(formatDay(nowMessageCreatedDate) != formatDay(previouMessageCreatedDate)){
     return true
   } else {
@@ -65,10 +65,10 @@ const showDateByCalculate = (index) => {
       <template v-else>
         <Empty 
           wrapperClass="!shadow-none mt-4"
-          v-if="chatStore.messageFileList?.results?.length == 0" 
+          v-if="chatStore.messageFileList?.length == 0" 
           title="no-data"  
         />
-        <template v-for="(message, index) in chatStore.messageFileList?.results || []" :key="index">
+        <template v-for="(message, index) in chatStore.messageFileList || []" :key="index">
           <!-- date -->
           <div v-if="showDateByCalculate(index)" class="pl-2 text-sm font-medium text-greyscale-500">{{ formatDateMonthWithDay(message?.created_date) }}</div>
           <FileItemDetail :message="message" :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500'}" :left-icon="{ name: FileTextBoldIcon, class: 'text-warning-500' }"/>

@@ -33,8 +33,8 @@ const containerRef = ref(null)
 useInfiniteScroll({ fetchFn: chatStore.actionGetMessageVideoFileList, containerRef, params: { page: 1, page_size: 3, chat:route.params?.id, type: MESSAGE_TYPES.VIDEO }})
 
 const showDateByCalculate = (index) => {
-  const previouMessageCreatedDate = chatStore.messageVideoFileList.results[index - 1]?.created_date
-  const nowMessageCreatedDate = chatStore.messageVideoFileList.results[index]?.created_date
+  const previouMessageCreatedDate = chatStore.messageVideoFileList[index - 1]?.created_date
+  const nowMessageCreatedDate = chatStore.messageVideoFileList[index]?.created_date
   if(formatDay(nowMessageCreatedDate) != formatDay(previouMessageCreatedDate)){
     return true
   } else {
@@ -66,12 +66,12 @@ const showDateByCalculate = (index) => {
       <template v-else>
         <EmptyData 
           wrapperClass="!shadow-none mt-4"
-          v-if="!chatStore.messageVideoFileList.results?.length" 
+          v-if="!chatStore.messageVideoFileList?.length" 
           title="no-data"  
         />
-        <template v-for="(message, index) in chatStore.messageVideoFileList.results || []" :key="index">
+        <template v-for="(message, index) in chatStore.messageVideoFileList || []" :key="index">
           <div v-if="showDateByCalculate(index)" class="pl-2 text-sm font-medium text-greyscale-500">{{ formatDateMonthWithDay(message.created_date) }}</div>
-          <FileItemDetail :message="message" :right-icon="{ name: DownloadMinimalisticIcon, class: 'text-greyscale-500' }" :left-icon="{ name: ClapperboardPlayBoldIcon, class: 'text-success-500' }"/>
+          <FileItemDetail :message="message" :left-icon="{ name: ClapperboardPlayBoldIcon, class: 'text-success-500' }"/>
         </template>
       </template>
     </div>

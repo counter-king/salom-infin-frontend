@@ -38,7 +38,7 @@ const props = defineProps({
          @click="()=>props.onClickFun(COMPONENT_TYPES.DOCUMENTS)"
          :info="{
           title: 'documents',
-          count: chatStore.messageFileList.results?.length,
+          count: chatStore.messageFileList?.length,
       }"
       :left-icon="{ name: FileTextBoldIcon, class: 'text-warning-500' }"
       :right-icon="{ name: ChevronUp20SolidIcon, class: 'text-greyscale-500 transform rotate-90' }"
@@ -47,7 +47,7 @@ const props = defineProps({
       @click="()=>props.onClickFun(COMPONENT_TYPES.VIDEOS)"
       :info="{
         title: 'video',
-        count: chatStore.messageVideoFileList.results?.length,
+        count: chatStore.messageVideoFileList?.length,
         size: '11'
       }"
       :left-icon="{ name: ClapperboardPlayBoldIcon, class: 'text-success-500' }"
@@ -57,7 +57,7 @@ const props = defineProps({
       @click="()=>props.onClickFun(COMPONENT_TYPES.IMAGES)"
       :info="{
         title: 'images',
-        count: chatStore.messageImageFileList.results?.length,
+        count: chatStore.messageImageFileList?.length,
       }"
       :left-icon="{ name: GalleryBoldIcon, class: 'text-critic-500' }"
       :right-icon="{ name: ChevronUp20SolidIcon, class: 'text-greyscale-500 transform rotate-90' }"
