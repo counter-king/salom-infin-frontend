@@ -1,5 +1,6 @@
 <script setup>
 // core
+import { useI18n } from 'vue-i18n';
 import { onMounted, ref, useAttrs } from 'vue';
 // components
 import ClickedStiker from './ClickedStiker.vue';
@@ -10,13 +11,10 @@ import { formatHour } from '@/utils/formatDate';
 import { dispatchNotify } from '@/utils/notify';
 // enums
 import { COLOR_TYPES } from '@/enums';
-import { fetchBlobFile } from '@/services/file.service';
-import Galleria from 'primevue/galleria';
 // store
 import { useChatStore } from '../../stores';
-import { MESSAGE_TYPES } from '../../constatns';
-import { useI18n } from 'vue-i18n';
 // services
+import { fetchBlobFile } from '@/services/file.service';
 
 const chatStore = useChatStore();
 
@@ -33,6 +31,9 @@ const props = defineProps({
   onShowContextMenu: {
     type: Function
   },
+  handleClickImage : {
+    type: Function
+  },
   uploaded: {
     type: Boolean,
     default: false
@@ -47,8 +48,6 @@ const props = defineProps({
 const { t } = useI18n();
 // reactives
 const loading = ref(false);
-const activeIndex = ref(0);
-const isGalleriaVisible = ref(false);
 const forwardedRef = ref(null);
 const attrs = useAttrs();
 
@@ -98,7 +97,7 @@ defineExpose({
       </div>
       <!-- image -->
       <div
-        @click="isGalleriaVisible = true"
+        @click="props.handleClickImage(props.message)"
         @contextmenu.prevent="(e)=>props.onShowContextMenu(e, props.message)"
         class="flex flex-col gap-2 p-2 cursor-pointer rounded-xl max-w-[300px] min-w-[64px] bg-white"
         >
@@ -143,25 +142,6 @@ defineExpose({
     </template>
    </div>
  </div>
-  <Galleria 
-    v-model:activeIndex="activeIndex"
-    v-model:visible="isGalleriaVisible"
-    :value="chatStore.messageListByChatId?.filter(item=>item?.message_type == MESSAGE_TYPES.IMAGE)?.map(item=>item?.attachments?.file?.url)"
-    containerStyle="max-width: 850px"
-    :circular="true" :fullScreen="true"
-    :showItemNavigators="true"
-    :showThumbnails="false"
-    >
-    <template #item="slotProps">
-      <div class="h-[500px] rounded-xl overflow-hidden">
-        <img
-          :src="slotProps.item"
-          :alt="slotProps.item?.alt"
-          class="w-full h-full object-contain"
-        />
-      </div>
-    </template>
-  </Galleria>
 </template>
 <style scoped>
 </style>

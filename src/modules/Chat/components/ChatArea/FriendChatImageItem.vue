@@ -11,7 +11,6 @@ import { dispatchNotify } from '@/utils/notify';
 // enums
 import { COLOR_TYPES } from '@/enums';
 import { fetchBlobFile } from '@/services/file.service';
-import Galleria from 'primevue/galleria';
 // store
 import { useChatStore } from '../../stores';
 import { MESSAGE_TYPES } from '../../constatns';
@@ -33,6 +32,9 @@ const props = defineProps({
   onShowContextMenu: {
     type: Function
   },
+  handleClickImage : {
+    type: Function
+  },
   uploaded: {
     type: Boolean,
     default: false
@@ -52,8 +54,6 @@ const props = defineProps({
 const { t } = useI18n();
 // reactives
 const loading = ref(false);
-const activeIndex = ref(0);
-const isGalleriaVisible = ref(false);
 const attrs = useAttrs();
 const forwardedRef = ref(null);
 
@@ -108,8 +108,7 @@ onMounted(async() => {
         </div>
         <!-- image -->
         <div
-          @click="isGalleriaVisible = true"
-          class=""
+          @click="props.handleClickImage(props.message)"
           >
           <BaseSpinner 
             v-if="loading"
@@ -133,7 +132,7 @@ onMounted(async() => {
       <p  class="text-xs font-medium text-greyscale-500 self-end">{{ formatHour(props.message?.created_date) }}</p>
     </div>
     <!-- reactions -->
-    <div v-if="Object.keys(props.message.reactions).length" class="flex gap-1">
+    <div v-if="props.message?.reactions && Object.keys(props.message.reactions).length" class="flex gap-1">
       <template v-for="reaction in Object.keys(props.message.reactions)" :key="reaction">
         <ClickedStiker 
           @click="props.handleClickEmoji(reaction, message.message_id)"
@@ -145,25 +144,6 @@ onMounted(async() => {
     </div>
   </div>
  </div>
- <Galleria
-    v-model:activeIndex="activeIndex"
-    v-model:visible="isGalleriaVisible"
-    :value="chatStore.messageListByChatId?.filter(item=>item?.message_type == MESSAGE_TYPES.IMAGE)?.map(item=>item?.attachments?.file?.url)"
-    containerStyle="max-width: 850px"
-    :circular="true" :fullScreen="true"
-    :showItemNavigators="true"
-    :showThumbnails="false"
-    >
-    <template #item="slotProps">
-      <div class="h-[500px] rounded-xl overflow-hidden">
-        <img
-          :src="slotProps.item"
-          :alt="slotProps.item?.alt"
-          class="w-full h-full object-contain"
-        />
-      </div>
-    </template>
-  </Galleria>
 </template>
 <style scoped>
 </style>

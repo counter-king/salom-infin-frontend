@@ -6,6 +6,13 @@ const props = defineProps({
  message: {
   type: Object
  },
+ type: {
+  type: String,
+  default: 'owner',
+  validator: (value) => {
+    return ['owner', 'friend'].includes(value);
+  } 
+  }
 })
 
 // https:// or http:// regular  pattern 
@@ -33,7 +40,7 @@ messageSplitArray.forEach((item) => {
 <template>
  <template v-for="(item, index) in formattedMessageSplitArray" :key="index">
     <template v-if="item.type == MESSAGE_TYPES.LINK">
-      <a class="underline cursor-pointer"  :href="item.content" target="_blank"> {{ item.content }} </a>
+      <a class="underline cursor-pointer" :class="{'text-primary-500': type == 'friend'}"  :href="item.content" target="_blank"> {{ item.content }} </a>
     </template>
     <template v-else>
         {{ item.content }}

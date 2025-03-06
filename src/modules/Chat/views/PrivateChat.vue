@@ -1,6 +1,6 @@
 <script setup>
 // cores
-import { inject, nextTick, onMounted, ref, watch } from 'vue';
+import { computed, inject, nextTick, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 // componennts
@@ -10,6 +10,7 @@ import { ShowDate } from '../components/ChatArea';
 import SendMessage from '../components/ChatArea/SendMessage.vue';
 import ScrollDownButton from '../components/ChatArea/ScrollDownButton.vue';
 import DeleteDialog from '../components/DeleteDialog.vue';
+import Galleria from 'primevue/galleria';
 // services 
 import FileUploadProgress from '../components/ChatArea/FileUploadProgress.vue';
 import ContextMenu from '../components/ChatArea/ContextMenu.vue';
@@ -47,10 +48,14 @@ const refEmojiContextMenu = ref(null);
 const emojiMenuItems = ref([]);
 const inputSendMessageHeight = ref(90);
 const initialRenderComplete = ref(false);
+const activeImageIndex = ref(0);
+const isGalleriaVisible = ref(false);
+// computed
+const getImageListByFilter = computed(()=> chatStore.messageListByChatId?.filter(item=>item?.message_type == MESSAGE_TYPES.IMAGE))
+const imageGalleriaValues = computed(() => getImageListByFilter?.value?.map(item=>item?.attachments?.file?.url))
 
 // inject
 const refChatArea = inject("refChatArea");
-
 // methods
 // when scroll down, scrollDwonButton will be visible
 const handleScroll = (event) => {
@@ -115,6 +120,14 @@ const onHandleDeleteMessage = () => {
 const onClickChatArea = () => {
   if(refSendMessage.value){
     refSendMessage.value.refInput.$el.focus()
+  }
+}
+
+const handleClickImage = (message) => {
+  isGalleriaVisible.value = true;
+  const clickedImageIndex = getImageListByFilter?.value?.findIndex(item=> item?.message_id == message?.message_id)
+  if(clickedImageIndex != -1){
+    activeImageIndex.value = clickedImageIndex
   }
 }
 
@@ -217,6 +230,7 @@ onMounted(() => {
             <template v-if="message?.message_type != MESSAGE_TYPES.TEXT && message?.message_type != MESSAGE_TYPES.LINK">
               <template v-if="message?.message_type == MESSAGE_TYPES.IMAGE">
                 <ChatImageItem
+                  :handleClickImage="handleClickImage"
                    ref="refMessageElements"
                   :data-message-id="message?.message_id"
                   :index="index"
@@ -255,6 +269,7 @@ onMounted(() => {
               <template v-if="message?.message_type == MESSAGE_TYPES.IMAGE">
                 <FriendChatImageItem
                   ref="refMessageElements"
+                  :handleClickImage="handleClickImage"
                   :data-message-id="message?.message_id"
                   :message="message"
                   :handleClickEmoji="handleClickEmoji"
@@ -262,6 +277,7 @@ onMounted(() => {
                   :onShowEmojiContextMenu="onShowEmojiContextMenu"
                   :avatarVisible="showFriendTextAvatar(index)"
                   :classNames="[{ 'mt-5': showFriendTextAvatar(index) }]"
+
                 />
               </template>
               <template v-else>
@@ -284,14 +300,13 @@ onMounted(() => {
                 :handleClickEmoji="handleClickEmoji"
                 :onShowContextMenu="onShowContextMenu" 
                 :onShowEmojiContextMenu="onShowEmojiContextMenu" 
-                :avatarVisible="showFriendTextAvatar(index)" 
+                :avatarVisible="showFriendTextAvatar(index) && false" 
                 :message="message"
-                :classNames="[{ 'mt-5': showFriendTextAvatar(index) }]"
+                :classNames="[{ 'mt-5 block first:hidden': showFriendTextAvatar(index) }]"
               />
           </template>
         </template>
         </template>
-       
         <template v-for="(message, index) in chatStore.uploadingFiles" :key="index"> 
           <ChatFileItem 
             :message="message"
@@ -347,4 +362,23 @@ onMounted(() => {
     :isDeleteLoading="chatStore.deleteMessageByIdLoading"
   />
 </div>
+<Galleria 
+  v-model:activeIndex="activeImageIndex"
+  v-model:visible="isGalleriaVisible"
+  :value="imageGalleriaValues"
+  containerStyle="max-width: 850px"
+  :circular="true" :fullScreen="true"
+  :showItemNavigators="true"
+  :showThumbnails="false"
+  >
+  <template #item="slotProps">
+    <div class="h-[500px] rounded-xl overflow-hidden">
+      <img
+        :src="slotProps.item"
+        :alt="slotProps.item?.alt"
+        class="w-full h-full object-contain"
+      />
+    </div>
+  </template>
+</Galleria>
 </template>

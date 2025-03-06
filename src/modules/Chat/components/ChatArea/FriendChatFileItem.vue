@@ -6,7 +6,7 @@ import { useI18n } from 'vue-i18n';
 import ClickedStiker from './ClickedStiker.vue';
 // contants
 import { formatHour } from '@/utils/formatDate';
-import { DownloadMinimalisticIcon, CheckIcon, PenBoldIcon } from '@/components/Icons';
+import { DownloadMinimalisticIcon, PenBoldIcon } from '@/components/Icons';
 import { downloadFile } from '../../services/file.service';
 import { fileTypes } from '../../constatns';
 // composables
@@ -81,7 +81,9 @@ defineExpose({
           <div 
             class="flex gap-4 p-2 pr-4 rounded-xl items-center w-full bg-white-400/[40%]"
             >
-              <div class="p-[10px] bg-greyscale-50 rounded-lg">
+              <div
+                 @click="downloadFile(props.message?.attachments?.file)" 
+                 class="p-[10px] bg-greyscale-50 rounded-lg group">
                 <base-iconify 
                   :icon="fileTypes[props.message?.message_type]?.icon"
                   class="!h-5 !w-5" 

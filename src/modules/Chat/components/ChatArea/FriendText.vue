@@ -78,7 +78,7 @@ defineExpose({
             </div>
             <!-- text -->
             <p class="text-sm font-medium text-greyscale-900 whitespace-pre-line break-all">
-              <LinkMessage v-if="props.message?.message_type == MESSAGE_TYPES.LINK" :message="props.message" />
+              <LinkMessage v-if="props.message?.message_type == MESSAGE_TYPES.LINK" type="friend" :message="props.message" />
               <span v-else>{{ props.message?.text }}</span>
             </p>
              <!-- edit -->

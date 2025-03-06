@@ -15,6 +15,7 @@ import { useChatStore } from "@/modules/Chat/stores";
 import { useAuthStore } from '@/modules/Auth/stores';
 // constatns
 import { CHAT_ROUTE_NAMES } from '../constatns';
+import TypingAnimation from './ChatArea/TypingAnimation.vue';
 
 const chatStore = useChatStore();
 const authStore = useAuthStore()
@@ -126,7 +127,7 @@ watch(createGroupDialogVisible, () => {
         </div>
         <div class="flex flex-col ml-3">
           <div class="text-base font-semibold select-none">{{ isGroupDetail ? chatStore.selectedGroup?.title : chatStore.selectedUser?.full_name}}</div>
-          <div v-if="isUserTypingInCurrentChat" class="text-sm font-medium text-success-500 select-none">{{route.name == CHAT_ROUTE_NAMES.GROUP ? typingUserName : ''}} typing ... </div>
+          <div v-if="isUserTypingInCurrentChat" class="text-sm font-medium text-success-500 select-none">{{route.name == CHAT_ROUTE_NAMES.GROUP ? typingUserName : ''}} <TypingAnimation/> </div>
           <div v-else class="text-sm font-medium text-greyscale-500 select-none">{{ isGroupDetail ? t('members', { count: chatStore.selectedGroup?.members?.length}) : chatStore.selectedUser?.position}}</div>
         </div>
       </div>
