@@ -40,7 +40,7 @@ const props = defineProps({
        />
     </div>
     <div class="grow flex flex-col gap-1 select-none">
-      <h3 class="text-sm font-semibold text-greyscale-900 capitalize line-clamp-1 max-w-[188px]">{{t(props.message?.text) }} {{ props.message?.text }}{{ props.message?.text }}</h3>
+      <h3 class="text-sm font-semibold text-greyscale-900 capitalize line-clamp-1 max-w-[188px]">{{t(props.message?.text) }}</h3>
       <!-- <p class="text-xs text-greyscale-500">{{ t('chat-info-file',{count: props.file.count}) }}</p> -->
     </div>
     <div class="p-2" @click="downloadFile(props.message?.attachments[0]?.file)" >
