@@ -101,7 +101,7 @@ defineExpose({
       </div>
     </div>
     <!-- reactions -->
-    <div v-if="props.message.reactions &&Object.keys(props.message.reactions).length" class="flex gap-1">
+    <div v-if="props.message.reactions && Object.keys(props.message.reactions).length" class="flex gap-1">
       <template v-for="reaction in Object.keys(props.message.reactions)" :key="reaction">
         <ClickedStiker 
           @click="props.handleClickEmoji(reaction, message.message_id)"

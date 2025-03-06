@@ -161,6 +161,7 @@ const onChangeInput = () => {
   sendMessageIsTyping()
   sendChatHandshake()
 }
+
 // when emoji selected
 const handleSelectEmoji = (e) => {
     message.value +=e.i;

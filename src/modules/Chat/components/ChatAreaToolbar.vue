@@ -57,7 +57,7 @@ const isUserTypingInCurrentChat = computed(() => {
 // Get the name of typing user
 const typingUserName = computed(() => {
   const typingUser = Object.values(chatStore.typingUsers).find(item => item.chat_id == route.params?.id);
-  return typingUser ? typingUser.user?.full_name : '';
+  return typingUser ? typingUser.user?.first_name : '';
 });
 
 // injects
@@ -81,12 +81,12 @@ const onDeleteChat = async () => {
   if(route.name == CHAT_ROUTE_NAMES.GROUP){
     await fetchDeleteGroupChatById(chatStore.selectedGroup?.chat_id)
     chatStore.selectedGroup = null
-    router.push({name: CHAT_ROUTE_NAMES.CHAT_INDEX})
+    router.push({name: CHAT_ROUTE_NAMES.CHAT_INDEX, query :{ tab: "group"} })
     chatStore.actionGetGroupChatList()  
   } else if(route.name == CHAT_ROUTE_NAMES.PRIVATE){
     await fetchDeletePrivateChatById(chatStore.selectedUser?.chat_id)
     chatStore.selectedUser = null
-    router.push({name: CHAT_ROUTE_NAMES.CHAT_INDEX})
+    router.push({name: CHAT_ROUTE_NAMES.CHAT_INDEX, query :{ tab: undefined} })
     chatStore.actionGetPrivateChatList()
   }
   

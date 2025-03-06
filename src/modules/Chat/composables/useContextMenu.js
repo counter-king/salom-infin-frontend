@@ -13,10 +13,13 @@ import { COLOR_TYPES } from "@/enums";
 import { socket } from "@/services/socket";
 // constants
 import { CHAT_ROUTE_NAMES, CHAT_TYPES, MESSAGE_TYPES } from "../constatns";
+// services
 import { downloadFile } from "../services/file.service";
+// store
+import { useAuthStore } from "@/modules/Auth/stores";
 
 const chatStore = useChatStore()
-
+const authStore = useAuthStore()
 export const useContextMenu = () => {
 const route = useRoute()
 const { send } = socket
@@ -50,13 +53,13 @@ const menuItems = computed(()=> ([
       chatStore.contextMenu = { ...chatStore.contextMenu, message: chatStore.contextMenu.tempMessage, replay: true, edit: false }
      } 
    },
-   { 
+   ...(chatStore.contextMenu?.tempMessage?.sender?.id == authStore.currentUser?.id ? [{ 
       label: 'update',
       iconName: PenIcon,
       command: () => {
         chatStore.contextMenu = { ...chatStore.contextMenu, message: chatStore.contextMenu.tempMessage, replay: false, edit: true }
       } 
-    },
+    }] : []),
    ...(
     [MESSAGE_TYPES.FILE, MESSAGE_TYPES.IMAGE, MESSAGE_TYPES.VIDEO, MESSAGE_TYPES.AUDIO].includes(chatStore.contextMenu?.tempMessage?.message_type) ? [
      { 
@@ -80,7 +83,7 @@ const menuItems = computed(()=> ([
       }
      } 
    },
-   { 
+   ...(chatStore.contextMenu?.tempMessage?.sender?.id == authStore.currentUser?.id ? [{ 
      label: 'delete',
      iconName: TrashBinTrashIcon,
      command: () => {      
@@ -88,7 +91,7 @@ const menuItems = computed(()=> ([
       chatStore.contextMenu = { message: chatStore.contextMenu.tempMessage, replay: false, edit: false, deleteDialog: true }
      },
      class: "!text-critic-500"
-   }
+   }]: [])
 ]))
 
  return {

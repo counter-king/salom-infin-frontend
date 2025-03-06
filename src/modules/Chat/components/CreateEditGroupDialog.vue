@@ -3,6 +3,7 @@
 import { computed, onMounted, reactive, ref, useModel } from 'vue';
 import { helpers, required } from '@vuelidate/validators';
 import useVuelidate from '@vuelidate/core';
+import { useRouter } from 'vue-router';
 // components
 import BaseDialog from '@/components/UI/BaseDialog.vue';
 import { CameraBoldIcon, PenIcon, TrashBinTrashIcon } from '@/components/Icons';
@@ -18,6 +19,9 @@ import { fetchCreateGroupChat, fetchEditGroupChat } from '../services';
 import { fetchBlobFile } from '@/services/file.service';
 // store
 import { useChatStore } from '../stores';
+// constants
+import { CHAT_ROUTE_NAMES } from '../constatns';
+
 // props
 const props = defineProps({
  modelValue: {
@@ -37,7 +41,7 @@ const props = defineProps({
 });
 
 const chatStore = useChatStore();
-
+const router = useRouter();
 // reactives
 const refContextMenu = ref(null);
 const refFileInput = ref(null);
@@ -65,11 +69,12 @@ const emit = defineEmits(['update:modelValue']);
 // methods
 const onSubmit = async () => {
   const isValid = await $v.value.$validate();
-  
+
   if(!isValid) return;
   if(props.type === 'create') {
-   await fetchCreateGroupChat({images:[{image: uploadingFiles.value[0]?.id}], title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
-    chatStore.actionGetGroupChatList();
+   const { data } = await fetchCreateGroupChat({images:[{image: uploadingFiles.value[0]?.id}], title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
+   router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: data?.id }, query :{ tab: 'group'} })
+   chatStore.actionGetGroupChatList();
   } else if(props.type === 'edit') {
     await fetchEditGroupChat(chatStore.selectedGroup?.chat_id, { images: uploadingFiles.value[0]?.id ?[{ image: uploadingFiles.value[0]?.id }]: undefined, title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
     chatStore.actionGetGroupChatList();

@@ -17,8 +17,7 @@ import {
 // constants  
 import { CHAT_TYPES, collectionStikers, MESSAGE_TYPES } from "../constatns";
 import { useAuthStore } from "@/modules/Auth/stores";
-import { dispatchNotify } from "@/utils/notify";
-import { COLOR_TYPES } from "@/enums";
+
 import { fetchBlobFile } from "@/services/file.service";
 import { fetchGetMessageFilesList, fetchGetMessageLinkList } from "../services";
 
@@ -344,7 +343,7 @@ export const useChatStore = defineStore("chat-stores", {
         // checking has next page
         return data
       } catch(e){
-        dispatchNotify(null, e, COLOR_TYPES.ERROR)
+        console.log(e)
       } 
     },
     /** */
@@ -354,7 +353,7 @@ export const useChatStore = defineStore("chat-stores", {
         await fetchDeleteMessageById(id)
         this.contextMenu.deleteDialog = false;
       } catch(e) {
-        dispatchNotify(null, e, COLOR_TYPES.ERROR)
+        console.log(e)
       } finally{
         this.deleteMessageByIdLoading = false;
       }
@@ -365,7 +364,7 @@ export const useChatStore = defineStore("chat-stores", {
         await fetchEditMessageById(id, body)
         this.contextMenu.edit = false;
       } catch(e) {
-        dispatchNotify(null, e, COLOR_TYPES.ERROR)
+        console.log(e)
       } finally {  
       }
     },
@@ -386,7 +385,7 @@ export const useChatStore = defineStore("chat-stores", {
         this.messageLinkListMoreLoading = false;
         return response
       } catch(e) {
-        dispatchNotify(null, e, COLOR_TYPES.ERROR)
+        console.log(e)
       } finally {
           this.messageLinkListLoading = false;
           this.messageLinkListMoreLoading = false;
@@ -399,7 +398,7 @@ export const useChatStore = defineStore("chat-stores", {
         this.messageVideoFileList = response?.data
         return response
       } catch(e) {
-        dispatchNotify(null, e, COLOR_TYPES.ERROR)
+        console.log(e)
       } finally {
       }
     },
@@ -410,7 +409,7 @@ export const useChatStore = defineStore("chat-stores", {
         this.messageImageFileList = response?.data
         return response
       } catch(e) {
-        dispatchNotify(null, e, COLOR_TYPES.ERROR)
+        console.log(e)
       } finally {
       }
     },
@@ -421,7 +420,7 @@ export const useChatStore = defineStore("chat-stores", {
         this.messageFileList = response?.data
         return response
       } catch(e) {
-        dispatchNotify(null, e, COLOR_TYPES.ERROR)
+        console.log(e)
       } finally {
       }
     },
@@ -432,7 +431,7 @@ export const useChatStore = defineStore("chat-stores", {
         this.messageAudioFileList = response?.data
         return response
       } catch(e) {
-        dispatchNotify(null, e, COLOR_TYPES.ERROR)
+        console.log(e)
       } finally {
       }
     },
@@ -443,7 +442,7 @@ export const useChatStore = defineStore("chat-stores", {
         this.messageAudioFileList = response?.data
         return response
       } catch(e) {
-        dispatchNotify(null, e, COLOR_TYPES.ERROR)
+        console.log(e)
       } finally {
       }
     }

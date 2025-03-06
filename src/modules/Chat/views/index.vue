@@ -2,7 +2,7 @@
 // core
 import { useI18n } from "vue-i18n";
 import { computed, onBeforeUnmount, onMounted, provide, ref, watch } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 // components
 import { ChatAreWrapper, LeftSidebar, RightSidebar } from "@/modules/Chat/components";
 // socket
@@ -16,6 +16,7 @@ import 'vue3-emoji-picker/css'
 
 const { t } = useI18n();
 const route = useRoute();
+const router = useRouter();
 const chatStore = useChatStore();
 const allowedPages = ['ChatPrivateDetail','ChatGroupDetail']
 const { status, data, send } = socket
@@ -56,7 +57,7 @@ watch(status, (newStatus) => {
 // Kelgan ma'lumotlarni kuzatish
 watch(data, (newData) => {
   newData = JSON.parse(newData);
-  // console.log("ewasd",newData);
+  console.log("ewasd",newData);
   if(newData.command == WEBCOCKET_EVENTS.USER_HANDSHAKE) {
     // console.log("user hand",newData);
   }
@@ -64,10 +65,11 @@ watch(data, (newData) => {
     // console.log("chat hand",newData);
   }
   else if(newData.type == WEBCOCKET_EVENTS.NEW_MESSAGE) {    
-    if(newData.chat_type == CHAT_TYPES.PRIVATE){     
-      // if user doen't exist in the list then add it
-      if(!chatStore.privateChatList.some(item=> item.chat_id == newData.chat_id)){
-        chatStore.privateChatList.unshift({
+    const isPrivate = newData.chat_type == CHAT_TYPES.PRIVATE
+    const chatList = isPrivate ? chatStore.privateChatList : chatStore.groupChatList
+
+    if(!chatList.some(item=> item.chat_id == newData.chat_id)){
+        chatStore.isPrivate.unshift({
           first_name: newData.sender?.first_name,
           full_name: newData.sender?.full_name,
           position: newData.sender?.position?.name,
@@ -77,11 +79,17 @@ watch(data, (newData) => {
           last_message: newData.text,
           last_message_date: newData.created_date,
           last_message_type: newData.message_type,
-          type: CHAT_TYPES.PRIVATE,
+          type: newData.chat_type,
           unread_count: 0
         })
       }
-      chatStore.uploadingFiles = chatStore.uploadingFiles.filter(item=> item?.attachments?.file?.id != newData?.files[0]?.id) 
+
+       // Yuborilgan fayllarni olib tashlash
+      chatStore.uploadingFiles = chatStore.uploadingFiles.filter(
+        item => item?.attachments?.file?.id !== newData?.files[0]?.id
+      );
+
+       // Yangi xabarni ro‘yxatga qo‘shish
       chatStore.messageListByChatId.push({
         attachments: { file: newData?.files[0] },
         chat_id: newData.chat_id,
@@ -94,64 +102,15 @@ watch(data, (newData) => {
         sender: newData.sender,
         text: newData.text,
         message_type: newData.message_type,
-        reactions: [],
-        chat_type: newData.chat_type,
-        uploaded: true,
-      })
-    
-      // set last message to privatelist chat
-      const privateChat = chatStore.privateChatList.find(item=> item.chat_id == newData.chat_id)
-      if(privateChat){
-        privateChat.last_message = newData.text
-      }
-      // set group chat last message
-    } 
-    // chat_type == group
-    else {
-      // if user doen't exist in the list then add it
-      if(!chatStore.groupChatList.some(item=> item.chat_id == newData.chat_id)){
-        chatStore.groupChatList.unshift({
-          first_name: newData.sender?.first_name,
-          full_name: newData.sender?.full_name,
-          position: newData.sender?.position?.name,
-          chat_id: newData.chat_id,
-          color: newData.sender?.color,
-          avatar: newData.sender?.avatar,
-          last_message: newData.text,
-          last_message_date: newData.created_date,
-          last_message_type: newData.message_type,
-          type: CHAT_TYPES.GROUP,
-          unread_count: 0
-        })
-      }
-      // remove uploaded file from uploading skeleton list
-      chatStore.uploadingFiles = chatStore.uploadingFiles.filter(item=> item?.attachments?.file?.id != newData?.files[0]?.id) 
-      // add new message to message list
-      chatStore.messageListByChatId.push({
-        attachments: { file: newData?.files[0] },
-        chat_id: newData.chat_id,
-        created_date: newData.created_date,
-        edited: newData.edited,
-        message_id: newData.message_id,
-        modified_date: newData.modified_date,
-        replied_to: newData.replied_to,
-        sender: newData.sender,
-        is_read: newData.is_read,
-        text: newData.text,
-        message_type: newData.message_type,
         chat_type: newData.chat_type,
         uploaded: true,
         reactions: [],
-      })
-      // set last message to grouplist chat
-      let groupChat = chatStore.messageListByChatId.find(item=> item.message_id == newData.message_id)
-      if(groupChat){
-        groupChat.last_message = newData.text
-      }
-    }
-    setTimeout(() => {
-      handleScrollDownSmooth()
-    }, 1);
+      });
+       // Oxirgi xabarni yangilash
+      const chat = chatList.find(item => item.chat_id == newData.chat_id);
+      if (chat && isPrivate) chat.last_message = newData.text;
+      if (chat && !isPrivate) chat.last_message = {sender: newData.sender, text: newData.text}
+    setTimeout(handleScrollDownSmooth,1);
   }
   else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_DELETED) {    
     chatStore.messageListByChatId = chatStore.messageListByChatId.filter(item=> item.message_id != newData?.content?.message_id)
@@ -222,8 +181,16 @@ watch(data, (newData) => {
   }
   else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_READ) {
     const message = chatStore.messageListByChatId.find(item=> item.message_id == newData?.message_id)
-    if(message.sender?.id != newData?.user?.id){
-      message.is_read = true
+    if(message?.sender?.id != newData?.user?.id){
+      if(message?.is_read == false){
+        message.is_read = true
+      }
+    }
+  }
+  else if(newData.type == WEBCOCKET_EVENTS.CHAT_DELETED) {
+    chatStore.groupChatList = chatStore.groupChatList.filter(item=> item.chat_id != newData?.content.chat_id)
+    if(route.params?.id == newData?.content.chat_id){
+      router.push({ name: CHAT_ROUTE_NAMES.CHAT_INDEX, query : { tab: newData?.content.chat_type == CHAT_TYPES.GROUP ? 'group' : undefined } })
     }
   }
 });

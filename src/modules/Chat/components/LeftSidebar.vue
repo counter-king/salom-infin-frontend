@@ -14,7 +14,7 @@ import { MagniferIcon, Plus20SolidIcon, UserRoundedBoldIcon, UsersGroupTwoRounde
 // store
 import { useChatStore } from "@/modules/Chat/stores";
 // constatns
-import { CHAT_ROUTE_NAMES, CHAT_TYPES, MESSAGE_TYPES } from "../constatns";
+import { CHAT_ROUTE_NAMES} from "../constatns";
 // composables
 import { useInfiniteScroll } from "../composables/useInfiniteScroll";
 
@@ -22,10 +22,14 @@ const { t } = useI18n();
 const chatStore = useChatStore();
 const router = useRouter();
 const route = useRoute();
+
 // reactive
 const searchInput = ref(null);
 const createGroupDialogVisible = ref(false);
-const activeTabIndex= computed(() => route.name == CHAT_ROUTE_NAMES.PRIVATE ? 0 : route.name == CHAT_ROUTE_NAMES.GROUP ? 1 : 0);
+const activeTabIndex= computed({
+  get: () => !route.query.tab ? 0 : route.query.tab == "group" ? 1 : 0, 
+  set: () => {}
+});
 
 // provides/injects
 const inputSendMessasgeRef = inject("inputSendMessasgeRef");
@@ -53,9 +57,11 @@ const tabPanelList = [
 const onTabChange = async (val) => {
   if (val.index === 0) {
     await chatStore.actionGetPrivateChatList({});
+    router.push({query :{ tab: undefined} })
   }
   else if (val.index === 1) {
     await chatStore.actionGetGroupChatList({});
+    router.push({query :{ tab: 'group'} })
   }
 }
 
@@ -66,14 +72,14 @@ const onCreateChat = async (user) => {
   if(!chatStore.privateChatList.some(item => item.chat_id == data.chat_id)){
     chatStore.privateChatList.unshift(data)
   }
-  router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: data.chat_id }})
+  router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: data.chat_id }, query :{ tab: undefined} })
   searchInput.value = null;
 }
 
 // when searched privete chat is clicked, work
 // addlist is ture, when user hasn't chat with this user 
 const onClickSearchedUser = (item, addlist=true) => {  
-    router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: item.chat_id }})
+    router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: item.chat_id }, query :{ tab: undefined} })
     // if user don't exist in the list then add it
     if(!chatStore.privateChatList.some(user => user.chat_id == item.chat_id) && addlist){
       chatStore.privateChatList.unshift(item)
@@ -100,7 +106,7 @@ const onClickChatPrivateUser = async (user) => {
 const onClickChatGroup = (group) => {
   // if group is already selected then don't do anything, becouse no full data, just it is getting from  api id
   if(route.params.id != group.chat_id){    
-    router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: group.chat_id }})
+    router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: group.chat_id }, query :{ tab: 'group'} })
     // if group don't exist in the list then add it
     if(!chatStore.groupChatList.some(item => item.chat_id == group.chat_id)){
       chatStore.groupChatList.unshift(group)
@@ -127,8 +133,8 @@ watch(createGroupDialogVisible, () => {
   inputSendMessasgeRef.value?.$el?.focus()
 })
 
-</script>
 
+</script>
 <template>
   <div  class="w-[352px] h-full border-r select-none">
     <div class="flex m-4 mb-0">

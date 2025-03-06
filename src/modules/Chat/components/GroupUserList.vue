@@ -7,6 +7,7 @@ import { useChatStore } from '../stores';
 const chatStore = useChatStore()
 
 const onClickChatPrivateUser = (user) => {
+  console.log(user)
 }
 </script>
 <template>
