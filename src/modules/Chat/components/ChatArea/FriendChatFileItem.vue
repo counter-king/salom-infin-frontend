@@ -66,7 +66,7 @@ defineExpose({
           @contextmenu.prevent="(e)=>props.onShowContextMenu(e, props.message)"
           @selectstart="handleSelectStart"
           @click="handleClick"
-          class="flex flex-col gap-2 p-2 pr-4 min-w-[243px] max-w-[400px] bg-white cursor-pointer rounded-xl"
+          class="flex flex-col gap-2 p-2 pr-4 min-w-[243px] max-w-[400px] bg-white rounded-xl"
           :class="[{'!p-0': !props.message.replied_to }]"
         >
           <!-- reply to message -->
@@ -83,7 +83,7 @@ defineExpose({
             >
               <div
                  @click="downloadFile(props.message)" 
-                 class="p-[10px] bg-greyscale-50 rounded-lg group">
+                 class="p-[10px] bg-greyscale-50 rounded-lg group cursor-pointer">
                 <base-iconify 
                   :icon="fileTypes[props.message?.message_type]?.icon"
                   class="!h-5 !w-5" 
@@ -104,7 +104,7 @@ defineExpose({
                 @click="downloadFile(props.message)" 
                 v-if="props.message?.uploaded"
                 :icon="DownloadMinimalisticIcon"
-                class="!h-5 !w-5 text-greyscale-500" 
+                class="!h-5 !w-5 text-greyscale-500 cursor-pointer" 
               />
               <BaseSpinner 
                 v-else

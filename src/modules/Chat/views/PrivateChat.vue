@@ -159,7 +159,9 @@ watch(
   () => route.params?.id,
   async (newId, oldId) => {
     if (newId !== oldId && route.name === CHAT_ROUTE_NAMES.PRIVATE) {
-      await chatStore.actionGetMessageListByChatId({chat:newId, page:1, page_size: 20}, true);
+     const { count } = await chatStore.actionGetMessageListByChatId({chat:newId, page:1, page_size: 20}, true);
+      hasNext.value = count > page.value * pageSize.value
+      page.value += 1
       // make scroll down after loading new data
       setTimeout(() => {
         handleScrollDown()

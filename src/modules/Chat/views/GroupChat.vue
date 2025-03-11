@@ -161,7 +161,9 @@ watch(
   () => route.params?.id,
   async (newId, oldId) => {
     if (newId !== oldId && route.name === CHAT_ROUTE_NAMES.GROUP) {
-      await chatStore.actionGetMessageListByChatId({chat:newId}, true);
+      const { count } = await chatStore.actionGetMessageListByChatId({ chat:route.params?.id, page:1, page_size: 20 }, true);
+      hasNext.value = count > page.value * pageSize.value
+      page.value += 1 
       // make scroll down after loading new data
        setTimeout(() => {
         handleScrollDown()
@@ -176,7 +178,7 @@ watch(
 
 onMounted(async () => {
   chatStore.selectedGroup = await chatStore.actionGetGroupChatById(route.params?.id);
-  const { count } = await chatStore.actionGetMessageListByChatId({ chat:route.params?.id }, true);
+  const { count } = await chatStore.actionGetMessageListByChatId({ chat:route.params?.id, page:1, page_size: 20 }, true);
   hasNext.value = count > page.value * pageSize.value
   page.value += 1
    // make scroll down after loading new data
