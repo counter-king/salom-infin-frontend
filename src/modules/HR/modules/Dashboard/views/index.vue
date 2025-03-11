@@ -837,12 +837,7 @@ const getCountStaff = async () => {
     let { data } = await axiosConfig.get(`sql-query/`, {
       query_type: 'count_staff',
     })
-
-    console.log('count_staff', data)
-
     countStaff.value = data.data[0]
-
-    console.log('countStaff', countStaff.value)
   }
   catch (error) {
   }
@@ -855,12 +850,7 @@ const getCountEmployees = async () => {
     let { data } = await axiosConfig.get(`sql-query/`, {
       query_type: 'count_emps',
     })
-
-    console.log('count_emps', data)
-
     countEmployees.value = data.data[0]
-
-    console.log('countEmployees', countEmployees.value)
   }
   catch (error) {
   }
@@ -873,12 +863,7 @@ const getCountRate = async () => {
     let { data } = await axiosConfig.get(`sql-query/`, {
       query_type: 'count_stavka',
     })
-
-    console.log('count_stavka', data)
-
     countRate.value = data.data[0]
-
-    console.log('countRate', countRate.value)
   }
   catch (error) {
   }
@@ -891,12 +876,7 @@ const getCountVacant = async () => {
     let { data } = await axiosConfig.get(`sql-query/`, {
       query_type: 'count_vacant',
     })
-
-    console.log('count_vacant', data)
-
     countVacant.value = data.data[0]
-
-    console.log('countVacant', countVacant.value)
   }
   catch (error) {
   }
