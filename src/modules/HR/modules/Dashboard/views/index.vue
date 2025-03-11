@@ -551,7 +551,7 @@ const agesOptions = ref({
             fontFamily: 'SFProDisplay-Regular',
             showAlways: true,
             formatter: function (w) {
-              return '31-40'
+              return 36
             }
           }
         }
@@ -830,6 +830,78 @@ const getFormCompletionPercent = async () => {
   }
 }
 
+const countStaff = ref({ COUNT: 0 })
+
+const getCountStaff = async () => {
+  try {
+    let { data } = await axiosConfig.get(`sql-query/`, {
+      query_type: 'count_staff',
+    })
+
+    console.log('count_staff', data)
+
+    countStaff.value = data.data[0]
+
+    console.log('countStaff', countStaff.value)
+  }
+  catch (error) {
+  }
+}
+
+const countEmployees = ref({ COUNT: 0 })
+
+const getCountEmployees = async () => {
+  try {
+    let { data } = await axiosConfig.get(`sql-query/`, {
+      query_type: 'count_emps',
+    })
+
+    console.log('count_emps', data)
+
+    countEmployees.value = data.data[0]
+
+    console.log('countEmployees', countEmployees.value)
+  }
+  catch (error) {
+  }
+}
+
+const countRate = ref({ COUNT: 0 })
+
+const getCountRate = async () => {
+  try {
+    let { data } = await axiosConfig.get(`sql-query/`, {
+      query_type: 'count_stavka',
+    })
+
+    console.log('count_stavka', data)
+
+    countRate.value = data.data[0]
+
+    console.log('countRate', countRate.value)
+  }
+  catch (error) {
+  }
+}
+
+const countVacant = ref({ COUNT: 0 })
+
+const getCountVacant = async () => {
+  try {
+    let { data } = await axiosConfig.get(`sql-query/`, {
+      query_type: 'count_vacant',
+    })
+
+    console.log('count_vacant', data)
+
+    countVacant.value = data.data[0]
+
+    console.log('countVacant', countVacant.value)
+  }
+  catch (error) {
+  }
+}
+
 watchEffect(async () => {
   if(!branchSelect.value) {
     departments.value = []
@@ -843,6 +915,10 @@ watchEffect(async () => {
 })
 
 onMounted(async () => {
+  await getCountStaff()
+  await getCountEmployees()
+  await getCountRate()
+  await getCountVacant()
   await getActivityPercent()
   await getFormCompletionPercent()
   await getGenderList()
@@ -901,8 +977,8 @@ onMounted(async () => {
               </div>
 
               <div class="font-medium">
-                <h1 class="text-sm text-greyscale-500">Всего людей</h1>
-                <p class="text-2xl text-greyscale-900">0</p>
+                <h1 class="text-sm text-greyscale-500">Штатная численность</h1>
+                <p class="text-2xl text-greyscale-900">{{ countStaff['COUNT'] }}</p>
               </div>
             </div>
 
@@ -915,8 +991,8 @@ onMounted(async () => {
               </div>
 
               <div class="font-medium">
-                <h1 class="text-sm text-greyscale-500">Факт. численность</h1>
-                <p class="text-2xl text-greyscale-900">0</p>
+                <h1 class="text-sm text-greyscale-500">Общее кол-во сотрудников</h1>
+                <p class="text-2xl text-greyscale-900">{{ countEmployees['COUNT'] }}</p>
               </div>
             </div>
 
@@ -929,8 +1005,8 @@ onMounted(async () => {
               </div>
 
               <div class="font-medium">
-                <h1 class="text-sm text-greyscale-500">Штатная численность</h1>
-                <p class="text-2xl text-greyscale-900">0</p>
+                <h1 class="text-sm text-greyscale-500">Общая ставка сотрудников</h1>
+                <p class="text-2xl text-greyscale-900">{{ countRate['COUNT'] }}</p>
               </div>
             </div>
 
@@ -943,8 +1019,8 @@ onMounted(async () => {
               </div>
 
               <div class="font-medium">
-                <h1 class="text-sm text-greyscale-500">Вакансии</h1>
-                <p class="text-2xl text-greyscale-900">0</p>
+                <h1 class="text-sm text-greyscale-500">Общее кол-во вакансий</h1>
+                <p class="text-2xl text-greyscale-900">{{ countVacant['COUNT'] }}</p>
               </div>
             </div>
           </div>
