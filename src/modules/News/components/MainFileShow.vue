@@ -30,7 +30,7 @@ const props = defineProps({
         </div>
         <video v-if="allowedVideoTypes.some(item => item.includes(props.file?.type))" :src="props.file.url ? props.file.url : props.file.blobUrl" controls class="w-full h-full object-cover"></video>
     </div>
-    <div v-if="allowedVideoTypes.some(item => item.includes(props.file?.type))" class="text-sm text-greyscale-500 mt-2 pl-3" >{{ props.file?.name }}</div>
+    <!-- <div v-if="allowedVideoTypes.some(item => item.includes(props.file?.type))" class="text-sm text-greyscale-500 mt-2 pl-3" >{{ props.file?.name }}</div> -->
 </template>
 
 <style scoped>

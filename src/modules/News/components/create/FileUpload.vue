@@ -111,11 +111,11 @@ const uploadFiles = async (files) => {
       continue;
     }
 
-    // Fayl hajmini tekshirish
-    if (files[i].size > 10 * 1024 * 1024) {
-      dispatchNotify(null, "Fayl maksimal 10 MB hajmdan oshib ketdi.", COLOR_TYPES.ERROR);
-      continue;
-    }
+    // // Fayl hajmini tekshirish
+    // if (files[i].size > 10 * 1024 * 1024) {
+    //   dispatchNotify(null, "Fayl maksimal 10 MB hajmdan oshib ketdi.", COLOR_TYPES.ERROR);
+    //   continue;
+    // }
     
     let fileName = returnShortFileName(files[i].name);
     let size = files[i].size;
@@ -141,7 +141,9 @@ const uploadFiles = async (files) => {
         item.blobUrl = blobUrl
         item.extension = data.extension
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log("error",error)
+        dispatchNotify(null, "Fayl maksimal hajmdan oshib ketdi.");
         item.uploaded = false;
       })
   }
