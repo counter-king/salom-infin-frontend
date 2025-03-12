@@ -1183,14 +1183,15 @@ onMounted(async () => {
               <div class="flex items-center gap-5 font-medium text-greyscale-500 px-1 py-[6px]">
                 <span class="text-[13px] w-16">{{ item.title }}</span>
 
-                <div class="flex-1 bg-greyscale-50 h-4 rounded overflow-hidden">
+                <div class="flex items-center gap-2 flex-1 bg-greyscale-50 h-4 rounded overflow-hidden">
                   <div
                     class="bg-primary-100 h-full border-r-2 border-r-primary-500"
                     :style="{ 'width': `${parseFloat(item.style) + 12}%` }"
-                  ></div>
-                </div>
+                  >
+                  </div>
 
-                <span class="text-sm w-10 text-center">{{ item.style }}%</span>
+                  <span class="text-xs text-center text-primary-500">{{ item.style }}%</span>
+                </div>
               </div>
             </template>
           </div>

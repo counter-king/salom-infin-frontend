@@ -197,8 +197,12 @@ const filterValueChildren = computed(()=> props.value[0]?.children.filter((child
             <span class="text-xs text-greyscale-500">IP-телефона</span>
           </div>
 
-          <div class="max-w-[225px] w-full bg-greyscale-50 py-[10px] px-4 rounded-tr-lg rounded-br-lg">
+          <div class="max-w-[225px] w-full bg-greyscale-50 py-[10px] px-4">
             <span class="text-xs text-greyscale-500">Корп. почта</span>
+          </div>
+
+          <div class="max-w-[225px] w-full bg-greyscale-50 py-[10px] px-4 rounded-tr-lg rounded-br-lg">
+            <span class="text-xs text-greyscale-500">Личный номер</span>
           </div>
         </div>
       </template>

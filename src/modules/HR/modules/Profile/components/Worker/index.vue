@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref, unref, nextTick, watch } from 'vue'
+import {ref, unref, nextTick, watch, onMounted} from 'vue'
 import { vMaska } from 'maska'
 import { onClickOutside } from '@vueuse/core'
 // Components
@@ -27,6 +27,7 @@ import { dispatchNotify } from '@/utils/notify'
 import { replaceWithNumbers } from '@/utils/regex'
 // Enums
 import { COLOR_TYPES } from '@/enums'
+import BaseSwitch from "@/components/UI/BaseSwitch.vue";
 // Composable
 const authStore = useAuthStore()
 // Reactive
@@ -34,6 +35,8 @@ const inputRef = ref(null)
 const ignoreRef = ref(null)
 const editIndex = ref(null)
 const editValue = ref(null)
+const changeValue = ref(false)
+const changeLoading = ref(false)
 const loadingSave = ref(false)
 const items = ref([
   {
@@ -104,6 +107,20 @@ const items = ref([
     title: 'Должность',
     description: authStore.currentUser?.position?.name ?? '-',
     icon: UserSpeakBoldIcon,
+    editable: false
+  },
+  {
+    key: 'show_mobile_number',
+    title: 'Личный номер',
+    description: authStore.currentUser?.phone ?? '-',
+    icon: CallMedicineRoundedBoldIcon,
+    editable: false
+  },
+  {
+    key: 'empty',
+    title: null,
+    description: null,
+    icon: null,
     editable: false
   },
   // {
@@ -199,12 +216,33 @@ const setNewItem = (key, value) => {
   let item = items.value.find((item) => item['key'] === key)
   item.description = value
 }
+const handleChange = async () => {
+  try {
+    changeLoading.value = true
+    await authStore.actionCurrentUserUpdate({ show_mobile_number: changeValue.value })
+    dispatchNotify(null, 'Успешно изменен', COLOR_TYPES.SUCCESS)
+  }
+  catch (error) {
+  }
+  finally {
+    setTimeout(() => {
+      changeLoading.value = false
+    }, 500)
+  }
+}
+// Hooks
+onMounted(() => {
+  changeValue.value = authStore.currentUser.show_mobile_number
+})
 </script>
 <template>
   <div class="worker-view px-4">
     <div class="grid grid-cols-2 gap-x-6 gap-y-2">
       <template v-for="(item, index) in items">
-        <div class="group col-span-1 flex transition-colors hover:bg-primary-10 h-20 relative rounded-xl p-4 after:hover:bg-transparent after:content after:transition-colors after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:bg-greyscale-70">
+        <div
+          class="group col-span-1 flex transition-colors hover:bg-primary-10 h-20 relative rounded-xl p-4 after:hover:bg-transparent after:content after:transition-colors after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:bg-greyscale-70"
+          :class="{ 'opacity-0': item.key === 'empty' }"
+        >
           <div class="w-9 h-9">
             <base-iconify :icon="item.icon" class="!w-6 !h-6 transition-colors text-greyscale-400 group-hover:text-primary-500" />
           </div>
@@ -224,7 +262,20 @@ const setNewItem = (key, value) => {
               </template>
 
               <template v-else>
-                <p class="font-semibold text-greyscale-900">{{ item.description }}</p>
+                <template v-if="item.key === 'show_mobile_number'">
+                  <input
+                    :value="item.description"
+                    v-maska
+                    data-maska="+### ## ### ## ##"
+                    type="text"
+                    readonly
+                    class="w-full border-transparent bg-transparent outline-none"
+                  />
+                </template>
+
+                <template v-else>
+                  <p class="font-semibold text-greyscale-900">{{ item.description }}</p>
+                </template>
               </template>
             </div>
 
@@ -257,6 +308,31 @@ const setNewItem = (key, value) => {
                   <base-iconify :icon="PenIcon" class="!w-4 !h-4 text-primary-500" />
                 </div>
               </template>
+            </template>
+
+            <template v-if="item.key === 'show_mobile_number'">
+              <div
+                v-tooltip.top="{
+                  value: `<h4 class='text-xs text-white text-center -my-1'>${changeValue ? 'Скрыть личный номер в справочнике' : 'Показать личный номер в справочнике'}</h4>`,
+                  escape: true
+                }"
+                class="flex items-center justify-center absolute right-0 top-2 cursor-pointer"
+              >
+                <template v-if="changeLoading">
+                  <base-spinner
+                    app-classes="bg-white rounded-full"
+                    root-classes="!w-5 !h-5"
+                  />
+                </template>
+
+                <template v-else>
+                  <base-switch
+                    v-model="changeValue"
+                    @emit:change="handleChange"
+                    class-switch-root="mr-0"
+                  />
+                </template>
+              </div>
             </template>
           </div>
         </div>
