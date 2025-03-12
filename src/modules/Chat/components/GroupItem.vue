@@ -52,8 +52,8 @@ const props = defineProps({
             </template>
             {{ props.group?.last_message?.text }}
         </div>
-        <div v-if="props.group?.unread_count" class="flex justify-center items-center bg-critic-500 w-5 h-5 rounded-3xl">
-          <span class="text-xs font-semibold text-white">{{ props.group?.unread_count }}</span>
+        <div v-if="!!props.group?.unread_count" class="flex justify-center items-center bg-critic-500 w-5 h-5 rounded-3xl p-1">
+          <span class="text-xs font-semibold text-white">{{ props.group?.unread_count }} </span>
         </div>
       </div>
     </div>

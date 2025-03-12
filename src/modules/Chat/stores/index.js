@@ -175,6 +175,7 @@ export const useChatStore = defineStore("chat-stores", {
           chat_id: item.id,
           color: item.color,
           avatar: item.avatar,
+          is_user_online: item.is_user_online,
           last_message: item.last_message?.text,
           last_message_date: item.last_message?.created_date,
           last_message_type: item.last_message?.type,
@@ -202,6 +203,7 @@ export const useChatStore = defineStore("chat-stores", {
         full_name: data?.title,
         position: data.members?.find((item) => item.user?.id == body.member_id)?.user?.position?.name,
         chat_id: data.id,
+        is_user_online: data.is_user_online,
         color: data.members?.find((item) => item.user?.id == body.member_id)?.user?.color,
         avatar: data.members?.find((item) => item.user?.id == body.member_id)?.user?.avatar,
         last_message: data?.last_message?.text,
@@ -224,6 +226,7 @@ export const useChatStore = defineStore("chat-stores", {
         color: data.members?.find((item) => item.user?.id !== authStore.currentUser.id)?.user?.color,
         avatar: data.members?.find((item) => item.user?.id !== authStore.currentUser.id)?.user?.avatar,
         members: data.members,
+        is_user_online: data.is_user_online,
         last_message: data?.last_message?.text,
         last_message_date: data?.last_message?.created_date,
         last_message_type: data?.last_message?.type,
@@ -242,17 +245,30 @@ export const useChatStore = defineStore("chat-stores", {
       }
       try {
       const response = await fetchGetGroupChatList(params);
-        const results = response.data.results?.map((item) => ({
-          last_message: item.last_message,
-          title: item.title,
-          image: item.images[0]?.image,
-          chat_id: item.id,
-          members: item?.members || [],
-          last_message_time: item.last_message?.created_date,
-          last_message_type: item.last_message?.type,
-          type: item.type,
-          unread_count: item.unread_count
-        }));
+        const results = await Promise.all(response.data.results?.map(async (item) => {
+          if(!!item.images.length){
+            const image = item.images.find(image => image.is_placed == true)
+            if(image?.image?.id){
+              const { blobUrl } = await fetchBlobFile(image.image?.id)
+              item.image = {}
+              item.image.url = blobUrl
+            }
+          }
+          return ({
+            last_message: item.last_message,
+            title: item.title,
+            image: item.image,
+            chat_id: item.id,
+            members: item?.members || [],
+            last_message_time: item.last_message?.created_date,
+            last_message_type: item.last_message?.type,
+            type: item.type,
+            unread_count: item.unread_count
+          })
+        })
+      )
+        
+
         if(resetList){
           this.groupChatList = results
         } else {
@@ -325,7 +341,7 @@ export const useChatStore = defineStore("chat-stores", {
           message_id: item.id,
           modified_date: item.modified_date,
           replied_to: item.replied_to,
-          is_read: item.is_read,
+          is_read: item.is_read || false,
           sender: item.sender,
           text: item.text,
           message_type: item.type || MESSAGE_TYPES.TEXT,
@@ -411,7 +427,7 @@ export const useChatStore = defineStore("chat-stores", {
     /** */
     async actionGetMessageImageFileList(params) {
       try {
-        const response= await fetchGetMessageFilesList(params);
+        const response = await fetchGetMessageFilesList(params);
         this.messageImageFileList = response?.data?.results?.map(item=>({
           attachments: item?.attachments[0],
           id: item?.id,

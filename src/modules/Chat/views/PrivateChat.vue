@@ -59,7 +59,7 @@ const refChatArea = inject("refChatArea");
 // methods
 // when scroll down, scrollDwonButton will be visible
 const handleScroll = (event) => {
-  if(event.target.scrollTop + event.target.clientHeight + 300 < event.target.scrollHeight ) {
+  if( event.target.scrollHeight - event.target.clientHeight >  Math.floor(event.target.scrollTop + 100)  ) {
     showScrollDownButton.value = true
   } else {
     showScrollDownButton.value = false
@@ -183,6 +183,8 @@ onMounted(async () => {
   handleScrollDown()
   // initialize read message observer to get correct ref values
   initializeReadMessageObserver()
+
+  
 })
 
 onMounted(() => {
@@ -193,7 +195,8 @@ onMounted(() => {
       inputSendMessageHeight.value = refSendMessage.value.InputSendMessageWrapperRef.scrollHeight
     }, { immediate: true })
   }
-  // Set flag to true after initial data load and scroll
+
+  // avoid scroll event working when initail loading happen 
   setTimeout(() => {
     initialRenderComplete.value = true;
   }, 500);
@@ -235,6 +238,7 @@ onMounted(() => {
                   :handleClickImage="handleClickImage"
                    ref="refMessageElements"
                   :data-message-id="message?.message_id"
+                  :data-message-is-read="message?.is_read"
                   :index="index"
                   :message="message"
                   :handleClickEmoji="handleClickEmoji"
@@ -246,6 +250,7 @@ onMounted(() => {
                 <ChatFileItem 
                  ref="refMessageElements"
                 :data-message-id="message?.message_id"
+                :data-message-is-read="message?.is_read"
                 :message="message"
                 :handleClickEmoji="handleClickEmoji"
                 :onShowContextMenu="onShowContextMenu" 
@@ -257,6 +262,7 @@ onMounted(() => {
               <OwnerText 
                 ref="refMessageElements"
                 :data-message-id="message?.message_id"
+                :data-message-is-read="message?.is_read"
                 :handleClickEmoji="handleClickEmoji"
                 :onShowContextMenu="onShowContextMenu" 
                 :onShowEmojiContextMenu="onShowEmojiContextMenu" 
@@ -273,6 +279,7 @@ onMounted(() => {
                   ref="refMessageElements"
                   :handleClickImage="handleClickImage"
                   :data-message-id="message?.message_id"
+                  :data-message-is-read="message?.is_read"
                   :message="message"
                   :handleClickEmoji="handleClickEmoji"
                   :onShowContextMenu="onShowContextMenu"
@@ -285,7 +292,8 @@ onMounted(() => {
               <template v-else>
                 <FriendChatFileItem 
                   ref="refMessageElements"
-                 :data-message-id="message?.message_id"
+                  :data-message-id="message?.message_id"
+                  :data-message-is-read="message?.is_read"
                   :message="message"
                   :handleClickEmoji="handleClickEmoji"
                   :onShowContextMenu="onShowContextMenu"
@@ -299,12 +307,13 @@ onMounted(() => {
               <FriendText 
                 ref="refMessageElements"
                 :data-message-id="message?.message_id"
+                :data-message-is-read="message?.is_read"
                 :handleClickEmoji="handleClickEmoji"
                 :onShowContextMenu="onShowContextMenu" 
                 :onShowEmojiContextMenu="onShowEmojiContextMenu" 
-                :avatarVisible="showFriendTextAvatar(index) && false" 
+                :avatarVisible="showFriendTextAvatar(index)" 
                 :message="message"
-                :classNames="[{ 'mt-5 block first:hidden': showFriendTextAvatar(index) }]"
+                :classNames="[{ 'mt-5': showFriendTextAvatar(index) }]"
               />
           </template>
         </template>

@@ -11,6 +11,7 @@ import { socket } from "@/services/socket";
 import { CHAT_ROUTE_NAMES, CHAT_TYPES, WEBCOCKET_EVENTS } from "../constatns";
 // store
 import { useChatStore } from "../stores";
+import { useAuthStore } from "@/modules/Auth/stores";
 // css
 import 'vue3-emoji-picker/css'
 
@@ -18,6 +19,8 @@ const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const chatStore = useChatStore();
+const authStore = useAuthStore();
+
 const allowedPages = ['ChatPrivateDetail','ChatGroupDetail']
 const { status, data, send } = socket
 // reactives
@@ -41,6 +44,16 @@ const sendChatHandshake = (id, chat_type)=> {
   send(JSON.stringify(payload))
 }
 
+const sendUserOnlineEvent = ()=> {
+  const payload = { command: 'user_online' }
+  send(JSON.stringify(payload))
+}
+
+const sendUserOfflineEvent = ()=> {
+  const payload = { command: 'user_offline' }
+  send(JSON.stringify(payload))
+}
+
 const handleScrollDownSmooth =()=> {
   refChatArea.value.scrollTo({
     top: refChatArea.value.scrollHeight,
@@ -58,18 +71,19 @@ watch(status, (newStatus) => {
 watch(data, (newData) => {
   newData = JSON.parse(newData);
   console.log("ewasd",newData);
+
   if(newData.command == WEBCOCKET_EVENTS.USER_HANDSHAKE) {
     // console.log("user hand",newData);
   }
   else if(newData.command == WEBCOCKET_EVENTS.CHAT_HANDSHAKE) {
     // console.log("chat hand",newData);
   }
-  else if(newData.type == WEBCOCKET_EVENTS.NEW_MESSAGE) {    
+  else if(newData.type == WEBCOCKET_EVENTS.NEW_MESSAGE) {   
     const isPrivate = newData.chat_type == CHAT_TYPES.PRIVATE
-    const chatList = isPrivate ? chatStore.privateChatList : chatStore.groupChatList
-
+    const chatList = isPrivate ? chatStore.privateChatList : chatStore.groupChatList 
+    // if chat not found, add it
     if(!chatList.some(item=> item.chat_id == newData.chat_id)){
-        chatStore.isPrivate.unshift({
+          chatList.unshift({
           first_name: newData.sender?.first_name,
           full_name: newData.sender?.full_name,
           position: newData.sender?.position?.name,
@@ -80,7 +94,7 @@ watch(data, (newData) => {
           last_message_date: newData.created_date,
           last_message_type: newData.message_type,
           type: newData.chat_type,
-          unread_count: 0
+          unread_count: newData.unread_count || 0
         })
       }
 
@@ -89,28 +103,51 @@ watch(data, (newData) => {
         item => item?.attachments?.file?.id !== newData?.files[0]?.id
       );
 
-       // Yangi xabarni ro‘yxatga qo‘shish
-      chatStore.messageListByChatId.push({
-        attachments: { file: newData?.files[0] },
-        chat_id: newData.chat_id,
-        created_date: newData.created_date,
-        edited: newData.edited,
-        message_id: newData.message_id,
-        modified_date: newData.modified_date,
-        replied_to: newData.replied_to,
-        is_read: newData.is_read,
-        sender: newData.sender,
-        text: newData.text,
-        message_type: newData.message_type,
-        chat_type: newData.chat_type,
-        uploaded: true,
-        reactions: [],
-      });
+      const isSrollStayDown = refChatArea.value.scrollHeight - refChatArea.value.clientHeight <= Math.floor(refChatArea.value.scrollTop) + 100;
+      // Yangi xabarni ro‘yxatga qo‘shish
+      if(route.params?.id == newData.chat_id){
+          chatStore.messageListByChatId.push({
+          attachments: { file: newData?.files[0] },
+          chat_id: newData.chat_id,
+          created_date: newData.created_date,
+          edited: newData.edited,
+          message_id: newData.message_id,
+          modified_date: newData.modified_date,
+          replied_to: newData.replied_to,
+          is_read: newData.is_read || false,
+          sender: newData.sender,
+          text: newData.text,
+          message_type: newData.message_type,
+          chat_type: newData.chat_type,
+          uploaded: true,
+          reactions: [],
+        });
+      }
+
        // Oxirgi xabarni yangilash
       const chat = chatList.find(item => item.chat_id == newData.chat_id);
-      if (chat && isPrivate) chat.last_message = newData.text;
-      if (chat && !isPrivate) chat.last_message = {sender: newData.sender, text: newData.text}
-    setTimeout(handleScrollDownSmooth,1);
+      if (chat && isPrivate) {
+        chat.last_message = newData.text;
+        console.log(chat) 
+        // unread_countni 1 ga oshirish
+        if(newData.sender?.id != authStore.currentUser?.id) {
+          chat.unread_count += 1; 
+        }
+      }
+      if (chat && !isPrivate) {
+        chat.last_message = {sender: newData.sender, text: newData.text}
+        // unread_countni 1 ga oshirish
+        if(newData.sender?.id != authStore.currentUser?.id) {
+          chat.unread_count += 1; 
+        }
+      }
+
+      // if user current then make scroll push untill bottom 
+      if(authStore.currentUser?.id == newData.sender?.id){
+        setTimeout(handleScrollDownSmooth,1);
+      }
+      // if user not current, but if scroll stand at bottom, then make scroll push untill bottom
+      else if(isSrollStayDown){ setTimeout(handleScrollDownSmooth, 1)}
   }
   else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_DELETED) {    
     chatStore.messageListByChatId = chatStore.messageListByChatId.filter(item=> item.message_id != newData?.content?.message_id)
@@ -180,12 +217,23 @@ watch(data, (newData) => {
     }, 1000);
   }
   else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_READ) {
+    
     const message = chatStore.messageListByChatId.find(item=> item.message_id == newData?.message_id)
     if(message?.sender?.id != newData?.user?.id){
-      if(message?.is_read == false){
+      if(message && !message?.is_read){
         message.is_read = true
+        // when messags are readed, then decrease count of unread message count from chat list
+        const chatPrivate = chatStore.privateChatList.find(item=> item.chat_id == message?.chat_id) 
+        const chatGroup = chatStore.groupChatList.find(item=> item.chat_id == message?.chat_id) 
+        if(chatPrivate?.unread_count > 0){
+          chatPrivate.unread_count -= 1
+        }
+        if(chatGroup?.unread_count > 0){
+          chatGroup.unread_count -= 1
+        }
       }
     }
+
   }
   else if(newData.type == WEBCOCKET_EVENTS.CHAT_DELETED) {
     chatStore.groupChatList = chatStore.groupChatList.filter(item=> item.chat_id != newData?.content.chat_id)
@@ -217,11 +265,13 @@ function initializeHandshake(){
 
 onMounted(() => {
   initializeHandshake()
+  sendUserOnlineEvent()
 })
 
 // Clean up on component unmount
 onBeforeUnmount(() => {
   Object.values(typingTimeouts).forEach(timeout => clearTimeout(timeout));
+  sendUserOfflineEvent()
 });
 
 </script>

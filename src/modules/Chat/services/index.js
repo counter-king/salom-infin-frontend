@@ -75,9 +75,9 @@ export const fetchDeleteMessageById = (id) => {
 
 // get message link list
 export const fetchGetMessageLinkList = (params) => {
-  return axiosConfig.get(`${URLS.chatMessageLink}`, params);
+  return axiosConfig.get(`${URLS.chatMessageLink}`,  {page: 1, page_size: 10, ...params});
 }
 // get message files list
 export const fetchGetMessageFilesList = (params) => {
-  return axiosConfig.get(`${URLS.chatMessageFiles}`, params);
+  return axiosConfig.get(`${URLS.chatMessageFiles}`, {page: 1, page_size: 10, ...params});
 }

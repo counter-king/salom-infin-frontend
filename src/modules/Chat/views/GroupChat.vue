@@ -59,7 +59,7 @@ const refChatArea = inject("refChatArea");
 // methods
 // when scroll down, scrollDwonButton will be visible
 const handleScroll = (event) => {
-  if(event.target.scrollTop + event.target.clientHeight + 300 < event.target.scrollHeight ) {
+  if( event.target.scrollHeight - event.target.clientHeight >  Math.floor(event.target.scrollTop + 100)  ) {
     showScrollDownButton.value = true
   } else {
     showScrollDownButton.value = false
@@ -124,7 +124,6 @@ const onClickChatArea = () => {
 }
 
 const handleClickImage = (message) => {
-  console.log(message)
   isGalleriaVisible.value = true;
   const clickedImageIndex = getImageListByFilter?.value?.findIndex(item=> item?.message_id == message?.message_id)
   if(clickedImageIndex != -1){
@@ -155,7 +154,6 @@ const showFriendTextAvatar = (index) => {
          perviousMessage.sender?.id !== nowMessage.sender?.id ||
          formatDay(perviousMessage.created_date) !== formatDay(nowMessage.created_date)
 }
-
 
 watch(
   () => route.params?.id,
@@ -200,6 +198,7 @@ onMounted(() => {
     initialRenderComplete.value = true;
   }, 500);
 })
+
 </script>
 <template>
  <div class="h-full relative">
@@ -236,6 +235,7 @@ onMounted(() => {
                   :handleClickImage="handleClickImage"
                    ref="refMessageElements"
                   :data-message-id="message?.message_id"
+                  :data-message-is-read="message?.is_read"
                   :index="index"
                   :message="message"
                   :handleClickEmoji="handleClickEmoji"
@@ -247,6 +247,7 @@ onMounted(() => {
                 <ChatFileItem 
                  ref="refMessageElements"
                 :data-message-id="message?.message_id"
+                :data-message-is-read="message?.is_read"
                 :message="message"
                 :handleClickEmoji="handleClickEmoji"
                 :onShowContextMenu="onShowContextMenu" 
@@ -258,6 +259,7 @@ onMounted(() => {
               <OwnerText 
                 ref="refMessageElements"
                 :data-message-id="message?.message_id"
+                :data-message-is-read="message?.is_read"
                 :handleClickEmoji="handleClickEmoji"
                 :onShowContextMenu="onShowContextMenu" 
                 :onShowEmojiContextMenu="onShowEmojiContextMenu" 
@@ -274,18 +276,21 @@ onMounted(() => {
                   ref="refMessageElements"
                   :handleClickImage="handleClickImage"
                   :data-message-id="message?.message_id"
+                  :data-message-is-read="message?.is_read"
                   :message="message"
                   :handleClickEmoji="handleClickEmoji"
                   :onShowContextMenu="onShowContextMenu"
                   :onShowEmojiContextMenu="onShowEmojiContextMenu"
                   :avatarVisible="showFriendTextAvatar(index)"
                   :classNames="[{ 'mt-5': showFriendTextAvatar(index) }]"
+
                 />
               </template>
               <template v-else>
                 <FriendChatFileItem 
                   ref="refMessageElements"
-                 :data-message-id="message?.message_id"
+                  :data-message-id="message?.message_id"
+                  :data-message-is-read="message?.is_read"
                   :message="message"
                   :handleClickEmoji="handleClickEmoji"
                   :onShowContextMenu="onShowContextMenu"
@@ -299,6 +304,7 @@ onMounted(() => {
               <FriendText 
                 ref="refMessageElements"
                 :data-message-id="message?.message_id"
+                :data-message-is-read="message?.is_read"
                 :handleClickEmoji="handleClickEmoji"
                 :onShowContextMenu="onShowContextMenu" 
                 :onShowEmojiContextMenu="onShowEmojiContextMenu" 
@@ -309,7 +315,6 @@ onMounted(() => {
           </template>
         </template>
         </template>
-       
         <template v-for="(message, index) in chatStore.uploadingFiles" :key="index"> 
           <ChatFileItem 
             :message="message"

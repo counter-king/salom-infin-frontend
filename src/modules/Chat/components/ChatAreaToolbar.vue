@@ -121,8 +121,9 @@ watch(createGroupDialogVisible, () => {
             label-classes="text-lg font-semibold select-none text-greyscale-900"
           />  
           <div 
-            class="absolute w-4 h-4 rounded-lg right-[-2px] bottom-[-2px] border-[3px] border-white"
-            :class="{ 'bg-success-500': false, 'bg-greyscale-300': true }"
+            v-if="!isGroupDetail"
+            class="absolute w-4 h-4 rounded-lg right-[-2px] bottom-[-2px] bg-greyscale-300 border-[3px] border-white"
+            :class="{ '!bg-success-500': chatStore.selectedUser?.is_user_online }"
           ></div>
         </div>
         <div class="flex flex-col ml-3">

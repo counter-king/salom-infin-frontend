@@ -13,6 +13,7 @@ const route = useRoute()
 // Reactives
 const refMessagesContainer = ref(null);
 const refMessageElements = ref([]);
+const observer = ref(null);
 
 // socket sending readed massageIds to backend
 const { send } = socket
@@ -22,19 +23,53 @@ function markMessageAsRead(messageId) {
     sendMessageIdEvent(messageId);
 }
 
-// send read message ids to backend
 function sendMessageIdEvent(messageId) {
     const payload = { command: 'message_read', chat_id: route.params?.id, chat_type: route.name == CHAT_ROUTE_NAMES.PRIVATE ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, message_id: messageId }
     send(JSON.stringify(payload))
 }
 
-let observer;
+// Disconnect observer to prevent memory leaks
+const disconnectObserver = () => {
+    if (observer.value) {
+        observer.value.disconnect();
+        observer.value = null;
+    }
+};
+
+// Initialize observer with proper cleanup
+const initializeObserver = () => {
+    // Clean up existing observer if it exists
+    if (observer.value) {
+        disconnectObserver();
+    }
+
+    // Create new observer
+    observer.value = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const messageId = parseInt(entry.target.dataset.messageId);
+                const isRead = JSON.parse(entry.target.dataset.messageIsRead)
+                if (messageId && !isRead) {
+                 markMessageAsRead(messageId);
+                }
+            }
+        });
+    }, { threshold: 0.5  });
+};
+
 const initializeReadMessageObserver = ()=> {   
+
+    // Make sure observer exists
+    if (!observer.value) {
+    initializeObserver();
+    }
+
     if (refMessageElements.value.length) {
         refMessageElements.value.forEach(component => {
         const el = component?.forwardedRef;
             if (el) {
-                observer.observe(el);
+                // console.log(el);
+                observer.value.observe(el);
             }   
         });
     } 
@@ -46,19 +81,9 @@ watch(() => chatStore.messageListByChatId, async () => {
     initializeReadMessageObserver();
 }, { deep: true });
 
-
 onMounted(() => {
-    observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const messageId = parseInt(entry.target.dataset.messageId);
-                if (messageId) {
-                   markMessageAsRead(messageId);
-                }
-            }
-        });
-    }, { threshold: 0.5, root: refMessagesContainer.value  });
-  });
+    initializeObserver();   
+});
 
 return { refMessagesContainer, refMessageElements, initializeReadMessageObserver }
 
