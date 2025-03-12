@@ -51,6 +51,7 @@ const props = defineProps({
     })
   }
 })
+const emit = defineEmits(['update:modelValue', 'emit:change'])
 // Composable
 const modelValue = useModel(props, 'modelValue')
 </script>
@@ -81,8 +82,9 @@ const modelValue = useModel(props, 'modelValue')
               { 'before:translate-x-4' : props.size === 'normal' && props.modelValue },
               props.size === 'small' && props.modelValue ? 'before:left-[6px]' : 'before:left-[1px]'
               ]
-          }),
+          })
         }"
+        @change="emit('emit:change')"
       />
     </div>
 
