@@ -207,6 +207,7 @@ onUnmounted(() => {
           @emit:file-upload="(val) => { newsStore.model.image = val[0]; $v.image.$model = val[0] || null }"
           @emit:on-file-delete="() => { newsStore.model.image = null; $v.image.$model = null }"
           :error="$v.image"
+          :allowed-upload-size="10"
           :allowed-file-info="t('allowed-file-info',{ formats: allowedImageTypes.map(item => item.split('/')[1]).join(', '), size: '10' })"
           />
       </base-col>
@@ -258,7 +259,7 @@ onUnmounted(() => {
             <label
               v-if="field.type === CONTENT_TYPES.FILE"
               class="block text-sm font-medium text-greyscale-500 mb-2">
-              {{ t('additional-images') }}
+              {{ t('additional-images-videos') }}
           </label>
           <file-upload
             v-if="field.type === CONTENT_TYPES.FILE"
@@ -267,7 +268,7 @@ onUnmounted(() => {
             :allowedFileTypes="allowedFileTypes"
             @emit:file-upload="(val) => field.value = val[0]"
             @emit:on-file-delete="() => field.value = null"
-            :allowed-file-info="t('allowed-file-info',{ formats: allowedFileTypes.map(item => item.split('/')[1]).join(', '), size: '10' })"
+            :allowed-file-info="t('allowed-file-info',{ formats: allowedFileTypes.map(item => item.split('/')[1]).join(', '), size: '200' })"
             />
           <base-textarea
             v-if="field.type === CONTENT_TYPES.QUOTE"
@@ -291,7 +292,7 @@ onUnmounted(() => {
           @click="addDynamicField(CONTENT_TYPES.TEXT)"
           class="w-fit" icon-color="warning-500"
         />
-        <add-card text="additional-images"
+        <add-card text="additional-images-videos"
          @click="addDynamicField(CONTENT_TYPES.FILE)"
          class="w-fit" icon-color="success-500"
          />
@@ -358,6 +359,7 @@ onUnmounted(() => {
         <label class="block text-sm font-medium text-greyscale-500 mb-2">{{ t('gallery') }}</label>
         <file-upload :multiple="true"
           :files="props.galleryFiles"
+          :allowed-upload-size="10"
           :allowedFileTypes="allowedImageTypes"
           @emit:file-upload="(val) => newsStore.model.images_ids = val"
           :allowed-file-info="t('allowed-file-info',{ formats: allowedImageTypes.map(item => item.split('/')[1]).join(', '), size: '10' })"
