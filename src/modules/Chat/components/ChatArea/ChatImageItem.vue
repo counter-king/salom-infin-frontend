@@ -100,6 +100,11 @@ defineExpose({
         @click="props.handleClickImage(props.message)"
         @contextmenu.prevent="(e)=>props.onShowContextMenu(e, props.message)"
         class="flex flex-col gap-2 p-2 cursor-pointer rounded-xl max-w-[300px] min-w-[64px] bg-white"
+        :class="[
+          {
+            '!py-2': props.message.edited
+          },
+        ]"
         >
         <!-- reply to message -->
         <div 

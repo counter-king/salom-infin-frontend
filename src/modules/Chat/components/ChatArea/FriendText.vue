@@ -65,8 +65,14 @@ defineExpose({
         <div class="flex gap-3">
           <div 
             @contextmenu.prevent="onShowContextMenu($event, props.message, props.index)"
-            class="friend-text flex flex-col gap-1 bg-white rounded-2xl rounded-bl-[4px] px-4 py-2 cursor-pointer w-fit  max-w-[400px]"
-            :class="[{'!rounded-2xl !rounded-tl-[4px]': props.avatarVisible}]"
+            class="friend-text flex flex-col gap-1 bg-white rounded-xl px-4 py-2 cursor-pointer w-fit  max-w-[400px]"
+            :class="[
+              {
+                '!rounded-xl !rounded-bl-[4px]': props.avatarVisible, 
+                '!rounded-tl-[4px]': !props.avatarVisible,
+                '!rounde-2xl' : !!props.message.replied_to
+              }
+            ]"
             >
             <!-- replay to message -->
             <div 

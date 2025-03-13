@@ -32,6 +32,8 @@ const components = {
 }
 // reactives
 const componentType = ref(COMPONENT_TYPES.FILES);
+const countLink = ref(0)
+const allFileCount = computed(() => chatStore.allFiles.reduce((sum, count) => sum +count, 0))
 // computed
 const activeComponent = computed(() => {
   return components[componentType.value]
@@ -46,7 +48,6 @@ const activeFileMenu = computed(() => {
   }
 });
 
-const allFileCount = computed(() => (chatStore.messageFileList?.length || 0) + (chatStore.messageImageFileList?.length || 0) + (chatStore.messageVideoFileList?.length || 0))
 const isGroupDetail = computed(() => route.name == CHAT_ROUTE_NAMES.GROUP)
 // methods
 const handleClickGroupUsers = () => {
@@ -64,16 +65,19 @@ const handleClickWrapper = () => {
 watch([() => route.params?.id], async () => {
   // when route change other than private or group, don't work only work on private or group
   if(route.name == CHAT_ROUTE_NAMES.PRIVATE || route.name == CHAT_ROUTE_NAMES.GROUP){
-    chatStore.actionGetMessageLinkList({ chat:route.params?.id})
+    const { data } = await chatStore.actionGetMessageLinkList({ chat:route.params?.id})
+    countLink.value = data?.count || 0
     chatStore.messageFilesListLoading = true
-    await Promise.all([
+    const results = await Promise.all([
       chatStore.actionGetMessageFileList({ chat:route.params?.id, type: MESSAGE_TYPES.FILE }),
-      chatStore.actionGetMessageImageFileList({ chat:route.params?.id, type: MESSAGE_TYPES.IMAGE }),
       chatStore.actionGetMessageVideoFileList({ chat:route.params?.id, type: MESSAGE_TYPES.VIDEO }),
+      chatStore.actionGetMessageImageFileList({ chat:route.params?.id, type: MESSAGE_TYPES.IMAGE }),
       chatStore.actionGetMessageAudioFileList({ chat:route.params?.id, type: MESSAGE_TYPES.AUDIO })
     ]).finally(()=>{
       chatStore.messageFilesListLoading = false
-    })
+  })
+
+    chatStore.allFiles = results.map(item => item.data.count)   
   }
 },{ immediate: true })
   
@@ -182,7 +186,7 @@ watch([() => route.params?.id], async () => {
                 </span>
               </div>
               <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-semibold text-greyscale-900">{{ chatStore.messageLinkList?.length || 0 }}</h2>
+                <h2 class="text-2xl font-semibold text-greyscale-900">{{ countLink || 0 }}</h2>
                 <div v-if="!activeFileMenu" class="absolute right-3 border-[6px] border-white bg-primary-500 w-4 h-4 rounded-full shadow-md"></div>
               </div>
             </div>

@@ -40,8 +40,17 @@ export const useChatStore = defineStore("chat-stores", {
     messageListByChatIdAddMoreLoading: false,
     deleteMessageByIdLoading: false,
     messageLinkListLoading: false,
+    messageVideoFileListLoading: false,
+    messageVideoFileListMoreLoading: false,
+    messageImageFileListLoading: false,
+    messageImageFileListMoreLoading: false,
+    messageFileListLoading: false,
+    messageFileListMoreLoading: false,
+    messageAudioFileListLoading: false,
+    messageAudioFileListMoreLoading: false,
     messageLinkListMoreLoading: false,
     messageFilesListLoading: false,
+    allFiles: [],
     selectedUser: null,
     selectedGroup: null,
     chatUserSearchList: [],
@@ -408,71 +417,119 @@ export const useChatStore = defineStore("chat-stores", {
       }
     },
     /** */
-    async actionGetMessageVideoFileList(params) {
+    async actionGetMessageVideoFileList(params, resetList = true) {
+      if(resetList){
+        this.messageVideoFileListLoading = true;
+      } else {
+        this.messageVideoFileListMoreLoading = true;
+      }
       try {
         const response = await fetchGetMessageFilesList(params);
-        this.messageVideoFileList = response?.data.results?.map(item=>({
+        response.data.results = response?.data?.results?.map(item=>({
           attachments: item?.attachments[0],
           id: item?.id,
           created_date: item?.created_date,
           text: item?.text,
           uploaded: true,
         }))
+        if(resetList){
+          this.messageVideoFileList = response?.data?.results
+        } else{
+          this.messageVideoFileList = [...this.messageVideoFileList, ...response?.data?.results]
+        }
         return response
       } catch(e) {
         console.log(e)
-      } finally {
+      }  finally {
+        this.messageVideoFileListLoading = false;
+        this.messageVideoFileListMoreLoading = false;
       }
     },
     /** */
-    async actionGetMessageImageFileList(params) {
+    async actionGetMessageImageFileList(params, resetList = true) {
+      if(resetList){
+        this.messageImageFileListLoading = true;
+      } else {
+        this.messageImageFileListMoreLoading = true;
+      }
       try {
         const response = await fetchGetMessageFilesList(params);
-        this.messageImageFileList = response?.data?.results?.map(item=>({
+        response.data.results = response?.data?.results?.map(item=>({
           attachments: item?.attachments[0],
           id: item?.id,
           created_date: item?.created_date,
           text: item?.text,
           uploaded: true,
         }))
+        if(resetList){
+          this.messageImageFileList = response?.data?.results
+        } else{
+          this.messageImageFileList = [...this.messageImageFileList, ...response?.data?.results]
+        }
         return response
       } catch(e) {
         console.log(e)
       } finally {
+        this.messageImageFileListLoading = false;
+        this.messageImageFileListMoreLoading = false;
       }
     },
     /** */
-    async actionGetMessageFileList(params) {
+    async actionGetMessageFileList(params, resetList = true) {
+      if(resetList){
+        this.messageFileListLoading = true;
+      } else {
+        this.messageFileListMoreLoading = true;
+      }
       try {
         const response= await fetchGetMessageFilesList(params);
-        this.messageFileList = response?.data?.results?.map(item=>({
+        response.data.results = response?.data?.results?.map(item=>({
           attachments: item?.attachments[0],
           id: item?.id,
           created_date: item?.created_date,
           text: item?.text,
           uploaded: true,
         }))
+        if(resetList){
+          this.messageFileList = response?.data?.results
+        } else{
+          this.messageFileList = [...this.messageFileList, ...response?.data?.results]
+        }
         return response
       } catch(e) {
         console.log(e)
       } finally {
+        this.messageFileListLoading = false;
+        this.messageFileListMoreLoading = false;
       }
     },
     /** */
-    async actionGetMessageAudioFileList(params) {
+    async actionGetMessageAudioFileList(params, resetList= true) {
+      if(resetList){
+        this.messageAudioFileListLoading = true;
+      } else {
+        this.messageAudioFileListMoreLoading = true;
+      }
       try {
         const response= await fetchGetMessageFilesList(params);
-        this.messageAudioFileList = response?.data?.results?.map(item=>({
+        response.data.results = response?.data?.results?.map(item=>({
           attachments: item?.attachments[0],
           id: item?.id,
           created_date: item?.created_date,
           text: item?.text,
           uploaded: true,
         }))
+        if(resetList){
+          this.messageAudioFileList = response?.data?.results
+        } else{
+          this.messageAudioFileList = [...this.messageAudioFileList, ...response?.data?.results]
+        }
         return response
       } catch(e) {
         console.log(e)
       } finally {
+        this.messageAudioFileListLoading = false;
+        this.messageAudioFileListMoreLoading = false;
       }
     },
   }

@@ -73,7 +73,12 @@ defineExpose({
       <div
          @contextmenu.prevent="(e)=>props.onShowContextMenu(e, props.message)"
          class="flex flex-col gap-1 bg-primary-400 rounded-2xl rounded-br-[4px] px-4 py-3 cursor-pointer  max-w-[400px]  min-w-[243px]"
-         :class="[{'!rounded-xl !rounded-br-[4px] !p-2 !pr-4  ': !props.message.replied_to }]"
+         :class="[
+          {
+            '!rounded-2xl' : !!props.message.replied_to,
+            '!py-2': props.message.edited
+          }
+        ]"
         >
         <!-- reply to message -->
         <div 

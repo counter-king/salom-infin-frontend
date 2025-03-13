@@ -34,6 +34,9 @@ const props = defineProps({
   },
   classNames: {
     type: [String , Array, Object] 
+  },
+  messageInnerClass: {
+    type: [String , Array, Object] 
   }
 })
 
@@ -74,8 +77,13 @@ defineExpose({
         @contextmenu.prevent="onShowContextMenu($event, props.message, props.index)"
         @selectstart="handleSelectStart"
         @click="handleClick"  
-         class="flex flex-col gap-1 bg-primary-400 rounded-2xl rounded-br-[4px] px-4 py-3 cursor-pointer  max-w-[400px]"
-         :class="[{'!rounded-xl !rounded-br-[4px]': false }]"
+         class="flex flex-col gap-1 bg-primary-400 rounded-xl px-4 py-3 cursor-pointer  max-w-[400px]"
+         :class="[
+          {
+            '!rounded-2xl' : !!props.message.replied_to,
+            '!py-2': props.message.edited
+          }, props.messageInnerClass
+        ]"
         >
         <!-- reply to message -->
         <div 

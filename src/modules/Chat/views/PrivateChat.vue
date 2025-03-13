@@ -268,6 +268,7 @@ onMounted(() => {
                 :onShowEmojiContextMenu="onShowEmojiContextMenu" 
                 :message="message"
                 :index="index"
+                :messageInnerClass="{'!rounded-br-[4px]': showFriendTextAvatar(index), '!rounded-tr-[4px]': !showFriendTextAvatar(index)}"
               />
             </template>
           </template>
