@@ -241,6 +241,13 @@ watch(data, (newData) => {
       router.push({ name: CHAT_ROUTE_NAMES.CHAT_INDEX, query : { tab: newData?.content.chat_type == CHAT_TYPES.GROUP ? 'group' : undefined } })
     }
   }
+  else if(newData.type == WEBCOCKET_EVENTS.USER_STATUS){
+    const chat = chatStore.privateChatList.find(item=> item.chat_id == newData?.content.chat_id)
+    if(chat){
+      chat.is_user_online = newData?.content.status == "online" ? true : false
+      chatStore.selectedUser.is_user_online = chat.is_user_online
+    }
+  }
 });
 
 watch(routeId, (newRouteId) => {    
