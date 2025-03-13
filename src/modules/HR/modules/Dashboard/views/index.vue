@@ -780,6 +780,19 @@ const getPositionRankList = async () => {
         }
       ]
     }
+
+    let counts = mock.data.reduce((acc, cur) => acc + cur['CNT'], 0)
+    let list = mock.data.map((item, index) => {
+      return {
+        title: item['CODE_RANGE'],
+        number: item['CNT'],
+        style: (item['CNT'] / counts * 100).toFixed(1)
+      }
+    })
+
+    positionRankList.value = {
+      list: [list[1], list[2], list[3], list[0], list[4]]
+    }
   }
   finally {
     setTimeout(() => {
@@ -1180,7 +1193,7 @@ onMounted(async () => {
         <template v-else>
           <div class="space-y-1">
             <template v-for="item in positionRankList.list">
-              <div class="flex items-center gap-5 font-medium text-greyscale-500 px-1 py-[6px]">
+              <div class="flex items-center gap-2 font-medium text-greyscale-500 px-1 py-[6px]">
                 <span class="text-[13px] w-16">{{ item.title }}</span>
 
                 <div class="flex items-center gap-2 flex-1 bg-greyscale-50 h-4 rounded overflow-hidden">
@@ -1192,6 +1205,8 @@ onMounted(async () => {
 
                   <span class="text-xs text-center text-primary-500">{{ item.style }}%</span>
                 </div>
+
+                <span class="text-xs text-right w-8">{{ item.number }}</span>
               </div>
             </template>
           </div>

@@ -66,6 +66,8 @@ const select = ref({
       </div>
 
       <div class="max-w-[225px] w-full py-[10px] px-4"></div>
+
+      <div class="max-w-[225px] w-full py-[10px] px-4"></div>
     </div>
 
     <div class="flex border-b-[1.5px] border-greyscale-100">
@@ -133,6 +135,16 @@ const select = ref({
         "
       >
         <span class="text-sm font-medium text-greyscale-900">{{ item.email ?? "-" }}</span>
+      </div>
+
+      <div
+        class="max-w-[225px] w-full py-3 px-4 cursor-pointer"
+        @click="
+          modal = true;
+          select = item
+        "
+      >
+        <span class="text-sm font-medium text-greyscale-900">{{ item.mobile_number ?? "-" }}</span>
       </div>
     </div>
   </div>

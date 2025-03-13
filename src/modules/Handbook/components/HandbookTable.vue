@@ -1,6 +1,7 @@
 <script setup>
 // Core
 import { ref } from 'vue'
+import { vMaska } from 'maska'
 // Components
 import { UserWithDetail } from '@/components/Users'
 import { StatusChip } from '@/components/Chips'
@@ -63,6 +64,8 @@ const select = ref({
       </div>
 
       <div class="max-w-[225px] w-full py-[10px] px-4"></div>
+
+      <div class="max-w-[225px] w-full py-[10px] px-4"></div>
     </div>
 
     <template v-if="props.item.users.length > 0 && props.item.condition !== CONDITION.A">
@@ -114,7 +117,20 @@ const select = ref({
           </div>
 
           <div class="max-w-[225px] w-full py-3 px-4 cursor-pointer" @click="modal = true; select = user">
-            <span class="text-sm font-medium text-greyscale-900">{{ user.mobile_number ?? 'Скрыт пользователем' }}</span>
+            <template v-if="user.mobile_number">
+              <input
+                type="text"
+                :value="user.mobile_number"
+                v-maska
+                data-maska="+### ## ### ## ##"
+                disabled
+                class="w-full border-transparent outline-none text-sm font-medium text-greyscale-900"
+              >
+            </template>
+
+            <template v-else>
+              <span class="text-sm font-medium text-greyscale-900">Скрыт пользователем</span>
+            </template>
           </div>
         </div>
       </template>

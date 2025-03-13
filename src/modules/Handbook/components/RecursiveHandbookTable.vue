@@ -18,7 +18,7 @@ const props = defineProps({
 
 const emit = defineEmits(['emit:page-change'])
 
-// left only item codiation is A 
+// left only item codiation is A
 const itemChildren = props.item.children.filter((child)=> child.condition === CONDITION.A)
 </script>
 
