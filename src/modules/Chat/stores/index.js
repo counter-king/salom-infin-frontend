@@ -235,6 +235,7 @@ export const useChatStore = defineStore("chat-stores", {
         color: data.members?.find((item) => item.user?.id !== authStore.currentUser.id)?.user?.color,
         avatar: data.members?.find((item) => item.user?.id !== authStore.currentUser.id)?.user?.avatar,
         members: data.members,
+        user_id: data.members?.find((item) => item.user?.id !== authStore.currentUser.id)?.user?.id,
         is_user_online: data.is_user_online,
         last_message: data?.last_message?.text,
         last_message_date: data?.last_message?.created_date,

@@ -245,7 +245,9 @@ watch(data, (newData) => {
     const chat = chatStore.privateChatList.find(item=> item.chat_id == newData?.content.chat_id)
     if(chat){
       chat.is_user_online = newData?.content.status == "online" ? true : false
-      chatStore.selectedUser.is_user_online = chat.is_user_online
+      if(!!chatStore.selectedUser){
+        chatStore.selectedUser.is_user_online = chat.is_user_online
+      }
     }
   }
 });
@@ -273,12 +275,15 @@ function initializeHandshake(){
 onMounted(() => {
   initializeHandshake()
   sendUserOnlineEvent()
+  window.removeEventListener("beforeunload", sendUserOfflineEvent);
 })
 
 // Clean up on component unmount
+
 onBeforeUnmount(() => {
   Object.values(typingTimeouts).forEach(timeout => clearTimeout(timeout));
   sendUserOfflineEvent()
+  window.removeEventListener("beforeunload", sendUserOfflineEvent);
 });
 
 </script>

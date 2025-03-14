@@ -8,7 +8,8 @@ const URLS = {
   chatMessageSearch: "chat/message/search/",
   chatMessages: "chat/messages/",
   chatMessageLink: "chat/message/links/",
-  chatMessageFiles: "chat/message/files/"
+  chatMessageFiles: "chat/message/files/",
+  userOnline:"user-online/"
 }
 /** Returns created personal and group chats list in searching **/
 export const fetchChatUsersSearch = (params) => {
@@ -80,4 +81,8 @@ export const fetchGetMessageLinkList = (params) => {
 // get message files list
 export const fetchGetMessageFilesList = (params) => {
   return axiosConfig.get(`${URLS.chatMessageFiles}`, {page: 1, page_size: 10, ...params});
+}
+// get user online
+export const fetchGetUserOnline = (id) => {
+  return axiosConfig.get(`${URLS.userOnline}${id}/`);
 }
