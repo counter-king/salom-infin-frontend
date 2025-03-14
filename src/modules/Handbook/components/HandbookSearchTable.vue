@@ -1,6 +1,7 @@
 <script setup>
 // Core
 import { ref } from 'vue'
+import { vMaska } from 'maska'
 // Components
 import { StatusChip } from '@/components/Chips'
 import { VerticalCard, VerticalCardItem } from '@/components/Card/Vertical'
@@ -145,7 +146,20 @@ const select = ref({
           select = item
         "
       >
-        <span class="text-sm font-medium text-greyscale-900">{{ item.mobile_number ?? "-" }}</span>
+        <template v-if="item.mobile_number">
+          <input
+            type="text"
+            :value="item.mobile_number"
+            v-maska
+            data-maska="+### ## ### ## ##"
+            disabled
+            class="w-full bg-transparent border-transparent outline-none text-sm font-medium text-greyscale-900"
+          >
+        </template>
+
+        <template v-else>
+          <span class="text-sm font-medium text-greyscale-900">Скрыт пользователем</span>
+        </template>
       </div>
     </div>
   </div>

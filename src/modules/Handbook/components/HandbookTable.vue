@@ -124,7 +124,7 @@ const select = ref({
                 v-maska
                 data-maska="+### ## ### ## ##"
                 disabled
-                class="w-full border-transparent outline-none text-sm font-medium text-greyscale-900"
+                class="w-full bg-transparent border-transparent outline-none text-sm font-medium text-greyscale-900"
               >
             </template>
 
