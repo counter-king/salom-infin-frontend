@@ -44,16 +44,6 @@ const sendChatHandshake = (id, chat_type)=> {
   send(JSON.stringify(payload))
 }
 
-const sendUserOnlineEvent = ()=> {
-  const payload = { command: 'user_online' }
-  send(JSON.stringify(payload))
-}
-
-const sendUserOfflineEvent = ()=> {
-  const payload = { command: 'user_offline' }
-  send(JSON.stringify(payload))
-}
-
 const handleScrollDownSmooth =()=> {
   refChatArea.value.scrollTo({
     top: refChatArea.value.scrollHeight,
@@ -261,7 +251,6 @@ watch(routeId, (newRouteId) => {
   }
 })
 
-
 function initializeHandshake(){
   sendUserHandshake()
     if(route.name == CHAT_ROUTE_NAMES.PRIVATE) {
@@ -274,16 +263,12 @@ function initializeHandshake(){
 
 onMounted(() => {
   initializeHandshake()
-  sendUserOnlineEvent()
-  window.removeEventListener("beforeunload", sendUserOfflineEvent);
 })
 
 // Clean up on component unmount
 
 onBeforeUnmount(() => {
   Object.values(typingTimeouts).forEach(timeout => clearTimeout(timeout));
-  sendUserOfflineEvent()
-  window.removeEventListener("beforeunload", sendUserOfflineEvent);
 });
 
 </script>

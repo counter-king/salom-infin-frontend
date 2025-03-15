@@ -3,11 +3,12 @@
 import Toast from 'primevue/toast'
 // Components
 import Notification from '@/components/Notification.vue'
-import { onBeforeUnmount, onMounted } from 'vue';
+import { onBeforeUnmount, onMounted, watch } from 'vue';
 // socket
 import { socket } from '@/services/socket';
 
-const { send } = socket
+const { send, data } = socket
+
 const sendUserOnlineEvent = ()=> {
   const payload = { command: 'user_online' }
   send(JSON.stringify(payload))
@@ -32,7 +33,13 @@ const handleBrowerserTabChanges =()=>{
   }
 }
 
+watch(data, (newData) => {
+  newData = JSON.parse(newData);
+  console.log("main",newData);
+})
+
 onMounted(() => {
+  sendUserOnlineEvent()
   sendUserHandshake()
   window.addEventListener("visibilitychange", handleBrowerserTabChanges)
 })

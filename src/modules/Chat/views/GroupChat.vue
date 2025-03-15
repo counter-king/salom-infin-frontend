@@ -193,11 +193,12 @@ onMounted(() => {
       inputSendMessageHeight.value = refSendMessage.value.InputSendMessageWrapperRef.scrollHeight
     }, { immediate: true })
   }
-  // Set flag to true after initial data load and scroll
-    setTimeout(() => {
+  // avoid scroll event working when initail loading happen 
+  setTimeout(() => {
     initialRenderComplete.value = true;
   }, 500);
 })
+
 
 </script>
 <template>
@@ -265,6 +266,7 @@ onMounted(() => {
                 :onShowEmojiContextMenu="onShowEmojiContextMenu" 
                 :message="message"
                 :index="index"
+                :messageInnerClass="{'!rounded-br-[4px]': showFriendTextAvatar(index), '!rounded-tr-[4px]': !showFriendTextAvatar(index)}"
               />
             </template>
           </template>
