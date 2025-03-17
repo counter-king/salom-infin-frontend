@@ -60,7 +60,7 @@ watch(status, (newStatus) => {
 // Kelgan ma'lumotlarni kuzatish
 watch(data, (newData) => {
   newData = JSON.parse(newData);
-  console.log("ewasd",newData);
+  // console.log("ewasd",newData);
 
   if(newData.command == WEBCOCKET_EVENTS.USER_HANDSHAKE) {
     // console.log("user hand",newData);
@@ -118,7 +118,6 @@ watch(data, (newData) => {
       const chat = chatList.find(item => item.chat_id == newData.chat_id);
       if (chat && isPrivate) {
         chat.last_message = newData.text;
-        console.log(chat) 
         // unread_countni 1 ga oshirish
         if(newData.sender?.id != authStore.currentUser?.id) {
           chat.unread_count += 1; 
