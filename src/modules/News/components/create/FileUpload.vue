@@ -68,6 +68,9 @@ const props = defineProps({
   allowedFileInfo: {
    type: String,
    default: () => ({})
+  },
+  allowedUploadSize : {
+    type: Number,
   }
 })
 
@@ -111,9 +114,9 @@ const uploadFiles = async (files) => {
       continue;
     }
 
-    // Fayl hajmini tekshirish
-    if (files[i].size > 10 * 1024 * 1024) {
-      dispatchNotify(null, "Fayl maksimal 10 MB hajmdan oshib ketdi.", COLOR_TYPES.ERROR);
+    // Fayl hajmini tekshirish, not allow continue, if size exceeds allowed size
+    if (props.allowedUploadSize && files[i].size > props.allowedUploadSize * 1024 * 1024) {
+      dispatchNotify(null, `Fayl maksimal ${props.allowedUploadSize} MB hajmdan oshib ketdi.`, COLOR_TYPES.ERROR);
       continue;
     }
     
@@ -141,7 +144,8 @@ const uploadFiles = async (files) => {
         item.blobUrl = blobUrl
         item.extension = data.extension
       })
-      .catch(() => {
+      .catch((error) => {
+        dispatchNotify(null, "Fayl maksimal hajmdan oshib ketgan bo'lishi mumkin.");
         item.uploaded = false;
       })
   }

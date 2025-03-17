@@ -28,9 +28,16 @@ const props = defineProps({
             <audio :src="props.file.url ? props.file.url : props.file.blobUrl" controls>{{ props.file?.name }}</audio>
             <span class="pl-3">{{ props.file?.name }}</span>
         </div>
-        <video v-if="allowedVideoTypes.some(item => item.includes(props.file?.type))" :src="props.file.url ? props.file.url : props.file.blobUrl" controls class="w-full h-full object-cover"></video>
-    </div>
-    <div v-if="allowedVideoTypes.some(item => item.includes(props.file?.type))" class="text-sm text-greyscale-500 mt-2 pl-3" >{{ props.file?.name }}</div>
+        <div v-if="allowedVideoTypes.some(item => item.includes(props.file?.type))" class="video-container"
+            >
+            <video 
+                :src="props.file.url ? props.file.url : props.file.blobUrl" 
+                controls 
+                class="video-player"
+            ></video>
+        </div>   
+     </div>
+    <!-- <div v-if="allowedVideoTypes.some(item => item.includes(props.file?.type))" class="text-sm text-greyscale-500 mt-2 pl-3" >{{ props.file?.name }}</div> -->
 </template>
 
 <style scoped>
@@ -50,5 +57,29 @@ const props = defineProps({
   filter: blur(10px);
   background-position: center; 
   z-index: 0;
+}
+.video-container {
+    width: 100%;
+    background-color: #000;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 56.25%; /* 16:9 aspect ratio */
+}
+
+.video-player {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.video-container video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 </style>

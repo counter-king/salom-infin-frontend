@@ -551,7 +551,7 @@ const agesOptions = ref({
             fontFamily: 'SFProDisplay-Regular',
             showAlways: true,
             formatter: function (w) {
-              return '31-40'
+              return 36
             }
           }
         }
@@ -780,6 +780,19 @@ const getPositionRankList = async () => {
         }
       ]
     }
+
+    let counts = mock.data.reduce((acc, cur) => acc + cur['CNT'], 0)
+    let list = mock.data.map((item, index) => {
+      return {
+        title: item['CODE_RANGE'],
+        number: item['CNT'],
+        style: (item['CNT'] / counts * 100).toFixed(1)
+      }
+    })
+
+    positionRankList.value = {
+      list: [list[1], list[2], list[3], list[0], list[4]]
+    }
   }
   finally {
     setTimeout(() => {
@@ -830,6 +843,58 @@ const getFormCompletionPercent = async () => {
   }
 }
 
+const countStaff = ref({ COUNT: 0 })
+
+const getCountStaff = async () => {
+  try {
+    let { data } = await axiosConfig.get(`sql-query/`, {
+      query_type: 'count_staff',
+    })
+    countStaff.value = data.data[0]
+  }
+  catch (error) {
+  }
+}
+
+const countEmployees = ref({ COUNT: 0 })
+
+const getCountEmployees = async () => {
+  try {
+    let { data } = await axiosConfig.get(`sql-query/`, {
+      query_type: 'count_emps',
+    })
+    countEmployees.value = data.data[0]
+  }
+  catch (error) {
+  }
+}
+
+const countRate = ref({ COUNT: 0 })
+
+const getCountRate = async () => {
+  try {
+    let { data } = await axiosConfig.get(`sql-query/`, {
+      query_type: 'count_stavka',
+    })
+    countRate.value = data.data[0]
+  }
+  catch (error) {
+  }
+}
+
+const countVacant = ref({ COUNT: 0 })
+
+const getCountVacant = async () => {
+  try {
+    let { data } = await axiosConfig.get(`sql-query/`, {
+      query_type: 'count_vacant',
+    })
+    countVacant.value = data.data[0]
+  }
+  catch (error) {
+  }
+}
+
 watchEffect(async () => {
   if(!branchSelect.value) {
     departments.value = []
@@ -843,6 +908,10 @@ watchEffect(async () => {
 })
 
 onMounted(async () => {
+  await getCountStaff()
+  await getCountEmployees()
+  await getCountRate()
+  await getCountVacant()
   await getActivityPercent()
   await getFormCompletionPercent()
   await getGenderList()
@@ -901,8 +970,8 @@ onMounted(async () => {
               </div>
 
               <div class="font-medium">
-                <h1 class="text-sm text-greyscale-500">Всего людей</h1>
-                <p class="text-2xl text-greyscale-900">0</p>
+                <h1 class="text-sm text-greyscale-500">Штатная численность</h1>
+                <p class="text-2xl text-greyscale-900">{{ countStaff['COUNT'] }}</p>
               </div>
             </div>
 
@@ -915,8 +984,8 @@ onMounted(async () => {
               </div>
 
               <div class="font-medium">
-                <h1 class="text-sm text-greyscale-500">Факт. численность</h1>
-                <p class="text-2xl text-greyscale-900">0</p>
+                <h1 class="text-sm text-greyscale-500">Общее кол-во сотрудников</h1>
+                <p class="text-2xl text-greyscale-900">{{ countEmployees['COUNT'] }}</p>
               </div>
             </div>
 
@@ -929,8 +998,8 @@ onMounted(async () => {
               </div>
 
               <div class="font-medium">
-                <h1 class="text-sm text-greyscale-500">Штатная численность</h1>
-                <p class="text-2xl text-greyscale-900">0</p>
+                <h1 class="text-sm text-greyscale-500">Общая ставка сотрудников</h1>
+                <p class="text-2xl text-greyscale-900">{{ countRate['COUNT'] }}</p>
               </div>
             </div>
 
@@ -943,8 +1012,8 @@ onMounted(async () => {
               </div>
 
               <div class="font-medium">
-                <h1 class="text-sm text-greyscale-500">Вакансии</h1>
-                <p class="text-2xl text-greyscale-900">0</p>
+                <h1 class="text-sm text-greyscale-500">Общее кол-во вакансий</h1>
+                <p class="text-2xl text-greyscale-900">{{ countVacant['COUNT'] }}</p>
               </div>
             </div>
           </div>
@@ -1124,17 +1193,20 @@ onMounted(async () => {
         <template v-else>
           <div class="space-y-1">
             <template v-for="item in positionRankList.list">
-              <div class="flex items-center gap-5 font-medium text-greyscale-500 px-1 py-[6px]">
+              <div class="flex items-center gap-2 font-medium text-greyscale-500 px-1 py-[6px]">
                 <span class="text-[13px] w-16">{{ item.title }}</span>
 
-                <div class="flex-1 bg-greyscale-50 h-4 rounded overflow-hidden">
+                <div class="flex items-center gap-2 flex-1 bg-greyscale-50 h-4 rounded overflow-hidden">
                   <div
                     class="bg-primary-100 h-full border-r-2 border-r-primary-500"
                     :style="{ 'width': `${parseFloat(item.style) + 12}%` }"
-                  ></div>
+                  >
+                  </div>
+
+                  <span class="text-xs text-center text-primary-500">{{ item.style }}%</span>
                 </div>
 
-                <span class="text-sm w-10 text-center">{{ item.style }}%</span>
+                <span class="text-xs text-right w-8">{{ item.number }}</span>
               </div>
             </template>
           </div>

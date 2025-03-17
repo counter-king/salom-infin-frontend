@@ -1,9 +1,10 @@
 <script setup>
 // Core
 import { ref } from 'vue'
+import { vMaska } from 'maska'
 // Components
+import { UserWithDetail } from '@/components/Users'
 import { StatusChip } from '@/components/Chips'
-import { VerticalCard, VerticalCardItem } from '@/components/Card/Vertical'
 // Enum
 import { CONDITION } from '../enums';
 // Macros
@@ -63,6 +64,8 @@ const select = ref({
       </div>
 
       <div class="max-w-[225px] w-full py-[10px] px-4"></div>
+
+      <div class="max-w-[225px] w-full py-[10px] px-4"></div>
     </div>
 
     <template v-if="props.item.users.length > 0 && props.item.condition !== CONDITION.A">
@@ -112,6 +115,23 @@ const select = ref({
           <div class="max-w-[225px] w-full py-3 px-4 cursor-pointer" @click="modal = true; select = user">
             <span class="text-sm font-medium text-greyscale-900">{{ user.email ?? '-' }}</span>
           </div>
+
+          <div class="max-w-[225px] w-full py-3 px-4 cursor-pointer" @click="modal = true; select = user">
+            <template v-if="user.mobile_number">
+              <input
+                type="text"
+                :value="user.mobile_number"
+                v-maska
+                data-maska="+### ## ### ## ##"
+                disabled
+                class="w-full bg-transparent border-transparent outline-none text-sm font-medium text-greyscale-900"
+              >
+            </template>
+
+            <template v-else>
+              <span class="text-sm font-medium text-greyscale-900">Скрыт пользователем</span>
+            </template>
+          </div>
         </div>
       </template>
     </template>
@@ -120,9 +140,9 @@ const select = ref({
   <!-- Dialog -->
   <base-dialog
     v-model="modal"
-    max-width="max-w-[540px]"
-    header-classes="relative border-none rounded-tl-[20px] rounded-tr-[20px]"
-    content-classes="overflow-visible pt-0 pb-6"
+    max-width="max-w-[477px]"
+    header-classes="hidden"
+    content-classes="!rounded-[20px] overflow-hidden p-0"
   >
     <template #header>
       <span></span>
@@ -130,41 +150,29 @@ const select = ref({
     </template>
 
     <template #content>
-      <div>
-        <div class="relative -mt-10 pl-4">
-          <div class="flex justify-center items-center w-[90px] h-[90px] rounded-full bg-white">
-            <base-avatar
-              :label="select.full_name"
-              :color="select.color ?? '#635AFF'"
-              avatarClasses="w-20 h-20"
-              :image="select?.avatar?.url"
-            >
-              <span class="text-3xl font-semibold text-white">{{ select.full_name[0] }}</span>
-            </base-avatar>
-          </div>
+      <button
+        class="p-dialog-header-icon p-dialog-header-close p-link w-9 h-9 shadow-button bg-white absolute top-[14px] right-[14px] z-10 rounded-full"
+        @click="modal = false"
+      >
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 14 14"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          class="p-icon p-dialog-header-close-icon w-3 h-3"
+        >
+          <path d="M8.01186 7.00933L12.27 2.75116C12.341 2.68501 12.398 2.60524 12.4375 2.51661C12.4769 2.42798 12.4982 2.3323 12.4999 2.23529C12.5016 2.13827 12.4838 2.0419 12.4474 1.95194C12.4111 1.86197 12.357 1.78024 12.2884 1.71163C12.2198 1.64302 12.138 1.58893 12.0481 1.55259C11.9581 1.51625 11.8617 1.4984 11.7647 1.50011C11.6677 1.50182 11.572 1.52306 11.4834 1.56255C11.3948 1.60204 11.315 1.65898 11.2488 1.72997L6.99067 5.98814L2.7325 1.72997C2.59553 1.60234 2.41437 1.53286 2.22718 1.53616C2.03999 1.53946 1.8614 1.61529 1.72901 1.74767C1.59663 1.88006 1.5208 2.05865 1.5175 2.24584C1.5142 2.43303 1.58368 2.61419 1.71131 2.75116L5.96948 7.00933L1.71131 11.2675C1.576 11.403 1.5 11.5866 1.5 11.7781C1.5 11.9696 1.576 12.1532 1.71131 12.2887C1.84679 12.424 2.03043 12.5 2.2219 12.5C2.41338 12.5 2.59702 12.424 2.7325 12.2887L6.99067 8.03052L11.2488 12.2887C11.3843 12.424 11.568 12.5 11.7594 12.5C11.9509 12.5 12.1346 12.424 12.27 12.2887C12.4053 12.1532 12.4813 11.9696 12.4813 11.7781C12.4813 11.5866 12.4053 11.403 12.27 11.2675L8.01186 7.00933Z" fill="currentColor"></path>
+        </svg>
+      </button>
 
-          <div class="mt-1">
-            <div>
-              <h1 class="text-greyscale-900 font-bold text-base mb-1">{{ select.full_name }}</h1>
-              <span class="block text-xs font-medium text-greyscale-500">{{ select.position?.name }}</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="mt-4">
-          <vertical-card>
-            <vertical-card-item title="branch" :description="select?.company?.name" />
-
-            <vertical-card-item title="department" :description="select?.top_level_department?.name" />
-
-            <vertical-card-item title="division" :description="select?.department?.name" />
-
-            <vertical-card-item title="corp-mail" :description="select.email" />
-
-            <vertical-card-item title="ip-phone" :description="select.cisco" />
-          </vertical-card>
-        </div>
-      </div>
+      <user-with-detail
+        :image="select?.avatar?.url"
+        :color="select.color"
+        :label="select.full_name"
+        :meta="select"
+        class="!m-0"
+      />
     </template>
   </base-dialog>
   <!-- /Dialog -->
