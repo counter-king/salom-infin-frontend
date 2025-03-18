@@ -83,6 +83,7 @@ watch(data, (newData) => {
           last_message: newData.text,
           last_message_date: newData.created_date,
           last_message_type: newData.message_type,
+          last_message_id: newData?.message_id,
           type: newData.chat_type,
           unread_count: newData.unread_count || 0
         })
@@ -118,13 +119,15 @@ watch(data, (newData) => {
       const chat = chatList.find(item => item.chat_id == newData.chat_id);
       if (chat && isPrivate) {
         chat.last_message = newData.text;
+        chat.last_message_id = newData?.message_id
         // unread_countni 1 ga oshirish
         if(newData.sender?.id != authStore.currentUser?.id) {
           chat.unread_count += 1; 
         }
       }
       if (chat && !isPrivate) {
-        chat.last_message = {sender: newData.sender, text: newData.text}
+        chat.last_message = { sender: newData.sender, text: newData.text}
+        chat.last_message_id = newData?.message_id
         // unread_countni 1 ga oshirish
         if(newData.sender?.id != authStore.currentUser?.id) {
           chat.unread_count += 1; 
@@ -168,7 +171,7 @@ watch(data, (newData) => {
     }
     else if(newData?.action == "deleted"){
       message.reactions[newData.emoji] = message.reactions[newData?.emoji].filter(user=> user.id != newData?.user?.id)
-      if(message.reactions[newData.emoji].length == 0) {
+      if(message.reactions[newData.emoji]?.length == 0) {
         delete message.reactions[newData.emoji]
       }
     }
@@ -225,7 +228,13 @@ watch(data, (newData) => {
 
   }
   else if(newData.type == WEBCOCKET_EVENTS.CHAT_DELETED) {
-    chatStore.groupChatList = chatStore.groupChatList.filter(item=> item.chat_id != newData?.content.chat_id)
+    const isPrivate = newData?.content?.chat_type == CHAT_TYPES.PRIVATE ? true : false
+    if(isPrivate) {
+      chatStore.privateChatList = chatStore.privateChatList.filter(item=> item.chat_id != newData?.content.chat_id)
+    } else{
+      chatStore.groupChatList = chatStore.groupChatList.filter(item=> item.chat_id != newData?.content.chat_id)
+    }
+    // if current chat is active, then redirect to chat index
     if(route.params?.id == newData?.content.chat_id){
       router.push({ name: CHAT_ROUTE_NAMES.CHAT_INDEX, query : { tab: newData?.content.chat_type == CHAT_TYPES.GROUP ? 'group' : undefined } })
     }
@@ -236,6 +245,47 @@ watch(data, (newData) => {
       chat.is_user_online = newData?.content.status == "online" ? true : false
       if(!!chatStore.selectedUser){
         chatStore.selectedUser.is_user_online = chat.is_user_online
+      }
+    }
+  }
+  // mew_message and new_chat_message are different events, but when mew_message comes, new_chat_message also comes
+  else if(newData.type == WEBCOCKET_EVENTS.NEW_CHAT_MESSAGE && route.params?.id != newData?.content?.chat_id) {
+    if(newData.content.chat_type == CHAT_TYPES.PRIVATE){
+      const privateChat = chatStore.privateChatList.find(item=> item.chat_id == newData?.content.chat_id)
+
+      if(privateChat){
+        privateChat.last_message = newData?.content?.text
+        const isTheSameLastMessageId = privateChat.last_message_id == newData?.content?.message_id
+        privateChat.last_message_id = newData?.content?.message_id
+        // to avoid showing unread message from sender
+        if(newData?.content?.sender?.id != authStore?.currentUser?.id && !isTheSameLastMessageId){
+          privateChat.unread_count += 1
+        }
+      } else {
+        chatStore.privateChatList.unshift({
+          first_name: newData?.content?.sender?.fist_name,
+          full_name: newData?.content?.sender?.full_name,
+          chat_id: newData?.content?.chat_id,
+          color: newData?.content?.sender?.color,
+          is_user_online: true,
+          last_message: newData?.content?.text,
+          last_message_id: newData?.content?.message_id,
+          type: newData?.content?.chat_type,
+          unread_count: 1
+        })
+      }
+    }
+    else if(newData.content.chat_type == CHAT_TYPES.GROUP){
+      const groupChat = chatStore.groupChatList.find(item=> item.chat_id == newData?.content.chat_id)
+
+      if(groupChat){
+        const isTheSameLastMessageId = groupChat.last_message_id == newData?.content?.message_id
+        groupChat.last_message = { sender: newData.content.sender, text: newData.content.text}
+        groupChat.last_message_id = newData?.content?.message_id
+        // to avoid showing unread message from sender
+        if(newData?.content?.sender?.id != authStore?.currentUser?.id && !isTheSameLastMessageId){
+          groupChat.unread_count += 1
+        }
       }
     }
   }

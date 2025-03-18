@@ -15,8 +15,10 @@ import {
   fetchUsersSearchByMessage
 } from "@/modules/Chat/services";
 // constants  
-import { CHAT_TYPES, collectionStikers, MESSAGE_TYPES } from "../constatns";
+import { CHAT_TYPES, MESSAGE_TYPES } from "../constatns";
+// stores
 import { useAuthStore } from "@/modules/Auth/stores";
+// import { useThemeStore } from "@/stores/theme.store";
 
 import { fetchBlobFile } from "@/services/file.service";
 import { fetchGetMessageFilesList, fetchGetMessageLinkList } from "../services";
@@ -77,6 +79,11 @@ export const useChatStore = defineStore("chat-stores", {
     uploadingFiles: []
   }),
   actions: {
+    async setCounts(increment = true) {
+      // const themeStore = useThemeStore()
+      // const chatCount = themeStore.header.find(menu=> menu.name === 'chat')
+      // chatCount.count += (increment ? 1 : -1) 
+    },
     toggleRightSidebar() {
       this.rightSidebarVisible = !this.rightSidebarVisible;
     },
@@ -188,6 +195,7 @@ export const useChatStore = defineStore("chat-stores", {
           last_message: item.last_message?.text,
           last_message_date: item.last_message?.created_date,
           last_message_type: item.last_message?.type,
+          last_message_id: item.last_message?.id,
           type: item.type,
           unread_count: item.unread_count
         }));
@@ -218,6 +226,7 @@ export const useChatStore = defineStore("chat-stores", {
         last_message: data?.last_message?.text,
         last_message_date: data?.last_message?.created_date,
         last_message_type: data?.last_message?.type,
+        last_message_id: data?.last_message?.id,
         type: data.type,
         unread_count: data.unread_count
       }
@@ -240,6 +249,7 @@ export const useChatStore = defineStore("chat-stores", {
         last_message: data?.last_message?.text,
         last_message_date: data?.last_message?.created_date,
         last_message_type: data?.last_message?.type,
+        last_message_id: data?.last_message?.id,
         type: data.type,
         unread_count: data.unread_count
       }
@@ -272,6 +282,7 @@ export const useChatStore = defineStore("chat-stores", {
             members: item?.members || [],
             last_message_time: item.last_message?.created_date,
             last_message_type: item.last_message?.type,
+            last_message_id: item.last_message?.id,
             type: item.type,
             unread_count: item.unread_count
           })
@@ -311,6 +322,7 @@ export const useChatStore = defineStore("chat-stores", {
           last_message: data?.last_message?.message_text,
           last_message_time: data?.last_message?.created_date,
           last_message_type: data?.last_message?.type,
+          last_message_id: data?.last_message?.id,
           type: data.type,
           unread_count: data.unread_count
         }

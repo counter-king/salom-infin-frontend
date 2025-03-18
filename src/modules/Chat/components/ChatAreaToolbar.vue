@@ -165,7 +165,7 @@ watch(createGroupDialogVisible, () => {
    v-model="deleteDialogVisible" 
    :onDelete="onDeleteChat" 
    :onClose="() => deleteDialogVisible = false"
-   conetentText="delete-chat-group-dialog-content"
+   :conetentText="route.name == CHAT_ROUTE_NAMES.GROUP ? 'delete-chat-group-dialog-content' : 'delete-chat-private-dialog-content'"
    :isDeleteLoading="isDeleteLoading"
   />
 </template>

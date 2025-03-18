@@ -14,10 +14,14 @@ import { useAuthStore } from '../modules/Auth/stores/index'
 import { getStorageItem } from '@/utils/storage'
 import { ACCESS } from '@/constants/storage'
 // Composable
+import { useUserOnlineStatus } from '@/composables/useUserOnlineStatus'
+
 const router = useRouter()
 const commonStore = useCommonStore()
 const countStore = useCountStore()
 const authStore = useAuthStore()
+useUserOnlineStatus()
+
 // Reactive
 // TODO: false
 const appLoading = ref(true)

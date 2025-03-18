@@ -24,7 +24,8 @@ export const WEBCOCKET_EVENTS = {
   TYPING: "typing",
   MESSAGE_READ: "message_read",
   CHAT_DELETED:"chat_deleted",
-  USER_STATUS:"user_status"
+  USER_STATUS:"user_status",
+  NEW_CHAT_MESSAGE:"new_chat_message"
 }
 
 export const MESSAGE_TYPES = {

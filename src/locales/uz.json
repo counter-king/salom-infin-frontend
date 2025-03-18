@@ -788,6 +788,6 @@
   "edit-group": "Guruhni tahrirlash",
   "message-found":"{count} xabar topildi",
   "save-as":"Saqlash...",
-  "edited": "tahrirlangan"
-
+  "edited": "tahrirlangan",
+  "delete-chat-private-dialog-content": "Siz bu suhbatni o'chirmoqchimisiz ?"
 }
