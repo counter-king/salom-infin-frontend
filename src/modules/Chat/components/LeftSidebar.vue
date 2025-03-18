@@ -165,7 +165,7 @@ watch(createGroupDialogVisible, () => {
       <template v-else>
         <div class="overflow-hidden overflow-y-auto p-4 pt-0" style="height: calc(100vh - 260px)">
           <!-- chat users who have chat with current user -->
-          <p class="text-sm font-medium text-greyscale-500 my-4">Найдено <span class="font-semibold text-greyscale-900">{{ chatStore.chatUserSearchList.length }}</span> результата</p>
+          <p class="text-sm font-medium text-greyscale-500 my-4">Найдено <span class="font-semibold text-greyscale-900">{{ chatStore.chatUserSearchList?.length }}</span> результата</p>
           <template v-for="item in chatStore.chatUserSearchList" :key="item.id">
             <template v-if="item.type === 'private'">
               <user-item
@@ -189,7 +189,7 @@ watch(createGroupDialogVisible, () => {
             @click="onCreateChat(user)"
           />
           <!-- users who sent messages to current user -->
-          <p class="text-sm font-medium text-greyscale-500 my-4">{{ t('message-found',{count: chatStore.usersSearchListByMessage.length })}}</p>
+          <p class="text-sm font-medium text-greyscale-500 my-4">{{ t('message-found',{count: chatStore.usersSearchListByMessage?.length })}}</p>
           <template v-for="item in chatStore.usersSearchListByMessage" :key="item.id">
             <user-item
             @click="onClickSearchedUser(item, false)"
@@ -218,7 +218,7 @@ watch(createGroupDialogVisible, () => {
               <base-spinner />
             </template>
             <template v-else>
-              <template v-if="!chatStore.privateChatList.length">
+              <template v-if="!chatStore.privateChatList?.length">
                 <div class="flex flex-col justify-center items-center h-full text-center px-4">
                   <img src="@/assets/img/chat-default.png" alt="chat-default">
                   <span class="text-sm font-semibold block mt-5">{{ t('find-users') }}</span>
@@ -244,7 +244,7 @@ watch(createGroupDialogVisible, () => {
               <base-spinner />
             </template>
             <template v-else>
-              <template v-if="!chatStore.groupChatList.length">
+              <template v-if="!chatStore.groupChatList?.length">
                 <div class="flex flex-col justify-center items-center h-full text-center px-4">
                   <img src="@/assets/img/chat-default.png" alt="chat-default">
                   <span class="text-sm font-semibold block mt-5">{{ t('find-users') }}</span>

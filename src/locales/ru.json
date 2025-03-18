@@ -789,5 +789,6 @@
   "edit-group": "Редактировать группу",
   "message-found":"{count} сообщение найдено",
   "save-as":"Сохранить как...",
-  "edited":"Изменено"
+  "edited":"Изменено",
+  "delete-chat-private-dialog-content": "Вы хотите удалить этот чат ?"
 }

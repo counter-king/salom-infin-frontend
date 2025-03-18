@@ -47,8 +47,6 @@ defineExpose({
  <div 
   class="flex flex-col gap-2 items-end"
   :class="classNames"
-  @selectstart="handleSelectStart"
-  @click="handleClick"
   v-bind="attrs"
   ref="forwardedRef"
   >
@@ -71,6 +69,8 @@ defineExpose({
       </div>
       <!-- files -->
       <div
+         @selectstart="handleSelectStart"
+         @click="handleClick"
          @contextmenu.prevent="(e)=>props.onShowContextMenu(e, props.message)"
          class="flex flex-col gap-1 bg-primary-400 rounded-2xl rounded-br-[4px] px-4 py-3 cursor-pointer  max-w-[400px]  min-w-[243px]"
          :class="[

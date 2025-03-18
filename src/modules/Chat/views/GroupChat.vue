@@ -223,7 +223,7 @@ onMounted(() => {
         </div>
       </div>
       <!-- message list -->
-      <div ref="refMessagesContainer" class="flex flex-col gap-1 h-full" v-if="!!chatStore.messageListByChatId.length">
+      <div ref="refMessagesContainer" class="flex flex-col gap-1 h-full" v-if="!!chatStore.messageListByChatId?.length">
         <template v-for="(message, index) in chatStore.messageListByChatId" :key="message?.message_id">
           <template v-if="showDateByCalculate(index)">
               <ShowDate :classNames="{ 'mb-5': index == 0, 'my-5': index != 0}" :date="message.created_date" />
