@@ -179,6 +179,9 @@ onMounted(async () => {
   hasNext.value = count > page.value * pageSize.value
   page.value += 1
   chatStore.selectedUser = await chatStore.actionGetPrivateChatById(route.params?.id);
+  if(!chatStore.privateChatList.some(item => item?.chat_id == chatStore.selectedUser?.chat_id)){
+    chatStore.privateChatList.unshift(chatStore.selectedUser)
+  }
   // make scroll down after loading new data
   handleScrollDown()
   // initialize read message observer to get correct ref values
