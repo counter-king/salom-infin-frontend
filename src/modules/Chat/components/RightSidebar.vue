@@ -80,7 +80,7 @@ watch([() => route.params?.id], async () => {
     chatStore.allFiles = results.map(item => item.data.count)   
   }
 },{ immediate: true })
-  
+
 </script>
 <template>
   <div

@@ -18,10 +18,11 @@ import {
 import { CHAT_TYPES, MESSAGE_TYPES } from "../constatns";
 // stores
 import { useAuthStore } from "@/modules/Auth/stores";
-// import { useThemeStore } from "@/stores/theme.store";
-
+import { useThemeStore } from "@/stores/theme.store";
+// services
 import { fetchBlobFile } from "@/services/file.service";
 import { fetchGetMessageFilesList, fetchGetMessageLinkList } from "../services";
+import { fetchChatUnreadMessageCounts } from "@/services/count.service";
 
 const authStore = useAuthStore();
 
@@ -79,10 +80,11 @@ export const useChatStore = defineStore("chat-stores", {
     uploadingFiles: []
   }),
   actions: {
-    async setCounts(increment = true) {
-      // const themeStore = useThemeStore()
-      // const chatCount = themeStore.header.find(menu=> menu.name === 'chat')
-      // chatCount.count += (increment ? 1 : -1) 
+    async setCounts() {
+      const { data } = await fetchChatUnreadMessageCounts()
+      const themeStore = useThemeStore()
+      const chatMenu = themeStore.header.find(menu=> menu.name === 'chat')
+      chatMenu.count = data.count
     },
     toggleRightSidebar() {
       this.rightSidebarVisible = !this.rightSidebarVisible;
@@ -318,7 +320,17 @@ export const useChatStore = defineStore("chat-stores", {
           title: data?.title,
           image: data?.images[0]?.image,
           chat_id: data.id,
-          members: data?.members || [],
+          members: data?.members.map((item)=>({
+            first_name: item?.user?.first_name,
+            full_name: item?.user?.full_name,
+            position: item?.user?.position?.name,
+            status: item?.user?.status,
+            id: item?.user?.id,
+            private_chat_id: item?.private_chat_id,
+            chat_id: item?.chat,
+            color: item?.user?.color,
+            avatar: item?.user?.avatar,        
+          })) || [],
           last_message: data?.last_message?.message_text,
           last_message_time: data?.last_message?.created_date,
           last_message_type: data?.last_message?.type,

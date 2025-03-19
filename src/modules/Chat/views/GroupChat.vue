@@ -59,7 +59,7 @@ const refChatArea = inject("refChatArea");
 // methods
 // when scroll down, scrollDwonButton will be visible
 const handleScroll = (event) => {
-  if( event.target.scrollHeight - event.target.clientHeight >  Math.floor(event.target.scrollTop + 100)  ) {
+  if(event && event.target && event.target.scrollHeight - event.target.clientHeight >  Math.floor(event.target.scrollTop + 100)  ) {
     showScrollDownButton.value = true
   } else {
     showScrollDownButton.value = false
@@ -72,19 +72,19 @@ const handleScroll = (event) => {
 }
 
 const handleScrollUp = () => {
-  refChatArea.value.scrollTo({
+  refChatArea.value?.scrollTo({
     top: refChatArea.value.clientHeight,
   });
 }
 
 const handleScrollDown = () => {
-  refChatArea.value.scrollTo({
+  refChatArea.value?.scrollTo({
     top: refChatArea.value.scrollHeight,
     // behavior: 'smooth'
   });
 }
 const handleScrollDownSmooth = () => {
-  refChatArea.value.scrollTo({
+  refChatArea.value?.scrollTo({
     top: refChatArea.value.scrollHeight,
     behavior: 'smooth'
   });
@@ -175,10 +175,10 @@ watch(
 );
 
 onMounted(async () => {
-  chatStore.selectedGroup = await chatStore.actionGetGroupChatById(route.params?.id);
   const { count } = await chatStore.actionGetMessageListByChatId({ chat:route.params?.id, page:1, page_size: 20 }, true);
   hasNext.value = count > page.value * pageSize.value
   page.value += 1
+  chatStore.selectedGroup = await chatStore.actionGetGroupChatById(route.params?.id);
    // make scroll down after loading new data
    handleScrollDown()
   // initialize read message observer to get correct ref values
@@ -237,6 +237,7 @@ onMounted(() => {
                    ref="refMessageElements"
                   :data-message-id="message?.message_id"
                   :data-message-is-read="message?.is_read"
+                  :data-message-user-id="message?.sender?.id"
                   :index="index"
                   :message="message"
                   :handleClickEmoji="handleClickEmoji"
@@ -249,6 +250,7 @@ onMounted(() => {
                  ref="refMessageElements"
                 :data-message-id="message?.message_id"
                 :data-message-is-read="message?.is_read"
+                :data-message-user-id="message?.sender?.id"
                 :message="message"
                 :handleClickEmoji="handleClickEmoji"
                 :onShowContextMenu="onShowContextMenu" 
@@ -261,6 +263,7 @@ onMounted(() => {
                 ref="refMessageElements"
                 :data-message-id="message?.message_id"
                 :data-message-is-read="message?.is_read"
+                :data-message-user-id="message?.sender?.id"
                 :handleClickEmoji="handleClickEmoji"
                 :onShowContextMenu="onShowContextMenu" 
                 :onShowEmojiContextMenu="onShowEmojiContextMenu" 
@@ -279,6 +282,7 @@ onMounted(() => {
                   :handleClickImage="handleClickImage"
                   :data-message-id="message?.message_id"
                   :data-message-is-read="message?.is_read"
+                  :data-message-user-id="message?.sender?.id"
                   :message="message"
                   :handleClickEmoji="handleClickEmoji"
                   :onShowContextMenu="onShowContextMenu"
@@ -293,6 +297,7 @@ onMounted(() => {
                   ref="refMessageElements"
                   :data-message-id="message?.message_id"
                   :data-message-is-read="message?.is_read"
+                  :data-message-user-id="message?.sender?.id"
                   :message="message"
                   :handleClickEmoji="handleClickEmoji"
                   :onShowContextMenu="onShowContextMenu"
@@ -307,6 +312,7 @@ onMounted(() => {
                 ref="refMessageElements"
                 :data-message-id="message?.message_id"
                 :data-message-is-read="message?.is_read"
+                :data-message-user-id="message?.sender?.id"
                 :handleClickEmoji="handleClickEmoji"
                 :onShowContextMenu="onShowContextMenu" 
                 :onShowEmojiContextMenu="onShowEmojiContextMenu" 

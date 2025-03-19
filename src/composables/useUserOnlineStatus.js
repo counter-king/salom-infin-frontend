@@ -1,16 +1,22 @@
- // Core
- import { onBeforeUnmount, onMounted, watch } from 'vue';
- // socket
- import { socket } from '@/services/socket';
- // contants
- import { WEBCOCKET_EVENTS } from '@/modules/Chat/constatns';
- // stores
- import { useChatStore } from '@/modules/Chat/stores';
+// Core
+import { onBeforeUnmount, onMounted, watch } from 'vue';
+// socket
+import { socket } from '@/services/socket';
+// contants
+import { WEBCOCKET_EVENTS } from '@/modules/Chat/constatns';
+// stores
+import { useChatStore } from '@/modules/Chat/stores';
+import { useAuthStore } from '@/modules/Auth/stores';
+// services
+import { useDebounceFn } from '@vueuse/core';
 
  
 export const useUserOnlineStatus = () => {
+
 const { send, data } = socket
+// composibles
 const chatStore = useChatStore()
+const authStore = useAuthStore()
 
 const sendUserOnlineEvent = ()=> {
   const payload = { command: 'user_online' }
@@ -36,16 +42,31 @@ const handleBrowerserTabChanges =()=>{
   }
 }
 
+const getUnreadCount = useDebounceFn(()=> {
+  chatStore.setCounts()
+}, 600)
+
+// watching socket events using data(data is socket event)
 watch(data, (newData) => {
   newData = JSON.parse(newData);
-//   if(newData.type == WEBCOCKET_EVENTS.NEW_CHAT_MESSAGE){
-//     chatStore.setCounts()
-//   }
+  if(newData.type == WEBCOCKET_EVENTS.NEW_CHAT_MESSAGE){
+    // if current user message sender, do not increment chat count
+    if(newData.content.sender.id != authStore.currentUser?.id){
+        getUnreadCount()
+    }
+  }
+  if(newData.type == WEBCOCKET_EVENTS.MESSAGE_READ){
+    // when current user, read mesage, decrement chat count
+    if(newData.user.id == authStore.currentUser?.id){
+        getUnreadCount()
+    }
+  }
 })
 
 onMounted(() => {
   sendUserOnlineEvent()
   sendUserHandshake()
+  chatStore.setCounts()
   window.addEventListener("visibilitychange", handleBrowerserTabChanges)
 })
 

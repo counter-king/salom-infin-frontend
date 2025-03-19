@@ -57,7 +57,7 @@ watch(status, (newStatus) => {
   }
 });
 
-// Kelgan ma'lumotlarni kuzatish
+// websocketdan, kelgan ma'lumotlarni kuzatish
 watch(data, (newData) => {
   newData = JSON.parse(newData);
   // console.log("ewasd",newData);
@@ -212,7 +212,7 @@ watch(data, (newData) => {
     
     const message = chatStore.messageListByChatId.find(item=> item.message_id == newData?.message_id)
     if(message?.sender?.id != newData?.user?.id){
-      if(message && !message?.is_read){
+      if(message){
         message.is_read = true
         // when messags are readed, then decrease count of unread message count from chat list
         const chatPrivate = chatStore.privateChatList.find(item=> item.chat_id == message?.chat_id) 
@@ -243,7 +243,7 @@ watch(data, (newData) => {
     const chat = chatStore.privateChatList.find(item=> item.chat_id == newData?.content.chat_id)
     if(chat){
       chat.is_user_online = newData?.content.status == "online" ? true : false
-      if(!!chatStore.selectedUser){
+      if(!!chatStore.selectedUser && chatStore.selectedUser.user_id == newData?.content.user_id){
         chatStore.selectedUser.is_user_online = chat.is_user_online
       }
     }
@@ -263,7 +263,7 @@ watch(data, (newData) => {
         }
       } else {
         chatStore.privateChatList.unshift({
-          first_name: newData?.content?.sender?.fist_name,
+          first_name: newData?.content?.sender?.first_name,
           full_name: newData?.content?.sender?.full_name,
           chat_id: newData?.content?.chat_id,
           color: newData?.content?.sender?.color,
