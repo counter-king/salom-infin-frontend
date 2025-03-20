@@ -62,6 +62,20 @@ const handleClickWrapper = () => {
   inputSendMessasgeRef.value.$el.focus()
 }
 
+// showing count of uploading files 
+watch(() => chatStore.uploadingFiles, async () => {
+  // when route change other than private or group, don't work only work on private or group
+  if(route.name == CHAT_ROUTE_NAMES.PRIVATE || route.name == CHAT_ROUTE_NAMES.GROUP){
+    const results = await Promise.all([
+      chatStore.actionGetMessageFileList({ chat:route.params?.id, type: MESSAGE_TYPES.FILE, page:1, page_size: 1}),
+      chatStore.actionGetMessageVideoFileList({ chat:route.params?.id, type: MESSAGE_TYPES.VIDEO, page:1, page_size: 1 }),
+      chatStore.actionGetMessageImageFileList({ chat:route.params?.id, type: MESSAGE_TYPES.IMAGE, page:1, page_size: 1 }),
+      chatStore.actionGetMessageAudioFileList({ chat:route.params?.id, type: MESSAGE_TYPES.AUDIO, page:1, page_size: 1 })
+    ])
+    chatStore.allFiles = results.map(item => item.data.count)   
+  }
+})
+
 watch([() => route.params?.id], async () => {
   // when route change other than private or group, don't work only work on private or group
   if(route.name == CHAT_ROUTE_NAMES.PRIVATE || route.name == CHAT_ROUTE_NAMES.GROUP){
@@ -69,10 +83,10 @@ watch([() => route.params?.id], async () => {
     countLink.value = data?.count || 0
     chatStore.messageFilesListLoading = true
     const results = await Promise.all([
-      chatStore.actionGetMessageFileList({ chat:route.params?.id, type: MESSAGE_TYPES.FILE }),
-      chatStore.actionGetMessageVideoFileList({ chat:route.params?.id, type: MESSAGE_TYPES.VIDEO }),
-      chatStore.actionGetMessageImageFileList({ chat:route.params?.id, type: MESSAGE_TYPES.IMAGE }),
-      chatStore.actionGetMessageAudioFileList({ chat:route.params?.id, type: MESSAGE_TYPES.AUDIO })
+      chatStore.actionGetMessageFileList({ chat:route.params?.id, type: MESSAGE_TYPES.FILE, page:1, page_size: 1}),
+      chatStore.actionGetMessageVideoFileList({ chat:route.params?.id, type: MESSAGE_TYPES.VIDEO, page:1, page_size: 1 }),
+      chatStore.actionGetMessageImageFileList({ chat:route.params?.id, type: MESSAGE_TYPES.IMAGE, page:1, page_size: 1 }),
+      chatStore.actionGetMessageAudioFileList({ chat:route.params?.id, type: MESSAGE_TYPES.AUDIO, page:1, page_size: 1 })
     ]).finally(()=>{
       chatStore.messageFilesListLoading = false
   })

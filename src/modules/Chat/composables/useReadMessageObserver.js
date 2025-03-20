@@ -73,7 +73,6 @@ const initializeReadMessageObserver = ()=> {
         refMessageElements.value.forEach(component => {
         const el = component?.forwardedRef;
             if (el) {
-                // console.log(el);
                 observer.value.observe(el);
             }   
         });

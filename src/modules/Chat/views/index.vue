@@ -85,7 +85,7 @@ watch(data, (newData) => {
           last_message_type: newData.message_type,
           last_message_id: newData?.message_id,
           type: newData.chat_type,
-          unread_count: newData.unread_count || 0
+          unread_count: newData.unread_count  
         })
       }
 

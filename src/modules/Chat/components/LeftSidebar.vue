@@ -91,6 +91,7 @@ const onClickSearchedUser = (item, addlist=true) => {
 
 // when private chat list  is clicked, work
 const onClickChatPrivateUser = async (user) => {
+  chatStore.selectedUser = user
   // if user is already selected then don't do anything, becouse no full data, just it is getting from  api id
   if(route.params.id != user.chat_id){
     router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: user.chat_id }})

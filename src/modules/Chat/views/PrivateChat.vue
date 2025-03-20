@@ -179,6 +179,7 @@ onMounted(async () => {
   hasNext.value = count > page.value * pageSize.value
   page.value += 1
   chatStore.selectedUser = await chatStore.actionGetPrivateChatById(route.params?.id);
+  // if selected user don't exist in the list then add it
   if(!chatStore.privateChatList.some(item => item?.chat_id == chatStore.selectedUser?.chat_id)){
     chatStore.privateChatList.unshift(chatStore.selectedUser)
   }
@@ -197,7 +198,7 @@ onMounted(() => {
     }, { immediate: true })
   }
 
-  // avoid scroll event working when initail loading happen 
+  // avoid scroll event that get next page data working when initail loading happen 
   setTimeout(() => {
     initialRenderComplete.value = true;
   }, 500);
