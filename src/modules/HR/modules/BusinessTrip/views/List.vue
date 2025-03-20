@@ -35,7 +35,7 @@ const openRoute = async () => {
     name: ROUTE_SD_CREATE,
     params: {
       document_type: COMPOSE_DOCUMENT_TYPES.NOTICE,
-      document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP
+      document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2
     }
   })
 }

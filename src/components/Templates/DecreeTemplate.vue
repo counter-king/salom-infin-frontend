@@ -59,10 +59,10 @@ const signers = computed(() => {
       FARMOYISH
     </div>
 
-<!--    <div v-if="SDStore.historyShow" class="text-justify" v-html="SDStore.historyContent"></div>-->
-    <div class="text-justify" v-html="props.composeModel?.content"></div>
+    <div v-if="SDStore.historyShow && composeModel.type === 'decree_for_leadership'" class="text-justify" v-html="SDStore.historyContent"></div>
+    <div v-else class="text-justify" v-html="props.composeModel?.content"></div>
 
-    <template v-if="composeModel.notices?.length && composeModel.trip_plans?.length && composeModel.bookings?.length">
+    <template v-if="composeModel.notices?.length && composeModel.trip_plans?.length && (composeModel.bookings?.length || composeModel.type === 'decree_for_leadership')">
       <base-business-trip-tables :compose-model="composeModel" :preview="preview" />
 
       <div class="indent-8 mt-2 text-sm text-justify">
@@ -78,7 +78,7 @@ const signers = computed(() => {
           Buxgalteriya hisobi va moliyaviy menejment departamenti tomonidan xizmat safari bilan bog‘liq xarajatlar uchun to‘lovlar belgilangan tartibda amalga oshirilsin.
         </div>
 
-        <div>
+        <div v-if="composeModel?.type !== 'decree_for_leadership'">
           <span class="font-semibold">Asos: </span>{{ composeModel?.trip_notice_register_number || '__' }}-sonli bildirishnnoma;
         </div>
 

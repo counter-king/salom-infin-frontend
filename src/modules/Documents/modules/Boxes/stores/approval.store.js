@@ -148,7 +148,8 @@ export const useBoxesApprovalStore = defineStore("approval-stores", {
               ...response.data.compose,
               decree_id: decreeCompose?.data?.to_composes[0]?.from_compose?.id,
               decree_content: decreeCompose?.data?.to_composes[0]?.from_compose?.content,
-              decree_register_number: decreeCompose?.data?.to_composes[0]?.from_compose?.register_number
+              decree_register_number: decreeCompose?.data?.to_composes[0]?.from_compose?.register_number,
+              type: response?.data?.compose?.document_sub_type?.id === Number(COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL) ? 'decree_for_leadership' : ''
             }
           }
         }

@@ -657,7 +657,7 @@ export const useSDStore = defineStore("sd-stores", {
         this.detailModel = {
           ...response.data,
           decree_content: res?.data?.to_composes[0]?.from_compose?.content,
-          decree_register_number: res?.data?.to_composes[0]?.from_compose?.register_number
+          decree_register_number: res?.data?.to_composes[0]?.from_compose?.register_number,
         }
         return Promise.resolve(response)
       }
