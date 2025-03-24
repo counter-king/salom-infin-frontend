@@ -73,7 +73,7 @@ onBeforeMount(async () => {
       }
     } else {
       SDStore.detailModel = {
-        ...response.data,
+        ...SDStore.detailModel,
         type: response?.data?.document_sub_type?.id === Number(COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL) ? 'decree_for_leadership' : ''
       }
       setTimeout(() => {

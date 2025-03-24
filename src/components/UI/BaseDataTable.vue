@@ -146,7 +146,7 @@ onMounted( async () => {
     :value="valueComputed"
     lazy
     :page-link-size="5"
-    :first="paginationStore.firstRow"
+    :first="paginationStore.firstRow || 0"
     paginator
     paginator-position="bottom"
     paginatorTemplate="RowsPerPageDropdown CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
