@@ -89,7 +89,7 @@ const props = defineProps({
         </template>
       </div>
 
-      <span>{{ formatNameToShort(props.resolution?.reviewer?.full_name) }}</span>
+      <span>{{ formatNameToShort(props.resolution?.reviewer?.full_name, '.', props.resolution?.reviewer?.first_name, props.resolution?.reviewer?.last_name) }}</span>
     </div>
 
 <!--    <pre>{{ props.resolution.reviewer }}</pre>-->

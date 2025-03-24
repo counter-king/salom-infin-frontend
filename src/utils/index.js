@@ -69,25 +69,37 @@ export const isObject = (key) => Object.prototype.toString.call(key) === '[objec
 * */
 export const normalizeText = (value) => value.split('\n').join('<br>').replace(/\s+/g, ' ').trim()
 /**
-* Форматирует и сокращает имя
+ * Форматирует и сокращает имя
  * @param { string } value
  * @param { string } separate
+ * @param first_name
+ * @param last_name
  * @return { string } Odinayev M.K.
-* */
-export const formatNameToShort = (value, separate = '.') => {
-  if(!value) return 'Текст не найден'
-
-  const [name, firstName, fatherName] = value.split(' ')
-
-  const firstNameChar = firstName.slice(0, 2).toLowerCase()
-  const fatherNameChar = fatherName?.slice(0, 2).toLowerCase()
+ * */
+export const formatNameToShort = (value, separate = '.', first_name = null, last_name = null) => {
   const mixedLetters = ['Sh', 'SH', 'sh', 'ch', 'CH', 'Ch', 'o\'', 'O\'', 'g\'', 'G\'', 'dj', 'Dj', 'DJ']
 
-  if (mixedLetters.includes(firstNameChar) || mixedLetters.includes(fatherNameChar)) {
-    return `${ name } ${ (firstName.slice(0, 2) + separate).toUpperCase() }`
-  }
-  else {
-    return `${ name } ${ (firstName.slice(0, 1) + separate).toUpperCase() }`
+  if (first_name && last_name) {
+    const firstNameChar = first_name.slice(0, 2).toLowerCase()
+    if (mixedLetters.includes(firstNameChar)) {
+      return `${last_name} ${first_name.slice(0, 2).toUpperCase()}.`
+    } else {
+      return `${last_name} ${first_name.slice(0, 1).toUpperCase()}.`
+    }
+  } else {
+    if(!value) return 'Текст не найден'
+
+    const [name, firstName, fatherName] = value.split(' ')
+
+    const firstNameChar = firstName.slice(0, 2).toLowerCase()
+    const fatherNameChar = fatherName?.slice(0, 2).toLowerCase()
+
+    if (mixedLetters.includes(firstNameChar) || mixedLetters.includes(fatherNameChar)) {
+      return `${ name } ${ (firstName.slice(0, 2) + separate).toUpperCase() }`
+    }
+    else {
+      return `${ name } ${ (firstName.slice(0, 1) + separate).toUpperCase() }`
+    }
   }
 }
 /*
