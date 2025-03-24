@@ -210,7 +210,7 @@ onMounted(() => {
     @dragover.prevent="onDragOver"
     @dragleave.prevent="onDragLeave"
     @drop.prevent="onDrop"
-    @contextmenu.prevent="onContextMenu"
+    @contextmenu.prevent=""
     >
     <template v-if="chatStore.messageListByChatIdLoading">
         <base-spinner />
