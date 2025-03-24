@@ -82,7 +82,7 @@ const onSelect = (item) => {
 
     <div>
       <h1 class="text-white text-sm font-semibold mb-1">
-        {{ formatNameToShort(userProfile.full_name) }}
+        {{ formatNameToShort(userProfile.full_name, '.', userProfile.first_name, userProfile.last_name) }}
       </h1>
 
       <input
