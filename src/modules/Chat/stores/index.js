@@ -5,6 +5,7 @@ import {
   fetchChatUsersSearch,
   fetchCreatePrivateChat,
   fetchDeleteMessageById,
+  fetchEditGroupChat,
   fetchEditMessageById,
   fetchGetGroupChatById,
   fetchGetGroupChatList,
@@ -311,7 +312,7 @@ export const useChatStore = defineStore("chat-stores", {
       this.groupChatByIdLoading = true;
       const { data } = await fetchGetGroupChatById(id);
       this.groupChatByIdLoading = false;
-      if(data){
+      try {
         if(data.images[0]?.image?.id){
         const { blobUrl } = await fetchBlobFile(data.images[0]?.image?.id)
         data.images[0].image.blobUrl = blobUrl
@@ -329,7 +330,8 @@ export const useChatStore = defineStore("chat-stores", {
             private_chat_id: item?.private_chat_id,
             chat_id: item?.chat,
             color: item?.user?.color,
-            avatar: item?.user?.avatar,        
+            avatar: item?.user?.avatar,
+            role: item?.role        
           })) || [],
           last_message: data?.last_message?.message_text,
           last_message_time: data?.last_message?.created_date,
@@ -338,6 +340,44 @@ export const useChatStore = defineStore("chat-stores", {
           type: data.type,
           unread_count: data.unread_count
         }
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    /** */
+    /** */
+    async actionEditGroupChatById(id, body) {
+      const { data } = await fetchEditGroupChat(id, body);
+      try {
+        if(data.images[0]?.image?.id){
+        const { blobUrl } = await fetchBlobFile(data.images[0]?.image?.id)
+        data.images[0].image.blobUrl = blobUrl
+        }
+        return {
+          title: data?.title,
+          image: data?.images[0]?.image,
+          chat_id: data.id,
+          members: data?.members.map((item)=>({
+            first_name: item?.user?.first_name,
+            full_name: item?.user?.full_name,
+            position: item?.user?.position?.name,
+            status: item?.user?.status,
+            id: item?.user?.id,
+            private_chat_id: item?.private_chat_id,
+            chat_id: item?.chat,
+            color: item?.user?.color,
+            avatar: item?.user?.avatar,
+            role: item?.role        
+          })) || [],
+          last_message: data?.last_message?.message_text,
+          last_message_time: data?.last_message?.created_date,
+          last_message_type: data?.last_message?.type,
+          last_message_id: data?.last_message?.id,
+          type: data.type,
+          unread_count: data.unread_count
+        }
+      } catch (err) {
+        console.log(err)
       }
     },
     /** */
@@ -362,8 +402,8 @@ export const useChatStore = defineStore("chat-stores", {
             groupedReactions[emoji].push(user);
           });
                   // image fetch blob URL
-          if (item.type == MESSAGE_TYPES.IMAGE && item.attachments[0]?.file?.id) {
-            const { blobUrl } = await fetchBlobFile(item.attachments[0]?.file?.id);
+          if (item.type == MESSAGE_TYPES.IMAGE && item?.attachments[0]?.file?.id) {
+            const { blobUrl } = await fetchBlobFile(item?.attachments[0]?.file?.id);
             item.attachments[0].file.url = blobUrl;
           }
 

@@ -38,7 +38,7 @@ const menuItems = computed(() => [
     },
     iconClass: "!text-greyscale-500 !w-4 !h-4"
   }] : []),  
-   ...(chatStore.selectedGroup?.members?.find((item) => item.user?.id == authStore.currentUser.id)?.role == 'owner' || chatStore.selectedUser?.members?.find((item) => item.user?.id == authStore.currentUser?.id)?.role == 'owner' ? 
+   ...(chatStore.selectedGroup?.members?.find((item) => item?.id == authStore.currentUser.id)?.role == 'owner' || chatStore.selectedUser?.members?.find((item) => item.user?.id == authStore.currentUser?.id)?.role == 'owner' ? 
     [{
      label: 'delete',
      labelClass: '!text-critic-500',

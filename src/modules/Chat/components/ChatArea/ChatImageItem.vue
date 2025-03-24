@@ -52,7 +52,7 @@ const forwardedRef = ref(null);
 const attrs = useAttrs();
 
 onMounted(async() => {
-  if(!props.message?.attachments?.file?.url){    
+  if(props.message?.attachments?.file?.id){    
     try {
       loading.value = true;
       const { blobUrl } = await fetchBlobFile(props.message?.attachments?.file?.id);

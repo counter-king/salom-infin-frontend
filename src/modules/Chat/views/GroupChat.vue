@@ -199,7 +199,6 @@ onMounted(() => {
   }, 500);
 })
 
-
 </script>
 <template>
  <div class="h-full relative">
@@ -284,12 +283,12 @@ onMounted(() => {
                   :data-message-is-read="message?.is_read"
                   :data-message-user-id="message?.sender?.id"
                   :message="message"
+                  :index="index"
                   :handleClickEmoji="handleClickEmoji"
                   :onShowContextMenu="onShowContextMenu"
                   :onShowEmojiContextMenu="onShowEmojiContextMenu"
                   :avatarVisible="showFriendTextAvatar(index)"
                   :classNames="[{ 'mt-5': showFriendTextAvatar(index) }]"
-
                 />
               </template>
               <template v-else>
@@ -334,7 +333,7 @@ onMounted(() => {
         <!-- file uploads progress -->
         <div class="sticky bottom-0 flex flex-col gap-1 mt-auto">
           <template  v-for="(message, index) in chatStore.uploadingFiles" :key="index">
-            <FileUploadProgress :progress="message.progress" :file="message.attachments.file" :index="index" />
+            <FileUploadProgress :progress="message.progress" :file="message?.attachments?.file" :index="index" />
           </template>
         </div>
         <!-- scroll down button -->

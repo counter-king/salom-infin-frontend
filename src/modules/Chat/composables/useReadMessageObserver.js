@@ -54,7 +54,7 @@ const initializeObserver = () => {
             if (entry.isIntersecting) {
                 const messageId = parseInt(entry.target.dataset.messageId);
                 const userId = parseInt(entry.target.dataset.messageUserId);
-                if (messageId && userId != authStore.currentUser?.id && (chatStore.selectedUser?.unread_count > 0 || chatStore.selectedGroup?.unread_count > 0)) {
+                if (messageId && userId != authStore.currentUser?.id) {
                     markMessageAsRead(messageId);
                 }
             }
@@ -66,9 +66,9 @@ const initializeReadMessageObserver = ()=> {
 
     // Make sure observer exists
     if (!observer.value) {
-    initializeObserver();
+        initializeObserver();
     }
-
+    
     if (refMessageElements.value.length) {
         refMessageElements.value.forEach(component => {
         const el = component?.forwardedRef;

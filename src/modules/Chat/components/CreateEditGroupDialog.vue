@@ -76,7 +76,8 @@ const onSubmit = async () => {
    router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: data?.id }, query :{ tab: 'group'} })
    chatStore.actionGetGroupChatList();
   } else if(props.type === 'edit') {
-    await fetchEditGroupChat(chatStore.selectedGroup?.chat_id, { images: uploadingFiles.value[0]?.id ?[{ image: uploadingFiles.value[0]?.id }]: undefined, title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
+    const data  = await chatStore.actionEditGroupChatById(chatStore.selectedGroup?.chat_id, { images: uploadingFiles.value[0]?.id ? [{ image: uploadingFiles.value[0]?.id }]: undefined, title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
+    chatStore.selectedGroup = data;
     chatStore.actionGetGroupChatList();
   }
 
@@ -164,7 +165,7 @@ const onDeleteAvatar = () => {
 onMounted(() => {
   if(props.type === 'edit') {
     formModal.group_name = chatStore.selectedGroup?.title
-    formModal.users = chatStore.selectedGroup?.members?.map(member => member.user) || []
+    formModal.users = chatStore.selectedGroup?.members?.map(member => member) || []
     uploadingFiles.value = chatStore.selectedGroup?.image ? [chatStore.selectedGroup?.image] : []
   }
 })
@@ -261,7 +262,7 @@ onMounted(() => {
           @click="resetForm"
         />
         <base-button
-          label="create"
+          :label="props.type === 'create' ? 'create' : 'edit'"
           rounded
           @click="onSubmit"
         />
