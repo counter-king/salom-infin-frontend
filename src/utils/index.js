@@ -81,17 +81,13 @@ export const formatNameToShort = (value, separate = '.') => {
 
   const firstNameChar = firstName.slice(0, 2).toLowerCase()
   const fatherNameChar = fatherName?.slice(0, 2).toLowerCase()
+  const mixedLetters = ['Sh', 'SH', 'sh', 'ch', 'CH', 'Ch', 'o\'', 'O\'', 'g\'', 'G\'', 'dj', 'Dj', 'DJ']
 
-  if (
-    firstNameChar === `sh` || fatherNameChar === `sh` ||
-    firstNameChar === `ch` || fatherNameChar === `ch` ||
-    firstNameChar === `o'` || fatherNameChar === `o'` ||
-    firstNameChar === `g'` || fatherNameChar === `g'`
-  ) {
-    return `${ name } ${ (firstNameChar.slice(0, 2) + separate).toUpperCase() }`
+  if (mixedLetters.includes(firstNameChar) || mixedLetters.includes(fatherNameChar)) {
+    return `${ name } ${ (firstName.slice(0, 2) + separate).toUpperCase() }`
   }
   else {
-    return `${ name } ${ (firstNameChar.slice(0, 1) + separate).toUpperCase() }`
+    return `${ name } ${ (firstName.slice(0, 1) + separate).toUpperCase() }`
   }
 }
 /*
@@ -186,7 +182,7 @@ export const getDateRange = (value) => {
 export const returnFirstLetter = (text) => {
   if (text) {
     const firstLetter = text.slice(0, 2).toLowerCase()
-    if (["sh", "ch", "o'", "g'" ].includes(firstLetter)){
+    if (["sh", "ch", "o'", "g'", "dj" ].includes(firstLetter)){
       return text.slice(0, 2)
     }else {
       return text.slice(0, 1)

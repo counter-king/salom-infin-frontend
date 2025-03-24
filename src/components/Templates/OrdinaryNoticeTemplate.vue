@@ -3,7 +3,7 @@
 import {computed} from "vue"
 // Utils
 import {formatDate, formatDateHour} from "@/utils/formatDate"
-import {formatUserFullName} from "@/utils"
+import { formatUserFullName, returnFirstLetter } from "@/utils"
 // Store
 import {useAuthStore} from "@/modules/Auth/stores"
 import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store"
@@ -74,13 +74,13 @@ const author = computed(() => {
           />
           <div class="text-sm mt-1">
             <span class="font-bold">Topshiriq: </span>
-            <span v-for="(performer, index) in curator.performers">{{ performer && performer.first_name && performer.first_name[0] }}. {{ performer.last_name }}<span v-if="index !== curator.performers.length - 1">, &nbsp;</span></span>
+            <span v-for="(performer, index) in curator.performers">{{ performer && performer.first_name && returnFirstLetter(performer.first_name) }}. {{ performer.last_name }}<span v-if="index !== curator.performers.length - 1">, &nbsp;</span></span>
           </div>
         </template>
       </div>
       <div class="flex flex-col items-end text-sm font-semibold text-right my-4">
         <span>{{ curator?.position?.name }}</span>
-        <span>{{ curator?.first_name[0] }}. {{ curator?.last_name }}ga</span>
+        <span>{{ returnFirstLetter(curator?.first_name) }}. {{ curator?.last_name }}ga</span>
       </div>
     </div>
 
