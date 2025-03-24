@@ -15,7 +15,7 @@ import DeleteDialog from './DeleteDialog.vue';
 import { isObject } from '@/utils'
 // services
 import axiosConfig from '@/services/axios.config';
-import { fetchCreateGroupChat, fetchEditGroupChat } from '../services';
+import { fetchAddMemberToGroupChat, fetchCreateGroupChat, fetchDeleteMemberFromGroupChat, fetchEditGroupChat } from '../services';
 import { fetchBlobFile } from '@/services/file.service';
 // store
 import { useChatStore } from '../stores';
@@ -51,7 +51,9 @@ const formModal = reactive({
   group_name: "",
   users: [],
 })
-
+const memebers = computed(()=>{
+  return chatStore.selectedGroup?.members?.map(member => member) || []
+})
 // rules
 const rules = {
   group_name: {
@@ -76,7 +78,15 @@ const onSubmit = async () => {
    router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: data?.id }, query :{ tab: 'group'} })
    chatStore.actionGetGroupChatList();
   } else if(props.type === 'edit') {
-    const data  = await chatStore.actionEditGroupChatById(chatStore.selectedGroup?.chat_id, { images: uploadingFiles.value[0]?.id ? [{ image: uploadingFiles.value[0]?.id }]: undefined, title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
+    const newMembers = formModal.users.map(user => user.id).filter(id => !memebers.value.some(member => member.id === id))
+    const deleteMembers = memebers.value.filter(member => !formModal.users.some(user => user.id === member.id)).map(member => member.id)
+    const data  = await chatStore.actionEditGroupChatById(chatStore.selectedGroup?.chat_id, { images: uploadingFiles.value[0]?.id ? [{ image: uploadingFiles.value[0]?.id }]: undefined, title: formModal.group_name, members_id: formModal.users.map(user => user.id), delete_members: deleteMembers, new_members: newMembers});
+    if(deleteMembers.length && chatStore.selectedGroup?.role == "owner") {
+      await fetchDeleteMemberFromGroupChat(chatStore.selectedGroup?.chat_id, { members_id: deleteMembers})
+    }
+    if(newMembers.length) {
+      await fetchAddMemberToGroupChat(chatStore.selectedGroup?.chat_id, { members: newMembers})
+    }
     chatStore.selectedGroup = data;
     chatStore.actionGetGroupChatList();
   }
@@ -165,7 +175,7 @@ const onDeleteAvatar = () => {
 onMounted(() => {
   if(props.type === 'edit') {
     formModal.group_name = chatStore.selectedGroup?.title
-    formModal.users = chatStore.selectedGroup?.members?.map(member => member) || []
+    formModal.users = memebers.value
     uploadingFiles.value = chatStore.selectedGroup?.image ? [chatStore.selectedGroup?.image] : []
   }
 })

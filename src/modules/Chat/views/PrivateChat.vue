@@ -175,7 +175,6 @@ watch(
 );
 
 onMounted(async () => {
-  
   const { count } = await chatStore.actionGetMessageListByChatId({ chat:route.params?.id, page:1, page_size: 20 }, true);
   hasNext.value = count > page.value * pageSize.value
   page.value += 1
@@ -197,7 +196,7 @@ onMounted(() => {
       await nextTick(); 
       inputSendMessageHeight.value = refSendMessage.value.InputSendMessageWrapperRef.scrollHeight
     }, { immediate: true })
-}
+  }
 
   // avoid scroll event that get next page data working when initail loading happen 
   setTimeout(() => {
@@ -216,6 +215,7 @@ onMounted(() => {
     @dragover.prevent="onDragOver"
     @dragleave.prevent="onDragLeave"
     @drop.prevent="onDrop"
+    @contextmenu.prevent=""
     >
     <template v-if="chatStore.messageListByChatIdLoading">
         <base-spinner />

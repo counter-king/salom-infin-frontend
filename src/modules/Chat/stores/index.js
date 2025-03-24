@@ -116,7 +116,7 @@ export const useChatStore = defineStore("chat-stores", {
               title: item.chat_title,
               image: item.avatar,
               chat_id: item.id,
-              last_message: item.last_message,
+              last_message:{text: item.last_message},
               last_message_time: item.last_message_date,
               last_message_type: item.last_message_type,
               type: item.type,
@@ -158,19 +158,35 @@ export const useChatStore = defineStore("chat-stores", {
       this.usersSearchByMessageListLoading = true;
       const response = await fetchUsersSearchByMessage(params);
       if (response) {
-        this.usersSearchListByMessage = response.data.data?.map((item) => ({
-          first_name: item?.sender?.first_name,
-          full_name: item?.sender?.full_name,
-          position: item?.sender?.position?.name,
-          chat_id: item.chat_id,
-          color: item?.sender?.color,
-          avatar: item?.sender?.avatar,
-          last_message: item.message_text,
-          last_message_date: item.created_date,
-          last_message_type: item.message_text?.type,
-          type: item.type || CHAT_TYPES.PRIVATE,
-          unread_count: item.unread_count
-        }));
+        this.usersSearchListByMessage = response.data.data?.map((item) => {
+          if(item.chat_type === CHAT_TYPES.PRIVATE){
+            return {
+            first_name: item?.chat_title,
+            full_name: item?.chat_title,
+            position: item?.position?.name,
+            chat_id: item.chat_id,
+            color: item?.color,
+            avatar: item?.avatar,
+            last_message: item.message_text,
+            last_message_date: item.created_date,
+            last_message_type: item.message_text?.type,
+            type: item.chat_type || CHAT_TYPES.PRIVATE,
+            unread_count: item.unread_count
+            }
+          } else {
+            return {
+              title: item?.chat_title,
+              image: item?.avatar,
+              chat_id: item?.chat_id,
+              last_message_time: item?.created_date,
+              last_message_type: item?.message_type,
+              last_message: { text: item?.message_text },
+              last_message_id: item?.message_id,
+              type: item?.chat_type,
+              unread_count: item?.unread_count
+            }
+          }
+      });
         this.usersSearchByMessageListLoading = false;
       } else {
         this.usersSearchByMessageListLoading = false;

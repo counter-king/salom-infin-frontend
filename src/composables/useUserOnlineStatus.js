@@ -44,11 +44,12 @@ const handleBrowerserTabChanges =()=>{
 
 const getUnreadCount = useDebounceFn(()=> {
   chatStore.setCounts()
-}, 600)
+}, 1000)
 
 // watching socket events using data(data is socket event)
 watch(data, (newData) => {
   newData = JSON.parse(newData);
+  // console.log(newData)
   if(newData.type == WEBCOCKET_EVENTS.NEW_CHAT_MESSAGE){
     // if current user message sender, do not increment chat count
     if(newData.content.sender.id != authStore.currentUser?.id){
@@ -60,6 +61,9 @@ watch(data, (newData) => {
     if(newData.user.id == authStore.currentUser?.id){
         getUnreadCount()
     }
+  }
+  if(newData.type == WEBCOCKET_EVENTS.CHAT_DELETED || newData.type == WEBCOCKET_EVENTS.MESSAGE_DELETED){
+    getUnreadCount()
   }
 })
 

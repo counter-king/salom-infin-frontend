@@ -142,6 +142,7 @@ watch(data, (newData) => {
       else if(isSrollStayDown){ setTimeout(handleScrollDownSmooth, 1)}
   }
   else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_DELETED) {    
+    console.log(newData)
     chatStore.messageListByChatId = chatStore.messageListByChatId.filter(item=> item.message_id != newData?.content?.message_id)
     chatStore.contextMenu.deleteDialog = false
   }
@@ -259,7 +260,11 @@ watch(data, (newData) => {
         privateChat.last_message_id = newData?.content?.message_id
         // to avoid showing unread message from sender
         if(newData?.content?.sender?.id != authStore?.currentUser?.id && !isTheSameLastMessageId){
-          privateChat.unread_count += 1
+          if(!privateChat.unread_count){
+            privateChat.unread_count = 1
+          } else {
+            privateChat.unread_count += 1
+          }
         }
       } else {
         chatStore.privateChatList.unshift({
@@ -283,8 +288,14 @@ watch(data, (newData) => {
         groupChat.last_message = { sender: newData.content.sender, text: newData.content.text}
         groupChat.last_message_id = newData?.content?.message_id
         // to avoid showing unread message from sender
+        
         if(newData?.content?.sender?.id != authStore?.currentUser?.id && !isTheSameLastMessageId){
-          groupChat.unread_count += 1
+          if(!groupChat.unread_count){
+            groupChat.unread_count = 1
+          }
+          else{
+            groupChat.unread_count += 1
+          }
         }
       }
     }
