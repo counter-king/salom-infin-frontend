@@ -3,13 +3,18 @@ import { nextTick, onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 // stores
 import { useChatStore } from "../stores";
+import { useAuthStore } from "@/modules/Auth/stores";
 // socket
 import { socket } from "@/services/socket";
+// constatns
 import { CHAT_ROUTE_NAMES, CHAT_TYPES } from "../constatns";
 
 const chatStore = useChatStore();
+const authStore = useAuthStore();
+
 export const useReadMessageObserver = () => {
 const route = useRoute()
+
 // Reactives
 const refMessagesContainer = ref(null);
 const refMessageElements = ref([]);
@@ -48,9 +53,9 @@ const initializeObserver = () => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const messageId = parseInt(entry.target.dataset.messageId);
-                const isRead = JSON.parse(entry.target.dataset.messageIsRead)
-                if (messageId && !isRead) {
-                 markMessageAsRead(messageId);
+                const userId = parseInt(entry.target.dataset.messageUserId);
+                if (messageId && userId != authStore.currentUser?.id) {
+                    markMessageAsRead(messageId);
                 }
             }
         });
@@ -61,14 +66,13 @@ const initializeReadMessageObserver = ()=> {
 
     // Make sure observer exists
     if (!observer.value) {
-    initializeObserver();
+        initializeObserver();
     }
-
+    
     if (refMessageElements.value.length) {
         refMessageElements.value.forEach(component => {
         const el = component?.forwardedRef;
             if (el) {
-                // console.log(el);
                 observer.value.observe(el);
             }   
         });

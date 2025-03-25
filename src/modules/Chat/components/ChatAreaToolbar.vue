@@ -29,6 +29,7 @@ const deleteDialogVisible = ref(false);
 const isDeleteLoading = ref(false);
 const menu = ref();
 const isGroupDetail = computed(() => route.name == CHAT_ROUTE_NAMES.GROUP)
+const isAllowedToDelete = computed(() => chatStore.selectedGroup?.members?.find((item) => item?.id == authStore.currentUser.id)?.role == 'owner' || chatStore.selectedUser?.members?.find((item) => item.user?.id == authStore.currentUser?.id)?.role == 'owner')
 const menuItems = computed(() => [
   ...(route.name == CHAT_ROUTE_NAMES.GROUP ? [{ 
     label: 'edit',
@@ -38,16 +39,15 @@ const menuItems = computed(() => [
     },
     iconClass: "!text-greyscale-500 !w-4 !h-4"
   }] : []),  
-   ...(chatStore.selectedGroup?.members?.find((item) => item.user?.id == authStore.currentUser.id)?.role == 'owner' || chatStore.selectedUser?.members?.find((item) => item.user?.id == authStore.currentUser?.id)?.role == 'owner' ? 
-    [{
-     label: 'delete',
-     labelClass: '!text-critic-500',
-     icon: TrashBinTrashBoldIcon,
-     command: () => {
-      deleteDialogVisible.value = true
-     },
-     iconClass: "!text-critic-500 !w-4 !h-4"
-    }] :  [])
+  {
+    label: 'delete',
+    class: ['pointer-events-none', '!text-critic-200', {'!text-critic-500 !pointer-events-auto': isAllowedToDelete.value}],
+    icon: TrashBinTrashBoldIcon,
+    command: () => {
+    deleteDialogVisible.value = true
+    },
+    iconClass: ['pointer-events-none', '!text-critic-200', {'!text-critic-500': isAllowedToDelete.value}],
+  }
 ]);
 
 // Computed property to check if someone is typing in current chat
@@ -149,7 +149,8 @@ watch(createGroupDialogVisible, () => {
           <template #item="{item}">
             <div
              class="flex gap-2 items-center text-greyscale-500 px-3 py-2 rounded-lg hover:bg-greyscale-50 cursor-pointer"
-            >
+             :class="item.class"
+             >
               <slot :item="item">
                 <base-iconify class="!w-4 !h-4" :icon="(item.icon)" :class="item.iconClass" />
                 <span class="text-xs font-medium" :class="item?.labelClass">{{t(item.label)}}</span>

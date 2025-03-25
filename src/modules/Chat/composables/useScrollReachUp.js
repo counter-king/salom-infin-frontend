@@ -13,7 +13,7 @@ export const useScrollReachUp = () => {
  const hasNext = ref(false)
 
 const debouncedHandleScrollUp = useDebounceFn(async(event, handleScrollUp) => {
-  if(event.target.scrollTop < 10){
+  if(event && event.target && event.target.scrollTop < 10){
    if(hasNext.value){
     const { count } =  await chatStore.actionGetMessageListByChatId({ chat:route.params?.id, page:page.value, page_size:pageSize.value }, false);
     hasNext.value = count > page.value * pageSize.value

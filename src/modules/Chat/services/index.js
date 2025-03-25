@@ -56,6 +56,14 @@ export const fetchGetGroupChatById = (id) => {
 export const fetchEditGroupChat = (id, body) => {
   return axiosConfig.put(`${URLS.chatGroup}${id}/`, body);
 }
+// add member to group chat by id
+export const fetchAddMemberToGroupChat = (chatId, body) => {
+  return axiosConfig.post(`${URLS.chatGroup}${chatId}/add-members/`, body);
+}
+// delete member from group chat by id
+export const fetchDeleteMemberFromGroupChat = (chatId, body) => {
+  return axiosConfig.post(`${URLS.chatGroup}${chatId}/remove-members/`, body);
+}
 // delete group chat by id
 export const fetchDeleteGroupChatById = (id) => {
   return axiosConfig.delete(`${URLS.chatGroup}${id}/`);

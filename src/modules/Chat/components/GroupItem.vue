@@ -21,10 +21,10 @@ const props = defineProps({
     :class="{ 'bg-greyscale-50': active }"
     >
     <base-avatar
-      :label="(group?.title || '').toUpperCase()"
+      :label="(props.group?.title || '').toUpperCase()"
       color="#E2E8F0"
       shape="circle"
-      :image="group?.image?.url"
+      :image="props.group?.image?.url"
       avatar-classes="w-10 h-10"
       label-classes="text-lg font-semibold text-greyscale-900"
     />

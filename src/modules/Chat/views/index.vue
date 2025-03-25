@@ -57,7 +57,7 @@ watch(status, (newStatus) => {
   }
 });
 
-// Kelgan ma'lumotlarni kuzatish
+// websocketdan, kelgan ma'lumotlarni kuzatish
 watch(data, (newData) => {
   newData = JSON.parse(newData);
   // console.log("ewasd",newData);
@@ -85,7 +85,7 @@ watch(data, (newData) => {
           last_message_type: newData.message_type,
           last_message_id: newData?.message_id,
           type: newData.chat_type,
-          unread_count: newData.unread_count || 0
+          unread_count: newData.unread_count  
         })
       }
 
@@ -212,7 +212,7 @@ watch(data, (newData) => {
     
     const message = chatStore.messageListByChatId.find(item=> item.message_id == newData?.message_id)
     if(message?.sender?.id != newData?.user?.id){
-      if(message && !message?.is_read){
+      if(message){
         message.is_read = true
         // when messags are readed, then decrease count of unread message count from chat list
         const chatPrivate = chatStore.privateChatList.find(item=> item.chat_id == message?.chat_id) 
@@ -243,7 +243,7 @@ watch(data, (newData) => {
     const chat = chatStore.privateChatList.find(item=> item.chat_id == newData?.content.chat_id)
     if(chat){
       chat.is_user_online = newData?.content.status == "online" ? true : false
-      if(!!chatStore.selectedUser){
+      if(!!chatStore.selectedUser && chatStore.selectedUser.user_id == newData?.content.user_id){
         chatStore.selectedUser.is_user_online = chat.is_user_online
       }
     }
@@ -259,11 +259,15 @@ watch(data, (newData) => {
         privateChat.last_message_id = newData?.content?.message_id
         // to avoid showing unread message from sender
         if(newData?.content?.sender?.id != authStore?.currentUser?.id && !isTheSameLastMessageId){
-          privateChat.unread_count += 1
+          if(!privateChat.unread_count){
+            privateChat.unread_count = 1
+          } else {
+            privateChat.unread_count += 1
+          }
         }
       } else {
         chatStore.privateChatList.unshift({
-          first_name: newData?.content?.sender?.fist_name,
+          first_name: newData?.content?.sender?.first_name,
           full_name: newData?.content?.sender?.full_name,
           chat_id: newData?.content?.chat_id,
           color: newData?.content?.sender?.color,
@@ -283,8 +287,14 @@ watch(data, (newData) => {
         groupChat.last_message = { sender: newData.content.sender, text: newData.content.text}
         groupChat.last_message_id = newData?.content?.message_id
         // to avoid showing unread message from sender
+        
         if(newData?.content?.sender?.id != authStore?.currentUser?.id && !isTheSameLastMessageId){
-          groupChat.unread_count += 1
+          if(!groupChat.unread_count){
+            groupChat.unread_count = 1
+          }
+          else{
+            groupChat.unread_count += 1
+          }
         }
       }
     }

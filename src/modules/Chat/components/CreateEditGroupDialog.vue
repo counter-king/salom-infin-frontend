@@ -15,10 +15,11 @@ import DeleteDialog from './DeleteDialog.vue';
 import { isObject } from '@/utils'
 // services
 import axiosConfig from '@/services/axios.config';
-import { fetchCreateGroupChat, fetchEditGroupChat } from '../services';
+import { fetchAddMemberToGroupChat, fetchCreateGroupChat, fetchDeleteMemberFromGroupChat, fetchEditGroupChat } from '../services';
 import { fetchBlobFile } from '@/services/file.service';
 // store
 import { useChatStore } from '../stores';
+import { useAuthStore } from '@/modules/Auth/stores';
 // constants
 import { CHAT_ROUTE_NAMES } from '../constatns';
 
@@ -42,16 +43,20 @@ const props = defineProps({
 
 const chatStore = useChatStore();
 const router = useRouter();
+const authStore = useAuthStore();
 // reactives
 const refContextMenu = ref(null);
 const refFileInput = ref(null);
 const deleteDialog = ref(false);
 const uploadingFiles = ref([]);
+const isSubmitting = ref(false);
 const formModal = reactive({
   group_name: "",
   users: [],
 })
-
+const memebers = computed(()=>{
+  return chatStore.selectedGroup?.members?.map(member => member) || []
+})
 // rules
 const rules = {
   group_name: {
@@ -72,12 +77,35 @@ const onSubmit = async () => {
 
   if(!isValid) return;
   if(props.type === 'create') {
-   const { data } = await fetchCreateGroupChat({images:[{image: uploadingFiles.value[0]?.id}], title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
-   router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: data?.id }, query :{ tab: 'group'} })
-   chatStore.actionGetGroupChatList();
-  } else if(props.type === 'edit') {
-    await fetchEditGroupChat(chatStore.selectedGroup?.chat_id, { images: uploadingFiles.value[0]?.id ?[{ image: uploadingFiles.value[0]?.id }]: undefined, title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
+   try {
+    isSubmitting.value = true;
+    const { data } = await fetchCreateGroupChat({images:[{image: uploadingFiles.value[0]?.id}], title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
+    router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: data?.id }, query :{ tab: 'group'} })
     chatStore.actionGetGroupChatList();
+   } catch (e) {
+    console.log(e);
+   } finally {
+    isSubmitting.value = false;
+   }
+  } else if(props.type === 'edit') {
+    try { 
+      isSubmitting.value = true;
+      const newMembers = formModal.users.map(user => user.id).filter(id => !memebers.value.some(member => member.id === id))
+      const deleteMembers = memebers.value.filter(member => !formModal.users.some(user => user.id === member.id)).map(member => member.id)
+      if(deleteMembers.length && chatStore.selectedGroup?.members.find(member => member.id == authStore.currentUser?.id)?.role == "owner") {
+        await fetchDeleteMemberFromGroupChat(chatStore.selectedGroup?.chat_id, { members: deleteMembers})
+      }
+      if(newMembers.length) {
+        await fetchAddMemberToGroupChat(chatStore.selectedGroup?.chat_id, { members: newMembers})
+      }
+      const data  = await chatStore.actionEditGroupChatById(chatStore.selectedGroup?.chat_id, { images: uploadingFiles.value[0]?.id ? [{ image: uploadingFiles.value[0]?.id }]: undefined, title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
+      chatStore.selectedGroup = data;
+      chatStore.actionGetGroupChatList();
+    } catch(error) {
+      console.log(error);
+    } finally {
+      isSubmitting.value = false;
+    }
   }
 
   uploadingFiles.value = [];
@@ -164,7 +192,7 @@ const onDeleteAvatar = () => {
 onMounted(() => {
   if(props.type === 'edit') {
     formModal.group_name = chatStore.selectedGroup?.title
-    formModal.users = chatStore.selectedGroup?.members?.map(member => member.user) || []
+    formModal.users = memebers.value
     uploadingFiles.value = chatStore.selectedGroup?.image ? [chatStore.selectedGroup?.image] : []
   }
 })
@@ -257,12 +285,14 @@ onMounted(() => {
           button-class="text-primary-900"
           border-color="border-primary-50"
           oulined
+          :disabled="isSubmitting"
           rounded
           @click="resetForm"
         />
         <base-button
-          label="create"
+          :label="props.type === 'create' ? 'create' : 'edit'"
           rounded
+          :loading="isSubmitting"
           @click="onSubmit"
         />
       </div>

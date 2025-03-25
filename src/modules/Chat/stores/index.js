@@ -5,6 +5,7 @@ import {
   fetchChatUsersSearch,
   fetchCreatePrivateChat,
   fetchDeleteMessageById,
+  fetchEditGroupChat,
   fetchEditMessageById,
   fetchGetGroupChatById,
   fetchGetGroupChatList,
@@ -18,10 +19,11 @@ import {
 import { CHAT_TYPES, MESSAGE_TYPES } from "../constatns";
 // stores
 import { useAuthStore } from "@/modules/Auth/stores";
-// import { useThemeStore } from "@/stores/theme.store";
-
+import { useThemeStore } from "@/stores/theme.store";
+// services
 import { fetchBlobFile } from "@/services/file.service";
 import { fetchGetMessageFilesList, fetchGetMessageLinkList } from "../services";
+import { fetchChatUnreadMessageCounts } from "@/services/count.service";
 
 const authStore = useAuthStore();
 
@@ -79,10 +81,11 @@ export const useChatStore = defineStore("chat-stores", {
     uploadingFiles: []
   }),
   actions: {
-    async setCounts(increment = true) {
-      // const themeStore = useThemeStore()
-      // const chatCount = themeStore.header.find(menu=> menu.name === 'chat')
-      // chatCount.count += (increment ? 1 : -1) 
+    async setCounts() {
+      const { data } = await fetchChatUnreadMessageCounts()
+      const themeStore = useThemeStore()
+      const chatMenu = themeStore.header.find(menu=> menu.name === 'chat')
+      chatMenu.count = data.count
     },
     toggleRightSidebar() {
       this.rightSidebarVisible = !this.rightSidebarVisible;
@@ -113,7 +116,7 @@ export const useChatStore = defineStore("chat-stores", {
               title: item.chat_title,
               image: item.avatar,
               chat_id: item.id,
-              last_message: item.last_message,
+              last_message:{text: item.last_message},
               last_message_time: item.last_message_date,
               last_message_type: item.last_message_type,
               type: item.type,
@@ -155,19 +158,35 @@ export const useChatStore = defineStore("chat-stores", {
       this.usersSearchByMessageListLoading = true;
       const response = await fetchUsersSearchByMessage(params);
       if (response) {
-        this.usersSearchListByMessage = response.data.data?.map((item) => ({
-          first_name: item?.sender?.first_name,
-          full_name: item?.sender?.full_name,
-          position: item?.sender?.position?.name,
-          chat_id: item.chat_id,
-          color: item?.sender?.color,
-          avatar: item?.sender?.avatar,
-          last_message: item.message_text,
-          last_message_date: item.created_date,
-          last_message_type: item.message_text?.type,
-          type: item.type || CHAT_TYPES.PRIVATE,
-          unread_count: item.unread_count
-        }));
+        this.usersSearchListByMessage = response.data.data?.map((item) => {
+          if(item.chat_type === CHAT_TYPES.PRIVATE){
+            return {
+            first_name: item?.chat_title,
+            full_name: item?.chat_title,
+            position: item?.position?.name,
+            chat_id: item.chat_id,
+            color: item?.color,
+            avatar: item?.avatar,
+            last_message: item.message_text,
+            last_message_date: item.created_date,
+            last_message_type: item.message_text?.type,
+            type: item.chat_type || CHAT_TYPES.PRIVATE,
+            unread_count: item.unread_count
+            }
+          } else {
+            return {
+              title: item?.chat_title,
+              image: item?.avatar,
+              chat_id: item?.chat_id,
+              last_message_time: item?.created_date,
+              last_message_type: item?.message_type,
+              last_message: { text: item?.message_text },
+              last_message_id: item?.message_id,
+              type: item?.chat_type,
+              unread_count: item?.unread_count
+            }
+          }
+      });
         this.usersSearchByMessageListLoading = false;
       } else {
         this.usersSearchByMessageListLoading = false;
@@ -309,7 +328,7 @@ export const useChatStore = defineStore("chat-stores", {
       this.groupChatByIdLoading = true;
       const { data } = await fetchGetGroupChatById(id);
       this.groupChatByIdLoading = false;
-      if(data){
+      try {
         if(data.images[0]?.image?.id){
         const { blobUrl } = await fetchBlobFile(data.images[0]?.image?.id)
         data.images[0].image.blobUrl = blobUrl
@@ -318,7 +337,18 @@ export const useChatStore = defineStore("chat-stores", {
           title: data?.title,
           image: data?.images[0]?.image,
           chat_id: data.id,
-          members: data?.members || [],
+          members: data?.members.map((item)=>({
+            first_name: item?.user?.first_name,
+            full_name: item?.user?.full_name,
+            position: item?.user?.position?.name,
+            status: item?.user?.status,
+            id: item?.user?.id,
+            private_chat_id: item?.private_chat_id,
+            chat_id: item?.chat,
+            color: item?.user?.color,
+            avatar: item?.user?.avatar,
+            role: item?.role        
+          })) || [],
           last_message: data?.last_message?.message_text,
           last_message_time: data?.last_message?.created_date,
           last_message_type: data?.last_message?.type,
@@ -326,6 +356,44 @@ export const useChatStore = defineStore("chat-stores", {
           type: data.type,
           unread_count: data.unread_count
         }
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    /** */
+    /** */
+    async actionEditGroupChatById(id, body) {
+      const { data } = await fetchEditGroupChat(id, body);
+      try {
+        if(data.images[0]?.image?.id){
+        const { blobUrl } = await fetchBlobFile(data.images[0]?.image?.id)
+        data.images[0].image.blobUrl = blobUrl
+        }
+        return {
+          title: data?.title,
+          image: data?.images[0]?.image,
+          chat_id: data.id,
+          members: data?.members.map((item)=>({
+            first_name: item?.user?.first_name,
+            full_name: item?.user?.full_name,
+            position: item?.user?.position?.name,
+            status: item?.user?.status,
+            id: item?.user?.id,
+            private_chat_id: item?.private_chat_id,
+            chat_id: item?.chat,
+            color: item?.user?.color,
+            avatar: item?.user?.avatar,
+            role: item?.role        
+          })) || [],
+          last_message: data?.last_message?.message_text,
+          last_message_time: data?.last_message?.created_date,
+          last_message_type: data?.last_message?.type,
+          last_message_id: data?.last_message?.id,
+          type: data.type,
+          unread_count: data.unread_count
+        }
+      } catch (err) {
+        console.log(err)
       }
     },
     /** */
@@ -350,8 +418,8 @@ export const useChatStore = defineStore("chat-stores", {
             groupedReactions[emoji].push(user);
           });
                   // image fetch blob URL
-          if (item.type == MESSAGE_TYPES.IMAGE && item.attachments[0]?.file?.id) {
-            const { blobUrl } = await fetchBlobFile(item.attachments[0]?.file?.id);
+          if (item.type == MESSAGE_TYPES.IMAGE && item?.attachments[0]?.file?.id) {
+            const { blobUrl } = await fetchBlobFile(item?.attachments[0]?.file?.id);
             item.attachments[0].file.url = blobUrl;
           }
 

@@ -14,7 +14,7 @@ import { MagniferIcon, Plus20SolidIcon, UserRoundedBoldIcon, UsersGroupTwoRounde
 // store
 import { useChatStore } from "@/modules/Chat/stores";
 // constatns
-import { CHAT_ROUTE_NAMES} from "../constatns";
+import { CHAT_ROUTE_NAMES, CHAT_TYPES} from "../constatns";
 // composables
 import { useInfiniteScroll } from "../composables/useInfiniteScroll";
 
@@ -78,13 +78,25 @@ const onCreateChat = async (user) => {
 
 // when searched privete chat is clicked, work
 // addlist is ture, when user hasn't chat with this user 
-const onClickSearchedUser = (item, addlist=true) => {  
+const onClickSearchedUserByMessage = (item, addlist=true) => {  
     router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: item.chat_id }, query :{ tab: undefined} })
     // if user don't exist in the list then add it
     if(!chatStore.privateChatList.some(user => user.chat_id == item.chat_id) && addlist){
       chatStore.privateChatList.unshift(item)
       chatStore.selectedUser = item
     }
+
+    chatStore.userSearching = false;
+    searchInput.value = null;
+}
+
+const onClickSearchedGroupByMessage = (item, addlist=true) => {  
+    router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: item.chat_id }, query :{ tab: "group"} })
+    // if user don't exist in the list then add it
+    if(!chatStore.groupChatList.some(group => group.chat_id == item.chat_id) && addlist){
+      chatStore.groupChatList.unshift(item)
+      chatStore.selectedGroup = item
+    }    
     chatStore.userSearching = false;
     searchInput.value = null;
 }
@@ -169,7 +181,7 @@ watch(createGroupDialogVisible, () => {
           <template v-for="item in chatStore.chatUserSearchList" :key="item.id">
             <template v-if="item.type === 'private'">
               <user-item
-              @click="onClickSearchedUser(item)"
+              @click="onClickSearchedUserAndGroup(item)"
               :user="item" 
               />
             </template>
@@ -188,13 +200,22 @@ watch(createGroupDialogVisible, () => {
             :user="user"
             @click="onCreateChat(user)"
           />
-          <!-- users who sent messages to current user -->
+          <!-- users who sent messages to current user or current user send messages to them and  -->
+           <!-- getting data by message  -->
           <p class="text-sm font-medium text-greyscale-500 my-4">{{ t('message-found',{count: chatStore.usersSearchListByMessage?.length })}}</p>
           <template v-for="item in chatStore.usersSearchListByMessage" :key="item.id">
-            <user-item
-            @click="onClickSearchedUser(item, false)"
-            :user="item" 
-            />
+            <template v-if="item.type === 'private'">
+              <user-item
+              @click="onClickSearchedUserByMessage(item)"
+              :user="item" 
+              />
+            </template>
+            <template v-else>
+              <group-item
+                @click="onClickSearchedGroupByMessage(item)"
+                :group="item"
+              />
+            </template>
           </template>
         </div>
       </template>
