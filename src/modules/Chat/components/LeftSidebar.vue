@@ -181,7 +181,7 @@ watch(createGroupDialogVisible, () => {
           <template v-for="item in chatStore.chatUserSearchList" :key="item.id">
             <template v-if="item.type === 'private'">
               <user-item
-              @click="onClickSearchedUserAndGroup(item)"
+              @click="onClickSearchedUserByMessage(item)"
               :user="item" 
               />
             </template>
