@@ -22,7 +22,7 @@ const inputSendMessasgeRef = inject("inputSendMessasgeRef");
 
 // methods
 const handleDateClick = () => {
- showDialog.value = true
+//  showDialog.value = true
 }
 
 const handleClickCalendar = (date) => {

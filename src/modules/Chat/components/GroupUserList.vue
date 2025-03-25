@@ -32,9 +32,6 @@ const onCreateUserChat = async (user) => {
 
 const onClickChatPrivateUser = (user) => {
   if(user.private_chat_id && user?.id != authStore.currentUser?.id){
-    if(!chatStore.privateChatList.some(item => item.chat_id == user.chat_id)){
-      chatStore.privateChatList.unshift(user)
-    }
     router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: user.private_chat_id }, query :{ tab: undefined} })
     props.onClickFun(COMPONENT_TYPES.FILES)
   } else if(!user.private_chat_id){
