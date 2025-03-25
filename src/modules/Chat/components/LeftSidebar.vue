@@ -106,6 +106,7 @@ const onClickChatPrivateUser = async (user) => {
   // if user is already selected then don't do anything, becouse no full data, just it is getting from  api id
   if(route.params.id != user.chat_id){
     router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: user.chat_id }})
+    chatStore.selectedUser = user
     // if user don't exist in the list then add it
     if(!chatStore.privateChatList.some(user => user.chat_id == user.chat_id)){
       chatStore.privateChatList.unshift(user)
