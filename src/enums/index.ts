@@ -36,7 +36,7 @@ export const USER_STATUS_CODES = {
   AUDIT_COMMISSION:              'AT', // Ревизионная комиссия
   BANK_COUNCIL:                  'AK', // Совет банка
   INTERNS:                       'AS', // Стажеры
-  SICK_LEAVES:                   'B',  // Болничные
+  SICK_LEAVES:                   'B',  // Больничные
   BUSINESS_TRIP:                 'K',  // Командировка
   TRANSFER_TO_ANOTHER_BRANCH:    'SF', // Перевод другой филиал
   SUSPENDED_NOT_STAFF:           'KO', // Отстраненные (не штат.)
