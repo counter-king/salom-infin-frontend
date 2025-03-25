@@ -197,7 +197,7 @@ onMounted(() => {
       inputSendMessageHeight.value = refSendMessage.value.InputSendMessageWrapperRef.scrollHeight
     }, { immediate: true })
   }
-
+  
   // avoid scroll event that get next page data working when initail loading happen 
   setTimeout(() => {
     initialRenderComplete.value = true;

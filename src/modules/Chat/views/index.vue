@@ -142,7 +142,6 @@ watch(data, (newData) => {
       else if(isSrollStayDown){ setTimeout(handleScrollDownSmooth, 1)}
   }
   else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_DELETED) {    
-    console.log(newData)
     chatStore.messageListByChatId = chatStore.messageListByChatId.filter(item=> item.message_id != newData?.content?.message_id)
     chatStore.contextMenu.deleteDialog = false
   }
