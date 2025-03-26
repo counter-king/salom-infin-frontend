@@ -373,22 +373,24 @@ export const adjustTagObjectToArray = async (items = [], tagId = null, multiple 
 export const returnStatusColor = (code) => {
   switch (code) {
     case USER_STATUS_CODES.WORKERS:
+    case USER_STATUS_CODES.WORKERS_NOT_STAFF:
       return 'text-success-500'
     case USER_STATUS_CODES.LABOR_LEAVE:
-      return 'text-critic-500'
-    default:
       return 'text-warning-500'
+    default:
+      return 'text-critic-500'
   }
 }
 
 export const returnStatusBgColor = (code) => {
   switch (code) {
     case USER_STATUS_CODES.WORKERS:
+    case USER_STATUS_CODES.WORKERS_NOT_STAFF:
       return 'bg-success-500'
     case USER_STATUS_CODES.LABOR_LEAVE:
-      return 'bg-critic-500'
-    default:
       return 'bg-warning-500'
+    default:
+      return 'bg-critic-500'
   }
 }
 

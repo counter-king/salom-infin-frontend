@@ -39,6 +39,8 @@ watch(
 const findHrRole = () => {
   return userStore.currentUser.roles.find(role => role.name === 'hr') ?? null
 }
+
+console.log(route.fullPath)
 </script>
 
 <template>
@@ -108,26 +110,28 @@ const findHrRole = () => {
       </template>
 
       <template v-if="findHrRole()">
-        <router-link
-          :to="{ name: 'HrDashboardIndex' }"
-          class="sidebar-link group flex items-center text-sm font-medium text-gray-1 rounded-xl p-3 pr-4 mb-1 border-b-2 border-transparent transition-all duration-[400ms] hover:text-primary-500 hover:border-gray-3 hover:bg-primary-50"
-          :class="{ 'pointer-events-none' : 'HrDashboardIndex' === route.name }"
-          v-tooltip="navigationStore.sidebarCollapse
-                ? {
-                    value: `<h4 class='text-xs text-white -my-1'>${t('dashboard')}</h4>`,
-                    escape: true,
-                    autoHide: false
-                  }
-                : null
-              "
-        >
-          <base-iconify
-            :icon="HomeSmileAngleIcon"
-            class="text-gray-1 transition-all duration-[400ms] group-hover:text-primary-500"
-          />
+        <template v-if="route.fullPath.slice(1, 3) === 'hr'">
+          <router-link
+            :to="{ name: 'HrDashboardIndex' }"
+            class="sidebar-link group flex items-center text-sm font-medium text-gray-1 rounded-xl p-3 pr-4 mb-1 border-b-2 border-transparent transition-all duration-[400ms] hover:text-primary-500 hover:border-gray-3 hover:bg-primary-50"
+            :class="{ 'pointer-events-none' : 'HrDashboardIndex' === route.name }"
+            v-tooltip="navigationStore.sidebarCollapse
+            ? {
+                value: `<h4 class='text-xs text-white -my-1'>${t('dashboard')}</h4>`,
+                escape: true,
+                autoHide: false
+              }
+            : null
+          "
+          >
+            <base-iconify
+              :icon="HomeSmileAngleIcon"
+              class="text-gray-1 transition-all duration-[400ms] group-hover:text-primary-500"
+            />
 
-          <span class="flex-1 truncate mx-3">{{ t('dashboard') }}</span>
-        </router-link>
+            <span class="flex-1 truncate mx-3">{{ t('dashboard') }}</span>
+          </router-link>
+        </template>
       </template>
     </div>
   </div>
