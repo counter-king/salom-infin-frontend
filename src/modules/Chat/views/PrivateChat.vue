@@ -159,7 +159,8 @@ watch(
   () => route.params?.id,
   async (newId, oldId) => {
     if (newId !== oldId && route.name === CHAT_ROUTE_NAMES.PRIVATE) {
-     const { count } = await chatStore.actionGetMessageListByChatId({chat:newId, page:1, page_size: 20}, true);
+      chatStore.selectedUser = await chatStore.actionGetPrivateChatById(newId);
+     const { count } = await chatStore.actionGetMessageListByChatId({ chat:newId, page:1, page_size: 20}, true);
       hasNext.value = count > page.value * pageSize.value
       page.value += 1
       // make scroll down after loading new data
@@ -167,7 +168,6 @@ watch(
         handleScrollDown()
         initializeReadMessageObserver()
       }, 10)
-      chatStore.selectedUser = await chatStore.actionGetPrivateChatById(newId);
       // every route change, reset context menu
       chatStore.contextMenu = {}
     }
@@ -175,10 +175,10 @@ watch(
 );
 
 onMounted(async () => {
+  chatStore.selectedUser = await chatStore.actionGetPrivateChatById(route.params?.id);
   const { count } = await chatStore.actionGetMessageListByChatId({ chat:route.params?.id, page:1, page_size: 20 }, true);
   hasNext.value = count > page.value * pageSize.value
   page.value += 1
-  chatStore.selectedUser = await chatStore.actionGetPrivateChatById(route.params?.id);
   // if selected user don't exist in the list then add it
   if(!chatStore.privateChatList.some(item => item?.chat_id == chatStore.selectedUser?.chat_id)){
     chatStore.privateChatList.unshift(chatStore.selectedUser)

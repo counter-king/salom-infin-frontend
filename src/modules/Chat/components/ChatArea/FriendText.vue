@@ -49,8 +49,7 @@ defineExpose({
   <div
      v-bind="attrs"
      ref="forwardedRef"  
-     @selectstart="handleSelectStart"
-     @click="handleClick">
+     >
     <div class="flex gap-2" :class="classNames">
       <base-avatar 
         :image="props.message?.sender?.avatar?.url"
@@ -64,6 +63,8 @@ defineExpose({
         <!-- message -->
         <div class="flex gap-3">
           <div 
+            @selectstart="handleSelectStart"
+            @click="handleClick"
             @contextmenu.prevent="onShowContextMenu($event, props.message, props.index)"
             class="friend-text flex flex-col gap-1 bg-white rounded-xl px-4 py-2 cursor-pointer w-fit  max-w-[400px]"
             :class="[
