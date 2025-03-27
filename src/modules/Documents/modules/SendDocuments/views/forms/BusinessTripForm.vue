@@ -20,7 +20,7 @@ import {
   STEPPER_DECREE
 } from "@/modules/Documents/modules/SendDocuments/constants"
 import { dispatchNotify } from "@/utils/notify";
-import { COLOR_TYPES, JOURNAL } from "@/enums";
+import { COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL } from "@/enums";
 import { adjustUsersToArray } from "@/utils";
 import { adjustDateTime } from "@/modules/Documents/modules/SendDocuments/utils";
 
@@ -153,12 +153,30 @@ const validateAndSendNotice = async () => {
   } else if (props.formType === FORM_TYPE_CREATE) {
     try {
       const { data } = await store.actionCreateDocument(store.model)
-      await router.replace({
-        query: {
-          ...route.query,
-          notice_id: data.id
-        }
-      })
+      const model = {
+        approvers: [],
+        signers: [],
+        curator: store.model?.__curator?.user_id,
+        journal: JOURNAL.ORDERS_PROTOCOLS,
+        company: authStore.currentUser.company.id,
+        sender: authStore?.currentUser?.top_level_department?.id,
+        document_type: COMPOSE_DOCUMENT_TYPES.DECREE,
+        document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_V2,
+        short_description: store.model?.short_description,
+        trip_notice_id: data.id,
+        content: data.content
+      }
+      store.decreeModel.content = data.content
+      try {
+        const res = await store.actionCreateDocument(model)
+        store.decreeModel.id = res?.data?.id
+        await router.replace({
+          query: {
+            ...route.query,
+            notice_id: data.id
+          }
+        })
+      } catch (err){}
     } catch (err) {}
   } else if (props.formType === FORM_TYPE_UPDATE && route.params.id) {
     try {

@@ -235,7 +235,10 @@ defineExpose({
       </base-col>
 
       <base-col col-class="w-full">
-        <div class="border-[1.5px] border-greyscale-200 rounded-2xl px-5 py-4">
+        <div
+          class="border-[1.5px] rounded-2xl px-5 py-4"
+          :class="showNestedError && !store.model.content ? 'border-critic-500' : 'border-greyscale-200'"
+        >
           <div class="text-base text-primary-900 font-semibold mb-2">{{ t('notice') }}</div>
 
           <editor-with-tabs

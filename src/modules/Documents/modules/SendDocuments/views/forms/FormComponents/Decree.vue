@@ -107,20 +107,12 @@ const update = async (notice_id, decree_id) => {
       }
     )
     await countStore.actionCountList();
-    dispatchNotify(null, t('changed'), COLOR_TYPES.SUCCESS)
-    await router.replace({
-      name: ROUTE_SD_DETAIL,
-      params: {
-        id: route.params.id,
-        document_type: route.params.document_type,
-        document_sub_type: route.params.document_sub_type
-      }
-    })
+    dispatchNotify(null, t('successfully-saved'), COLOR_TYPES.SUCCESS)
   } catch (err) {
 
   }
 }
-const manage = () => {
+const manage = async () => {
   let notice_id = null
   if (props.formType === FORM_TYPE_CREATE && route.query.notice_id) {
     notice_id = route.query.notice_id
@@ -128,11 +120,23 @@ const manage = () => {
     notice_id = route.params.id
   }
 
-  if (props.formType === FORM_TYPE_CREATE) {
-    create(notice_id, null)
-  } else {
-    update(notice_id, store.decreeModel?.id)
-  }
+  try {
+    await update(notice_id, store.decreeModel?.id)
+    await router.replace({
+      name: ROUTE_SD_DETAIL,
+      params: {
+        id: notice_id,
+        document_type: route.params.document_type,
+        document_sub_type: route.params.document_sub_type
+      }
+    })
+  } catch (err) {}
+
+  // if (props.formType === FORM_TYPE_CREATE) {
+  //   create(notice_id, null)
+  // } else {
+  //   update(notice_id, store.decreeModel?.id)
+  // }
 }
 
 defineExpose({
@@ -184,6 +188,7 @@ defineExpose({
         <preview-dialog
           v-model="dialog"
           :send-button-loading="store.buttonLoading"
+          send-button-label="update"
           @emit:send="manage"
           content-classes="p-0"
         >

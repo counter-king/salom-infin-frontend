@@ -11,6 +11,10 @@ const props = defineProps({
   sendButtonLoading: {
     type: Boolean,
     default: false
+  },
+  sendButtonLabel: {
+    type: String,
+    default: 'send'
   }
 });
 const modelValue = useModel(props, 'modelValue');
@@ -44,7 +48,7 @@ const emit = defineEmits(['update:modelValue', 'emit:send']);
       />
 
       <base-button
-        label="send"
+        :label="sendButtonLabel"
         rounded
         shadow
         border-color="border-transparent"

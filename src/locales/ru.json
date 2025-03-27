@@ -756,7 +756,7 @@
   "news": "Новости банка",
   "save-news-as-draft": "Хотите сохранить данные как черновик?",
   "reply-to-moderator": "Ответить модератору",
-  "notice-saved-successfully": "Рапорт успешно сохранен!",
+  "notice-saved-successfully": "Рапорт и распоряжения успешно сохранен!",
   "all-birthdays": "Все именинники",
   "our-office": "Наш офис",
   "compose-message": "Написать сообщение",
@@ -783,12 +783,13 @@
   "error":"Ошибка",
   "delete-chat-dialog-content": "Вы хотите удалить это сообщение ?",
   "delete-chat-avatar-dialog-content": "Вы хотите удалить это фото ?",
-  "delete-chat-group-dialog-content": "Вы хотите удалить эту группу ?",  
+  "delete-chat-group-dialog-content": "Вы хотите удалить эту группу ?",
   "you-dont-have-any-messages": "У вас пока нет сообщений",
   "you-dont-have-any-messages-description": "Чтобы отправить сообщение этому контакту, напишите свое сообщение ниже!",
   "edit-group": "Редактировать группу",
   "message-found":"{count} сообщение найдено",
   "save-as":"Сохранить как...",
   "edited":"Изменено",
-  "delete-chat-private-dialog-content": "Вы хотите удалить этот чат ?"
+  "delete-chat-private-dialog-content": "Вы хотите удалить этот чат ?",
+  "successfully-saved": "Успешно сохранен!"
 }
