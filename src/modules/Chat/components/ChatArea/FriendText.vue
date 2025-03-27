@@ -10,8 +10,11 @@ import LinkMessage from './LinkMessage.vue';
 import { formatHour } from '@/utils/formatDate';
 // contants
 import { MESSAGE_TYPES } from '../../constatns';
+// store
+import { useChatStore } from '../../stores';
 // composables
 import { useTextSelection } from '../../composables/useTextSelection';
+
 // props
 const props = defineProps({
   message: {
@@ -35,8 +38,9 @@ const props = defineProps({
   }
 })
 
+const chatStore = useChatStore()
 const { t } = useI18n();
-const { handleSelectStart, handleClick } = useTextSelection();
+const { handleMessageClick } = useTextSelection();
 // reactives
 const attrs = useAttrs();
 const forwardedRef = ref(null);
@@ -52,7 +56,7 @@ defineExpose({
      >
     <div class="flex gap-2" :class="classNames">
       <base-avatar 
-        :image="props.message?.sender?.avatar?.url"
+        :image="props.message?.sender?.avatar?.url || chatStore.selectedUser?.avatar?.url"
         :label="props.message?.sender?.first_name"
         :color="props.message?.sender?.color"
         shape="circle"
@@ -63,8 +67,7 @@ defineExpose({
         <!-- message -->
         <div class="flex gap-3">
           <div 
-            @selectstart="handleSelectStart"
-            @click="handleClick"
+            @click="handleMessageClick"
             @contextmenu.prevent="onShowContextMenu($event, props.message, props.index)"
             class="friend-text flex flex-col gap-1 bg-white rounded-xl px-4 py-2 cursor-pointer w-fit  max-w-[400px]"
             :class="[

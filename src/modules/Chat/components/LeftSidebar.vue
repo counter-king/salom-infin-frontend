@@ -66,7 +66,7 @@ const onTabChange = async (val) => {
 }
 
 const onCreateChat = async (user) => {
-  const data = await chatStore.actionCreatePrivateChat({ member_id: user.id });  
+  const data = await chatStore.actionCreatePrivateChat({ member_id: user?.id });  
   chatStore.selectedUser = data
   // if user don't exist in the list then add it
   if(!chatStore.privateChatList.some(item => item.chat_id == data.chat_id)){
@@ -104,7 +104,7 @@ const onClickSearchedGroupByMessage = (item, addlist=true) => {
 // when private chat list  is clicked, work
 const onClickChatPrivateUser = async (user) => {
   // if user is already selected then don't do anything, becouse no full data, just it is getting from  api id
-  if(route.params.id != user.chat_id){
+  if(route.params?.id != user.chat_id){
     router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: user.chat_id }})
     chatStore.selectedUser = user
     // if user don't exist in the list then add it
@@ -118,7 +118,7 @@ const onClickChatPrivateUser = async (user) => {
 // when group chat list  is clicked, work
 const onClickChatGroup = (group) => {
   // if group is already selected then don't do anything, becouse no full data, just it is getting from  api id
-  if(route.params.id != group.chat_id){    
+  if(route.params?.id != group.chat_id){    
     router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: group.chat_id }, query :{ tab: 'group'} })
     // if group don't exist in the list then add it
     if(!chatStore.groupChatList.some(item => item.chat_id == group.chat_id)){
@@ -179,7 +179,7 @@ watch(createGroupDialogVisible, () => {
         <div class="overflow-hidden overflow-y-auto p-4 pt-0" style="height: calc(100vh - 260px)">
           <!-- chat users who have chat with current user -->
           <p class="text-sm font-medium text-greyscale-500 my-4">Найдено <span class="font-semibold text-greyscale-900">{{ chatStore.chatUserSearchList?.length }}</span> результата</p>
-          <template v-for="item in chatStore.chatUserSearchList" :key="item.id">
+          <template v-for="item in chatStore.chatUserSearchList" :key="item?.id">
             <template v-if="item.type === 'private'">
               <user-item
               @click="onClickSearchedUserByMessage(item)"
@@ -197,14 +197,14 @@ watch(createGroupDialogVisible, () => {
           <p class="text-sm font-medium text-greyscale-500 my-4">{{ t('global-search-results') }}</p>
           <user-item-search
             v-for="user in chatStore.userSearchList"
-            :key="user.id"
+            :key="user?.id"
             :user="user"
             @click="onCreateChat(user)"
           />
           <!-- users who sent messages to current user or current user send messages to them and  -->
            <!-- getting data by message  -->
           <p class="text-sm font-medium text-greyscale-500 my-4">{{ t('message-found',{count: chatStore.usersSearchListByMessage?.length })}}</p>
-          <template v-for="item in chatStore.usersSearchListByMessage" :key="item.id">
+          <template v-for="item in chatStore.usersSearchListByMessage" :key="item?.id">
             <template v-if="item.type === 'private'">
               <user-item
               @click="onClickSearchedUserByMessage(item)"
@@ -248,11 +248,11 @@ watch(createGroupDialogVisible, () => {
                 </div>
               </template> 
               <template v-else>
-                <template v-for="item in chatStore.privateChatList" :key="item.id">
+                <template v-for="item in chatStore.privateChatList" :key="item?.id">
                   <user-item
                     @click="onClickChatPrivateUser(item)"
                     :user="item" 
-                    :active="item.chat_id == route.params.id"
+                    :active="item?.chat_id == route.params?.id"
                   />
                 </template>
               </template>
@@ -274,11 +274,11 @@ watch(createGroupDialogVisible, () => {
                 </div>
               </template> 
               <template v-else>
-                <template v-for="group in chatStore.groupChatList" :key="group.id">
+                <template v-for="group in chatStore.groupChatList" :key="group?.id">
                   <group-item
                     @click="onClickChatGroup(group)"
                     :group="group"
-                    :active="group.chat_id == route.params.id"
+                    :active="group?.chat_id == route.params?.id"
                   />
                 </template>
               </template>

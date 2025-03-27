@@ -85,7 +85,7 @@ onMounted(async() => {
   :class="classNames"
   >
   <base-avatar 
-    :image="props.message?.sender?.avatar?.url"
+    :image="props.message?.sender?.avatar?.url || chatStore.selectedUser?.avatar?.url"
     :label="props.message?.sender?.first_name"
     :color="props.message?.sender?.color"
     avatar-classes="w-8 h-8"

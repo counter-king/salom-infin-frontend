@@ -283,6 +283,7 @@ onMounted(() => {
       ref="refInput"
       @focus="isFocused = true"
       @blur="isFocused = false"
+      :disabled="chatStore.messageListByChatIdLoading"
       size="large"
       :pt="{
         root: {

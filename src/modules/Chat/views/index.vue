@@ -39,14 +39,9 @@ const sendUserHandshake = ()=> {
   send(JSON.stringify(payload))
 }
 
-const sendChatHandshake = (id, chat_type)=> {
-  const payload = { command: 'chat_handshake', chat_type, chat_id: id }
-  send(JSON.stringify(payload))
-}
-
 const handleScrollDownSmooth =()=> {
   refChatArea.value.scrollTo({
-    top: refChatArea.value.scrollHeight,
+    top: refChatArea.value?.scrollHeight,
     behavior: 'smooth'
   })
 }
@@ -240,7 +235,7 @@ watch(data, (newData) => {
     }
   }
   else if(newData.type == WEBCOCKET_EVENTS.USER_STATUS){
-    const chat = chatStore.privateChatList.find(item=> item.chat_id == newData?.content.chat_id)
+    const chat = chatStore.privateChatList.find(item=> item.chat_id == newData?.content?.chat_id)
     if(chat){
       chat.is_user_online = newData?.content.status == "online" ? true : false
       if(!!chatStore.selectedUser && chatStore.selectedUser.user_id == newData?.content.user_id){
@@ -301,27 +296,8 @@ watch(data, (newData) => {
   }
 });
 
-watch(routeId, (newRouteId) => {    
-  if(route.name == CHAT_ROUTE_NAMES.PRIVATE) {
-    sendChatHandshake(newRouteId, CHAT_TYPES.PRIVATE)
-  }
-  else if(route.name == CHAT_ROUTE_NAMES.GROUP) {
-    sendChatHandshake(newRouteId, CHAT_TYPES.GROUP)
-  }
-})
-
-function initializeHandshake(){
-  sendUserHandshake()
-    if(route.name == CHAT_ROUTE_NAMES.PRIVATE) {
-      sendChatHandshake(route.params.id, CHAT_TYPES.PRIVATE)
-    }
-    else if(route.name == CHAT_ROUTE_NAMES.GROUP) {
-      sendChatHandshake(route.params.id, CHAT_TYPES.GROUP)
-    }
-}
-
 onMounted(() => {
-  initializeHandshake()
+  sendUserHandshake()
 })
 
 // Clean up on component unmount

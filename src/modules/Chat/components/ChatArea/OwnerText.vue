@@ -40,7 +40,7 @@ const props = defineProps({
   }
 })
 
-const { handleSelectStart, handleClick } = useTextSelection();
+const { handleMessageClick } = useTextSelection();
 // reactives
 const attrs = useAttrs();
 const forwardedRef = ref  (null);
@@ -75,8 +75,7 @@ defineExpose({
       <!-- message -->
       <div 
         @contextmenu.prevent="onShowContextMenu($event, props.message, props.index)"
-        @selectstart="handleSelectStart"
-        @click="handleClick"  
+        @click="handleMessageClick"  
          class="flex flex-col gap-1 bg-primary-400 rounded-xl px-4 py-3 cursor-pointer  max-w-[400px]"
          :class="[
           {

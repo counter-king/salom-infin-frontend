@@ -226,7 +226,10 @@ export const useChatStore = defineStore("chat-stores", {
         }
         response.data.results = results
         return response
-      } finally {
+      } catch(e){
+        console.log("error", e)
+      }
+       finally {
         this.privateChatLoading = false;
         this.privateChatMoreLoading = false;
       }
@@ -251,26 +254,31 @@ export const useChatStore = defineStore("chat-stores", {
       }
     },
     /** */
-    async actionGetPrivateChatById(id) {
-      this.privateChatByIdLoading = true;
-      const { data } = await fetchGetPrivateChatById(id);
-      this.privateChatByIdLoading = false;      
-      return {
-        first_name: data?.title,
-        full_name: data?.title,
-        position: data.members?.find((item) => item.user?.id !== authStore.currentUser.id)?.user?.position?.name,
-        chat_id: data.id,
-        color: data.members?.find((item) => item.user?.id !== authStore.currentUser.id)?.user?.color,
-        avatar: data.members?.find((item) => item.user?.id !== authStore.currentUser.id)?.user?.avatar,
-        members: data.members,
-        user_id: data.members?.find((item) => item.user?.id !== authStore.currentUser.id)?.user?.id,
-        is_user_online: data.is_user_online,
-        last_message: data?.last_message?.text,
-        last_message_date: data?.last_message?.created_date,
-        last_message_type: data?.last_message?.type,
-        last_message_id: data?.last_message?.id,
-        type: data.type,
-        unread_count: data.unread_count
+    async actionGetPrivateChatById(id, error = false ) {
+      try {
+        this.privateChatByIdLoading = true;
+        const { data } = await fetchGetPrivateChatById(id);
+        return {
+          first_name: data?.title,
+          full_name: data?.title,
+          position: data.members?.find((item) => item.user?.id !== authStore.currentUser.id)?.user?.position?.name,
+          chat_id: data.id,
+          color: data.members?.find((item) => item.user?.id !== authStore.currentUser.id)?.user?.color,
+          avatar: data.members?.find((item) => item.user?.id !== authStore.currentUser.id)?.user?.avatar,
+          members: data.members,
+          user_id: data.members?.find((item) => item.user?.id !== authStore.currentUser.id)?.user?.id,
+          is_user_online: data.is_user_online,
+          last_message: data?.last_message?.text,
+          last_message_date: data?.last_message?.created_date,
+          last_message_type: data?.last_message?.type,
+          last_message_id: data?.last_message?.id,
+          type: data.type,
+          unread_count: data.unread_count
+        }
+      } catch(e){
+        if(error) throw e
+      } finally {
+        this.privateChatByIdLoading = false;      
       }
     },
     /** */
@@ -324,10 +332,9 @@ export const useChatStore = defineStore("chat-stores", {
     },
     /** */
     /** */
-    async actionGetGroupChatById(id) {
+    async actionGetGroupChatById(id, error = false) {
       this.groupChatByIdLoading = true;
       const { data } = await fetchGetGroupChatById(id);
-      this.groupChatByIdLoading = false;
       try {
         if(data.images[0]?.image?.id){
         const { blobUrl } = await fetchBlobFile(data.images[0]?.image?.id)
@@ -356,8 +363,10 @@ export const useChatStore = defineStore("chat-stores", {
           type: data.type,
           unread_count: data.unread_count
         }
-      } catch (err) {
-        console.log(err)
+      } catch (e) {
+        if(error) throw e
+      } finally {
+        this.groupChatByIdLoading = false;      
       }
     },
     /** */
@@ -441,16 +450,17 @@ export const useChatStore = defineStore("chat-stores", {
 
         if(resetList){
           this.messageListByChatId = messageList;
-          this.messageListByChatIdLoading = false;
         } else {
-          this.messageListByChatIdAddMoreLoading = false;
           this.messageListByChatId = [...messageList, ...this.messageListByChatId]
         }
         // checking has next page
         return data
       } catch(e){
         console.log(e)
-      } 
+      } finally{
+        this.messageListByChatIdLoading = false;
+        this.messageListByChatIdAddMoreLoading = false;
+      }
     },
     /** */
     async actionDeleteMessageById(id) {

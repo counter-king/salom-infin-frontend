@@ -2,7 +2,7 @@
 // cores
 import { computed, inject, nextTick, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 // componennts
 import OwnerText from '../components/ChatArea/OwnerText.vue';
 import FriendText from '../components/ChatArea/FriendText.vue';
@@ -20,12 +20,15 @@ import ChatImageItem from '../components/ChatArea/ChatImageItem.vue';
 import FriendChatFileItem from '../components/ChatArea/FriendChatFileItem.vue';
 import FriendChatImageItem from '../components/ChatArea/FriendChatImageItem.vue';
 // contants
-import { CHAT_ROUTE_NAMES, MESSAGE_TYPES } from '../constatns';
+import { CHAT_ROUTE_NAMES, CHAT_TYPES, MESSAGE_TYPES } from '../constatns';
 // utils
 import { formatDay } from '@/utils/formatDate';
+import { dispatchNotify } from '@/utils/notify';
 // stores
 import { useChatStore } from '../stores';
 import { useAuthStore } from '@/modules/Auth/stores';
+// socket
+import { socket } from "@/services/socket";
 // composables
 import { useContextMenu } from '../composables/useContextMenu';
 import { useFileUploadDrop } from '../composables/useFileUploadDrop';  
@@ -39,8 +42,11 @@ const { refMessagesContainer, refMessageElements, initializeReadMessageObserver 
 
 const { t } = useI18n();
 const route = useRoute();
+const router = useRouter()
 const chatStore = useChatStore()
 const authStore = useAuthStore()
+const { send } = socket
+
 // reactives
 const showScrollDownButton = ref(false);
 const refSendMessage = ref(null);
@@ -57,6 +63,11 @@ const imageGalleriaValues = computed(() => getImageListByFilter?.value?.map(item
 // inject
 const refChatArea = inject("refChatArea");
 // methods
+// websocket event
+const sendChatHandshake = ()=> {
+  const payload = { command: 'chat_handshake', chat_type: route.name == CHAT_ROUTE_NAMES.PRIVATE ?  CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: route.params?.id }
+  send(JSON.stringify(payload))
+}
 // when scroll down, scrollDwonButton will be visible
 const handleScroll = (event) => {
   if(event && event.target && event.target.scrollHeight - event.target.clientHeight >  Math.floor(event.target.scrollTop + 100)  ) {
@@ -64,7 +75,6 @@ const handleScroll = (event) => {
   } else {
     showScrollDownButton.value = false
   }
-
    // Only run handleScrollReachUp if initial render is complete
    if (initialRenderComplete.value) {
       handleScrollReachUp(event, handleScrollUp);
@@ -89,6 +99,7 @@ const handleScrollDownSmooth = () => {
     behavior: 'smooth'
   });
 }
+
 const onShowContextMenu = (event, message, index) => {
   chatStore.contextMenu.tempMessage = message
   chatStore.contextMenu.index = index
@@ -145,7 +156,7 @@ const showFriendTextAvatar = (index) => {
   // Joriy xabar va oldingi xabarni olish
   const nowMessage = chatStore.messageListByChatId[index]
   const perviousMessage = chatStore.messageListByChatId[index - 1]
-  
+
   // Avatar quyidagi hollarda ko'rsatiladi:
   // 1. Agar bu birinchi xabar bo'lsa (oldingi xabar yo'q)
   // 2. Agar oldingi xabar boshqa foydalanuvchidan bo'lsa
@@ -159,8 +170,11 @@ watch(
   () => route.params?.id,
   async (newId, oldId) => {
     if (newId !== oldId && route.name === CHAT_ROUTE_NAMES.GROUP) {
-      const { count } = await chatStore.actionGetMessageListByChatId({ chat:route.params?.id, page:1, page_size: 20 }, true);
-      hasNext.value = count > page.value * pageSize.value
+      chatStore.selectedGroup = await chatStore.actionGetGroupChatById(newId);
+      // if there is chat_id, then send chat handshake, otherwise don't
+      sendChatHandshake();
+      const response = await chatStore.actionGetMessageListByChatId({ chat:route.params?.id, page:1, page_size: 20 }, true);
+      hasNext.value = response?.count > page.value * pageSize.value
       page.value += 1 
       // make scroll down after loading new data
        setTimeout(() => {
@@ -168,19 +182,29 @@ watch(
         initializeReadMessageObserver()
       }, 10)
       // every route change, reset context menu
-      chatStore.selectedGroup = await chatStore.actionGetGroupChatById(newId);
       chatStore.contextMenu = {}
     }
   }
 );
 
 onMounted(async () => {
-  const { count } = await chatStore.actionGetMessageListByChatId({ chat:route.params?.id, page:1, page_size: 20 }, true);
-  hasNext.value = count > page.value * pageSize.value
-  page.value += 1
-  chatStore.selectedGroup = await chatStore.actionGetGroupChatById(route.params?.id);
+  try {
+    chatStore.selectedGroup = await chatStore.actionGetGroupChatById(route.params?.id, true);
+    // if there is chat_id, then send chat handshake, otherwise don't
+    sendChatHandshake();
+    const response = await chatStore.actionGetMessageListByChatId({ chat: route.params?.id, page:1, page_size: 20 }, true);
+    hasNext.value = response?.count > page.value * pageSize.value
+    page.value += 1
+  } catch (e) {
+    if(e.status == 403){
+      router.push({ name: CHAT_ROUTE_NAMES.CHAT_INDEX, query: { tab: 'group' }})
+      dispatchNotify(null, 'Доступ запрещен')
+    } else if(e.status == 404) {
+      router.push({ name: CHAT_ROUTE_NAMES.CHAT_INDEX, query: { tab: 'group' }})
+    }
+  }
    // make scroll down after loading new data
-   handleScrollDown()
+  handleScrollDown()
   // initialize read message observer to get correct ref values
   initializeReadMessageObserver()
 })

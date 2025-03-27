@@ -4,11 +4,14 @@ import { ref, useAttrs } from 'vue';
 import { useI18n } from 'vue-i18n';
 // components
 import ClickedStiker from './ClickedStiker.vue';
-// contants
-import { formatHour } from '@/utils/formatDate';
 import { DownloadMinimalisticIcon, PenBoldIcon } from '@/components/Icons';
+// utils
+import { formatHour } from '@/utils/formatDate';
+// contants
 import { downloadFile } from '../../services/file.service';
 import { fileTypes } from '../../constatns';
+// store
+import { useChatStore } from '../../stores';
 // composables
 import { useTextSelection } from '../../composables/useTextSelection';
 
@@ -33,7 +36,9 @@ const props = defineProps({
     type: [String , Array, Object] 
   }
 })
-const { handleSelectStart, handleClick } = useTextSelection();
+
+const chatStore = useChatStore()
+const { handleMessageClick } = useTextSelection();
 const { t } = useI18n();
 // reactives
 const attrs = useAttrs();
@@ -53,7 +58,7 @@ defineExpose({
     >
     <!-- avatat -->
     <base-avatar 
-      :image="props.message?.sender?.avatar?.url"
+      :image="props.message?.sender?.avatar?.url || chatStore.selectedUser?.avatar?.url"
       :label="props.message?.sender?.first_name"
       :color="props.message?.sender?.color"
       avatar-classes="w-8 h-8"
@@ -64,8 +69,7 @@ defineExpose({
       <div class="flex gap-3">
         <div
           @contextmenu.prevent="(e)=>props.onShowContextMenu(e, props.message)"
-          @selectstart="handleSelectStart"
-          @click="handleClick"
+          @click="handleMessageClick"
           class="flex flex-col gap-2 p-2 pr-4 min-w-[243px] max-w-[400px] bg-white rounded-xl"
           :class="[{'!p-0': !props.message.replied_to }]"
         >
