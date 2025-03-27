@@ -59,7 +59,7 @@ const refChatArea = inject("refChatArea");
 // methods
 // when scroll down, scrollDwonButton will be visible
 const handleScroll = (event) => {
-  if( event.target.scrollHeight - event.target.clientHeight >  Math.floor(event.target.scrollTop + 100)  ) {
+  if(event && event.target && event.target.scrollHeight - event.target.clientHeight >  Math.floor(event.target.scrollTop + 100)  ) {
     showScrollDownButton.value = true
   } else {
     showScrollDownButton.value = false
@@ -72,19 +72,19 @@ const handleScroll = (event) => {
 }
 
 const handleScrollUp = () => {
-  refChatArea.value.scrollTo({
+  refChatArea.value?.scrollTo({
     top: refChatArea.value.clientHeight,
   });
 }
 
 const handleScrollDown = () => {
-  refChatArea.value.scrollTo({
+  refChatArea.value?.scrollTo({
     top: refChatArea.value.scrollHeight,
     // behavior: 'smooth'
   });
 }
 const handleScrollDownSmooth = () => {
-  refChatArea.value.scrollTo({
+  refChatArea.value?.scrollTo({
     top: refChatArea.value.scrollHeight,
     behavior: 'smooth'
   });
@@ -159,7 +159,8 @@ watch(
   () => route.params?.id,
   async (newId, oldId) => {
     if (newId !== oldId && route.name === CHAT_ROUTE_NAMES.PRIVATE) {
-     const { count } = await chatStore.actionGetMessageListByChatId({chat:newId, page:1, page_size: 20}, true);
+      chatStore.selectedUser = await chatStore.actionGetPrivateChatById(newId);
+     const { count } = await chatStore.actionGetMessageListByChatId({ chat:newId, page:1, page_size: 20}, true);
       hasNext.value = count > page.value * pageSize.value
       page.value += 1
       // make scroll down after loading new data
@@ -167,7 +168,6 @@ watch(
         handleScrollDown()
         initializeReadMessageObserver()
       }, 10)
-      chatStore.selectedUser = await chatStore.actionGetPrivateChatById(newId);
       // every route change, reset context menu
       chatStore.contextMenu = {}
     }
@@ -179,12 +179,14 @@ onMounted(async () => {
   const { count } = await chatStore.actionGetMessageListByChatId({ chat:route.params?.id, page:1, page_size: 20 }, true);
   hasNext.value = count > page.value * pageSize.value
   page.value += 1
+  // if selected user don't exist in the list then add it
+  if(!chatStore.privateChatList.some(item => item?.chat_id == chatStore.selectedUser?.chat_id)){
+    chatStore.privateChatList.unshift(chatStore.selectedUser)
+  }
   // make scroll down after loading new data
   handleScrollDown()
   // initialize read message observer to get correct ref values
-  initializeReadMessageObserver()
-
-  
+  initializeReadMessageObserver()  
 })
 
 onMounted(() => {
@@ -195,8 +197,8 @@ onMounted(() => {
       inputSendMessageHeight.value = refSendMessage.value.InputSendMessageWrapperRef.scrollHeight
     }, { immediate: true })
   }
-
-  // avoid scroll event working when initail loading happen 
+  
+  // avoid scroll event that get next page data working when initail loading happen 
   setTimeout(() => {
     initialRenderComplete.value = true;
   }, 500);
@@ -213,6 +215,7 @@ onMounted(() => {
     @dragover.prevent="onDragOver"
     @dragleave.prevent="onDragLeave"
     @drop.prevent="onDrop"
+    @contextmenu.prevent=""
     >
     <template v-if="chatStore.messageListByChatIdLoading">
         <base-spinner />
@@ -239,6 +242,7 @@ onMounted(() => {
                    ref="refMessageElements"
                   :data-message-id="message?.message_id"
                   :data-message-is-read="message?.is_read"
+                  :data-message-user-id="message?.sender?.id"
                   :index="index"
                   :message="message"
                   :handleClickEmoji="handleClickEmoji"
@@ -251,6 +255,7 @@ onMounted(() => {
                  ref="refMessageElements"
                 :data-message-id="message?.message_id"
                 :data-message-is-read="message?.is_read"
+                :data-message-user-id="message?.sender?.id"
                 :message="message"
                 :handleClickEmoji="handleClickEmoji"
                 :onShowContextMenu="onShowContextMenu" 
@@ -263,6 +268,7 @@ onMounted(() => {
                 ref="refMessageElements"
                 :data-message-id="message?.message_id"
                 :data-message-is-read="message?.is_read"
+                :data-message-user-id="message?.sender?.id"
                 :handleClickEmoji="handleClickEmoji"
                 :onShowContextMenu="onShowContextMenu" 
                 :onShowEmojiContextMenu="onShowEmojiContextMenu" 
@@ -281,13 +287,14 @@ onMounted(() => {
                   :handleClickImage="handleClickImage"
                   :data-message-id="message?.message_id"
                   :data-message-is-read="message?.is_read"
+                  :data-message-user-id="message?.sender?.id"
                   :message="message"
+                  :index="index"
                   :handleClickEmoji="handleClickEmoji"
                   :onShowContextMenu="onShowContextMenu"
                   :onShowEmojiContextMenu="onShowEmojiContextMenu"
                   :avatarVisible="showFriendTextAvatar(index)"
                   :classNames="[{ 'mt-5': showFriendTextAvatar(index) }]"
-
                 />
               </template>
               <template v-else>
@@ -295,6 +302,7 @@ onMounted(() => {
                   ref="refMessageElements"
                   :data-message-id="message?.message_id"
                   :data-message-is-read="message?.is_read"
+                  :data-message-user-id="message?.sender?.id"
                   :message="message"
                   :handleClickEmoji="handleClickEmoji"
                   :onShowContextMenu="onShowContextMenu"
@@ -309,6 +317,7 @@ onMounted(() => {
                 ref="refMessageElements"
                 :data-message-id="message?.message_id"
                 :data-message-is-read="message?.is_read"
+                :data-message-user-id="message?.sender?.id"
                 :handleClickEmoji="handleClickEmoji"
                 :onShowContextMenu="onShowContextMenu" 
                 :onShowEmojiContextMenu="onShowEmojiContextMenu" 
@@ -330,7 +339,7 @@ onMounted(() => {
         <!-- file uploads progress -->
         <div class="sticky bottom-0 flex flex-col gap-1 mt-auto">
           <template  v-for="(message, index) in chatStore.uploadingFiles" :key="index">
-            <FileUploadProgress :progress="message.progress" :file="message.attachments.file" :index="index" />
+            <FileUploadProgress :progress="message.progress" :file="message?.attachments?.file" :index="index" />
           </template>
         </div>
         <!-- scroll down button -->
