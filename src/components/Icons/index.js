@@ -197,6 +197,8 @@ export { default as WhatsappIcon } from '~icons/mage/whatsapp-filled'
 export { default as EditLightIcon } from '~icons/iconamoon/edit-light'
 // Clarity
 export { default as PlaneIcon } from '~icons/clarity/airplane-solid'
+export { default as VolumeUpLineIcon } from '~icons/clarity/volume-up-line'
+export { default as VolumeMuteLineIcon } from '~icons/clarity/volume-mute-line'
 // Material symbols
 export { default as TrainIcon } from '~icons/material-symbols/train'
 export { default as LocalTaxiIcon } from '~icons/material-symbols/local-taxi'

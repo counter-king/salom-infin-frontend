@@ -216,7 +216,8 @@ export const useChatStore = defineStore("chat-stores", {
           last_message_type: item.last_message?.type,
           last_message_id: item.last_message?.id,
           type: item.type,
-          unread_count: item.unread_count
+          unread_count: item.unread_count,
+          sound: item?.sound || true
         }));
 
         if(resetList){
