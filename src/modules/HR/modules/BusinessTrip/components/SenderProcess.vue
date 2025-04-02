@@ -55,7 +55,7 @@ const stepperIcon = computed(() => {
 
 <template>
   <div class="flex gap-x-3">
-    <div class="w-[350px] min-h-[80px]">
+    <div class="w-[400px] min-h-[80px]">
       <sender-process-card
         v-if="alignment === 'left' && isAllReceiversVerified"
         :verifications="props.verifications"
@@ -87,7 +87,7 @@ const stepperIcon = computed(() => {
       </div>
     </div>
 
-    <div class="w-[350px] min-h-[80px]">
+    <div class="w-[400px] min-h-[80px]">
       <sender-process-card
         v-if="alignment === 'right' && isAllReceiversVerified"
         :verifications="props.verifications"

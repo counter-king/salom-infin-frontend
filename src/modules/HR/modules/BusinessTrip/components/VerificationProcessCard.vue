@@ -112,7 +112,7 @@ const onConfirm = async () => {
         class="text-xs font-medium"
         :class="props.item?.arrived_at ? 'text-primary-900' : 'text-greyscale-500'"
       >
-        {{ props.item?.arrived_at ? formatUserFullName(props.item.arrived_verified_by) : 'Имя сотрудника' }}
+        {{ props.item?.arrived_at ? `${item?.region?.country?.name} / ${item?.region?.name}` : t('trip-place') }}
       </span>
     </div>
 

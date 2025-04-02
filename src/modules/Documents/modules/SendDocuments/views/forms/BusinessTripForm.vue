@@ -129,8 +129,10 @@ const validateAndSendNotice = async () => {
     segments: item.segments.map(segment => ({
       departure_city: segment.departure_city.id,
       arrival_city: segment.arrival_city.id,
-      departure_date: adjustDateTime(segment.date, segment.time, 0),
-      departure_end_date: adjustDateTime(segment.date, segment.time, 1),
+      departure_date: `${segment.date}T${segment.time?.hours}:${segment.time?.minutes}:00+05:00`,
+      departure_end_date: null,
+      // departure_date: adjustDateTime(segment.date, segment.time, 0),
+      // departure_end_date: adjustDateTime(segment.date, segment.time, 1),
       segment_class: segment.segment_class.value
     })),
     passengers: item.passengers.map(passenger => ({ user: passenger.id }))

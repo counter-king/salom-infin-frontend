@@ -128,4 +128,7 @@ const { t } = useI18n()
 .base-time-picker .dp__action_row {
   background: var(--greyscale-50);
 }
+.dp__overlay {
+  height: 155px!important;
+}
 </style>

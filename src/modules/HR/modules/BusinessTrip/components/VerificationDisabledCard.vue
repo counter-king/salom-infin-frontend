@@ -93,7 +93,7 @@ const onConfirm = async () => {
 
       <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
 
-      <span class="text-xs font-medium text-greyscale-400">Имя сотрудника</span>
+      <span class="text-xs font-medium text-greyscale-400">{{ t('trip-place') }}</span>
     </div>
 
     <div class="flex items-center gap-x-[6px]">
