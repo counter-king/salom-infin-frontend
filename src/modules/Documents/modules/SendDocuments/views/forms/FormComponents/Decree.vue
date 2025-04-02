@@ -188,7 +188,6 @@ defineExpose({
         <preview-dialog
           v-model="dialog"
           :send-button-loading="store.buttonLoading"
-          send-button-label="update"
           @emit:send="manage"
           content-classes="p-0"
         >
