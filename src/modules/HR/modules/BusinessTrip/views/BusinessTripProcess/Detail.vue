@@ -41,7 +41,7 @@ const zoomFile = (event, file) => {
   <div class="flex px-6 py-6 overflow-y-auto" style="height: calc(100% - 100px)">
     <div class="flex flex-col w-3/4">
       <div class="flex gap-x-3">
-        <div class="flex flex-col w-[400px] rounded-xl border border-greyscale-100 py-[10px] px-3 bg-greyscale-50 mb-[6px]">
+        <div class="flex flex-col w-[450px] rounded-xl border border-greyscale-100 py-[10px] px-3 bg-greyscale-50 mb-[6px]">
           <span class="text-primary-900 text-sm font-semibold">{{ t('sketch') }}</span>
 
           <div class="flex flex-col gap-y-1 mt-2">

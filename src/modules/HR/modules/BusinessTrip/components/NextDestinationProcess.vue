@@ -20,7 +20,7 @@ const alignment = computed(() => {
 
 <template>
   <div class="flex gap-x-3">
-    <div class="w-[400px] min-h-[80px]">
+    <div class="w-[450px] min-h-[80px]">
       <next-destination-disabled-card v-if="alignment === 'right'" />
     </div>
 
@@ -44,7 +44,7 @@ const alignment = computed(() => {
       </div>
     </div>
 
-    <div class="w-[400px] min-h-[80px]">
+    <div class="w-[450px] min-h-[80px]">
       <next-destination-disabled-card v-if="alignment === 'left'" />
     </div>
   </div>

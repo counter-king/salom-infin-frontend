@@ -51,7 +51,7 @@ const stepperIcon = computed(() => {
 <template>
   <div class="verification-process">
     <div class="flex gap-x-3">
-      <div class="w-[400px] min-h-[130px]">
+      <div class="w-[450px] min-h-[130px]">
         <verification-process-card
           v-if="props.item.direction === 'left' && props.item.arrived_at"
           :item="props.item"
@@ -89,7 +89,7 @@ const stepperIcon = computed(() => {
         </div>
       </div>
 
-      <div class="w-[400px] min-h-[130px]">
+      <div class="w-[450px] min-h-[130px]">
         <verification-process-card
           v-if="props.item.direction === 'right' && (props.item.arrived_at || (props.item.left_at && props.item.is_sender))"
           :item="props.item"
