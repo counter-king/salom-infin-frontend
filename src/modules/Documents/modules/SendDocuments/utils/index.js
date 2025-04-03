@@ -60,13 +60,23 @@ export const returnBTDepartureTime = (departure_date, departure_end_date) => {
     const departureDate = formatDate(departure_date)
     const time = `${new Date(departure_date).toTimeString().slice(0, 5)}-${new Date(departure_end_date).toTimeString().slice(0, 5)}`
     return `${departureDate} <br> ${time}`
+  } else if (departure_date) {
+    const departureDate = formatDate(departure_date)
+    const time = `${new Date(departure_date).toTimeString().slice(0, 5)}`
+    return `${departureDate} <br> ${time}`
   }
 }
 
 export const returnBTDateTimeToISO = (segment, index) => {
-  const hours = Number(segment.time[index].hours) < 10 ? `0${Number(segment.time[index].hours)}` : segment.time[index].hours
-  const minutes = Number(segment.time[index].minutes) < 10 ? `0${Number(segment.time[index].minutes)}` : segment.time[index].minutes
-  return `${segment.date}T${hours}:${minutes}:00+05:00`
+  if (Array.isArray(segment.time)) {
+    const hours = Number(segment.time[index].hours) < 10 ? `0${Number(segment.time[index].hours)}` : segment.time[index].hours
+    const minutes = Number(segment.time[index].minutes) < 10 ? `0${Number(segment.time[index].minutes)}` : segment.time[index].minutes
+    return `${segment.date}T${hours}:${minutes}:00+05:00`
+  } else {
+    const hours = Number(segment.time.hours) < 10 ? `0${Number(segment.time.hours)}` : segment.time.hours
+    const minutes = Number(segment.time.minutes) < 10 ? `0${Number(segment.time.minutes)}` : segment.time.minutes
+    return `${segment.date}T${hours}:${minutes}:00+05:00`
+  }
 }
 
 export const adjustBTDateToTimeArray = async (start_date, end_date) => {
@@ -78,5 +88,8 @@ export const adjustBTDateToTimeArray = async (start_date, end_date) => {
       { hours: start.format('HH'), minutes: start.format('mm'), seconds: '00' },
       { hours: end.format('HH'), minutes: end.format('mm'), seconds: '00' },
     ]
+  } else if (start_date) {
+    const start = dayjs(start_date)
+    return { hours: start.format('HH'), minutes: start.format('mm'), seconds: '00' }
   }
 }

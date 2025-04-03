@@ -61,7 +61,7 @@ const bookings = computed(() => {
       segments: booking.segments.map((segment, segmentIndex) => ({
         ...segment,
         departure_date: returnBTDateTimeToISO(segment, 0),
-        departure_end_date: returnBTDateTimeToISO(segment, 1),
+        departure_end_date: null,
       })),
       passengers: booking.passengers.map((passenger, passengerIndex) => ({
         user: passenger

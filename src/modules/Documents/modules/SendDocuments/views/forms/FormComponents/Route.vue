@@ -22,7 +22,7 @@ import { useCountStore } from "@/stores/count.store"
 // Utils
 import { formatDateReverse } from "@/utils/formatDate"
 import { dispatchNotify } from "@/utils/notify"
-import { adjustUsersToArray } from "@/utils"
+import { adjustUsersToArray, isObject } from "@/utils"
 import { adjustDateTime } from "@/modules/Documents/modules/SendDocuments/utils"
 // Components
 import BaseBrickRadio from "@/components/UI/BaseBrickRadio.vue"
@@ -262,7 +262,6 @@ defineExpose({
               :error="$v.bookings.$each.$response.$data[index].segments.$each.$data[subIndex].time"
               label="time"
               required
-              range
               :show-nested-error="showNestedError"
             />
 

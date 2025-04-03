@@ -153,3 +153,30 @@ body {
   height: 100%;
   overflow: hidden;
 }
+
+#atlwdg-trigger {
+  /*bottom: -2px !important;*/
+  /*right: 30px !important;*/
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 8px 8px 0 0 !important;
+  background: rgb(9 15 51 / 1) !important;
+  color: white !important;
+  font-family: var(--font-regular), serif !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  padding: 12px !important;
+  width: 190px !important;
+  text-align: center !important;
+  /*left: inherit !important;*/
+  /*top: inherit !important;*/
+  /*transform: inherit !important;*/
+  /*transform-origin: inherit !important;*/
+  z-index: 99 !important;
+}
+
+.atlwdg-trigger.atlwdg-RIGHT {
+  left: 98% !important;
+  top: 60% !important;
+  transform: rotate(270deg) !important;
+}

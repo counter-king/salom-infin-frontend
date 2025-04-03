@@ -756,7 +756,7 @@
   "news": "Bank yangiliklari",
   "save-news-as-draft": "Maʼlumotlarni qoralama sifatida saqlamoqchimisiz?",
   "reply-to-moderator": "Moderatorga javob",
-  "notice-saved-successfully": "Bildirishnoma muvaffaqiyatli saqlandi!",
+  "notice-saved-successfully": "Bildirishnoma va farmoyish muvaffaqiyatli saqlandi!",
   "all-birthdays": "Barcha tug'ilgan kunlar",
   "our-office": "Bizning ofis",
   "compose-message": "Xabar yozish",
@@ -789,5 +789,6 @@
   "message-found":"{count} xabar topildi",
   "save-as":"Saqlash...",
   "edited": "tahrirlangan",
-  "delete-chat-private-dialog-content": "Siz bu suhbatni o'chirmoqchimisiz ?"
+  "delete-chat-private-dialog-content": "Siz bu suhbatni o'chirmoqchimisiz ?",
+  "successfully-saved": "Muvaffaqiyatli saqlandi!"
 }

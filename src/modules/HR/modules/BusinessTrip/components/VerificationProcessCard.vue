@@ -112,7 +112,7 @@ const onConfirm = async () => {
         class="text-xs font-medium"
         :class="props.item?.arrived_at ? 'text-primary-900' : 'text-greyscale-500'"
       >
-        {{ props.item?.arrived_at ? formatUserFullName(props.item.arrived_verified_by) : 'Имя сотрудника' }}
+        {{ props.item?.arrived_at ? `${item?.region?.country?.name} / ${item?.region?.name}` : t('trip-place') }}
       </span>
     </div>
 
@@ -122,16 +122,18 @@ const onConfirm = async () => {
     >
       <div
         v-for="(item, index) in props.item.visited_places"
-        class="flex bg-white py-1 px-2 rounded-lg"
+        class="flex bg-white py-1 px-2 rounded-lg cursor-pointer hover:bg-greyscale-100"
       >
-        <div class="flex gap-x-1">
-          <base-iconify :icon="MapPointBoldIcon" class="!w-4 !h-4 text-greyscale-300" />
+        <a :href="`https://www.google.com/maps?q=${item.place?.lat},${item.place?.lng}`" target="_blank" class="w-full">
+          <div class="flex gap-x-1">
+            <base-iconify :icon="MapPointBoldIcon" class="!w-4 !h-4 text-greyscale-300" />
 
-          <div class="flex flex-col gap-y-[2px]">
-            <span class="text-greyscale-900 font-medium text-[13px] truncate">{{ item?.place?.name }}</span>
-            <span class="text-greyscale-500 font-medium text-xs">{{ formatDateHour(item?.created_date) }}</span>
+            <div class="flex flex-col gap-y-[2px]">
+              <span class="text-greyscale-900 font-medium text-[13px] truncate">{{ item?.place?.name }}</span>
+              <span class="text-greyscale-500 font-medium text-xs">{{ formatDateHour(item?.created_date) }}</span>
+            </div>
           </div>
-        </div>
+        </a>
       </div>
     </div>
 
