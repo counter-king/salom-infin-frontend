@@ -24,7 +24,7 @@ const chatStore = useChatStore();
 const authStore = useAuthStore();
 const { playNotificationSound } = useNotificationSound()
 const allowedPages = ['ChatPrivateDetail','ChatGroupDetail']
-const { status, data, send } = socket
+const { status, data, send } = socket()
 // reactives
 const isShowChat = computed(() => allowedPages.includes(route.name))
 const routeId = computed(() => route.params.id)
@@ -63,8 +63,9 @@ watch(status, (newStatus) => {
 
 // websocketdan, kelgan ma'lumotlarni kuzatish
 watch(data, (newData) => {
+  
   newData = JSON.parse(newData);
-  // console.log("ewasd",newData);
+  console.log("ewasd", newData);
 
   if(newData.command == WEBCOCKET_EVENTS.USER_HANDSHAKE) {
     // console.log("user hand",newData);

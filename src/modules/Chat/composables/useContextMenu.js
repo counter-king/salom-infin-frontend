@@ -22,7 +22,7 @@ const chatStore = useChatStore()
 const authStore = useAuthStore()
 export const useContextMenu = () => {
 const route = useRoute()
-const { send } = socket
+const { send } = socket()
 // reactives
 const refContextMenu = ref(null);
 

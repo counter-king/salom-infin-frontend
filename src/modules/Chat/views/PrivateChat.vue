@@ -45,7 +45,7 @@ const route = useRoute();
 const router = useRouter()
 const chatStore = useChatStore()
 const authStore = useAuthStore()
-const { send } = socket
+const { send } = socket()
 
 // reactives
 const showScrollDownButton = ref(false);

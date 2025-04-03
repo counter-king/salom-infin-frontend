@@ -9,7 +9,7 @@ import { socket } from "@/services/socket";
 import { CHAT_ROUTE_NAMES, CHAT_TYPES, MESSAGE_TYPES } from "../constatns";
 const chatStore = useChatStore()
 
-const { send } = socket
+const { send } = socket()
 
 const sendChatFileEmit = (file_id, file_name, chat_id, message_type, chat_type)=> {
   const payload = { command: 'new_message', chat_type, chat_id, files: [file_id],message_type, text: file_name, replied_to_id: chatStore.contextMenu?.message?.message_id}

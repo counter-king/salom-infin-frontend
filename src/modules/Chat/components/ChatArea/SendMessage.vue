@@ -21,7 +21,7 @@ import { useDebounceFn } from '@vueuse/core';
 
 const { t } = useI18n();
 const { uploadFiles } = useFileUpload();
-const { send } = socket
+const { send } = socket()
 const chatStore = useChatStore()
 const route = useRoute();
 // reactives
