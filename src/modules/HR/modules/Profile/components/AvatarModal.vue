@@ -86,8 +86,7 @@ const handleDelete = async () => {
 }
 // Hooks
 onMounted(async () => {
-  await axiosConfig.get(`/document/`, {
-    name: 'avatar',
+  await axiosConfig.get(`/custom-avatars/`, {
     page_size: 30
   })
   .then(({ data }) => {
@@ -123,13 +122,13 @@ onMounted(async () => {
         <template v-for="avatar in avatars">
           <div
             class="w-[98px] h-[98px] relative rounded-full cursor-pointer"
-            :class="{ 'ring-4 ring-primary-500': avatarSelected === avatar.id }"
-            @click="handleAvatar(avatar.id)"
+            :class="{ 'ring-4 ring-primary-500': avatarSelected === avatar.file }"
+            @click="handleAvatar(avatar.file)"
           >
             <img :src="avatar.url" alt="avatar">
 
             <div
-              v-if="avatarSelected === avatar.id"
+              v-if="avatarSelected === avatar.file"
               class="flex justify-center items-center absolute bottom-0 right-0 w-6 h-6 rounded-full bg-primary-500 text-white"
             >
               <base-iconify :icon="UnreadLinearIcon" />
