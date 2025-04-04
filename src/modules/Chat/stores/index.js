@@ -15,7 +15,7 @@ import {
   fetchUsersSearch,
   fetchUsersSearchByMessage
 } from "@/modules/Chat/services";
-// constants  
+// constants
 import { CHAT_TYPES, MESSAGE_TYPES } from "../constatns";
 // stores
 import { useAuthStore } from "@/modules/Auth/stores";
@@ -67,7 +67,6 @@ export const useChatStore = defineStore("chat-stores", {
     privateChatList: [],
     userSearchList: [],
     groupChatList: [],
-    messageLinkList: [],
     messageLinkList: [],
     typingUsers: {},
     contextMenu: {
@@ -201,7 +200,7 @@ export const useChatStore = defineStore("chat-stores", {
       else {
         this.privateChatMoreLoading = true;
       }
-      try {  
+      try {
         const response = await fetchGetPrivateChatList(params);
         const results = response.data.results?.map((item) => ({
           first_name: item?.title,
@@ -316,7 +315,7 @@ export const useChatStore = defineStore("chat-stores", {
           })
         })
       )
-        
+
 
         if(resetList){
           this.groupChatList = results
@@ -355,7 +354,7 @@ export const useChatStore = defineStore("chat-stores", {
             chat_id: item?.chat,
             color: item?.user?.color,
             avatar: item?.user?.avatar,
-            role: item?.role        
+            role: item?.role
           })) || [],
           last_message: data?.last_message?.message_text,
           last_message_time: data?.last_message?.created_date,
@@ -393,7 +392,7 @@ export const useChatStore = defineStore("chat-stores", {
             chat_id: item?.chat,
             color: item?.user?.color,
             avatar: item?.user?.avatar,
-            role: item?.role        
+            role: item?.role
           })) || [],
           last_message: data?.last_message?.message_text,
           last_message_time: data?.last_message?.created_date,
@@ -477,12 +476,12 @@ export const useChatStore = defineStore("chat-stores", {
     },
     /** */
     async actionEditMessageById(id, body) {
-      try { 
+      try {
         await fetchEditMessageById(id, body)
         this.contextMenu.edit = false;
       } catch(e) {
         console.log(e)
-      } finally {  
+      } finally {
       }
     },
     /** */
