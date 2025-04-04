@@ -123,8 +123,9 @@ const onShowEmojiContextMenu = (event, userReactionList) => {
   refEmojiContextMenu.value.menu.show(event);
 }
 
-const onHandleDeleteMessage = () => {
-  chatStore.actionDeleteMessageById(chatStore.contextMenu?.message?.message_id)
+const onHandleDeleteMessage = async() => {
+  await chatStore.actionDeleteMessageById(chatStore.contextMenu?.message?.message_id)
+  chatStore.messageListByChatId = chatStore.messageListByChatId.filter(item=> item?.message_id != chatStore.contextMenu?.message?.message_id)
 }
 
 const onClickChatArea = () => {
