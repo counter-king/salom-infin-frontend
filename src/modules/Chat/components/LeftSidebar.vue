@@ -10,11 +10,11 @@ import UserItem from "@/modules/Chat/components/UserItem.vue";
 import UserItemSearch from "@/modules/Chat/components/UserItemSearch.vue";
 import CreateEditGroupDialog from "./CreateEditGroupDialog.vue";
 // icons
-import { AltArrowRightIcon, ArrowRightDownIcon, MagniferIcon, Plus20SolidIcon, UserCheckIcon, UserRoundedBoldIcon, UsersGroupTwoRoundedBoldIcon, VolumeMuteLineIcon, VolumeUpLineIcon } from '@/components/Icons'
+import { AltArrowRightIcon, MagniferIcon, Plus20SolidIcon, UserRoundedBoldIcon, UsersGroupTwoRoundedBoldIcon, VolumeMuteLineIcon, VolumeUpLineIcon } from '@/components/Icons'
 // store
 import { useChatStore } from "@/modules/Chat/stores";
 // constatns
-import { CHAT_ROUTE_NAMES, CHAT_TYPES} from "../constatns";
+import { CHAT_ROUTE_NAMES } from "../constatns";
 // composables
 import { useInfiniteScroll } from "../composables/useInfiniteScroll";
 import { ContextMenu } from "./ChatArea";
@@ -45,18 +45,28 @@ useInfiniteScroll({ fetchFn: chatStore.actionGetGroupChatList, containerRef: con
 
 const menuItems = ref([
     {
-        label: 'Speech',
-        iconName: VolumeUpLineIcon,
+        label: chatStore.contextMenu.chat?.sound ? 'Mute' : 'Speech',
+        iconName: chatStore.contextMenu.chat?.sound ? VolumeMuteLineIcon : VolumeUpLineIcon,
         rightIcon: AltArrowRightIcon,
+        command: () => {
+          console.log("click sound main")
+        },
         items: [
             {
                 label: 'Unmute',
                 iconName: VolumeUpLineIcon,
-                active: true,
+                active: chatStore.contextMenu.chat?.sound,
+                command: () => {
+                  console.log("click sound unmuted")
+              },
             },
             {
                 label: 'Mute',
-                iconName:VolumeMuteLineIcon
+                iconName:VolumeMuteLineIcon,
+                active: !chatStore.contextMenu.chat?.sound,
+                command: () => {
+                    console.log("click sound muted")
+                }
             }
         ]
     },
@@ -76,9 +86,10 @@ const tabPanelList = [
 ];
 
 // Methods
-
-const onShowContextMenu = (event) => {
+const onShowContextMenu = (event, chat) => {
+  chatStore.contextMenu.chat = chat;
   refContextMenu.value.menu.show(event);
+
 }
 
 const onTabChange = async (val) => {
@@ -277,7 +288,7 @@ watch(createGroupDialogVisible, () => {
               <template v-else>
                 <template v-for="item in chatStore.privateChatList" :key="item?.id">
                   <user-item
-                    @contextmenu.prevent="onShowContextMenu"
+                    @contextmenu.prevent="onShowContextMenu($event, item)"
                     @click="onClickChatPrivateUser(item)"
                     :user="item" 
                     :active="item?.chat_id == route.params?.id"
@@ -304,7 +315,7 @@ watch(createGroupDialogVisible, () => {
               <template v-else>
                 <template v-for="group in chatStore.groupChatList" :key="group?.id">
                   <group-item
-                    @contextmenu.prevent="onShowContextMenu"
+                    @contextmenu.prevent="onShowContextMenu($event, group)"
                     @click="onClickChatGroup(group)"
                     :group="group"
                     :active="group?.chat_id == route.params?.id"
@@ -318,7 +329,7 @@ watch(createGroupDialogVisible, () => {
     </template>
     <create-edit-group-dialog v-if="createGroupDialogVisible" v-model="createGroupDialogVisible" type="create"/>
   </div>
-  <ContextMenu :menu-items="menuItems" ref="refContextMenu" >
+  <ContextMenu :menu-items="menuItems" ref="refContextMenu">
     <template  #default="{ item }" >
       <div class="flex justify-between items-center w-full">
         <div class="flex gap-1 items-center text-xs" :class="{ '!text-critic-500': item.active }">

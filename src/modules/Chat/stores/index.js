@@ -75,7 +75,8 @@ export const useChatStore = defineStore("chat-stores", {
       index: null,
       edit: false,
       replay: false,
-      deleteDialog: false
+      deleteDialog: false,
+      chat: null,
     },
     uploadingFiles: []
   }),

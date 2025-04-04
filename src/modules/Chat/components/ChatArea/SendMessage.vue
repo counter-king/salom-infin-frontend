@@ -6,6 +6,7 @@ import { useRoute } from 'vue-router';
 import { useDebounceFn } from '@vueuse/core';
 // components
 import EmojiStikers from './EmojiStikers.vue';
+import Textarea from 'primevue/textarea';
 import FileTypeIcon from '../FileTypeIcon.vue';
 // icons
 import { ForwardIcon, PaperclipLinearIcon, PenIcon, PlainBoldIcon, SmileCircleLinearIcon, XMarkSolidIcon } from '@/components/Icons';
@@ -17,7 +18,6 @@ import { useChatStore } from '../../stores';
 import { CHAT_ROUTE_NAMES, CHAT_TYPES, MESSAGE_TYPES } from '../../constatns';
 // webocket
 import { socket } from "@/services/socket";
-import Textarea from 'primevue/textarea';
 
 const { t } = useI18n();
 const { uploadFiles } = useFileUpload();
