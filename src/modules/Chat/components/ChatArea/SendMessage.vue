@@ -192,6 +192,19 @@ const handlePaste = async() => {
   
 }
 
+const debouncedUploadFile = useDebounceFn((file) => {
+    uploadFiles([file]);
+  }, 400);
+
+const handleCopyPasteImage = (e) => {
+    const items = e.clipboardData?.items
+    if (!items) return
+    if (items[0]?.type.startsWith("image/")) {
+        const file = items[0].getAsFile()
+        debouncedUploadFile(file)
+      }
+}
+
 // showSend icon show or hide
 watch(message, (val) => {
  if(!!val) {
@@ -235,24 +248,12 @@ defineExpose({
 
 onMounted(()=>{
   refInput.value.$el.focus()
-
-  const debouncedUploadFile = useDebounceFn((file) => {
-    uploadFiles([file]);
-  }, 400);
-
-  const handlePasteImage = (e) => {
-      const items = e.clipboardData?.items
-      if (!items) return
-      if (items[0]?.type.startsWith("image/")) {
-          const file = items[0].getAsFile()
-          debouncedUploadFile(file)
-        }
-    }
-    document.addEventListener("paste", handlePasteImage)
+  
+  document.addEventListener("paste", handleCopyPasteImage)
 })
 
 onUnmounted(() => {
-  document.removeEventListener("paste", handlePasteImage)
+  document.removeEventListener("paste", handleCopyPasteImage)
 })
 
 </script>
