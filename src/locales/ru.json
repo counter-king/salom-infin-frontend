@@ -791,5 +791,7 @@
   "save-as":"Сохранить как...",
   "edited":"Изменено",
   "delete-chat-private-dialog-content": "Вы хотите удалить этот чат ?",
-  "successfully-saved": "Успешно сохранен!"
+  "successfully-saved": "Успешно сохранен!",
+  "turn-off-notification": "Выключить уведомления",
+  "turn-on-notification": "Включить уведомления"
 }

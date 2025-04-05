@@ -790,5 +790,7 @@
   "save-as":"Saqlash...",
   "edited": "tahrirlangan",
   "delete-chat-private-dialog-content": "Siz bu suhbatni o'chirmoqchimisiz ?",
-  "successfully-saved": "Muvaffaqiyatli saqlandi!"
+  "successfully-saved": "Muvaffaqiyatli saqlandi!",
+  "turn-off-notification": "Bildirishnomalarni o'chirish",
+  "turn-on-notification": "Bildirishnomalarni yoqing"
 }

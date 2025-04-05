@@ -35,40 +35,38 @@ const activeTabIndex= computed({
 
 // provides/injects
 const inputSendMessasgeRef = inject("inputSendMessasgeRef");
-
 const containerPersionalRef = ref(null)
 const containerGroupRef = ref(null)
 // composibles
 useInfiniteScroll({ fetchFn: chatStore.actionGetPrivateChatList, containerRef: containerPersionalRef, params: { page: 1, page_size: 20}})
 useInfiniteScroll({ fetchFn: chatStore.actionGetGroupChatList, containerRef: containerGroupRef, params: { page: 1, page_size: 20, chat:route.params?.id}})
 
-
 const menuItems = ref([
     {
-        label: chatStore.contextMenu.chat?.sound ? 'Mute' : 'Speech',
+        label: chatStore.contextMenu.chat?.sound ? t('turn-off-notification') : t('turn-on-notification'),
         iconName: chatStore.contextMenu.chat?.sound ? VolumeMuteLineIcon : VolumeUpLineIcon,
-        rightIcon: AltArrowRightIcon,
+        rightIcon:  chatStore.contextMenu.chat?.sound ? AltArrowRightIcon: null,
         command: () => {
           console.log("click sound main")
         },
-        items: [
+        items: chatStore.contextMenu.chat?.sound ? [
             {
-                label: 'Unmute',
+                label: t('turn-on-notification'),
                 iconName: VolumeUpLineIcon,
                 active: chatStore.contextMenu.chat?.sound,
                 command: () => {
-                  console.log("click sound unmuted")
-              },
+                    console.log("click sound unmuted")
+                },
             },
             {
-                label: 'Mute',
+                label: t('turn-off-notification'),
                 iconName:VolumeMuteLineIcon,
                 active: !chatStore.contextMenu.chat?.sound,
                 command: () => {
                     console.log("click sound muted")
                 }
             }
-        ]
+        ] : []
     },
 ]);
 
@@ -329,12 +327,12 @@ watch(createGroupDialogVisible, () => {
     </template>
     <create-edit-group-dialog v-if="createGroupDialogVisible" v-model="createGroupDialogVisible" type="create"/>
   </div>
-  <ContextMenu :menu-items="menuItems" ref="refContextMenu">
+  <ContextMenu :menu-items="menuItems" ref="refContextMenu" class-menu="!w-fit">
     <template  #default="{ item }" >
       <div class="flex justify-between items-center w-full">
         <div class="flex gap-1 items-center text-xs" :class="{ '!text-critic-500': item.active }">
           <base-iconify class="!w-5 !h-5" :icon="(item.iconName)" v-if="item.iconName" :class="item.iconClass" />
-          <span class="font-medium">{{ item?.label }}</span>
+          <span class="font-medium select-none">{{ item?.label }}</span>
         </div>
         <base-iconify v-if="item.rightIcon" class="!w-5 !h-5" :icon="item.rightIcon" :class="item.iconClass" />
       </div>

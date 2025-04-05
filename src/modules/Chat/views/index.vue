@@ -27,7 +27,6 @@ const allowedPages = ['ChatPrivateDetail','ChatGroupDetail']
 const { status, data, send } = socket()
 // reactives
 const isShowChat = computed(() => allowedPages.includes(route.name))
-const routeId = computed(() => route.params.id)
 const inputSendMessasgeRef = ref(null)
 const refChatArea = ref(null)
 
