@@ -67,7 +67,9 @@ onMounted(async() => {
     try {
       loading.value = true;
       const { blobUrl } = await fetchBlobFile(props.message?.attachments?.file?.id);
-      chatStore.messageListByChatId[props.index].attachments.file.url = blobUrl;  
+      if(chatStore.messageListByChatId[props.index] && chatStore.messageListByChatId[props.index].attachments){
+        chatStore.messageListByChatId[props.index].attachments.file.url = blobUrl
+      }  
     } catch (error) {
       dispatchNotify(null, error, COLOR_TYPES.ERROR)
     }
