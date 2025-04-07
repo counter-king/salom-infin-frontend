@@ -7,19 +7,18 @@ import { useDebounceFn } from '@vueuse/core';
 // componennts
 import OwnerText from '../components/ChatArea/OwnerText.vue';
 import FriendText from '../components/ChatArea/FriendText.vue';
-import { ShowDate } from '../components/ChatArea';
-import SendMessage from '../components/ChatArea/SendMessage.vue';
-import ScrollDownButton from '../components/ChatArea/ScrollDownButton.vue';
-import DeleteDialog from '../components/DeleteDialog.vue';
-import Galleria from 'primevue/galleria';
-// services 
-import FileUploadProgress from '../components/ChatArea/FileUploadProgress.vue';
-import ContextMenu from '../components/ChatArea/ContextMenu.vue';
-import ChatFileItem from '../components/ChatArea/ChatFileItem.vue';
-import Empty from '@/components/Empty.vue';
 import ChatImageItem from '../components/ChatArea/ChatImageItem.vue';
 import FriendChatFileItem from '../components/ChatArea/FriendChatFileItem.vue';
 import FriendChatImageItem from '../components/ChatArea/FriendChatImageItem.vue';
+import ChatFileItem from '../components/ChatArea/ChatFileItem.vue';
+import FileUploadProgress from '../components/ChatArea/FileUploadProgress.vue';
+import { ShowDate } from '../components/ChatArea';
+import ContextMenu from '../components/ChatArea/ContextMenu.vue';
+import SendMessage from '../components/ChatArea/SendMessage.vue';
+import ScrollDownButton from '../components/ChatArea/ScrollDownButton.vue';
+import DeleteDialog from '../components/DeleteDialog.vue';
+import Empty from '@/components/Empty.vue';
+import Galleria from 'primevue/galleria';
 // contants
 import { CHAT_ROUTE_NAMES, CHAT_TYPES, MESSAGE_TYPES } from '../constatns';
 // utils
@@ -167,6 +166,56 @@ const showFriendTextAvatar = (index) => {
          formatDay(perviousMessage.created_date) !== formatDay(nowMessage.created_date)
 }
 
+// show message component by message type
+const getMessageComponent = (message) => {
+  const isCurrentUser = (message) => message.sender?.id  == authStore.currentUser?.id;
+  if (isCurrentUser(message)) {
+    return message.message_type === MESSAGE_TYPES.IMAGE ? ChatImageItem : 
+           message.message_type === MESSAGE_TYPES.TEXT || message.message_type === MESSAGE_TYPES.LINK ? OwnerText : 
+           ChatFileItem;
+  } else {
+    return message.message_type === MESSAGE_TYPES.IMAGE ? FriendChatImageItem : 
+           message.message_type === MESSAGE_TYPES.TEXT || message.message_type === MESSAGE_TYPES.LINK ? FriendText : 
+           FriendChatFileItem;
+  }
+};
+
+const getMessageComponentProps = (message, index) => {
+  const baseProps = {
+    'data-message-id': message?.message_id,
+    'data-message-is-read': message?.is_read,
+    'data-message-user-id': message?.sender?.id,
+    message,
+    index,
+    handleClickEmoji,
+    onShowContextMenu,
+    onShowEmojiContextMenu
+  };
+
+  const additionalProps = ()=>{
+    if(isCurrentUser(message) && (message.message_type === MESSAGE_TYPES.TEXT || message.message_type === MESSAGE_TYPES.LINK)){
+      return {
+        messageInnerClass: {
+          '!rounded-br-[4px]': showFriendTextAvatar(index),
+          '!rounded-tr-[4px]': !showFriendTextAvatar(index)
+        }
+      }
+    } else if(!isCurrentUser(message)) {
+      return {
+        avatarVisible: showFriendTextAvatar(index),
+        classNames: { 'mt-5': showFriendTextAvatar(index) }
+      };
+    }
+  };
+
+  if (message.message_type === MESSAGE_TYPES.IMAGE) {
+    additionalProps.handleClickImage = handleClickImage;
+  }
+
+  return { ...baseProps, ...additionalProps };
+};
+
+
 const getMessageList = useDebounceFn(async()=>{
   const response = await chatStore.actionGetMessageListByChatId({ chat:route.params?.id, page:1, page_size: 20}, true);
       hasNext.value = response?.count > page.value * pageSize.value
@@ -195,7 +244,6 @@ watch(
 
 onMounted(async () => {
   try {
-    
     chatStore.selectedUser = await chatStore.actionGetPrivateChatById(route.params?.id, true);
     // if there is chat_id, then send chat handshake, otherwise don't
     sendChatHandshake()
@@ -264,100 +312,12 @@ onMounted(() => {
           <template v-if="showDateByCalculate(index)">
               <ShowDate :classNames="{ 'mb-5': index == 0, 'my-5': index != 0}" :date="message.created_date" />
           </template>
-          <!-- owner chat -->
-          <template v-if="message?.sender?.id == authStore.currentUser?.id" >
-            <template v-if="message?.message_type != MESSAGE_TYPES.TEXT && message?.message_type != MESSAGE_TYPES.LINK">
-              <template v-if="message?.message_type == MESSAGE_TYPES.IMAGE">
-                <ChatImageItem
-                  :handleClickImage="handleClickImage"
-                   ref="refMessageElements"
-                  :data-message-id="message?.message_id"
-                  :data-message-is-read="message?.is_read"
-                  :data-message-user-id="message?.sender?.id"
-                  :index="index"
-                  :message="message"
-                  :handleClickEmoji="handleClickEmoji"
-                  :onShowContextMenu="onShowContextMenu"
-                  :onShowEmojiContextMenu="onShowEmojiContextMenu"
-                />
-              </template>
-              <template v-else>
-                <ChatFileItem 
-                 ref="refMessageElements"
-                :data-message-id="message?.message_id"
-                :data-message-is-read="message?.is_read"
-                :data-message-user-id="message?.sender?.id"
-                :message="message"
-                :handleClickEmoji="handleClickEmoji"
-                :onShowContextMenu="onShowContextMenu" 
-                :onShowEmojiContextMenu="onShowEmojiContextMenu" 
-              />
-              </template>
-            </template>
-            <template v-else>
-              <OwnerText 
-                ref="refMessageElements"
-                :data-message-id="message?.message_id"
-                :data-message-is-read="message?.is_read"
-                :data-message-user-id="message?.sender?.id"
-                :handleClickEmoji="handleClickEmoji"
-                :onShowContextMenu="onShowContextMenu" 
-                :onShowEmojiContextMenu="onShowEmojiContextMenu" 
-                :message="message"
-                :index="index"
-                :messageInnerClass="{'!rounded-br-[4px]': showFriendTextAvatar(index), '!rounded-tr-[4px]': !showFriendTextAvatar(index)}"
-              />
-            </template>
-          </template>
-          <!-- friend chat -->
-          <template v-else>
-            <template v-if="message?.message_type != MESSAGE_TYPES.TEXT && message?.message_type != MESSAGE_TYPES.LINK">
-              <template v-if="message?.message_type == MESSAGE_TYPES.IMAGE">
-                <FriendChatImageItem
-                  ref="refMessageElements"
-                  :handleClickImage="handleClickImage"
-                  :data-message-id="message?.message_id"
-                  :data-message-is-read="message?.is_read"
-                  :data-message-user-id="message?.sender?.id"
-                  :message="message"
-                  :index="index"
-                  :handleClickEmoji="handleClickEmoji"
-                  :onShowContextMenu="onShowContextMenu"
-                  :onShowEmojiContextMenu="onShowEmojiContextMenu"
-                  :avatarVisible="showFriendTextAvatar(index)"
-                  :classNames="[{ 'mt-5': showFriendTextAvatar(index) }]"
-                />
-              </template>
-              <template v-else>
-                <FriendChatFileItem 
-                  ref="refMessageElements"
-                  :data-message-id="message?.message_id"
-                  :data-message-is-read="message?.is_read"
-                  :data-message-user-id="message?.sender?.id"
-                  :message="message"
-                  :handleClickEmoji="handleClickEmoji"
-                  :onShowContextMenu="onShowContextMenu"
-                  :onShowEmojiContextMenu="onShowEmojiContextMenu"
-                  :avatarVisible="showFriendTextAvatar(index)"
-                  :classNames="[{ 'mt-5': showFriendTextAvatar(index) }]"
-                />
-              </template>
-            </template>
-            <template v-else>
-              <FriendText 
-                ref="refMessageElements"
-                :data-message-id="message?.message_id"
-                :data-message-is-read="message?.is_read"
-                :data-message-user-id="message?.sender?.id"
-                :handleClickEmoji="handleClickEmoji"
-                :onShowContextMenu="onShowContextMenu" 
-                :onShowEmojiContextMenu="onShowEmojiContextMenu" 
-                :avatarVisible="showFriendTextAvatar(index)" 
-                :message="message"
-                :classNames="[{ 'mt-5': showFriendTextAvatar(index) }]"
-              />
-          </template>
-        </template>
+          <!-- message component -->
+          <component
+            :is="getMessageComponent(message)"
+            ref="refMessageElements"
+            v-bind="getMessageComponentProps(message, index)"
+          />
         </template>
         <template v-for="(message, index) in chatStore.uploadingFiles" :key="index"> 
           <ChatFileItem 
