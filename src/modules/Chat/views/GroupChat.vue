@@ -3,6 +3,7 @@
 import { computed, inject, nextTick, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
+import { useDebounceFn } from '@vueuse/core';
 // componennts
 import OwnerText from '../components/ChatArea/OwnerText.vue';
 import FriendText from '../components/ChatArea/FriendText.vue';
@@ -166,14 +167,8 @@ const showFriendTextAvatar = (index) => {
          formatDay(perviousMessage.created_date) !== formatDay(nowMessage.created_date)
 }
 
-watch(
-  () => route.params?.id,
-  async (newId, oldId) => {
-    if (newId !== oldId && route.name === CHAT_ROUTE_NAMES.GROUP) {
-      chatStore.selectedGroup = await chatStore.actionGetGroupChatById(newId);
-      // if there is chat_id, then send chat handshake, otherwise don't
-      sendChatHandshake();
-      const response = await chatStore.actionGetMessageListByChatId({ chat:route.params?.id, page:1, page_size: 20 }, true);
+const getMessageList = useDebounceFn(async()=>{
+  const response = await chatStore.actionGetMessageListByChatId({ chat:route.params?.id, page:1, page_size: 20 }, true);
       hasNext.value = response?.count > page.value * pageSize.value
       page.value += 1 
       // make scroll down after loading new data
@@ -183,6 +178,16 @@ watch(
       }, 10)
       // every route change, reset context menu
       chatStore.contextMenu = {}
+}, 300)
+
+watch(
+  () => route.params?.id,
+  async (newId, oldId) => {
+    if (newId !== oldId && route.name === CHAT_ROUTE_NAMES.GROUP) {
+      chatStore.selectedGroup = await chatStore.actionGetGroupChatById(newId);
+      // if there is chat_id, then send chat handshake, otherwise don't
+      sendChatHandshake();
+      getMessageList()
     }
   }
 );
