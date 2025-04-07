@@ -80,7 +80,7 @@ const getUnreadCount = useDebounceFn(()=> {
 
 // watching socket events using data(data is socket event)
 watch(data, (newData) => {
-    newData = unref(newData)   
+    newData = unref(newData)
     if(!newData) return
     newData = JSON.parse(newData);
     if(newData.type == WEBCOCKET_EVENTS.NEW_CHAT_MESSAGE){
