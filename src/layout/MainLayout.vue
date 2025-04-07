@@ -14,13 +14,13 @@ import { useAuthStore } from '../modules/Auth/stores/index'
 import { getStorageItem } from '@/utils/storage'
 import { ACCESS } from '@/constants/storage'
 // Composable
-// import { useUserOnlineStatus } from '@/composables/useUserOnlineStatus'
+import { useUserOnlineStatus } from '@/composables/useUserOnlineStatus'
 
 const router = useRouter()
 const commonStore = useCommonStore()
 const countStore = useCountStore()
 const authStore = useAuthStore()
-// useUserOnlineStatus()
+useUserOnlineStatus()
 
 // Reactive
 // TODO: false
