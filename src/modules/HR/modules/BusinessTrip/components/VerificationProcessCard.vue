@@ -84,7 +84,7 @@ const onConfirm = async () => {
         class="flex items-center py-[2px] pr-2 pl-[3px] gap-x-1 rounded-xl"
         :class="props.item?.arrived_at ? 'bg-success-100' : 'bg-greyscale-70'"
       >
-        <div class="flex justify-center items-center w-[18px] h-[18px] bg-white rounded-full shadow">
+        <div class="flex justify-center items-center w-[24px] h-[24px] bg-white rounded-full shadow">
           <base-iconify
             :icon="ArrowLeftDownIcon"
             class="!w-3 !h-3"
@@ -100,20 +100,34 @@ const onConfirm = async () => {
         </span>
       </div>
 
-      <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
+      <div class="flex flex-col gap-y-1">
+        <div class="flex items-center gap-x-1">
+          <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
+          <span
+            class="text-xs font-medium"
+            :class="props.item?.arrived_at ? 'text-primary-900' : 'text-greyscale-500'"
+          >
+            {{ props.item?.arrived_at ? `${item?.region?.country?.name} / ${item?.region?.name}` : t('trip-place') }}
+          </span>
 
-      <span class="text-xs font-medium text-greyscale-500">
-        {{ props.item?.arrived_at ? formatDateHour(props.item?.arrived_at) : t('date')}}
-      </span>
+          <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
 
-      <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
+          <span
+            class="text-xs font-medium"
+            :class="props.item?.arrived_at ? 'text-primary-900' : 'text-greyscale-500'"
+          >
+            {{ props.item?.arrived_at ? formatUserFullName(props.item.arrived_verified_by) : 'Имя сотрудника' }}
+          </span>
+        </div>
 
-      <span
-        class="text-xs font-medium"
-        :class="props.item?.arrived_at ? 'text-primary-900' : 'text-greyscale-500'"
-      >
-        {{ props.item?.arrived_at ? `${item?.region?.country?.name} / ${item?.region?.name}` : t('trip-place') }}
-      </span>
+        <div class="flex items-center gap-x-1">
+          <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
+
+          <span class="text-xs font-medium text-greyscale-500">
+            {{ props.item?.arrived_at ? formatDateHour(props.item?.arrived_at) : t('date')}}
+          </span>
+        </div>
+      </div>
     </div>
 
     <div
@@ -144,7 +158,7 @@ const onConfirm = async () => {
         class="flex items-center py-[2px] pr-2 pl-[3px] gap-x-1 rounded-xl"
         :class="isLeft ? 'bg-critic-30' : 'bg-greyscale-70'"
       >
-        <div class="flex justify-center items-center w-[18px] h-[18px] bg-white rounded-full shadow">
+        <div class="flex justify-center items-center w-[24px] h-[24px] bg-white rounded-full shadow">
           <base-iconify
             :icon="ArrowRightUpIcon"
             class="!w-3 !h-3"
@@ -160,21 +174,36 @@ const onConfirm = async () => {
         </span>
       </div>
 
-      <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
+      <div class="flex flex-col gap-y-1">
+        <div class="flex items-center gap-x-1">
+          <template v-if="item?.region?.country?.name">
+            <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
+            <span
+              class="text-xs font-medium"
+              :class="props.item?.left_at ? 'text-primary-900' : 'text-greyscale-500'"
+            >
+              {{ props.item?.left_at ? `${item?.region?.country?.name} / ${item?.region?.name}` : t('trip-place') }}
+            </span>
+          </template>
 
-      <span class="text-xs font-medium text-greyscale-500">
-        {{ isLeft ? formatDateHour(props.item?.left_at) : t('date') }}
-      </span>
+          <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
 
-      <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
+          <span
+            class="text-xs font-medium"
+            :class="isLeft ? 'text-primary-900' : 'text-greyscale-500'"
+          >
+            {{ isLeft ? formatUserFullName(props.item.left_verified_by) : 'Имя сотрудника'}}
+          </span>
+        </div>
 
-      <span
-        class="text-xs font-medium"
-        :class="isLeft ? 'text-primary-900' : 'text-greyscale-500'"
-      >
-        {{ isLeft ? formatUserFullName(props.item.left_verified_by) : 'Имя сотрудника'}}
-      </span>
+        <div class="flex items-center gap-x-1">
+          <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
 
+          <span class="text-xs font-medium text-greyscale-500">
+            {{ isLeft ? formatDateHour(props.item?.left_at) : t('date') }}
+          </span>
+        </div>
+      </div>
     </div>
 
 <!--    <div class="flex justify-end items-center">
