@@ -10,18 +10,20 @@ import UserItem from "@/modules/Chat/components/UserItem.vue";
 import UserItemSearch from "@/modules/Chat/components/UserItemSearch.vue";
 import CreateEditGroupDialog from "./CreateEditGroupDialog.vue";
 // icons
-import { MagniferIcon, Plus20SolidIcon, UserRoundedBoldIcon, UsersGroupTwoRoundedBoldIcon } from '@/components/Icons'
+import { AltArrowRightIcon, MagniferIcon, Plus20SolidIcon, UserRoundedBoldIcon, UsersGroupTwoRoundedBoldIcon, VolumeMuteLineIcon, VolumeUpLineIcon } from '@/components/Icons'
 // store
 import { useChatStore } from "@/modules/Chat/stores";
 // constatns
-import { CHAT_ROUTE_NAMES, CHAT_TYPES} from "../constatns";
+import { CHAT_ROUTE_NAMES } from "../constatns";
 // composables
 import { useInfiniteScroll } from "../composables/useInfiniteScroll";
+import { ContextMenu } from "./ChatArea";
 
 const { t } = useI18n();
 const chatStore = useChatStore();
 const router = useRouter();
 const route = useRoute();
+const refContextMenu = ref(null);
 
 // reactive
 const searchInput = ref(null);
@@ -33,12 +35,40 @@ const activeTabIndex= computed({
 
 // provides/injects
 const inputSendMessasgeRef = inject("inputSendMessasgeRef");
-
 const containerPersionalRef = ref(null)
 const containerGroupRef = ref(null)
 // composibles
 useInfiniteScroll({ fetchFn: chatStore.actionGetPrivateChatList, containerRef: containerPersionalRef, params: { page: 1, page_size: 20}})
 useInfiniteScroll({ fetchFn: chatStore.actionGetGroupChatList, containerRef: containerGroupRef, params: { page: 1, page_size: 20, chat:route.params?.id}})
+
+const menuItems = ref([
+    {
+        label: chatStore.contextMenu.chat?.sound ? t('turn-off-notification') : t('turn-on-notification'),
+        iconName: chatStore.contextMenu.chat?.sound ? VolumeMuteLineIcon : VolumeUpLineIcon,
+        rightIcon:  chatStore.contextMenu.chat?.sound ? AltArrowRightIcon: null,
+        command: () => {
+          console.log("click sound main")
+        },
+        items: chatStore.contextMenu.chat?.sound ? [
+            {
+                label: t('turn-on-notification'),
+                iconName: VolumeUpLineIcon,
+                active: chatStore.contextMenu.chat?.sound,
+                command: () => {
+                    console.log("click sound unmuted")
+                },
+            },
+            {
+                label: t('turn-off-notification'),
+                iconName:VolumeMuteLineIcon,
+                active: !chatStore.contextMenu.chat?.sound,
+                command: () => {
+                    console.log("click sound muted")
+                }
+            }
+        ] : []
+    },
+]);
 
 const tabPanelList = [
   {
@@ -54,6 +84,12 @@ const tabPanelList = [
 ];
 
 // Methods
+const onShowContextMenu = (event, chat) => {
+  chatStore.contextMenu.chat = chat;
+  refContextMenu.value.menu.show(event);
+
+}
+
 const onTabChange = async (val) => {
   if (val.index === 0) {
     await chatStore.actionGetPrivateChatList({});
@@ -66,7 +102,7 @@ const onTabChange = async (val) => {
 }
 
 const onCreateChat = async (user) => {
-  const data = await chatStore.actionCreatePrivateChat({ member_id: user.id });  
+  const data = await chatStore.actionCreatePrivateChat({ member_id: user?.id });  
   chatStore.selectedUser = data
   // if user don't exist in the list then add it
   if(!chatStore.privateChatList.some(item => item.chat_id == data.chat_id)){
@@ -104,7 +140,7 @@ const onClickSearchedGroupByMessage = (item, addlist=true) => {
 // when private chat list  is clicked, work
 const onClickChatPrivateUser = async (user) => {
   // if user is already selected then don't do anything, becouse no full data, just it is getting from  api id
-  if(route.params.id != user.chat_id){
+  if(route.params?.id != user.chat_id){
     router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: user.chat_id }})
     chatStore.selectedUser = user
     // if user don't exist in the list then add it
@@ -118,7 +154,7 @@ const onClickChatPrivateUser = async (user) => {
 // when group chat list  is clicked, work
 const onClickChatGroup = (group) => {
   // if group is already selected then don't do anything, becouse no full data, just it is getting from  api id
-  if(route.params.id != group.chat_id){    
+  if(route.params?.id != group.chat_id){    
     router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: group.chat_id }, query :{ tab: 'group'} })
     // if group don't exist in the list then add it
     if(!chatStore.groupChatList.some(item => item.chat_id == group.chat_id)){
@@ -179,7 +215,7 @@ watch(createGroupDialogVisible, () => {
         <div class="overflow-hidden overflow-y-auto p-4 pt-0" style="height: calc(100vh - 260px)">
           <!-- chat users who have chat with current user -->
           <p class="text-sm font-medium text-greyscale-500 my-4">Найдено <span class="font-semibold text-greyscale-900">{{ chatStore.chatUserSearchList?.length }}</span> результата</p>
-          <template v-for="item in chatStore.chatUserSearchList" :key="item.id">
+          <template v-for="item in chatStore.chatUserSearchList" :key="item?.id">
             <template v-if="item.type === 'private'">
               <user-item
               @click="onClickSearchedUserByMessage(item)"
@@ -197,14 +233,14 @@ watch(createGroupDialogVisible, () => {
           <p class="text-sm font-medium text-greyscale-500 my-4">{{ t('global-search-results') }}</p>
           <user-item-search
             v-for="user in chatStore.userSearchList"
-            :key="user.id"
+            :key="user?.id"
             :user="user"
             @click="onCreateChat(user)"
           />
           <!-- users who sent messages to current user or current user send messages to them and  -->
            <!-- getting data by message  -->
           <p class="text-sm font-medium text-greyscale-500 my-4">{{ t('message-found',{count: chatStore.usersSearchListByMessage?.length })}}</p>
-          <template v-for="item in chatStore.usersSearchListByMessage" :key="item.id">
+          <template v-for="item in chatStore.usersSearchListByMessage" :key="item?.id">
             <template v-if="item.type === 'private'">
               <user-item
               @click="onClickSearchedUserByMessage(item)"
@@ -248,11 +284,12 @@ watch(createGroupDialogVisible, () => {
                 </div>
               </template> 
               <template v-else>
-                <template v-for="item in chatStore.privateChatList" :key="item.id">
+                <template v-for="item in chatStore.privateChatList" :key="item?.id">
                   <user-item
+                    @contextmenu.prevent="onShowContextMenu($event, item)"
                     @click="onClickChatPrivateUser(item)"
                     :user="item" 
-                    :active="item.chat_id == route.params.id"
+                    :active="item?.chat_id == route.params?.id"
                   />
                 </template>
               </template>
@@ -274,11 +311,12 @@ watch(createGroupDialogVisible, () => {
                 </div>
               </template> 
               <template v-else>
-                <template v-for="group in chatStore.groupChatList" :key="group.id">
+                <template v-for="group in chatStore.groupChatList" :key="group?.id">
                   <group-item
+                    @contextmenu.prevent="onShowContextMenu($event, group)"
                     @click="onClickChatGroup(group)"
                     :group="group"
-                    :active="group.chat_id == route.params.id"
+                    :active="group?.chat_id == route.params?.id"
                   />
                 </template>
               </template>
@@ -289,7 +327,17 @@ watch(createGroupDialogVisible, () => {
     </template>
     <create-edit-group-dialog v-if="createGroupDialogVisible" v-model="createGroupDialogVisible" type="create"/>
   </div>
-
+  <ContextMenu :menu-items="menuItems" ref="refContextMenu" class-menu="!w-fit">
+    <template  #default="{ item }" >
+      <div class="flex justify-between items-center w-full">
+        <div class="flex gap-1 items-center text-xs" :class="{ '!text-critic-500': item.active }">
+          <base-iconify class="!w-5 !h-5" :icon="(item.iconName)" v-if="item.iconName" :class="item.iconClass" />
+          <span class="font-medium select-none">{{ item?.label }}</span>
+        </div>
+        <base-iconify v-if="item.rightIcon" class="!w-5 !h-5" :icon="item.rightIcon" :class="item.iconClass" />
+      </div>
+    </template>
+  </ContextMenu>
 </template>
 
 <style scoped>

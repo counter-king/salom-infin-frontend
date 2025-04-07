@@ -42,6 +42,7 @@ export const fileTypes = {
   image: {icon: GalleryIcon, class: '!text-critic-500', class2: '!text-white'},
   video: {icon: ClapperboardPlayLinearIcon, class: '!text-success-500', class2: '!text-white'},
   file: { icon: FileTextIcon, class: '!text-warning-500', class2: '!text-white'},
+  audio: { icon: FileTextIcon, class: '!text-warning-500', class2: '!text-white'},
   text: {icon: false, class: '!text-greyscale-500', class2: '!text-white'},
 }
 

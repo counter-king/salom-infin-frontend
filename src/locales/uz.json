@@ -791,5 +791,9 @@
   "edited": "tahrirlangan",
   "delete-chat-private-dialog-content": "Siz bu suhbatni o'chirmoqchimisiz ?",
   "successfully-saved": "Muvaffaqiyatli saqlandi!",
-  "emp-name": "Xodim ism-familiyasi"
+  "emp-name": "Xodim ism-familiyasi",
+  "turn-off-notification": "Bildirishnomalarni o'chirish",
+  "turn-on-notification": "Bildirishnomalarni yoqing",
+  "auth-session-end-title": "Sessiya tugadi - qayta avtorizatsiya talab qilinadi",
+  "auth-session-end-description": "Ishni davom ettirish uchun tizimga qayta kiring."
 }

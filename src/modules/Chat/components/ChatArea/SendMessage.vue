@@ -1,10 +1,12 @@
 <script setup>
 // cores
-import { inject, nextTick, onMounted, ref, watch } from 'vue';
+import { inject, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
+import { useDebounceFn } from '@vueuse/core';
 // components
 import EmojiStikers from './EmojiStikers.vue';
+import Textarea from 'primevue/textarea';
 import FileTypeIcon from '../FileTypeIcon.vue';
 // icons
 import { ForwardIcon, PaperclipLinearIcon, PenIcon, PlainBoldIcon, SmileCircleLinearIcon, XMarkSolidIcon } from '@/components/Icons';
@@ -16,12 +18,10 @@ import { useChatStore } from '../../stores';
 import { CHAT_ROUTE_NAMES, CHAT_TYPES, MESSAGE_TYPES } from '../../constatns';
 // webocket
 import { socket } from "@/services/socket";
-import Textarea from 'primevue/textarea';
-import { useDebounceFn } from '@vueuse/core';
 
 const { t } = useI18n();
 const { uploadFiles } = useFileUpload();
-const { send } = socket
+const { send } = socket()
 const chatStore = useChatStore()
 const route = useRoute();
 // reactives
@@ -192,6 +192,19 @@ const handlePaste = async() => {
   
 }
 
+const debouncedUploadFile = useDebounceFn((file) => {
+    uploadFiles([file]);
+  }, 400);
+
+const handleCopyPasteImage = (e) => {
+    const items = e.clipboardData?.items
+    if (!items) return
+    if (items[0]?.type.startsWith("image/")) {
+        const file = items[0].getAsFile()
+        debouncedUploadFile(file)
+      }
+}
+
 // showSend icon show or hide
 watch(message, (val) => {
  if(!!val) {
@@ -233,8 +246,14 @@ defineExpose({
   InputSendMessageRows: rows
 })
 
-onMounted(() => {
+onMounted(()=>{
   refInput.value.$el.focus()
+  
+  document.addEventListener("paste", handleCopyPasteImage)
+})
+
+onUnmounted(() => {
+  document.removeEventListener("paste", handleCopyPasteImage)
 })
 
 </script>
@@ -283,6 +302,7 @@ onMounted(() => {
       ref="refInput"
       @focus="isFocused = true"
       @blur="isFocused = false"
+      :disabled="chatStore.messageListByChatIdLoading"
       size="large"
       :pt="{
         root: {

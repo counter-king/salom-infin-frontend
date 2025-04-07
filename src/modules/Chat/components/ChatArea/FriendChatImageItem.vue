@@ -67,7 +67,9 @@ onMounted(async() => {
     try {
       loading.value = true;
       const { blobUrl } = await fetchBlobFile(props.message?.attachments?.file?.id);
-      chatStore.messageListByChatId[props.index].attachments.file.url = blobUrl;  
+      if(chatStore.messageListByChatId[props.index] && chatStore.messageListByChatId[props.index].attachments){
+        chatStore.messageListByChatId[props.index].attachments.file.url = blobUrl
+      }  
     } catch (error) {
       dispatchNotify(null, error, COLOR_TYPES.ERROR)
     }
@@ -85,7 +87,7 @@ onMounted(async() => {
   :class="classNames"
   >
   <base-avatar 
-    :image="props.message?.sender?.avatar?.url"
+    :image="props.message?.sender?.avatar?.url || chatStore.selectedUser?.avatar?.url"
     :label="props.message?.sender?.first_name"
     :color="props.message?.sender?.color"
     avatar-classes="w-8 h-8"

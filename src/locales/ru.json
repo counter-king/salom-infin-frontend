@@ -792,5 +792,9 @@
   "edited":"Изменено",
   "delete-chat-private-dialog-content": "Вы хотите удалить этот чат ?",
   "successfully-saved": "Успешно сохранен!",
-  "emp-name": "Имя сотрудника"
+  "emp-name": "Имя сотрудника",
+  "turn-off-notification": "Выключить уведомления",
+  "turn-on-notification": "Включить уведомления",
+  "auth-session-end-title": "Сессия завершена — необходима повторная авторизация",
+  "auth-session-end-description": "Чтобы продолжить работу, пожалуйста, войдите в систему снова."
 }

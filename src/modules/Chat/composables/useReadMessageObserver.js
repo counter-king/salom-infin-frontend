@@ -21,7 +21,7 @@ const refMessageElements = ref([]);
 const observer = ref(null);
 
 // socket sending readed massageIds to backend
-const { send } = socket
+const { send } = socket()
 
 // mark message as read
 function markMessageAsRead(messageId) {
