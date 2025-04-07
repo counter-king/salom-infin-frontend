@@ -10,6 +10,9 @@ import { useChatStore } from '@/modules/Chat/stores';
 import { useAuthStore } from '@/modules/Auth/stores';
 // services
 import { useDebounceFn } from '@vueuse/core';
+// Utils
+import { getStorageItem } from '@/utils/storage'
+import { ACCESS, EXPIRES } from '@/constants/storage'
 
 export const useUserOnlineStatus = () => {
 // composibles
@@ -77,7 +80,7 @@ const getUnreadCount = useDebounceFn(()=> {
 
 // watching socket events using data(data is socket event)
 watch(data, (newData) => {
-    newData = unref(newData)    
+    newData = unref(newData)   
     if(!newData) return
     newData = JSON.parse(newData);
     if(newData.type == WEBCOCKET_EVENTS.NEW_CHAT_MESSAGE){
@@ -100,7 +103,9 @@ watch(data, (newData) => {
 onMounted(() => {
   sendUserOnlineEvent()
   sendUserHandshake()
-  chatStore.setCounts()
+  if(getStorageItem(ACCESS) && getStorageItem(EXPIRES) && new Date(getStorageItem(EXPIRES)) > new Date()) {
+    chatStore.setCounts()
+  }
   window.addEventListener("visibilitychange", handleBrowerserTabChanges)
 })
 
