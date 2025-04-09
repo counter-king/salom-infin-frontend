@@ -65,7 +65,9 @@ const refChatArea = inject("refChatArea");
 // methods
 // websocket event
 const sendChatHandshake = ()=> {
-  const payload = { command: 'chat_handshake', chat_type: route.name == CHAT_ROUTE_NAMES.PRIVATE ?  CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: route.params?.id }
+  const isPrivateChat = route.name == CHAT_ROUTE_NAMES.PRIVATE
+  const chat_id = isPrivateChat ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id 
+  const payload = { command: 'chat_handshake', chat_type: isPrivateChat ?  CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id }
   send(JSON.stringify(payload))
 }
 // when scroll down, scrollDwonButton will be visible
@@ -217,7 +219,7 @@ const getMessageComponentProps = (message, index) => {
 
 
 const getMessageList = useDebounceFn(async()=>{
-  const response = await chatStore.actionGetMessageListByChatId({ chat:route.params?.id, page:1, page_size: 20}, true);
+  const response = await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id, page:1, page_size: 20 }, true);
       hasNext.value = response?.count > page.value * pageSize.value
       page.value += 1
       // make scroll down after loading new data
@@ -247,7 +249,7 @@ onMounted(async () => {
     chatStore.selectedUser = await chatStore.actionGetPrivateChatById(route.params?.id, true);
     // if there is chat_id, then send chat handshake, otherwise don't
     sendChatHandshake()
-    const response = await chatStore.actionGetMessageListByChatId({ chat:route.params?.id, page:1, page_size: 20 }, true);
+    const response = await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id, page:1, page_size: 20 }, true);
     hasNext.value = response?.count > page.value * pageSize.value
     page.value += 1
     // if selected user don't exist in the list then add it

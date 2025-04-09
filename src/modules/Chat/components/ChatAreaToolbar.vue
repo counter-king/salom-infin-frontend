@@ -50,14 +50,16 @@ const menuItems = computed(() => [
   }
 ]);
 
+const isPrivate = computed(() => route.name == CHAT_ROUTE_NAMES.PRIVATE)
+const chat_id = computed(() => isPrivate.value ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id)
 // Computed property to check if someone is typing in current chat
 const isUserTypingInCurrentChat = computed(() => {
-  return Object.values(chatStore.typingUsers).some(item => item.chat_id == route.params?.id && authStore.currentUser?.id != item?.user?.id);
+  return Object.values(chatStore.typingUsers).some(item => item.chat_id == chat_id.value && authStore.currentUser?.id != item?.user?.id);
 });
 
 // Get the name of typing user
 const typingUserName = computed(() => {
-  const typingUser = Object.values(chatStore.typingUsers).find(item => item.chat_id == route.params?.id);
+  const typingUser = Object.values(chatStore.typingUsers).find(item => item.chat_id == chat_id.value);
   return typingUser ? typingUser.user?.first_name : '';
 });
 
@@ -80,12 +82,12 @@ const onDeleteChat = async () => {
   isDeleteLoading.value = true
   
   if(route.name == CHAT_ROUTE_NAMES.GROUP){
-    await fetchDeleteGroupChatById(chatStore.selectedGroup?.chat_id)
+    await fetchDeleteGroupChatById(chatStore.selectedGroup?.chat_uid)
     chatStore.selectedGroup = null
-    router.push({name: CHAT_ROUTE_NAMES.CHAT_INDEX, query :{ tab: "group"} })
+    router.push({name: CHAT_ROUTE_NAMES.CHAT_INDEX, query :{ tab: "group" } })
     chatStore.actionGetGroupChatList()  
   } else if(route.name == CHAT_ROUTE_NAMES.PRIVATE){
-    await fetchDeletePrivateChatById(chatStore.selectedUser?.chat_id)
+    await fetchDeletePrivateChatById(chatStore.selectedUser?.chat_uid)
     chatStore.selectedUser = null
     router.push({name: CHAT_ROUTE_NAMES.CHAT_INDEX, query :{ tab: undefined} })
     chatStore.actionGetPrivateChatList()

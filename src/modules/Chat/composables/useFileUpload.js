@@ -1,26 +1,31 @@
+// core
+import { useRoute } from "vue-router";
 // stores
 import { useChatStore } from "../stores";
-import { useRoute } from "vue-router";
 // services
 import axiosConfig from "@/services/axios.config";
 // sockets
 import { socket } from "@/services/socket";
 // contants
 import { CHAT_ROUTE_NAMES, CHAT_TYPES, MESSAGE_TYPES } from "../constatns";
+
 const chatStore = useChatStore()
 
 const { send } = socket()
 
-const sendChatFileEmit = (file_id, file_name, chat_id, message_type, chat_type)=> {
+const messageTypes = [MESSAGE_TYPES.IMAGE, MESSAGE_TYPES.VIDEO, MESSAGE_TYPES.AUDIO]
+
+export const useFileUpload = () => {
+const route = useRoute();
+
+const sendChatFileEmit = (file_id, file_name, message_type)=> {
+  const isPrivateChat = route.name == CHAT_ROUTE_NAMES.PRIVATE
+  const chat_type = isPrivateChat ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP
+  const chat_id = isPrivateChat ? chatStore.selectedUser.chat_id : chatStore.selectedGroup.chat_id 
   const payload = { command: 'new_message', chat_type, chat_id, files: [file_id],message_type, text: file_name, replied_to_id: chatStore.contextMenu?.message?.message_id}
   send(JSON.stringify(payload))
   chatStore.contextMenu = {}
 }
-
-const messageTypes = [MESSAGE_TYPES.IMAGE, MESSAGE_TYPES.VIDEO, MESSAGE_TYPES.AUDIO]
-
-export const useFileUpload = () => {
-  const route = useRoute()
 
 const returnShortFileName = (fileName) => {
   return (fileName.split('.')[0].length >= 12) ? fileName.substring(0, 13) + '... .' + fileName.split('.')[1] : fileName
@@ -69,7 +74,7 @@ const returnShortFileName = (fileName) => {
        .then(({ data }) => {
         // sending file to websocket          
         const currentMessageType =  messageTypes.find(type=>type === item.attachments?.file?.file?.type.split("/")[0]) || MESSAGE_TYPES.FILE
-         sendChatFileEmit(data.id, data.name, route.params.id, currentMessageType, route.name == CHAT_ROUTE_NAMES.PRIVATE ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP); 
+         sendChatFileEmit(data.id, data.name, currentMessageType); 
          item.attachments.file.id = data.id;
          item.uploaded = false;
          item.attachments.file.url = data.url
