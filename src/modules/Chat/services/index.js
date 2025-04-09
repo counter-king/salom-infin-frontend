@@ -94,3 +94,7 @@ export const fetchGetMessageFilesList = (params) => {
 export const fetchGetUserOnline = (id) => {
   return axiosConfig.get(`${URLS.userOnline}${id}/`);
 }
+
+// export const fetchEditChatMute = (id, body) => {
+//   return axiosConfig.post(`${URLS.chatGroup}${id}/mute/`, body);
+// }
