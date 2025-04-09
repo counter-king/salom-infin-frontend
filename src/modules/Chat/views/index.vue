@@ -170,11 +170,16 @@ watch(data, (newData) => {
   }
   else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_REACTION) {
     const message = chatStore.messageListByChatId.find(item=> item.message_id == newData?.message_id)
+    if (!message) return
     if(newData?.action == "created") {
-      if (!message.reactions[newData.emoji]) {
-        message.reactions[newData.emoji] = [];
+      const reactions = { ...message.reactions }
+      if (!reactions[newData.emoji]) {
+        reactions[newData.emoji] = []
       }
-      message.reactions[newData.emoji]?.push(newData?.user)
+
+      reactions[newData.emoji].push(newData.user)
+
+      message.reactions = reactions
     }
     else if(newData?.action == "deleted"){
       message.reactions[newData.emoji] = message.reactions[newData?.emoji].filter(user=> user.id != newData?.user?.id)
