@@ -107,7 +107,19 @@ const onConfirm = async () => {
             class="text-xs font-medium"
             :class="props.item?.arrived_at ? 'text-primary-900' : 'text-greyscale-500'"
           >
-            {{ props.item?.arrived_at ? `${item?.region?.country?.name} / ${item?.region?.name}` : t('trip-place') }}
+            <template v-if="item.arrived_lat && item.arrived_lng">
+              <a
+                :href="`https://www.google.com/maps?q=${item.arrived_lat},${item.arrived_lng}`"
+                target="_blank"
+                class="underline hover:text-primary-500"
+              >
+                {{ props.item?.arrived_at ? `${item?.region?.country?.name} / ${item?.region?.name}` : t('trip-place') }}
+              </a>
+            </template>
+
+            <template v-else>
+              {{ props.item?.arrived_at ? `${item?.region?.country?.name} / ${item?.region?.name}` : t('trip-place') }}
+            </template>
           </span>
 
           <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
@@ -116,7 +128,7 @@ const onConfirm = async () => {
             class="text-xs font-medium"
             :class="props.item?.arrived_at ? 'text-primary-900' : 'text-greyscale-500'"
           >
-            {{ props.item?.arrived_at ? formatUserFullName(props.item.arrived_verified_by) : 'Имя сотрудника' }}
+            {{ props.item?.arrived_at ? formatUserFullName(props.item.arrived_verified_by) : t('emp-name') }}
           </span>
         </div>
 
@@ -182,7 +194,18 @@ const onConfirm = async () => {
               class="text-xs font-medium"
               :class="props.item?.left_at ? 'text-primary-900' : 'text-greyscale-500'"
             >
-              {{ props.item?.left_at ? `${item?.region?.country?.name} / ${item?.region?.name}` : t('trip-place') }}
+              <template v-if="item.left_lat && item.left_lng">
+                <a
+                  :href="`https://www.google.com/maps?q=${item.left_lat},${item.left_lng}`"
+                  target="_blank"
+                  class="underline hover:text-primary-500"
+                >
+                  {{ props.item?.arrived_at ? `${item?.region?.country?.name} / ${item?.region?.name}` : t('trip-place') }}
+                </a>
+              </template>
+              <template v-else>
+                {{ props.item?.left_at ? `${item?.region?.country?.name} / ${item?.region?.name}` : t('trip-place') }}
+              </template>
             </span>
           </template>
 
@@ -192,7 +215,7 @@ const onConfirm = async () => {
             class="text-xs font-medium"
             :class="isLeft ? 'text-primary-900' : 'text-greyscale-500'"
           >
-            {{ isLeft ? formatUserFullName(props.item.left_verified_by) : 'Имя сотрудника'}}
+            {{ isLeft ? formatUserFullName(props.item.left_verified_by) : t('emp-name')}}
           </span>
         </div>
 
