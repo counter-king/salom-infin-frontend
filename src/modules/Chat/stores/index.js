@@ -220,7 +220,7 @@ export const useChatStore = defineStore("chat-stores", {
           last_message_id: item.last_message?.id,
           type: item.type,
           unread_count: item.unread_count,
-          sound: item?.sound || true
+          on_mute: item?.on_mute,
         }));
 
         if(resetList){
@@ -255,7 +255,8 @@ export const useChatStore = defineStore("chat-stores", {
         last_message_type: data?.last_message?.type,
         last_message_id: data?.last_message?.id,
         type: data.type,
-        unread_count: data.unread_count
+        unread_count: data.unread_count,
+        on_mute: data?.on_mute,
       }
     },
     /** */
@@ -279,7 +280,8 @@ export const useChatStore = defineStore("chat-stores", {
           last_message_type: data?.last_message?.type,
           last_message_id: data?.last_message?.id,
           type: data.type,
-          unread_count: data.unread_count
+          unread_count: data.unread_count,
+          on_mute: data?.on_mute,
         }
       } catch(e){
         if(error) throw e
@@ -318,7 +320,8 @@ export const useChatStore = defineStore("chat-stores", {
             last_message_type: item.last_message?.type,
             last_message_id: item.last_message?.id,
             type: item.type,
-            unread_count: item.unread_count
+            unread_count: item.unread_count,
+            on_mute: item?.on_mute,
           })
         })
       )
@@ -358,8 +361,9 @@ export const useChatStore = defineStore("chat-stores", {
             position: item?.user?.position?.name,
             status: item?.user?.status,
             id: item?.user?.id,
-            private_chat_id: item?.private_chat_id,
+            private_chat_uid: item?.private_chat_uid,
             chat_id: item?.chat,
+            chat_uid: item.chat_uid,
             color: item?.user?.color,
             avatar: item?.user?.avatar,
             role: item?.role
@@ -408,7 +412,8 @@ export const useChatStore = defineStore("chat-stores", {
           last_message_type: data?.last_message?.type,
           last_message_id: data?.last_message?.id,
           type: data.type,
-          unread_count: data.unread_count
+          unread_count: data.unread_count,
+          on_mute: data?.on_mute,
         }
       } catch (err) {
         console.log(err)

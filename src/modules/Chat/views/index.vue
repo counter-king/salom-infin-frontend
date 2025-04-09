@@ -273,7 +273,7 @@ watch(data, (newData) => {
         // to avoid showing unread message from sender
         if(newData?.content?.sender?.id != authStore?.currentUser?.id && !isTheSameLastMessageId){
           // play sound if sound is enabled
-          if(privateChat.sound){
+          if(!privateChat.on_mute){
             playNotificationSound()
           }
           // adding unread count
@@ -309,7 +309,7 @@ watch(data, (newData) => {
         
         if(newData?.content?.sender?.id != authStore?.currentUser?.id && !isTheSameLastMessageId){ // play sound if sound is enabled
           // play sound if sound is enabled
-          if(groupChat.sound){
+          if(!groupChat.on_mute){
             playNotificationSound()
           }
           // adding unread count
