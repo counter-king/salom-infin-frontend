@@ -121,7 +121,7 @@ watch(data, (newData) => {
         });
 
         // get chat files count, when current user send a file message
-        if(newData.message_type != MESSAGE_TYPES.TEXT) {
+        if(newData.message_type != MESSAGE_TYPES.TEXT && authStore.currentUser?.id == newData.sender?.id) {
           chatStore.actionGetChatFilesCount(chat_id)
         }
       }
