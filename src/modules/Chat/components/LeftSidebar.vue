@@ -43,36 +43,6 @@ const containerGroupRef = ref(null)
 useInfiniteScroll({ fetchFn: chatStore.actionGetPrivateChatList, containerRef: containerPersionalRef, params: { page: 1, page_size: 20}})
 useInfiniteScroll({ fetchFn: chatStore.actionGetGroupChatList, containerRef: containerGroupRef, params: { page: 1, page_size: 20, chat:route.params?.id}})
 
-// const menuItems = ref([
-//     {
-//         // label: chatStore.contextMenu.chat?.sound ? t('turn-off-notification') : t('turn-on-notification'),
-//         iconName: chatStore.contextMenu.chat?.sound ? VolumeMuteLineIcon : VolumeUpLineIcon,
-//         rightIcon:  chatStore.contextMenu.chat?.sound ? AltArrowRightIcon: null,
-//         command: () => {
-//           if(!chatStore.contextMenu.chat?.sound){
-//             handleChatMuteStatus(true)
-//           }
-//         },
-//         items: chatStore.contextMenu.chat?.sound ? [
-//             {
-//                 label: t('turn-on-notification'),
-//                 iconName: VolumeUpLineIcon,
-//                 active: chatStore.contextMenu.chat?.sound,
-//                 command: () => {
-//                   handleChatMuteStatus(false)
-//                 },
-//             },
-//             {
-//                 label: t('turn-off-notification'),
-//                 iconName:VolumeMuteLineIcon,
-//                 active: !chatStore.contextMenu.chat?.sound,
-//                 command: () => {
-//                   handleChatMuteStatus(true)
-//                 }
-//             }
-//         ] : []
-//     },
-// ]);
 const menuItems = ref([
     {
         label: t('manage-notification'),
