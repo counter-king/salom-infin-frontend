@@ -128,6 +128,8 @@ const onShowEmojiContextMenu = (event, userReactionList) => {
 const onHandleDeleteMessage = async() => {
   await chatStore.actionDeleteMessageById(chatStore.contextMenu?.message?.message_id)
   chatStore.messageListByChatId = chatStore.messageListByChatId.filter(item=> item?.message_id != chatStore.contextMenu?.message?.message_id)
+  // to clear context menu after delete message
+  chatStore.contextMenu = {}
 }
 
 const onClickChatArea = () => {
@@ -183,6 +185,8 @@ const getMessageComponent = (message) => {
 };
 
 const getMessageComponentProps = (message, index) => {
+  const isCurrentUser = (message) => message.sender?.id  == authStore.currentUser?.id;
+
   const baseProps = {
     'data-message-id': message?.message_id,
     'data-message-is-read': message?.is_read,
@@ -195,14 +199,14 @@ const getMessageComponentProps = (message, index) => {
   };
 
   const additionalProps = ()=>{
-    if(isCurrentUser(message) && (message.message_type === MESSAGE_TYPES.TEXT || message.message_type === MESSAGE_TYPES.LINK)){
+    if(isCurrentUser(message) && (message?.message_type === MESSAGE_TYPES.TEXT || message?.message_type === MESSAGE_TYPES.LINK)){
       return {
         messageInnerClass: {
           '!rounded-br-[4px]': showFriendTextAvatar(index),
           '!rounded-tr-[4px]': !showFriendTextAvatar(index)
         }
       }
-    } else if(!isCurrentUser(message)) {
+    } else {
       return {
         avatarVisible: showFriendTextAvatar(index),
         classNames: { 'mt-5': showFriendTextAvatar(index) }
@@ -214,7 +218,7 @@ const getMessageComponentProps = (message, index) => {
     additionalProps.handleClickImage = handleClickImage;
   }
 
-  return { ...baseProps, ...additionalProps };
+  return { ...baseProps, ...additionalProps(message) };
 };
 
 

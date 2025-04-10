@@ -7,6 +7,7 @@ import {
   fetchDeleteMessageById,
   fetchEditGroupChat,
   fetchEditMessageById,
+  fetchGetChatFilesCount,
   fetchGetGroupChatById,
   fetchGetGroupChatList,
   fetchGetMessagesByChatId,
@@ -54,6 +55,7 @@ export const useChatStore = defineStore("chat-stores", {
     messageAudioFileListMoreLoading: false,
     messageLinkListMoreLoading: false,
     messageFilesListLoading: false,
+    chatFilesCountLoading: false,
     allFiles: [],
     selectedUser: null,
     selectedGroup: null,
@@ -68,6 +70,7 @@ export const useChatStore = defineStore("chat-stores", {
     userSearchList: [],
     groupChatList: [],
     messageLinkList: [],
+    chatFilesCount: [],
     typingUsers: {},
     contextMenu: {
       tempMessage: null,
@@ -635,6 +638,19 @@ export const useChatStore = defineStore("chat-stores", {
       } finally {
         this.messageAudioFileListLoading = false;
         this.messageAudioFileListMoreLoading = false;
+      }
+    },
+    /** */
+    async actionGetChatFilesCount(chatId) {
+      this.chatFilesCountLoading = true;
+      try {
+        const response = await fetchGetChatFilesCount(chatId);
+        this.chatFilesCount = response?.data
+        return response;
+      } catch (e) {
+        console.log(e)
+      } finally {
+        this.chatFilesCountLoading = false;
       }
     },
   }

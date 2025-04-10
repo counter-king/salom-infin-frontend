@@ -52,7 +52,7 @@ const getUnreadCount = useDebounceFn(()=> {
 // watching socket events using data(data is socket event)
 watch(data, (newData) => {
   newData = JSON.parse(newData);
-  console.log(newData)
+  // console.log(newData)
   if(newData.type == WEBCOCKET_EVENTS.NEW_CHAT_MESSAGE){
     // if current user message sender, do not increment chat count
     if(newData.content.sender.id != authStore.currentUser?.id){

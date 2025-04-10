@@ -8,7 +8,7 @@ import { ChatAreWrapper, LeftSidebar, RightSidebar } from "@/modules/Chat/compon
 // socket
 import { socket } from "@/services/socket";
 // contants
-import { CHAT_ROUTE_NAMES, CHAT_TYPES, WEBCOCKET_EVENTS } from "../constatns";
+import { CHAT_ROUTE_NAMES, CHAT_TYPES, MESSAGE_TYPES, WEBCOCKET_EVENTS } from "../constatns";
 // store
 import { useChatStore } from "../stores";
 import { useAuthStore } from "@/modules/Auth/stores";
@@ -66,7 +66,6 @@ watch(status, (newStatus) => {
 watch(data, (newData) => {
   
   newData = JSON.parse(newData);
-  console.log("ewasd", newData);
   const isPrivate = route.name == CHAT_ROUTE_NAMES.PRIVATE
   const chat_id = isPrivate ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id
   if(newData.command == WEBCOCKET_EVENTS.USER_HANDSHAKE) {
@@ -102,7 +101,7 @@ watch(data, (newData) => {
       );
 
       const isSrollStayDown = refChatArea.value.scrollHeight - refChatArea.value.clientHeight <= Math.floor(refChatArea.value.scrollTop) + 100;
-      // Yangi xabarni ro‘yxatga qo‘shish
+      // add a new message to messageList
       if(chat_id == newData.chat_id){
           chatStore.messageListByChatId.push({
           attachments: { file: newData?.files[0] },
@@ -120,6 +119,11 @@ watch(data, (newData) => {
           uploaded: true,
           reactions: [],
         });
+
+        // get chat files count, when current user send a file message
+        if(newData.message_type != MESSAGE_TYPES.TEXT) {
+          chatStore.actionGetChatFilesCount(chat_id)
+        }
       }
 
        // Oxirgi xabarni yangilash

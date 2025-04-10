@@ -1,8 +1,7 @@
 <script setup>
 // cores
-import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 // components
 import FileItemLink from './FileItemLink.vue';
 import Empty from '@/components/Empty.vue';
@@ -10,6 +9,8 @@ import Empty from '@/components/Empty.vue';
 import { formatDateMonthWithDay, formatDay } from '@/utils/formatDate';
 // stores
 import { useChatStore } from '../stores';
+// constants
+import { CHAT_ROUTE_NAMES } from '../constatns';
 // composables
 import { useInfiniteScroll } from '../composables/useInfiniteScroll';
 
@@ -21,7 +22,9 @@ const props = defineProps({
 // reactives
 const containerRef = ref(null)
 
-useInfiniteScroll({ fetchFn: chatStore.actionGetMessageLinkList, containerRef, params: { page: 1, page_size: 10, chat:route.params?.id }})
+const isPrivateChat = computed(()=> route.name == CHAT_ROUTE_NAMES.PRIVATE)
+// composables
+useInfiniteScroll({ fetchFn: chatStore.actionGetMessageLinkList, containerRef, params: { page: 1, page_size: 10, chat: isPrivateChat.value ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id }})
 
 const showDateByCalculate = (index) => {
   const previouMessageCreatedDate = chatStore.messageLinkList[index - 1]?.created_date
