@@ -303,7 +303,7 @@ watch(createGroupDialogVisible, () => {
                     @contextmenu.prevent="onShowContextMenu($event, item)"
                     @click="onClickChatPrivateUser(item)"
                     :user="item" 
-                    :active="item?.chat_id == route.params?.id"
+                    :active="item?.chat_uid == route.params?.id"
                   />
                 </template>
               </template>
@@ -330,7 +330,7 @@ watch(createGroupDialogVisible, () => {
                     @contextmenu.prevent="onShowContextMenu($event, group)"
                     @click="onClickChatGroup(group)"
                     :group="group"
-                    :active="group?.chat_id == route.params?.id"
+                    :active="group?.chat_uid == route.params?.id"
                   />
                 </template>
               </template>
