@@ -57,7 +57,7 @@ defineExpose({
     <div class="flex gap-2" :class="classNames">
       <base-avatar 
         :image="props.message?.sender?.avatar?.url || chatStore.selectedUser?.avatar?.url"
-        :label="props.message?.sender?.first_name"
+        :label="props.message?.sender?.full_name"
         :color="props.message?.sender?.color"
         shape="circle"
         :meta="props.message?.sender"
