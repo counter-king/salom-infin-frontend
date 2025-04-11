@@ -70,7 +70,7 @@ export const useChatStore = defineStore("chat-stores", {
     userSearchList: [],
     groupChatList: [],
     messageLinkList: [],
-    chatFilesCount: [],
+    chatFilesCount: {},
     typingUsers: {},
     contextMenu: {
       tempMessage: null,

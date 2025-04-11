@@ -92,7 +92,7 @@ watch(()=> chatStore.chatFilesCount, (value, oldValue) => {
   } else if(value?.link != oldValue.link) {
     chatStore.actionGetMessageLinkList({ chat: chatId, type: MESSAGE_TYPES.LINK})
   }
-}, { immediate: true })
+}, { deep: true, immediate: true })
 
 </script>
 <template>
@@ -122,7 +122,7 @@ watch(()=> chatStore.chatFilesCount, (value, oldValue) => {
               label-classes="text-2xl font-semibold select-none text-greyscale-900"
             />
             <h2 class="mt-1 text-base font-semibold select-none text-greyscale-900">{{ isGroupDetail ? chatStore.selectedGroup?.title : chatStore.selectedUser?.full_name}}</h2>
-            <p class="text-sm font-medium select-none text-greyscale-500">{{ isGroupDetail ? t('members', { count: chatStore.selectedGroup?.members?.length}) : chatStore.selectedUser?.position}}</p>
+            <p class="text-sm font-medium select-none text-greyscale-500 min-h-[20px]">{{ isGroupDetail ? t('members', { count: chatStore.selectedGroup?.members?.length}) : chatStore.selectedUser?.position}}</p>
           </div>
           <!-- users  -->
           <div 

@@ -41,7 +41,7 @@ const showDateByCalculate = (index) => {
   <div ref="containerRef" class="flex flex-col gap-4 p-4 overflow-auto h-[260px]" >
    <!-- data -->
     <div class="flex flex-col gap-1">
-       <template v-if="chatStore.messageLinkListLoading">
+       <template v-if="chatStore.messageLinkListLoading && !chatStore.messageLinkList?.length">
          <base-spinner class="mt-5" />
        </template>
        <template v-else>

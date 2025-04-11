@@ -29,7 +29,7 @@ const props = defineProps({
      />
    </div>
    <!-- data -->
-    <template v-if="chatStore.chatFilesCountLoading">
+    <template v-if="chatStore.chatFilesCountLoading && !Object.keys(chatStore.chatFilesCount).length">
       <base-spinner />
     </template>
     <template v-else>

@@ -62,7 +62,7 @@ const showDateByCalculate = (index) => {
    </div>
    <!-- data -->
     <div class="flex flex-col gap-1">
-      <template v-if="chatStore.messageVideoFileListLoading">
+      <template v-if="chatStore.messageVideoFileListLoading && !chatStore.messageVideoFileList?.length">
         <base-spinner class="mt-5"  />
       </template>
       <template v-else>

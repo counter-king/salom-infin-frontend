@@ -43,7 +43,7 @@ const containerGroupRef = ref(null)
 useInfiniteScroll({ fetchFn: chatStore.actionGetPrivateChatList, containerRef: containerPersionalRef, params: { page: 1, page_size: 20}})
 useInfiniteScroll({ fetchFn: chatStore.actionGetGroupChatList, containerRef: containerGroupRef, params: { page: 1, page_size: 20, chat:route.params?.id}})
 
-const menuItems = ref([
+const menuItems = computed(() => [
     {
         label: t('manage-notification'),
         iconName: chatStore.contextMenu.chat?.on_mute ? VolumeMuteLineIcon : VolumeUpLineIcon,
@@ -52,28 +52,28 @@ const menuItems = ref([
             {
                 label: t('turn-on-notification'),
                 iconName: VolumeUpLineIcon,
-                active: chatStore.contextMenu.chat?.on_mute,
+                active: !chatStore.contextMenu.chat?.on_mute,
                 command: async () => {
                   const response = await handleChatMuteStatus(false)
                   if(response.status == 200){
                       const isPrivateChat = chatStore.contextMenu.chat.type == CHAT_TYPES.PRIVATE;
                       const chat = isPrivateChat ? chatStore.privateChatList.find(item => item.chat_id == chatStore.contextMenu.chat?.chat_id) : chatStore.groupChatList.find(item => item.chat_id == chatStore.contextMenu.chat?.chat_id)
                       chat.on_mute = false
-                      chatStore.contextMenu.chat.on_mute = false
+                      chatStore.contextMenu = {}
                   }
                 },
             },
             {
                 label: t('turn-off-notification'),
                 iconName: VolumeMuteLineIcon,
-                active: !chatStore.contextMenu.chat?.on_mute,
+                active: chatStore.contextMenu.chat?.on_mute,
                 command: async () => {
                   const response = await handleChatMuteStatus(true)
                   if(response.status == 200){
                       const isPrivateChat = chatStore.contextMenu.chat.type == CHAT_TYPES.PRIVATE;
                       const chat = isPrivateChat ? chatStore.privateChatList.find(item => item.chat_id == chatStore.contextMenu.chat?.chat_id) : chatStore.groupChatList.find(item => item.chat_id == chatStore.contextMenu.chat?.chat_id)
                       chat.on_mute = true
-                      chatStore.contextMenu.chat.on_mute = true
+                      chatStore.contextMenu = {}
                   }
                 }
             }

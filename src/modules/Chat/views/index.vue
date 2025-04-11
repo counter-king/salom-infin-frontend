@@ -64,8 +64,9 @@ watch(status, (newStatus) => {
 
 // websocketdan, kelgan ma'lumotlarni kuzatish
 watch(data, (newData) => {
-  
+  if(!newData) return
   newData = JSON.parse(newData);
+  // console.log("user hand",newData);
   const isPrivate = route.name == CHAT_ROUTE_NAMES.PRIVATE
   const chat_id = isPrivate ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id
   if(newData.command == WEBCOCKET_EVENTS.USER_HANDSHAKE) {
@@ -121,7 +122,7 @@ watch(data, (newData) => {
         });
 
         // get chat files count, when current user send a file message
-        if(newData.message_type != MESSAGE_TYPES.TEXT && authStore.currentUser?.id == newData.sender?.id) {
+        if(newData.message_type != MESSAGE_TYPES.TEXT) {
           chatStore.actionGetChatFilesCount(chat_id)
         }
       }
@@ -158,8 +159,10 @@ watch(data, (newData) => {
   }
   else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_UPDATE) {
     let message = chatStore.messageListByChatId.find(item=> item.message_id == newData?.content?.message_id)
-    message.text = newData?.content?.text
-    message.edited = true
+    if(message) {
+      message.text = newData?.content?.text
+      message.edited = true
+    }
   }
   else if(newData.type == WEBCOCKET_EVENTS.NEW_GROUP_CHAT) {
     if(!chatStore.groupChatList.find(item=> item.chat_id == newData?.content?.chat_id)){
@@ -300,6 +303,8 @@ watch(data, (newData) => {
           type: newData?.content?.chat_type,
           unread_count: 1
         })
+        // fist time user send message, play sound
+        playNotificationSound()
       }
     }
     else if(newData.content.chat_type == CHAT_TYPES.GROUP){
@@ -328,25 +333,8 @@ watch(data, (newData) => {
     }
   }
 });
-const simulateInteraction = () => {
-  const events = [
-    () => document.dispatchEvent(new MouseEvent('mousemove', {
-      clientX: Math.random() * window.innerWidth,
-      clientY: Math.random() * window.innerHeight
-    })),
-    () => window.scrollBy(0, Math.random() * 100),
-    () => document.dispatchEvent(new KeyboardEvent('keydown', {
-      key: String.fromCharCode(Math.floor(Math.random() * 26) + 97)
-    }))
-  ];
-
-  setInterval(() => {
-    events[Math.floor(Math.random() * events.length)]();
-  }, 1000 + Math.random() * 2000);
-};
 
 onMounted(() => {
-  simulateInteraction();
   sendUserHandshake()
 })
 

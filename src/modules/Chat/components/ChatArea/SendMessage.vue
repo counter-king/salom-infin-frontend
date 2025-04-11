@@ -81,6 +81,8 @@ const handleSendMessage = (event) => {
       resetInputProperties()
     }
     else if(!!message.value.trim()){
+        // every change, urlRegex last index reset, to avoid unexpected checking result
+        urlRegex.lastIndex = 0;
         // replay message
         if(chatStore.contextMenu?.replay) {
           if(urlRegex.test(message.value)){
@@ -127,6 +129,8 @@ const handleSendMessage = (event) => {
 
 const handleMessageByIcon = () => {
  if(!!message.value.trim()){
+        // every change, urlRegex last index reset, to avoid unexpected checking result
+        urlRegex.lastIndex = 0;
         // replay message
         if(chatStore.contextMenu?.replay) {
           if(urlRegex.test(message.value)){
