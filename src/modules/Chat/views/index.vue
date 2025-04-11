@@ -77,8 +77,9 @@ watch(data, (newData) => {
   }
   else if(newData.type == WEBCOCKET_EVENTS.NEW_MESSAGE) {  
     const chatList = isPrivate ? chatStore.privateChatList : chatStore.groupChatList 
+    
     // if chat not found, add it
-    if(!chatList.some(item=> item.chat_id == newData.chat_id)){
+    if(!chatList.some(item=> item.chat_id == newData.chat_id) && newData.chat_type == (isPrivate ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP)){
           chatList.unshift({
           first_name: newData.sender?.first_name,
           full_name: newData.sender?.full_name,
@@ -272,7 +273,6 @@ watch(data, (newData) => {
 
     if(newData.content.chat_type == CHAT_TYPES.PRIVATE){
       const privateChat = chatStore.privateChatList.find(item=> item.chat_id == newData?.content.chat_id)
-
       if(privateChat){
         privateChat.last_message = newData?.content?.text
         const isTheSameLastMessageId = privateChat.last_message_id == newData?.content?.message_id
