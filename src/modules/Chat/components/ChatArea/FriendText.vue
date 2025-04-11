@@ -60,6 +60,8 @@ defineExpose({
         :label="props.message?.sender?.first_name"
         :color="props.message?.sender?.color"
         shape="circle"
+        :meta="props.message?.sender"
+        detail-dialog
         avatar-classes="w-8 h-8"
         :class="{'!visible': props.avatarVisible, '!invisible': !props.avatarVisible}"
       />
@@ -82,11 +84,12 @@ defineExpose({
             <div 
               v-if="!!props.message.replied_to"
               class="flex flex-col gap-1 pl-2 border-l-[2px] border-warning-500"
-              >
+              > 
               <span class="text-xs font-semibold text-warning-500 truncate">{{ props.message.replied_to?.sender?.first_name }} {{ props.message.replied_to?.sender?.last_name }}</span>
               <span class="text-xs font-medium text-greyscale-500 truncate">{{ props.message.replied_to?.text }}</span>
             </div>
             <!-- text -->
+            <p v-if="props.avatarVisible" class="text-sm font-bold text-blue-900" >{{ props.message.sender.first_name }} {{ props.message.sender.last_name }}</p>
             <p class="text-sm font-medium text-greyscale-900 whitespace-pre-line break-all">
               <LinkMessage v-if="props.message?.message_type == MESSAGE_TYPES.LINK" type="friend" :message="props.message" />
               <span v-else>{{ props.message?.text }}</span>

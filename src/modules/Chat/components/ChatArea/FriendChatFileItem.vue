@@ -62,6 +62,8 @@ defineExpose({
       :label="props.message?.sender?.first_name"
       :color="props.message?.sender?.color"
       avatar-classes="w-8 h-8"
+      :meta="props.message?.sender"
+      detail-dialog
       :class="{'!visible': props.avatarVisible, '!invisible': !props.avatarVisible}"
     />
     <div class="flex flex-col gap-2">
@@ -70,7 +72,7 @@ defineExpose({
         <div
           @contextmenu.prevent="(e)=>props.onShowContextMenu(e, props.message)"
           @click="handleMessageClick"
-          class="flex flex-col gap-2 p-2 pr-4 min-w-[243px] max-w-[400px] bg-white rounded-xl"
+          class="flex flex-col gap-2 !p-2 !pr-4 min-w-[243px] max-w-[400px] bg-white rounded-xl"
           :class="[{'!p-0': !props.message.replied_to }]"
         >
           <!-- reply to message -->
@@ -82,8 +84,9 @@ defineExpose({
             <span class="text-xs font-medium text-greyscale-500 truncate">{{ props.message.replied_to?.text }}</span>
           </div>
           <!-- file info -->
+          <p v-if="props.avatarVisible" class="text-sm font-bold text-blue-700" >{{ props.message.sender.first_name }} {{ props.message.sender.last_name }}</p>
           <div 
-            class="flex gap-4 p-2 pr-4 rounded-xl items-center w-full bg-white-400/[40%]"
+            class="flex gap-4 rounded-xl items-center w-full bg-white-400/[40%]"
             >
               <div
                  @click="downloadFile(props.message)" 
