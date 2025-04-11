@@ -10,7 +10,7 @@ import { COLOR_TYPES } from '@/enums';
 const url = process.env.NODE_ENV === 'development' || window.location.host === 'app.itco.uz' || window.location.host === 'new-side-project.vercel.app' ? import.meta.env.VITE_BASE_TEST_URL : import.meta.env.VITE_BASE_PROD_URL;
 const baseURL = url.replace(/^https?:\/\//, '').replace(/\/api\/v1\/?/, '');
 
-let socketInstance = null 
+let socketInstance = null
 export const socket = ()=> {
   if(!socketInstance) {
     socketInstance = useWebSocket(`wss://${baseURL}/ws/?token=${getStorageItem(ACCESS)}`, {

@@ -55,7 +55,7 @@ watch(debouncedSearch, async (value) => {
       isSearch.value = false;
       emit('emit:up', departmentUsers.value)
     }
-    // when search, clear query to get new values 
+    // when search, clear query to get new values
     router.push({ path: router.currentRoute.value.path, query: {} });
   }
   else {
@@ -64,7 +64,7 @@ watch(debouncedSearch, async (value) => {
     isSearch.value = true
     emit('emit:up', departmentUsers.value, data?.count)
   }
-  
+
   emit('emit:search', isSearch.value);
 })
 
@@ -81,7 +81,7 @@ watchEffect(async () => {
     } else {
       departments.value = data.results
     }
-    departmentSelect.value = departments.value[0]?.id 
+    departmentSelect.value = departments.value[0]?.id
   }
 })
 
@@ -98,7 +98,7 @@ watchEffect(async () => {
       isSearch.value = true;
       emit('emit:search', true);
       emit('emit:up', departmentUsers.value, data?.count)
-    } else {       
+    } else {
       let { data: users } = await fetchDepartmentsWithUserList({ id: departmentSelect.value })
       departmentUsers.value = [users]
       isSearch.value = false;
@@ -127,7 +127,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <action-toolbar title="Справочник">
+  <action-toolbar :title="t('handbook')">
     <template #filters>
       <div class="w-full max-w-[316px]">
         <base-input
@@ -146,7 +146,7 @@ onMounted(async () => {
       <div class="max-w-[350px] w-full">
         <handbook-dropdown v-model="departmentSelect" v-model:options="departments"
           api-url=departments/top-level-departments :api-params="{
-            company: branchSelect, condition: 'A,K' 
+            company: branchSelect, condition: 'A,K'
           }" placeholder="Подразделение" />
       </div>
     </template>

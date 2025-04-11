@@ -45,7 +45,7 @@
   "not-receive-code": "Tasdiqlash kodini olmadingizmi ?",
   "resend-code": "Qayta yuborish",
   "dashboard": "Dashbord",
-  "handbook": "Ma'lumotnoma",
+  "handbook": "Kontaktlar",
   "new": "Yangi",
   "in-progress": "Jarayonda",
   "all": "Barchasi",
@@ -791,7 +791,10 @@
   "edited": "tahrirlangan",
   "delete-chat-private-dialog-content": "Siz bu suhbatni o'chirmoqchimisiz ?",
   "successfully-saved": "Muvaffaqiyatli saqlandi!",
+  "emp-name": "Xodim ism-familiyasi",
   "turn-off-notification": "Bildirishnomalarni o'chirish",
   "turn-on-notification": "Bildirishnomalarni yoqing",
-  "manage-notification": "Bildirishnomalarni boshqarish"
+  "manage-notification": "Bildirishnomalarni boshqarish",
+  "auth-session-end-title": "Sessiya tugadi - qayta avtorizatsiya talab qilinadi",
+  "auth-session-end-description": "Ishni davom ettirish uchun tizimga qayta kiring."
 }

@@ -64,7 +64,7 @@ const onConfirm = async () => {
         class="flex items-center py-[2px] pr-2 pl-[3px] gap-x-1 rounded-xl"
         :class="isArrived ? 'bg-success-100' : 'bg-greyscale-70'"
       >
-        <div class="flex justify-center items-center w-[18px] h-[18px] bg-white rounded-full shadow">
+        <div class="flex justify-center items-center w-[24px] h-[24px] bg-white rounded-full shadow">
           <base-iconify
             :icon="ArrowLeftDownIcon"
             class="!w-3 !h-3"

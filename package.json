@@ -65,7 +65,7 @@
     "cypress": "^13.2.0",
     "jsdom": "^22.1.0",
     "postcss": "^8.4.31",
-    "sass": "^1.69.4",
+    "sass": "^1.86.3",
     "sharp": "^0.33.5",
     "sharp-ico": "^0.1.5",
     "start-server-and-test": "^2.0.0",

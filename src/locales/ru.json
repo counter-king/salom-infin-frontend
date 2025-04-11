@@ -374,7 +374,7 @@
   "grif": "Гриф",
   "groups": "Группы",
   "group-chat": "Создайте группу в чате",
-  "handbook": "Справочник",
+  "handbook": "Контакты",
   "headers": "Заголовки",
   "headers-reset": "Столбцы сброшены",
   "headers-saved": "Столбцы сохранены!",
@@ -792,7 +792,10 @@
   "edited":"Изменено",
   "delete-chat-private-dialog-content": "Вы хотите удалить этот чат ?",
   "successfully-saved": "Успешно сохранен!",
+  "emp-name": "Имя сотрудника",
   "turn-off-notification": "Выключить уведомления",
   "turn-on-notification": "Включить уведомления",
-  "manage-notification": "Управлять уведомлениями"
+  "manage-notification": "Управлять уведомлениями",
+  "auth-session-end-title": "Сессия завершена — необходима повторная авторизация",
+  "auth-session-end-description": "Чтобы продолжить работу, пожалуйста, войдите в систему снова."
 }

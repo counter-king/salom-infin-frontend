@@ -165,6 +165,7 @@ export { default as CameraBoldIcon } from  '~icons/solar/camera-bold'
 export { default as StarBoldIcon } from  '~icons/solar/star-bold'
 export { default as LinkCircleBoldIcon } from  '~icons/solar/link-circle-bold'
 export { default as DialogBoldIcon } from  '~icons/solar/dialog-bold'
+export { default as DangerCircleBoldIcon } from  '~icons/solar/danger-circle-bold'
 // Solar (Bold Duotone)
 export { default as ArchiveUpBoldDuotoneIcon } from  '~icons/solar/archive-up-bold-duotone'
 export { default as StarBoldDuotoneIcon } from  '~icons/solar/star-bold-duotone'
