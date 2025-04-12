@@ -8,7 +8,7 @@ import { ChatAreWrapper, LeftSidebar, RightSidebar } from "@/modules/Chat/compon
 // socket
 import { socket } from "@/services/socket";
 // contants
-import { CHAT_ROUTE_NAMES, CHAT_TYPES, WEBCOCKET_EVENTS } from "../constatns";
+import { CHAT_ROUTE_NAMES, CHAT_TYPES, MESSAGE_TYPES, WEBCOCKET_EVENTS } from "../constatns";
 // store
 import { useChatStore } from "../stores";
 import { useAuthStore } from "@/modules/Auth/stores";
@@ -41,7 +41,9 @@ const sendUserHandshake = ()=> {
 }
 
 const sendChatHandshake = ()=> {
-  const payload = { command: 'chat_handshake', chat_type: route.name == CHAT_ROUTE_NAMES.PRIVATE ?  CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: route.params?.id }
+  const isPrivateChat = route.name == CHAT_ROUTE_NAMES.PRIVATE
+  const chat_id = isPrivateChat ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id 
+  const payload = { command: 'chat_handshake', chat_type: isPrivateChat ?  CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id }
   send(JSON.stringify(payload))
 }
 
@@ -62,10 +64,11 @@ watch(status, (newStatus) => {
 
 // websocketdan, kelgan ma'lumotlarni kuzatish
 watch(data, (newData) => {
-  
+  if(!newData) return
   newData = JSON.parse(newData);
-  // console.log("ewasd", newData);
-
+  // console.log("user hand",newData);
+  const isPrivate = route.name == CHAT_ROUTE_NAMES.PRIVATE
+  const chat_id = isPrivate ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id
   if(newData.command == WEBCOCKET_EVENTS.USER_HANDSHAKE) {
     // console.log("user hand",newData);
   }
@@ -73,15 +76,16 @@ watch(data, (newData) => {
     // console.log("chat hand",newData);
   }
   else if(newData.type == WEBCOCKET_EVENTS.NEW_MESSAGE) {  
-    const isPrivate = newData.chat_type == CHAT_TYPES.PRIVATE
     const chatList = isPrivate ? chatStore.privateChatList : chatStore.groupChatList 
+    
     // if chat not found, add it
-    if(!chatList.some(item=> item.chat_id == newData.chat_id)){
+    if(!chatList.some(item=> item.chat_id == newData.chat_id) && newData.chat_type == (isPrivate ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP)){
           chatList.unshift({
           first_name: newData.sender?.first_name,
           full_name: newData.sender?.full_name,
           position: newData.sender?.position?.name,
           chat_id: newData.chat_id,
+          chat_uid: newData?.chat_uid,
           color: newData.sender?.color,
           avatar: newData.sender?.avatar,
           last_message: newData.text,
@@ -99,8 +103,8 @@ watch(data, (newData) => {
       );
 
       const isSrollStayDown = refChatArea.value.scrollHeight - refChatArea.value.clientHeight <= Math.floor(refChatArea.value.scrollTop) + 100;
-      // Yangi xabarni ro‘yxatga qo‘shish
-      if(route.params?.id == newData.chat_id){
+      // add a new message to messageList
+      if(chat_id == newData.chat_id){
           chatStore.messageListByChatId.push({
           attachments: { file: newData?.files[0] },
           chat_id: newData.chat_id,
@@ -117,6 +121,11 @@ watch(data, (newData) => {
           uploaded: true,
           reactions: [],
         });
+
+        // get chat files count, when current user send a file message
+        if(newData.message_type != MESSAGE_TYPES.TEXT) {
+          chatStore.actionGetChatFilesCount(chat_id)
+        }
       }
 
        // Oxirgi xabarni yangilash
@@ -151,14 +160,16 @@ watch(data, (newData) => {
   }
   else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_UPDATE) {
     let message = chatStore.messageListByChatId.find(item=> item.message_id == newData?.content?.message_id)
-    message.text = newData?.content?.text
-    message.edited = true
+    if(message) {
+      message.text = newData?.content?.text
+      message.edited = true
+    }
   }
   else if(newData.type == WEBCOCKET_EVENTS.NEW_GROUP_CHAT) {
     if(!chatStore.groupChatList.find(item=> item.chat_id == newData?.content?.chat_id)){
       chatStore.groupChatList.unshift({
         chat_id: newData?.content?.chat_id,
-        chat_id: newData?.content?.chat_id,
+        chat_uid: newData?.content?.uid,
         title: newData?.content?.title,
         image: newData?.content?.image,
         members: newData?.content?.members,
@@ -167,11 +178,16 @@ watch(data, (newData) => {
   }
   else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_REACTION) {
     const message = chatStore.messageListByChatId.find(item=> item.message_id == newData?.message_id)
+    if (!message) return
     if(newData?.action == "created") {
-      if (!message.reactions[newData.emoji]) {
-        message.reactions[newData.emoji] = [];
+      const reactions = { ...message.reactions }
+      if (!reactions[newData.emoji]) {
+        reactions[newData.emoji] = []
       }
-      message.reactions[newData.emoji]?.push(newData?.user)
+
+      reactions[newData.emoji].push(newData.user)
+
+      message.reactions = reactions
     }
     else if(newData?.action == "deleted"){
       message.reactions[newData.emoji] = message.reactions[newData?.emoji].filter(user=> user.id != newData?.user?.id)
@@ -232,14 +248,14 @@ watch(data, (newData) => {
 
   }
   else if(newData.type == WEBCOCKET_EVENTS.CHAT_DELETED) {
-    const isPrivate = newData?.content?.chat_type == CHAT_TYPES.PRIVATE ? true : false
+    const isPrivate = newData.content.chat_type == CHAT_TYPES.PRIVATE
     if(isPrivate) {
-      chatStore.privateChatList = chatStore.privateChatList.filter(item=> item.chat_id != newData?.content.chat_id)
-    } else{
-      chatStore.groupChatList = chatStore.groupChatList.filter(item=> item.chat_id != newData?.content.chat_id)
+      chatStore.privateChatList = chatStore.privateChatList.filter(item => item.chat_id != newData?.content.chat_id)
+    } else  {
+      chatStore.groupChatList = chatStore.groupChatList.filter(item => item.chat_id != newData?.content.chat_id)
     }
     // if current chat is active, then redirect to chat index
-    if(route.params?.id == newData?.content.chat_id){
+    if(chat_id == newData?.content.chat_id){
       router.push({ name: CHAT_ROUTE_NAMES.CHAT_INDEX, query : { tab: newData?.content.chat_type == CHAT_TYPES.GROUP ? 'group' : undefined } })
     }
   }
@@ -253,11 +269,10 @@ watch(data, (newData) => {
     }
   }
   // mew_message and new_chat_message are different events, but when mew_message comes, new_chat_message also comes
-  else if(newData.type == WEBCOCKET_EVENTS.NEW_CHAT_MESSAGE && route.params?.id != newData?.content?.chat_id) {
+  else if(newData.type == WEBCOCKET_EVENTS.NEW_CHAT_MESSAGE && chat_id != newData?.content?.chat_id) {
 
     if(newData.content.chat_type == CHAT_TYPES.PRIVATE){
       const privateChat = chatStore.privateChatList.find(item=> item.chat_id == newData?.content.chat_id)
-
       if(privateChat){
         privateChat.last_message = newData?.content?.text
         const isTheSameLastMessageId = privateChat.last_message_id == newData?.content?.message_id
@@ -265,7 +280,7 @@ watch(data, (newData) => {
         // to avoid showing unread message from sender
         if(newData?.content?.sender?.id != authStore?.currentUser?.id && !isTheSameLastMessageId){
           // play sound if sound is enabled
-          if(privateChat.sound){
+          if(!privateChat.on_mute){
             playNotificationSound()
           }
           // adding unread count
@@ -280,6 +295,7 @@ watch(data, (newData) => {
           first_name: newData?.content?.sender?.first_name,
           full_name: newData?.content?.sender?.full_name,
           chat_id: newData?.content?.chat_id,
+          chat_uid: newData?.content?.uid,
           color: newData?.content?.sender?.color,
           is_user_online: true,
           last_message: newData?.content?.text,
@@ -287,6 +303,8 @@ watch(data, (newData) => {
           type: newData?.content?.chat_type,
           unread_count: 1
         })
+        // fist time user send message, play sound
+        playNotificationSound()
       }
     }
     else if(newData.content.chat_type == CHAT_TYPES.GROUP){
@@ -300,7 +318,7 @@ watch(data, (newData) => {
         
         if(newData?.content?.sender?.id != authStore?.currentUser?.id && !isTheSameLastMessageId){ // play sound if sound is enabled
           // play sound if sound is enabled
-          if(groupChat.sound){
+          if(!groupChat.on_mute){
             playNotificationSound()
           }
           // adding unread count
@@ -315,25 +333,8 @@ watch(data, (newData) => {
     }
   }
 });
-const simulateInteraction = () => {
-  const events = [
-    () => document.dispatchEvent(new MouseEvent('mousemove', {
-      clientX: Math.random() * window.innerWidth,
-      clientY: Math.random() * window.innerHeight
-    })),
-    () => window.scrollBy(0, Math.random() * 100),
-    () => document.dispatchEvent(new KeyboardEvent('keydown', {
-      key: String.fromCharCode(Math.floor(Math.random() * 26) + 97)
-    }))
-  ];
-
-  setInterval(() => {
-    events[Math.floor(Math.random() * events.length)]();
-  }, 1000 + Math.random() * 2000);
-};
 
 onMounted(() => {
-  simulateInteraction();
   sendUserHandshake()
 })
 

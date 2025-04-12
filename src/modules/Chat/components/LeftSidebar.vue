@@ -14,10 +14,12 @@ import { AltArrowRightIcon, MagniferIcon, Plus20SolidIcon, UserRoundedBoldIcon, 
 // store
 import { useChatStore } from "@/modules/Chat/stores";
 // constatns
-import { CHAT_ROUTE_NAMES } from "../constatns";
+import { CHAT_ROUTE_NAMES, CHAT_TYPES } from "../constatns";
 // composables
 import { useInfiniteScroll } from "../composables/useInfiniteScroll";
 import { ContextMenu } from "./ChatArea";
+// services
+import { fetchCreateChatMuteStatus } from "../services";
 
 const { t } = useI18n();
 const chatStore = useChatStore();
@@ -41,34 +43,47 @@ const containerGroupRef = ref(null)
 useInfiniteScroll({ fetchFn: chatStore.actionGetPrivateChatList, containerRef: containerPersionalRef, params: { page: 1, page_size: 20}})
 useInfiniteScroll({ fetchFn: chatStore.actionGetGroupChatList, containerRef: containerGroupRef, params: { page: 1, page_size: 20, chat:route.params?.id}})
 
-const menuItems = ref([
+const menuItems = computed(() => [
     {
-        label: chatStore.contextMenu.chat?.sound ? t('turn-off-notification') : t('turn-on-notification'),
-        iconName: chatStore.contextMenu.chat?.sound ? VolumeMuteLineIcon : VolumeUpLineIcon,
-        rightIcon:  chatStore.contextMenu.chat?.sound ? AltArrowRightIcon: null,
-        command: () => {
-          console.log("click sound main")
-        },
-        items: chatStore.contextMenu.chat?.sound ? [
+        label: t('manage-notification'),
+        iconName: chatStore.contextMenu.chat?.on_mute ? VolumeMuteLineIcon : VolumeUpLineIcon,
+        rightIcon: AltArrowRightIcon,
+        items: [
             {
                 label: t('turn-on-notification'),
                 iconName: VolumeUpLineIcon,
-                active: chatStore.contextMenu.chat?.sound,
-                command: () => {
-                    console.log("click sound unmuted")
+                active: !chatStore.contextMenu.chat?.on_mute,
+                command: async () => {
+                  const response = await handleChatMuteStatus(false)
+                  if(response.status == 200){
+                      const isPrivateChat = chatStore.contextMenu.chat.type == CHAT_TYPES.PRIVATE;
+                      const chat = isPrivateChat ? chatStore.privateChatList.find(item => item.chat_id == chatStore.contextMenu.chat?.chat_id) : chatStore.groupChatList.find(item => item.chat_id == chatStore.contextMenu.chat?.chat_id)
+                      chat.on_mute = false
+                      chatStore.contextMenu = {}
+                  }
                 },
             },
             {
                 label: t('turn-off-notification'),
-                iconName:VolumeMuteLineIcon,
-                active: !chatStore.contextMenu.chat?.sound,
-                command: () => {
-                    console.log("click sound muted")
+                iconName: VolumeMuteLineIcon,
+                active: chatStore.contextMenu.chat?.on_mute,
+                command: async () => {
+                  const response = await handleChatMuteStatus(true)
+                  if(response.status == 200){
+                      const isPrivateChat = chatStore.contextMenu.chat.type == CHAT_TYPES.PRIVATE;
+                      const chat = isPrivateChat ? chatStore.privateChatList.find(item => item.chat_id == chatStore.contextMenu.chat?.chat_id) : chatStore.groupChatList.find(item => item.chat_id == chatStore.contextMenu.chat?.chat_id)
+                      chat.on_mute = true
+                      chatStore.contextMenu = {}
+                  }
                 }
             }
-        ] : []
+        ]
     },
 ]);
+
+async function handleChatMuteStatus(mute) {
+  return await fetchCreateChatMuteStatus(chatStore.contextMenu.chat?.chat_id, { on_mute: mute })
+}
 
 const tabPanelList = [
   {
@@ -87,7 +102,6 @@ const tabPanelList = [
 const onShowContextMenu = (event, chat) => {
   chatStore.contextMenu.chat = chat;
   refContextMenu.value.menu.show(event);
-
 }
 
 const onTabChange = async (val) => {
@@ -108,14 +122,14 @@ const onCreateChat = async (user) => {
   if(!chatStore.privateChatList.some(item => item.chat_id == data.chat_id)){
     chatStore.privateChatList.unshift(data)
   }
-  router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: data.chat_id }, query :{ tab: undefined} })
+  router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: data.chat_uid }, query: { tab: undefined} })
   searchInput.value = null;
 }
 
-// when searched privete chat is clicked, work
+// when searched privete chat is clicked, that works
 // addlist is ture, when user hasn't chat with this user 
 const onClickSearchedUserByMessage = (item, addlist=true) => {  
-    router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: item.chat_id }, query :{ tab: undefined} })
+    router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: item.chat_uid }, query: { tab: undefined} })
     // if user don't exist in the list then add it
     if(!chatStore.privateChatList.some(user => user.chat_id == item.chat_id) && addlist){
       chatStore.privateChatList.unshift(item)
@@ -127,7 +141,7 @@ const onClickSearchedUserByMessage = (item, addlist=true) => {
 }
 
 const onClickSearchedGroupByMessage = (item, addlist=true) => {  
-    router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: item.chat_id }, query :{ tab: "group"} })
+    router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: item.chat_uid }, query :{ tab: "group"} })
     // if user don't exist in the list then add it
     if(!chatStore.groupChatList.some(group => group.chat_id == item.chat_id) && addlist){
       chatStore.groupChatList.unshift(item)
@@ -140,8 +154,8 @@ const onClickSearchedGroupByMessage = (item, addlist=true) => {
 // when private chat list  is clicked, work
 const onClickChatPrivateUser = async (user) => {
   // if user is already selected then don't do anything, becouse no full data, just it is getting from  api id
-  if(route.params?.id != user.chat_id){
-    router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: user.chat_id }})
+  if(route.params?.id != user.chat_uid){
+    router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: user.chat_uid }})
     chatStore.selectedUser = user
     // if user don't exist in the list then add it
     if(!chatStore.privateChatList.some(user => user.chat_id == user.chat_id)){
@@ -154,8 +168,8 @@ const onClickChatPrivateUser = async (user) => {
 // when group chat list  is clicked, work
 const onClickChatGroup = (group) => {
   // if group is already selected then don't do anything, becouse no full data, just it is getting from  api id
-  if(route.params?.id != group.chat_id){    
-    router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: group.chat_id }, query :{ tab: 'group'} })
+  if(route.params?.id != group.chat_uid){    
+    router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: group.chat_uid }, query :{ tab: 'group'} })
     // if group don't exist in the list then add it
     if(!chatStore.groupChatList.some(item => item.chat_id == group.chat_id)){
       chatStore.groupChatList.unshift(group)
@@ -289,7 +303,7 @@ watch(createGroupDialogVisible, () => {
                     @contextmenu.prevent="onShowContextMenu($event, item)"
                     @click="onClickChatPrivateUser(item)"
                     :user="item" 
-                    :active="item?.chat_id == route.params?.id"
+                    :active="item?.chat_uid == route.params?.id"
                   />
                 </template>
               </template>
@@ -316,7 +330,7 @@ watch(createGroupDialogVisible, () => {
                     @contextmenu.prevent="onShowContextMenu($event, group)"
                     @click="onClickChatGroup(group)"
                     :group="group"
-                    :active="group?.chat_id == route.params?.id"
+                    :active="group?.chat_uid == route.params?.id"
                   />
                 </template>
               </template>

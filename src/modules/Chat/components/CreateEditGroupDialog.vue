@@ -13,6 +13,7 @@ import { ContextMenu } from './ChatArea';
 import DeleteDialog from './DeleteDialog.vue';
 // utils
 import { isObject } from '@/utils'
+import { dispatchNotify } from '@/utils/notify';
 // services
 import axiosConfig from '@/services/axios.config';
 import { fetchAddMemberToGroupChat, fetchCreateGroupChat, fetchDeleteMemberFromGroupChat, fetchEditGroupChat } from '../services';
@@ -22,6 +23,8 @@ import { useChatStore } from '../stores';
 import { useAuthStore } from '@/modules/Auth/stores';
 // constants
 import { CHAT_ROUTE_NAMES } from '../constatns';
+// enums
+import { COLOR_TYPES } from '@/enums';
 
 // props
 const props = defineProps({
@@ -74,16 +77,15 @@ const emit = defineEmits(['update:modelValue']);
 // methods
 const onSubmit = async () => {
   const isValid = await $v.value.$validate();
-
   if(!isValid) return;
   if(props.type === 'create') {
    try {
     isSubmitting.value = true;
     const { data } = await fetchCreateGroupChat({images:[{image: uploadingFiles.value[0]?.id}], title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
-    router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: data?.id }, query :{ tab: 'group'} })
+    router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: data?.uid }, query :{ tab: 'group'} })
     chatStore.actionGetGroupChatList();
    } catch (e) {
-    console.log(e);
+     console.log(e);
    } finally {
     isSubmitting.value = false;
    }
@@ -93,12 +95,14 @@ const onSubmit = async () => {
       const newMembers = formModal.users.map(user => user.id).filter(id => !memebers.value.some(member => member.id === id))
       const deleteMembers = memebers.value.filter(member => !formModal.users.some(user => user.id === member.id)).map(member => member.id)
       if(deleteMembers.length && chatStore.selectedGroup?.members.find(member => member.id == authStore.currentUser?.id)?.role == "owner") {
-        await fetchDeleteMemberFromGroupChat(chatStore.selectedGroup?.chat_id, { members: deleteMembers})
+        await fetchDeleteMemberFromGroupChat(chatStore.selectedGroup?.chat_uid, { members: deleteMembers})
+      } else if(deleteMembers.length) {
+        dispatchNotify(null, "У вас нет прав на удаление участников группы.",COLOR_TYPES.WARNING);
       }
       if(newMembers.length) {
-        await fetchAddMemberToGroupChat(chatStore.selectedGroup?.chat_id, { members: newMembers})
+        await fetchAddMemberToGroupChat(chatStore.selectedGroup?.chat_uid, { members: newMembers })
       }
-      const data  = await chatStore.actionEditGroupChatById(chatStore.selectedGroup?.chat_id, { images: uploadingFiles.value[0]?.id ? [{ image: uploadingFiles.value[0]?.id }]: undefined, title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
+      const data  = await chatStore.actionEditGroupChatById(chatStore.selectedGroup?.chat_uid, { images: uploadingFiles.value[0]?.id ? [{ image: uploadingFiles.value[0]?.id }]: undefined, title: formModal.group_name, members_id: formModal.users.map(user => user.id)});
       chatStore.selectedGroup = data;
       chatStore.actionGetGroupChatList();
     } catch(error) {

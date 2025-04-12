@@ -2,7 +2,7 @@
 // cores
 import { ChevronDown20SolidIcon, DownloadMinimalisticIcon, FileTextBoldIcon } from '@/components/Icons';
 import { useI18n } from 'vue-i18n';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 // components
 import Empty from '@/components/Empty.vue';
@@ -10,7 +10,7 @@ import Empty from '@/components/Empty.vue';
 import { formatDateMonthWithDay, formatDay } from '@/utils/formatDate';
 import FileItemDetail from './FileItemDetail.vue';
 //constants
-import { COMPONENT_TYPES, MESSAGE_TYPES } from '../constatns';
+import { CHAT_ROUTE_NAMES, COMPONENT_TYPES, MESSAGE_TYPES } from '../constatns';
 // stores
 import { useChatStore } from '../stores';
 // composables
@@ -28,8 +28,10 @@ const props = defineProps({
 const route = useRoute()
 // reactives
 const containerRef = ref(null)
+// computeds
+const isPrivateChat = computed(()=> route.name == CHAT_ROUTE_NAMES.PRIVATE)
 // composables
-useInfiniteScroll({ fetchFn: chatStore.actionGetMessageFileList, containerRef, params: { page: 1, page_size: 10, chat:route.params?.id, type: MESSAGE_TYPES.FILE }})
+useInfiniteScroll({ fetchFn: chatStore.actionGetMessageFileList, containerRef, params: { page: 1, page_size: 10, chat: isPrivateChat.value ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id, type: MESSAGE_TYPES.FILE }})
 
 const showDateByCalculate = (index) => {
   const previouMessageCreatedDate = chatStore.messageFileList[index - 1]?.created_date
@@ -59,7 +61,7 @@ const showDateByCalculate = (index) => {
    </div>
    <!-- data -->
     <div class="flex flex-col gap-1">
-      <template v-if="chatStore.messageFilesListLoading">
+      <template v-if="chatStore.messageFileListLoading && !chatStore.messageFileList?.length">
         <base-spinner />
       </template>
       <template v-else>

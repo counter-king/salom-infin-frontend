@@ -57,7 +57,11 @@ const props = defineProps({
           </template>
           {{ props.user?.last_message }}
         </div>
-        <div v-if="!!props.user?.unread_count" class="flex justify-center items-center bg-critic-500 w-5 h-5 rounded-3xl">
+        <div 
+          v-if="!!props.user?.unread_count" 
+          class="flex justify-center items-center bg-critic-500 w-5 h-5 rounded-3xl"
+          :class="{'bg-greyscale-400' : props.user?.on_mute }"
+        >
           <span class="text-xs font-semibold text-white">{{ props.user?.unread_count}}</span>
         </div>
         <base-iconify

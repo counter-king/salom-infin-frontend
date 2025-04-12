@@ -1,6 +1,6 @@
 <script setup>
 // cores
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { ChevronDown20SolidIcon, ClapperboardPlayBoldIcon, DownloadMinimalisticIcon, FileTextBoldIcon } from '@/components/Icons';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
@@ -8,7 +8,7 @@ import { useI18n } from 'vue-i18n';
 import FileItemDetail from './FileItemDetail.vue';
 import EmptyData from '@/components/Empty.vue';
 // constants
-import { COMPONENT_TYPES, MESSAGE_TYPES } from '../constatns';
+import { CHAT_ROUTE_NAMES, COMPONENT_TYPES, MESSAGE_TYPES } from '../constatns';
 // utils
 import { formatDateMonthWithDay, formatDay } from '@/utils/formatDate';
 // stores
@@ -29,8 +29,10 @@ const route = useRoute()
 
 // reactives
 const containerRef = ref(null)
+// computeds
+const isPrivateChat = computed(()=> route.name == CHAT_ROUTE_NAMES.PRIVATE)
 // composables
-useInfiniteScroll({ fetchFn: chatStore.actionGetMessageVideoFileList, containerRef, params: { page: 1, page_size: 3, chat:route.params?.id, type: MESSAGE_TYPES.VIDEO }})
+useInfiniteScroll({ fetchFn: chatStore.actionGetMessageVideoFileList, containerRef, params: { page: 1, page_size: 3, chat: isPrivateChat.value ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id, type: MESSAGE_TYPES.VIDEO }})
 
 const showDateByCalculate = (index) => {
   const previouMessageCreatedDate = chatStore.messageVideoFileList[index - 1]?.created_date
@@ -60,8 +62,8 @@ const showDateByCalculate = (index) => {
    </div>
    <!-- data -->
     <div class="flex flex-col gap-1">
-      <template v-if="chatStore.messageFilesListLoading">
-        <base-spinner />
+      <template v-if="chatStore.messageVideoFileListLoading && !chatStore.messageVideoFileList?.length">
+        <base-spinner class="mt-5"  />
       </template>
       <template v-else>
         <EmptyData 

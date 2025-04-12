@@ -1,6 +1,7 @@
 <script setup>
 // cores
-import { ChevronDown20SolidIcon, DownloadMinimalisticIcon, FileTextBoldIcon, GalleryBoldIcon } from '@/components/Icons';
+import { computed, ref } from 'vue';
+import { ChevronDown20SolidIcon, DownloadMinimalisticIcon, GalleryBoldIcon } from '@/components/Icons';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 // components
@@ -9,10 +10,9 @@ import Empty from '@/components/Empty.vue';
 // utils
 import { formatDateMonthWithDay, formatDay } from '@/utils/formatDate';
 // contants
-import { COMPONENT_TYPES, MESSAGE_TYPES } from '../constatns';
+import { CHAT_ROUTE_NAMES, COMPONENT_TYPES, MESSAGE_TYPES } from '../constatns';
 // stores
 import { useChatStore } from '../stores';
-import { ref } from 'vue';
 // composables
 import { useInfiniteScroll } from '../composables/useInfiniteScroll';
 
@@ -29,8 +29,10 @@ const chatStore = useChatStore();
 const route = useRoute()
 // reactives
 const containerRef = ref(null)
+// computeds
+const isPrivateChat = computed(()=> route.name == CHAT_ROUTE_NAMES.PRIVATE)
 // composables
-useInfiniteScroll({ fetchFn: chatStore.actionGetMessageImageFileList, containerRef, params: { page: 1, page_size: 10, chat:route.params?.id, type: MESSAGE_TYPES.IMAGE }})
+useInfiniteScroll({ fetchFn: chatStore.actionGetMessageImageFileList, containerRef, params: { page: 1, page_size: 10, chat: isPrivateChat.value ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id, type: MESSAGE_TYPES.IMAGE }})
 
 const showDateByCalculate = (index) => {
   const previouMessageCreatedDate = chatStore.messageImageFileList[index - 1]?.created_date
@@ -60,8 +62,8 @@ const showDateByCalculate = (index) => {
    </div>
     <!-- data -->
     <div class="flex flex-col gap-1">
-      <template v-if="chatStore.messageFilesListLoading">
-        <base-spinner />
+      <template v-if="chatStore.messageImageFileListLoading && !chatStore.messageImageFileList?.length">
+        <base-spinner class="mt-5"  />
       </template>
       <template v-else>
         <Empty 

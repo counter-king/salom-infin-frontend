@@ -30,10 +30,9 @@ const components = {
   [COMPONENT_TYPES.IMAGES]: FileTypeImage,
   [COMPONENT_TYPES.GROUP_USERS]: GroupUserList,
 }
+
 // reactives
 const componentType = ref(COMPONENT_TYPES.FILES);
-const countLink = ref(0)
-const allFileCount = computed(() => chatStore.allFiles.reduce((sum, count) => sum +count, 0))
 // computed
 const activeComponent = computed(() => {
   return components[componentType.value]
@@ -49,6 +48,7 @@ const activeFileMenu = computed(() => {
 });
 
 const isGroupDetail = computed(() => route.name == CHAT_ROUTE_NAMES.GROUP)
+const allFilesCount = computed(() => (chatStore.chatFilesCount.file || 0) + (chatStore.chatFilesCount.image || 0) + (chatStore.chatFilesCount.video || 0))
 // methods
 const handleClickGroupUsers = () => {
   if(componentType.value === COMPONENT_TYPES.GROUP_USERS){
@@ -62,38 +62,37 @@ const handleClickWrapper = () => {
   inputSendMessasgeRef.value.$el.focus()
 }
 
-// showing count of uploading files 
-watch(() => chatStore.uploadingFiles, async () => {
-  // when route change other than private or group, don't work only work on private or group
-  if(route.name == CHAT_ROUTE_NAMES.PRIVATE || route.name == CHAT_ROUTE_NAMES.GROUP){
-    const results = await Promise.all([
-      chatStore.actionGetMessageFileList({ chat:route.params?.id, type: MESSAGE_TYPES.FILE, page:1, page_size: 1}),
-      chatStore.actionGetMessageVideoFileList({ chat:route.params?.id, type: MESSAGE_TYPES.VIDEO, page:1, page_size: 1 }),
-      chatStore.actionGetMessageImageFileList({ chat:route.params?.id, type: MESSAGE_TYPES.IMAGE, page:1, page_size: 1 }),
-      chatStore.actionGetMessageAudioFileList({ chat:route.params?.id, type: MESSAGE_TYPES.AUDIO, page:1, page_size: 1 })
-    ])
-    chatStore.allFiles = results.map(item => item.data.count)   
+watch(() => chatStore.selectedUser, (value) => {
+  if(value){
+    // rest rightside bar
+    componentType.value = COMPONENT_TYPES.FILES
+    chatStore.actionGetChatFilesCount(value?.chat_id)
   }
-})
+}, { immediate: true })
 
-watch([() => route.params?.id], async () => {
-  // when route change other than private or group, don't work only work on private or group
-  if(route.name == CHAT_ROUTE_NAMES.PRIVATE || route.name == CHAT_ROUTE_NAMES.GROUP){
-    const response = await chatStore.actionGetMessageLinkList({ chat:route.params?.id})
-    countLink.value = response?.data?.count || 0
-    chatStore.messageFilesListLoading = true
-    const results = await Promise.all([
-      // chatStore.actionGetMessageFileList({ chat:route.params?.id, type: MESSAGE_TYPES.FILE, page:1, page_size: 1}),
-      // chatStore.actionGetMessageVideoFileList({ chat:route.params?.id, type: MESSAGE_TYPES.VIDEO, page:1, page_size: 1 }),
-      // chatStore.actionGetMessageImageFileList({ chat:route.params?.id, type: MESSAGE_TYPES.IMAGE, page:1, page_size: 1 }),
-      // chatStore.actionGetMessageAudioFileList({ chat:route.params?.id, type: MESSAGE_TYPES.AUDIO, page:1, page_size: 1 })
-    ]).finally(()=>{
-      chatStore.messageFilesListLoading = false
-  })
-
-    chatStore.allFiles = results.map(item => item?.data?.count)   
+watch(() => chatStore.selectedGroup, (value) => {
+  if(value){
+    // rest rightside bar
+    componentType.value = COMPONENT_TYPES.FILES
+    chatStore.actionGetChatFilesCount(value?.chat_id)
   }
-},{ immediate: true })
+}, { immediate: true })
+
+// when any file count change, then if there is a open, file type, then get that file list
+watch(()=> chatStore.chatFilesCount, (value, oldValue) => {
+  if(!value || !oldValue) return;
+  const isPrivateChat = route.name == CHAT_ROUTE_NAMES.PRIVATE;
+  const chatId = isPrivateChat ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id
+  if(value?.file != oldValue.file ){
+    chatStore.actionGetMessageFileList({ chat: chatId, type: MESSAGE_TYPES.FILE})
+  } else if(value?.image != oldValue.image) {
+    chatStore.actionGetMessageImageFileList({ chat: chatId,  type: MESSAGE_TYPES.IMAGE})
+  } else if(value?.video != oldValue.video) {
+    chatStore.actionGetMessageVideoFileList({ chat: chatId, type: MESSAGE_TYPES.VIDEO})
+  } else if(value?.link != oldValue.link) {
+    chatStore.actionGetMessageLinkList({ chat: chatId, type: MESSAGE_TYPES.LINK})
+  }
+}, { deep: true, immediate: true })
 
 </script>
 <template>
@@ -123,7 +122,7 @@ watch([() => route.params?.id], async () => {
               label-classes="text-2xl font-semibold select-none text-greyscale-900"
             />
             <h2 class="mt-1 text-base font-semibold select-none text-greyscale-900">{{ isGroupDetail ? chatStore.selectedGroup?.title : chatStore.selectedUser?.full_name}}</h2>
-            <p class="text-sm font-medium select-none text-greyscale-500">{{ isGroupDetail ? t('members', { count: chatStore.selectedGroup?.members?.length}) : chatStore.selectedUser?.position}}</p>
+            <p class="text-sm font-medium select-none text-greyscale-500 min-h-[20px]">{{ isGroupDetail ? t('members', { count: chatStore.selectedGroup?.members?.length}) : chatStore.selectedUser?.position}}</p>
           </div>
           <!-- users  -->
           <div 
@@ -177,7 +176,7 @@ watch([() => route.params?.id], async () => {
                 </span>
               </div>
               <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-semibold text-greyscale-900">{{ allFileCount }}</h2>
+                <h2 class="text-2xl font-semibold text-greyscale-900">{{ allFilesCount || 0 }}</h2>
                 <div v-if="activeFileMenu" class="absolute right-3 border-[6px] border-white bg-primary-500 w-4 h-4 rounded-full shadow-md"></div>
               </div>
             </div>
@@ -200,7 +199,7 @@ watch([() => route.params?.id], async () => {
                 </span>
               </div>
               <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-semibold text-greyscale-900">{{ countLink || 0 }}</h2>
+                <h2 class="text-2xl font-semibold text-greyscale-900">{{ chatStore.chatFilesCount?.link || 0 }}</h2>
                 <div v-if="!activeFileMenu" class="absolute right-3 border-[6px] border-white bg-primary-500 w-4 h-4 rounded-full shadow-md"></div>
               </div>
             </div>

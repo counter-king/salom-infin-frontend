@@ -1,6 +1,6 @@
 <script setup>
 // cores
-import { inject, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, inject, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import { useDebounceFn } from '@vueuse/core';
@@ -35,30 +35,29 @@ const isCtrlAllPressed = ref(false);
 const InputSendMessageWrapperRef = ref(null);
 const rows = ref(1);
 
+const isPrivateChat = computed(()=> route.name == CHAT_ROUTE_NAMES.PRIVATE)
 // checking there are http or https regex
 const urlRegex = /(^|\s)(https?:\/\/[^\s]+)/g;
-
 // methods
 const sendNewMessageEvent = (data)=> {
-    const payload = { command: 'new_message', chat_type: route.name == CHAT_ROUTE_NAMES.PRIVATE ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: route.params.id, text: data?.text, message_type: data.message_type } 
-    send(JSON.stringify(payload))  
+  const payload = { command: 'new_message', chat_type: isPrivateChat.value ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: isPrivateChat.value ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id, text: data?.text, message_type: data.message_type } 
+  send(JSON.stringify(payload))  
 }
 
 const sendReplayNewMessageEvent = (data)=> {
-  const payload = { command: 'new_message', chat_type: route.name == CHAT_ROUTE_NAMES.PRIVATE ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: route.params.id, text: data?.text, message_type: data.message_type, replied_to_id: chatStore.contextMenu?.message?.message_id } 
+  const payload = { command: 'new_message', chat_type: isPrivateChat.value ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: isPrivateChat.value ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id, text: data?.text, message_type: data.message_type, replied_to_id: chatStore.contextMenu?.message?.message_id } 
   send(JSON.stringify(payload))  
 }
 
 const sendMessageIsTyping = useDebounceFn(()=>{
-  const payload = { command: 'typing', chat_type: route.name == CHAT_ROUTE_NAMES.PRIVATE ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: route.params.id } 
+  const payload = { command: 'typing', chat_type: isPrivateChat.value ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: isPrivateChat.value ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id } 
   send(JSON.stringify(payload))  
 }, 100);
 
 const sendChatHandshake = ()=> {
-  const payload = { command: 'chat_handshake',  chat_type: route.name == CHAT_ROUTE_NAMES.PRIVATE ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: route.params.id }
+  const payload = { command: 'chat_handshake',  chat_type: isPrivateChat.value ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: isPrivateChat.value ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id }
   send(JSON.stringify(payload))
 }
-
 
 const resetInputProperties = (event) => {
   message.value = '';
@@ -82,6 +81,8 @@ const handleSendMessage = (event) => {
       resetInputProperties()
     }
     else if(!!message.value.trim()){
+        // every change, urlRegex last index reset, to avoid unexpected checking result
+        urlRegex.lastIndex = 0;
         // replay message
         if(chatStore.contextMenu?.replay) {
           if(urlRegex.test(message.value)){
@@ -111,6 +112,7 @@ const handleSendMessage = (event) => {
         chatStore.contextMenu = {}
     }
  } 
+
  // when ctrl + all is pressed, that works
  else if (event.ctrlKey && (event.key === 'A' || event.key === 'a')){
   isCtrlAllPressed.value = true
@@ -127,6 +129,8 @@ const handleSendMessage = (event) => {
 
 const handleMessageByIcon = () => {
  if(!!message.value.trim()){
+        // every change, urlRegex last index reset, to avoid unexpected checking result
+        urlRegex.lastIndex = 0;
         // replay message
         if(chatStore.contextMenu?.replay) {
           if(urlRegex.test(message.value)){

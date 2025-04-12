@@ -29,7 +29,7 @@ const props = defineProps({
      />
    </div>
    <!-- data -->
-    <template v-if="chatStore.messageFilesListLoading">
+    <template v-if="chatStore.chatFilesCountLoading && !Object.keys(chatStore.chatFilesCount).length">
       <base-spinner />
     </template>
     <template v-else>
@@ -38,7 +38,7 @@ const props = defineProps({
          @click="()=>props.onClickFun(COMPONENT_TYPES.DOCUMENTS)"
          :info="{
           title: 'documents',
-          count: chatStore.allFiles[0],
+          count: chatStore.chatFilesCount.file || 0,
       }"
       :left-icon="{ name: FileTextBoldIcon, class: 'text-warning-500' }"
       :right-icon="{ name: ChevronUp20SolidIcon, class: 'text-greyscale-500 transform rotate-90' }"
@@ -47,7 +47,7 @@ const props = defineProps({
       @click="()=>props.onClickFun(COMPONENT_TYPES.VIDEOS)"
       :info="{
         title: 'video',
-        count: chatStore.allFiles[1],
+        count: chatStore.chatFilesCount.video || 0,
       }"
       :left-icon="{ name: ClapperboardPlayBoldIcon, class: 'text-success-500' }"
       :right-icon="{ name: ChevronUp20SolidIcon, class: 'text-greyscale-500 transform rotate-90' }"
@@ -56,7 +56,7 @@ const props = defineProps({
       @click="()=>props.onClickFun(COMPONENT_TYPES.IMAGES)"
       :info="{
         title: 'images',
-        count: chatStore.allFiles[2],
+        count: chatStore.chatFilesCount.image || 0,
       }"
       :left-icon="{ name: GalleryBoldIcon, class: 'text-critic-500' }"
       :right-icon="{ name: ChevronUp20SolidIcon, class: 'text-greyscale-500 transform rotate-90' }"

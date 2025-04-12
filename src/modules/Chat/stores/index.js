@@ -7,6 +7,7 @@ import {
   fetchDeleteMessageById,
   fetchEditGroupChat,
   fetchEditMessageById,
+  fetchGetChatFilesCount,
   fetchGetGroupChatById,
   fetchGetGroupChatList,
   fetchGetMessagesByChatId,
@@ -54,6 +55,7 @@ export const useChatStore = defineStore("chat-stores", {
     messageAudioFileListMoreLoading: false,
     messageLinkListMoreLoading: false,
     messageFilesListLoading: false,
+    chatFilesCountLoading: false,
     allFiles: [],
     selectedUser: null,
     selectedGroup: null,
@@ -68,6 +70,7 @@ export const useChatStore = defineStore("chat-stores", {
     userSearchList: [],
     groupChatList: [],
     messageLinkList: [],
+    chatFilesCount: {},
     typingUsers: {},
     contextMenu: {
       tempMessage: null,
@@ -101,6 +104,7 @@ export const useChatStore = defineStore("chat-stores", {
               first_name: item.chat_title,
               full_name: item.chat_title,
               chat_id: item.id,
+              chat_uid: item.uid,
               position: item?.position?.name,
               color: item.color,
               avatar: item.avatar,
@@ -165,6 +169,7 @@ export const useChatStore = defineStore("chat-stores", {
             full_name: item?.chat_title,
             position: item?.position?.name,
             chat_id: item.chat_id,
+            chat_uid: item?.chat_uid,
             color: item?.color,
             avatar: item?.avatar,
             last_message: item.message_text,
@@ -208,6 +213,7 @@ export const useChatStore = defineStore("chat-stores", {
           full_name: item?.title,
           position: item?.position?.name,
           chat_id: item.id,
+          chat_uid: item.uid,
           color: item.color,
           avatar: item.avatar,
           is_user_online: item.is_user_online,
@@ -217,7 +223,7 @@ export const useChatStore = defineStore("chat-stores", {
           last_message_id: item.last_message?.id,
           type: item.type,
           unread_count: item.unread_count,
-          sound: item?.sound || true
+          on_mute: item?.on_mute,
         }));
 
         if(resetList){
@@ -243,6 +249,7 @@ export const useChatStore = defineStore("chat-stores", {
         full_name: data?.title,
         position: data.members?.find((item) => item.user?.id == body.member_id)?.user?.position?.name,
         chat_id: data.id,
+        chat_uid: data.uid,
         is_user_online: data.is_user_online,
         color: data.members?.find((item) => item.user?.id == body.member_id)?.user?.color,
         avatar: data.members?.find((item) => item.user?.id == body.member_id)?.user?.avatar,
@@ -251,7 +258,8 @@ export const useChatStore = defineStore("chat-stores", {
         last_message_type: data?.last_message?.type,
         last_message_id: data?.last_message?.id,
         type: data.type,
-        unread_count: data.unread_count
+        unread_count: data.unread_count,
+        on_mute: data?.on_mute,
       }
     },
     /** */
@@ -264,6 +272,7 @@ export const useChatStore = defineStore("chat-stores", {
           full_name: data?.title,
           position: data.members?.find((item) => item.user?.id !== authStore.currentUser.id)?.user?.position?.name,
           chat_id: data.id,
+          chat_uid: data.uid,
           color: data.members?.find((item) => item.user?.id !== authStore.currentUser.id)?.user?.color,
           avatar: data.members?.find((item) => item.user?.id !== authStore.currentUser.id)?.user?.avatar,
           members: data.members,
@@ -274,7 +283,8 @@ export const useChatStore = defineStore("chat-stores", {
           last_message_type: data?.last_message?.type,
           last_message_id: data?.last_message?.id,
           type: data.type,
-          unread_count: data.unread_count
+          unread_count: data.unread_count,
+          on_mute: data?.on_mute,
         }
       } catch(e){
         if(error) throw e
@@ -307,12 +317,14 @@ export const useChatStore = defineStore("chat-stores", {
             title: item.title,
             image: item.image,
             chat_id: item.id,
+            chat_uid: item.uid,
             members: item?.members || [],
             last_message_time: item.last_message?.created_date,
             last_message_type: item.last_message?.type,
             last_message_id: item.last_message?.id,
             type: item.type,
-            unread_count: item.unread_count
+            unread_count: item.unread_count,
+            on_mute: item?.on_mute,
           })
         })
       )
@@ -345,14 +357,16 @@ export const useChatStore = defineStore("chat-stores", {
           title: data?.title,
           image: data?.images[0]?.image,
           chat_id: data.id,
+          chat_uid: data.uid,
           members: data?.members.map((item)=>({
             first_name: item?.user?.first_name,
             full_name: item?.user?.full_name,
             position: item?.user?.position?.name,
             status: item?.user?.status,
             id: item?.user?.id,
-            private_chat_id: item?.private_chat_id,
+            private_chat_uid: item?.private_chat_uid,
             chat_id: item?.chat,
+            chat_uid: item.chat_uid,
             color: item?.user?.color,
             avatar: item?.user?.avatar,
             role: item?.role
@@ -383,6 +397,7 @@ export const useChatStore = defineStore("chat-stores", {
           title: data?.title,
           image: data?.images[0]?.image,
           chat_id: data.id,
+          chat_uid:data.uid,
           members: data?.members.map((item)=>({
             first_name: item?.user?.first_name,
             full_name: item?.user?.full_name,
@@ -400,7 +415,8 @@ export const useChatStore = defineStore("chat-stores", {
           last_message_type: data?.last_message?.type,
           last_message_id: data?.last_message?.id,
           type: data.type,
-          unread_count: data.unread_count
+          unread_count: data.unread_count,
+          on_mute: data?.on_mute,
         }
       } catch (err) {
         console.log(err)
@@ -622,6 +638,19 @@ export const useChatStore = defineStore("chat-stores", {
       } finally {
         this.messageAudioFileListLoading = false;
         this.messageAudioFileListMoreLoading = false;
+      }
+    },
+    /** */
+    async actionGetChatFilesCount(chatId) {
+      this.chatFilesCountLoading = true;
+      try {
+        const response = await fetchGetChatFilesCount(chatId);
+        this.chatFilesCount = response?.data
+        return response;
+      } catch (e) {
+        console.log(e)
+      } finally {
+        this.chatFilesCountLoading = false;
       }
     },
   }

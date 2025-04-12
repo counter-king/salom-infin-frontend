@@ -29,8 +29,10 @@ function markMessageAsRead(messageId) {
 }
 
 function sendMessageIdEvent(messageId) {
-    const payload = { command: 'message_read', chat_id: route.params?.id, chat_type: route.name == CHAT_ROUTE_NAMES.PRIVATE ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, message_id: messageId }
-    send(JSON.stringify(payload))
+  const isPrivateChat = route.name == CHAT_ROUTE_NAMES.PRIVATE
+  const chat_id = isPrivateChat ? chatStore.selectedUser.chat_id : chatStore.selectedGroup.chat_id 
+  const payload = { command: 'message_read', chat_id, chat_type: isPrivateChat ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, message_id: messageId }
+  send(JSON.stringify(payload))
 }
 
 // Disconnect observer to prevent memory leaks

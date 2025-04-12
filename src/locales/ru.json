@@ -795,6 +795,7 @@
   "emp-name": "Имя сотрудника",
   "turn-off-notification": "Выключить уведомления",
   "turn-on-notification": "Включить уведомления",
+  "manage-notification": "Управлять уведомлениями",
   "auth-session-end-title": "Сессия завершена — необходима повторная авторизация",
   "auth-session-end-description": "Чтобы продолжить работу, пожалуйста, войдите в систему снова."
 }

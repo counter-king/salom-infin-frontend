@@ -88,9 +88,11 @@ onMounted(async() => {
   >
   <base-avatar 
     :image="props.message?.sender?.avatar?.url || chatStore.selectedUser?.avatar?.url"
-    :label="props.message?.sender?.first_name"
+    :label="props.message?.sender?.full_name"
     :color="props.message?.sender?.color"
     avatar-classes="w-8 h-8"
+    :meta="props.message?.sender"
+    detail-dialog
     :class="{'!visible': props.avatarVisible, '!invisible': !props.avatarVisible}"
    />
    <div class="flex flex-col gap-2">
@@ -108,6 +110,7 @@ onMounted(async() => {
             <span class="text-xs font-semibold text-warning-500 truncate">{{ props.message.replied_to?.sender?.first_name }} {{ props.message.replied_to?.sender?.last_name }}</span>
             <span class="text-xs font-medium text-greyscale-500 truncate">{{ props.message.replied_to?.text }} </span>
         </div>
+        <p v-if="props.avatarVisible" class="text-sm font-bold text-blue-900" >{{ props.message.sender.first_name }} {{ props.message.sender.last_name }}</p>
         <!-- image -->
         <div
           @click="props.handleClickImage(props.message)"

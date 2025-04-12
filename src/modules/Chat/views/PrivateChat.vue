@@ -65,7 +65,9 @@ const refChatArea = inject("refChatArea");
 // methods
 // websocket event
 const sendChatHandshake = ()=> {
-  const payload = { command: 'chat_handshake', chat_type: route.name == CHAT_ROUTE_NAMES.PRIVATE ?  CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: route.params?.id }
+  const isPrivateChat = route.name == CHAT_ROUTE_NAMES.PRIVATE
+  const chat_id = isPrivateChat ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id 
+  const payload = { command: 'chat_handshake', chat_type: isPrivateChat ?  CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id }
   send(JSON.stringify(payload))
 }
 // when scroll down, scrollDwonButton will be visible
@@ -126,6 +128,8 @@ const onShowEmojiContextMenu = (event, userReactionList) => {
 const onHandleDeleteMessage = async() => {
   await chatStore.actionDeleteMessageById(chatStore.contextMenu?.message?.message_id)
   chatStore.messageListByChatId = chatStore.messageListByChatId.filter(item=> item?.message_id != chatStore.contextMenu?.message?.message_id)
+  // to clear context menu after delete message
+  chatStore.contextMenu = {}
 }
 
 const onClickChatArea = () => {
@@ -181,6 +185,8 @@ const getMessageComponent = (message) => {
 };
 
 const getMessageComponentProps = (message, index) => {
+  const isCurrentUser = (message) => message.sender?.id  == authStore.currentUser?.id;
+
   const baseProps = {
     'data-message-id': message?.message_id,
     'data-message-is-read': message?.is_read,
@@ -193,14 +199,14 @@ const getMessageComponentProps = (message, index) => {
   };
 
   const additionalProps = ()=>{
-    if(isCurrentUser(message) && (message.message_type === MESSAGE_TYPES.TEXT || message.message_type === MESSAGE_TYPES.LINK)){
+    if(isCurrentUser(message) && (message?.message_type === MESSAGE_TYPES.TEXT || message?.message_type === MESSAGE_TYPES.LINK)){
       return {
         messageInnerClass: {
           '!rounded-br-[4px]': showFriendTextAvatar(index),
           '!rounded-tr-[4px]': !showFriendTextAvatar(index)
         }
       }
-    } else if(!isCurrentUser(message)) {
+    } else {
       return {
         avatarVisible: showFriendTextAvatar(index),
         classNames: { 'mt-5': showFriendTextAvatar(index) }
@@ -212,12 +218,12 @@ const getMessageComponentProps = (message, index) => {
     additionalProps.handleClickImage = handleClickImage;
   }
 
-  return { ...baseProps, ...additionalProps };
+  return { ...baseProps, ...additionalProps(message) };
 };
 
 
 const getMessageList = useDebounceFn(async()=>{
-  const response = await chatStore.actionGetMessageListByChatId({ chat:route.params?.id, page:1, page_size: 20}, true);
+  const response = await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id, page:1, page_size: 20 }, true);
       hasNext.value = response?.count > page.value * pageSize.value
       page.value += 1
       // make scroll down after loading new data
@@ -247,7 +253,7 @@ onMounted(async () => {
     chatStore.selectedUser = await chatStore.actionGetPrivateChatById(route.params?.id, true);
     // if there is chat_id, then send chat handshake, otherwise don't
     sendChatHandshake()
-    const response = await chatStore.actionGetMessageListByChatId({ chat:route.params?.id, page:1, page_size: 20 }, true);
+    const response = await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id, page:1, page_size: 20 }, true);
     hasNext.value = response?.count > page.value * pageSize.value
     page.value += 1
     // if selected user don't exist in the list then add it

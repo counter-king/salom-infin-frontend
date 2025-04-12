@@ -27,7 +27,9 @@ const { send } = socket()
 const refContextMenu = ref(null);
 
 const sendReactionEvent = (type) => {
-  const payload = { command: "message_reaction", chat_id: route.params.id, chat_type: route.name == CHAT_ROUTE_NAMES.PRIVATE ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, message_id: chatStore.contextMenu?.tempMessage?.message_id, emoji: type }
+  const isPrivateChat = route.name == CHAT_ROUTE_NAMES.PRIVATE
+  const chat_id = isPrivateChat ? chatStore.selectedUser.chat_id : chatStore.selectedGroup.chat_id 
+  const payload = { command: "message_reaction", chat_id, chat_type: isPrivateChat ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, message_id: chatStore.contextMenu?.tempMessage?.message_id, emoji: type }
   send(JSON.stringify(payload))
 }
 
