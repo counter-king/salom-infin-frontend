@@ -114,7 +114,8 @@ const validateAndSendNotice = async () => {
         company: authStore.currentUser?.company?.id,
         regions: group.__regions.map(r => r.id),
         tags: group.__tags.map(t => ({ id: t.id })),
-        group_id
+        group_id,
+        ...(user.business_trip_id ? { id: user.business_trip_id } : {})
       }))
     )
   })
@@ -155,6 +156,7 @@ const validateAndSendNotice = async () => {
   } else if (props.formType === FORM_TYPE_CREATE) {
     try {
       const { data } = await store.actionCreateDocument(store.model)
+
       const model = {
         approvers: [],
         signers: [],
@@ -178,6 +180,8 @@ const validateAndSendNotice = async () => {
             notice_id: data.id
           }
         })
+
+        await store.actionGetDocumentDetailForUpdate(data.id)
       } catch (err){}
     } catch (err) {}
   } else if (props.formType === FORM_TYPE_UPDATE && route.params.id) {

@@ -322,8 +322,16 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
         this.model.__groups = await Promise.all(
           array.map(async (group) => {
             const __users = await Promise.all(
-              group.items.map((childItem) => adjustUserObjectToArray([], childItem.user.id, false))
+              group.items.map(async (childItem) => {
+                const user = await adjustUserObjectToArray([], childItem.user.id, false)
+                return {
+                  ...user,
+                  business_trip_id : childItem.id
+                }
+              })
             )
+
+            console.log(__users)
             const __tags = await adjustTagObjectToArray(group.items[0].tags)
             const __regions = await adjustObjectToArray('regions', group.items[0].locations)
             const __start_date = group.items[0].start_date
