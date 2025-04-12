@@ -72,7 +72,7 @@ const sendChatHandshake = ()=> {
 }
 // when scroll down, scrollDwonButton will be visible
 const handleScroll = (event) => {
-  if(event && event.target && event.target.scrollHeight - event.target.clientHeight >  Math.floor(event.target.scrollTop + 100)  ) {
+  if(event && event.target && event.target?.scrollHeight - event.target?.clientHeight >  Math.floor(event.target.scrollTop + 100)  ) {
     showScrollDownButton.value = true
   } else {
     showScrollDownButton.value = false
@@ -91,13 +91,13 @@ const handleScrollUp = () => {
 
 const handleScrollDown = () => {
   refChatArea.value?.scrollTo({
-    top: refChatArea.value.scrollHeight,
+    top: refChatArea.value?.scrollHeight,
     // behavior: 'smooth'
   });
 }
 const handleScrollDownSmooth = () => {
   refChatArea.value?.scrollTo({
-    top: refChatArea.value.scrollHeight,
+    top: refChatArea.value?.scrollHeight,
     behavior: 'smooth'
   });
 }
@@ -279,7 +279,7 @@ onMounted(() => {
   if(!!refSendMessage.value?.InputSendMessageRows) {    
     watch([()=> refSendMessage.value?.InputSendMessageRows, () => chatStore.contextMenu], async() => {
       await nextTick(); 
-      inputSendMessageHeight.value = refSendMessage.value.InputSendMessageWrapperRef.scrollHeight
+      inputSendMessageHeight.value = refSendMessage.value.InputSendMessageWrapperRef?.scrollHeight
     }, { immediate: true })
   }
   

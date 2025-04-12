@@ -154,15 +154,49 @@ watch(data, (newData) => {
       // if user not current, but if scroll stand at bottom, then make scroll push untill bottom
       else if(isSrollStayDown){ setTimeout(handleScrollDownSmooth, 1)}
   }
-  else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_DELETED) {    
+  else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_DELETED) {  
     chatStore.messageListByChatId = chatStore.messageListByChatId.filter(item=> item.message_id != newData?.content?.message_id)
     chatStore.contextMenu.deleteDialog = false
+
+    const chatList = newData?.content?.chat_type == CHAT_TYPES.PRIVATE ? chatStore.privateChatList : chatStore.groupChatList
+    const chat = chatList.find(item=> item.chat_id == newData?.content?.chat_id)
+    if(chat) {
+      // decrement unread count of chat
+      if(chat?.unread_count > 0) {
+        chat.unread_count -= 1
+      }
+      // update last message of chat
+      if(chat && newData?.content?.chat_type == CHAT_TYPES.PRIVATE) {
+          if(newData?.content?.message_id == chat.last_message_id){
+            chat.last_message = newData?.content?.text
+          }
+      }
+      else if(chat && newData?.content?.chat_type == CHAT_TYPES.GROUP) {
+        if(newData?.content?.message_id == chat.last_message_id){
+            chat.last_message.text = newData?.content?.text
+        }
+      }
+    }
   }
   else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_UPDATE) {
+    // if a message is related to current messageListByChatId, update it 
     let message = chatStore.messageListByChatId.find(item=> item.message_id == newData?.content?.message_id)
     if(message) {
       message.text = newData?.content?.text
       message.edited = true
+    }
+    // update last message of chat
+    const chatList = newData?.content?.chat_type == CHAT_TYPES.PRIVATE ? chatStore.privateChatList : chatStore.groupChatList
+    const chat = chatList.find(item=> item.chat_id == newData?.content?.chat_id)
+    if(chat && newData?.content?.chat_type == CHAT_TYPES.PRIVATE) {
+        if(newData?.content?.message_id == chat.last_message_id){
+          chat.last_message = newData?.content?.text
+        }
+    }
+    else if(chat && newData?.content?.chat_type == CHAT_TYPES.GROUP) {
+      if(newData?.content?.message_id == chat.last_message_id){
+          chat.last_message.text = newData?.content?.text
+      }
     }
   }
   else if(newData.type == WEBCOCKET_EVENTS.NEW_GROUP_CHAT) {
@@ -283,6 +317,7 @@ watch(data, (newData) => {
           if(!privateChat.on_mute){
             playNotificationSound()
           }
+          // when user don't chat handshake with other user, that work, becouse new_message event doesn't work that case
           // adding unread count
           if(!privateChat.unread_count){
             privateChat.unread_count = 1

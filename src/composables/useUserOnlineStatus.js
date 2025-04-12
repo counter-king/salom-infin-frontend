@@ -47,7 +47,7 @@ const handleBrowerserTabChanges =()=>{
 
 const getUnreadCount = useDebounceFn(()=> {
   chatStore.setCounts()
-}, 1000)
+}, 4000)
 
 // watching socket events using data(data is socket event)
 watch(data, (newData) => {
