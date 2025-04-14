@@ -110,11 +110,11 @@ watch(data, (newData) => {
           uploaded: true,
           reactions: [],
         });
-
-        // get chat files count, when current user send a file message
-        if(newData.message_type != MESSAGE_TYPES.TEXT) {
-          chatStore.actionGetChatFilesCount(chat_id)
-        }
+      }
+      
+      // get chat files count, when current user send a file message
+      if(newData.message_type != MESSAGE_TYPES.TEXT && chat_id == (chatStore.selectedUser?.chat_id || chatStore.selectedGroup?.chat_id)) {
+        chatStore.actionGetChatFilesCount(chat_id)
       }
 
        // Oxirgi xabarni yangilash
@@ -157,14 +157,19 @@ watch(data, (newData) => {
       // update last message of chat
       if(chat && newData?.content?.chat_type == CHAT_TYPES.PRIVATE) {
           if(newData?.content?.message_id == chat.last_message_id){
-            chat.last_message = newData?.content?.text
+            chat.last_message = newData?.content?.last_message_text
           }
       }
       else if(chat && newData?.content?.chat_type == CHAT_TYPES.GROUP) {
         if(newData?.content?.message_id == chat.last_message_id){
-            chat.last_message.text = newData?.content?.text
+            chat.last_message.text = newData?.content?.last_message_text
+            chat.last_message.sender.first_name = newData?.content?.last_message_sender?.split(" ")[1]
         }
       }
+    }
+    // get chat files count, when current user send a file message
+    if(newData.content.message_type != MESSAGE_TYPES.TEXT && chat.chat_id == (chatStore.selectedUser?.chat_id || chatStore.selectedGroup?.chat_id)) {
+      chatStore.actionGetChatFilesCount(chat.chat_id)
     }
   }
   else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_UPDATE) {
