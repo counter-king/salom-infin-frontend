@@ -29,6 +29,7 @@ const { status, data, send } = socket()
 const isShowChat = computed(() => allowedPages.includes(route.name))
 const inputSendMessasgeRef = ref(null)
 const refChatArea = ref(null)
+const chatHandshakeChatIds = ref([])
 
 let typingTimeouts = {};
 // privder
@@ -40,13 +41,6 @@ const sendUserHandshake = ()=> {
   send(JSON.stringify(payload))
 }
 
-const sendChatHandshake = ()=> {
-  const isPrivateChat = route.name == CHAT_ROUTE_NAMES.PRIVATE
-  const chat_id = isPrivateChat ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id 
-  const payload = { command: 'chat_handshake', chat_type: isPrivateChat ?  CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id }
-  send(JSON.stringify(payload))
-}
-
 const handleScrollDownSmooth =()=> {
   refChatArea.value.scrollTo({
     top: refChatArea.value?.scrollHeight,
@@ -54,30 +48,25 @@ const handleScrollDownSmooth =()=> {
   })
 }
 
-// WebSocket holatini kuzatish
-watch(status, (newStatus) => {
-  if(newStatus == "OPEN"){
-    sendChatHandshake()
-    sendUserHandshake()
-  }
-});
-
 // websocketdan, kelgan ma'lumotlarni kuzatish
 watch(data, (newData) => {
   if(!newData) return
   newData = JSON.parse(newData);
-  // console.log("user hand",newData);
-  const isPrivate = route.name == CHAT_ROUTE_NAMES.PRIVATE
+  console.log("user hand",newData);
+  const isPrivate = (newData?.chat_type || newData?.content?.chat_type) == CHAT_TYPES.PRIVATE
   const chat_id = isPrivate ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id
   if(newData.command == WEBCOCKET_EVENTS.USER_HANDSHAKE) {
     // console.log("user hand",newData);
   }
   else if(newData.command == WEBCOCKET_EVENTS.CHAT_HANDSHAKE) {
     // console.log("chat hand",newData);
+    if(!chatHandshakeChatIds.value.includes(newData.chat_id)) {
+      chatHandshakeChatIds.value.push(newData.chat_id)
+    }
   }
+
   else if(newData.type == WEBCOCKET_EVENTS.NEW_MESSAGE) {  
     const chatList = isPrivate ? chatStore.privateChatList : chatStore.groupChatList 
-    
     // if chat not found, add it
     if(!chatList.some(item=> item.chat_id == newData.chat_id) && newData.chat_type == (isPrivate ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP)){
           chatList.unshift({
@@ -102,7 +91,7 @@ watch(data, (newData) => {
         item => item?.attachments?.file?.id !== newData?.files[0]?.id
       );
 
-      const isSrollStayDown = refChatArea.value.scrollHeight - refChatArea.value.clientHeight <= Math.floor(refChatArea.value.scrollTop) + 100;
+      const isSrollStayDown = refChatArea.value?.scrollHeight - refChatArea.value?.clientHeight <= Math.floor(refChatArea.value?.scrollTop) + 100;
       // add a new message to messageList
       if(chat_id == newData.chat_id){
           chatStore.messageListByChatId.push({
@@ -312,14 +301,14 @@ watch(data, (newData) => {
         const isTheSameLastMessageId = privateChat.last_message_id == newData?.content?.message_id
         privateChat.last_message_id = newData?.content?.message_id
         // to avoid showing unread message from sender
-        if(newData?.content?.sender?.id != authStore?.currentUser?.id && !isTheSameLastMessageId){
+        if(newData?.content?.sender?.id != authStore?.currentUser?.id && !chatHandshakeChatIds.value.includes(newData?.content?.chat_id)){
           // play sound if sound is enabled
           if(!privateChat.on_mute){
             playNotificationSound()
           }
           // when user don't chat handshake with other user, that work, becouse new_message event doesn't work that case
           // adding unread count
-          if(!privateChat.unread_count){
+          if(!privateChat.unread_count && !isTheSameLastMessageId){
             privateChat.unread_count = 1
           } else {
             privateChat.unread_count += 1
@@ -344,14 +333,12 @@ watch(data, (newData) => {
     }
     else if(newData.content.chat_type == CHAT_TYPES.GROUP){
       const groupChat = chatStore.groupChatList.find(item=> item.chat_id == newData?.content.chat_id)
-
+      
       if(groupChat){
-        const isTheSameLastMessageId = groupChat.last_message_id == newData?.content?.message_id
         groupChat.last_message = { sender: newData.content.sender, text: newData.content.text}
         groupChat.last_message_id = newData?.content?.message_id
         // to avoid showing unread message from sender
-        
-        if(newData?.content?.sender?.id != authStore?.currentUser?.id && !isTheSameLastMessageId){ // play sound if sound is enabled
+        if(newData?.content?.sender?.id != authStore?.currentUser?.id && !chatHandshakeChatIds.value.includes(newData?.content?.chat_id)){ // play sound if sound is enabled
           // play sound if sound is enabled
           if(!groupChat.on_mute){
             playNotificationSound()
@@ -376,6 +363,7 @@ onMounted(() => {
 // Clean up on component unmount
 onBeforeUnmount(() => {
   Object.values(typingTimeouts).forEach(timeout => clearTimeout(timeout));
+  chatHandshakeChatIds.value = []
 });
 
 </script>
