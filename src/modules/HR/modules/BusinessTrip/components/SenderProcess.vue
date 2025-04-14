@@ -14,7 +14,11 @@ const props = defineProps({
 
 // Computed
 const alignment = computed(() => {
-  return props.verifications.filter(item => item.arrived_at).length % 2 === 0 ? 'right' : 'left'
+  if (!sender.value.is_arrived) {
+    return props.verifications.filter(item => item.arrived_at).length % 2 === 0 ? 'right' : 'left'
+  } else {
+    return props.verifications.length % 2 === 0 ? 'right' : 'left'
+  }
 })
 const isAllReceiversVerified = computed(() => {
   return props.verifications.filter(item => !item.is_sender)?.every(every => every.left_at && every.arrived_at)

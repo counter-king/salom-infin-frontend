@@ -112,6 +112,7 @@ const validateAndSendNotice = async () => {
         end_date: group.__end_date,
         user: user.id,
         company: authStore.currentUser?.company?.id,
+        sender_company: group.__company?.id,
         regions: group.__regions.map(r => r.id),
         tags: group.__tags.map(t => ({ id: t.id })),
         group_id,

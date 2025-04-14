@@ -69,7 +69,8 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
           __tags: null,
           __regions: null,
           __start_date: null,
-          __end_date: null
+          __end_date: null,
+          __company: null
         }
       ],
       __curator: null,
@@ -114,6 +115,9 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
             required: helpers.withMessage(`Поле не должен быть пустым`, required),
           },
           __end_date: {
+            required: helpers.withMessage(`Поле не должен быть пустым`, required),
+          },
+          __company: {
             required: helpers.withMessage(`Поле не должен быть пустым`, required),
           },
         }),
@@ -331,9 +335,9 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
               })
             )
 
-            console.log(__users)
             const __tags = await adjustTagObjectToArray(group.items[0].tags)
             const __regions = await adjustObjectToArray('regions', group.items[0].locations)
+            const __company = await adjustObjectToArray('companies', [], false, group.items[0].sender_company)
             const __start_date = group.items[0].start_date
             const __end_date = group.items[0].end_date
 
@@ -342,7 +346,8 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
               __tags,
               __regions,
               __start_date,
-              __end_date
+              __end_date,
+              __company
             }
           })
         )
@@ -383,7 +388,8 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
         __tags: null,
         __regions: null,
         __start_date: null,
-        __end_date: null
+        __end_date: null,
+        __company: null
       })
     },
     /** **/
@@ -502,7 +508,8 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
             __tags: null,
             __regions: null,
             __start_date: null,
-            __end_date: null
+            __end_date: null,
+            __company: null
           }
         ],
         __curator: null,

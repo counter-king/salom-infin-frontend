@@ -469,3 +469,15 @@ export function formatToK(number) {
   }
   return number.toString();
 }
+
+export const extractCountryAndCity = (address) => {
+  if (!address) return ''
+
+  const parts = address.split(',').map(part => part.trim())
+
+  if (parts.length >= 2) {
+    return `${parts[0]} / ${parts[1]}`
+  }
+
+  return parts[0] || ''
+}
