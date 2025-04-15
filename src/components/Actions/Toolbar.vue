@@ -37,6 +37,10 @@ const props = defineProps({
   keysToIncludeOnClearFilter: {
     type: Array,
     default: () => []
+  },
+  searchField: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -102,7 +106,10 @@ const emits = defineEmits(['emit:resetHeaders'])
     <div class="flex items-center justify-end flex-1 gap-2">
       <slot name="filters">
 
-        <div class="w-full max-w-[316px]">
+        <div
+          v-if="searchField"
+          class="w-full max-w-[316px]"
+        >
           <base-input
             v-model="search"
             :icon-left="MagniferIcon"
