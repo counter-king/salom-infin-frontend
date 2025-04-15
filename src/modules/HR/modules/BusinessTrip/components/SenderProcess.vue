@@ -14,7 +14,7 @@ const props = defineProps({
 
 // Computed
 const alignment = computed(() => {
-  if (!sender.value.is_arrived) {
+  if (!sender.value.is_arrived && !isAllReceiversVerified.value) {
     return props.verifications.filter(item => item.arrived_at).length % 2 === 0 ? 'right' : 'left'
   } else {
     return props.verifications.length % 2 === 0 ? 'right' : 'left'
@@ -55,6 +55,10 @@ const iconColor = computed(() => {
 const stepperIcon = computed(() => {
   return !isAllReceiversVerified.value || sender?.value?.arrived_at ? UnreadLinearIcon : RemoveMinusIcon
 })
+const nextDestinationAlignment = computed(() => {
+  return props.verifications.filter(item => !item.is_sender && item.arrived_at && item.left_at).length % 2 === 0
+    && props.verifications.find(item => item.is_sender).left_at ? 'left' : 'right'
+})
 </script>
 
 <template>
@@ -66,7 +70,7 @@ const stepperIcon = computed(() => {
       />
 
       <next-destination-disabled-card
-        v-if="alignment === 'left' && !isAllReceiversVerified && isNextDestinationVisible"
+        v-if="nextDestinationAlignment === 'left' && !isAllReceiversVerified && isNextDestinationVisible"
         :verifications="props.verifications"
       />
     </div>
@@ -98,7 +102,7 @@ const stepperIcon = computed(() => {
       />
 
       <next-destination-disabled-card
-        v-if="alignment === 'right' && !isAllReceiversVerified && isNextDestinationVisible"
+        v-if="nextDestinationAlignment === 'right' && !isAllReceiversVerified && isNextDestinationVisible"
         :verifications="props.verifications"
       />
     </div>
