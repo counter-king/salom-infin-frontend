@@ -36,8 +36,6 @@ const debouncedHandleScrollDown = useDebounceFn(async(event) => {
 
 const handleScrollReachDown = async (event) => {
   if(!isLoading.value){
-    console.log("ishlamoqda")
-
     debouncedHandleScrollDown(event) 
   }
  }

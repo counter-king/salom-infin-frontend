@@ -79,13 +79,12 @@ const handleScroll = (event) => {
   } else {
     showScrollDownButton.value = false
   }
-   // Only run handleScrollReachUp if initial render is complete
-   if (initialRenderComplete.value) {
+  // Only run handleScrollReachUp if initial render is complete
+  if (initialRenderComplete.value) {
       handleScrollReachUp(event, handleScrollUp);
       handleScrollReachDown(event)
   }
 }
-
 const handleScrollUp = () => {
   refChatArea.value?.scrollTo({
     top: refChatArea.value.clientHeight,
@@ -224,7 +223,31 @@ const getMessageComponentProps = (message, index) => {
   return { ...baseProps, ...additionalProps(message) };
 };
 
-const getMessageList = useDebounceFn(async()=>{
+const putScrollFirstUnreadMessagePalce = ()=>{
+  const isChatScrollExist = refChatArea.value?.scrollHeight > refChatArea.value?.clientHeight;
+  if(!isChatScrollExist) return 
+  const data = document.querySelectorAll("[data-message-is-read]")
+    let count = 0
+    data.forEach(item=>{
+      if(item.getAttribute("data-message-is-read") == "false" && count==0){
+        const div = document.createElement("div")
+        div.innerHTML = 
+          `<div>
+            <div class='px-1 py-[6px] relative flex items-center justify-center text-sm text-greyscale-500 w-[calc(100%+48px)] relative left-[-24px] right-[-24px] my-[6px] font-medium  bg-white'>
+              ${t('unread-messages')}
+              <span class="absolute right-4 w-5 h-5">
+              <svg xmlns="http://www.w3.org/2000/svg" width="inherit" height="inherit" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m19 9l-7 6l-7-6"/></svg>  
+              </span>
+            </div>
+          </div>`;
+        item.parentNode.insertBefore(div, item);
+        item.scrollIntoView({ block: "nearest" });
+        count++
+      }
+    })
+}
+
+const getMessageListByCondition = async ()=>{
     pageDown.value = chatStore.selectedUser.unread_count > 20 ? Math.ceil(chatStore.selectedUser.unread_count / 20) : 1
     page.value = pageDown.value
     let response = null
@@ -245,6 +268,10 @@ const getMessageList = useDebounceFn(async()=>{
     } else {
       handleScrollDown()
     }
+}
+
+const getMessageList = useDebounceFn(async()=>{
+    await getMessageListByCondition()
     // every route change, reset context menu
     chatStore.contextMenu = {}
     // avoid scroll event that get next page data working when initail loading happen 
@@ -267,55 +294,12 @@ watch(
   }
 );
 
-const putScrollFirstUnreadMessagePalce = ()=>{
-  const data = document.querySelectorAll("[data-message-is-read]")
-    let count = 0
-    data.forEach(item=>{
-      if(item.getAttribute("data-message-is-read") == "false" && count==0){
-        const div = document.createElement("div")
-        div.innerHTML = 
-          `<div>
-            <div class='px-1 py-[6px] relative flex items-center justify-center text-sm text-greyscale-500 w-[calc(100%+48px)] relative left-[-24px] right-[-24px] my-[6px] font-medium  bg-white'>
-              ${t('unread-messages')}
-              <span class="absolute right-4 w-5 h-5">
-              <svg xmlns="http://www.w3.org/2000/svg" width="inherit" height="inherit" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m19 9l-7 6l-7-6"/></svg>  
-              </span>
-            </div>
-          </div>`;
-        item.parentNode.insertBefore(div, item);
-        item.scrollIntoView({ block: "nearest" });
-        count++
-      }
-    })
-}
-
 onMounted(async () => {
   try {
     chatStore.selectedUser = await chatStore.actionGetPrivateChatById(route.params?.id, true);
     // if there is chat_id, then send chat handshake, otherwise don't
     sendChatHandshake()
-    pageDown.value = chatStore.selectedUser.unread_count > 20 ? Math.ceil(chatStore.selectedUser.unread_count / 20) : 1
-    page.value = pageDown.value
-    let response = null
-    if(chatStore.selectedUser.unread_count > 0){
-      response = await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id, page: pageDown.value, page_size: 20 }, true, false);
-      pageDown.value -= 1
-      if(pageDown.value > 1){
-        response = await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id, page: pageDown.value, page_size: 20 }, false, false, true);
-      }
-    } else {
-      response =  await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id, page: page.value, page_size: 20 });
-      hasNext.value = response?.count > page.value * pageSize.value
-    }
-    page.value +=1 
-
-    
-    if(chatStore.selectedUser.unread_count > 0){
-      putScrollFirstUnreadMessagePalce()
-    } else {
-      // make scroll down after loading new data
-      handleScrollDown()
-    }
+    await getMessageListByCondition()
     // if selected user don't exist in the list then add it
     if(!chatStore.privateChatList.some(item => item?.chat_id == chatStore.selectedUser?.chat_id)){
       chatStore.privateChatList.unshift(chatStore.selectedUser)
