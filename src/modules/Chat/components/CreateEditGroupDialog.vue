@@ -95,7 +95,7 @@ const onSubmit = async () => {
       const newMembers = formModal.users.map(user => user.id).filter(id => !memebers.value.some(member => member.id === id))
       const deleteMembers = memebers.value.filter(member => !formModal.users.some(user => user.id === member.id)).map(member => member.id)
       if(deleteMembers.length && chatStore.selectedGroup?.members.find(member => member.id == authStore.currentUser?.id)?.role == "owner") {
-        await fetchDeleteMemberFromGroupChat(chatStore.selectedGroup?.chat_uid, { members: deleteMembers})
+        await fetchDeleteMemberFromGroupChat(chatStore.selectedGroup?.chat_uid, { members_id: deleteMembers})
       } else if(deleteMembers.length) {
         dispatchNotify(null, "У вас нет прав на удаление участников группы.",COLOR_TYPES.WARNING);
       }

@@ -33,13 +33,13 @@ import { socket } from "@/services/socket";
 import { useContextMenu } from '../composables/useContextMenu';
 import { useFileUploadDrop } from '../composables/useFileUploadDrop';  
 import { useScrollReachUpGetNextMessageList } from '../composables/useScrollReachUpGetNextMessageList';
-import { useScrollReachUpDownGetNextMessageList } from '../composables/useScrollReachUpDownGetNextMessageList';
+import { useScrollReachDownGetNextMessageList } from '../composables/useScrollReachDownGetNextMessageList';
 import { useReadMessageObserver } from '../composables/useReadMessageObserver';
 
 const { menuItems, refContextMenu } = useContextMenu();
 const { onDragOver, onDragLeave, onDrop } = useFileUploadDrop();
 const { handleScrollReachUp, hasNext, page, pageSize } = useScrollReachUpGetNextMessageList();
-const { handleScrollReachDown, page: pageDown } = useScrollReachUpDownGetNextMessageList();
+const { handleScrollReachDown, page: pageDown } = useScrollReachDownGetNextMessageList();
 const { refMessagesContainer, refMessageElements, initializeReadMessageObserver } = useReadMessageObserver();
 
 const { t } = useI18n();
@@ -74,7 +74,7 @@ const sendChatHandshake = ()=> {
 }
 // when scroll down, scrollDwonButton will be visible
 const handleScroll = (event) => {
-  if(event && event.target && event.target?.scrollHeight - event.target?.clientHeight >  Math.floor(event.target.scrollTop + 100)  ) {
+  if(event && event.target && event.target?.scrollHeight - event.target?.clientHeight >  Math.floor(event.target.scrollTop + 100) || (refChatArea.value?.scrollHeight - refChatArea.value?.clientHeight >  Math.floor(refChatArea.value.scrollTop + 100))  ) {
     showScrollDownButton.value = true
   } else {
     showScrollDownButton.value = false
@@ -236,7 +236,7 @@ const putScrollFirstUnreadMessagePalce = ()=>{
             <div class='px-1 py-[6px] relative flex items-center justify-center text-sm text-greyscale-500 w-[calc(100%+48px)] relative left-[-24px] right-[-24px] my-[6px] font-medium  bg-white'>
               ${t('unread-messages')}
               <span class="absolute right-4 w-5 h-5">
-              <svg xmlns="http://www.w3.org/2000/svg" width="inherit" height="inherit" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m19 9l-7 6l-7-6"/></svg>  
+              <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m19 9l-7 6l-7-6"/></svg>  
               </span>
             </div>
           </div>`;
@@ -254,15 +254,15 @@ const getMessageListByCondition = async ()=>{
     if(chatStore.selectedUser.unread_count > 0){
       response = await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id, page: pageDown.value, page_size: 20 }, true, false);
       pageDown.value -= 1
-      if(pageDown.value > 1){
+      if(pageDown.value >= 1){
         response = await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id, page: pageDown.value, page_size: 20 }, false, false, true);
+        pageDown.value -= 1
       }
     } else {
       response =  await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id, page: page.value, page_size: 20 });
       hasNext.value = response?.count > page.value * pageSize.value
     }
     page.value +=1 
-
     if(chatStore.selectedUser.unread_count > 0){
       putScrollFirstUnreadMessagePalce()
     } else {

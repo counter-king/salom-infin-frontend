@@ -16,7 +16,7 @@ export const useScrollReachUpGetNextMessageList = () => {
 
 const debouncedHandleScrollUp = useDebounceFn(async(event, handleScrollUp) => {
   if(event && event.target && event.target.scrollTop < 10){
-    if(hasNext.value && page.value >= 1){
+    if(hasNext.value && page.value > 1){
       const isPrivateChat = route.name == CHAT_ROUTE_NAMES.PRIVATE;
       const { count } =  await chatStore.actionGetMessageListByChatId({ chat: isPrivateChat ? chatStore.selectedUser.chat_id : chatStore.selectedGroup.chat_id, page:page.value, page_size:pageSize.value }, false)
       hasNext.value = count > page.value * pageSize.value

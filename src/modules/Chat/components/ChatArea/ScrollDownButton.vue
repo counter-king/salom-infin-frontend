@@ -1,14 +1,17 @@
 <script setup>
 // core
 import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 // components
 import { ChevronDown20SolidIcon } from '@/components/Icons';
 // sore
 import { useChatStore } from '../../stores';
-import { useAuthStore } from '@/modules/Auth/stores';
+// contatns
+import { CHAT_ROUTE_NAMES } from '../../constatns';
 
 const chatStore = useChatStore()
-const authStore = useAuthStore()
+const route = useRoute()
+// props
 const props = defineProps({
   btnClass: {
    type: String
@@ -16,9 +19,11 @@ const props = defineProps({
 })
 
 const unReadMessagesCount = computed(() => {
-  return 
+  const isPrivateChat = route.name == CHAT_ROUTE_NAMES.PRIVATE
+  const chatList = isPrivateChat ? chatStore.privateChatList : chatStore.groupChatList
+  const chat = chatList.find(item=> item.chat_id == (chatStore.selectedUser?.chat_id || chatStore.selectedGroup?.chat_id))
+  return chat?.unread_count;
 })
-
 </script>
 <template>
  <div 
