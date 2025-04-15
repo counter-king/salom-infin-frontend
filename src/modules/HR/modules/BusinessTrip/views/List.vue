@@ -73,6 +73,7 @@ onMounted(() => {
       :filter-keys="filterKeys"
       :keys-to-include-on-clear-filter="keysToIncludeOnClearFilter"
       :storage-columns-name="HR_BUSINESS_TRIP_COLUMNS"
+      :api-params="{ destination: currentUser?.company?.id }"
       @emit:reset-headers="BTStore.resetHeaders"
     >
       <template #end>
