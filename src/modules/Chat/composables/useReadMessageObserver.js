@@ -87,7 +87,8 @@ watch(() => chatStore.messageListByChatId, async () => {
     initializeReadMessageObserver();
 }, { deep: true });
 
-onMounted(() => {
+onMounted(async () => {
+    await nextTick()
     initializeObserver();   
 });
 

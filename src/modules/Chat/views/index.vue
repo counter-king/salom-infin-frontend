@@ -52,7 +52,7 @@ const handleScrollDownSmooth =()=> {
 watch(data, (newData) => {
   if(!newData) return
   newData = JSON.parse(newData);
-  console.log("user hand",newData);
+  // console.log("user hand",newData);
   const isPrivate = (newData?.chat_type || newData?.content?.chat_type) == CHAT_TYPES.PRIVATE
   const chat_id = isPrivate ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id
   if(newData.command == WEBCOCKET_EVENTS.USER_HANDSHAKE) {
@@ -260,7 +260,7 @@ watch(data, (newData) => {
     
     const message = chatStore.messageListByChatId.find(item=> item.message_id == newData?.message_id)
     if(message?.sender?.id != newData?.user?.id){
-      if(message){
+      if(message && !message.is_read){
         message.is_read = true
         // when messags are readed, then decrease count of unread message count from chat list
         const chatPrivate = chatStore.privateChatList.find(item=> item.chat_id == message?.chat_id) 

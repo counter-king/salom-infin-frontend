@@ -32,7 +32,7 @@ import { socket } from "@/services/socket";
 // composables
 import { useContextMenu } from '../composables/useContextMenu';
 import { useFileUploadDrop } from '../composables/useFileUploadDrop';  
-import { useScrollReachUp } from '../composables/useScrollReachUp';
+import { useScrollReachUp } from '../composables/useScrollReachUpGetNextMessageList';
 import { useReadMessageObserver } from '../composables/useReadMessageObserver';
 
 const { menuItems, refContextMenu } = useContextMenu();

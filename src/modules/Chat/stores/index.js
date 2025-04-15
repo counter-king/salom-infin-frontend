@@ -43,6 +43,7 @@ export const useChatStore = defineStore("chat-stores", {
     privateChatByIdLoading: false,
     messageListByChatIdLoading: false,
     messageListByChatIdAddMoreLoading: false,
+    messageListByChatIdAddScrollDownLoading: false,
     deleteMessageByIdLoading: false,
     messageLinkListLoading: false,
     messageVideoFileListLoading: false,
@@ -424,13 +425,16 @@ export const useChatStore = defineStore("chat-stores", {
     },
     /** */
     /** */
-    async actionGetMessageListByChatId(params, resetList = true) {
+    async actionGetMessageListByChatId(params, resetList = true, addingFront = true, addingScrollDown = false) {
       try {
         if(resetList){
           this.messageListByChatIdLoading = true;
-        } else {
+        } else if(addingFront){
           this.messageListByChatIdAddMoreLoading = true;
+        } else if(addingScrollDown) {
+          this.messageListByChatIdAddScrollDownLoading = true;
         }
+        
         const { data } = await fetchGetMessagesByChatId(params);
         const messageList =  await Promise.all(data?.results?.reverse()?.map( async (item) => {
           // reactions grouping
@@ -467,8 +471,10 @@ export const useChatStore = defineStore("chat-stores", {
 
         if(resetList){
           this.messageListByChatId = messageList;
-        } else {
+        } else if(addingFront) {
           this.messageListByChatId = [...messageList, ...this.messageListByChatId]
+        } else {
+          this.messageListByChatId = [...this.messageListByChatId, ...messageList]
         }
         // checking has next page
         return data
@@ -477,6 +483,7 @@ export const useChatStore = defineStore("chat-stores", {
       } finally{
         this.messageListByChatIdLoading = false;
         this.messageListByChatIdAddMoreLoading = false;
+        this.messageListByChatIdAddScrollDownLoading = false;
       }
     },
     /** */
