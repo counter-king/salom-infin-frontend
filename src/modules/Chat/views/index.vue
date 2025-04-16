@@ -53,8 +53,10 @@ watch(data, (newData) => {
   if(!newData) return
   newData = JSON.parse(newData);
   // console.log("user hand",newData);
+  // isPrivate is realted to which chatType, isPrivate is not current route chat
   const isPrivate = (newData?.chat_type || newData?.content?.chat_type) == CHAT_TYPES.PRIVATE
-  const chat_id = isPrivate ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id
+  const chat_id = [chatStore.selectedUser,chatStore.selectedGroup].find(item=> item?.chat_uid == route.params?.id)?.chat_id
+
   if(newData.command == WEBCOCKET_EVENTS.USER_HANDSHAKE) {
     // console.log("user hand",newData);
   }
@@ -273,10 +275,9 @@ watch(data, (newData) => {
         }
       }
     }
-
   }
   else if(newData.type == WEBCOCKET_EVENTS.CHAT_DELETED) {
-    const isPrivate = newData.content.chat_type == CHAT_TYPES.PRIVATE
+    const isPrivate = newData.content?.chat_type == CHAT_TYPES.PRIVATE
     if(isPrivate) {
       chatStore.privateChatList = chatStore.privateChatList.filter(item => item.chat_id != newData?.content.chat_id)
     } else  {

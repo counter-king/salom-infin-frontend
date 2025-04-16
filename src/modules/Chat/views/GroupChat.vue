@@ -284,6 +284,7 @@ watch(
   () => route.params?.id,
   async (newId, oldId) => {
     if (newId !== oldId && route.name === CHAT_ROUTE_NAMES.GROUP) {
+      chatStore.selectedUser = null
       chatStore.selectedGroup = await chatStore.actionGetGroupChatById(newId);
       // if there is chat_id, then send chat handshake, otherwise don't
       sendChatHandshake()
@@ -296,6 +297,7 @@ watch(
 
 onMounted(async () => {
   try {
+    chatStore.selectedUser = null
     chatStore.selectedGroup = await chatStore.actionGetGroupChatById(route.params?.id, true);
     // if there is chat_id, then send chat handshake, otherwise don't
     sendChatHandshake()

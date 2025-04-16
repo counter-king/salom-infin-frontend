@@ -284,6 +284,7 @@ watch(
   () => route.params?.id,
   async (newId, oldId) => {
     if (newId !== oldId && route.name === CHAT_ROUTE_NAMES.PRIVATE) {
+      chatStore.selectedGroup = null
       chatStore.selectedUser = await chatStore.actionGetPrivateChatById(newId);
       // if there is chat_id, then send chat handshake, otherwise don't
       sendChatHandshake()
@@ -296,6 +297,7 @@ watch(
 
 onMounted(async () => {
   try {
+    chatStore.selectedGroup = null
     chatStore.selectedUser = await chatStore.actionGetPrivateChatById(route.params?.id, true);
     // if there is chat_id, then send chat handshake, otherwise don't
     sendChatHandshake()
