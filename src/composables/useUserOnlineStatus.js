@@ -13,6 +13,7 @@ import { useDebounceFn } from '@vueuse/core';
 import { getStorageItem } from '@/utils/storage';
 // constants
 import { ACCESS, EXPIRES } from '@/constants/storage';
+import { useThemeStore } from '@/stores/theme.store';
 
 export const useUserOnlineStatus = () => {
 
@@ -20,6 +21,7 @@ const { send, data } = socket()
 // composibles
 const chatStore = useChatStore()
 const authStore = useAuthStore()
+const themeStore = useThemeStore()
 
 const sendUserOnlineEvent = ()=> {
   const payload = { command: 'user_online' }
@@ -53,7 +55,7 @@ const getUnreadCount = useDebounceFn(()=> {
 watch(data, (newData) => {
   newData = JSON.parse(newData);
   // console.log(newData)
-  if(newData.type == WEBCOCKET_EVENTS.NEW_CHAT_MESSAGE){
+  if(newData.type == WEBCOCKET_EVENTS.NEW_CHAT_MESSAGE && themeStore?.header?.find(item => item?.name == 'chat').count > 0){
     // if current user message sender, do not increment chat count
     if(newData.content.sender.id != authStore.currentUser?.id){
         getUnreadCount()
