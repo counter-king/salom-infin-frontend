@@ -797,5 +797,7 @@
   "manage-notification": "Bildirishnomalarni boshqarish",
   "auth-session-end-title": "Sessiya tugadi - qayta avtorizatsiya talab qilinadi",
   "auth-session-end-description": "Ishni davom ettirish uchun tizimga qayta kiring.",
-  "unread-messages":"o'qilmagan xabarlar"
+  "unread-messages":"o'qilmagan xabarlar",
+  "from-where-filial": "Qayerdan (filial)",
+  "to-where": "Qayerga (hudud)"
 }

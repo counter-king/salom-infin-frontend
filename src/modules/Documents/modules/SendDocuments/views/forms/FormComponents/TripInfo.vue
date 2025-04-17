@@ -16,12 +16,14 @@ import { AddPlusIcon, TrashBinTrashBoldIcon } from "@/components/Icons"
 import EditorWithTabs from "@/components/Composed/EditorWithTabs.vue"
 import { dispatchNotify } from "@/utils/notify";
 import { COLOR_TYPES } from "@/enums";
-import { STEPPER_WORK_PLAN } from "@/modules/Documents/modules/SendDocuments/constants";
+import { ROUND_TRIP, STEPPER_WORK_PLAN } from "@/modules/Documents/modules/SendDocuments/constants";
+import { useCommonStore } from "@/stores/common";
 
 // Composable
 const route = useRoute()
 const router = useRouter()
 const store = useBusinessTripStore()
+const commonStore = useCommonStore()
 const { t } = useI18n()
 const $v = useVuelidate(store.rules, store.model)
 
@@ -117,31 +119,57 @@ defineExpose({
             </base-col>
 
             <base-col col-class="w-1/2">
-              <base-multi-select
-                v-model="group.__regions"
-                :error="$v.__groups.$each.$response.$data[index].__regions"
-                api-url="regions"
-                :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
-                display="chip"
-                selectable
-                label="trip-place"
-                type="department"
-                placeholder="select-trip-place"
-                required
-                :show-nested-error="showNestedError"
-              >
-                <template #chip="{ value }">
-                  {{ value.name }}
-                </template>
+              <div class="flex align-center gap-x-4">
+                <base-dropdown
+                  v-model="group.__company"
+                  :error="$v.__groups.$each.$response.$data[index].__company"
+                  v-model:options="commonStore.filialList"
+                  required
+                  api-url="companies"
+                  label="from-where-filial"
+                  placeholder="choose-one"
+                  menu-placeholder="search"
+                  option-label="name"
+                  searchable
+                  :show-nested-error="showNestedError"
+                  class="w-1/2"
+                >
+                  <template #option="{ option }">
+                    <user-with-radio
+                      :title="option.name"
+                      :text-truncate="false"
+                    >
+                    </user-with-radio>
+                  </template>
+                </base-dropdown>
 
-                <template #option="{ value }">
-                  <user-with-radio
-                    :title="value.name"
-                    :text-truncate="false"
-                  >
-                  </user-with-radio>
-                </template>
-              </base-multi-select>
+                <base-multi-select
+                  v-model="group.__regions"
+                  :error="$v.__groups.$each.$response.$data[index].__regions"
+                  api-url="regions"
+                  :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
+                  display="chip"
+                  selectable
+                  label="to-where"
+                  type="department"
+                  placeholder="select-trip-place"
+                  required
+                  :show-nested-error="showNestedError"
+                  class="w-1/2"
+                >
+                  <template #chip="{ value }">
+                    {{ value.name }}
+                  </template>
+
+                  <template #option="{ value }">
+                    <user-with-radio
+                      :title="value.name"
+                      :text-truncate="false"
+                    >
+                    </user-with-radio>
+                  </template>
+                </base-multi-select>
+              </div>
             </base-col>
 
             <base-col col-class="w-1/2">

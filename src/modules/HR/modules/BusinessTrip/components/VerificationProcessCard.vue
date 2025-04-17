@@ -10,7 +10,7 @@ import { AltArrowDownIcon, ArrowLeftDownIcon, ArrowRightUpIcon, MapPointBoldIcon
 import {formatDateHour} from "@/utils/formatDate";
 import {useAuthStore} from "@/modules/Auth/stores";
 import {VerificationConfirmationModal} from "@/modules/HR/modules/BusinessTrip/components/index"
-import {formatUserFullName} from "../../../../../utils";
+import { extractCountryAndCity, formatUserFullName } from "../../../../../utils";
 
 const props = defineProps({
   item: {
@@ -113,12 +113,12 @@ const onConfirm = async () => {
                 target="_blank"
                 class="underline hover:text-primary-500"
               >
-                {{ props.item?.arrived_at ? `${item?.region?.country?.name} / ${item?.region?.name}` : t('trip-place') }}
+                {{ props.item?.arrived_at && item.arrived_address ? `${extractCountryAndCity(item.arrived_address)}` : t('trip-place') }}
               </a>
             </template>
 
             <template v-else>
-              {{ props.item?.arrived_at ? `${item?.region?.country?.name} / ${item?.region?.name}` : t('trip-place') }}
+              {{ props.item?.arrived_at && item.arrived_address ? `${extractCountryAndCity(item.arrived_address)}` : t('trip-place') }}
             </template>
           </span>
 
@@ -188,26 +188,25 @@ const onConfirm = async () => {
 
       <div class="flex flex-col gap-y-1">
         <div class="flex items-center gap-x-1">
-          <template v-if="item?.region?.country?.name">
-            <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
-            <span
-              class="text-xs font-medium"
-              :class="props.item?.left_at ? 'text-primary-900' : 'text-greyscale-500'"
-            >
+          <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
+          <span
+            class="text-xs font-medium"
+            :class="props.item?.left_at ? 'text-primary-900' : 'text-greyscale-500'"
+          >
               <template v-if="item.left_lat && item.left_lng">
                 <a
                   :href="`https://www.google.com/maps?q=${item.left_lat},${item.left_lng}`"
                   target="_blank"
                   class="underline hover:text-primary-500"
                 >
-                  {{ props.item?.arrived_at ? `${item?.region?.country?.name} / ${item?.region?.name}` : t('trip-place') }}
+                  {{ props.item?.left_at && item.left_address ? `${extractCountryAndCity(item.left_address)}` : t('trip-place') }}
                 </a>
               </template>
+
               <template v-else>
-                {{ props.item?.left_at ? `${item?.region?.country?.name} / ${item?.region?.name}` : t('trip-place') }}
+                {{ props.item?.left_at && item.left_address ? `${extractCountryAndCity(item.left_address)}` : t('trip-place') }}
               </template>
             </span>
-          </template>
 
           <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
 

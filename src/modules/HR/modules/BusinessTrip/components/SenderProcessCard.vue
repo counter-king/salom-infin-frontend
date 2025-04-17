@@ -5,7 +5,7 @@ import {useI18n} from "vue-i18n"
 import {useRoute} from "vue-router"
 // Utils
 import {formatDateHour} from "@/utils/formatDate"
-import {formatUserFullName} from "@/utils"
+import { extractCountryAndCity, formatUserFullName } from "@/utils"
 // Store
 import {useBusinessTripStore} from "@/modules/HR/modules/BusinessTrip/stores/businessTrip.store";
 // Components
@@ -62,38 +62,64 @@ const onConfirm = async () => {
     >
       <div
         class="flex items-center py-[2px] pr-2 pl-[3px] gap-x-1 rounded-xl"
-        :class="isArrived ? 'bg-success-100' : 'bg-greyscale-70'"
+        :class="sender.arrived_at ? 'bg-success-100' : 'bg-greyscale-70'"
       >
         <div class="flex justify-center items-center w-[24px] h-[24px] bg-white rounded-full shadow">
           <base-iconify
             :icon="ArrowLeftDownIcon"
             class="!w-3 !h-3"
-            :class="isArrived ? 'text-success-500' : 'text-greyscale-400'"
+            :class="sender.arrived_at ? 'text-success-500' : 'text-greyscale-400'"
           />
         </div>
 
         <span
           class="text-xs font-medium"
-          :class="isArrived ? 'text-success-500' : 'text-greyscale-400'"
+          :class="sender.arrived_at ? 'text-success-500' : 'text-greyscale-400'"
         >
           {{ t('arrived') }}
         </span>
       </div>
 
-      <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
+      <div class="flex flex-col gap-y-1">
+        <div class="flex items-center gap-x-1">
+          <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
+          <span
+            class="text-xs font-medium"
+            :class="sender.arrived_at ? 'text-primary-900' : 'text-greyscale-500'"
+          >
+            <template v-if="sender.arrived_lat && sender.arrived_lng">
+              <a
+                :href="`https://www.google.com/maps?q=${sender.arrived_lat},${sender.arrived_lng}`"
+                target="_blank"
+                class="underline hover:text-primary-500"
+              >
+                {{ sender?.arrived_at && sender.arrived_address ? `${extractCountryAndCity(sender.arrived_address)}` : t('trip-place') }}
+              </a>
+            </template>
 
-      <span class="text-xs font-medium text-greyscale-500">
-        {{ isArrived ? formatDateHour(sender?.arrived_at) : t('date') }}
-      </span>
+            <template v-else>
+              {{ sender?.arrived_at && sender.arrived_address ? `${extractCountryAndCity(sender.arrived_address)}` : t('trip-place') }}
+            </template>
+          </span>
 
-      <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
+          <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
 
-      <span
-        class="text-xs font-medium"
-        :class="isArrived ? 'text-primary-900' : 'text-greyscale-500'"
-      >
-        {{ isArrived ? formatUserFullName(sender?.arrived_verified_by) : 'Имя сотрудника'}}
-      </span>
+          <span
+            class="text-xs font-medium"
+            :class="sender?.arrived_at ? 'text-primary-900' : 'text-greyscale-500'"
+          >
+            {{ sender?.arrived_at ? formatUserFullName(sender.arrived_verified_by) : t('emp-name') }}
+          </span>
+        </div>
+
+        <div class="flex items-center gap-x-1">
+          <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
+
+          <span class="text-xs font-medium text-greyscale-500">
+            {{ sender?.arrived_at ? formatDateHour(sender?.arrived_at) : t('date')}}
+          </span>
+        </div>
+      </div>
     </div>
 
 <!--    <div class="flex justify-end items-center">-->

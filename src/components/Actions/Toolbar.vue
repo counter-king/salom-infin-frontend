@@ -1,10 +1,13 @@
 <script setup>
 // Core
-import { useI18n } from "vue-i18n";
+import { onMounted, ref, watch } from "vue"
+import { useI18n } from "vue-i18n"
+import { useDebounce } from "@vueuse/core"
+import { useRoute, useRouter } from "vue-router"
 // Components
-import { CalendarMenu, ColumnMenu, ExportButton, FilterMenu} from "./index";
-
-const { t } = useI18n();
+import { CalendarMenu, ColumnMenu, ExportButton, FilterMenu} from "./index"
+import { MagniferIcon } from "@/components/Icons"
+import BaseInput from "@/components/UI/BaseInput.vue"
 
 const props = defineProps({
   title: {
@@ -23,6 +26,10 @@ const props = defineProps({
     type: Function,
     default: () => void 0
   },
+  apiParams: {
+    type: Object,
+    default: () => {}
+  },
   filterKeys: {
     type: Array,
     default: () => []
@@ -30,10 +37,60 @@ const props = defineProps({
   keysToIncludeOnClearFilter: {
     type: Array,
     default: () => []
+  },
+  searchField: {
+    type: Boolean,
+    default: false
   }
 })
 
-const emits = defineEmits(['emit:resetHeaders']);
+// Reactive
+const search = ref(null)
+
+const { t } = useI18n()
+const debouncedSearch = useDebounce(search, 750)
+const route = useRoute()
+const router = useRouter()
+
+// Watcher
+watch(debouncedSearch, async (value) => {
+  if (value) {
+    await router.replace({
+      query: {
+        ...route.query,
+        search: value
+      }
+    })
+    props.actionList({
+      ...route.query,
+      ...props.apiParams,
+      search: value,
+      page: 1,
+      page_size: 15
+    })
+
+  } else {
+    await router.replace({
+      query: {
+        ...route.query,
+        search: null
+      }
+    })
+    props.actionList({
+      ...route.query,
+      ...props.apiParams
+    })
+  }
+})
+
+// Hooks
+onMounted(() => {
+  if (route.query?.search) {
+    search.value = route.query.search
+  }
+})
+
+const emits = defineEmits(['emit:resetHeaders'])
 </script>
 
 <template>
@@ -48,6 +105,22 @@ const emits = defineEmits(['emit:resetHeaders']);
 
     <div class="flex items-center justify-end flex-1 gap-2">
       <slot name="filters">
+
+        <div
+          v-if="searchField"
+          class="w-full max-w-[316px]"
+        >
+          <base-input
+            v-model="search"
+            :icon-left="MagniferIcon"
+            :placeholder="t('search')"
+            class="flex p-input-icon-left items-center"
+            input-class="!pl-10 p-3 bg-white text-xs !rounded-[90px] placeholder:text-xs"
+            icon-left-class="!w-4 !h-4"
+            clearable
+          />
+        </div>
+
         <export-button />
 
         <calendar-menu
