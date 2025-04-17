@@ -55,7 +55,7 @@ const getUnreadCount = useDebounceFn(()=> {
 watch(data, (newData) => {
   newData = JSON.parse(newData);
   // console.log(newData)
-  if(newData.type == WEBCOCKET_EVENTS.NEW_CHAT_MESSAGE && themeStore?.header?.find(item => item?.name == 'chat').count > 0){
+  if(newData.type == WEBCOCKET_EVENTS.NEW_CHAT_MESSAGE){
     // if current user message sender, do not increment chat count
     if(newData.content.sender.id != authStore.currentUser?.id){
         getUnreadCount()
@@ -63,7 +63,7 @@ watch(data, (newData) => {
   }
   if(newData.type == WEBCOCKET_EVENTS.MESSAGE_READ){
     // when current user, read mesage, decrement chat count
-    if(newData.user.id == authStore.currentUser?.id){
+    if(newData.user.id == authStore.currentUser?.id && themeStore?.header?.find(item => item?.name == 'chat')?.count > 0){
         getUnreadCount()
     }
   }
