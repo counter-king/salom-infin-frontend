@@ -7,13 +7,13 @@ import { WEBCOCKET_EVENTS } from '@/modules/Chat/constatns';
 // stores
 import { useChatStore } from '@/modules/Chat/stores';
 import { useAuthStore } from '@/modules/Auth/stores';
+import { useThemeStore } from '@/stores/theme.store';
 // services
 import { useDebounceFn } from '@vueuse/core';
 // utils
 import { getStorageItem } from '@/utils/storage';
 // constants
 import { ACCESS, EXPIRES } from '@/constants/storage';
-import { useThemeStore } from '@/stores/theme.store';
 
 export const useUserOnlineStatus = () => {
 
@@ -49,7 +49,7 @@ const handleBrowerserTabChanges =()=>{
 
 const getUnreadCount = useDebounceFn(()=> {
   chatStore.setCounts()
-}, 4000)
+}, 5000)
 
 // watching socket events using data(data is socket event)
 watch(data, (newData) => {

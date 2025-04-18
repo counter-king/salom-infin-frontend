@@ -9,7 +9,10 @@ import {
   LocalTaxiIcon,
   PlaneIcon,
   Routing2BoldIcon,
-  TrainIcon
+  TrainIcon,
+  MapLinearIcon,
+  RoutingOutlineIcon,
+  RefreshIcon,
 } from "@/components/Icons"
 
 import {
@@ -257,19 +260,19 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
       {
         id: 1,
         title: 'there-back',
-        icon: PlaneIcon,
+        icon: RefreshIcon,
         value: ROUND_TRIP
       },
       {
         id: 2,
         title: 'complex-route',
-        icon: TrainIcon,
+        icon: RoutingOutlineIcon,
         value: MULTI_CITY
       },
       {
         id: 3,
         title: 'one-way',
-        icon: LocalTaxiIcon,
+        icon: MapLinearIcon,
         value: ONE_WAY
       }
     ]
