@@ -73,7 +73,7 @@ defineExpose({
           :error="$v.__curator"
           api-url="top-signers"
           :api-params="{ doc_types: route.params.document_type }"
-          label="whom"
+          label="whom-specific"
           required
           placeholder="select-leader"
         />
