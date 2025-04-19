@@ -800,5 +800,6 @@
   "unread-messages":"o'qilmagan xabarlar",
   "from-where-filial": "Qayerdan (filial)",
   "to-where": "Qayerga (hudud)",
-  "whom-specific": "Kimga (Rais yoki Rais o'rinbosari)"
+  "whom-specific": "Kimga (Rais yoki Rais o'rinbosari)",
+  "select-status": "Statusni tanlang"
 }

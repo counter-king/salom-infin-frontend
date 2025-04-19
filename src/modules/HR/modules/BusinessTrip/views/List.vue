@@ -6,6 +6,7 @@ import {useRoute, useRouter} from "vue-router"
 import { ActionToolbar } from "@/components/Actions"
 import BaseDataTable from "@/components/UI/BaseDataTable.vue"
 import { Plus20SolidIcon } from '@/components/Icons'
+import { TripStatus } from "@/components/Chips"
 // Store
 import {useAuthStore} from "@/modules/Auth/stores"
 import { useBusinessTripStore } from "@/modules/HR/modules/BusinessTrip/stores/businessTrip.store"
@@ -21,7 +22,7 @@ const BTStore = useBusinessTripStore()
 const currentUser = useAuthStore().currentUser
 
 // Const
-const filterKeys = ["users", "branches"]
+const filterKeys = ["trip_status"]
 const keysToIncludeOnClearFilter = ["destination"]
 
 // Computed
@@ -101,7 +102,7 @@ onMounted(() => {
       @emit:row-click="onRowClick"
     >
       <template #department="{ data }">
-        <span>{{ data?.user?.top_level_department?.name }}</span>
+        <span class="max-w-[300px] block">{{ data?.user?.top_level_department?.name }}</span>
       </template>
 
       <template #employee="{ data }">
@@ -111,6 +112,12 @@ onMounted(() => {
 <!--          shape="circle"-->
 <!--          avatar-classes="w-8 h-8"-->
 <!--        />-->
+      </template>
+
+      <template #trip_status="{ data }">
+        <TripStatus
+          :status="data?.trip_status"
+        />
       </template>
 
       <template #destinations="{ data }">

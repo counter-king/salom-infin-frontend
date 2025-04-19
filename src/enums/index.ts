@@ -232,4 +232,26 @@ export const SIGNER_TYPES = {
   NEGOTIATOR: 'negotiator',
   SIGNER: 'signer'
 }
+export const TRIP_STATUSES = [
+  {
+    title_uz: "Boshlanmagan",
+    title_ru: "Не начато",
+    value: "not_started"
+  },
+  {
+    title_uz: "Xizmat safarida",
+    title_ru: "В командировке",
+    value: "on_trip"
+  },
+  {
+    title_uz: "Hisobot topshrish",
+    title_ru: "Предоставление отчета",
+    value: "reporting"
+  },
+  {
+    title_uz: "Yakunlangan",
+    title_ru: "Закрыто",
+    value: "closed"
+  }
+]
 
