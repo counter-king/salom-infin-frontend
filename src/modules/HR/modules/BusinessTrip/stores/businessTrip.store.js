@@ -152,6 +152,11 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
     resetHeaders() {
       this.headers = [
         {
+          header: "employee",
+          field: "employee",
+          active: true
+        },
+        {
           header: "department-name",
           field: "department",
           active: true
@@ -161,16 +166,11 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
           field: "created_date",
           active: true
         },
-        {
-          header: "author",
-          field: "author",
-          active: true
-        },
-        {
-          header: "status",
-          field: "status",
-          active: true
-        },
+        // {
+        //   header: "Статус",
+        //   field: "status",
+        //   active: true
+        // },
         {
           header: "branch",
           field: "destinations",
