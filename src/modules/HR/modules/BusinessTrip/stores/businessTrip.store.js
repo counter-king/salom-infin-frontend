@@ -32,18 +32,18 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
         active: true
       },
       {
-        header: "created-date",
-        field: "created_date",
+        header: "start-date",
+        field: "start_date",
+        active: true
+      },
+      {
+        header: "end-date",
+        field: "end_date",
         active: true
       },
       {
         header: "status",
         field: "trip_status",
-        active: true
-      },
-      {
-        header: "branch",
-        field: "destinations",
         active: true
       }
     ],
@@ -162,18 +162,18 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
           active: true
         },
         {
-          header: "created-date",
-          field: "created_date",
+          header: "start-date",
+          field: "start_date",
+          active: true
+        },
+        {
+          header: "end-date",
+          field: "end_date",
           active: true
         },
         {
           header: "status",
           field: "trip_status",
-          active: true
-        },
-        {
-          header: "branch",
-          field: "destinations",
           active: true
         }
       ]

@@ -14,6 +14,7 @@ import { useBusinessTripStore } from "@/modules/HR/modules/BusinessTrip/stores/b
 import {COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES} from "@/enums"
 import { HR_BUSINESS_TRIP_COLUMNS, ROUTE_HR_BUSINESS_TRIP_DETAIL } from "@/modules/HR/constants"
 import { ROUTE_SD_CREATE } from "@/modules/Documents/modules/SendDocuments/constants"
+import { formatDate } from "../../../../../utils/formatDate";
 
 // Composable
 const router = useRouter()
@@ -75,6 +76,7 @@ onMounted(() => {
       :column-menu-items="BTStore.headers"
       :filter-keys="filterKeys"
       :storage-columns-name="HR_BUSINESS_TRIP_COLUMNS"
+      :action-buttons="['filter']"
       search-field
       @emit:reset-headers="BTStore.resetHeaders"
     >
@@ -112,6 +114,14 @@ onMounted(() => {
 <!--          shape="circle"-->
 <!--          avatar-classes="w-8 h-8"-->
 <!--        />-->
+      </template>
+
+      <template #start_date="{ data }">
+        {{ formatDate(data?.start_date) }}
+      </template>
+
+      <template #end_date="{ data }">
+        {{ formatDate(data?.end_date) }}
       </template>
 
       <template #trip_status="{ data }">
