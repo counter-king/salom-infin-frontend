@@ -37,6 +37,17 @@ const onStatusChange = async (status) => {
     })
     await props.actionList(route.query)
   }
+  else if (status.active) {
+    store.tripStatuses.forEach(item => item.active = item.value === null)
+    await router.replace({
+      query: {
+        page: 1,
+        page_size: 10,
+        first_row: 0
+      }
+    })
+    await props.actionList(route.query)
+  }
 }
 const init = () => {
   if (route.query?.trip_status) {
