@@ -60,18 +60,18 @@ const manageRoute = () => {
 
 // Hooks
 onMounted(() => {
-  manageRoute()
+  // manageRoute()
 })
 </script>
 
 <template>
   <div class="business-trip-list-view">
+<!--    :keys-to-include-on-clear-filter="keysToIncludeOnClearFilter"-->
     <action-toolbar
       title="business-trip"
       :action-list="BTStore.actionGetBusinessTripList"
       :column-menu-items="BTStore.headers"
       :filter-keys="filterKeys"
-      :keys-to-include-on-clear-filter="keysToIncludeOnClearFilter"
       :storage-columns-name="HR_BUSINESS_TRIP_COLUMNS"
       :api-params="{ destination: currentUser?.company?.id }"
       search-field
@@ -87,10 +87,10 @@ onMounted(() => {
         />
       </template>
     </action-toolbar>
+<!--    :api-params="apiParams"-->
 
     <base-data-table
       :action-list="BTStore.actionGetBusinessTripList"
-      :api-params="apiParams"
       :loading="BTStore.listLoading"
       :total-count="BTStore.totalCount"
       :value="BTStore.businessTripList"
