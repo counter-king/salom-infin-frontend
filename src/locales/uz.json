@@ -801,5 +801,9 @@
   "from-where-filial": "Qayerdan (filial)",
   "to-where": "Qayerga (hudud)",
   "whom-specific": "Kimga (Rais yoki Rais o'rinbosari)",
-  "select-status": "Statusni tanlang"
+  "select-status": "Statusni tanlang",
+  "not-started": "Boshlanmagan",
+  "on-trip": "Xizmat safarida",
+  "reporting": "Hisobot topshrish",
+  "closed": "Yakunlangan"
 }

@@ -4,6 +4,8 @@ import { computed } from "vue"
 import { useI18n } from "vue-i18n"
 // Enums
 import { TRIP_STATUSES } from "@/enums"
+// Store
+import { useBusinessTripStore } from "@/modules/HR/modules/BusinessTrip/stores/businessTrip.store"
 
 const props = defineProps({
   status: {
@@ -12,11 +14,13 @@ const props = defineProps({
   }
 })
 
-const { locale } = useI18n()
+// Composable
+const store = useBusinessTripStore()
+const { t, locale } = useI18n()
 
 const label = computed(() => {
-  const statusObject = TRIP_STATUSES.find(item => item.value === props.status)
-  return locale === 'uz' ? statusObject?.title_uz : statusObject?.title_ru
+  const statusObject = store.tripStatuses.find(item => item.value === props.status)
+  return t(statusObject.label)
 })
 
 const classes = computed(() => {

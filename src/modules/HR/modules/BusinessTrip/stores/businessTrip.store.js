@@ -58,6 +58,33 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
         file: null
       }
     ],
+    tripStatuses: [
+      {
+        label: 'all',
+        value: null,
+        active: false
+      },
+      {
+        label: "not-started",
+        value: "not_started",
+        active: false
+      },
+      {
+        label: "on-trip",
+        value: "on_trip",
+        active: false
+      },
+      {
+        label: "reporting",
+        value: "reporting",
+        active: false
+      },
+      {
+        label: "closed",
+        value: "closed",
+        active: false
+      }
+    ]
   }),
   actions: {
     async actionGetBusinessTripList(params) {
