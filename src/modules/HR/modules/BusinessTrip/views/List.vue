@@ -67,13 +67,13 @@ onMounted(() => {
 <template>
   <div class="business-trip-list-view">
 <!--    :keys-to-include-on-clear-filter="keysToIncludeOnClearFilter"-->
+<!--    :api-params="{ destination: currentUser?.company?.id }"-->
     <action-toolbar
       title="business-trip"
       :action-list="BTStore.actionGetBusinessTripList"
       :column-menu-items="BTStore.headers"
       :filter-keys="filterKeys"
       :storage-columns-name="HR_BUSINESS_TRIP_COLUMNS"
-      :api-params="{ destination: currentUser?.company?.id }"
       search-field
       @emit:reset-headers="BTStore.resetHeaders"
     >
