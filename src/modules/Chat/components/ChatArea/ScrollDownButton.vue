@@ -1,14 +1,17 @@
 <script setup>
 // core
 import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 // components
 import { ChevronDown20SolidIcon } from '@/components/Icons';
 // sore
 import { useChatStore } from '../../stores';
-import { useAuthStore } from '@/modules/Auth/stores';
+// contatns
+import { CHAT_ROUTE_NAMES } from '../../constatns';
 
 const chatStore = useChatStore()
-const authStore = useAuthStore()
+const route = useRoute()
+// props
 const props = defineProps({
   btnClass: {
    type: String
@@ -16,9 +19,11 @@ const props = defineProps({
 })
 
 const unReadMessagesCount = computed(() => {
-  return chatStore.messageListByChatId.filter((message) => !message.is_read && authStore?.currentUser?.id != message?.sender?.id).length
+  const isPrivateChat = route.name == CHAT_ROUTE_NAMES.PRIVATE
+  const chatList = isPrivateChat ? chatStore.privateChatList : chatStore.groupChatList
+  const chat = chatList.find(item=> item.chat_id == (chatStore.selectedUser?.chat_id || chatStore.selectedGroup?.chat_id))
+  return chat?.unread_count;
 })
-
 </script>
 <template>
  <div 
@@ -29,8 +34,8 @@ const unReadMessagesCount = computed(() => {
      :icon="ChevronDown20SolidIcon"
      class="!w-5 !h-5 text-greyscale-900"
     />
-    <!-- <div v-if="!!unReadMessagesCount" class="flex items-center justify-center text-[10px] text-white font-semibold h-4 w-4 bg-critic-500 rounded-full absolute top-[-2px] right-0 z-10">
+    <div v-if="!!unReadMessagesCount" class="flex items-center justify-center text-[10px] text-white font-semibold h-4 w-4 bg-critic-500 rounded-full absolute top-[-2px] right-0 z-10">
       {{unReadMessagesCount  }}
-    </div> -->
+    </div>
  </div>
 </template>

@@ -32,12 +32,14 @@ import { socket } from "@/services/socket";
 // composables
 import { useContextMenu } from '../composables/useContextMenu';
 import { useFileUploadDrop } from '../composables/useFileUploadDrop';  
-import { useScrollReachUp } from '../composables/useScrollReachUp';
+import { useScrollReachUpGetNextMessageList } from '../composables/useScrollReachUpGetNextMessageList';
+import { useScrollReachDownGetNextMessageList } from '../composables/useScrollReachDownGetNextMessageList';
 import { useReadMessageObserver } from '../composables/useReadMessageObserver';
 
 const { menuItems, refContextMenu } = useContextMenu();
 const { onDragOver, onDragLeave, onDrop } = useFileUploadDrop();
-const { handleScrollReachUp, hasNext, page, pageSize } = useScrollReachUp();
+const { handleScrollReachUp, hasNext, page, pageSize } = useScrollReachUpGetNextMessageList();
+const { handleScrollReachDown, page: pageDown } = useScrollReachDownGetNextMessageList();
 const { refMessagesContainer, refMessageElements, initializeReadMessageObserver } = useReadMessageObserver();
 
 const { t } = useI18n();
@@ -72,17 +74,17 @@ const sendChatHandshake = ()=> {
 }
 // when scroll down, scrollDwonButton will be visible
 const handleScroll = (event) => {
-  if(event && event.target && event.target.scrollHeight - event.target.clientHeight >  Math.floor(event.target.scrollTop + 100)  ) {
+  if(event && event.target && event.target?.scrollHeight - event.target?.clientHeight >  Math.floor(event.target.scrollTop + 100) || (refChatArea.value?.scrollHeight - refChatArea.value?.clientHeight >  Math.floor(refChatArea.value.scrollTop + 100))  ) {
     showScrollDownButton.value = true
   } else {
     showScrollDownButton.value = false
   }
-   // Only run handleScrollReachUp if initial render is complete
-   if (initialRenderComplete.value) {
+  // Only run handleScrollReachUp if initial render is complete
+  if (initialRenderComplete.value) {
       handleScrollReachUp(event, handleScrollUp);
+      handleScrollReachDown(event)
   }
 }
-
 const handleScrollUp = () => {
   refChatArea.value?.scrollTo({
     top: refChatArea.value.clientHeight,
@@ -91,13 +93,13 @@ const handleScrollUp = () => {
 
 const handleScrollDown = () => {
   refChatArea.value?.scrollTo({
-    top: refChatArea.value.scrollHeight,
+    top: refChatArea.value?.scrollHeight,
     // behavior: 'smooth'
   });
 }
 const handleScrollDownSmooth = () => {
   refChatArea.value?.scrollTo({
-    top: refChatArea.value.scrollHeight,
+    top: refChatArea.value?.scrollHeight,
     behavior: 'smooth'
   });
 }
@@ -221,46 +223,91 @@ const getMessageComponentProps = (message, index) => {
   return { ...baseProps, ...additionalProps(message) };
 };
 
+const putScrollFirstUnreadMessagePalce = ()=>{
+  const isChatScrollExist = refChatArea.value?.scrollHeight > refChatArea.value?.clientHeight;
+  if(!isChatScrollExist) return 
+  const data = document.querySelectorAll("[data-message-is-read]")
+    let count = 0
+    data.forEach(item=>{
+      if(item.getAttribute("data-message-is-read") == "false" && count==0){
+        const div = document.createElement("div")
+        div.innerHTML = 
+          `<div>
+            <div class='px-1 py-[6px] relative flex items-center justify-center text-sm text-greyscale-500 w-[calc(100%+48px)] relative left-[-24px] right-[-24px] my-[6px] font-medium  bg-white'>
+              ${t('unread-messages')}
+              <span class="absolute right-4 w-5 h-5">
+              <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m19 9l-7 6l-7-6"/></svg>  
+              </span>
+            </div>
+          </div>`;
+        item.parentNode.insertBefore(div, item);
+        item.scrollIntoView({ block: "nearest" });
+        count++
+      }
+    })
+}
+
+const getMessageListByCondition = async ()=>{
+    pageDown.value = chatStore.selectedUser.unread_count > 20 ? Math.ceil(chatStore.selectedUser.unread_count / 20) : 1
+    page.value = pageDown.value
+    let response = null
+    if(chatStore.selectedUser.unread_count > 0){
+      response = await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id, page: pageDown.value, page_size: 20 }, true, false);
+      pageDown.value -= 1
+      if(pageDown.value >= 1){
+        response = await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id, page: pageDown.value, page_size: 20 }, false, false, true);
+        pageDown.value -= 1
+      }
+    } else {
+      response =  await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id, page: page.value, page_size: 20 });
+      hasNext.value = response?.count > page.value * pageSize.value
+    }
+    page.value +=1 
+    if(chatStore.selectedUser.unread_count > 0){
+      putScrollFirstUnreadMessagePalce()
+    } else {
+      handleScrollDown()
+    }
+}
 
 const getMessageList = useDebounceFn(async()=>{
-  const response = await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id, page:1, page_size: 20 }, true);
-      hasNext.value = response?.count > page.value * pageSize.value
-      page.value += 1
-      // make scroll down after loading new data
-      setTimeout(() => {
-        handleScrollDown()
-        initializeReadMessageObserver()
-      }, 10)
-      // every route change, reset context menu
-      chatStore.contextMenu = {}
-}, 300)
+    await getMessageListByCondition()
+    // every route change, reset context menu
+    chatStore.contextMenu = {}
+    // avoid scroll event that get next page data working when initail loading happen 
+    setTimeout(() => {
+      initialRenderComplete.value = true;
+    }, 500);
+}, 400)
 
 watch(
   () => route.params?.id,
   async (newId, oldId) => {
     if (newId !== oldId && route.name === CHAT_ROUTE_NAMES.PRIVATE) {
+      chatStore.selectedGroup = null
       chatStore.selectedUser = await chatStore.actionGetPrivateChatById(newId);
       // if there is chat_id, then send chat handshake, otherwise don't
       sendChatHandshake()
+      chatStore.messageListByChatIdLoading = true
+      initialRenderComplete.value = false
       getMessageList()
     }
   }
 );
 
-
 onMounted(async () => {
   try {
+    chatStore.selectedGroup = null
     chatStore.selectedUser = await chatStore.actionGetPrivateChatById(route.params?.id, true);
     // if there is chat_id, then send chat handshake, otherwise don't
     sendChatHandshake()
-    const response = await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id, page:1, page_size: 20 }, true);
-    hasNext.value = response?.count > page.value * pageSize.value
-    page.value += 1
+    await getMessageListByCondition()
     // if selected user don't exist in the list then add it
     if(!chatStore.privateChatList.some(item => item?.chat_id == chatStore.selectedUser?.chat_id)){
       chatStore.privateChatList.unshift(chatStore.selectedUser)
     }
   } catch(e) {
+    console.log(e)
     if(e.status == 403){
       router.push({ name: CHAT_ROUTE_NAMES.CHAT_INDEX})
       dispatchNotify(null, 'Доступ запрещен')
@@ -268,8 +315,6 @@ onMounted(async () => {
       router.push({ name: CHAT_ROUTE_NAMES.CHAT_INDEX})
     }
   }
-  // make scroll down after loading new data
-  handleScrollDown()
   // initialize read message observer to get correct ref values
   initializeReadMessageObserver()  
 })
@@ -279,7 +324,7 @@ onMounted(() => {
   if(!!refSendMessage.value?.InputSendMessageRows) {    
     watch([()=> refSendMessage.value?.InputSendMessageRows, () => chatStore.contextMenu], async() => {
       await nextTick(); 
-      inputSendMessageHeight.value = refSendMessage.value.InputSendMessageWrapperRef.scrollHeight
+      inputSendMessageHeight.value = refSendMessage.value.InputSendMessageWrapperRef?.scrollHeight
     }, { immediate: true })
   }
   
@@ -353,6 +398,12 @@ onMounted(() => {
           wrapper-class="w-full h-full !bg-transparent shadow-none"
           inner-wrapper-class="w-[335px]"
         />
+      </div>
+      <!-- get more Message by scroll down loading -->
+      <div class="flex justify-center items-center fixed bottom-[14%] left-[50%] z-50" v-if="chatStore.messageListByChatIdAddScrollDownLoading">
+        <div class="w-9 h-9 bg-white p-1 rounded-full" style="box-shadow: 0px 2px 4px 0px rgba(47, 61, 87, 0.03), 0px 1px 1px 0px rgba(95, 110, 169, 0.03)">
+          <base-spinner />
+        </div>
       </div>
     </template>
   </div>

@@ -30,7 +30,7 @@ function markMessageAsRead(messageId) {
 
 function sendMessageIdEvent(messageId) {
   const isPrivateChat = route.name == CHAT_ROUTE_NAMES.PRIVATE
-  const chat_id = isPrivateChat ? chatStore.selectedUser.chat_id : chatStore.selectedGroup.chat_id 
+  const chat_id = isPrivateChat ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id 
   const payload = { command: 'message_read', chat_id, chat_type: isPrivateChat ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, message_id: messageId }
   send(JSON.stringify(payload))
 }
@@ -87,7 +87,8 @@ watch(() => chatStore.messageListByChatId, async () => {
     initializeReadMessageObserver();
 }, { deep: true });
 
-onMounted(() => {
+onMounted(async () => {
+    await nextTick()
     initializeObserver();   
 });
 

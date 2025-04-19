@@ -29,6 +29,7 @@ const { status, data, send } = socket()
 const isShowChat = computed(() => allowedPages.includes(route.name))
 const inputSendMessasgeRef = ref(null)
 const refChatArea = ref(null)
+const chatHandshakeChatIds = ref([])
 
 let typingTimeouts = {};
 // privder
@@ -40,13 +41,6 @@ const sendUserHandshake = ()=> {
   send(JSON.stringify(payload))
 }
 
-const sendChatHandshake = ()=> {
-  const isPrivateChat = route.name == CHAT_ROUTE_NAMES.PRIVATE
-  const chat_id = isPrivateChat ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id 
-  const payload = { command: 'chat_handshake', chat_type: isPrivateChat ?  CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id }
-  send(JSON.stringify(payload))
-}
-
 const handleScrollDownSmooth =()=> {
   refChatArea.value.scrollTo({
     top: refChatArea.value?.scrollHeight,
@@ -54,30 +48,27 @@ const handleScrollDownSmooth =()=> {
   })
 }
 
-// WebSocket holatini kuzatish
-watch(status, (newStatus) => {
-  if(newStatus == "OPEN"){
-    sendChatHandshake()
-    sendUserHandshake()
-  }
-});
-
 // websocketdan, kelgan ma'lumotlarni kuzatish
 watch(data, (newData) => {
   if(!newData) return
   newData = JSON.parse(newData);
   // console.log("user hand",newData);
-  const isPrivate = route.name == CHAT_ROUTE_NAMES.PRIVATE
-  const chat_id = isPrivate ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id
+  // isPrivate is realted to which chatType, isPrivate is not current route chat
+  const isPrivate = (newData?.chat_type || newData?.content?.chat_type) == CHAT_TYPES.PRIVATE
+  const chat_id = [chatStore.selectedUser,chatStore.selectedGroup].find(item=> item?.chat_uid == route.params?.id)?.chat_id
+
   if(newData.command == WEBCOCKET_EVENTS.USER_HANDSHAKE) {
     // console.log("user hand",newData);
   }
   else if(newData.command == WEBCOCKET_EVENTS.CHAT_HANDSHAKE) {
     // console.log("chat hand",newData);
+    if(!chatHandshakeChatIds.value.includes(newData.chat_id)) {
+      chatHandshakeChatIds.value.push(newData.chat_id)
+    }
   }
+
   else if(newData.type == WEBCOCKET_EVENTS.NEW_MESSAGE) {  
     const chatList = isPrivate ? chatStore.privateChatList : chatStore.groupChatList 
-    
     // if chat not found, add it
     if(!chatList.some(item=> item.chat_id == newData.chat_id) && newData.chat_type == (isPrivate ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP)){
           chatList.unshift({
@@ -102,7 +93,7 @@ watch(data, (newData) => {
         item => item?.attachments?.file?.id !== newData?.files[0]?.id
       );
 
-      const isSrollStayDown = refChatArea.value.scrollHeight - refChatArea.value.clientHeight <= Math.floor(refChatArea.value.scrollTop) + 100;
+      const isSrollStayDown = refChatArea.value?.scrollHeight - refChatArea.value?.clientHeight <= Math.floor(refChatArea.value?.scrollTop) + 100;
       // add a new message to messageList
       if(chat_id == newData.chat_id){
           chatStore.messageListByChatId.push({
@@ -121,11 +112,11 @@ watch(data, (newData) => {
           uploaded: true,
           reactions: [],
         });
-
-        // get chat files count, when current user send a file message
-        if(newData.message_type != MESSAGE_TYPES.TEXT) {
-          chatStore.actionGetChatFilesCount(chat_id)
-        }
+      }
+      
+      // get chat files count, when current user send a file message
+      if(newData.message_type != MESSAGE_TYPES.TEXT && chat_id == (chatStore.selectedUser?.chat_id || chatStore.selectedGroup?.chat_id)) {
+        chatStore.actionGetChatFilesCount(chat_id)
       }
 
        // Oxirgi xabarni yangilash
@@ -154,15 +145,54 @@ watch(data, (newData) => {
       // if user not current, but if scroll stand at bottom, then make scroll push untill bottom
       else if(isSrollStayDown){ setTimeout(handleScrollDownSmooth, 1)}
   }
-  else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_DELETED) {    
+  else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_DELETED) {  
     chatStore.messageListByChatId = chatStore.messageListByChatId.filter(item=> item.message_id != newData?.content?.message_id)
     chatStore.contextMenu.deleteDialog = false
+
+    const chatList = newData?.content?.chat_type == CHAT_TYPES.PRIVATE ? chatStore.privateChatList : chatStore.groupChatList
+    const chat = chatList.find(item=> item.chat_id == newData?.content?.chat_id)
+    if(chat) {
+      // decrement unread count of chat
+      if(chat?.unread_count > 0) {
+        chat.unread_count -= 1
+      }
+      // update last message of chat
+      if(chat && newData?.content?.chat_type == CHAT_TYPES.PRIVATE) {
+          if(newData?.content?.message_id == chat.last_message_id){
+            chat.last_message = newData?.content?.last_message_text
+          }
+      }
+      else if(chat && newData?.content?.chat_type == CHAT_TYPES.GROUP) {
+        if(newData?.content?.message_id == chat.last_message_id){
+            chat.last_message.text = newData?.content?.last_message_text
+            chat.last_message.sender.first_name = newData?.content?.last_message_sender?.split(" ")[1]
+        }
+      }
+    }
+    // get chat files count, when current user send a file message
+    if(newData.content.message_type != MESSAGE_TYPES.TEXT && chat.chat_id == (chatStore.selectedUser?.chat_id || chatStore.selectedGroup?.chat_id)) {
+      chatStore.actionGetChatFilesCount(chat.chat_id)
+    }
   }
   else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_UPDATE) {
+    // if a message is related to current messageListByChatId, update it 
     let message = chatStore.messageListByChatId.find(item=> item.message_id == newData?.content?.message_id)
     if(message) {
       message.text = newData?.content?.text
       message.edited = true
+    }
+    // update last message of chat
+    const chatList = newData?.content?.chat_type == CHAT_TYPES.PRIVATE ? chatStore.privateChatList : chatStore.groupChatList
+    const chat = chatList.find(item=> item.chat_id == newData?.content?.chat_id)
+    if(chat && newData?.content?.chat_type == CHAT_TYPES.PRIVATE) {
+        if(newData?.content?.message_id == chat.last_message_id){
+          chat.last_message = newData?.content?.text
+        }
+    }
+    else if(chat && newData?.content?.chat_type == CHAT_TYPES.GROUP) {
+      if(newData?.content?.message_id == chat.last_message_id){
+          chat.last_message.text = newData?.content?.text
+      }
     }
   }
   else if(newData.type == WEBCOCKET_EVENTS.NEW_GROUP_CHAT) {
@@ -232,7 +262,7 @@ watch(data, (newData) => {
     
     const message = chatStore.messageListByChatId.find(item=> item.message_id == newData?.message_id)
     if(message?.sender?.id != newData?.user?.id){
-      if(message){
+      if(message && !message.is_read){
         message.is_read = true
         // when messags are readed, then decrease count of unread message count from chat list
         const chatPrivate = chatStore.privateChatList.find(item=> item.chat_id == message?.chat_id) 
@@ -245,10 +275,9 @@ watch(data, (newData) => {
         }
       }
     }
-
   }
   else if(newData.type == WEBCOCKET_EVENTS.CHAT_DELETED) {
-    const isPrivate = newData.content.chat_type == CHAT_TYPES.PRIVATE
+    const isPrivate = newData.content?.chat_type == CHAT_TYPES.PRIVATE
     if(isPrivate) {
       chatStore.privateChatList = chatStore.privateChatList.filter(item => item.chat_id != newData?.content.chat_id)
     } else  {
@@ -278,13 +307,14 @@ watch(data, (newData) => {
         const isTheSameLastMessageId = privateChat.last_message_id == newData?.content?.message_id
         privateChat.last_message_id = newData?.content?.message_id
         // to avoid showing unread message from sender
-        if(newData?.content?.sender?.id != authStore?.currentUser?.id && !isTheSameLastMessageId){
+        if(newData?.content?.sender?.id != authStore?.currentUser?.id && !chatHandshakeChatIds.value.includes(newData?.content?.chat_id)){
           // play sound if sound is enabled
           if(!privateChat.on_mute){
             playNotificationSound()
           }
+          // when user don't chat handshake with other user, that work, becouse new_message event doesn't work that case
           // adding unread count
-          if(!privateChat.unread_count){
+          if(!privateChat.unread_count && !isTheSameLastMessageId){
             privateChat.unread_count = 1
           } else {
             privateChat.unread_count += 1
@@ -309,14 +339,12 @@ watch(data, (newData) => {
     }
     else if(newData.content.chat_type == CHAT_TYPES.GROUP){
       const groupChat = chatStore.groupChatList.find(item=> item.chat_id == newData?.content.chat_id)
-
+      
       if(groupChat){
-        const isTheSameLastMessageId = groupChat.last_message_id == newData?.content?.message_id
         groupChat.last_message = { sender: newData.content.sender, text: newData.content.text}
         groupChat.last_message_id = newData?.content?.message_id
         // to avoid showing unread message from sender
-        
-        if(newData?.content?.sender?.id != authStore?.currentUser?.id && !isTheSameLastMessageId){ // play sound if sound is enabled
+        if(newData?.content?.sender?.id != authStore?.currentUser?.id && !chatHandshakeChatIds.value.includes(newData?.content?.chat_id)){ // play sound if sound is enabled
           // play sound if sound is enabled
           if(!groupChat.on_mute){
             playNotificationSound()
@@ -341,6 +369,7 @@ onMounted(() => {
 // Clean up on component unmount
 onBeforeUnmount(() => {
   Object.values(typingTimeouts).forEach(timeout => clearTimeout(timeout));
+  chatHandshakeChatIds.value = []
 });
 
 </script>

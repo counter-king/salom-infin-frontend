@@ -83,15 +83,23 @@ const onRouteTypeTabChange = (item, index) => {
   store.routeTypeTabItems.forEach(route => route.active = route.id === item.id)
   store.actionChangeRouteSegment(item.value, index)
 }
-const stepClick = async (step) => {
+const stepClick = async (step, validateAndSend = false) => {
   const valid = await $v.value.$validate()
   showNestedError.value = true
   if (!valid) {
     dispatchNotify(null, t('fill-required-fields'), COLOR_TYPES.WARNING)
-    return
+    return 
   }
 
-  await store.actionStepClick(router, route, step)
+  const selectedRouteUserIds = store.booking_model.bookings?.flatMap(booking=> booking.passengers?.map(user=> user?.id))
+  const usersNotHaveRoute = users.value?.filter(user=> !selectedRouteUserIds?.includes(user.id))
+  if(!!usersNotHaveRoute.length){  
+    dispatchNotify(null, `У следующих сотрудников не назначен маршрут: ${usersNotHaveRoute.map(user=>(user.first_name + ' ' + user.last_name)).join(', ')}.`, COLOR_TYPES.WARNING)
+    dispatchNotify(null, `У всех сотрудников должен быть назначен маршрут`, COLOR_TYPES.WARNING)
+  } else {
+    validateAndSend && emit('emit:onValidateAndSend')
+    await store.actionStepClick(router, route, step)
+  }
 }
 const addRoute = () => {
   store.actionAddRouteRow()
@@ -114,11 +122,8 @@ const onSegmentClassChange = (value, parentIndex, childIndex, booking) => {
 }
 
 const validateAndSend = () => {
-  stepClick(STEPPER_DECREE)
-  emit('emit:onValidateAndSend')
-}
-
-// Emits
+    stepClick(STEPPER_DECREE, true)
+  }
 const emit = defineEmits(['emit:onValidateAndSend'])
 
 // Expose
@@ -198,7 +203,7 @@ defineExpose({
             <base-dropdown
               v-model="subItem.arrival_city"
               :error="$v.bookings.$each.$response.$data[index].segments.$each.$data[subIndex].arrival_city"
-              v-model:options="commonStore.regionsList"
+              :options="commonStore.regionsList.filter(region => region?.id != subItem.departure_city?.id)"
               required
               api-url="regions"
               label="where-to"

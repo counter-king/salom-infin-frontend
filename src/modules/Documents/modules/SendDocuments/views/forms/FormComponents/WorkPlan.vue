@@ -52,8 +52,14 @@ const stepClick = async (step) => {
     dispatchNotify(null, t('fill-required-fields'), COLOR_TYPES.WARNING)
     return
   }
-
-  await store.actionStepClick(router, route, step)
+  const tripPlanUserIds = store.trip_plan_model.trip_plans.flatMap(plan=> plan.users?.map(user=> user.id))
+  const usersNotHaveWorkPlan = users.value.filter(user=> !tripPlanUserIds.includes(user.id))
+  if(!!usersNotHaveWorkPlan.length){
+    dispatchNotify(null, `У следующих сотрудников нет плана работы: ${usersNotHaveWorkPlan?.map(user=>(user.first_name + ' ' + user.last_name)).join(', ')}.`, COLOR_TYPES.WARNING)
+    dispatchNotify(null, `У всех сотрудников должен быть назначен рабочий план.`, COLOR_TYPES.WARNING)
+  } else {
+    await store.actionStepClick(router, route, step)
+  }
 }
 const addRow = () => {
   store.actionAddWorkPlanRow()

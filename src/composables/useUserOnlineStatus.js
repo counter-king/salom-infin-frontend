@@ -7,6 +7,7 @@ import { WEBCOCKET_EVENTS } from '@/modules/Chat/constatns';
 // stores
 import { useChatStore } from '@/modules/Chat/stores';
 import { useAuthStore } from '@/modules/Auth/stores';
+import { useThemeStore } from '@/stores/theme.store';
 // services
 import { useDebounceFn } from '@vueuse/core';
 // utils
@@ -20,6 +21,7 @@ const { send, data } = socket()
 // composibles
 const chatStore = useChatStore()
 const authStore = useAuthStore()
+const themeStore = useThemeStore()
 
 const sendUserOnlineEvent = ()=> {
   const payload = { command: 'user_online' }
@@ -47,7 +49,7 @@ const handleBrowerserTabChanges =()=>{
 
 const getUnreadCount = useDebounceFn(()=> {
   chatStore.setCounts()
-}, 1000)
+}, 5000)
 
 // watching socket events using data(data is socket event)
 watch(data, (newData) => {
@@ -61,7 +63,7 @@ watch(data, (newData) => {
   }
   if(newData.type == WEBCOCKET_EVENTS.MESSAGE_READ){
     // when current user, read mesage, decrement chat count
-    if(newData.user.id == authStore.currentUser?.id){
+    if(newData.user.id == authStore.currentUser?.id && themeStore?.header?.find(item => item?.name == 'chat')?.count > 0){
         getUnreadCount()
     }
   }
