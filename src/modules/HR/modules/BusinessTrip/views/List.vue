@@ -3,7 +3,7 @@
 import {computed, onMounted} from "vue"
 import {useRoute, useRouter} from "vue-router"
 // Components
-import { ActionToolbar } from "@/components/Actions"
+import { ActionToolbar, TripStatusButtons } from "@/components/Actions"
 import BaseDataTable from "@/components/UI/BaseDataTable.vue"
 import { Plus20SolidIcon } from '@/components/Icons'
 import { TripStatus } from "@/components/Chips"
@@ -14,7 +14,8 @@ import { useBusinessTripStore } from "@/modules/HR/modules/BusinessTrip/stores/b
 import {COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES} from "@/enums"
 import { HR_BUSINESS_TRIP_COLUMNS, ROUTE_HR_BUSINESS_TRIP_DETAIL } from "@/modules/HR/constants"
 import { ROUTE_SD_CREATE } from "@/modules/Documents/modules/SendDocuments/constants"
-import { formatDate } from "../../../../../utils/formatDate";
+// Utils
+import { formatDate } from "@/utils/formatDate"
 
 // Composable
 const router = useRouter()
@@ -76,10 +77,16 @@ onMounted(() => {
       :column-menu-items="BTStore.headers"
       :filter-keys="filterKeys"
       :storage-columns-name="HR_BUSINESS_TRIP_COLUMNS"
-      :action-buttons="['filter']"
+      :action-buttons="[]"
       search-field
       @emit:reset-headers="BTStore.resetHeaders"
     >
+      <template #title-after>
+        <TripStatusButtons
+          :action-list="BTStore.actionGetBusinessTripList"
+        />
+      </template>
+
       <template #end>
         <base-button
           label="create"
