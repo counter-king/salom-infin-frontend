@@ -26,7 +26,7 @@ const verificationList = computed(() => {
   }
 })
 const isProcessFinished = computed(() => {
-  return verificationList.value?.every(every => every.left_at && every.arrived_at)
+  return verificationList.value?.every(every => every.left_at && every.arrived_at) || verificationList.value.find(item => item.is_sender)?.arrived_at
 })
 
 // Methods

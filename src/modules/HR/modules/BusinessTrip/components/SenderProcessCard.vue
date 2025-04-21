@@ -54,7 +54,7 @@ const onConfirm = async () => {
 <template>
   <div class="flex flex-col rounded-xl border border-greyscale-100 py-[10px] px-3 bg-greyscale-50 mb-[6px] gap-y-2">
     <span class="text-primary-900 text-sm font-semibold">
-      {{ sender?.company?.name }}
+      {{ sender?.region?.name_uz || sender?.company?.name }}
     </span>
 
     <div

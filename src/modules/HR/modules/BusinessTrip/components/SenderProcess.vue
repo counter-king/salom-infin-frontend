@@ -21,7 +21,7 @@ const alignment = computed(() => {
   }
 })
 const isAllReceiversVerified = computed(() => {
-  return props.verifications.filter(item => !item.is_sender)?.every(every => every.left_at && every.arrived_at)
+  return props.verifications.filter(item => !item.is_sender)?.every(every => every.left_at && every.arrived_at) || props.verifications.find(item => item.is_sender)?.arrived_at
 })
 const isNextDestinationVisible = computed(() => {
   const filteredArray = props.verifications.filter(item => item.arrived_at || item.is_sender)
