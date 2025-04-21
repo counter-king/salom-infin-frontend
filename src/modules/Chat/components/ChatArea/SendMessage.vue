@@ -1,6 +1,6 @@
 <script setup>
 // cores
-import { computed, inject, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, inject, nextTick, onMounted, onUnmounted, ref, useModel, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import { useDebounceFn } from '@vueuse/core';
@@ -19,6 +19,13 @@ import { CHAT_ROUTE_NAMES, CHAT_TYPES, MESSAGE_TYPES } from '../../constatns';
 // webocket
 import { socket } from "@/services/socket";
 
+// props
+const props = defineProps({
+  modelValue: {
+    type: Number
+  }
+})
+
 const { t } = useI18n();
 const { uploadFiles } = useFileUpload();
 const { send } = socket()
@@ -34,6 +41,11 @@ const isFocused = ref(false);
 const isCtrlAllPressed = ref(false);
 const InputSendMessageWrapperRef = ref(null);
 const rows = ref(1);
+// emits
+const emit = defineEmits(['update:modelValue'])
+// inject
+const refChatArea = inject("refChatArea");
+const modelValue = useModel(props, 'modelValue')
 
 const isPrivateChat = computed(()=> route.name == CHAT_ROUTE_NAMES.PRIVATE)
 // checking there are http or https regex
@@ -67,7 +79,7 @@ const resetInputProperties = (event) => {
   }
 }
 
-const handleSendMessage = (event) => {
+const handleSendMessage = async (event) => {
 
  if(event.key == "Enter"){
     // when shift or ctrl pressed with enter
@@ -110,6 +122,13 @@ const handleSendMessage = (event) => {
         resetInputProperties(event)
         // replay or edit reset, not show them in ui
         chatStore.contextMenu = {}
+        // 
+        if(chatStore.replayedMessageClicked){
+          modelValue.value = 1
+          chatStore.replayedMessageClicked = false
+          await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id, page: 1, page_size: 20 }, true);
+          refChatArea.value.scrollTop = refChatArea.value.scrollHeight
+        }
     }
  } 
 
@@ -252,7 +271,6 @@ defineExpose({
 
 onMounted(()=>{
   refInput.value.$el.focus()
-  
   document.addEventListener("paste", handleCopyPasteImage)
 })
 

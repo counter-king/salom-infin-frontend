@@ -11,7 +11,8 @@ const URLS = {
   chatMessageFiles: "chat/message/files/",
   userOnline:"user-online/",
   chatMute: "chat/mute/",
-  chat:"chat/"
+  chat:"chat/",
+  chatGetMessagePage: "chat/get-message-page/"
 }
 /** Returns created personal and group chats list in searching **/
 export const fetchChatUsersSearch = (params) => {
@@ -104,4 +105,9 @@ export const fetchCreateChatMuteStatus = (id, body) => {
 // get chat files count by chat id
 export const fetchGetChatFilesCount = (id) => {
   return axiosConfig.get(`${URLS.chat}${id}/files-count/`);
+}
+
+// get message page 
+export const fetchGetMessagePage = body => {
+  return axiosConfig.post(`${URLS.chatGetMessagePage}`, body);
 }

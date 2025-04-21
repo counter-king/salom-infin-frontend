@@ -34,6 +34,9 @@ const props = defineProps({
   handleClickImage : {
     type: Function
   },
+  handleClickReplayMessage: {
+    type: Function
+  },
   uploaded: {
     type: Boolean,
     default: false
@@ -111,6 +114,7 @@ defineExpose({
         <!-- reply to message -->
         <div 
           v-if="!!props.message.replied_to"
+           @click="props.handleClickReplayMessage(props.message)"
           class="flex flex-col gap-1 pl-2 border-l-[2px] border-warning-500"
           >
           <span class="text-xs font-semibold text-warning-500 truncate">{{ props.message.replied_to?.sender?.first_name }} {{ props.message.replied_to?.sender?.last_name }}</span>

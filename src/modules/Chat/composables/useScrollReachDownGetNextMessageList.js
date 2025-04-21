@@ -19,17 +19,22 @@ const debouncedHandleScrollDown = useDebounceFn(async(event) => {
   if(event && event.target && event.target.scrollHeight - event.target.clientHeight - event.target.scrollTop < 200){
     const isPrivateChat = route.name == CHAT_ROUTE_NAMES.PRIVATE;
     const chat = isPrivateChat ? chatStore.selectedUser : chatStore.selectedGroup
-    if(page.value >= 1 && chat?.unread_count > 0 && !isLoading.value){
-    isLoading.value = true
-    try {
-      await chatStore.actionGetMessageListByChatId({ chat: chat.chat_id, page:page.value, page_size:pageSize.value }, false, false, true)
-      page.value -= 1
-    } catch (error) {
-      console.log(error)
-    } finally {
-      isLoading.value = false
+    // working cases
+    // when unread_counts are exist then work
+    // when replay message is clicked, then work
+    if(page.value >= 1 && chat?.unread_count > 0 && !isLoading.value || chatStore.replayedMessageClicked && page.value >= 1){
+      isLoading.value = true
+      try {
+        await chatStore.actionGetMessageListByChatId({ chat: chat.chat_id, page:page.value, page_size:pageSize.value }, false, false, true)
+        page.value -= 1
+      } catch (error) {
+        console.log(error)
+      } finally {
+        isLoading.value = false
+      }
+    } else {
+      chatStore.replayedMessageClicked = false
     }
-  }
   }
 }, 200)
 

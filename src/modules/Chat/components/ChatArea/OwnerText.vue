@@ -29,6 +29,9 @@ const props = defineProps({
   handleClickEmoji: {
     type: Function
   },
+  handleClickReplayMessage: {
+    type: Function
+  },
   index: {
     type: Number
   },
@@ -87,6 +90,7 @@ defineExpose({
         <!-- reply to message -->
         <div 
           v-if="!!props.message.replied_to"
+          @click="props.handleClickReplayMessage(props.message)"
           class="flex flex-col gap-1 pl-2 pr-2 border-l-[2px] rounded-r-[8px] bg-white/[12%]"
           >
           <span class="text-xs font-semibold text-white truncate">{{ props.message.replied_to?.sender?.first_name }} {{ props.message.replied_to?.sender?.last_name }}</span>
