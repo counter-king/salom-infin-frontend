@@ -333,6 +333,15 @@ const getMessageList = useDebounceFn(async()=>{
     }, 500);
 }, 400)
 
+// extra checking and provide scrollDown button correctly if there is scroll event not handled in handleScroll
+watch(()=> chatStore.messageListByChatId, ()=>{
+  setTimeout(()=>{
+      if(refChatArea.value?.scrollHeight - refChatArea.value?.clientHeight >  Math.floor(refChatArea.value.scrollTop + 100)){
+      showScrollDownButton.value = true
+    }
+  },0)
+})
+
 watch(
   () => route.params?.id,
   async (newId, oldId) => {

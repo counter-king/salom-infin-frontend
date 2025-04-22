@@ -52,7 +52,7 @@ const handleScrollDownSmooth = ()=> {
 watch(data, (newData) => {
   if(!newData) return
   newData = JSON.parse(newData);
-  console.log("user hand",newData);
+  // console.log("user hand",newData);
   // isPrivate is realted to which chatType, isPrivate is not current route chat
   const isPrivate = (newData?.chat_type || newData?.content?.chat_type) == CHAT_TYPES.PRIVATE
   const chat_id = [chatStore.selectedUser, chatStore.selectedGroup].find(item=> item?.chat_uid == route.params?.id)?.chat_id
