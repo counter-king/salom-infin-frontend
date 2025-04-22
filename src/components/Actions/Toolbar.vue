@@ -41,6 +41,10 @@ const props = defineProps({
   searchField: {
     type: Boolean,
     default: false
+  },
+  actionButtons: {
+    type: Array,
+    default: ['export', 'calendar', 'filter']
   }
 })
 
@@ -121,14 +125,16 @@ const emits = defineEmits(['emit:resetHeaders'])
           />
         </div>
 
-        <export-button />
+        <export-button v-if="actionButtons.includes('export')" />
 
         <calendar-menu
+          v-if="actionButtons.includes('calendar')"
           :action-list="props.actionList"
           :keys-to-include-on-clear-filter="props.keysToIncludeOnClearFilter"
         />
 
         <filter-menu
+          v-if="actionButtons.includes('filter')"
           :action-list="props.actionList"
           :filter-keys="props.filterKeys"
           :keys-to-include-on-clear-filter="props.keysToIncludeOnClearFilter"

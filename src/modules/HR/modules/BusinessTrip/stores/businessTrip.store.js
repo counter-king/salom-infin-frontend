@@ -32,18 +32,18 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
         active: true
       },
       {
-        header: "created-date",
-        field: "created_date",
+        header: "start-date",
+        field: "start_date",
         active: true
       },
-      // {
-      //   header: "Статус",
-      //   field: "status",
-      //   active: true
-      // },
       {
-        header: "branch",
-        field: "destinations",
+        header: "end-date",
+        field: "end_date",
+        active: true
+      },
+      {
+        header: "status",
+        field: "trip_status",
         active: true
       }
     ],
@@ -58,6 +58,33 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
         file: null
       }
     ],
+    tripStatuses: [
+      {
+        label: 'all',
+        value: null,
+        active: false
+      },
+      {
+        label: "not-started",
+        value: "not_started",
+        active: false
+      },
+      {
+        label: "on-trip",
+        value: "on_trip",
+        active: false
+      },
+      {
+        label: "reporting",
+        value: "reporting",
+        active: false
+      },
+      {
+        label: "closed",
+        value: "closed",
+        active: false
+      }
+    ]
   }),
   actions: {
     async actionGetBusinessTripList(params) {
@@ -152,28 +179,28 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
     resetHeaders() {
       this.headers = [
         {
+          header: "employee",
+          field: "employee",
+          active: true
+        },
+        {
           header: "department-name",
           field: "department",
           active: true
         },
         {
-          header: "created-date",
-          field: "created_date",
+          header: "start-date",
+          field: "start_date",
           active: true
         },
         {
-          header: "author",
-          field: "author",
+          header: "end-date",
+          field: "end_date",
           active: true
         },
         {
           header: "status",
-          field: "status",
-          active: true
-        },
-        {
-          header: "branch",
-          field: "destinations",
+          field: "trip_status",
           active: true
         }
       ]

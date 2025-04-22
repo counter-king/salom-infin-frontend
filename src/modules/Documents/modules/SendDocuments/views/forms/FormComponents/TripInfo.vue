@@ -58,6 +58,19 @@ const stepClick = async (step) => {
 
   await store.actionStepClick(router, route, step)
 }
+const onSenderCompanyChange = (val, index) => {
+  store.model.__groups[index].__regions = []
+}
+const onRegionsChange = (val, index) => {
+  val.value.forEach(item => {
+    if (item.id === store.model?.__groups[index]?.__company?.region?.id) {
+      const regionIndex = store.model.__groups[index].__regions.findIndex(region => region.id === item.id)
+      if (regionIndex || regionIndex === 0) {
+        store.model.__groups[index].__regions.splice(regionIndex, 1)
+      }
+    }
+  })
+}
 
 defineExpose({
   stepClick
@@ -73,7 +86,7 @@ defineExpose({
           :error="$v.__curator"
           api-url="top-signers"
           :api-params="{ doc_types: route.params.document_type }"
-          label="whom"
+          label="whom-specific"
           required
           placeholder="select-leader"
         />
@@ -120,6 +133,7 @@ defineExpose({
 
             <base-col col-class="w-1/2">
               <div class="flex align-center gap-x-4">
+<!--                <pre>{{ group.__company }}</pre>-->
                 <base-dropdown
                   v-model="group.__company"
                   :error="$v.__groups.$each.$response.$data[index].__company"
@@ -133,6 +147,7 @@ defineExpose({
                   searchable
                   :show-nested-error="showNestedError"
                   class="w-1/2"
+                  @emit:change="(val) => onSenderCompanyChange(val, index)"
                 >
                   <template #option="{ option }">
                     <user-with-radio
@@ -156,6 +171,7 @@ defineExpose({
                   required
                   :show-nested-error="showNestedError"
                   class="w-1/2"
+                  @emit:change="(val) => onRegionsChange(val, index)"
                 >
                   <template #chip="{ value }">
                     {{ value.name }}

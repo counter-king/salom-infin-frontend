@@ -3,9 +3,10 @@
 import {computed, onMounted} from "vue"
 import {useRoute, useRouter} from "vue-router"
 // Components
-import { ActionToolbar } from "@/components/Actions"
+import { ActionToolbar, TripStatusButtons } from "@/components/Actions"
 import BaseDataTable from "@/components/UI/BaseDataTable.vue"
 import { Plus20SolidIcon } from '@/components/Icons'
+import { TripStatus } from "@/components/Chips"
 // Store
 import {useAuthStore} from "@/modules/Auth/stores"
 import { useBusinessTripStore } from "@/modules/HR/modules/BusinessTrip/stores/businessTrip.store"
@@ -13,6 +14,8 @@ import { useBusinessTripStore } from "@/modules/HR/modules/BusinessTrip/stores/b
 import {COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES} from "@/enums"
 import { HR_BUSINESS_TRIP_COLUMNS, ROUTE_HR_BUSINESS_TRIP_DETAIL } from "@/modules/HR/constants"
 import { ROUTE_SD_CREATE } from "@/modules/Documents/modules/SendDocuments/constants"
+// Utils
+import { formatDate } from "@/utils/formatDate"
 
 // Composable
 const router = useRouter()
@@ -21,7 +24,7 @@ const BTStore = useBusinessTripStore()
 const currentUser = useAuthStore().currentUser
 
 // Const
-const filterKeys = ["users", "branches"]
+const filterKeys = ["trip_status"]
 const keysToIncludeOnClearFilter = ["destination"]
 
 // Computed
@@ -60,23 +63,30 @@ const manageRoute = () => {
 
 // Hooks
 onMounted(() => {
-  manageRoute()
+  // manageRoute()
 })
 </script>
 
 <template>
   <div class="business-trip-list-view">
+<!--    :keys-to-include-on-clear-filter="keysToIncludeOnClearFilter"-->
+<!--    :api-params="{ destination: currentUser?.company?.id }"-->
     <action-toolbar
       title="business-trip"
       :action-list="BTStore.actionGetBusinessTripList"
       :column-menu-items="BTStore.headers"
       :filter-keys="filterKeys"
-      :keys-to-include-on-clear-filter="keysToIncludeOnClearFilter"
       :storage-columns-name="HR_BUSINESS_TRIP_COLUMNS"
-      :api-params="{ destination: currentUser?.company?.id }"
+      :action-buttons="[]"
       search-field
       @emit:reset-headers="BTStore.resetHeaders"
     >
+      <template #title-after>
+        <TripStatusButtons
+          :action-list="BTStore.actionGetBusinessTripList"
+        />
+      </template>
+
       <template #end>
         <base-button
           label="create"
@@ -87,10 +97,10 @@ onMounted(() => {
         />
       </template>
     </action-toolbar>
+<!--    :api-params="apiParams"-->
 
     <base-data-table
       :action-list="BTStore.actionGetBusinessTripList"
-      :api-params="apiParams"
       :loading="BTStore.listLoading"
       :total-count="BTStore.totalCount"
       :value="BTStore.businessTripList"
@@ -101,7 +111,7 @@ onMounted(() => {
       @emit:row-click="onRowClick"
     >
       <template #department="{ data }">
-        <span>{{ data?.user?.top_level_department?.name }}</span>
+        <span class="max-w-[300px] block">{{ data?.user?.top_level_department?.name }}</span>
       </template>
 
       <template #employee="{ data }">
@@ -111,6 +121,20 @@ onMounted(() => {
 <!--          shape="circle"-->
 <!--          avatar-classes="w-8 h-8"-->
 <!--        />-->
+      </template>
+
+      <template #start_date="{ data }">
+        {{ formatDate(data?.start_date) }}
+      </template>
+
+      <template #end_date="{ data }">
+        {{ formatDate(data?.end_date) }}
+      </template>
+
+      <template #trip_status="{ data }">
+        <TripStatus
+          :status="data?.trip_status"
+        />
       </template>
 
       <template #destinations="{ data }">

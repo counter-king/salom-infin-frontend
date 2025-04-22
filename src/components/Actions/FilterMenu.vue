@@ -25,6 +25,8 @@ import DepartmentMultiSelect from "@/components/Select/DepartmentMultiSelect.vue
 import BaseMultiSelect from "@/components/UI/BaseMultiSelect.vue";
 import {UserWithRadio} from "@/components/Users";
 import BranchMultiSelect from "@/components/Select/BranchMultiSelect.vue";
+import { FORM_TYPE_READ } from "@/constants/constants";
+import { TRIP_STATUSES } from "@/enums";
 
 const props = defineProps({
   actionList: {
@@ -43,7 +45,7 @@ const props = defineProps({
 
 const route = useRoute();
 const router = useRouter();
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const filterStore = useFilterStore();
 const opRef = ref(null);
 const paginationStore = usePaginationStore();
@@ -113,7 +115,7 @@ const mapObjectsToKey = (sourceArray, targetKey) => {
 };
 const adjustKeysToValues = async () => {
   for (let i = 0; i < objectToKeysList.length; i++) {
-    await mapObjectsToKey(filterStore.filterState[`__${objectToKeysList[i].param}`], objectToKeysList[i].param);
+    await mapObjectsToKey(filterStore.filterState[`__${objectToKeysList[i].param}`], objectToKeysList[i].param)
   }
 }
 const filter = async () => {
@@ -134,10 +136,10 @@ const filter = async () => {
   await props.actionList({ ...route.query })
 }
 const clearFilter = async () => {
-  await clearModel(filterStore.filterState, props.keysToIncludeOnClearFilter);
+  await clearModel(filterStore.filterState, props.keysToIncludeOnClearFilter)
   toggle();
   if (route.query) {
-    let tempRouteQuery = filterObjectByKeys(route.query, props.keysToIncludeOnClearFilter);
+    let tempRouteQuery = filterObjectByKeys(route.query, props.keysToIncludeOnClearFilter)
     await paginationStore.resetPagination();
     await router.replace({
       query: {
@@ -147,7 +149,7 @@ const clearFilter = async () => {
         first_row: paginationStore.firstRow
       }
     });
-    await props.actionList({ ...route.query });
+    await props.actionList({ ...route.query })
   }
 }
 const fetchAndPopulateFilterState = async (queryParam, targetArray, action) => {
@@ -359,6 +361,18 @@ onMounted(async () => {
             :label="props.filterKeys.find(item => item.key === 'branch_recipients')?.label ? props.filterKeys.find(item => item.key === 'branch_recipients')?.label : 'branch'"
           />
         </base-col>
+
+        <base-col v-if="props.filterKeys.includes('trip_status')" col-class="w-1/2">
+          <base-dropdown
+            v-model="filterStore.filterState.trip_status"
+            :options="TRIP_STATUSES"
+            :option-label="locale === 'uz' ? 'title_uz' : 'title_ru'"
+            option-value="value"
+            label="status"
+            placeholder="select-status"
+          />
+        </base-col>
+
       </base-row>
 
 <!--      <pre>{{ props.filterModel }}</pre>-->

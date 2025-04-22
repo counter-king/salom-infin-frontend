@@ -46,7 +46,7 @@ const verifications = computed(() => {
       arr.push({
         label: 'Jo\'nadi',
         actionTime: item.left_at,
-        filial: item.is_sender ? item.company?.name : item.region?.name_uz,
+        filial: item.region?.name_uz || item.company?.name,
         responsible: formatUserFullName(item.left_verified_by)
       })
     }
@@ -54,7 +54,7 @@ const verifications = computed(() => {
       arr.push({
         label: 'Jo\'nadi',
         actionTime: item.left_at,
-        filial: item.is_sender ? item.company?.name : item.region?.name_uz,
+        filial: item.region?.name_uz || item.company?.name,
         responsible: formatUserFullName(item.left_verified_by)
       })
     }
@@ -62,7 +62,7 @@ const verifications = computed(() => {
       arr.push({
         label: 'Keldi',
         actionTime: item.arrived_at,
-        filial: item.is_sender ? item.company?.name : item.region?.name_uz,
+        filial: item.region?.name_uz || item.company?.name,
         responsible: formatUserFullName(item.arrived_verified_by)
       })
     }
@@ -70,7 +70,7 @@ const verifications = computed(() => {
       arr.push({
         label: 'Keldi',
         actionTime: item.arrived_at,
-        filial: item.is_sender ? item.company?.name : item.region?.name_uz,
+        filial: item.region?.name_uz || item.company?.name,
         responsible: formatUserFullName(item.arrived_verified_by)
       })
     }

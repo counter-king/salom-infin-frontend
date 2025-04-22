@@ -12,6 +12,6 @@ export const REGISTRATION_INCOMING_COLUMNS = "REGISTRATION_INCOMING_COLUMNS"
 
 export const pagination = {
     page: 1,
-    pageSize: 15,
+    pageSize: 10,
     firstRow: 0
 }

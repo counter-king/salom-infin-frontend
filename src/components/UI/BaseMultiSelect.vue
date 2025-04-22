@@ -15,7 +15,7 @@ import { USER_STATUS_CODES } from '@/enums'
 const modelValue = useModel(props, 'modelValue')
 const { t } = useI18n()
 // Macros
-const emit = defineEmits(['update:modelValue', 'emit:select-item'])
+const emit = defineEmits(['update:modelValue', 'emit:select-item', 'emit:change'])
 const props = defineProps({
   modelValue: {
     type: Array,
@@ -209,7 +209,7 @@ const toggle = (event) => {
 const onLazyLoad = (event) => {
   console.log('sssssss')
 }
-const onChange = async () => {
+const onChange = async (val) => {
   if (props.hideOnChange) {
     multiselect.value.hide()
   } else {
@@ -227,6 +227,8 @@ const onChange = async () => {
       }, 10)
     }
   }
+
+  emit('emit:change', val)
 }
 const onShow = () => {
   inputRef.value.focus()

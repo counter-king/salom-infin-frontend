@@ -33,7 +33,8 @@ export const useFilterStore = defineStore("filter-stores", {
       department_recipients: [],
       __department_recipients: [],
       branch_recipients: [],
-      __branch_recipients: []
+      __branch_recipients: [],
+      trip_status: null
     }
   }),
   actions: {
