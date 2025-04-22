@@ -73,7 +73,7 @@ const onConfirm = async () => {
   <div class="flex flex-col rounded-xl border border-greyscale-100 py-[10px] px-3 bg-greyscale-50 mb-[6px] gap-y-2">
 <!--    <pre>{{ props.item }}</pre>-->
     <span class="text-primary-900 text-sm font-semibold">
-      {{ props.item?.region?.name_uz || props.item?.company?.name }}
+      {{ item?.region?.name_uz }}
     </span>
 
     <div
