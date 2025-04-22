@@ -27,6 +27,9 @@ const props = defineProps({
   onShowContextMenu: {
     type: Function
   },
+  handleClickReplayMessage: {
+    type: Function
+  },
   classNames: {
     type: [String, Array, Object] 
   }
@@ -61,7 +64,7 @@ defineExpose({
       </div>
       <!-- time and check icon -->
       <div v-else class="flex gap-1 items-end select-none">
-        <span class="text-xs font-medium text-greyscale-500">{{ formatHour(props.message?.created_date) }}</span>
+        <span class="text-xs font-medium text-greyscale-500">{{ props.message?.created_date && formatHour(props.message?.created_date) }}</span>
         <base-iconify
           :icon="props.message?.is_read ? CheckReadIcon : CheckIcon"
           class="!w-5 !h-5 !text-success-500"
@@ -82,6 +85,7 @@ defineExpose({
         <!-- reply to message -->
         <div 
           v-if="!!props.message.replied_to"
+          @click="props.handleClickReplayMessage(props.message)"
           class="flex flex-col gap-1 pl-2 pr-2 border-l-[2px] rounded-r-[8px] bg-white/[12%]"
           >
           <span class="text-xs font-semibold text-white truncate">{{ props.message.replied_to?.sender?.first_name }} {{ props.message.replied_to?.sender?.last_name }}</span>

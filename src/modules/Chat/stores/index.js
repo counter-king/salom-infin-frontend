@@ -73,6 +73,7 @@ export const useChatStore = defineStore("chat-stores", {
     messageLinkList: [],
     chatFilesCount: {},
     typingUsers: {},
+    replayedMessageClicked: false,
     contextMenu: {
       tempMessage: null,
       message: null,

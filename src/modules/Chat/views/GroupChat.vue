@@ -35,6 +35,8 @@ import { useFileUploadDrop } from '../composables/useFileUploadDrop';
 import { useScrollReachUpGetNextMessageList } from '../composables/useScrollReachUpGetNextMessageList';
 import { useScrollReachDownGetNextMessageList } from '../composables/useScrollReachDownGetNextMessageList';
 import { useReadMessageObserver } from '../composables/useReadMessageObserver';
+// services
+import { fetchGetMessagePage } from '../services';
 
 const { menuItems, refContextMenu } = useContextMenu();
 const { onDragOver, onDragLeave, onDrop } = useFileUploadDrop();
@@ -74,13 +76,13 @@ const sendChatHandshake = ()=> {
 }
 // when scroll down, scrollDwonButton will be visible
 const handleScroll = (event) => {
-  if(event && event.target && event.target?.scrollHeight - event.target?.clientHeight >  Math.floor(event.target.scrollTop + 100)  ) {
+  if(event && event.target && event.target?.scrollHeight - event.target?.clientHeight >  Math.floor(event.target.scrollTop + 100) || (refChatArea.value?.scrollHeight - refChatArea.value?.clientHeight >  Math.floor(refChatArea.value.scrollTop + 100))  ) {
     showScrollDownButton.value = true
   } else {
     showScrollDownButton.value = false
   }
   // Only run handleScrollReachUp if initial render is complete
-  if (initialRenderComplete.value) {
+  if (initialRenderComplete.value && !chatStore.messageListByChatIdLoading) {
       handleScrollReachUp(event, handleScrollUp);
       handleScrollReachDown(event)
   }
@@ -90,7 +92,6 @@ const handleScrollUp = () => {
     top: refChatArea.value.clientHeight,
   });
 }
-
 const handleScrollDown = () => {
   refChatArea.value?.scrollTo({
     top: refChatArea.value?.scrollHeight,
@@ -108,7 +109,6 @@ const onShowContextMenu = (event, message, index) => {
   chatStore.contextMenu.index = index
   refContextMenu.value.menu.show(event);
 }
-
 const handleClickEmoji = (emojiType, messageId) => {
   chatStore.contextMenu.tempMessage = { message_id: messageId }
   menuItems.value[0].action(emojiType, emojiType)
@@ -197,30 +197,35 @@ const getMessageComponentProps = (message, index) => {
     index,
     handleClickEmoji,
     onShowContextMenu,
-    onShowEmojiContextMenu
+    onShowEmojiContextMenu,
+    handleClickReplayMessage
   };
 
   const additionalProps = ()=>{
-    if(isCurrentUser(message) && (message?.message_type === MESSAGE_TYPES.TEXT || message?.message_type === MESSAGE_TYPES.LINK)){
-      return {
-        messageInnerClass: {
+    const props = {};
+    const isTextOrLink = message?.message_type === MESSAGE_TYPES.TEXT || message?.message_type === MESSAGE_TYPES.LINK;
+    if(isCurrentUser(message) && isTextOrLink){
+      // realated to owners message props
+      props.messageInnerClass = {
           '!rounded-br-[4px]': showFriendTextAvatar(index),
           '!rounded-tr-[4px]': !showFriendTextAvatar(index)
-        }
       }
+      // realated to friends message props
     } else {
-      return {
-        avatarVisible: showFriendTextAvatar(index),
-        classNames: { 'mt-5': showFriendTextAvatar(index) }
+      props.avatarVisible = showFriendTextAvatar(index);
+      props.classNames = {
+        'mt-5': showFriendTextAvatar(index),
       };
     }
+
+    if (message.message_type === MESSAGE_TYPES.IMAGE) {
+      props.handleClickImage = handleClickImage;
+    }
+
+    return props;
   };
 
-  if (message.message_type === MESSAGE_TYPES.IMAGE) {
-    additionalProps.handleClickImage = handleClickImage;
-  }
-
-  return { ...baseProps, ...additionalProps(message) };
+  return { ...baseProps, ...additionalProps() };
 };
 
 const putScrollFirstUnreadMessagePalce = ()=>{
@@ -246,6 +251,54 @@ const putScrollFirstUnreadMessagePalce = ()=>{
       }
     })
 }
+
+const putScrollReplayedMessagePalce = (messageId)=>{
+  const data = document.querySelectorAll("[data-message-id]")
+    let count = 0
+    data.forEach(item=>{
+      if(item.getAttribute("data-message-id") == messageId && count==0){
+        item.classList.add("highlight");
+        item.style.position = "relative";
+        item.style.left = "-24px"
+        item.style.right = "-24px"
+        item.style.paddingRight= "24px"
+        item.style.paddingLeft= "24px"
+        item.style.paddingY="10px"
+        item.style.width = "calc(100% + 48px)"
+        item.scrollIntoView({ block: "nearest", behavior: "instant"});
+        count++
+      }
+      setTimeout(() => {
+        item.classList.add("fade-out");
+      }, 200); 
+      setTimeout(() => {
+        item.classList.remove("highlight", "fade-out");
+      }, 2200);
+    })
+}
+
+const handleClickReplayMessage = useDebounceFn(async (message) => {
+  if(message.replied_to){
+    const isMessageExistOnCurrentMessageList = chatStore.messageListByChatId.some(item => item.message_id == message.replied_to?.id)
+    if(isMessageExistOnCurrentMessageList){
+      putScrollReplayedMessagePalce(message.replied_to?.id)
+      chatStore.replayedMessageClicked = false
+    }
+    else {
+        const  data = await fetchGetMessagePage({
+          page_size: 20,
+          message_id: message.replied_to?.id,
+          chat_id: chatStore.selectedGroup?.chat_id
+        })
+        page.value = data?.data?.page || 1;
+        pageDown.value = data?.data?.page - 1
+        await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedGroup?.chat_id, page: page.value, page_size: pageSize.value }, true);
+        page.value +=1
+        putScrollReplayedMessagePalce(message.replied_to?.id)
+        chatStore.replayedMessageClicked = true
+    }
+  }
+}, 300)
 
 const getMessageListByCondition = async ()=>{
     pageDown.value = chatStore.selectedGroup.unread_count > 20 ? Math.ceil(chatStore.selectedGroup.unread_count / 20) : 1
@@ -279,6 +332,15 @@ const getMessageList = useDebounceFn(async()=>{
       initialRenderComplete.value = true;
     }, 500);
 }, 400)
+
+// extra checking and provide scrollDown button correctly if there is scroll event not handled in handleScroll
+watch(()=> chatStore.messageListByChatId, ()=>{
+  setTimeout(()=>{
+      if(refChatArea.value?.scrollHeight - refChatArea.value?.clientHeight >  Math.floor(refChatArea.value.scrollTop + 100)){
+      showScrollDownButton.value = true
+    }
+  },0)
+})
 
 watch(
   () => route.params?.id,
@@ -398,14 +460,14 @@ onMounted(() => {
       </div>
       <!-- get more Message by scroll down loading -->
       <div class="flex justify-center items-center fixed bottom-[14%] left-[50%] z-50" v-if="chatStore.messageListByChatIdAddScrollDownLoading">
-        <div class="w-9 h-9 bg-white p-1 rounded-full" style="box-shadow: 0px 2px 4px 0px rgba(47, 61, 87, 0.03), 0px 1px 1px 0px rgba(95, 110, 169, 0.03)">
+        <div class="w-10 h-10 bg-white p-1 rounded-full" style="box-shadow: 0px 2px 4px 0px rgba(47, 61, 87, 0.03), 0px 1px 1px 0px rgba(95, 110, 169, 0.03)">
           <base-spinner />
         </div>
       </div>
     </template>
   </div>
   <div class="px-6 mt-2">
-      <SendMessage ref="refSendMessage" />
+      <SendMessage ref="refSendMessage" v-model="pageDown" />
   </div>
   <ContextMenu :menu-items="menuItems" ref="refContextMenu" />
   <!-- emoji context menu -->
@@ -448,3 +510,13 @@ onMounted(() => {
   </template>
 </Galleria>
 </template>
+<style scoped>
+.highlight {
+  background-color: var(--primary-100);
+}
+
+.highlight.fade-out {
+  background-color: transparent;
+  transition: background-color 2s linear;
+}
+</style>
