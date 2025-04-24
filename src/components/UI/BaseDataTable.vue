@@ -151,7 +151,7 @@ onMounted( async () => {
     paginator-position="bottom"
     paginatorTemplate="RowsPerPageDropdown CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
     row-hover
-    :rows-per-page-options="[10, 15, 30]"
+    :rows-per-page-options="[10, 15, 30, 50, 100]"
     :rows="paginationStore.pageSize"
     currentPageReportTemplate="{first}-{last} из {totalRecords}"
     :scroll-height="props.scrollHeight"
