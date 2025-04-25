@@ -20,9 +20,10 @@ const props = defineProps({
       :label="item?.full_name"
       :image="item.avatar?.url"
       :color="item?.color"
+      :meta="item"
+      detailDialog
       avatarClasses="w-8 h-8"
     />
-
     <div class="flex-1 min-w-0">
       <div class="flex items-center gap-1 font-semibold leading-[1] mb-1">
         <h1 class="text-greyscale-900 text-[13px] font-semibold leading-[1] truncate">{{ props.label }}</h1>
