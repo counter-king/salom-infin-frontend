@@ -77,7 +77,7 @@ const signers = computed(() => {
         </div>
 
         <div>
-          Buxgalteriya hisobi va moliyaviy menejment departamenti tomonidan xizmat safari bilan bog‘liq xarajatlar uchun to‘lovlar belgilangan tartibda amalga oshirilsin.
+          Buxgalteriya hisobi va hisoboti departamenti tomonidan xizmat safari bilan bog‘liq xarajatlar uchun to‘lovlar belgilangan tartibda amalga oshirilsin.
         </div>
 
         <div v-if="composeModel?.type !== 'decree_for_leadership'">
