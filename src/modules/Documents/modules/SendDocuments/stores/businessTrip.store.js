@@ -73,7 +73,8 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
           __regions: null,
           __start_date: null,
           __end_date: null,
-          __company: null
+          __company: null,
+          __route: null
         }
       ],
       __curator: null,
@@ -121,6 +122,9 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
             required: helpers.withMessage(`Поле не должен быть пустым`, required),
           },
           __company: {
+            required: helpers.withMessage(`Поле не должен быть пустым`, required),
+          },
+          __route: {
             required: helpers.withMessage(`Поле не должен быть пустым`, required),
           },
         }),
@@ -214,20 +218,20 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
         active: true,
         value: STEPPER_TRIP_INFO
       },
-      {
-        id: 2,
-        label: 'work-plan',
-        icon: DocumentTextBoldIcon,
-        active: false,
-        value: STEPPER_WORK_PLAN
-      },
-      {
-        id: 3,
-        label: 'route',
-        icon: Routing2BoldIcon,
-        active: false,
-        value: STEPPER_ROUTE
-      },
+      // {
+      //   id: 2,
+      //   label: 'work-plan',
+      //   icon: DocumentTextBoldIcon,
+      //   active: false,
+      //   value: STEPPER_WORK_PLAN
+      // },
+      // {
+      //   id: 3,
+      //   label: 'route',
+      //   icon: Routing2BoldIcon,
+      //   active: false,
+      //   value: STEPPER_ROUTE
+      // },
       {
         id: 4,
         label: 'decree',
@@ -241,19 +245,25 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
         id: 1,
         title: 'airplane',
         icon: PlaneIcon,
-        value: BY_PLANE
+        value: BY_PLANE,
+        name_uz: 'Samolyot',
+        name_ru: 'Самолёт'
       },
       {
         id: 2,
         title: 'train',
         icon: TrainIcon,
-        value: BY_TRAIN
+        value: BY_TRAIN,
+        name_uz: 'Poyezd',
+        name_ru: 'Поезд'
       },
       {
         id: 3,
         title: 'taxi',
         icon: LocalTaxiIcon,
-        value: BY_CAR
+        value: BY_CAR,
+        name_uz: 'Taksi',
+        name_ru: 'Такси'
       }
     ],
     routeTypeTabItems: [
@@ -343,6 +353,7 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
             const __company = await adjustObjectToArray('companies', [], false, group.items[0].sender_company)
             const __start_date = group.items[0].start_date
             const __end_date = group.items[0].end_date
+            const __route = group.items[0].route
 
             return {
               __users,
@@ -350,7 +361,8 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
               __regions,
               __start_date,
               __end_date,
-              __company
+              __company,
+              __route
             }
           })
         )
@@ -392,7 +404,8 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
         __regions: null,
         __start_date: null,
         __end_date: null,
-        __company: null
+        __company: null,
+        __route: null
       })
     },
     /** **/
@@ -512,7 +525,8 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
             __regions: null,
             __start_date: null,
             __end_date: null,
-            __company: null
+            __company: null,
+            __route: null
           }
         ],
         __curator: null,

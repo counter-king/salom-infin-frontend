@@ -81,9 +81,9 @@ const bookings = computed(() => {
   >
     <table class="business-trip-table w-full mt-4 text-sm text-center">
       <tr class="bg-greyscale-100 font-semibold">
-        <td class="w-[16%] text-start">
-          Guruh {{ item.group_id }}:
-        </td>
+<!--        <td class="w-[16%] text-start">-->
+<!--          Guruh {{ item.group_id }}:-->
+<!--        </td>-->
         <td class="w-[28%]">
           F.I.Sh
         </td>
@@ -100,7 +100,7 @@ const bookings = computed(() => {
         v-for="(child, index) in item.children"
         :key="child?.user?.id"
       >
-        <td></td>
+<!--        <td></td>-->
         <td>{{ child?.user?.full_name }}</td>
         <td>{{ child?.user?.position?.name }}</td>
         <td>{{ child?.user?.top_level_department?.name }}</td>
@@ -176,7 +176,8 @@ const bookings = computed(() => {
   </div>
   <!-- /Loop according to groups -->
 
-  <template v-if="composeModel?.type !== 'decree'">
+<!--  composeModel?.type !== 'decree'-->
+  <template v-if="false">
     <divider class="my-4 border border-greyscale-300" />
 
     <table class="business-trip-table w-full text-sm text-center">

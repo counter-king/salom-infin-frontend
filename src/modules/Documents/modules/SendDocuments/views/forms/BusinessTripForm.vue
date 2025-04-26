@@ -72,8 +72,8 @@ const onStepClick = async (item) => {
   if (route.query?.step !== item.value) {
     await _childComponent.stepClick(item.value)
     if (item.value === STEPPER_DECREE) {
-      await validateAndSendNotice()
-      await dispatchNotify(null, t('notice-saved-successfully'), COLOR_TYPES.SUCCESS)
+      // await validateAndSendNotice()
+      // await dispatchNotify(null, t('notice-saved-successfully'), COLOR_TYPES.SUCCESS)
     }
   }
 }
@@ -115,6 +115,7 @@ const validateAndSendNotice = async () => {
         sender_company: group.__company?.id,
         regions: group.__regions.map(r => r.id),
         tags: group.__tags.map(t => ({ id: t.id })),
+        route: group.__route,
         group_id,
         ...(user.business_trip_id ? { id: user.business_trip_id } : {})
       }))
@@ -126,24 +127,24 @@ const validateAndSendNotice = async () => {
   store.model.document_type = route.params.document_type
   store.model.document_sub_type = route.params.document_sub_type
 
-  store.model.bookings = store.booking_model.bookings.map(item => ({
-    ...item,
-    segments: item.segments.map(segment => ({
-      departure_city: segment.departure_city.id,
-      arrival_city: segment.arrival_city.id,
-      departure_date: `${segment.date}T${segment.time?.hours}:${segment.time?.minutes}:00+05:00`,
-      departure_end_date: null,
-      // departure_date: adjustDateTime(segment.date, segment.time, 0),
-      // departure_end_date: adjustDateTime(segment.date, segment.time, 1),
-      segment_class: segment.segment_class.value
-    })),
-    passengers: item.passengers.map(passenger => ({ user: passenger.id }))
-  }))
-
-  store.model.trip_plans = store.trip_plan_model.trip_plans.map(plan => ({
-    users: plan.users.map(user => ({ id: user.id })),
-    text: plan.text
-  }))
+  // store.model.bookings = store.booking_model.bookings.map(item => ({
+  //   ...item,
+  //   segments: item.segments.map(segment => ({
+  //     departure_city: segment.departure_city.id,
+  //     arrival_city: segment.arrival_city.id,
+  //     departure_date: `${segment.date}T${segment.time?.hours}:${segment.time?.minutes}:00+05:00`,
+  //     departure_end_date: null,
+  //     // departure_date: adjustDateTime(segment.date, segment.time, 0),
+  //     // departure_end_date: adjustDateTime(segment.date, segment.time, 1),
+  //     segment_class: segment.segment_class.value
+  //   })),
+  //   passengers: item.passengers.map(passenger => ({ user: passenger.id }))
+  // }))
+  //
+  // store.model.trip_plans = store.trip_plan_model.trip_plans.map(plan => ({
+  //   users: plan.users.map(user => ({ id: user.id })),
+  //   text: plan.text
+  // }))
 
   if (props.formType === FORM_TYPE_CREATE && route.query.notice_id) {
     try {

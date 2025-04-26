@@ -13,7 +13,16 @@
     <script src="/e-imzo.js"></script>
     <script src="/e-imzo-client.js"></script>
 
-    <script src="/libs/jquery.js"></script>
-    <script src="https://jira.sqb.uz/plugins/servlet/issueCollectorBootstrap.js?collectorId=687ddb3c&locale=ru_RU"></script>
+    <script>
+      if (window.location.hostname.includes('sqb.uz')) {
+        const script1 = document.createElement('script')
+        script1.src = '/libs/jquery.js'
+        document.body.appendChild(script1)
+
+        const script2 = document.createElement('script')
+        script2.src = 'https://jira.sqb.uz/plugins/servlet/issueCollectorBootstrap.js?collectorId=687ddb3c&locale=ru_RU'
+        document.body.appendChild(script2)
+      }
+    </script>
   </body>
 </html>

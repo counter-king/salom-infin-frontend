@@ -24,7 +24,7 @@ const route = useRoute()
 const router = useRouter()
 const store = useBusinessTripStore()
 const commonStore = useCommonStore()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const $v = useVuelidate(store.rules, store.model)
 
 // Props
@@ -56,7 +56,10 @@ const stepClick = async (step) => {
     return
   }
 
-  await store.actionStepClick(router, route, step)
+  emit('emit:onValidateAndSend')
+  await store.actionStepClick(router, route, 'decree')
+
+  // await store.actionStepClick(router, route, step)
 }
 const onSenderCompanyChange = (val, index) => {
   store.model.__groups[index].__regions = []
@@ -75,6 +78,8 @@ const onRegionsChange = (val, index) => {
 defineExpose({
   stepClick
 })
+
+const emit = defineEmits(['emit:onValidateAndSend'])
 </script>
 
 <template>
@@ -189,32 +194,56 @@ defineExpose({
             </base-col>
 
             <base-col col-class="w-1/2">
-              <base-multi-select
-                v-model="group.__tags"
-                :error="$v.__groups.$each.$response.$data[index].__tags"
-                api-url="tags"
-                :api-params="{ document_sub_type: route.params. document_sub_type, page_size: 500}"
-                :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
-                display="chip"
-                selectable
-                label="trip-purpose"
-                type="department"
-                placeholder="select-targets"
-                required
-                :show-nested-error="showNestedError"
-              >
-                <template #chip="{ value }">
-                  {{ value.name }}
-                </template>
+              <div class="flex w-full gap-x-4">
+                <base-multi-select
+                  v-model="group.__tags"
+                  :error="$v.__groups.$each.$response.$data[index].__tags"
+                  api-url="tags"
+                  :api-params="{ document_sub_type: route.params. document_sub_type, page_size: 500}"
+                  :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
+                  display="chip"
+                  selectable
+                  label="trip-purpose"
+                  type="department"
+                  placeholder="select-targets"
+                  required
+                  :show-nested-error="showNestedError"
+                  class="w-1/2"
+                >
+                  <template #chip="{ value }">
+                    {{ value.name }}
+                  </template>
 
-                <template #option="{ value }">
-                  <user-with-radio
-                    :title="value.name"
-                    :text-truncate="false"
-                  >
-                  </user-with-radio>
-                </template>
-              </base-multi-select>
+                  <template #option="{ value }">
+                    <user-with-radio
+                      :title="value.name"
+                      :text-truncate="false"
+                    >
+                    </user-with-radio>
+                  </template>
+                </base-multi-select>
+
+                <base-dropdown
+                  v-model="group.__route"
+                  :error="$v.__groups.$each.$response.$data[index].__route"
+                  v-model:options="store.routeTabItems"
+                  required
+                  label="transport-type"
+                  placeholder="select-transport-type"
+                  :option-label="locale === 'uz' ? 'name_uz' : 'name_ru'"
+                  option-value="value"
+                  :show-nested-error="showNestedError"
+                  class="w-1/2"
+                >
+                  <template #option="{ option }">
+                    <user-with-radio
+                      :title="t(option.title)"
+                      :text-truncate="false"
+                    >
+                    </user-with-radio>
+                  </template>
+                </base-dropdown>
+              </div>
             </base-col>
 
             <base-col col-class="w-1/2">
