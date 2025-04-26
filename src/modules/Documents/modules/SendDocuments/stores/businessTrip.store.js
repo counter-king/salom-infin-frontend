@@ -61,7 +61,7 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
       notices: [],
       start_date: null,
       end_date: null,
-      short_description: null,
+      short_description: "Xizmat safariga yuborish  to‘g‘risida",
       sender: null,
       signers: [],
       files: [],

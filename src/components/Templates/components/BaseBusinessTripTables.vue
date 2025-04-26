@@ -81,16 +81,16 @@ const bookings = computed(() => {
   >
     <table class="business-trip-table w-full mt-4 text-sm text-center">
       <tr class="bg-greyscale-100 font-semibold">
-<!--        <td class="w-[16%] text-start">-->
-<!--          Guruh {{ item.group_id }}:-->
-<!--        </td>-->
-        <td class="w-[28%]">
+        <td class="w-[5%] text-start">
+          №
+        </td>
+        <td class="w-[30%]">
           F.I.Sh
         </td>
-        <td class="w-[28%]">
+        <td class="w-[30%]">
           Lavozimi
         </td>
-        <td class="w-[28%]">
+        <td class="w-[35%]">
           Tarkibiy tuzilmasi
         </td>
       </tr>
@@ -100,7 +100,7 @@ const bookings = computed(() => {
         v-for="(child, index) in item.children"
         :key="child?.user?.id"
       >
-<!--        <td></td>-->
+        <td>{{ index + 1 }}.</td>
         <td>{{ child?.user?.full_name }}</td>
         <td>{{ child?.user?.position?.name }}</td>
         <td>{{ child?.user?.top_level_department?.name }}</td>
@@ -155,11 +155,9 @@ const bookings = computed(() => {
 
     <table class="business-trip-table w-full text-sm text-center mt-2">
       <tr class="bg-greyscale-100 font-semibold">
-        <td class="w-1/3 text-start">
+        <td class="w-[5%] text-start">№</td>
+        <td class="text-start w-[95%]">
           Xizmat safari maqsadi:
-        </td>
-        <td class="w-2/3 text-center">
-          Qisqacha mazmuni
         </td>
       </tr>
 
@@ -168,11 +166,15 @@ const bookings = computed(() => {
         v-for="(tag, index) in item.children[0]?.tags"
         :key="index"
       >
-        <td></td>
-        <td>{{ tag?.name_uz }}</td>
+        <td class="text-start">
+          {{ index + 1 }}.
+        </td>
+        <td class="text-start">{{ tag?.name_uz }}</td>
       </tr>
       <!-- /Loop according to group tags -->
     </table>
+
+    <divider v-if="index < groups.length - 1" class="my-8 border border-greyscale-300" />
   </div>
   <!-- /Loop according to groups -->
 
