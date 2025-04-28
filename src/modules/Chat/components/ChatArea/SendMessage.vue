@@ -183,6 +183,10 @@ const handleMessageByIcon = () => {
 const onChangeInput = () => {
   sendMessageIsTyping()
   sendChatHandshake()
+
+  const lineHeight = 24;
+  const textarea = refInput.value.$el;
+  rows.value = Math.min(5, Math.max(1, Math.ceil(textarea.scrollHeight / lineHeight)));
 }
 
 // when emoji selected
@@ -207,13 +211,12 @@ const onClickSendMessage = () => {
   refInput.value.$el.focus()
 }
 
-const handlePaste = async() => {
-  await nextTick(); 
-  setTimeout(() => {
-    rows.value = message.value.split("\n").length
-  }, 10);
-  
-}
+// const handlePaste = async() => {
+//   await nextTick(); 
+//   setTimeout(() => {
+//     rows.value = message.value.split("\n").length
+//   }, 10);
+// }
 
 const debouncedUploadFile = useDebounceFn((file) => {
     uploadFiles([file]);
@@ -320,7 +323,6 @@ onUnmounted(() => {
       v-model="message"
       @input="onChangeInput"
       @keydown="handleSendMessage"
-      @paste="handlePaste"
       ref="refInput"
       @focus="isFocused = true"
       @blur="isFocused = false"
