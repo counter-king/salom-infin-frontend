@@ -7,9 +7,12 @@ import { numberFormat } from '@/utils/formatIntl'
 const dashboardStore = useHRDashboardStore()
 
 onMounted(async () => {
+  const month = new Date().getMonth()
+  const year = new Date().getFullYear()
+
   await dashboardStore.actionDashboardPayrolls({
-    start_date: '2024-01-01',
-    end_date: '2025-12-31',
+    start_date: `${year}-01-01`,
+    end_date: `${year}-${month < 9 ? '0' + month : month}-01`,
   })
 })
 </script>
