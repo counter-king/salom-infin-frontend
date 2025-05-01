@@ -24,7 +24,7 @@ onMounted(async () => {
         <col-table>Головной офис</col-table>
 
         <template v-for="item in dashboardStore.payrolls?.values?.head_office">
-          <col-table class="text-center">{{ numberFormat(item.amount) }}</col-table>
+          <col-table>{{ numberFormat(item.amount) }}</col-table>
         </template>
       </row-table>
 
@@ -32,7 +32,7 @@ onMounted(async () => {
         <col-table>Филиал</col-table>
 
         <template v-for="item in dashboardStore.payrolls?.values?.branches">
-          <col-table class="text-center">{{ numberFormat(item.amount) }}</col-table>
+          <col-table>{{ numberFormat(item.amount) }}</col-table>
         </template>
       </row-table>
     </template>

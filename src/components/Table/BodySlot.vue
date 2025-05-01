@@ -14,7 +14,7 @@ const { t } = useI18n()
 <template>
   <div class="body-slot-datatable p-datatable">
     <div class="body-slot-wrapper p-datatable-wrapper">
-      <table role="table" class="body-slot-datatable-table p-datatable-table p-datatable-scrollable-table border-separate border-spacing-y-1 -mt-1">
+      <table role="table" class="body-slot-datatable-table p-datatable-table p-datatable-scrollable-table w-full border-separate border-spacing-y-1 -mt-1">
         <thead class="body-slot-datatable-thead p-datatable-thead bg-white">
           <tr>
             <th class="w-[60px] bg-white !text-sm font-semibold !text-greyscale-500">
