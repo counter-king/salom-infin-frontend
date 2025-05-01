@@ -806,5 +806,7 @@
   "not-started": "Не начато",
   "on-trip": "В командировке",
   "reporting": "Предоставление отчета",
-  "closed": "Закрыто"
+  "closed": "Закрыто",
+  "main-dashboard": "Общий дашбоард",
+  "financial-dashboard": "Финансовый дашбоард"
 }

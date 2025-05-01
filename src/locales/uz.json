@@ -805,5 +805,7 @@
   "not-started": "Boshlanmagan",
   "on-trip": "Xizmat safarida",
   "reporting": "Hisobot topshrish",
-  "closed": "Yakunlangan"
+  "closed": "Yakunlangan",
+  "main-dashboard": "Umumiy dashbord",
+  "financial-dashboard": "Moliyaviy dashbord"
 }
