@@ -18,7 +18,7 @@ const HrDashboard = [
           isAuthRequired: true,
           navigation: true
         },
-        component: () => import('../views/main.vue'),
+        component: () => import('../views/Main.vue'),
       },
       {
         path: 'financial',
@@ -27,7 +27,7 @@ const HrDashboard = [
           isAuthRequired: true,
           navigation: true
         },
-        component: () => import('../views/financial.vue'),
+        component: () => import('../views/Financial.vue'),
       }
     ]
   }
