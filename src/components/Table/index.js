@@ -1,3 +1,6 @@
+export { default as BodySlotTable } from './BodySlot.vue'
 export { default as CardTable } from './Card.vue'
+export { default as ColTable } from './Col.vue'
 export { default as GroupTable } from './Group.vue'
 export { default as LinkableCell } from './LinkableCell.vue'
+export { default as RowTable } from './Row.vue'

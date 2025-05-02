@@ -807,5 +807,7 @@
   "on-trip": "В командировке",
   "reporting": "Предоставление отчета",
   "closed": "Закрыто",
+  "main-dashboard": "Общий дашбоард",
+  "financial-dashboard": "Финансовый дашбоард",
   "mobile-number": "Мобильный номер"
 }
