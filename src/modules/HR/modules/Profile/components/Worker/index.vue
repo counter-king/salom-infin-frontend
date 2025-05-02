@@ -117,6 +117,20 @@ const items = ref([
     editable: false
   },
   {
+    key: 'email',
+    title: 'Корп. почта',
+    description: authStore.currentUser.email ?? '-',
+    icon: LetterBoldIcon,
+    editable: true
+  },
+  {
+    key: 'phone_2',
+    title: 'Мобильный номер',
+    description: authStore.currentUser?.phone_2 ?? '-',
+    icon: CallMedicineRoundedBoldIcon,
+    editable: true
+  },
+  {
     key: 'empty',
     title: null,
     description: null,
@@ -128,13 +142,6 @@ const items = ref([
   //   description: authStore.currentUser.begin_work_date ?? '-',
   //   icon: BriefCase20SolidIcon
   // },
-  {
-    key: 'email',
-    title: 'Корп. почта',
-    description: authStore.currentUser.email ?? '-',
-    icon: LetterBoldIcon,
-    editable: true
-  },
 ])
 // Watch
 // watch(
@@ -255,9 +262,10 @@ onMounted(() => {
                   ref="inputRef"
                   v-model="editValue"
                   v-maska
-                  :data-maska="item.key === 'cisco' ? '##-##' : undefined"
+                  :data-maska="item.key === 'cisco' ? '##-##' : item.key === 'phone_2' ? '+998 ## ### ## ##' : undefined"
                   type="text"
                   class="w-full border-b-[2px] border-b-primary-500 bg-transparent outline-none"
+                  :placeholder="item.key === 'phone_2' ? '+998 ## ### ## ##' : ''"
                 />
               </template>
 
@@ -269,7 +277,7 @@ onMounted(() => {
                     data-maska="+### ## ### ## ##"
                     type="text"
                     readonly
-                    class="w-full border-transparent bg-transparent outline-none"
+                    class="w-full font-semibold border-transparent bg-transparent outline-none"
                   />
                 </template>
 

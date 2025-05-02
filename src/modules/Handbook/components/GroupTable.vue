@@ -204,6 +204,10 @@ const filterValueChildren = computed(()=> props.value[0]?.children.filter((child
           <div class="max-w-[225px] w-full bg-greyscale-50 py-[10px] px-4 rounded-tr-lg rounded-br-lg">
             <span class="text-xs text-greyscale-500">Личный номер</span>
           </div>
+
+          <div class="max-w-[225px] w-full bg-greyscale-50 py-[10px] px-4 rounded-tr-lg rounded-br-lg">
+            <span class="text-xs text-greyscale-500">Мобильный номер</span>
+          </div>
         </div>
       </template>
 
