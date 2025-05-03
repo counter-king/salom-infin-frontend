@@ -809,5 +809,8 @@
   "closed": "Закрыто",
   "main-dashboard": "Общий дашбоард",
   "financial-dashboard": "Финансовый дашбоард",
-  "mobile-number": "Мобильный номер"
+  "mobile-number": "Мобильный номер",
+  "mlrd": "млрд",
+  "mln": "млн",
+  "ming": "тысяч"
 }

@@ -124,6 +124,58 @@ export const maskNumbers = (number) => number.replace(/\D/g, '').replace( /(\d{3
  * Сделает первую букву заглавный
  * */
 export const firstLetterCapitalize = (value) => value.charAt(0).toUpperCase() + value.slice(1)
+/**
+ *
+ * */
+export const getNiceStep = (maxValue, stepsCount) => {
+  const roughStep = maxValue / stepsCount
+
+  const exponent = Math.floor(Math.log10(roughStep))
+  const base = Math.pow(10, exponent)
+
+  return Math.ceil(roughStep / base) * base
+}
+/**
+ *
+ * */
+export const generateCleanYAxisLabels = (maxValue, stepsCount = 7) => {
+  const extendedMax = maxValue * 1.2
+  const step = getNiceStep(extendedMax, stepsCount)
+  const roundedMax = step * stepsCount
+  const labels = []
+
+  for (let i = 0; i <= stepsCount; i++) {
+    labels.push(i * step)
+  }
+
+  return labels
+}
+
+export const formatNumberToMillionsOrBillions = (value) => {
+  if (value >= 1_000_000_000) {
+    return (value / 1_000_000_000).toFixed(1).replace(/\.0$/, '')
+  } else if (value >= 1_000_000) {
+    return (value / 1_000_000).toFixed(1).replace(/\.0$/, '')
+  } else {
+    return value.toString()
+  }
+}
+/**
+ * Финансовом секторе отображение
+ * число миллиард пишется как млн
+ * */
+export const formatNumberToFinanceChart = (value) => {
+  if (value >= 1_000_000_000_000) {
+    return 'mlrd'
+  }
+  else if (value >= 1_000_000_000) {
+    return 'mln'
+  } else if (value >= 1_000_000) {
+    return 'sum'
+  } else {
+    return ''
+  }
+}
 /*
 *
 * */

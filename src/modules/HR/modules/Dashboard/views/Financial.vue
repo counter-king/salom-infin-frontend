@@ -6,7 +6,7 @@ import FinancialTable from '../components/FinancialTable.vue'
 import FinancialChart from '../components/FinancialChart.vue'
 
 const { t } = useI18n()
-const tabIndex = ref(1)
+const tabIndex = ref(0)
 </script>
 
 <template>
