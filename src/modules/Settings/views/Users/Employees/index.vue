@@ -14,7 +14,7 @@ import OverlayPanel from 'primevue/overlaypanel';
 import InputSwitch from 'primevue/inputswitch';
 import { tableConfig, columnConfig, dropdownConfig, paginationConfig, dropdownOptions, overlayConfig } from './config';
 import { useI18n } from "vue-i18n";
-import { SettingsMinimalisticIcon } from '@/components/Icons'
+import { RefreshIcon, SettingsMinimalisticIcon } from '@/components/Icons'
 const { locale, t } = useI18n();
 const defaultFilter = { page: 1, page_size: 15, search: '' };
 const count = ref(1);
@@ -71,10 +71,18 @@ const headers = ref([
     header: 'actions',
     is_active: true,
   },
+  {
+    columnKey: 'synchronization',
+    field: 'synchronization',
+    header: 'synchronization',
+    is_active: true,
+  },
 ]);
 const loading = ref(false);
 const employees = ref([]);
 const settingsOverlay = ref(null);
+const syncDialogVisible = ref(false);
+const syncEmployeeLoading = ref(false);
 const visibleHeaders = computed(() => headers.value.filter(header => header?.is_active));
 const editableHeaders = computed(() => headers?.value.filter(header => !header?.disabled));
 const setVisible = newVisible => {
@@ -150,6 +158,26 @@ const initHeaders = () => {
     headers.value = newHeaders;
   }
 };
+
+const onSyncEmployee = (employeeId) => {
+  syncEmployeeLoading.value = true;
+  axiosConfig
+    .get(`/users/${employeeId}/sync_user_from_iabs/`)
+    .then(() => {
+        syncDialogVisible.value = true;
+    })
+    .catch(error => {
+      console.log(error)
+    })
+    .finally(() => {
+      syncEmployeeLoading.value = false;
+    });
+};
+
+const onCloseSyncDialog = () => {
+  syncDialogVisible.value = false;
+  getFirstPageEmployees()
+}
 onMounted(() => {
   getFirstPageEmployees();
   initHeaders();
@@ -215,6 +243,15 @@ onMounted(() => {
             :getFirstPageEmployees="getFirstPageEmployees"
             :setEmployees="setEmployees"
             />
+            <template v-if="field === 'synchronization'">
+              <div 
+                @click="onSyncEmployee(data.id)"
+                class="flex items-center justify-center w-10 h-10 bg-success-300 hover:bg-success-500 rounded-full text-white"
+                :class="{ '!pointer-events-none': syncEmployeeLoading }"
+                >
+                 <base-iconify :icon="RefreshIcon" class="!w-5 !h-5"/>
+              </div>
+            </template>
         </template>
       </Column>
       <template #loading>
@@ -293,6 +330,24 @@ onMounted(() => {
     :setVisible="setVisible"
     :visible="visible"
     />
+  <base-dialog
+    :visible="syncDialogVisible"
+    :header="t('synchronization')"
+    @update:visible="()=>onCloseSyncDialog()"
+    max-width="max-w-[500px]"
+    >
+    <template #content>
+      <div class="flex justify-center items-center">
+        <h1 class="text-greyscale-600 text-2xl font-bold"> {{ t('successfully-completed') }}</h1>
+      </div>
+    </template>
+    <template #footer>
+      <base-button
+        @click="onCloseSyncDialog"
+        label="close"
+        />
+    </template>
+  </base-dialog>
 </template>
 <style>
 .employees-table th:first-child, td:first-child {

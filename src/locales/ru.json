@@ -813,6 +813,8 @@
   "mlrd": "млрд",
   "mln": "млн",
   "ming": "тысяч",
+  "synchronization": "Синхронизация",
+  "successfully-completed": "Готово успешно",
   "finance-dashboard": {
     "text-0": "Накопительный итог с начала года",
     "text-1": "Материальная помощь",
