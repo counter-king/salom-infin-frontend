@@ -812,5 +812,8 @@
   "mobile-number": "Мобильный номер",
   "mlrd": "млрд",
   "mln": "млн",
-  "ming": "тысяч"
+  "ming": "тысяч",
+  "synchronization": "Синхронизация",
+  "successfully-completed": "Готово успешно"
+
 }
