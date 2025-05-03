@@ -1,11 +1,11 @@
 <script setup>
 // core
 import { ref } from 'vue';
-import { useI18n } from 'vue-i18n';
 // components
 import HeaderToolbar from '../../components/MyAttendance/HeaderToolbar.vue';
 import ActivityCard from '../../components/ActivityCard.vue';
 import { AlarmBoldIcon, AlarmTurnOffBoldIcon, CalendarDateBoldIcon, CalendarSearchBoldIcon, CheckCircleBoldIcon, TreePalmIcon } from '@/components/Icons';
+import CaledarTable from '../../components/MyAttendance/CaledarTable.vue';
 
 const activityData = ref([
     {
@@ -76,11 +76,11 @@ const activityData = ref([
 <div class="flex flex-col">
     <!-- header-toolbar -->
     <HeaderToolbar />
+    <!-- activity cards -->
     <div class="flex items-center gap-2">
         <ActivityCard v-for="activity in activityData" :key="activity.id" :data="activity" />
     </div>
     <!-- components -->
-    <div>2</div>
     <router-view />
 </div>
 </template>

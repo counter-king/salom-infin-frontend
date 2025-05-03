@@ -5,8 +5,9 @@ import { useI18n } from 'vue-i18n';
 // components
 import { ActionToolbar } from '@/components/Actions';
 import ToggleButton from './ToggleButton.vue';
-import { AltArrowLeftIcon, AltArrowRightIcon, FileDownloadIcon } from '@/components/Icons';
+import { FileDownloadIcon } from '@/components/Icons';
 import BaseButton from '@/components/UI/BaseButton.vue';
+import CalendarButton from './CalendarButton.vue';
 
 const { t } = useI18n()
 // reactive
@@ -15,23 +16,6 @@ const selectedTabView = ref('calendar')
 const onSelectedTabViewChange = (view) => {
   selectedTabView.value = view
 }
-
-const controlPagination = [
-    {
-        icon: AltArrowLeftIcon,
-        action: () => {
-            console.log("ishla")
-        }
-    },
-    {
-        icon: AltArrowRightIcon,
-        action: () => {
-            console.log("ishla")
-        }
-    }
-
-]
-
 </script>           
 <template>
     <action-toolbar :title="t('my-attendance')">
@@ -40,28 +24,7 @@ const controlPagination = [
     </template>
     <template #filters>
       <div class="flex items-center gap-2">
-        <div class="flex items-center gap-2">
-            <div class="text-base font-medium text-greyscale-500 mr-1">
-                Апрель, 2025
-            </div>
-            <div
-                v-for="item in controlPagination"
-                :key="item.icon"
-                class="flex items-center justify-center p-[10px] bg-white rounded-full cursor-pointer hover:text-primary-500 "
-                @click="item.action"
-                v-tooltip.top="{
-                    value: `${t('next-month')}`,
-                    pt: {
-                        arrow: {
-                            class: '!text-greyscale-900'
-                        },
-                        text: '!px-3 !py-2 !rounded-[12px] !bg-greyscale-900 !text-white !text-sm' 
-                    },
-                }"
-            >
-                <base-iconify :icon="item.icon" class="!w-5 !h-5" />
-            </div>
-        </div>
+        <calendar-button />
         <base-button 
           label="current-month"
           rounded

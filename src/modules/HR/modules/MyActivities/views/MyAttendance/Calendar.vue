@@ -1,7 +1,9 @@
 <script setup>
+// core
+// components
+import CaledarTable from '../../components/MyAttendance/CaledarTable.vue';
 </script>
 <template>
-    <div class="">
-        my-calendar
-    </div>
+    <!-- table -->
+    <CaledarTable class="mt-4"/>
 </template>

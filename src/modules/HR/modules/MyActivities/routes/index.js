@@ -16,11 +16,11 @@ const MyActivities = [
           isAuthRequired: true,
         },
         component: () => import('../views/MyAttendance/index.vue'),
-        redirect: { name: 'Calendar' },
+        redirect: { name: 'MyCalendar' },
         children: [
           {
             path: 'calendar',
-            name: 'Calendar',
+            name: 'MyCalendar',
             meta: {
               isAuthRequired: true,
               navigation: true
@@ -29,7 +29,7 @@ const MyActivities = [
           },
           {
             path: 'table',
-            name: 'Table',
+            name: 'MyTable',
             meta: {
               isAuthRequired: true,
               navigation: true

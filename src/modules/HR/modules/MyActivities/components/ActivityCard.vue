@@ -29,7 +29,7 @@ const toolTipFun = (data)=> (
         <div class="flex items-center gap-3 relative overflow-visible">
             <!-- icon wrapper -->
             <div 
-                class="w-12 h-12 min-w-12 min-h-12 rounded-full flex items-center justify-center bg-primary-50"
+                class="w-12 h-12 min-w-12 min-h-12 rounded-full flex items-center justify-center"
                 :class="props.data.iconClass"
                 >
                 <base-iconify :icon="props.data.icon" class="!w-[22px] !h-[22px]" />
@@ -37,8 +37,9 @@ const toolTipFun = (data)=> (
             <div class="text-xl font-semibold text-greyscale-900">
                 {{ props.data.title }}
             </div>
+            <!-- warning icon -->
             <div  
-              class="z-[9999] absolute top-[-2px] right-[-2px]"
+              class="z-[2] absolute top-[-2px] right-[-2px]"
               v-if="props.data.toolTipInfo.placement == 'left'"
               v-tooltip.left="toolTipFun(props.data.toolTipInfo)"
               >
@@ -47,7 +48,7 @@ const toolTipFun = (data)=> (
               />
             </div>
             <div  
-              class="z-[9999] absolute top-[-2px] right-[-2px]"
+              class="z-[2] absolute top-[-2px] right-[-2px]"
               v-else
               v-tooltip.top="toolTipFun(props.data.toolTipInfo)"
               >
