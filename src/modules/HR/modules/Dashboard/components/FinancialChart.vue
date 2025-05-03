@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, unref, onMounted, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useHRDashboardStore } from '../stores'
 import ChartCard from '../components/Card.vue'
@@ -9,7 +9,8 @@ import { formatNumberToMillionsOrBillions, formatNumberToFinanceChart } from '@/
 const { t } = useI18n()
 const dashboardStore = useHRDashboardStore()
 
-const loading = ref(false)
+const blueBarRef = ref(null)
+const warningBarRef = ref(null)
 
 const month = new Date().getMonth()
 const year = new Date().getFullYear()
@@ -33,19 +34,27 @@ const handleYear = async () => {
 	else {
 		await dashboardStore.actionDashboardComparison(current.value)
 	}
+
+	animateBars()
+}
+const animateBars = () => {
+	setTimeout(() => {
+		const _blueBarRef = unref(blueBarRef)
+		const _warningBarRef = unref(warningBarRef)
+
+		_blueBarRef.forEach(el => el.classList.add('h-[385px]'))
+		_warningBarRef.forEach(el => el.classList.add('h-[385px]'))
+	}, 1000)
 }
 
 onMounted(async () => {
 	await dashboardStore.actionDashboardComparison(current.value)
-
-	setTimeout(() => {
-		loading.value = true
-	}, 500)
+	animateBars()
 })
 </script>
 
 <template>
-  <div v-if="loading" class="relative h-[575px]">
+  <div class="relative h-[575px]">
     <div class="absolute top-0 left-0 w-full h-full">
       <chart-card class="h-full pt-6 pb-8 mt-2 px-10">
         <header class="flex flex-wrap items-center">
@@ -138,19 +147,20 @@ onMounted(async () => {
 
 	          <template v-for="(item, index) in dashboardStore.comparison.data.head_office">
 		          <div class="col-span-1">
-			          <div class="flex justify-center gap-5">
-				          <div class="w-14 h-[385px] relative rounded-lg overflow-hidden">
+			          <div class="flex justify-center items-end h-[385px] gap-5">
+				          <div ref="blueBarRef" class="w-14 h-0 relative rounded-lg overflow-hidden transition-all duration-700">
 					          <div
 						          class="bg-info-50 hover:bg-info-100 transition-colors absolute w-full h-[70%] bottom-0 left-0 border-t-[3px] border-t-info-500 cursor-pointer"
 						          :class="[item.comparison_amount_percent > item.current_amount_percent ? 'z-[1]': '']"
 						          :style="{
 												'height': item.current_amount_percent,
 											}"
-						          v-tooltip.top="{
+						          v-tooltip.focus.top="{
 		                    value: `<h4 class='text-xs text-white -my-1'>${numberFormat(parseInt(item.current_amount))}</h4>`,
 		                    escape: true,
 		                    autoHide: false
 		                  }"
+						          tabindex="0"
 					          ></div>
 
 					          <div
@@ -159,15 +169,16 @@ onMounted(async () => {
 						          :style="{
 												'height': item.comparison_amount_percent,
 											}"
-						          v-tooltip.top="{
+						          v-tooltip.focus.top="{
 		                    value: `<h4 class='text-xs text-white text-center -my-1'>${numberFormat(parseInt(item.comparison_amount))} <br> <span class='block mt-[2px]'>Сравнение с ${new Date().getFullYear() - 1} г.</span></h4>`,
 		                    escape: true,
 		                    autoHide: false
 		                  }"
+						          tabindex="0"
 					          ></div>
 				          </div>
 
-				          <div class="w-14 h-[385px] relative rounded-lg overflow-hidden">
+				          <div ref="warningBarRef" class="w-14 h-0 relative rounded-lg overflow-hidden transition-all duration-700">
 					          <div
 						          class="bg-warning-50 hover:bg-warning-100 transition-colors absolute w-full h-[70%] bottom-0 left-0 border-t-[3px] border-t-warning-500 cursor-pointer"
 						          :class="[
@@ -178,11 +189,12 @@ onMounted(async () => {
 						          :style="{
 												'height': dashboardStore.comparison.data.branches[index]?.current_amount_percent ?? 0,
 											}"
-						          v-tooltip.top="{
+						          v-tooltip.focus.top="{
 		                    value: `<h4 class='text-xs text-white -my-1'>${numberFormat(parseInt(dashboardStore.comparison.data.branches[index]?.current_amount ?? 0))}</h4>`,
 		                    escape: true,
 		                    autoHide: false
 		                  }"
+						          tabindex="0"
 					          ></div>
 
 					          <div
@@ -191,11 +203,12 @@ onMounted(async () => {
 						          :style="{
 												'height': dashboardStore.comparison.data.branches[index]?.comparison_amount_percent ?? 0,
 											}"
-						          v-tooltip.top="{
+						          v-tooltip.focus.top="{
 		                    value: `<h4 class='text-xs text-white text-center -my-1'>${numberFormat(parseInt(dashboardStore.comparison.data.branches[index]?.comparison_amount ?? 0))} <br> <span class='block mt-[2px]'>Сравнение с ${new Date().getFullYear() - 1} г.</span></h4>`,
 		                    escape: true,
 		                    autoHide: false
 		                  }"
+						          tabindex="0"
 					          ></div>
 				          </div>
 			          </div>

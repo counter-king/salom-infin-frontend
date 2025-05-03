@@ -26,10 +26,10 @@ onMounted(async () => {
         <col-table>{{ t('head-office') }}</col-table>
 
         <template v-for="item in dashboardStore.payrolls?.values?.head_office">
-          <col-table class="!text-center">{{ numberFormat(item.amount) }}</col-table>
+          <col-table class="!text-center !w-[12.5%]">{{ numberFormat(item.amount) }}</col-table>
         </template>
 
-        <col-table>
+        <col-table class="!w-[12.5%] text-center">
           <strong class="font-bold text-[#000]">
             {{ numberFormat(dashboardStore.payrolls?.values?.head_office_all_count.amount) }}
           </strong>
@@ -40,10 +40,10 @@ onMounted(async () => {
         <col-table>{{ t('branch') }}</col-table>
 
         <template v-for="item in dashboardStore.payrolls?.values?.branches">
-          <col-table class="!text-center">{{ numberFormat(item.amount) }}</col-table>
+          <col-table class="!text-center !w-[12.5%]">{{ numberFormat(item.amount) }}</col-table>
         </template>
 
-        <col-table>
+        <col-table class="!w-[12.5%] text-center">
           <strong class="font-bold text-[#000]">
             {{ numberFormat(dashboardStore.payrolls?.values?.branches_all_count.amount) }}
           </strong>
@@ -59,7 +59,7 @@ onMounted(async () => {
           <col-table class="!text-center"></col-table>
         </template>
 
-        <col-table class="!text-center">
+        <col-table class="!w-[12.5%] !text-center">
           <strong class="font-bold text-[#000]">
             {{ numberFormat(dashboardStore.payrolls?.values?.head_office_all_count.amount + dashboardStore.payrolls?.values?.branches_all_count.amount) }}
           </strong>
