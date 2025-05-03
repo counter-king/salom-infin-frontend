@@ -119,7 +119,7 @@ onMounted(async () => {
 	      <template v-else>
           <div class="grid grid-cols-6 gap-16 relative pl-10 mt-11">
 	          <div class="flex flex-col absolute top-0 left-0 w-full h-full">
-		          <template v-for="(item, index) in dashboardStore.comparison.axes">
+		          <template v-for="item in dashboardStore.comparison.axes">
 			          <div class="flex flex-1 gap-2">
 				          <h1 class="text-xs font-medium text-greyscale-500">
 					          {{ formatNumberToMillionsOrBillions(item) }} {{ t(formatNumberToFinanceChart(item)) }}

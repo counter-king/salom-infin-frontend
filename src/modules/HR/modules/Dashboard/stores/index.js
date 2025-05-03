@@ -115,120 +115,121 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
     async actionDashboardComparison(params = {}) {
       this.comparison.loader = true
       try {
-        const data = await fetchDashboardComparison(params)
+        const { data } = await fetchDashboardComparison(params)
 
-        const dataFromBackend = {
-          branches: [
-            {
-              pay_type: "Материальная помощь",
-              current_amount: 1070456408,
-              comparison_amount: 1517195934.97,
-              difference: -446739526.97
-            },
-            {
-              pay_type: "Оплата по договору ГПХ",
-              current_amount: 3903880270.17,
-              comparison_amount: 1273457018.38,
-              difference: 2630423251.79
-            },
-            {
-              pay_type: "Переменное вознаграждение",
-              current_amount: 29415250902.29,
-              comparison_amount: 53891874862.45,
-              difference: -24476623960.159996
-            },
-            {
-              pay_type: "Премии к праздникам и мат помощь с/х продукты",
-              current_amount: 6201000000,
-              comparison_amount: 12614950000,
-              difference: -6413950000
-            },
-            {
-              pay_type: "Прочее",
-              current_amount: 53357884,
-              comparison_amount: 1406000,
-              difference: 51951884
-            },
-            {
-              pay_type: "Разовые выплаты",
-              current_amount: 3525910000,
-              comparison_amount: 365200000,
-              difference: 3160710000
-            },
-            {
-              pay_type: "Фиксированное вознаграждение",
-              current_amount: 49472838993.96,
-              comparison_amount: 87227600491.1,
-              difference: -37754761497.14001
-            },
-            {
-              pay_type: "Ценные подарки",
-              current_amount: 1834000,
-              comparison_amount: 2073992,
-              difference: -239992
-            }
-          ],
-          head_office: [
-            {
-              pay_type: "Выплата членам НС",
-              current_amount: 1147872516.53,
-              comparison_amount: 1559008082.14,
-              difference: -411135565.61000013
-            },
-            {
-              pay_type: "Материальная помощь",
-              current_amount: 323400000,
-              comparison_amount: 734347456.56,
-              difference: -410947456.55999994
-            },
-            {
-              pay_type: "Оплата по договору ГПХ",
-              current_amount: 3931412447.93,
-              comparison_amount: 1829974771.48,
-              difference: 2101437676.4499998
-            },
-            {
-              pay_type: "Переменное вознаграждение",
-              current_amount: 26859966459.91,
-              comparison_amount: 43407236709.56,
-              difference: -16547270249.649998
-            },
-            {
-              pay_type: "Премии к праздникам и мат помощь с/х продукты",
-              current_amount: 5623000000,
-              comparison_amount: 11067625000,
-              difference: -5444625000
-            },
-            {
-              pay_type: "Прочее",
-              current_amount: 0,
-              comparison_amount: 30662571.43,
-              difference: -30662571.43
-            },
-            {
-              pay_type: "Разовые выплаты",
-              current_amount: 4981295000,
-              comparison_amount: 2122750000,
-              difference: 2858545000
-            },
-            {
-              pay_type: "Фиксированное вознаграждение",
-              current_amount: 89749385017.07,
-              comparison_amount: 105293535633.45,
-              difference: -15544150616.37999
-            },
-            {
-              pay_type: "Ценные подарки",
-              current_amount: 122069067.92,
-              comparison_amount: 2410760,
-              difference: 119658307.92
-            }
-          ]
-        }
+        // const dataFromBackend = {
+        //   branches: [
+        //     {
+        //       pay_type: "Материальная помощь",
+        //       current_amount: 1070456408,
+        //       comparison_amount: 1517195934.97,
+        //       difference: -446739526.97
+        //     },
+        //     {
+        //       pay_type: "Оплата по договору ГПХ",
+        //       current_amount: 3903880270.17,
+        //       comparison_amount: 1273457018.38,
+        //       difference: 2630423251.79
+        //     },
+        //     {
+        //       pay_type: "Переменное вознаграждение",
+        //       current_amount: 29415250902.29,
+        //       comparison_amount: 53891874862.45,
+        //       difference: -24476623960.159996
+        //     },
+        //     {
+        //       pay_type: "Премии к праздникам и мат помощь с/х продукты",
+        //       current_amount: 6201000000,
+        //       comparison_amount: 12614950000,
+        //       difference: -6413950000
+        //     },
+        //     {
+        //       pay_type: "Прочее",
+        //       current_amount: 53357884,
+        //       comparison_amount: 1406000,
+        //       difference: 51951884
+        //     },
+        //     {
+        //       pay_type: "Разовые выплаты",
+        //       current_amount: 3525910000,
+        //       comparison_amount: 365200000,
+        //       difference: 3160710000
+        //     },
+        //     {
+        //       pay_type: "Фиксированное вознаграждение",
+        //       current_amount: 49472838993.96,
+        //       comparison_amount: 87227600491.1,
+        //       difference: -37754761497.14001
+        //     },
+        //     {
+        //       pay_type: "Ценные подарки",
+        //       current_amount: 1834000,
+        //       comparison_amount: 2073992,
+        //       difference: -239992
+        //     }
+        //   ],
+        //   head_office: [
+        //     {
+        //       pay_type: "Выплата членам НС",
+        //       current_amount: 1147872516.53,
+        //       comparison_amount: 1559008082.14,
+        //       difference: -411135565.61000013
+        //     },
+        //     {
+        //       pay_type: "Материальная помощь",
+        //       current_amount: 323400000,
+        //       comparison_amount: 734347456.56,
+        //       difference: -410947456.55999994
+        //     },
+        //     {
+        //       pay_type: "Оплата по договору ГПХ",
+        //       current_amount: 3931412447.93,
+        //       comparison_amount: 1829974771.48,
+        //       difference: 2101437676.4499998
+        //     },
+        //     {
+        //       pay_type: "Переменное вознаграждение",
+        //       current_amount: 26859966459.91,
+        //       comparison_amount: 43407236709.56,
+        //       difference: -16547270249.649998
+        //     },
+        //     {
+        //       pay_type: "Премии к праздникам и мат помощь с/х продукты",
+        //       current_amount: 5623000000,
+        //       comparison_amount: 11067625000,
+        //       difference: -5444625000
+        //     },
+        //     {
+        //       pay_type: "Прочее",
+        //       current_amount: 0,
+        //       comparison_amount: 30662571.43,
+        //       difference: -30662571.43
+        //     },
+        //     {
+        //       pay_type: "Разовые выплаты",
+        //       current_amount: 4981295000,
+        //       comparison_amount: 2122750000,
+        //       difference: 2858545000
+        //     },
+        //     {
+        //       pay_type: "Фиксированное вознаграждение",
+        //       current_amount: 89749385017.07,
+        //       comparison_amount: 105293535633.45,
+        //       difference: -15544150616.37999
+        //     },
+        //     {
+        //       pay_type: "Ценные подарки",
+        //       current_amount: 122069067.92,
+        //       comparison_amount: 2410760,
+        //       difference: 119658307.92
+        //     }
+        //   ]
+        // }
+        //
 
         const maxAmount = Math.max(
-          ...dataFromBackend.head_office.map(i => i.current_amount > i.comparison_amount ? i.current_amount : i.comparison_amount),
-          ...dataFromBackend.branches.map(i => i.current_amount > i.comparison_amount ? i.current_amount : i.comparison_amount)
+          ...data.head_office.map(i => i.current_amount > i.comparison_amount ? i.current_amount : i.comparison_amount),
+          ...data.branches.map(i => i.current_amount > i.comparison_amount ? i.current_amount : i.comparison_amount)
         )
         const addMaxAmount = (maxAmount + 2e10) / 100
 
@@ -319,8 +320,6 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
             },
           ],
         }
-
-        console.log('data', data)
 
         return Promise.resolve()
       }
