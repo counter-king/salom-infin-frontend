@@ -24,9 +24,9 @@ const { t } = useI18n()
             </th>
 
             <template v-for="{ header } in props.headers">
-              <th class="bg-inherit h-[56px]">
+              <th class="bg-inherit h-[56px] !text-center">
                 <div class="p-column-header-content text-sm font-semibold text-greyscale-500">
-                  <span class="p-column-title">{{ header }}</span>
+                  <span class="p-column-title">{{ t(header) }}</span>
                 </div>
               </th>
             </template>

@@ -45,12 +45,15 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div v-if="loading" class="relative pb-[35%]">
+  <div v-if="loading" class="relative h-[575px]">
     <div class="absolute top-0 left-0 w-full h-full">
       <chart-card class="h-full pt-6 pb-8 mt-2 px-10">
         <header class="flex flex-wrap items-center">
           <div class="flex items-center flex-1 gap-7 text-greyscale-900">
-            <h1 class="text-lg font-semibold">Динамика ФОТ</h1>
+            <h1 class="text-lg font-semibold">
+	            {{ t('finance-dashboard.text-0') }}
+	            ({{ t('mln') }})
+            </h1>
 
 	          <div class="flex items-center gap-2 cursor-pointer">
 		          <Checkbox
@@ -70,7 +73,7 @@ onMounted(async () => {
 		          </Checkbox>
 
 		          <label for="checkbox-year" class="cursor-pointer">
-			          <span class="font-semibold text-base">2024 Год</span>
+			          <span class="font-semibold text-base">{{ new Date().getFullYear() - 1 }} {{ t('year') }}</span>
 		          </label>
 	          </div>
           </div>
@@ -79,33 +82,33 @@ onMounted(async () => {
 	          <template v-if="isCompare">
 		          <div class="flex items-center gap-2">
 			          <div
-					          class="w-4 h-4 rounded"
-					          style="background: repeating-linear-gradient(-45deg, #66c2ff, #66c2ff 4px, #4da6ff 4px, #4da6ff 8px)"
+				          class="w-4 h-4 rounded"
+				          style="background: repeating-linear-gradient(-45deg, #66c2ff, #66c2ff 4px, #4da6ff 4px, #4da6ff 8px)"
 			          ></div>
 
-			          <span class="text-[13px] font-medium text-greyscale-900">Сравнение Головной банк</span>
+			          <span class="text-[13px] font-medium text-greyscale-900">{{ t('comparison-with-head-bank') }}</span>
 		          </div>
 
 		          <div class="flex items-center gap-2">
 			          <div
-					          class="w-4 h-4 rounded"
-					          style="background: repeating-linear-gradient(-45deg, #FFECC8, #FFECC8 4px, #FFA803 4px, #FFA803 8px)"
+				          class="w-4 h-4 rounded"
+				          style="background: repeating-linear-gradient(-45deg, #FFECC8, #FFECC8 4px, #FFA803 4px, #FFA803 8px)"
 			          ></div>
 
-			          <span class="text-[13px] font-medium text-greyscale-900">Сравнение Филиальная сеть</span>
+			          <span class="text-[13px] font-medium text-greyscale-900">{{ t('comparison-with-branch') }}</span>
 		          </div>
 	          </template>
 
             <div class="flex items-center gap-2">
               <div class="w-4 h-4 rounded bg-info-500"></div>
 
-              <span class="text-[13px] font-medium text-greyscale-900">Головной Банк</span>
+              <span class="text-[13px] font-medium text-greyscale-900">{{ t('head-office') }}</span>
             </div>
 
             <div class="flex items-center gap-2">
               <div class="w-4 h-4 rounded bg-warning-500"></div>
 
-              <span class="text-[13px] font-medium text-greyscale-900">Филиальная сеть</span>
+              <span class="text-[13px] font-medium text-greyscale-900">{{ t('branch') }}</span>
             </div>
           </div>
         </header>
@@ -151,6 +154,7 @@ onMounted(async () => {
 					          ></div>
 
 					          <div
+						          v-if="isCompare"
 						          class="gradient-info-diagonal absolute w-full h-[50%] bottom-0 left-0 border-t-[3px] border-t-info-300 cursor-pointer"
 						          :style="{
 												'height': item.comparison_amount_percent,
@@ -182,6 +186,7 @@ onMounted(async () => {
 					          ></div>
 
 					          <div
+						          v-if="isCompare"
 						          class="gradient-warning-diagonal absolute w-full h-[50%] bottom-0 left-0 border-t-[3px] border-t-warning-300 cursor-pointer"
 						          :style="{
 												'height': dashboardStore.comparison.data.branches[index]?.comparison_amount_percent ?? 0,
@@ -195,7 +200,24 @@ onMounted(async () => {
 				          </div>
 			          </div>
 
-			          <span class="block h-10 content-center text-sm font-medium text-greyscale-900 text-center mt-4">{{ item.pay_type }}</span>
+			          <span class="block h-10 content-center text-sm font-medium text-greyscale-900 text-center mt-4">
+				          {{ item.pay_type_id === 5
+					          ? t('finance-dashboard.text-1')
+					          : item.pay_type_id === 9
+		                  ? t('finance-dashboard.text-2')
+						          : item.pay_type_id === 3
+			                  ? t('finance-dashboard.text-3')
+							          : item.pay_type_id === 4
+			                    ? t('finance-dashboard.text-4')
+								          : item.pay_type_id === 6
+			                      ? t('finance-dashboard.text-5')
+									          : item.pay_type_id === 2
+		                          ? t('finance-dashboard.text-6')
+											          : item.pay_type_id === 1
+			                            ? t('finance-dashboard.text-7')
+												          : t('finance-dashboard.text-8')
+				          }}
+			          </span>
 		          </div>
 	          </template>
           </div>

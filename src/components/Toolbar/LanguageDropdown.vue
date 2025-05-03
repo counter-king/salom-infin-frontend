@@ -113,9 +113,9 @@ onMounted(() => {
           class="flex items-center justify-between px-3 py-3 rounded-xl bg-white cursor-pointer shadow-button"
           @click="toggleIconVisibility(event, language)"
         >
-          <base-icon :name="language.icon" />
+<!--          <base-icon :name="language.icon" />-->
 
-          <h1 class="flex-1 ml-3 text-sm font-semibold text-primary-900">{{ language.text }}</h1>
+          <h1 class="flex-1 ml-2 text-sm font-semibold text-primary-900">{{ language.text }}</h1>
 
           <base-iconify
             v-if="language.icon === languageSelected.icon"

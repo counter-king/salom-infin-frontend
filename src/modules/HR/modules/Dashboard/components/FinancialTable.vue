@@ -1,9 +1,11 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useHRDashboardStore } from '../stores'
 import { BodySlotTable, RowTable, ColTable } from '@/components/Table'
 import { numberFormat } from '@/utils/formatIntl'
 
+const { t } = useI18n()
 const dashboardStore = useHRDashboardStore()
 
 onMounted(async () => {
@@ -21,19 +23,47 @@ onMounted(async () => {
   <body-slot-table :headers="dashboardStore.payrolls.headers">
     <template #body>
       <row-table index="1">
-        <col-table>Головной офис</col-table>
+        <col-table>{{ t('head-office') }}</col-table>
 
         <template v-for="item in dashboardStore.payrolls?.values?.head_office">
-          <col-table>{{ numberFormat(item.amount) }}</col-table>
+          <col-table class="!text-center">{{ numberFormat(item.amount) }}</col-table>
         </template>
+
+        <col-table>
+          <strong class="font-bold text-[#000]">
+            {{ numberFormat(dashboardStore.payrolls?.values?.head_office_all_count.amount) }}
+          </strong>
+        </col-table>
       </row-table>
 
       <row-table index="2">
-        <col-table>Филиал</col-table>
+        <col-table>{{ t('branch') }}</col-table>
 
         <template v-for="item in dashboardStore.payrolls?.values?.branches">
-          <col-table>{{ numberFormat(item.amount) }}</col-table>
+          <col-table class="!text-center">{{ numberFormat(item.amount) }}</col-table>
         </template>
+
+        <col-table>
+          <strong class="font-bold text-[#000]">
+            {{ numberFormat(dashboardStore.payrolls?.values?.branches_all_count.amount) }}
+          </strong>
+        </col-table>
+      </row-table>
+
+      <row-table index="3">
+        <col-table>
+          <strong class="font-bold text-[#000]">{{ t('total') }}:</strong>
+        </col-table>
+
+        <template v-for="item in 6">
+          <col-table class="!text-center"></col-table>
+        </template>
+
+        <col-table class="!text-center">
+          <strong class="font-bold text-[#000]">
+            {{ numberFormat(dashboardStore.payrolls?.values?.head_office_all_count.amount + dashboardStore.payrolls?.values?.branches_all_count.amount) }}
+          </strong>
+        </col-table>
       </row-table>
     </template>
   </body-slot-table>
