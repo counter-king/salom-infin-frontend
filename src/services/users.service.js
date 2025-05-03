@@ -2,6 +2,7 @@ import axiosConfig from "./axios.config"
 
 const URLS = {
   users: "users",
+  userSearch: 'user-search',
   employeeGroups: "employee-groups",
   topSigners: "top-signers"
 }
@@ -11,6 +12,13 @@ const URLS = {
  * */
 export const fetchUsersList = (params) => {
   return axiosConfig.get(`${URLS.users}/`, params)
+}
+/**
+ * Возвращает список пользователей
+ * @returns Promise
+ * */
+export const fetchUserSearchList = (params) => {
+  return axiosConfig.get(`${URLS.userSearch}/`, params)
 }
 /** **/
 export const fetchTopSignersList = (params) => {
