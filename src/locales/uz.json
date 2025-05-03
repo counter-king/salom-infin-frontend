@@ -805,5 +805,12 @@
   "not-started": "Boshlanmagan",
   "on-trip": "Xizmat safarida",
   "reporting": "Hisobot topshrish",
-  "closed": "Yakunlangan"
+  "closed": "Yakunlangan",
+  "my-activities": "Mening faoliyatim",
+  "my-attendance": "Mening ishtirokim",
+  "my-applications": "Mening bayonotlarim",
+  "table": "Jadval",
+  "next-month": "Keyingi oy",
+  "prev-month": "Avvalgi oy",
+  "current-month": "Joriy oy"
 }

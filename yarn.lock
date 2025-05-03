@@ -1107,6 +1107,13 @@
   dependencies:
     "@iconify/types" "*"
 
+"@iconify-json/lucide@^1.2.39":
+  version "1.2.39"
+  resolved "https://registry.yarnpkg.com/@iconify-json/lucide/-/lucide-1.2.39.tgz#22c9087b0df0dbf3cbe77fff95a2e05bc97c3149"
+  integrity sha512-1BKCamEZRvArR7PErYCP4SZo9pAANJy6iQWpynI3GM8QKSQtWQgvw6usqGIFCQeJwFZHPOn2OcbDR4P56DyEaQ==
+  dependencies:
+    "@iconify/types" "*"
+
 "@iconify-json/mage@^1.2.1":
   version "1.2.1"
   resolved "https://registry.npmjs.org/@iconify-json/mage/-/mage-1.2.1.tgz"

@@ -806,5 +806,12 @@
   "not-started": "Не начато",
   "on-trip": "В командировке",
   "reporting": "Предоставление отчета",
-  "closed": "Закрыто"
+  "closed": "Закрыто",
+  "my-activities": "Мои активности",
+  "my-attendance": "Моя посещаемость",
+  "my-applications": "Мои заявления",
+  "table": "Таблица",
+  "next-month": "Следующий месяц",
+  "prev-month": "Предыдущий месяц",
+  "current-month": "Текущий месяц"
 }

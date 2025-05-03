@@ -2,7 +2,7 @@
 // Core
 import { ref } from 'vue'
 // Components
-import { CaseIcon, UserIcon, SettingsMinimalisticIcon, HomeSmileAngleIcon } from '@/components/Icons'
+import { CaseIcon, UserIcon, SettingsMinimalisticIcon, HomeSmileAngleIcon, BoltBoldIcon } from '@/components/Icons'
 import TheSidebar from '@/components/TheSidebar.vue'
 import TheFooter from '@/components/TheFooter.vue';
 // Stores
@@ -19,6 +19,12 @@ const menus = ref([
     title: 'my-profile',
     icon: UserIcon,
     link: 'ProfileIndex',
+    children: []
+  },
+  {
+    title: "my-activities",
+    icon: BoltBoldIcon,
+    link: "MyActivitiesIndex",
     children: []
   },
   {
