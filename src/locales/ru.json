@@ -839,5 +839,6 @@
   "sick-leave-coefficient": "Коэффициент больничный",
   "experience": "Опыт",
   "trip-address": "Aдрес командировки",
-  "trip-reason": "Причина командировки"
+  "trip-reason": "Причина командировки",
+  "show-numbers": "Показать цифры"
 }

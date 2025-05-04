@@ -226,93 +226,93 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
       try {
         const { data } = await fetchDashboardComparison(params)
 
-        const maxAmount = Math.max(
-          ...data.head_office.map(i => i.current_amount > i.comparison_amount ? i.current_amount : i.comparison_amount),
-          ...data.branches.map(i => i.current_amount > i.comparison_amount ? i.current_amount : i.comparison_amount)
-        )
-        const addMaxAmount = (maxAmount + 2e10) / 100
-
-        this.comparison.axes = generateCleanYAxisLabels(maxAmount)
-        this.comparison.axes = this.comparison.axes.slice(0, this.comparison.axes.length - 1).reverse()
-
-        this.comparison.data = {
-          head_office: [
-            // Фиксированное вознаграждение
-            {
-              ...data.head_office[7],
-              current_amount_percent: `${((data.head_office[7].current_amount / addMaxAmount)).toFixed(1)}%`,
-              comparison_amount_percent: `${((data.head_office[7].comparison_amount / addMaxAmount)).toFixed(1)}%`
-            },
-            // Переменное вознаграждение
-            {
-              ...data.head_office[3],
-              current_amount_percent: `${(data.head_office[3].current_amount / addMaxAmount).toFixed(1)}%`,
-              comparison_amount_percent: `${(data.head_office[3].comparison_amount / addMaxAmount).toFixed(1)}%`
-            },
-            // Разовые выплаты
-            {
-              ...data.head_office[6],
-              current_amount_percent: `${(data.head_office[6].current_amount / addMaxAmount).toFixed(1)}%`,
-              comparison_amount_percent: `${(data.head_office[6].comparison_amount / addMaxAmount).toFixed(1)}%`
-            },
-            // Премии к праздникам и мат помощь с/х продукты
-            {
-              ...data.head_office[4],
-              current_amount_percent: `${(data.head_office[4].current_amount / addMaxAmount).toFixed(1)}%`,
-              comparison_amount_percent: `${(data.head_office[4].comparison_amount / addMaxAmount).toFixed(1)}%`
-            },
-            // Материальная помощь
-            {
-              ...data.head_office[1],
-              current_amount_percent: `${(data.head_office[1].current_amount / addMaxAmount).toFixed(1)}%`,
-              comparison_amount_percent: `${(data.head_office[1].comparison_amount / addMaxAmount).toFixed(1)}%`
-            },
-            // Прочее
-            {
-              ...data.head_office[5],
-              current_amount_percent: `${(data.head_office[5].current_amount / addMaxAmount).toFixed(1)}%`,
-              comparison_amount_percent: `${(data.head_office[5].comparison_amount / addMaxAmount).toFixed(1)}%`
-            }
-          ],
-          branches: [
-            // Фиксированное вознаграждение
-            {
-              ...data.branches[6],
-              current_amount_percent: `${(data.branches[6].current_amount / addMaxAmount).toFixed(1)}%`,
-              comparison_amount_percent: `${(data.branches[6].comparison_amount / addMaxAmount).toFixed(1)}%`
-            },
-            // Переменное вознаграждение
-            {
-              ...data.branches[2],
-              current_amount_percent: `${(data.branches[2].current_amount / addMaxAmount).toFixed(1)}%`,
-              comparison_amount_percent: `${(data.branches[2].comparison_amount / addMaxAmount).toFixed(1)}%`
-            },
-            // Разовые выплаты
-            {
-              ...data.branches[5],
-              current_amount_percent: `${(data.branches[5].current_amount / addMaxAmount).toFixed(1)}%`,
-              comparison_amount_percent: `${(data.branches[5].comparison_amount / addMaxAmount).toFixed(1)}%`
-            },
-            // Премии к праздникам и мат помощь с/х продукты
-            {
-              ...data.branches[3],
-              current_amount_percent: `${(data.branches[3].current_amount / addMaxAmount).toFixed(1)}%`,
-              comparison_amount_percent: `${(data.branches[3].comparison_amount / addMaxAmount).toFixed(1)}%`
-            },
-            // Материальная помощь
-            {
-              ...data.branches[0],
-              current_amount_percent: `${(data.branches[0].current_amount / addMaxAmount).toFixed(1)}%`,
-              comparison_amount_percent: `${(data.branches[0].comparison_amount / addMaxAmount).toFixed(1)}%`
-            },
-            // Прочее
-            {
-              ...data.branches[4],
-              current_amount_percent: `${(data.branches[4].current_amount / addMaxAmount).toFixed(1)}%`,
-              comparison_amount_percent: `${(data.branches[4].comparison_amount / addMaxAmount).toFixed(1)}%`
-            },
-          ],
-        }
+        // const maxAmount = Math.max(
+        //   ...data.head_office.map(i => i.current_amount > i.comparison_amount ? i.current_amount : i.comparison_amount),
+        //   ...data.branches.map(i => i.current_amount > i.comparison_amount ? i.current_amount : i.comparison_amount)
+        // )
+        // const addMaxAmount = (maxAmount + 2e10) / 100
+        //
+        // this.comparison.axes = generateCleanYAxisLabels(maxAmount)
+        // this.comparison.axes = this.comparison.axes.slice(0, this.comparison.axes.length - 1).reverse()
+        //
+        // this.comparison.data = {
+        //   head_office: [
+        //     // Фиксированное вознаграждение
+        //     {
+        //       ...data.head_office[7],
+        //       current_amount_percent: `${((data.head_office[7].current_amount / addMaxAmount)).toFixed(1)}%`,
+        //       comparison_amount_percent: `${((data.head_office[7].comparison_amount / addMaxAmount)).toFixed(1)}%`
+        //     },
+        //     // Переменное вознаграждение
+        //     {
+        //       ...data.head_office[3],
+        //       current_amount_percent: `${(data.head_office[3].current_amount / addMaxAmount).toFixed(1)}%`,
+        //       comparison_amount_percent: `${(data.head_office[3].comparison_amount / addMaxAmount).toFixed(1)}%`
+        //     },
+        //     // Разовые выплаты
+        //     {
+        //       ...data.head_office[6],
+        //       current_amount_percent: `${(data.head_office[6].current_amount / addMaxAmount).toFixed(1)}%`,
+        //       comparison_amount_percent: `${(data.head_office[6].comparison_amount / addMaxAmount).toFixed(1)}%`
+        //     },
+        //     // Премии к праздникам и мат помощь с/х продукты
+        //     {
+        //       ...data.head_office[4],
+        //       current_amount_percent: `${(data.head_office[4].current_amount / addMaxAmount).toFixed(1)}%`,
+        //       comparison_amount_percent: `${(data.head_office[4].comparison_amount / addMaxAmount).toFixed(1)}%`
+        //     },
+        //     // Материальная помощь
+        //     {
+        //       ...data.head_office[1],
+        //       current_amount_percent: `${(data.head_office[1].current_amount / addMaxAmount).toFixed(1)}%`,
+        //       comparison_amount_percent: `${(data.head_office[1].comparison_amount / addMaxAmount).toFixed(1)}%`
+        //     },
+        //     // Прочее
+        //     {
+        //       ...data.head_office[5],
+        //       current_amount_percent: `${(data.head_office[5].current_amount / addMaxAmount).toFixed(1)}%`,
+        //       comparison_amount_percent: `${(data.head_office[5].comparison_amount / addMaxAmount).toFixed(1)}%`
+        //     }
+        //   ],
+        //   branches: [
+        //     // Фиксированное вознаграждение
+        //     {
+        //       ...data.branches[6],
+        //       current_amount_percent: `${(data.branches[6].current_amount / addMaxAmount).toFixed(1)}%`,
+        //       comparison_amount_percent: `${(data.branches[6].comparison_amount / addMaxAmount).toFixed(1)}%`
+        //     },
+        //     // Переменное вознаграждение
+        //     {
+        //       ...data.branches[2],
+        //       current_amount_percent: `${(data.branches[2].current_amount / addMaxAmount).toFixed(1)}%`,
+        //       comparison_amount_percent: `${(data.branches[2].comparison_amount / addMaxAmount).toFixed(1)}%`
+        //     },
+        //     // Разовые выплаты
+        //     {
+        //       ...data.branches[5],
+        //       current_amount_percent: `${(data.branches[5].current_amount / addMaxAmount).toFixed(1)}%`,
+        //       comparison_amount_percent: `${(data.branches[5].comparison_amount / addMaxAmount).toFixed(1)}%`
+        //     },
+        //     // Премии к праздникам и мат помощь с/х продукты
+        //     {
+        //       ...data.branches[3],
+        //       current_amount_percent: `${(data.branches[3].current_amount / addMaxAmount).toFixed(1)}%`,
+        //       comparison_amount_percent: `${(data.branches[3].comparison_amount / addMaxAmount).toFixed(1)}%`
+        //     },
+        //     // Материальная помощь
+        //     {
+        //       ...data.branches[0],
+        //       current_amount_percent: `${(data.branches[0].current_amount / addMaxAmount).toFixed(1)}%`,
+        //       comparison_amount_percent: `${(data.branches[0].comparison_amount / addMaxAmount).toFixed(1)}%`
+        //     },
+        //     // Прочее
+        //     {
+        //       ...data.branches[4],
+        //       current_amount_percent: `${(data.branches[4].current_amount / addMaxAmount).toFixed(1)}%`,
+        //       comparison_amount_percent: `${(data.branches[4].comparison_amount / addMaxAmount).toFixed(1)}%`
+        //     },
+        //   ],
+        // }
 
 
         const dataFromBackend = {
@@ -442,93 +442,93 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         }
 
 
-        // const maxAmount = Math.max(
-        //   ...dataFromBackend.head_office.map(i => i.current_amount > i.comparison_amount ? i.current_amount : i.comparison_amount),
-        //   ...dataFromBackend.branches.map(i => i.current_amount > i.comparison_amount ? i.current_amount : i.comparison_amount)
-        // )
-        // const addMaxAmount = (maxAmount + 2e10) / 100
+        const maxAmount = Math.max(
+          ...dataFromBackend.head_office.map(i => i.current_amount > i.comparison_amount ? i.current_amount : i.comparison_amount),
+          ...dataFromBackend.branches.map(i => i.current_amount > i.comparison_amount ? i.current_amount : i.comparison_amount)
+        )
+        const addMaxAmount = (maxAmount + 2e10) / 100
 
-        // this.comparison.axes = generateCleanYAxisLabels(maxAmount)
-        // this.comparison.axes = this.comparison.axes.slice(0, this.comparison.axes.length - 1).reverse()
+        this.comparison.axes = generateCleanYAxisLabels(maxAmount)
+        this.comparison.axes = this.comparison.axes.slice(0, this.comparison.axes.length - 1).reverse()
 
-        // this.comparison.data = {
-        //   head_office: [
-        //     // Фиксированное вознаграждение
-        //     {
-        //       ...dataFromBackend.head_office[7],
-        //       current_amount_percent: `${((dataFromBackend.head_office[7].current_amount / addMaxAmount)).toFixed(1)}%`,
-        //       comparison_amount_percent: `${((dataFromBackend.head_office[7].comparison_amount / addMaxAmount)).toFixed(1)}%`
-        //     },
-        //     // Переменное вознаграждение
-        //     {
-        //       ...dataFromBackend.head_office[3],
-        //       current_amount_percent: `${(dataFromBackend.head_office[3].current_amount / addMaxAmount).toFixed(1)}%`,
-        //       comparison_amount_percent: `${(dataFromBackend.head_office[3].comparison_amount / addMaxAmount).toFixed(1)}%`
-        //     },
-        //     // Разовые выплаты
-        //     {
-        //       ...dataFromBackend.head_office[6],
-        //       current_amount_percent: `${(dataFromBackend.head_office[6].current_amount / addMaxAmount).toFixed(1)}%`,
-        //       comparison_amount_percent: `${(dataFromBackend.head_office[6].comparison_amount / addMaxAmount).toFixed(1)}%`
-        //     },
-        //     // Премии к праздникам и мат помощь с/х продукты
-        //     {
-        //       ...dataFromBackend.head_office[4],
-        //       current_amount_percent: `${(dataFromBackend.head_office[4].current_amount / addMaxAmount).toFixed(1)}%`,
-        //       comparison_amount_percent: `${(dataFromBackend.head_office[4].comparison_amount / addMaxAmount).toFixed(1)}%`
-        //     },
-        //     // Материальная помощь
-        //     {
-        //       ...dataFromBackend.head_office[1],
-        //       current_amount_percent: `${(dataFromBackend.head_office[1].current_amount / addMaxAmount).toFixed(1)}%`,
-        //       comparison_amount_percent: `${(dataFromBackend.head_office[1].comparison_amount / addMaxAmount).toFixed(1)}%`
-        //     },
-        //     // Прочее
-        //     {
-        //       ...dataFromBackend.head_office[5],
-        //       current_amount_percent: `${(dataFromBackend.head_office[5].current_amount / addMaxAmount).toFixed(1)}%`,
-        //       comparison_amount_percent: `${(dataFromBackend.head_office[5].comparison_amount / addMaxAmount).toFixed(1)}%`
-        //     }
-        //   ],
-        //   branches: [
-        //     // Фиксированное вознаграждение
-        //     {
-        //       ...dataFromBackend.branches[6],
-        //       current_amount_percent: `${(dataFromBackend.branches[6].current_amount / addMaxAmount).toFixed(1)}%`,
-        //       comparison_amount_percent: `${(dataFromBackend.branches[6].comparison_amount / addMaxAmount).toFixed(1)}%`
-        //     },
-        //     // Переменное вознаграждение
-        //     {
-        //       ...dataFromBackend.branches[2],
-        //       current_amount_percent: `${(dataFromBackend.branches[2].current_amount / addMaxAmount).toFixed(1)}%`,
-        //       comparison_amount_percent: `${(dataFromBackend.branches[2].comparison_amount / addMaxAmount).toFixed(1)}%`
-        //     },
-        //     // Разовые выплаты
-        //     {
-        //       ...dataFromBackend.branches[5],
-        //       current_amount_percent: `${(dataFromBackend.branches[5].current_amount / addMaxAmount).toFixed(1)}%`,
-        //       comparison_amount_percent: `${(dataFromBackend.branches[5].comparison_amount / addMaxAmount).toFixed(1)}%`
-        //     },
-        //     // Премии к праздникам и мат помощь с/х продукты
-        //     {
-        //       ...dataFromBackend.branches[3],
-        //       current_amount_percent: `${(dataFromBackend.branches[3].current_amount / addMaxAmount).toFixed(1)}%`,
-        //       comparison_amount_percent: `${(dataFromBackend.branches[3].comparison_amount / addMaxAmount).toFixed(1)}%`
-        //     },
-        //     // Материальная помощь
-        //     {
-        //       ...dataFromBackend.branches[0],
-        //       current_amount_percent: `${(dataFromBackend.branches[0].current_amount / addMaxAmount).toFixed(1)}%`,
-        //       comparison_amount_percent: `${(dataFromBackend.branches[0].comparison_amount / addMaxAmount).toFixed(1)}%`
-        //     },
-        //     // Прочее
-        //     {
-        //       ...dataFromBackend.branches[4],
-        //       current_amount_percent: `${(dataFromBackend.branches[4].current_amount / addMaxAmount).toFixed(1)}%`,
-        //       comparison_amount_percent: `${(dataFromBackend.branches[4].comparison_amount / addMaxAmount).toFixed(1)}%`
-        //     },
-        //   ],
-        // }
+        this.comparison.data = {
+          head_office: [
+            // Фиксированное вознаграждение
+            {
+              ...dataFromBackend.head_office[7],
+              current_amount_percent: `${((dataFromBackend.head_office[7].current_amount / addMaxAmount)).toFixed(1)}%`,
+              comparison_amount_percent: `${((dataFromBackend.head_office[7].comparison_amount / addMaxAmount)).toFixed(1)}%`
+            },
+            // Переменное вознаграждение
+            {
+              ...dataFromBackend.head_office[3],
+              current_amount_percent: `${(dataFromBackend.head_office[3].current_amount / addMaxAmount).toFixed(1)}%`,
+              comparison_amount_percent: `${(dataFromBackend.head_office[3].comparison_amount / addMaxAmount).toFixed(1)}%`
+            },
+            // Разовые выплаты
+            {
+              ...dataFromBackend.head_office[6],
+              current_amount_percent: `${(dataFromBackend.head_office[6].current_amount / addMaxAmount).toFixed(1)}%`,
+              comparison_amount_percent: `${(dataFromBackend.head_office[6].comparison_amount / addMaxAmount).toFixed(1)}%`
+            },
+            // Премии к праздникам и мат помощь с/х продукты
+            {
+              ...dataFromBackend.head_office[4],
+              current_amount_percent: `${(dataFromBackend.head_office[4].current_amount / addMaxAmount).toFixed(1)}%`,
+              comparison_amount_percent: `${(dataFromBackend.head_office[4].comparison_amount / addMaxAmount).toFixed(1)}%`
+            },
+            // Материальная помощь
+            {
+              ...dataFromBackend.head_office[1],
+              current_amount_percent: `${(dataFromBackend.head_office[1].current_amount / addMaxAmount).toFixed(1)}%`,
+              comparison_amount_percent: `${(dataFromBackend.head_office[1].comparison_amount / addMaxAmount).toFixed(1)}%`
+            },
+            // Прочее
+            {
+              ...dataFromBackend.head_office[5],
+              current_amount_percent: `${(dataFromBackend.head_office[5].current_amount / addMaxAmount).toFixed(1)}%`,
+              comparison_amount_percent: `${(dataFromBackend.head_office[5].comparison_amount / addMaxAmount).toFixed(1)}%`
+            }
+          ],
+          branches: [
+            // Фиксированное вознаграждение
+            {
+              ...dataFromBackend.branches[6],
+              current_amount_percent: `${(dataFromBackend.branches[6].current_amount / addMaxAmount).toFixed(1)}%`,
+              comparison_amount_percent: `${(dataFromBackend.branches[6].comparison_amount / addMaxAmount).toFixed(1)}%`
+            },
+            // Переменное вознаграждение
+            {
+              ...dataFromBackend.branches[2],
+              current_amount_percent: `${(dataFromBackend.branches[2].current_amount / addMaxAmount).toFixed(1)}%`,
+              comparison_amount_percent: `${(dataFromBackend.branches[2].comparison_amount / addMaxAmount).toFixed(1)}%`
+            },
+            // Разовые выплаты
+            {
+              ...dataFromBackend.branches[5],
+              current_amount_percent: `${(dataFromBackend.branches[5].current_amount / addMaxAmount).toFixed(1)}%`,
+              comparison_amount_percent: `${(dataFromBackend.branches[5].comparison_amount / addMaxAmount).toFixed(1)}%`
+            },
+            // Премии к праздникам и мат помощь с/х продукты
+            {
+              ...dataFromBackend.branches[3],
+              current_amount_percent: `${(dataFromBackend.branches[3].current_amount / addMaxAmount).toFixed(1)}%`,
+              comparison_amount_percent: `${(dataFromBackend.branches[3].comparison_amount / addMaxAmount).toFixed(1)}%`
+            },
+            // Материальная помощь
+            {
+              ...dataFromBackend.branches[0],
+              current_amount_percent: `${(dataFromBackend.branches[0].current_amount / addMaxAmount).toFixed(1)}%`,
+              comparison_amount_percent: `${(dataFromBackend.branches[0].comparison_amount / addMaxAmount).toFixed(1)}%`
+            },
+            // Прочее
+            {
+              ...dataFromBackend.branches[4],
+              current_amount_percent: `${(dataFromBackend.branches[4].current_amount / addMaxAmount).toFixed(1)}%`,
+              comparison_amount_percent: `${(dataFromBackend.branches[4].comparison_amount / addMaxAmount).toFixed(1)}%`
+            },
+          ],
+        }
 
         return Promise.resolve()
       }

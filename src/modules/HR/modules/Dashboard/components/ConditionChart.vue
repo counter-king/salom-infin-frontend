@@ -263,23 +263,6 @@ const getConditionList = async () => {
       ],
       median_age: 33
     }
-
-    let list = mock.data
-    .sort((prev, next) => next['COUNT'] - prev['COUNT'])
-    .map(item => {
-      return {
-        title: item['CONDITION_NOTE'],
-        number: item['COUNT'],
-        class: conditionColors(item['CONDITION']),
-        CONDITION: item['CONDITION'],
-      }
-    })
-
-    conditionSeries.value = mock.data.map(item => item['COUNT'])
-    conditionList.value = {
-      list,
-      counts: list.reduce((acc, cur) => acc + cur.number, 0)
-    }
   }
   finally {
     setTimeout(() => {
