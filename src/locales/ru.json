@@ -833,5 +833,11 @@
   "graphic": "График",
   "table": "Таблица",
   "total": "Всего",
-  "total-2": "Итого"
+  "total-2": "Итого",
+  "tabel-number": "Табель номер",
+  "sick-type": "Тип больничный",
+  "sick-leave-coefficient": "Коэффициент больничный",
+  "experience": "Опыт",
+  "trip-address": "Aдрес командировки",
+  "trip-reason": "Причина командировки"
 }

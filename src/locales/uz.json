@@ -832,5 +832,11 @@
   "graphic": "Grafik",
   "table": "Jadval",
   "total": "Barchasi",
-  "total-2": "Jami"
+  "total-2": "Jami",
+  "tabel-number": "Tabel raqam",
+  "sick-type": "Kasallik tipi",
+  "sick-leave-coefficient": "Kasallik koeffitsienti",
+  "experience": "Tajriba",
+  "trip-address": "Xizmat safar manzili",
+  "trip-reason": "Xizmat safar sababi"
 }

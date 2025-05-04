@@ -68,7 +68,7 @@ onMounted(async () => {
     v-model="model"
     :label="label"
     @emit:after-hide="emit('emit:after-hide')"
-    max-width="max-w-[1640px]"
+    max-width="max-w-[1740px]"
   >
     <template #header>
       <div class="flex flex-1 items-center mr-6">

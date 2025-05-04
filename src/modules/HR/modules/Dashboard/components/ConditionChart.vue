@@ -11,6 +11,86 @@ const route = useRoute()
 const router = useRouter()
 const userStore = useUsersStore()
 
+const headerDefault = [
+  {
+    header: 'employee',
+    field: 'full_name',
+    width: '400px',
+    active: true
+  },
+  {
+    header: 'branch',
+    field: 'company',
+    width: '250px',
+    active: true
+  },
+  {
+    header: 'department',
+    field: 'top_level_department',
+    width: '400px',
+    active: true
+  },
+  {
+    header: 'position',
+    field: 'position',
+    width: '350px',
+    active: true
+  },
+  {
+    header: 'start-date',
+    field: 'start_date',
+    width: '250px',
+    active: true
+  },
+  {
+    header: 'end-date',
+    field: 'end_date',
+    width: '250px',
+    active: true
+  },
+  {
+    header: 'tabel-number',
+    field: 'table_number',
+    width: '250px',
+    active: true
+  },
+  {
+    header: 'sick-type',
+    field: 'sick_leave_type',
+    width: '250px',
+    active: false,
+    tabelTypes: ['B']
+  },
+  {
+    header: 'sick-leave-coefficient',
+    field: 'sick_leave_coefficient',
+    width: '400px',
+    active: false,
+    tabelTypes: ['B']
+  },
+  {
+    header: 'experience',
+    field: 'experience',
+    width: '250px',
+    active: false,
+    tabelTypes: ['B']
+  },
+  {
+    header: 'trip-address',
+    field: 'trip_address',
+    width: '250px',
+    active: false,
+    tabelTypes: ['K']
+  },
+  {
+    header: 'trip-reason',
+    field: 'trip_reason',
+    width: '400px',
+    active: false,
+    tabelTypes: ['K']
+  },
+]
+
 const modal = ref(false)
 const selected = ref({
   title: '',
@@ -91,42 +171,7 @@ const users = ref({
   count: 0
 })
 const loading = ref(true)
-const headers = ref([
-  {
-    header: 'Сотрудник',
-    field: 'full_name',
-    width: '400px',
-    active: true
-  },
-  {
-    header: 'Филиал',
-    field: 'company',
-    width: '250px',
-    active: true
-  },
-  {
-    header: 'Департамент',
-    field: 'top_level_department',
-    width: '400px',
-    active: true
-  },
-  {
-    header: 'Должность',
-    field: 'position',
-    width: '400px',
-    active: true
-  },
-  {
-    header: 'Дата начала',
-    field: 'start_date',
-    active: false
-  },
-  {
-    header: 'Дата окончания',
-    field: 'end_date',
-    active: false
-  }
-])
+const headers = ref(headerDefault)
 const filters = ref({
   search: null,
   company: null,
@@ -218,6 +263,23 @@ const getConditionList = async () => {
       ],
       median_age: 33
     }
+
+    let list = mock.data
+    .sort((prev, next) => next['COUNT'] - prev['COUNT'])
+    .map(item => {
+      return {
+        title: item['CONDITION_NOTE'],
+        number: item['COUNT'],
+        class: conditionColors(item['CONDITION']),
+        CONDITION: item['CONDITION'],
+      }
+    })
+
+    conditionSeries.value = mock.data.map(item => item['COUNT'])
+    conditionList.value = {
+      list,
+      counts: list.reduce((acc, cur) => acc + cur.number, 0)
+    }
   }
   finally {
     setTimeout(() => {
@@ -255,6 +317,16 @@ const conditionColors = (condition) => {
 }
 const handleType = async (item) => {
   selected.value = item
+
+  if(selected.value.CONDITION === 'B' || selected.value.CONDITION === 'K') {
+    headers.value = headers.value?.map(header => {
+      return {
+        ...header,
+        active: header.hasOwnProperty('tabelTypes') ? header.tabelTypes.includes(item.CONDITION) : true
+      }
+    })
+  }
+
   modal.value = true
   await actionUserSearchList()
 }
@@ -293,6 +365,7 @@ const handleAfterHide = async () => {
     query: {}
   })
   .then(() => {})
+  headers.value = headerDefault
 }
 
 onMounted(async () => {
@@ -384,6 +457,45 @@ onMounted(async () => {
 
           <template #position="{ data }">
             <h1 class="text-sm font-medium text-greyscale-900">{{ data.position?.name ?? '-' }}</h1>
+          </template>
+
+          <template #start_date="{ data }">
+            <h1 class="text-sm font-medium text-greyscale-900">{{ data.start_date ?? '-' }}</h1>
+          </template>
+
+          <template #end_date="{ data }">
+            <h1 class="text-sm font-medium text-greyscale-900">{{ data.end_date ?? '-' }}</h1>
+          </template>
+
+          <template #table_number="{ data }">
+            <h1 class="text-sm font-medium text-greyscale-900">{{ data.table_number ?? '-' }}</h1>
+          </template>
+
+          <template #sick_leave_type="{ data }">
+            <h1 class="text-sm font-medium text-greyscale-900">{{ data.sick_leave_type ?? '-' }}</h1>
+          </template>
+
+          <template #sick_leave_coefficient="{ data }">
+            <h1 class="text-sm font-medium text-greyscale-900">{{ data.sick_leave_coefficient ?? '-' }}</h1>
+          </template>
+
+          <template #experience="{ data }">
+            <h1 class="text-sm font-medium text-greyscale-900">{{ data.experience ?? '-' }}</h1>
+          </template>
+
+          <template #trip_address="{ data }">
+            <h1 class="text-sm font-medium text-greyscale-900">{{ data.trip_address ?? '-' }}</h1>
+          </template>
+
+          <template #trip_reason="{ data }">
+            <h1
+              class="text-sm font-medium text-greyscale-900 line-clamp-2"
+              v-tooltip.top="{
+                value: `<h4 class='text-xs text-white -my-1'>${data.trip_reason}</h4>`,
+                escape: true
+              }"
+            >
+              {{ data.trip_reason ?? '-' }}</h1>
           </template>
         </base-data-table>
       </template>
