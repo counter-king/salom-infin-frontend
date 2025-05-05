@@ -718,17 +718,17 @@ watchEffect(async () => {
 })
 
 onMounted(async () => {
-  // await getCountStaff()
-  // await getCountEmployees()
-  // await getCountRate()
-  // await getCountVacant()
-  // await getActivityPercent()
-  // await getFormCompletionPercent()
-  // await getGenderList()
-  // await getExperienceList()
-  // await getAgesList()
-  // await getManagersList()
-  // await getPositionRankList()
+  await getCountStaff()
+  await getCountEmployees()
+  await getCountRate()
+  await getCountVacant()
+  await getActivityPercent()
+  await getFormCompletionPercent()
+  await getGenderList()
+  await getExperienceList()
+  await getAgesList()
+  await getManagersList()
+  await getPositionRankList()
 })
 </script>
 
