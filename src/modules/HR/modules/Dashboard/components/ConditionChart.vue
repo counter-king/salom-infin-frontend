@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, provide, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUsersStore } from '@/stores/users.store'
 import axiosConfig from '@/services/axios.config'
@@ -7,6 +7,7 @@ import { USER_STATUS_CODES } from '@/enums'
 import Card from './Card.vue'
 import { ModalWithFilters } from '@/components/Modal'
 import { isObject } from '@/utils'
+import { formatDate } from '@/utils/formatDate'
 
 const route = useRoute()
 const router = useRouter()
@@ -48,14 +49,36 @@ const headerDefault = [
     field: 'start_date',
     width: '250px',
     active: false,
-    tabelTypes: ['B']
+    tabelTypes: [
+      USER_STATUS_CODES.LABOR_LEAVE,
+      USER_STATUS_CODES.SICK_LEAVES,
+      USER_STATUS_CODES.ACADEMICIAN_VACATION,
+      USER_STATUS_CODES.MILITARY_SERVICE,
+      USER_STATUS_CODES.NO_CONTENT,
+      USER_STATUS_CODES.DECREE_2,
+      USER_STATUS_CODES.DECREE_3,
+      USER_STATUS_CODES.STUDY_LEAVE,
+      USER_STATUS_CODES.SICK_LEAVE_DECREE,
+      USER_STATUS_CODES.BUSINESS_TRIP
+    ]
   },
   {
     header: 'end-date',
     field: 'end_date',
     width: '250px',
     active: false,
-    tabelTypes: ['B', 'K']
+    tabelTypes: [
+      USER_STATUS_CODES.LABOR_LEAVE,
+      USER_STATUS_CODES.SICK_LEAVES,
+      USER_STATUS_CODES.ACADEMICIAN_VACATION,
+      USER_STATUS_CODES.MILITARY_SERVICE,
+      USER_STATUS_CODES.NO_CONTENT,
+      USER_STATUS_CODES.DECREE_2,
+      USER_STATUS_CODES.DECREE_3,
+      USER_STATUS_CODES.STUDY_LEAVE,
+      USER_STATUS_CODES.SICK_LEAVE_DECREE,
+      USER_STATUS_CODES.BUSINESS_TRIP
+    ]
   },
   {
     header: 'sick-type',
@@ -179,6 +202,13 @@ const filters = ref({
   search: null,
   company: null,
   department: null,
+  start_date: null,
+  end_date: null,
+  __date: null
+})
+
+provide('filters', {
+  filters
 })
 
 const getConditionList = async () => {
@@ -267,22 +297,22 @@ const getConditionList = async () => {
       median_age: 33
     }
 
-    // let list = mock.data
-    // .sort((prev, next) => next['COUNT'] - prev['COUNT'])
-    // .map(item => {
-    //   return {
-    //     title: item['CONDITION_NOTE'],
-    //     number: item['COUNT'],
-    //     class: conditionColors(item['CONDITION']),
-    //     CONDITION: item['CONDITION'],
-    //   }
-    // })
-    //
-    // conditionSeries.value = mock.data.map(item => item['COUNT'])
-    // conditionList.value = {
-    //   list,
-    //   counts: list.reduce((acc, cur) => acc + cur.number, 0)
-    // }
+    let list = mock.data
+    .sort((prev, next) => next['COUNT'] - prev['COUNT'])
+    .map(item => {
+      return {
+        title: item['CONDITION_NOTE'],
+        number: item['COUNT'],
+        class: conditionColors(item['CONDITION']),
+        CONDITION: item['CONDITION'],
+      }
+    })
+
+    conditionSeries.value = mock.data.map(item => item['COUNT'])
+    conditionList.value = {
+      list,
+      counts: list.reduce((acc, cur) => acc + cur.number, 0)
+    }
   }
   finally {
     setTimeout(() => {
@@ -346,6 +376,15 @@ const handleType = async (item) => {
       USER_STATUS_CODES.BUSINESS_TRIP
     ].includes(selected.value.CONDITION)
   ) {
+    headers.value = headers.value?.map(header => {
+      return {
+        ...header,
+        active: header.hasOwnProperty('tabelTypes') ? header.tabelTypes.includes(item.CONDITION) : true
+      }
+    })
+
+    console.log('asd', headers.value)
+
     await actionUserOnVacationList()
   }
   else {
@@ -354,7 +393,26 @@ const handleType = async (item) => {
 }
 const handleFiltered = async (value) => {
   filters.value = value
-  await actionUserSearchList(value)
+
+  if(
+    [
+      USER_STATUS_CODES.LABOR_LEAVE,
+      USER_STATUS_CODES.SICK_LEAVES,
+      USER_STATUS_CODES.ACADEMICIAN_VACATION,
+      USER_STATUS_CODES.MILITARY_SERVICE,
+      USER_STATUS_CODES.NO_CONTENT,
+      USER_STATUS_CODES.DECREE_2,
+      USER_STATUS_CODES.DECREE_3,
+      USER_STATUS_CODES.STUDY_LEAVE,
+      USER_STATUS_CODES.SICK_LEAVE_DECREE,
+      USER_STATUS_CODES.BUSINESS_TRIP
+    ].includes(selected.value.CONDITION)
+  ) {
+    await actionUserOnVacationList(value)
+  }
+  else {
+    await actionUserSearchList(value)
+  }
 }
 const actionUserSearchList = async (params = {}) => {
   try {
@@ -380,8 +438,6 @@ const actionUserOnVacationList = async (params = {}) => {
       ...params,
       code: selected.value.CONDITION
     })
-
-    // users.value.results = results.filter(item => item.)
   }
   catch (error) {}
   finally {
@@ -394,10 +450,31 @@ const setLoading = (value) => {
   loading.value = value
 }
 const handlePaginate = async (value) => {
-  await actionUserSearchList({
-    page: value,
-    ...filters.value,
-  })
+  if(
+    [
+      USER_STATUS_CODES.LABOR_LEAVE,
+      USER_STATUS_CODES.SICK_LEAVES,
+      USER_STATUS_CODES.ACADEMICIAN_VACATION,
+      USER_STATUS_CODES.MILITARY_SERVICE,
+      USER_STATUS_CODES.NO_CONTENT,
+      USER_STATUS_CODES.DECREE_2,
+      USER_STATUS_CODES.DECREE_3,
+      USER_STATUS_CODES.STUDY_LEAVE,
+      USER_STATUS_CODES.SICK_LEAVE_DECREE,
+      USER_STATUS_CODES.BUSINESS_TRIP
+    ].includes(selected.value.CONDITION)
+  ) {
+    await actionUserOnVacationList({
+      page: value,
+      ...filters.value,
+    })
+  }
+  else {
+    await actionUserSearchList({
+      page: value,
+      ...filters.value,
+    })
+  }
 }
 const handleAfterHide = async () => {
   await router.replace({
@@ -406,6 +483,14 @@ const handleAfterHide = async () => {
   })
   .then(() => {})
   headers.value = headerDefault
+  filters.value = {
+    search: null,
+    company: null,
+    department: null,
+    start_date: null,
+    end_date: null,
+    __date: null
+  }
 }
 
 onMounted(async () => {
@@ -455,6 +540,7 @@ onMounted(async () => {
   <modal-with-filters
     v-model="modal"
     :label="selected.title"
+    :conditions="selected.CONDITION"
     @update:filtered="handleFiltered"
     @emit:after-hide="handleAfterHide"
   >
@@ -498,15 +584,15 @@ onMounted(async () => {
           </template>
 
           <template #top_level_department="{ data }">
-            <template v-if="data.department">
+            <template v-if="data.top_level_department">
               <h1 class="text-sm font-medium text-greyscale-900">
-                {{ data.department }}
+                {{ isObject(data.top_level_department) ? data.top_level_department?.name ?? '-' : data.top_level_department }}
               </h1>
             </template>
 
             <template v-else>
               <h1 class="text-sm font-medium text-greyscale-900">
-                {{ isObject(data.top_level_department) ? data.top_level_department?.name ?? '-' : data.top_level_department }}
+                {{ data.department }}
               </h1>
             </template>
           </template>
@@ -518,11 +604,15 @@ onMounted(async () => {
           </template>
 
           <template #start_date="{ data }">
-            <h1 class="text-sm font-medium text-greyscale-900">{{ data.start_date ?? '-' }}</h1>
+            <h1 class="text-sm font-medium text-greyscale-900">
+              {{ formatDate(data.start_date) ?? '-' }}
+            </h1>
           </template>
 
           <template #end_date="{ data }">
-            <h1 class="text-sm font-medium text-greyscale-900">{{ data.end_date ?? '-' }}</h1>
+            <h1 class="text-sm font-medium text-greyscale-900">
+              {{ formatDate(data.end_date) ?? '' }}
+            </h1>
           </template>
 
           <template #sick_leave_type="{ data }">

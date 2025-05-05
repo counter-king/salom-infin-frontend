@@ -1,11 +1,13 @@
 <script setup>
-import { ref, onMounted, useModel } from 'vue'
+import { ref, watch, inject, onMounted, useModel } from 'vue'
 import { useDebounceFn } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
 import { MagniferIcon } from '@/components/Icons'
 import BaseInput from '@/components/UI/BaseInput.vue'
 import HandbookDropdown from '@/modules/Handbook/components/Dropdown.vue'
 import { fetchCompaniesList, fetchDepartmentList } from '@/services/common.service'
+import { formatDateReverse } from '@/utils/formatDate'
+import { USER_STATUS_CODES } from '@/enums'
 
 const props = defineProps({
   modelValue: {
@@ -13,18 +15,17 @@ const props = defineProps({
   },
   label: {
     type: String,
+  },
+  conditions: {
+    type: String
   }
 })
 const emit = defineEmits(['update:filtered', 'emit:after-hide'])
 
 const { t } = useI18n()
 const model = useModel(props, 'modelValue')
+const { filters } = inject('filters')
 
-const filters = ref({
-  search: null,
-  company: null,
-  department: null
-})
 const companies = ref([])
 const departments = ref([])
 
@@ -57,6 +58,20 @@ const handleDepartment = (value) => {
   emit('update:filtered', filters.value)
 }
 
+watch(
+  () => filters.value.__date,
+  (value) => {
+    const [start, end] = value
+
+    if(start && end) {
+      filters.value.start_date = formatDateReverse(start)
+      filters.value.end_date = formatDateReverse(end)
+
+      emit('update:filtered', filters.value)
+    }
+  }
+)
+
 onMounted(async () => {
   let { data } = await fetchCompaniesList({ page_size: 100 })
   companies.value = data.results
@@ -68,7 +83,7 @@ onMounted(async () => {
     v-model="model"
     :label="label"
     @emit:after-hide="emit('emit:after-hide')"
-    max-width="max-w-[1740px]"
+    max-width="max-w-[1840px]"
   >
     <template #header>
       <div class="flex flex-1 items-center mr-6">
@@ -106,6 +121,20 @@ onMounted(async () => {
               @emit:change="handleDepartment"
             />
           </div>
+
+          <template v-if="props.conditions !== USER_STATUS_CODES.BUSINESS_TRIP">
+            <div class="max-w-[350px] w-full">
+              <base-calendar
+                v-model="filters.__date"
+                selection-mode="range"
+                root-class="!bg-white !rounded-[80px] shadow-button !h-10 !cursor-pointer"
+                input-class="!bg-white leading-[14px] !py-3 !pl-4 !cursor-pointer"
+                dropdown-button-class="!bg-white"
+                placeholder="Выберите дату"
+                date-format="dd.mm.yy"
+              />
+            </div>
+          </template>
         </div>
       </div>
     </template>
