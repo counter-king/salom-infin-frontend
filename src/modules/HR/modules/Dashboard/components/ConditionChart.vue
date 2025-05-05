@@ -423,7 +423,12 @@ const actionUserSearchList = async (params = {}) => {
       status_codes: selected.value.CONDITION
     })
   }
-  catch (error) {}
+  catch (error) {
+    users.value = {
+      results: [],
+      count: 0
+    }
+  }
   finally {
     setTimeout(() => {
       setLoading(false)
@@ -439,7 +444,12 @@ const actionUserOnVacationList = async (params = {}) => {
       code: selected.value.CONDITION
     })
   }
-  catch (error) {}
+  catch (error) {
+    users.value = {
+      results: [],
+      count: 0
+    }
+  }
   finally {
     setTimeout(() => {
       setLoading(false)

@@ -6,7 +6,7 @@ import { MagniferIcon } from '@/components/Icons'
 import BaseInput from '@/components/UI/BaseInput.vue'
 import HandbookDropdown from '@/modules/Handbook/components/Dropdown.vue'
 import { fetchCompaniesList, fetchDepartmentList } from '@/services/common.service'
-import { formatDateReverse } from '@/utils/formatDate'
+import { formatDateReverse, formatDate } from '@/utils/formatDate'
 import { USER_STATUS_CODES } from '@/enums'
 
 const props = defineProps({
@@ -64,8 +64,8 @@ watch(
     const [start, end] = value
 
     if(start && end) {
-      filters.value.start_date = formatDateReverse(start)
-      filters.value.end_date = formatDateReverse(end)
+      filters.value.start_date = formatDate(start)
+      filters.value.end_date = formatDate(end)
 
       emit('update:filtered', filters.value)
     }
