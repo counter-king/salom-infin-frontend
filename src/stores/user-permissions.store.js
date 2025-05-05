@@ -1,16 +1,17 @@
 // Core
 import { defineStore } from 'pinia'
 // Services
-import { fetchUserPermissions } from '../services/user.permissions.service'
+import { fetchUserPermissions } from '@/services/user.permissions.service'
 // Stores
-import { useAuthStore } from '../modules/Auth/stores'
+import { useAuthStore } from '@/modules/Auth/stores'
 const authStore = useAuthStore()
+
 export const useUserPermissionStore = defineStore('user-permissions', {
   state: () => ({
     userPermissions: []
   }),
   actions: {
-    async getUserPermisission() {
+    async getUserPermission() {
       let { data } = await fetchUserPermissions()
       this.userPermissions = data
     },
@@ -19,12 +20,12 @@ export const useUserPermissionStore = defineStore('user-permissions', {
      * @param { string } permission
      * @returns { boolean }
      * */
-    canAccess(menu) {
+    canAccess(permission) {
       return true
 
       // const authStore = useAuthStore()
 
-      // // Если юзер суперадмин или
+      // // Если юзер супер админ или
       // // permission не определен или null
       // // пропускаем проверку
       // if(!permission) {
