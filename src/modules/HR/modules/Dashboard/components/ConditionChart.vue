@@ -263,6 +263,23 @@ const getConditionList = async () => {
       ],
       median_age: 33
     }
+
+    let list = mock.data
+    .sort((prev, next) => next['COUNT'] - prev['COUNT'])
+    .map(item => {
+      return {
+        title: item['CONDITION_NOTE'],
+        number: item['COUNT'],
+        class: conditionColors(item['CONDITION']),
+        CONDITION: item['CONDITION'],
+      }
+    })
+
+    conditionSeries.value = mock.data.map(item => item['COUNT'])
+    conditionList.value = {
+      list,
+      counts: list.reduce((acc, cur) => acc + cur.number, 0)
+    }
   }
   finally {
     setTimeout(() => {
@@ -311,7 +328,26 @@ const handleType = async (item) => {
   }
 
   modal.value = true
-  await actionUserSearchList()
+
+  if(
+    [
+      USER_STATUS_CODES.LABOR_LEAVE,
+      USER_STATUS_CODES.SICK_LEAVES,
+      USER_STATUS_CODES.ACADEMICIAN_VACATION,
+      USER_STATUS_CODES.MILITARY_SERVICE,
+      USER_STATUS_CODES.NO_CONTENT,
+      USER_STATUS_CODES.DECREE_2,
+      USER_STATUS_CODES.DECREE_3,
+      USER_STATUS_CODES.STUDY_LEAVE,
+      USER_STATUS_CODES.SICK_LEAVE_DECREE,
+      USER_STATUS_CODES.BUSINESS_TRIP
+    ].includes(selected.value.CONDITION)
+  ) {
+    await actionUserOnVacationList()
+  }
+  else {
+    await actionUserSearchList()
+  }
 }
 const handleFiltered = async (value) => {
   filters.value = value
@@ -325,6 +361,27 @@ const actionUserSearchList = async (params = {}) => {
       ...params,
       status_codes: selected.value.CONDITION
     })
+  }
+  catch (error) {}
+  finally {
+    setTimeout(() => {
+      setLoading(false)
+    }, 500)
+  }
+}
+const actionUserOnVacationList = async (params = {}) => {
+  try {
+    setLoading(true)
+
+    let { results, count } = await userStore.actionUserOnVacationList({
+      ...params,
+      status_codes: selected.value.CONDITION
+    })
+
+    console.log('results', results)
+    console.log('count', count)
+
+    // users.value.results = results.filter(item => item.)
   }
   catch (error) {}
   finally {

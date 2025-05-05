@@ -3,7 +3,8 @@ import {
   fetchUsersList,
   fetchUserSearchList,
   fetchEmployeeGroupsList,
-  fetchEmployeeGroupsCreate
+  fetchEmployeeGroupsCreate,
+  fetchUserOnVacationList
 } from "@/services/users.service"
 
 export const useUsersStore = defineStore("users", {
@@ -28,6 +29,18 @@ export const useUsersStore = defineStore("users", {
      * */
     async actionUserSearchList(payload = {}) {
       let { data } = await fetchUserSearchList(payload)
+
+      return Promise.resolve({
+        results: data.results,
+        count: data.count
+      })
+    },
+    /**
+     * Поиск пользователей
+     * @returns Promise
+     * */
+    async actionUserOnVacationList(payload = {}) {
+      let { data } = await fetchUserOnVacationList(payload)
 
       return Promise.resolve({
         results: data.results,
