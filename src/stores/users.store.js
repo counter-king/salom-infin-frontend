@@ -1,6 +1,7 @@
 import { defineStore } from "pinia"
 import {
   fetchUsersList,
+  fetchUserSearchList,
   fetchEmployeeGroupsList,
   fetchEmployeeGroupsCreate
 } from "@/services/users.service"
@@ -20,6 +21,18 @@ export const useUsersStore = defineStore("users", {
       this.usersList = data.results
 
       return Promise.resolve(data.results)
+    },
+    /**
+     * Поиск пользователей
+     * @returns Promise
+     * */
+    async actionUserSearchList(payload = {}) {
+      let { data } = await fetchUserSearchList(payload)
+
+      return Promise.resolve({
+        results: data.results,
+        count: data.count
+      })
     },
     /**
      * Возвращает список группа сотрудников

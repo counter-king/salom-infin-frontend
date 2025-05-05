@@ -30,7 +30,7 @@ const tabIndex = ref(0)
             class="font-medium text-sm text-greyscale-500"
             :class="{ 'text-greyscale-900' : tabIndex === 0 }"
           >
-            График
+            {{ t('graphic') }}
           </span>
         </div>
 
@@ -49,7 +49,7 @@ const tabIndex = ref(0)
             class="font-medium text-sm text-greyscale-500"
             :class="{ 'text-greyscale-900' : tabIndex === 1 }"
           >
-            Таблица
+            {{ t('table') }}
           </span>
         </div>
       </div>

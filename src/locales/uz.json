@@ -813,6 +813,31 @@
   "mln": "mln",
   "ming": "ming",
   "synchronization": "Sinxronizatsiya",
-  "successfully-completed": "Muvaffaqiyatli bajarildi"
-
+  "successfully-completed": "Muvaffaqiyatli bajarildi",
+  "finance-dashboard": {
+    "text-0": "Yil boshidan beri jami jami",
+    "text-1": "Moliyaviy yordam",
+    "text-2": "Fuqarolik-huquqiy shartnoma bo'yicha to'lov",
+    "text-3": "O'zgaruvchan ish haqi",
+    "text-4": "Bayramlar uchun bonuslar va qishloq xo'jaligi mahsulotlari uchun moddiy yordam",
+    "text-5": "Boshqa",
+    "text-6": "Bir martalik to'lovlar",
+    "text-7": "Belgilangan ish haqi",
+    "text-8": "Qimmatbaho sovg'alar",
+    "text-9": "Milliy kengash a'zolariga to'lov"
+  },
+  "head-office": "Bosh ofis",
+  "comparison-with-head-bank": "Bosh bank bilan taqqoslash",
+  "comparison-with-branch": "Filial bilan taqqoslash",
+  "graphic": "Grafik",
+  "table": "Jadval",
+  "total": "Barchasi",
+  "total-2": "Jami",
+  "tabel-number": "Tabel raqam",
+  "sick-type": "Kasallik tipi",
+  "sick-leave-coefficient": "Kasallik koeffitsienti",
+  "experience": "Tajriba",
+  "trip-address": "Xizmat safar manzili",
+  "trip-reason": "Xizmat safar sababi",
+  "show-numbers": "Raqamlarni ko'rsatish"
 }

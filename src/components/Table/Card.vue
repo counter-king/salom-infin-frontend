@@ -170,9 +170,9 @@ const updateSelection = (value) => {
         :key="col.field"
         :field="col.field"
         :header="col.header"
-        :style="{width: col.width}"
+        :style="{ width: col.width }"
         :pt="{
-          headerCell: { class: ['bg-inherit', 'h-[56px] bbbbbbbbbbbbbb',  props.headerCellClass] },
+          headerCell: { class: ['bg-inherit', 'h-[56px]',  props.headerCellClass] },
           headerContent: { class: ['text-sm', 'font-semibold', 'text-greyscale-500'] },
           bodyCell: { class: [props.bodyCellClass, 'text-base', 'py-0', 'h-[56px]', 'font-medium', 'text-primary-900', 'border-hidden', 'hover:text-primary-500', ] }
         }"
