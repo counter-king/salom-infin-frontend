@@ -498,9 +498,17 @@ onMounted(async () => {
           </template>
 
           <template #top_level_department="{ data }">
-            <h1 class="text-sm font-medium text-greyscale-900">
-              {{ isObject(data.top_level_department) ? data.top_level_department?.name ?? '-' : data.top_level_department }}
-            </h1>
+            <template v-if="data.department">
+              <h1 class="text-sm font-medium text-greyscale-900">
+                {{ data.department }}
+              </h1>
+            </template>
+
+            <template v-else>
+              <h1 class="text-sm font-medium text-greyscale-900">
+                {{ isObject(data.top_level_department) ? data.top_level_department?.name ?? '-' : data.top_level_department }}
+              </h1>
+            </template>
           </template>
 
           <template #position="{ data }">
