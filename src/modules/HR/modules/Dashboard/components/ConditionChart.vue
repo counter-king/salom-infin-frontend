@@ -6,6 +6,7 @@ import axiosConfig from '@/services/axios.config'
 import { USER_STATUS_CODES } from '@/enums'
 import Card from './Card.vue'
 import { ModalWithFilters } from '@/components/Modal'
+import { isObject } from '@/utils'
 
 const route = useRoute()
 const router = useRouter()
@@ -14,7 +15,7 @@ const userStore = useUsersStore()
 const headerDefault = [
   {
     header: 'tabel-number',
-    field: 'table_number',
+    field: 'tabel_number',
     width: '200px',
     active: true
   },
@@ -474,8 +475,8 @@ onMounted(async () => {
           scroll-height="calc(100vh - 295px)"
           @emit:onPageChange="handlePaginate"
         >
-          <template #table_number="{ data }">
-            <h1 class="text-sm font-medium text-greyscale-900">{{ data.table_number ?? '-' }}</h1>
+          <template #tabel_number="{ data }">
+            <h1 class="text-sm font-medium text-greyscale-900">{{ data.tabel_number ?? '-' }}</h1>
           </template>
 
           <template #full_name="{ data }">
@@ -491,15 +492,21 @@ onMounted(async () => {
           </template>
 
           <template #company="{ data }">
-            <h1 class="text-sm font-medium text-greyscale-900">{{ data.company?.name ?? '-' }}</h1>
+            <h1 class="text-sm font-medium text-greyscale-900">
+              {{ isObject(data.company) ? data.company?.name ?? '-' : data.company }}
+            </h1>
           </template>
 
           <template #top_level_department="{ data }">
-            <h1 class="text-sm font-medium text-greyscale-900">{{ data.top_level_department?.name ?? '-' }}</h1>
+            <h1 class="text-sm font-medium text-greyscale-900">
+              {{ isObject(data.top_level_department) ? data.top_level_department?.name ?? '-' : data.top_level_department }}
+            </h1>
           </template>
 
           <template #position="{ data }">
-            <h1 class="text-sm font-medium text-greyscale-900">{{ data.position?.name ?? '-' }}</h1>
+            <h1 class="text-sm font-medium text-greyscale-900">
+              {{ isObject(data.position) ? data.position?.name ?? '-' : data.position }}
+            </h1>
           </template>
 
           <template #start_date="{ data }">
