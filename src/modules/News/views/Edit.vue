@@ -13,6 +13,8 @@ import DialogPreview from '../components/create/DialogPreview.vue';
 import BaseDialog from '@/components/UI/BaseDialog.vue'
 // stores
 import { useNewsStore } from '../stores';
+import { useCountStore } from '@/stores/count.store'
+import { useNewsCountStore } from '../stores/news.count.store'
 // services 
 import { fetchGetMyNewsDelete, fetchGetMyNews } from '../services/news.service';
 import { fetchBlobFile } from '../../../services/file.service'; 
@@ -28,6 +30,8 @@ const { t } = useI18n()
 const route = useRoute()
 const newsStore = useNewsStore()
 const router = useRouter()
+const newsCountStore = useNewsCountStore()
+const countStore = useCountStore()
 // reactive
 const loading = ref(false)
 const dialogisPreviewOpen = ref(false) 
@@ -62,6 +66,8 @@ const handleDeleteNews = async()=>{
   isDeleteLoading.value = true
   if(!!route.params.id){
    await fetchGetMyNewsDelete(route.params.id)
+   countStore.actionCountList()
+   newsCountStore.actionGetNewsPandingCountList()
    isDeleteLoading.value = false
    dialogDeleteOpen.value = false
    router.push({name:'MyNewsList', query: {...router.currentRoute.value.query, activeMenu: 'my-posts'}})

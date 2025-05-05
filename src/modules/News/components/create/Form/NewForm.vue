@@ -25,14 +25,15 @@ import { useNewsStore } from '../../../stores';
 import { dispatchNotify } from '@/utils/notify';
 // services
 import { fetchCreateMyNews, fetchUpdateMyNews } from '../../../services/news.service';
+import { useCountStore } from '@/stores/count.store'
 // constants
 import { COLOR_TYPES } from '@/enums';
 import {  allowedAudioTypes, allowedFileTypes, allowedImageTypes, allowedVideoTypes, CONTENT_TYPES } from '../../../constants';
 import { NEWS_STATUS } from '@/modules/News/enums';
 
 const newsStore = useNewsStore();
+const countStore = useCountStore()
 const router = useRouter()
-
 // Macros
 const props = defineProps({
   imageFile: {
@@ -112,8 +113,10 @@ const onSubmitForm = async (isDraft = false) => {
     try {
      if (props.newsId) {
       await fetchUpdateMyNews(props.newsId, formData);
+      countStore.actionCountList()
     } else {
       await fetchCreateMyNews(formData);
+      countStore.actionCountList()
     }
 
     newsStore.loadingSubmitButton = false

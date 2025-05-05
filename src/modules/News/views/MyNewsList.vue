@@ -13,6 +13,9 @@ import RejectNewsDialog from '../components/RejectNewsDialog.vue';
 // composable
 import { useMyNewsList } from '../composibles/useMyNewsList';
 import { useSearchNews } from '../composibles/useSearchNews';
+// stores
+import { useCountStore } from '@/stores/count.store'
+import { useNewsCountStore } from '../stores/news.count.store'
 // utils
 import { formatDate } from '@/utils/formatDate';
 import { fetchGetMyNewsDelete } from '../services/news.service';
@@ -20,6 +23,10 @@ import { NEWS_STATUS } from '../enums';
 
 const { t } = useI18n();
 const router = useRouter();
+// composables
+const countStore = useCountStore()
+const newsCountStore = useNewsCountStore()
+
 const {headers, list, totalCount, loading , getMyNewsList } = useMyNewsList();
 const {debouncedSearchQuery } = useSearchNews();
 // reactive
@@ -52,6 +59,8 @@ const handleDeleteNews = async ()=>{
   if(!!newsId.value){
    await fetchGetMyNewsDelete(newsId.value)
    getMyNewsList({page:1, page_size: 15, search: debouncedSearchQuery.value})
+   countStore.actionCountList()
+   newsCountStore.actionGetNewsPandingCountList()
    isDeleteLoading.value = false
    dialogDeleteIsOpen.value = false
   }

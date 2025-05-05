@@ -6,6 +6,7 @@ import { useBoxesCommonStore } from '@/modules/Documents/modules/Boxes/stores/co
 import { useAgreementsRoutesStore } from '@/modules/HR/modules/Agreements/stores/routes.store'
 // Services
 import { fetchDocumentCountList } from '@/services/count.service'
+import { fetchGetNewsPendingCount } from '@/modules/News/services/news.service'
 
 export const useCountStore = defineStore('count-store', {
   state: () => ({}),
@@ -16,6 +17,9 @@ export const useCountStore = defineStore('count-store', {
 
       this.actionSetBoxesCount(boxes)
       this.actionSetAgreementsCount(hr)
+
+      const { data: dataNews } = await fetchGetNewsPendingCount()
+      this.actionSetNewsCount(dataNews)
     },
     /**
      *
@@ -43,6 +47,16 @@ export const useCountStore = defineStore('count-store', {
 
       hr.count = counts.unread_negotiator
       agreementsStore.routes.count = counts.unread_negotiator
+    },
+    /**
+     *
+     *
+     * */
+    actionSetNewsCount(counts){
+      const themeStore = useThemeStore()
+      const news = themeStore.header.find(route => route.name === 'news')
+
+      news.count = counts?.count
     }
   }
 })

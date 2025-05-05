@@ -25,6 +25,8 @@ import { EyeBoldIcon, HeartBoldIcon } from '@/components/Icons';
 // services
 import { fetchCreateNewsComment, fetchCreateNewsLike, fetchCreateNewsModerationHistory, fetchGetMyNews, fetchGetNewsCommentList, fetchGetNewsModerationHistoryList, fetchModerationApproveNews } from '../services/news.service';
 import { fetchBlobFile } from '../../../services/file.service';
+// store
+import { useCountStore } from '@/stores/count.store'
 // utils
 import { formatToK } from '@/utils';
 import { dispatchNotify } from '@/utils/notify';
@@ -36,6 +38,8 @@ import { NEWS_STATUS } from '../enums';
 const  { t } = useI18n()
 const  route = useRoute()
 const  router = useRouter()
+// composibles
+const countStore = useCountStore()
 // reactive 
 const loading = ref(false)
 const newsOne = ref({})
@@ -145,6 +149,7 @@ const handleModerationApprove = async () => {
   try {
     await fetchCreateNewsModerationHistory({ news: newsId.value, status: NEWS_STATUS.PUBLISHED, description: null })
     await fetchModerationApproveNews(newsId.value, { status: NEWS_STATUS.PUBLISHED })
+    countStore.actionCountList()
   }
   catch(e){
     dispatchNotify(null, e?.message, COLOR_TYPES.ERROR)
@@ -160,6 +165,7 @@ const handleRejectModeration = async (reason) => {
   try {
     await fetchCreateNewsModerationHistory({ news: newsId.value, status: NEWS_STATUS.DECLINED, description: reason })
     await fetchModerationApproveNews(newsId.value, {cancelled_reason: reason, status: NEWS_STATUS.DECLINED})
+    countStore.actionCountList()
   } 
   catch(e){
     dispatchNotify(null, e?.message, COLOR_TYPES.ERROR)
