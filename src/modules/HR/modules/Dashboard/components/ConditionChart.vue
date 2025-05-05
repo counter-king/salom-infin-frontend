@@ -13,6 +13,12 @@ const userStore = useUsersStore()
 
 const headerDefault = [
   {
+    header: 'tabel-number',
+    field: 'table_number',
+    width: '200px',
+    active: true
+  },
+  {
     header: 'employee',
     field: 'full_name',
     width: '400px',
@@ -40,19 +46,15 @@ const headerDefault = [
     header: 'start-date',
     field: 'start_date',
     width: '250px',
-    active: true
+    active: false,
+    tabelTypes: ['B']
   },
   {
     header: 'end-date',
     field: 'end_date',
     width: '250px',
-    active: true
-  },
-  {
-    header: 'tabel-number',
-    field: 'table_number',
-    width: '250px',
-    active: true
+    active: false,
+    tabelTypes: ['B', 'K']
   },
   {
     header: 'sick-type',
@@ -264,22 +266,22 @@ const getConditionList = async () => {
       median_age: 33
     }
 
-    let list = mock.data
-    .sort((prev, next) => next['COUNT'] - prev['COUNT'])
-    .map(item => {
-      return {
-        title: item['CONDITION_NOTE'],
-        number: item['COUNT'],
-        class: conditionColors(item['CONDITION']),
-        CONDITION: item['CONDITION'],
-      }
-    })
-
-    conditionSeries.value = mock.data.map(item => item['COUNT'])
-    conditionList.value = {
-      list,
-      counts: list.reduce((acc, cur) => acc + cur.number, 0)
-    }
+    // let list = mock.data
+    // .sort((prev, next) => next['COUNT'] - prev['COUNT'])
+    // .map(item => {
+    //   return {
+    //     title: item['CONDITION_NOTE'],
+    //     number: item['COUNT'],
+    //     class: conditionColors(item['CONDITION']),
+    //     CONDITION: item['CONDITION'],
+    //   }
+    // })
+    //
+    // conditionSeries.value = mock.data.map(item => item['COUNT'])
+    // conditionList.value = {
+    //   list,
+    //   counts: list.reduce((acc, cur) => acc + cur.number, 0)
+    // }
   }
   finally {
     setTimeout(() => {
@@ -373,13 +375,10 @@ const actionUserOnVacationList = async (params = {}) => {
   try {
     setLoading(true)
 
-    let { results, count } = await userStore.actionUserOnVacationList({
+    users.value = await userStore.actionUserOnVacationList({
       ...params,
-      status_codes: selected.value.CONDITION
+      code: selected.value.CONDITION
     })
-
-    console.log('results', results)
-    console.log('count', count)
 
     // users.value.results = results.filter(item => item.)
   }
@@ -475,6 +474,10 @@ onMounted(async () => {
           scroll-height="calc(100vh - 295px)"
           @emit:onPageChange="handlePaginate"
         >
+          <template #table_number="{ data }">
+            <h1 class="text-sm font-medium text-greyscale-900">{{ data.table_number ?? '-' }}</h1>
+          </template>
+
           <template #full_name="{ data }">
             <div class="flex items-center gap-3">
               <base-avatar
@@ -505,10 +508,6 @@ onMounted(async () => {
 
           <template #end_date="{ data }">
             <h1 class="text-sm font-medium text-greyscale-900">{{ data.end_date ?? '-' }}</h1>
-          </template>
-
-          <template #table_number="{ data }">
-            <h1 class="text-sm font-medium text-greyscale-900">{{ data.table_number ?? '-' }}</h1>
           </template>
 
           <template #sick_leave_type="{ data }">
