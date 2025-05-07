@@ -121,6 +121,7 @@ export { default as GalleryIcon } from  '~icons/solar/gallery-outline'
 export { default as DocumentsMinimalisticIcon } from  '~icons/solar/documents-minimalistic-outline'
 export { default as RoutingOutlineIcon } from  '~icons/solar/routing-outline'
 export { default as MapLinearIcon } from  '~icons/solar/map-linear'
+export { default as Buildings2OutlineIcon } from  '~icons/solar/buildings-2-outline'
 // Solar (Bold)
 export { default as CheckCircleBoldIcon } from  '~icons/solar/check-circle-bold'
 export { default as CalendarDateBoldIcon } from  '~icons/solar/calendar-date-bold'
