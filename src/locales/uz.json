@@ -857,5 +857,8 @@
   "add-purpose": "Maqsad qo'shish",
   "current-no-trip-purpose":"Hozirda sayohat maqsadlari yo'q.",
   "create-trip-purpose":"Sayohat maqsadni qo'shish",
-  "edit-trip-purpose":"Sayohat maqsadni tahrirlash"
+  "edit-trip-purpose":"Sayohat maqsadni tahrirlash",
+  "old-value": "eski ma'no",
+  "new-value": "yangi ma'no",
+  "to-which-country": "Qaysi davlat?"
 }

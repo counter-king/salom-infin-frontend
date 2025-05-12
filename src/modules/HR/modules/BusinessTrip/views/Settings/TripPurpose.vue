@@ -5,9 +5,10 @@ import { ref } from 'vue';
 // components
 import AddButton from './components/AddButton.vue';
 import Empty from '@/components/Empty.vue';
-import { TripModal, TripTable } from './components/TripPrupose';
-
-
+import { TripModal } from './components/TripPrupose';
+import { TrashBinTrashIcon, PenBoldIcon } from '@/components/Icons';
+import DataTable from './components/DataTable.vue';
+// composibles
 const { t } = useI18n()
 // reactives
 const tripModalVisible = ref(false)
@@ -18,31 +19,41 @@ const handleClickAddButton = () => {
 
 const headers = [
   {
-    field: 'order',
-    header: '№',
-    width: 'w-[2%]'
-  },
-  {
     field: 'targets',
     header: 'targets',
-    width: 'w-[60%]'
+    width: '60%',
+    active: true
   },
   {
     field: 'documentType',
     header: 'document-type',
-    width: 'w-[20%]'
+    width: '20%',
+    active: true
 
   },
   {
     field: 'actions',
     header: 'actions',
-    width: 'w-[10%]'
+    width: '10%',
+    active: true
   }
 ]
-
+const value = [{
+  order: 1,
+  targets: 'targets',
+  documentType: 'document-type',
+  actions: 'actions'
+},
+{
+  order: 2,
+  targets: 'targets',
+  documentType: 'document-type',
+  actions: 'actions'
+}
+]
 </script>
 <template>
-  <div class="flex flex-col pt-4 min-h-[520px]">
+  <div class="flex flex-col pt-4 min-h-[300px]">
     <!-- header -->
     <div class="flex items-center justify-between">
       <!-- title -->
@@ -53,18 +64,34 @@ const headers = [
        />
     </div>
     <!-- table -->
-    <div v-if="true" class="mt-4">
-      <TripTable :headers="headers"/>
+    <div v-if="true" class="mt-4 mb-4 h-[calc(100vh-380px)]">
+      <DataTable 
+        :headers="headers"
+        :value="value"
+        scroll-height="calc(100vh - 360px)"
+        class="flex flex-col h-full"
+      >
+      <template #actions="{ data }">
+        <div class="flex gap-2">
+          <div class="p-[6px] bg-greyscale-50 rounded-[8px] cursor-pointer hover:bg-greyscale-70">
+            <base-iconify :icon="PenBoldIcon" class="!w-5 !h-5 text-greyscale-500"/>
+          </div>
+          <div class="p-[6px] bg-greyscale-50 rounded-[8px] cursor-pointer hover:bg-greyscale-70">
+            <base-iconify :icon="TrashBinTrashIcon" class="!w-5 !h-5 text-critic-500"/>
+          </div>
+        </div>
+      </template>
+      </DataTable>
     </div>
     <div v-else class="flex flex-col gap-6 items-center justify-center flex-1">
-        <Empty
-            title="current-no-trip-purpose"
-            wrapper-class="shadow-none"
-            label-classes="text-sm text-greyscale-400"
-        />
-        <AddButton
-          @click="handleClickAddButton"
-          label="add-purpose"
+      <Empty
+          title="current-no-trip-purpose"
+          wrapper-class="shadow-none"
+          label-classes="text-sm text-greyscale-400"
+      />
+      <AddButton
+        @click="handleClickAddButton"
+        label="add-purpose"
        />
     </div>    
     <!-- modal -->

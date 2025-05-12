@@ -67,36 +67,37 @@ const handleAddCity = () => {
 <template>
   <div class="w-1/2 pt-5 px-6">
     <!-- title -->
-    <div class="text-xl font-semibold text-greyscale-900">{{ t('cities') }}</div>
+    <div class="mb-4 text-xl font-semibold text-greyscale-900">{{ t('cities') }}</div>
     <div v-if="true" class="flex flex-col gap-1">
       <!-- cities -->
-      <template  v-for="city in cities" :key="city.name"
-      >
-        <div 
-          class="flex items-center justify-between group p-4 pr-3 hover:bg-primary-10 border-[1.5px] border-white hover:border-[1.5px] hover:border-primary-30 rounded-xl cursor-pointer" 
-          :class="{ '!bg-primary-10 !border-[1.5px] !border-primary-30': activeSelectedCity == city.id }" 
-          @click="handleClickCity(city)"
-          >
-          <p class="text-[15px] font-medium text-greyscale-900">{{ city.name[locale] }}</p>
-          <!-- actions -->
-          <div class="flex items-center gap-4 opacity-0 group-hover:opacity-100">
-            <base-iconify 
-              :icon="TrashBinTrashIcon" class="!w-5 !h-5 text-critic-500"
-              @click="handleDeleteCity(city)"
-            />
-            <base-iconify 
-              :icon="PenBoldIcon" class="!w-5 !h-5 text-greyscale-400"
-              @click="handleEditCity(city)"
-            />
-            <base-iconify 
-              :icon="AddCircleBoldIcon" class="!w-5 !h-5 text-primary-500"
-              @click="handleAddCity(city)"
-            />
+      <div class="flex flex-col gap-1 overflow-y-auto h-[calc(100vh-470px)]">
+        <template  v-for="city in cities" :key="city.name"
+        >
+          <div 
+            class="flex items-center justify-between group p-4 pr-3 hover:bg-primary-10 border-[1.5px] border-white hover:border-[1.5px] hover:border-primary-30 rounded-xl cursor-pointer" 
+            :class="{ '!bg-primary-10 !border-[1.5px] !border-primary-30': activeSelectedCity == city.id }" 
+            @click="handleClickCity(city)"
+            >
+            <p class="text-[15px] font-medium text-greyscale-900">{{ city.name[locale] }}</p>
+            <!-- actions -->
+            <div class="flex items-center gap-4 opacity-0 group-hover:opacity-100">
+              <base-iconify 
+                :icon="TrashBinTrashIcon" class="!w-5 !h-5 text-critic-500"
+                @click="handleDeleteCity(city)"
+              />
+              <base-iconify 
+                :icon="PenBoldIcon" class="!w-5 !h-5 text-greyscale-400"
+                @click="handleEditCity(city)"
+              />
+              <base-iconify 
+                :icon="AddCircleBoldIcon" class="!w-5 !h-5 text-primary-500"
+                @click="handleAddCity(city)"
+              />
+            </div>
           </div>
-        </div>
-      </template>
-      
-      <!-- add country -->
+        </template>
+      </div>      
+      <!-- add city -->
       <div 
         class="flex items-center justify-center gap-2 mt-1 hover:bg-greyscale-70 bg-greyscale-50 rounded-lg px-3 py-[14px] cursor-pointer"
         @click="handleAddCity()"

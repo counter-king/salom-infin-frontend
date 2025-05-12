@@ -1,16 +1,16 @@
 const BusinessTrip = [
   {
     path: 'trip',
-    name: 'BusinessTripMainIndex',
+    name: 'BusinessTripIndex',
     meta: {
       isAuthRequired: true
     },
     component: () => import("../views/index.vue"),
-    redirect: { name: "BusinessTripIndex" },
+    redirect: { name: "BusinessTripMainIndex" },
     children: [
       {
         path: "business-trip",
-        name: "BusinessTripIndex",
+        name: "BusinessTripMainIndex",
         meta: {
           isAuthRequired: true,
           navigation: true

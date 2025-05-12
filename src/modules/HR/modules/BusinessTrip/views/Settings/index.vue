@@ -1,16 +1,18 @@
 import { useI18n } from 'vue-i18n';
 <script setup>
 // core
-import { ref } from 'vue';
+import { ref,computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
 // components
 import { ActionToolbar } from '@/components/Actions';
 import { CheckCircleIcon, History2Icon, MapIcon } from '@/components/Icons';
 
 
 const { t } = useI18n()
+const route = useRoute()
 // reactives
-const activeTab = ref(1)
+const activeTab = computed(() => route.name)
 const tabs = [
   {
     title: 'geographical-handbook',
@@ -55,8 +57,8 @@ const tabs = [
               <RouterLink :to="{name: tab.link}">
                 <div 
                  class="flex flex-col gap-2 text-sm group text-greyscale-500 font-medium"
-                 :class="{ 'text-greyscale-900': activeTab == tab.value }"
-                 @click="activeTab = tab.value"
+                 :class="{ 'text-greyscale-900': activeTab == tab.link }"
+                 @click="activeTab = tab.link"
                  >
                   <div class="flex gap-2 items-center">
                     <base-iconify :icon="tab.icon" class="!w-5 !h-5"/>
@@ -64,7 +66,7 @@ const tabs = [
                   </div>
                   <div 
                     class="h-[2px] w-full bg-primary-500 rounded-[8px] opacity-0 group-hover:opacity-100 relative bottom-[-2px]"
-                    :class="{ 'opacity-100': activeTab == tab.value }"
+                    :class="{ 'opacity-100': activeTab == tab.link }"
                     >
                   </div>
                 </div>

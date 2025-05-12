@@ -26,23 +26,10 @@ const $v = useModel(props, 'validator')
     <div class="flex flex-col gap-y-6">
         <div class="w-full">
           <base-input
-            label="name-uz"
-            v-model="formValue.name.uz"
-            :error="$v?.name?.uz"
-          />
-        </div>
-        <div class="w-full">
-          <base-input
-            label="name-ru"
-            v-model="formValue.name.ru"
-            :error="$v?.name?.ru"
-          />
-        </div>
-        <div class="w-full">
-          <base-input
-            label="name-en"
-            v-model="formValue.name.en"
-            :error="$v?.name?.en"
+            label="name"
+            placeholder="enter-naming-2"
+            v-model="formValue.name"
+            :error="$v?.name"
           />
         </div>
         <div class="flex justify-between items-center">

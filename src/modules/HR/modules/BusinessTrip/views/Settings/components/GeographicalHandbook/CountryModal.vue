@@ -1,13 +1,18 @@
 <script setup>
 // core
 import { useI18n } from 'vue-i18n'
-import { onMounted, reactive, useModel } from 'vue'
+import { onMounted, reactive, useModel, ref } from 'vue'
 import useVuelidate from '@vuelidate/core'
 import { helpers, required } from '@vuelidate/validators'
 // components
 import BaseDialog from '@/components/UI/BaseDialog.vue'
 import Form from './Form.vue'
+// services
+import { fetchCreateCountry, fetchUpdateCountryById, fetchGetCountryById } from '../../../../services'
+// stores
+import { useSettingsStore } from '@/modules/HR/modules/BusinessTrip/stores/settings.store'
 
+const settingsStore = useSettingsStore()
 const { t } = useI18n()
 // props
 const props = defineProps({
@@ -22,6 +27,10 @@ const props = defineProps({
   maxWidth : {
     type: String,
     default: 'max-w-[544px]'
+  },
+  id: {
+    type: Number,
+    default: null
   }
 })
 //  composables
@@ -32,26 +41,15 @@ const emit = defineEmits(['update:modelValue'])
 
 // reactives
 const formValue = reactive({
-  name: {
-    uz: null,
-    ru: null,
-    en: null
-  },
+  name: null,
   status : false
 })
-
+const isGetCountryLoading = ref(false)
+const isSubmitLoading = ref(false)
 // form rules
 const rules = {
   name: {
-    uz: {
-      required: helpers.withMessage(`Поле не должен быть пустым`, required)
-    },
-    ru: {
-      required: helpers.withMessage(`Поле не должен быть пустым`, required)
-    },
-    en: {
-      required: helpers.withMessage(`Поле не должен быть пустым`, required)
-    }
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   status: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
@@ -62,17 +60,40 @@ const $v = useVuelidate(rules, formValue)
 
 const submitForm = async () => {
   const isValid = await $v.value.$validate()
-  console.log("isValid", isValid)
   if(!isValid) return
-  console.log(formValue)
-  emit('update:modelValue', false)
+
+  try {
+    isSubmitLoading.value = true
+    if(props.id){
+      await fetchUpdateCountryById(props.id, {...formValue, status: formValue.status ? "a" : "p"})
+    } else{
+      await fetchCreateCountry({...formValue, status: formValue.status ? "a" : "p"})
+    }
+    emit('update:modelValue', false)
+    settingsStore.actionGetCountryList()
+  } catch (err) {
+    console.log(err)
+  } finally {
+    isSubmitLoading.value = false
+  }
 }
 const onCloseModal = () => {
   modelValue.value = false
 }
 
-onMounted(() => {
-  console.log("mounted")
+onMounted(async () => {
+  if(props.id){
+    isGetCountryLoading.value = true
+   try{
+     const { data } =  await fetchGetCountryById(props.id)
+     formValue.name = data.name
+     formValue.status = data.status == "a" ? true : false
+   } catch(err){
+    console.log(err)
+   } finally{
+    isGetCountryLoading.value = false
+   }
+  }
 })
 
 </script>
@@ -84,11 +105,17 @@ onMounted(() => {
     content-classes="p-6 pb-14"
   >
     <template #content>
-        <Form v-model:formValue="formValue" v-model:validator="$v" formId="country-form" />
+        <div v-if="isGetCountryLoading" class="flex h-[120px] items-center justify-center">
+          <base-spinner/>
+        </div>
+        <template v-else>
+          <Form v-model:formValue="formValue" v-model:validator="$v" formId="country-form" />
+        </template>
     </template>
     <template #footer>
       <div>
         <base-button
+          :disabled="isSubmitLoading"
           @click="onCloseModal"
           label="cancel"
           button-class="!py-[14px] !px-8 !rounded-[120px]"
@@ -97,9 +124,10 @@ onMounted(() => {
           outlined
         />
         <base-button
+          :loading="isSubmitLoading"
           type="submit"
           form="country-form"
-          label="add"
+          :label="props.id ? 'edit' : 'add'"
           button-class="!py-[14px] !px-8 !rounded-[120px]"
           @click="submitForm"
         />

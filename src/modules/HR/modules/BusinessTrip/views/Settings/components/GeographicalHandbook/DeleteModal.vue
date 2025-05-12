@@ -26,11 +26,16 @@ const props = defineProps({
       description: 'want-delete-city',
       value: ""
     })
+  },
+  loading: {
+    type: Boolean,
+    default: () => false
   }
 })
 const modelValue = useModel(props, 'modelValue')
 const emit = defineEmits(['update:modelValue','click:delete'])
 const { t } = useI18n()
+
 // emit
 const onCloseModal = () => {
   modelValue.value = false
@@ -38,6 +43,7 @@ const onCloseModal = () => {
 const handleClickDelete = () => {
   emit('click:delete')
 }
+
 </script>
 <template>
   <BaseDialog
@@ -67,6 +73,7 @@ const handleClickDelete = () => {
     <template #footer>
       <div>
         <base-button
+          :disabled="props.loading"
           @click="onCloseModal"
           label="cancel"
           button-class="!py-[14px] !px-8 !rounded-[120px]"
@@ -75,6 +82,7 @@ const handleClickDelete = () => {
           outlined
         />
         <base-button
+          :loading="props.loading"
           label="delete"
           button-class="!py-[14px] !px-8 !rounded-[120px]"
           @click="handleClickDelete"
