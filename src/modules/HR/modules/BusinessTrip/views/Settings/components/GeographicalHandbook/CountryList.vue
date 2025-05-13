@@ -58,7 +58,7 @@ const handleClickDeleteModal = async() => {
 
 </script>
 <template>
-  <div class="w-1/2 pt-5 pr-6">
+  <div class="w-1/2 py-5 pr-6">
     <!-- title -->
     <div class="mb-4 text-xl font-semibold text-greyscale-900">{{ t('country') }}</div>
     <div v-if="true" class="flex flex-col gap-1">

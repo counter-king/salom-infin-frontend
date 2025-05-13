@@ -75,7 +75,7 @@ watch(()=> activeSelectedCountry.value, (newValue, oldValue)=> {
 
 </script>
 <template>
-  <div class="w-1/2 pt-5 px-6">
+  <div class="w-1/2 py-5 px-6">
     <!-- title -->
     <div class="mb-4 text-xl font-semibold text-greyscale-900">{{ t('city') }}</div>
     <div v-if="!!settingsStore.cityList.length" class="flex flex-col gap-1">
