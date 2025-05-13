@@ -81,8 +81,11 @@ const handleClickDeleteModal = async() => {
 watch(()=> activeSelectedCountry.value, (newValue, oldValue)=> {
   if(newValue != oldValue){
     enabledFetchCityList.value = true
-    params.country = newValue?.id
-    refetch({ page: 1, page_size: 100, country: newValue?.id })  
+    if(!!newValue){
+      refetch({ page: 1, page_size: 100, country: newValue?.id })
+    } else {
+      settingsStore.cityList = []
+    }
   }
 },{ deep: true })
 
@@ -105,30 +108,31 @@ watch(()=> activeSelectedCountry.value, (newValue, oldValue)=> {
     <div v-if="!!settingsStore.cityList.length" class="flex flex-col gap-1">
       <!-- cities -->
       <div ref="cityListWrapperRef" class="flex flex-col gap-1 overflow-y-auto h-[calc(100vh-470px)]">
-        <template  v-for="city in settingsStore.cityList" :key="city.name"
-        >
-          <div 
-            class="flex items-center justify-between group p-4 pr-3 hover:bg-primary-10 border-[1.5px] border-white hover:border-[1.5px] hover:border-primary-30 rounded-xl cursor-pointer" 
-            :class="{ '!bg-primary-10 !border-[1.5px] !border-primary-30': activeSelectedCity?.id == city.id }" 
-            @click="handleClickCity(city)"
-            >
-            <p class="text-[15px] font-medium text-greyscale-900">{{ city.name }}</p>
-            <!-- actions -->
-            <div class="flex items-center gap-4 opacity-0 group-hover:opacity-100">
-              <base-iconify 
-                :icon="TrashBinTrashIcon" class="!w-5 !h-5 text-critic-500"
-                @click="handleDeleteCity(city)"
-              />
-              <base-iconify 
-                :icon="PenBoldIcon" class="!w-5 !h-5 text-greyscale-400"
-                @click="handleEditCity(city)"
-              />
-              <base-iconify 
-                :icon="AddCircleBoldIcon" class="!w-5 !h-5 text-primary-500"
-                @click="handleAddCity(city)"
-              />
+        <template v-if="settingsStore.cityListLoading">
+          <base-spinner/>
+        </template>
+        <template v-else>
+          <template  v-for="city in settingsStore.cityList" :key="city.name"
+          >
+            <div 
+              class="flex items-center justify-between group p-4 pr-3 hover:bg-primary-10 border-[1.5px] border-white hover:border-[1.5px] hover:border-primary-30 rounded-xl cursor-pointer" 
+              :class="{ '!bg-primary-10 !border-[1.5px] !border-primary-30': activeSelectedCity?.id == city.id }" 
+              @click="handleClickCity(city)"
+              >
+              <p class="text-[15px] font-medium text-greyscale-900">{{ city.name }}</p>
+              <!-- actions -->
+              <div class="flex items-center gap-4 opacity-0 group-hover:opacity-100">
+                <base-iconify 
+                  :icon="TrashBinTrashIcon" class="!w-5 !h-5 text-critic-500"
+                  @click="handleDeleteCity(city)"
+                />
+                <base-iconify 
+                  :icon="PenBoldIcon" class="!w-5 !h-5 text-greyscale-400"
+                  @click="handleEditCity(city)"
+                />
+              </div>
             </div>
-          </div>
+          </template>
         </template>
       </div>      
       <!-- add city -->

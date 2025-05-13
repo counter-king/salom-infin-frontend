@@ -1,6 +1,6 @@
 <script setup>
 // core
-import { useModel } from 'vue';
+import { useModel, onMounted, ref, nextTick } from 'vue';
 
 // props
 const props = defineProps({
@@ -17,9 +17,19 @@ const props = defineProps({
     default: () => {}
   }
 })
+// reactives
+const inputRef = ref(null)
 const formValue = useModel(props, 'formValue')
 const $v = useModel(props, 'validator')
 
+onMounted(() => {
+  if(inputRef.value){
+    nextTick(()=>{
+      const input = inputRef.value?.$el?.querySelector('input')
+      input?.focus()
+    })
+  }
+})
 </script>
 <template>
   <form :id="props.formId" @submit.prevent>
@@ -41,6 +51,7 @@ const $v = useModel(props, 'validator')
         </div>
         <div class="w-full">
           <base-input
+            ref="inputRef"
             label="name"
             placeholder="enter-naming-2"
             v-model="formValue.name"

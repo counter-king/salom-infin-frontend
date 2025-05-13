@@ -65,6 +65,7 @@ const handleClickDeleteModal = async() => {
     await fetchDeleteCountryById(activeSelectedCountry.value?.id)
     deleteModalVisible.value = false
     refetch({ page: 1, page_size: 230 })
+    activeSelectedCountry.value = null
   } catch (err) {
     console.log(err)
   } finally {
@@ -116,10 +117,6 @@ const handleClickDeleteModal = async() => {
                 <base-iconify 
                   :icon="PenBoldIcon" class="!w-5 !h-5 text-greyscale-400"
                   @click="handleEditCountry(country)"
-                />
-                <base-iconify 
-                  :icon="AddCircleBoldIcon" class="!w-5 !h-5 text-primary-500"
-                  @click="handleAddCountry()"
                 />
               </div>
             </div>
