@@ -70,12 +70,13 @@ onMounted(async () => {
        />
     </div>
     <!-- table -->
-    <div v-if="!!settingsStore.tripPurposeList.length" class="mt-4 mb-4 h-[calc(100vh-380px)]">
+    <div v-if="true" class="mt-4 mb-4 h-[calc(100vh-380px)]">
       <DataTable 
         :headers="headers"
         :value="settingsStore.tripPurposeList"
         scroll-height="calc(100vh - 360px)"
         class="flex flex-col h-full"
+        :loading="settingsStore.tripPurposeListLoading"
       >
       <template #document_sub_type="{ data }">
         <span>{{ data.name }}</span>

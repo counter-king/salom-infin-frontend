@@ -155,8 +155,7 @@ onMounted( async () => {
         return ({
          class: ['border-greyscale-100 cursor-pointer hover:bg-greyscale-50 border-b-[1px]', {'!border-b-[0px]': context.context?.index == valueComputed?.length - 1}]
       })},
-      root: {
-      },
+      loadingoverlay: { class: ['bg-transparent overflow-hidden', 'h-[calc(100%-56px)]'] },
       paginator: {
         rowPerPageDropdown: {
           root: { class: ['h-6', 'rounded-2'] },
@@ -241,6 +240,22 @@ onMounted( async () => {
          </slot>
         </template>
       </Column>
+    </template>
+    <template #loading>
+      <base-skeleton
+        :columns="props.headers"
+      />
+    </template>
+
+    <template #empty>
+      <slot name="empty">
+        <div
+          class="w-full flex justify-center items-center rounded-lg"
+          style="height: calc(100vh - 390px)"
+        >
+          <img class="w-[200px] h-[170px]" src="@/assets/img/empty-img-gray.png" alt="EmptyFolder">
+        </div>
+      </slot>
     </template>
   </DataTable>
 </template>
