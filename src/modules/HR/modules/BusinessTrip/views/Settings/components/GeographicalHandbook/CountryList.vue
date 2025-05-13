@@ -1,11 +1,12 @@
 <script setup>
 // core
-import { inject, ref } from 'vue'
+import { inject, ref, watch, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useDebounce } from '@vueuse/core'
 // components
 import CountryModal from './CountryModal.vue'
 import DeleteModal from './DeleteModal.vue'
-import { AddCircleBoldIcon, PenBoldIcon, TrashBinTrashIcon } from '@/components/Icons'
+import { AddCircleBoldIcon, MagniferIcon, PenBoldIcon, TrashBinTrashIcon } from '@/components/Icons'
 import Empty from '@/components/Empty.vue'
 // stores
 import { useSettingsStore } from '@/modules/HR/modules/BusinessTrip/stores/settings.store'
@@ -16,16 +17,31 @@ import { fetchDeleteCountryById } from '@/modules/HR/modules/BusinessTrip/servic
 const { t } = useI18n()
 const settingsStore = useSettingsStore()
 // reactive
+const defaultParams = { page: 1, page_size: 230 }
 const deleteModalVisible = ref(false)
 const countryModalVisible = ref(false)
 const countyListWrapperRef = ref(null)
 const deleteModalLoading = ref(false)
 const selectedCountryEditId = ref(null)
+const countrySearch = ref('')
+const params = reactive(defaultParams)
 // infinite scroll
-useInfiniteScroll({ fetchFn: settingsStore.actionGetCountryList, countyListWrapperRef, params: { page: 1, page_size: 20 }})
+const { refetch } = useInfiniteScroll({ fetchFn: settingsStore.actionGetCountryList, containerRef: countyListWrapperRef, params: params })
 // inject
 const activeSelectedCountry = inject('activeSelectedCountry')
 // methods
+const debouncedSearch = useDebounce(countrySearch, 500)
+
+watch(debouncedSearch, async (value) => {
+  // if value is empty if works
+  if (!value) {  
+    refetch({ page: 1, page_size: 230 })
+  } else {
+    refetch({ page: 1, page_size: 230, search: value})
+  }
+})
+
+
 const handleClickCountry = (country) => {
   activeSelectedCountry.value = country
 }
@@ -48,7 +64,7 @@ const handleClickDeleteModal = async() => {
   try {
     await fetchDeleteCountryById(activeSelectedCountry.value?.id)
     deleteModalVisible.value = false
-    settingsStore.actionGetCountryList()
+    refetch({ page: 1, page_size: 230 })
   } catch (err) {
     console.log(err)
   } finally {
@@ -60,7 +76,17 @@ const handleClickDeleteModal = async() => {
 <template>
   <div class="w-1/2 py-5 pr-6">
     <!-- title -->
-    <div class="mb-4 text-xl font-semibold text-greyscale-900">{{ t('country') }}</div>
+    <div class="flex  justify-between items-center gap-2 mb-4">
+      <div class="text-xl font-semibold text-greyscale-900">{{ t('country') }}</div>
+      <base-input
+        v-model="countrySearch"
+        :icon-left="MagniferIcon"
+        :placeholder="t('search')"
+        class="flex p-input-icon-left items-center"
+        input-class="!pl-10 p-3 text-xs !rounded-[90px] placeholder:text-xs !w-[280px]"
+        icon-left-class="!w-4 !h-4"
+      />
+    </div>
     <div v-if="true" class="flex flex-col gap-1">
       <!-- countries -->
       <div

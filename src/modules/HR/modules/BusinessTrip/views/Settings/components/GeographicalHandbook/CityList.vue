@@ -1,7 +1,8 @@
 <script setup>
 // core
-import { ref, reactive, inject, watch, computed } from 'vue'
+import { ref, reactive, inject, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useDebounce } from '@vueuse/core'
 // components
 import Empty from '@/components/Empty.vue'
 import CityModal from './CityModal.vue'
@@ -9,18 +10,18 @@ import DeleteModal from './DeleteModal.vue'
 // services
 import { fetchDeleteRegionById } from '@/modules/HR/modules/BusinessTrip/services'
 // icons
-import { AddCircleBoldIcon, PenBoldIcon, TrashBinTrashIcon } from '@/components/Icons'
+import { AddCircleBoldIcon, MagniferIcon, PenBoldIcon, TrashBinTrashIcon } from '@/components/Icons'
 // composibles
 import { useInfiniteScroll } from '../../composibles/useInfiniteScroll'
 // stores
 import { useSettingsStore } from '@/modules/HR/modules/BusinessTrip/stores/settings.store'
 
 const settingsStore = useSettingsStore()
-const { t, locale } = useI18n()
+const { t } = useI18n()
 
 // inject
 const activeSelectedCountry = inject('activeSelectedCountry')
-const defaultParams = reactive({ page: 1, page_size: 20, country: activeSelectedCountry.value?.id })
+const defaultParams = { page: 1, page_size: 100, country: activeSelectedCountry.value?.id }
 // reactives
 const activeSelectedCity = ref(null)
 const selectedCityEditId = ref(null)
@@ -30,10 +31,22 @@ const cityListWrapperRef = ref(null)
 const deleteModalLoading = ref(false)
 const enabledFetchCityList = ref(false)
 const params = reactive(defaultParams)
-
+const citySearch = ref('')
 // infinite scroll
-const { refetch } = useInfiniteScroll({ fetchFn: settingsStore.actionGetCityList, cityListWrapperRef, params, enabled: enabledFetchCityList })
+const { refetch } = useInfiniteScroll({ fetchFn: settingsStore.actionGetCityList, containerRef: cityListWrapperRef, params, enabled: enabledFetchCityList })
 // methods
+const debouncedSearch = useDebounce(citySearch, 500)
+
+watch(debouncedSearch, async (value) => {
+  // if value is empty if works
+  if (!value) {  
+    refetch({ page: 1, page_size: 100, country: activeSelectedCountry.value?.id })
+  } else {
+    refetch({ page: 1, page_size: 100, search: value, country: activeSelectedCountry.value?.id })
+  }
+})
+
+
 const handleClickCity = (city) => {
   activeSelectedCity.value = city
 }
@@ -57,7 +70,7 @@ const handleClickDeleteModal = async() => {
   try {
     await fetchDeleteRegionById(activeSelectedCity.value?.id)
     deleteModalVisible.value = false
-    settingsStore.actionGetCityList({ country: activeSelectedCountry.value?.id })
+    refetch({ page: 1, page_size: 100, country: activeSelectedCountry.value?.id })
   } catch (err) {
     console.log(err)
   } finally {
@@ -69,7 +82,7 @@ watch(()=> activeSelectedCountry.value, (newValue, oldValue)=> {
   if(newValue != oldValue){
     enabledFetchCityList.value = true
     params.country = newValue?.id
-    refetch()  
+    refetch({ country: newValue?.id })  
   }
 },{ deep: true })
 
@@ -77,7 +90,18 @@ watch(()=> activeSelectedCountry.value, (newValue, oldValue)=> {
 <template>
   <div class="w-1/2 py-5 px-6">
     <!-- title -->
-    <div class="mb-4 text-xl font-semibold text-greyscale-900">{{ t('city') }}</div>
+    <div class="flex  justify-between items-center gap-2 mb-4">
+      <div class="mb-4 text-xl font-semibold text-greyscale-900">{{ t('city') }}</div>
+      <base-input
+        :disabled="!activeSelectedCountry"
+        v-model="citySearch"
+        :icon-left="MagniferIcon"
+        :placeholder="t('search')"
+        class="flex p-input-icon-left items-center"
+        input-class="!pl-10 p-3 text-xs !rounded-[90px] placeholder:text-xs !w-[280px]"
+        icon-left-class="!w-4 !h-4"
+      />
+    </div>
     <div v-if="!!settingsStore.cityList.length" class="flex flex-col gap-1">
       <!-- cities -->
       <div ref="cityListWrapperRef" class="flex flex-col gap-1 overflow-y-auto h-[calc(100vh-470px)]">

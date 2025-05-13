@@ -31,7 +31,7 @@ export const fetchCreateCountry = (body) => {
 }
 //  get countries
 export const fetchGetCountryList = (params = {}) => {
-  return axiosConfig.get(`${URLS.countries}/`, { page:1, page_size:20, ...params})
+  return axiosConfig.get(`${URLS.countries}/`, { page:1, page_size: 230, ...params})
 }
 // get country by id
 export const fetchGetCountryById = (id) => {
