@@ -190,6 +190,7 @@ onMounted(async () => {
 <template>
   <div class="app-input">
     <base-label :label="props.label" :required="props.required" />
+
     <Dropdown
       v-model="modelValue"
       :options="customSearch ? list : translatedOptions"

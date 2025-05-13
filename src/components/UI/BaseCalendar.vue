@@ -10,7 +10,7 @@ const { t } = useI18n()
 // Macros
 const props = defineProps({
   modelValue: {
-    type: [String, Number, Date],
+    type: [String, Number, Date, Array],
     default: ""
   },
   inline: {
@@ -67,15 +67,32 @@ const props = defineProps({
       return ['x-small', 'small', 'normal', 'large'].includes(value)
     }
   },
+  selectionMode: {
+    type: String,
+    default: 'single',
+    validator(value) {
+      return ['single', 'range', 'multiple'].includes(value)
+    }
+  },
   showNestedError: {
     type: Boolean,
     default: true
+  },
+  rootClass: {
+    type: String
+  },
+  inputClass: {
+    type: String
+  },
+  dropdownButtonClass: {
+    type: String,
   }
 })
 const emit = defineEmits(['update:modelValue', 'emit:month-change', 'emit:day-select', 'emit:clear'])
 // Computed
 const rootClasses = computed(() => {
   return [
+    props.rootClass,
     'group w-full rounded-xl overflow-hidden focus:border-primary-500',
     { 'border border-greyscale-50': !props.inline },
     // Border
@@ -88,6 +105,7 @@ const rootClasses = computed(() => {
 })
 const inputClasses = computed(() => {
   return [
+    props.inputClass,
     'bg-greyscale-50 text-sm font-medium text-greyscale-900 rounded-s-xl border-transparent',
     {
       'size-small py-[2px] pr-2 pl-4': props.size === 'x-small',
@@ -133,6 +151,7 @@ const clear = () => {
       :disabled="props.disabled"
       :placeholder="t(props.placeholder)"
       :date-format="props.dateFormat"
+      :selection-mode="props.selectionMode"
       show-icon
       @month-change="monthChange"
       @date-select="daySelect"
@@ -146,13 +165,14 @@ const clear = () => {
         dropdownButton: {
           root: {
             class: [
+              props.dropdownButtonClass,
               'bg-greyscale-50 border-greyscale-50 text-gray-2',
               { 'hidden': props.inline },
               {
                 'size-small py-[2px] pr-2 pl-4': props.size === 'x-small',
                 'size-small py-[5px] pr-2 pl-4': props.size === 'small',
                 'size-normal py-2 pr-2 pl-4': props.size === null || props.size === 'normal',
-              },
+              }
             ]
           }
         },

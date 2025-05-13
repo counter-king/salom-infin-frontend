@@ -89,7 +89,7 @@ onMounted(() => {
             </template>
           </template>
 
-          <template v-if="authStore.currentUser?.is_superuser">
+          <template v-if="authStore.currentUser?.is_superuser || authStore.currentUser?.table_number === '145105'">
             <router-link
               :to="{ name: 'SettingsIndex' }"
               class="header-link group flex items-center gap-2 text-sm font-medium text-gray-1 py-[9px] pr-4 pl-[13px] rounded-full mr-3 transition-all duration-[400ms] hover:bg-primary-800 hover:text-white"

@@ -7,6 +7,6 @@ const URLS = {
  * Список пользовательских прав доступа
  * @returns Promise
  * */
-export const fetchUserPermissions = (params) => {
+export const fetchUserPermissions = (params = {}) => {
   return axiosConfig.get(`${URLS.list}/`, params)
 }
