@@ -20,18 +20,18 @@ const tabs = [
     link: 'GeographicalHandbook',
     value: 1
   },
-  {
-    title: 'business-trip-purpose',
-    icon: CheckCircleIcon,
-    link: 'TripPurpose',
-    value: 2
+  // {
+  //   title: 'business-trip-purpose',
+  //   icon: CheckCircleIcon,
+  //   link: 'TripPurpose',
+  //   value: 2
 
-  },
-  {
-    title: 'trip-history',
-    icon: History2Icon,
-    link: 'TripHistory',
-  },
+  // },
+  // {
+  //   title: 'trip-history',
+  //   icon: History2Icon,
+  //   link: 'TripHistory',
+  // },
 ]
 
 </script>
@@ -44,7 +44,7 @@ const tabs = [
       <template #title-after>
       </template>
       <template #filters>
-        <div>123</div>
+        <div></div>
       </template>
       <template #end>
       </template>
