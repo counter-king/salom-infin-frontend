@@ -225,7 +225,7 @@ onMounted( async () => {
             ]
           },
           headerContent: {
-            class: ['text-sm font-semibold text-greyscale-500 border-none']
+            class: ['text-sm font-semibold text-greyscale-500 border-nonex']
           },
           bodyCell: {
             class: ['border-greyscale-100 py-3 px-4 text-sm font-semibold text-primary-900 border-0',
@@ -236,7 +236,7 @@ onMounted( async () => {
         }"
       >
         <template #body="{ field, data }">
-         <slot :name="field" :data="data">
+         <slot :name="field" :data="data"  :field="field">
             <span>{{ data[field] }}</span>
          </slot>
         </template>

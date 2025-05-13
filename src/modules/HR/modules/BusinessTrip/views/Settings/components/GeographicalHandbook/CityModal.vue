@@ -1,14 +1,14 @@
 <script setup>
 // core
 import { useI18n } from 'vue-i18n'
-import { onMounted, reactive, useModel, ref } from 'vue'
+import { onMounted, reactive, useModel, ref, inject } from 'vue'
 import useVuelidate from '@vuelidate/core'
 import { helpers, required } from '@vuelidate/validators'
 // components
 import BaseDialog from '@/components/UI/BaseDialog.vue'
-import CountryForm from './CountryForm.vue'
+import CityForm from './CityForm.vue'
 // services
-import { fetchCreateCountry, fetchUpdateCountryById, fetchGetCountryById } from '../../../../services'
+import { fetchCreateRegion, fetchUpdateRegionById, fetchGetRegionById } from '../../../../services'
 // stores
 import { useSettingsStore } from '@/modules/HR/modules/BusinessTrip/stores/settings.store'
 
@@ -33,25 +33,31 @@ const props = defineProps({
     default: null
   }
 })
-
-// emit
-const emit = defineEmits(['update:modelValue'])
 //  composables
 const modelValue = useModel(props, 'modelValue')
-
+// emit
+const emit = defineEmits(['update:modelValue'])
+// inject
+const activeSelectedCountry = inject('activeSelectedCountry')
 // reactives
 const formValue = reactive({
   name: null,
-  status : false
+  status : false,
+  country: activeSelectedCountry.value
 })
+
 const isGetCountryLoading = ref(false)
 const isSubmitLoading = ref(false)
+
 // form rules
 const rules = {
   name: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
   status: {
+    required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  country: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   }
 }
@@ -65,12 +71,12 @@ const submitForm = async () => {
   try {
     isSubmitLoading.value = true
     if(props.id){
-      await fetchUpdateCountryById(props.id, {...formValue, status: formValue.status ? "a" : "p"})
+      await fetchUpdateRegionById(props.id, {name: formValue.name, is_active: formValue.status, country: formValue.country.id })
     } else{
-      await fetchCreateCountry({...formValue, status: formValue.status ? "a" : "p"})
+      await fetchCreateRegion({name: formValue.name, is_active: formValue.status, country: formValue.country.id })
     }
     emit('update:modelValue', false)
-    settingsStore.actionGetCountryList()
+    settingsStore.actionGetCityList({ country: activeSelectedCountry.value?.id })
   } catch (err) {
     console.log(err)
   } finally {
@@ -82,13 +88,12 @@ const onCloseModal = () => {
 }
 
 onMounted(async () => {
-
   if(props.id){
     isGetCountryLoading.value = true
    try{
-     const { data } =  await fetchGetCountryById(props.id)
+     const { data } =  await fetchGetRegionById(props.id)
      formValue.name = data.name
-     formValue.status = data.status == "a" ? true : false
+     formValue.status = data.is_active
    } catch(err){
     console.log(err)
    } finally{
@@ -99,7 +104,7 @@ onMounted(async () => {
 
 </script>
 <template>
-  <base-dialog
+  <BaseDialog
     v-model="modelValue"
     :label="t(props.label)"
     :max-width="props.maxWidth"
@@ -110,7 +115,7 @@ onMounted(async () => {
           <base-spinner/>
         </div>
         <template v-else>
-          <CountryForm v-model:formValue="formValue" v-model:validator="$v" formId="country-form" />
+          <CityForm v-model:formValue="formValue" v-model:validator="$v" formId="country-form" />
         </template>
     </template>
     <template #footer>
@@ -134,5 +139,5 @@ onMounted(async () => {
         />
       </div>
     </template>
-  </base-dialog>
+  </BaseDialog>
 </template>

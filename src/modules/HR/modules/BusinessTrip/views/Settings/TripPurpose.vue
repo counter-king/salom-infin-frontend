@@ -1,31 +1,33 @@
 <script setup>
 // cores
 import { useI18n } from 'vue-i18n'
-import { ref } from 'vue';
+import { ref, onMounted} from 'vue';
 // components
 import AddButton from './components/AddButton.vue';
 import Empty from '@/components/Empty.vue';
 import { TripModal } from './components/TripPrupose';
 import { TrashBinTrashIcon, PenBoldIcon } from '@/components/Icons';
 import DataTable from './components/DataTable.vue';
+// stores
+import { useSettingsStore } from '@/modules/HR/modules/BusinessTrip/stores/settings.store'
 // composibles
 const { t } = useI18n()
+const settingsStore = useSettingsStore()
 // reactives
 const tripModalVisible = ref(false)
+const selectedTripPurpose = ref(null)
 // methods
-const handleClickAddButton = () => {
-  tripModalVisible.value = true
-}
+
 
 const headers = [
   {
-    field: 'targets',
+    field: 'name',
     header: 'targets',
     width: '60%',
     active: true
   },
   {
-    field: 'documentType',
+    field: 'document_sub_type',
     header: 'document-type',
     width: '20%',
     active: true
@@ -38,19 +40,23 @@ const headers = [
     active: true
   }
 ]
-const value = [{
-  order: 1,
-  targets: 'targets',
-  documentType: 'document-type',
-  actions: 'actions'
-},
-{
-  order: 2,
-  targets: 'targets',
-  documentType: 'document-type',
-  actions: 'actions'
+
+const handleClickAddButton = () => {
+  selectedTripPurpose.value = null
+  tripModalVisible.value = true
 }
-]
+
+const handleDeleteTripPurpose = (data) => {
+  selectedTripPurpose.value = data
+}
+const handleEditTripPurpose = (data) => {
+  selectedTripPurpose.value = data
+}
+
+onMounted(async () => {
+ await settingsStore.actionGetTripPurposeList({page: 1, page_size: 20})
+})
+
 </script>
 <template>
   <div class="flex flex-col pt-4 min-h-[300px]">
@@ -64,19 +70,26 @@ const value = [{
        />
     </div>
     <!-- table -->
-    <div v-if="true" class="mt-4 mb-4 h-[calc(100vh-380px)]">
+    <div v-if="!!settingsStore.tripPurposeList.length" class="mt-4 mb-4 h-[calc(100vh-380px)]">
       <DataTable 
         :headers="headers"
-        :value="value"
+        :value="settingsStore.tripPurposeList"
         scroll-height="calc(100vh - 360px)"
         class="flex flex-col h-full"
       >
+      <template #document_sub_type="{ data }">
+        <span>{{ data.name }}</span>
+      </template>
       <template #actions="{ data }">
         <div class="flex gap-2">
-          <div class="p-[6px] bg-greyscale-50 rounded-[8px] cursor-pointer hover:bg-greyscale-70">
+          <div
+            @click="handleEditTripPurpose(data)"
+            class="p-[6px] bg-greyscale-50 rounded-[8px] cursor-pointer hover:bg-greyscale-70">
             <base-iconify :icon="PenBoldIcon" class="!w-5 !h-5 text-greyscale-500"/>
           </div>
-          <div class="p-[6px] bg-greyscale-50 rounded-[8px] cursor-pointer hover:bg-greyscale-70">
+          <div
+            @click="handleDeleteTripPurpose(data)" 
+            class="p-[6px] bg-greyscale-50 rounded-[8px] cursor-pointer hover:bg-greyscale-70">
             <base-iconify :icon="TrashBinTrashIcon" class="!w-5 !h-5 text-critic-500"/>
           </div>
         </div>
@@ -95,7 +108,11 @@ const value = [{
        />
     </div>    
     <!-- modal -->
-    <TripModal v-model="tripModalVisible" label="create-trip-purpose"/>
+    <TripModal 
+      v-model="tripModalVisible" 
+      label="create-trip-purpose"
+      :id="activeSelectedTripPurpose?.id"
+    />
   </div>
 </template>
 

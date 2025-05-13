@@ -1,6 +1,6 @@
 <script setup>
 // core
-import { ref } from 'vue'
+import { inject, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 // components
 import CountryModal from './CountryModal.vue'
@@ -13,39 +13,40 @@ import { useInfiniteScroll } from '../../composibles/useInfiniteScroll'
 // services
 import { fetchDeleteCountryById } from '@/modules/HR/modules/BusinessTrip/services'
 // composibles
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const settingsStore = useSettingsStore()
 // reactive
-const activeSelectedCountryId = ref(null)
 const deleteModalVisible = ref(false)
 const countryModalVisible = ref(false)
-const selectedDeleteCountry = ref(null)
 const countyListWrapperRef = ref(null)
-const selectedEditCountryId = ref(null)
 const deleteModalLoading = ref(false)
+const selectedCountryEditId = ref(null)
 // infinite scroll
 useInfiniteScroll({ fetchFn: settingsStore.actionGetCountryList, countyListWrapperRef, params: { page: 1, page_size: 20 }})
-
+// inject
+const activeSelectedCountry = inject('activeSelectedCountry')
 // methods
 const handleClickCountry = (country) => {
-  activeSelectedCountryId.value = country.id
+  activeSelectedCountry.value = country
 }
 const handleDeleteCountry = (data) => {
-  selectedDeleteCountry.value = data
+  activeSelectedCountry.value = data
   deleteModalVisible.value = true
 }
 const handleEditCountry = (country) => { 
-  selectedEditCountryId.value = country.id
+  selectedCountryEditId.value = country?.id
   countryModalVisible.value = true
 }
 const handleAddCountry = () => {
+  
+  selectedCountryEditId.value = null
   countryModalVisible.value = true
 }
 
 const handleClickDeleteModal = async() => {
   deleteModalLoading.value = true
   try {
-    await fetchDeleteCountryById(selectedDeleteCountry.value.id)
+    await fetchDeleteCountryById(activeSelectedCountry.value?.id)
     deleteModalVisible.value = false
     settingsStore.actionGetCountryList()
   } catch (err) {
@@ -59,7 +60,7 @@ const handleClickDeleteModal = async() => {
 <template>
   <div class="w-1/2 pt-5 pr-6">
     <!-- title -->
-    <div class="mb-4 text-xl font-semibold text-greyscale-900">{{ t('countries') }}</div>
+    <div class="mb-4 text-xl font-semibold text-greyscale-900">{{ t('country') }}</div>
     <div v-if="true" class="flex flex-col gap-1">
       <!-- countries -->
       <div
@@ -74,13 +75,13 @@ const handleClickDeleteModal = async() => {
             <div 
               class="flex items-center justify-between group p-4 pr-3 hover:bg-primary-10 border-[1.5px] border-white hover:border-[1.5px] hover:border-primary-30 rounded-xl cursor-pointer"
               @click="handleClickCountry(country)"
-              :class="{ '!bg-primary-10 !border-[1.5px] !border-primary-30': activeSelectedCountryId == country.id }" 
+              :class="{ '!bg-primary-10 !border-[1.5px] !border-primary-30': activeSelectedCountry?.id == country.id }" 
               >
               <p class="text-[15px] font-medium text-greyscale-900">{{ country.name }}</p>
               <!-- actions -->
               <div 
                 class="flex items-center gap-4 opacity-0 group-hover:opacity-100"
-                :class="{ 'opacity-100': activeSelectedCountryId == country.id }"
+                :class="{ 'opacity-100': activeSelectedCountry?.id == country.id }"
                 >
                 <base-iconify 
                   :icon="TrashBinTrashIcon" class="!w-5 !h-5 text-critic-500"
@@ -130,7 +131,7 @@ const handleClickDeleteModal = async() => {
   </div>
   <CountryModal
     v-if="countryModalVisible"
-    :id="selectedEditCountryId"
+    :id="selectedCountryEditId"
     v-model="countryModalVisible"
     label="add-country"
     :max-width="'max-w-[600px]'"
@@ -144,7 +145,7 @@ const handleClickDeleteModal = async() => {
     :content="{
       title: 'delete-country',
       description: 'want-delete-country',
-      value: selectedDeleteCountry?.name
+      value: activeSelectedCountry?.name
     }"
     @click:delete="handleClickDeleteModal"
   />

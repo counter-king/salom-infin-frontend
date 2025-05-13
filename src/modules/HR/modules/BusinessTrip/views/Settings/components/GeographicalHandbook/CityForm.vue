@@ -1,8 +1,6 @@
 <script setup>
 // core
 import { useModel } from 'vue';
-// stores
-import { useCommonStore } from '@/stores/common'
 
 // props
 const props = defineProps({
@@ -19,8 +17,6 @@ const props = defineProps({
     default: () => {}
   }
 })
-// Composable
-const commonStore = useCommonStore()
 const formValue = useModel(props, 'formValue')
 const $v = useModel(props, 'validator')
 
@@ -29,21 +25,19 @@ const $v = useModel(props, 'validator')
   <form :id="props.formId" @submit.prevent>
     <div class="flex flex-col gap-y-6">
         <div class="w-full">
-            <base-dropdown
-              searchable
-              label="category-purpose"
-              v-model:options="commonStore.documentSubTypesList"
-              api-url="document-sub-types"
-              option-value="id"
-              placeholder="choose-document-sub-type"
-              option-label="name"
-              v-model="formValue.doc_sub_type"
-              :error="$v?.doc_sub_type"
-            >
-              <template #option="{ option }">
-                <span>{{ option.name }}</span>
-              </template>
-            </base-dropdown>
+          <base-dropdown
+            label="country"
+            disabled
+            option-label="name"
+            option-value="id"
+            :options="[{...props.formValue.country}]"
+            v-model="formValue.country.id"
+            :error="$v?.country"
+          >
+            <template #option="{ option }">
+              <span>{{ option.name }}</span>
+            </template>
+          </base-dropdown>
         </div>
         <div class="w-full">
           <base-input
@@ -51,6 +45,15 @@ const $v = useModel(props, 'validator')
             placeholder="enter-naming-2"
             v-model="formValue.name"
             :error="$v?.name"
+          />
+        </div>
+        <div class="flex justify-between items-center">
+          <base-label label="status" />
+          <base-switch
+            label="active"
+            class-body="!flex !items-center gap-2"
+            v-model="formValue.status"
+            :error="$v.status"
           />
         </div>
     </div>

@@ -860,5 +860,11 @@
   "edit-trip-purpose":"Sayohat maqsadni tahrirlash",
   "old-value": "eski ma'no",
   "new-value": "yangi ma'no",
-  "to-which-country": "Qaysi davlat?"
+  "to-which-country": "Qaysi davlat?",
+  "country": "Mamlakat",
+  "city": "Shahar",
+  "admin": "Admin",
+  "in-which-section":"Qaysi bo'limda?",
+   "category-purpose": "Kategoriya maqsadi"
+
 }

@@ -13,36 +13,53 @@ const historyModalVisible = ref(false)
 
 const headers = [
   {
-    field: 'targets',
-    header: 'targets',
-    width: '60%',
+    field: 'admin',
+    header: 'admin',
+    width: '25%',
     active: true
   },
   {
-    field: 'documentType',
-    header: 'document-type',
-    width: '20%',
+    field: 'inWhichSection',
+    header: 'in-which-section',
+    width: '25%',
     active: true
 
   },
   {
     field: 'actions',
     header: 'actions',
-    width: '10%',
+    width: '25%',
+    active: true
+  },
+  {
+    field: 'date',
+    header: 'date',
+    width: '20%',
+    active: true
+  },
+  {
+    field: 'value',
+    header: 'value',
+    width: '5%',
     active: true
   }
 ]
 const value = [{
   order: 1,
-  targets: 'targets',
-  documentType: 'document-type',
-  actions: 'actions'
+  admin: 'admin',
+  inWhichSection: 'in-which-section',
+  actions: 'actions',
+  date: 'date',
+  value: 'value',
+  
 },
 {
   order: 2,
-  targets: 'targets',
-  documentType: 'document-type',
-  actions: 'actions'
+  admin: 'admin',
+  inWhichSection: 'in-which-section',
+  actions: 'actions',
+  date: 'date',
+  value: 'value',
 }
 ]
 
@@ -67,7 +84,18 @@ const handleClickDetail = () => {
         :value="value"
         scroll-height="calc(100vh - 495px)"
       >
-        <template #actions="{ data }">
+      <template #admin="{data , field}">
+          <div class="flex items-center justify-center gap-3">
+           <!-- <base-avatar
+           :image="data.admin"
+           shape="circle"
+           avatar-classes="w-7 h-7"
+           
+           /> -->
+           <span class="">{{ data[field] }}</span>
+          </div>
+        </template>
+        <template #value="{ data }">
           <div class="flex gap-2">
             <div 
               @click="handleClickDetail(data)" 

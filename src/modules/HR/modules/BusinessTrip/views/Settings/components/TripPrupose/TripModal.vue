@@ -7,7 +7,8 @@ import { helpers, required } from '@vuelidate/validators'
 // components
 import BaseDialog from '@/components/UI/BaseDialog.vue'
 import Form from './Form.vue'
-
+// services
+import { fetchGetTagById, fetchUpdateTagById, fetchCreateTag } from '@/modules/HR/modules/BusinessTrip/services'
 const { t } = useI18n()
 // props
 const props = defineProps({
@@ -22,6 +23,10 @@ const props = defineProps({
   maxWidth : {
     type: String,
     default: 'max-w-[544px]'
+  },
+  id: {
+    type: Number,
+    default: null
   }
 })
 //  composables
@@ -32,51 +37,37 @@ const emit = defineEmits(['update:modelValue'])
 
 // reactives
 const formValue = reactive({
-  category: null,
-  name: {
-    uz: null,
-    ru: null,
-    en: null
-  },
-  status : false
+  doc_sub_type: null,
+  name: null,
 })
 
 // form rules
 const rules = {
-  name: {
-    uz: {
-      required: helpers.withMessage(`Поле не должен быть пустым`, required)
-    },
-    ru: {
-      required: helpers.withMessage(`Поле не должен быть пустым`, required)
-    },
-    en: {
-      required: helpers.withMessage(`Поле не должен быть пустым`, required)
-    }
-  },
-  category: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
-  status: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  }
+  name: { required: helpers.withMessage(`Поле не должен быть пустым`, required)},
+  doc_sub_type: { required: helpers.withMessage(`Поле не должен быть пустым`, required)},
 }
 // validattor
 const $v = useVuelidate(rules, formValue)
 
 const submitForm = async () => {
   const isValid = await $v.value.$validate()
-  console.log("isValid", isValid)
   if(!isValid) return
-  console.log(formValue)
+  if(props.id){
+    await fetchUpdateTagById(props.id, formValue)
+  } else {
+    await fetchCreateTag(formValue)
+  }
   emit('update:modelValue', false)
 }
 const onCloseModal = () => {
   modelValue.value = false
 }
 
-onMounted(() => {
-  console.log("mounted")
+onMounted(async () => {
+  if(props.id){
+    const data = await fetchGetTagById(props.id)
+    console.log("data", data)
+  }
 })
 
 </script>

@@ -1,7 +1,12 @@
 <script setup>
 // core
+import { provide, ref } from 'vue';
 // components
 import { CityList, CountryList } from './components/GeographicalHandbook'
+// reactive
+const activeSelectedCountry = ref(null)
+// provider
+provide('activeSelectedCountry', activeSelectedCountry)
 
 </script>
 <template>

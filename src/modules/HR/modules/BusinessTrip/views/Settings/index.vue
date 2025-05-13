@@ -44,7 +44,7 @@ const tabs = [
       <template #title-after>
       </template>
       <template #filters>
-        <div></div>
+        <div>123</div>
       </template>
       <template #end>
       </template>

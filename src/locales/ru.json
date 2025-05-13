@@ -861,5 +861,10 @@
   "edit-trip-purpose":"Редактировать Командировочные цели",
   "old-value": "Старое значение",
   "new-value": "Новое значение",
-  "to-which-country": "В какую страну?"
+  "to-which-country": "В какую страну?",
+  "country": "Страна",
+  "city": "Город",
+  "admin": "Админ",
+  "in-which-section":"В каком разделе?",
+  "category-purpose":"Категория цель"
 }
