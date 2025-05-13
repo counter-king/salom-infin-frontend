@@ -42,7 +42,7 @@ const activeSelectedCountry = inject('activeSelectedCountry')
 // reactives
 const formValue = reactive({
   name: null,
-  status : false,
+  status : true,
   country: activeSelectedCountry.value
 })
 

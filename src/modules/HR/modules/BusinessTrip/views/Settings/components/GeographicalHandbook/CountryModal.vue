@@ -42,7 +42,7 @@ const modelValue = useModel(props, 'modelValue')
 // reactives
 const formValue = reactive({
   name: null,
-  status : false
+  status : true
 })
 const isGetCountryLoading = ref(false)
 const isSubmitLoading = ref(false)
