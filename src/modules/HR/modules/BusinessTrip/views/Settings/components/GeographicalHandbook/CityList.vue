@@ -82,7 +82,7 @@ watch(()=> activeSelectedCountry.value, (newValue, oldValue)=> {
   if(newValue != oldValue){
     enabledFetchCityList.value = true
     params.country = newValue?.id
-    refetch({ country: newValue?.id })  
+    refetch({ page: 1, page_size: 100, country: newValue?.id })  
   }
 },{ deep: true })
 
