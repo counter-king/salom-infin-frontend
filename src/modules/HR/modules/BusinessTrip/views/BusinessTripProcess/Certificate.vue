@@ -180,7 +180,7 @@ const generatePdf = async () => {
               col-class="w-1/2 mb-1"
             >
               <div class="text-sm flex flex-col">
-                <div><span class="font-semibold">{{ item.label }}:</span> {{ formatDate(item.actionTime) }}</div>
+                <div><span class="font-semibold">{{ item.label }}:</span> {{ formatDateHour(item.actionTime) }}</div>
                 <div><span class="font-semibold">Hudud:</span> {{ item.filial }}</div>
                 <div><span class="font-semibold">Mas'ul xodim: </span> {{ item.responsible }}</div>
                 <div class="font-semibold">Borilgan manzillar:</div>
