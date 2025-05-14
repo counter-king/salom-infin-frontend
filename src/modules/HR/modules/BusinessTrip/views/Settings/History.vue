@@ -78,10 +78,11 @@ const handleClickDetail = () => {
        <p class="text-xl font-semibold text-greyscale-900">{{ t('history') }}</p>
     </div>
     <!-- table -->
-    <div class="mt-4 h-[calc(100vh-200px)]">
+    <div class="mt-4 mb-4 h-[calc(100vh-380px)]">
       <DataTable
         :headers="headers"
         :value="value"
+        class="flex flex-col h-full"
         scroll-height="calc(100vh - 495px)"
       >
       <template #admin="{data , field}">

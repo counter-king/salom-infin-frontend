@@ -19,13 +19,13 @@ const tabs = [
     link: 'GeographicalHandbook',
     value: 1
   },
-  // {
-  //   title: 'business-trip-purpose',
-  //   icon: CheckCircleIcon,
-  //   link: 'TripPurpose',
-  //   value: 2
+  {
+    title: 'business-trip-purpose',
+    icon: CheckCircleIcon,
+    link: 'TripPurpose',
+    value: 2
 
-  // },
+  },
   // {
   //   title: 'trip-history',
   //   icon: History2Icon,

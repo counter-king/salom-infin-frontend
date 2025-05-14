@@ -62,7 +62,11 @@ export const useSettingsStore = defineStore("settings-trip-store", {
       this.tripPurposeListLoading = true
       try {
         const response= await fetchGetTagList(params);
-        response.data.results = response?.data?.results
+        response.data.results = response?.data?.results.map((item)=>({
+          name: item.name,
+          document_sub_type: item?.document_sub_type?.name,
+          id: item.id,
+        }))
         this.tripPurposeList = response?.data?.results
         return response
       } catch(e) {

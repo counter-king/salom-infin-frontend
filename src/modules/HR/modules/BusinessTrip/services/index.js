@@ -72,7 +72,7 @@ export const fetchCreateTag = (body) => {
 }
 // get tags
 export const fetchGetTagList = (params = {}) => {
-  return axiosConfig.get(`${URLS.tags}/`, { page:1, page_size:20, ...params})
+  return axiosConfig.get(`${URLS.tags}/`, { page:1, page_size: 10, ...params})
 }
 // get tag by id
 export const fetchGetTagById = (id) => {

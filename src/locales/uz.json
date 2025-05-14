@@ -865,6 +865,6 @@
   "city": "Shahar",
   "admin": "Admin",
   "in-which-section":"Qaysi bo'limda?",
-   "category-purpose": "Kategoriya maqsadi"
-
+   "category-purpose": "Kategoriya maqsadi",
+   "name-count": "Название - ({count}) belgidan oshmasligi kerak"
 }
