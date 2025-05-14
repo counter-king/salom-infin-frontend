@@ -89,19 +89,19 @@ watch(
   () => salaryStore.isLoggedIn,
   async () => {
     salaryStore.isLoggedIn && await salaryStore.getSalaryStatistic()
-    await handleYearMonth(0)
+    await handleYearMonth(new Date().getMonth())
   }
 )
 // Methods
 const dateSelect = async () => {
   date.value = new Date(date.value).getFullYear().toString()
   await salaryStore.getSalaryStatistic(date.value)
-  await handleYearMonth(0)
+  await handleYearMonth(new Date().getMonth())
 }
 const clear = () => {
   date.value = new Date().getFullYear().toString()
   salaryStore.getSalaryStatistic()
-  handleYearMonth(0)
+  handleYearMonth(new Date().getMonth())
 }
 const handleYearMonth = async (index) => {
   month.value = index
