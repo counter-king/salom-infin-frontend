@@ -1,8 +1,7 @@
 <script setup>
 // Core
-import {ref, unref, nextTick, watch, onMounted} from 'vue'
+import { ref, unref, nextTick, onMounted, onUnmounted } from 'vue'
 import { vMaska } from 'maska'
-import { onClickOutside } from '@vueuse/core'
 // Components
 import {
   UserRoundedBoldIcon,
@@ -31,10 +30,12 @@ import BaseSwitch from "@/components/UI/BaseSwitch.vue";
 // Composable
 const authStore = useAuthStore()
 // Reactive
+let clickHandler = null
 const inputRef = ref(null)
-const ignoreRef = ref(null)
+const bodyRef = ref(null)
 const editIndex = ref(null)
 const editValue = ref(null)
+const editKey = ref(null)
 const changeValue = ref(false)
 const changeLoading = ref(false)
 const loadingSave = ref(false)
@@ -143,41 +144,16 @@ const items = ref([
   //   icon: BriefCase20SolidIcon
   // },
 ])
-// Watch
-// watch(
-//   () => editValue.value,
-//   (__value) => {
-//     if(editIndex.value === 11) {
-//       const atIndex = __value.indexOf('@')
-//
-//       if (atIndex !== -1) {
-//         const localPart = __value.slice(0, atIndex).replace(/[^a-zA-Z0-9._%+-]/g, '')
-//         const domainPart = __value
-//         .slice(atIndex + 1)
-//         .replace(/[^sqbuz.]/g, '')
-//         .replace(/(s+|q+|b+|u+|z+|\.{2,})/g, match => match[0])
-//
-//         const validDomain = "sqb.uz".slice(0, domainPart.length)
-//
-//         editValue.value = `${localPart}@${validDomain}`
-//       } else {
-//         editValue.value = __value.replace(/[^a-zA-Z0-9._%+-]/g, '')
-//       }
-//     }
-//   }
-// )
-// onClickOutside(
-//   inputRef,
-//   () => editIndex.value = null,
-//   { ignore: [ignoreRef] }
-// )
 // Methods
-const handleEdit = async (index, value) => {
-  editIndex.value = index
-  await nextTick()
-  const input = unref(inputRef)
-  input[0].focus()
-  editValue.value = value
+const handleEdit = async (index, value, key) => {
+  setTimeout(async () => {
+    editIndex.value = index
+    await nextTick()
+    const input = unref(inputRef)
+    input[0].focus()
+    editValue.value = value
+    editKey.value = key
+  }, 0)
 }
 const handleSave = async (key) => {
   if(key === 'cisco') {
@@ -237,9 +213,28 @@ const handleChange = async () => {
     }, 500)
   }
 }
+const handleEnter = async () => {
+  await handleSave(editKey.value)
+  editIndex.value = null
+}
 // Hooks
 onMounted(() => {
   changeValue.value = authStore.currentUser.show_mobile_number
+
+  clickHandler = async (e) => {
+    bodyRef.value = e.target.nodeName
+    if (editIndex.value && bodyRef.value !== 'INPUT') {
+      await handleEnter()
+    }
+  }
+
+  document.addEventListener('click', clickHandler)
+})
+
+onUnmounted(() => {
+  if (clickHandler) {
+    document.removeEventListener('click', clickHandler)
+  }
 })
 </script>
 <template>
@@ -266,6 +261,7 @@ onMounted(() => {
                   type="text"
                   class="w-full border-b-[2px] border-b-primary-500 bg-transparent outline-none"
                   :placeholder="item.key === 'phone_2' ? '+998 ## ### ## ##' : ''"
+                  @keydown.enter="handleEnter"
                 />
               </template>
 
@@ -292,7 +288,6 @@ onMounted(() => {
                 <button
                   type="button"
                   class="flex items-center justify-center w-8 h-8 bg-primary-500 rounded-full absolute right-0 top-2 z-[2] cursor-pointer"
-                  @click="handleSave(item.key)"
                 >
                   <base-spinner
                     v-if="loadingSave"
@@ -311,7 +306,7 @@ onMounted(() => {
               <template v-else>
                 <div
                   class="edit-group flex items-center justify-center w-8 h-8 bg-greyscale-50 border border-greyscale-100 rounded-full absolute right-0 top-2 cursor-pointer"
-                  @click="handleEdit(index, item.description)"
+                  @click="handleEdit(index, item.description, item.key)"
                 >
                   <base-iconify :icon="PenIcon" class="!w-4 !h-4 text-primary-500" />
                 </div>

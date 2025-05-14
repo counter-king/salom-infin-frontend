@@ -196,6 +196,7 @@ const users = ref({
   results: [],
   count: 0
 })
+const usersCopy = ref([])
 const loading = ref(true)
 const headers = ref(headerDefault)
 const filters = ref({
@@ -383,8 +384,6 @@ const handleType = async (item) => {
       }
     })
 
-    console.log('asd', headers.value)
-
     await actionUserOnVacationList()
   }
   else {
@@ -439,10 +438,14 @@ const actionUserOnVacationList = async (params = {}) => {
   try {
     setLoading(true)
 
-    users.value = await userStore.actionUserOnVacationList({
+    let { results, count } = await userStore.actionUserOnVacationList({
       ...params,
       code: selected.value.CONDITION
     })
+
+    usersCopy.value = results
+    users.value.results = usersCopy.value.slice(0, 10)
+    users.value.count = count
   }
   catch (error) {
     users.value = {
@@ -474,10 +477,7 @@ const handlePaginate = async (value) => {
       USER_STATUS_CODES.BUSINESS_TRIP
     ].includes(selected.value.CONDITION)
   ) {
-    await actionUserOnVacationList({
-      page: value,
-      ...filters.value,
-    })
+    users.value.results = usersCopy.value.slice((value - 1) * 10, value * 10)
   }
   else {
     await actionUserSearchList({
