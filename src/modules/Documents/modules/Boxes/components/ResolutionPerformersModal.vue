@@ -19,6 +19,7 @@ import { UserWithSelectableItem } from "@/components/Users";
 import { StatusChip } from "@/components/Chips";
 import { VueDraggable } from "vue-draggable-plus";
 import Eimzo from "@/components/EIMZO/Eimzo.vue";
+import { useAuthStore } from "@/modules/Auth/stores";
 
 const route = useRoute()
 const { t } = useI18n()
@@ -251,7 +252,7 @@ defineExpose({ buttonLoading, dialog })
         />
 
         <base-button
-          v-if="isHostVercel"
+          v-if="isHostVercel || useAuthStore().currentUser.id === 1"
           label="sign"
           :loading="buttonLoading"
           rounded
