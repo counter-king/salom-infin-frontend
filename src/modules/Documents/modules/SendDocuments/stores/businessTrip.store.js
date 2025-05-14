@@ -350,7 +350,7 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
 
             const __tags = await adjustTagObjectToArray(group.items[0].tags)
             const __regions = await adjustObjectToArray('regions', group.items[0].locations)
-            const __company = await adjustObjectToArray('companies', [], false, group.items[0].sender_company)
+            const __company = await adjustObjectToArray('companies', [], false, group.items[0].sender_company?.id)
             const __start_date = group.items[0].start_date
             const __end_date = group.items[0].end_date
             const __route = group.items[0].route
@@ -513,7 +513,7 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
         notices: [],
         start_date: null,
         end_date: null,
-        short_description: null,
+        short_description: "Xizmat safariga yuborish  to‘g‘risida",
         sender: null,
         signers: [],
         files: [],

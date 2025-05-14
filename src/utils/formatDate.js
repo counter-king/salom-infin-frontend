@@ -36,7 +36,6 @@ export function formatDateNamedMonth(date) {
 export function formatDateMonthWithDay(date, locale = 'ru') {
   return date ? dayjs(date).locale(locale).format('DD MMMM') : 'Не верный формат даты'
 }
-//
 export function formatDay(date) {
   return date ? dayjs(date).format("DD") : "Не верный формат даты"
 }

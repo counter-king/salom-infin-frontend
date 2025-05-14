@@ -5,7 +5,7 @@ import html2pdf from "html2pdf.js"
 // Store
 import { useBusinessTripStore } from "@/modules/HR/modules/BusinessTrip/stores/businessTrip.store"
 // Utils
-import { formatDate } from "@/utils/formatDate"
+import { formatDate, formatDateHour } from "@/utils/formatDate"
 // Components
 import QrcodeVue from "qrcode.vue"
 import { formatUserFullName } from "@/utils";
@@ -47,7 +47,8 @@ const verifications = computed(() => {
         label: 'Jo\'nadi',
         actionTime: item.left_at,
         filial: item.region?.name_uz || item.company?.name,
-        responsible: formatUserFullName(item.left_verified_by)
+        responsible: formatUserFullName(item.left_verified_by),
+        visited_places: item.visited_places,
       })
     }
     if (!item.is_sender && item.left_at) {
@@ -55,7 +56,8 @@ const verifications = computed(() => {
         label: 'Jo\'nadi',
         actionTime: item.left_at,
         filial: item.region?.name_uz || item.company?.name,
-        responsible: formatUserFullName(item.left_verified_by)
+        responsible: formatUserFullName(item.left_verified_by),
+        visited_places: item.visited_places,
       })
     }
     if (!item.is_sender && item.arrived_at) {
@@ -63,7 +65,8 @@ const verifications = computed(() => {
         label: 'Keldi',
         actionTime: item.arrived_at,
         filial: item.region?.name_uz || item.company?.name,
-        responsible: formatUserFullName(item.arrived_verified_by)
+        responsible: formatUserFullName(item.arrived_verified_by),
+        visited_places: item.visited_places,
       })
     }
     if (item.is_sender && item.arrived_at) {
@@ -71,7 +74,8 @@ const verifications = computed(() => {
         label: 'Keldi',
         actionTime: item.arrived_at,
         filial: item.region?.name_uz || item.company?.name,
-        responsible: formatUserFullName(item.arrived_verified_by)
+        responsible: formatUserFullName(item.arrived_verified_by),
+        visited_places: item.visited_places,
       })
     }
   })
@@ -179,6 +183,13 @@ const generatePdf = async () => {
                 <div><span class="font-semibold">{{ item.label }}:</span> {{ formatDate(item.actionTime) }}</div>
                 <div><span class="font-semibold">Hudud:</span> {{ item.filial }}</div>
                 <div><span class="font-semibold">Mas'ul xodim: </span> {{ item.responsible }}</div>
+                <div class="font-semibold">Borilgan manzillar:</div>
+                <div
+                  v-for="(visited_place, index) in item.visited_places"
+                >
+                 {{ index + 1 }}. {{ visited_place?.place?.name }} - {{ formatDateHour(visited_place?.created_date) }}
+<!--                  <pre>{{ item.visited_places }}</pre>-->
+                </div>
                 <div class="mt-3">
                   <qrcode-vue
                     :value="'salom.sqb.uz'"

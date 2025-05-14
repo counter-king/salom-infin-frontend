@@ -1,4 +1,4 @@
-<script setup>
+  <script setup>
 // Core
 import { computed } from "vue"
 // Store
