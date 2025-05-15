@@ -14,8 +14,8 @@ const { t, locale } = useI18n()
 // props
 const props = defineProps({
   date: {
-    type: String,
-    default: new Date()
+    type: [String, Date],
+    default: ()=> new Date()
   },
   onRightArrowClick:  {
     type: Function,

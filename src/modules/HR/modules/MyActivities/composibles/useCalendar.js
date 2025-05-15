@@ -78,6 +78,7 @@ const goToNextMonth = () => {
 
 // Function to handle month selection
 const handleMonthChange = (data) => {
+    
   const month = MONTH_NAMES.find((month) => month.id === data?.month?.id)
   if (month) {
     currentDate.value = new Date(currentYear, month.id - 1, 1)
@@ -89,7 +90,7 @@ return {
         goToNextMonth,
         handleMonthChange,
         currentDate,
-        currentMonth
+        currentMonth,
         calendarDays
     }
 }
