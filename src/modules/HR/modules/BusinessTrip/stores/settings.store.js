@@ -12,6 +12,7 @@ export const useSettingsStore = defineStore("settings-trip-store", {
     cityList : [],
     tripPurposeListLoading: false,
     tripPurposeList : [],
+    tripPurposeListTotalCount: 0,
   }),
   actions: {
     async actionGetCountryList(params, resetList = true) {
@@ -67,6 +68,7 @@ export const useSettingsStore = defineStore("settings-trip-store", {
           document_sub_type: item?.document_sub_type?.name,
           id: item.id,
         }))
+        this.tripPurposeListTotalCount = response?.data?.count
         this.tripPurposeList = response?.data?.results
         return response
       } catch(e) {

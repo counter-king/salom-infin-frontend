@@ -66,7 +66,7 @@ const handleClickDeleteModal = async ()=> {
   try {
     await fetchDeleteTagById(selectedTripPurpose.value.id)
     deleteModalVisible.value = false
-    settingsStore.actionGetTripPurposeList({ page: 1, page_size: 10 })
+    settingsStore.actionGetTripPurposeList({ page: 1, page_size: 15 })
     selectedTripPurpose.value = null
   } catch (error) {
     console.log(error)
@@ -80,9 +80,9 @@ const debouncedSearch = useDebounce(search, 500)
 watch(debouncedSearch, async (value) => {
   // if value is empty if works
   if (!value) {  
-    await settingsStore.actionGetTripPurposeList({ page: 1, page_size: 10 })
+    await settingsStore.actionGetTripPurposeList({ page: 1, page_size: 15 })
   } else {
-    await settingsStore.actionGetTripPurposeList({ page: 1, page_size: 10, search: value})
+    await settingsStore.actionGetTripPurposeList({ page: 1, page_size: 15, search: value})
   }
 
   if(!settingsStore.tripPurposeList.length && value){
@@ -98,15 +98,6 @@ watch(()=>settingsStore.tripPurposeList, (newValue)=>{
   } else {
     isFiltered.value = false
   }
-})
-
-onMounted(async () => {
- await settingsStore.actionGetTripPurposeList({ page: 1, page_size: 10 })
- if(!!settingsStore.tripPurposeList.length){
-  isFiltered.value = true
- } else {
-  isFiltered.value = false
- } 
 })
 
 </script>
@@ -140,7 +131,9 @@ onMounted(async () => {
         scroll-height="calc(100vh - 360px)"
         class="flex flex-col h-full"
         :loading="settingsStore.tripPurposeListLoading"
+        :total-count="settingsStore.tripPurposeListTotalCount"
         :action-list="settingsStore.actionGetTripPurposeList"
+        :pageSize="15"
       >
         <template #actions="{ data }">
           <div class="flex gap-2">

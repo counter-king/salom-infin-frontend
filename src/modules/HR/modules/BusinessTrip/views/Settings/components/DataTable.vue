@@ -57,6 +57,10 @@ const props = defineProps({
   headerCellClass: {
     type: [String, Array, Object],
     default: () => ''
+  },
+  pageSize: {
+    type: Number,
+    default: () => 10
   }
 })
 // emits
@@ -70,7 +74,7 @@ const emit = defineEmits([
 // reactives
 const paginationStore = reactive({
   page: pagination.page || route.query.page,
-  pageSize: pagination.pageSize || route.query.page_size,
+  pageSize: props.pageSize || pagination.pageSize || route.query.page_size,
   firstRow: pagination.firstRow || +route.query.firstRow,
 });
 
@@ -135,9 +139,10 @@ onMounted( async () => {
   <DataTable 
     :value="valueComputed" 
     :headers="headersComputed"
-    :page-link-size="5"
     :first="paginationStore.firstRow || 0"
+    :page-link-size="5"
     paginator
+    lazy
     paginator-position="bottom"
     :rows-per-page-options="[10, 15, 30, 50, 100]"
     paginatorTemplate="RowsPerPageDropdown CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
