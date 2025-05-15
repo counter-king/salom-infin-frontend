@@ -10,13 +10,14 @@ import { activityData } from '../../constants';
 // composibles
 import { useCalendar } from '../../composibles/useCalendar';
 
-const { goToPrevMonth, goToNextMonth, handleMonthChange, currentDate, currentMonth, calendarDays } = useCalendar()
+const { goToPrevMonth, goToNextMonth, handleMonthChange, currentDate, currentMonth, calendarDays, handleClickCurrentMonth } = useCalendar()
 provide('goToPrevMonth', goToPrevMonth)
 provide('goToNextMonth', goToNextMonth)
 provide('handleMonthChange', handleMonthChange)
 provide('currentDate', currentDate)
 provide('currentMonth', currentMonth)
 provide('calendarDays', calendarDays)
+provide('handleClickCurrentMonth', handleClickCurrentMonth)
 
 
 </script>           

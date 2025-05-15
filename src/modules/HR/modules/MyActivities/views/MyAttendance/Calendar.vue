@@ -76,14 +76,19 @@ const toolTipFun = (data) => {
                   >
                   {{ day.day }} 
                 </div>
-                <!-- info area -->
-                <div 
+                <!-- info area line  -->
+                <!-- <div 
                   v-if="index == 2"
                   v-tooltip.top="toolTipFun(getToltipText('1'))"
                   class="flex justify-center items-center py-[6px] px-2 bg-info-100 relative h-[32px] cursor-pointer text-sm text-greyscale-900 font-medium" 
                   :class="getCellMergeRangeClass(status,index)"
                 >
                   {{ getCellMergeRangeText("1") }}
+                </div> -->
+                <div v-if="true"></div>
+                <!-- hour -->
+                <div v-else class="flex justify-center items-center py-[6px] px-[6px] rounded-lg bg-success-100 text-xs font-semibold text-greyscale-900">
+                  8 ч.
                 </div>
             </div>
           </template>

@@ -39,7 +39,7 @@ const toolTipFun = (data)=> (
             </div>
             <!-- warning icon -->
             <div  
-              class="z-[2] absolute top-[-2px] right-[-2px]"
+              class="z-[0] absolute top-[-2px] right-[-2px]"
               v-if="props.data.toolTipInfo.placement == 'left'"
               v-tooltip.left="toolTipFun(props.data.toolTipInfo)"
               >
@@ -48,7 +48,7 @@ const toolTipFun = (data)=> (
               />
             </div>
             <div  
-              class="z-[2] absolute top-[-2px] right-[-2px]"
+              class="z-[0] absolute top-[-2px] right-[-2px]"
               v-else
               v-tooltip.top="toolTipFun(props.data.toolTipInfo)"
               >

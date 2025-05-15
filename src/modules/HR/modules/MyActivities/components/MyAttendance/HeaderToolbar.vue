@@ -2,6 +2,7 @@
 // core
 import { ref, inject } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
 // components
 import { ActionToolbar } from '@/components/Actions';
 import ToggleButton from './ToggleButton.vue';
@@ -10,24 +11,28 @@ import BaseButton from '@/components/UI/BaseButton.vue';
 import CalendarButton from './CalendarButton.vue';
 
 const { t } = useI18n()
+const route = useRouter()
 // reactive
-const selectedTabView = ref('calendar')
 // injects
 const currentDate = inject('currentDate')
 const handleMonthChange = inject('handleMonthChange')
 const goToPrevMonth = inject('goToPrevMonth')
 const goToNextMonth = inject('goToNextMonth')
-
+const handleClickCurrentMonth = inject('handleClickCurrentMonth')
 // methods
 const onSelectedTabViewChange = (view) => {
-  selectedTabView.value = view
+  if(view == 2){
+    route.push({ name: 'MyTable' })
+  } else {
+    route.push({ name: 'MyCalendar' })  
+  }
 }
 
 </script>           
 <template>
     <action-toolbar :title="t('my-attendance')">
     <template #title-after>
-      <ToggleButton @update:selectedTabView="onSelectedTabViewChange" />
+      <ToggleButton @emit:onChange="onSelectedTabViewChange" />
     </template>
     <template #filters>
       <div class="flex items-center gap-2">
@@ -44,6 +49,7 @@ const onSelectedTabViewChange = (view) => {
           size="large"
           shadow
           class="bg-white text-primary-900 font-medium text-xs hover:bg-greyscale-100"
+          @click="handleClickCurrentMonth"
         >
         </base-button>
         <base-button 
