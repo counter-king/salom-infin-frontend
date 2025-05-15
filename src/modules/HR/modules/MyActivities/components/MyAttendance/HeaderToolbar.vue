@@ -1,6 +1,6 @@
 <script setup>
 // core
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { useI18n } from 'vue-i18n';
 // components
 import { ActionToolbar } from '@/components/Actions';
@@ -12,10 +12,17 @@ import CalendarButton from './CalendarButton.vue';
 const { t } = useI18n()
 // reactive
 const selectedTabView = ref('calendar')
+// injects
+const currentDate = inject('currentDate')
+const handleMonthChange = inject('handleMonthChange')
+const goToPrevMonth = inject('goToPrevMonth')
+const goToNextMonth = inject('goToNextMonth')
+
 // methods
 const onSelectedTabViewChange = (view) => {
   selectedTabView.value = view
 }
+
 </script>           
 <template>
     <action-toolbar :title="t('my-attendance')">
@@ -24,7 +31,12 @@ const onSelectedTabViewChange = (view) => {
     </template>
     <template #filters>
       <div class="flex items-center gap-2">
-        <calendar-button />
+        <calendar-button 
+          :date="currentDate"
+          @click:submit="handleMonthChange"
+          :onRightArrowClick="goToNextMonth"
+          :onLeftArrowClick="goToPrevMonth"
+        />
         <base-button 
           label="current-month"
           rounded
