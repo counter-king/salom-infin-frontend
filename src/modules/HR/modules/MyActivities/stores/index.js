@@ -17,6 +17,11 @@ export const useMyAttendanceStore = defineStore("my-attendance-store", {
         field: "week_days",
         active: true
       },
+      {
+        header: "Статус",
+        field: "status",
+        active: true
+      }
     ]
   }),
   actions: {

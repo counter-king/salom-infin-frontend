@@ -813,5 +813,8 @@
   "table": "Таблица",
   "next-month": "Следующий месяц",
   "prev-month": "Предыдущий месяц",
-  "current-month": "Текущий месяц"
+  "current-month": "Текущий месяц",
+  "sick-leave": "Больничный отпуск",
+  "without-content": "без содержания",
+  "additional-day-off": "Дополнительный выходной день"
 }

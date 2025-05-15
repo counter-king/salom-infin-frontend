@@ -30,6 +30,7 @@ const props = defineProps({
 const refOverPanel = ref(null)
 const selectedMonth = ref(null)
 const selectedYear = ref(null)
+const overPanelIsOpen = ref(false)
 // emit
 const emit = defineEmits(['click:submit'])
 // methods
@@ -72,6 +73,9 @@ const handleClickSubmit = () => {
   toggle();
 }
 
+const onChangeState = (state) => {
+  overPanelIsOpen.value = state
+}
 </script>
 <template>
   <div class="flex items-center">
@@ -85,6 +89,7 @@ const handleClickSubmit = () => {
     <div 
       class="min-w-[136px] capitalize select-none flex items-center justify-center px-2 border-r border-l cursor-pointer border-greyscale-200 text-base font-medium text-greyscale-500 bg-white self-stretch"
       @click="toggle"
+      :class="{'!text-primary-500': overPanelIsOpen }"
       >
        {{ formatMonthAndYear(props.date) }}
     </div>
@@ -100,6 +105,7 @@ const handleClickSubmit = () => {
     ref="refOverPanel"
     width="w-[416px]"
     menu-class="bg-white mt-1 overflow-hidden"
+    @emit:changeState="onChangeState"
   >
     <template #header>
       <div class="flex items-center justify-between h-14 px-4">
@@ -115,7 +121,7 @@ const handleClickSubmit = () => {
             :class="{'bg-greyscale-50': selectedMonth?.id === month.id }"
             @click="selectedMonth = month"
           >
-            <span class="text-xs font-medium text-greyscale-900">{{ month[locale] }}</span>
+            <span class="text-sm font-medium text-greyscale-900">{{ month[locale] }}</span>
             <base-iconify v-show="selectedMonth?.id == month.id" :icon="CheckCircleBoldIcon" class="!w-4 !h-4 text-primary-500" />
           </div>
         </template>
@@ -130,7 +136,7 @@ const handleClickSubmit = () => {
             :class="{'bg-greyscale-50': selectedYear == year }"
             @click="selectedYear = year"
           >
-            <span class="text-xs font-medium text-greyscale-900">{{ year }}</span>
+            <span class="text-sm font-medium text-greyscale-900">{{ year }}</span>
             <base-iconify v-show="selectedYear == year" :icon="CheckCircleBoldIcon" class="!w-4 !h-4 text-primary-500" />
           </div>
         </template>

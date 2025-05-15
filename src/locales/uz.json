@@ -812,5 +812,8 @@
   "table": "Jadval",
   "next-month": "Keyingi oy",
   "prev-month": "Avvalgi oy",
-  "current-month": "Joriy oy"
+  "current-month": "Joriy oy",
+  "sick-leave": "Kasallik ta'tillari",
+  "without-content": "Без содержания",
+  "additional-day-off": "Qo'shimcha dam olish kuni"
 }

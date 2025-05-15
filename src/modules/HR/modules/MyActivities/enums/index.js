@@ -16,3 +16,4 @@ export const WEEK_DAYS_UZ = [
   'Shanba',
   'Yankshanba'
 ]
+

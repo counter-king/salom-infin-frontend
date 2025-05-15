@@ -5,6 +5,8 @@ import { useI18n } from 'vue-i18n';
 // enums
 import { WEEK_DAYS_RU, WEEK_DAYS_UZ } from '../../enums';
 import { MONTH_NAMES } from '@/enums';
+// constants
+import { LeaveTypes } from '../../constants';
 
 const { t, locale } = useI18n()
 // reactives
@@ -16,29 +18,27 @@ const calendarDays = inject('calendarDays')
 const getCellMergeRangeClass = (status,index) => {
   const data1 = [{status: 1},{status: 1},{status: 1},{status:1, exception:true },{status: 1, exception:true },{status: 1},{status: 1},{status: 1},{status: 1}]
   const data2 = [{status: 1},{status: 1},{status: 2},{status: 1},{status: 2},{status: 1},{status: 1},{status: 1}]
-  if(index == 2) return ['w-[calc(200%+20px)] left-[calc(50%+20px)]  rounded-lg']
+  if(index == 2) return ['w-[calc(200%+20px)] left-[calc(50%+20px)] bg-info-100 border-info-200']
+  if(index == 3) return ['w-[calc(200%+20px)] left-[calc(50%+20px)] bg-critic-30 border-critic-50']
+  if(index == 4) return ['w-[calc(200%+20px)] left-[calc(50%+20px)] bg-warning-100 border-warning-200']
 }
 
 const getCellMergeRangeText = (index) => {
-  if(index == "1") return 'трудовой отпуск'
-  else if(index == "2") return 'Больничный отпуск'
-  else if(index == "3") return 'без содержания'
-  else if(index == "4") return 'Командировка'
-  else if(index == "5") return 'Дополнительный выходной день'
+  return LeaveTypes[index]
 }
 
 const getToltipText = (value) => {
-  if(value == '4') return { title: '23-24 Апрель, (2 день)', description: 'трудовой отпуск' }
-  else if(value == '2') return { title: '23-24 Апрель, (2 день)', description: 'Командировка' }
-  else if(value == '3') return { title: '23-24 Апрель, (2 день)', description: 'Больничный отпуск' }
-  else if(value == '1') return { title: '23-24 Апрель, (2 день)', description: 'без содержания' }
+  if(value == '4') return { title: '23-24 Апрель, (2 день)', description: LeaveTypes[value] }
+  else if(value == '2') return { title: '23-24 Апрель, (2 день)', description: LeaveTypes[value] }
+  else if(value == '3') return { title: '23-24 Апрель, (2 день)', description: LeaveTypes[value] }
+  else if(value == '1') return { title: '23-24 Апрель, (2 день)', description: LeaveTypes[value] }
 }
 
 const toolTipFun = (data) => {
   return {
     value: `<div class="flex flex-col gap-1">
               <p class="text-sm text-white">${ data?.title }</p>
-              <p class="text-sm text-white">${ data?.description }</p>
+              <p class="text-sm text-white">${ t(data?.description) }</p>
             </div>`,
     pt: {
       arrow: {
@@ -67,7 +67,8 @@ const toolTipFun = (data) => {
           <template v-for="(day, index) in calendarDays" :key="index">
             <!-- cell -->
             <div
-                class="flex flex-col justify-between items-center p-4 h-[120px] border-t [&:not(:nth-child(7n))]:border-r border-greyscale-200"
+              v-if="false"
+              class="flex flex-col justify-between items-center p-4 h-[120px] border-t [&:not(:nth-child(7n))]:border-r border-greyscale-200"
             >
                 <!-- number area -->
                 <div 
@@ -77,19 +78,24 @@ const toolTipFun = (data) => {
                   {{ day.day }} 
                 </div>
                 <!-- info area line  -->
-                <!-- <div 
+                <div 
                   v-if="index == 2"
                   v-tooltip.top="toolTipFun(getToltipText('1'))"
-                  class="flex justify-center items-center py-[6px] px-2 bg-info-100 relative h-[32px] cursor-pointer text-sm text-greyscale-900 font-medium" 
-                  :class="getCellMergeRangeClass(status,index)"
+                  class="flex justify-center items-center py-[6px] px-2 relative h-[32px] cursor-pointer text-sm border-[2px] text-greyscale-900 font-medium rounded-lg" 
+                  :class="getCellMergeRangeClass(status = 2, index)"
                 >
-                  {{ getCellMergeRangeText("1") }}
-                </div> -->
-                <div v-if="true"></div>
+                  {{ t(getCellMergeRangeText("1")) }}
+                </div>
                 <!-- hour -->
                 <div v-else class="flex justify-center items-center py-[6px] px-[6px] rounded-lg bg-success-100 text-xs font-semibold text-greyscale-900">
                   8 ч.
                 </div>
+            </div>
+            <div 
+              v-else
+              class="flex flex-col justify-between items-center p-4 h-[120px] border-t [&:not(:nth-child(7n))]:border-r text-critic-500"
+            >
+              123
             </div>
           </template>
         </div>

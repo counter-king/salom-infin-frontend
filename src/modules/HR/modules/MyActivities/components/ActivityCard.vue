@@ -18,49 +18,51 @@ const toolTipFun = (data)=> (
       arrow: {
           class: '!text-greyscale-900'
       },
-      text: '!px-3 !py-2 !rounded-[12px] !bg-greyscale-900 !text-white !text-sm !w-fit',
+      text: '!px-3 !py-2 !rounded-[12px] !bg-greyscale-900 !text-white !text-sm',
   },
+  escape: true,
+  autoHide: false
 })
 
 </script>
 <template>
     <div class="shadow w-full flex flex-col gap-3 p-4 cursor-pointer rounded-[20px] bg-white">
-        <!-- top -->
-        <div class="flex items-center gap-3 relative overflow-visible">
-            <!-- icon wrapper -->
-            <div 
-                class="w-12 h-12 min-w-12 min-h-12 rounded-full flex items-center justify-center"
-                :class="props.data.iconClass"
-                >
-                <base-iconify :icon="props.data.icon" class="!w-[22px] !h-[22px]" />
-            </div>
-            <div class="text-xl font-semibold text-greyscale-900">
-                {{ props.data.title }}
-            </div>
-            <!-- warning icon -->
-            <div  
-              class="z-[0] absolute top-[-2px] right-[-2px]"
-              v-if="props.data.toolTipInfo.placement == 'left'"
-              v-tooltip.left="toolTipFun(props.data.toolTipInfo)"
-              >
-              <base-iconify
-                :icon="InfoCircleBoldIcon" class="!w-6 !h-6 text-greyscale-200"
-              />
-            </div>
-            <div  
-              class="z-[0] absolute top-[-2px] right-[-2px]"
-              v-else
-              v-tooltip.top="toolTipFun(props.data.toolTipInfo)"
-              >
-              <base-iconify
-                :icon="InfoCircleBoldIcon" class="!w-6 !h-6 text-greyscale-200"
-              />
-            </div>
+      <!-- top -->
+      <div class="flex items-center gap-3 relative overflow-visible">
+        <!-- icon wrapper -->
+        <div 
+            class="w-12 h-12 min-w-12 min-h-12 rounded-full flex items-center justify-center"
+            :class="props.data.iconClass"
+            >
+            <base-iconify :icon="props.data.icon" class="!w-[22px] !h-[22px]" />
         </div>
-        <!-- bottom -->
-        <div class="text-sm font-medium text-greyscale-900">
-            {{ props.data.description }}
+        <div class="text-xl font-semibold text-greyscale-900">
+            {{ props.data.title }}
         </div>
+        <!-- warning icon -->
+        <div  
+          class="z-[0] absolute top-[-2px] right-[-2px]"
+          v-if="props.data.toolTipInfo.placement == 'left'"
+          v-tooltip.left="toolTipFun(props.data.toolTipInfo)"
+          >
+          <base-iconify
+            :icon="InfoCircleBoldIcon" class="!w-6 !h-6 text-greyscale-200"
+          />
+        </div>
+        <div  
+          class="z-[0] absolute top-[-2px] right-[-2px]"
+          v-else
+          v-tooltip.top="toolTipFun(props.data.toolTipInfo)"
+          >
+          <base-iconify
+            :icon="InfoCircleBoldIcon" class="!w-6 !h-6 text-greyscale-200"
+          />
+        </div>
+      </div>
+      <!-- bottom -->
+      <div class="text-sm font-medium text-greyscale-900">
+          {{ props.data.description }}
+      </div>
     </div>
 </template>
 <style scoped>
