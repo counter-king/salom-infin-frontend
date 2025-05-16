@@ -67,7 +67,7 @@ const toolTipFun = (data) => {
           <template v-for="(day, index) in calendarDays" :key="index">
             <!-- cell -->
             <div
-              v-if="false"
+              v-if="true"
               class="flex flex-col justify-between items-center p-4 h-[120px] border-t [&:not(:nth-child(7n))]:border-r border-greyscale-200"
             >
                 <!-- number area -->
@@ -93,7 +93,7 @@ const toolTipFun = (data) => {
             </div>
             <div 
               v-else
-              class="flex flex-col justify-between items-center p-4 h-[120px] border-t [&:not(:nth-child(7n))]:border-r text-critic-500"
+              class="flex flex-col justify-between items-center p-4 h-[120px] border-t [&:not(:nth-child(7n))]:border-r text-critic-500 bg-critic-50 font-medium"
             >
               123
             </div>

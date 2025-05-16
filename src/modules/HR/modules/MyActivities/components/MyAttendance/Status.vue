@@ -1,4 +1,5 @@
 <script setup>
+
 const props = defineProps({
   status: {
     type: Object,
@@ -7,8 +8,7 @@ const props = defineProps({
   }
 })
 
-
-const statusClass = (id)=>{
+const statusClass = (id)=> {
   switch(id){
     case 1:
       return 'bg-info-100 text-greyscale-900'  // трудовой отпуск
