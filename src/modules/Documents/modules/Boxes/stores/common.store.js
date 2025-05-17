@@ -43,7 +43,7 @@ export const useBoxesCommonStore = defineStore('boxes-common', {
         },
         // Моё поручение
         {
-          title: 'my-assignment',
+          title: 'my-assignments',
           icon: ArrowRightDownIcon,
           link: 'AssignmentIndex',
           children: [],

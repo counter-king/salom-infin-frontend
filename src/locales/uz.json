@@ -867,5 +867,8 @@
   "admin": "Admin",
   "in-which-section":"Qaysi bo'limda?",
    "category-purpose": "Kategoriya maqsadi",
-   "name-count": "Название - ({count}) belgidan oshmasligi kerak"
+   "name-count": "Nomi - ({count}) belgidan oshmasligi kerak",
+   "my-tasks":"Mening vazifalarim",
+   "ordering": "Farmoyish",
+   "my-assignments": "Mening vazifalarim"
 }
