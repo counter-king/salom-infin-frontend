@@ -3,6 +3,7 @@ import BusinessTrip from "@/modules/HR/modules/BusinessTrip/routes"
 import Agreements from '../modules/Agreements/routes'
 import AgreementSettings from '../modules/AgreementSettings/routes'
 import Dashboard from '../modules/Dashboard/routes'
+import InteractionABS from '../modules/InteractionABS/routes'
 
 const HR = [
   {
@@ -23,7 +24,9 @@ const HR = [
       // AgreementSettings
       ...AgreementSettings,
       // Dashboard
-      ...Dashboard
+      ...Dashboard,
+      // InteractionABS
+      ...InteractionABS
     ]
   }
 ]

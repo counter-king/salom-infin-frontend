@@ -870,5 +870,9 @@
    "name-count": "Nomi - ({count}) belgidan oshmasligi kerak",
    "my-tasks":"Mening vazifalarim",
    "ordering": "Farmoyish",
-   "my-assignments": "Mening vazifalarim"
+   "my-assignments": "Mening vazifalarim",
+   "interaction-with-abs": "iABS bilan aloqa",
+   "document-name":"Dokning nomi",
+   "operation-type":"Operatsiya turi",
+   "status-abs":"status iABS"
 }

@@ -871,5 +871,9 @@
   "name-count": "Название - не более ({count}) символов",
   "my-tasks":"Мои задачи",
   "ordering":"Распоряжение",
-  "my-assignments": "Мои поручения"
+  "my-assignments": "Мои поручения",
+  "interaction-with-abs": "Взаимодействие с iABS",
+  "document-name":"Название док.",
+  "operation-type":"Тип операции",
+  "status-abs":"Статус iABS"
 }
