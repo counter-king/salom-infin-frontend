@@ -164,7 +164,7 @@ onMounted(async () => {
         </template>
 
         <template v-else>
-          <div class="grid grid-cols-10 gap-8 relative pl-10 mt-11">
+          <div class="grid grid-cols-10 gap-8 relative pl-14 mt-11">
             <div class="flex flex-col absolute top-0 left-0 w-full h-full">
               <template v-for="item in dashboardStore.comparison.axes">
                 <div class="flex flex-1 gap-2">
@@ -316,7 +316,9 @@ onMounted(async () => {
                                   ? t('finance-dashboard.text-9')
                                   : item.pay_type_id === 9
                                     ? t('finance-dashboard.text-2')
-                                    : t('finance-dashboard.text-5')
+                                      : item.pay_type_id === 6
+                                        ? t('finance-dashboard.text-5')
+                                        : 'asdas'
                   }}
 			          </span>
               </div>
