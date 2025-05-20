@@ -21,7 +21,7 @@ const { t } =useI18n()
 
       <li class="flex items-center gap-2 hover:bg-greyscale-50 cursor-pointer rounded-lg py-[10px] px-3">
         <div class="bg-success-200 w-4 h-4 rounded-full"></div>
-        <span class="text-sm font-medium text-primary-900">{{ t('tasks') }}</span>
+        <span class="text-sm font-medium text-primary-900">{{ t('my-tasks') }}</span>
       </li>
     </ul>
   </div>

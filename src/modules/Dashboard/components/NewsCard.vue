@@ -2,7 +2,7 @@
 // components
 import NewsCategory from '@/components/Chips/NewsCategory.vue';
 import ShortDescription from '@/modules/News/components/ShortDescription.vue';
-import { CalendarLinearIcon, EyeLinearIcon, HeartLinearIcon } from '@/components/Icons';
+import { CalendarLinearIcon, EyeLinearIcon, HeartLinearIcon, CommentDotsIcon } from '@/components/Icons';
 // utils
 import { formatToK } from '@/utils';
 import { formatDate } from '@/utils/formatDate';
@@ -36,9 +36,15 @@ const props = defineProps({
           </div>
         </div>
       </div>
-      <!-- view-likes -->
+      <!-- view-likes-comments -->
       <div class="min-w-fit flex gap-2 items-center text-greyscale-400 self-end justify-end">
-         <div class="flex gap-1 items-center">
+        <div class="flex gap-1 items-center">
+           <div class="hover:cursor-pointer">
+             <base-iconify :icon="CommentDotsIcon"  />
+           </div>
+           <div class="text-xs font-medium text-greyscale-400">{{ props.item.comments_counts && formatToK(props.item.comments_counts) }}</div>
+         </div> 
+        <div class="flex gap-1 items-center">
            <div class="hover:cursor-pointer">
              <base-iconify :icon="HeartLinearIcon" />
            </div>

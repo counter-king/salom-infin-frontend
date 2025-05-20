@@ -35,7 +35,7 @@ let typingTimeouts = {};
 // privder
 provide("inputSendMessasgeRef", inputSendMessasgeRef) 
 provide('refChatArea', refChatArea)
-// methods
+// method
 const sendUserHandshake = ()=> {
   const payload = { command: 'user_handshake' }
   send(JSON.stringify(payload))

@@ -200,6 +200,7 @@ export { default as WhatsappIcon } from '~icons/mage/whatsapp-filled'
 
 // iconamoon
 export { default as EditLightIcon } from '~icons/iconamoon/edit-light'
+export { default as CommentDotsIcon } from '~icons/iconamoon/comment-dots'
 // Clarity
 export { default as PlaneIcon } from '~icons/clarity/airplane-solid'
 export { default as VolumeUpLineIcon } from '~icons/clarity/volume-up-line'
