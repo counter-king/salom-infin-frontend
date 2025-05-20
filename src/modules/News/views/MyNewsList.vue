@@ -92,6 +92,7 @@ watch(debouncedSearchQuery, () => {
         <template #status="{ data }">
           <div class="flex gap-[100px] items-center">
             <news-status :status="data.status"/>
+            
             <div 
               @click.stop="isRejectReasonVisible = true; rejectReason = data.cancelled_reason"
               v-if="data.status === NEWS_STATUS.DECLINED" class="flex items-center pl-2 pr-1 py-1 rounded-full bg-greyscale-50 hover:bg-white"
