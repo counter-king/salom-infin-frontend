@@ -871,5 +871,6 @@
   "name-count": "Название - не более ({count}) символов",
   "my-tasks":"Мои задачи",
   "ordering":"Распоряжение",
-  "my-assignments": "Мои поручения"
+  "my-assignments": "Мои поручения",
+  "published-date": "Дата публикации"
 }

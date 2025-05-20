@@ -104,6 +104,9 @@ watch(debouncedSearchQuery, () => {
         <template #created_date="{ data }">
           {{ formatDate(data.created_date) }}
         </template>
+        <template #published_date="{ data }">
+          {{ formatDate(data.published_date) }}
+        </template>
         <template #actions="{ data }">
          <div class="flex gap-2">
           <div @click.stop="handleClickEdit(data.id)" class="cursor-pointer bg-greyscale-50 text-greyscale-500 p-[6px] rounded-lg hover:bg-white">
