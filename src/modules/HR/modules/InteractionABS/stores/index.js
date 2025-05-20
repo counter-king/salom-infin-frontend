@@ -13,7 +13,7 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
           documentName: 'Document 1',
           documentType: 'Type 1',
           operationType: 'Type 1',
-          statusABS: 'Status 1',
+          status: 1,
           history: 'History 1',
           actions: 'Actions 1'
         }
@@ -23,14 +23,14 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
         {
           field: 'employee',
           header: 'employee',
-          width: '10%',
+          width: '13%',
           active: true
         },
         {
           field: 'position',
           header: 'position',
-          width: '10%',
-          active: true
+            width: '10%',
+            active: true
         },
         {
           field: 'branch',
@@ -63,7 +63,7 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
           active: true
         },
         {
-          field: 'status-abs',
+          field: 'status',
           header: 'status-abs',
           width: '10%',
           active: true
@@ -71,13 +71,13 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
         {
           field: 'history',
           header: 'history',
-          width: '10%',
+          width: '2%',
           active: true
         },
         {
           field: 'actions',
           header: 'actions',
-          width: '10%',
+          width: '15%',
           active: true
         }
       ]

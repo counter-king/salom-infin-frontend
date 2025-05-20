@@ -875,5 +875,7 @@
   "interaction-with-abs": "Взаимодействие с iABS",
   "document-name":"Название док.",
   "operation-type":"Тип операции",
-  "status-abs":"Статус iABS"
+  "status-abs":"Статус iABS",
+  "success":"Успешно",
+  "send-again":"Отправить Заново"
 }

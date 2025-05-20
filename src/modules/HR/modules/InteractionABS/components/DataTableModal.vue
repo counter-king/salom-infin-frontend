@@ -216,12 +216,6 @@ onMounted( async () => {
           <span class="text-sm font-medium text-greyscale-500">{{ (paginationStore.pageSize * paginationStore.page + 1) - (paginationStore.pageSize - index) }}</span>
         </slot>
         </template>
-        <!-- <template #header>
-          <div class="flex items-center gap-2">
-            <i class="pi pi-star text-primary"></i>
-            <span>№</span>
-          </div>
-        </template> -->
       </Column>
     <template v-for="(header, index) in headersComputed" :key="header.field">
       <Column

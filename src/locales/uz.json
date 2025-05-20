@@ -874,5 +874,7 @@
    "interaction-with-abs": "iABS bilan aloqa",
    "document-name":"Dokning nomi",
    "operation-type":"Operatsiya turi",
-   "status-abs":"status iABS"
+   "status-abs":"status iABS",
+   "success":"Muvaffaqiyatli",
+   "send-again":"Qayta yuborish"
 }
