@@ -44,6 +44,7 @@ import {
 import { formatDateReverse } from "@/utils/formatDate";
 import { adjustBTDateToTimeArray } from "@/modules/Documents/modules/SendDocuments/utils";
 import { useCountStore } from "@/stores/count.store";
+import { useCommonStore } from "@/stores/common";
 
 export const useBusinessTripStore = defineStore("sd-business-trip-store", {
   state: () => ({
@@ -74,7 +75,8 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
           __start_date: null,
           __end_date: null,
           __company: null,
-          __route: null
+          __route: null,
+          __filialList: [...useCommonStore().filialList],
         }
       ],
       __curator: null,
@@ -405,7 +407,8 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
         __start_date: null,
         __end_date: null,
         __company: null,
-        __route: null
+        __route: null,
+        __filialList: [...useCommonStore().filialList],
       })
     },
     /** **/
@@ -526,7 +529,8 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
             __start_date: null,
             __end_date: null,
             __company: null,
-            __route: null
+            __route: null,
+            __filialList: [...useCommonStore().filialList],
           }
         ],
         __curator: null,

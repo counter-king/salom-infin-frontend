@@ -142,7 +142,7 @@ const emit = defineEmits(['emit:onValidateAndSend'])
                 <base-dropdown
                   v-model="group.__company"
                   :error="$v.__groups.$each.$response.$data[index].__company"
-                  v-model:options="commonStore.filialList"
+                  v-model:options="group.__filialList"
                   required
                   api-url="companies"
                   label="from-where-filial"
