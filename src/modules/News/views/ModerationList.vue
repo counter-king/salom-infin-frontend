@@ -67,6 +67,9 @@ onMounted(() => {
         <template #created_date="{ data }">
           {{ formatDate(data.created_date) }}
         </template>
+        <template #published_date="{ data }">
+          {{ formatDate(data.published_date) }}
+        </template>
      </base-data-table>
   </div>
 </template>

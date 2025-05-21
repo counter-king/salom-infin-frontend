@@ -77,7 +77,7 @@ export const useSDStore = defineStore("sd-stores", {
       },
       // Распоряжения
       {
-        label: "decree",
+        label: "ordering",
         icon: "CheckCircleIcon",
         type: "decree",
         sub_type: "decree",
@@ -510,7 +510,7 @@ export const useSDStore = defineStore("sd-stores", {
         },
         // Распоряжения
         {
-          label: "decree",
+          label: "ordering",
           icon: "CheckCircleIcon",
           type: "decree",
           sub_type: "decree",

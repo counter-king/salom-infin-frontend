@@ -71,9 +71,9 @@ const submitForm = async () => {
   try {
     isSubmitLoading.value = true
     if(props.id){
-      await fetchUpdateRegionById(props.id, {name: formValue.name, is_active: formValue.status, country: formValue.country.id })
+      await fetchUpdateRegionById(props.id, {name: formValue.name, name_uz: formValue.name, name_ru: formValue.name, is_active: formValue.status, country: formValue.country.id })
     } else{
-      await fetchCreateRegion({name: formValue.name, is_active: formValue.status, country: formValue.country.id })
+      await fetchCreateRegion({name: formValue.name, name_uz: formValue.name, name_ru: formValue.name, is_active: formValue.status, country: formValue.country.id })
     }
     emit('update:modelValue', false)
     settingsStore.actionGetCityList({ country: activeSelectedCountry.value?.id })

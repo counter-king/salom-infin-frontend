@@ -34,7 +34,7 @@ const link = (data) => {
 <template>
   <div class="incoming-view flex-1">
     <action-toolbar
-      title="my-assignment"
+      title="my-assignments"
       :column-menu-items="assignmentStore.headers"
       :storage-columns-name="BOXES_ASSIGNMENT_COLUMNS"
       :action-list="assignmentStore.actionAssignmentList"

@@ -29,8 +29,13 @@ export const useMyNewsList = () => {
      active: true
    },
    {
-     header: "date",
+     header: "created-date",
      field: "created_date",
+     active: true
+   },
+   {
+     header: "published-date",
+     field: "published_date",
      active: true
    },
    {

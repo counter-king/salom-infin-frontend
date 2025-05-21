@@ -60,7 +60,7 @@ const submitForm = async () => {
   if(props.id){
     isLoading.value = true
     try {
-      await fetchUpdateTagById(props.id, formValue)
+      await fetchUpdateTagById(props.id, { name: formValue.name, name_uz: formValue.name, name_ru: formValue.name, document_sub_type: formValue.document_sub_type })
     } catch (error) {
       console.log(error)
     } finally {
@@ -69,7 +69,7 @@ const submitForm = async () => {
   } else {
     isLoading.value = true
     try {
-      await fetchCreateTag(formValue)
+      await fetchCreateTag({ name: formValue.name, name_uz: formValue.name, name_ru: formValue.name, document_sub_type: formValue.document_sub_type })
     } catch (error) {
       console.log(error)
     } finally {
