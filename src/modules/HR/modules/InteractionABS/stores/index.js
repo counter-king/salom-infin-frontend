@@ -45,19 +45,19 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
           active: true
         },
         {
-          field: 'document-name',
+          field: 'documentName',
           header: 'document-name',
           width: '10%',
           active: true
         },
         {
-          field: 'document-type',
+          field: 'documentType',
           header: 'document-type',
           width: '10%',
           active: true
         },
         {
-          field: 'operation-type',
+          field: 'operationType',
           header: 'operation-type',
           width: '10%',
           active: true

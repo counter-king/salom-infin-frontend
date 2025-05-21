@@ -67,7 +67,8 @@ const emit = defineEmits([
   'emit:setStoreHeaders',
   'emit:rowClick',
   'emit:onPageChange',
-  'update:selection'
+  'update:selection',
+  'emit:onSort'
 ]);
 
 // reactives
@@ -151,6 +152,7 @@ onMounted( async () => {
     :total-records="props.totalCount"
     :loading="props.loading"
     scrollable
+    @sort="(event) => emit('emit:onSort', event)"
     @row-click="event => emit('emit:rowClick', event.data)"
     @page="onPageChange"
     :pt="
@@ -216,15 +218,10 @@ onMounted( async () => {
           <span class="text-sm font-medium text-greyscale-500">{{ (paginationStore.pageSize * paginationStore.page + 1) - (paginationStore.pageSize - index) }}</span>
         </slot>
         </template>
-        <!-- <template #header>
-          <div class="flex items-center gap-2">
-            <i class="pi pi-star text-primary"></i>
-            <span>№</span>
-          </div>
-        </template> -->
       </Column>
     <template v-for="(header, index) in headersComputed" :key="header.field">
       <Column
+        sortable
         :field="header.field"
         :header="t(header.header)"
         :style="{ width: header.width }"
@@ -233,7 +230,7 @@ onMounted( async () => {
             class: ['bg-greyscale-50 px-[11px] h-[48px] border-0 border-r border-greyscale-200 last:rounded-tr-[12px] last:border-r-0', props.headerCellClass]
           },
           headerContent: {
-            class: ['text-sm font-semibold text-greyscale-500']
+            class: ['gap-3 text-sm font-semibold text-greyscale-500']
           },
           bodyCell: {
             class: ['border-greyscale-100 py-3 px-4 border-0 border-t border-r last:border-r-0'],
@@ -243,11 +240,14 @@ onMounted( async () => {
           },
       }"
       >
-        <template #body="{ field, data }">
-         <slot :name="field" :data="data"  :field="field">
+        <template #sorticon>
+          <slot :name="'headerIcon' + header.field" ></slot>
+        </template>
+        <template #body="{ field, data }" >
+         <slot :name="field" :data="data"  :field="field" class="order-1">
             <span>{{ data[field] }}</span>
          </slot>
-        </template>
+        </template>       
       </Column>
     </template>
     <template #loading>
