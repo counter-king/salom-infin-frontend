@@ -2,7 +2,7 @@
 // Core
 import { ref } from 'vue'
 // Components
-import { CaseIcon, UserIcon, SettingsMinimalisticIcon, DocumentAddBoldIcon } from '@/components/Icons'
+import { CaseIcon, UserIcon, SettingsMinimalisticIcon, DocumentAddBoldIcon, DocumentAddIcon} from '@/components/Icons'
 import TheSidebar from '@/components/TheSidebar.vue'
 import TheFooter from '@/components/TheFooter.vue';
 // Stores
@@ -36,7 +36,7 @@ const menus = ref([
   },
   {
     title: "interaction-with-abs",
-    icon: DocumentAddBoldIcon,
+    icon: DocumentAddIcon,
     link: "InteractionABSIndex",
     children: []
   },

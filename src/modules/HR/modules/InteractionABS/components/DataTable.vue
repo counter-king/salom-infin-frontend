@@ -230,7 +230,7 @@ onMounted( async () => {
             class: ['bg-greyscale-50 px-[11px] h-[48px] border-0 border-r border-greyscale-200 last:rounded-tr-[12px] last:border-r-0', props.headerCellClass]
           },
           headerContent: {
-            class: ['gap-3 text-sm font-semibold text-greyscale-500']
+            class: ['gap-1 text-sm font-semibold text-greyscale-500']
           },
           bodyCell: {
             class: ['border-greyscale-100 py-3 px-4 border-0 border-t border-r last:border-r-0'],
@@ -241,7 +241,7 @@ onMounted( async () => {
       }"
       >
         <template #sorticon>
-          <slot :name="'headerIcon' + header.field" ></slot>
+          <slot :name="'headerIcon' + header.field" :data="header" ></slot>
         </template>
         <template #body="{ field, data }" >
          <slot :name="field" :data="data"  :field="field" class="order-1">

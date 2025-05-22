@@ -25,12 +25,17 @@ const props = defineProps({
 const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
+// emit
+const emit = defineEmits([
+  'onChange'
+])
 
 // reactives
 const selectedItem = computed(() => route.query[props.type])
 
 // methods
 const onSelectItem = (item) => {
+  emit('onChange', item)
   router.replace({
     query: {
       ...router.currentRoute.value.query,

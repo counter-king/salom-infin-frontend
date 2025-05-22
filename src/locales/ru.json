@@ -877,5 +877,6 @@
   "operation-type":"Тип операции",
   "status-abs":"Статус iABS",
   "success":"Успешно",
-  "send-again":"Отправить Заново"
+  "send-again":"Отправить Заново",
+  "reesult-of-action":"Результат действия"
 }

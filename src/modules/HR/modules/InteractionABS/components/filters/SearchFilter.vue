@@ -30,8 +30,13 @@ const route = useRoute()
 const search = ref('')
 const selectedItem = computed(() => route.query[props.type])
 
+// emit
+const emit = defineEmits([
+  'onChange'
+])
 // methods
 const onSelectItem = (item) => {
+  emit('onChange', item)
   router.replace({
     query: {
       ...router.currentRoute.value.query,
@@ -39,6 +44,7 @@ const onSelectItem = (item) => {
     }
   })
   props.parentRef.style = 'display: none'
+ 
 }
 // hooks
 watch(search, (newVal) => {

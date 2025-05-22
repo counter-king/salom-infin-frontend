@@ -876,5 +876,6 @@
    "operation-type":"Operatsiya turi",
    "status-abs":"status iABS",
    "success":"Muvaffaqiyatli",
-   "send-again":"Qayta yuborish"
+   "send-again":"Qayta yuborish",
+   "reesult-of-action":"Harakat natijasi"
 }

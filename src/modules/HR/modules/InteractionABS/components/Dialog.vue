@@ -1,6 +1,6 @@
 <script setup>
 // core
-import { ref } from 'vue'
+import { ref, useModel} from 'vue'
 import { useI18n } from 'vue-i18n'
 // components
 import DataTableModal from './DataTableModal.vue'
@@ -8,8 +8,7 @@ import DataTableModal from './DataTableModal.vue'
 import { useInteractionABSStore } from '../stores';
 // composibles
 const interactionABSStore = useInteractionABSStore()
-import { useModel } from 'vue'
-
+const { t } = useI18n()
 // props
 const props = defineProps({
   dialogVisible: {
@@ -29,29 +28,42 @@ const dialogVisible = useModel(props, 'dialogVisible')
     v-model="dialogVisible"
     max-width="max-w-[1638px]"
     :headerClasses="'px-6 py-6'"
-    :contentClasses="'px-6 py-[6px]'"
+    :contentClasses="'px-6 py-3 !h-[444px]'"
     :footerClasses="'h-[84px]'"
+    :label="t('history')"
   >
-    <template #header>
-      123
-    </template>
     <template #content>
-      <DataTableModal
-        :headers="interactionABSStore.headers"
-        :value="interactionABSStore.list"
-        scroll-height="calc(100vh - 360px)"
-        class="flex flex-col h-full"
-        :loading="interactionABSStore.listLoading"
-        :total-count="interactionABSStore.totalCount"
-        :action-list="interactionABSStore.actionGetInteractionABSList"
-        :pageSize="15"
-        >
-          <template #order="{ data }">
-            <div class="text-greyscale-500">
-             {{ data.order }}
-            </div>
-          </template>
-      </DataTableModal>
+      <template v-if="true">
+        <DataTableModal
+          :headers="interactionABSStore.historyHeaders"
+          :value="interactionABSStore.list"
+          scroll-height="calc(100vh - 360px)"
+          class="flex flex-col h-full"
+          :loading="interactionABSStore.listLoading"
+          :total-count="interactionABSStore.totalCount"
+          :action-list="interactionABSStore.actionGetInteractionABSList"
+          :pageSize="15"
+          >
+            <template #order="{ data }">
+              <div class="text-greyscale-500">
+              {{ data.order }}
+              </div>
+            </template>
+            <template #employee="{ data }">
+              <div class="flex items-center gap-3">
+                <base-avatar 
+                  :image="data.employeeImage"
+                  :label="data.employee"
+                  avatar-classes="w-7 h-7"
+                />
+                <span >{{ data.employee }}</span>
+              </div>
+            </template>
+        </DataTableModal>
+      </template>
+      <template v-else>
+        <base-spinner/>
+      </template>
     </template>
     <template #footer>
       

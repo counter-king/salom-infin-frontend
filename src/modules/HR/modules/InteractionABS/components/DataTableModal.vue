@@ -163,7 +163,7 @@ onMounted( async () => {
         ]
       },
       
-      thead: { class: ['bg-inherit'] },
+      thead: { class: ['bg-white'] },
       bodyRow: { class: ['cursor-pointer text-sm font-medium greyscale-900', 'hover:bg-greyscale-50','last:border-b last:border-b-greyscale-100'] },
       loadingoverlay: { class: ['bg-transparent overflow-hidden', 'h-[calc(100%-56px)]'] },
       paginator: {
@@ -194,13 +194,13 @@ onMounted( async () => {
       header="№"
       :pt="{
         headerCell: {
-          class: ['bg-greyscale-50 px-[11px] h-[48px] border-0 border-r border-greyscale-200 rounded-tl-[12px]', props.headerCellClass]
+          class: ['bg-white px-5 h-[56px] border-0 border-b border-greyscale-200 rounded-tl-[12px]', props.headerCellClass]
         },
         headerContent: {
           class: ['text-sm font-semibold text-greyscale-500']
         },
         bodyCell: {
-          class: ['border-greyscale-100 py-3 px-4 border-0 border-t border-r'],
+          class: ['border-greyscale-100 py-4 px-5 border-0 border-b'],
         },
         bodyCellContent: {
           class: ['text-sm font-medium text-greyscale-900']
@@ -224,13 +224,13 @@ onMounted( async () => {
         :style="{ width: header.width }"
         :pt="{
           headerCell: {
-            class: ['bg-greyscale-50 px-[11px] h-[48px] border-0 border-r border-greyscale-200 last:rounded-tr-[12px] last:border-r-0', props.headerCellClass]
+            class: ['bg-white px-5 h-[56px] border-0 border-b border-greyscale-200 last:rounded-tr-[12px] last:border-r-0', props.headerCellClass]
           },
           headerContent: {
             class: ['text-sm font-semibold text-greyscale-500']
           },
           bodyCell: {
-            class: ['border-greyscale-100 py-3 px-4 border-0 border-t border-r last:border-r-0'],
+            class: ['border-greyscale-100 py-4 px-5 border-0 border-b'],
           },
           bodyCellContent: {
             class: ['text-sm font-medium text-greyscale-900']

@@ -24,60 +24,90 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
           field: 'employee',
           header: 'employee',
           width: '13%',
-          active: true
+          active: true,
+          filter: false,
         },
         {
           field: 'position',
           header: 'position',
-            width: '10%',
-            active: true
+          width: '10%',
+          active: true,
+          filter: false,
         },
         {
           field: 'branch',
           header: 'branch',
           width: '10%',
-          active: true
+          active: true,
+          filter: false,
         },
         {
           field: 'department',
           header: 'department',
           width: '10%',
-          active: true
+          active: true,
+          filter: false,
         },
         {
           field: 'documentName',
           header: 'document-name',
           width: '10%',
-          active: true
+          active: true,
+          filter: false,
         },
         {
           field: 'documentType',
           header: 'document-type',
           width: '10%',
-          active: true
+          active: true,
+          filter: false
         },
         {
           field: 'operationType',
           header: 'operation-type',
           width: '10%',
-          active: true
+          active: true,
+          filter: false
         },
         {
-          field: 'status',
+          field: 'statusAbs',
           header: 'status-abs',
           width: '10%',
-          active: true
+          active: true,
+          filter: false
         },
         {
           field: 'history',
           header: 'history',
           width: '2%',
-          active: true
+          active: true,
+          filter: false
         },
         {
           field: 'actions',
           header: 'actions',
           width: '15%',
+          active: true,
+          filter: false
+        }
+      ],
+      historyHeaders: [
+        {
+          field: 'employee',
+          header: 'employee',
+          width: '20%',
+          active: true
+        },
+        {
+          field: 'date',
+          header: 'date',
+          width: '20%',
+          active: true
+        },
+        {
+          field: 'status',
+          header: 'result-of-action',
+          width: '60%',
           active: true
         }
       ]
