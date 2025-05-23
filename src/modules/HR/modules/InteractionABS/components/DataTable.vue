@@ -53,7 +53,15 @@ const props = defineProps({
     type: [String, Array, Object],
     default: () => ''
   },
+  bodyCellContentClass: {
+    type: [String, Array, Object],
+    default: () => ''
+  },
   headerCellClass: {
+    type: [String, Array, Object],
+    default: () => ''
+  },
+  headerCellContentClass: {
     type: [String, Array, Object],
     default: () => ''
   },
@@ -196,16 +204,16 @@ onMounted( async () => {
       header="№"
       :pt="{
         headerCell: {
-          class: ['bg-greyscale-50 px-[11px] h-[48px] border-0 border-r border-greyscale-200 rounded-tl-[12px]', props.headerCellClass]
+          class: ['bg-greyscale-50 px-[10px] h-[48px] border-0 border-r border-greyscale-200 rounded-tl-[12px]', props.headerCellClass]
         },
         headerContent: {
-          class: ['text-sm font-semibold text-greyscale-500']
+          class: ['text-sm font-semibold text-greyscale-500', props.headerCellContentClass]
         },
         bodyCell: {
-          class: ['border-greyscale-100 py-3 px-4 border-0 border-t border-r'],
+          class: ['border-greyscale-100 py-3 px-4 border-0 border-t border-r', props.bodyCellClass],
         },
         bodyCellContent: {
-          class: ['text-sm font-medium text-greyscale-900']
+          class: ['text-sm font-medium text-greyscale-900', props.bodyCellContentClass]
         },
       }"
       >
@@ -226,22 +234,22 @@ onMounted( async () => {
         :header="t(header.header)"
         :style="{ width: header.width }"
         :pt="{
-          headerCell: {
+          headerCell: { 
             class: ['bg-greyscale-50 px-[11px] h-[48px] border-0 border-r border-greyscale-200 last:rounded-tr-[12px] last:border-r-0', props.headerCellClass]
           },
           headerContent: {
-            class: ['gap-1 text-sm font-semibold text-greyscale-500']
+            class: ['gap-1 text-sm font-semibold text-greyscale-500', props.headerCellContentClass]
           },
           bodyCell: {
-            class: ['border-greyscale-100 py-3 px-4 border-0 border-t border-r last:border-r-0'],
+            class: ['border-greyscale-100 py-3 px-4 border-0 border-t border-r last:border-r-0', props.bodyCellClass],
           },
           bodyCellContent: {
-            class: ['text-sm font-medium text-greyscale-900']
+            class: ['text-sm font-medium text-greyscale-900', props.bodyCellContentClass]
           },
       }"
       >
         <template #sorticon>
-          <slot :name="'headerIcon' + header.field" :data="header" ></slot>
+          <slot :name="'headerIcon' + header.field" :data="header"></slot>
         </template>
         <template #body="{ field, data }" >
          <slot :name="field" :data="data"  :field="field" class="order-1">
