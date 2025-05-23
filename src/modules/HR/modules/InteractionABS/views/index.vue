@@ -1,6 +1,6 @@
 <script setup>
 // core
-import { ref, onMounted, onUnmounted, shallowRef } from 'vue'
+import { ref, onMounted, onUnmounted, shallowRef, computed, watch } from 'vue'
 import { useI18n} from 'vue-i18n'
 import { useRouter } from 'vue-router'
 // components
@@ -8,10 +8,12 @@ import { ActionToolbar } from '@/components/Actions';
 import DataTable from '../components/DataTable.vue';
 import { Status } from '../components';
 import { SearchFilter, SimpleFilter } from '../components/filters';
-import { AltArrowDownIcon, AltArrowUpIcon, History2Icon, MagniferIcon, CloseCircleBoldIcon} from '@/components/Icons';
+import { AltArrowDownIcon, AltArrowUpIcon, History2Icon, MagniferIcon, CloseCircleBoldIcon } from '@/components/Icons';
 import Dialog from '../components/Dialog.vue';
 // stores
 import { useInteractionABSStore } from '../stores';
+// enums
+import { HEADERS, HEADERS_TITLE, OPERATION_TYPE, OPERATION_TYPE_TITLE, STATUS_ABS, STATUS_ABS_TITLE } from '../enums'
 // composibles
 const interactionABSStore = useInteractionABSStore()
 const { t } = useI18n()
@@ -22,17 +24,58 @@ const filterDropdownRef = ref(null)
 const headerRef = ref(null)
 const activeFilterComponent = shallowRef(null)
 const activeComponentType = ref(null)
-// methods
+
+const statusAbsValue = [{ id: STATUS_ABS.SUCCESS, name: t(STATUS_ABS_TITLE[STATUS_ABS.SUCCESS]) }, { id: STATUS_ABS.ERROR, name: t(STATUS_ABS_TITLE[STATUS_ABS.ERROR])}]
+const operationTypeValue = [{ id: OPERATION_TYPE.CREATE, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.CREATE]) }, { id: OPERATION_TYPE.CANCEL, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.CANCEL]) }, { id: OPERATION_TYPE.EXTEND, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.EXTEND]) }]
+// computed
+const dataList = computed(() => {
+  switch (activeComponentType.value) {
+    case HEADERS.DEPARTMENT:
+      return interactionABSStore.topDepartmentsList
+    case HEADERS.BRANCH:
+      return interactionABSStore.companyList
+    case HEADERS.DOCUMENT_TYPE:
+      return interactionABSStore.documentTypeList
+    case HEADERS.DOCUMENT_SUB_TYPE:
+      return interactionABSStore.documentSubTypeList
+    case HEADERS.OPERATION_TYPE:
+      return operationTypeValue
+    case HEADERS.STATUS_ABS:
+      return statusAbsValue
+    default:
+      return [{ id: 1, name: 'test' }]
+  }
+})
+
+const apiAction = computed(() => {
+  switch (activeComponentType.value) {
+    case HEADERS.DEPARTMENT:
+      return interactionABSStore.actionGetTopDepartmentsList
+    case HEADERS.BRANCH:
+      return interactionABSStore.actionGetCompanyList
+    case HEADERS.DOCUMENT_TYPE:
+      return interactionABSStore.actionGetDocumentTypeList
+    case HEADERS.DOCUMENT_SUB_TYPE:
+      return interactionABSStore.actionGetDocumentSubTypeList
+    case HEADERS.OPERATION_TYPE:
+      return null
+    case HEADERS.STATUS_ABS:
+      return null
+    default:
+      return null
+  }
+})
 
 const tableFilters = {
   department: SearchFilter,
   branch: SearchFilter,
-  documentName: SimpleFilter,
-  documentType: SimpleFilter,
+  documentType: SimpleFilter, // document type
+  documentSubType: SearchFilter, // document sub type
   operationType: SimpleFilter,
   statusAbs: SimpleFilter,
 }
 
+// methods
 const onHistoryClick = () => {
   dialogVisible.value = true
 }
@@ -48,14 +91,14 @@ const toogleFilterDropdown = (event) => {
   filterDropdownRef.value.style.display = filterDropdownRef.value.style.display === "block" ? "none" : "block"
   filterDropdownRef.value.style.top = `${headerRect.bottom}px`
   filterDropdownRef.value.style.left = `${headerRect.left}px`
-  if(['documentName', 'documentType', 'operationType', 'statusAbs'].includes(activeComponentType.value)){
+  if([HEADERS.DOCUMENT_TYPE, HEADERS.OPERATION_TYPE, HEADERS.STATUS_ABS].includes(activeComponentType.value)){
     filterDropdownRef.value.style.width = `${headerRect.width}px`
   }else{
     filterDropdownRef.value.style.width = `fit-content`
   }
 }
 
-const allowSortColumns = ['branch', 'department', 'documentName', 'documentType', 'operationType', 'statusAbs']
+const allowSortColumns = [HEADERS.BRANCH, HEADERS.DEPARTMENT, HEADERS.DOCUMENT_TYPE, HEADERS.DOCUMENT_SUB_TYPE, HEADERS.OPERATION_TYPE, HEADERS.STATUS_ABS]
 
 const onSort = (event) => {
   console.log(event)
@@ -63,6 +106,7 @@ const onSort = (event) => {
   event.originalEvent.stopPropagation()
   if (!allowSortColumns.includes(event.sortField)) return
   activeFilterComponent.value = tableFilters[event.sortField]
+  activeComponentType.value = null
   activeComponentType.value = event.sortField
   toogleFilterDropdown(event)
 }
@@ -70,27 +114,31 @@ const onSort = (event) => {
 const handleOutsideClick = (event) => {
   if(filterDropdownRef.value && !filterDropdownRef.value.contains(event.target)){
     filterDropdownRef.value.style.display = "none"
+    activeComponentType.value = null
   }
 }
 
 const onChangeFilter = (item) => {
-  console.log(item)
-  console.log(activeComponentType.value)
   const header = interactionABSStore.headers.find(header => header.field === activeComponentType.value)
   header.header = item.name
   header.filter = true
 }
 
 const onCancelFilter = (type) => {
-  console.log(type)
-  const header = interactionABSStore.headers.find(header => header.header == type)
-  // header.filter = false
-  // header.header = type
+  const header = interactionABSStore.headers.find(header => header.field == type)
+  header.filter = false
+  header.header = HEADERS_TITLE[header.field]
 }
-onMounted(() => {
-  document.addEventListener('click', handleOutsideClick)
+onMounted(async() => {
   // clear queries params
-  // router.replace({ query: router.currentRoute.value.query });
+  router.replace({ query: {} });
+
+  await interactionABSStore.actionGetCompanyList({page: 1, page_size: 20})
+  await interactionABSStore.actionGetTopDepartmentsList({ page: 1, page_size: 20})
+  await interactionABSStore.actionGetDocumentTypeList({ page: 1, page_size: 20})
+  await interactionABSStore.actionGetDocumentSubTypeList({ page: 1, page_size: 20})
+  document.addEventListener('click', handleOutsideClick)
+
 })
 
 onUnmounted(() => {
@@ -119,11 +167,12 @@ onUnmounted(() => {
         >
         <!-- header -->
          <template #headerIconbranch="{ data }">
-          <div class="flex items-center gap-3">
+          <div class="flex items-center gap-1">
             <base-iconify 
               v-if="data.filter"
               :icon="CloseCircleBoldIcon"
-              @click="onCancelFilter('branch')"
+              @click="onCancelFilter(HEADERS.BRANCH)"
+              class="!w-5 !h-5 text-greyscale-500"
             />
             <div class="flex flex-col items-center relative">
               <base-iconify :icon="AltArrowUpIcon" class="!w-4 !h-4 text-greyscale-500 absolute left-0 bottom-[-5px]"/>
@@ -132,24 +181,12 @@ onUnmounted(() => {
           </div>
           </template>
           <template #headerIcondepartment="{ data }">
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-1">
               <base-iconify 
                 v-if="data.filter"
                 :icon="CloseCircleBoldIcon"
-                @click="onCancelFilter('department')"
-              />
-              <div class="flex flex-col items-center relative">
-                <base-iconify :icon="AltArrowUpIcon" class="!w-4 !h-4 text-greyscale-500 absolute left-0 bottom-[-5px]"/>
-                <base-iconify :icon="AltArrowDownIcon" class="!w-4 !h-4 text-greyscale-500 absolute left-0 top-[-5px]"/>
-              </div>
-            </div>
-          </template>
-          <template #headerIcondocumentName="{ data }">
-            <div class="flex items-center gap-3">
-              <base-iconify 
-                v-if="data.filter"
-                :icon="CloseCircleBoldIcon"
-                @click="onCancelFilter('document-name')"
+                @click="onCancelFilter(HEADERS.DEPARTMENT)"
+                class="!w-5 !h-5 text-greyscale-500"
               />
               <div class="flex flex-col items-center relative">
                 <base-iconify :icon="AltArrowUpIcon" class="!w-4 !h-4 text-greyscale-500 absolute left-0 bottom-[-5px]"/>
@@ -158,11 +195,26 @@ onUnmounted(() => {
             </div>
           </template>
           <template #headerIcondocumentType="{ data }">
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-1">
               <base-iconify 
                 v-if="data.filter"
                 :icon="CloseCircleBoldIcon"
-                @click="onCancelFilter('document-type')"
+                @click="onCancelFilter(HEADERS.DOCUMENT_TYPE)"
+                class="!w-5 !h-5 text-greyscale-500"
+              />
+              <div class="flex flex-col items-center relative">
+                <base-iconify :icon="AltArrowUpIcon" class="!w-4 !h-4 text-greyscale-500 absolute left-0 bottom-[-5px]"/>
+                <base-iconify :icon="AltArrowDownIcon" class="!w-4 !h-4 text-greyscale-500 absolute left-0 top-[-5px]"/>
+              </div>
+            </div>
+          </template>
+          <template #headerIcondocumentSubType="{ data }">
+            <div class="flex items-center gap-1">
+              <base-iconify 
+                v-if="data.filter"
+                :icon="CloseCircleBoldIcon"
+                @click="onCancelFilter(HEADERS.DOCUMENT_SUB_TYPE)"
+                class="!w-5 !h-5 text-greyscale-500"
               />
               <div class="flex flex-col items-center relative">
                 <base-iconify :icon="AltArrowUpIcon" class="!w-4 !h-4 text-greyscale-500 absolute left-0 bottom-[-5px]"/>
@@ -171,11 +223,11 @@ onUnmounted(() => {
             </div>
           </template>
           <template #headerIconoperationType="{ data }">
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-1">
               <base-iconify 
                 v-if="data.filter"
                 :icon="CloseCircleBoldIcon"
-                @click="onCancelFilter('operation-type')"
+                @click="onCancelFilter(HEADERS.OPERATION_TYPE)"
               />
               <div class="flex flex-col items-center relative">
                 <base-iconify :icon="AltArrowUpIcon" class="!w-4 !h-4 text-greyscale-500 absolute left-0 bottom-[-5px]"/>
@@ -184,11 +236,11 @@ onUnmounted(() => {
             </div>
           </template>
           <template #headerIconstatusAbs="{ data }">
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-1">
               <base-iconify 
                 v-if="data.filter"
                 :icon="CloseCircleBoldIcon"
-                @click="onCancelFilter('status-abs')"
+                @click="onCancelFilter(HEADERS.STATUS_ABS)"
               />
               <div class="flex flex-col items-center relative">
                 <base-iconify :icon="AltArrowUpIcon" class="!w-4 !h-4 text-greyscale-500 absolute left-0 bottom-[-5px]"/>
@@ -215,7 +267,7 @@ onUnmounted(() => {
               <p class="text-sm font-medium text-greyscale-900">{{ data.employee }}</p>
             </div>
           </template>
-          <template #status="{ data }">
+          <template #status="{ data }"> 
             <status :status="data.status" />
           </template>
           <template #history="{ data }">
@@ -239,8 +291,11 @@ onUnmounted(() => {
           :parentRef="filterDropdownRef" 
           :is="activeFilterComponent"
           :type="activeComponentType"
-          :apiList="[{id: 1, name: '333'}, {id: 2, name: '444'},{ id:3, name: '333'}, {id: 4, name: '444'},{id: 5, name: '333'}, {id: 6, name: '444'},{id: 7, name: '333'}, {id: 8, name: '444'},{id: 9, name: '333'}, {id: 10, name: '444'}]"
+          :apiAction="apiAction"
+          :apiList="dataList"
+          :apiParams="{ page: 1, page_size: 20 }"
           @onChange="onChangeFilter"
+          :key="activeComponentType"
           />
       </div>
     </div>
@@ -252,5 +307,14 @@ onUnmounted(() => {
 <style scoped>
 ::v-deep(.p-inputtext:enabled:focus){
   box-shadow: none !important;
+}
+
+::v-deep(.p-column-title){
+  max-width: 72% !important;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
 }
 </style>
