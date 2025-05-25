@@ -4,10 +4,13 @@ import { ref, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter, useRoute } from 'vue-router'
 // Stores
-import { useUserPermissionStore } from '../stores/user-permissions.store'
+import { useAuthStore } from '@/modules/Auth/stores'
+import { useUserPermissionStore } from '@/stores/user-permissions.store'
+import { CaseIcon } from '@/components/Icons'
 // Composable
 const { t } = useI18n()
 const route = useRoute()
+const userStore = useAuthStore()
 const userPermissionStore = useUserPermissionStore()
 // Macros
 const props = defineProps({
@@ -60,6 +63,23 @@ const checkRouteMeta = () => {
               </template>
             </router-link>
           </template>
+        </template>
+
+        <template v-if="route.fullPath.includes('hr/dashboard') && userStore.currentUser.is_superuser === true">
+          <router-link
+            :to="{ name: 'HRTrip' }"
+            class="collapse-link group flex items-center gap-2 text-sm font-medium text-greyscale-500 mr-6 py-[10px] relative transition-all duration-[400ms] after:content-[''] after:absolute after:bottom-[-9px] after:w-full after:h-[2px] after:bg-primary-500 after:opacity-0 after:transition-all after:duration-500 hover:text-primary-900 hover:after:opacity-100"
+            :class="[
+              { 'router-link-active router-link-exact-active': route.name === 'HRTrip' }
+            ]"
+          >
+            <base-iconify
+              :icon="CaseIcon"
+              class="!w-5 !h-5 text-gray-1 transition-all duration-[400ms] group-hover:text-primary-900"
+            />
+
+            {{ t('business-trip-dashboard') }}
+          </router-link>
         </template>
       </div>
     </div>

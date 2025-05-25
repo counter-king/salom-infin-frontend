@@ -28,12 +28,12 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         // /Финансовый дашбоард
 
         // Командировочный дашбоард
-        {
-          title: 'business-trip-dashboard',
-          icon: CaseIcon,
-          link: 'HRTrip',
-          children: [],
-        },
+        // {
+        //   title: 'business-trip-dashboard',
+        //   icon: CaseIcon,
+        //   link: 'HRTrip',
+        //   children: [],
+        // },
         // Командировочный дашбоард
       ]
     },
