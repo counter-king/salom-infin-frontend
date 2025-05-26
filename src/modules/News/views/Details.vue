@@ -348,7 +348,7 @@ onMounted( async () => {
                             <div 
                                 class="w-8 h-8 min-w-8 min-h-8 text-base text-greyscale-300 bg-greyscale-50 rounded-full flex justify-center items-center font-semibold"
                                 :class="{'!text-critic-500 !bg-critic-30': activeTabPanel === 'history'}"
-                                >{{ newCommentList.length}}</div>
+                                >{{ newsModerationHistoryList.length}}</div>
                         </div>    
                     </div>
                     <!-- comment enter -->

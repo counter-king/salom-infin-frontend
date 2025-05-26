@@ -122,6 +122,7 @@ export { default as DocumentsMinimalisticIcon } from  '~icons/solar/documents-mi
 export { default as RoutingOutlineIcon } from  '~icons/solar/routing-outline'
 export { default as MapLinearIcon } from  '~icons/solar/map-linear'
 export { default as Buildings2OutlineIcon } from  '~icons/solar/buildings-2-outline'
+export { default as AlarmOutlineIcon } from  '~icons/solar/alarm-outline'
 // Solar (Bold)
 export { default as CheckCircleBoldIcon } from  '~icons/solar/check-circle-bold'
 export { default as CalendarDateBoldIcon } from  '~icons/solar/calendar-date-bold'
@@ -171,6 +172,9 @@ export { default as DangerCircleBoldIcon } from  '~icons/solar/danger-circle-bol
 export { default as ChartBoldIcon } from  '~icons/solar/chart-bold'
 export { default as AlignVerticalSpacingBoldIcon } from  '~icons/solar/align-vertical-spacing-bold'
 export { default as DocumentAddBoldIcon } from  '~icons/solar/document-add-bold'
+export { default as AlarmBoldIcon } from  '~icons/solar/alarm-bold'
+export { default as ClipboardCheckBoldIcon } from  '~icons/solar/clipboard-check-bold'
+export { default as Flag2BoldIcon } from  '~icons/solar/flag-2-bold'
 // Solar (Bold Duotone)
 export { default as ArchiveUpBoldDuotoneIcon } from  '~icons/solar/archive-up-bold-duotone'
 export { default as StarBoldDuotoneIcon } from  '~icons/solar/star-bold-duotone'
@@ -201,6 +205,7 @@ export { default as WhatsappIcon } from '~icons/mage/whatsapp-filled'
 
 // iconamoon
 export { default as EditLightIcon } from '~icons/iconamoon/edit-light'
+export { default as CommentDotsIcon } from '~icons/iconamoon/comment-dots'
 // Clarity
 export { default as PlaneIcon } from '~icons/clarity/airplane-solid'
 export { default as VolumeUpLineIcon } from '~icons/clarity/volume-up-line'

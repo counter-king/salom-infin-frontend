@@ -7,7 +7,7 @@ export const useNewsCountStore = defineStore('newsCountStore', {
     state: ()=> ({}),
     actions: {
         async actionGetNewsPandingCountList(){
-         const {data} = await fetchGetNewsPendingCount()
+         const {data} = await fetchGetNewsPendingCount({status: 'pending'})
          this.setNewsHeaderCount(data.count)
         },
         

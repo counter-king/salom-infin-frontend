@@ -878,5 +878,7 @@
    "success":"Muvaffaqiyatli",
    "send-again":"Qayta yuborish",
    "reesult-of-action":"Harakat natijasi",
-   "extension": "Uzaytirish"
+   "extension": "Uzaytirish",
+   "published-date": "Nashr etilgan sana",
+   "business-trip-dashboard": "Ish safari dashbord"
 }

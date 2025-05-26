@@ -164,7 +164,7 @@ onMounted(async () => {
         </template>
 
         <template v-else>
-          <div class="grid grid-cols-6 gap-16 relative pl-10 mt-11">
+          <div class="grid grid-cols-10 gap-8 relative pl-14 mt-11">
             <div class="flex flex-col absolute top-0 left-0 w-full h-full">
               <template v-for="item in dashboardStore.comparison.axes">
                 <div class="flex flex-1 gap-2">
@@ -191,7 +191,7 @@ onMounted(async () => {
                         bottom: `${(findMaxPercentage(item, index) + 2)}%`
                       }"
                     >
-                      <div class="bg-[#000] text-white text-xs space-y-2 rounded py-2 px-3">
+                      <div class="bg-[#000] text-white text-[10px] space-y-2 rounded py-2 px-3">
                         <div class="flex items-center gap-2">
                           <div class="w-4 h-4 bg-info-200 rounded"></div>
 
@@ -298,21 +298,27 @@ onMounted(async () => {
                 </div>
 
                 <span class="block h-10 content-center text-sm font-medium text-greyscale-900 text-center mt-4">
-				          {{ item.pay_type_id === 5
-                  ? t('finance-dashboard.text-1')
-                  : item.pay_type_id === 9
-                    ? t('finance-dashboard.text-2')
-                    : item.pay_type_id === 3
-                      ? t('finance-dashboard.text-3')
+				          {{ item.pay_type_id === 1
+                  ? t('finance-dashboard.text-7')
+                  : item.pay_type_id === 3
+                    ? t('finance-dashboard.text-3')
+                    : item.pay_type_id === 2
+                      ? t('finance-dashboard.text-6')
                       : item.pay_type_id === 4
                         ? t('finance-dashboard.text-4')
-                        : item.pay_type_id === 6
-                          ? t('finance-dashboard.text-5')
-                          : item.pay_type_id === 2
-                            ? t('finance-dashboard.text-6')
-                            : item.pay_type_id === 1
-                              ? t('finance-dashboard.text-7')
-                              : t('finance-dashboard.text-8')
+                        : item.pay_type_id === 5
+                          ? t('finance-dashboard.text-1')
+                          : item.pay_type_id === 8
+                            ? t('finance-dashboard.text-8')
+                            : item.pay_type_id === 7
+                              ? t('finance-dashboard.text-10')
+                                : item.pay_type_id === 10
+                                  ? t('finance-dashboard.text-9')
+                                  : item.pay_type_id === 9
+                                    ? t('finance-dashboard.text-2')
+                                      : item.pay_type_id === 6
+                                        ? t('finance-dashboard.text-5')
+                                        : 'asdas'
                   }}
 			          </span>
               </div>

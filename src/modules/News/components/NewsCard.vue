@@ -3,7 +3,7 @@
 import NewsCategory from '@/components/Chips/NewsCategory.vue';
 import ShortDescription from './ShortDescription.vue';
 //Icons
-import { EyeLinearIcon, HeartLinearIcon } from '@/components/Icons'
+import { EyeLinearIcon, HeartLinearIcon, CommentDotsIcon } from '@/components/Icons'
 import BaseIconify from '@/components/UI/BaseIconify.vue'
 // import { EditLightIcon } from '../../../components/Icons';
 // utils
@@ -41,6 +41,12 @@ const props = defineProps({
             <!-- <RouterLink :to="{ name: 'NewsEdit', params: {id: props.item.id}}" class="text-sm hover:text-warning-500">
               <base-iconify :icon="EditLightIcon" />
             </RouterLink> -->
+            <div class="flex gap-1 items-center">
+              <div class="hover:cursor-pointer">
+                <base-iconify :icon="CommentDotsIcon" />
+              </div>
+              <div class="text-xs font-medium text-greyscale-400">{{ formatToK(props.item.comments_counts) }}</div>
+            </div>
             <div class="flex gap-1 items-center">
               <div class="hover:cursor-pointer">
                 <base-iconify :icon="HeartLinearIcon" />

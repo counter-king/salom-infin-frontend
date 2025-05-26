@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { fetchDashboardComparison, fetchDashboardPayrolls } from '../services'
-import { CalendarLinearIcon, FileTextIcon } from '@/components/Icons'
+import { CalendarLinearIcon, FileTextIcon, CaseIcon } from '@/components/Icons'
 import { generateCleanYAxisLabels } from '@/utils'
 
 export const useHRDashboardStore = defineStore('useHRDashboardStore', {
@@ -26,6 +26,15 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
           children: [],
         },
         // /Финансовый дашбоард
+
+        // Командировочный дашбоард
+        // {
+        //   title: 'business-trip-dashboard',
+        //   icon: CaseIcon,
+        //   link: 'HRTrip',
+        //   children: [],
+        // },
+        // Командировочный дашбоард
       ]
     },
     payrolls: {
@@ -47,6 +56,18 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         },
         {
           header: 'finance-dashboard.text-1',
+        },
+        {
+          header: 'Ценные подарки'
+        },
+        {
+          header: 'Выплата пенсионерам (не сотр. Банка)'
+        },
+        {
+          header: 'Выплата членам НС'
+        },
+        {
+          header: 'Оплата по дог. ГПХ'
         },
         {
           header: 'finance-dashboard.text-5',
@@ -85,93 +106,103 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
 
         console.log('payrolls/summary', data)
 
-        let dataFromBackend = {
-          "branches": [
-            {
-              "pay_type": "Материальная помощь",
-              "amount": 1070456408,
-              "pay_type_id": 5
-            },
-            {
-              "pay_type": "Оплата по договору ГПХ",
-              "amount": 3903880270.17,
-              "pay_type_id": 9
-            },
-            {
-              "pay_type": "Переменное вознаграждение",
-              "amount": 29415250902.29,
-              "pay_type_id": 3
-            },
-            {
-              "pay_type": "Премии к праздникам и мат помощь с/х продукты",
-              "amount": 6201000000,
-              "pay_type_id": 4
-            },
-            {
-              "pay_type": "Прочее",
-              "amount": 53357884,
-              "pay_type_id": 6
-            },
-            {
-              "pay_type": "Разовые выплаты",
-              "amount": 3525910000,
-              "pay_type_id": 2
-            },
-            {
-              "pay_type": "Фиксированное вознаграждение",
-              "amount": 49472838993.96,
-              "pay_type_id": 1
-            },
-            {
-              "pay_type": "Ценные подарки",
-              "amount": 1834000,
-              "pay_type_id": 8
-            }
-          ],
-          "head_office": [
-            {
-              "pay_type": "Выплата членам НС",
-              "amount": 1147872516.53,
-              "pay_type_id": 10
-            },
-            {
-              "pay_type": "Материальная помощь",
-              "amount": 323400000,
-              "pay_type_id": 5
-            },
-            {
-              "pay_type": "Оплата по договору ГПХ",
-              "amount": 3931412447.93,
-              "pay_type_id": 9
-            },
-            {
-              "pay_type": "Переменное вознаграждение",
-              "amount": 26859966459.91,
-              "pay_type_id": 3
-            },
-            {
-              "pay_type": "Премии к праздникам и мат помощь с/х продукты",
-              "amount": 5623000000,
-              "pay_type_id": 4
-            },
-            {
-              "pay_type": "Разовые выплаты",
-              "amount": 4981295000,
-              "pay_type_id": 2
-            },
-            {
-              "pay_type": "Фиксированное вознаграждение",
-              "amount": 89749385017.07,
-              "pay_type_id": 1
-            },
-            {
-              "pay_type": "Ценные подарки",
-              "amount": 122069067.92,
-              "pay_type_id": 8
-            }
-          ]
-        }
-
+        // let dataFromBackend = {
+        //   "branches": [
+        //     {
+        //       "pay_type": "Материальная помощь",
+        //       "amount": 1070456408,
+        //       "pay_type_id": 5
+        //     },
+        //     {
+        //       "pay_type": "Оплата по договору ГПХ",
+        //       "amount": 3903880270.17,
+        //       "pay_type_id": 9
+        //     },
+        //     {
+        //       "pay_type": "Переменное вознаграждение",
+        //       "amount": 29415250902.29,
+        //       "pay_type_id": 3
+        //     },
+        //     {
+        //       "pay_type": "Премии к праздникам и мат помощь с/х продукты",
+        //       "amount": 6201000000,
+        //       "pay_type_id": 4
+        //     },
+        //     {
+        //       "pay_type": "Прочее",
+        //       "amount": 53357884,
+        //       "pay_type_id": 6
+        //     },
+        //     {
+        //       "pay_type": "Разовые выплаты",
+        //       "amount": 3525910000,
+        //       "pay_type_id": 2
+        //     },
+        //     {
+        //       "pay_type": "Фиксированное вознаграждение",
+        //       "amount": 49472838993.96,
+        //       "pay_type_id": 1
+        //     },
+        //     {
+        //       "pay_type": "Ценные подарки",
+        //       "amount": 1834000,
+        //       "pay_type_id": 8
+        //     },
+        //     {
+        //       "pay_type": "Выплата пенсионерам (не сотр. Банка)",
+        //       "amount": 200,
+        //       "pay_type_id": 7
+        //     }
+        //   ],
+        //   "head_office": [
+        //     {
+        //       "pay_type": "Выплата членам НС",
+        //       "amount": 1147872516.53,
+        //       "pay_type_id": 10
+        //     },
+        //     {
+        //       "pay_type": "Материальная помощь",
+        //       "amount": 323400000,
+        //       "pay_type_id": 5
+        //     },
+        //     {
+        //       "pay_type": "Оплата по договору ГПХ",
+        //       "amount": 3931412447.93,
+        //       "pay_type_id": 9
+        //     },
+        //     {
+        //       "pay_type": "Переменное вознаграждение",
+        //       "amount": 26859966459.91,
+        //       "pay_type_id": 3
+        //     },
+        //     {
+        //       "pay_type": "Премии к праздникам и мат помощь с/х продукты",
+        //       "amount": 5623000000,
+        //       "pay_type_id": 4
+        //     },
+        //     {
+        //       "pay_type": "Разовые выплаты",
+        //       "amount": 4981295000,
+        //       "pay_type_id": 2
+        //     },
+        //     {
+        //       "pay_type": "Фиксированное вознаграждение",
+        //       "amount": 89749385017.07,
+        //       "pay_type_id": 1
+        //     },
+        //     {
+        //       "pay_type": "Ценные подарки",
+        //       "amount": 122069067.92,
+        //       "pay_type_id": 8
+        //     },
+        //     {
+        //       "pay_type": "Выплата пенсионерам (не сотр. Банка)",
+        //       "amount": 200,
+        //       "pay_type_id": 7
+        //     }
+        //   ]
+        // }
+        //
         // this.payrolls.values = {
         //   branches: [
         //     dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 1) ?? { amount: '-' }, // Фиксированное вознаграждение
@@ -179,11 +210,15 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         //     dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 2) ?? { amount: '-' }, // Разовые выплаты
         //     dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 4) ?? { amount: '-' }, // Премии к праздникам и мат помощь с/х продукты
         //     dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 5) ?? { amount: '-' }, // Материальная помощь
+        //     dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 8) ?? { amount: '-' }, // Ценные подарки
+        //     dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 7) ?? { amount: '-' }, // Выплата пенсионерам (не сотр. Банка)
+        //     dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 10) ?? { amount: '-' }, // Выплата членам НС
+        //     dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 9) ?? { amount: '-' }, // Оплата по дог. ГПХ
         //     dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 6) ?? { amount: '-' }, // Прочее
         //   ],
         //   branches_all_count: {
         //     amount: dataFromBackend.branches
-        //       .filter(({ pay_type_id }) => pay_type_id !== 8 && pay_type_id !== 9)
+        //       .filter(({ pay_type_id }) => pay_type_id !== 9)
         //       .reduce((a, b) => parseInt(a) + parseInt(b.amount), '0'),
         //   },
         //   head_office: [
@@ -192,6 +227,10 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         //     dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 2) ?? { amount: '-' }, // Разовые выплаты
         //     dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 4) ?? { amount: '-' }, // Премии к праздникам и мат помощь с/х продукты
         //     dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 5) ?? { amount: '-' }, // Материальная помощь
+        //     dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 8) ?? { amount: '-' }, // Ценные подарки
+        //     dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 7) ?? { amount: '-' }, // Выплата пенсионерам (не сотр. Банка)
+        //     dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 10) ?? { amount: '-' }, // Выплата членам НС
+        //     dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 9) ?? { amount: '-' }, // Оплата по дог. ГПХ
         //     dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 6) ?? { amount: '-' }, // Прочее
         //   ],
         //   head_office_all_count: {
@@ -208,11 +247,15 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
             data.branches.find(({ pay_type_id }) => pay_type_id === 2) ?? { amount: '-' }, // Разовые выплаты
             data.branches.find(({ pay_type_id }) => pay_type_id === 4) ?? { amount: '-' }, // Премии к праздникам и мат помощь с/х продукты
             data.branches.find(({ pay_type_id }) => pay_type_id === 5) ?? { amount: '-' }, // Материальная помощь
+            data.branches.find(({ pay_type_id }) => pay_type_id === 8) ?? { amount: '-' }, // Ценные подарки
+            data.branches.find(({ pay_type_id }) => pay_type_id === 7) ?? { amount: '-' }, // Выплата пенсионерам (не сотр. Банка)
+            data.branches.find(({ pay_type_id }) => pay_type_id === 10) ?? { amount: '-' }, // Выплата членам НС
+            data.branches.find(({ pay_type_id }) => pay_type_id === 9) ?? { amount: '-' }, // Оплата по дог. ГПХ
             data.branches.find(({ pay_type_id }) => pay_type_id === 6) ?? { amount: '-' }, // Прочее
           ],
           branches_all_count: {
             amount: data.branches
-            .filter(({ pay_type_id }) => pay_type_id !== 8 && pay_type_id !== 9)
+            // .filter(({ pay_type_id }) => pay_type_id !== 8 && pay_type_id !== 9)
             .reduce((a, b) => parseInt(a) + parseInt(b.amount), '0'),
           },
           head_office: [
@@ -221,11 +264,15 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
             data.head_office.find(({ pay_type_id }) => pay_type_id === 2) ?? { amount: '-' }, // Разовые выплаты
             data.head_office.find(({ pay_type_id }) => pay_type_id === 4) ?? { amount: '-' }, // Премии к праздникам и мат помощь с/х продукты
             data.head_office.find(({ pay_type_id }) => pay_type_id === 5) ?? { amount: '-' }, // Материальная помощь
+            data.head_office.find(({ pay_type_id }) => pay_type_id === 8) ?? { amount: '-' }, // Ценные подарки
+            data.head_office.find(({ pay_type_id }) => pay_type_id === 7) ?? { amount: '-' }, // Выплата пенсионерам (не сотр. Банка)
+            data.head_office.find(({ pay_type_id }) => pay_type_id === 10) ?? { amount: '-' }, // Выплата членам НС
+            data.head_office.find(({ pay_type_id }) => pay_type_id === 9) ?? { amount: '-' }, // Оплата по дог. ГПХ
             data.head_office.find(({ pay_type_id }) => pay_type_id === 6) ?? { amount: '-' }, // Прочее
           ],
           head_office_all_count: {
             amount: data.head_office
-            .filter(({ pay_type_id }) => pay_type_id !== 8 && pay_type_id !== 9 && pay_type_id !== 10)
+            // .filter(({ pay_type_id }) => pay_type_id !== 8 && pay_type_id !== 9 && pay_type_id !== 10)
             .reduce((a, b) => parseInt(a) + parseInt(b.amount), '0'),
           }
         }
@@ -258,20 +305,28 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
 
         let model = {
           branches: {
-            1: data.branches.find(({ pay_type_id }) => pay_type_id === 1) ?? { amount: '-' }, // Фиксированное вознаграждение
-            3: data.branches.find(({ pay_type_id }) => pay_type_id === 3) ?? { amount: '-' }, // Переменное вознаграждение
-            2: data.branches.find(({ pay_type_id }) => pay_type_id === 2) ?? { amount: '-' }, // Разовые выплаты
-            4: data.branches.find(({ pay_type_id }) => pay_type_id === 4) ?? { amount: '-' }, // Премии к праздникам и мат помощь с/х продукты
-            5: data.branches.find(({ pay_type_id }) => pay_type_id === 5) ?? { amount: '-' }, // Материальная помощь
-            6: data.branches.find(({ pay_type_id }) => pay_type_id === 6) ?? { amount: '-' } // Прочее
+            1: data.branches.find(({ pay_type_id }) => pay_type_id === 1) ?? { pay_type_id: 1, comparison_amount: 0, current_amount: 0 }, // Фиксированное вознаграждение
+            3: data.branches.find(({ pay_type_id }) => pay_type_id === 3) ?? { pay_type_id: 3, comparison_amount: 0, current_amount: 0 }, // Переменное вознаграждение
+            2: data.branches.find(({ pay_type_id }) => pay_type_id === 2) ?? { pay_type_id: 2, comparison_amount: 0, current_amount: 0 }, // Разовые выплаты
+            4: data.branches.find(({ pay_type_id }) => pay_type_id === 4) ?? { pay_type_id: 4, comparison_amount: 0, current_amount: 0 }, // Премии к праздникам и мат помощь с/х продукты
+            5: data.branches.find(({ pay_type_id }) => pay_type_id === 5) ?? { pay_type_id: 5, comparison_amount: 0, current_amount: 0 }, // Материальная помощь
+            6: data.branches.find(({ pay_type_id }) => pay_type_id === 8) ?? { pay_type_id: 8, comparison_amount: 0, current_amount: 0 }, // Ценные подарки
+            7: data.branches.find(({ pay_type_id }) => pay_type_id === 7) ?? { pay_type_id: 7, comparison_amount: 0, current_amount: 0 }, // Выплата пенсионерам (не сотр. Банка)
+            8: data.branches.find(({ pay_type_id }) => pay_type_id === 10) ?? { pay_type_id: 10, comparison_amount: 0, current_amount: 0 }, // Выплата членам НС
+            9: data.branches.find(({ pay_type_id }) => pay_type_id === 9) ?? { pay_type_id: 9, comparison_amount: 0, current_amount: 0 }, // Оплата по договору ГПХ
+            10: data.branches.find(({ pay_type_id }) => pay_type_id === 6) ?? { pay_type_id: 6, comparison_amount: 0, current_amount: 0 } // Прочее
           },
           head_office: {
-            1: data.head_office.find(({ pay_type_id }) => pay_type_id === 1) ?? { amount: '-' }, // Фиксированное вознаграждение
-            3: data.head_office.find(({ pay_type_id }) => pay_type_id === 3) ?? { amount: '-' }, // Переменное вознаграждение
-            2: data.head_office.find(({ pay_type_id }) => pay_type_id === 2) ?? { amount: '-' }, // Разовые выплаты
-            4: data.head_office.find(({ pay_type_id }) => pay_type_id === 4) ?? { amount: '-' }, // Премии к праздникам и мат помощь с/х продукты
-            5: data.head_office.find(({ pay_type_id }) => pay_type_id === 5) ?? { amount: '-' }, // Материальная помощь
-            6: data.head_office.find(({ pay_type_id }) => pay_type_id === 6) ?? { amount: '-' } // Прочее
+            1: data.head_office.find(({ pay_type_id }) => pay_type_id === 1) ?? { pay_type_id: 1, comparison_amount: 0, current_amount: 0 }, // Фиксированное вознаграждение
+            3: data.head_office.find(({ pay_type_id }) => pay_type_id === 3) ?? { pay_type_id: 3, comparison_amount: 0, current_amount: 0 }, // Переменное вознаграждение
+            2: data.head_office.find(({ pay_type_id }) => pay_type_id === 2) ?? { pay_type_id: 2, comparison_amount: 0, current_amount: 0 }, // Разовые выплаты
+            4: data.head_office.find(({ pay_type_id }) => pay_type_id === 4) ?? { pay_type_id: 4, comparison_amount: 0, current_amount: 0 }, // Премии к праздникам и мат помощь с/х продукты
+            5: data.head_office.find(({ pay_type_id }) => pay_type_id === 5) ?? { pay_type_id: 5, comparison_amount: 0, current_amount: 0 }, // Материальная помощь
+            6: data.head_office.find(({ pay_type_id }) => pay_type_id === 8) ?? { pay_type_id: 8, comparison_amount: 0, current_amount: 0 }, // Ценные подарки
+            7: data.head_office.find(({ pay_type_id }) => pay_type_id === 7) ?? { pay_type_id: 7, comparison_amount: 0, current_amount: 0 }, // Выплата пенсионерам (не сотр. Банка)
+            8: data.head_office.find(({ pay_type_id }) => pay_type_id === 10) ?? { pay_type_id: 10, comparison_amount: 0, current_amount: 0 }, // Выплата членам НС
+            9: data.head_office.find(({ pay_type_id }) => pay_type_id === 9) ?? { pay_type_id: 9, comparison_amount: 0, current_amount: 0 }, // Оплата по договору ГПХ
+            10: data.head_office.find(({ pay_type_id }) => pay_type_id === 6) ?? { pay_type_id: 6, comparison_amount: 0, current_amount: 0 } // Прочее
           }
         }
 
@@ -307,12 +362,36 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
               current_amount_percent: `${(model.head_office[5].current_amount / addMaxAmount).toFixed(1)}%`,
               comparison_amount_percent: `${(model.head_office[5].comparison_amount / addMaxAmount).toFixed(1)}%`
             },
-            // Прочее
+            // Ценные подарки
             {
               ...model.head_office[6],
               current_amount_percent: `${(model.head_office[6].current_amount / addMaxAmount).toFixed(1)}%`,
               comparison_amount_percent: `${(model.head_office[6].comparison_amount / addMaxAmount).toFixed(1)}%`
-            }
+            },
+            // Выплата пенсионерам (не сотр. Банка)
+            {
+              ...model.head_office[7],
+              current_amount_percent: `${(model.head_office[7].current_amount / addMaxAmount).toFixed(1)}%`,
+              comparison_amount_percent: `${(model.head_office[7].comparison_amount / addMaxAmount).toFixed(1)}%`
+            },
+            // Выплата членам НС
+            {
+              ...model.head_office[8],
+              current_amount_percent: `${(model.head_office[8].current_amount / addMaxAmount).toFixed(1)}%`,
+              comparison_amount_percent: `${(model.head_office[8].comparison_amount / addMaxAmount).toFixed(1)}%`
+            },
+            // Оплата по договору ГПХ
+            {
+              ...model.head_office[9],
+              current_amount_percent: `${(model.head_office[9].current_amount / addMaxAmount).toFixed(1)}%`,
+              comparison_amount_percent: `${(model.head_office[9].comparison_amount / addMaxAmount).toFixed(1)}%`
+            },
+            // Прочее
+            {
+              ...model.head_office[10],
+              current_amount_percent: `${(model.head_office[10].current_amount / addMaxAmount).toFixed(1)}%`,
+              comparison_amount_percent: `${(model.head_office[10].comparison_amount / addMaxAmount).toFixed(1)}%`
+            },
           ],
           branches: [
             // Фиксированное вознаграждение
@@ -345,21 +424,47 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
               current_amount_percent: `${(model.branches[5].current_amount / addMaxAmount).toFixed(1)}%`,
               comparison_amount_percent: `${(model.branches[5].comparison_amount / addMaxAmount).toFixed(1)}%`
             },
-            // Прочее
+            // Ценные подарки
             {
               ...model.branches[6],
               current_amount_percent: `${(model.branches[6].current_amount / addMaxAmount).toFixed(1)}%`,
               comparison_amount_percent: `${(model.branches[6].comparison_amount / addMaxAmount).toFixed(1)}%`
             },
+            // Выплата пенсионерам (не сотр. Банка)
+            {
+              ...model.branches[7],
+              current_amount_percent: `${(model.branches[7].current_amount / addMaxAmount).toFixed(1)}%`,
+              comparison_amount_percent: `${(model.branches[7].comparison_amount / addMaxAmount).toFixed(1)}%`
+            },
+            // Выплата членам НС
+            {
+              ...model.branches[8],
+              current_amount_percent: `${(model.branches[8].current_amount / addMaxAmount).toFixed(1)}%`,
+              comparison_amount_percent: `${(model.branches[8].comparison_amount / addMaxAmount).toFixed(1)}%`
+            },
+            // Оплата по договору ГПХ
+            {
+              ...model.branches[9],
+              current_amount_percent: `${(model.branches[9].current_amount / addMaxAmount).toFixed(1)}%`,
+              comparison_amount_percent: `${(model.branches[9].comparison_amount / addMaxAmount).toFixed(1)}%`
+            },
+            // Прочее
+            {
+              ...model.branches[10],
+              current_amount_percent: `${(model.branches[10].current_amount / addMaxAmount).toFixed(1)}%`,
+              comparison_amount_percent: `${(model.branches[10].comparison_amount / addMaxAmount).toFixed(1)}%`
+            }
           ],
         }
+        //
+        //
 
-
+        // MOCK DATA
         // const dataFromBackend = {
         //   branches: [
         //     {
         //       pay_type: "Материальная помощь",
-        //       current_amount: 1070456408,
+        //       current_amount: 41070456408,
         //       comparison_amount: 1517195934.97,
         //       difference: -446739526.97,
         //       pay_type_id: 5
@@ -412,6 +517,13 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         //       comparison_amount: 2073992,
         //       difference: -239992,
         //       pay_type_id: 8
+        //     },
+        //     {
+        //       pay_type: "Выплата пенсионерам (не сотр. Банка)",
+        //       current_amount: 22069067.92,
+        //       comparison_amount: 410760,
+        //       difference: 19658307.92,
+        //       pay_type_id: 117
         //     }
         //   ],
         //   head_office: [
@@ -424,7 +536,7 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         //     },
         //     {
         //       pay_type: "Материальная помощь",
-        //       current_amount: 323400000,
+        //       current_amount: 22323400000,
         //       comparison_amount: 734347456.56,
         //       difference: -410947456.55999994,
         //       pay_type_id: 5
@@ -477,6 +589,13 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         //       comparison_amount: 2410760,
         //       difference: 119658307.92,
         //       pay_type_id: 8
+        //     },
+        //     {
+        //       pay_type: "Выплата пенсионерам (не сотр. Банка)",
+        //       current_amount: 122069067.92,
+        //       comparison_amount: 2410760,
+        //       difference: 119658307.92,
+        //       pay_type_id: 117
         //     }
         //   ]
         // }
@@ -492,20 +611,28 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         //
         // let model = {
         //   branches: {
-        //     1: dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 1) ?? { amount: '-' }, // Фиксированное вознаграждение
-        //     3: dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 3) ?? { amount: '-' }, // Переменное вознаграждение
-        //     2: dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 2) ?? { amount: '-' }, // Разовые выплаты
-        //     4: dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 4) ?? { amount: '-' }, // Премии к праздникам и мат помощь с/х продукты
-        //     5: dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 5) ?? { amount: '-' }, // Материальная помощь
-        //     6: dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 6) ?? { amount: '-' } // Прочее
+        //     1: dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 1) ?? { pay_type_id: 1, comparison_amount: 0, current_amount: 0 }, // Фиксированное вознаграждение
+        //     3: dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 3) ?? { pay_type_id: 3, comparison_amount: 0, current_amount: 0 }, // Переменное вознаграждение
+        //     2: dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 2) ?? { pay_type_id: 2, comparison_amount: 0, current_amount: 0 }, // Разовые выплаты
+        //     4: dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 4) ?? { pay_type_id: 4, comparison_amount: 0, current_amount: 0 }, // Премии к праздникам и мат помощь с/х продукты
+        //     5: dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 5) ?? { pay_type_id: 5, comparison_amount: 0, current_amount: 0 }, // Материальная помощь
+        //     6: dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 8) ?? { pay_type_id: 8, comparison_amount: 0, current_amount: 0 }, // Ценные подарки
+        //     7: dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 7) ?? { pay_type_id: 7, comparison_amount: 0, current_amount: 0 }, // Выплата пенсионерам (не сотр. Банка)
+        //     8: dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 10) ?? { pay_type_id: 10, comparison_amount: 0, current_amount: 0 }, // Выплата членам НС
+        //     9: dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 9) ?? { pay_type_id: 9, comparison_amount: 0, current_amount: 0 }, // Оплата по договору ГПХ
+        //     10: dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 6) ?? { pay_type_id: 6, comparison_amount: 0, current_amount: 0 } // Прочее
         //   },
         //   head_office: {
-        //     1: dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 1) ?? { amount: '-' }, // Фиксированное вознаграждение
-        //     3: dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 3) ?? { amount: '-' }, // Переменное вознаграждение
-        //     2: dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 2) ?? { amount: '-' }, // Разовые выплаты
-        //     4: dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 4) ?? { amount: '-' }, // Премии к праздникам и мат помощь с/х продукты
-        //     5: dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 5) ?? { amount: '-' }, // Материальная помощь
-        //     6: dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 6) ?? { amount: '-' } // Прочее
+        //     1: dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 1) ?? { pay_type_id: 1, comparison_amount: 0, current_amount: 0 }, // Фиксированное вознаграждение
+        //     3: dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 3) ?? { pay_type_id: 3, comparison_amount: 0, current_amount: 0 }, // Переменное вознаграждение
+        //     2: dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 2) ?? { pay_type_id: 2, comparison_amount: 0, current_amount: 0 }, // Разовые выплаты
+        //     4: dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 4) ?? { pay_type_id: 4, comparison_amount: 0, current_amount: 0 }, // Премии к праздникам и мат помощь с/х продукты
+        //     5: dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 5) ?? { pay_type_id: 5, comparison_amount: 0, current_amount: 0 }, // Материальная помощь
+        //     6: dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 8) ?? { pay_type_id: 8, comparison_amount: 0, current_amount: 0 }, // Ценные подарки
+        //     7: dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 7) ?? { pay_type_id: 7, comparison_amount: 0, current_amount: 0 }, // Выплата пенсионерам (не сотр. Банка)
+        //     8: dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 10) ?? { pay_type_id: 10, comparison_amount: 0, current_amount: 0 }, // Выплата членам НС
+        //     9: dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 9) ?? { pay_type_id: 9, comparison_amount: 0, current_amount: 0 }, // Оплата по договору ГПХ
+        //     10: dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 6) ?? { pay_type_id: 6, comparison_amount: 0, current_amount: 0 } // Прочее
         //   }
         // }
         //
@@ -541,12 +668,36 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         //       current_amount_percent: `${(model.head_office[5].current_amount / addMaxAmount).toFixed(1)}%`,
         //       comparison_amount_percent: `${(model.head_office[5].comparison_amount / addMaxAmount).toFixed(1)}%`
         //     },
-        //     // Прочее
+        //     // Ценные подарки
         //     {
         //       ...model.head_office[6],
         //       current_amount_percent: `${(model.head_office[6].current_amount / addMaxAmount).toFixed(1)}%`,
         //       comparison_amount_percent: `${(model.head_office[6].comparison_amount / addMaxAmount).toFixed(1)}%`
-        //     }
+        //     },
+        //     // Выплата пенсионерам (не сотр. Банка)
+        //     {
+        //       ...model.head_office[7],
+        //       current_amount_percent: `${(model.head_office[7].current_amount / addMaxAmount).toFixed(1)}%`,
+        //       comparison_amount_percent: `${(model.head_office[7].comparison_amount / addMaxAmount).toFixed(1)}%`
+        //     },
+        //     // Выплата членам НС
+        //     {
+        //       ...model.head_office[8],
+        //       current_amount_percent: `${(model.head_office[8].current_amount / addMaxAmount).toFixed(1)}%`,
+        //       comparison_amount_percent: `${(model.head_office[8].comparison_amount / addMaxAmount).toFixed(1)}%`
+        //     },
+        //     // Оплата по договору ГПХ
+        //     {
+        //       ...model.head_office[9],
+        //       current_amount_percent: `${(model.head_office[9].current_amount / addMaxAmount).toFixed(1)}%`,
+        //       comparison_amount_percent: `${(model.head_office[9].comparison_amount / addMaxAmount).toFixed(1)}%`
+        //     },
+        //     // Прочее
+        //     {
+        //       ...model.head_office[10],
+        //       current_amount_percent: `${(model.head_office[10].current_amount / addMaxAmount).toFixed(1)}%`,
+        //       comparison_amount_percent: `${(model.head_office[10].comparison_amount / addMaxAmount).toFixed(1)}%`
+        //     },
         //   ],
         //   branches: [
         //     // Фиксированное вознаграждение
@@ -579,11 +730,35 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         //       current_amount_percent: `${(model.branches[5].current_amount / addMaxAmount).toFixed(1)}%`,
         //       comparison_amount_percent: `${(model.branches[5].comparison_amount / addMaxAmount).toFixed(1)}%`
         //     },
-        //     // Прочее
+        //     // Ценные подарки
         //     {
         //       ...model.branches[6],
         //       current_amount_percent: `${(model.branches[6].current_amount / addMaxAmount).toFixed(1)}%`,
         //       comparison_amount_percent: `${(model.branches[6].comparison_amount / addMaxAmount).toFixed(1)}%`
+        //     },
+        //     // Выплата пенсионерам (не сотр. Банка)
+        //     {
+        //       ...model.branches[7],
+        //       current_amount_percent: `${(model.branches[7].current_amount / addMaxAmount).toFixed(1)}%`,
+        //       comparison_amount_percent: `${(model.branches[7].comparison_amount / addMaxAmount).toFixed(1)}%`
+        //     },
+        //     // Выплата членам НС
+        //     {
+        //       ...model.branches[8],
+        //       current_amount_percent: `${(model.branches[8].current_amount / addMaxAmount).toFixed(1)}%`,
+        //       comparison_amount_percent: `${(model.branches[8].comparison_amount / addMaxAmount).toFixed(1)}%`
+        //     },
+        //     // Оплата по договору ГПХ
+        //     {
+        //       ...model.branches[9],
+        //       current_amount_percent: `${(model.branches[9].current_amount / addMaxAmount).toFixed(1)}%`,
+        //       comparison_amount_percent: `${(model.branches[9].comparison_amount / addMaxAmount).toFixed(1)}%`
+        //     },
+        //     // Прочее
+        //     {
+        //       ...model.branches[10],
+        //       current_amount_percent: `${(model.branches[10].current_amount / addMaxAmount).toFixed(1)}%`,
+        //       comparison_amount_percent: `${(model.branches[10].comparison_amount / addMaxAmount).toFixed(1)}%`
         //     },
         //   ],
         // }

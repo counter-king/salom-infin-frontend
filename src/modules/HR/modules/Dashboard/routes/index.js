@@ -28,7 +28,16 @@ const HrDashboard = [
           navigation: true
         },
         component: () => import('../views/Financial.vue'),
-      }
+      },
+      {
+        path: 'trip',
+        name: 'HRTrip',
+        meta: {
+          isAuthRequired: true,
+          navigation: true
+        },
+        component: () => import('../views/Trip.vue'),
+      },
     ]
   }
 ]

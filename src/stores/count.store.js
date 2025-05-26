@@ -18,7 +18,7 @@ export const useCountStore = defineStore('count-store', {
       this.actionSetBoxesCount(boxes)
       this.actionSetAgreementsCount(hr)
 
-      const { data: dataNews } = await fetchGetNewsPendingCount()
+      const { data: dataNews } = await fetchGetNewsPendingCount({ status: 'pending'})
       this.actionSetNewsCount(dataNews)
     },
     /**
