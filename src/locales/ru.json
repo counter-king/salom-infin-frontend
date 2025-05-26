@@ -878,5 +878,6 @@
   "status-abs":"Статус iABS",
   "success":"Успешно",
   "send-again":"Отправить Заново",
-  "reesult-of-action":"Результат действия"
+  "result-of-action":"Результат действия",
+  "extension": "Расширение"
 }

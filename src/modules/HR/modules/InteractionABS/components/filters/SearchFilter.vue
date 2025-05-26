@@ -1,6 +1,6 @@
 <script setup>
 // core
-import { ref, watch, computed, onUnmounted } from 'vue'
+import { ref, watch, computed, onUnmounted, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter, useRoute } from 'vue-router'
 import { useDebounce } from '@vueuse/core';
@@ -48,12 +48,16 @@ const { moreLoderRef, resetList, hasMore } = useInfiniteScroll({
 // reactives
 const search = ref('')
 const useDebounceSearch = useDebounce(search, 500)
-const selectedItem = computed(() => route.query[props.type])
+const selectedItem = computed({
+  get:()=> { return route.query[props.type]},
+  set:()=> {}
+})
 
 // emit
 const emit = defineEmits([
   'onChange'
 ])
+
 // methods
 const onSelectItem = (item) => {
   emit('onChange', item)
@@ -65,24 +69,14 @@ const onSelectItem = (item) => {
   })
   props.parentRef.style = 'display: none'
 }
+
 // hooks
 watch(useDebounceSearch, (newVal) => {
-  // if(newVal.length){
-  //   router.replace({
-  //     query: {
-  //       ...router.currentRoute.value.query,
-  //       search: newVal
-  //     }
-  //   })
-  // } else {
-  //   router.replace({
-  //     query: {
-  //       ...router.currentRoute.value.query,
-  //       search: undefined
-  //     }
-  //   })
-  // }
   resetList({ search: newVal })
+})
+
+onMounted(() => {
+  selectedItem.value = null
 })
 
 onUnmounted(() => {

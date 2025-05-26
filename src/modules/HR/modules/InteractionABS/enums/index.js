@@ -43,5 +43,5 @@ export const OPERATION_TYPE = {
 export const OPERATION_TYPE_TITLE = {
   [OPERATION_TYPE.CREATE]: 'create',
   [OPERATION_TYPE.CANCEL]: 'cancel',
-  [OPERATION_TYPE.EXTEND]: 'extend'
+  [OPERATION_TYPE.EXTEND]: 'extension'
 }

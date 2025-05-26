@@ -2,7 +2,7 @@
 // core
 import { ref, onMounted, onUnmounted, shallowRef, computed, watch } from 'vue'
 import { useI18n} from 'vue-i18n'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 // components
 import { ActionToolbar } from '@/components/Actions';
 import DataTable from '../components/DataTable.vue';
@@ -18,6 +18,7 @@ import { HEADERS, HEADERS_TITLE, OPERATION_TYPE, OPERATION_TYPE_TITLE, STATUS_AB
 const interactionABSStore = useInteractionABSStore()
 const { t } = useI18n()
 const router = useRouter()
+const route = useRoute()
 // reactives
 const dialogVisible = ref(false)
 const filterDropdownRef = ref(null)
@@ -27,6 +28,7 @@ const activeComponentType = ref(null)
 
 const statusAbsValue = [{ id: STATUS_ABS.SUCCESS, name: t(STATUS_ABS_TITLE[STATUS_ABS.SUCCESS]) }, { id: STATUS_ABS.ERROR, name: t(STATUS_ABS_TITLE[STATUS_ABS.ERROR])}]
 const operationTypeValue = [{ id: OPERATION_TYPE.CREATE, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.CREATE]) }, { id: OPERATION_TYPE.CANCEL, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.CANCEL]) }, { id: OPERATION_TYPE.EXTEND, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.EXTEND]) }]
+
 // computed
 const dataList = computed(() => {
   switch (activeComponentType.value) {
@@ -43,7 +45,7 @@ const dataList = computed(() => {
     case HEADERS.STATUS_ABS:
       return statusAbsValue
     default:
-      return [{ id: 1, name: 'test' }]
+      return []
   }
 })
 
@@ -93,7 +95,7 @@ const toogleFilterDropdown = (event) => {
   filterDropdownRef.value.style.left = `${headerRect.left}px`
   if([HEADERS.DOCUMENT_TYPE, HEADERS.OPERATION_TYPE, HEADERS.STATUS_ABS].includes(activeComponentType.value)){
     filterDropdownRef.value.style.width = `${headerRect.width}px`
-  }else{
+  } else{
     filterDropdownRef.value.style.width = `fit-content`
   }
 }
@@ -129,11 +131,15 @@ const onCancelFilter = (type) => {
   header.filter = false
   header.header = HEADERS_TITLE[header.field]
 }
-onMounted(async() => {
-  // clear queries params
-  router.replace({ query: {} });
 
-  await interactionABSStore.actionGetCompanyList({page: 1, page_size: 20})
+onMounted(async() => {
+  
+  // URLdan query parametrlarini olib tashlash
+  if (Object.keys(router.currentRoute.value.query).length > 0) {
+    window.history.replaceState({}, document.title, window.location.pathname)
+  }
+  
+  await interactionABSStore.actionGetCompanyList({ page: 1, page_size: 20 })
   await interactionABSStore.actionGetTopDepartmentsList({ page: 1, page_size: 20})
   await interactionABSStore.actionGetDocumentTypeList({ page: 1, page_size: 20})
   await interactionABSStore.actionGetDocumentSubTypeList({ page: 1, page_size: 20})

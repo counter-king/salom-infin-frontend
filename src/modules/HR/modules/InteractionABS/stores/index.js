@@ -20,10 +20,10 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
           position: 'Manager',
           branch: 'Branch 1',
           department: 'Department 1',
-          documentName: 'Document 1',
-          documentType: 'Type 1',
+          documentType: 'Document 1',
+          documentSubType: 'Type 1',
           operationType: 'Type 1',
-          status: 1,
+          status: "1",
           history: 'History 1',
           actions: 'Actions 1'
         }
