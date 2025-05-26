@@ -114,6 +114,20 @@ onBeforeMount(async () => {
 <!--        />-->
 
         <base-button
+          color="bg-white hover:bg-greyscale-100 text-primary-dark"
+          border-color="border-transparent"
+          label="modify-business-trip"
+          :icon-left="Pen2Icon"
+          icon-height="16"
+          icon-width="16"
+          icon-color="#767994"
+          rounded
+          shadow
+          type="button"
+          @click="openUpdatePage"
+        />
+
+        <base-button
           v-if="updateButtonVisible"
           color="bg-white hover:bg-greyscale-100 text-primary-dark"
           border-color="border-transparent"

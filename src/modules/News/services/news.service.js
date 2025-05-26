@@ -6,8 +6,8 @@ const URLS = {
     newsTags: "news-tags",
     newsLikes: "news-likes",
     newsComments: "news-comments",
-    newsPending: "pending-news",
-    newsPendingCount: "pending-news/count",
+    newsPending: "moderation-news",
+    newsPendingCount: "moderation-news/count",
     myNews: "my-news",
     approve: "approve",
     newsModerationHistory: "news-moderation-history"
