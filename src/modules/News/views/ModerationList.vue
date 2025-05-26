@@ -1,7 +1,7 @@
 <script setup>
 // core
 import { useI18n } from 'vue-i18n';
-import { onMounted, watch } from 'vue';
+import { onMounted, watch, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 // components
 import BaseDataTable from '@/components/UI/BaseDataTable.vue';
@@ -21,6 +21,7 @@ const router = useRouter();
 const route = useRoute()
 const newsCountStore = useNewsCountStore()
 
+const statusQuery = computed(() => route.query.status || `${NEWS_STATUS.PANDING},${NEWS_STATUS.PUBLISHED},${NEWS_STATUS.DECLINED}`)
 // composables
 const {headers, list, totalCount, loading , getModerationNewsList } = useModerationNewsList();
 const { debouncedSearchQuery } = useSearchNews();
@@ -31,7 +32,7 @@ const onRowClick = (data) => {
 }
 
 watch(debouncedSearchQuery, () => {
-  router.replace({ name: 'NewsModerationList', query: { ...router.currentRoute.value.query, search: debouncedSearchQuery.value, page: undefined, page_size: undefined } });
+  router.replace({ name: 'NewsModerationList', query: { ...router.currentRoute.value.query, status: statusQuery.value, search: debouncedSearchQuery.value, page: undefined, page_size: undefined } });
   getModerationNewsList({ page:1, page_size: 15, ...route.query, search: debouncedSearchQuery.value })
 })
 
@@ -39,14 +40,19 @@ watch(() => route.query.status, () => {
   if(route.query.status){
     getModerationNewsList({ page:1, page_size: 15, ...route.query })
   } else {
-    getModerationNewsList({ page:1, page_size: 15, status: `${NEWS_STATUS.PANDING},${NEWS_STATUS.PUBLISHED},${NEWS_STATUS.DECLINED}`})
+    getModerationNewsList({ page:1, page_size: 15, ...route.query, status: statusQuery.value})
   }
 })
 
 onMounted(() => {
   newsCountStore.actionGetNewsPandingCountList()
-  if(!route.query.status){
-      router.replace({ query: {...router.currentRoute.value.query, status: `${NEWS_STATUS.PANDING},${NEWS_STATUS.PUBLISHED},${NEWS_STATUS.DECLINED}` } })
+
+  if (!route.query.status) {
+    const newQuery = {
+      ...route.query,
+      status: statusQuery.value
+    }
+    router.replace({ query: newQuery })
   }
 })
 
@@ -55,7 +61,7 @@ onMounted(() => {
   <div class="w-full">
       <base-data-table 
         :action-list="getModerationNewsList"
-        :api-params="{ page_size: 15, status: route.query.status || `${NEWS_STATUS.PANDING},${NEWS_STATUS.PUBLISHED},${NEWS_STATUS.DECLINED}` }"
+        :api-params="{ page_size: 15, status: statusQuery }"
         :headers="headers"
         :total-count="totalCount"
         :value="list"
