@@ -39,7 +39,7 @@ const { t } = useI18n()
 
           <widget-survey class="h-[156px] mb-5" />
 
-          <widget-birthday class="h-[364px] overflow-y-auto mb-5" />
+          <widget-birthday class="overflow-y-auto mb-5" />
 
   <!--        <widget-applications class="flex-1 overflow-y-auto" />-->
         </div>
