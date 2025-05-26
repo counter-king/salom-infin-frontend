@@ -21,7 +21,13 @@ const route = useRoute()
 const authStore = useAuthStore()
 const newsHeaderStore = useNewsHeaderStore()
 const newsCountStore = useNewsCountStore()
-// Reactive
+// reactives
+const tagPramId = computed(() => route.query.tag || undefined)
+const isUserModerator = computed(() => authStore.currentUser.roles.some(role => role.name === 'moderator'))
+const rules = ref([])
+const filterValue = ref(route.query.status || 'pending,published,declined')
+
+// computeds
 const searchQuery = computed({
   get:() => route.query.search || undefined,
   set:(value) =>{
@@ -29,14 +35,10 @@ const searchQuery = computed({
   }
 })
 
-const tagPramId = computed(() => route.query.tag || undefined)
-const isUserModerator = computed(() => authStore.currentUser.roles.some(role => role.name === 'moderator'))
-const rules = ref([])
-
 const activeMenu = computed({
   get: () => ( route.query.activeMenu || !tagPramId.value && 'all-news'),
   set: (value) => {
-    router.replace({ query: { ...router.currentRoute.value.query, activeMenu: value } })
+    router.replace({ query: {...router.currentRoute.value.query, activeMenu: value } })
   }
 })
 
@@ -58,6 +60,18 @@ const handleClickMenu=(item)=>{
     router.push({ name:item.link, query: { activeMenu: item.title}})
   }
 }
+
+watch(() => filterValue.value, (newValue) => {
+  if(!newValue){
+    router.replace({ query: {...router.currentRoute.value.query, status: undefined} })
+  } else {
+    router.replace({ query: {...router.currentRoute.value.query, status: newValue} })
+  }
+})
+
+watch(() => route.query.status, (newValue) => {
+  filterValue.value = newValue
+})
 
 watchEffect(() => {
   if (!!tagPramId.value) {
@@ -104,6 +118,16 @@ onMounted(() => {
       </div>
     </template>
     <template #filters>
+      <base-dropdown
+        v-if="activeMenu === 'for-moderation'"
+        v-model="filterValue"
+        :options="[{title: t('all'), value: 'pending,published,declined'}, {title: t('for-moderation'), value: 'pending'}, {title: t('published'), value: 'published'}, {title: t('declined'), value: 'declined'}]"
+        option-label="title"
+        option-value="value"
+        :placeholder="t('filter')"
+        class="w-full max-w-[316px]"
+        root-class="bg-white"
+      />
       <div class="w-full max-w-[316px]">
         <base-input
           v-model="searchQuery"
