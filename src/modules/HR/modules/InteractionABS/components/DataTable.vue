@@ -129,7 +129,7 @@ const initializeTable = async () => {
   } else if (route.query && props.apiParams) {
     await props.actionList({ ...props.apiParams, ...route.query });
   } else if (props.apiParams){
-    await props.actionList({ ...props.apiParams});
+    await props.actionList({...props.apiParams});
   } else {
     await props.actionList({ page: paginationStore.page, page_size: paginationStore.pageSize });
   }

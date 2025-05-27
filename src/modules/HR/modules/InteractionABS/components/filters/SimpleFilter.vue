@@ -4,7 +4,7 @@ import { ref,  computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter, useRoute } from 'vue-router'
 // components
-import { MagniferIcon, CheckCircleBoldIcon } from '@/components/Icons';
+import { CheckCircleBoldIcon } from '@/components/Icons';
 // props
 const props = defineProps({
   apiList: {
@@ -23,7 +23,6 @@ const props = defineProps({
 
 // composibles
 const { t } = useI18n()
-const router = useRouter()
 const route = useRoute()
 // emit
 const emit = defineEmits([
@@ -36,13 +35,6 @@ const selectedItem = computed(() => route.query[props.type])
 // methods
 const onSelectItem = (item) => {
   emit('onChange', item)
-  router.replace({
-    query: {
-      ...router.currentRoute.value.query,
-      [props.type]: item.id
-    }
-  })
-  props.parentRef.style = 'display: none'
 }
 </script>
 <template>

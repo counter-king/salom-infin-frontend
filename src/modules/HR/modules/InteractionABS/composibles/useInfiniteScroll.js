@@ -1,6 +1,7 @@
 import { ref, watch, onMounted, onUnmounted} from "vue";
 
 export const useInfiniteScroll = (params, queryFun) => {
+
   const list = ref([])
   const page = ref(params.page || 1)
   const pageSize = ref(params.page_size || 15)

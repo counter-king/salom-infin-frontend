@@ -1,7 +1,7 @@
 export const HEADERS = {
   EMPLOYEE: 'employee',
   POSITION: 'position',
-  BRANCH: 'branch',
+  COMPANY: 'company',
   DEPARTMENT: 'department',
   DOCUMENT_TYPE: 'documentType',
   DOCUMENT_SUB_TYPE: 'documentSubType',
@@ -14,7 +14,7 @@ export const HEADERS = {
 export const HEADERS_TITLE = {
   [HEADERS.EMPLOYEE]: 'employee',
   [HEADERS.POSITION]: 'position',
-  [HEADERS.BRANCH]: 'branch',
+  [HEADERS.COMPANY]: 'branch',
   [HEADERS.DEPARTMENT]: 'department',
   [HEADERS.DOCUMENT_TYPE]: 'document-name',
   [HEADERS.DOCUMENT_SUB_TYPE]: 'document-type',
@@ -35,13 +35,18 @@ export const STATUS_ABS_TITLE = {
 }
 
 export const OPERATION_TYPE = {
-  CREATE: "1",
-  CANCEL: "2",
-  EXTEND: "3"
+  SENT: "1",
+  FAILED: "2",
+  CREATE: "3",
+  PROLONG: "4",
+  CANCEL: "5"
 }
 
 export const OPERATION_TYPE_TITLE = {
+  [OPERATION_TYPE.SENT]: 'sent',
+  [OPERATION_TYPE.FAILED]: 'failed',
   [OPERATION_TYPE.CREATE]: 'create',
+  [OPERATION_TYPE.PROLONG]: 'prolong',
   [OPERATION_TYPE.CANCEL]: 'cancel',
-  [OPERATION_TYPE.EXTEND]: 'extension'
 }
+

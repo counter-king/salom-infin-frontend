@@ -23,10 +23,6 @@ const props = defineProps({
     type: String,
     default: 'department'
   },
-  parentRef: {
-    type: Object,
-    default: () => ({})
-  },
   apiParams: {
     type: Object,
     default: () => ({})
@@ -61,13 +57,6 @@ const emit = defineEmits([
 // methods
 const onSelectItem = (item) => {
   emit('onChange', item)
-  router.replace({
-    query: {
-      ...router.currentRoute.value.query,
-      [props.type]: item.id
-    }
-  })
-  props.parentRef.style = 'display: none'
 }
 
 // hooks

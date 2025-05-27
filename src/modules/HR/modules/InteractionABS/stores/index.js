@@ -1,10 +1,73 @@
 import { defineStore } from 'pinia'
-import { getCompanyList, getTopDepartmentsList, getDocumentTypeList, getDocumentSubTypeList } from '../services'
+import { getCompanyList, getTopDepartmentsList, getDocumentTypeList, getDocumentSubTypeList, getIabsActionList } from '../services'
 import { HEADERS, HEADERS_TITLE } from '../enums'
+
+const mockData = {
+  data: {
+    count: 167,
+    next: "https://salom-api.sqb.uz/api/v1/iabs/actions/?page=2",
+    previous: null,
+    results: [
+      {
+        id: 167,
+        action: "create",
+        compose: {
+          id: 1541,
+          document_type: {
+            id: 4,
+            name: "Farmoyish"
+          },
+          document_sub_type: {
+            id: 36,
+            name: "Xizmat safari farmoyishi 2"
+          },
+          register_number: "5/429"
+        },
+        content_type: 61,
+        iabs_id: null,
+        object_id: 1818,
+        result: "Missing orderId",
+        status: "failed",
+        user: {
+          id: 2953,
+          full_name: "XOJALEPESOV AMANGELDI ABATBEKOVICH",
+          position: {
+            id: 1546,
+            name: "Yetakchi menejer"
+          },
+          top_level_department: {
+            id: 1537,
+            name: "Kredit monitoringi va nazorati departamenti"
+          },
+          table_number: "143556",
+          company: {
+            id: 17,
+            name: "Bosh bank"
+          }
+        }
+      }
+    ]
+  }
+}
 
 export const useInteractionABSStore = defineStore('interaction-abs-store', {
     state: () => ({
-      listLoading: false,
+      iabsActionListLoading: false,
+      iabsActionList: [
+        {
+          order: 1,
+          employee: 'John Doe',
+          position: 'Manager',
+          company: 'Branch 1',
+          department: 'Department 1',
+          documentType: 'Document 1',
+          documentSubType: 'Type 1',
+          operationType: 'Type 1',
+          statusAbs: "1",
+          history: 'History 1',
+          actions: 'Actions 1'
+        }
+      ],
       companyListLoading: false,
       companyList: [],
       topDepartmentsListLoading: false,
@@ -13,22 +76,7 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
       documentTypeList: [],
       documentSubTypeListLoading: false,
       documentSubTypeList: [],
-      list: [
-        {
-          order: 1,
-          employee: 'John Doe',
-          position: 'Manager',
-          branch: 'Branch 1',
-          department: 'Department 1',
-          documentType: 'Document 1',
-          documentSubType: 'Type 1',
-          operationType: 'Type 1',
-          status: "1",
-          history: 'History 1',
-          actions: 'Actions 1'
-        }
-      ],
-      totalCount: 0,
+      iabsActionListTotalCount: 0,
       headers: [
         {
           field: HEADERS.EMPLOYEE,
@@ -45,8 +93,8 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
           filter: false,
         },
         {
-          field: HEADERS.BRANCH,
-          header: HEADERS_TITLE[HEADERS.BRANCH],
+          field: HEADERS.COMPANY,
+          header: HEADERS_TITLE[HEADERS.COMPANY],
           width: '10%',
           active: true,
           filter: false,
@@ -123,8 +171,31 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
       ]
     }),
     actions: {   
-      async actionGetInteractionABSList() {
-        this.listLoading = false
+      async actionGetIabsActionList(params) {
+        this.iabsActionListLoading = true
+        try {
+          const response = await getIabsActionList(params)
+          // this.iabsActionList = response.data.results
+          // this.iabsActionListTotalCount = response.data.count
+          this.iabsActionList = mockData.data.results.map((item)=>({
+            id: item.id,
+            user: item.user,
+            position: item.user.position,
+            company: item.user.company,
+            department: item.user.top_level_department,
+            documentType: item.compose.document_type,
+            documentSubType: item.compose.document_sub_type,
+            operationType: item.action,
+            statusAbs: item.status,
+          }))
+          
+          this.iabsActionListTotalCount = mockData.data.count
+          return response
+        } catch (error) {
+          console.log(error)
+        } finally {
+          this.iabsActionListLoading = false
+        }
       },
       async actionGetCompanyList(params, resetList= true) {
         try {
