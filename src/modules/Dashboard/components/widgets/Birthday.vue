@@ -289,7 +289,7 @@ onMounted(async () => {
                   avatarClasses="w-12 h-12"
                 />
                 <div v-else class="flex flex-col w-12 h-12 justify-center items-center text-base font-semibold text-white bg-primary-500 rounded-full">{{ returnFirstLetter(item.full_name) }}</div>
-                <div class="text-greyscale-900 text-sm font-semibold mt-3">{{ item?.full_name }}</div>
+                <div class="text-greyscale-900 text-xs font-semibold mt-3 text-center">{{ item?.full_name }}</div>
                 <div class="text-greyscale-400 text-xs font-medium mt-1">{{ item?.position?.name }}</div>
 
                 <div class="flex justify-around items-center mt-3 w-full">

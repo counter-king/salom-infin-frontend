@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { fetchDashboardComparison, fetchDashboardPayrolls } from '../services'
-import { CalendarLinearIcon, FileTextIcon } from '@/components/Icons'
+import { CalendarLinearIcon, FileTextIcon, CaseIcon } from '@/components/Icons'
 import { generateCleanYAxisLabels } from '@/utils'
 
 export const useHRDashboardStore = defineStore('useHRDashboardStore', {
@@ -26,6 +26,15 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
           children: [],
         },
         // /Финансовый дашбоард
+
+        // Командировочный дашбоард
+        // {
+        //   title: 'business-trip-dashboard',
+        //   icon: CaseIcon,
+        //   link: 'HRTrip',
+        //   children: [],
+        // },
+        // Командировочный дашбоард
       ]
     },
     payrolls: {
