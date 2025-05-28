@@ -1,3 +1,5 @@
+export const INTERACTION_ABS_COLUMNS = "INTERACTION_ABS_COLUMNS"
+  
 export const HEADERS = {
   EMPLOYEE: 'employee',
   POSITION: 'position',

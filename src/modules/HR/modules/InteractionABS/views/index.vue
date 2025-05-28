@@ -13,7 +13,7 @@ import Dialog from '../components/Dialog.vue';
 // stores
 import { useInteractionABSStore } from '../stores';
 // enums
-import { HEADERS, HEADERS_TITLE, OPERATION_TYPE, OPERATION_TYPE_TITLE, STATUS_ABS, STATUS_ABS_TITLE } from '../enums'
+import { HEADERS, HEADERS_TITLE, INTERACTION_ABS_COLUMNS, OPERATION_TYPE, OPERATION_TYPE_TITLE, STATUS_ABS, STATUS_ABS_TITLE } from '../enums'
 // composibles
 const interactionABSStore = useInteractionABSStore()
 const { t } = useI18n()
@@ -213,7 +213,11 @@ onUnmounted(() => {
   <div class="">
     <action-toolbar 
       :action-buttons="['export', 'calendar']" 
-      title="interaction-with-abs">
+      title="interaction-with-abs"
+      :column-menu-items="interactionABSStore.headers"
+      :storage-columns-name="INTERACTION_ABS_COLUMNS"
+      @emit:reset-headers="interactionABSStore.resetHeaders"
+      >
     </action-toolbar>
     <div class="flex flex-col h-full">
       <DataTable
@@ -223,8 +227,10 @@ onUnmounted(() => {
         class="flex flex-col h-full"
         :loading="interactionABSStore.iabsActionListLoading"
         :total-count="interactionABSStore.iabsActionListTotalCount"
+        :storage-columns-name="INTERACTION_ABS_COLUMNS"
         :pageSize="15"
         @emit:onSort="onSort"
+        @emit:set-store-headers="(val) => interactionABSStore.headers = val"
         >
         <!-- header -->
          <template #headerIconcompany="{ data }">

@@ -204,6 +204,7 @@ onMounted( async () => {
     >
     <Column
       header="№"
+      :style="{ width: '3%'}"
       :pt="{
         headerCell: {
           class: ['bg-greyscale-50 px-[10px] h-[48px] border-0 border-r border-greyscale-200 rounded-tl-[12px]', props.headerCellClass]
@@ -221,12 +222,12 @@ onMounted( async () => {
       >
         <template #body="{ index, data }">
           <slot
-          name="count"
-          :index="index"
-          :data="data"
-        >
-          <span class="text-sm font-medium text-greyscale-500">{{ (paginationStore.pageSize * paginationStore.page + 1) - (paginationStore.pageSize - index) }}</span>
-        </slot>
+            name="count"
+            :index="index"
+            :data="data"
+          >
+            <span class="text-sm font-medium text-greyscale-500">{{ (paginationStore.pageSize * paginationStore.page + 1) - (paginationStore.pageSize - index) }}</span>
+          </slot>
         </template>
       </Column>
     <template v-for="(header, index) in headersComputed" :key="header.field">
