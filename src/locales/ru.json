@@ -881,5 +881,8 @@
   "result-of-action":"Результат действия",
   "extension": "Расширение",
   "published-date": "Дата публикации",
-  "business-trip-dashboard": "Командировочный дашбоард"
+  "business-trip-dashboard": "Командировочный дашбоард",
+  "sent": "Отправить",
+  "failed": "Неуспешный",
+  "prolong": "Продлить"
 }

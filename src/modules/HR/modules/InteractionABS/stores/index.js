@@ -53,21 +53,7 @@ const mockData = {
 export const useInteractionABSStore = defineStore('interaction-abs-store', {
     state: () => ({
       iabsActionListLoading: false,
-      iabsActionList: [
-        {
-          order: 1,
-          employee: 'John Doe',
-          position: 'Manager',
-          company: 'Branch 1',
-          department: 'Department 1',
-          documentType: 'Document 1',
-          documentSubType: 'Type 1',
-          operationType: 'Type 1',
-          statusAbs: "1",
-          history: 'History 1',
-          actions: 'Actions 1'
-        }
-      ],
+      iabsActionList: [],
       companyListLoading: false,
       companyList: [],
       topDepartmentsListLoading: false,
@@ -184,6 +170,7 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
             company: item.user.company,
             department: item.user.top_level_department,
             documentType: item.compose.document_type,
+            composeId: item.compose.id,
             documentSubType: item.compose.document_sub_type,
             operationType: item.action,
             statusAbs: item.status,
@@ -269,6 +256,5 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
           this.documentSubTypeListLoading = false
         }
       },
-
     }
 })

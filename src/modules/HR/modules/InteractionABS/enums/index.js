@@ -25,21 +25,27 @@ export const HEADERS_TITLE = {
 }
 
 export const STATUS_ABS = {
-  SUCCESS: "1",
-  ERROR: "2"
+  SENT: "sent",
+  FAILED: "failed",
+  CREATE: "create",
+  PROLONG: "prolong",
+  CANCEL: "cancel"
 }
 
 export const STATUS_ABS_TITLE = {
-  [STATUS_ABS.SUCCESS]: 'success',
-  [STATUS_ABS.ERROR]: 'error'
+  [STATUS_ABS.SENT]: 'sent',
+  [STATUS_ABS.FAILED]: 'failed',
+  [STATUS_ABS.CREATE]: 'create',
+  [STATUS_ABS.PROLONG]: 'prolong',
+  [STATUS_ABS.CANCEL]: 'cancel',
 }
 
 export const OPERATION_TYPE = {
-  SENT: "1",
-  FAILED: "2",
-  CREATE: "3",
-  PROLONG: "4",
-  CANCEL: "5"
+  SENT: "sent",
+  FAILED: "failed",
+  CREATE: "create",
+  PROLONG: "prolong",
+  CANCEL: "cancel"
 }
 
 export const OPERATION_TYPE_TITLE = {

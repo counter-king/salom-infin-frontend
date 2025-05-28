@@ -8,7 +8,7 @@ import { ActionToolbar } from '@/components/Actions';
 import DataTable from '../components/DataTable.vue';
 import { Status } from '../components';
 import { SearchFilter, SimpleFilter } from '../components/filters';
-import { AltArrowDownIcon, AltArrowUpIcon, History2Icon, MagniferIcon, CloseCircleBoldIcon } from '@/components/Icons';
+import { AltArrowDownIcon, AltArrowUpIcon, History2Icon, CloseCircleBoldIcon } from '@/components/Icons';
 import Dialog from '../components/Dialog.vue';
 // stores
 import { useInteractionABSStore } from '../stores';
@@ -25,7 +25,7 @@ const filterDropdownRef = ref(null)
 const activeFilterComponent = shallowRef(null)
 const activeComponentType = ref(null)
 const activeApiAction = ref(null)
-const statusAbsValue = [{ id: STATUS_ABS.SUCCESS, name: t(STATUS_ABS_TITLE[STATUS_ABS.SUCCESS]) }, { id: STATUS_ABS.ERROR, name: t(STATUS_ABS_TITLE[STATUS_ABS.ERROR])}]
+const statusAbsValue = [{ id: STATUS_ABS.SENT, name: t(STATUS_ABS_TITLE[STATUS_ABS.SENT]) }, { id: STATUS_ABS.FAILED, name: t(STATUS_ABS_TITLE[STATUS_ABS.FAILED]) }, { id: STATUS_ABS.CREATE, name: t(STATUS_ABS_TITLE[STATUS_ABS.CREATE]) }, { id: STATUS_ABS.PROLONG, name: t(STATUS_ABS_TITLE[STATUS_ABS.PROLONG]) }, { id: STATUS_ABS.CANCEL, name: t(STATUS_ABS_TITLE[STATUS_ABS.CANCEL]) }]
 const operationTypeValue = [{ id: OPERATION_TYPE.SENT, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.SENT]) }, { id: OPERATION_TYPE.FAILED, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.FAILED]) }, { id: OPERATION_TYPE.CREATE, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.CREATE]) }, { id: OPERATION_TYPE.PROLONG, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.PROLONG]) }, { id: OPERATION_TYPE.CANCEL, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.CANCEL]) }]
 
 const QUERY_NAMES = {
@@ -159,7 +159,6 @@ const onChangeFilter = (item) => {
   })
   header.header = item.name
   header.filter = true
-  interactionABSStore.actionGetIabsActionList({ ...router.currentRoute.value.query, status: route.query.statusAbs || undefined })
 }
 
 const onCancelFilter = (type) => {
@@ -173,23 +172,23 @@ const onCancelFilter = (type) => {
       [getQueryName(type)]: undefined
     }
   })
-  
-  interactionABSStore.actionGetIabsActionList({ ...router.currentRoute.value.query, status: route.query.statusAbs || undefined })
 }
 
+watch(()=>route.query, ()=>{
+  interactionABSStore.actionGetIabsActionList({ page: 1, page_size: 20, ...router.currentRoute.value.query, status: route.query.statusAbs || undefined, start_date: route.query.created_start_date || undefined, end_date: route.query.created_end_date || undefined })
+}, { deep: true, immediate: true })
+
 onMounted(async() => {
-  
+
   // URLdan query parametrlarini olib tashlash
   // if (Object.keys(router.currentRoute.value.query).length > 0) {
   //   window.history.replaceState({}, document.title, window.location.pathname)
   // }
-  
   await interactionABSStore.actionGetCompanyList({ page: 1, page_size: 20 })
   await interactionABSStore.actionGetTopDepartmentsList({ page: 1, page_size: 20})
   await interactionABSStore.actionGetDocumentTypeList({ page: 1, page_size: 20})
   await interactionABSStore.actionGetDocumentSubTypeList({ page: 1, page_size: 20})
   document.addEventListener('click', handleOutsideClick)
-
 })
 
 onMounted(()=>{
@@ -212,20 +211,18 @@ onUnmounted(() => {
 
 <template>
   <div class="">
-    <action-toolbar title="interaction-with-abs">
-      <template #filters>
-      </template>
+    <action-toolbar 
+      :action-buttons="['export', 'calendar']" 
+      title="interaction-with-abs">
     </action-toolbar>
     <div class="flex flex-col h-full">
       <DataTable
         :headers="interactionABSStore.headers"
         :value="interactionABSStore.iabsActionList"
-        :apiParams="{...router.currentRoute.value.query, status: route.query.statusAbs || undefined}"
         scroll-height="calc(100vh - 360px)"
         class="flex flex-col h-full"
         :loading="interactionABSStore.iabsActionListLoading"
         :total-count="interactionABSStore.iabsActionListTotalCount"
-        :action-list="interactionABSStore.actionGetIabsActionList"
         :pageSize="15"
         @emit:onSort="onSort"
         >
@@ -347,10 +344,10 @@ onUnmounted(() => {
             <p class="text-sm font-medium text-greyscale-900">{{ data?.documentSubType?.name }}</p>
           </template>
           <template #operationType="{ data }">
-            <p class="text-sm font-medium text-greyscale-900">{{ data.operationType }}</p>
+            <p class="text-sm font-medium text-greyscale-900">{{ t(data.operationType) }}</p>
           </template>
-          <template #status="{ data }"> 
-            <status :statusAbs="data.statusAbs" />
+          <template #statusAbs="{ data }"> 
+            <status :status="data.statusAbs" />
           </template>
           <template #history="{ data }">
             <base-iconify :icon="History2Icon" class="w-6 h-6 text-greyscale-400" @click="onHistoryClick"/>

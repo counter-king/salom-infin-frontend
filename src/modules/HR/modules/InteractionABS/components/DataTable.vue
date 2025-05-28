@@ -115,6 +115,7 @@ const onPageChange = async (val) => {
         first_row: paginationStore.firstRow
       }
     });
+
   await props.actionList({ ...route.query, page: paginationStore.page, page_size: paginationStore.pageSize });
 
   emit('emit:onPageChange', paginationStore.page)
@@ -142,6 +143,7 @@ const initializeTable = async () => {
 onMounted( async () => {
   await initializeTable();
 })
+
 </script>
 <template>
   <DataTable 

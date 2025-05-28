@@ -24,6 +24,7 @@ export const useInfiniteScroll = (params, queryFun) => {
       page: 1,
       page_size: pageSize.value
     }, true)
+    
     list.value = response.data.results
     page.value = 1
     hasMore.value = response.data.count > page.value * pageSize.value
