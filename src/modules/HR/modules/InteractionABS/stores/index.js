@@ -256,5 +256,12 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
           this.documentSubTypeListLoading = false
         }
       },
+
+      resetHeaders() {
+        this.headers = this.headers.map(header => ({
+          ...header,
+          active: true
+        }))
+      }
     }
 })

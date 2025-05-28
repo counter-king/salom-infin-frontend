@@ -176,7 +176,7 @@ onMounted( async () => {
       },
       
       thead: { class: ['bg-inherit'] },
-      bodyRow: { class: ['cursor-pointer text-sm font-medium greyscale-900', 'hover:bg-greyscale-50','last:border-b last:border-b-greyscale-100'] },
+      bodyRow: { class: ['cursor-pointer text-sm font-medium greyscale-900', 'hover:bg-white','last:border-b last:border-b-greyscale-100'] },
       loadingoverlay: { class: ['bg-transparent overflow-hidden', 'h-[calc(100%-56px)]'] },
       paginator: {
         rowPerPageDropdown: {
@@ -266,7 +266,6 @@ onMounted( async () => {
         :columns="props.headers"
       />
     </template>
-
     <template #empty>
       <slot name="empty">
         <div
