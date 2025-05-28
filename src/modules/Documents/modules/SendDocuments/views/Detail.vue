@@ -49,7 +49,20 @@ const openUpdatePage = () => {
     }
   })
 }
+const openExtendForm = async () => {
+  await router.push({
+    name: 'SendDocumentsCreate',
+    params: {
+      document_type: route.params.document_type,
+      document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE,
+    },
+    query: {
+      parent_notice_id: route.params.id
+    }
+  })
+}
 
+// Hooks
 onBeforeMount(async () => {
   SDStore.detailLoading = true;
   const response = await SDStore.actionGetDocumentDetail(route.params.id);
@@ -124,7 +137,7 @@ onBeforeMount(async () => {
           rounded
           shadow
           type="button"
-          @click="openUpdatePage"
+          @click="openExtendForm"
         />
 
         <base-button
