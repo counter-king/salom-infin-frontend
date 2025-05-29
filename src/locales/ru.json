@@ -816,7 +816,7 @@
   "synchronization": "Синхронизация",
   "successfully-completed": "Готово успешно",
   "hr-main-dashboard": {
-    "staff-numbers": "Штатная численность",
+    "staff-numbers": "Кол-во укомпл. штатов",
     "total-number-employees": "Общее кол-во сотрудников",
     "total-staff-rate": "Общая ставка сотрудников",
     "total-number-vacancies": "Общее кол-во вакансий",
@@ -828,7 +828,10 @@
     "leaders-text": "Руководители / Специалисты / Рабочие",
     "sex": "Пол",
     "chart-text-1": "лет в среднее",
-    "presence": "Присутствие"
+    "presence": "Присутствие",
+    "top-departments": "Топ департаменты",
+    "transport": "Транспорт",
+    "top-targets": "Топ цели"
   },
   "finance-dashboard": {
     "text-0": "Накопительный итог с начала года",
@@ -842,6 +845,16 @@
     "text-8": "Ценные подарки",
     "text-9": "Выплата членам НС",
     "text-10": "Выплата пенсионерам (не сотр. Банка)"
+  },
+  "hr-trip-dashboard": {
+    "on-start": "Должен начаться",
+    "on-site": "На месте",
+    "report": "Отчёт",
+    "finished": "Завершена",
+    "inner-outer": "Внутренняя и внешняя",
+    "inner": "Внутренние",
+    "outer": "Внешние",
+    "travel-expenses": "Командировочные расходы"
   },
   "head-office": "Головной банк",
   "comparison-with-head-bank": "Сравнение с Головной банк",

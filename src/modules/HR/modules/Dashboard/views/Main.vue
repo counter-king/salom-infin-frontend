@@ -770,33 +770,33 @@ onMounted(async () => {
               </div>
             </div>
 
-            <div class="flex items-center justify-center gap-4 border-r border-r-greyscale-200">
-              <div class="flex items-center justify-center w-12 h-12 bg-greyscale-50 rounded-xl">
-                <base-iconify
-                  :icon="CaseRoundBoldDuotoneIcon"
-                  class="w-7 h-7 text-info-500"
-                />
-              </div>
+<!--            <div class="flex items-center justify-center gap-4 border-r border-r-greyscale-200">-->
+<!--              <div class="flex items-center justify-center w-12 h-12 bg-greyscale-50 rounded-xl">-->
+<!--                <base-iconify-->
+<!--                  :icon="CaseRoundBoldDuotoneIcon"-->
+<!--                  class="w-7 h-7 text-info-500"-->
+<!--                />-->
+<!--              </div>-->
 
-              <div class="font-medium">
-                <h1 class="text-sm text-greyscale-500">{{ t('hr-main-dashboard.total-staff-rate') }}</h1>
-                <p class="text-2xl text-greyscale-900">{{ countRate['COUNT'] }}</p>
-              </div>
-            </div>
+<!--              <div class="font-medium">-->
+<!--                <h1 class="text-sm text-greyscale-500">{{ t('hr-main-dashboard.total-staff-rate') }}</h1>-->
+<!--                <p class="text-2xl text-greyscale-900">{{ countRate['COUNT'] }}</p>-->
+<!--              </div>-->
+<!--            </div>-->
 
-            <div class="flex items-center justify-center gap-4">
-              <div class="flex items-center justify-center w-12 h-12 bg-greyscale-50 rounded-xl">
-                <base-iconify
-                  :icon="UserSpeakBoldDuotoneIcon"
-                  class="w-7 h-7 text-critic-500"
-                />
-              </div>
+<!--            <div class="flex items-center justify-center gap-4">-->
+<!--              <div class="flex items-center justify-center w-12 h-12 bg-greyscale-50 rounded-xl">-->
+<!--                <base-iconify-->
+<!--                  :icon="UserSpeakBoldDuotoneIcon"-->
+<!--                  class="w-7 h-7 text-critic-500"-->
+<!--                />-->
+<!--              </div>-->
 
-              <div class="font-medium">
-                <h1 class="text-sm text-greyscale-500">{{ t('hr-main-dashboard.total-number-vacancies') }}</h1>
-                <p class="text-2xl text-greyscale-900">{{ countVacant['COUNT'] }}</p>
-              </div>
-            </div>
+<!--              <div class="font-medium">-->
+<!--                <h1 class="text-sm text-greyscale-500">{{ t('hr-main-dashboard.total-number-vacancies') }}</h1>-->
+<!--                <p class="text-2xl text-greyscale-900">{{ countVacant['COUNT'] }}</p>-->
+<!--              </div>-->
+<!--            </div>-->
           </div>
         </card>
       </div>

@@ -827,7 +827,10 @@
     "leaders-text": "Rahbarlar / Mutaxassislar / Ishchilar",
     "sex": "Jinsi",
     "chart-text-1": "o'rtacha yil",
-    "presence": "Mavjudligi"
+    "presence": "Mavjudligi",
+    "top-departments": "Top departamentlar",
+    "transport": "Transport",
+    "top-targets": "Top maqsadlar"
   },
   "finance-dashboard": {
     "text-0": "Yil boshidan beri jami jami",
@@ -841,6 +844,16 @@
     "text-8": "Qimmatbaho sovg'alar",
     "text-9": "Milliy kengash a'zolariga to'lov",
     "text-10": "Pensionerlarga to'lovlar (bank bo'lmagan xodimlar)"
+  },
+  "hr-trip-dashboard": {
+    "on-start": "Boshlanishi kerak",
+    "on-site": "Ish olib borilayotgan joy",
+    "report": "Hisobot",
+    "finished": "Yakunlangan",
+    "inner-outer": "Ichki va tashqi",
+    "inner": "Ichki",
+    "outer": "Tashqi",
+    "travel-expenses": "Sayohat xarajatlari"
   },
   "head-office": "Bosh ofis",
   "comparison-with-head-bank": "Bosh bank bilan taqqoslash",

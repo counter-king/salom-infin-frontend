@@ -49,7 +49,7 @@ onMounted(async () => {
 
         <col-table class="!w-[12.5%] text-center">
           <strong class="font-bold text-[#000]">
-            {{ parseInt(numberFormat(dashboardStore.payrolls?.values?.branches_all_count.amount/1e6)) }}
+            {{ numberFormat(parseInt(dashboardStore.payrolls?.values?.branches_all_count.amount/1e6)) }}
           </strong>
         </col-table>
       </row-table>

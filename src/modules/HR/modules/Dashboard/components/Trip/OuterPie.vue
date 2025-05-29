@@ -1,7 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import Card from '../Card.vue'
 import { USER_STATUS_CODES } from '@/enums'
+
+const { t } = useI18n()
 
 const options = ref({
   chart: {
@@ -183,7 +186,7 @@ onMounted(() => {
 
 <template>
   <card>
-    <h1 class="flex-1 font-semibold text-greyscale-900 mb-8">Внутренняя</h1>
+    <h1 class="flex-1 font-semibold text-greyscale-900 mb-8">{{ t('hr-trip-dashboard.outer') }}</h1>
 
     <div class="flex items-center relative pb-2">
       <div class="max-w-[240px] w-full">

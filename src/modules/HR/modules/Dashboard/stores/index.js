@@ -1,7 +1,18 @@
 import { defineStore } from 'pinia'
-import { fetchDashboardComparison, fetchDashboardPayrolls } from '../services'
+import {
+  fetchDashboardComparison,
+  fetchDashboardPayrolls,
+  fetchTripByStatus,
+  fetchTripInnerOuterChart,
+  fetchTripTopDepartments,
+  fetchByRoute,
+  fetchByGoals,
+  fetchByLocations,
+  fetchByExpense
+} from '../services'
 import { CalendarLinearIcon, FileTextIcon, CaseIcon } from '@/components/Icons'
 import { generateCleanYAxisLabels } from '@/utils'
+import { formatDateReverse } from '@/utils/formatDate'
 
 export const useHRDashboardStore = defineStore('useHRDashboardStore', {
   state: () => ({
@@ -66,9 +77,9 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         {
           header: 'finance-dashboard.text-2'
         },
-        {
-          header: 'finance-dashboard.text-10'
-        },
+        // {
+        //   header: 'finance-dashboard.text-10'
+        // },
         {
           header: 'finance-dashboard.text-5',
         },
@@ -83,10 +94,41 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
       axes: [],
       loader: true
     },
+    tripStatus: {
+      loader: true,
+      data: {
+        not_started: 0,
+        on_trip: 0,
+        reporting: 0,
+        closed: 0,
+        all: 0
+      }
+    },
+    innerOuterChart: {
+      loader: true,
+      data: []
+    },
+    topDepartments: {
+      loader: true,
+      data: []
+    },
+    byRoute: {
+      loader: true,
+      data: {}
+    },
+    topGoals: {
+      loader: true,
+      data: []
+    },
+    byLocations: {
+      loader: true,
+      data: []
+    },
+    expenseChart: {
+      loader: true,
+      data: []
+    },
   }),
-  getters: {
-
-  },
   actions: {
     async actionDashboardPayrolls(params = {}) {
       try {
@@ -204,7 +246,7 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         //   ],
         //   branches_all_count: {
         //     amount: dataFromBackend.branches
-        //       .filter(({ pay_type_id }) => pay_type_id !== 9)
+        //       // .filter(({ pay_type_id }) => pay_type_id !== 9)
         //       .reduce((a, b) => parseInt(a) + parseInt(b.amount), '0'),
         //   },
         //   head_office: [
@@ -221,7 +263,7 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         //   ],
         //   head_office_all_count: {
         //     amount: dataFromBackend.head_office
-        //     .filter(({ pay_type_id }) => pay_type_id !== 8 && pay_type_id !== 9 && pay_type_id !== 10)
+        //     // .filter(({ pay_type_id }) => pay_type_id !== 8 && pay_type_id !== 9 && pay_type_id !== 10)
         //     .reduce((a, b) => parseInt(a) + parseInt(b.amount), '0'),
         //   }
         // }
@@ -236,7 +278,7 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
             data.branches.find(({ pay_type_id }) => pay_type_id === 8) ?? { amount: '-' }, // Ценные подарки
             data.branches.find(({ pay_type_id }) => pay_type_id === 10) ?? { amount: '-' }, // Выплата членам НС
             data.branches.find(({ pay_type_id }) => pay_type_id === 9) ?? { amount: '-' }, // Оплата по дог. ГПХ
-            data.branches.find(({ pay_type_id }) => pay_type_id === 7) ?? { amount: '-' }, // Выплата пенсионерам (не сотр. Банка)
+            // data.branches.find(({ pay_type_id }) => pay_type_id === 7) ?? { amount: '-' }, // Выплата пенсионерам (не сотр. Банка)
             data.branches.find(({ pay_type_id }) => pay_type_id === 6) ?? { amount: '-' }, // Прочее
           ],
           branches_all_count: {
@@ -252,7 +294,7 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
             data.head_office.find(({ pay_type_id }) => pay_type_id === 8) ?? { amount: '-' }, // Ценные подарки
             data.head_office.find(({ pay_type_id }) => pay_type_id === 10) ?? { amount: '-' }, // Выплата членам НС
             data.head_office.find(({ pay_type_id }) => pay_type_id === 9) ?? { amount: '-' }, // Оплата по дог. ГПХ
-            data.head_office.find(({ pay_type_id }) => pay_type_id === 7) ?? { amount: '-' }, // Выплата пенсионерам (не сотр. Банка)
+            // data.head_office.find(({ pay_type_id }) => pay_type_id === 7) ?? { amount: '-' }, // Выплата пенсионерам (не сотр. Банка)
             data.head_office.find(({ pay_type_id }) => pay_type_id === 6) ?? { amount: '-' }, // Прочее
           ],
           head_office_all_count: {
@@ -365,11 +407,11 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
               comparison_amount_percent: `${(model.head_office[9].comparison_amount / addMaxAmount).toFixed(1)}%`
             },
             // Выплата пенсионерам (не сотр. Банка)
-            {
-              ...model.head_office[7],
-              current_amount_percent: `${(model.head_office[7].current_amount / addMaxAmount).toFixed(1)}%`,
-              comparison_amount_percent: `${(model.head_office[7].comparison_amount / addMaxAmount).toFixed(1)}%`
-            },
+            // {
+            //   ...model.head_office[7],
+            //   current_amount_percent: `${(model.head_office[7].current_amount / addMaxAmount).toFixed(1)}%`,
+            //   comparison_amount_percent: `${(model.head_office[7].comparison_amount / addMaxAmount).toFixed(1)}%`
+            // },
             // Прочее
             {
               ...model.head_office[10],
@@ -427,11 +469,11 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
               comparison_amount_percent: `${(model.branches[9].comparison_amount / addMaxAmount).toFixed(1)}%`
             },
             // Выплата пенсионерам (не сотр. Банка)
-            {
-              ...model.branches[7],
-              current_amount_percent: `${(model.branches[7].current_amount / addMaxAmount).toFixed(1)}%`,
-              comparison_amount_percent: `${(model.branches[7].comparison_amount / addMaxAmount).toFixed(1)}%`
-            },
+            // {
+            //   ...model.branches[7],
+            //   current_amount_percent: `${(model.branches[7].current_amount / addMaxAmount).toFixed(1)}%`,
+            //   comparison_amount_percent: `${(model.branches[7].comparison_amount / addMaxAmount).toFixed(1)}%`
+            // },
             // Прочее
             {
               ...model.branches[10],
@@ -753,6 +795,175 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
       finally {
         setTimeout(() => {
           this.comparison.loader = false
+        }, 500)
+      }
+    },
+    /**
+     *
+     * */
+    async actionTripStatus(params = { start_date: `${new Date().getFullYear()}-01-01`, end_date: formatDateReverse(new Date()) }) {
+      try {
+        this.tripStatus.loader = true
+
+        const { data } = await fetchTripByStatus(params)
+
+        this.tripStatus.data.not_started = data.not_started ?? 0
+        this.tripStatus.data.on_trip = data.on_trip ?? 0
+        this.tripStatus.data.reporting = data.reporting ?? 0
+        this.tripStatus.data.closed = data.closed ?? 0
+        this.tripStatus.data.all = Object.values(this.tripStatus.data).reduce((acc, val) => acc + val, 0)
+
+        return Promise.resolve()
+      }
+      catch (error) {
+        return Promise.reject()
+      }
+      finally {
+        setTimeout(() => {
+          this.tripStatus.loader = false
+        }, 500)
+      }
+    },
+    /**
+     *
+     * */
+    async actionTripInnerOuterChart(params = { start_date: `${new Date().getFullYear()}-01-01`, end_date: formatDateReverse(new Date()) }) {
+      try {
+        this.innerOuterChart.loader = true
+
+        const { data } = await fetchTripInnerOuterChart(params)
+        this.innerOuterChart.data = data
+
+        return Promise.resolve()
+      }
+      catch (error) {
+        return Promise.reject()
+      }
+      finally {
+        setTimeout(() => {
+          this.innerOuterChart.loader = false
+        }, 500)
+      }
+    },
+    /**
+     *
+     * */
+    async actionTripTopDepartments(params = { start_date: `${new Date().getFullYear()}-01-01`, end_date: formatDateReverse(new Date()) }) {
+      try {
+        this.topDepartments.loader = true
+
+        const { data } = await fetchTripTopDepartments(params)
+        this.topDepartments.data = data
+
+        return Promise.resolve()
+      }
+      catch (error) {
+        return Promise.reject()
+      }
+      finally {
+        setTimeout(() => {
+          this.topDepartments.loader = false
+        }, 500)
+      }
+    },
+    /**
+     *
+     * */
+    async actionTripByRoute(params = { start_date: `${new Date().getFullYear()}-01-01`, end_date: formatDateReverse(new Date()) }) {
+      try {
+        this.byRoute.loader = true
+
+        const { data } = await fetchByRoute(params)
+        this.byRoute.data = data
+
+        return Promise.resolve()
+      }
+      catch (error) {
+        return Promise.reject()
+      }
+      finally {
+        setTimeout(() => {
+          this.byRoute.loader = false
+        }, 500)
+      }
+    },
+    /**
+     *
+     * */
+    async actionTripByGoals(params = { start_date: `${new Date().getFullYear()}-01-01`, end_date: formatDateReverse(new Date()) }) {
+      try {
+        this.topGoals.loader = true
+
+        const { data } = await fetchByGoals(params)
+        this.topGoals.data = data
+
+        return Promise.resolve()
+      }
+      catch (error) {
+        return Promise.reject()
+      }
+      finally {
+        setTimeout(() => {
+          this.topGoals.loader = false
+        }, 500)
+      }
+    },
+    /**
+     *
+     * */
+    async actionByLocations(params = { start_date: `${new Date().getFullYear()}-01-01`, end_date: formatDateReverse(new Date()) }) {
+      try {
+        this.byLocations.loader = true
+
+        const { data } = await fetchByLocations(params)
+        this.byLocations.data = data
+
+        return Promise.resolve()
+      }
+      catch (error) {
+        return Promise.reject()
+      }
+      finally {
+        setTimeout(() => {
+          this.byLocations.loader = false
+        }, 500)
+      }
+    },
+    /**
+     *
+     * */
+    async actionTripExpenseChart(params = { start_date: `${new Date().getFullYear()}-01-01`, end_date: formatDateReverse(new Date()) }) {
+      try {
+        this.expenseChart.loader = true
+
+        const { data } = await fetchByExpense(params)
+        this.expenseChart.data = data
+        // this.expenseChart.data = {
+        //   "2025-01": {
+        //     "Командировочные": 2000000
+        //   },
+        //   "2025-02": {
+        //     "Командировочные": 3000000
+        //   },
+        //   "2025-03": {
+        //     "Командировочные": 4000000
+        //   },
+        //   "2025-04": {
+        //     "Командировочные": 5000000
+        //   },
+        //   "2025-05": {
+        //     "Командировочные": 0
+        //   },
+        // }
+
+        return Promise.resolve()
+      }
+      catch (error) {
+        return Promise.reject()
+      }
+      finally {
+        setTimeout(() => {
+          this.expenseChart.loader = false
         }, 500)
       }
     },
