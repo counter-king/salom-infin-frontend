@@ -2,7 +2,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useHRDashboardStore } from '../../stores'
-import { formatNumberWithFloat } from '@/utils'
+import { numberFormat } from '@/utils/formatIntl'
 import Card from '../Card.vue'
 
 const { t } = useI18n()
@@ -53,9 +53,8 @@ const options = ref({
       return `<div class="min-w-[110px] bg-primary-900 rounded-lg text-white text-center py-[6px] px-2">
         <span class=" opacity-80">${w.globals.categoryLabels[dataPointIndex]}</span>
         <div class="flex gap-1 justify-center text-sm">
-          <span class="font-medium">${ series[seriesIndex][dataPointIndex]}</span>
-          <!-- <span class="font-medium">${ formatNumberWithFloat(series[seriesIndex][dataPointIndex])}</span> -->
-          <span class="font-regular">сум</span>
+           <span class="font-medium">${ numberFormat(parseInt(series[seriesIndex][dataPointIndex]))}</span>
+<!--          <span class="font-regular">сум</span>-->
         </div>
       </div>`
     }
@@ -81,7 +80,7 @@ const series = computed(() => {
 
   return [
     {
-      data: values.map(item => item['Командировочные']).slice(0, new Date().getMonth() + 1)
+      data: values.map(item => item.count).slice(0, new Date().getMonth())
     }
     // {
     //   data: values.map(item => item.foreign).slice(0, new Date().getMonth() + 1)
@@ -97,11 +96,11 @@ onMounted(async () => {
 <template>
   <card>
     <div class="flex items-center gap-6">
-      <h1 class="flex-1 font-semibold text-greyscale-900">{{ t('hr-trip-dashboard.travel-expenses') }}</h1>
+      <h1 class="flex-1 font-semibold text-greyscale-900">{{ t('hr-trip-dashboard.travel-expenses') }} ({{ t('ming') }})</h1>
 
       <div class="flex items-center gap-2">
         <div class="w-[10px] h-[10px] bg-primary-500 rounded"></div>
-        <h1 class="text-[13px] font-medium text-greyscale-500">{{ t('hr-trip-dashboard.inner') }}</h1>
+        <h1 class="text-[13px] font-medium text-greyscale-500">{{ t('hr-trip-dashboard.inner-outer') }}</h1>
       </div>
 
 <!--      <div class="flex items-center gap-2">-->

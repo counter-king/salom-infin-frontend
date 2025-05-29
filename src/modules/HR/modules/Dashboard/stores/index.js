@@ -937,8 +937,7 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         this.expenseChart.loader = true
 
         const { data } = await fetchByExpense(params)
-        this.expenseChart.data = data
-        // this.expenseChart.data = {
+        // let mock = {
         //   "2025-01": {
         //     "Командировочные": 2000000
         //   },
@@ -955,6 +954,15 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         //     "Командировочные": 0
         //   },
         // }
+
+        let model = Object.values(data).map(item => {
+          return {
+            ...item,
+            count: item['Командировочные']/1e3
+          }
+        })
+
+        this.expenseChart.data = model
 
         return Promise.resolve()
       }
