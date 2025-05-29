@@ -27,13 +27,13 @@ onMounted(async () => {
 
         <template v-for="item in dashboardStore.payrolls?.values?.head_office">
           <col-table class="!text-center !w-[12.5%]">
-            {{ item.amount === '-' ? '-' : numberFormat(item.amount) }}
+            {{ item.amount === '-' ? '-' : numberFormat(parseInt(item.amount/1e6)) }}
           </col-table>
         </template>
 
         <col-table class="!w-[12.5%] text-center">
           <strong class="font-bold text-[#000]">
-            {{ numberFormat(dashboardStore.payrolls?.values?.head_office_all_count.amount) }}
+            {{ numberFormat(parseInt(dashboardStore.payrolls?.values?.head_office_all_count.amount/1e6)) }}
           </strong>
         </col-table>
       </row-table>
@@ -43,13 +43,13 @@ onMounted(async () => {
 
         <template v-for="item in dashboardStore.payrolls?.values?.branches">
           <col-table class="!text-center !w-[12.5%]">
-            {{ item.amount === '-' ? '-' : numberFormat(item.amount) }}
+            {{ item.amount === '-' ? '-' : numberFormat(parseInt(item.amount/1e6)) }}
           </col-table>
         </template>
 
         <col-table class="!w-[12.5%] text-center">
           <strong class="font-bold text-[#000]">
-            {{ numberFormat(dashboardStore.payrolls?.values?.branches_all_count.amount) }}
+            {{ parseInt(numberFormat(dashboardStore.payrolls?.values?.branches_all_count.amount/1e6)) }}
           </strong>
         </col-table>
       </row-table>
@@ -65,7 +65,7 @@ onMounted(async () => {
 
         <col-table class="!w-[12.5%] !text-center">
           <strong class="font-bold text-[#000]">
-            {{ numberFormat(dashboardStore.payrolls?.values?.head_office_all_count.amount + dashboardStore.payrolls?.values?.branches_all_count.amount) }}
+            {{ numberFormat(parseInt(dashboardStore.payrolls?.values?.head_office_all_count.amount/1e6) + parseInt(dashboardStore.payrolls?.values?.branches_all_count.amount/1e6)) }}
           </strong>
         </col-table>
       </row-table>
