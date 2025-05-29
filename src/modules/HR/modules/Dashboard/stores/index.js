@@ -241,7 +241,7 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         //     dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 8) ?? { amount: '-' }, // Ценные подарки
         //     dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 10) ?? { amount: '-' }, // Выплата членам НС
         //     dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 9) ?? { amount: '-' }, // Оплата по дог. ГПХ
-        //     dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 7) ?? { amount: '-' }, // Выплата пенсионерам (не сотр. Банка)
+        //     // dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 7) ?? { amount: '-' }, // Выплата пенсионерам (не сотр. Банка)
         //     dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 6) ?? { amount: '-' }, // Прочее
         //   ],
         //   branches_all_count: {
@@ -258,7 +258,7 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         //     dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 8) ?? { amount: '-' }, // Ценные подарки
         //     dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 10) ?? { amount: '-' }, // Выплата членам НС
         //     dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 9) ?? { amount: '-' }, // Оплата по дог. ГПХ
-        //     dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 7) ?? { amount: '-' }, // Выплата пенсионерам (не сотр. Банка)
+        //     // dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 7) ?? { amount: '-' }, // Выплата пенсионерам (не сотр. Банка)
         //     dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 6) ?? { amount: '-' }, // Прочее
         //   ],
         //   head_office_all_count: {
@@ -482,6 +482,7 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
             }
           ],
         }
+
 
         // MOCK DATA
         // const dataFromBackend = {
@@ -711,11 +712,11 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         //       comparison_amount_percent: `${(model.head_office[9].comparison_amount / addMaxAmount).toFixed(1)}%`
         //     },
         //     // Выплата пенсионерам (не сотр. Банка)
-        //     {
-        //       ...model.head_office[7],
-        //       current_amount_percent: `${(model.head_office[7].current_amount / addMaxAmount).toFixed(1)}%`,
-        //       comparison_amount_percent: `${(model.head_office[7].comparison_amount / addMaxAmount).toFixed(1)}%`
-        //     },
+        //     // {
+        //     //   ...model.head_office[7],
+        //     //   current_amount_percent: `${(model.head_office[7].current_amount / addMaxAmount).toFixed(1)}%`,
+        //     //   comparison_amount_percent: `${(model.head_office[7].comparison_amount / addMaxAmount).toFixed(1)}%`
+        //     // },
         //     // Прочее
         //     {
         //       ...model.head_office[10],
@@ -773,11 +774,11 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         //       comparison_amount_percent: `${(model.branches[9].comparison_amount / addMaxAmount).toFixed(1)}%`
         //     },
         //     // Выплата пенсионерам (не сотр. Банка)
-        //     {
-        //       ...model.branches[7],
-        //       current_amount_percent: `${(model.branches[7].current_amount / addMaxAmount).toFixed(1)}%`,
-        //       comparison_amount_percent: `${(model.branches[7].comparison_amount / addMaxAmount).toFixed(1)}%`
-        //     },
+        //     // {
+        //     //   ...model.branches[7],
+        //     //   current_amount_percent: `${(model.branches[7].current_amount / addMaxAmount).toFixed(1)}%`,
+        //     //   comparison_amount_percent: `${(model.branches[7].comparison_amount / addMaxAmount).toFixed(1)}%`
+        //     // },
         //     // Прочее
         //     {
         //       ...model.branches[10],

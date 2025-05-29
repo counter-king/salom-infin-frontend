@@ -59,7 +59,7 @@ onMounted(async () => {
           <strong class="font-bold text-[#000]">{{ t('total') }}:</strong>
         </col-table>
 
-        <template v-for="item in 10">
+        <template v-for="item in 9">
           <col-table class="!text-center"></col-table>
         </template>
 

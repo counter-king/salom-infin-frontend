@@ -164,7 +164,7 @@ onMounted(async () => {
         </template>
 
         <template v-else>
-          <div class="grid grid-cols-10 gap-8 relative pl-14 mt-11">
+          <div class="grid grid-cols-9 gap-8 relative pl-14 mt-11">
             <div class="flex flex-col absolute top-0 left-0 w-full h-full">
               <template v-for="item in dashboardStore.comparison.axes">
                 <div class="flex flex-1 gap-2">
