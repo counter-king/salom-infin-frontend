@@ -195,7 +195,7 @@ onMounted(async () => {
                         <div class="flex items-center gap-2">
                           <div class="w-4 h-4 bg-info-200 rounded"></div>
 
-                          <span class="font-medium">{{ numberFormat(parseInt(item.current_amount)) }}</span>
+                          <span class="font-medium">{{ numberFormat(parseInt(item.current_amount/1e6)) }}</span>
                         </div>
 
                         <template v-if="isCompare">
@@ -205,14 +205,14 @@ onMounted(async () => {
                               style="background: repeating-linear-gradient(-45deg, #66c2ff, #66c2ff 4px, #4da6ff 4px, #4da6ff 8px)"
                             ></div>
 
-                            <span class="font-medium">{{ numberFormat(parseInt(item.comparison_amount)) }}</span>
+                            <span class="font-medium">{{ numberFormat(parseInt(item.comparison_amount/1e6)) }}</span>
                           </div>
                         </template>
 
                         <div class="flex items-center gap-2">
                           <div class="w-4 h-4 bg-warning-200 rounded"></div>
 
-                          <span class="font-medium">{{ numberFormat(parseInt(dashboardStore.comparison.data.branches[index]?.current_amount ?? 0)) }}</span>
+                          <span class="font-medium">{{ numberFormat(parseInt(dashboardStore.comparison.data.branches[index]?.current_amount/1e6 ?? 0)) }}</span>
                         </div>
 
                         <template v-if="isCompare">
@@ -222,7 +222,7 @@ onMounted(async () => {
                               style="background: repeating-linear-gradient(-45deg, #FFECC8, #FFECC8 4px, #FFA803 4px, #FFA803 8px)"
                             ></div>
 
-                            <span class="font-medium">{{ numberFormat(parseInt(dashboardStore.comparison.data.branches[index]?.comparison_amount ?? 0)) }}</span>
+                            <span class="font-medium">{{ numberFormat(parseInt(dashboardStore.comparison.data.branches[index]?.comparison_amount/1e6 ?? 0)) }}</span>
                           </div>
                         </template>
                       </div>
@@ -240,7 +240,7 @@ onMounted(async () => {
 												'height': item.current_amount_percent
 											}"
                       v-tooltip.focus.top="{
-		                    value: `<h4 class='text-xs text-white -my-1'>${numberFormat(parseInt(item.current_amount))}</h4>`,
+		                    value: `<h4 class='text-xs text-white -my-1'>${numberFormat(parseInt(item.current_amount/1e6))}</h4>`,
 		                    escape: true,
 		                    autoHide: false
 		                  }"
@@ -254,7 +254,7 @@ onMounted(async () => {
 												'height': item.comparison_amount_percent,
 											}"
                       v-tooltip.focus.top="{
-		                    value: `<h4 class='text-xs text-white text-center -my-1'>${numberFormat(parseInt(item.comparison_amount))} <br> <span class='block mt-[2px]'>Сравнение с ${new Date().getFullYear() - 1} г.</span></h4>`,
+		                    value: `<h4 class='text-xs text-white text-center -my-1'>${numberFormat(parseInt(item.comparison_amount/1e6))} <br> <span class='block mt-[2px]'>Сравнение с ${new Date().getFullYear() - 1} г.</span></h4>`,
 		                    escape: true,
 		                    autoHide: false
 		                  }"
@@ -274,7 +274,7 @@ onMounted(async () => {
 												'height': dashboardStore.comparison.data.branches[index]?.current_amount_percent ?? 0,
 											}"
                       v-tooltip.focus.top="{
-		                    value: `<h4 class='text-xs text-white -my-1'>${numberFormat(parseInt(dashboardStore.comparison.data.branches[index]?.current_amount ?? 0))}</h4>`,
+		                    value: `<h4 class='text-xs text-white -my-1'>${numberFormat(parseInt(dashboardStore.comparison.data.branches[index]?.current_amount/1e6 ?? 0))}</h4>`,
 		                    escape: true,
 		                    autoHide: false
 		                  }"
@@ -288,7 +288,7 @@ onMounted(async () => {
 												'height': dashboardStore.comparison.data.branches[index]?.comparison_amount_percent ?? 0,
 											}"
                       v-tooltip.focus.top="{
-		                    value: `<h4 class='text-xs text-white text-center -my-1'>${numberFormat(parseInt(dashboardStore.comparison.data.branches[index]?.comparison_amount ?? 0))} <br> <span class='block mt-[2px]'>Сравнение с ${new Date().getFullYear() - 1} г.</span></h4>`,
+		                    value: `<h4 class='text-xs text-white text-center -my-1'>${numberFormat(parseInt(dashboardStore.comparison.data.branches[index]?.comparison_amount/1e6 ?? 0))} <br> <span class='block mt-[2px]'>Сравнение с ${new Date().getFullYear() - 1} г.</span></h4>`,
 		                    escape: true,
 		                    autoHide: false
 		                  }"
@@ -318,7 +318,7 @@ onMounted(async () => {
                                     ? t('finance-dashboard.text-2')
                                       : item.pay_type_id === 6
                                         ? t('finance-dashboard.text-5')
-                                        : 'asdas'
+                                        : ''
                   }}
 			          </span>
               </div>

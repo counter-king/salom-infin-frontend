@@ -13,7 +13,7 @@ import Card from '../components/Card.vue'
 import ConditionChart from '../components/ConditionChart.vue'
 import { USER_STATUS_CODES } from '@/enums'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const branchSelect = ref(null)
 const departments = ref([])
@@ -131,7 +131,7 @@ const genderOptions = ref({
           },
           total: {
             show: true,
-            label: 'Сотрудники',
+            label: t('employees'),
             fontSize: '18px',
             color: '#9CA8B9',
             fontFamily: 'SFProDisplay-Regular',
@@ -222,13 +222,13 @@ const experienceOptions = ref({
           },
           total: {
             show: true,
-            label: 'лет в среднее',
+            label: t('hr-main-dashboard.chart-text-1'),
             fontSize: '18px',
             color: '#9CA8B9',
             fontFamily: 'SFProDisplay-Regular',
             showAlways: true,
             formatter: function (w) {
-              return '2.8 год'
+              return locale.value === 'uz' ? '2.8 yil' : '2.8 год'
             }
           }
         }
@@ -355,7 +355,7 @@ const agesOptions = ref({
           },
           total: {
             show: true,
-            label: 'лет в среднее',
+            label: t('hr-main-dashboard.chart-text-1'),
             fontSize: '18px',
             color: '#9CA8B9',
             fontFamily: 'SFProDisplay-Regular',
@@ -476,7 +476,7 @@ const managersOptions = ref({
           },
           total: {
             show: true,
-            label: 'сотрудники',
+            label: t('employees'),
             fontSize: '18px',
             color: '#9CA8B9',
             fontFamily: 'SFProDisplay-Regular',
@@ -751,7 +751,7 @@ onMounted(async () => {
               </div>
 
               <div class="font-medium">
-                <h1 class="text-sm text-greyscale-500">Штатная численность</h1>
+                <h1 class="text-sm text-greyscale-500">{{ t('hr-main-dashboard.staff-numbers') }}</h1>
                 <p class="text-2xl text-greyscale-900">{{ countStaff['COUNT'] }}</p>
               </div>
             </div>
@@ -765,7 +765,7 @@ onMounted(async () => {
               </div>
 
               <div class="font-medium">
-                <h1 class="text-sm text-greyscale-500">Общее кол-во сотрудников</h1>
+                <h1 class="text-sm text-greyscale-500">{{ t('hr-main-dashboard.total-number-employees') }}</h1>
                 <p class="text-2xl text-greyscale-900">{{ countEmployees['COUNT'] }}</p>
               </div>
             </div>
@@ -779,7 +779,7 @@ onMounted(async () => {
               </div>
 
               <div class="font-medium">
-                <h1 class="text-sm text-greyscale-500">Общая ставка сотрудников</h1>
+                <h1 class="text-sm text-greyscale-500">{{ t('hr-main-dashboard.total-staff-rate') }}</h1>
                 <p class="text-2xl text-greyscale-900">{{ countRate['COUNT'] }}</p>
               </div>
             </div>
@@ -793,7 +793,7 @@ onMounted(async () => {
               </div>
 
               <div class="font-medium">
-                <h1 class="text-sm text-greyscale-500">Общее кол-во вакансий</h1>
+                <h1 class="text-sm text-greyscale-500">{{ t('hr-main-dashboard.total-number-vacancies') }}</h1>
                 <p class="text-2xl text-greyscale-900">{{ countVacant['COUNT'] }}</p>
               </div>
             </div>
@@ -820,7 +820,7 @@ onMounted(async () => {
                 </div>
 
                 <div class="font-medium absolute -right-2">
-                  <h1 class="text-sm text-greyscale-500">Активность</h1>
+                  <h1 class="text-sm text-greyscale-500">{{ t('hr-main-dashboard.activity') }}</h1>
                   <p class="text-2xl text-greyscale-900">{{ activityPercent }}%</p>
                 </div>
               </div>
@@ -846,7 +846,7 @@ onMounted(async () => {
                 </div>
 
                 <div class="font-medium absolute -right-1">
-                  <h1 class="text-sm text-greyscale-500">Заполненность</h1>
+                  <h1 class="text-sm text-greyscale-500">{{ t('hr-main-dashboard.filling') }}</h1>
                   <p class="text-2xl text-greyscale-900">{{ formCompletionPercent }}%</p>
                 </div>
               </div>
@@ -860,7 +860,7 @@ onMounted(async () => {
       <condition-chart />
 
       <card>
-        <h1 class="font-semibold text-greyscale-900 mb-2">Возраст</h1>
+        <h1 class="font-semibold text-greyscale-900 mb-2">{{ t('hr-main-dashboard.age') }}</h1>
 
         <template v-if="agesLoading">
           <base-spinner />
@@ -895,7 +895,7 @@ onMounted(async () => {
       </card>
 
       <card>
-        <h1 class="font-semibold text-greyscale-900 mb-2">Стаж</h1>
+        <h1 class="font-semibold text-greyscale-900 mb-2">{{ t('hr-main-dashboard.experience') }}</h1>
 
         <template v-if="experienceLoading">
           <base-spinner />
@@ -932,7 +932,7 @@ onMounted(async () => {
 
     <div class="grid grid-cols-3 gap-4">
       <card>
-        <h1 class="font-semibold text-greyscale-900 mb-2">Разряды</h1>
+        <h1 class="font-semibold text-greyscale-900 mb-2">{{ t('hr-main-dashboard.discharges') }}</h1>
 
         <template v-if="positionRankLoading">
           <base-spinner />
@@ -962,7 +962,7 @@ onMounted(async () => {
       </card>
 
       <card>
-        <h1 class="font-semibold text-greyscale-900 mb-2">Руководители / Специалисты / Рабочие</h1>
+        <h1 class="font-semibold text-greyscale-900 mb-2">{{ t('hr-main-dashboard.leaders-text') }}</h1>
 
         <template v-if="managersLoading">
           <base-spinner />
@@ -997,7 +997,7 @@ onMounted(async () => {
       </card>
 
       <card>
-        <h1 class="font-semibold text-greyscale-900 mb-2">Пол</h1>
+        <h1 class="font-semibold text-greyscale-900 mb-2">{{ t('hr-main-dashboard.sex') }}</h1>
 
         <template v-if="genderLoading">
           <base-spinner />

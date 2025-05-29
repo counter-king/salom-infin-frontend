@@ -58,16 +58,16 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
           header: 'finance-dashboard.text-1',
         },
         {
-          header: 'Ценные подарки'
+          header: 'finance-dashboard.text-8'
         },
         {
-          header: 'Выплата пенсионерам (не сотр. Банка)'
+          header: 'finance-dashboard.text-10'
         },
         {
-          header: 'Выплата членам НС'
+          header: 'finance-dashboard.text-9'
         },
         {
-          header: 'Оплата по дог. ГПХ'
+          header: 'finance-dashboard.text-2'
         },
         {
           header: 'finance-dashboard.text-5',
@@ -75,18 +75,6 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         {
           header: 'total-2'
         }
-        // {
-        //   header: 'Выплата членам НС',
-        // },
-        // {
-        //   header: 'Оплата по договору ГПХ',
-        // },
-        // {
-        //   header: 'Премии к праздникам',
-        // },
-        // {
-        //   header: "Ценные подарки",
-        //
       ],
       values: null
     },
