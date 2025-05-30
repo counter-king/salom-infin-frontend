@@ -143,7 +143,63 @@ export const useSalaryStore = defineStore('salary-store', {
           passcode: getStorageItem('PASSCODE'),
           date
         })
+        // const model = [
+        //   {
+        //     "month_value": "1",
+        //     "monthly_salary": "500000000"
+        //   },
+        //   {
+        //     "month_value": "2",
+        //     "monthly_salary": "300000000"
+        //   },
+        //   {
+        //     "month_value": "3",
+        //     "monthly_salary": "400000000"
+        //   },
+        //   {
+        //     "month_value": "4",
+        //     "monthly_salary": "100000000"
+        //   },
+        //   {
+        //     "month_value": "5",
+        //     "monthly_salary": "1000000000"
+        //   },
+        //   {
+        //     "month_value": "6",
+        //     "monthly_salary": "700000000"
+        //   },
+        //   {
+        //     "month_value": "7",
+        //     "monthly_salary": "200000000"
+        //   },
+        //   {
+        //     "month_value": "8",
+        //     "monthly_salary": "800000000"
+        //   },
+        //   {
+        //     "month_value": "9",
+        //     "monthly_salary": "500000000"
+        //   },
+        //   {
+        //     "month_value": "10",
+        //     "monthly_salary": "1500000000"
+        //   },
+        //   {
+        //     "month_value": "11",
+        //     "monthly_salary": "2500000000"
+        //   },
+        //   {
+        //     "month_value": "12",
+        //     "monthly_salary": "900000000"
+        //   }
+        // ]
+        //
+        // this.salarySeries[0].data = date === '2025'
+        //   ? model.slice(0, 4).map(salary => salary.monthly_salary)
+        //   : data.results.map(salary => salary.monthly_salary)
+
         this.salarySeries[0].data = data.results.map(salary => salary.monthly_salary)
+
         return Promise.resolve()
       }
       catch (error) {
