@@ -33,8 +33,10 @@ const options = ref({
       '#767994',
       '#63BA3D',
       '#FFC352',
-      // '#11A5ED',
-      // '#090F33'
+      '#11A5ED',
+      '#090F33',
+      '#FF914D',
+      '#3AD1A1'
     ],
   },
   stroke: {
@@ -80,26 +82,32 @@ const totalCount = computed(() => {
 
 const conditionColors = (condition) => {
   switch (condition) {
-    case 'Namangan viloyati':
-      return '#29CD74'
-    case 'Farg\'ona viloyati':
-      return '#5EC1E7'
     case 'Andijon viloyati':
-      return '#FF7290'
-    case 'Toshkent viloyati':
-      return '#FDC031'
+      return '#29CD74'
     case 'Xorazm viloyati':
+      return '#5EC1E7'
+    case 'Surxondaryo viloyati':
+      return '#FF7290'
+    case 'Toshkent shahri':
+      return '#FDC031'
+    case 'Fargʻona viloyati':
       return '#827BFF'
-    case 'Sirdaryo viloyati':
+    case 'Qashqadaryo viloyati':
       return '#FF72D5'
-    case 'Qoraqalpogiston Respublikasi viloyati':
+    case 'Buxoro viloyati':
       return '#635AFF'
     case 'Samarqand viloyati':
       return '#767994'
-    case 'Surxondaryo viloyati':
+    case 'Navoiy viloyati':
       return '#63BA3D'
-    case 'Qashqadaryo viloyati':
+    case 'Toshkent viloyati':
       return '#FFC352'
+    case 'Sirdaryo viloyati':
+      return '#11A5ED'
+    case 'Qoraqalpogʻiston Respublikasi':
+      return '#FF914D'
+    case 'Jizzax viloyati':
+      return '#3AD1A1'
   }
 }
 

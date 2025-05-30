@@ -158,7 +158,7 @@ const handleYearMonth = async (index) => {
               <div class="flex justify-center flex-1">
                 <button
                   class="flex justify-center items-center h-7 bg-greyscale-70 text-sm text-greyscale-900 capitalize font-medium rounded-full px-3"
-                  :class="{ 'bg-primary-500 text-white': month === index }"
+                  :class="{ 'bg-primary-500 text-white': date === (new Date().getFullYear()).toString() && month === index }"
                   @click="handleYearMonth(index)"
                 >
                   {{ formatDateMonth(new Date().setMonth(index), locale, index) }}
