@@ -6,7 +6,7 @@ import { CalendarLinearIcon, EyeLinearIcon, HeartLinearIcon, CommentDotsIcon } f
 // utils
 import { formatToK } from '@/utils';
 import { formatDate } from '@/utils/formatDate';
-
+import { formatNameToShort } from '@/utils';
 // props
 const props = defineProps({
   item: { type: Object, default: () => {} }
@@ -28,7 +28,18 @@ const props = defineProps({
           <h3 class="font-semibold text-sm text-greyscale-900 line-clamp-2 max-h-[40px] overflow-hidden">{{ props.item.title }}</h3>
           <short-description wrap-class="mt-1 line-clamp-2 !text-greyscale-600 !text-[13px]" :text="props.item.description"/>
         </div>
-        <div class="flex gap-3 mt-auto h-fit">
+        <div class="flex items-center gap-3 mt-auto h-fit">
+          <div class="flex gap-2 items-center">
+            <base-avatar 
+              :label="props.item.created_by?.full_name"
+              :image="props.item.created_by?.avatar?.url"
+              :color="props.item.created_by?.color"
+              :meta="props.item.created_by"
+              detailDialog
+              avatar-classes="!w-6 !h-6"
+            />
+            <span class="text-[13px] text-greyscale-500 font-medium">{{ formatNameToShort(props.item.created_by?.full_name) }}</span>
+          </div>
           <news-category :category="props.item.category"/>
           <div class="flex gap-1 items-center text-[#5F6878]">
             <base-iconify :icon="CalendarLinearIcon" class="!w-3 !h-3" />
