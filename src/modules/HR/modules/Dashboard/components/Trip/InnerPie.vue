@@ -80,25 +80,25 @@ const totalCount = computed(() => {
 
 const conditionColors = (condition) => {
   switch (condition) {
-    case 'Namangan':
+    case 'Namangan viloyati':
       return '#29CD74'
-    case 'Farg\'ona':
+    case 'Farg\'ona viloyati':
       return '#5EC1E7'
-    case 'Andijon':
+    case 'Andijon viloyati':
       return '#FF7290'
-    case 'Toshkent':
+    case 'Toshkent viloyati':
       return '#FDC031'
-    case 'Xorazm':
+    case 'Xorazm viloyati':
       return '#827BFF'
-    case 'Sirdaryo':
+    case 'Sirdaryo viloyati':
       return '#FF72D5'
-    case 'Qoraqalpogiston Respublikasi':
+    case 'Qoraqalpogiston Respublikasi viloyati':
       return '#635AFF'
-    case 'Samarqand':
+    case 'Samarqand viloyati':
       return '#767994'
-    case 'Surxondaryo':
+    case 'Surxondaryo viloyati':
       return '#63BA3D'
-    case 'Qashqadaryo':
+    case 'Qashqadaryo viloyati':
       return '#FFC352'
   }
 }
