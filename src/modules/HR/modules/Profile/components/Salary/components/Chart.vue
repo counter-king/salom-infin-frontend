@@ -154,7 +154,7 @@ const handleYearMonth = async (index) => {
           ></apexchart>
 
           <div class="flex gap-6 -mx-2 pb-1 px-6">
-            <template v-for="(_, index) in date === (new Date().getFullYear()).toString() ? new Date().getMonth() : 12">
+            <template v-for="(_, index) in date === (new Date().getFullYear()).toString() ? salaryStore.salarySeries[0].data.length : 12">
               <div class="flex justify-center flex-1">
                 <button
                   class="flex justify-center items-center h-7 bg-greyscale-70 text-sm text-greyscale-900 capitalize font-medium rounded-full px-3"
