@@ -853,7 +853,7 @@
     "inner-outer": "Ichki va tashqi",
     "inner": "Ichki",
     "outer": "Tashqi",
-    "travel-expenses": "Sayohat xarajatlari"
+    "travel-expenses": "Xizmat safari xarajatlari"
   },
   "head-office": "Bosh ofis",
   "comparison-with-head-bank": "Bosh bank bilan taqqoslash",
@@ -900,5 +900,5 @@
    "ordering": "Farmoyish",
    "my-assignments": "Mening vazifalarim",
    "published-date": "Nashr etilgan sana",
-  "business-trip-dashboard": "Ish safari dashbord"
+  "business-trip-dashboard": "Xizmat safari dashbord"
 }

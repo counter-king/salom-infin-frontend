@@ -105,6 +105,8 @@ const conditionColors = (condition) => {
     case 'Sirdaryo viloyati':
       return '#11A5ED'
     case 'Qoraqalpogʻiston Respublikasi':
+      return '#090F33'
+    case 'Namangan viloyati':
       return '#FF914D'
     case 'Jizzax viloyati':
       return '#3AD1A1'
