@@ -77,6 +77,8 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
           __company: null,
           __route: null,
           __filialList: [...useCommonStore().filialList],
+          __users_to_extend: null,
+          __regions_to_extend: null,
         }
       ],
       __curator: null,

@@ -32,7 +32,11 @@ const fillOnMount = computed(() => {
 })
 
 const updateButtonVisible = computed(() => {
-  return !SDStore.detailModel?.registered_document && route.params.document_sub_type !== COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_V2
+  return !SDStore.detailModel?.registered_document && ![COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_V2, COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_DECREE].includes(route.params.document_sub_type)
+})
+
+const extendBusinessTripButtonVisible = computed(() => {
+  return SDStore.detailModel?.registered_document && [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2].includes(route.params.document_sub_type)
 })
 
 // Methods
@@ -45,7 +49,8 @@ const openUpdatePage = () => {
       document_sub_type: route.params.document_sub_type,
     },
     query: {
-      trip_notice_id: SDStore.detailModel.trip_notice_id || null
+      trip_notice_id: SDStore.detailModel.trip_notice_id || null,
+      parent_id: route.query.parent_id || null,
     }
   })
 }
@@ -57,7 +62,7 @@ const openExtendForm = async () => {
       document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE,
     },
     query: {
-      parent_notice_id: route.params.id
+      parent_id: route.params.id
     }
   })
 }
@@ -127,6 +132,7 @@ onBeforeMount(async () => {
 <!--        />-->
 
         <base-button
+          v-if="extendBusinessTripButtonVisible"
           color="bg-white hover:bg-greyscale-100 text-primary-dark"
           border-color="border-transparent"
           label="modify-business-trip"
@@ -181,7 +187,7 @@ onBeforeMount(async () => {
         >
           <div
             class="min-h-full shadow-block border-[0.095rem] border-greyscale-200"
-            :class="SDStore.detailModel.document_sub_type.id === Number(COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2) ? '' : 'p-10'"
+            :class="[COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2, COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE].includes(String(SDStore.detailModel.document_sub_type.id)) ? '' : 'p-10'"
           >
             <base-template
               :compose-model="SDStore.detailModel"

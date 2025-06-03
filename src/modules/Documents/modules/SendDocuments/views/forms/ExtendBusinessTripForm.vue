@@ -1,32 +1,44 @@
 <script setup>
 // Core
-import { computed, onBeforeMount, ref } from "vue"
+import { computed, nextTick, onBeforeMount, onMounted, onUnmounted, ref } from "vue"
 import { useVuelidate } from "@vuelidate/core"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 // Store
+import { useAuthStore } from "@/modules/Auth/stores"
 import { useBusinessTripStore } from "@/modules/Documents/modules/SendDocuments/stores/businessTrip.store"
+import { useExtendBusinessTripStore } from "@/modules/Documents/modules/SendDocuments/stores/extendBusinessTrip.store"
 // Constants
 import { FORM_TYPE_CREATE, FORM_TYPE_UPDATE } from "@/constants/constants"
-import { JOURNAL } from "@/enums"
+import { COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL } from "@/enums"
 // Utils
 import { returnBTRoute } from "@/modules/Documents/modules/SendDocuments/utils"
 import { formatDate, formatDateReverse } from "@/utils/formatDate"
 // Components
 import { LayoutWithTabsCompose } from "@/components/DetailLayout"
 import UserSelect from "@/components/Select/UserSelect.vue"
-import { CloseSmIcon, TrashBinTrashBoldIcon } from "@/components/Icons"
+import { CloseSmIcon, TrashBinTrashBoldIcon, TrashBinTrashIcon, UnreadLinearIcon } from "@/components/Icons"
 import BaseChip from "@/components/UI/BaseChip.vue"
 import UserMultiSelect from "@/components/Select/UserMultiSelect.vue"
 import EditorWithTabs from "@/components/Composed/EditorWithTabs.vue"
+import { UserWithRadio } from "@/components/Users"
+import {
+  STEPPER_DECREE,
+  STEPPER_TRIP_INFO,
+  STEPPER_WORK_PLAN
+} from "@/modules/Documents/modules/SendDocuments/constants"
+import { Decree } from "@/modules/Documents/modules/SendDocuments/views/forms/FormComponents"
+import { dispatchNotify } from "@/utils/notify"
+import { adjustUsersToArray } from "@/utils";
 
 // Composable
-const store = useBusinessTripStore()
+const store = useExtendBusinessTripStore()
+const businessTripStore = useBusinessTripStore()
+const authStore = useAuthStore()
 const $v = useVuelidate(store.rules, store.model)
-const $vDecree = useVuelidate(store.decreeRules, store.decreeModel)
 const route = useRoute()
 const router = useRouter()
-const { t } = useI18n()
+const {t} = useI18n()
 
 // Props
 const props = defineProps({
@@ -38,6 +50,8 @@ const props = defineProps({
 
 // Reactive
 const showNestedError = ref(false)
+const dialog = ref(false)
+const changingBusinessTrip = ref(null)
 
 // Computed
 const title = computed(() => {
@@ -46,23 +60,116 @@ const title = computed(() => {
 })
 
 // Methods
-const onUserClear = (groupIndex, userIndex) => {
-  store.model.__groups[groupIndex].__users.splice(userIndex, 1)
-}
-const preview = () => {
+const adjustObjects = async () => {
   const approvers = adjustUsersToArray(store.model.__approvers)
   const signers = adjustUsersToArray(store.model.__signers)
 
   store.model.approvers = []
   store.model.signers = []
   store.model.notices = []
-  store.model.bookings = []
-  store.model.trip_plans = []
   store.model.approvers = approvers
   store.model.signers = signers
   store.model.curator = store.model?.__curator?.user_id
   store.model.journal = JOURNAL.INNER
   store.model.company = authStore.currentUser?.company?.id
+
+  store.model.__groups.forEach((group) => {
+    if (Array.isArray(group.__notices_to_change)) {
+      store.model.notices.push(
+        ...group.__notices_to_change.map(notice => ({
+          ...(props.formType === FORM_TYPE_UPDATE ? { id: notice.id } : {}),
+          start_date: notice.__start_date,
+          end_date: notice.__end_date,
+          user: notice.user.id,
+          company: authStore.currentUser?.company?.id,
+          sender_company: notice.sender_company?.id,
+          regions: notice.__regions.map(region => region.id),
+          tags: notice.tags.map(tag => ({
+            id: tag.id
+          })),
+          route: notice.route,
+          group_id: 1,
+          ...(notice.business_trip_id ? {id: notice.business_trip_id} : {})
+        }))
+      )
+    }
+  })
+
+  store.model.sender = authStore?.currentUser?.top_level_department?.id
+  store.model.files = store.model.__files.map(item => {
+    return {id: item.id}
+  })
+  store.model.document_type = route.params.document_type
+  store.model.document_sub_type = route.params.document_sub_type
+  store.model.trip_notice_id = route.query?.parent_id || null
+
+
+  if (props.formType === FORM_TYPE_CREATE && route.query.notice_id) {
+    try {
+      await store.actionUpdateDocument(
+        {
+          id: route.query.notice_id,
+          body: store.model
+        }
+      )
+
+      await dispatchNotify(null, t('notice-saved-successfully'), COLOR_TYPES.SUCCESS)
+    } catch (err) {
+    }
+  }
+  else if (props.formType === FORM_TYPE_CREATE) {
+    try {
+      const {data} = await store.actionCreateDocument(store.model)
+
+      const model = {
+        approvers: [],
+        signers: [],
+        curator: store.model?.__curator?.user_id,
+        journal: JOURNAL.ORDERS_PROTOCOLS,
+        company: authStore.currentUser.company.id,
+        sender: authStore?.currentUser?.top_level_department?.id,
+        document_type: COMPOSE_DOCUMENT_TYPES.DECREE,
+        document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_DECREE,
+        short_description: store.model?.short_description,
+        trip_notice_id: data.id,
+        content: data.content
+      }
+
+      businessTripStore.decreeModel.content = data.content
+
+      try {
+        const res = await store.actionCreateDocument(model)
+        businessTripStore.decreeModel.id = res?.data?.id
+        await router.replace({
+          query: {
+            ...route.query,
+            notice_id: data.id,
+            parent_id : route.query.parent_id,
+          }
+        })
+
+        await dispatchNotify(null, t('notice-saved-successfully'), COLOR_TYPES.SUCCESS)
+
+        await store.actionGetDocumentDetailForUpdate(data.id, route.query.parent_id)
+
+      } catch (err) {
+        console.error(err)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  } else if (props.formType === FORM_TYPE_UPDATE && route.params.id) {
+    try {
+      await store.actionUpdateDocument(
+        {
+          id: route.params.id,
+          body: store.model
+        }
+      )
+      await dispatchNotify(null, t('notice-saved-successfully'), COLOR_TYPES.SUCCESS)
+    } catch (err) {
+    }
+  }
 }
 const onFileUpload = (files) => {
   store.model.__files = []
@@ -70,14 +177,80 @@ const onFileUpload = (files) => {
     store.model.__files.push(file)
   })
 }
+const onRegionsChange = () => {
+
+}
+const onStepClick = async (item) => {
+  try {
+    if (route.query?.step !== item.value) {
+      if (item.value === STEPPER_DECREE) {
+        await validateTripInfo()
+        await adjustObjects()
+      }
+      await businessTripStore.actionStepClick(router, route, item.value)
+    }
+  } catch (error) {
+    console.error(error)
+  }
+}
+const validateTripInfo = async () => {
+  const valid = await $v.value.$validate()
+  showNestedError.value = true
+  if (!valid) {
+    dispatchNotify(null, t('fill-required-fields'), COLOR_TYPES.WARNING)
+    return Promise.reject()
+  }
+
+  const hasAtLeastOneNoticeToChange = store.model.__groups.some(
+    group => Array.isArray(group.__notices_to_change) && group.__notices_to_change.length > 0
+  )
+
+  if (!hasAtLeastOneNoticeToChange) {
+    dispatchNotify(null, "Kamida bitta xodim o'zgartirish uchun tanlanishi kerak!", COLOR_TYPES.WARNING)
+    return Promise.reject()
+  }
+}
+const init = async () => {
+  if (!route.query.step) {
+    await router.replace({
+      query: {
+        ...route.query,
+        step: STEPPER_TRIP_INFO
+      }
+    })
+  }
+
+  businessTripStore.stepperItems.forEach(step => step.active = step.value === route.query.step)
+}
+const checkBusinessTripLocations = async (group, groupIndex) => {
+  await nextTick()
+  const selectedUsers = store.model.__groups[groupIndex].__users_to_extend || []
+  const item = store.model.__notices.find(notice =>
+    selectedUsers.some(user => user.id === notice.user.id)
+  )
+  if (item) {
+    changingBusinessTrip.value = item
+    dialog.value = true
+  }
+}
 
 // Hooks
+onMounted(async () => {
+  await init()
+})
 onBeforeMount(async () => {
-  if (props.formType === FORM_TYPE_UPDATE) {
-    await store.actionGetDocumentDetailForUpdate(route.params.id)
-  } else if (route.query.parent_notice_id) {
-    await store.actionGetDocumentDetailForUpdate(route.query.parent_notice_id)
+  if (props.formType === FORM_TYPE_CREATE && route.query?.notice_id && route.query?.parent_id) {
+    await store.actionGetDocumentDetailForUpdate(route.query?.notice_id, route.query?.parent_id)
   }
+  else if (props.formType === FORM_TYPE_CREATE && route.query?.parent_id) {
+    await store.actionGetParentDocumentDetail(route.query.parent_id)
+  } else if (props.formType === FORM_TYPE_UPDATE) {
+    await store.actionGetDocumentDetailForUpdate(route.params.id, route.query?.parent_id)
+  }
+})
+
+onUnmounted(() => {
+  store.actionResetBTModel()
 })
 </script>
 
@@ -95,221 +268,215 @@ onBeforeMount(async () => {
         :title="title"
       >
         <template #content>
+          <div class="py-4 px-6 border-b-[1.5px] border-greyscale-200">
+            <base-stepper
+              :items="businessTripStore.stepperItems"
+              @emit:step-click="onStepClick"
+            />
+          </div>
+
           <div class="px-6 py-4">
-            <base-row>
-              <base-col col-class="w-1/2">
-                <user-select
-                  v-model="$v.__curator.$model"
-                  :error="$v.__curator"
-                  api-url="top-signers"
-                  :api-params="{ doc_types: route.params.document_type }"
-                  label="whom-specific"
-                  required
-                  placeholder="select-leader"
-                />
-              </base-col>
+            <template v-if="route.query?.step === 'trip_info'">
+              <base-row>
+                <base-col col-class="w-1/2">
+                  <user-select
+                    v-model="$v.__curator.$model"
+                    :error="$v.__curator"
+                    api-url="top-signers"
+                    :api-params="{ doc_types: route.params.document_type }"
+                    label="whom-specific"
+                    required
+                    placeholder="select-leader"
+                  />
+                </base-col>
 
-              <base-col col-class="w-1/2">
-                <base-input
-                  v-model="$v.short_description.$model"
-                  :error="$v.short_description"
-                  required
-                  label="short-description"
-                  placeholder="enter-short-description"
-                />
-              </base-col>
+                <base-col col-class="w-1/2">
+                  <base-input
+                    v-model="$v.short_description.$model"
+                    :error="$v.short_description"
+                    required
+                    label="short-description"
+                    placeholder="enter-short-description"
+                  />
+                </base-col>
 
-              <base-col col-class="w-full mb-2 flex flex-col gap-y-3">
-                <div
-                  v-for="(group, index) in store.model.__groups"
-                  class="border-[1.5px] border-greyscale-200 rounded-2xl px-5 py-4"
-                >
-                  <div class="flex justify-between">
-                    <span class="text-base text-primary-900 font-semibold mb-1">{{ t('group') }}-{{ index + 1 }}</span>
-
-                    <div
-                      v-if="index !== 0"
-                      class="flex justify-center items-center bg-critic-50 hover:bg-critic-100 rounded-lg w-7 h-7 cursor-pointer"
-                      @click="store.actionDeleteGroupBlock(index)"
-                    >
-                      <base-iconify :icon="TrashBinTrashBoldIcon" class="text-critic-500 !w-4 !h-4" />
+                <base-col col-class="w-full mb-2 flex flex-col gap-y-3">
+                  <div
+                    v-for="(group, index) in store.model.__groups"
+                    class="border-[1.5px] border-greyscale-200 rounded-2xl px-5 py-4"
+                  >
+                    <div class="flex justify-between">
+                      <span class="text-base text-primary-900 font-semibold mb-1">{{ t('group') }}-{{
+                          index + 1
+                        }}</span>
                     </div>
-                  </div>
 
-                  <base-row>
-                    <base-col col-class="w-1/2">
-                      <span class="text-sm text-greyscale-500 font-medium">{{ t('employees-in-business-trip') }}</span>
-
-                      <div class="flex gap-x-2 items-center mt-2">
-                        <base-chip
-                          v-for="(user, userIndex) in group.__users"
-                          :label="user.full_name"
-                          type="user"
-                          :clearable="group.__users.length > 1 && index + 1 >= group.__users.length"
-                          @emit:clear="onUserClear(index, userIndex)"
-                        />
-                      </div>
-                    </base-col>
-
-                    <base-col col-class="w-1/2">
-                      <div class="flex align-center gap-x-4">
-                        <div class="w-1/2">
-                          <span class="text-sm text-greyscale-500 font-medium">{{ t('from-where-filial') }}</span>
-
-                          <div class="flex gap-x-2 items-center mt-2">
-                            <base-chip
-                              :label="group.__company.name_uz"
-                              type="location"
-                            />
-                          </div>
-                        </div>
-
-                        <div class="w-1/2">
-                          <span class="text-sm text-greyscale-500 font-medium">{{ t('to-where') }}</span>
-
-                          <div class="flex gap-x-2 items-center mt-2">
-                            <base-chip
-                              v-for="(region, regionIndex) in group.__regions"
-                              :label="region.name_uz"
-                              type="location"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </base-col>
-
-                    <base-col col-class="w-1/2">
-                      <div class="flex align-center gap-x-4">
-                        <div class="w-1/2">
-                          <span class="text-sm text-greyscale-500 font-medium">{{ t('trip-purpose') }}</span>
-
-                          <div class="flex gap-x-2 items-center mt-2">
-                            <base-chip
-                              v-for="(tag, tagIndex) in group.__tags"
-                              :label="tag.name_uz"
-                              type="other"
-                            />
-                          </div>
-                        </div>
-
-                        <div class="w-1/2">
-                          <span class="text-sm text-greyscale-500 font-medium">{{ t('transport-type') }}</span>
-
-                          <div class="flex gap-x-2 items-center mt-2">
-                            <base-chip
-                              :label="returnBTRoute(group.__route)"
-                              type="other"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </base-col>
-
-                    <base-col col-class="w-1/2">
-                      <div class="flex align-center gap-x-4">
-                        <div class="w-1/2">
-                          <span class="text-sm text-greyscale-500 font-medium">{{ t('start-date') }}</span>
-
-                          <div class="flex gap-x-2 items-center mt-2">
-                            <base-chip
-                              :label="formatDate(group.__start_date)"
-                              type="other"
-                            />
-                          </div>
-                        </div>
-
-                        <base-calendar
-                          v-model="group.__end_date"
-                          :error="$v.__groups.$each.$response.$data[index].__end_date"
-                          :min-date="new Date()"
-                          required
-                          label="end-date"
-                          placeholder="choose-end-time"
-                          class="w-1/2"
+                    <base-row>
+                      <base-col col-class="w-full">
+                        <user-multi-select
+                          v-model="group.__users_to_extend"
+                          label="select-employees-in-business-trip"
+                          :options="group.__users"
+                          :searchable="false"
+                          placeholder="select-employees"
                           :show-nested-error="showNestedError"
-                          @update:modelValue="(value) => group.__end_date = formatDateReverse(value)"
+                          :disabled="formType === FORM_TYPE_UPDATE || route.query.notice_id"
+                          @update:modelValue="checkBusinessTripLocations(group, index)"
+
                         />
-                      </div>
-                    </base-col>
-                  </base-row>
-                </div>
-              </base-col>
+                      </base-col>
 
-              <base-col col-class="w-1/2">
-                <user-multi-select
-                  v-model="store.model.__approvers"
-                  label="approvers"
-                  placeholder="enter-approvers"
-                />
-              </base-col>
+                      <base-col col-class="w-full">
+                        <base-row
+                          v-for="item in group.__notices_to_change"
+                        >
+                          <base-col col-class="w-1/3">
+                            <span class="text-sm text-greyscale-500 font-medium">{{
+                                t('employees-in-business-trip')
+                              }}</span>
 
-              <base-col col-class="w-1/2">
-                <user-multi-select
-                  v-model="$v.__signers.$model"
-                  :error="$v.__signers"
-                  label="signers"
-                  placeholder="enter-signers"
-                  required
-                />
-              </base-col>
+                            <base-chip
+                              :label="item.user?.full_name"
+                              class="w-fit"
+                            />
+                          </base-col>
 
-              <base-col col-class="w-full">
-                <div
-                  class="border-[1.5px] rounded-2xl px-5 py-4"
-                  :class="showNestedError && !store.model.content ? 'border-critic-500' : 'border-greyscale-200'"
-                >
-                  <div class="text-base text-primary-900 font-semibold mb-2">{{ t('notice') }}</div>
+                          <base-col col-class="w-1/3">
+                            <base-multi-select
+                              v-model="item.__regions"
+                              api-url="regions"
+                              :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
+                              display="chip"
+                              selectable
+                              label="trip-place"
+                              type="department"
+                              placeholder="select-trip-place"
+                              required
+                              :show-nested-error="showNestedError"
+                              @emit:change="(val) => onRegionsChange(val, index)"
+                            >
+                              <template #chip="{ value }">
+                                {{ value.name }}
+                              </template>
 
-                  <editor-with-tabs
-                    v-model="$v.content.$model"
-                    :error="$v.content"
-                    file-upload-container-classes="w-1/2 pr-2"
-                    :files="store.model.__files"
-                    @emit:file-upload="onFileUpload"
+                              <template #option="{ value }">
+                                <user-with-radio
+                                  :title="value.name"
+                                  :text-truncate="false"
+                                >
+                                </user-with-radio>
+                              </template>
+                            </base-multi-select>
+                          </base-col>
+
+                          <base-col col-class="w-1/3">
+                            <base-calendar
+                              v-model="item.__end_date"
+                              :min-date="new Date(item.__start_date)"
+                              required
+                              label="end-date"
+                              placeholder="choose-end-time"
+                              :show-nested-error="showNestedError"
+                              @update:modelValue="(value) => item.__end_date = formatDateReverse(value)"
+                            />
+                          </base-col>
+                        </base-row>
+                      </base-col>
+                    </base-row>
+                  </div>
+                </base-col>
+
+                <base-col col-class="w-1/2">
+                  <user-multi-select
+                    v-model="store.model.__approvers"
+                    label="approvers"
+                    placeholder="enter-approvers"
                   />
-                </div>
-              </base-col>
+                </base-col>
 
-              <base-col col-class="w-full">
-                <div
-                  class="border-[1.5px] rounded-2xl px-5 py-4"
-                  :class="showNestedError && !store.model.content ? 'border-critic-500' : 'border-greyscale-200'"
-                >
-                  <div class="text-base text-primary-900 font-semibold mb-2">{{ t('decree') }}</div>
-
-                  <editor-with-tabs
-                    v-model="store.decreeModel.content"
-                    :error="$vDecree.content"
-                    file-upload-container-classes="w-1/2 pr-2"
-                    :files="store.decreeModel.__files"
-                    @emit:file-upload="onFileUpload"
+                <base-col col-class="w-1/2">
+                  <user-multi-select
+                    v-model="$v.__signers.$model"
+                    :error="$v.__signers"
+                    label="signers"
+                    placeholder="enter-signers"
+                    required
                   />
-                </div>
-              </base-col>
-            </base-row>
+                </base-col>
 
-            <div class="flex items-center justify-between">
-              <base-button
-                label="save-as-draft"
-                color="bg-primary-0 hover:bg-greyscale-100 text-primary-dark"
-                rounded
-                shadow
-                border-color="border-transparent"
-              />
+                <base-col col-class="w-full">
+                  <div
+                    class="border-[1.5px] rounded-2xl px-5 py-4"
+                    :class="showNestedError && !store.model.content ? 'border-critic-500' : 'border-greyscale-200'"
+                  >
+                    <div class="text-base text-primary-900 font-semibold mb-2">{{ t('notice') }}</div>
 
-              <base-button
-                label="preview"
-                rounded
-                shadow
-                border-color="border-transparent"
-                class="ml-2"
-                @click="preview"
-              />
-            </div>
+                    <editor-with-tabs
+                      v-model="$v.content.$model"
+                      :error="$v.content"
+                      file-upload-container-classes="w-1/2 pr-2"
+                      :files="store.model.__files"
+                      @emit:file-upload="onFileUpload"
+                    />
+                  </div>
+                </base-col>
+              </base-row>
+
+              <div class="flex items-center justify-between">
+                <base-button
+                  label="save-as-draft"
+                  color="bg-primary-0 hover:bg-greyscale-100 text-primary-dark"
+                  rounded
+                  shadow
+                  border-color="border-transparent"
+                />
+
+                <base-button
+                  label="next-step"
+                  rounded
+                  shadow
+                  border-color="border-transparent"
+                  class="ml-2"
+                  @click="onStepClick({ value: STEPPER_DECREE })"
+                />
+              </div>
+            </template>
+
+            <template v-else-if="route.query?.step === 'decree'">
+              <decree :form-type="formType"/>
+            </template>
           </div>
         </template>
       </layout-with-tabs-compose>
     </template>
+
+    <base-dialog
+      v-model="dialog"
+      label="confirm"
+      max-width="max-w-[610px]"
+    >
+      <template #content>
+
+      </template>
+
+      <template #footer>
+        <base-button
+          color="bg-white hover:bg-greyscale-100 text-primary-dark"
+          border-color="border-transparent"
+          label="cancel"
+          rounded
+          shadow
+          type="button"
+        />
+
+        <base-button
+          label="update"
+          rounded
+          shadow
+          type="button"
+        />
+      </template>
+    </base-dialog>
   </div>
 </template>
 

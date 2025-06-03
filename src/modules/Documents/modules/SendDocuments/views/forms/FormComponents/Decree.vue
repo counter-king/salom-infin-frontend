@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref } from "vue"
+import { computed, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useVuelidate } from "@vuelidate/core"
 import { useI18n } from "vue-i18n"
@@ -23,6 +23,7 @@ import { useCountStore } from "@/stores/count.store"
 import EditorWithTabs from "@/components/Composed/EditorWithTabs.vue"
 import PreviewDialog from "@/modules/Documents/modules/SendDocuments/components/PreviewDialog.vue"
 import { MultipleTemplates } from "@/components/Templates"
+import { useExtendBusinessTripStore } from "@/modules/Documents/modules/SendDocuments/stores/extendBusinessTrip.store";
 
 // Props
 const props = defineProps({
@@ -36,6 +37,7 @@ const props = defineProps({
 const route = useRoute()
 const router = useRouter()
 const store = useBusinessTripStore()
+const extendBusinessTripStore = useExtendBusinessTripStore()
 const $v = useVuelidate(store.decreeRules, store.decreeModel)
 const { t } = useI18n()
 const authStore = useAuthStore()
@@ -43,6 +45,20 @@ const countStore = useCountStore()
 
 // Reactive
 const dialog = ref(false)
+
+// Computed
+const composeModel = computed(() => {
+  const baseModel = route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE
+    ? extendBusinessTripStore.model
+    : store.model
+
+  return {
+    ...baseModel,
+    bookings: store.booking_model.bookings,
+    trip_plans: store.trip_plan_model.trip_plans,
+    decree_content: store.decreeModel.content
+  }
+})
 
 // Methods
 const stepClick = async (step) => {
@@ -70,7 +86,7 @@ const preview = async () => {
   store.decreeModel.sender = authStore?.currentUser?.top_level_department?.id
   // store.decreeModel.files = store.decreeModel.__files.map(item => { return { id: item.id } })
   store.decreeModel.document_type = COMPOSE_DOCUMENT_TYPES.DECREE
-  store.decreeModel.document_sub_type = COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_V2
+  store.decreeModel.document_sub_type = route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE ? COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_DECREE : COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_V2
   store.decreeModel.short_description = store.model.short_description
 
   dialog.value = true
@@ -128,6 +144,9 @@ const manage = async () => {
         id: notice_id,
         document_type: route.params.document_type,
         document_sub_type: route.params.document_sub_type
+      },
+      query: {
+        parent_id: route.query.parent_id,
       }
     })
   } catch (err) {}
@@ -193,12 +212,7 @@ defineExpose({
         >
           <template #content>
             <multiple-templates
-              :compose-model="{
-                ...store.model,
-                bookings: store.booking_model.bookings,
-                trip_plans: store.trip_plan_model.trip_plans,
-                decree_content: store.decreeModel.content
-              }"
+              :compose-model="composeModel"
               :preview="true"
             />
           </template>

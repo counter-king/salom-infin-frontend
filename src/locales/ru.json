@@ -875,5 +875,6 @@
   "published-date": "Дата публикации",
   "business-trip-dashboard": "Командировочный дашбоард",
   "modify-business-trip": "Продлить командировку",
-  "employees-in-business-trip": "Сотрудники в командировках"
+  "employees-in-business-trip": "Сотрудники в командировках",
+  "select-employees-in-business-trip": "Выбрать сотрудников в командировке"
 }

@@ -1,6 +1,7 @@
 <script setup>
 // Core
 import { computed } from "vue"
+import { useRoute } from "vue-router"
 // Utils
 import {
   returnBTClass, returnBTDateTimeToISO,
@@ -8,8 +9,8 @@ import {
   returnBTRoute,
   returnBTRouteType
 } from "@/modules/Documents/modules/SendDocuments/utils"
+import { COMPOSE_DOCUMENT_SUB_TYPES } from "@/enums"
 import { formatDate } from "@/utils/formatDate"
-import { COMPOSE_DOCUMENT_SUB_TYPES } from "@/enums";
 
 const props = defineProps({
   composeModel: {
@@ -23,36 +24,73 @@ const props = defineProps({
   }
 })
 
+const route = useRoute()
+
 const groups = computed(() => {
-  return props.preview ?
-    props.composeModel.__groups.map((group, index) => ({
-      group_id: index + 1,
-      children: group.__users.map((user, userIndex) => ({
-        user,
-        locations: group?.__regions,
-        start_date: group?.__start_date,
-        end_date: group?.__end_date,
-        tags: group?.__tags,
-        sender_company: {
-          region: {
-            name: group?.__company?.region?.name,
+  if (route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE) {
+    if (props.preview) {
+      const allNotices = props.composeModel?.__groups
+        ?.flatMap(group => group.__notices_to_change || [])
+
+      return allNotices.map((notice, noticeId) => ({
+        group_id: noticeId + 1,
+        children: [
+          {
+            user: notice.user,
+            locations: notice?.__regions,
+            start_date: notice.__start_date,
+            end_date: notice.__end_date,
+            tags: notice.tags,
+            sender_company: notice.__sender_company,
           }
-        }
+        ]
       }))
-    }))
-    :
-    props.composeModel?.notices.reduce((acc, item) => {
-      const group = acc.find((g) => g.group_id === item.group_id)
-      if (group) {
-        group.children.push(item)
-      } else {
-        acc.push({
-          group_id: item.group_id,
-          children: [item]
-        })
-      }
-      return acc
-    }, [])
+    } else {
+      return props.composeModel?.notices.map((notice, index) => ({
+        group_id: index + 1,
+        children: [
+          {
+            user: notice.user,
+            locations: notice?.regions,
+            start_date: notice?.start_date,
+            end_date: notice?.end_date,
+            tags: notice?.tags,
+            sender_company: notice?.sender_company,
+          }
+        ]
+      }))
+    }
+  } else {
+    return props.preview ?
+      props.composeModel.__groups.map((group, index) => ({
+        group_id: index + 1,
+        children: group.__users.map((user, userIndex) => ({
+          user,
+          locations: group?.__regions,
+          start_date: group?.__start_date,
+          end_date: group?.__end_date,
+          tags: group?.__tags,
+          sender_company: {
+            region: {
+              name: group?.__company?.region?.name,
+            }
+          }
+        }))
+      }))
+      :
+      props.composeModel?.notices.reduce((acc, item) => {
+        const group = acc.find((g) => g.group_id === item.group_id)
+        if (group) {
+          group.children.push(item)
+        } else {
+          acc.push({
+            group_id: item.group_id,
+            children: [item]
+          })
+        }
+        return acc
+      }, [])
+  }
 })
 
 const trip_plans = computed(() => {
@@ -79,6 +117,7 @@ const bookings = computed(() => {
 </script>
 
 <template>
+<!--  <pre>{{ composeModel }}</pre>-->
   <!-- Loop according to groups -->
   <div
     v-for="(item, index) in groups"
