@@ -36,6 +36,8 @@ export { default as CaseBoldIcon } from  '~icons/solar/case-bold'
 export { default as ClapperboardPlayLinearIcon } from  '~icons/solar/clapperboard-play-linear'
 export { default as PaperclipLinearIcon } from  '~icons/solar/paperclip-linear'
 export { default as SmileCircleLinearIcon } from  '~icons/solar/smile-circle-linear'
+export { default as ChecklistMinimalisticLinearIcon } from  '~icons/solar/checklist-minimalistic-linear'
+export { default as BoltLinearIcon } from  '~icons/solar/bolt-linear'
 // Solar (Outline)
 export { default as CheckCircleIcon } from  '~icons/solar/check-circle-outline'
 export { default as AltArrowUpIcon } from  '~icons/solar/alt-arrow-up-outline'
@@ -178,6 +180,7 @@ export { default as AlignVerticalSpacingBoldIcon } from  '~icons/solar/align-ver
 export { default as AlarmBoldIcon } from  '~icons/solar/alarm-bold'
 export { default as ClipboardCheckBoldIcon } from  '~icons/solar/clipboard-check-bold'
 export { default as Flag2BoldIcon } from  '~icons/solar/flag-2-bold'
+export { default as FaceScanSquareBoldIcon } from  '~icons/solar/face-scan-square-bold'
 // Solar (Bold Duotone)
 export { default as ArchiveUpBoldDuotoneIcon } from  '~icons/solar/archive-up-bold-duotone'
 export { default as StarBoldDuotoneIcon } from  '~icons/solar/star-bold-duotone'

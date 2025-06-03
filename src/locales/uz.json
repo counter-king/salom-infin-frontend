@@ -909,5 +909,11 @@
    "ordering": "Farmoyish",
    "my-assignments": "Mening vazifalarim",
    "published-date": "Nashr etilgan sana",
-  "business-trip-dashboard": "Xizmat safari dashbord"
+  "business-trip-dashboard": "Xizmat safari dashbord",
+  "timesheet-system": "Vaqt jadvali tizimi",
+  "state": "Shtat",
+  "timesheet": "Vaqt jadvali",
+  "helloSQB": "Salom SQB",
+  "general":"Umumiy",
+  "faceId": "Face ID"
 }

@@ -910,5 +910,11 @@
   "ordering":"Распоряжение",
   "my-assignments": "Мои поручения",
   "published-date": "Дата публикации",
-  "business-trip-dashboard": "Командировочный дашбоард"
+  "business-trip-dashboard": "Командировочный дашбоард",
+  "timesheet-system": "Система табел",
+  "state": "Штат",
+  "timesheet": "Табель",
+  "helloSQB": "Salom SQB",
+  "general":"Общей",
+  "faceId": "Face ID"
 }

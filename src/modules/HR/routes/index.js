@@ -4,6 +4,7 @@ import Agreements from '../modules/Agreements/routes'
 import AgreementSettings from '../modules/AgreementSettings/routes'
 import Dashboard from '../modules/Dashboard/routes'
 import MyActivities from '../modules/MyActivities/routes'
+import TimesheetSystem from '../modules/TimesheetSystem/routes'
 
 const HR = [
   {
@@ -26,7 +27,9 @@ const HR = [
       // Dashboard
       ...Dashboard,
       // MyActivities
-      ...MyActivities
+      ...MyActivities,
+      // TimesheetSystem
+      ...TimesheetSystem
     ]
   }
 ]
