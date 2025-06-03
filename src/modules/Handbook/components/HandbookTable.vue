@@ -132,6 +132,10 @@ const select = ref({
               <span class="text-sm font-medium text-greyscale-900">Скрыт пользователем</span>
             </template>
           </div>
+
+          <div class="max-w-[225px] w-full py-3 px-4 cursor-pointer" @click="modal = true; select = user">
+            <span class="text-sm font-medium text-greyscale-900">{{ user.phone_2 ?? '-' }}</span>
+          </div>
         </div>
       </template>
     </template>

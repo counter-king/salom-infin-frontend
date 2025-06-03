@@ -59,7 +59,7 @@ const signers = computed(() => {
       FARMOYISH
     </div>
 
-    <div v-if="SDStore.historyShow && composeModel.type === 'decree_for_leadership'" class="text-justify" v-html="SDStore.historyContent"></div>
+    <div v-if="SDStore.historyShow" class="text-justify" v-html="SDStore.historyContent"></div>
     <div v-else class="text-justify" v-html="props.composeModel?.content"></div>
 
 <!--    && composeModel.trip_plans?.length && (composeModel.bookings?.length || composeModel.type === 'decree_for_leadership')-->

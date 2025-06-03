@@ -1,66 +1,115 @@
 const BusinessTrip = [
   {
-    path: "business-trip",
-    name: "BusinessTripIndex",
+    path: 'trip',
+    name: 'BusinessTripIndex',
     meta: {
       isAuthRequired: true
     },
     component: () => import("../views/index.vue"),
-    redirect: { name: "BusinessTripList" },
+    redirect: { name: "BusinessTripMainIndex" },
     children: [
       {
-        path: "list",
-        name: "BusinessTripList",
+        path: "business-trip",
+        name: "BusinessTripMainIndex",
         meta: {
-          isAuthRequired: true
+          isAuthRequired: true,
+          navigation: true
         },
-        component: () => import("../views/List.vue"),
-      },
-      {
-        path: "show/:id",
-        name: "BusinessTripDetail",
-        meta: {
-          isAuthRequired: true
-        },
-        component: () => import("../views/Detail.vue"),
-        redirect: { name: "BusinessTripProcess" },
+        component: () => import("../views/BussinessTripIndex.vue"),
+        redirect: { name: "BusinessTripList" },
         children: [
           {
-            path: "process",
-            name: "BusinessTripProcess",
+            path: "list",
+            name: "BusinessTripList",
             meta: {
               isAuthRequired: true
             },
-            component: () => import("../views/BusinessTripProcess/Detail.vue")
+            component: () => import("../views/List.vue"),
           },
           {
-            path: "advance-report-list",
-            name: "BusinessTripAdvanceReportList",
+            path: "show/:id",
+            name: "BusinessTripDetail",
             meta: {
               isAuthRequired: true
             },
-            component: () => import("../views/AdvanceReport/List.vue")
+            component: () => import("../views/Detail.vue"),
+            redirect: { name: "BusinessTripProcess" },
+            children: [
+              {
+                path: "process",
+                name: "BusinessTripProcess",
+                meta: {
+                  isAuthRequired: true
+                },
+                component: () => import("../views/BusinessTripProcess/Detail.vue")
+              },
+              {
+                path: "advance-report-list",
+                name: "BusinessTripAdvanceReportList",
+                meta: {
+                  isAuthRequired: true
+                },
+                component: () => import("../views/AdvanceReport/List.vue")
+              },
+              {
+                path: "advance-report-create",
+                name: "BusinessTripAdvanceReportCreate",
+                meta: {
+                  isAuthRequired: true
+                },
+                component: () => import("../views/AdvanceReport/Create.vue")
+              },
+              {
+                path: "certificate",
+                name: "BusinessTripCertificate",
+                meta: {
+                  isAuthRequired: true
+                },
+                component: () => import("../views/BusinessTripProcess/Certificate.vue")
+              },
+            ]
+          }
+        ]
+      },
+      //  settings
+      {
+        path: "settings",
+        name: "BusinessTripSettings",
+        meta: {
+          isAuthRequired: true,
+          navigation: true
+        },
+        component: () => import("../views/Settings/index.vue"),
+        redirect: { name: "GeographicalHandbook" },
+        children: [
+          {
+            path: "geographical-handbook",
+            name: "GeographicalHandbook",
+            meta: {
+              isAuthRequired: true
+            },
+            component: () => import("../views/Settings/GeographicalHandbook.vue")
           },
           {
-            path: "advance-report-create",
-            name: "BusinessTripAdvanceReportCreate",
+            path: "trip-purpose",
+            name: "TripPurpose",
             meta: {
               isAuthRequired: true
             },
-            component: () => import("../views/AdvanceReport/Create.vue")
+            component: () => import("../views/Settings/TripPurpose.vue")
           },
           {
-            path: "certificate",
-            name: "BusinessTripCertificate",
+            path: "history",
+            name: "TripHistory",
             meta: {
               isAuthRequired: true
             },
-            component: () => import("../views/BusinessTripProcess/Certificate.vue")
-          },
+            component: () => import("../views/Settings/History.vue")
+          }
         ]
       }
     ]
-  }
+  },
 ]
 
 export default BusinessTrip

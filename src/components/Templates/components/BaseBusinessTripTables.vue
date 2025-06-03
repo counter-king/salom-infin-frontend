@@ -32,7 +32,12 @@ const groups = computed(() => {
         locations: group?.__regions,
         start_date: group?.__start_date,
         end_date: group?.__end_date,
-        tags: group?.__tags
+        tags: group?.__tags,
+        sender_company: {
+          region: {
+            name: group?.__company?.region?.name,
+          }
+        }
       }))
     }))
     :
@@ -108,16 +113,18 @@ const bookings = computed(() => {
       <!-- /Loop according to group users -->
     </table>
 
+<!--    <pre>{{ composeModel }}</pre>-->
+
     <table class="business-trip-table w-full text-sm text-center mt-2">
       <tr class="bg-greyscale-100 font-semibold">
-        <td class="w-1/3 text-start">
-          Xizmat safari hududi:
+        <td class="w-1/3">
+          Qayerdan
+        </td>
+        <td class="w-1/3">
+          Qayerga
         </td>
         <td class="w-1/3">
           Mamlakat
-        </td>
-        <td class="w-1/3">
-          Hudud
         </td>
       </tr>
 
@@ -126,9 +133,9 @@ const bookings = computed(() => {
         v-for="(location, index) in item.children[0]?.locations"
         :key="location?.id"
       >
-        <td></td>
-        <td>O'zbekiston</td>
+        <td>{{ index === 0 ? item?.children[0]?.sender_company?.region?.name : '' }}</td>
         <td>{{ location?.name_uz }}</td>
+        <td>{{ index === 0 ? location?.country?.name : '' }}</td>
       </tr>
       <!-- /Loop according to group regions -->
     </table>

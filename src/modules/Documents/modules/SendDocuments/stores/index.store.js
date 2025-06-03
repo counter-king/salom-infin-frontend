@@ -77,7 +77,7 @@ export const useSDStore = defineStore("sd-stores", {
       },
       // Распоряжения
       {
-        label: "decree",
+        label: "ordering",
         icon: "CheckCircleIcon",
         type: "decree",
         sub_type: "decree",
@@ -166,6 +166,8 @@ export const useSDStore = defineStore("sd-stores", {
     detailLoading: false,
     customUpdateLoading: false,
     versionHistoryList: [],
+    secondVersionHistoryList: [],
+    tempVersionHistoryList: [],
     historyContent: "",
     historyShow: false,
     tree: null,
@@ -508,7 +510,7 @@ export const useSDStore = defineStore("sd-stores", {
         },
         // Распоряжения
         {
-          label: "decree",
+          label: "ordering",
           icon: "CheckCircleIcon",
           type: "decree",
           sub_type: "decree",
@@ -642,7 +644,8 @@ export const useSDStore = defineStore("sd-stores", {
           let { data } = await fetchGetTree(response.data?.registered_document)
           this.tree = data
         }
-        await this.actionVersionHistory(id)
+        console.log(response)
+        await this.actionVersionHistory(id, response?.data?.document_sub_type?.id === Number(COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2) ? res?.data?.to_composes[0]?.from_compose?.id : null)
         // let files = []
         // if (response.data.files.length) {
         //   for (const file of response.data.files) {
@@ -656,6 +659,7 @@ export const useSDStore = defineStore("sd-stores", {
 
         this.detailModel = {
           ...response.data,
+          decree_id: res?.data?.to_composes[0]?.from_compose?.id,
           decree_content: res?.data?.to_composes[0]?.from_compose?.content,
           decree_register_number: res?.data?.to_composes[0]?.from_compose?.register_number,
         }
@@ -684,12 +688,28 @@ export const useSDStore = defineStore("sd-stores", {
       }
     },
     /** **/
-    async actionVersionHistory(id) {
+    async actionVersionHistory(id, secondId = null) {
       this.versionHistoryList = []
+      this.tempVersionHistoryList = []
+      this.secondVersionHistoryList = []
       const response = await fetchVersionHistory(id)
       if (response.status === 200) {
-        this.versionHistoryList = response.data.map(item => ({ ...item, active: false }))
+        this.tempVersionHistoryList = response.data.map(item => ({ ...item, active: false }))
+        this.versionHistoryList = this.tempVersionHistoryList
       }
+      if (secondId) {
+        const secondResponse = await fetchVersionHistory(secondId)
+        if (secondResponse && secondResponse.status === 200) {
+          this.secondVersionHistoryList = secondResponse.data.map(item => ({ ...item, active: false }))
+        }
+      }
+    },
+    /** **/
+    actionCloseHistoryDetail() {
+      this.historyShow = false
+      this.tempVersionHistoryList.forEach(item => item.active = false)
+      this.versionHistoryList.forEach(item => item.active = false)
+      this.secondVersionHistoryList.forEach(item => item.active = false)
     }
   }
 })

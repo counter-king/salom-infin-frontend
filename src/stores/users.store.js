@@ -1,8 +1,10 @@
 import { defineStore } from "pinia"
 import {
   fetchUsersList,
+  fetchUserSearchList,
   fetchEmployeeGroupsList,
-  fetchEmployeeGroupsCreate
+  fetchEmployeeGroupsCreate,
+  fetchUserOnVacationList
 } from "@/services/users.service"
 
 export const useUsersStore = defineStore("users", {
@@ -20,6 +22,30 @@ export const useUsersStore = defineStore("users", {
       this.usersList = data.results
 
       return Promise.resolve(data.results)
+    },
+    /**
+     * Поиск пользователей
+     * @returns Promise
+     * */
+    async actionUserSearchList(payload = {}) {
+      let { data } = await fetchUserSearchList(payload)
+
+      return Promise.resolve({
+        results: data.results,
+        count: data.count
+      })
+    },
+    /**
+     * Поиск пользователей
+     * @returns Promise
+     * */
+    async actionUserOnVacationList(payload = {}) {
+      let { data } = await fetchUserOnVacationList(payload)
+
+      return Promise.resolve({
+        results: data.results,
+        count: data.count
+      })
     },
     /**
      * Возвращает список группа сотрудников

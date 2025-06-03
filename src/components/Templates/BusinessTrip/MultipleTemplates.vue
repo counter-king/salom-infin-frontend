@@ -1,9 +1,10 @@
 <script setup>
 // Core
-import { ref } from "vue"
+import {reactive, ref} from "vue"
 // Components
 import { CustomTabs } from "@/components/Tabs"
 import { BusinessTripTemplate, DecreeTemplate } from "@/components/Templates"
+import { useSDStore } from "@/modules/Documents/modules/SendDocuments/stores/index.store"
 
 // Props
 const props = defineProps({
@@ -16,6 +17,9 @@ const props = defineProps({
     default: false
   }
 })
+
+// Composable
+const SDStore = useSDStore()
 
 // Reactive
 const tabs = ref([
@@ -33,7 +37,9 @@ const tabs = ref([
   }
 ])
 // Methods
-const onItemClick = (item) => {
+const onItemClick = async (item) => {
+  SDStore.actionCloseHistoryDetail()
+  item.id === 1 ? SDStore.versionHistoryList = SDStore.tempVersionHistoryList : SDStore.versionHistoryList = SDStore.secondVersionHistoryList
   emit('emit:onItemClick', item)
 }
 // Emits

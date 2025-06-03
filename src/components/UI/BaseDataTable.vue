@@ -60,6 +60,9 @@ const props = defineProps({
   actionList: {
     type: Function,
     default: () => void 0
+  },
+  borderable: {
+    type: Boolean,
   }
 });
 const emit = defineEmits([
@@ -112,6 +115,8 @@ const onPageChange = async (val) => {
       }
     });
   await props.actionList({ ...route.query, page: paginationStore.page, page_size: paginationStore.pageSize });
+
+  emit('emit:onPageChange', paginationStore.page)
 }
 const initializeTable = async () => {
   if (route.query && route.query.page && route.query.page_size && route.query.first_row) {
@@ -159,7 +164,13 @@ onMounted( async () => {
     :total-records="props.totalCount"
     :loading="props.loading"
     :pt="{
-      table: { class: ['border-separate', 'border-spacing-y-1', '-mt-1'] },
+      table: {
+        class: [
+          {
+            'border-separate border-spacing-y-1 -mt-1': !props.borderable
+          }
+        ]
+      },
       thead: { class: ['bg-white'] },
       bodyRow: { class: ['cursor-pointer', 'hover:bg-greyscale-50'] },
       loadingoverlay: { class: ['bg-transparent overflow-hidden', 'h-[calc(100%-56px)]'] },
@@ -190,7 +201,10 @@ onMounted( async () => {
       }
     }"
     class="base-data-table"
-    :class="{ 'base-data-table--roundable': props.roundable }"
+    :class="{
+      'base-data-table--roundable': props.roundable,
+      'base-data-table--borderable': props.borderable,
+    }"
     @row-click="event => emit('emit:rowClick', event.data)"
     @page="onPageChange"
     @update:selection="updateSelection"
@@ -226,6 +240,7 @@ onMounted( async () => {
       <Column
         :header="t(header.header)"
         :field="header.field"
+        :style="{ width: header.width }"
         :pt="{
           headerCell: { class: ['bg-inherit h-[56px]', header.class] },
           headerContent: { class: ['text-sm', 'font-semibold', 'text-greyscale-500'] },
@@ -287,5 +302,9 @@ onMounted( async () => {
 
 .base-data-table--roundable th:last-child, .base-data-table--roundable td:last-child {
   border-radius: 0 12px 12px 0;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+  border-bottom: 1px solid #E2E8F0 !important;
 }
 </style>

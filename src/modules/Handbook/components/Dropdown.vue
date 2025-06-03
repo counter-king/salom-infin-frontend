@@ -25,7 +25,7 @@ const props = defineProps({
     })
 	},
 })
-const emit = defineEmits(['update:modelValue', 'update:options'])
+const emit = defineEmits(['update:modelValue', 'update:options', 'emit:change'])
 // Composable
 const modelValue = useModel(props, 'modelValue')
 // Computed
@@ -54,6 +54,7 @@ const options = computed({
       input-class="leading-[14px] !py-3 !pl-4"
       wrapper-class="!max-h-[240px]"
       item-class="!py-[10px]"
+      @emit:change="(value) => emit('emit:change', value)"
     >
     </base-dropdown>
   </div>

@@ -89,19 +89,19 @@ watch(
   () => salaryStore.isLoggedIn,
   async () => {
     salaryStore.isLoggedIn && await salaryStore.getSalaryStatistic()
-    await handleYearMonth(0)
+    await handleYearMonth(new Date().getMonth())
   }
 )
 // Methods
 const dateSelect = async () => {
   date.value = new Date(date.value).getFullYear().toString()
   await salaryStore.getSalaryStatistic(date.value)
-  await handleYearMonth(0)
+  await handleYearMonth(new Date().getMonth())
 }
 const clear = () => {
   date.value = new Date().getFullYear().toString()
   salaryStore.getSalaryStatistic()
-  handleYearMonth(0)
+  handleYearMonth(new Date().getMonth())
 }
 const handleYearMonth = async (index) => {
   month.value = index
@@ -154,14 +154,14 @@ const handleYearMonth = async (index) => {
           ></apexchart>
 
           <div class="flex gap-6 -mx-2 pb-1 px-6">
-            <template v-for="(_, index) in 12">
+            <template v-for="(_, index) in date === (new Date().getFullYear()).toString() ? salaryStore.salarySeries[0].data.length : 12">
               <div class="flex justify-center flex-1">
                 <button
                   class="flex justify-center items-center h-7 bg-greyscale-70 text-sm text-greyscale-900 capitalize font-medium rounded-full px-3"
-                  :class="{ 'bg-primary-500 text-white': month === index }"
+                  :class="{ 'bg-primary-500 text-white': date === (new Date().getFullYear()).toString() && month === index }"
                   @click="handleYearMonth(index)"
                 >
-                  {{ formatDateMonth(new Date().setMonth(index), locale) }}
+                  {{ formatDateMonth(new Date().setMonth(index), locale, index) }}
                 </button>
               </div>
             </template>

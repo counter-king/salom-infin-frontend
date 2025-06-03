@@ -23,8 +23,10 @@ import NewsModerationHistory from '../components/NewsModerationHistory.vue';
 import BaseIconify from '@/components/UI/BaseIconify.vue';
 import { EyeBoldIcon, HeartBoldIcon } from '@/components/Icons';
 // services
-import { fetchCreateNewsComment, fetchCreateNewsLike, fetchCreateNewsModerationHistory, fetchGetMyNews, fetchGetNewsCommentList, fetchGetNewsModerationHistoryList, fetchModerationApproveNews } from '../services/news.service';
+import { fetchCreateNewsComment, fetchCreateNewsLike, fetchCreateNewsModerationHistory, fetchGetMyNews, fetchGetNewsCommentList, fetchGetNewsModerationHistoryList, fetchModerationApproveNews,fetchGetPendingNews } from '../services/news.service';
 import { fetchBlobFile } from '../../../services/file.service';
+// store
+import { useCountStore } from '@/stores/count.store'
 // utils
 import { formatToK } from '@/utils';
 import { dispatchNotify } from '@/utils/notify';
@@ -36,6 +38,8 @@ import { NEWS_STATUS } from '../enums';
 const  { t } = useI18n()
 const  route = useRoute()
 const  router = useRouter()
+// composibles
+const countStore = useCountStore()
 // reactive 
 const loading = ref(false)
 const newsOne = ref({})
@@ -88,7 +92,42 @@ const fetchOneNews = async() => {
    } finally {
     loading.value = false
    }
- }
+}
+
+const fetchOnePendingNews = async() => {
+   loading.value = true
+   try {
+
+       const { data }  = await fetchGetPendingNews(route.params.id)   
+       const { blobUrl } = await fetchBlobFile(data.image.id)
+       data.image.blobUrl = blobUrl
+
+       data.contents = await Promise.all(data.contents.map(async(item) => {
+        if([CONTENT_TYPES.AUDIO, CONTENT_TYPES.VIDEO, CONTENT_TYPES.IMAGE].includes(item.type)){
+            const { blobUrl } = await fetchBlobFile(item.file?.id)
+            item.file.blobUrl = blobUrl
+            return item
+        } else {
+           return item
+        }
+       }))
+
+       data.galleries = await Promise.all(data.galleries.map(async(item) => {
+        const { blobUrl } = await fetchBlobFile(item.id)
+        item.blobUrl = blobUrl
+        return item
+       }))
+
+       newsOne.value = data
+       viewHeartIsLike.value = data.is_liked
+       viewHeartLikeCounts.value = data.like_counts 
+
+   } catch(e) {
+    dispatchNotify(null, e?.message, COLOR_TYPES.ERROR)
+   } finally {
+    loading.value = false
+   }
+}
 
  /* user click like, dislike operation */
 const handleClickLike = async() => {
@@ -145,6 +184,7 @@ const handleModerationApprove = async () => {
   try {
     await fetchCreateNewsModerationHistory({ news: newsId.value, status: NEWS_STATUS.PUBLISHED, description: null })
     await fetchModerationApproveNews(newsId.value, { status: NEWS_STATUS.PUBLISHED })
+    countStore.actionCountList()
   }
   catch(e){
     dispatchNotify(null, e?.message, COLOR_TYPES.ERROR)
@@ -160,6 +200,7 @@ const handleRejectModeration = async (reason) => {
   try {
     await fetchCreateNewsModerationHistory({ news: newsId.value, status: NEWS_STATUS.DECLINED, description: reason })
     await fetchModerationApproveNews(newsId.value, {cancelled_reason: reason, status: NEWS_STATUS.DECLINED})
+    countStore.actionCountList()
   } 
   catch(e){
     dispatchNotify(null, e?.message, COLOR_TYPES.ERROR)
@@ -176,7 +217,11 @@ const handleRejectModerationDialog = async () => {
 }
 
 const fetchAllApi = async () => {
-    await fetchOneNews()
+    if(type.value === 'show'){
+        await fetchOneNews()
+    } else {
+        await fetchOnePendingNews()
+    }
     await getNewCommentList()
     await getNewsModerationHistoryList()
 }
@@ -303,7 +348,7 @@ onMounted( async () => {
                             <div 
                                 class="w-8 h-8 min-w-8 min-h-8 text-base text-greyscale-300 bg-greyscale-50 rounded-full flex justify-center items-center font-semibold"
                                 :class="{'!text-critic-500 !bg-critic-30': activeTabPanel === 'history'}"
-                                >{{ newCommentList.length}}</div>
+                                >{{ newsModerationHistoryList.length}}</div>
                         </div>    
                     </div>
                     <!-- comment enter -->
@@ -338,7 +383,7 @@ onMounted( async () => {
                 </div>
             </div>
             <!-- container-bottom -->
-            <div v-if="type === 'moderation' && !loading"
+            <div v-if="type === 'moderation' && newsOne.status === NEWS_STATUS.PANDING && !loading"
                 class="news-details py-4 px-6 flex gap-3 bg-greyscale-50 rounded-b-[20px] justify-end"
                 >
                 <base-button

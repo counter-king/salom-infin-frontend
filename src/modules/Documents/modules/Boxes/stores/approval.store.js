@@ -122,7 +122,7 @@ export const useBoxesApprovalStore = defineStore("approval-stores", {
       const response = await fetchApprovalDetail(id)
       const decreeCompose = await fetchGetLinkedDocumentsList(response.data?.compose?.id)
       if (response.status === 200) {
-        await useSDStore().actionVersionHistory(response.data?.compose?.id)
+        await useSDStore().actionVersionHistory(response.data?.compose?.id, response.data?.compose?.document_sub_type?.id === Number(COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2) ? decreeCompose?.data?.to_composes[0]?.from_compose?.id : null)
         if (response.data?.compose?.registered_document){
           let { data } = await fetchGetTree(response.data?.compose?.registered_document)
           this.tree = data

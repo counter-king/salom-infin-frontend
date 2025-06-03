@@ -66,7 +66,7 @@ export const useCommonStore = defineStore("common", {
       const allUrlStore = useAllUrlStore()
       const permissionStore = usePermissionStore()
 
-      await userPermissionStore.getUserPermisission()
+      await userPermissionStore.getUserPermission()
       await correspondent.actionGetList({})
 			await users.actionUsersList()
       await users.actionEmployeeGroupList()

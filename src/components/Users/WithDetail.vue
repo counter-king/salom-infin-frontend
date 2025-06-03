@@ -128,6 +128,12 @@ const props = defineProps({
           </div>
 
           <div class="flex items-center gap-[10px]">
+            <base-iconify :icon="CallMedicineRoundedBoldIcon" class="text-greyscale-400" />
+
+            <span class="text-sm font-medium text-greyscale-900">{{ props.meta?.phone_2 ?? '-' }}</span>
+          </div>
+
+          <div class="flex items-center gap-[10px]">
             <base-iconify :icon="LetterBoldIcon" class="text-greyscale-400" />
 
             <span class="text-sm font-medium text-greyscale-900">{{ props.meta?.email ?? '-' }}</span>

@@ -133,7 +133,7 @@ onMounted(async () => {
         <base-input
           v-model="search"
           :icon-left="MagniferIcon"
-         :placeholder="t('search')"
+          :placeholder="t('search')"
           class="flex p-input-icon-left items-center"
           input-class="!pl-10 p-3 bg-white text-xs !rounded-[90px] placeholder:text-xs"
           icon-left-class="!w-4 !h-4"

@@ -33,7 +33,7 @@ const isNextDestinationVisible = computed(() => {
     return true
   }
 
-  return lastItem.is_sender && !lastItem.left_at
+  return lastItem.is_sender || lastItem.left_at
 })
 const sender = computed(() => {
   return props.verifications.find(item => item.is_sender)

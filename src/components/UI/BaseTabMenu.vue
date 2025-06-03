@@ -23,6 +23,9 @@ const props = defineProps({
   },
   menuClass: {
     type: String
+  },
+  actionClass: {
+    type: String
   }
 })
 const modelValue = useModel(props, 'modelValue');
@@ -72,6 +75,7 @@ const panelClass = (_, state, context) => {
             'm-0 border-transparent bg-inherit font-medium py-2 m-1 mb-[2px] w-32 text-center rounded-lg flex justify-center': props.segment,
             '!ml-0 !py-1 !px-2 rounded-[6px] border-none hover:bg-greyscale-50': props.bricks
           },
+          props.actionClass,
           panelClass(_, state, context)
         ],
       }),
@@ -86,7 +90,15 @@ const panelClass = (_, state, context) => {
     }"
   >
     <template v-if="!(props.segment || props.bricks)" #item="{ item, label }">
-      <a role="menuitem" class="p-menuitem-link text-greyscale-500 font-medium m-0 border-transparent py-4 px-0 mx-4" aria-label="Ortga" aria-disabled="false" tabindex="-1" data-pc-section="action">
+      <a
+        role="menuitem"
+        class="p-menuitem-link text-greyscale-500 font-medium m-0 border-transparent py-4 px-0 mx-4"
+        aria-label="Ortga"
+        aria-disabled="false"
+        tabindex="-1"
+        data-pc-section="action"
+        :class="[props.actionClass]"
+      >
         <base-iconify
           v-if="item.icon"
           :icon="item.icon"
@@ -100,6 +112,14 @@ const panelClass = (_, state, context) => {
 </template>
 
 <style scoped>
+::v-deep(.p-tabmenu-nav) {
+  margin-left: 20px;
+}
+
+.p-tabmenuitem:first-child > a {
+  margin-left: 0 !important;
+}
+
 .p-tabmenuitem.p-highlight > a {
   @apply !text-primary-900;
   @apply !font-semibold;

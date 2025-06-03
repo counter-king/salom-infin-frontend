@@ -21,6 +21,7 @@ import Eimzo from "@/components/EIMZO/Eimzo.vue"
 // Enums
 import { COMPOSE_DOCUMENT_SUB_TYPES, SIGNER_TYPES } from "@/enums"
 import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue"
+import { useAuthStore } from "@/modules/Auth/stores";
 
 const signStore = useBoxesSignStore()
 const countStore = useCountStore()
@@ -142,7 +143,7 @@ onMounted( async () => {
         <template v-if="signed === null">
           <template v-if="signStore.detailModel.type !== SIGNER_TYPES.BASIC_SIGNER">
             <base-button
-              v-if="isHostVercel"
+              v-if="isHostVercel || useAuthStore().currentUser.id === 1"
               border-color="border-transparent"
               label="sign"
               :icon-left="CheckCircleIcon"

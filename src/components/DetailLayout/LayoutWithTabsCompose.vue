@@ -128,8 +128,7 @@ const getVersionHistoryDetail = async (item) => {
   SDStore.historyShow = true
 }
 const closeHistoryDetail = () => {
-  SDStore.historyShow = false
-  SDStore.versionHistoryList.forEach(i => i.active = false)
+  SDStore.actionCloseHistoryDetail()
 }
 </script>
 
