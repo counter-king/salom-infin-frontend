@@ -204,10 +204,9 @@ onMounted( async () => {
     >
     <Column
       header="№"
-      :style="{ width: '3%'}"
       :pt="{
         headerCell: {
-          class: ['bg-greyscale-50 px-[10px] h-[48px] border-0 border-r border-greyscale-200 rounded-tl-[12px]', props.headerCellClass]
+          class: ['bg-greyscale-50 px-[10px] h-[48px] border-0 border-r border-greyscale-200', props.headerCellClass]
         },
         headerContent: {
           class: ['text-sm font-semibold text-greyscale-500', props.headerCellContentClass]
@@ -238,7 +237,7 @@ onMounted( async () => {
         :style="{ width: header.width }"
         :pt="{
           headerCell: { 
-            class: ['bg-greyscale-50 px-[11px] h-[48px] border-0 border-r border-greyscale-200 last:rounded-tr-[12px] last:border-r-0', props.headerCellClass]
+            class: ['bg-greyscale-50 px-[11px] h-[48px] border-0 border-r border-greyscale-200 last:border-r-0', props.headerCellClass]
           },
           headerContent: {
             class: ['gap-1 text-sm font-semibold text-greyscale-500', props.headerCellContentClass]
