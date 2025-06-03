@@ -812,7 +812,7 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         this.tripStatus.data.on_trip = data.on_trip ?? 0
         this.tripStatus.data.reporting = data.reporting ?? 0
         this.tripStatus.data.closed = data.closed ?? 0
-        this.tripStatus.data.all = Object.values(this.tripStatus.data).reduce((acc, val) => acc + val, 0)
+        this.tripStatus.data.all = Object.values(data).reduce((acc, val) => acc + val, 0)
 
         return Promise.resolve()
       }
