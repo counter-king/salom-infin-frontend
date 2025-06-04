@@ -1,6 +1,6 @@
 <script setup>
 // core
-import { reactive, computed, onMounted } from 'vue';
+import { reactive, computed, onMounted, nextTick } from 'vue';
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 // components
@@ -144,6 +144,47 @@ onMounted( async () => {
   await initializeTable();
 })
 
+onMounted(() => {
+  nextTick(() => {
+    const table = document.querySelector('.p-datatable-table');
+    const cells = table.querySelectorAll('tbody td');
+
+    cells.forEach(cell => {
+      cell.addEventListener('mouseenter', (e) => {
+        const allCells = table.querySelectorAll('tbody td');
+        const currentCell = e.target;
+        const currentRow = currentCell.parentElement;
+        const colIndex = Array.from(currentRow.children).indexOf(currentCell);
+        const rowIndex = Array.from(currentRow.parentElement.children).indexOf(currentRow);
+        
+        // Tozalash
+        allCells.forEach(c => c.classList.remove('bg-highlight'));
+
+        // 1. Ustun bo‘yicha yuqoridan pastgacha highlight (shu katakkacha)
+        const rows = table.querySelectorAll('tbody tr');
+        rows.forEach((row, rIdx) => {
+          if (rIdx <= rowIndex) {
+            const td = row.children[colIndex];
+            if (td) td.classList.add('bg-highlight');
+          }
+        });
+
+        // 2. Qator bo‘yicha chapdan shu katakkacha highlight
+        currentRow.querySelectorAll('td').forEach((td, cIdx) => {
+          if (cIdx <= colIndex) {
+            td.classList.add('bg-highlight');
+          }
+        });
+      });
+    });
+
+    // Optional: mouse chiqib ketsa tozalash
+    table.addEventListener('mouseleave', () => {
+      table.querySelectorAll('tbody td').forEach(c => c.classList.remove('bg-highlight'));
+    });
+  });
+});
+
 </script>
 <template>
   <DataTable 
@@ -277,6 +318,8 @@ onMounted( async () => {
     </template>
   </DataTable>
 </template>
-<style scoped>
-
+<style>
+.bg-highlight {
+  background-color: var(--greyscale-50);
+}
 </style>
