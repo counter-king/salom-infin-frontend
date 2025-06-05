@@ -91,51 +91,51 @@ onMounted(async () => {
           {{ label }}
         </h1>
 
-        <div class="flex flex-1 items-center justify-end gap-2">
-          <div class="w-full max-w-[316px]">
-            <base-input
-              v-model="filters.search"
-              :icon-left="MagniferIcon"
-              :placeholder="t('search')"
-              class="flex p-input-icon-left items-center"
-              input-class="shadow-button !pl-10 p-3 bg-white text-xs !rounded-[90px] placeholder:text-xs"
-              icon-left-class="!w-4 !h-4"
-              @input="handleSearch"
-            />
-          </div>
+<!--        <div class="flex flex-1 items-center justify-end gap-2">-->
+<!--          <div class="w-full max-w-[316px]">-->
+<!--            <base-input-->
+<!--              v-model="filters.search"-->
+<!--              :icon-left="MagniferIcon"-->
+<!--              :placeholder="t('search')"-->
+<!--              class="flex p-input-icon-left items-center"-->
+<!--              input-class="shadow-button !pl-10 p-3 bg-white text-xs !rounded-[90px] placeholder:text-xs"-->
+<!--              icon-left-class="!w-4 !h-4"-->
+<!--              @input="handleSearch"-->
+<!--            />-->
+<!--          </div>-->
 
-          <div class="max-w-[350px] w-full">
-            <handbook-dropdown
-              v-model="filters.company"
-              :options="companies"
-              :placeholder="t('branch')"
-              @emit:change="handleCompany"
-            />
-          </div>
+<!--          <div class="max-w-[350px] w-full">-->
+<!--            <handbook-dropdown-->
+<!--              v-model="filters.company"-->
+<!--              :options="companies"-->
+<!--              :placeholder="t('branch')"-->
+<!--              @emit:change="handleCompany"-->
+<!--            />-->
+<!--          </div>-->
 
-          <div class="max-w-[350px] w-full">
-            <handbook-dropdown
-              v-model="filters.department"
-              :options="departments"
-              :placeholder="t('departments')"
-              @emit:change="handleDepartment"
-            />
-          </div>
+<!--          <div class="max-w-[350px] w-full">-->
+<!--            <handbook-dropdown-->
+<!--              v-model="filters.department"-->
+<!--              :options="departments"-->
+<!--              :placeholder="t('departments')"-->
+<!--              @emit:change="handleDepartment"-->
+<!--            />-->
+<!--          </div>-->
 
-          <template v-if="props.conditions !== USER_STATUS_CODES.BUSINESS_TRIP">
-            <div class="max-w-[350px] w-full">
-              <base-calendar
-                v-model="filters.__date"
-                selection-mode="range"
-                root-class="!bg-white !rounded-[80px] shadow-button !h-10 !cursor-pointer"
-                input-class="!bg-white leading-[14px] !py-3 !pl-4 !cursor-pointer"
-                dropdown-button-class="!bg-white"
-                placeholder="Выберите дату"
-                date-format="dd.mm.yy"
-              />
-            </div>
-          </template>
-        </div>
+<!--          <template v-if="props.conditions !== USER_STATUS_CODES.BUSINESS_TRIP">-->
+<!--            <div class="max-w-[350px] w-full">-->
+<!--              <base-calendar-->
+<!--                v-model="filters.__date"-->
+<!--                selection-mode="range"-->
+<!--                root-class="!bg-white !rounded-[80px] shadow-button !h-10 !cursor-pointer"-->
+<!--                input-class="!bg-white leading-[14px] !py-3 !pl-4 !cursor-pointer"-->
+<!--                dropdown-button-class="!bg-white"-->
+<!--                placeholder="Выберите дату"-->
+<!--                date-format="dd.mm.yy"-->
+<!--              />-->
+<!--            </div>-->
+<!--          </template>-->
+<!--        </div>-->
       </div>
     </template>
 

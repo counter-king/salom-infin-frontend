@@ -383,7 +383,7 @@ onMounted( async () => {
                 </div>
             </div>
             <!-- container-bottom -->
-            <div v-if="type === 'moderation' && !loading"
+            <div v-if="type === 'moderation' && newsOne.status === NEWS_STATUS.PANDING && !loading"
                 class="news-details py-4 px-6 flex gap-3 bg-greyscale-50 rounded-b-[20px] justify-end"
                 >
                 <base-button

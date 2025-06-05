@@ -1,5 +1,6 @@
 <script setup>
 import { ref, provide, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { useUsersStore } from '@/stores/users.store'
 import axiosConfig from '@/services/axios.config'
@@ -9,6 +10,7 @@ import { ModalWithFilters } from '@/components/Modal'
 import { isObject } from '@/utils'
 import { formatDate } from '@/utils/formatDate'
 
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const userStore = useUsersStore()
@@ -510,7 +512,7 @@ onMounted(async () => {
 
 <template>
   <card>
-    <h1 class="font-semibold text-greyscale-900 mb-2">Присутствие</h1>
+    <h1 class="font-semibold text-greyscale-900 mb-2">{{ t('hr-main-dashboard.presence') }}</h1>
 
     <template v-if="conditionLoading">
       <base-spinner />
