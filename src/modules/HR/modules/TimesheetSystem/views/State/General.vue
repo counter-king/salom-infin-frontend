@@ -2,6 +2,7 @@
 // core
 import { ref, inject, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useDebounce } from '@vueuse/core';
 // components
 import BaseInput from '@/components/UI/BaseInput.vue';
 import { MagniferIcon } from '@/components/Icons';
@@ -9,6 +10,7 @@ import { MagniferIcon } from '@/components/Icons';
 import DataTable from '../../components/state/DataTable.vue';
 // stores
 import { useStateStore } from '@/modules/HR/modules/TimesheetSystem/stores/state.store';
+
 // composibles
 const { t } = useI18n()
 const stateStore = useStateStore()
@@ -17,8 +19,21 @@ const search = ref('')
 // inject
 const calendarDays = inject('calendarDays')
 
-watch(() => calendarDays.value, () => {
-   
+// composibles
+const useDebounceSearch = useDebounce(search, 300)
+const useDebounceCalendarDays = useDebounce(calendarDays, 300)
+// watch
+watch(useDebounceSearch, (val) => {
+   if(val){
+    console.log(val)
+      stateStore.actionGeneralList({ search: val })
+   } else {
+      stateStore.actionGeneralList()
+   }
+})
+
+watch(useDebounceCalendarDays, () => {
+   stateStore.resetGeneralHeaders()
    stateStore.generalHeaders = stateStore.generalHeaders.map((item) => {
     const day = calendarDays.value.find(day => day.day == item.field)
       if(day){
@@ -26,11 +41,12 @@ watch(() => calendarDays.value, () => {
       }
       return item
    })
-   if( stateStore.generalHeaders.at(-1).field != calendarDays.value.at(-1).day){
-      stateStore.generalHeaders.at(-1).active = false
-   } else {
-      stateStore.generalHeaders.at(-1).active = true
+   
+   const findIndex = stateStore.generalHeaders.findIndex(item => item.field == calendarDays.value.at(-1).day)
+   if(findIndex != -1){
+      stateStore.generalHeaders.splice(findIndex + 1)
    }
+   stateStore.actionGeneralList()
 }, {
   immediate: true
 })
@@ -53,6 +69,9 @@ watch(() => calendarDays.value, () => {
         <DataTable 
           :value="stateStore.generalList"
           :headers="stateStore.generalHeaders"
+          :actionList="stateStore.actionGeneralList"
+          :loading="stateStore.generalLoading"
+          :total-count="stateStore.generalTotalCount"
           scroll-height="calc(100vh - 300px)"
         >
          <template #header1="{data}">
@@ -240,6 +259,10 @@ watch(() => calendarDays.value, () => {
               <span>{{ data.value?.top }}</span>
               <span>{{ data.value?.bottom }}</span>
             </div>
+         </template>
+         <!--  body -->
+         <template #1="{data, field}">
+              <span>{{ data[field] }}</span>
          </template>
         </DataTable>  
       </div>

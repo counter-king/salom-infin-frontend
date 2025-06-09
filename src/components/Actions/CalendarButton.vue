@@ -1,7 +1,7 @@
 <script setup>
 // core
 import { useI18n } from 'vue-i18n';
-import { ref, unref } from 'vue';
+import { ref, unref, watch } from 'vue';
 // components
 import { AltArrowLeftIcon, AltArrowRightIcon, CheckCircleBoldIcon } from '@/components/Icons';
 import BaseOverlayPanel from '@/components/UI/BaseOverlayPanel.vue';
@@ -87,7 +87,7 @@ const onChangeState = (state) => {
       <base-iconify :icon="AltArrowLeftIcon" class="!w-5 !h-5" />
     </div>
     <div 
-      class="min-w-[136px] capitalize select-none flex items-center justify-center px-2 border-r border-l cursor-pointer border-greyscale-200 text-base font-medium text-greyscale-500 bg-white self-stretch"
+      class="min-w-[136px] capitalize select-none flex items-center justify-center px-2 border-r border-l cursor-pointer border-greyscale-200 text-sm font-medium text-greyscale-500 bg-white self-stretch"
       @click="toggle"
       :class="{'!text-primary-500': overPanelIsOpen }"
       >

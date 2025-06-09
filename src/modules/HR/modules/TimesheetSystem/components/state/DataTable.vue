@@ -1,6 +1,6 @@
 <script setup>
 // core
-import { reactive, computed, onMounted, nextTick } from 'vue';
+import { reactive, computed, onMounted, nextTick, watch } from 'vue';
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 // components
@@ -143,12 +143,7 @@ const initializeTable = async () => {
   }
 }
 
-// Hooks
-onMounted( async () => {
-  await initializeTable();
-})
-
-onMounted(() => {
+watch(() => props.headers, () => {
   nextTick(() => {
     const table = document.querySelector('.p-datatable-table');
     const cells = table.querySelectorAll('tbody td');
@@ -187,7 +182,13 @@ onMounted(() => {
       table.querySelectorAll('tbody td').forEach(c => c.classList.remove('bg-highlight'));
     });
   });
-});
+}, {
+  immediate: true
+})
+// Hooks
+onMounted( async () => {
+  await initializeTable();
+})
 
 </script>
 <template>
@@ -336,141 +337,9 @@ onMounted(() => {
   background-color: var(--greyscale-50);
 }
 
-::v-deep(.p-frozen-column) {
-  z-index: 100;
-}
-::v-deep(.p-datatable-wrapper) {
-  position: relative;
-  overflow: hidden;
-}
-
 ::v-deep(.p-datatable-table) {
   border-collapse: separate;
   border-spacing: 0;
-}
-
-/* Frozen columns styling with full background coverage */
-::v-deep(.p-frozen-column) {
-  position: sticky !important;
-  left: 0;
-  z-index: 2;
-  background-color: inherit;
-  border-right: 1px solid var(--greyscale-200) !important;
-}
-
-/* Header cells for frozen columns */
-::v-deep(.frozen-header-cell) {
-  background-color: rgb(249 250 251) !important; /* bg-greyscale-50 equivalent */
-  position: sticky;
-  left: 0;
-  z-index: 3;
-  border-right: 1px solid var(--greyscale-200) !important;
-  /* Ensure full coverage */
-  background-clip: padding-box;
-  box-shadow: inset 0 0 0 1000px rgb(249 250 251);
-}
-
-/* Body cells for frozen columns */
-::v-deep(.frozen-body-cell) {
-  background-color: white !important;
-  position: sticky;
-  left: 0;
-  z-index: 2;
-  border-right: 1px solid var(--greyscale-200) !important;
-  /* Ensure full coverage */
-  background-clip: padding-box;
-  box-shadow: inset 0 0 0 1000px white;
-}
-
-/* Hover state for frozen body cells */
-::v-deep(.p-datatable-tbody > tr:hover .frozen-body-cell) {
-  background-color: white !important;
-  box-shadow: inset 0 0 0 1000px white;
-}
-
-/* Ensure frozen table has proper borders and background */
-::v-deep(.p-datatable-frozen-table) {
-  border-right: 2px solid var(--greyscale-200);
-  box-shadow: 2px 0 4px 0 rgba(0, 0, 0, 0.1);
-  background-color: white;
-}
-
-/* Remove duplicate borders on scrollable section */
-::v-deep(.p-datatable-scrollable-table) {
-  border-left: none;
-}
-
-/* Sync header heights between frozen and scrollable sections */
-::v-deep(.p-datatable-thead > tr > th) {
-  height: auto;
-  vertical-align: middle;
-}
-
-::v-deep(.p-datatable-tbody > tr > td) {
-  height: auto;
-  vertical-align: middle;
-}
-
-/* Hide content behind frozen columns */
-::v-deep(.p-datatable-scrollable-body) {
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  position: relative;
-}
-
-/* Ensure text doesn't show through frozen columns */
-::v-deep(.p-datatable-scrollable-body::before) {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 0; /* Will be set dynamically based on frozen column width */
-  background-color: white;
-  z-index: 1;
-  pointer-events: none;
-}
-
-/* Additional coverage for frozen columns */
-::v-deep(.p-frozen-column::before) {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: inherit;
-  z-index: -1;
-}
-
-/* Ensure proper stacking order */
-::v-deep(.p-datatable-thead .frozen-header-cell) {
-  z-index: 4;
-}
-
-::v-deep(.p-datatable-tbody .frozen-body-cell) {
-  z-index: 3;
-}
-
-/* Fix for last frozen column border */
-::v-deep(.p-frozen-column:last-of-type) {
-  border-right: 2px solid var(--greyscale-200) !important;
-  box-shadow: 2px 0 4px 0 rgba(0, 0, 0, 0.1);
-}
-
-/* Prevent text overflow in frozen columns */
-::v-deep(.frozen-header-cell),
-::v-deep(.frozen-body-cell) {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* Ensure background covers completely */
-::v-deep(.frozen-header-cell *),
-::v-deep(.frozen-body-cell *) {
-  position: relative;
-  z-index: 1;
 }
 
 </style>

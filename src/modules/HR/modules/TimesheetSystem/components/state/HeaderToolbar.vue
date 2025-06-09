@@ -52,6 +52,13 @@ const ToggleButtonList = [
   }
 ]
 
+// methods
+const onMonthChange = (date) => {
+  console.log("date", date);
+  handleMonthChange(date)
+  router.push({ query: {...router.currentRoute.value.query, month: date.date }})
+}
+
 </script>           
 <template>
     <action-toolbar :title="t('state')">
@@ -81,7 +88,7 @@ const ToggleButtonList = [
         />
         <calendar-button 
           :date="currentDate"
-          @click:submit="handleMonthChange"
+          @click:submit="onMonthChange"
           :onRightArrowClick="goToNextMonth"
           :onLeftArrowClick="goToPrevMonth"
         />
