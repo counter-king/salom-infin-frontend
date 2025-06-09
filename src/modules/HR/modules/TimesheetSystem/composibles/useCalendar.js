@@ -1,5 +1,6 @@
 import { MONTH_NAMES } from "@/enums"
 import { ref, watch, computed  } from "vue"
+import { WEEK_DAYS_SHORT } from "../enums"
 
 export const useCalendar = () => {
 
@@ -36,37 +37,19 @@ const prevMonthLastDay = computed(() => new Date(currentYear.value, currentMonth
 const calendarDays = ref([])
 watch(()=> currentDate.value, () => {
     calendarDays.value = []
-   // Add days from the previous month
-    for (let i = 0; i < firstDayOfWeek.value; i++) {
-        const date = new Date(currentYear.value, currentMonth.value - 1, prevMonthLastDay.value - firstDayOfWeek.value + i + 1)
-        const dayOfWeek = date.getDay()
-        calendarDays.value.push({
-        day: prevMonthLastDay.value - firstDayOfWeek.value + i + 1,
-        currentMonth: false,
-        date: new Date(currentYear.value, currentMonth.value - 1, prevMonthLastDay.value - firstDayOfWeek.value + i + 1),
-        workDay: dayOfWeek !== 0 && dayOfWeek !== 6
-        })
-    }
+
 
     // Add days from the current month
     for (let i = 1; i <= daysInMonth.value; i++) {
         const date = new Date(currentYear.value, currentMonth.value, i)
         const dayOfWeek = date.getDay();
+        console.log("dayOfWeek",dayOfWeek, WEEK_DAYS_SHORT[dayOfWeek])
         calendarDays.value.push({
             day: i,
             currentMonth: true,
             date: new Date(currentYear.value, currentMonth.value, i),
-            workDay: dayOfWeek !== 0 && dayOfWeek !== 6
-        })
-    }
-    // Add days from the next month
-    const remainingDays = 35 - calendarDays.value.length // 6 rows of 7 days
-    for (let i = 1; i <= remainingDays; i++) {
-        calendarDays.value.push({
-        day: "",
-        currentMonth: false,
-        date: new Date(currentYear.value, currentMonth.value + 1, i),
-        workDay: false   
+            workDay: dayOfWeek !== 0 && dayOfWeek !== 6,
+            dayName: WEEK_DAYS_SHORT[dayOfWeek]
         })
     }
 

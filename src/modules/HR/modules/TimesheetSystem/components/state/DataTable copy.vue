@@ -258,7 +258,7 @@ onMounted(() => {
           class: ['text-sm font-semibold text-greyscale-500', props.headerCellContentClass]
         },
         bodyCell: {
-          class: ['border-greyscale-100 py-2 px-3 border-0 border-t border-r frozen-body-cell', props.bodyCellClass],
+          class: ['border-greyscale-100 py-2 px-3 border-0 border-t border-r', props.bodyCellClass],
         },
         bodyCellContent: {
           class: ['text-sm font-medium text-greyscale-900', props.bodyCellContentClass]
@@ -285,16 +285,14 @@ onMounted(() => {
         :pt="{
           headerCell: { 
             class: ['bg-greyscale-50 py-2 px-3 border-0 border-r greyscale-200 last:border-r-0',
-             header.frozen ? 'frozen-header-cell' : 'last:border-r-0',
+             header.frozen ? 'border-l bg-none' : 'border-r',
              props.headerCellClass]
           },
           headerContent: {
             class: ['gap-1 text-sm font-semibold text-greyscale-500', props.headerCellContentClass]
           },
           bodyCell: {
-            class: ['border-greyscale-100 py-2 px-3 border-0 border-t border-r last:border-r-0',
-            header.frozen ? 'frozen-body-cell' : 'last:border-r-0',
-            props.bodyCellClass],
+            class: ['border-greyscale-100 py-2 px-3 border-0 border-t border-r last:border-r-0', props.bodyCellClass],
           },
           bodyCellContent: {
             class: ['text-sm font-medium text-greyscale-900', props.bodyCellContentClass]
@@ -339,138 +337,14 @@ onMounted(() => {
 ::v-deep(.p-frozen-column) {
   z-index: 100;
 }
-::v-deep(.p-datatable-wrapper) {
-  position: relative;
-  overflow: hidden;
-}
-
-::v-deep(.p-datatable-table) {
-  border-collapse: separate;
-  border-spacing: 0;
-}
-
-/* Frozen columns styling with full background coverage */
-::v-deep(.p-frozen-column) {
-  position: sticky !important;
-  left: 0;
-  z-index: 2;
-  background-color: inherit;
-  border-right: 1px solid var(--greyscale-200) !important;
-}
-
-/* Header cells for frozen columns */
 ::v-deep(.frozen-header-cell) {
-  background-color: rgb(249 250 251) !important; /* bg-greyscale-50 equivalent */
+  background-color: rgb(249 250 251) !important; 
   position: sticky;
   left: 0;
   z-index: 3;
   border-right: 1px solid var(--greyscale-200) !important;
-  /* Ensure full coverage */
   background-clip: padding-box;
   box-shadow: inset 0 0 0 1000px rgb(249 250 251);
-}
-
-/* Body cells for frozen columns */
-::v-deep(.frozen-body-cell) {
-  background-color: white !important;
-  position: sticky;
-  left: 0;
-  z-index: 2;
-  border-right: 1px solid var(--greyscale-200) !important;
-  /* Ensure full coverage */
-  background-clip: padding-box;
-  box-shadow: inset 0 0 0 1000px white;
-}
-
-/* Hover state for frozen body cells */
-::v-deep(.p-datatable-tbody > tr:hover .frozen-body-cell) {
-  background-color: white !important;
-  box-shadow: inset 0 0 0 1000px white;
-}
-
-/* Ensure frozen table has proper borders and background */
-::v-deep(.p-datatable-frozen-table) {
-  border-right: 2px solid var(--greyscale-200);
-  box-shadow: 2px 0 4px 0 rgba(0, 0, 0, 0.1);
-  background-color: white;
-}
-
-/* Remove duplicate borders on scrollable section */
-::v-deep(.p-datatable-scrollable-table) {
-  border-left: none;
-}
-
-/* Sync header heights between frozen and scrollable sections */
-::v-deep(.p-datatable-thead > tr > th) {
-  height: auto;
-  vertical-align: middle;
-}
-
-::v-deep(.p-datatable-tbody > tr > td) {
-  height: auto;
-  vertical-align: middle;
-}
-
-/* Hide content behind frozen columns */
-::v-deep(.p-datatable-scrollable-body) {
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  position: relative;
-}
-
-/* Ensure text doesn't show through frozen columns */
-::v-deep(.p-datatable-scrollable-body::before) {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 0; /* Will be set dynamically based on frozen column width */
-  background-color: white;
-  z-index: 1;
-  pointer-events: none;
-}
-
-/* Additional coverage for frozen columns */
-::v-deep(.p-frozen-column::before) {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: inherit;
-  z-index: -1;
-}
-
-/* Ensure proper stacking order */
-::v-deep(.p-datatable-thead .frozen-header-cell) {
-  z-index: 4;
-}
-
-::v-deep(.p-datatable-tbody .frozen-body-cell) {
-  z-index: 3;
-}
-
-/* Fix for last frozen column border */
-::v-deep(.p-frozen-column:last-of-type) {
-  border-right: 2px solid var(--greyscale-200) !important;
-  box-shadow: 2px 0 4px 0 rgba(0, 0, 0, 0.1);
-}
-
-/* Prevent text overflow in frozen columns */
-::v-deep(.frozen-header-cell),
-::v-deep(.frozen-body-cell) {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* Ensure background covers completely */
-::v-deep(.frozen-header-cell *),
-::v-deep(.frozen-body-cell *) {
-  position: relative;
-  z-index: 1;
 }
 
 </style>
