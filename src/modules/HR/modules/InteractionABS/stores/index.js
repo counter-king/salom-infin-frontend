@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { getCompanyList, getTopDepartmentsList, getDocumentTypeList, getDocumentSubTypeList, getIabsActionList } from '../services'
+import { getCompanyList, getTopDepartmentsList, getDocumentTypeList, getDocumentSubTypeList, getIabsActionList, getIabsRequestCalls } from '../services'
 import { HEADERS, HEADERS_TITLE } from '../enums'
 
 const mockData = {
@@ -63,6 +63,9 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
       documentSubTypeListLoading: false,
       documentSubTypeList: [],
       iabsActionListTotalCount: 0,
+      iabsRequestCallsLoading: false,
+      iabsRequestCalls: [],
+      iabsRequestCallsTotalCount: 0,
       headers: [
         {
           field: HEADERS.EMPLOYEE,
@@ -254,6 +257,24 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
           console.log(error)
         } finally {
           this.documentSubTypeListLoading = false
+        }
+      },
+      async actionGetIabsRequestCalls(params, resetList= true) {
+        try {
+          if(resetList){
+            this.iabsRequestCallsLoading = true
+          } 
+          const response = await getIabsRequestCalls(params)
+          if(resetList){
+            this.iabsRequestCalls = response.data.results
+          } else {
+            this.iabsRequestCalls = [...this.iabsRequestCalls, ...response.data.results]
+          }
+          return response
+        } catch (error) {
+          console.log(error)
+        } finally {
+          this.iabsRequestCallsLoading = false
         }
       },
 

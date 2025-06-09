@@ -1,6 +1,6 @@
 <script setup>
 // core
-import { ref, onMounted, onUnmounted, shallowRef, computed, watch } from 'vue'
+import { ref, onMounted, onUnmounted, shallowRef, computed, watch, nextTick } from 'vue'
 import { useI18n} from 'vue-i18n'
 import { useRouter, useRoute } from 'vue-router'
 // components
@@ -25,6 +25,7 @@ const filterDropdownRef = ref(null)
 const activeFilterComponent = shallowRef(null)
 const activeComponentType = ref(null)
 const activeApiAction = ref(null)
+const iabsActionHistoryById = ref(null)
 const statusAbsValue = [{ id: STATUS_ABS.SENT, name: t(STATUS_ABS_TITLE[STATUS_ABS.SENT]) }, { id: STATUS_ABS.FAILED, name: t(STATUS_ABS_TITLE[STATUS_ABS.FAILED]) }, { id: STATUS_ABS.CREATE, name: t(STATUS_ABS_TITLE[STATUS_ABS.CREATE]) }, { id: STATUS_ABS.PROLONG, name: t(STATUS_ABS_TITLE[STATUS_ABS.PROLONG]) }, { id: STATUS_ABS.CANCEL, name: t(STATUS_ABS_TITLE[STATUS_ABS.CANCEL]) }]
 const operationTypeValue = [{ id: OPERATION_TYPE.SENT, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.SENT]) }, { id: OPERATION_TYPE.FAILED, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.FAILED]) }, { id: OPERATION_TYPE.CREATE, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.CREATE]) }, { id: OPERATION_TYPE.PROLONG, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.PROLONG]) }, { id: OPERATION_TYPE.CANCEL, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.CANCEL]) }]
 
@@ -86,7 +87,8 @@ const tableFilters = {
 }
 
 // methods
-const onHistoryClick = () => {
+const onHistoryClick = (item) => {
+  iabsActionHistoryById.value = item.id
   dialogVisible.value = true
 }
 
@@ -174,34 +176,42 @@ const onCancelFilter = (type) => {
   })
 }
 
+const onSendAgain = (item) => {
+  console.log("item", item)
+}
+
 watch(()=>route.query, ()=>{
   interactionABSStore.actionGetIabsActionList({ page: 1, page_size: 20, ...router.currentRoute.value.query, status: route.query.statusAbs || undefined, start_date: route.query.created_start_date || undefined, end_date: route.query.created_end_date || undefined })
-}, { deep: true, immediate: true })
+}, { deep: true })
+
 
 onMounted(async() => {
-
   // URLdan query parametrlarini olib tashlash
-  // if (Object.keys(router.currentRoute.value.query).length > 0) {
-  //   window.history.replaceState({}, document.title, window.location.pathname)
-  // }
+  await nextTick(() => {
+    router.replace({
+      query: {}
+    })
+  })
+
   await interactionABSStore.actionGetCompanyList({ page: 1, page_size: 20 })
   await interactionABSStore.actionGetTopDepartmentsList({ page: 1, page_size: 20})
   await interactionABSStore.actionGetDocumentTypeList({ page: 1, page_size: 20})
   await interactionABSStore.actionGetDocumentSubTypeList({ page: 1, page_size: 20})
   document.addEventListener('click', handleOutsideClick)
+
+  interactionABSStore.actionGetIabsActionList({ page: 1, page_size: 20, ...router.currentRoute.value.query, status: route.query.statusAbs || undefined, start_date: route.query.created_start_date || undefined, end_date: route.query.created_end_date || undefined })
 })
 
-onMounted(()=>{
-
-  // if query parametrlari bor bo'lsa headersni filter qilib, qiymatlarni table filter berish
-  Object.keys(router.currentRoute.value.query).forEach((key)=>{
-    const header = interactionABSStore.headers.find(header => QUERY_NAMES[header.field] == key)
-    if(header){
-      header.filter = true
-      header.header = HEADERS_TITLE[header.field]
-    }
-  })
-})
+// onMounted(()=>{
+//   // if query parametrlari bor bo'lsa headersni filter qilib, qiymatlarni table filter berish
+//   Object.keys(router.currentRoute.value.query).forEach((key)=>{
+//     const header = interactionABSStore.headers.find(header => QUERY_NAMES[header.field] == key)
+//     if(header){
+//       header.filter = true
+//       header.header = HEADERS_TITLE[header.field]
+//     }
+//   })
+// })
 
 onUnmounted(() => {
   document.removeEventListener('click', handleOutsideClick)
@@ -356,12 +366,13 @@ onUnmounted(() => {
             <status :status="data.statusAbs" />
           </template>
           <template #history="{ data }">
-            <base-iconify :icon="History2Icon" class="w-6 h-6 text-greyscale-400" @click="onHistoryClick"/>
+            <base-iconify :icon="History2Icon" class="w-6 h-6 text-greyscale-400" @click="onHistoryClick(data)"/>
           </template>
           <template #actions="{ data }">
             <div 
+              @click="onSendAgain(data)"
               class="px-3 py-2 select-none bg-primary-500 rounded-[90px] text-xs text-white w-fit "
-              :class="{ '!bg-greyscale-200 !pointer-events-none': false }"
+              :class="{ '!bg-greyscale-200 !pointer-events-none': data.statusAbs != STATUS_ABS.FAILED }"
               >
               {{ t('send-again') }}
             </div>
@@ -386,6 +397,8 @@ onUnmounted(() => {
     </div>
   </div>
   <Dialog
+    v-if="dialogVisible"
+    :id="iabsActionHistoryById"
     v-model:dialogVisible="dialogVisible"
   />
 </template>

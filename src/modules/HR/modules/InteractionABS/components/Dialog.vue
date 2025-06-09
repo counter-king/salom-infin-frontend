@@ -1,11 +1,13 @@
 <script setup>
 // core
-import { ref, useModel} from 'vue'
+import { ref, useModel, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 // components
 import DataTableModal from './DataTableModal.vue'
 // stores
 import { useInteractionABSStore } from '../stores';
+// services
+import { getIabsRequestCalls } from '../services';
 // composibles
 const interactionABSStore = useInteractionABSStore()
 const { t } = useI18n()
@@ -14,14 +16,25 @@ const props = defineProps({
   dialogVisible: {
     type: Boolean,
     default: false
+  },
+  id: {
+    type: Number,
+    default: null
   }
 })
 
+// emits
 const emit = defineEmits([
   'update:dialogVisible'
 ])
-
+// composibles
 const dialogVisible = useModel(props, 'dialogVisible')
+
+onMounted(() => {
+  if (props.id) {
+    interactionABSStore.actionGetIabsRequestCalls({ action_history_id: props.id })
+  }
+})
 </script>
 <template>
   <base-dialog
@@ -36,12 +49,12 @@ const dialogVisible = useModel(props, 'dialogVisible')
       <template v-if="true">
         <DataTableModal
           :headers="interactionABSStore.historyHeaders"
-          :value="interactionABSStore.list"
+          :value="interactionABSStore.iabsRequestCalls"
           scroll-height="calc(100vh - 360px)"
           class="flex flex-col h-full"
-          :loading="interactionABSStore.listLoading"
-          :total-count="interactionABSStore.totalCount"
-          :action-list="interactionABSStore.actionGetInteractionABSList"
+          :loading="interactionABSStore.iabsRequestCallsLoading"
+          :total-count="interactionABSStore.iabsRequestCallsTotalCount"
+          :action-list="interactionABSStore.actionGetIabsRequestCalls"
           :pageSize="15"
           >
             <template #order="{ data }">

@@ -5,7 +5,8 @@ const URLS = {
   topDepartments: "departments/top-level-departments",
   documentTypes: "document-types/",
   documentSubTypes: "document-sub-types/",
-  iabsAction: "iabs/actions/"
+  iabsAction: "iabs/actions/",
+  iabsRequestCalls: "iabs/request-calls/"
 }
 
 // get companies list
@@ -34,4 +35,8 @@ export const getIabsActionList = (params) => {
 // get iabs action by id
 export const getIabsActionById = (id) => {
    return axiosConfig.get(`${URLS.iabsAction}${id}/`)
+}
+// get iabs request calls
+export const getIabsRequestCalls = (params) => {
+   return axiosConfig.get(URLS.iabsRequestCalls, params)
 }
