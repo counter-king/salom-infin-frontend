@@ -11,9 +11,14 @@ import { UserWithRadio } from "@/components/Users";
 import { formatDateReverse } from "@/utils/formatDate";
 import { dispatchNotify } from "@/utils/notify";
 import { COLOR_TYPES } from "@/enums";
+import { computed } from "vue";
 // Composable
 const store = useExtendBusinessTripStore()
 const { t } = useI18n()
+// Computed
+const isTripFinished = computed(() => {
+  return ['reporting', 'closed'].includes(store?.changingBTModel?.trip_status)
+})
 // Methods
 const onChangeClick = () => {
   const hasRegions = store.tempVerifications?.length > 0
@@ -60,68 +65,84 @@ const onRegionsChange = (regions) => {
       </template>
 
       <template v-else>
-        <div class="flex flex-col gap-y-5">
-          <div class="flex gap-x-3 py-3 px-4 bg-warning-50 border border-warning-100 rounded-xl">
-            <base-iconify :icon="InfoCircleBoldIcon" class="text-warning-500 !w-6 !h-6"/>
+        <template v-if="!isTripFinished">
+          <div class="flex flex-col gap-y-5">
+            <div class="flex gap-x-3 py-3 px-4 bg-warning-50 border border-warning-100 rounded-xl">
+              <base-iconify :icon="InfoCircleBoldIcon" class="text-warning-500 !w-6 !h-6"/>
 
-            <div class="text-sm font-medium text-greyscale-500">Siz rostdan ham <span
-              class="text-green-900">{{ store.changingBTModel?.user?.full_name }}</span>ga tegishli bo'lgan xizmat
-              safarini o'zgartirmoqchimisiz? <br> Bunda xizmat safari bilan vaqtinchalik amaliyot bajarish to'xtatiladi!
+              <div class="text-sm font-medium text-greyscale-500">Siz rostdan ham <span
+                class="text-green-900">{{ store.changingBTModel?.user?.full_name }}</span>ga tegishli bo'lgan xizmat
+                safarini o'zgartirmoqchimisiz? <br> Bunda xizmat safari bilan vaqtinchalik amaliyot bajarish
+                to'xtatiladi!
+              </div>
             </div>
-          </div>
 
-          <div class="flex flex-col gap-y-2">
-            <span class="text-sm font-medium text-greyscale-500">{{ t('trip-place') }} <span class="text-red-500">*</span> </span>
-            <div class="flex flex-wrap gap-3">
-              <base-chip
-                v-for="(item, index) in store.tempVerifications"
-                :key="item.id"
-                :label="item?.region?.name_uz"
-                :clearable="!item.is_visited"
-                type="location"
-                class="w-fit"
-                @emit:clear="onClearItem(item, index)"
+            <div class="flex flex-col gap-y-2">
+              <span class="text-sm font-medium text-greyscale-500">{{ t('trip-place') }} <span
+                class="text-red-500">*</span> </span>
+              <div class="flex flex-wrap gap-3">
+                <base-chip
+                  v-for="(item, index) in store.tempVerifications"
+                  :key="item.id"
+                  :label="item?.region?.name_uz"
+                  :clearable="!item.is_visited"
+                  type="location"
+                  class="w-fit"
+                  @emit:clear="onClearItem(item, index)"
+                />
+              </div>
+
+              <base-multi-select
+                v-model="store.tempRegions"
+                api-url="regions"
+                :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
+                display="chip"
+                selectable
+                type="department"
+                placeholder="add-trip-place"
+                required
+                @emit:change="(val) => onRegionsChange(val)"
+              >
+                <template #chip="{ value }">
+                  {{ value.name }}
+                </template>
+
+                <template #option="{ value }">
+                  <user-with-radio
+                    :title="value.name"
+                    :text-truncate="false"
+                  >
+                  </user-with-radio>
+                </template>
+              </base-multi-select>
+            </div>
+
+            <div class="flex flex-col gap-y-2">
+              <base-calendar
+                v-model="store.changingBTModel.end_date"
+                :min-date="new Date(store.changingBTModel.start_date)"
+                required
+                label="end-date"
+                placeholder="choose-end-time"
+                @update:modelValue="(value) => store.changingBTModel.end_date = formatDateReverse(value)"
               />
             </div>
 
-            <base-multi-select
-              v-model="store.tempRegions"
-              api-url="regions"
-              :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
-              display="chip"
-              selectable
-              type="department"
-              placeholder="add-trip-place"
-              required
-              @emit:change="(val) => onRegionsChange(val)"
-            >
-              <template #chip="{ value }">
-                {{ value.name }}
-              </template>
-
-              <template #option="{ value }">
-                <user-with-radio
-                  :title="value.name"
-                  :text-truncate="false"
-                >
-                </user-with-radio>
-              </template>
-            </base-multi-select>
+            <!--          <pre>{{ store.changingBTModel }}</pre>-->
           </div>
+        </template>
+        <template v-else>
+          <div class="flex flex-col gap-y-5">
+            <div class="flex gap-x-3 py-3 px-4 bg-warning-50 border border-warning-100 rounded-xl">
+              <base-iconify :icon="InfoCircleBoldIcon" class="text-warning-500 !w-6 !h-6"/>
 
-          <div class="flex flex-col gap-y-2">
-            <base-calendar
-              v-model="store.changingBTModel.end_date"
-              :min-date="new Date(store.changingBTModel.start_date)"
-              required
-              label="end-date"
-              placeholder="choose-end-time"
-              @update:modelValue="(value) => store.changingBTModel.end_date = formatDateReverse(value)"
-            />
+              <div class="text-sm font-medium text-greyscale-500"><span
+                class="text-green-900">{{ store.changingBTModel?.user?.full_name }}</span>ga tegishli bo'lgan xizmat
+                safari yakunlangan!
+              </div>
+            </div>
           </div>
-
-<!--          <pre>{{ store.changingBTModel }}</pre>-->
-        </div>
+        </template>
       </template>
     </template>
 
@@ -137,6 +158,7 @@ const onRegionsChange = (regions) => {
       />
 
       <base-button
+        v-if="!isTripFinished"
         :loading="store.userTripUpdateButtonLoading"
         label="update"
         rounded
