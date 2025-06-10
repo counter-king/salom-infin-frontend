@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import {computed, onBeforeMount, onMounted} from "vue"
+import { computed, onBeforeMount, onMounted, ref } from "vue"
 import {useRoute, useRouter} from "vue-router"
 import {useI18n} from "vue-i18n"
 // Store
@@ -19,6 +19,9 @@ const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 
+// Reactive
+const isHostVercel = ref(null)
+
 // Computed
 const isChangeable = computed(() => {
   return SDStore.detailModel
@@ -36,7 +39,7 @@ const updateButtonVisible = computed(() => {
 })
 
 const extendBusinessTripButtonVisible = computed(() => {
-  return SDStore.detailModel?.registered_document && [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2].includes(route.params.document_sub_type)
+  return SDStore.detailModel?.registered_document && [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2].includes(route.params.document_sub_type) && isHostVercel.value
 })
 
 // Methods
@@ -99,6 +102,9 @@ onBeforeMount(async () => {
       }, 1000)
     }
   }
+})
+onMounted(() => {
+  isHostVercel.value = window.location.host === 'app.itco.uz' || window.location.host === 'new-side-project.vercel.app' || window.location.host.startsWith('localhost')
 })
 </script>
 
