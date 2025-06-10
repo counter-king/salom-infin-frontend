@@ -30,6 +30,8 @@ import {
 import { Decree } from "@/modules/Documents/modules/SendDocuments/views/forms/FormComponents"
 import { dispatchNotify } from "@/utils/notify"
 import { adjustUsersToArray } from "@/utils";
+import ChangingBusinessTripModal
+  from "@/modules/Documents/modules/SendDocuments/views/forms/FormComponents/ChangingBusinessTripModal.vue";
 
 // Composable
 const store = useExtendBusinessTripStore()
@@ -51,12 +53,11 @@ const props = defineProps({
 // Reactive
 const showNestedError = ref(false)
 const dialog = ref(false)
-const changingBusinessTrip = ref(null)
 
 // Computed
 const title = computed(() => {
   const isCreate = props.formType === FORM_TYPE_CREATE
-  return isCreate ? 'create-business-trip-notice' : 'update-business-trip-notice'
+  return isCreate ? 'trip-notice-for-change' : 'trip-notice-for-change'
 })
 
 // Methods
@@ -89,6 +90,7 @@ const adjustObjects = async () => {
           })),
           route: notice.route,
           group_id: 1,
+          trip_type: 'changed_local',
           ...(notice.business_trip_id ? {id: notice.business_trip_id} : {})
         }))
       )
@@ -222,17 +224,6 @@ const init = async () => {
 
   businessTripStore.stepperItems.forEach(step => step.active = step.value === route.query.step)
 }
-const checkBusinessTripLocations = async (group, groupIndex) => {
-  await nextTick()
-  const selectedUsers = store.model.__groups[groupIndex].__users_to_extend || []
-  const item = store.model.__notices.find(notice =>
-    selectedUsers.some(user => user.id === notice.user.id)
-  )
-  if (item) {
-    changingBusinessTrip.value = item
-    dialog.value = true
-  }
-}
 
 // Hooks
 onMounted(async () => {
@@ -321,7 +312,7 @@ onUnmounted(() => {
                           placeholder="select-employees"
                           :show-nested-error="showNestedError"
                           :disabled="formType === FORM_TYPE_UPDATE || route.query.notice_id"
-                          @update:modelValue="checkBusinessTripLocations(group, index)"
+                          @update:modelValue="store.actionAddUsersToExtend(group, index)"
 
                         />
                       </base-col>
@@ -331,53 +322,34 @@ onUnmounted(() => {
                           v-for="item in group.__notices_to_change"
                         >
                           <base-col col-class="w-1/3">
-                            <span class="text-sm text-greyscale-500 font-medium">{{
-                                t('employees-in-business-trip')
-                              }}</span>
+                            <span class="text-sm text-greyscale-500 font-medium">{{ t('employees-in-business-trip') }}</span>
 
                             <base-chip
                               :label="item.user?.full_name"
-                              class="w-fit"
+                              class="w-fit mt-1"
                             />
                           </base-col>
 
                           <base-col col-class="w-1/3">
-                            <base-multi-select
-                              v-model="item.__regions"
-                              api-url="regions"
-                              :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
-                              display="chip"
-                              selectable
-                              label="trip-place"
-                              type="department"
-                              placeholder="select-trip-place"
-                              required
-                              :show-nested-error="showNestedError"
-                              @emit:change="(val) => onRegionsChange(val, index)"
-                            >
-                              <template #chip="{ value }">
-                                {{ value.name }}
-                              </template>
-
-                              <template #option="{ value }">
-                                <user-with-radio
-                                  :title="value.name"
-                                  :text-truncate="false"
-                                >
-                                </user-with-radio>
-                              </template>
-                            </base-multi-select>
+                            <span class="text-sm text-greyscale-500 font-medium">{{ t('trip-place') }}</span>
+                            <div class="flex flex-wrap gap-3 mt-1">
+                              <base-chip
+                                v-for="region in item.__regions"
+                                :key="item.id"
+                                :label="region.name_uz"
+                                type="location"
+                                class="w-fit"
+                              />
+                            </div>
                           </base-col>
 
                           <base-col col-class="w-1/3">
-                            <base-calendar
-                              v-model="item.__end_date"
-                              :min-date="new Date(item.__start_date)"
-                              required
-                              label="end-date"
-                              placeholder="choose-end-time"
-                              :show-nested-error="showNestedError"
-                              @update:modelValue="(value) => item.__end_date = formatDateReverse(value)"
+                            <span class="text-sm text-greyscale-500 font-medium">{{ t('end-date') }}</span>
+
+                            <base-chip
+                              :label="item.__end_date"
+                              type="other"
+                              class="w-fit mt-1"
                             />
                           </base-col>
                         </base-row>
@@ -450,33 +422,9 @@ onUnmounted(() => {
       </layout-with-tabs-compose>
     </template>
 
-    <base-dialog
-      v-model="dialog"
-      label="confirm"
-      max-width="max-w-[610px]"
-    >
-      <template #content>
-
-      </template>
-
-      <template #footer>
-        <base-button
-          color="bg-white hover:bg-greyscale-100 text-primary-dark"
-          border-color="border-transparent"
-          label="cancel"
-          rounded
-          shadow
-          type="button"
-        />
-
-        <base-button
-          label="update"
-          rounded
-          shadow
-          type="button"
-        />
-      </template>
-    </base-dialog>
+  <changing-business-trip-modal
+    v-model="store.changingBTDialog"
+  />
   </div>
 </template>
 

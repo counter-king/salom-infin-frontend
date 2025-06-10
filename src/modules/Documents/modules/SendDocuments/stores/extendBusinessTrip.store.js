@@ -19,11 +19,24 @@ import { withAsync } from "@/utils/withAsync"
 import { useCountStore } from "@/stores/count.store"
 import { useBusinessTripStore } from "@/modules/Documents/modules/SendDocuments/stores/businessTrip.store"
 import { useDecreeStore } from "@/modules/Documents/modules/SendDocuments/stores/decree.store";
+import {
+  fetchBusinessTripDetail,
+  fetchUpdateBusinessTripVerification
+} from "@/modules/HR/modules/BusinessTrip/services";
+import { dispatchNotify } from "@/utils/notify";
+import { COLOR_TYPES } from "@/enums";
 
 export const useExtendBusinessTripStore = defineStore("sd-extend-business-trip-store", {
   state: () => ({
     buttonLoading: false,
+    userTripUpdateButtonLoading: false,
     detailLoading: false,
+    changingBTDialog: false,
+    changingBTLoading: false,
+    changingBTModel: null,
+    tempVerifications: [],
+    tempRegions: [],
+    tempGroupIndex: null,
     model: {
       approvers: [],
       company: null,
@@ -106,7 +119,8 @@ export const useExtendBusinessTripStore = defineStore("sd-extend-business-trip-s
           )
 
           return {
-            __users
+            __users,
+            __notices_to_change: [],
           }
         })
       )
@@ -121,24 +135,37 @@ export const useExtendBusinessTripStore = defineStore("sd-extend-business-trip-s
         selectedUsers.some(user => user.id === notice.user.id)
       )
 
+      this.changingBTModel = item
+      this.tempGroupIndex = groupIndex
+      this.changingBTLoading = true
+      this.changingBTDialog = true
 
+      setTimeout(() => {
+        this.changingBTLoading = false
+      }, 2000)
 
-      console.log(item)
+      const res = await fetchBusinessTripDetail(item.id)
 
-      const matchedNotices = this.model.__notices.filter(item =>
-        selectedUsers.some(user => user.id === item.user.id)
-      )
-
-      console.log(matchedNotices)
-
-      this.model.__groups[groupIndex].__notices_to_change = await Promise.all(
-        matchedNotices.map(async (notice) => ({
-          ...notice,
-          __regions: await adjustObjectToArray('regions', notice.locations),
-          __end_date: notice.end_date,
-          __start_date: notice.start_date
-        }))
-      )
+      this.tempVerifications = res?.data?.verifications.filter(item => !item.is_sender).map(item => ({
+        ...item,
+        is_visited: item.arrived_at || item.left_at,
+      }))
+    },
+    /** **/
+    actionFillNoticesToChange(){
+      console.log(this.tempRegions)
+      console.log(this.tempVerifications)
+      if (this.model?.__groups?.[this.tempGroupIndex]?.__notices_to_change) {
+        this.model.__groups[this.tempGroupIndex].__notices_to_change.push({
+          ...this.changingBTModel,
+          __regions: this.tempVerifications.map(item => ({...item.region})),
+          __start_date: this.changingBTModel?.start_date,
+          __end_date: this.changingBTModel?.end_date,
+          __sender_company: this.changingBTModel?.sender_company
+        })
+      } else {
+        console.warn("Target group or __notices_to_change array not found.")
+      }
     },
     /** **/
     async actionCreateDocument(body) {
@@ -186,7 +213,6 @@ export const useExtendBusinessTripStore = defineStore("sd-extend-business-trip-s
           )
 
           if (matchingNotices.length) {
-            console.log(matchingNotices)
             item.__users_to_extend = item.__users
             item.__notices_to_change = await Promise.all(
               matchingNotices.map(async n => ({
@@ -222,6 +248,27 @@ export const useExtendBusinessTripStore = defineStore("sd-extend-business-trip-s
       }
     },
     /** **/
+    async actionUpdateUserTrip() {
+      this.userTripUpdateButtonLoading = true
+
+      const body = {
+        regions: this.tempVerifications.map(item => (item?.region?.id || null)),
+        end_date: this.changingBTModel?.end_date
+      }
+      try {
+        await fetchUpdateBusinessTripVerification({ id: this.changingBTModel?.id, body })
+        this.actionFillNoticesToChange()
+        this.actionClearTempModel()
+        dispatchNotify(null, "Muvaffaqiyatli!", COLOR_TYPES.SUCCESS)
+
+
+      } catch (error) {
+        console.error(error)
+      } finally {
+        this.userTripUpdateButtonLoading = false
+      }
+    },
+    /** **/
     actionResetBTModel() {
       this.model = {
         approvers: [],
@@ -251,6 +298,20 @@ export const useExtendBusinessTripStore = defineStore("sd-extend-business-trip-s
         __approvers: [],
         __signers: [],
       }
+    },
+    /** **/
+    actionClearTempModel() {
+      this.changingBTDialog = false
+      this.changingBTLoading = false
+      this.changingBTModel = null
+      this.tempVerifications = []
+      this.tempRegions = []
+      this.model.__groups[this.tempGroupIndex].__users_to_extend = []
+    },
+    /** **/
+    actionClearUserToExtend() {
+      const index = this.model.__groups[this.tempGroupIndex].__users_to_extend.findIndex(user => user.id === this.changingBTModel?.user?.id)
+      this.model.__groups[this.tempGroupIndex].__users_to_extend.splice(index, 1)
     }
   }
 })

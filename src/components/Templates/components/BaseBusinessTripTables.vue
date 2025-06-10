@@ -51,7 +51,7 @@ const groups = computed(() => {
         children: [
           {
             user: notice.user,
-            locations: notice?.regions,
+            locations: notice?.locations,
             start_date: notice?.start_date,
             end_date: notice?.end_date,
             tags: notice?.tags,
@@ -117,7 +117,7 @@ const bookings = computed(() => {
 </script>
 
 <template>
-<!--  <pre>{{ composeModel }}</pre>-->
+<!--  <pre>{{ props.composeModel?.notices }}</pre>-->
   <!-- Loop according to groups -->
   <div
     v-for="(item, index) in groups"
