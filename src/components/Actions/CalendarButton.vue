@@ -49,8 +49,6 @@ const toolTipFun = (value) => {
 }
 
 const toggle = (event) => {
-  selectedMonth.value = null
-  selectedYear.value = null
   const _refOverPanel = unref(refOverPanel)
   _refOverPanel.opRef.toggle(event)
 }
@@ -65,7 +63,8 @@ const handleClickSubmit = () => {
   // "2025-03-01T00:00:00.000Z"
   const isoDate = date.toISOString(); 
   emit('click:submit', {
-    date: isoDate,
+    date: date,
+    isoDate: isoDate,
     month: selectedMonth.value,
     year: selectedYear.value
   })
@@ -76,6 +75,19 @@ const handleClickSubmit = () => {
 const onChangeState = (state) => {
   overPanelIsOpen.value = state
 }
+
+const updateSelectedMonthYearFromDate = (dateValue) => {
+  selectedYear.value = dateValue.getFullYear();
+  const monthIndex = dateValue.getMonth();
+   // 0-based index (0-11)
+
+  selectedMonth.value = MONTH_NAMES.find((m) => m.id === monthIndex + 1);
+}
+
+watch(() => props.date, (newDate) => {
+  updateSelectedMonthYearFromDate(newDate);
+}, { immediate: true });
+
 </script>
 <template>
   <div class="flex items-center">
@@ -87,7 +99,7 @@ const onChangeState = (state) => {
       <base-iconify :icon="AltArrowLeftIcon" class="!w-5 !h-5" />
     </div>
     <div 
-      class="min-w-[136px] capitalize select-none flex items-center justify-center px-2 border-r border-l cursor-pointer border-greyscale-200 text-sm font-medium text-greyscale-500 bg-white self-stretch"
+      class="min-w-[136px] capitalize select-none flex items-center justify-center px-2 border-r border-l cursor-pointer border-greyscale-200 text-sm font-medium text-greyscale-900 bg-white self-stretch"
       @click="toggle"
       :class="{'!text-primary-500': overPanelIsOpen }"
       >

@@ -8,7 +8,7 @@ import { ActionToolbar } from '@/components/Actions';
 import ToggleButton from './ToggleButton.vue';
 import { FileDownloadIcon } from '@/components/Icons';
 import BaseButton from '@/components/UI/BaseButton.vue';
-import CalendarButton from './CalendarButton.vue';
+import CalendarButton from '@/components/Actions/CalendarButton.vue';
 
 const { t } = useI18n()
 const route = useRouter()

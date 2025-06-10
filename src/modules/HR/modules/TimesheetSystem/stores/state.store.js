@@ -4,21 +4,21 @@ const defaultGeneralHeaders = [
     header: 'Сотрудник',
     field: 'employee',
     active: true,
-    width: '200px',
+    width: '170px',
     frozen: true
   },
   {
     header: 'Подразделение',
     field: 'division',
     active: true,
-    width: '210px',
+    width: '170px',
     frozen: false
   },
   {
     header: 'Должность',
     field: 'position',
     active: true,
-    width: '200px',
+    width: '170px',
     frozen: false
   },
   {
@@ -29,7 +29,7 @@ const defaultGeneralHeaders = [
       bottom: "1"
     },
     active: true,
-    width:"232px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -39,7 +39,7 @@ const defaultGeneralHeaders = [
       bottom: "2"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -49,7 +49,7 @@ const defaultGeneralHeaders = [
       bottom: "3"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -59,7 +59,7 @@ const defaultGeneralHeaders = [
       bottom: "4"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -69,7 +69,7 @@ const defaultGeneralHeaders = [
       bottom: "5"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -79,7 +79,7 @@ const defaultGeneralHeaders = [
       bottom: "6"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -89,7 +89,7 @@ const defaultGeneralHeaders = [
       bottom: "7"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -99,7 +99,7 @@ const defaultGeneralHeaders = [
       bottom: "8"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -109,7 +109,7 @@ const defaultGeneralHeaders = [
       bottom: "9"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -119,7 +119,7 @@ const defaultGeneralHeaders = [
       bottom: "10"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -129,7 +129,7 @@ const defaultGeneralHeaders = [
       bottom: "11"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -139,7 +139,7 @@ const defaultGeneralHeaders = [
       bottom: "12"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -149,7 +149,7 @@ const defaultGeneralHeaders = [
       bottom: "13"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -158,7 +158,8 @@ const defaultGeneralHeaders = [
       top: "Ср",
       bottom: "14"
     },
-    active: true
+    active: true,
+    width:"fit-content"
   },
   // untill 1..31
   {
@@ -169,7 +170,7 @@ const defaultGeneralHeaders = [
       bottom: "15"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -179,7 +180,7 @@ const defaultGeneralHeaders = [
       bottom: "16"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -189,7 +190,7 @@ const defaultGeneralHeaders = [
       bottom: "17"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -199,7 +200,7 @@ const defaultGeneralHeaders = [
       bottom: "18"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -209,7 +210,7 @@ const defaultGeneralHeaders = [
       bottom: "19"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -219,7 +220,7 @@ const defaultGeneralHeaders = [
       bottom: "20"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -229,7 +230,7 @@ const defaultGeneralHeaders = [
       bottom: "21"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -239,7 +240,7 @@ const defaultGeneralHeaders = [
       bottom: "22"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -249,7 +250,7 @@ const defaultGeneralHeaders = [
       bottom: "23"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -259,7 +260,7 @@ const defaultGeneralHeaders = [
       bottom: "24"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -269,7 +270,7 @@ const defaultGeneralHeaders = [
       bottom: "25"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -279,7 +280,7 @@ const defaultGeneralHeaders = [
       bottom: "26"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -289,7 +290,7 @@ const defaultGeneralHeaders = [
       bottom: "27"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -299,7 +300,7 @@ const defaultGeneralHeaders = [
       top: "Ср",
       bottom: "28"
     },
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -309,7 +310,7 @@ const defaultGeneralHeaders = [
       bottom: "29"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -319,7 +320,7 @@ const defaultGeneralHeaders = [
       bottom: "30"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
   {
     header: "",
@@ -329,47 +330,47 @@ const defaultGeneralHeaders = [
       bottom: "31"
     },
     active: true,
-    width:"32px"
+    width:"fit-content"
   },
 ]
 export const useStateStore = defineStore("state-store", {
   state: () => ({
     generalList: [
      ...Array.from({ length: 5 }, (_, i) => ({
-        employee: '2025-06-01',
-        division: 'Понедельник',
-        position: 'Должность',
-        "1":1,
-        "2":2,
-        "3":3,
-        "4":4,
-        "5":5,
-        "6":6,
-        "7":7,
+        employee: 'Abdullayev Mo’min Botir o’g’li',
+        division: 'Ichki dasturiy taminotlarni ishlab chiqish bo’limi',
+        position: 'Заместитель директора ',
+        "1":8,
+        "2":8,
+        "3":8,
+        "4":8,
+        "5":8,
+        "6":8,
+        "7":8,
         "8":8,
-        "9":9,
-        "10":10,
-        "11":11,
-        "12":12,
-        "13":13,
-        "14":14,
-        "15":15,
-        "16":16,
-        "17":17,
-        "18":18,
-        "19":19,
-        "20":20,
-        "21":21,
-        "22":22,
-        "23":23,
-        "24":24,
-        "25":25,
-        "26":26,
-        "27":27,
-        "28":28,
-        "29":29,
-        "30":30,
-        "31":31,
+        "9":8,
+        "10":8,
+        "11":8,
+        "12":8,
+        "13":8,
+        "14":8,
+        "15":8,
+        "16":8,
+        "17":8,
+        "18":8,
+        "19":8,
+        "20":8,
+        "21":8,
+        "22":8,
+        "23":8,
+        "24":8,
+        "25":8,
+        "26":"rest",
+        "27":8,
+        "28":8,
+        "29":8,
+        "30":8,
+        "31":8,
       }))
     ],
 

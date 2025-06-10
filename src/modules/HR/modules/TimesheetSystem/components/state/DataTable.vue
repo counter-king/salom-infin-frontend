@@ -253,13 +253,13 @@ onMounted( async () => {
       frozen
       :pt="{
         headerCell: {
-          class: ['bg-greyscale-50 py-2 px-3 border-0 border-r border-greyscale-200 frozen-header-cell', props.headerCellClass]
+          class: ['bg-greyscale-50 py-2 px-3 border-0 border-r border-greyscale-200 ', props.headerCellClass]
         },
         headerContent: {
           class: ['text-sm font-semibold text-greyscale-500', props.headerCellContentClass]
         },
         bodyCell: {
-          class: ['border-greyscale-100 py-2 px-3 border-0 border-t border-r frozen-body-cell', props.bodyCellClass],
+          class: ['border-greyscale-100 py-2 px-3 border-0 border-t border-r', props.bodyCellClass],
         },
         bodyCellContent: {
           class: ['text-sm font-medium text-greyscale-900', props.bodyCellContentClass]
@@ -285,17 +285,16 @@ onMounted( async () => {
         :style="{ width: header.width }"
         :pt="{
           headerCell: { 
-            class: ['bg-greyscale-50 py-2 px-3 border-0 border-r greyscale-200 last:border-r-0',
-             header.frozen ? 'frozen-header-cell' : 'last:border-r-0',
-             props.headerCellClass]
+            class: ['bg-greyscale-50 py-2 px-3 border-0 border-r greyscale-200 last:border-r-0', props.headerCellClass],
+            style: { width: header.width, minWidth: header.width, maxWidth: header.width } 
+
           },
           headerContent: {
             class: ['gap-1 text-sm font-semibold text-greyscale-500', props.headerCellContentClass]
           },
           bodyCell: {
-            class: ['border-greyscale-100 py-2 px-3 border-0 border-t border-r last:border-r-0',
-            header.frozen ? 'frozen-body-cell' : 'last:border-r-0',
-            props.bodyCellClass],
+            class: ['border-greyscale-100 py-2 px-3 border-0 border-t border-r last:border-r-0',props.bodyCellClass],
+            style: { width: header.width, minWidth: header.width, maxWidth: header.width } 
           },
           bodyCellContent: {
             class: ['text-sm font-medium text-greyscale-900', props.bodyCellContentClass]

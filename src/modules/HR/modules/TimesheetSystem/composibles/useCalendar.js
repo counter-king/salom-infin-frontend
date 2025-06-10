@@ -43,7 +43,6 @@ watch(()=> currentDate.value, () => {
     for (let i = 1; i <= daysInMonth.value; i++) {
         const date = new Date(currentYear.value, currentMonth.value, i)
         const dayOfWeek = date.getDay();
-        console.log("dayOfWeek",dayOfWeek, WEEK_DAYS_SHORT[dayOfWeek])
         calendarDays.value.push({
             day: i,
             currentMonth: true,

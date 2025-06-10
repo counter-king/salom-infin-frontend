@@ -18,14 +18,34 @@ const stateStore = useStateStore()
 const search = ref('')
 // inject
 const calendarDays = inject('calendarDays')
-
 // composibles
 const useDebounceSearch = useDebounce(search, 300)
 const useDebounceCalendarDays = useDebounce(calendarDays, 300)
+
+// methods
+const getMatchDayStatusText = (day) => {
+   console.log(day)
+   switch (day) {
+      case 8:
+         return '8'
+      case 'rest':
+         return 'OT'
+      case 'holiday':
+         return 'H'
+      case 'absent':
+         return 'A'
+      case 'late':
+         return 'L'
+      case 'leave':
+         return 'L'
+      case 'vacation':
+         return 'V'
+   }
+}
+
 // watch
 watch(useDebounceSearch, (val) => {
    if(val){
-    console.log(val)
       stateStore.actionGeneralList({ search: val })
    } else {
       stateStore.actionGeneralList()
@@ -50,6 +70,7 @@ watch(useDebounceCalendarDays, () => {
 }, {
   immediate: true
 })
+
 </script>
 <template>
     <div class="bg-white rounded-xl h-[calc(100vh-300px)]">
@@ -262,7 +283,97 @@ watch(useDebounceCalendarDays, () => {
          </template>
          <!--  body -->
          <template #1="{data, field}">
-              <span>{{ data[field] }}</span>
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #2="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #3="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #4="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #5="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #6="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #7="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #8="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #9="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #10="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #11="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #12="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #13="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #14="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #15="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #16="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #17="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #18="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #19="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #20="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #21="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #22="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #23="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #24="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #25="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #26="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #27="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #28="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #29="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #30="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
+         </template>
+         <template #31="{data, field}">
+              <span class="flex justify-center items-center">{{ getMatchDayStatusText(data[field]) }}</span>
          </template>
         </DataTable>  
       </div>
