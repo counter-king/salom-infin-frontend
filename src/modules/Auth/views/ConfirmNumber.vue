@@ -52,7 +52,7 @@ const submit = async () => {
     loading.value = true
     await fetchSendOtp({
       phone_number: formModel.value.phone_number?.replace(/\D/g, ''),
-      type: props.type,
+      otp_type: props.type,
     })
     dispatchNotify(null, t('confirm-code-send'), COLOR_TYPES.SUCCESS)
     await router.push({
