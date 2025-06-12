@@ -225,7 +225,7 @@ export const useExtendBusinessTripStore = defineStore("sd-extend-business-trip-s
 
         const groups = await Promise.all(this.model.__groups.map(async item => {
           const matchingNotices = data.notices.filter(notice =>
-            item.__users.some(user => user.id === notice.user?.id)
+            item.__users.some(user => user.id === notice.user?.id && notice.group_id === item.group_id)
           )
 
           if (matchingNotices.length) {
