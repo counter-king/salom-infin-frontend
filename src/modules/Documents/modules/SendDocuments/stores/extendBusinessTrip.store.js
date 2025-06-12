@@ -121,6 +121,7 @@ export const useExtendBusinessTripStore = defineStore("sd-extend-business-trip-s
           return {
             __users,
             __notices_to_change: [],
+            group_id: group.group_id,
           }
         })
       )
@@ -132,8 +133,21 @@ export const useExtendBusinessTripStore = defineStore("sd-extend-business-trip-s
       const selectedUsers = this.model.__groups[groupIndex].__users_to_extend || []
 
       const item = this.model.__notices.find(notice =>
-        selectedUsers.some(user => user.id === notice.user.id)
+        selectedUsers.some(user => user.id === notice.user.id && notice.group_id === group.group_id)
       )
+
+      if (!item) return
+
+      const groupData = this.model.__groups[groupIndex]
+      if (!Array.isArray(groupData.__notices_to_change)) {
+        this.$set(groupData, '__notices_to_change', [])
+      }
+      const alreadyExists = groupData.__notices_to_change.some(n => n.id === item.id)
+
+      if (alreadyExists) {
+        this.actionClearTempModel()
+        return
+      }
 
       this.changingBTModel = item
       this.tempGroupIndex = groupIndex
@@ -152,9 +166,11 @@ export const useExtendBusinessTripStore = defineStore("sd-extend-business-trip-s
       }))
     },
     /** **/
+    actionDeleteNoticeToChange(item, itemIndex, groupIndex) {
+      this.model.__groups[groupIndex].__notices_to_change.splice(itemIndex, 1)
+    },
+    /** **/
     actionFillNoticesToChange(){
-      console.log(this.tempRegions)
-      console.log(this.tempVerifications)
       if (this.model?.__groups?.[this.tempGroupIndex]?.__notices_to_change) {
         this.model.__groups[this.tempGroupIndex].__notices_to_change.push({
           ...this.changingBTModel,
@@ -249,24 +265,26 @@ export const useExtendBusinessTripStore = defineStore("sd-extend-business-trip-s
     },
     /** **/
     async actionUpdateUserTrip() {
-      this.userTripUpdateButtonLoading = true
-
-      const body = {
-        regions: this.tempVerifications.map(item => (item?.region?.id || null)),
-        end_date: this.changingBTModel?.end_date
-      }
-      try {
-        await fetchUpdateBusinessTripVerification({ id: this.changingBTModel?.id, body })
-        this.actionFillNoticesToChange()
-        this.actionClearTempModel()
-        dispatchNotify(null, "Muvaffaqiyatli!", COLOR_TYPES.SUCCESS)
-
-
-      } catch (error) {
-        console.error(error)
-      } finally {
-        this.userTripUpdateButtonLoading = false
-      }
+      this.actionFillNoticesToChange()
+      this.actionClearTempModel()
+      // this.userTripUpdateButtonLoading = true
+      //
+      // const body = {
+      //   regions: this.tempVerifications.map(item => (item?.region?.id || null)),
+      //   end_date: this.changingBTModel?.end_date
+      // }
+      // try {
+      //   await fetchUpdateBusinessTripVerification({ id: this.changingBTModel?.id, body })
+      //   this.actionFillNoticesToChange()
+      //   this.actionClearTempModel()
+      //   dispatchNotify(null, "Muvaffaqiyatli!", COLOR_TYPES.SUCCESS)
+      //
+      //
+      // } catch (error) {
+      //   console.error(error)
+      // } finally {
+      //   this.userTripUpdateButtonLoading = false
+      // }
     },
     /** **/
     actionResetBTModel() {
