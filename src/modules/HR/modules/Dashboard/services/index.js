@@ -3,6 +3,7 @@ import axiosConfig from '@/services/axios.config'
 const URLS = {
   payrolls: 'payrolls/summary',
   comparison: 'payrolls/comparison',
+  byCompanyType: 'payrolls/by-company-type',
   tripByStatus: 'trips-statistics/by-status',
   tripInnerOuterChart: 'trips-statistics/by-type-line-chart',
   tripTopDepartments: 'trips-statistics/by-top-departments',
@@ -22,6 +23,12 @@ export const fetchDashboardPayrolls = (params = {}) => {
  * */
 export const fetchDashboardComparison = (params = {}) => {
   return axiosConfig.get(`${URLS.comparison}/`, params)
+}
+/**
+ * @returns Promise
+ * */
+export const fetchDashboardByCompanyType = (params = {}) => {
+  return axiosConfig.get(`${URLS.byCompanyType}/`, params)
 }
 /**
  * @returns Promise
