@@ -901,5 +901,11 @@
   "ordering":"Распоряжение",
   "my-assignments": "Мои поручения",
   "published-date": "Дата публикации",
-  "business-trip-dashboard": "Командировочный дашбоард"
+  "business-trip-dashboard": "Командировочный дашбоард",
+  "modify-business-trip": "Продлить командировку",
+  "employees-in-business-trip": "Сотрудники в командировках",
+  "select-employees-in-business-trip": "Выбрать сотрудников в командировке",
+  "add-location": "Добавить место",
+  "add-trip-place": "Добавить место командировки",
+  "trip-notice-for-change": "Рапорт на изменение командировке"
 }

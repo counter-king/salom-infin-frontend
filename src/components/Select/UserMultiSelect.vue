@@ -30,6 +30,10 @@ const props = defineProps({
   options: {
     type: Array,
     default: () => []
+  },
+  searchable: {
+    type: Boolean,
+    default: true
   }
 });
 const modelValue = useModel(props, 'modelValue')
@@ -50,6 +54,7 @@ const emit = defineEmits(['update:modelValue'])
     :label="props.label"
     :required="props.required"
     :hide-on-change="true"
+    :searchable="searchable"
     type="user"
   >
     <template #chip="{ value }">

@@ -40,6 +40,9 @@ const tabValue = ref('notice')
 const signed = computed(() => {
 	return signStore.detailModel?.is_signed
 })
+const templateClasses = computed(() => {
+  return [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2, COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE].includes(String(signStore?.detailModel?.compose?.document_sub_type?.id)) ? '' : 'p-10'
+})
 
 // Methods
 const onReject = async (comment) => {
@@ -209,7 +212,7 @@ onMounted( async () => {
         >
           <div
             class="min-h-full shadow-block border-[0.095rem] border-greyscale-200"
-            :class="signStore?.detailModel?.compose?.document_sub_type?.id === Number(COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2) ? '' : 'p-10'"
+            :class="templateClasses"
           >
             <base-template
               v-if="signStore.detailModel && signStore.detailModel.compose"

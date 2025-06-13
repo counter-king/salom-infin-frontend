@@ -128,6 +128,10 @@ const props = defineProps({
   showNestedError: {
     type: Boolean,
     default: true
+  },
+  searchable: {
+    type: Boolean,
+    default: true
   }
 })
 // Reactive
@@ -139,7 +143,7 @@ const multiselect = ref(null)
 // Composable
 const debounced = useDebounce(search, 500)
 // Computed
-const options = computed(() => props.options.length
+const options = computed(() => props.options?.length
   ? props.options
   : list.value
 )
@@ -231,7 +235,7 @@ const onChange = async (val) => {
   emit('emit:change', val)
 }
 const onShow = () => {
-  inputRef.value.focus()
+  inputRef?.value?.focus()
   props.options.value = []
 }
 const onSearchClear = async (event) => {
@@ -351,7 +355,7 @@ const  handleEnterPress = () => {
         }
       }"
     >
-      <template #header="{ value, options }">
+      <template v-if="searchable" #header="{ value, options }">
         <div class="flex items-center border-b border-greyscale-200 px-3">
           <base-iconify :icon="MagniferIcon" class="!w-4 !h-4" />
 

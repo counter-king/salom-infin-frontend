@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import {computed, onBeforeMount, onMounted} from "vue"
+import { computed, onBeforeMount, onMounted, ref } from "vue"
 import {useRoute, useRouter} from "vue-router"
 import {useI18n} from "vue-i18n"
 // Store
@@ -19,6 +19,9 @@ const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 
+// Reactive
+const isHostVercel = ref(null)
+
 // Computed
 const isChangeable = computed(() => {
   return SDStore.detailModel
@@ -32,7 +35,11 @@ const fillOnMount = computed(() => {
 })
 
 const updateButtonVisible = computed(() => {
-  return !SDStore.detailModel?.registered_document && route.params.document_sub_type !== COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_V2
+  return !SDStore.detailModel?.registered_document && ![COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_V2, COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_DECREE].includes(route.params.document_sub_type)
+})
+
+const extendBusinessTripButtonVisible = computed(() => {
+  return SDStore.detailModel?.registered_document && [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2].includes(route.params.document_sub_type) && isHostVercel.value
 })
 
 // Methods
@@ -45,11 +52,25 @@ const openUpdatePage = () => {
       document_sub_type: route.params.document_sub_type,
     },
     query: {
-      trip_notice_id: SDStore.detailModel.trip_notice_id || null
+      trip_notice_id: SDStore.detailModel.trip_notice_id || null,
+      parent_id: route.query.parent_id || null,
+    }
+  })
+}
+const openExtendForm = async () => {
+  await router.push({
+    name: 'SendDocumentsCreate',
+    params: {
+      document_type: route.params.document_type,
+      document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE,
+    },
+    query: {
+      parent_id: route.params.id
     }
   })
 }
 
+// Hooks
 onBeforeMount(async () => {
   SDStore.detailLoading = true;
   const response = await SDStore.actionGetDocumentDetail(route.params.id);
@@ -82,6 +103,9 @@ onBeforeMount(async () => {
     }
   }
 })
+onMounted(() => {
+  isHostVercel.value = window.location.host === 'app.itco.uz' || window.location.host === 'new-side-project.vercel.app' || window.location.host.startsWith('localhost')
+})
 </script>
 
 <template>
@@ -112,6 +136,21 @@ onBeforeMount(async () => {
 <!--          shadow-->
 <!--          type="button"-->
 <!--        />-->
+
+        <base-button
+          v-if="extendBusinessTripButtonVisible"
+          color="bg-white hover:bg-greyscale-100 text-primary-dark"
+          border-color="border-transparent"
+          label="modify-business-trip"
+          :icon-left="Pen2Icon"
+          icon-height="16"
+          icon-width="16"
+          icon-color="#767994"
+          rounded
+          shadow
+          type="button"
+          @click="openExtendForm"
+        />
 
         <base-button
           v-if="updateButtonVisible"
@@ -154,7 +193,7 @@ onBeforeMount(async () => {
         >
           <div
             class="min-h-full shadow-block border-[0.095rem] border-greyscale-200"
-            :class="SDStore.detailModel.document_sub_type.id === Number(COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2) ? '' : 'p-10'"
+            :class="[COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2, COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE].includes(String(SDStore.detailModel.document_sub_type.id)) ? '' : 'p-10'"
           >
             <base-template
               :compose-model="SDStore.detailModel"

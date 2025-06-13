@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import {
   fetchDashboardComparison,
   fetchDashboardPayrolls,
+  fetchDashboardByCompanyType,
   fetchTripByStatus,
   fetchTripInnerOuterChart,
   fetchTripTopDepartments,
@@ -93,6 +94,10 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
       data: {},
       axes: [],
       loader: true
+    },
+    companyType: {
+      loader: true,
+      data: {}
     },
     tripStatus: {
       loader: true,
@@ -796,6 +801,80 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
       finally {
         setTimeout(() => {
           this.comparison.loader = false
+        }, 500)
+      }
+    },
+    /**
+     *
+     * */
+    async actionDashboardByCompanyType(params = {}) {
+      this.companyType.loader = true
+
+      try {
+        const { data } = await fetchDashboardByCompanyType(params)
+
+        this.companyType.data = data
+
+        // MOCK DATA
+        // this.companyType.data = {
+        //   "Agrosanoat klasterlarini moliyalashtirishni  muvofiqlashtirish departamenti": [
+        //     {
+        //       "category": "Переменное вознаграждение",
+        //       "total": 601087800.79
+        //     },
+        //     {
+        //       "category": "Премии к праздникам и мат помощь с/х продукты",
+        //       "total": 54000000
+        //     },
+        //     {
+        //       "category": "Разовые выплаты",
+        //       "total": 130000000
+        //     },
+        //     {
+        //       "category": "Фиксированное вознаграждение",
+        //       "total": 1392558434.7
+        //     },
+        //     {
+        //       "category": "Ценные подарки",
+        //       "total": 1364000
+        //     }
+        //   ],
+        //   "Aholini moliyaviy qo'llab-quvvatlash va tadbirkorlikka jalb qilish departamenti": [
+        //     {
+        //       "category": "Материальная помощь",
+        //       "total": 601087800.79
+        //     },
+        //     {
+        //       "category": "Переменное вознаграждение",
+        //       "total": 601087800.79
+        //     },
+        //     {
+        //       "category": "Премии к праздникам и мат помощь с/х продукты",
+        //       "total": 54000000
+        //     },
+        //     {
+        //       "category": "Разовые выплаты",
+        //       "total": 130000000
+        //     },
+        //     {
+        //       "category": "Фиксированное вознаграждение",
+        //       "total": 1392558434.7
+        //     },
+        //     {
+        //       "category": "Ценные подарки",
+        //       "total": 1364000
+        //     }
+        //   ],
+        // }
+
+        return Promise.resolve()
+      }
+      catch (error) {
+        return Promise.reject()
+      }
+      finally {
+        setTimeout(() => {
+          this.companyType.loader = false
         }, 500)
       }
     },

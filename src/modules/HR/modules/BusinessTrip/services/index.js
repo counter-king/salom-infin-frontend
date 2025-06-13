@@ -86,3 +86,6 @@ export const fetchUpdateTagById = (id, body) => {
 export const fetchDeleteTagById = (id) => {
   return axiosConfig.delete(`${URLS.tags}/${id}/`)
 }
+export const fetchUpdateBusinessTripVerification = ({ id, body }) => {
+  return axiosConfig.post(`${URLS.tripVerification}s/${id}/`, body)
+}

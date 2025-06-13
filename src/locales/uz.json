@@ -900,5 +900,11 @@
    "ordering": "Farmoyish",
    "my-assignments": "Mening vazifalarim",
    "published-date": "Nashr etilgan sana",
-  "business-trip-dashboard": "Xizmat safari dashbord"
+  "business-trip-dashboard": "Xizmat safari dashbord",
+  "modify-business-trip": "Xizmat safarini uzaytirish",
+  "employees-in-business-trip": "Xizmat safaridagi xodimlar",
+  "select-employees-in-business-trip": "Xizmat safaridagi xodimlarni tanlang",
+  "add-location": "Hudud qo'shish",
+  "add-trip-place": "Xizmat safari hududini qo'shish",
+  "trip-notice-for-change": "Xizmat safarini o'zgartirish uchun raport"
 }
