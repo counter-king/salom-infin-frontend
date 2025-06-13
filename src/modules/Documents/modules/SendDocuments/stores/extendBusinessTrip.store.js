@@ -142,9 +142,10 @@ export const useExtendBusinessTripStore = defineStore("sd-extend-business-trip-s
       if (!Array.isArray(groupData.__notices_to_change)) {
         this.$set(groupData, '__notices_to_change', [])
       }
-      const alreadyExists = groupData.__notices_to_change.some(n => n.id === item.id)
+      const alreadyExists = groupData.__notices_to_change.some(n => n.id === item.id || n.parent_id === item.id)
 
       if (alreadyExists) {
+        this.tempGroupIndex = groupIndex
         this.actionClearTempModel()
         return
       }
@@ -229,7 +230,6 @@ export const useExtendBusinessTripStore = defineStore("sd-extend-business-trip-s
           )
 
           if (matchingNotices.length) {
-            item.__users_to_extend = item.__users
             item.__notices_to_change = await Promise.all(
               matchingNotices.map(async n => ({
                 user: n.user,
@@ -238,17 +238,14 @@ export const useExtendBusinessTripStore = defineStore("sd-extend-business-trip-s
                 __end_date: n.end_date,
                 tags: n.tags,
                 __sender_company: n.sender_company,
-                business_trip_id: n.id
+                business_trip_id: n.id,
+                parent_id: n.parent,
               }))
             )
           }
 
           return item
         }))
-
-        this.model.__groups = groups.filter(group =>
-          group.__users_to_extend && group.__users_to_extend.length > 0
-        )
 
         this.model.__curator = await adjustTopSignerObjectToArray([], data.curator.id, false)
         this.model.__signers = await adjustUserObjectToArray(data.signers)
