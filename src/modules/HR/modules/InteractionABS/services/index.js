@@ -6,7 +6,8 @@ const URLS = {
   documentTypes: "document-types/",
   documentSubTypes: "document-sub-types/",
   iabsAction: "iabs/actions/",
-  iabsRequestCalls: "iabs/request-calls/"
+  iabsRequestCalls: "iabs/request-calls/",
+  retryAction: "retry-action/"
 }
 
 // get companies list
@@ -39,4 +40,8 @@ export const getIabsActionById = (id) => {
 // get iabs request calls
 export const getIabsRequestCalls = (params) => {
    return axiosConfig.get(URLS.iabsRequestCalls, params)
+}
+// retry iabs action
+export const getRetryIabsAction = (id) => {
+   return axiosConfig.get(`${URLS.iabsAction}${id}/${URLS.retryAction}`)
 }

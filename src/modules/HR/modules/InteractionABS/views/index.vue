@@ -14,6 +14,9 @@ import Dialog from '../components/Dialog.vue';
 import { useInteractionABSStore } from '../stores';
 // enums
 import { HEADERS, HEADERS_TITLE, INTERACTION_ABS_COLUMNS, OPERATION_TYPE, OPERATION_TYPE_TITLE, STATUS_ABS, STATUS_ABS_TITLE } from '../enums'
+// services
+import { getRetryIabsAction } from '../services';
+
 // composibles
 const interactionABSStore = useInteractionABSStore()
 const { t } = useI18n()
@@ -176,8 +179,9 @@ const onCancelFilter = (type) => {
   })
 }
 
-const onSendAgain = (item) => {
-  console.log("item", item)
+const onSendAgain = async(item) => {
+  await getRetryIabsAction(item.id)
+  interactionABSStore.actionGetIabsActionList({ page: 1, page_size: 20 })
 }
 
 watch(()=>route.query, ()=>{

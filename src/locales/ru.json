@@ -873,6 +873,7 @@
   "ordering":"Распоряжение",
   "my-assignments": "Мои поручения",
   "interaction-with-abs": "Взаимодействие с iABS",
+  "interaction-with-abs2": "Интеграция с iABS",
   "document-name":"Название док.",
   "operation-type":"Тип операции",
   "status-abs":"Статус iABS",

@@ -77,14 +77,14 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
         {
           field: HEADERS.POSITION,
           header: HEADERS_TITLE[HEADERS.POSITION],
-          width: '10%',
+          width: '9%',
           active: true,
           filter: false,
         },
         {
           field: HEADERS.COMPANY,
           header: HEADERS_TITLE[HEADERS.COMPANY],
-          width: '10%',
+          width: '9%',
           active: true,
           filter: false,
         },
@@ -133,7 +133,7 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
         {
           field: HEADERS.ACTIONS,
           header: HEADERS_TITLE[HEADERS.ACTIONS],
-          width: '12%',
+          width: '14%',
           active: true,
           filter: false
         }

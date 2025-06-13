@@ -35,7 +35,7 @@ const menus = ref([
     children: []
   },
   {
-    title: "interaction-with-abs",
+    title: "interaction-with-abs2",
     icon: DocumentAddIcon,
     link: "InteractionABSIndex",
     children: []
