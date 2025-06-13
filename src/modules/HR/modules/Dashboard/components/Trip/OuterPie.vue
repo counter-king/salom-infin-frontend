@@ -1,7 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import Card from '../Card.vue'
 import { USER_STATUS_CODES } from '@/enums'
+
+const { t } = useI18n()
 
 const options = ref({
   chart: {
@@ -104,59 +107,24 @@ onMounted(() => {
   let mock = {
     data: [
       {
-        "CONDITION_NOTE": "Ташкентская об.",
-        "COUNT": 1,
+        "CONDITION_NOTE": "-",
+        "COUNT": 0,
         "CONDITION": "AO"
       },
       {
-        "CONDITION_NOTE": "Андижанская об.",
-        "COUNT": 13,
+        "CONDITION_NOTE": "-",
+        "COUNT": 0,
         "CONDITION": "OB"
       },
       {
-        "CONDITION_NOTE": "Наманганская об.",
-        "COUNT": 26,
+        "CONDITION_NOTE": "-",
+        "COUNT": 0,
         "CONDITION": "B"
       },
       {
-        "CONDITION_NOTE": "Воинская служба",
-        "COUNT": 6,
+        "CONDITION_NOTE": "-",
+        "COUNT": 0,
         "CONDITION": "I"
-      },
-      {
-        "CONDITION_NOTE": "Декрет больничный",
-        "COUNT": 37,
-        "CONDITION": "DB"
-      },
-      {
-        "CONDITION_NOTE": "Декрет_2",
-        "COUNT": 172,
-        "CONDITION": "OD"
-      },
-      {
-        "CONDITION_NOTE": "Декрет_3",
-        "COUNT": 68,
-        "CONDITION": "OF"
-      },
-      {
-        "CONDITION_NOTE": "Командировка",
-        "COUNT": 14,
-        "CONDITION": "K"
-      },
-      {
-        "CONDITION_NOTE": "Рабочие",
-        "COUNT": 3821,
-        "CONDITION": "A"
-      },
-      {
-        "CONDITION_NOTE": "Трудовой отп.",
-        "COUNT": 152,
-        "CONDITION": "OT"
-      },
-      {
-        "CONDITION_NOTE": "Ученический отп.",
-        "COUNT": 50,
-        "CONDITION": "OU"
       }
     ],
     median_age: 33
@@ -183,7 +151,7 @@ onMounted(() => {
 
 <template>
   <card>
-    <h1 class="flex-1 font-semibold text-greyscale-900 mb-8">Внутренняя</h1>
+    <h1 class="flex-1 font-semibold text-greyscale-900 mb-8">{{ t('hr-trip-dashboard.outer') }} (На стадии разработки)</h1>
 
     <div class="flex items-center relative pb-2">
       <div class="max-w-[240px] w-full">
@@ -208,9 +176,9 @@ onMounted(() => {
 
             <span class="text-greyscale-900 text-sm font-semibold">{{ item.number }}</span>
 
-            <span class="w-9 text-right text-sm group-hover:text-greyscale-900">
-              {{ `${(item.number / items.counts * 100).toFixed(1)}%` }}
-            </span>
+<!--            <span class="w-9 text-right text-sm group-hover:text-greyscale-900">-->
+<!--              {{ `${(item.number / items.counts * 100).toFixed(1)}%` }}-->
+<!--            </span>-->
           </div>
         </template>
       </div>

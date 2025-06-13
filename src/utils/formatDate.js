@@ -18,8 +18,8 @@ export const isDateHour = (date) => {
 export function formatDateHour(date) {
   return date ? dayjs(date).format("DD.MM.YYYY HH:mm") : "Не верный формат даты"
 }
-export function formatDateMonth(date, locale = 'ru') {
-  return date ? dayjs(date).locale(locale).format('MMMM') : 'Не верный формат даты'
+export function formatDateMonth(date, locale = 'ru', index) {
+  return date ? dayjs(date).set('month', index).startOf('month').locale(locale).format('MMMM') : 'Не верный формат даты'
 }
 export function formatHour(date) {
   return date ? dayjs(date).format("HH:mm") : "Не верный формат даты"

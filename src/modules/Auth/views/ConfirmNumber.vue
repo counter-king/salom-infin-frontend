@@ -21,6 +21,10 @@ const props = defineProps({
   title: {
     type: String,
     default: "register"
+  },
+  type: {
+    type: String,
+    default: 'for_registration',
   }
 })
 // Reactive
@@ -46,7 +50,10 @@ const submit = async () => {
 
   try {
     loading.value = true
-    await fetchSendOtp({ phone_number: formModel.value.phone_number?.replace(/\D/g, '') })
+    await fetchSendOtp({
+      phone_number: formModel.value.phone_number?.replace(/\D/g, ''),
+      otp_type: props.type,
+    })
     dispatchNotify(null, t('confirm-code-send'), COLOR_TYPES.SUCCESS)
     await router.push({
       name: 'VerifyNumber',

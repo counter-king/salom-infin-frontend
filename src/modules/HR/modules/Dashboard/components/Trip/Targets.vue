@@ -1,29 +1,46 @@
 <script setup>
+import { onMounted, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useHRDashboardStore } from '../../stores'
 import Card from '../Card.vue'
+
+const { t } = useI18n()
+const dashboardStore = useHRDashboardStore()
+
+const totalCount = computed(() => {
+  return dashboardStore.topDepartments.data.reduce((acc, val) => acc + val.count, 0)
+})
+
+onMounted(async () => {
+  await dashboardStore.actionTripByGoals()
+})
 </script>
 
 <template>
   <card>
-    <h1 class="font-semibold text-greyscale-900 mb-1">Топ цели</h1>
+    <h1 class="font-semibold text-greyscale-900 mb-1">{{ t('hr-main-dashboard.top-targets') }}</h1>
 
     <div class="h-[284px] overflow-y-auto -mr-2">
-      <template v-for="item in 25">
-        <div
-          class="group flex gap-4 font-medium text-greyscale-500 rounded-xl hover:bg-greyscale-50 cursor-pointer px-3 py-[9px] mr-2"
-        >
-          <span class="text-sm font-medium text-greyscale-500">{{ item }}</span>
+      <template v-if="dashboardStore.topGoals.loader">
+        <base-spinner />
+      </template>
 
-          <h1 class="flex-1 text-[13px] group-hover:text-greyscale-900 line-clamp-2">
-            Joylarda biznes reja ko‘rsatkichlarini bajarilishini o‘rganish
-            Joylarda biznes reja ko‘rsatkichlarini bajarilishini o‘rganish
-          </h1>
+      <template v-else>
+        <template v-for="(item, index) in dashboardStore.topGoals.data">
+          <div
+            class="group flex gap-4 font-medium text-greyscale-500 rounded-xl hover:bg-greyscale-50 cursor-pointer px-3 py-[9px] mr-2"
+          >
+            <span class="text-sm font-medium text-greyscale-500">{{ index + 1 }}</span>
 
-          <span class="text-greyscale-900 text-sm font-semibold">20</span>
+            <h1 class="flex-1 text-[13px] group-hover:text-greyscale-900">{{ item.name }}</h1>
 
-          <span class="w-9 text-right text-sm group-hover:text-greyscale-900">
-            32%
+            <span class="text-greyscale-900 text-sm font-semibold ml-4">{{ item.count }}</span>
+
+            <span class="w-9 text-right text-sm group-hover:text-greyscale-900">
+            {{ ((item.count / totalCount) * 100).toFixed(1) }}%
           </span>
-        </div>
+          </div>
+        </template>
       </template>
     </div>
   </card>

@@ -41,6 +41,9 @@ const tabValue = ref('notice')
 const approved = computed(() => {
 	return approvalStore.detailModel?.is_approved
 })
+const templateClasses = computed(() => {
+  return [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2, COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE].includes(String(approvalStore?.detailModel?.compose?.document_sub_type?.id)) ? '' : 'p-10'
+})
 /** **/
 const isAssistant = computed(() => {
   return approvalStore.detailModel?.compose?.curator?.assistant === authstore.currentUser?.id
@@ -165,7 +168,7 @@ onMounted(  () => {
         >
           <div
             class="min-h-full shadow-block border-[0.095rem] border-greyscale-200"
-            :class="approvalStore?.detailModel?.compose?.document_sub_type?.id === Number(COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2) ? '' : 'p-10'"
+            :class="templateClasses"
           >
             <base-template
               v-if="approvalStore.detailModel && approvalStore.detailModel.compose"

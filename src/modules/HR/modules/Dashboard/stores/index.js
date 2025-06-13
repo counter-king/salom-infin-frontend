@@ -1,7 +1,19 @@
 import { defineStore } from 'pinia'
-import { fetchDashboardComparison, fetchDashboardPayrolls } from '../services'
+import {
+  fetchDashboardComparison,
+  fetchDashboardPayrolls,
+  fetchDashboardByCompanyType,
+  fetchTripByStatus,
+  fetchTripInnerOuterChart,
+  fetchTripTopDepartments,
+  fetchByRoute,
+  fetchByGoals,
+  fetchByLocations,
+  fetchByExpense
+} from '../services'
 import { CalendarLinearIcon, FileTextIcon, CaseIcon } from '@/components/Icons'
 import { generateCleanYAxisLabels } from '@/utils'
+import { formatDateReverse } from '@/utils/formatDate'
 
 export const useHRDashboardStore = defineStore('useHRDashboardStore', {
   state: () => ({
@@ -58,35 +70,23 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
           header: 'finance-dashboard.text-1',
         },
         {
-          header: 'Ценные подарки'
+          header: 'finance-dashboard.text-8'
         },
         {
-          header: 'Выплата пенсионерам (не сотр. Банка)'
+          header: 'finance-dashboard.text-9'
         },
         {
-          header: 'Выплата членам НС'
+          header: 'finance-dashboard.text-2'
         },
-        {
-          header: 'Оплата по дог. ГПХ'
-        },
+        // {
+        //   header: 'finance-dashboard.text-10'
+        // },
         {
           header: 'finance-dashboard.text-5',
         },
         {
           header: 'total-2'
         }
-        // {
-        //   header: 'Выплата членам НС',
-        // },
-        // {
-        //   header: 'Оплата по договору ГПХ',
-        // },
-        // {
-        //   header: 'Премии к праздникам',
-        // },
-        // {
-        //   header: "Ценные подарки",
-        //
       ],
       values: null
     },
@@ -95,16 +95,49 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
       axes: [],
       loader: true
     },
+    companyType: {
+      loader: true,
+      data: {}
+    },
+    tripStatus: {
+      loader: true,
+      data: {
+        not_started: 0,
+        on_trip: 0,
+        reporting: 0,
+        closed: 0,
+        all: 0
+      }
+    },
+    innerOuterChart: {
+      loader: true,
+      data: []
+    },
+    topDepartments: {
+      loader: true,
+      data: []
+    },
+    byRoute: {
+      loader: true,
+      data: {}
+    },
+    topGoals: {
+      loader: true,
+      data: []
+    },
+    byLocations: {
+      loader: true,
+      data: []
+    },
+    expenseChart: {
+      loader: true,
+      data: []
+    },
   }),
-  getters: {
-
-  },
   actions: {
     async actionDashboardPayrolls(params = {}) {
       try {
         const { data } = await fetchDashboardPayrolls(params)
-
-        console.log('payrolls/summary', data)
 
         // let dataFromBackend = {
         //   "branches": [
@@ -211,14 +244,14 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         //     dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 4) ?? { amount: '-' }, // Премии к праздникам и мат помощь с/х продукты
         //     dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 5) ?? { amount: '-' }, // Материальная помощь
         //     dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 8) ?? { amount: '-' }, // Ценные подарки
-        //     dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 7) ?? { amount: '-' }, // Выплата пенсионерам (не сотр. Банка)
         //     dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 10) ?? { amount: '-' }, // Выплата членам НС
         //     dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 9) ?? { amount: '-' }, // Оплата по дог. ГПХ
+        //     // dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 7) ?? { amount: '-' }, // Выплата пенсионерам (не сотр. Банка)
         //     dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 6) ?? { amount: '-' }, // Прочее
         //   ],
         //   branches_all_count: {
         //     amount: dataFromBackend.branches
-        //       .filter(({ pay_type_id }) => pay_type_id !== 9)
+        //       // .filter(({ pay_type_id }) => pay_type_id !== 9)
         //       .reduce((a, b) => parseInt(a) + parseInt(b.amount), '0'),
         //   },
         //   head_office: [
@@ -228,14 +261,14 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         //     dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 4) ?? { amount: '-' }, // Премии к праздникам и мат помощь с/х продукты
         //     dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 5) ?? { amount: '-' }, // Материальная помощь
         //     dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 8) ?? { amount: '-' }, // Ценные подарки
-        //     dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 7) ?? { amount: '-' }, // Выплата пенсионерам (не сотр. Банка)
         //     dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 10) ?? { amount: '-' }, // Выплата членам НС
         //     dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 9) ?? { amount: '-' }, // Оплата по дог. ГПХ
+        //     // dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 7) ?? { amount: '-' }, // Выплата пенсионерам (не сотр. Банка)
         //     dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 6) ?? { amount: '-' }, // Прочее
         //   ],
         //   head_office_all_count: {
         //     amount: dataFromBackend.head_office
-        //     .filter(({ pay_type_id }) => pay_type_id !== 8 && pay_type_id !== 9 && pay_type_id !== 10)
+        //     // .filter(({ pay_type_id }) => pay_type_id !== 8 && pay_type_id !== 9 && pay_type_id !== 10)
         //     .reduce((a, b) => parseInt(a) + parseInt(b.amount), '0'),
         //   }
         // }
@@ -248,14 +281,13 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
             data.branches.find(({ pay_type_id }) => pay_type_id === 4) ?? { amount: '-' }, // Премии к праздникам и мат помощь с/х продукты
             data.branches.find(({ pay_type_id }) => pay_type_id === 5) ?? { amount: '-' }, // Материальная помощь
             data.branches.find(({ pay_type_id }) => pay_type_id === 8) ?? { amount: '-' }, // Ценные подарки
-            data.branches.find(({ pay_type_id }) => pay_type_id === 7) ?? { amount: '-' }, // Выплата пенсионерам (не сотр. Банка)
             data.branches.find(({ pay_type_id }) => pay_type_id === 10) ?? { amount: '-' }, // Выплата членам НС
             data.branches.find(({ pay_type_id }) => pay_type_id === 9) ?? { amount: '-' }, // Оплата по дог. ГПХ
+            // data.branches.find(({ pay_type_id }) => pay_type_id === 7) ?? { amount: '-' }, // Выплата пенсионерам (не сотр. Банка)
             data.branches.find(({ pay_type_id }) => pay_type_id === 6) ?? { amount: '-' }, // Прочее
           ],
           branches_all_count: {
             amount: data.branches
-            // .filter(({ pay_type_id }) => pay_type_id !== 8 && pay_type_id !== 9)
             .reduce((a, b) => parseInt(a) + parseInt(b.amount), '0'),
           },
           head_office: [
@@ -265,14 +297,13 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
             data.head_office.find(({ pay_type_id }) => pay_type_id === 4) ?? { amount: '-' }, // Премии к праздникам и мат помощь с/х продукты
             data.head_office.find(({ pay_type_id }) => pay_type_id === 5) ?? { amount: '-' }, // Материальная помощь
             data.head_office.find(({ pay_type_id }) => pay_type_id === 8) ?? { amount: '-' }, // Ценные подарки
-            data.head_office.find(({ pay_type_id }) => pay_type_id === 7) ?? { amount: '-' }, // Выплата пенсионерам (не сотр. Банка)
             data.head_office.find(({ pay_type_id }) => pay_type_id === 10) ?? { amount: '-' }, // Выплата членам НС
             data.head_office.find(({ pay_type_id }) => pay_type_id === 9) ?? { amount: '-' }, // Оплата по дог. ГПХ
+            // data.head_office.find(({ pay_type_id }) => pay_type_id === 7) ?? { amount: '-' }, // Выплата пенсионерам (не сотр. Банка)
             data.head_office.find(({ pay_type_id }) => pay_type_id === 6) ?? { amount: '-' }, // Прочее
           ],
           head_office_all_count: {
             amount: data.head_office
-            // .filter(({ pay_type_id }) => pay_type_id !== 8 && pay_type_id !== 9 && pay_type_id !== 10)
             .reduce((a, b) => parseInt(a) + parseInt(b.amount), '0'),
           }
         }
@@ -311,9 +342,9 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
             4: data.branches.find(({ pay_type_id }) => pay_type_id === 4) ?? { pay_type_id: 4, comparison_amount: 0, current_amount: 0 }, // Премии к праздникам и мат помощь с/х продукты
             5: data.branches.find(({ pay_type_id }) => pay_type_id === 5) ?? { pay_type_id: 5, comparison_amount: 0, current_amount: 0 }, // Материальная помощь
             6: data.branches.find(({ pay_type_id }) => pay_type_id === 8) ?? { pay_type_id: 8, comparison_amount: 0, current_amount: 0 }, // Ценные подарки
-            7: data.branches.find(({ pay_type_id }) => pay_type_id === 7) ?? { pay_type_id: 7, comparison_amount: 0, current_amount: 0 }, // Выплата пенсионерам (не сотр. Банка)
             8: data.branches.find(({ pay_type_id }) => pay_type_id === 10) ?? { pay_type_id: 10, comparison_amount: 0, current_amount: 0 }, // Выплата членам НС
             9: data.branches.find(({ pay_type_id }) => pay_type_id === 9) ?? { pay_type_id: 9, comparison_amount: 0, current_amount: 0 }, // Оплата по договору ГПХ
+            7: data.branches.find(({ pay_type_id }) => pay_type_id === 7) ?? { pay_type_id: 7, comparison_amount: 0, current_amount: 0 }, // Выплата пенсионерам (не сотр. Банка)
             10: data.branches.find(({ pay_type_id }) => pay_type_id === 6) ?? { pay_type_id: 6, comparison_amount: 0, current_amount: 0 } // Прочее
           },
           head_office: {
@@ -323,9 +354,9 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
             4: data.head_office.find(({ pay_type_id }) => pay_type_id === 4) ?? { pay_type_id: 4, comparison_amount: 0, current_amount: 0 }, // Премии к праздникам и мат помощь с/х продукты
             5: data.head_office.find(({ pay_type_id }) => pay_type_id === 5) ?? { pay_type_id: 5, comparison_amount: 0, current_amount: 0 }, // Материальная помощь
             6: data.head_office.find(({ pay_type_id }) => pay_type_id === 8) ?? { pay_type_id: 8, comparison_amount: 0, current_amount: 0 }, // Ценные подарки
-            7: data.head_office.find(({ pay_type_id }) => pay_type_id === 7) ?? { pay_type_id: 7, comparison_amount: 0, current_amount: 0 }, // Выплата пенсионерам (не сотр. Банка)
             8: data.head_office.find(({ pay_type_id }) => pay_type_id === 10) ?? { pay_type_id: 10, comparison_amount: 0, current_amount: 0 }, // Выплата членам НС
             9: data.head_office.find(({ pay_type_id }) => pay_type_id === 9) ?? { pay_type_id: 9, comparison_amount: 0, current_amount: 0 }, // Оплата по договору ГПХ
+            7: data.head_office.find(({ pay_type_id }) => pay_type_id === 7) ?? { pay_type_id: 7, comparison_amount: 0, current_amount: 0 }, // Выплата пенсионерам (не сотр. Банка)
             10: data.head_office.find(({ pay_type_id }) => pay_type_id === 6) ?? { pay_type_id: 6, comparison_amount: 0, current_amount: 0 } // Прочее
           }
         }
@@ -368,12 +399,6 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
               current_amount_percent: `${(model.head_office[6].current_amount / addMaxAmount).toFixed(1)}%`,
               comparison_amount_percent: `${(model.head_office[6].comparison_amount / addMaxAmount).toFixed(1)}%`
             },
-            // Выплата пенсионерам (не сотр. Банка)
-            {
-              ...model.head_office[7],
-              current_amount_percent: `${(model.head_office[7].current_amount / addMaxAmount).toFixed(1)}%`,
-              comparison_amount_percent: `${(model.head_office[7].comparison_amount / addMaxAmount).toFixed(1)}%`
-            },
             // Выплата членам НС
             {
               ...model.head_office[8],
@@ -386,6 +411,12 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
               current_amount_percent: `${(model.head_office[9].current_amount / addMaxAmount).toFixed(1)}%`,
               comparison_amount_percent: `${(model.head_office[9].comparison_amount / addMaxAmount).toFixed(1)}%`
             },
+            // Выплата пенсионерам (не сотр. Банка)
+            // {
+            //   ...model.head_office[7],
+            //   current_amount_percent: `${(model.head_office[7].current_amount / addMaxAmount).toFixed(1)}%`,
+            //   comparison_amount_percent: `${(model.head_office[7].comparison_amount / addMaxAmount).toFixed(1)}%`
+            // },
             // Прочее
             {
               ...model.head_office[10],
@@ -430,12 +461,6 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
               current_amount_percent: `${(model.branches[6].current_amount / addMaxAmount).toFixed(1)}%`,
               comparison_amount_percent: `${(model.branches[6].comparison_amount / addMaxAmount).toFixed(1)}%`
             },
-            // Выплата пенсионерам (не сотр. Банка)
-            {
-              ...model.branches[7],
-              current_amount_percent: `${(model.branches[7].current_amount / addMaxAmount).toFixed(1)}%`,
-              comparison_amount_percent: `${(model.branches[7].comparison_amount / addMaxAmount).toFixed(1)}%`
-            },
             // Выплата членам НС
             {
               ...model.branches[8],
@@ -448,6 +473,12 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
               current_amount_percent: `${(model.branches[9].current_amount / addMaxAmount).toFixed(1)}%`,
               comparison_amount_percent: `${(model.branches[9].comparison_amount / addMaxAmount).toFixed(1)}%`
             },
+            // Выплата пенсионерам (не сотр. Банка)
+            // {
+            //   ...model.branches[7],
+            //   current_amount_percent: `${(model.branches[7].current_amount / addMaxAmount).toFixed(1)}%`,
+            //   comparison_amount_percent: `${(model.branches[7].comparison_amount / addMaxAmount).toFixed(1)}%`
+            // },
             // Прочее
             {
               ...model.branches[10],
@@ -456,8 +487,7 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
             }
           ],
         }
-        //
-        //
+
 
         // MOCK DATA
         // const dataFromBackend = {
@@ -617,9 +647,9 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         //     4: dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 4) ?? { pay_type_id: 4, comparison_amount: 0, current_amount: 0 }, // Премии к праздникам и мат помощь с/х продукты
         //     5: dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 5) ?? { pay_type_id: 5, comparison_amount: 0, current_amount: 0 }, // Материальная помощь
         //     6: dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 8) ?? { pay_type_id: 8, comparison_amount: 0, current_amount: 0 }, // Ценные подарки
-        //     7: dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 7) ?? { pay_type_id: 7, comparison_amount: 0, current_amount: 0 }, // Выплата пенсионерам (не сотр. Банка)
         //     8: dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 10) ?? { pay_type_id: 10, comparison_amount: 0, current_amount: 0 }, // Выплата членам НС
         //     9: dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 9) ?? { pay_type_id: 9, comparison_amount: 0, current_amount: 0 }, // Оплата по договору ГПХ
+        //     7: dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 7) ?? { pay_type_id: 7, comparison_amount: 0, current_amount: 0 }, // Выплата пенсионерам (не сотр. Банка)
         //     10: dataFromBackend.branches.find(({ pay_type_id }) => pay_type_id === 6) ?? { pay_type_id: 6, comparison_amount: 0, current_amount: 0 } // Прочее
         //   },
         //   head_office: {
@@ -629,9 +659,9 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         //     4: dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 4) ?? { pay_type_id: 4, comparison_amount: 0, current_amount: 0 }, // Премии к праздникам и мат помощь с/х продукты
         //     5: dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 5) ?? { pay_type_id: 5, comparison_amount: 0, current_amount: 0 }, // Материальная помощь
         //     6: dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 8) ?? { pay_type_id: 8, comparison_amount: 0, current_amount: 0 }, // Ценные подарки
-        //     7: dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 7) ?? { pay_type_id: 7, comparison_amount: 0, current_amount: 0 }, // Выплата пенсионерам (не сотр. Банка)
         //     8: dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 10) ?? { pay_type_id: 10, comparison_amount: 0, current_amount: 0 }, // Выплата членам НС
         //     9: dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 9) ?? { pay_type_id: 9, comparison_amount: 0, current_amount: 0 }, // Оплата по договору ГПХ
+        //     7: dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 7) ?? { pay_type_id: 7, comparison_amount: 0, current_amount: 0 }, // Выплата пенсионерам (не сотр. Банка)
         //     10: dataFromBackend.head_office.find(({ pay_type_id }) => pay_type_id === 6) ?? { pay_type_id: 6, comparison_amount: 0, current_amount: 0 } // Прочее
         //   }
         // }
@@ -674,12 +704,6 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         //       current_amount_percent: `${(model.head_office[6].current_amount / addMaxAmount).toFixed(1)}%`,
         //       comparison_amount_percent: `${(model.head_office[6].comparison_amount / addMaxAmount).toFixed(1)}%`
         //     },
-        //     // Выплата пенсионерам (не сотр. Банка)
-        //     {
-        //       ...model.head_office[7],
-        //       current_amount_percent: `${(model.head_office[7].current_amount / addMaxAmount).toFixed(1)}%`,
-        //       comparison_amount_percent: `${(model.head_office[7].comparison_amount / addMaxAmount).toFixed(1)}%`
-        //     },
         //     // Выплата членам НС
         //     {
         //       ...model.head_office[8],
@@ -692,6 +716,12 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         //       current_amount_percent: `${(model.head_office[9].current_amount / addMaxAmount).toFixed(1)}%`,
         //       comparison_amount_percent: `${(model.head_office[9].comparison_amount / addMaxAmount).toFixed(1)}%`
         //     },
+        //     // Выплата пенсионерам (не сотр. Банка)
+        //     // {
+        //     //   ...model.head_office[7],
+        //     //   current_amount_percent: `${(model.head_office[7].current_amount / addMaxAmount).toFixed(1)}%`,
+        //     //   comparison_amount_percent: `${(model.head_office[7].comparison_amount / addMaxAmount).toFixed(1)}%`
+        //     // },
         //     // Прочее
         //     {
         //       ...model.head_office[10],
@@ -736,12 +766,6 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         //       current_amount_percent: `${(model.branches[6].current_amount / addMaxAmount).toFixed(1)}%`,
         //       comparison_amount_percent: `${(model.branches[6].comparison_amount / addMaxAmount).toFixed(1)}%`
         //     },
-        //     // Выплата пенсионерам (не сотр. Банка)
-        //     {
-        //       ...model.branches[7],
-        //       current_amount_percent: `${(model.branches[7].current_amount / addMaxAmount).toFixed(1)}%`,
-        //       comparison_amount_percent: `${(model.branches[7].comparison_amount / addMaxAmount).toFixed(1)}%`
-        //     },
         //     // Выплата членам НС
         //     {
         //       ...model.branches[8],
@@ -754,6 +778,12 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         //       current_amount_percent: `${(model.branches[9].current_amount / addMaxAmount).toFixed(1)}%`,
         //       comparison_amount_percent: `${(model.branches[9].comparison_amount / addMaxAmount).toFixed(1)}%`
         //     },
+        //     // Выплата пенсионерам (не сотр. Банка)
+        //     // {
+        //     //   ...model.branches[7],
+        //     //   current_amount_percent: `${(model.branches[7].current_amount / addMaxAmount).toFixed(1)}%`,
+        //     //   comparison_amount_percent: `${(model.branches[7].comparison_amount / addMaxAmount).toFixed(1)}%`
+        //     // },
         //     // Прочее
         //     {
         //       ...model.branches[10],
@@ -771,6 +801,257 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
       finally {
         setTimeout(() => {
           this.comparison.loader = false
+        }, 500)
+      }
+    },
+    /**
+     *
+     * */
+    async actionDashboardByCompanyType(params = {}) {
+      this.companyType.loader = true
+
+      try {
+        const { data } = await fetchDashboardByCompanyType(params)
+
+        this.companyType.data = data
+
+        // MOCK DATA
+        // this.companyType.data = {
+        //   "Agrosanoat klasterlarini moliyalashtirishni  muvofiqlashtirish departamenti": [
+        //     {
+        //       "category": "Переменное вознаграждение",
+        //       "total": 601087800.79
+        //     },
+        //     {
+        //       "category": "Премии к праздникам и мат помощь с/х продукты",
+        //       "total": 54000000
+        //     },
+        //     {
+        //       "category": "Разовые выплаты",
+        //       "total": 130000000
+        //     },
+        //     {
+        //       "category": "Фиксированное вознаграждение",
+        //       "total": 1392558434.7
+        //     },
+        //     {
+        //       "category": "Ценные подарки",
+        //       "total": 1364000
+        //     }
+        //   ],
+        //   "Aholini moliyaviy qo'llab-quvvatlash va tadbirkorlikka jalb qilish departamenti": [
+        //     {
+        //       "category": "Материальная помощь",
+        //       "total": 601087800.79
+        //     },
+        //     {
+        //       "category": "Переменное вознаграждение",
+        //       "total": 601087800.79
+        //     },
+        //     {
+        //       "category": "Премии к праздникам и мат помощь с/х продукты",
+        //       "total": 54000000
+        //     },
+        //     {
+        //       "category": "Разовые выплаты",
+        //       "total": 130000000
+        //     },
+        //     {
+        //       "category": "Фиксированное вознаграждение",
+        //       "total": 1392558434.7
+        //     },
+        //     {
+        //       "category": "Ценные подарки",
+        //       "total": 1364000
+        //     }
+        //   ],
+        // }
+
+        return Promise.resolve()
+      }
+      catch (error) {
+        return Promise.reject()
+      }
+      finally {
+        setTimeout(() => {
+          this.companyType.loader = false
+        }, 500)
+      }
+    },
+    /**
+     *
+     * */
+    async actionTripStatus(params = { start_date: `${new Date().getFullYear()}-01-01`, end_date: formatDateReverse(new Date()) }) {
+      try {
+        this.tripStatus.loader = true
+
+        const { data } = await fetchTripByStatus(params)
+
+        this.tripStatus.data.not_started = data.not_started ?? 0
+        this.tripStatus.data.on_trip = data.on_trip ?? 0
+        this.tripStatus.data.reporting = data.reporting ?? 0
+        this.tripStatus.data.closed = data.closed ?? 0
+        this.tripStatus.data.all = Object.values(data).reduce((acc, val) => acc + val, 0)
+
+        return Promise.resolve()
+      }
+      catch (error) {
+        return Promise.reject()
+      }
+      finally {
+        setTimeout(() => {
+          this.tripStatus.loader = false
+        }, 500)
+      }
+    },
+    /**
+     *
+     * */
+    async actionTripInnerOuterChart(params = { start_date: `${new Date().getFullYear()}-01-01`, end_date: formatDateReverse(new Date()) }) {
+      try {
+        this.innerOuterChart.loader = true
+
+        const { data } = await fetchTripInnerOuterChart(params)
+        this.innerOuterChart.data = data
+
+        return Promise.resolve()
+      }
+      catch (error) {
+        return Promise.reject()
+      }
+      finally {
+        setTimeout(() => {
+          this.innerOuterChart.loader = false
+        }, 500)
+      }
+    },
+    /**
+     *
+     * */
+    async actionTripTopDepartments(params = { start_date: `${new Date().getFullYear()}-01-01`, end_date: formatDateReverse(new Date()) }) {
+      try {
+        this.topDepartments.loader = true
+
+        const { data } = await fetchTripTopDepartments(params)
+        this.topDepartments.data = data
+
+        return Promise.resolve()
+      }
+      catch (error) {
+        return Promise.reject()
+      }
+      finally {
+        setTimeout(() => {
+          this.topDepartments.loader = false
+        }, 500)
+      }
+    },
+    /**
+     *
+     * */
+    async actionTripByRoute(params = { start_date: `${new Date().getFullYear()}-01-01`, end_date: formatDateReverse(new Date()) }) {
+      try {
+        this.byRoute.loader = true
+
+        const { data } = await fetchByRoute(params)
+        this.byRoute.data = data
+
+        return Promise.resolve()
+      }
+      catch (error) {
+        return Promise.reject()
+      }
+      finally {
+        setTimeout(() => {
+          this.byRoute.loader = false
+        }, 500)
+      }
+    },
+    /**
+     *
+     * */
+    async actionTripByGoals(params = { start_date: `${new Date().getFullYear()}-01-01`, end_date: formatDateReverse(new Date()) }) {
+      try {
+        this.topGoals.loader = true
+
+        const { data } = await fetchByGoals(params)
+        this.topGoals.data = data
+
+        return Promise.resolve()
+      }
+      catch (error) {
+        return Promise.reject()
+      }
+      finally {
+        setTimeout(() => {
+          this.topGoals.loader = false
+        }, 500)
+      }
+    },
+    /**
+     *
+     * */
+    async actionByLocations(params = { start_date: `${new Date().getFullYear()}-01-01`, end_date: formatDateReverse(new Date()) }) {
+      try {
+        this.byLocations.loader = true
+
+        const { data } = await fetchByLocations(params)
+        this.byLocations.data = data
+
+        return Promise.resolve()
+      }
+      catch (error) {
+        return Promise.reject()
+      }
+      finally {
+        setTimeout(() => {
+          this.byLocations.loader = false
+        }, 500)
+      }
+    },
+    /**
+     *
+     * */
+    async actionTripExpenseChart(params = { start_date: `${new Date().getFullYear()}-01-01`, end_date: formatDateReverse(new Date()) }) {
+      try {
+        this.expenseChart.loader = true
+
+        const { data } = await fetchByExpense(params)
+        // let mock = {
+        //   "2025-01": {
+        //     "Командировочные": 2000000
+        //   },
+        //   "2025-02": {
+        //     "Командировочные": 3000000
+        //   },
+        //   "2025-03": {
+        //     "Командировочные": 4000000
+        //   },
+        //   "2025-04": {
+        //     "Командировочные": 5000000
+        //   },
+        //   "2025-05": {
+        //     "Командировочные": 0
+        //   },
+        // }
+
+        let model = Object.values(data).map(item => {
+          return {
+            ...item,
+            count: item['Командировочные']/1e3
+          }
+        })
+
+        this.expenseChart.data = model
+
+        return Promise.resolve()
+      }
+      catch (error) {
+        return Promise.reject()
+      }
+      finally {
+        setTimeout(() => {
+          this.expenseChart.loader = false
         }, 500)
       }
     },

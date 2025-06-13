@@ -12,7 +12,8 @@ import {
   DecreeForm,
   PowerOfAttorneyForm,
   BusinessTripForm,
-  BusinessTripDecreeForm
+  BusinessTripDecreeForm,
+  ExtendBusinessTripForm
 } from "@/modules/Documents/modules/SendDocuments/views/forms/index"
 // Constants
 import {FORM_TYPE_CREATE} from "@/constants/constants"
@@ -29,6 +30,7 @@ const formMap = {
     [COMPOSE_DOCUMENT_SUB_TYPES.ORDER_FOR_EMPLOYMENT]: OrderForm,
     [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2]: BusinessTripForm,
     [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL]: BusinessTripDecreeForm,
+    [COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE]: ExtendBusinessTripForm,
   },
   APPLICATION: [
     COMPOSE_DOCUMENT_SUB_TYPES.LABOR_LEAVE,

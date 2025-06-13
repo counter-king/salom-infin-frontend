@@ -1,16 +1,39 @@
 <script setup>
+// core
+import { ref, nextTick, unref } from 'vue'
 // components
 import NewsCategory from '@/components/Chips/NewsCategory.vue';
 import ShortDescription from '@/modules/News/components/ShortDescription.vue';
-import { CalendarLinearIcon, EyeLinearIcon, HeartLinearIcon, CommentDotsIcon } from '@/components/Icons';
+import { CalendarLinearIcon, EyeLinearIcon, HeartLinearIcon, CommentDotsIcon, PersonIcon } from '@/components/Icons';
+import UserWithDetail from '@/components/Users/WithDetail.vue';
 // utils
 import { formatToK } from '@/utils';
 import { formatDate } from '@/utils/formatDate';
-
+import { formatNameToShort } from '@/utils';
 // props
 const props = defineProps({
   item: { type: Object, default: () => {} }
 })
+
+const overlayRef = ref(null)
+const overlayVisible = ref(false)
+// Methods
+const handleMouseEnter = async (event) => {
+    const elem = event.target
+    const { top, left, right, width } = elem.getBoundingClientRect()
+    const bottomHeight = document.body.clientHeight - top
+    const rightWidth = document.body.clientWidth - right
+
+    overlayVisible.value = true
+    await nextTick()
+    const overlay = unref(overlayRef)
+    const style = overlay.style
+
+    // Bottom calc
+    overlay.clientHeight >= bottomHeight ? style.bottom = `${50}px` : style.top = `${top}px`
+    // Right calc
+    overlay.clientWidth >= rightWidth ? style.right = `${rightWidth + width}px` : style.left = `${left + width}px`
+}
 
 </script>
 <template>
@@ -28,11 +51,32 @@ const props = defineProps({
           <h3 class="font-semibold text-sm text-greyscale-900 line-clamp-2 max-h-[40px] overflow-hidden">{{ props.item.title }}</h3>
           <short-description wrap-class="mt-1 line-clamp-2 !text-greyscale-600 !text-[13px]" :text="props.item.description"/>
         </div>
-        <div class="flex gap-3 mt-auto h-fit">
+        <div class="flex items-center gap-3 mt-auto h-fit">
           <news-category :category="props.item.category"/>
           <div class="flex gap-1 items-center text-[#5F6878]">
             <base-iconify :icon="CalendarLinearIcon" class="!w-3 !h-3" />
             <span class="font-medium text-xs flex items-center">{{ formatDate(props.item.created_date) }}</span>
+          </div>
+          <div 
+            class="flex gap-1 items-center cursor-pointer"
+            @mouseenter="handleMouseEnter"
+            @mouseleave="overlayVisible = false"  
+          >
+            <base-iconify :icon="PersonIcon" class="!w-3 !h-3 text-[#5F6878]"  />
+            <span 
+              class="text-xs text-[#5F6878]">
+                {{ formatNameToShort(props.item.created_by?.full_name) }}
+            </span>
+            <template v-if="overlayVisible">
+              <div ref="overlayRef" class="fixed z-10">
+                <user-with-detail
+                  :image="props.item.created_by?.avatar?.url"
+                  :color="props.item.created_by?.color"
+                  :label="props.item.created_by?.full_name"
+                  :meta="props.item.created_by"
+                />
+              </div>
+            </template>
           </div>
         </div>
       </div>
@@ -42,7 +86,7 @@ const props = defineProps({
            <div class="hover:cursor-pointer">
              <base-iconify :icon="CommentDotsIcon"  />
            </div>
-           <div class="text-xs font-medium text-greyscale-400">{{ props.item.comments_counts && formatToK(props.item.comments_counts) }}</div>
+           <div class="text-xs font-medium text-greyscale-400 ">{{ props.item.comments_counts && formatToK(props.item.comments_counts) }}</div>
          </div> 
         <div class="flex gap-1 items-center">
            <div class="hover:cursor-pointer">

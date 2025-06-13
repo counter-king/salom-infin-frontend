@@ -5,6 +5,6 @@ import ConfirmNumber from './ConfirmNumber.vue'
 
 <template>
   <div class="sign-in-view">
-    <ConfirmNumber title="forgot-password" />
+    <ConfirmNumber title="forgot-password" type="forget_password" />
   </div>
 </template>

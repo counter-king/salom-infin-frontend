@@ -7,6 +7,6 @@ import FinancialChartBar from './FinancialChartBar.vue'
   <div class="space-y-5">
     <financial-chart-column />
 
-<!--    <financial-chart-bar />-->
+    <financial-chart-bar />
   </div>
 </template>

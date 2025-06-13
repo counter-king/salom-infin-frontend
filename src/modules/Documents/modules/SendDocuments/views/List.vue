@@ -38,6 +38,9 @@ const onClickRow = (data) => {
       id: data.id,
       document_type: data.document_type.id,
       document_sub_type: data.document_sub_type.id
+    },
+    query: {
+      parent_id: data.parent?.id || null,
     }
   })
 }

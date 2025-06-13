@@ -13,7 +13,7 @@ const { t } = useI18n()
 
 // Methods
 const onStepClick = (item) => {
-  emit('emit:stepClick', item)
+  void emit('emit:stepClick', item)
 }
 
 const emit = defineEmits(['emit:stepClick'])

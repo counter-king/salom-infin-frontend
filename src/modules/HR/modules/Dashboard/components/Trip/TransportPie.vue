@@ -1,7 +1,18 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useHRDashboardStore } from '../../stores'
 import Card from '../Card.vue'
-import { USER_STATUS_CODES } from '@/enums'
+
+const { t } = useI18n()
+const dashboardStore = useHRDashboardStore()
+
+const series = computed(() => {
+  return Object.values(dashboardStore.byRoute.data)
+})
+const totalCount = computed(() => {
+  return series.value.reduce((acc, val) => acc + val, 0)
+})
 
 const options = ref({
   chart: {
@@ -22,15 +33,6 @@ const options = ref({
       '#29CD74',
       '#5EC1E7',
       '#FF7290',
-      '#FDC031',
-      '#827BFF',
-      '#FF72D5',
-      '#635AFF',
-      '#767994',
-      '#63BA3D',
-      '#FFC352',
-      '#11A5ED',
-      '#090F33'
     ],
   },
   stroke: {
@@ -53,7 +55,7 @@ const options = ref({
           },
           total: {
             show: true,
-            label: 'Всего',
+            label: t('total'),
             fontSize: '18px',
             color: '#9CA8B9',
             fontFamily: 'SFProDisplay-Regular',
@@ -65,116 +67,54 @@ const options = ref({
     }
   }
 })
-const series = ref([])
-const items = ref({
-  list: [],
-  counts: 0
-})
 
-const conditionColors = (condition) => {
-  switch (condition) {
-    case USER_STATUS_CODES.ACADEMICIAN_VACATION:
-      return '#29CD74'
-    case USER_STATUS_CODES.NO_CONTENT:
-      return '#5EC1E7'
-    case USER_STATUS_CODES.SICK_LEAVES:
-      return '#FF7290'
-    case USER_STATUS_CODES.MILITARY_SERVICE:
-      return '#FDC031'
-    case USER_STATUS_CODES.SICK_LEAVE_DECREE:
-      return '#827BFF'
-    case USER_STATUS_CODES.DECREE_2:
-      return '#FF72D5'
-    case USER_STATUS_CODES.DECREE_3:
-      return '#635AFF'
-    case USER_STATUS_CODES.BUSINESS_TRIP:
-      return '#767994'
-    case USER_STATUS_CODES.WORKERS:
-      return '#63BA3D'
-    case USER_STATUS_CODES.LABOR_LEAVE:
-      return '#FFC352'
-    case USER_STATUS_CODES.STUDY_LEAVE:
-      return '#11A5ED'
-    case USER_STATUS_CODES.FROM_THE_CONTENT:
-      return '#090F33'
-  }
-}
-
-onMounted(() => {
-  let mock = {
-    data: [
-      {
-        "CONDITION_NOTE": "Самолет",
-        "COUNT": 1,
-        "CONDITION": "AO"
-      },
-      {
-        "CONDITION_NOTE": "Поезд",
-        "COUNT": 13,
-        "CONDITION": "OB"
-      },
-      {
-        "CONDITION_NOTE": "Такси",
-        "COUNT": 26,
-        "CONDITION": "B"
-      },
-    ],
-    median_age: 33
-  }
-
-  let list = mock.data
-  .sort((prev, next) => next['COUNT'] - prev['COUNT'])
-  .map(item => {
-    return {
-      title: item['CONDITION_NOTE'],
-      number: item['COUNT'],
-      class: conditionColors(item['CONDITION']),
-      CONDITION: item['CONDITION'],
-    }
-  })
-
-  series.value = mock.data.map(item => item['COUNT'])
-  items.value = {
-    list,
-    counts: list.reduce((acc, cur) => acc + cur.number, 0)
-  }
+onMounted(async () => {
+  await dashboardStore.actionTripByRoute()
 })
 </script>
 
 <template>
   <card>
-    <h1 class="flex-1 font-semibold text-greyscale-900 mb-8">Транспорт</h1>
+    <h1 class="flex-1 font-semibold text-greyscale-900 mb-8">{{ t('hr-main-dashboard.transport') }}</h1>
 
-    <div class="flex items-center relative pb-2">
-      <div class="max-w-[240px] w-full">
-        <apexchart
-          type="donut"
-          :options="options"
-          :series="series"
-        ></apexchart>
+    <template v-if="dashboardStore.byRoute.loader">
+      <div class="h-[200px]">
+        <base-spinner />
       </div>
+    </template>
 
-      <div class="flex-1 max-w-[275px] w-full absolute right-0 max-h-[200px] overflow-y-auto">
-        <template v-for="item in items.list">
-          <div
-            class="group flex items-center gap-2 font-medium text-greyscale-500 rounded-xl hover:bg-greyscale-50 cursor-pointer px-3 py-[6px]"
-          >
+    <template v-else>
+      <div class="flex items-center relative pb-2">
+        <div class="max-w-[240px] w-full">
+          <apexchart
+            type="donut"
+            :options="options"
+            :series="series"
+          ></apexchart>
+        </div>
+
+        <div class="flex-1 max-w-[275px] w-full absolute right-0 max-h-[200px] overflow-y-auto">
+          <template v-for="item in Object.keys(dashboardStore.byRoute.data)">
             <div
-              class="w-[10px] h-[10px] rounded"
-              :style="{ backgroundColor: item.class }"
-            ></div>
+              class="group flex items-center gap-2 font-medium text-greyscale-500 rounded-xl hover:bg-greyscale-50 cursor-pointer px-3 py-[6px]"
+            >
+              <div
+                class="w-[10px] h-[10px] rounded"
+                :style="{ backgroundColor: item === 'by_car' ? '#29CD74' : item === 'by_plane' ? '#5EC1E7' : '#FF7290' }"
+              ></div>
 
-            <h1 class="flex-1 text-[13px] group-hover:text-greyscale-900">{{ item.title }}</h1>
+              <h1 class="flex-1 text-[13px] group-hover:text-greyscale-900">{{ item === 'by_car' ? t('airplane') : item === 'by_plane' ? t('train') : t('taxi') }}</h1>
 
-            <span class="text-greyscale-900 text-sm font-semibold">{{ item.number }}</span>
+              <span class="text-greyscale-900 text-sm font-semibold">{{ dashboardStore.byRoute.data[item] }}</span>
 
-            <span class="w-9 text-right text-sm group-hover:text-greyscale-900">
-              {{ `${(item.number / items.counts * 100).toFixed(1)}%` }}
+              <span class="w-9 text-right text-sm group-hover:text-greyscale-900">
+              {{ `${((dashboardStore.byRoute.data[item] / totalCount) * 100).toFixed(1)}%` }}
             </span>
-          </div>
-        </template>
+            </div>
+          </template>
+        </div>
       </div>
-    </div>
+    </template>
   </card>
 </template>
 
