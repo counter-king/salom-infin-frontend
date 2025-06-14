@@ -140,13 +140,13 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
       ],
       historyHeaders: [
         {
-          field: 'employee',
+          field: 'caller',
           header: 'employee',
           width: '20%',
           active: true
         },
         {
-          field: 'date',
+          field: 'requested_date',
           header: 'date',
           width: '20%',
           active: true

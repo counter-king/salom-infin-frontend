@@ -60,14 +60,15 @@ onMounted(() => {
               {{ data.order }}
               </div>
             </template>
-            <template #employee="{ data }">
+            <template #caller="{ data }">
               <div class="flex items-center gap-3">
-                <base-avatar 
-                  :image="data.employeeImage"
-                  :label="data.employee"
+                <!-- <base-avatar 
+                  :image="data.callerImage"
+                  :label="data.caller"
                   avatar-classes="w-7 h-7"
-                />
-                <span >{{ data.employee }}</span>
+                /> -->
+                <pre>{{ data.caller }}</pre>
+                <span >{{ data.caller }}</span>
               </div>
             </template>
         </DataTableModal>
