@@ -197,13 +197,12 @@ onMounted(async() => {
     })
   })
 
-  await interactionABSStore.actionGetCompanyList({ page: 1, page_size: 20 })
-  await interactionABSStore.actionGetTopDepartmentsList({ page: 1, page_size: 20})
-  await interactionABSStore.actionGetDocumentTypeList({ page: 1, page_size: 20})
-  await interactionABSStore.actionGetDocumentSubTypeList({ page: 1, page_size: 20})
-  document.addEventListener('click', handleOutsideClick)
-
+  interactionABSStore.actionGetCompanyList({ page: 1, page_size: 20 })
+  interactionABSStore.actionGetTopDepartmentsList({ page: 1, page_size: 20})
+  interactionABSStore.actionGetDocumentTypeList({ page: 1, page_size: 20})
+  interactionABSStore.actionGetDocumentSubTypeList({ page: 1, page_size: 20})
   interactionABSStore.actionGetIabsActionList({ page: 1, page_size: 20, ...router.currentRoute.value.query, status: route.query.statusAbs || undefined, start_date: route.query.created_start_date || undefined, end_date: route.query.created_end_date || undefined })
+  document.addEventListener('click', handleOutsideClick)
 })
 
 // onMounted(()=>{

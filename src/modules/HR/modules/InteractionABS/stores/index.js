@@ -164,9 +164,7 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
         this.iabsActionListLoading = true
         try {
           const response = await getIabsActionList(params)
-          // this.iabsActionList = response.data.results
-          // this.iabsActionListTotalCount = response.data.count
-          this.iabsActionList = mockData.data.results.map((item)=>({
+          this.iabsActionList = response.data?.results?.map((item)=>({
             id: item.id,
             user: item.user,
             position: item.user.position,
@@ -179,7 +177,7 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
             statusAbs: item.status,
           }))
           
-          this.iabsActionListTotalCount = mockData.data.count
+          this.iabsActionListTotalCount = response.data?.count
           return response
         } catch (error) {
           console.log(error)
