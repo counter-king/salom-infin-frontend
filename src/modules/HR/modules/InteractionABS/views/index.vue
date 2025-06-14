@@ -181,11 +181,11 @@ const onCancelFilter = (type) => {
 
 const onSendAgain = async(item) => {
   await getRetryIabsAction(item.id)
-  interactionABSStore.actionGetIabsActionList({ page: 1, page_size: 20 })
+  interactionABSStore.actionGetIabsActionList({ page: 1, page_size: 15 })
 }
 
 watch(()=>route.query, ()=>{
-  interactionABSStore.actionGetIabsActionList({ page: 1, page_size: 20, ...router.currentRoute.value.query, status: route.query.statusAbs || undefined, start_date: route.query.created_start_date || undefined, end_date: route.query.created_end_date || undefined })
+  interactionABSStore.actionGetIabsActionList({ page: 1, page_size: 15, ...router.currentRoute.value.query, status: route.query.statusAbs || undefined, start_date: route.query.created_start_date || undefined, end_date: route.query.created_end_date || undefined })
 }, { deep: true })
 
 
@@ -197,11 +197,11 @@ onMounted(async() => {
     })
   })
 
-  interactionABSStore.actionGetCompanyList({ page: 1, page_size: 20 })
-  interactionABSStore.actionGetTopDepartmentsList({ page: 1, page_size: 20})
-  interactionABSStore.actionGetDocumentTypeList({ page: 1, page_size: 20})
-  interactionABSStore.actionGetDocumentSubTypeList({ page: 1, page_size: 20})
-  interactionABSStore.actionGetIabsActionList({ page: 1, page_size: 20, ...router.currentRoute.value.query, status: route.query.statusAbs || undefined, start_date: route.query.created_start_date || undefined, end_date: route.query.created_end_date || undefined })
+  interactionABSStore.actionGetCompanyList({ page: 1, page_size: 15 })
+  interactionABSStore.actionGetTopDepartmentsList({ page: 1, page_size: 15})
+  interactionABSStore.actionGetDocumentTypeList({ page: 1, page_size: 15})
+  interactionABSStore.actionGetDocumentSubTypeList({ page: 1, page_size: 15})
+  interactionABSStore.actionGetIabsActionList({ page: 1, page_size: 15, ...router.currentRoute.value.query, status: route.query.statusAbs || undefined, start_date: route.query.created_start_date || undefined, end_date: route.query.created_end_date || undefined })
   document.addEventListener('click', handleOutsideClick)
 })
 

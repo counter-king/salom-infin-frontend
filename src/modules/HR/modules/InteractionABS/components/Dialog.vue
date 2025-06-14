@@ -6,8 +6,6 @@ import { useI18n } from 'vue-i18n'
 import DataTableModal from './DataTableModal.vue'
 // stores
 import { useInteractionABSStore } from '../stores';
-// services
-import { getIabsRequestCalls } from '../services';
 // composibles
 const interactionABSStore = useInteractionABSStore()
 const { t } = useI18n()
@@ -32,7 +30,7 @@ const dialogVisible = useModel(props, 'dialogVisible')
 
 onMounted(() => {
   if (props.id) {
-    interactionABSStore.actionGetIabsRequestCalls({ action_history_id: props.id })
+    interactionABSStore.actionGetIabsRequestCalls({ action_history_id: props.id, page: 1, page_size: 15 })
   }
 })
 </script>
