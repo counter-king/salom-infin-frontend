@@ -319,7 +319,6 @@ onUnmounted(() => {
                           :searchable="false"
                           placeholder="select-employees"
                           :show-nested-error="showNestedError"
-                          :disabled="formType === FORM_TYPE_UPDATE || route.query.notice_id"
                           @update:modelValue="store.actionAddUsersToExtend(group, index)"
 
                         />
