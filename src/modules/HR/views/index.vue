@@ -2,7 +2,7 @@
 // Core
 import { ref } from 'vue'
 // Components
-import { CaseIcon, UserIcon, SettingsMinimalisticIcon, HomeSmileAngleIcon } from '@/components/Icons'
+import { CaseIcon, UserIcon, SettingsMinimalisticIcon, DocumentAddBoldIcon, DocumentAddIcon} from '@/components/Icons'
 import TheSidebar from '@/components/TheSidebar.vue'
 import TheFooter from '@/components/TheFooter.vue';
 // Stores
@@ -32,6 +32,12 @@ const menus = ref([
     title: "agreement-settings",
     icon: SettingsMinimalisticIcon,
     link: "AgreementSettingsIndex",
+    children: []
+  },
+  {
+    title: "interaction-with-abs2",
+    icon: DocumentAddIcon,
+    link: "InteractionABSIndex",
     children: []
   },
   // {
