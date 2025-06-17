@@ -347,17 +347,11 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
           this.documentSubTypeListLoading = false
         }
       },
-      async actionGetIabsRequestCalls(params, resetList= true) {
+      async actionGetIabsRequestCalls(params) {
         try {
-          if(resetList){
-            this.iabsRequestCallsLoading = true
-          } 
+          this.iabsRequestCallsLoading = true
           const response = await getIabsRequestCalls(params)
-          if(resetList){
-            this.iabsRequestCalls = response.data.results
-          } else {
-            this.iabsRequestCalls = [...this.iabsRequestCalls, ...response.data.results]
-          }
+          this.iabsRequestCalls = response.data.results
           this.iabsRequestCallsTotalCount = response.data.count
           return response
         } catch (error) {
