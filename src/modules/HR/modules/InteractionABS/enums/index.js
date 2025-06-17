@@ -10,6 +10,7 @@ export const HEADERS = {
   OPERATION_TYPE: 'operationType',
   STATUS_ABS: 'statusAbs',
   HISTORY: 'history',
+  TYPE: 'type',
   ACTIONS: 'actions'
 } 
 
@@ -23,6 +24,7 @@ export const HEADERS_TITLE = {
   [HEADERS.OPERATION_TYPE]: 'operation-type',
   [HEADERS.STATUS_ABS]: 'status-abs',
   [HEADERS.HISTORY]: 'history',
+  [HEADERS.TYPE]: 'type',
   [HEADERS.ACTIONS]: 'actions'
 }
 

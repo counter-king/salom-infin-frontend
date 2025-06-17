@@ -23,6 +23,7 @@ const mockData = {
           },
           register_number: "5/429"
         },
+        
         type: "order",
         content_type: 61,
         iabs_id: null,
@@ -64,6 +65,46 @@ const mockData = {
           register_number: "5/429"
         },
         content_type: 61,
+        iabs_id: 123,
+        object_id: 1818,
+        result: "Missing orderId",
+        status: "failed",
+        user: {
+          id: 2953,
+          full_name: "XOJALEPESOV AMANGELDI ABATBEKOVICH",
+          position: {
+            id: 1546,
+            name: "Yetakchi menejer"
+          },
+          top_level_department: {
+            id: 1537,
+            name: "Kredit monitoringi va nazorati departamenti"
+          },
+          table_number: "143556",
+          company: {
+            id: 17,
+            name: "Bosh bank"
+          }
+        }
+      },
+      {
+        id: 167,
+        action: "create",
+        compose: {
+          id: 1541,
+          document_type: {
+            id: 4,
+            name: "Farmoyish"
+          },
+          document_sub_type: {
+            id: 36,
+            name: "Xizmat safari farmoyishi 2"
+          },
+          register_number: "5/429"
+        },
+        
+        type: "trip_extend",
+        content_type: 61,
         iabs_id: null,
         object_id: 1818,
         result: "Missing orderId",
@@ -85,7 +126,7 @@ const mockData = {
             name: "Bosh bank"
           }
         }
-      }
+      },
     ]
   }
 }
@@ -142,17 +183,24 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
           active: true,
           filter: false,
         },
+        // {
+        //   field: HEADERS.DOCUMENT_SUB_TYPE,
+        //   header: HEADERS_TITLE[HEADERS.DOCUMENT_SUB_TYPE],
+        //   width: '10%',
+        //   active: true,
+        //   filter: false
+        // },
         {
-          field: HEADERS.DOCUMENT_SUB_TYPE,
-          header: HEADERS_TITLE[HEADERS.DOCUMENT_SUB_TYPE],
+          field: HEADERS.OPERATION_TYPE,
+          header: HEADERS_TITLE[HEADERS.OPERATION_TYPE],
           width: '10%',
           active: true,
           filter: false
         },
         {
-          field: HEADERS.OPERATION_TYPE,
-          header: HEADERS_TITLE[HEADERS.OPERATION_TYPE],
-          width: '10%',
+          field: HEADERS.TYPE,
+          header: HEADERS_TITLE[HEADERS.TYPE],
+          width: '8%',
           active: true,
           filter: false
         },
@@ -166,14 +214,14 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
         {
           field: HEADERS.HISTORY,
           header: HEADERS_TITLE[HEADERS.HISTORY],
-          width: '5%',
+          width: '6%',
           active: true,
           filter: false
         },
         {
           field: HEADERS.ACTIONS,
           header: HEADERS_TITLE[HEADERS.ACTIONS],
-          width: '14%',
+          width: '15%',
           active: true,
           filter: false
         }
@@ -204,7 +252,7 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
         this.iabsActionListLoading = true
         try {
           const response = await getIabsActionList(params)
-          this.iabsActionList = mockData.data?.results?.map((item)=>({
+          this.iabsActionList = response.data?.results?.map((item)=>({
             id: item.id,
             user: item.user,
             position: item.user.position,
@@ -216,6 +264,7 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
             operationType: item.action,
             statusAbs: item.status,
             type: item.type,
+            iabsId: item.iabs_id
           }))
           
           this.iabsActionListTotalCount = response.data?.count
@@ -309,6 +358,7 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
           } else {
             this.iabsRequestCalls = [...this.iabsRequestCalls, ...response.data.results]
           }
+          this.iabsRequestCallsTotalCount = response.data.count
           return response
         } catch (error) {
           console.log(error)
@@ -316,7 +366,6 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
           this.iabsRequestCallsLoading = false
         }
       },
-
       resetHeaders() {
         this.headers = this.headers.map(header => ({
           ...header,

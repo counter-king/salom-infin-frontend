@@ -181,10 +181,15 @@ const onCancelFilter = (type) => {
 
 
 const onSendAgain = async(item) => {
-  const order_id = item.type == TYPE.TRIP ? item.trip_id : "string"
-
-  await getRetryIabsAction(item.id, { order_id })
-  interactionABSStore.actionGetIabsActionList({ page: 1, page_size: 15 })
+  const order_id = item.type == TYPE.TRIP ? item.iabsId : "string"
+  try {
+    const response = await getRetryIabsAction(item.id, { order_id })
+    if(response.status == 200 || response.status == 201){
+      interactionABSStore.actionGetIabsActionList({ page: 1, page_size: 15 })
+    }
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 watch(()=>route.query, ()=>{
@@ -343,6 +348,8 @@ onUnmounted(() => {
                 :label="data.user?.full_name"
                 :image="null"
                 :color="data.user?.full_name"
+                detail-dialog
+                :meta="data.user"
                 avatarClasses="w-7 h-7"
               >
                 <span class="text-xs font-semibold text-white">{{ data.user?.full_name[0] }}</span>
@@ -378,7 +385,7 @@ onUnmounted(() => {
             <div 
               @click="onSendAgain(data)"
               class="px-3 py-2 select-none bg-primary-500 rounded-[90px] text-xs text-white w-fit "
-              :class="{ '!bg-greyscale-200 !pointer-events-none': data.statusAbs != STATUS_ABS.FAILED }"
+              :class="{ '!bg-greyscale-200 !pointer-events-none': !(data.statusAbs === STATUS_ABS.FAILED && ((data.type == TYPE.ORDER && data.iabsId == null) || (data.type == TYPE.TRIP && data.iabsId != null)) )}"
               >
               {{ t('send-again') }}
             </div>
