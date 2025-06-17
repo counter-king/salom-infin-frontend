@@ -13,7 +13,7 @@ import Dialog from '../components/Dialog.vue';
 // stores
 import { useInteractionABSStore } from '../stores';
 // enums
-import { HEADERS, HEADERS_TITLE, INTERACTION_ABS_COLUMNS, OPERATION_TYPE, OPERATION_TYPE_TITLE, STATUS_ABS, STATUS_ABS_TITLE } from '../enums'
+import { HEADERS, HEADERS_TITLE, INTERACTION_ABS_COLUMNS, OPERATION_TYPE, OPERATION_TYPE_TITLE, STATUS_ABS, STATUS_ABS_TITLE, TYPE } from '../enums'
 // services
 import { getRetryIabsAction } from '../services';
 
@@ -179,8 +179,11 @@ const onCancelFilter = (type) => {
   })
 }
 
+
 const onSendAgain = async(item) => {
-  await getRetryIabsAction(item.id)
+  const order_id = item.type == TYPE.TRIP ? item.trip_id : "string"
+
+  await getRetryIabsAction(item.id, { order_id })
   interactionABSStore.actionGetIabsActionList({ page: 1, page_size: 15 })
 }
 

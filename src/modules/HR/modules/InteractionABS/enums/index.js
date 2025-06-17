@@ -58,3 +58,10 @@ export const OPERATION_TYPE_TITLE = {
   [OPERATION_TYPE.CANCEL]: 'cancel',
 }
 
+export const TYPE = {
+  ORDER: "order",
+  TRIP: "trip",
+  TRIP_EXTEND: "trip_extend",
+  TRIP_CANCEL: "trip_cancel",
+  TRIP_PROLONG: "trip_prolong",
+}

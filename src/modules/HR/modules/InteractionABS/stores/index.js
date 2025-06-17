@@ -23,6 +23,46 @@ const mockData = {
           },
           register_number: "5/429"
         },
+        type: "order",
+        content_type: 61,
+        iabs_id: null,
+        object_id: 1818,
+        result: "Missing orderId",
+        status: "failed",
+        user: {
+          id: 2953,
+          full_name: "XOJALEPESOV AMANGELDI ABATBEKOVICH",
+          position: {
+            id: 1546,
+            name: "Yetakchi menejer"
+          },
+          top_level_department: {
+            id: 1537,
+            name: "Kredit monitoringi va nazorati departamenti"
+          },
+          table_number: "143556",
+          company: {
+            id: 17,
+            name: "Bosh bank"
+          }
+        }
+      },
+      {
+        id: 168,
+        action: "create",
+        type: "trip",
+        compose: {
+          id: 1541,
+          document_type: {
+            id: 4,
+            name: "Farmoyish"
+          },
+          document_sub_type: {
+            id: 36,
+            name: "Xizmat safari farmoyishi 2"
+          },
+          register_number: "5/429"
+        },
         content_type: 61,
         iabs_id: null,
         object_id: 1818,
@@ -164,7 +204,7 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
         this.iabsActionListLoading = true
         try {
           const response = await getIabsActionList(params)
-          this.iabsActionList = response.data?.results?.map((item)=>({
+          this.iabsActionList = mockData.data?.results?.map((item)=>({
             id: item.id,
             user: item.user,
             position: item.user.position,
@@ -175,6 +215,7 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
             documentSubType: item.compose.document_sub_type,
             operationType: item.action,
             statusAbs: item.status,
+            type: item.type,
           }))
           
           this.iabsActionListTotalCount = response.data?.count

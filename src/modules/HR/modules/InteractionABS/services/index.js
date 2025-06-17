@@ -42,6 +42,6 @@ export const getIabsRequestCalls = (params) => {
    return axiosConfig.get(URLS.iabsRequestCalls, params)
 }
 // retry iabs action
-export const getRetryIabsAction = (id) => {
-   return axiosConfig.get(`${URLS.iabsAction}${id}/${URLS.retryAction}`)
+export const getRetryIabsAction = (id, body) => {
+   return axiosConfig.post(`${URLS.iabsAction}${id}/${URLS.retryAction}`, body)
 }
