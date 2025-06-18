@@ -915,5 +915,6 @@
   "select-employees-in-business-trip": "Xizmat safaridagi xodimlarni tanlang",
   "add-location": "Hudud qo'shish",
   "add-trip-place": "Xizmat safari hududini qo'shish",
-  "trip-notice-for-change": "Xizmat safarini o'zgartirish uchun raport"
+  "trip-notice-for-change": "Xizmat safarini o'zgartirish uchun raport",
+  "response-result": "Javob natijasi"
 }

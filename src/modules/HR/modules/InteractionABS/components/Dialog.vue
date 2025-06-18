@@ -82,6 +82,11 @@ const dialogVisible = useModel(props, 'dialogVisible')
                 <status :status="data.status" />
               </div>
             </template>
+            <template #responseText="{ data }">
+              <div class="text-greyscale-500">
+                {{ data.response_text }}
+              </div>
+            </template>
         </DataTableModal>
       </template>
       <template v-else>

@@ -37,7 +37,7 @@ const route = useRoute()
 // infinite scroll
 const { moreLoderRef, resetList, hasMore } = useInfiniteScroll({
   page: 1,
-  page_size: 20,
+  page_size: 15,
   ...props.apiParams
 }, props.apiAction)
 
@@ -75,6 +75,7 @@ onUnmounted(() => {
 </script>
 <template>
   <div class="!w-[297px]">
+    <!-- <pre>{{ props.apiList }}</pre> -->
     <base-input
       v-model="search"
       :placeholder="t('search')"
@@ -84,13 +85,13 @@ onUnmounted(() => {
       input-class="!bg-[#3C3D43] border-none !focus:shadow-none !pl-10 px-3 py-2 bg-white text-white text-xs font-medium !rounded-[90px] placeholder:text-xs"
     />
     <div class="flex flex-col gap-2 mt-2 overflow-y-auto  max-h-[220px]"> 
-      <template v-if="apiList.length">
-        <template v-for="item in apiList" :key="item.id">
+      <template v-if="props.apiList.length">
+        <template v-for="item in props.apiList" :key="item.id">
           <div
             class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-white/10 cursor-pointer"
             @click="onSelectItem(item)"
             >
-              <span class="text-xs font-medium text-white">{{ item.name }}</span>
+              <span class="text-xs font-medium text-white">{{ item.name || item.full_name }}</span>
               <!-- icon -->
               <div 
                 class="rounded-full w-5 h-5 flex items-center justify-center relative"

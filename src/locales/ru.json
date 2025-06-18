@@ -919,5 +919,6 @@
   "select-employees-in-business-trip": "Выбрать сотрудников в командировке",
   "add-location": "Добавить место",
   "add-trip-place": "Добавить место командировки",
-  "trip-notice-for-change": "Рапорт на изменение командировке"
+  "trip-notice-for-change": "Рапорт на изменение командировке",
+  "response-result": "Результат ответа"
 }

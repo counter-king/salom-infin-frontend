@@ -7,7 +7,8 @@ const URLS = {
   documentSubTypes: "document-sub-types/",
   iabsAction: "iabs/actions/",
   iabsRequestCalls: "iabs/request-calls/",
-  retryAction: "retry-action/"
+  retryAction: "retry-action/",
+  users: "users/"
 }
 
 // get companies list
@@ -44,4 +45,8 @@ export const getIabsRequestCalls = (params) => {
 // retry iabs action
 export const getRetryIabsAction = (id, body) => {
    return axiosConfig.post(`${URLS.iabsAction}${id}/${URLS.retryAction}`, body)
+}
+// get users list
+export const fetchGetUsersList = (params) => {
+   return axiosConfig.get(URLS.users, params)
 }

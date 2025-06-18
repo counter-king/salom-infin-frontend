@@ -1,6 +1,219 @@
 import { defineStore } from 'pinia'
-import { getCompanyList, getTopDepartmentsList, getDocumentTypeList, getDocumentSubTypeList, getIabsActionList, getIabsRequestCalls } from '../services'
+import { getCompanyList, getTopDepartmentsList, getDocumentTypeList, getDocumentSubTypeList, getIabsActionList, getIabsRequestCalls, fetchGetUsersList } from '../services'
 import { HEADERS, HEADERS_TITLE } from '../enums'
+
+const mockData = {
+  data: {
+    count: 167,
+    next: "https://salom-api.sqb.uz/api/v1/iabs/actions/?page=2",
+    previous: null,
+    results: [
+      {
+        id: 167,
+        action: "create",
+        compose: {
+          id: 1541,
+          document_type: {
+            id: 4,
+            name: "Farmoyish"
+          },
+          document_sub_type: {
+            id: 36,
+            name: "Xizmat safari farmoyishi 2"
+          },
+          register_number: "5/429"
+        },
+        
+        type: "order",
+        content_type: 61,
+        iabs_id: null,
+        object_id: 1818,
+        result: "Missing orderId",
+        status: "failed",
+        user: {
+          id: 2953,
+          full_name: "XOJALEPESOV AMANGELDI ABATBEKOVICH",
+          position: {
+            id: 1546,
+            name: "Yetakchi menejer"
+          },
+          top_level_department: {
+            id: 1537,
+            name: "Kredit monitoringi va nazorati departamenti"
+          },
+          table_number: "143556",
+          company: {
+            id: 17,
+            name: "Bosh bank"
+          }
+        }
+      },
+      {
+        id: 168,
+        action: "create",
+        type: "trip",
+        compose: {
+          id: 1541,
+          document_type: {
+            id: 4,
+            name: "Farmoyish"
+          },
+          document_sub_type: {
+            id: 36,
+            name: "Xizmat safari farmoyishi 2"
+          },
+          register_number: "5/429"
+        },
+        content_type: 61,
+        iabs_id: 123,
+        object_id: 1818,
+        result: "Missing orderId",
+        status: "failed",
+        user: {
+          id: 2953,
+          full_name: "XOJALEPESOV AMANGELDI ABATBEKOVICH",
+          position: {
+            id: 1546,
+            name: "Yetakchi menejer"
+          },
+          top_level_department: {
+            id: 1537,
+            name: "Kredit monitoringi va nazorati departamenti"
+          },
+          table_number: "143556",
+          company: {
+            id: 17,
+            name: "Bosh bank"
+          }
+        }
+      },
+      {
+        id: 167,
+        action: "create",
+        compose: {
+          id: 1541,
+          document_type: {
+            id: 4,
+            name: "Farmoyish"
+          },
+          document_sub_type: {
+            id: 36,
+            name: "Xizmat safari farmoyishi 2"
+          },
+          register_number: "5/429"
+        },
+        
+        type: "trip_extend",
+        content_type: 61,
+        iabs_id: null,
+        object_id: 1818,
+        result: "Missing orderId",
+        status: "failed",
+        user: {
+          id: 2953,
+          full_name: "XOJALEPESOV AMANGELDI ABATBEKOVICH",
+          position: {
+            id: 1546,
+            name: "Yetakchi menejer"
+          },
+          top_level_department: {
+            id: 1537,
+            name: "Kredit monitoringi va nazorati departamenti"
+          },
+          table_number: "143556",
+          company: {
+            id: 17,
+            name: "Bosh bank"
+          }
+        }
+      },
+    ]
+  }
+}
+const mockDataHistory = {
+  data: {
+    count: 3,
+    next: null,
+    previous: null,
+    results: [
+      {
+          id: 7,
+          action_history_id: 389,
+          caller: {
+              id: 3104,
+              full_name: "XOLMURODOVA SHAXNOZA BEKBO`TA QIZI",
+              position: {
+                  id: 1711,
+                  name: "Menejer"
+              },
+              "top_level_department": {
+                  "id": 34,
+                  "name": "Xodimlar va tashkiliy rivojlantirish departamenti"
+              },
+              table_number: "145105",
+              company: {
+                  id: 17,
+                  name: "Bosh bank - 00000"
+              }
+          },
+          requested_date: "2025-06-17T19:45:28.206694+05:00",
+          status: "failed",
+          response_text: "IABS xizmatiga murojaat qilishda xato: 500 Server Error:  for url: http://192.168.1.80:9093/1.0.0/create-trip",
+          response_code: -1
+      },
+      {
+          id: 6,
+          action_history_id: 389,
+          caller: {
+              id: 3104,
+              full_name: "XOLMURODOVA SHAXNOZA BEKBO`TA QIZI",
+              position: {
+                  id: 1711,
+                  name: "Menejer"
+              },
+              top_level_department: {
+                  id: 34,
+                  name: "Xodimlar va tashkiliy rivojlantirish departamenti"
+              },
+              table_number: "145105",
+              company: {
+                  id: 17,
+                  name: "Bosh bank - 00000"
+              }
+          },
+          requested_date: "2025-06-17T19:45:19.429649+05:00",
+          status: "failed",
+          response_text: "IABS xizmatiga murojaat qilishda xato: 500 Server Error:  for url: http://192.168.1.80:9093/1.0.0/create-trip",
+          response_code: -1
+      },
+      {
+          id: 5,
+          action_history_id: 389,
+          caller: {
+              id: 3104,
+              full_name: "XOLMURODOVA SHAXNOZA BEKBO`TA QIZI",
+              position: {
+                  id: 1711,
+                  name: "Menejer"
+              },
+              top_level_department: {
+                  id: 34,
+                  name: "Xodimlar va tashkiliy rivojlantirish departamenti"
+              },
+              table_number: "145105",
+              company: {
+                  id: 17,
+                  name: "Bosh bank - 00000"
+              }
+          },
+          requested_date: "2025-06-17T19:42:56.712403+05:00",
+          status: "failed",
+          response_text: "IABS xizmatiga murojaat qilishda xato: 500 Server Error:  for url: http://192.168.1.80:9093/1.0.0/create-trip",
+          response_code: -1
+      }
+    ]
+  }
+}
 
 export const useInteractionABSStore = defineStore('interaction-abs-store', {
     state: () => ({
@@ -18,6 +231,8 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
       iabsRequestCallsLoading: false,
       iabsRequestCalls: [],
       iabsRequestCallsTotalCount: 0,
+      usersListLoading: false,
+      usersList: [],
       headers: [
         {
           field: HEADERS.EMPLOYEE,
@@ -113,7 +328,13 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
         {
           field: 'status',
           header: 'result-of-action',
-          width: '60%',
+          width: '20%',
+          active: true
+        },
+        {
+          field: 'responseText',
+          header: 'response-result',
+          width: '40%',
           active: true
         }
       ]
@@ -123,7 +344,7 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
         this.iabsActionListLoading = true
         try {
           const response = await getIabsActionList(params)
-          this.iabsActionList = response.data?.results?.map((item)=>({
+          this.iabsActionList = mockData.data?.results?.map((item)=>({
             id: item.id,
             user: item.user,
             position: item.user.position,
@@ -138,7 +359,7 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
             iabsId: item.iabs_id
           }))
           
-          this.iabsActionListTotalCount = response.data?.count
+          this.iabsActionListTotalCount = mockData.data?.count
           return response
         } catch (error) {
           console.log(error)
@@ -218,12 +439,30 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
           this.documentSubTypeListLoading = false
         }
       },
+      async actionGetUsersList(params, resetList= true) {
+        try {
+          if(resetList){
+            this.usersListLoading = true
+          } 
+          const response = await fetchGetUsersList(params)
+          if(resetList){
+            this.usersList = response.data.results
+          } else {
+            this.usersList = [...this.usersList, ...response.data.results]
+          }
+          return response
+        } catch (error) {
+          console.log(error)
+        } finally {
+          this.usersListLoading = false
+        }
+      },
       async actionGetIabsRequestCalls(params) {
         try {
           this.iabsRequestCallsLoading = true
-          const response = await getIabsRequestCalls(params)
-          this.iabsRequestCalls = response.data.results
-          this.iabsRequestCallsTotalCount = response.data.count
+          // const response = await getIabsRequestCalls(params)
+          this.iabsRequestCalls = mockDataHistory.data.results
+          this.iabsRequestCallsTotalCount = mockDataHistory.data.count
           return response
         } catch (error) {
           console.log(error)

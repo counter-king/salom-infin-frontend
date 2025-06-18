@@ -31,6 +31,7 @@ const activeApiAction = ref(null)
 const iabsActionHistoryById = ref(null)
 const statusAbsValue = [{ id: STATUS_ABS.SENT, name: t(STATUS_ABS_TITLE[STATUS_ABS.SENT]) }, { id: STATUS_ABS.FAILED, name: t(STATUS_ABS_TITLE[STATUS_ABS.FAILED]) }, { id: STATUS_ABS.CREATE, name: t(STATUS_ABS_TITLE[STATUS_ABS.CREATE]) }, { id: STATUS_ABS.PROLONG, name: t(STATUS_ABS_TITLE[STATUS_ABS.PROLONG]) }, { id: STATUS_ABS.CANCEL, name: t(STATUS_ABS_TITLE[STATUS_ABS.CANCEL]) }]
 const operationTypeValue = [{ id: OPERATION_TYPE.SENT, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.SENT]) }, { id: OPERATION_TYPE.FAILED, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.FAILED]) }, { id: OPERATION_TYPE.CREATE, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.CREATE]) }, { id: OPERATION_TYPE.PROLONG, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.PROLONG]) }, { id: OPERATION_TYPE.CANCEL, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.CANCEL]) }]
+const typeValue = [{ id: TYPE.ORDER, name: TYPE.ORDER }, { id: TYPE.TRIP, name: TYPE.TRIP }, { id: TYPE.TRIP_EXTEND, name: TYPE.TRIP_EXTEND }, { id: TYPE.TRIP_CANCEL, name: TYPE.TRIP_CANCEL }, { id: TYPE.TRIP_PROLONG, name: TYPE.TRIP_PROLONG }]
 
 const QUERY_NAMES = {
   [HEADERS.COMPANY]: 'company_id',
@@ -38,7 +39,9 @@ const QUERY_NAMES = {
   [HEADERS.DOCUMENT_TYPE]: 'doc_type_id',
   [HEADERS.DOCUMENT_SUB_TYPE]: 'doc_sub_type_id',
   [HEADERS.OPERATION_TYPE]: 'action',
-  [HEADERS.STATUS_ABS]: 'statusAbs'
+  [HEADERS.STATUS_ABS]: 'statusAbs',
+  [HEADERS.EMPLOYEE]: 'employee_id',
+  [HEADERS.TYPE]: 'type'
 }
 // computed
 const dataList = computed(() => {
@@ -55,6 +58,10 @@ const dataList = computed(() => {
       return operationTypeValue
     case HEADERS.STATUS_ABS:
       return statusAbsValue
+    case HEADERS.EMPLOYEE:
+      return interactionABSStore.usersList
+    case HEADERS.TYPE:
+      return typeValue
     default:
       return []
   }
@@ -70,9 +77,13 @@ const apiAction =(activeComponentType) => {
       return interactionABSStore.actionGetDocumentTypeList
     case HEADERS.DOCUMENT_SUB_TYPE:
       return interactionABSStore.actionGetDocumentSubTypeList
+    case HEADERS.EMPLOYEE:
+      return interactionABSStore.actionGetUsersList
     case HEADERS.OPERATION_TYPE:
       return null
     case HEADERS.STATUS_ABS:
+      return null
+    case HEADERS.TYPE:
       return null
     default:
       return null
@@ -85,8 +96,10 @@ const tableFilters = {
   department: SearchFilter, // department
   documentType: SimpleFilter, // document type
   documentSubType: SearchFilter, // document sub type
-  operationType: SimpleFilter,
-  statusAbs: SimpleFilter,
+  operationType: SimpleFilter, // operation type
+  statusAbs: SimpleFilter, // status abs
+  type: SimpleFilter, // type,
+  employee: SearchFilter, // employee
 }
 
 // methods
@@ -105,16 +118,17 @@ const toogleFilterDropdown = (event) => {
   filterDropdownRef.value.style.display = filterDropdownRef.value.style.display === "block" ? "none" : "block"
   filterDropdownRef.value.style.top = `${headerRect.bottom}px`
   filterDropdownRef.value.style.left = `${headerRect.left}px`
-  if([HEADERS.DOCUMENT_TYPE, HEADERS.OPERATION_TYPE, HEADERS.STATUS_ABS].includes(activeComponentType.value)){
+  if([HEADERS.DOCUMENT_TYPE, HEADERS.OPERATION_TYPE, HEADERS.STATUS_ABS, HEADERS.TYPE].includes(activeComponentType.value)){
     filterDropdownRef.value.style.width = `${headerRect.width}px`
   } else{
     filterDropdownRef.value.style.width = `fit-content`
   }
 }
 
-const allowSortColumns = [HEADERS.COMPANY, HEADERS.DEPARTMENT, HEADERS.DOCUMENT_TYPE, HEADERS.DOCUMENT_SUB_TYPE, HEADERS.OPERATION_TYPE, HEADERS.STATUS_ABS]
+const allowSortColumns = [HEADERS.COMPANY, HEADERS.DEPARTMENT, HEADERS.DOCUMENT_TYPE, HEADERS.DOCUMENT_SUB_TYPE, HEADERS.OPERATION_TYPE, HEADERS.STATUS_ABS, HEADERS.EMPLOYEE, HEADERS.TYPE]
 
 const onSort = (event) => {
+
   // to avoid event bubbling
   event.originalEvent.stopPropagation()
   if (!allowSortColumns.includes(event.sortField)) return
@@ -147,6 +161,8 @@ const getQueryName = (type) => {
       return 'action'
     case HEADERS.STATUS_ABS:
       return 'statusAbs'
+    case HEADERS.TYPE:
+      return 'type'
     default:
       return null
   }
@@ -162,7 +178,7 @@ const onChangeFilter = (item) => {
       [getQueryName(activeComponentType.value)]: item.id
     }
   })
-  header.header = item.name
+  header.header = item.name || `${item.first_name} ${item.last_name}`
   header.filter = true
 }
 
@@ -204,11 +220,12 @@ onMounted(async() => {
       query: {}
     })
   })
-
+  
   interactionABSStore.actionGetCompanyList({ page: 1, page_size: 15 })
   interactionABSStore.actionGetTopDepartmentsList({ page: 1, page_size: 15})
   interactionABSStore.actionGetDocumentTypeList({ page: 1, page_size: 15})
   interactionABSStore.actionGetDocumentSubTypeList({ page: 1, page_size: 15})
+  interactionABSStore.actionGetUsersList({ page: 1, page_size: 15})
   interactionABSStore.actionGetIabsActionList({ page: 1, page_size: 15, ...router.currentRoute.value.query, status: route.query.statusAbs || undefined, start_date: route.query.created_start_date || undefined, end_date: route.query.created_end_date || undefined })
   document.addEventListener('click', handleOutsideClick)
 })
@@ -254,6 +271,20 @@ onUnmounted(() => {
         @emit:set-store-headers="(val) => interactionABSStore.headers = val"
         >
         <!-- header -->
+        <template #headerIconemployee="{ data }">
+            <div class="flex items-center gap-1">
+              <base-iconify 
+                v-if="data.filter"
+                :icon="CloseCircleBoldIcon"
+                @click="onCancelFilter(HEADERS.EMPLOYEE)"
+                class="!w-5 !h-5 text-greyscale-500"
+              />
+              <div class="flex flex-col items-center relative">
+                <base-iconify :icon="AltArrowUpIcon" class="!w-4 !h-4 text-greyscale-500 absolute left-0 bottom-[-5px]"/>
+                <base-iconify :icon="AltArrowDownIcon" class="!w-4 !h-4 text-greyscale-500 absolute left-0 top-[-5px]"/>
+              </div>
+            </div>
+          </template>
          <template #headerIconcompany="{ data }">
           <div class="flex items-center gap-1">
             <base-iconify 
@@ -316,6 +347,19 @@ onUnmounted(() => {
                 v-if="data.filter"
                 :icon="CloseCircleBoldIcon"
                 @click="onCancelFilter(HEADERS.OPERATION_TYPE)"
+              />
+              <div class="flex flex-col items-center relative">
+                <base-iconify :icon="AltArrowUpIcon" class="!w-4 !h-4 text-greyscale-500 absolute left-0 bottom-[-5px]"/>
+                <base-iconify :icon="AltArrowDownIcon" class="!w-4 !h-4 text-greyscale-500 absolute left-0 top-[-5px]"/>
+              </div>
+            </div>
+          </template>
+          <template #headerIcontype="{ data }">
+            <div class="flex items-center gap-1">
+              <base-iconify 
+                v-if="data.filter"
+                :icon="CloseCircleBoldIcon"
+                @click="onCancelFilter(HEADERS.TYPE)"
               />
               <div class="flex flex-col items-center relative">
                 <base-iconify :icon="AltArrowUpIcon" class="!w-4 !h-4 text-greyscale-500 absolute left-0 bottom-[-5px]"/>
@@ -402,7 +446,7 @@ onUnmounted(() => {
           :type="QUERY_NAMES[activeComponentType]"
           :apiAction="activeApiAction"
           :apiList="dataList"
-          :apiParams="{ page: 1, page_size: 20 }"
+          :apiParams="{ page: 1, page_size: 15 }"
           @onChange="onChangeFilter"
           :key="activeComponentType"
           />
