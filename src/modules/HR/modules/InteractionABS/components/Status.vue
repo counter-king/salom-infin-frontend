@@ -17,7 +17,7 @@ const props = defineProps({
 const statusClass = (status)=> {
   switch(status){
     case STATUS_ABS.SENT:
-      return 'bg-greyscale-50 text-greyscale-500'  // Отправлено
+      return 'bg-greyscale-50 text-success-500'  // Отправлено
     case STATUS_ABS.FAILED:
       return 'bg-critic-50 text-critic-500' // Ошибка
     case STATUS_ABS.CREATE:

@@ -7,38 +7,34 @@ import TheSidebar from '@/components/TheSidebar.vue'
 import TheFooter from '@/components/TheFooter.vue';
 // Stores
 import { useAgreementsRoutesStore } from '../modules/Agreements/stores/routes.store'
+import { useAuthStore } from '@/modules/Auth/stores'
 // Composable
 const agreementsRoutesStore = useAgreementsRoutesStore()
+const authStore = useAuthStore()
 
 const menus = ref([
   {
     title: "HR",
-    prefix: true
+    prefix: true,
   },
   {
     title: 'my-profile',
     icon: UserIcon,
     link: 'ProfileIndex',
-    children: []
+    children: [],
   },
   {
     title: "business-trip",
     icon: CaseIcon,
     link: "BusinessTripIndex",
-    children: []
+    children: [],
   },
   agreementsRoutesStore.routes,
   {
     title: "agreement-settings",
     icon: SettingsMinimalisticIcon,
     link: "AgreementSettingsIndex",
-    children: []
-  },
-  {
-    title: "interaction-with-abs2",
-    icon: DocumentAddIcon,
-    link: "InteractionABSIndex",
-    children: []
+    children: [],
   },
   // {
   //   title: "dashboard",
@@ -47,6 +43,16 @@ const menus = ref([
   //   children: []
   // },
 ])
+ 
+ if(authStore.currentUser.is_superuser) {
+  menus.value.push({
+    title: "interaction-with-abs2",
+    icon: DocumentAddIcon,
+    link: "InteractionABSIndex",
+    children: []
+  })
+}
+
 </script>
 
 <template>

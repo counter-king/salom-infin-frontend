@@ -1,14 +1,18 @@
 <script setup>
 // core
-import { ref, useModel, onMounted } from 'vue'
+import { useModel } from 'vue'
 import { useI18n } from 'vue-i18n'
 // components
 import DataTableModal from './DataTableModal.vue'
+import Status from './Status.vue'
 // stores
 import { useInteractionABSStore } from '../stores';
+// utils
+import { formatDateHour } from '@/utils/formatDate'
 // composibles
 const interactionABSStore = useInteractionABSStore()
 const { t } = useI18n()
+
 // props
 const props = defineProps({
   dialogVisible: {
@@ -28,11 +32,6 @@ const emit = defineEmits([
 // composibles
 const dialogVisible = useModel(props, 'dialogVisible')
 
-onMounted(() => {
-  if (props.id) {
-    interactionABSStore.actionGetIabsRequestCalls({ action_history_id: props.id, page: 1, page_size: 15 })
-  }
-})
 </script>
 <template>
   <base-dialog
@@ -53,6 +52,7 @@ onMounted(() => {
           :loading="interactionABSStore.iabsRequestCallsLoading"
           :total-count="interactionABSStore.iabsRequestCallsTotalCount"
           :action-list="interactionABSStore.actionGetIabsRequestCalls"
+          :apiParams="{ action_history_id: props.id, page: 1, page_size: 15 }"
           :pageSize="15"
           >
             <template #order="{ data }">
@@ -62,13 +62,24 @@ onMounted(() => {
             </template>
             <template #caller="{ data }">
               <div class="flex items-center gap-3">
-                <!-- <base-avatar 
+                <base-avatar 
                   :image="data.callerImage"
-                  :label="data.caller"
+                  :label="data.caller?.full_name"
+                  detail-dialog
+                  :meta="data.caller"
                   avatar-classes="w-7 h-7"
-                /> -->
-                <pre>{{ data.caller }}</pre>
-                <span >{{ data.caller }}</span>
+                />
+                <span >{{ data.caller?.full_name }}</span>
+              </div>
+            </template>
+            <template #date="{ data }">
+              <div class="text-greyscale-500">
+              {{ formatDateHour(data?.requested_date) }}
+              </div>
+            </template>
+            <template #status="{ data }">
+              <div class="text-greyscale-500">
+                <status :status="data.status" />
               </div>
             </template>
         </DataTableModal>

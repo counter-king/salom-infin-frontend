@@ -2,135 +2,6 @@ import { defineStore } from 'pinia'
 import { getCompanyList, getTopDepartmentsList, getDocumentTypeList, getDocumentSubTypeList, getIabsActionList, getIabsRequestCalls } from '../services'
 import { HEADERS, HEADERS_TITLE } from '../enums'
 
-const mockData = {
-  data: {
-    count: 167,
-    next: "https://salom-api.sqb.uz/api/v1/iabs/actions/?page=2",
-    previous: null,
-    results: [
-      {
-        id: 167,
-        action: "create",
-        compose: {
-          id: 1541,
-          document_type: {
-            id: 4,
-            name: "Farmoyish"
-          },
-          document_sub_type: {
-            id: 36,
-            name: "Xizmat safari farmoyishi 2"
-          },
-          register_number: "5/429"
-        },
-        
-        type: "order",
-        content_type: 61,
-        iabs_id: null,
-        object_id: 1818,
-        result: "Missing orderId",
-        status: "failed",
-        user: {
-          id: 2953,
-          full_name: "XOJALEPESOV AMANGELDI ABATBEKOVICH",
-          position: {
-            id: 1546,
-            name: "Yetakchi menejer"
-          },
-          top_level_department: {
-            id: 1537,
-            name: "Kredit monitoringi va nazorati departamenti"
-          },
-          table_number: "143556",
-          company: {
-            id: 17,
-            name: "Bosh bank"
-          }
-        }
-      },
-      {
-        id: 168,
-        action: "create",
-        type: "trip",
-        compose: {
-          id: 1541,
-          document_type: {
-            id: 4,
-            name: "Farmoyish"
-          },
-          document_sub_type: {
-            id: 36,
-            name: "Xizmat safari farmoyishi 2"
-          },
-          register_number: "5/429"
-        },
-        content_type: 61,
-        iabs_id: 123,
-        object_id: 1818,
-        result: "Missing orderId",
-        status: "failed",
-        user: {
-          id: 2953,
-          full_name: "XOJALEPESOV AMANGELDI ABATBEKOVICH",
-          position: {
-            id: 1546,
-            name: "Yetakchi menejer"
-          },
-          top_level_department: {
-            id: 1537,
-            name: "Kredit monitoringi va nazorati departamenti"
-          },
-          table_number: "143556",
-          company: {
-            id: 17,
-            name: "Bosh bank"
-          }
-        }
-      },
-      {
-        id: 167,
-        action: "create",
-        compose: {
-          id: 1541,
-          document_type: {
-            id: 4,
-            name: "Farmoyish"
-          },
-          document_sub_type: {
-            id: 36,
-            name: "Xizmat safari farmoyishi 2"
-          },
-          register_number: "5/429"
-        },
-        
-        type: "trip_extend",
-        content_type: 61,
-        iabs_id: null,
-        object_id: 1818,
-        result: "Missing orderId",
-        status: "failed",
-        user: {
-          id: 2953,
-          full_name: "XOJALEPESOV AMANGELDI ABATBEKOVICH",
-          position: {
-            id: 1546,
-            name: "Yetakchi menejer"
-          },
-          top_level_department: {
-            id: 1537,
-            name: "Kredit monitoringi va nazorati departamenti"
-          },
-          table_number: "143556",
-          company: {
-            id: 17,
-            name: "Bosh bank"
-          }
-        }
-      },
-    ]
-  }
-}
-
 export const useInteractionABSStore = defineStore('interaction-abs-store', {
     state: () => ({
       iabsActionListLoading: false,
@@ -234,7 +105,7 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
           active: true
         },
         {
-          field: 'requested_date',
+          field: 'date',
           header: 'date',
           width: '20%',
           active: true
