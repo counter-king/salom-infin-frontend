@@ -1,6 +1,6 @@
 <script setup>
 // core
-import { ref, watch, computed, onUnmounted, onMounted } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter, useRoute } from 'vue-router'
 import { useDebounce } from '@vueuse/core';
@@ -66,10 +66,6 @@ watch(useDebounceSearch, (newVal) => {
 
 onMounted(() => {
   selectedItem.value = null
-})
-
-onUnmounted(() => {
-  resetList()
 })
 
 </script>
