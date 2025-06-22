@@ -58,12 +58,12 @@ const showNumbers = inject('showNumbers')
               <div class="flex gap-2 absolute -top-6">
                 <template v-for="({ color, longText }) in colors">
                   <template v-if="item.items.find(({ category }) => category === longText)">
-                    <div class="flex items-center gap-[6px] bg-greyscale-900 relative rounded-lg text-white text-xs font-semibold py-1 px-[6px]">
+                    <div class="flex items-center gap-[6px] bg-greyscale-900 relative rounded-lg text-white text-[10px] font-medium py-1 px-[6px]">
                       <div class="w-[10px] h-[10px] rounded" :style="{ background: color }"></div>
 
-                      <span>{{ formatNumberWithFloat(item.total) }}</span>
+                      <span class="relative z-10">{{ formatNumberWithFloat(item.items.find(({ category }) => category === longText).total) }}</span>
 
-<!--                      <div class="w-4 h-[6px] bg-greyscale-900 absolute bottom-0 -rotate-45 right-8"></div>-->
+                      <div class="w-4 h-[6px] bg-greyscale-900 absolute bottom-0 -rotate-45 translate-x-1/2 right-1/2"></div>
                     </div>
                   </template>
                 </template>
@@ -72,20 +72,34 @@ const showNumbers = inject('showNumbers')
 
             <div class="flex">
               <template v-for="({ color, longText }) in colors">
-                <div
-                  v-if="item.items.find(({ category }) => category === longText)"
-                  v-tooltip.top="{
-                  value: `<h4 class='text-xs text-white text-center -my-1'>${ formatNumberWithFloat(item.items.find(({ category }) => category === longText).total)}</h4>`,
-                  escape: true,
-                  autoHide: false
-                }"
-                  class="h-3"
-                  :style="{
-                  background: color,
-                  width: `${((item.items.find(({ category }) => category === longText).total / dashboardStore.companyType.additionalMax) * 100).toFixed(1)}%`
-                }"
-                >
-                </div>
+                <template v-if="item.items.find(({ category }) => category === longText)">
+                  <template v-if="showNumbers">
+                    <div
+                      class="h-3"
+                      :style="{
+                        background: color,
+                        width: `${((item.items.find(({ category }) => category === longText).total / dashboardStore.companyType.additionalMax) * 100).toFixed(1)}%`
+                      }"
+                    >
+                    </div>
+                  </template>
+
+                  <template v-else>
+                    <div
+                      v-tooltip.top="{
+                        value: `<h4 class='text-xs text-white text-center -my-1'>${ formatNumberWithFloat(item.items.find(({ category }) => category === longText).total)}</h4>`,
+                        escape: true,
+                        autoHide: false
+                      }"
+                      class="h-3"
+                      :style="{
+                        background: color,
+                        width: `${((item.items.find(({ category }) => category === longText).total / dashboardStore.companyType.additionalMax) * 100).toFixed(1)}%`
+                      }"
+                    >
+                    </div>
+                  </template>
+                </template>
               </template>
             </div>
           </div>

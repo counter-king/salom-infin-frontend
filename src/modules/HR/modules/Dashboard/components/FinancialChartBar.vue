@@ -5,11 +5,13 @@ import { useHRDashboardStore } from '../../Dashboard/stores'
 import ChartCard from './Card.vue'
 import ChartBar from './ChartBar.vue'
 import DepartmentMultiSelect from '@/components/Select/DepartmentMultiSelect.vue'
+import BranchMultiSelect from '@/components/Select/BranchMultiSelect.vue'
 
 const { t } = useI18n()
 const dashboardStore = useHRDashboardStore()
 
 const departmentSelect = ref([])
+const branchSelect = ref([])
 const activeTabIndex = ref(0)
 const tabItems = ref([
   {
@@ -82,6 +84,9 @@ const showNumbers = ref(false)
 const handleDepartmentSelect = (data) => {
   dashboardStore.actionFilterCompanyTypeDepartments(data)
 }
+const handleBranchSelect = (data) => {
+  dashboardStore.actionFilterCompanyTypeDepartments(data)
+}
 const handleShowNumber = () => {
 
 }
@@ -129,6 +134,14 @@ provide('showNumbers', showNumbers)
                 label=""
                 :placeholder="t('departments')"
                 @update:modelValue="handleDepartmentSelect"
+              />
+            </template>
+
+            <template v-if="activeTabIndex === 1">
+              <branch-multi-select
+                v-model="branchSelect"
+                label=""
+                @update:modelValue="handleBranchSelect"
               />
             </template>
           </div>
