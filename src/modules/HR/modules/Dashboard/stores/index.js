@@ -97,7 +97,9 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
     },
     companyType: {
       loader: true,
-      data: {}
+      data: [],
+      sorted: [],
+      additionalMax: null
     },
     tripStatus: {
       loader: true,
@@ -813,59 +815,213 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
       try {
         const { data } = await fetchDashboardByCompanyType(params)
 
-        this.companyType.data = data
+        // this.companyType.data = data
 
         // MOCK DATA
-        // this.companyType.data = {
-        //   "Agrosanoat klasterlarini moliyalashtirishni  muvofiqlashtirish departamenti": [
-        //     {
-        //       "category": "Переменное вознаграждение",
-        //       "total": 601087800.79
-        //     },
-        //     {
-        //       "category": "Премии к праздникам и мат помощь с/х продукты",
-        //       "total": 54000000
-        //     },
-        //     {
-        //       "category": "Разовые выплаты",
-        //       "total": 130000000
-        //     },
-        //     {
-        //       "category": "Фиксированное вознаграждение",
-        //       "total": 1392558434.7
-        //     },
-        //     {
-        //       "category": "Ценные подарки",
-        //       "total": 1364000
-        //     }
-        //   ],
-        //   "Aholini moliyaviy qo'llab-quvvatlash va tadbirkorlikka jalb qilish departamenti": [
-        //     {
-        //       "category": "Материальная помощь",
-        //       "total": 601087800.79
-        //     },
-        //     {
-        //       "category": "Переменное вознаграждение",
-        //       "total": 601087800.79
-        //     },
-        //     {
-        //       "category": "Премии к праздникам и мат помощь с/х продукты",
-        //       "total": 54000000
-        //     },
-        //     {
-        //       "category": "Разовые выплаты",
-        //       "total": 130000000
-        //     },
-        //     {
-        //       "category": "Фиксированное вознаграждение",
-        //       "total": 1392558434.7
-        //     },
-        //     {
-        //       "category": "Ценные подарки",
-        //       "total": 1364000
-        //     }
-        //   ],
-        // }
+        const mockData = {
+          "Agrosanoat klasterlarini moliyalashtirishni  muvofiqlashtirish departamenti": [
+            {
+              "category": "Переменное вознаграждение",
+              "total": 601087800.79
+            },
+            {
+              "category": "Премии к праздникам и мат помощь с/х продукты",
+              "total": 54000000
+            },
+            {
+              "category": "Разовые выплаты",
+              "total": 130000000
+            },
+            {
+              "category": "Фиксированное вознаграждение",
+              "total": 1392558434.7
+            },
+            {
+              "category": "Ценные подарки",
+              "total": 1364000
+            }
+          ],
+          "Aholini moliyaviy qo'llab-quvvatlash va tadbirkorlikka jalb qilish departamenti": [
+            {
+              "category": "Материальная помощь",
+              "total": 13860000
+            },
+            {
+              "category": "Переменное вознаграждение",
+              "total": 1555380138.43
+            },
+            {
+              "category": "Премии к праздникам и мат помощь с/х продукты",
+              "total": 136500000
+            },
+            {
+              "category": "Разовые выплаты",
+              "total": 240000000
+            },
+            {
+              "category": "Фиксированное вознаграждение",
+              "total": 3923660724.67
+            },
+            {
+              "category": "Ценные подарки",
+              "total": 2913000
+            }
+          ],
+          "Aktivlar va passivlar xizmati": [
+            {
+              "category": "Материальная помощь",
+              "total": 5775000
+            },
+            {
+              "category": "Переменное вознаграждение",
+              "total": 337480000.77
+            },
+            {
+              "category": "Премии к праздникам и мат помощь с/х продукты",
+              "total": 30000000
+            },
+            {
+              "category": "Разовые выплаты",
+              "total": 103730000
+            },
+            {
+              "category": "Фиксированное вознаграждение",
+              "total": 758799432
+            }
+          ],
+          "Aloqa markazi": [
+            {
+              "category": "Переменное вознаграждение",
+              "total": 599248409.91
+            },
+            {
+              "category": "Премии к праздникам и мат помощь с/х продукты",
+              "total": 134500000
+            },
+            {
+              "category": "Разовые выплаты",
+              "total": 50000000
+            },
+            {
+              "category": "Фиксированное вознаграждение",
+              "total": 1838535892.84
+            }
+          ],
+          "Analitik tahlil xizmati": [
+            {
+              "category": "Переменное вознаграждение",
+              "total": 12354645.01
+            },
+            {
+              "category": "Премии к праздникам и мат помощь с/х продукты",
+              "total": 3000000
+            },
+            {
+              "category": "Фиксированное вознаграждение",
+              "total": 79782604.54
+            }
+          ],
+          "Axborotlarni muhofaza qilish markazi": [
+            {
+              "category": "Переменное вознаграждение",
+              "total": 503314462.66
+            },
+            {
+              "category": "Премии к праздникам и мат помощь с/х продукты",
+              "total": 33000000
+            },
+            {
+              "category": "Разовые выплаты",
+              "total": 150000000
+            },
+            {
+              "category": "Фиксированное вознаграждение",
+              "total": 1171952280.75
+            },
+            {
+              "category": "Ценные подарки",
+              "total": 74194.92
+            }
+          ],
+          "Axborot texnologiyalari departamenti": [
+            {
+              "category": "Материальная помощь",
+              "total": 10000000
+            },
+            {
+              "category": "Оплата по договору ГПХ",
+              "total": 51000000
+            },
+            {
+              "category": "Переменное вознаграждение",
+              "total": 5981619859.48
+            },
+            {
+              "category": "Премии к праздникам и мат помощь с/х продукты",
+              "total": 487500000
+            },
+            {
+              "category": "Разовые выплаты",
+              "total": 447277000
+            },
+            {
+              "category": "Фиксированное вознаграждение",
+              "total": 15579186689.32
+            },
+            {
+              "category": "Ценные подарки",
+              "total": 1660779.68
+            }
+          ],
+          "Axborot xavfsizligi xizmati": [
+            {
+              "category": "Переменное вознаграждение",
+              "total": 232585943.57
+            },
+            {
+              "category": "Премии к праздникам и мат помощь с/х продукты",
+              "total": 18000000
+            },
+            {
+              "category": "Разовые выплаты",
+              "total": 55861000
+            },
+            {
+              "category": "Фиксированное вознаграждение",
+              "total": 673502099.96
+            }
+          ],
+        }
+
+        const departmentTotals = Object.entries(mockData).map(([department, items]) => {
+          const totalSum = items.reduce((sum, item) => sum + item.total, 0)
+
+          return {
+            department,
+            items,
+            total: totalSum,
+          }
+        })
+        this.companyType.sorted = departmentTotals.sort((a, b) => b.total - a.total)
+
+        console.log('this.companyType.sorted', this.companyType.sorted)
+
+        this.companyType.data = [ ...this.companyType.sorted ]
+
+        const maxTotal = this.companyType.sorted[0].total
+        const remainder = maxTotal % 5000000000;
+        const addition = remainder === 0 ? 0 : 5000000000 - remainder;
+        const adjustedTotal = maxTotal + addition;
+        const stepsCount = adjustedTotal / 5
+
+        this.companyType.additionalMax = maxTotal + addition
+
+        console.log('asd', {
+          original: maxTotal,
+          adjustedTotal,
+          addition,
+          stepsCount,
+        })
 
         return Promise.resolve()
       }
@@ -876,6 +1032,17 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
         setTimeout(() => {
           this.companyType.loader = false
         }, 500)
+      }
+    },
+    /**
+     *
+     * */
+    actionFilterCompanyTypeDepartments(data) {
+      if(!data.length) {
+        this.companyType.data = [...this.companyType.sorted]
+      }
+      else {
+        this.companyType.data = this.companyType.sorted.filter(item => data.map(department => department.name).includes(item.department))
       }
     },
     /**
