@@ -17,7 +17,9 @@ import { formatDate, formatDateReverse } from "@/utils/formatDate"
 // Components
 import { LayoutWithTabsCompose } from "@/components/DetailLayout"
 import UserSelect from "@/components/Select/UserSelect.vue"
-import { CloseSmIcon, TrashBinTrashBoldIcon, TrashBinTrashIcon, UnreadLinearIcon } from "@/components/Icons"
+import {
+  TrashBinBoldIcon,
+} from "@/components/Icons"
 import BaseChip from "@/components/UI/BaseChip.vue"
 import UserMultiSelect from "@/components/Select/UserMultiSelect.vue"
 import EditorWithTabs from "@/components/Composed/EditorWithTabs.vue"
@@ -29,9 +31,9 @@ import {
 } from "@/modules/Documents/modules/SendDocuments/constants"
 import { Decree } from "@/modules/Documents/modules/SendDocuments/views/forms/FormComponents"
 import { dispatchNotify } from "@/utils/notify"
-import { adjustUsersToArray } from "@/utils";
+import { adjustUsersToArray } from "@/utils"
 import ChangingBusinessTripModal
-  from "@/modules/Documents/modules/SendDocuments/views/forms/FormComponents/ChangingBusinessTripModal.vue";
+  from "@/modules/Documents/modules/SendDocuments/views/forms/FormComponents/ChangingBusinessTripModal.vue"
 
 // Composable
 const store = useExtendBusinessTripStore()
@@ -74,6 +76,8 @@ const adjustObjects = async () => {
   store.model.journal = JOURNAL.INNER
   store.model.company = authStore.currentUser?.company?.id
 
+  let groupIdCounter = 1
+
   store.model.__groups.forEach((group) => {
     if (Array.isArray(group.__notices_to_change)) {
       store.model.notices.push(
@@ -89,8 +93,9 @@ const adjustObjects = async () => {
             id: tag.id
           })),
           route: notice.route,
-          group_id: 1,
+          group_id: groupIdCounter++,
           trip_type: 'changed_local',
+          parent: notice.id,
           ...(notice.business_trip_id ? {id: notice.business_trip_id} : {})
         }))
       )
@@ -224,6 +229,9 @@ const init = async () => {
 
   businessTripStore.stepperItems.forEach(step => step.active = step.value === route.query.step)
 }
+const deleteNoticeToChange = (item, itemIndex, groupIndex) => {
+  store.actionDeleteNoticeToChange(item, itemIndex, groupIndex)
+}
 
 // Hooks
 onMounted(async () => {
@@ -311,7 +319,6 @@ onUnmounted(() => {
                           :searchable="false"
                           placeholder="select-employees"
                           :show-nested-error="showNestedError"
-                          :disabled="formType === FORM_TYPE_UPDATE || route.query.notice_id"
                           @update:modelValue="store.actionAddUsersToExtend(group, index)"
 
                         />
@@ -319,7 +326,7 @@ onUnmounted(() => {
 
                       <base-col col-class="w-full">
                         <base-row
-                          v-for="item in group.__notices_to_change"
+                          v-for="(item, itemIndex) in group.__notices_to_change"
                         >
                           <base-col col-class="w-1/3">
                             <span class="text-sm text-greyscale-500 font-medium">{{ t('employees-in-business-trip') }}</span>
@@ -344,13 +351,24 @@ onUnmounted(() => {
                           </base-col>
 
                           <base-col col-class="w-1/3">
-                            <span class="text-sm text-greyscale-500 font-medium">{{ t('end-date') }}</span>
+                            <div class="flex justify-between items-center">
+                              <div>
+                                <span class="text-sm text-greyscale-500 font-medium">{{ t('end-date') }}</span>
 
-                            <base-chip
-                              :label="item.__end_date"
-                              type="other"
-                              class="w-fit mt-1"
-                            />
+                                <base-chip
+                                  :label="item.__end_date"
+                                  type="other"
+                                  class="w-fit mt-1"
+                                />
+                              </div>
+
+                              <div
+                                class="cursor-pointer"
+                                @click="deleteNoticeToChange(item, itemIndex, index)"
+                              >
+                                <base-iconify :icon="TrashBinBoldIcon" class="text-critic-500"/>
+                              </div>
+                            </div>
                           </base-col>
                         </base-row>
                       </base-col>

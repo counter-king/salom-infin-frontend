@@ -121,6 +121,7 @@ export const useExtendBusinessTripStore = defineStore("sd-extend-business-trip-s
           return {
             __users,
             __notices_to_change: [],
+            group_id: group.group_id,
           }
         })
       )
@@ -132,8 +133,22 @@ export const useExtendBusinessTripStore = defineStore("sd-extend-business-trip-s
       const selectedUsers = this.model.__groups[groupIndex].__users_to_extend || []
 
       const item = this.model.__notices.find(notice =>
-        selectedUsers.some(user => user.id === notice.user.id)
+        selectedUsers.some(user => user.id === notice.user.id && notice.group_id === group.group_id)
       )
+
+      if (!item) return
+
+      const groupData = this.model.__groups[groupIndex]
+      if (!Array.isArray(groupData.__notices_to_change)) {
+        this.$set(groupData, '__notices_to_change', [])
+      }
+      const alreadyExists = groupData.__notices_to_change.some(n => n.id === item.id || n.parent_id === item.id)
+
+      if (alreadyExists) {
+        this.tempGroupIndex = groupIndex
+        this.actionClearTempModel()
+        return
+      }
 
       this.changingBTModel = item
       this.tempGroupIndex = groupIndex
@@ -152,9 +167,11 @@ export const useExtendBusinessTripStore = defineStore("sd-extend-business-trip-s
       }))
     },
     /** **/
+    actionDeleteNoticeToChange(item, itemIndex, groupIndex) {
+      this.model.__groups[groupIndex].__notices_to_change.splice(itemIndex, 1)
+    },
+    /** **/
     actionFillNoticesToChange(){
-      console.log(this.tempRegions)
-      console.log(this.tempVerifications)
       if (this.model?.__groups?.[this.tempGroupIndex]?.__notices_to_change) {
         this.model.__groups[this.tempGroupIndex].__notices_to_change.push({
           ...this.changingBTModel,
@@ -209,11 +226,10 @@ export const useExtendBusinessTripStore = defineStore("sd-extend-business-trip-s
 
         const groups = await Promise.all(this.model.__groups.map(async item => {
           const matchingNotices = data.notices.filter(notice =>
-            item.__users.some(user => user.id === notice.user?.id)
+            item.__users.some(user => user.id === notice.user?.id && notice.group_id === item.group_id)
           )
 
           if (matchingNotices.length) {
-            item.__users_to_extend = item.__users
             item.__notices_to_change = await Promise.all(
               matchingNotices.map(async n => ({
                 user: n.user,
@@ -222,17 +238,14 @@ export const useExtendBusinessTripStore = defineStore("sd-extend-business-trip-s
                 __end_date: n.end_date,
                 tags: n.tags,
                 __sender_company: n.sender_company,
-                business_trip_id: n.id
+                business_trip_id: n.id,
+                parent_id: n.parent,
               }))
             )
           }
 
           return item
         }))
-
-        this.model.__groups = groups.filter(group =>
-          group.__users_to_extend && group.__users_to_extend.length > 0
-        )
 
         this.model.__curator = await adjustTopSignerObjectToArray([], data.curator.id, false)
         this.model.__signers = await adjustUserObjectToArray(data.signers)
@@ -249,24 +262,26 @@ export const useExtendBusinessTripStore = defineStore("sd-extend-business-trip-s
     },
     /** **/
     async actionUpdateUserTrip() {
-      this.userTripUpdateButtonLoading = true
-
-      const body = {
-        regions: this.tempVerifications.map(item => (item?.region?.id || null)),
-        end_date: this.changingBTModel?.end_date
-      }
-      try {
-        await fetchUpdateBusinessTripVerification({ id: this.changingBTModel?.id, body })
-        this.actionFillNoticesToChange()
-        this.actionClearTempModel()
-        dispatchNotify(null, "Muvaffaqiyatli!", COLOR_TYPES.SUCCESS)
-
-
-      } catch (error) {
-        console.error(error)
-      } finally {
-        this.userTripUpdateButtonLoading = false
-      }
+      this.actionFillNoticesToChange()
+      this.actionClearTempModel()
+      // this.userTripUpdateButtonLoading = true
+      //
+      // const body = {
+      //   regions: this.tempVerifications.map(item => (item?.region?.id || null)),
+      //   end_date: this.changingBTModel?.end_date
+      // }
+      // try {
+      //   await fetchUpdateBusinessTripVerification({ id: this.changingBTModel?.id, body })
+      //   this.actionFillNoticesToChange()
+      //   this.actionClearTempModel()
+      //   dispatchNotify(null, "Muvaffaqiyatli!", COLOR_TYPES.SUCCESS)
+      //
+      //
+      // } catch (error) {
+      //   console.error(error)
+      // } finally {
+      //   this.userTripUpdateButtonLoading = false
+      // }
     },
     /** **/
     actionResetBTModel() {

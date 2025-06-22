@@ -35,7 +35,7 @@ const fillOnMount = computed(() => {
 })
 
 const updateButtonVisible = computed(() => {
-  return !SDStore.detailModel?.registered_document && ![COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_V2, COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_DECREE].includes(route.params.document_sub_type)
+  return !SDStore.detailModel?.registered_document && ![COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_V2, COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_DECREE, COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE].includes(route.params.document_sub_type)
 })
 
 const extendBusinessTripButtonVisible = computed(() => {

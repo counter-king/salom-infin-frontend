@@ -117,7 +117,7 @@ const bookings = computed(() => {
 </script>
 
 <template>
-<!--  <pre>{{ props.composeModel?.notices }}</pre>-->
+<!--  <pre>{{ props.composeModel?.__groups }}</pre>-->
   <!-- Loop according to groups -->
   <div
     v-for="(item, index) in groups"
