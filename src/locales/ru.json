@@ -920,5 +920,6 @@
   "add-location": "Добавить место",
   "add-trip-place": "Добавить место командировки",
   "trip-notice-for-change": "Рапорт на изменение командировке",
-  "response-result": "Результат ответа"
+  "response-result": "Результат ответа",
+  "add-approvers": "Добавить на согласование"
 }

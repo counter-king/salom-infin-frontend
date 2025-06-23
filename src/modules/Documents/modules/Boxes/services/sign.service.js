@@ -1,7 +1,8 @@
 import axiosConfig from "@/services/axios.config"
 
 const URLS = {
-  sign: "signers"
+  sign: "signers",
+  addApprover: "add-approvers"
 }
 export const fetchSignList = (params = {}) => {
   return axiosConfig.get(`${URLS.sign}/`, params)
@@ -14,4 +15,7 @@ export const fetchRejectSignDocument = ({ id, comment }) => {
 }
 export const fetchSignDocument = ({ id, body }) => {
   return axiosConfig.put(`${URLS.sign}/${id}/sign/`, body)
+}
+export const fetchAddApprovers = (body) => {
+  return axiosConfig.post(`${URLS.sign}/${URLS.addApprover}/`, body)
 }
