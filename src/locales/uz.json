@@ -916,5 +916,11 @@
   "add-location": "Hudud qo'shish",
   "add-trip-place": "Xizmat safari hududini qo'shish",
   "trip-notice-for-change": "Xizmat safarini o'zgartirish uchun raport",
-  "response-result": "Javob natijasi"
+  "response-result": "Javob natijasi",
+  "atLeast-8-characters": "Eng kami 8 ta belgi",
+  "atLeast-1-capital-letter": "Eng kami 1 ta katta harf",
+  "atLeast-1-small-letter": "Eng kami 1 ta kichik harf",
+  "atLeast-1-number": "Eng kami 1 ta raqam",
+  "atLeast-1-special-character": "Eng kami 1 ta belgi (!@#$%^&*)", 
+  "password-not-match": "Parol mos kelmaydi"
 }

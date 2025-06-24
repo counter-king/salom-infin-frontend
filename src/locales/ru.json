@@ -920,5 +920,11 @@
   "add-location": "Добавить место",
   "add-trip-place": "Добавить место командировки",
   "trip-notice-for-change": "Рапорт на изменение командировке",
-  "response-result": "Результат ответа"
+  "response-result": "Результат ответа",
+  "atLeast-8-characters": "Минимум 8 символов",
+  "atLeast-1-capital-letter": "Минимум 1 большая буква",
+  "atLeast-1-small-letter": "Минимум 1 маленькая буква",
+  "atLeast-1-number": "Минимум 1 цифра",
+  "atLeast-1-special-character": "Минимум 1 специальный символ (!@#$%^&*)",
+  "password-not-match": "Пароль не совпадает"
 }
