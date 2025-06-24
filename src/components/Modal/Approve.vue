@@ -1,8 +1,8 @@
 <script setup>
 // Core
 import { ref } from 'vue'
-import { useI18n } from "vue-i18n";
-import { useRoute } from "vue-router";
+import { useI18n } from "vue-i18n"
+import { useRoute } from "vue-router"
 // Components
 import { CheckCircleIcon, InfoCircleBoldIcon } from '@/components/Icons'
 // Service
@@ -13,7 +13,7 @@ const route = useRoute();
 const { t } = useI18n();
 const buttonLoading = ref(false);
 
-const emit = defineEmits(['emit:onApprove']);
+const emit = defineEmits(['emit:onApprove'])
 
 // Methods
 const onApprove = async () => {

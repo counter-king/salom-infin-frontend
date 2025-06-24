@@ -1,11 +1,17 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, provide } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useHRDashboardStore } from '../../Dashboard/stores'
 import ChartCard from './Card.vue'
 import ChartBar from './ChartBar.vue'
+import DepartmentMultiSelect from '@/components/Select/DepartmentMultiSelect.vue'
+import BranchMultiSelect from '@/components/Select/BranchMultiSelect.vue'
 
 const { t } = useI18n()
+const dashboardStore = useHRDashboardStore()
 
+const departmentSelect = ref([])
+const branchSelect = ref([])
 const activeTabIndex = ref(0)
 const tabItems = ref([
   {
@@ -73,16 +79,72 @@ const colors = ref([
     color: '#5F64FF'
   },
 ])
+const showNumbers = ref(false)
+
+const handleDepartmentSelect = (data) => {
+  dashboardStore.actionFilterCompanyTypeDepartments(data)
+}
+const handleBranchSelect = (data) => {
+  dashboardStore.actionFilterCompanyTypeDepartments(data)
+}
+const handleShowNumber = () => {
+
+}
+provide('showNumbers', showNumbers)
 </script>
 
 <template>
   <div class="relative">
     <chart-card class="h-full pt-6 pb-8 mt-2 px-10">
       <header class="flex flex-wrap items-center mb-4">
-        <div class="flex items-center flex-1 gap-7 text-greyscale-900">
-          <h1 class="text-lg font-semibold">
-            Динамика ФОТ ({{ t('mln') }})
-          </h1>
+        <div class="flex items-center justify-between flex-1 gap-7 text-greyscale-900">
+          <div class="flex gap-7">
+            <h1 class="text-lg font-semibold">
+              Динамика ФОТ
+              <!--            ({{ t('mln') }})-->
+            </h1>
+
+            <div class="flex items-center gap-2 cursor-pointer">
+              <Checkbox
+                v-model="showNumbers"
+                :binary="true"
+                input-id="finance-checkbox-numbers"
+                :pt="{
+	                root: {
+	                  class: 'flex items-center'
+	                },
+	                input:{
+	                  class: 'checkbox-event w-5 h-5 rounded'
+	                }
+	              }"
+                @change="handleShowNumber"
+              >
+              </Checkbox>
+
+              <label for="finance-checkbox-numbers" class="cursor-pointer">
+                <span class="font-semibold text-base">{{ t('show-numbers') }}</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="max-w-[350px] w-full">
+            <template v-if="activeTabIndex === 0">
+              <department-multi-select
+                v-model="departmentSelect"
+                label=""
+                :placeholder="t('departments')"
+                @update:modelValue="handleDepartmentSelect"
+              />
+            </template>
+
+            <template v-if="activeTabIndex === 1">
+              <branch-multi-select
+                v-model="branchSelect"
+                label=""
+                @update:modelValue="handleBranchSelect"
+              />
+            </template>
+          </div>
         </div>
       </header>
 

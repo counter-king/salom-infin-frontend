@@ -180,3 +180,28 @@ body {
   top: 60% !important;
   transform: rotate(270deg) !important;
 }
+
+.tree-connector::before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 26px;
+  height: 3px;
+  background-color: var(--greyscale-200); /* gray-300 */
+}
+
+.tree-connector::after {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: -12px;
+  width: 2px;
+  height: 100%;
+  background-color: var(--greyscale-200); /* gray-300 */
+}
+
+.tree-connector.last-approver::after {
+  height: 62%;
+}

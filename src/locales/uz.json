@@ -922,5 +922,6 @@
   "atLeast-1-small-letter": "Eng kami 1 ta kichik harf",
   "atLeast-1-number": "Eng kami 1 ta raqam",
   "atLeast-1-special-character": "Eng kami 1 ta belgi (!@#$%^&*)", 
-  "password-not-match": "Parol mos kelmaydi"
+  "password-not-match": "Parol mos kelmaydi",
+  "add-approvers": "Kelishishga xodim qo'shish"
 }

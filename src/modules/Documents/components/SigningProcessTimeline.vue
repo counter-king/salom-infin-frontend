@@ -5,19 +5,26 @@ import {useI18n} from "vue-i18n"
 // Utils
 import {formatDateHour} from "@/utils/formatDate"
 // Enums
-import {SIGNER_TYPES} from "@/enums"
+import { COLOR_TYPES, SIGNER_TYPES } from "@/enums"
 // Components
 import Timeline from 'primevue/timeline'
-import {ModalComment} from "@/components/Modal"
+import { ModalComment } from "@/components/Modal"
 import {
-	CheckCircleBoldIcon,
-	CheckCircleIcon, CircleIcon, CloseCircleBoldIcon,
-	EyeClosedIcon,
-	EyeIcon,
-	FileCheckIcon,
-	MenuDotsBoldIcon,
-	Pen2Icon
+  CheckCircleBoldIcon,
+  CheckCircleIcon, CircleIcon, CloseCircleBoldIcon,
+  EyeClosedIcon,
+  EyeIcon,
+  FileCheckIcon,
+  MenuDotsBoldIcon,
+  Pen2Icon, TrashBinTrashBoldIcon, TrashBinTrashIcon
 } from '@/components/Icons'
+import BaseIconify from "@/components/UI/BaseIconify.vue";
+import { useAuthStore } from "@/modules/Auth/stores";
+import { DeleteModal } from "@/modules/HR/modules/BusinessTrip/views/Settings/components/TripPrupose";
+import { fetchDeleteApprover } from "@/modules/Documents/modules/Boxes/services/approval.service";
+import { useBoxesSignStore } from "@/modules/Documents/modules/Boxes/stores/sign.store";
+import { useRoute } from "vue-router";
+import { dispatchNotify } from "@/utils/notify";
 
 const properties = defineProps({
   composeModel: {
@@ -27,9 +34,18 @@ const properties = defineProps({
   }
 })
 
+// Reactive
+const deleteDialog = ref(false)
+const deleteLoading = ref(false)
+const deletingItemId = ref(null)
+
+// Composables
 const { t } = useI18n();
 const reason = ref("");
-const reasonModal = ref(false);
+const reasonModal = ref(false)
+const currentUser = useAuthStore().currentUser
+const signStore = useBoxesSignStore()
+const route = useRoute()
 
 // Computed
 const signingProcessComputed = computed(() => {
@@ -37,31 +53,61 @@ const signingProcessComputed = computed(() => {
 
   if (!composeModel?.approvers || !composeModel?.signers) return []
 
-  let approvers = composeModel.approvers.map(item => ({ ...item, type: "approvers" }))
+  const author = { user: composeModel.author, type: "author" }
 
-  const assistant = composeModel?.curator?.assistant
-    ? approvers.find(item => item.user.id === composeModel.curator.assistant)
-    : null
-
-  if (assistant) {
-    approvers = approvers.filter(item => item.user.id !== assistant.user.id)
-  }
-
-  let signers = composeModel.signers.filter(item => item.type !== SIGNER_TYPES.BASIC_SIGNER).map(item => ({ ...item, type: "signers" }))
-
+  // Separate assistant and curator
   const curator = composeModel?.curator
     ? composeModel.signers.find(item => item.type === SIGNER_TYPES.BASIC_SIGNER)
     : null
 
-  const author = { user: composeModel.author, type: "author" }
+  const assistant = composeModel?.curator?.assistant
+    ? composeModel.approvers.find(item => item.user.id === composeModel.curator.assistant)
+    : null
 
-  return [
-    author,
-    ...approvers,
-    ...signers,
-    ...(assistant ? [{ ...assistant, type: "approvers", role: "assistant" }] : []),
-    ...(curator ? [{ ...curator, type: "signers" }] : []),
-  ]
+  // Filter approvers: remove assistant from approvers list
+  const approversWithoutAssistant = composeModel.approvers
+    .filter(item => !assistant || item.user.id !== assistant.user.id)
+    .map(item => ({...item, type: "approvers"}))
+
+  // Group approvers by their added_by
+  const addedByMap = new Map()
+  const orphanApprovers = []
+
+  for (const approver of approversWithoutAssistant) {
+    if (approver.added_by) {
+      if (!addedByMap.has(approver.added_by)) {
+        addedByMap.set(approver.added_by, [])
+      }
+      addedByMap.get(approver.added_by).push(approver)
+    } else {
+      orphanApprovers.push(approver)
+    }
+  }
+
+  // Filter out non-curator signers
+  const signers = composeModel.signers
+    .filter(item => item.type !== SIGNER_TYPES.BASIC_SIGNER)
+    .map(item => ({...item, type: "signers"}))
+
+  const result = [author, ...orphanApprovers]
+
+  for (const signer of signers) {
+    result.push(signer)
+    const approversOfSigner = addedByMap.get(signer.user.id)
+    if (approversOfSigner) {
+      result.push(...approversOfSigner)
+    }
+  }
+
+  if (assistant) {
+    result.push({...assistant, type: "approvers", role: "assistant"})
+  }
+
+  if (curator) {
+    result.push({...curator, type: "signers"})
+  }
+
+  return result
 })
 
 // Methods
@@ -134,9 +180,37 @@ const returnItemIconClass = (item) => {
           || (item.type === 'signers' && item.is_signed === false)
             ? 'text-critic-500' : 'text-greyscale-200'
 }
+const returnItemContentClasses = (props, context) => {
+  const items = props.value
+  const index = context.index
+
+  const isApprover = items[index].added_by
+  if (!isApprover) return ''
+
+  const nextIsNotApprover = !items[index + 1]?.added_by
+
+  return `ml-16 tree-connector relative${nextIsNotApprover ? ' last-approver' : ''}`
+}
 const showReason = (item) => {
 	reason.value = item.comment;
 	reasonModal.value = true;
+}
+const onDeleteClick = (item) => {
+  deletingItemId.value = item.id
+  deleteDialog.value = true
+}
+const onDelete = async () => {
+  deleteLoading.value = true
+
+  try {
+    await fetchDeleteApprover(deletingItemId.value)
+    await signStore.actionGetSignDetail(route.params.id)
+    deleteDialog.value = false
+    dispatchNotify(null, t('deleted-employee'), COLOR_TYPES.SUCCESS)
+  } catch (e) {}
+  finally {
+    deleteLoading.value = false
+  }
 }
 </script>
 
@@ -149,6 +223,9 @@ const showReason = (item) => {
         opposite: { class: [ 'hidden' ] },
         connector: ({ props, context }) => (
           { class: [returnConnectorClasses(props, context), '-my-1'] }
+        ),
+        content: ({ props, context }) => (
+          { class: [returnItemContentClasses(props, context)] }
         )
       }"
     >
@@ -212,6 +289,12 @@ const showReason = (item) => {
 		            >
 			            {{ returnItemActionValue(item) }}
 		            </div>
+                <base-iconify
+                  v-if="currentUser?.id === item?.added_by"
+                  :icon="TrashBinTrashBoldIcon"
+                  class="text-critic-500 cursor-pointer !w-4 !h-4"
+                  @click="onDeleteClick(item)"
+                />
 	            </div>
             </div>
 
@@ -235,6 +318,20 @@ const showReason = (item) => {
 		:footer="false"
 	/>
 	<!-- /REASON TEXT MODAL -->
+
+	<!-- DELETE CONFIRM MODAL -->
+  <DeleteModal
+    v-model="deleteDialog"
+    label="delete"
+    :loading="deleteLoading"
+    :max-width="'max-w-[480px]'"
+    :content="{
+        title: 'really-want-delete'
+      }"
+    @click:delete="onDelete"
+  />
+	<!-- /DELETE CONFIRM MODAL -->
+
 </template>
 
 <style scoped>

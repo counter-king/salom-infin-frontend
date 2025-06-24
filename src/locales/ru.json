@@ -926,5 +926,6 @@
   "atLeast-1-small-letter": "Минимум 1 маленькая буква",
   "atLeast-1-number": "Минимум 1 цифра",
   "atLeast-1-special-character": "Минимум 1 специальный символ (!@#$%^&*)",
-  "password-not-match": "Пароль не совпадает"
+  "password-not-match": "Пароль не совпадает",
+  "add-approvers": "Добавить на согласование"
 }

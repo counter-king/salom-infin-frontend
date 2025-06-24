@@ -4,13 +4,17 @@ import { computed, onMounted, ref } from "vue"
 import {useRoute, useRouter} from "vue-router"
 import {useI18n} from "vue-i18n"
 // Service
-import {fetchRejectSignDocument, fetchSignDocument} from "@/modules/Documents/modules/Boxes/services/sign.service"
+import {
+  fetchAddApprovers,
+  fetchRejectSignDocument,
+  fetchSignDocument
+} from "@/modules/Documents/modules/Boxes/services/sign.service"
 // Store
 import { useBoxesSignStore } from "@/modules/Documents/modules/Boxes/stores/sign.store"
 import { useCountStore } from '@/stores/count.store'
 import { useSDStore } from "@/modules/Documents/modules/SendDocuments/stores/index.store"
 // Components
-import { CheckCircleIcon, Pen2Icon, XMarkSolidIcon } from '@/components/Icons'
+import { AddPlusIcon, CheckCircleIcon, Pen2Icon, XMarkSolidIcon } from '@/components/Icons'
 import { LayoutWithTabsCompose } from "@/components/DetailLayout"
 import { ModalComment } from "@/components/Modal"
 import SigningProcessTimeline from "@/modules/Documents/components/SigningProcessTimeline.vue"
@@ -19,9 +23,12 @@ import SendForApproval from "@/modules/Documents/modules/Boxes/components/SendFo
 import { TreeUsers } from '@/components/Tree'
 import Eimzo from "@/components/EIMZO/Eimzo.vue"
 // Enums
-import { COMPOSE_DOCUMENT_SUB_TYPES, SIGNER_TYPES } from "@/enums"
+import { COLOR_TYPES as Color_TYPES, COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, SIGNER_TYPES } from "@/enums"
 import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue"
 import { useAuthStore } from "@/modules/Auth/stores";
+import UserMultiSelect from "@/components/Select/UserMultiSelect.vue";
+import app from "../../../../../../App.vue";
+import { dispatchNotify } from "@/utils/notify";
 
 const signStore = useBoxesSignStore()
 const countStore = useCountStore()
@@ -35,6 +42,9 @@ const resolutionModal = ref(null)
 const buttonLoading = ref(false)
 const isHostVercel = ref(null)
 const tabValue = ref('notice')
+const addApproverDialog = ref(false)
+const addApproverLoading = ref(false)
+const approvers = ref([])
 
 // Computed
 const signed = computed(() => {
@@ -91,6 +101,29 @@ const signDocumentWithResolution = async (body) => {
 const onItemClick = (item) => {
   tabValue.value = item.slot
 }
+const onAddApprover = async () => {
+  if (approvers.value.length > 0) {
+    addApproverLoading.value = true
+
+    let model = {
+      approvers: approvers.value.map(item => (item.id)),
+      compose_id: route.query?.compose_id,
+    }
+
+    try {
+      await fetchAddApprovers(model)
+      addApproverDialog.value = false
+      approvers.value = []
+      await signStore.actionGetSignDetail(route.params.id)
+      dispatchNotify(null, t('added-employee'), Color_TYPES.SUCCESS)
+    } catch {}
+    finally {
+      addApproverLoading.value = false
+    }
+  } else {
+    dispatchNotify(null, "Kamida bitta xodim qo'shing!", COLOR_TYPES.WARNING)
+  }
+}
 
 // Hooks
 onMounted( async () => {
@@ -114,6 +147,22 @@ onMounted( async () => {
       :title="signStore.detailModel?.compose?.title?.name"
     >
       <template #header-end>
+        <base-button
+          v-if="signed === null && isHostVercel"
+          color="bg-white hover:bg-greyscale-100 text-primary-dark"
+          border-color="border-transparent"
+          label="add-approvers"
+          :icon-left="AddPlusIcon"
+          icon-height="!w-4"
+          icon-width="!h-4"
+          icon-color="#767994"
+          rounded
+          shadow
+          type="button"
+          :loading="sdStore.customUpdateLoading"
+          @click="addApproverDialog = true"
+        />
+
         <base-button
 	        v-if="signed === null"
           color="bg-white hover:bg-greyscale-100 text-primary-dark"
@@ -246,6 +295,44 @@ onMounted( async () => {
       :loading="sdStore.customUpdateLoading"
     />
     <!-- /CHANGE TEXT MODAL -->
+
+    <!-- ADD APPROVER MODAL -->
+    <base-dialog
+      v-model="addApproverDialog"
+      label="add-approvers"
+      max-width="max-w-[631px]"
+    >
+      <template #content>
+        <div>
+          <user-multi-select
+            v-model="approvers"
+            label="approvers"
+            placeholder="enter-approvers"
+          />
+        </div>
+      </template>
+
+      <template #footer>
+        <base-button
+          color="bg-white hover:bg-greyscale-100 text-primary-dark"
+          border-color="border-transparent"
+          label="cancel"
+          rounded
+          shadow
+          type="button"
+          @click="addApproverDialog = false"
+        />
+        <base-button
+          label="add"
+          :loading="addApproverLoading"
+          rounded
+          shadow
+          type="button"
+          @click="onAddApprover"
+        />
+      </template>
+    </base-dialog>
+    <!-- /ADD APPROVER MODAL -->
   </template>
 </template>
 
