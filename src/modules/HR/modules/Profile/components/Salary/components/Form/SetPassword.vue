@@ -70,7 +70,7 @@ const passwordRequirements = computed(() => [
     met: formModel.passcode && hasNumber(formModel.passcode)
   },
   {
-    text: t('atLeast-1-special-character'),
+    text: t('atLeast-1-special-character', { characters: '!@#$%^&*' }),
     met: formModel.passcode && hasSpecialChar(formModel.passcode)
   }
 ])
