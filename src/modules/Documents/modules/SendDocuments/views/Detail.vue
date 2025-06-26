@@ -39,7 +39,7 @@ const updateButtonVisible = computed(() => {
 })
 
 const extendBusinessTripButtonVisible = computed(() => {
-  return SDStore.detailModel?.registered_document && [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2].includes(route.params.document_sub_type) && isHostVercel.value
+  return SDStore.detailModel?.registered_document && [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2].includes(route.params.document_sub_type)
 })
 
 // Methods
