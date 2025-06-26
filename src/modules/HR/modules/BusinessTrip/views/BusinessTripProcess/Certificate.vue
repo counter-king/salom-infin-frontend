@@ -48,7 +48,7 @@ const verifications = computed(() => {
         actionTime: item.left_at,
         filial: item.region?.name_uz || item.company?.name,
         responsible: formatUserFullName(item.left_verified_by),
-        visited_places: item.visited_places,
+        visited_places: [],
       })
     }
     if (!item.is_sender && item.left_at) {
@@ -57,7 +57,7 @@ const verifications = computed(() => {
         actionTime: item.left_at,
         filial: item.region?.name_uz || item.company?.name,
         responsible: formatUserFullName(item.left_verified_by),
-        visited_places: item.visited_places,
+        visited_places: [],
       })
     }
     if (!item.is_sender && item.arrived_at) {
@@ -75,7 +75,7 @@ const verifications = computed(() => {
         actionTime: item.arrived_at,
         filial: item.region?.name_uz || item.company?.name,
         responsible: formatUserFullName(item.arrived_verified_by),
-        visited_places: item.visited_places,
+        visited_places: [],
       })
     }
   })
