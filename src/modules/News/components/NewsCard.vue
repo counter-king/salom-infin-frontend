@@ -36,7 +36,7 @@ const props = defineProps({
       </div>
       <!-- bottom -->
       <div class="flex items-center justify-between p-2 mt-auto">
-          <span class="font-medium text-xs text-[#5F6878]">{{ formatDateNamedMonth(props.item.created_date) }}</span>
+          <span class="font-medium text-xs text-[#5F6878]">{{ formatDateNamedMonth(props.item?.published_date || props.item.created_date) }}</span>
           <div class="flex gap-2 items-center text-greyscale-400">
             <!-- <RouterLink :to="{ name: 'NewsEdit', params: {id: props.item.id}}" class="text-sm hover:text-warning-500">
               <base-iconify :icon="EditLightIcon" />
