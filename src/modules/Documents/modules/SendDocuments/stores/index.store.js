@@ -210,7 +210,7 @@ export const useSDStore = defineStore("sd-stores", {
       {
         header: "Действие",
         field: "action",
-        active: false
+        active: true
       }
     ],
     list: [],
@@ -417,11 +417,6 @@ export const useSDStore = defineStore("sd-stores", {
     resetHeaders() {
       this.headers = [
         {
-          header: "№",
-          field: "index",
-          active: true
-        },
-        {
           header: "letter-type",
           field: "document_sub_type",
           active: true
@@ -454,7 +449,7 @@ export const useSDStore = defineStore("sd-stores", {
         {
           header: "Действие",
           field: "action",
-          active: false
+          active: true
         }
       ]
     },

@@ -150,7 +150,7 @@ onMounted(async () => {
 
       <template #action="{ data }">
         <base-button
-          v-if="data.document_sub_type.id === Number(COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE)"
+          v-if="data.document_sub_type.id === Number(COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE) && data.status.id !== 5"
           color="text-critic-500"
           :icon-left="TrashIcon"
           only-icon
