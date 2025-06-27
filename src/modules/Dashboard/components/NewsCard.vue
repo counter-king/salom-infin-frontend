@@ -55,7 +55,7 @@ const handleMouseEnter = async (event) => {
           <news-category :category="props.item.category"/>
           <div class="flex gap-1 items-center text-[#5F6878]">
             <base-iconify :icon="CalendarLinearIcon" class="!w-3 !h-3" />
-            <span class="font-medium text-xs flex items-center">{{ formatDate(props.item.created_date) }}</span>
+            <span class="font-medium text-xs flex items-center">{{ formatDate(props.item?.published_date || props.item.created_date) }}</span>
           </div>
           <div 
             class="flex gap-1 items-center cursor-pointer"
