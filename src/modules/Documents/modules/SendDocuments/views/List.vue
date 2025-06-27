@@ -1,12 +1,12 @@
 <script setup>
 // Core
-import { computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 // Store
 import { useSDStore } from "../stores/index.store";
 import { usePaginationStore } from "@/stores/pagination.store";
 // Constants
-import { COMPOSE_DOCUMENT_TYPES } from "@/enums";
+import { COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES } from "@/enums";
 import { ROUTE_SD_DETAIL, SD_INNER_COLUMNS } from "../constants";
 // Components
 import DocType from "../../../../../components/Chips/DocType.vue";
@@ -15,6 +15,11 @@ import { ActionToolbar } from "../../../../../components/Actions";
 import { ToolbarMenu } from "../components/index";
 import CreateButton from "@/modules/Documents/modules/SendDocuments/components/CreateButton.vue";
 import OverlayButton from "@/components/Menu/OverlayButton.vue";
+import TrashIcon from "primevue/icons/trash";
+import { CHAT_ROUTE_NAMES } from "@/modules/Chat/constatns";
+import DeleteDialog from "@/modules/Chat/components/DeleteDialog.vue";
+import { DeleteModal } from "@/modules/HR/modules/BusinessTrip/views/Settings/components/TripPrupose";
+import { fetchDeleteDocument } from "@/modules/Documents/modules/SendDocuments/services/index.service";
 
 const sdStore = useSDStore()
 const paginationStore = usePaginationStore()
@@ -22,6 +27,11 @@ const route = useRoute()
 const router = useRouter()
 const filterKeys = ["approvers", "author", "curator", "signers", "departments", "register_number", "status", "document_sub_types",]
 const keysToIncludeOnClearFilter = ["document_type"]
+
+// Reactive
+const deleteButtonLoading = ref(false)
+const deleteDialogVisible = ref(false)
+const deletingComposeId = ref(null)
 
 const title = computed(() => {
   return route.query?.document_type ? sdStore.SD_TOOLBAR_MENU_LIST.find(item => item.document_type === route.query?.document_type).label : COMPOSE_DOCUMENT_TYPES.INNER
@@ -45,7 +55,23 @@ const onClickRow = (data) => {
   })
 }
 const onDeleteRow = (data) => {
-  console.log(data)
+  deletingComposeId.value = data.id
+  deleteDialogVisible.value = true
+}
+const onDelete = async () => {
+  deleteButtonLoading.value = true
+  try {
+    await fetchDeleteDocument(deletingComposeId.value)
+    deleteDialogVisible.value = false
+    await sdStore.actionGetDocumentList({
+      document_type: route.query.document_type,
+      page_size: sdStore.filterState.page_size
+    })
+
+  } catch (error) {}
+  finally {
+    deleteButtonLoading.value = false
+  }
 }
 const onChangeDocType = (menu) => {
   paginationStore.resetPagination();
@@ -124,16 +150,31 @@ onMounted(async () => {
 
       <template #action="{ data }">
         <base-button
+          v-if="data.document_sub_type.id === Number(COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE)"
           color="text-critic-500"
-          icon-left="TrashIcon"
+          :icon-left="TrashIcon"
           only-icon
           text
           rounded
+          icon-height="!h-4"
           @click="onDeleteRow(data)"
         />
       </template>
     </base-data-table>
   </div>
+
+  <!-- DELETE CONFIRM MODAL -->
+  <DeleteModal
+    v-model="deleteDialogVisible"
+    label="delete"
+    :loading="deleteButtonLoading"
+    :max-width="'max-w-[480px]'"
+    :content="{
+        title: 'really-want-delete'
+      }"
+    @click:delete="onDelete"
+  />
+  <!-- /DELETE CONFIRM MODAL -->
 </template>
 
 <style scoped>

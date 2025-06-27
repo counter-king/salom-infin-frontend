@@ -28,3 +28,6 @@ export const fetchVersionHistory = (id) => {
 export const fetchGetLinkedDocumentsList = (id) => {
   return axiosConfig.get(`${URLS.compose}/${id}/links/`)
 }
+export const fetchDeleteDocument = (id) => {
+return axiosConfig.delete(`${URLS.compose}/${id}/`)
+}
