@@ -319,6 +319,7 @@ onUnmounted(() => {
                           :searchable="false"
                           placeholder="select-employees"
                           :show-nested-error="showNestedError"
+                          :disabled="formType === FORM_TYPE_UPDATE"
                           @update:modelValue="store.actionAddUsersToExtend(group, index)"
 
                         />
@@ -362,12 +363,12 @@ onUnmounted(() => {
                                 />
                               </div>
 
-                              <div
-                                class="cursor-pointer"
-                                @click="deleteNoticeToChange(item, itemIndex, index)"
-                              >
-                                <base-iconify :icon="TrashBinBoldIcon" class="text-critic-500"/>
-                              </div>
+<!--                              <div-->
+<!--                                class="cursor-pointer"-->
+<!--                                @click="deleteNoticeToChange(item, itemIndex, index)"-->
+<!--                              >-->
+<!--                                <base-iconify :icon="TrashBinBoldIcon" class="text-critic-500"/>-->
+<!--                              </div>-->
                             </div>
                           </base-col>
                         </base-row>

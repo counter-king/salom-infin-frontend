@@ -921,7 +921,9 @@
   "atLeast-1-capital-letter": "Eng kami 1 ta katta harf",
   "atLeast-1-small-letter": "Eng kami 1 ta kichik harf",
   "atLeast-1-number": "Eng kami 1 ta raqam",
-  "atLeast-1-special-character": "Eng kami 1 ta belgi ({characters})", 
+  "atLeast-1-special-character": "Eng kami 1 ta belgi ({characters})",
   "password-not-match": "Parol mos kelmaydi",
-  "add-approvers": "Kelishishga xodim qo'shish"
+  "add-approvers": "Kelishishga xodim qo'shish",
+  "changed_notice": "O'zgartirish bildirishnomasi",
+  "changed_decree": "O'zgartirish farmoyishi"
 }

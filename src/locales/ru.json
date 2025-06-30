@@ -927,5 +927,7 @@
   "atLeast-1-number": "Минимум 1 цифра",
   "atLeast-1-special-character": "Минимум 1 специальный символ ({characters})",
   "password-not-match": "Пароль не совпадает",
-  "add-approvers": "Добавить на согласование"
+  "add-approvers": "Добавить на согласование",
+  "changed_notice": "Рапорт изменение",
+  "changed_decree": "Распоряжения изменение"
 }
