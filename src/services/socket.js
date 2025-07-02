@@ -18,7 +18,7 @@ export const socket = ()=> {
         retries: 3,
         delay:500,
         onFailed(err) {
-          dispatchNotify(null, `error happened ${err}`, COLOR_TYPES.ERROR)
+          dispatchNotify(null, `socket error happened ${err}`, COLOR_TYPES.ERROR)
         },
       },
     })
