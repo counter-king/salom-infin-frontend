@@ -97,7 +97,7 @@ const curatorFullName = computed(() => {
   return BTStore.detailModel?.compose && BTStore.detailModel?.compose[0]?.curator
 })
 const isTripChanged = computed(() => {
-  return BTStore.detailModel?.compose && BTStore.detailModel?.compose.length > 2
+  return BTStore.detailModel?.compose && BTStore.detailModel?.compose.length > 2 && BTStore.detailModel?.end_date_2
 })
 const addedRegions = computed(() => {
   const exclude = new Set(BTStore.detailModel?.locations?.map(l => l.id))

@@ -36,6 +36,7 @@ export { default as CaseBoldIcon } from  '~icons/solar/case-bold'
 export { default as ClapperboardPlayLinearIcon } from  '~icons/solar/clapperboard-play-linear'
 export { default as PaperclipLinearIcon } from  '~icons/solar/paperclip-linear'
 export { default as SmileCircleLinearIcon } from  '~icons/solar/smile-circle-linear'
+export { default as ReplyLinearIcon } from  '~icons/solar/reply-linear'
 // Solar (Outline)
 export { default as CheckCircleIcon } from  '~icons/solar/check-circle-outline'
 export { default as AltArrowUpIcon } from  '~icons/solar/alt-arrow-up-outline'
