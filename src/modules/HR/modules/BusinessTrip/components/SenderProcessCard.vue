@@ -44,7 +44,7 @@ const isSenderOffice = computed(() => {
   return props.verifications.find(item => item.is_sender)?.company?.id === currentUser?.company?.id
 })
 const arrivedResetVisible = computed(() => {
-  return sender.value.arrived_at
+  return sender.value.arrived_at && currentUser.is_superuser
 })
 
 // Methods

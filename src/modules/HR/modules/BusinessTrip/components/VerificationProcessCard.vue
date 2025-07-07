@@ -76,10 +76,10 @@ const leftResetVisible = computed(() => {
   const filteredEntries = props.verifications.filter(entry => !entry.is_sender)
   const hasValue = filteredEntries.some(item => item.left_at || item.arrived_at)
   const sender = props.verifications?.find(item => item.is_sender)
-  return props.item?.left_at && (!props.item?.is_sender || !hasValue) && !sender.arrived_at
+  return props.item?.left_at && (!props.item?.is_sender || !hasValue) && !sender.arrived_at && currentUser.is_superuser
 })
 const arrivedResetVisible = computed(() => {
-  return props.item?.arrived_at && !props.item?.left_at
+  return props.item?.arrived_at && !props.item?.left_at && currentUser.is_superuser
 })
 
 // Methods
