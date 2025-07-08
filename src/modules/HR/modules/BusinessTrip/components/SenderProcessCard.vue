@@ -44,7 +44,7 @@ const isSenderOffice = computed(() => {
   return props.verifications.find(item => item.is_sender)?.company?.id === currentUser?.company?.id
 })
 const arrivedResetVisible = computed(() => {
-  return sender.value.arrived_at && currentUser.is_superuser
+  return sender.value.arrived_at && (currentUser.is_superuser || currentUser.id === 3104)
 })
 
 // Methods
@@ -112,7 +112,7 @@ const onResetClick = (item, type) => {
               <a
                 :href="`https://www.google.com/maps?q=${sender.arrived_lat},${sender.arrived_lng}`"
                 target="_blank"
-                class="underline hover:text-primary-500"
+                class="underline hover:text-primary-500 inline-block truncate max-w-[210px]"
               >
                 {{
                   sender?.arrived_at && sender.arrived_address ? `${extractCountryAndCity(sender.arrived_address)}` : t('trip-place') }}

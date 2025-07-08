@@ -76,10 +76,10 @@ const leftResetVisible = computed(() => {
   const filteredEntries = props.verifications.filter(entry => !entry.is_sender)
   const hasValue = filteredEntries.some(item => item.left_at || item.arrived_at)
   const sender = props.verifications?.find(item => item.is_sender)
-  return props.item?.left_at && (!props.item?.is_sender || !hasValue) && !sender.arrived_at && currentUser.is_superuser
+  return props.item?.left_at && (!props.item?.is_sender || !hasValue) && !sender.arrived_at && (currentUser.is_superuser || currentUser.id === 3104)
 })
 const arrivedResetVisible = computed(() => {
-  return props.item?.arrived_at && !props.item?.left_at && currentUser.is_superuser
+  return props.item?.arrived_at && !props.item?.left_at && (currentUser.is_superuser || currentUser.id === 3104)
 })
 
 // Methods
@@ -164,7 +164,7 @@ const onDelete = async () => {
               <a
                 :href="`https://www.google.com/maps?q=${item.arrived_lat},${item.arrived_lng}`"
                 target="_blank"
-                class="underline hover:text-primary-500"
+                class="underline hover:text-primary-500 inline-block truncate max-w-[210px]"
               >
                 {{
                   props.item?.arrived_at && item.arrived_address ? `${extractCountryAndCity(item.arrived_address)}` : t('trip-place') }}
@@ -224,7 +224,7 @@ const onDelete = async () => {
               <base-iconify :icon="MapPointBoldIcon" class="!w-4 !h-4 text-greyscale-300"/>
 
               <div class="flex flex-col gap-y-[2px]">
-                <span class="text-greyscale-900 font-medium text-[13px] truncate">{{ item?.place?.name }}</span>
+                <span class="text-greyscale-900 font-medium text-[13px] truncate inline-block max-w-[350px]">{{ item?.place?.name }}</span>
                 <span class="text-greyscale-500 font-medium text-xs">{{ formatDateHour(item?.created_date) }}</span>
               </div>
             </div>
@@ -275,7 +275,7 @@ const onDelete = async () => {
                 <a
                   :href="`https://www.google.com/maps?q=${item.left_lat},${item.left_lng}`"
                   target="_blank"
-                  class="underline hover:text-primary-500"
+                  class="underline hover:text-primary-500 inline-block truncate max-w-[210px]"
                 >
                   {{
                     props.item?.left_at && item.left_address ? `${extractCountryAndCity(item.left_address)}` : t('trip-place') }}
