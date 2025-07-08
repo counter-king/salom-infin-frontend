@@ -112,7 +112,7 @@ const onResetClick = (item, type) => {
               <a
                 :href="`https://www.google.com/maps?q=${sender.arrived_lat},${sender.arrived_lng}`"
                 target="_blank"
-                class="underline hover:text-primary-500 inline-block truncate max-w-[200px]"
+                class="underline hover:text-primary-500 inline-block truncate max-w-[185px]"
               >
                 {{
                   sender?.arrived_at && sender.arrived_address ? `${extractCountryAndCity(sender.arrived_address)}` : t('trip-place') }}
