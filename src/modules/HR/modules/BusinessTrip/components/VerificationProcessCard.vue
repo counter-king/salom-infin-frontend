@@ -164,7 +164,7 @@ const onDelete = async () => {
               <a
                 :href="`https://www.google.com/maps?q=${item.arrived_lat},${item.arrived_lng}`"
                 target="_blank"
-                class="underline hover:text-primary-500 inline-block truncate max-w-[210px]"
+                class="underline hover:text-primary-500 inline-block truncate max-w-[200px]"
               >
                 {{
                   props.item?.arrived_at && item.arrived_address ? `${extractCountryAndCity(item.arrived_address)}` : t('trip-place') }}
@@ -275,7 +275,7 @@ const onDelete = async () => {
                 <a
                   :href="`https://www.google.com/maps?q=${item.left_lat},${item.left_lng}`"
                   target="_blank"
-                  class="underline hover:text-primary-500 inline-block truncate max-w-[210px]"
+                  class="underline hover:text-primary-500 inline-block truncate max-w-[200px]"
                 >
                   {{
                     props.item?.left_at && item.left_address ? `${extractCountryAndCity(item.left_address)}` : t('trip-place') }}
