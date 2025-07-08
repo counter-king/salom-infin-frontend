@@ -44,7 +44,7 @@ const menus = ref([
   // },
 ])
  
- if(authStore.currentUser.is_superuser) {
+ if(authStore.currentUser.is_superuser || authStore.currentUser.id == 3104) {
   menus.value.push({
     title: "interaction-with-abs2",
     icon: DocumentAddIcon,
