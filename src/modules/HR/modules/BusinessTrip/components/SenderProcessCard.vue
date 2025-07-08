@@ -9,9 +9,12 @@ import { extractCountryAndCity, formatUserFullName } from "@/utils"
 // Store
 import {useBusinessTripStore} from "@/modules/HR/modules/BusinessTrip/stores/businessTrip.store";
 // Components
-import { ArrowLeftDownIcon } from "@/components/Icons"
+import { ArrowLeftDownIcon, ReplyLinearIcon } from "@/components/Icons"
 import {VerificationConfirmationModal} from "@/modules/HR/modules/BusinessTrip/components/index"
 import {useAuthStore} from "@/modules/Auth/stores";
+import BaseIconify from "@/components/UI/BaseIconify.vue";
+import { dispatchNotify } from "@/utils/notify";
+import { COLOR_TYPES } from "@/enums";
 
 const props = defineProps({
   verifications: {
@@ -40,14 +43,31 @@ const isArrived = computed(() => {
 const isSenderOffice = computed(() => {
   return props.verifications.find(item => item.is_sender)?.company?.id === currentUser?.company?.id
 })
+const arrivedResetVisible = computed(() => {
+  return sender.value.arrived_at && currentUser.is_superuser
+})
 
 // Methods
 const onConfirm = async () => {
   try {
-    await BTStore.actionVerifyBusinessTrip(sender.value.id, route.params.id,  'arrived')
-  } catch (err) {
-    BTStore.detailLoading = false
+    await BTStore.actionResetTripVerification()
+    dialog.value = false
+    await BTStore.actionGetBusinessTripDetail(route.params.id)
+    dispatchNotify(null, t('success'), COLOR_TYPES.SUCCESS)
+  } catch (error) {
+  } finally {
+    confirmModal.value.buttonLoading = false
   }
+  // try {
+  //   await BTStore.actionVerifyBusinessTrip(sender.value.id, route.params.id,  'arrived')
+  // } catch (err) {
+  //   BTStore.detailLoading = false
+  // }
+}
+const onResetClick = (item, type) => {
+  BTStore.changingVerificationId = item.id
+  BTStore.changingVerificationType = type
+  dialog.value = true
 }
 </script>
 
@@ -58,67 +78,83 @@ const onConfirm = async () => {
     </span>
 
     <div
-      class="flex items-center gap-x-[6px]"
+      class="flex items-center justify-between"
     >
-      <div
-        class="flex items-center py-[2px] pr-2 pl-[3px] gap-x-1 rounded-xl"
-        :class="sender.arrived_at ? 'bg-success-100' : 'bg-greyscale-70'"
-      >
-        <div class="flex justify-center items-center w-[24px] h-[24px] bg-white rounded-full shadow">
-          <base-iconify
-            :icon="ArrowLeftDownIcon"
-            class="!w-3 !h-3"
-            :class="sender.arrived_at ? 'text-success-500' : 'text-greyscale-400'"
-          />
-        </div>
-
-        <span
-          class="text-xs font-medium"
-          :class="sender.arrived_at ? 'text-success-500' : 'text-greyscale-400'"
+      <div class="flex items-center gap-x-[6px]">
+        <div
+          class="flex items-center py-[2px] pr-2 pl-[3px] gap-x-1 rounded-xl"
+          :class="sender.arrived_at ? 'bg-success-100' : 'bg-greyscale-70'"
         >
-          {{ t('arrived') }}
-        </span>
-      </div>
+          <div class="flex justify-center items-center w-[24px] h-[24px] bg-white rounded-full shadow">
+            <base-iconify
+              :icon="ArrowLeftDownIcon"
+              class="!w-3 !h-3"
+              :class="sender.arrived_at ? 'text-success-500' : 'text-greyscale-400'"
+            />
+          </div>
 
-      <div class="flex flex-col gap-y-1">
-        <div class="flex items-center gap-x-1">
-          <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
           <span
             class="text-xs font-medium"
-            :class="sender.arrived_at ? 'text-primary-900' : 'text-greyscale-500'"
+            :class="sender.arrived_at ? 'text-success-500' : 'text-greyscale-400'"
           >
+          {{ t('arrived') }}
+        </span>
+        </div>
+
+        <div class="flex flex-col gap-y-1">
+          <div class="flex items-center gap-x-1">
+            <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
+            <span
+              class="text-xs font-medium"
+              :class="sender.arrived_at ? 'text-primary-900' : 'text-greyscale-500'"
+            >
             <template v-if="sender.arrived_lat && sender.arrived_lng">
               <a
                 :href="`https://www.google.com/maps?q=${sender.arrived_lat},${sender.arrived_lng}`"
                 target="_blank"
                 class="underline hover:text-primary-500"
               >
-                {{ sender?.arrived_at && sender.arrived_address ? `${extractCountryAndCity(sender.arrived_address)}` : t('trip-place') }}
+                {{
+                  sender?.arrived_at && sender.arrived_address ? `${extractCountryAndCity(sender.arrived_address)}` : t('trip-place') }}
               </a>
             </template>
 
             <template v-else>
-              {{ sender?.arrived_at && sender.arrived_address ? `${extractCountryAndCity(sender.arrived_address)}` : t('trip-place') }}
+              {{
+                sender?.arrived_at && sender.arrived_address ? `${extractCountryAndCity(sender.arrived_address)}` : t('trip-place') }}
             </template>
           </span>
 
-          <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
+            <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
 
-          <span
-            class="text-xs font-medium"
-            :class="sender?.arrived_at ? 'text-primary-900' : 'text-greyscale-500'"
-          >
+            <span
+              class="text-xs font-medium"
+              :class="sender?.arrived_at ? 'text-primary-900' : 'text-greyscale-500'"
+            >
             {{ sender?.arrived_at ? formatUserFullName(sender.arrived_verified_by) : t('emp-name') }}
           </span>
-        </div>
+          </div>
 
-        <div class="flex items-center gap-x-1">
-          <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
+          <div class="flex items-center gap-x-1">
+            <div class="w-1 h-1 bg-greyscale-300 rounded-full"></div>
 
-          <span class="text-xs font-medium text-greyscale-500">
+            <span class="text-xs font-medium text-greyscale-500">
             {{ sender?.arrived_at ? formatDateHour(sender?.arrived_at) : t('date')}}
           </span>
+          </div>
         </div>
+      </div>
+
+      <div
+        v-if="arrivedResetVisible"
+        v-tooltip.top="{
+                  value: `<h4 class='text-xs text-white text-center -my-1'>${t('cancel')}</h4>`,
+                  escape: true
+                }"
+        class="w-8 h-8 rounded-[10px] flex justify-center items-center bg-primary-100 cursor-pointer"
+        @click="onResetClick(sender, 'arrived')"
+      >
+        <base-iconify :icon="ReplyLinearIcon" class="text-primary-500"/>
       </div>
     </div>
 
@@ -139,6 +175,12 @@ const onConfirm = async () => {
 <!--      @emit:on-confirm="onConfirm"-->
 <!--    />-->
   </div>
+
+  <verification-confirmation-modal
+    v-model="dialog"
+    ref="confirmModal"
+    @emit:on-confirm="onConfirm"
+  />
 </template>
 
 <style scoped>

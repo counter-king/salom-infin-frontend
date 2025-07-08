@@ -925,5 +925,6 @@
   "password-not-match": "Parol mos kelmaydi",
   "add-approvers": "Kelishishga xodim qo'shish",
   "changed_notice": "O'zgartirish bildirishnomasi",
-  "changed_decree": "O'zgartirish farmoyishi"
+  "changed_decree": "O'zgartirish farmoyishi",
+  "undo": ""
 }

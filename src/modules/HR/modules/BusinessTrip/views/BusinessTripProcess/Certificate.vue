@@ -96,6 +96,20 @@ const orderRegisteredDate = computed(() => {
 const curatorFullName = computed(() => {
   return BTStore.detailModel?.compose && BTStore.detailModel?.compose[0]?.curator
 })
+const isTripChanged = computed(() => {
+  return BTStore.detailModel?.compose && BTStore.detailModel?.compose.length > 2 && BTStore.detailModel?.end_date_2
+})
+const addedRegions = computed(() => {
+  const exclude = new Set(BTStore.detailModel?.locations?.map(l => l.id))
+  return BTStore.detailModel?.verifications?.filter(v => !exclude.has(v.region.id) && !v.is_sender)
+})
+const decree2RegisteredDate = computed(() => {
+  return BTStore.detailModel?.compose?.find(item => item.doc_type === 'changed_decree')?.register_date
+})
+const decree2RegisteredNumber = computed(() => {
+  return BTStore.detailModel?.compose?.find(item => item.doc_type === 'changed_decree')?.register_number
+})
+
 
 // Methods
 const generatePdf = async () => {
@@ -143,19 +157,26 @@ const generatePdf = async () => {
 
           <div>
             <span class="font-semibold">Xizmat safari muddati: </span> {{ formatDate(BTStore.detailModel?.start_date) }}
-            dan {{ formatDate(BTStore.detailModel?.end_date) }} gacha ({{ numberOfDays }} kun)
+            dan {{ isTripChanged ? formatDate(BTStore.detailModel?.end_date_2) : formatDate(BTStore.detailModel?.end_date) }} gacha ({{ numberOfDays }} kun)<template v-if="isTripChanged">, {{ formatDate(BTStore.detailModel?.start_date) }} dan {{ formatDate(BTStore.detailModel?.end_date) }} gacha</template>
           </div>
 
           <div>
             <span class="font-semibold">Safarga boradigan joylari: </span>
             <span v-for="(location, index) in BTStore.detailModel?.locations">{{ location.name_uz }}<span
               v-if="index !== BTStore.detailModel?.locations.length - 1">,</span> &nbsp; </span>
+            <template v-if="isTripChanged && addedRegions.length">
+              (<span v-for="(item, itemIndex) in addedRegions">{{ item?.region?.name_uz }}<span
+                v-if="itemIndex !== addedRegions.length - 1">, &nbsp;</span></span>)
+            </template>
           </div>
 
           <div>
             <span class="font-semibold">Asos: </span> {{ orderRegisteredDate ? formatDate(orderRegisteredDate) : '__.__.____' }} dagi {{
               orderRegisteredNumber ? orderRegisteredNumber : '__'
-            }}-sonli {{ docType === 'order' ? 'buyruq' : 'farmoyish' }}
+            }}-sonli {{ docType === 'order' ? 'buyruq' : 'farmoyish' }}<template v-if="isTripChanged">,
+            {{ decree2RegisteredDate ? formatDate(decree2RegisteredDate) : '__.__.____' }} dagi
+            {{ decree2RegisteredNumber ? decree2RegisteredNumber : '__' }}-sonli farmoyish
+            </template>
           </div>
         </div>
 

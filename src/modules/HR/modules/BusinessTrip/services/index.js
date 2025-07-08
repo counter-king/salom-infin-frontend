@@ -89,3 +89,9 @@ export const fetchDeleteTagById = (id) => {
 export const fetchUpdateBusinessTripVerification = ({ id, body }) => {
   return axiosConfig.post(`${URLS.tripVerification}s/${id}/`, body)
 }
+export const fetchResetTripVerification = ({ id, body }) => {
+  return axiosConfig.post(`${URLS.tripVerification}/${id}/reset/`, body)
+}
+export const fetchDeleteVisitedPlace = (id) => {
+  return axiosConfig.delete(`visited-places/${id}/`)
+}

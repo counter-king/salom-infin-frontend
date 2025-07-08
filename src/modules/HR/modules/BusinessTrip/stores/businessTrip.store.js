@@ -4,9 +4,10 @@ import { defineStore } from 'pinia'
 import {
   fetchAdvanceReportCreate,
   fetchBusinessTripDetail,
-  fetchBusinessTripList, fetchMarkBusinessTripArrived, fetchMarkBusinessTripLeft,
+  fetchBusinessTripList, fetchMarkBusinessTripArrived, fetchMarkBusinessTripLeft, fetchResetTripVerification,
 } from "@/modules/HR/modules/BusinessTrip/services"
 import { fetchBlobFile } from "@/services/file.service";
+import Props from "@/components/Users/props";
 
 export const useBusinessTripStore = defineStore("business-trip-store", {
   state: () => ({
@@ -20,6 +21,8 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
     buttonLoading: false,
     businessTripList: [],
     detailModel: {},
+    changingVerificationId: null,
+    changingVerificationType: null,
     headers: [
       {
         header: "employee",
@@ -131,6 +134,20 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
         if (response && response.status === 200) {
           await this.actionGetBusinessTripDetail(tripId)
         }
+      }
+    },
+    /** **/
+    async actionResetTripVerification(type) {
+      try {
+        const res = await fetchResetTripVerification({
+          id: this.changingVerificationId,
+          body: {
+            type: this.changingVerificationType
+          }
+        })
+        return Promise.resolve()
+      } catch (error) {
+        return Promise.reject(error)
       }
     },
     /** **/
