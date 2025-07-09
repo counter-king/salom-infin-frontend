@@ -52,7 +52,7 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
         {
           field:  HEADERS.DOCUMENT_TYPE,
           header: HEADERS_TITLE[HEADERS.DOCUMENT_TYPE],
-          width: '10%',
+          width: '9%',
           active: true,
           filter: false,
         },
@@ -66,28 +66,35 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
         {
           field: HEADERS.OPERATION_TYPE,
           header: HEADERS_TITLE[HEADERS.OPERATION_TYPE],
-          width: '10%',
+          width: '9%',
           active: true,
           filter: false
         },
         {
           field: HEADERS.TYPE,
           header: HEADERS_TITLE[HEADERS.TYPE],
-          width: '8%',
+          width: '6%',
           active: true,
           filter: false
         },
         {
           field: HEADERS.STATUS_ABS,
           header: HEADERS_TITLE[HEADERS.STATUS_ABS],
-          width: '10%',
+          width: '8%',
+          active: true,
+          filter: false
+        },
+        {
+          field: HEADERS.CREATE_DATE,
+          header: HEADERS_TITLE[HEADERS.CREATE_DATE],
+          width: '6%',
           active: true,
           filter: false
         },
         {
           field: HEADERS.HISTORY,
           header: HEADERS_TITLE[HEADERS.HISTORY],
-          width: '6%',
+          width: '5%',
           active: true,
           filter: false
         },
@@ -139,6 +146,7 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
             department: item.user.top_level_department,
             documentType: item.compose.document_type,
             composeId: item.compose.id,
+            createdDate: item.compose?.created_date,
             documentSubType: item.compose.document_sub_type,
             operationType: item.action,
             statusAbs: item.status,

@@ -16,7 +16,8 @@ import { useInteractionABSStore } from '../stores';
 import { HEADERS, HEADERS_TITLE, INTERACTION_ABS_COLUMNS, OPERATION_TYPE, OPERATION_TYPE_TITLE, STATUS_ABS, STATUS_ABS_TITLE, TYPE } from '../enums'
 // services
 import { getRetryIabsAction } from '../services';
-
+// utils
+import { formatDate } from '@/utils/formatDate'
 // composibles
 const interactionABSStore = useInteractionABSStore()
 const { t } = useI18n()
@@ -421,6 +422,9 @@ onUnmounted(() => {
           </template>
           <template #statusAbs="{ data }"> 
             <status :status="data.statusAbs" />
+          </template>
+          <template #createDate="{ data }">
+            <p class="text-sm font-medium text-greyscale-900">{{ formatDate(data?.createdDate) }}</p>
           </template>
           <template #history="{ data }">
             <base-iconify :icon="History2Icon" class="w-6 h-6 text-greyscale-400" @click="onHistoryClick(data)"/>

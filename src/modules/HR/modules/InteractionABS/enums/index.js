@@ -11,7 +11,8 @@ export const HEADERS = {
   STATUS_ABS: 'statusAbs',
   HISTORY: 'history',
   TYPE: 'type',
-  ACTIONS: 'actions'
+  ACTIONS: 'actions',
+  CREATE_DATE: 'createDate'
 } 
 
 export const HEADERS_TITLE = {
@@ -25,7 +26,8 @@ export const HEADERS_TITLE = {
   [HEADERS.STATUS_ABS]: 'status-abs',
   [HEADERS.HISTORY]: 'history',
   [HEADERS.TYPE]: 'type',
-  [HEADERS.ACTIONS]: 'actions'
+  [HEADERS.ACTIONS]: 'actions',
+  [HEADERS.CREATE_DATE]: 'created-date'
 }
 
 export const STATUS_ABS = {
