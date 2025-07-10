@@ -426,6 +426,9 @@ onUnmounted(() => {
           <template #createDate="{ data }">
             <p class="text-sm font-medium text-greyscale-900">{{ formatDate(data?.createdDate) }}</p>
           </template>
+          <template #requestId="{ data }">
+            <p class="text-sm font-medium text-greyscale-900">{{ data?.requestId }}</p>
+          </template>
           <template #history="{ data }">
             <base-iconify :icon="History2Icon" class="w-6 h-6 text-greyscale-400" @click="onHistoryClick(data)"/>
           </template>
