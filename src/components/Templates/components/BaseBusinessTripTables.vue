@@ -185,10 +185,10 @@ const bookings = computed(() => {
           Xizmat safari muddati:
         </td>
         <td class="w-1/3">
-          Jo'nab ketish sanasi
+          Boshlanish sanasi
         </td>
         <td class="w-1/3">
-          Yetib kelish sanasi
+          Tugash sanasi
         </td>
       </tr>
 
