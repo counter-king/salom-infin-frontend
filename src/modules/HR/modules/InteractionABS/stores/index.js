@@ -2,6 +2,52 @@ import { defineStore } from 'pinia'
 import { getCompanyList, getTopDepartmentsList, getDocumentTypeList, getDocumentSubTypeList, getIabsActionList, getIabsRequestCalls, fetchGetUsersList } from '../services'
 import { HEADERS, HEADERS_TITLE } from '../enums'
 
+// const mockData = {
+//   data : {
+//     count : 100,
+//     results : [
+//       {
+//         "id": 167,
+//         "action": "create",
+//         "request_id": "1",
+//         "compose": {
+//           "id": 1541,
+//           "document_type": {
+//             "id": 4,
+//             "name": "Farmoyish"
+//           },
+//           "document_sub_type": {
+//             "id": 36,
+//             "name": "Xizmat safari farmoyishi 2"
+//           },
+//           "register_number": "5/429"
+//         },
+//         "content_type": 61,
+//         "iabs_id": null,
+//         "object_id": 1818,
+//         "result": "Missing orderId",
+//         "status": "failed",
+//         "user": {
+//           "id": 2953,
+//           "full_name": "XOJALEPESOV AMANGELDI ABATBEKOVICH",
+//           "position": {
+//             "id": 1546,
+//             "name": "Yetakchi menejer"
+//           },
+//           "top_level_department": {
+//             "id": 1537,
+//             "name": "Kredit monitoringi va nazorati departamenti"
+//           },
+//           "table_number": "143556",
+//           "company": {
+//             "id": 17,
+//             "name": "Bosh bank"
+//           }
+//         }
+//       }
+//     ]
+//   }
+// }
 export const useInteractionABSStore = defineStore('interaction-abs-store', {
     state: () => ({
       iabsActionListLoading: false,
@@ -52,7 +98,7 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
         {
           field:  HEADERS.DOCUMENT_TYPE,
           header: HEADERS_TITLE[HEADERS.DOCUMENT_TYPE],
-          width: '10%',
+          width: '9%',
           active: true,
           filter: false,
         },
@@ -66,28 +112,42 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
         {
           field: HEADERS.OPERATION_TYPE,
           header: HEADERS_TITLE[HEADERS.OPERATION_TYPE],
-          width: '10%',
+          width: '9%',
           active: true,
           filter: false
         },
         {
           field: HEADERS.TYPE,
           header: HEADERS_TITLE[HEADERS.TYPE],
-          width: '8%',
+          width: '6%',
           active: true,
           filter: false
         },
         {
           field: HEADERS.STATUS_ABS,
           header: HEADERS_TITLE[HEADERS.STATUS_ABS],
-          width: '10%',
+          width: '8%',
+          active: true,
+          filter: false
+        },
+        {
+          field: HEADERS.REQUEST_ID,
+          header: HEADERS_TITLE[HEADERS.REQUEST_ID],
+          width: '4%',
+          active: true,
+          filter: false
+        },
+        {
+          field: HEADERS.CREATE_DATE,
+          header: HEADERS_TITLE[HEADERS.CREATE_DATE],
+          width: '6%',
           active: true,
           filter: false
         },
         {
           field: HEADERS.HISTORY,
           header: HEADERS_TITLE[HEADERS.HISTORY],
-          width: '6%',
+          width: '5%',
           active: true,
           filter: false
         },
@@ -103,13 +163,13 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
         {
           field: 'caller',
           header: 'employee',
-          width: '20%',
+          width: '15%',
           active: true
         },
         {
           field: 'date',
           header: 'date',
-          width: '20%',
+          width: '15%',
           active: true
         },
         {
@@ -119,11 +179,17 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
           active: true
         },
         {
+          field: 'requestId',
+          header: 'request-id',
+          width: '10%',
+          active: true
+        },
+        {
           field: 'responseText',
           header: 'response-result',
           width: '40%',
           active: true
-        }
+        },
       ]
     }),
     actions: {   
@@ -139,11 +205,13 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
             department: item.user.top_level_department,
             documentType: item.compose.document_type,
             composeId: item.compose.id,
+            createdDate: item.compose?.created_date,
             documentSubType: item.compose.document_sub_type,
             operationType: item.action,
             statusAbs: item.status,
             type: item.type,
-            iabsId: item.iabs_id
+            iabsId: item.iabs_id,
+            requestId: item?.request_id
           }))
           
           this.iabsActionListTotalCount = response.data?.count

@@ -926,5 +926,6 @@
   "add-approvers": "Kelishishga xodim qo'shish",
   "changed_notice": "O'zgartirish bildirishnomasi",
   "changed_decree": "O'zgartirish farmoyishi",
-  "undo": ""
+  "undo": "",
+  "request-id": "So'rov ID"
 }

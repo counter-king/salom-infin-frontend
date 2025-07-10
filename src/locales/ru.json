@@ -929,5 +929,6 @@
   "password-not-match": "Пароль не совпадает",
   "add-approvers": "Добавить на согласование",
   "changed_notice": "Рапорт изменение",
-  "changed_decree": "Распоряжения изменение"
+  "changed_decree": "Распоряжения изменение",
+  "request-id": "ID запроса"
 }
