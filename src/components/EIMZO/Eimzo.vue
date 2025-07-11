@@ -148,18 +148,25 @@ const uiFillCombo = (items) => {
       const expired = itemVo?.expired
       const pinfl = itemVo?.PINFL
 
-      const shouldAdd =
-        (props.type === 'sign' && pinfl && currentUserPinfl && pinfl === currentUserPinfl) ||
-        (props.type === 'login')
+      pfxKeys.value.push({
+        name: item.text,
+        value: item.value,
+        option: item,
+        expired
+      })
 
-      if (shouldAdd) {
-        pfxKeys.value.push({
-          name: item.text,
-          value: item.value,
-          option: item,
-          expired
-        })
-      }
+      // const shouldAdd =
+      //   (props.type === 'sign' && pinfl && currentUserPinfl && pinfl === currentUserPinfl) ||
+      //   (props.type === 'login')
+      //
+      // if (shouldAdd) {
+      //   pfxKeys.value.push({
+      //     name: item.text,
+      //     value: item.value,
+      //     option: item,
+      //     expired
+      //   })
+      // }
     })
 
     pfxKeys.value = pfxKeys.value.sort((a, b) => a.expired - b.expired)
