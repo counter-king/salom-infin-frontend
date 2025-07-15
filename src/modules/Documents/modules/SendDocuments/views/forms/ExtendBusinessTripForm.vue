@@ -320,6 +320,7 @@ onUnmounted(() => {
                           placeholder="select-employees"
                           :show-nested-error="showNestedError"
                           :disabled="formType === FORM_TYPE_UPDATE"
+                          :allSelectable="true"
                           @update:modelValue="store.actionAddUsersToExtend(group, index)"
 
                         />
