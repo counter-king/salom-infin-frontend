@@ -65,6 +65,9 @@ const handleSelect = (item) => {
     checkboxIndex.value = id
   }
 }
+const handleAvatarClick = (event, item) => {
+  event.stopPropagation()
+}
 </script>
 
 <template>
@@ -89,6 +92,7 @@ const handleSelect = (item) => {
         :size="props.size"
         :shape="props.shape"
         :avatarClasses="props.avatarClasses"
+        @click="(event) => handleAvatarClick(event, item)"
       />
 
       <div class="flex-1 font-medium">

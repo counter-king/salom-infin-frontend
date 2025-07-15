@@ -132,6 +132,14 @@ const props = defineProps({
   searchable: {
     type: Boolean,
     default: true
+  },
+  selectableStatuses: {
+    type: Array,
+    default: () => [USER_STATUS_CODES.WORKERS]
+  },
+  allSelectable: {
+    type: Boolean,
+    default: false
   }
 })
 // Reactive
@@ -198,7 +206,7 @@ const removeItem = (event, value) => {
 }
 const selectItem = (event, value) => {
   // Если это статус не Рабочие
-  if(value?.status && value?.status?.code !== USER_STATUS_CODES.WORKERS) {
+  if((value?.status && !props.selectableStatuses.includes(value?.status?.code)) && !props.allSelectable) {
     event.stopPropagation()
     return
   }
@@ -395,7 +403,7 @@ const  handleEnterPress = () => {
       <template #option="{ option }">
         <div
           class="absolute top-0 left-0 w-full h-full"
-          :class="{ 'bg-greyscale-50/50 cursor-not-allowed': option?.status && option?.status?.code !== USER_STATUS_CODES.WORKERS }"
+          :class="{ 'bg-greyscale-50/50 cursor-not-allowed': (option?.status && !selectableStatuses.includes(option?.status?.code)) && !allSelectable}"
           @click="(event) => selectItem(event, option)"
         ></div>
         <slot name="option" :value="option" />

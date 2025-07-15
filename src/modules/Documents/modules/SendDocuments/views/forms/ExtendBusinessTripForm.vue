@@ -10,7 +10,7 @@ import { useBusinessTripStore } from "@/modules/Documents/modules/SendDocuments/
 import { useExtendBusinessTripStore } from "@/modules/Documents/modules/SendDocuments/stores/extendBusinessTrip.store"
 // Constants
 import { FORM_TYPE_CREATE, FORM_TYPE_UPDATE } from "@/constants/constants"
-import { COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL } from "@/enums"
+import { COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL, USER_STATUS_CODES } from "@/enums"
 // Utils
 import { returnBTRoute } from "@/modules/Documents/modules/SendDocuments/utils"
 import { formatDate, formatDateReverse } from "@/utils/formatDate"
