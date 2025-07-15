@@ -132,6 +132,7 @@ const emit = defineEmits(['emit:onValidateAndSend'])
                 label="who-is-going-to-business-trip"
                 placeholder="select-employees"
                 required
+                allSelectable
                 :show-nested-error="showNestedError"
               />
             </base-col>
