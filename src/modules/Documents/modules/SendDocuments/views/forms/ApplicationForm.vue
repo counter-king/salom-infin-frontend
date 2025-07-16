@@ -181,11 +181,9 @@ onUnmounted(() => {
 
             <base-col col-class="w-1/2">
               <user-multi-select
-                v-model="$v.__approvers.$model"
-                :error="$v.__approvers"
+                v-model="applicationStore.model.__approvers"
                 label="approvers"
                 placeholder="enter-approvers"
-                required
               />
             </base-col>
 
