@@ -92,7 +92,8 @@ export const COMPOSE_DOCUMENT_SUB_TYPES = {
   BUSINESS_TRIP_NOTICE_V2:       '35', // Командировка 2
   BUSINESS_TRIP_DECREE_V2:       '36', // Командировочная распоряжения
   EXTEND_BUSINESS_TRIP_NOTICE:   '37', // Продлить командировку
-  EXTEND_BUSINESS_TRIP_DECREE:   '38'  // Продлить командировку распоряжения
+  EXTEND_BUSINESS_TRIP_DECREE:   '38', // Продлить командировку распоряжения
+  EXPLANATION_LETTER:            '39', // Пояснительное письмо
 }
 export const COLOR_TYPES = {
   PRIMARY: "primary",

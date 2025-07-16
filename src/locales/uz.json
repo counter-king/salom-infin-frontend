@@ -927,5 +927,8 @@
   "changed_notice": "O'zgartirish bildirishnomasi",
   "changed_decree": "O'zgartirish farmoyishi",
   "undo": "",
-  "request-id": "So'rov ID"
+  "request-id": "So'rov ID",
+  "explanation-letter": "Tushuntirish xati",
+  "create-explanation-letter": "Tushuntirish xati yaratish",
+  "update-explanation-letter": "Tushuntirish xatini o'zgartirish"
 }

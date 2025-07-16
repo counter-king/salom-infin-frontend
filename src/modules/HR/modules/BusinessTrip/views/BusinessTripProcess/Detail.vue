@@ -57,15 +57,30 @@ const zoomFile = (event, file) => {
                 <span class="text-xs text-greyscale-900 font-semibold">{{ t(item.doc_type) }}</span>
               </div>
 
-              <div class="flex items-center gap-x-1">
+              <div class="flex items-center gap-x-3">
+                <div
+                  v-tooltip.top="{
+                    value: `<h4 class='text-xs text-white -my-1'>${t('preview-text')}</h4>`,
+                    escape: true,
+                    autoHide: false
+                  }"
+                  class="cursor-pointer"
+                  @click="zoomFile($event, item)"
+                >
+                  <base-iconify
+                    :icon="EyeIcon"
+                    class="text-greyscale-400 !w-4 !h-4"
+                  />
+                </div>
+
                 <div class="flex justify-center items-center border border-success-100 bg-success-50 text-xs font-semibold text-success-500 rounded-lg px-2 py-1">
                   {{ item.status }}
                 </div>
 
-                <base-iconify
-                  :icon="AltArrowRightIcon"
-                  class="text-greyscale-400 !w-4 !h-4"
-                />
+<!--                <base-iconify-->
+<!--                  :icon="AltArrowRightIcon"-->
+<!--                  class="text-greyscale-400 !w-4 !h-4"-->
+<!--                />-->
               </div>
             </div>
           </div>
@@ -112,6 +127,7 @@ const zoomFile = (event, file) => {
     </div>
   </div>
 
+<!--
   <div class="absolute flex flex-col gap-y-2 right-[32px] top-[102px] w-[298px] max-h-[72vh] overflow-y-auto rounded-2xl border border-primary-100 bg-primary-10 p-4 pt-3">
     <span class="text-base text-primary-900 font-semibold">{{ t('documents') }}</span>
 
@@ -140,6 +156,7 @@ const zoomFile = (event, file) => {
       />
     </div>
   </div>
+-->
 
   <!-- FILE PREVIEW -->
   <base-dialog v-model="filePreview" max-width="max-w-[820px]">

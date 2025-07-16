@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import {onMounted, onUnmounted, ref} from "vue"
+import { computed, onMounted, onUnmounted, ref } from "vue"
 import {useVuelidate} from "@vuelidate/core"
 import {useI18n} from "vue-i18n"
 import {useRoute, useRouter} from "vue-router"
@@ -44,7 +44,15 @@ const {t} = useI18n()
 const router = useRouter()
 const route = useRoute()
 
-const $v = useVuelidate(applicationStore.rules, applicationStore.model);
+const $v = useVuelidate(applicationStore.rules, applicationStore.model)
+
+// Computed
+const title = computed(() => {
+  if (route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.EXPLANATION_LETTER) {
+    return props.formType === FORM_TYPE_CREATE ? 'create-explanation-letter' : 'update-explanation-letter'
+  }
+  return props.formType === FORM_TYPE_CREATE ? 'create-sd-application' : 'update-sd-application'
+})
 
 // Methods
 const preview = async () => {
@@ -102,8 +110,8 @@ const update = async () => {
     name: ROUTE_SD_DETAIL,
     params: {
       id: route.params.id,
-      document_type: COMPOSE_DOCUMENT_TYPES.APPLICATION,
-      document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.LABOR_LEAVE
+      document_type: route.params.document_type,
+      document_sub_type: route.params.document_sub_type,
     }
   });
 }
@@ -132,7 +140,7 @@ onUnmounted(() => {
 
   <template v-else>
     <layout-with-tabs-compose
-      :title="props.formType === FORM_TYPE_CREATE ? 'create-sd-application' : 'update-sd-application'"
+      :title="title"
     >
       <template #content>
         <form-container
@@ -221,6 +229,7 @@ onUnmounted(() => {
             author: props.formType === FORM_TYPE_CREATE ? authStore.currentUser : applicationStore.model.__signers[0].user,
             signers: props.formType === FORM_TYPE_CREATE ? [authStore.currentUser] : applicationStore.model.__signers,
           }"
+          :preview="true"
         />
       </template>
     </preview-dialog>

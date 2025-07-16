@@ -331,6 +331,14 @@ export const useSDStore = defineStore("sd-stores", {
             documentType: COMPOSE_DOCUMENT_TYPES.APPLICATION,
             documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.APPLICATION
           },
+          {
+            label: 'explanation-letter',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.APPLICATION,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.EXPLANATION_LETTER
+          },
         ],
       },
       {

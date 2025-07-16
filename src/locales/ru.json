@@ -930,5 +930,8 @@
   "add-approvers": "Добавить на согласование",
   "changed_notice": "Рапорт изменение",
   "changed_decree": "Распоряжения изменение",
-  "request-id": "ID запроса"
+  "request-id": "ID запроса",
+  "explanation-letter": "Пояснительное письмо",
+  "create-explanation-letter": "Создать пояснительное письмо",
+  "update-explanation-letter": "Изменить пояснительное письмо"
 }
