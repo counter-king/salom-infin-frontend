@@ -43,7 +43,7 @@ const curator = computed(() => {
 })
 
 const signers = computed(() => {
-  return props.preview ? props.composeModel?.__signers : props.composeModel?.signers.filter(item => item.type === SIGNER_TYPES.SIGNER)
+  return props.preview ? props.composeModel?.signers : props.composeModel?.signers.filter(item => item.type === SIGNER_TYPES.SIGNER)
 })
 
 </script>
