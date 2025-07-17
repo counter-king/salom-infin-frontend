@@ -118,7 +118,8 @@ export const useSalaryStore = defineStore('salary-store', {
 
         let { data } = await fetchSalary({
           passcode: getStorageItem('PASSCODE'),
-          date: formatDate(date)
+          date: formatDate(date),
+          page_size: 50
         })
         this.salaryList = data.results
         return Promise.resolve()
@@ -141,7 +142,8 @@ export const useSalaryStore = defineStore('salary-store', {
 
         let { data } = await fetchSalaryStatistic({
           passcode: getStorageItem('PASSCODE'),
-          date
+          date,
+          page_size: 50
         })
         // const model = [
         //   {

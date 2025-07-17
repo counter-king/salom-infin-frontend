@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 // Components
 import { ActionToolbar, ExportButton } from '@/components/Actions'
@@ -84,6 +84,15 @@ const options = ref({
     }
   }
 })
+// Computed
+const dateRange = computed(() => {
+  if(date.value === (new Date().getFullYear()).toString() || salaryStore.salarySeries[0].data.length < 12) {
+    return salaryStore.salarySeries[0].data.length
+  }
+  else {
+    return 12
+  }
+})
 // Watch
 watch(
   () => salaryStore.isLoggedIn,
@@ -154,14 +163,14 @@ const handleYearMonth = async (index) => {
           ></apexchart>
 
           <div class="flex gap-6 -mx-2 pb-1 px-6">
-            <template v-for="(_, index) in date === (new Date().getFullYear()).toString() ? salaryStore.salarySeries[0].data.length : 12">
+            <template v-for="(_, index) in dateRange">
               <div class="flex justify-center flex-1">
                 <button
                   class="flex justify-center items-center h-7 bg-greyscale-70 text-sm text-greyscale-900 capitalize font-medium rounded-full px-3"
                   :class="{ 'bg-primary-500 text-white': date === (new Date().getFullYear()).toString() && month === index }"
                   @click="handleYearMonth(index)"
                 >
-                  {{ formatDateMonth(new Date().setMonth(index), locale, index) }}
+                  {{ formatDateMonth(new Date().setMonth(index), locale, (12 - salaryStore.salarySeries[0].data.length) +  index) }}
                 </button>
               </div>
             </template>

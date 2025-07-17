@@ -9,9 +9,11 @@ import {
   fetchLoginViaERI
 } from "../services/index"
 // Utils
+import { replaceErrorQuestionSymbol } from '@/utils'
 import { withAsync } from "@/utils/withAsync"
 import { saveStorageItem } from "@/utils/storage"
 import { ACCESS, REFRESH, EXPIRES } from "@/constants/storage"
+
 export const useAuthStore = defineStore("authStore", {
   state: () => ({
     // TODO: null
@@ -69,7 +71,11 @@ export const useAuthStore = defineStore("authStore", {
      * */
     async actionUserProfile() {
       const { response } = await withAsync(fetchCurrentUser)
-      this.currentUser = response.data
+
+      this.currentUser = {
+        ...response.data,
+        full_name: replaceErrorQuestionSymbol(response.data.full_name)
+      }
     }
   }
 })
