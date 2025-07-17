@@ -89,6 +89,10 @@ onMounted(async () => {
         <doc-type :type="data.compose.document_type.name"/>
       </template>
 
+      <template #document_sub_type="{ data }">
+        <doc-type :type="data.compose.document_sub_type.name"/>
+      </template>
+
       <template #register_date="{ data }">
         {{ data.compose.register_date ? formatDate(data.compose.register_date) : null }}
       </template>

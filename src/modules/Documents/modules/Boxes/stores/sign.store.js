@@ -42,6 +42,11 @@ export const useBoxesSignStore = defineStore("sign-stores", {
         active: true
       },
       {
+        header: "document-sub-type",
+        field: "document_sub_type",
+        active: true
+      },
+      {
         header: "Рег. дата",
         field: "register_date",
         active: true
@@ -84,6 +89,11 @@ export const useBoxesSignStore = defineStore("sign-stores", {
         {
           header: "letter-type",
           field: "document_type",
+          active: true
+        },
+        {
+          header: "document-sub-type",
+          field: "document_sub_type",
           active: true
         },
         {
