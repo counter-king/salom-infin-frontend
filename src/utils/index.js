@@ -125,6 +125,13 @@ export const maskNumbers = (number) => number.replace(/\D/g, '').replace( /(\d{3
  * */
 export const firstLetterCapitalize = (value) => value.charAt(0).toUpperCase() + value.slice(1)
 /**
+ * Замена ? символ на `
+ * @param { string } text
+ * */
+export const replaceErrorQuestionSymbol = (text) => {
+  return text.replace(/[?]/g, '`')
+}
+/**
  *
  * */
 export const getNiceStep = (maxValue, stepsCount) => {

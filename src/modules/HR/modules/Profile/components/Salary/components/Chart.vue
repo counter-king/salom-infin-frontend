@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 // Components
 import { ActionToolbar, ExportButton } from '@/components/Actions'
@@ -8,7 +8,6 @@ import Empty from '@/components/Empty.vue'
 // Stores
 import { useSalaryStore } from '../../../stores/salary.store'
 // Utils
-import { formatNumberWithFloat } from '@/utils'
 import { formatDateMonth } from '@/utils/formatDate'
 // Composable
 const { locale } = useI18n()
@@ -16,74 +15,6 @@ const salaryStore = useSalaryStore()
 // Reactive
 const date = ref(new Date().getFullYear().toString())
 const month = ref(new Date().getMonth())
-const options = ref({
-  chart: {
-    height: 275,
-    type: 'line',
-    zoom: {
-      enabled: false
-    }
-  },
-  dataLabels: {
-    enabled: false
-  },
-  title: {
-    text: 'Статистика',
-    align: 'left',
-    style: {
-      fontSize: '16px',
-      fontFamily: 'SFProDisplay-Semibold',
-      color: '#191F3F'
-    }
-  },
-  stroke: {
-    curve: 'straight',
-    lineCap: 'round',
-    colors: ['#635AFF'],
-    width: 4
-  },
-  grid: {
-    borderColor: '#E2E8F0',
-    strokeDashArray: 10,
-    row: {
-      colors: ['transparent', 'transparent'],
-      opacity: 1
-    },
-  },
-  markers: {
-    size: 6,
-    strokeWidth: 3,
-    colors: '#635AFF',
-    hover: {
-      size: 10,
-      sizeOffset: 10
-    }
-  },
-  tooltip: {
-    custom({ series, seriesIndex, dataPointIndex, w }) {
-      return `<div class="min-w-[110px] bg-primary-900 rounded-lg text-white text-center py-[6px] px-2">
-        <span class=" opacity-80">${w.globals.categoryLabels[dataPointIndex]}</span>
-        <div class="flex gap-1 justify-center text-sm">
-          <span class="font-medium">${ formatNumberWithFloat(series[seriesIndex][dataPointIndex])}</span>
-          <span class="font-regular">сум</span>
-        </div>
-      </div>`
-    }
-  },
-  xaxis: {
-    categories: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь ', 'Ноябрь', 'Декабрь'],
-    labels: {
-      show: false,
-    }
-  },
-  yaxis: {
-    labels: {
-      formatter: (value) => {
-        return String(parseInt(value)).length <= 9 ? `${value / 1e6} млн` : `${value / 1e9} млрд`
-      },
-    }
-  }
-})
 // Watch
 watch(
   () => salaryStore.isLoggedIn,
@@ -147,21 +78,21 @@ const handleYearMonth = async (index) => {
       <div class="salary-chart-view bg-primary-10 rounded-2xl pt-4 pb-3 px-3">
         <div class="-mx-1">
           <apexchart
-            :options="options"
+            :options="salaryStore.salaryOptions"
             :series="salaryStore.salarySeries"
             type="line"
             height="275"
           ></apexchart>
 
           <div class="flex gap-6 -mx-2 pb-1 px-6">
-            <template v-for="(_, index) in date === (new Date().getFullYear()).toString() ? salaryStore.salarySeries[0].data.length : 12">
+            <template v-for="(item, index) in salaryStore.salarySeries[0].list">
               <div class="flex justify-center flex-1">
                 <button
                   class="flex justify-center items-center h-7 bg-greyscale-70 text-sm text-greyscale-900 capitalize font-medium rounded-full px-3"
                   :class="{ 'bg-primary-500 text-white': date === (new Date().getFullYear()).toString() && month === index }"
                   @click="handleYearMonth(index)"
                 >
-                  {{ formatDateMonth(new Date().setMonth(index), locale, index) }}
+                  {{ formatDateMonth(new Date().setMonth(index), locale, item.month_value - 1) }}
                 </button>
               </div>
             </template>

@@ -9,13 +9,16 @@ import { fetchSetPasscode, fetchCheckPasscode, fetchSalary, fetchSalaryStatistic
 // Utils
 import { saveStorageItem, getStorageItem } from '@/utils/storage'
 import { formatDate } from '@/utils/formatDate'
+import {ref} from "vue";
+import {formatNumberWithFloat} from "@/utils";
 
 const defaultStore = {
   salaryList: [],
   salaryStatisticList: [],
   salarySeries: [{
     name: 'Salary',
-    data: []
+    data: [],
+    list: []
   }],
   headers: [
     {
@@ -44,9 +47,79 @@ const defaultStore = {
   }
 }
 
+const months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь ', 'Ноябрь', 'Декабрь']
+
 export const useSalaryStore = defineStore('salary-store', {
   state: () => ({
-    ...defaultStore
+    ...defaultStore,
+    salaryOptions: {
+      chart: {
+        height: 275,
+        type: 'line',
+        zoom: {
+          enabled: false
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      title: {
+        text: 'Статистика',
+        align: 'left',
+        style: {
+          fontSize: '16px',
+          fontFamily: 'SFProDisplay-Semibold',
+          color: '#191F3F'
+        }
+      },
+      stroke: {
+        curve: 'straight',
+        lineCap: 'round',
+        colors: ['#635AFF'],
+        width: 4
+      },
+      grid: {
+        borderColor: '#E2E8F0',
+        strokeDashArray: 10,
+        row: {
+          colors: ['transparent', 'transparent'],
+          opacity: 1
+        },
+      },
+      markers: {
+        size: 6,
+        strokeWidth: 3,
+        colors: '#635AFF',
+        hover: {
+          size: 10,
+          sizeOffset: 10
+        }
+      },
+      tooltip: {
+        custom({ series, seriesIndex, dataPointIndex, w }) {
+          return `<div class="min-w-[110px] bg-primary-900 rounded-lg text-white text-center py-[6px] px-2">
+        <span class=" opacity-80">${w.globals.categoryLabels[dataPointIndex]}</span>
+        <div class="flex gap-1 justify-center text-sm">
+          <span class="font-medium">${ formatNumberWithFloat(series[seriesIndex][dataPointIndex])}</span>
+          <span class="font-regular">сум</span>
+        </div>
+      </div>`
+        }
+      },
+      xaxis: {
+        categories: months,
+        labels: {
+          show: false,
+        }
+      },
+      yaxis: {
+        labels: {
+          formatter: (value) => {
+            return String(parseInt(value)).length <= 9 ? `${value / 1e6} млн` : `${value / 1e9} млрд`
+          },
+        }
+      }
+    }
   }),
   actions: {
     async setPasscode() {
@@ -118,7 +191,8 @@ export const useSalaryStore = defineStore('salary-store', {
 
         let { data } = await fetchSalary({
           passcode: getStorageItem('PASSCODE'),
-          date: formatDate(date)
+          date: formatDate(date),
+          page_size: 50
         })
         this.salaryList = data.results
         return Promise.resolve()
@@ -141,7 +215,8 @@ export const useSalaryStore = defineStore('salary-store', {
 
         let { data } = await fetchSalaryStatistic({
           passcode: getStorageItem('PASSCODE'),
-          date
+          date,
+          page_size: 50
         })
         // const model = [
         //   {
@@ -198,7 +273,14 @@ export const useSalaryStore = defineStore('salary-store', {
         //   ? model.slice(0, 4).map(salary => salary.monthly_salary)
         //   : data.results.map(salary => salary.monthly_salary)
 
+        const monthRange = {
+          start: data.results[0]?.month_value - 1 ?? '0',
+          end: data.results[data.results.length - 1]?.month_value ?? '0'
+        }
+
+        this.salaryOptions.xaxis.categories = months.slice(monthRange.start, monthRange.end)
         this.salarySeries[0].data = data.results.map(salary => salary.monthly_salary)
+        this.salarySeries[0].list = data.results
 
         return Promise.resolve()
       }
