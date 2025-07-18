@@ -79,7 +79,7 @@ export const COMPOSE_DOCUMENT_SUB_TYPES = {
   VACATION_OWN_EXPENSE:          '7', // Отпуск за свой счет
   CHILD_CARE_LEAVE:              '8', // Отпуск по уходу за ребенком
   ORDINARY_NOTICE:               '9', // Рапорт
-  BUSINESS_TRIP_DECREE_FOREIGN:  '10', // Командировочный распоряжение (зарубежный)
+  // BUSINESS_TRIP_DECREE_FOREIGN:  '10', // Командировочный распоряжение (зарубежный)
   ORDERS_BANK_MANAGEMENT:        '18', // Приказ правления банка
   APPLICATION:                   '27', // Заявление
   BUSINESS_TRIP_DECREE_LOCAL:    '28', // Командировочный распоряжение (локальный)
@@ -94,6 +94,8 @@ export const COMPOSE_DOCUMENT_SUB_TYPES = {
   EXTEND_BUSINESS_TRIP_NOTICE:   '37', // Продлить командировку
   EXTEND_BUSINESS_TRIP_DECREE:   '38', // Продлить командировку распоряжения
   EXPLANATION_LETTER:            '39', // Пояснительное письмо
+  BUSINESS_TRIP_NOTICE_FOREIGN:  '40', // Командировка (зарубежная)
+  BUSINESS_TRIP_DECREE_FOREIGN:  '41', // Командировочная распоряжения (зарубежная)
 }
 export const COLOR_TYPES = {
   PRIMARY: "primary",

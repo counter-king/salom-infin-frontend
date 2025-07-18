@@ -193,7 +193,7 @@ onMounted(() => {
         >
           <div
             class="min-h-full shadow-block border-[0.095rem] border-greyscale-200"
-            :class="[COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2, COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE].includes(String(SDStore.detailModel.document_sub_type.id)) ? '' : 'p-10'"
+            :class="[COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2, COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE, COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_FOREIGN].includes(String(SDStore.detailModel.document_sub_type.id)) ? '' : 'p-10'"
           >
             <base-template
               :compose-model="SDStore.detailModel"

@@ -86,7 +86,11 @@ const preview = async () => {
   store.decreeModel.sender = authStore?.currentUser?.top_level_department?.id
   // store.decreeModel.files = store.decreeModel.__files.map(item => { return { id: item.id } })
   store.decreeModel.document_type = COMPOSE_DOCUMENT_TYPES.DECREE
-  store.decreeModel.document_sub_type = route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE ? COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_DECREE : COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_V2
+  store.decreeModel.document_sub_type = route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE
+    ? COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_DECREE
+    : route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_FOREIGN
+      ? COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_FOREIGN
+      : COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_V2
   store.decreeModel.short_description = store.model.short_description
 
   dialog.value = true

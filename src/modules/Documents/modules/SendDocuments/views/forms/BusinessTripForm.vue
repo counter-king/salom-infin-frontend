@@ -48,7 +48,11 @@ const childComponent = ref(null)
 // Computed
 const title = computed(() => {
   const isCreate = props.formType === FORM_TYPE_CREATE
-  return isCreate ? 'create-business-trip-notice' : 'update-business-trip-notice'
+  if (isCreate) {
+    return route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2 ? 'create-business-trip-notice' : 'create-business-trip-notice-foreign'
+  } else {
+    return route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2 ? 'update-business-trip-notice' : 'update-business-trip-notice-foreign'
+  }
 })
 
 const selectedComponent = computed(() => {
@@ -118,6 +122,7 @@ const validateAndSendNotice = async () => {
         tags: group.__tags.map(t => ({ id: t.id })),
         route: group.__route,
         group_id,
+        trip_type: route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_FOREIGN ? 'foreign' : 'local',
         ...(user.business_trip_id ? { id: user.business_trip_id } : {})
       }))
     )
@@ -168,7 +173,11 @@ const validateAndSendNotice = async () => {
         company: authStore.currentUser.company.id,
         sender: authStore?.currentUser?.top_level_department?.id,
         document_type: COMPOSE_DOCUMENT_TYPES.DECREE,
-        document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_V2,
+        document_sub_type: route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE
+          ? COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_DECREE
+          : route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_FOREIGN
+            ? COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_FOREIGN
+            : COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_V2,
         short_description: store.model?.short_description,
         trip_notice_id: data.id,
         content: data.content

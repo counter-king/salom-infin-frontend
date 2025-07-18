@@ -5,13 +5,14 @@ import { computed } from "vue"
 import {formatDate, formatDateHour} from "@/utils/formatDate"
 import { formatUserFullName } from "@/utils"
 // Enums
-import { SIGNER_TYPES } from "@/enums"
+import { COMPOSE_DOCUMENT_SUB_TYPES, SIGNER_TYPES } from "@/enums"
 // Store
 import { useAuthStore } from "@/modules/Auth/stores"
 import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store"
 // Components
 import QrcodeVue from "qrcode.vue"
 import { BaseBusinessTripTables, BaseHeaderTemplate, BasePerformer } from "@/components/Templates/components"
+import { useRoute } from "vue-router";
 
 const props = defineProps({
   composeModel: {
@@ -27,6 +28,7 @@ const props = defineProps({
 
 // Composable
 const SDStore = useSDStore()
+const route = useRoute()
 
 const author = computed(() => {
   return props.preview ? useAuthStore().currentUser : props.composeModel?.author
@@ -67,35 +69,64 @@ const signers = computed(() => {
     <template v-if="composeModel.notices?.length">
       <base-business-trip-tables :compose-model="composeModel" :preview="preview" />
 
-      <div class="indent-8 mt-2 text-sm text-justify">
-        <div>
-          Xizmat safarida bo‘lgan xodimga u yuborilgan Bank tarmog‘i/tashkilotdagi ish vaqti rejimi va dam olish vaqtlari tadbiq etilsin.
-        </div>
+      <template v-if="route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_FOREIGN">
+        <div class="indent-8 mt-2 text-sm text-justify">
+          <div>
+            Xizmat safari natijasi yuzasidan mas'ul departament direktori tomonidan 3 kun ichida Boshqaruv Raisiga axborot kiritilsin.
+          </div>
 
-        <div>
-          Xizmat safariga yuborilgan xodim safardan qaytgandan so‘ng 3 ish kuni ichida xizmat safari natijalari to‘g‘risida xisobot topshirsin.
-        </div>
+          <div>
+            Buxgalteriya hisobi va hisoboti departamenti tomonidan xizmat safari bilan bog‘liq
+            (aviachipta, kunlik, transfer, mexmonxona, o‘quv kursi) xarajatlari uchun to‘lovlar belgilangan
+            tartibda amalga oshirilsin (O‘zR MKning 287-moddasi, Jamoa shartnomasi, 2015-yil 19-
+            oktabrdagi “Vazirliklar, idoralar, korxonalar va tashkilotlar xodimlari O‘zbekiston Respublikasi
+            tashqarisiga xizmat safariga yuborilganda xizmat safari xarajatlari uchun mablag‘lar berish
+            tartibi to‘g‘risidagi Nizom”).
+          </div>
 
-        <div>
-          Buxgalteriya hisobi va hisoboti departamenti tomonidan xizmat safari bilan bog‘liq xarajatlar uchun to‘lovlar belgilangan tartibda amalga oshirilsin.
+          <div v-if="composeModel?.type !== 'decree_for_leadership'">
+            <span class="font-semibold">Asos: </span>{{ composeModel?.trip_notice_register_number || '__' }}-sonli
+            bildirishnnoma.
+          </div>
         </div>
+      </template>
 
-        <div v-if="composeModel?.type !== 'decree_for_leadership'">
-          <span class="font-semibold">Asos: </span>{{ composeModel?.trip_notice_register_number || '__' }}-sonli bildirishnnoma;
-        </div>
+      <template v-else>
+        <div class="indent-8 mt-2 text-sm text-justify">
+          <div>
+            Xizmat safarida bo‘lgan xodimga u yuborilgan Bank tarmog‘i/tashkilotdagi ish vaqti rejimi va dam olish
+            vaqtlari tadbiq etilsin.
+          </div>
 
-        <div>
-          “O‘zsanoatqurilishbank” ATB xodimlarini xizmat safariga yuborish to‘g‘risidagi Tartib;
-        </div>
+          <div>
+            Xizmat safariga yuborilgan xodim safardan qaytgandan so‘ng 3 ish kuni ichida xizmat safari natijalari
+            to‘g‘risida xisobot topshirsin.
+          </div>
 
-        <div>
-          O‘zR MKning 287-moddasi;
-        </div>
+          <div>
+            Buxgalteriya hisobi va hisoboti departamenti tomonidan xizmat safari bilan bog‘liq xarajatlar uchun
+            to‘lovlar belgilangan tartibda amalga oshirilsin.
+          </div>
 
-        <div>
-          Vazirlar Mahkamasining 2022-yil 2-avgustdagi “O‘zbekiston Respublikasi hududida xizmat safarlari to‘g‘risidagi” 424-sonli Nizom.
+          <div v-if="composeModel?.type !== 'decree_for_leadership'">
+            <span class="font-semibold">Asos: </span>{{ composeModel?.trip_notice_register_number || '__' }}-sonli
+            bildirishnnoma;
+          </div>
+
+          <div>
+            “O‘zsanoatqurilishbank” ATB xodimlarini xizmat safariga yuborish to‘g‘risidagi Tartib;
+          </div>
+
+          <div>
+            O‘zR MKning 287-moddasi;
+          </div>
+
+          <div>
+            Vazirlar Mahkamasining 2022-yil 2-avgustdagi “O‘zbekiston Respublikasi hududida xizmat safarlari
+            to‘g‘risidagi” 424-sonli Nizom.
+          </div>
         </div>
-      </div>
+      </template>
     </template>
 
     <div class="mt-6 pb-2 px-4">

@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref } from "vue"
+import { computed, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import { useVuelidate } from "@vuelidate/core"
@@ -15,7 +15,7 @@ import { UserWithRadio } from "@/components/Users"
 import { AddPlusIcon, TrashBinTrashBoldIcon } from "@/components/Icons"
 import EditorWithTabs from "@/components/Composed/EditorWithTabs.vue"
 import { dispatchNotify } from "@/utils/notify";
-import { COLOR_TYPES } from "@/enums";
+import { COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES } from "@/enums";
 import { ROUND_TRIP, STEPPER_WORK_PLAN } from "@/modules/Documents/modules/SendDocuments/constants";
 import { useCommonStore } from "@/stores/common";
 
@@ -37,6 +37,11 @@ const props = defineProps({
 
 // Reactive
 const showNestedError = ref(false)
+
+// Computed
+const regionApiParams = computed(() => {
+  return route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_FOREIGN ? { region_type: 'foreign' } : { region_type: 'local' }
+})
 
 // Methods
 const onFileUpload = (files) => {
@@ -168,6 +173,7 @@ const emit = defineEmits(['emit:onValidateAndSend'])
                   v-model="group.__regions"
                   :error="$v.__groups.$each.$response.$data[index].__regions"
                   api-url="regions"
+                  :api-params="regionApiParams"
                   :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
                   display="chip"
                   selectable

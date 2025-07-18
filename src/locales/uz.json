@@ -512,8 +512,8 @@
   "route": "Marshrut",
   "select-route": "Marshrutni tanlang",
   "business-trip": "Xizmat safari",
-  "create-business-trip-notice": "Xizmat safari uchun bildirishnoma yaratish",
-  "update-business-trip-notice": "Xizmat safari bildirishnomasini o'zgartirish",
+  "create-business-trip-notice": "Mahalliy xizmat safari uchun bildirishnoma yaratish",
+  "update-business-trip-notice": "Mahalliy xizmat safari bildirishnomasini o'zgartirish",
   "labor-leave": "Mehnat ta’tili",
   "order": "Buyruq",
   "business-trip-order": "Xizmat safar buyrug'i",
@@ -749,7 +749,8 @@
   "sleeper-class": "Kupe",
   "seat-class": "umumiy vagon",
   "add-line": "Qator qo'shish",
-  "business-trip-v2": "Komandirovka 2.0",
+  "business-trip-v2": "Xizmat safari (mahalliy)",
+  "business-trip-v2-foreign": "Xizmat safari (chet el)",
   "news": "Bank yangiliklari",
   "save-news-as-draft": "Maʼlumotlarni qoralama sifatida saqlamoqchimisiz?",
   "reply-to-moderator": "Moderatorga javob",
@@ -930,5 +931,7 @@
   "request-id": "So'rov ID",
   "explanation-letter": "Tushuntirish xati",
   "create-explanation-letter": "Tushuntirish xati yaratish",
-  "update-explanation-letter": "Tushuntirish xatini o'zgartirish"
+  "update-explanation-letter": "Tushuntirish xatini o'zgartirish",
+  "create-business-trip-notice-foreign": "Chet el xizmat safari uchun bildirishnoma yaratish",
+  "update-business-trip-notice-foreign": "Chet el xizmat safari bildirishnomasini o'zgartirish"
 }

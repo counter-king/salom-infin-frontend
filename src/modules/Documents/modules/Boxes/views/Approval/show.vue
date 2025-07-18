@@ -42,7 +42,7 @@ const approved = computed(() => {
 	return approvalStore.detailModel?.is_approved
 })
 const templateClasses = computed(() => {
-  return [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2, COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE].includes(String(approvalStore?.detailModel?.compose?.document_sub_type?.id)) ? '' : 'p-10'
+  return [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2, COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE, COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_FOREIGN].includes(String(approvalStore?.detailModel?.compose?.document_sub_type?.id)) ? '' : 'p-10'
 })
 /** **/
 const isAssistant = computed(() => {

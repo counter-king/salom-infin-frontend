@@ -51,7 +51,7 @@ const signed = computed(() => {
 	return signStore.detailModel?.is_signed
 })
 const templateClasses = computed(() => {
-  return [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2, COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE].includes(String(signStore?.detailModel?.compose?.document_sub_type?.id)) ? '' : 'p-10'
+  return [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2, COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE, COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_FOREIGN].includes(String(signStore?.detailModel?.compose?.document_sub_type?.id)) ? '' : 'p-10'
 })
 
 // Methods

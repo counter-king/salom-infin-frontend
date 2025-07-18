@@ -135,7 +135,7 @@
   "create": "Создать",
   "create-assistants": "Создать помощника",
   "create-branch": "Создать филиал",
-  "create-business-trip-notice": "Создать рапорт на командировке",
+  "create-business-trip-notice": "Создать рапорт на местную командировку",
   "create-correspondents": "Создать корреспондент",
   "create-decree": "Создать распоряжения",
   "create-department": "Создан департамент",
@@ -652,7 +652,7 @@
   "unsupported-file-type": "Не поддерживаемый тип файла",
   "upcoming-tasks": "Предстоящие задачи",
   "update": "Изменить",
-  "update-business-trip-notice": "Изменить рапорт на командировке",
+  "update-business-trip-notice": "Изменить рапорт на местную командировку",
   "update-decree": "Изменить распоряжения",
   "update-document": "Изменить документ",
   "update-document-type": "Изменить тип документа",
@@ -752,7 +752,8 @@
   "sleeper-class": "Купе",
   "seat-class": "Общий вагон",
   "add-line": "Добавить линия",
-  "business-trip-v2": "Командировка 2.0",
+  "business-trip-v2": "Командировка (местная)",
+  "business-trip-v2-foreign": "Командировка (зарубежная)",
   "news": "Новости банка",
   "save-news-as-draft": "Хотите сохранить данные как черновик?",
   "reply-to-moderator": "Ответить модератору",
@@ -933,5 +934,7 @@
   "request-id": "ID запроса",
   "explanation-letter": "Пояснительное письмо",
   "create-explanation-letter": "Создать пояснительное письмо",
-  "update-explanation-letter": "Изменить пояснительное письмо"
+  "update-explanation-letter": "Изменить пояснительное письмо",
+  "create-business-trip-notice-foreign": "Создать рапорт на зарубежную командировку",
+  "update-business-trip-notice-foreign": "Изменить рапорт на зарубежную командировку"
 }
