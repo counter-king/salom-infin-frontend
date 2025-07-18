@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { computed, ref } from "vue"
+import { computed, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import { useVuelidate } from "@vuelidate/core"
@@ -37,6 +37,16 @@ const props = defineProps({
 
 // Reactive
 const showNestedError = ref(false)
+const isRegionsSelectVisible = ref(true)
+
+// Watch
+watch(() => route.params.document_sub_type, (val) => {
+  isRegionsSelectVisible.value = false
+
+  setTimeout(() => {
+    isRegionsSelectVisible.value = true
+  }, 50)
+})
 
 // Computed
 const regionApiParams = computed(() => {
@@ -170,6 +180,7 @@ const emit = defineEmits(['emit:onValidateAndSend'])
                 </base-dropdown>
 
                 <base-multi-select
+                  v-if="isRegionsSelectVisible"
                   v-model="group.__regions"
                   :error="$v.__groups.$each.$response.$data[index].__regions"
                   api-url="regions"
