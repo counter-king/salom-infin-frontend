@@ -45,6 +45,13 @@ const props = defineProps({
   actionButtons: {
     type: Array,
     default: ['export', 'calendar', 'filter']
+  },
+  onExportClick: {
+    type: Function,
+  },
+  exportButtonLoading: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -125,7 +132,11 @@ const emits = defineEmits(['emit:resetHeaders'])
           />
         </div>
 
-        <export-button v-if="actionButtons.includes('export')" />
+        <export-button
+          v-if="actionButtons.includes('export')"
+          :export-button-loading="exportButtonLoading"
+          :on-export-click="onExportClick"
+        />
 
         <calendar-menu
           v-if="actionButtons.includes('calendar')"

@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import {computed, onMounted} from "vue"
+import { computed, onMounted, ref } from "vue"
 import {useRoute, useRouter} from "vue-router"
 // Components
 import { ActionToolbar, TripStatusButtons } from "@/components/Actions"
@@ -16,6 +16,13 @@ import { HR_BUSINESS_TRIP_COLUMNS, ROUTE_HR_BUSINESS_TRIP_DETAIL } from "@/modul
 import { ROUTE_SD_CREATE } from "@/modules/Documents/modules/SendDocuments/constants"
 // Utils
 import { formatDate } from "@/utils/formatDate"
+import axios from "axios";
+import axiosConfig, { baseURL } from "@/services/axios.config";
+import { getStorageItem } from "@/utils/storage";
+import { ACCESS } from "@/constants/storage";
+
+// Reactive
+const exportButtonLoading = ref(false)
 
 // Composable
 const router = useRouter()
@@ -60,6 +67,45 @@ const manageRoute = () => {
     })
   }
 }
+const onExportClick = async () => {
+  exportButtonLoading.value = true
+
+  const token = getStorageItem(ACCESS)
+  const query = {}
+  if (route.query?.trip_status) {
+    query.trip_status = route.query.trip_status
+  }
+
+  const queryParams = new URLSearchParams(query).toString()
+
+  fetch(`${baseURL}trips/export-excel/${queryParams ? '?' + queryParams : ''}`, {
+    method: 'GET',
+    headers: {
+      Authorization: token ? 'Bearer ' + token : null,
+    },
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
+      }
+      return response.blob()
+    })
+    .then(blob => {
+      const url = window.URL.createObjectURL(new Blob([blob]))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', 'Xizmat_safarlari.xlsx')
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+    })
+    .catch(error => {
+      console.error('Download error:', error)
+    })
+    .finally(() => {
+      exportButtonLoading.value = false
+    })
+}
 
 // Hooks
 onMounted(() => {
@@ -77,8 +123,10 @@ onMounted(() => {
       :column-menu-items="BTStore.headers"
       :filter-keys="filterKeys"
       :storage-columns-name="HR_BUSINESS_TRIP_COLUMNS"
-      :action-buttons="[]"
+      :action-buttons="['export']"
       search-field
+      :export-button-loading="exportButtonLoading"
+      :onExportClick="onExportClick"
       @emit:reset-headers="BTStore.resetHeaders"
     >
       <template #title-after>

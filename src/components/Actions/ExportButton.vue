@@ -5,6 +5,13 @@ import { FileDownloadIcon } from '@/components/Icons'
 const props = defineProps({
   rootClass: {
     type: String
+  },
+  onExportClick: {
+    type: Function,
+  },
+  exportButtonLoading: {
+    type: Boolean,
+    default: false
   }
 })
 </script>
@@ -20,6 +27,8 @@ const props = defineProps({
     shadow
     type="button"
     :class="props.rootClass"
+    :loading="exportButtonLoading"
+    @click="onExportClick"
   />
 </template>
 
