@@ -35,6 +35,16 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
         active: true
       },
       {
+        header: "where-from",
+        field: "sender_company",
+        active: true
+      },
+      {
+        header: "where-to",
+        field: "locations",
+        active: true
+      },
+      {
         header: "start-date",
         field: "start_date",
         active: true
@@ -203,6 +213,16 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
         {
           header: "department-name",
           field: "department",
+          active: true
+        },
+        {
+          header: "where-from",
+          field: "sender_company",
+          active: true
+        },
+        {
+          header: "where-to",
+          field: "locations",
           active: true
         },
         {

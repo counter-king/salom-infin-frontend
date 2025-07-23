@@ -171,6 +171,10 @@ onMounted(() => {
 <!--        />-->
       </template>
 
+      <template #sender_company="{ data }">
+        <span class="max-w-[300px] block">{{ data?.sender_company?.name }}</span>
+      </template>
+
       <template #start_date="{ data }">
         {{ formatDate(data?.start_date) }}
       </template>
@@ -185,10 +189,10 @@ onMounted(() => {
         />
       </template>
 
-      <template #destinations="{ data }">
+      <template #locations="{ data }">
 <!--        <pre>{{ data?.destinations }}</pre>-->
         <base-badge-group
-          :items="data?.destinations"
+          :items="data?.locations"
         />
       </template>
     </base-data-table>
