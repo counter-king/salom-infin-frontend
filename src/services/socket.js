@@ -21,6 +21,9 @@ export const socket = ()=> {
           dispatchNotify(null, `socket error happened ${err}`, COLOR_TYPES.ERROR)
         },
       },
+      onError(ws, event) {
+        dispatchNotify(null, `socket ws-error-${ws}, event-error-${event}`, COLOR_TYPES.ERROR);
+      },
     })
   }
   return socketInstance
