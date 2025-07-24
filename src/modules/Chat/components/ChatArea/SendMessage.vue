@@ -199,7 +199,12 @@ const handleAttachmentClick = () => {
 }
 
 const handleFileInputChange = (event) => {
-    uploadFiles(event.target.files);
+  const files = event.target.files;
+  if (files.length) {
+    uploadFiles(files);
+  }
+  // value ni tozalab yuboramiz, qayta yana talay olish uchun
+  event.target.value = '';
 }
 
 const onCancelIconReplay = () => {
