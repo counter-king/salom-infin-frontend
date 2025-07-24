@@ -38,8 +38,8 @@ const returnShortFileName = (fileName) => {
      const abortController = new AbortController();
      const signal = abortController.signal;
 
-     let fileName = returnShortFileName(files[i].name);
-     let size = files[i].size;
+     let fileName = returnShortFileName(files[i]?.name);
+     let size = files[i]?.size;
      let fileSize = (size > 1048576) ? (size / 1048576).toFixed(2) + ' MB' : (size <= 1048576 && size > 1024) ? (size / 1024).toFixed(2) + ' KB' : size + ' B'
      const message = { 
                     attachments: { 
