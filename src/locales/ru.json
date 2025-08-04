@@ -936,5 +936,6 @@
   "create-explanation-letter": "Создать пояснительное письмо",
   "update-explanation-letter": "Изменить пояснительное письмо",
   "create-business-trip-notice-foreign": "Создать рапорт на зарубежную командировку",
-  "update-business-trip-notice-foreign": "Изменить рапорт на зарубежную командировку"
+  "update-business-trip-notice-foreign": "Изменить рапорт на зарубежную командировку",
+  "to-where-country": "Куда (страна)"
 }

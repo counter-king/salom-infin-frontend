@@ -67,6 +67,7 @@ const groups = computed(() => {
         children: group.__users.map((user, userIndex) => ({
           user,
           locations: group?.__regions,
+          countries: group?.__countries,
           start_date: group?.__start_date,
           end_date: group?.__end_date,
           tags: group?.__tags,
@@ -152,32 +153,57 @@ const bookings = computed(() => {
       <!-- /Loop according to group users -->
     </table>
 
-<!--    <pre>{{ composeModel }}</pre>-->
+<!--    <pre>{{ item.children }}</pre>-->
 
-    <table class="business-trip-table w-full text-sm text-center mt-2">
-      <tr class="bg-greyscale-100 font-semibold">
-        <td class="w-1/3">
-          Qayerdan
-        </td>
-        <td class="w-1/3">
-          Qayerga
-        </td>
-        <td class="w-1/3">
-          Mamlakat
-        </td>
-      </tr>
+    <template v-if="[COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_FOREIGN].includes(route.params.document_sub_type)">
+      <table class="business-trip-table w-full text-sm text-center mt-2">
+        <tr class="bg-greyscale-100 font-semibold">
+          <td class="w-1/2">
+            Qayerdan
+          </td>
+          <td class="w-1/2">
+            Qayerga
+          </td>
+        </tr>
 
-      <!-- Loop according to group regions -->
-      <tr
-        v-for="(location, index) in item.children[0]?.locations"
-        :key="location?.id"
-      >
-        <td>{{ index === 0 ? item?.children[0]?.sender_company?.region?.name : '' }}</td>
-        <td>{{ location?.name_uz }}</td>
-        <td>{{ index === 0 ? location?.country?.name : '' }}</td>
-      </tr>
-      <!-- /Loop according to group regions -->
-    </table>
+        <!-- Loop according to group regions -->
+        <tr
+          v-for="(country, index) in item.children[0]?.countries"
+          :key="country?.id"
+        >
+          <td>{{ index === 0 ? item?.children[0]?.sender_company?.region?.name : '' }}</td>
+          <td>{{ country?.name }}</td>
+        </tr>
+        <!-- /Loop according to group regions -->
+      </table>
+    </template>
+
+    <template v-else>
+      <table class="business-trip-table w-full text-sm text-center mt-2">
+        <tr class="bg-greyscale-100 font-semibold">
+          <td class="w-1/3">
+            Qayerdan
+          </td>
+          <td class="w-1/3">
+            Qayerga
+          </td>
+          <td class="w-1/3">
+            Mamlakat
+          </td>
+        </tr>
+
+        <!-- Loop according to group regions -->
+        <tr
+          v-for="(location, index) in item.children[0]?.locations"
+          :key="location?.id"
+        >
+          <td>{{ index === 0 ? item?.children[0]?.sender_company?.region?.name : '' }}</td>
+          <td>{{ location?.name_uz }}</td>
+          <td>{{ index === 0 ? location?.country?.name : '' }}</td>
+        </tr>
+        <!-- /Loop according to group regions -->
+      </table>
+    </template>
 
     <table class="business-trip-table w-full text-sm text-center mt-2">
       <tr class="bg-greyscale-100 font-semibold">

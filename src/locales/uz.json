@@ -933,5 +933,6 @@
   "create-explanation-letter": "Tushuntirish xati yaratish",
   "update-explanation-letter": "Tushuntirish xatini o'zgartirish",
   "create-business-trip-notice-foreign": "Chet el xizmat safari uchun bildirishnoma yaratish",
-  "update-business-trip-notice-foreign": "Chet el xizmat safari bildirishnomasini o'zgartirish"
+  "update-business-trip-notice-foreign": "Chet el xizmat safari bildirishnomasini o'zgartirish",
+  "to-where-country": "Qayerga (mamlakat)"
 }

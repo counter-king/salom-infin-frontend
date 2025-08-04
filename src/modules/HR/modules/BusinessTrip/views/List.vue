@@ -171,6 +171,10 @@ onMounted(() => {
 <!--        />-->
       </template>
 
+      <template #iabs_emp_id="{ data }">
+        {{ data?.user?.iabs_emp_id }}
+      </template>
+
       <template #sender_company="{ data }">
         <span class="max-w-[300px] block">{{ data?.sender_company?.name }}</span>
       </template>

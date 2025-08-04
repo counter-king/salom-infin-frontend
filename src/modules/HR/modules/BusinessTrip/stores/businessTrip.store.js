@@ -30,6 +30,11 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
         active: true
       },
       {
+        header: "tabel-number",
+        field: "iabs_emp_id",
+        active: true
+      },
+      {
         header: "department-name",
         field: "department",
         active: true
@@ -208,6 +213,11 @@ export const useBusinessTripStore = defineStore("business-trip-store", {
         {
           header: "employee",
           field: "employee",
+          active: true
+        },
+        {
+          header: "tabel-number",
+          field: "iabs_emp_id",
           active: true
         },
         {

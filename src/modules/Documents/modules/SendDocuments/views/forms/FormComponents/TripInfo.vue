@@ -37,20 +37,10 @@ const props = defineProps({
 
 // Reactive
 const showNestedError = ref(false)
-const isRegionsSelectVisible = ref(true)
-
-// Watch
-watch(() => route.params.document_sub_type, (val) => {
-  isRegionsSelectVisible.value = false
-
-  setTimeout(() => {
-    isRegionsSelectVisible.value = true
-  }, 50)
-})
 
 // Computed
 const regionApiParams = computed(() => {
-  return route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_FOREIGN ? { region_type: 'foreign' } : { region_type: 'local' }
+  return { region_type: 'local' }
 })
 
 // Methods
@@ -69,6 +59,36 @@ const stepClick = async (step) => {
   if (!valid) {
     dispatchNotify(null, t('fill-required-fields'), COLOR_TYPES.WARNING)
     return
+  }
+
+  if (route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_FOREIGN) {
+    const invalidGroup = store.model.__groups.find(
+      (group) => !group.__countries || group.__countries.length === 0
+    )
+
+    if (invalidGroup) {
+      dispatchNotify(null, t('fill-required-fields'), COLOR_TYPES.WARNING)
+      return
+    }
+
+    store.model.__groups.forEach((group) => {
+      group.__regions = []
+    })
+  }
+
+  if (route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2) {
+    const invalidGroup = store.model.__groups.find(
+      (group) => !group.__regions || group.__regions.length === 0
+    )
+
+    if (invalidGroup) {
+      dispatchNotify(null, t('fill-required-fields'), COLOR_TYPES.WARNING)
+      return
+    }
+
+    store.model.__groups.forEach((group) => {
+      group.__countries = []
+    })
   }
 
   emit('emit:onValidateAndSend')
@@ -179,10 +199,11 @@ const emit = defineEmits(['emit:onValidateAndSend'])
                   </template>
                 </base-dropdown>
 
+<!--                :error="$v.__groups.$each.$response.$data[index].__regions"-->
+
                 <base-multi-select
-                  v-if="isRegionsSelectVisible"
+                  v-if="route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_V2"
                   v-model="group.__regions"
-                  :error="$v.__groups.$each.$response.$data[index].__regions"
                   api-url="regions"
                   :api-params="regionApiParams"
                   :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
@@ -195,6 +216,37 @@ const emit = defineEmits(['emit:onValidateAndSend'])
                   :show-nested-error="showNestedError"
                   class="w-1/2"
                   @emit:change="(val) => onRegionsChange(val, index)"
+                >
+                  <template #chip="{ value }">
+                    {{ value.name }}
+                  </template>
+
+                  <template #option="{ value }">
+                    <user-with-radio
+                      :title="value.name"
+                      :text-truncate="false"
+                    >
+                    </user-with-radio>
+                  </template>
+                </base-multi-select>
+
+<!--                :error="$v.__groups.$each.$response.$data[index].__countries"-->
+
+                <base-multi-select
+                  v-if="route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_FOREIGN"
+                  v-model="group.__countries"
+                  api-url="countries"
+                  :api-params="{ country_type: 'foreign' }"
+                  :token-class="['chip-hover shadow-button bg-white cursor-pointer']"
+                  display="chip"
+                  selectable
+                  label="to-where-country"
+                  type="department"
+                  placeholder="select-trip-place"
+                  required
+                  :show-nested-error="showNestedError"
+                  all-selectable
+                  class="w-1/2"
                 >
                   <template #chip="{ value }">
                     {{ value.name }}

@@ -72,6 +72,7 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
           __users: null,
           __tags: null,
           __regions: null,
+          __countries: null,
           __start_date: null,
           __end_date: null,
           __company: null,
@@ -116,9 +117,12 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
           __tags: {
             required: helpers.withMessage(`Поле не должен быть пустым`, required),
           },
-          __regions: {
-            required: helpers.withMessage(`Поле не должен быть пустым`, required),
-          },
+          // __regions: {
+          //   required: helpers.withMessage(`Поле не должен быть пустым`, required),
+          // },
+          // __countries: {
+          //   required: helpers.withMessage(`Поле не должен быть пустым`, required),
+          // },
           __start_date: {
             required: helpers.withMessage(`Поле не должен быть пустым`, required),
           },
