@@ -65,9 +65,9 @@ const submitForm = async () => {
   try {
     isSubmitLoading.value = true
     if(props.id){
-      await fetchUpdateCountryById(props.id, {...formValue, status: formValue.status ? "a" : "p"})
+      await fetchUpdateCountryById(props.id, {...formValue, status: formValue.status ? "A" : "P"})
     } else{
-      await fetchCreateCountry({...formValue, status: formValue.status ? "a" : "p"})
+      await fetchCreateCountry({...formValue, status: formValue.status ? "A" : "P"})
     }
     emit('update:modelValue', false)
     settingsStore.actionGetCountryList()
@@ -88,7 +88,7 @@ onMounted(async () => {
    try{
      const { data } =  await fetchGetCountryById(props.id)
      formValue.name = data.name
-     formValue.status = data.status == "a" ? true : false
+     formValue.status = data.status == "A" ? true : false
    } catch(err){
     console.log(err)
    } finally{
