@@ -2,7 +2,7 @@
 // Core
 import { ref } from 'vue'
 // Components
-import { CaseIcon, UserIcon, SettingsMinimalisticIcon, DocumentAddBoldIcon, DocumentAddIcon} from '@/components/Icons'
+import { CaseIcon, UserIcon, SettingsMinimalisticIcon, DocumentAddBoldIcon, DocumentAddIcon, ArchiveDownMinimlisticOutlineIcon } from '@/components/Icons'
 import TheSidebar from '@/components/TheSidebar.vue'
 import TheFooter from '@/components/TheFooter.vue';
 // Stores
@@ -42,8 +42,14 @@ const menus = ref([
   //   link: "HrDashboardIndex",
   //   children: []
   // },
+  // {
+  //   title: 'tests-surveys',
+  //   icon: ArchiveDownMinimlisticOutlineIcon,
+  //   link: 'SurveyIndex',
+  //   children: [],
+  // },
 ])
- 
+
  if(authStore.currentUser.is_superuser || authStore.currentUser.id == 3104) {
   menus.value.push({
     title: "interaction-with-abs2",

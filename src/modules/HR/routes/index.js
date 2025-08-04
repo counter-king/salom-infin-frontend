@@ -4,6 +4,7 @@ import Agreements from '../modules/Agreements/routes'
 import AgreementSettings from '../modules/AgreementSettings/routes'
 import Dashboard from '../modules/Dashboard/routes'
 import InteractionABS from '../modules/InteractionABS/routes'
+import Survey from '../modules/Survey/routes'
 
 const HR = [
   {
@@ -26,7 +27,9 @@ const HR = [
       // Dashboard
       ...Dashboard,
       // InteractionABS
-      ...InteractionABS
+      ...InteractionABS,
+      // Survey
+      ...Survey
     ]
   }
 ]

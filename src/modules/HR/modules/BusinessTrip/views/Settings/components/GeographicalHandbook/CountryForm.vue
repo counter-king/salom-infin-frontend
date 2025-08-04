@@ -46,15 +46,15 @@ onMounted(() => {
             :error="$v?.name"
           />
         </div>
-        <div class="flex justify-between items-center">
-          <base-label label="status" />
-          <base-switch
-            label="active"
-            class-body="!flex !items-center gap-2"
-            v-model="formValue.status"
-            :error="$v.status"
-          />
-        </div>
+<!--        <div class="flex justify-between items-center">-->
+<!--          <base-label label="status" />-->
+<!--          <base-switch-->
+<!--            label="active"-->
+<!--            class-body="!flex !items-center gap-2"-->
+<!--            v-model="formValue.status"-->
+<!--            :error="$v.status"-->
+<!--          />-->
+<!--        </div>-->
     </div>
   </form>
 </template>
