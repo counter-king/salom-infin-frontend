@@ -20,6 +20,10 @@ import { useInfiniteScroll } from "../composables/useInfiniteScroll";
 import { ContextMenu } from "./ChatArea";
 // services
 import { fetchCreateChatMuteStatus } from "../services";
+// utiles
+import { dispatchNotify } from "@/utils/notify";
+// enums
+import { COLOR_TYPES } from "@/enums";
 
 const { t } = useI18n();
 const chatStore = useChatStore();
@@ -116,14 +120,18 @@ const onTabChange = async (val) => {
 }
 
 const onCreateChat = async (user) => {
-  const data = await chatStore.actionCreatePrivateChat({ member_id: user?.id });  
-  chatStore.selectedUser = data
-  // if user don't exist in the list then add it
-  if(!chatStore.privateChatList.some(item => item.chat_id == data.chat_id)){
-    chatStore.privateChatList.unshift(data)
+  try {
+    const data = await chatStore.actionCreatePrivateChat({ member_id: user?.id });  
+    chatStore.selectedUser = data
+    // if user don't exist in the list then add it
+    if(!chatStore.privateChatList.some(item => item.chat_id == data.chat_id)){
+      chatStore.privateChatList.unshift(data)
+    }
+    router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: data.chat_uid }, query: { tab: undefined} })
+    searchInput.value = null;  
+  } catch(err) {
+      dispatchNotify(null, `error happned: ${err}`, COLOR_TYPES.ERROR)
   }
-  router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: data.chat_uid }, query: { tab: undefined} })
-  searchInput.value = null;
 }
 
 // when searched privete chat is clicked, that works
@@ -153,30 +161,38 @@ const onClickSearchedGroupByMessage = (item, addlist=true) => {
 
 // when private chat list  is clicked, work
 const onClickChatPrivateUser = async (user) => {
-  // if user is already selected then don't do anything, becouse no full data, just it is getting from  api id
-  if(route.params?.id != user.chat_uid){
-    router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: user.chat_uid }})
-    chatStore.selectedUser = user
-    // if user don't exist in the list then add it
-    if(!chatStore.privateChatList.some(user => user.chat_id == user.chat_id)){
-      chatStore.privateChatList.unshift(user)
+  try {
+    // if user is already selected then don't do anything, becouse no full data, just it is getting from  api id
+    if(route.params?.id != user.chat_uid){
+      router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: user.chat_uid }})
       chatStore.selectedUser = user
+      // if user don't exist in the list then add it
+      if(!chatStore.privateChatList.some(user => user.chat_id == user.chat_id)){
+        chatStore.privateChatList.unshift(user)
+        chatStore.selectedUser = user
+      }
     }
+  } catch(err) {
+    dispatchNotify(null, `error happned: ${err}`, COLOR_TYPES.ERROR)
   }
 }
 
 // when group chat list  is clicked, work
 const onClickChatGroup = (group) => {
-  // if group is already selected then don't do anything, becouse no full data, just it is getting from  api id
-  if(route.params?.id != group.chat_uid){    
-    router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: group.chat_uid }, query :{ tab: 'group'} })
-    // if group don't exist in the list then add it
-    if(!chatStore.groupChatList.some(item => item.chat_id == group.chat_id)){
-      chatStore.groupChatList.unshift(group)
-      chatStore.selectedGroup = group
+  try {
+    // if group is already selected then don't do anything, becouse no full data, just it is getting from  api id
+    if(route.params?.id != group.chat_uid){    
+      router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: group.chat_uid }, query :{ tab: 'group'} })
+      // if group don't exist in the list then add it
+      if(!chatStore.groupChatList.some(item => item.chat_id == group.chat_id)){
+        chatStore.groupChatList.unshift(group)
+        chatStore.selectedGroup = group
+      }
+      chatStore.userSearching = false;
+      searchInput.value = null;
     }
-    chatStore.userSearching = false;
-    searchInput.value = null;
+  } catch(err) {
+    dispatchNotify(null, `error happned: ${err}`, COLOR_TYPES.ERROR)
   }
 }
 // hooks
