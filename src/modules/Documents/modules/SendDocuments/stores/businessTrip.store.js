@@ -358,15 +358,18 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
 
             const __tags = await adjustTagObjectToArray(group.items[0].tags)
             const __regions = await adjustObjectToArray('regions', group.items[0].locations)
+            const __countries = await adjustObjectToArray('countries', group.items[0].countries)
             const __company = await adjustObjectToArray('companies', [], false, group.items[0].sender_company?.id)
             const __start_date = group.items[0].start_date
             const __end_date = group.items[0].end_date
             const __route = group.items[0].route
 
+
             return {
               __users,
               __tags,
               __regions,
+              __countries,
               __start_date,
               __end_date,
               __company,

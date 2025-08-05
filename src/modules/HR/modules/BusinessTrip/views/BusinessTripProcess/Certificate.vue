@@ -10,6 +10,7 @@ import { formatDate, formatDateHour } from "@/utils/formatDate"
 import QrcodeVue from "qrcode.vue"
 import { formatUserFullName } from "@/utils";
 import { AltArrowDownIcon, DownloadMinimalisticIcon } from "@/components/Icons"
+import axiosConfig from "@/services/axios.config";
 
 const BTStore = useBusinessTripStore()
 
@@ -49,6 +50,7 @@ const verifications = computed(() => {
         filial: item.region?.name_uz || item.company?.name,
         responsible: formatUserFullName(item.left_verified_by),
         visited_places: [],
+        actionTimeForBack: formatDateHour(item.left_at)
       })
     }
     if (!item.is_sender && item.left_at) {
@@ -58,6 +60,7 @@ const verifications = computed(() => {
         filial: item.region?.name_uz || item.company?.name,
         responsible: formatUserFullName(item.left_verified_by),
         visited_places: [],
+        actionTimeForBack: formatDateHour(item.left_at)
       })
     }
     if (!item.is_sender && item.arrived_at) {
@@ -66,7 +69,11 @@ const verifications = computed(() => {
         actionTime: item.arrived_at,
         filial: item.region?.name_uz || item.company?.name,
         responsible: formatUserFullName(item.arrived_verified_by),
-        visited_places: item.visited_places,
+        visited_places: item.visited_places.map((item) => ({
+          ...item,
+          createdDateForBack: formatDateHour(item.created_date)
+        })),
+        actionTimeForBack: formatDateHour(item.arrived_at)
       })
     }
     if (item.is_sender && item.arrived_at) {
@@ -76,6 +83,7 @@ const verifications = computed(() => {
         filial: item.region?.name_uz || item.company?.name,
         responsible: formatUserFullName(item.arrived_verified_by),
         visited_places: [],
+        actionTimeForBack: formatDateHour(item.arrived_at)
       })
     }
   })
@@ -109,32 +117,74 @@ const decree2RegisteredDate = computed(() => {
 const decree2RegisteredNumber = computed(() => {
   return BTStore.detailModel?.compose?.find(item => item.doc_type === 'changed_decree')?.register_number
 })
+const chunkedArray = computed(() => {
+  const chunkSize = 2
+  const result = []
+  for (let i = 0; i < verifications.value.length; i += chunkSize) {
+    result.push(verifications.value.slice(i, i + chunkSize))
+  }
+  return result
+})
 
 
 // Methods
 const generatePdf = async () => {
   downloadLoading.value = true
-  const element = document.querySelector('.element-to-download'); // Adjust selector as needed
-
-  const options = {
-    margin: [16, 20], // Set margins (top, bottom, left, right)
-    filename: author?.value?.full_name,
-    image: { type: "jpeg", quality: 0.98 },
-    html2canvas: { scale: 2 }, // Increase scale for better quality
-    jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-  };
-
-  // Generate the PDF
-  try {
-    await html2pdf()
-      .from(element)
-      .set(options)
-      .save();
-  } catch (err) {
-
-  } finally {
-    downloadLoading.value = false
+  const body = {
+    author: author.value,
+    start_date: formatDate(BTStore.detailModel?.start_date),
+    isTripChanged: isTripChanged.value,
+    end_date: formatDate(BTStore.detailModel?.end_date),
+    end_date_2: formatDate(BTStore.detailModel?.end_date_2),
+    numberOfDays: numberOfDays.value,
+    locations: BTStore.detailModel?.locations,
+    addedRegions: addedRegions.value,
+    orderRegisteredDate: orderRegisteredDate.value ? formatDate(orderRegisteredDate.value) : null,
+    orderRegisteredNumber: orderRegisteredNumber.value ? orderRegisteredNumber.value : null,
+    decree2RegisteredDate: decree2RegisteredDate.value ? formatDate(decree2RegisteredDate.value) : null,
+    decree2RegisteredNumber: decree2RegisteredNumber.value ? decree2RegisteredNumber.value : null,
+    curatorFullName: curatorFullName.value,
+    verifications: chunkedArray.value,
   }
+
+  axiosConfig.post('business-trip-certificate-to-pdf/', body, { responseType: 'blob' })
+    .then((response) => {
+      const blob = new Blob([response.data], {type: 'application/pdf'})
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', `${author?.value?.full_name}.pdf`)
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+    })
+    .catch((error) => {
+      console.error('PDF download failed:', error)
+    })
+    .finally(() => {
+      downloadLoading.value = false
+    })
+  // const element = document.querySelector('.element-to-download'); // Adjust selector as needed
+  //
+  // const options = {
+  //   margin: [16, 20], // Set margins (top, bottom, left, right)
+  //   filename: author?.value?.full_name,
+  //   image: { type: "jpeg", quality: 0.98 },
+  //   html2canvas: { scale: 2 }, // Increase scale for better quality
+  //   jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+  // };
+  //
+  // // Generate the PDF
+  // try {
+  //   await html2pdf()
+  //     .from(element)
+  //     .set(options)
+  //     .save();
+  // } catch (err) {
+  //
+  // } finally {
+  //   downloadLoading.value = false
+  // }
 
 };
 </script>
