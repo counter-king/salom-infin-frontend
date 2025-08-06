@@ -1,6 +1,7 @@
 <script setup>
 // core
-import { useModel } from 'vue'
+import { useModel, onUnmounted } from 'vue'
+import { useRouter, useRoute} from 'vue-router'
 import { useI18n } from 'vue-i18n'
 // components
 import DataTableModal from './DataTableModal.vue'
@@ -12,17 +13,14 @@ import { formatDateHour } from '@/utils/formatDate'
 // composibles
 const interactionABSStore = useInteractionABSStore()
 const { t } = useI18n()
-
+const router = useRouter()
+const route = useRoute()
 // props
 const props = defineProps({
   dialogVisible: {
     type: Boolean,
     default: false
   },
-  id: {
-    type: Number,
-    default: null
-  }
 })
 
 // emits
@@ -31,6 +29,15 @@ const emit = defineEmits([
 ])
 // composibles
 const dialogVisible = useModel(props, 'dialogVisible')
+
+onUnmounted(() => {
+  router.replace({
+    query: {
+      ...router.currentRoute.value.query,
+      action_history: undefined
+    }
+  })
+})
 
 </script>
 <template>
@@ -52,7 +59,7 @@ const dialogVisible = useModel(props, 'dialogVisible')
           :loading="interactionABSStore.iabsRequestCallsLoading"
           :total-count="interactionABSStore.iabsRequestCallsTotalCount"
           :action-list="interactionABSStore.actionGetIabsRequestCalls"
-          :apiParams="{ action_history: props.id, page: 1, page_size: 15 }"
+          :apiParams="{ action_history: route.query?.action_history, page: 1, page_size: 15 }"
           :pageSize="15"
           >
             <template #order="{ data }">
