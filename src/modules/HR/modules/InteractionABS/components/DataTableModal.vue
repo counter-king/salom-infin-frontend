@@ -72,9 +72,9 @@ const emit = defineEmits([
 
 // reactives
 const paginationStore = reactive({
-  page: pagination.page || route.query.page,
-  pageSize: props.pageSize || pagination.pageSize || route.query.page_size,
-  firstRow: pagination.firstRow || +route.query.firstRow,
+  page: pagination.page ,
+  pageSize: props.pageSize || pagination.pageSize ,
+  firstRow: pagination.firstRow ,
 });
 
 // Computed
@@ -96,31 +96,14 @@ const onPageChange = async (val) => {
   paginationStore.page = val.page + 1;
   paginationStore.pageSize = val.rows;
   paginationStore.firstRow = val.first;
-
-  await router.replace({
-      ...route,
-      query: {
-        ...route.query,
-        page: paginationStore.page,
-        page_size: paginationStore.pageSize,
-        first_row: paginationStore.firstRow
-      }
-    });
   await props.actionList({ ...route.query, page: paginationStore.page, page_size: paginationStore.pageSize });
 
   emit('emit:onPageChange', paginationStore.page)
 }
 
 const initializeTable = async () => {
-  if (route.query && route.query.page && route.query.page_size && route.query.first_row) {
-    paginationStore.page = Number(route.query.page);
-    paginationStore.pageSize = Number(route.query.page_size);
-    paginationStore.firstRow = Number(route.query.first_row);
-    await props.actionList({ ...route.query, page: paginationStore.page, page_size: paginationStore.pageSize });
-  } else if (route.query && props.apiParams) {
-    await props.actionList({ ...props.apiParams, ...route.query });
-  } else if (props.apiParams){
-    await props.actionList({ ...props.apiParams});
+  if (props.apiParams) {
+    await props.actionList({ ...props.apiParams });
   } else {
     await props.actionList({ page: paginationStore.page, page_size: paginationStore.pageSize });
   }

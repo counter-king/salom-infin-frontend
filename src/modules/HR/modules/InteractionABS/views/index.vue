@@ -29,7 +29,6 @@ const filterDropdownRef = ref(null)
 const activeFilterComponent = shallowRef(null)
 const activeComponentType = ref(null)
 const activeApiAction = ref(null)
-const iabsActionHistoryById = ref(null)
 const statusAbsValue = [{ id: STATUS_ABS.SENT, name: t(STATUS_ABS_TITLE[STATUS_ABS.SENT]) }, { id: STATUS_ABS.FAILED, name: t(STATUS_ABS_TITLE[STATUS_ABS.FAILED]) }, { id: STATUS_ABS.CREATE, name: t(STATUS_ABS_TITLE[STATUS_ABS.CREATE]) }, { id: STATUS_ABS.PROLONG, name: t(STATUS_ABS_TITLE[STATUS_ABS.PROLONG]) }, { id: STATUS_ABS.CANCEL, name: t(STATUS_ABS_TITLE[STATUS_ABS.CANCEL]) }]
 const operationTypeValue = [{ id: OPERATION_TYPE.SENT, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.SENT]) }, { id: OPERATION_TYPE.FAILED, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.FAILED]) }, { id: OPERATION_TYPE.CREATE, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.CREATE]) }, { id: OPERATION_TYPE.PROLONG, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.PROLONG]) }, { id: OPERATION_TYPE.CANCEL, name: t(OPERATION_TYPE_TITLE[OPERATION_TYPE.CANCEL]) }]
 const typeValue = [{ id: TYPE.ORDER, name: TYPE.ORDER }, { id: TYPE.TRIP, name: TYPE.TRIP }, { id: TYPE.TRIP_EXTEND, name: TYPE.TRIP_EXTEND }, { id: TYPE.TRIP_CANCEL, name: TYPE.TRIP_CANCEL }, { id: TYPE.TRIP_PROLONG, name: TYPE.TRIP_PROLONG }]
@@ -104,8 +103,13 @@ const tableFilters = {
 }
 
 // methods
-const onHistoryClick = (item) => {
-  iabsActionHistoryById.value = item.id
+const onHistoryClick = async(item) => {
+ await router.replace({
+    query: {
+      ...route.query,
+      action_history: item.id
+    }
+  })
   dialogVisible.value = true
 }
 
@@ -153,7 +157,7 @@ const getQueryName = (type) => {
     case HEADERS.COMPANY:
       return 'company_id'
     case HEADERS.DEPARTMENT:
-      return 'department_id'
+      return 'department'
     case HEADERS.DOCUMENT_TYPE:
       return 'doc_type_id'
     case HEADERS.DOCUMENT_SUB_TYPE:
@@ -462,7 +466,6 @@ onUnmounted(() => {
   </div>
   <Dialog
     v-if="dialogVisible"
-    :id="iabsActionHistoryById"
     v-model:dialogVisible="dialogVisible"
   />
 </template>
