@@ -103,8 +103,8 @@ const tableFilters = {
 }
 
 // methods
-const onHistoryClick = (item) => {
-  router.replace({
+const onHistoryClick = async(item) => {
+ await router.replace({
     query: {
       ...route.query,
       action_history: item.id
