@@ -373,7 +373,8 @@ export const useBusinessTripStore = defineStore("sd-business-trip-store", {
               __start_date,
               __end_date,
               __company,
-              __route
+              __route,
+              __filialList: useCommonStore().filialList,
             }
           })
         )

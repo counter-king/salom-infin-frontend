@@ -161,7 +161,9 @@ const validateAndSendNotice = async () => {
           body: store.model
         }
       )
-    } catch (err) {}
+    } catch (err) {
+      throw err
+    }
   } else if (props.formType === FORM_TYPE_CREATE) {
     try {
       const { data } = await store.actionCreateDocument(store.model)
@@ -195,8 +197,12 @@ const validateAndSendNotice = async () => {
         })
 
         await store.actionGetDocumentDetailForUpdate(data.id)
-      } catch (err){}
-    } catch (err) {}
+      } catch (err){
+        throw err
+      }
+    } catch (err) {
+      throw err
+    }
   } else if (props.formType === FORM_TYPE_UPDATE && route.params.id) {
     try {
       await store.actionUpdateDocument(
@@ -205,15 +211,20 @@ const validateAndSendNotice = async () => {
           body: store.model
         }
       )
-    } catch (err) {}
+    } catch (err) {
+      throw err
+    }
   }
 }
 
-const onValidateAndSend = async () => {
+const onValidateAndSend = async (resolve) => {
   try {
     await validateAndSendNotice()
     await dispatchNotify(null, t('notice-saved-successfully'), COLOR_TYPES.SUCCESS)
-  } catch (err) {}
+    resolve(true)
+  } catch (err) {
+    resolve(false)
+  }
 }
 
 // Hooks
