@@ -52,7 +52,7 @@ const dialogVisible = useModel(props, 'dialogVisible')
           :loading="interactionABSStore.iabsRequestCallsLoading"
           :total-count="interactionABSStore.iabsRequestCallsTotalCount"
           :action-list="interactionABSStore.actionGetIabsRequestCalls"
-          :apiParams="{ action_history_id: props.id, page: 1, page_size: 15 }"
+          :apiParams="{ action_history: props.id, page: 1, page_size: 15 }"
           :pageSize="15"
           >
             <template #order="{ data }">

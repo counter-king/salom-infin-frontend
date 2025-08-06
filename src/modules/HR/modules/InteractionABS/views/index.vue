@@ -153,7 +153,7 @@ const getQueryName = (type) => {
     case HEADERS.COMPANY:
       return 'company_id'
     case HEADERS.DEPARTMENT:
-      return 'department_id'
+      return 'department'
     case HEADERS.DOCUMENT_TYPE:
       return 'doc_type_id'
     case HEADERS.DOCUMENT_SUB_TYPE:
