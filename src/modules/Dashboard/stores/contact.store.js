@@ -43,7 +43,9 @@ export const useDashboardContactStore = defineStore('dashboardContactStore', {
           ...item.user,
           id: item?.user?.id,
           favourite_id: item.id,
-          is_selected: true
+          is_selected: true,
+          is_user_online: item.is_user_online,
+          private_chat_id: item.private_chat_id
         }))
       } catch (err) {}
       finally {

@@ -1,6 +1,7 @@
 <script setup>
 // Core
 import { computed, onMounted, ref, watch } from 'vue'
+import { useRouter } from "vue-router"
 import { useDebounce, useElementVisibility } from '@vueuse/core'
 import { useI18n } from "vue-i18n"
 // Components
@@ -9,12 +10,21 @@ import { UserWithAction } from '@/components/Users'
 import WidgetWrapper from '../WidgetWrapper.vue'
 // utils
 import { returnStatusBgColor } from "@/utils"
+import { dispatchNotify } from '@/utils/notify'
 // Stores
 import { useDashboardContactStore } from "@/modules/Dashboard/stores/contact.store"
+import { useChatStore } from '@/modules/Chat/stores'
 // Services
 import axiosConfig from '@/services/axios.config'
+// contants
+import { CHAT_ROUTE_NAMES } from '@/modules/Chat/constatns'
+// enums
+import { COLOR_TYPES } from '@/enums'
+
 // Composable
 const store = useDashboardContactStore()
+const router = useRouter()
+const chatStore = useChatStore()
 // Reactive
 const search = ref(null)
 const skipSearch = ref(false) // Flag to skip search watcher
@@ -58,6 +68,24 @@ const handleFavouriteClick = async (item) => {
   skipSearch.value = true
   search.value = null
 }
+
+const createChat = async (user) => {
+  try {
+    const data = await chatStore.actionCreatePrivateChat({ member_id: user?.id });  
+    router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: data.chat_uid }, query: { tab: undefined} })
+  } catch(err) {
+      dispatchNotify(null, `error happned: ${err}`, COLOR_TYPES.ERROR)
+  }
+}
+
+const handleChatClick = async(item) => {
+  if(!!item.private_chat_id){
+    router.push({name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: item.private_chat_id }})
+  } else {
+    createChat(item)
+  }
+}
+
 // Hooks
 onMounted(async () => {
   await store.actionGetDashboardFavouriteContacts()
@@ -108,15 +136,7 @@ onMounted(async () => {
                 :color="item.color"
               >
                 <template #sub-title-after>
-                  <div
-                    v-tooltip.top="{
-                      value: `<h4 class='text-xs text-white'>${item.status?.name}</h4>`,
-                      escape: true,
-                      autoHide: false
-                    }"
-                    class="w-2 min-w-1 h-2 rounded-full"
-                    :class="returnStatusBgColor(item?.status?.code)"
-                  />
+                  <div class="w-1 h-1 min-w-1 min-h-1 bg-greyscale-400 rounded-full"></div>
                   <span class="flex-1 min-w-[40px] text-xs text-greyscale-500">{{ item.cisco || '00-00' }}</span>
                 </template>
 
@@ -128,6 +148,7 @@ onMounted(async () => {
                     autoHide: false
                   }"
                     class="h-4"
+                    @click="handleChatClick(item)"
                   >
                     <base-iconify
                       :icon="ChatLineIcon"

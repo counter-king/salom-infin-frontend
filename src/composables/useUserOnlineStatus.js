@@ -8,6 +8,8 @@ import { WEBCOCKET_EVENTS } from '@/modules/Chat/constatns';
 import { useChatStore } from '@/modules/Chat/stores';
 import { useAuthStore } from '@/modules/Auth/stores';
 import { useThemeStore } from '@/stores/theme.store';
+import { useDashboardContactStore } from "@/modules/Dashboard/stores/contact.store"
+
 // services
 import { useDebounceFn } from '@vueuse/core';
 // utils
@@ -22,6 +24,7 @@ const { send, data } = socket()
 const chatStore = useChatStore()
 const authStore = useAuthStore()
 const themeStore = useThemeStore()
+const dashboardContactStore = useDashboardContactStore()
 
 const sendUserOnlineEvent = ()=> {
   const payload = { command: 'user_online' }
@@ -61,13 +64,19 @@ watch(data, (newData) => {
         getUnreadCount()
     }
   }
-  if(newData.type == WEBCOCKET_EVENTS.MESSAGE_READ){
+  else if(newData.type == WEBCOCKET_EVENTS.USER_STATUS){
+    const user = dashboardContactStore.dashboardContactList.find(item => item.id == newData?.content?.user_id)
+    if(user){
+      user.is_user_online = newData?.content?.status =='offline' ? false : true
+    }
+  }
+  else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_READ){
     // when current user, read mesage, decrement chat count
     if(newData.user.id == authStore.currentUser?.id && themeStore?.header?.find(item => item?.name == 'chat')?.count > 0){
         getUnreadCount()
     }
   }
-  if(newData.type == WEBCOCKET_EVENTS.CHAT_DELETED || newData.type == WEBCOCKET_EVENTS.MESSAGE_DELETED){
+  else if(newData.type == WEBCOCKET_EVENTS.CHAT_DELETED || newData.type == WEBCOCKET_EVENTS.MESSAGE_DELETED){
     getUnreadCount()
   }
 })
