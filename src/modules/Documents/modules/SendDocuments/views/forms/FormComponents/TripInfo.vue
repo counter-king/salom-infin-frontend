@@ -37,6 +37,7 @@ const props = defineProps({
 
 // Reactive
 const showNestedError = ref(false)
+const nextButtonLoading = ref(false)
 
 // Computed
 const regionApiParams = computed(() => {
@@ -91,9 +92,18 @@ const stepClick = async (step) => {
     })
   }
 
-  emit('emit:onValidateAndSend')
-  await store.actionStepClick(router, route, 'decree')
+  nextButtonLoading.value = true
 
+  // Await parent's response
+  const success = await new Promise((resolve) => {
+    emit('emit:onValidateAndSend', resolve)
+  })
+
+  if (success) {
+    await store.actionStepClick(router, route, 'decree')
+  }
+
+  nextButtonLoading.value = false
   // await store.actionStepClick(router, route, step)
 }
 const onSenderCompanyChange = (val, index) => {
@@ -410,6 +420,7 @@ const emit = defineEmits(['emit:onValidateAndSend'])
         shadow
         border-color="border-transparent"
         class="ml-2"
+        :loading="nextButtonLoading"
         @click="stepClick(STEPPER_WORK_PLAN)"
       />
     </div>

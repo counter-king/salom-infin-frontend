@@ -135,15 +135,15 @@ onMounted(() => {
         />
       </template>
 
-      <template #end>
-        <base-button
-          label="create"
-          :icon-left="Plus20SolidIcon"
-          rounded
-          type="button"
-          @click="openRoute"
-        />
-      </template>
+<!--      <template #end>-->
+<!--        <base-button-->
+<!--          label="create"-->
+<!--          :icon-left="Plus20SolidIcon"-->
+<!--          rounded-->
+<!--          type="button"-->
+<!--          @click="openRoute"-->
+<!--        />-->
+<!--      </template>-->
     </action-toolbar>
 <!--    :api-params="apiParams"-->
 
