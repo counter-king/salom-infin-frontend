@@ -83,6 +83,8 @@ const employees = ref([]);
 const settingsOverlay = ref(null);
 const syncDialogVisible = ref(false);
 const syncEmployeeLoading = ref(false);
+const syncEmployeeId = ref(false)
+
 const visibleHeaders = computed(() => headers.value.filter(header => header?.is_active));
 const editableHeaders = computed(() => headers?.value.filter(header => !header?.disabled));
 const setVisible = newVisible => {
@@ -161,6 +163,7 @@ const initHeaders = () => {
 
 const onSyncEmployee = (employeeId) => {
   syncEmployeeLoading.value = true;
+  syncEmployeeId.value = employeeId;
   axiosConfig
     .get(`/users/${employeeId}/sync_user_from_iabs/`)
     .then(() => {
@@ -170,6 +173,7 @@ const onSyncEmployee = (employeeId) => {
       console.log(error)
     })
     .finally(() => {
+      syncEmployeeId.value = null
       syncEmployeeLoading.value = false;
     });
 };
@@ -249,7 +253,8 @@ onMounted(() => {
                 class="flex items-center justify-center w-10 h-10 bg-success-300 hover:bg-success-500 rounded-full text-white"
                 :class="{ '!pointer-events-none': syncEmployeeLoading }"
                 >
-                 <base-iconify :icon="RefreshIcon" class="!w-5 !h-5"/>
+                <base-spinner v-if="syncEmployeeLoading && syncEmployeeId == data.id" rootClasses="!w-5 !h-5 spinner-svg" />
+                <base-iconify v-else :icon="RefreshIcon" class="!w-5 !h-5"/>
               </div>
             </template>
         </template>
@@ -355,5 +360,24 @@ onMounted(() => {
 }
 .employees-table th:last-child, td:last-child {
   border-radius: 0 12px 12px 0;
+}
+::v-deep(.p-progress-spinner-circle) {
+  stroke: var(--spinner-stroke-color, white) !important;
+  animation: none !important;
+}
+
+@keyframes p-progress-spinner-color {
+  0%, 100% {
+    stroke: var(--spinner-stroke-color, white) !important;
+  }
+  25% {
+    stroke: var(--spinner-stroke-color, white) !important;
+  }
+  50% {
+    stroke: var(--spinner-stroke-color, white) !important;
+  }
+  75% {
+    stroke: var(--spinner-stroke-color, white) !important;
+  }
 }
 </style>
