@@ -23,10 +23,8 @@ export const WEBCOCKET_EVENTS = {
   CHAT_DELETED: "chat_deleted",
   TYPING: "typing",
   MESSAGE_READ: "message_read",
-  CHAT_DELETED:"chat_deleted",
   USER_STATUS:"user_status",
   NEW_CHAT_MESSAGE:"new_chat_message",
-  USER_STATUS:"user_status",
 }
 
 export const MESSAGE_TYPES = {
@@ -67,8 +65,8 @@ export const collectionStikers = {
 
 export const stikersTypes = [
   {
-    type: 'fire', 
-    value: '🔥' 
+    type: 'fire',
+    value: '🔥'
   },
   {
     type: 'lough',
