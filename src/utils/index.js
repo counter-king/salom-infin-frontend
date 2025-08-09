@@ -521,6 +521,70 @@ export const hexToRgba = (hex, alpha)=> {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
+//-------------------------------------------------------------------------------------------------------------------//
+
+export const calculateYearsAndMonths = (startDate, endDate) => {
+  const start = new Date(startDate)
+  const end = new Date(endDate)
+
+  if (isNaN(start) || isNaN(end)) {
+    return 'Invalid date(s)'
+  }
+
+  let years = end.getFullYear() - start.getFullYear()
+  let months = end.getMonth() - start.getMonth()
+
+  if (months < 0) {
+    years--
+    months += 12
+  }
+
+  if (years < 0 || (years === 0 && months < 0)) {
+    return 'End date must be after start date'
+  }
+
+  if (years === 0) {
+    return `${months} (${numberToUzbekWords(months)}) oy`
+  }
+
+  return `${years} (${numberToUzbekWords(years)}) yil${months > 0 ? ' ' + months + ' (' + numberToUzbekWords(months) + ') oy' : ''}`
+}
+
+//-------------------------------------------------------------------------------------------------------------------//
+
+export const numberToUzbekWords = (num) => {
+  const ones = [
+    '', 'bir', 'ikki', 'uch', 'to‘rt', 'besh', 'olti', 'yetti', 'sakkiz', 'to‘qqiz'
+  ]
+  const tens = [
+    '', 'o‘n', 'yigirma', 'o‘ttiz', 'qirq', 'ellik', 'oltmish', 'yetmisḩ', 'sakson', 'to‘qson'
+  ]
+
+  if (num === 0) return 'nol'
+
+  let words = ''
+
+  if (num >= 100) {
+    let hundred = Math.floor(num / 100)
+    words += ones[hundred] + ' yuz'
+    num = num % 100
+    if (num > 0) words += ' '
+  }
+
+  if (num >= 10) {
+    let ten = Math.floor(num / 10)
+    words += tens[ten]
+    num = num % 10
+    if (num > 0) words += ' '
+  }
+
+  if (num > 0) {
+    words += ones[num]
+  }
+
+  return words.trim()
+}
+
 // Format number to k
 export function formatToK(number) {
   if (number >= 1000) {

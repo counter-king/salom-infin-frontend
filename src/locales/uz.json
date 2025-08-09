@@ -660,7 +660,7 @@
   "old-poa": "Eski ishonchnoma",
   "select-old-poa": "Eski ishonchnomani tanlang",
   "acting-manager": "BXM boshqaruvchi vazifasini bajaruvchi",
-  "deputy-filial-manager": "BXM boshqaruvchisi o'rinbosari",
+  "deputy-filial-manager": "BXM boshqaruvchisi o'rinbosari (biznes)",
   "collapse": "Kichraytirmoq",
   "design-text": "Sahifaning qulayligini va dizaynini qanday baholaysiz?",
   "physical": "Jismoniy shaxs",
@@ -937,5 +937,14 @@
   "update-explanation-letter": "Tushuntirish xatini o'zgartirish",
   "create-business-trip-notice-foreign": "Chet el xizmat safari uchun bildirishnoma yaratish",
   "update-business-trip-notice-foreign": "Chet el xizmat safari bildirishnomasini o'zgartirish",
-  "to-where-country": "Qayerga (mamlakat)"
+  "to-where-country": "Qayerga (mamlakat)",
+  "second-type-bsc-manager": "2-toifa BXM boshqarish",
+  "deputy-filial-manager-retail": "BXM boshqaruvchisi o'rinbosari (chakana)",
+  "bxo-manager": "BXO boshqaruvchisi",
+  "bxo-deputy-manager-business": "BXO boshqaruvchisi o'rinbosari (biznes)",
+  "bxo-deputy-manager-retail": "BXO boshqaruvchisi o'rinbosari (chakana)",
+  "client-manager": "Mijoz menejeri",
+  "eimzo": "Elektron raqamli imzo",
+  "operative-group-head": "Operatsion guruh nazoratchisi",
+  "employer-representative": "Ish beruvchi vakili"
 }

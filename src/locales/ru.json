@@ -216,7 +216,7 @@
   "department-name": "Название департамент",
   "department-not-found": "Департамент не найден",
   "departments": "Департаменты",
-  "deputy-filial-manager": "Заместитель управляющего ЦБУ",
+  "deputy-filial-manager": "Заместитель управляющего ЦБУ (бизнес)",
   "description": "Описания",
   "design-text": "Как вы оцениваете удобство использования и дизайн страницы?",
   "do-responsible": "Назначить ответ. исп.",
@@ -940,5 +940,14 @@
   "update-explanation-letter": "Изменить пояснительное письмо",
   "create-business-trip-notice-foreign": "Создать рапорт на зарубежную командировку",
   "update-business-trip-notice-foreign": "Изменить рапорт на зарубежную командировку",
-  "to-where-country": "Куда (страна)"
+  "to-where-country": "Куда (страна)",
+  "second-type-bsc-manager": "Управление ЦБУ типа 2",
+  "deputy-filial-manager-retail": "Заместитель управляющего ЦБУ (розничная)",
+  "bxo-manager": "Управляющий ОБУ",
+  "bxo-deputy-manager-business": "Заместитель управляющего ОБУ (бизнес)",
+  "bxo-deputy-manager-retail": "Заместитель управляющего ОБУ (розничная)",
+  "client-manager": "Клиент менеджер",
+  "eimzo": "Электронная цифровая подпись",
+  "operative-group-head": "Руководитель оперативной группы",
+  "employer-representative": "Представитель работодателя"
 }

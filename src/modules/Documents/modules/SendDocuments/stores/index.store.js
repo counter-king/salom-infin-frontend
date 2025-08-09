@@ -418,12 +418,84 @@ export const useSDStore = defineStore("sd-stores", {
             documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_ACTING_FILIAL_MANAGER
           },
           {
+            label: 'second-type-bsc-manager',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_SECOND_TYPE_BSC_MANAGER
+          },
+          {
             label: 'deputy-filial-manager',
             type: 'submenu',
             hasRouterLink: true,
             routerLinkName: ROUTE_SD_CREATE,
             documentType: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
-            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_DEPUTY_FILIAL_MANAGER
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_DEPUTY_FILIAL_MANAGER_BUSINESS
+          },
+          {
+            label: 'deputy-filial-manager-retail',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_DEPUTY_FILIAL_MANAGER_RETAIL
+          },
+          {
+            label: 'bxo-manager',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_BSO_MANAGER
+          },
+          {
+            label: 'bxo-deputy-manager-business',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_BSO_DEPUTY_MANAGER_BUSINESS
+          },
+          {
+            label: 'bxo-deputy-manager-retail',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_BSO_DEPUTY_MANAGER_RETAIL
+          },
+          {
+            label: 'client-manager',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_BSO_CLIENT_MANAGER
+          },
+          {
+            label: 'eimzo',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_ELECTRON_DIGITAL_SIGNATURE
+          },
+          {
+            label: 'operative-group-head',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_OPERATIVE_GROUP_HEAD
+          },
+          {
+            label: 'employer-representative',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_EMPLOYER_REPRESENTATIVE
           },
         ],
       },

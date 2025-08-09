@@ -62,29 +62,43 @@ const props = defineProps({
           {{ props.curatorPosition }} {{ props.curatorFullName }}
           {{ props.empPositionFull }} {{ props.empFullName }}
         </span>ga
-        O‘zbekiston Respublikasi Fuqarolik kodeksining 134-144-moddalariga asosan quyidagi vakolatlarni beradi
+        O‘zbekiston Respublikasi Fuqarolik kodeksining 134-144-moddalariga asosan quyidagi vakolatlarni beradi:
       </div>
 
       <div>
-        Bank va uning hududiy tarmoqlari faoliyatidan kelib chiqadigan sudlov ishlari boʼyicha Oʼzbekiston Respublikasining barcha sudlarida (iqtisodiy, fuqarolik, jinoyat, maʼmuriy, hakamlik) va barcha instansiyalarida, shuningdek Savdo-sanoat palatasi va uning hududiy boshqarmalarida, surishtiruv, tergov organlari, Majburiy ijro byurosi va uning hududiy boʼlimlari va boshqa davlat organlari va tashkilotlarida bankning ishonchli vakili sifatida ishtirok etish;
+        Bank va uning tarmoqlari faoliyatidan kelib chiqqan sudlov ishlari bo‘yicha O‘zbekiston Respublikasining
+        iqtisodiy, fuqarolik, jinoyat, maʼmuriy, hakamlik va boshqa sudlarining barcha instansiyalarida, shuningdek
+        Savdo-sanoat palatasi va uning hududiy boshqarmalarida, Majburiy ijro byurosi va uning hududiy bo‘limlari,
+        surishtiruv, tergov organlari, boshqa davlat organlari va tashkilotlarida Bankning ishonchli vakili sifatida
+        ishtirok etish;
       </div>
 
       <div>
-        Sudlarda bank nomidan barcha protsessual harakatlarni amalga oshirish, xususan da’vo ariza, ariza, iltimos va shikoyatni imzolash, sud hujjati ustidan apellyatsiya, kassatsiya, taftish shikoyatlarini hamda qarzdorga nisbatan to‘lovga qobiliyatsizlik to‘g‘risida ish qo‘zg‘atish haqidagi arizani imzolash, shuningdek sud hujjatini yangi ochilgan holatlar bo‘yicha qayta ko‘rib chiqish to‘g‘risidagi arizani imzolash, ishni hakamlik sudiga topshirish, da’vo (arz qilingan talab) predmetini yoki asosini o‘zgartirish, da’vo talablari miqdorini ko‘paytirish yoki kamaytirish, ijro hujjatini undiruvga taqdim etish, ijro hujjatini ijroga topshirish, sud hujjatining majburiy ijro etilishini talab qilish, undirilgan mol-mulkni yoki pulni olish, davlat ijrochisining xatti-harakatlari (harakat yoki harakatsizligi) ustidan shikoyat berish va uni rad qilish hamda ushbu ishonchnoma bilan yuklatilgan topshiriqlarni bajarish bilan bog’liq bo‘lgan boshqa zarur harakatlarni bajarish;
+        Ijro xatlarini rasmiylashtirish uchun notariuslarga barcha zarur hujjatlarni taqdim etish va ijro xatlarini
+        ulardan olish;
       </div>
 
       <div>
-        Bank faoliyatidan kelib chiqadigan masalalar yuzasidan huquqni muhofaza qiluvchi organlarga tegishli tartibda ariza, shikoyat, takliflar hamda amaliy yordam ko‘rsatish to‘g’risidagi murojaatlarni imzolash;
+        Sudlarda Bank nomidan barcha protsessual harakatlarni amalga oshirish, xususan da’vo ariza, ariza, iltimos va
+        shikoyatni imzolash, sud hujjati ustidan apellyatsiya, kassatsiya, taftish va boshqa shikoyatlarni hamda
+        qarzdorga nisbatan to‘lovga qobiliyatsizlik to‘g‘risida ish qo‘zg‘atish haqidagi arizani imzolash, shuningdek
+        sud hujjatini yangi ochilgan holatlar bo‘yicha qayta ko‘rib chiqish to‘g‘risidagi arizani imzolash, ishni
+        hakamlik sudiga topshirish, da’vo (arz qilingan talab) predmetini yoki asosini o‘zgartirish, da’vo talablari
+        miqdorini ko‘paytirish yoki kamaytirish, ijro hujjatini undiruvga taqdim etish, ijro hujjatini tegishli davlat
+        organiga, tashkilotga yoki uning mansabdor shaxsiga ijrosini ta’minlash uchun topshirish, sud hujjatining
+        majburiy ijro etilishini talab qilish, davlat ijrochisining xatti-harakatlari (harakat yoki harakatsizligi)
+        ustidan shikoyat berish va uni rad qilish;
       </div>
 
       <div>
-        To‘lovga qobiliyatsizlik to‘g‘risidagi ishlar bo’yicha Bankning ishonchli vakili sifatida ishtirok etish, ko’rsatma va tushuntirishlar berish, kreditorlar yig’ilishida vakil sifatida ishtirok etish, shuningdek notarial idora (notarius)larda garov va ipoteka shartnomalarini hamda ularga kiritiladigan o’zgartirish va qo’shimchalarni Bank nomidan imzolash, shu bilan birga ijro xatlarini rasmiylashtirish uchun notariuslarga barcha zarur hujjatlarni taqdim etish va ijro xatlarini ulardan olish vakolatini beradi.
+        Bank faoliyatidan kelib chiqqan masalalar yuzasidan huquqni muhofaza qiluvchi organlarga tegishli tartibda
+        ariza, shikoyat, taklif hamda amaliy yordam ko‘rsatish to‘g’risidagi murojaatlarni imzolash.
       </div>
 
-      <div>
-        {{ props.empPositionFull }} {{ props.empFullName }}ning ID pasport ma‘lumotlari:
-        {{ props.empPassportDetails }}.
-      </div>
+<!--      <div>-->
+<!--        {{ props.empPositionFull }} {{ props.empFullName }}ning ID pasport ma‘lumotlari:-->
+<!--        {{ props.empPassportDetails }}.-->
+<!--      </div>-->
 
       <base-footer :compose-model="props.composeModel" :parent-document="props.parentDocument" />
     </div>

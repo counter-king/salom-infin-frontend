@@ -75,15 +75,25 @@ const props = defineProps({
       </div>
 
       <div>
-        1. Bank nomidan Bank Ustavi, Bankka berilgan litsenziya va Markaz Nizomida ko‘zda tutilgan operatsiyalarni Bosh bank tomonidan Markaz uchun o‘rnatilgan limit va vakolatlar doirasida amalga oshirish hamda uni amalga oshirish bilan bog‘liq bo‘lgan hujjatlarni imzolash;
+        1. Markaz tomonidan Bank nomidan Bank Ustavi, Bank litsenziyasi, Markaz Nizomida ko‘zda tutilgan operatsiyalarni
+        Bank tomonidan Markaz uchun o‘rnatilgan limit va vakolatlar doirasida amalga oshirish hamda uni amalga oshirish
+        bilan bog‘liq bo‘lgan hujjatlarni imzolash;
       </div>
 
       <div>
-        2.	Markaz faoliyatidan kelib chiqadigan masalalarni hal etishda barcha davlat va jamoat organlari, boshqa muassasa, tashkilot va korxonalarda hamda jismoniy va yuridik shaxslar bilan munosabatda Bank manfaatlarini ko‘zlab ish yuritish;
+        2. Markaz faoliyatidan kelib chiqadigan masalalarni hal etishda barcha davlat va jamoat organlari, boshqa
+        muassasa, tashkilot va korxonalar, jismoniy va yuridik shaxslar bilan munosabatlarda Bank manfaatlarini ko‘zlab
+        ish yuritish;
       </div>
 
       <div>
-        3.	Bank nomidan belgilangan tartibda bank hisobvarag‘i, omonat, kredit, garov (ipoteka), kafolat, kafillik shartnomalari, aksiyalar, obligatsiyalar va Bank tomonidan chiqariladigan qimmatli qog‘ozlarni tarqatish (sotish) bo‘yicha shartnomalarni va boshqa shartnomalarini (Mehnat munosabatlari bilan bog‘liq bo‘lgan shartnoma va kelishuvlar bundan mustasno), bank balansidagi ko‘char va ko‘chmas mulklarning oldi-sotdi shartnomalarini imzolash,  o‘zgartirish va bekor qilish (vakolatli kollegial organ qarori asosida) hamda shartnomalar ijrosini qabul qilish, notarial idora/notariuslarda Bank vakili sifatida qatnashish.
+        3. Bank nomidan belgilangan tartibda Markaz tomonidan bank hisobvarag‘i, omonat, kredit, garov (ipoteka),
+        kafolat, kafillik shartnomalari, aksiyalar, obligatsiyalar va Bank tomonidan chiqariladigan qimmatli qog‘ozlarni
+        tarqatish (sotish) bo‘yicha, Bank balansidagi ko‘char va ko‘chmas mulklarning oldi-sotdi shartnomalarini va
+        boshqa shartnomalarni (mehnat munosabatlari bilan bog‘liq bo‘lgan shartnoma va kelishuvlar bundan mustasno)
+        imzolash, vakolatli kollegial organ qarori asosida ularga tegishli o‘zgartirish va qo‘shimchalar kiritish, bekor
+        qilish haqidagi kelishuvlarni imzolash, shuningdek Bank nomidan Markaz faoliyatiga taalluqli shartnomalar
+        ijrosini qabul qilish, notarial idora/notariuslarda Bank vakili sifatida qatnashish.
       </div>
 
       <div>
@@ -91,7 +101,20 @@ const props = defineProps({
       </div>
 
       <div>
-        4.	Markaz faoliyatidan kelib chiqadigan sudlov ishlari bo‘yicha barcha sud va huquqni muhofaza qiluvchi organlarda taraflarning barcha protsessual harakatlarini amalga oshirish huquqlari bilan Bankning huquq va manfaatlarini himoya qilish.
+        4. Markaz faoliyatidan kelib chiqqan sudlov ishlari bo‘yicha barcha sud va huquqni muhofaza qiluvchi organlarda
+        taraflarning barcha protsessual harakatlarini amalga oshirish huquqi bilan Bankning huquq va manfaatlarini
+        himoya qilish va vakil sifatida ishtirok etish.
+      </div>
+
+      <div>
+        5. Boshqaruvchi Markaz faoliyatidan kelib chiqqan sud ishlari bo‘yicha Bank nomidan ariza, da’vo ariza,
+        shikoyatni imzolash, shu jumladan sud hujjati ustidan apellyatsiya, kassatsiya, taftish shikoyatlarini imzolash
+        hamda sud hujjatini yangi ochilgan holatlar bo‘yicha qayta ko‘rib chiqish to‘g‘risidagi arizani imzolash, ishni
+        hakamlik sudiga topshirish, da’vo (arz qilingan talab) predmetini yoki asosini o‘zgartirish, da’vo talablari
+        miqdorini ko‘paytirish yoki kamaytirish, ijro hujjatini ijro hujjatini tegishli davlat organiga, tashkilotga
+        yoki uning mansabdor shaxsiga ijrosini ta’minlash uchun topshirish, sud hujjatining majburiy ijro etilishini
+        talab qilish, davlat ijrochisining xatti-harakatlari (harakat yoki harakatsizligi) ustidan shikoyat berish va
+        uni rad qilish, undirilgan mol-mulkni yoki pulni olish huquqiga ega bo‘ladi.
       </div>
 
       <base-footer :compose-model="props.composeModel" :parent-document="props.parentDocument" />

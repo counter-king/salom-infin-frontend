@@ -8,7 +8,11 @@ import { useAuthStore } from "@/modules/Auth/stores"
 import {
   ForLegalServices,
   ActingFilialManagerTemplate,
-  DeputyFilialManagerTemplate
+  DeputyFilialManagerTemplate,
+  SecondTypeBXMManagerTemplate,
+  DeputyFilialManagerRetailTemplate,
+  BSOManagerTemplate,
+  BSOClientManagerTemplate, ElectronDigitalSignatureTemplate, OperativeGroupHeadTemplate, EmployerRepresentativeTemplate
 } from "@/components/Templates/PowerOfAttorney/index"
 // Constants
 import { COMPOSE_DOCUMENT_SUB_TYPES, SIGNER_TYPES } from "@/enums"
@@ -31,7 +35,16 @@ const props = defineProps({
 const formMap = {
   [COMPOSE_DOCUMENT_SUB_TYPES.POA_FOR_LEGAL_SERVICES]: ForLegalServices,
   [COMPOSE_DOCUMENT_SUB_TYPES.POA_ACTING_FILIAL_MANAGER]: ActingFilialManagerTemplate,
-  [COMPOSE_DOCUMENT_SUB_TYPES.POA_DEPUTY_FILIAL_MANAGER]: DeputyFilialManagerTemplate,
+  [COMPOSE_DOCUMENT_SUB_TYPES.POA_SECOND_TYPE_BSC_MANAGER]: SecondTypeBXMManagerTemplate,
+  [COMPOSE_DOCUMENT_SUB_TYPES.POA_DEPUTY_FILIAL_MANAGER_BUSINESS]: DeputyFilialManagerTemplate,
+  [COMPOSE_DOCUMENT_SUB_TYPES.POA_BSO_DEPUTY_MANAGER_BUSINESS]: DeputyFilialManagerTemplate,
+  [COMPOSE_DOCUMENT_SUB_TYPES.POA_DEPUTY_FILIAL_MANAGER_RETAIL]: DeputyFilialManagerRetailTemplate,
+  [COMPOSE_DOCUMENT_SUB_TYPES.POA_BSO_DEPUTY_MANAGER_RETAIL]: DeputyFilialManagerRetailTemplate,
+  [COMPOSE_DOCUMENT_SUB_TYPES.POA_BSO_CLIENT_MANAGER]: BSOClientManagerTemplate,
+  [COMPOSE_DOCUMENT_SUB_TYPES.POA_BSO_MANAGER]: BSOManagerTemplate,
+  [COMPOSE_DOCUMENT_SUB_TYPES.POA_ELECTRON_DIGITAL_SIGNATURE]: ElectronDigitalSignatureTemplate,
+  [COMPOSE_DOCUMENT_SUB_TYPES.POA_OPERATIVE_GROUP_HEAD]: OperativeGroupHeadTemplate,
+  [COMPOSE_DOCUMENT_SUB_TYPES.POA_EMPLOYER_REPRESENTATIVE]: EmployerRepresentativeTemplate,
 }
 
 // Computed
