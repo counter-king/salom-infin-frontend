@@ -28,6 +28,7 @@ import UserMultiSelect from "@/components/Select/UserMultiSelect.vue"
 import UserSelect from "@/components/Select/UserSelect.vue"
 import { LayoutWithTabsCompose } from "@/components/DetailLayout"
 import EditorWithTabs from "@/components/Composed/EditorWithTabs.vue";
+import { ModalShortDescription } from "@/components/Modal";
 
 // Composable
 const route = useRoute()
@@ -207,6 +208,10 @@ onUnmounted(() => {
                   file-upload-container-classes="w-1/2 pr-2"
                   :files="store.model.__files"
                   @emit:file-upload="onFileUpload"
+                />
+
+                <modal-short-description
+                  @emit:selected="(value) => store.model.content = value"
                 />
               </div>
             </base-col>

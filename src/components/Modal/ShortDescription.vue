@@ -74,7 +74,7 @@ onMounted(() => {
           class="max-w-[225px] truncate bg-greyscale-50 hover:bg-primary-500 transition-colors border border-greyscale-200 text-greyscale-500 hover:text-white text-xs rounded-[6px] py-[7px] px-2 cursor-pointer"
           @click="emit('emit:selected', item.description)"
         >
-          {{ item.description }}
+          {{ item.title }}
         </div>
       </template>
     </div>
@@ -115,7 +115,7 @@ onMounted(() => {
                   :for="`short-description-item-${index}`"
                   class="flex-1 text-sm font-medium text-greyscale-900 cursor-pointer py-[14px]"
                 >
-                  {{ item.description }}
+                  {{ item.title }}
                 </label>
               </div>
             </template>
