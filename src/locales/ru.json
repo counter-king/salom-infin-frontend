@@ -949,5 +949,9 @@
   "client-manager": "Клиент менеджер",
   "eimzo": "Электронная цифровая подпись",
   "operative-group-head": "Руководитель оперативной группы",
-  "employer-representative": "Представитель работодателя"
+  "employer-representative": "Представитель работодателя",
+  "return-enforcement-document": "Возврат исполнительного документа",
+  "basis": "Основа",
+  "enter-basis": "Введите основу",
+  "mediation-agreement": "Посредническое соглашение"
 }

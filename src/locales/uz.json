@@ -946,5 +946,9 @@
   "client-manager": "Mijoz menejeri",
   "eimzo": "Elektron raqamli imzo",
   "operative-group-head": "Operatsion guruh nazoratchisi",
-  "employer-representative": "Ish beruvchi vakili"
+  "employer-representative": "Ish beruvchi vakili",
+  "return-enforcement-document": "Ijro hujjatini qaytarib olish",
+  "basis": "Asos",
+  "enter-basis": "Asosni kiriting",
+  "mediation-agreement": "Mediativ kelishuv"
 }

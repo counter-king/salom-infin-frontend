@@ -105,6 +105,8 @@ export const COMPOSE_DOCUMENT_SUB_TYPES = {
   POA_ELECTRON_DIGITAL_SIGNATURE:      '48', // Электронная цифровая подпись
   POA_OPERATIVE_GROUP_HEAD:            '49', // Руководитель оперативной группы
   POA_EMPLOYER_REPRESENTATIVE:         '50', // Представитель работодателя
+  POA_RETURN_ENFORCEMENT_DOCUMENT:     '51', // Возврат исполнительного документа
+  POA_MEDIATION_AGREEMENT:             '52', // Посредническое соглашение
 }
 export const COLOR_TYPES = {
   PRIMARY: "primary",

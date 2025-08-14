@@ -12,7 +12,11 @@ import {
   SecondTypeBXMManagerTemplate,
   DeputyFilialManagerRetailTemplate,
   BSOManagerTemplate,
-  BSOClientManagerTemplate, ElectronDigitalSignatureTemplate, OperativeGroupHeadTemplate, EmployerRepresentativeTemplate
+  BSOClientManagerTemplate,
+  ElectronDigitalSignatureTemplate,
+  OperativeGroupHeadTemplate,
+  EmployerRepresentativeTemplate,
+  ReturnEnforcementDocumentTemplate
 } from "@/components/Templates/PowerOfAttorney/index"
 // Constants
 import { COMPOSE_DOCUMENT_SUB_TYPES, SIGNER_TYPES } from "@/enums"
@@ -45,6 +49,8 @@ const formMap = {
   [COMPOSE_DOCUMENT_SUB_TYPES.POA_ELECTRON_DIGITAL_SIGNATURE]: ElectronDigitalSignatureTemplate,
   [COMPOSE_DOCUMENT_SUB_TYPES.POA_OPERATIVE_GROUP_HEAD]: OperativeGroupHeadTemplate,
   [COMPOSE_DOCUMENT_SUB_TYPES.POA_EMPLOYER_REPRESENTATIVE]: EmployerRepresentativeTemplate,
+  [COMPOSE_DOCUMENT_SUB_TYPES.POA_RETURN_ENFORCEMENT_DOCUMENT]: ReturnEnforcementDocumentTemplate,
+  [COMPOSE_DOCUMENT_SUB_TYPES.POA_MEDIATION_AGREEMENT]: ReturnEnforcementDocumentTemplate,
 }
 
 // Computed

@@ -57,6 +57,26 @@ export const usePOAStore = defineStore("power-of-attorney", {
       __user: {
         required: helpers.withMessage(`Поле не должен быть пустым`, required)
       },
+    },
+    secondRules: {
+      content: {
+        required: helpers.withMessage(`Поле не должен быть пустым`, required)
+      },
+      short_description: {
+        required: helpers.withMessage(`Поле не должен быть пустым`, required)
+      },
+      __curator: {
+        required: helpers.withMessage(`Поле не должен быть пустым`, required)
+      },
+      __signers: {
+        required: helpers.withMessage(`Поле не должен быть пустым`, required)
+      },
+      // short_description: {
+      //   required: helpers.withMessage(`Поле не должен быть пустым`, required)
+      // },
+      __user: {
+        required: helpers.withMessage(`Поле не должен быть пустым`, required)
+      },
     }
   }),
   actions: {

@@ -11,7 +11,7 @@ import {
   OrdinaryNoticeForm,
   DecreeForm,
   PowerOfAttorneyForm,
-  BusinessTripForm, BusinessTripDecreeForm, ExtendBusinessTripForm
+  BusinessTripForm, BusinessTripDecreeForm, ExtendBusinessTripForm, PowerOfAttorneySecondForm
 } from "@/modules/Documents/modules/SendDocuments/views/forms/index"
 // Constants
 import {FORM_TYPE_UPDATE} from "@/constants/constants";
@@ -31,6 +31,8 @@ const formMap = {
     [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_NOTICE_FOREIGN]: BusinessTripForm,
     [COMPOSE_DOCUMENT_SUB_TYPES.BUSINESS_TRIP_DECREE_LOCAL]: BusinessTripDecreeForm,
     [COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE]: ExtendBusinessTripForm,
+    [COMPOSE_DOCUMENT_SUB_TYPES.POA_RETURN_ENFORCEMENT_DOCUMENT]: PowerOfAttorneySecondForm,
+    [COMPOSE_DOCUMENT_SUB_TYPES.POA_MEDIATION_AGREEMENT]: PowerOfAttorneySecondForm,
   },
   APPLICATION: [
     COMPOSE_DOCUMENT_SUB_TYPES.LABOR_LEAVE,
