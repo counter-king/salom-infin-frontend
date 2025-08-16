@@ -1,7 +1,13 @@
 <script setup>
-import { computed } from 'vue'
-import { CallMedicineRoundedBoldIcon, LetterBoldIcon } from '@/components/Icons'
+import { ref, computed } from 'vue'
+import { useToast } from 'primevue/usetoast'
+import { useI18n } from 'vue-i18n'
+import axiosConfig from '@/services/axios.config'
+import { CallMedicineRoundedBoldIcon, LetterBoldIcon, StarLinearIcon, StarBoldIcon } from '@/components/Icons'
 import { UserStatusChip } from '@/components/Chips'
+
+const toast = useToast()
+const { t } = useI18n()
 
 const props = defineProps({
   value: {
@@ -16,7 +22,25 @@ const props = defineProps({
   }
 })
 
-const flatDeepItems = computed(() => collectUsersFromArray(props.value))
+const itemId = ref(0)
+
+const flatDeepItems = computed(() => props.isSearch ? props.value : collectUsersFromArray(props.value))
+
+const addToFavourite = async (id) => {
+  itemId.value = id
+  try {
+    await axiosConfig.post(`my-selected-contacts/`, { user: id })
+    toast.add({ severity: 'success', summary: t('successfully-added'), life: 3000 })
+  }
+  catch (error) {
+
+  }
+  finally {
+    setTimeout(() => {
+      itemId.value = 0
+    }, 500)
+  }
+}
 
 function collectUsersFromArray(departments) {
   let result = []
@@ -48,8 +72,8 @@ function collectUsers(department) {
 <template>
   <div class="grid grid-cols-4 gap-5">
     <template v-for="item in flatDeepItems" :key="item.id">
-      <div class="bg-white shadow-button rounded-[20px] overflow-hidden">
-        <div class="flex gap-4 p-5 pb-4">
+      <div class="flex flex-col bg-white shadow-button rounded-[20px] overflow-hidden relative">
+        <div class="flex flex-1 gap-4 p-5">
           <div class="w-14 h-14">
             <base-avatar
               :label="item?.full_name"
@@ -65,9 +89,7 @@ function collectUsers(department) {
           </div>
 
           <div class="flex-1">
-            <h1 class="font-semibold text-greyscale-900">{{ item.full_name }}</h1>
-            <h2 class="font-medium text-greyscale-500">{{ item.position?.name }}</h2>
-            <h2 class="font-medium text-greyscale-400 my-2">{{ item.department?.name }}</h2>
+            <h1 class="font-semibold text-greyscale-900 mb-1">{{ item.full_name }}</h1>
 
             <user-status-chip
               :name="item.status.name"
@@ -75,6 +97,9 @@ function collectUsers(department) {
               border
               circle
             />
+
+            <h2 class="font-medium text-greyscale-500 line-clamp-1 mt-2">{{ item.position?.name }}</h2>
+            <h2 class="font-medium text-greyscale-400 line-clamp-1 mt-1">{{ item.department?.name }}</h2>
           </div>
         </div>
 
@@ -89,9 +114,29 @@ function collectUsers(department) {
             <span class="font-medium text-greyscale-900 text-sm">{{ item.email }}</span>
           </div>
         </div>
+
+        <button
+          type="button"
+          class="absolute top-4 right-4"
+          @click="addToFavourite(item.id)"
+        >
+          <template v-if="itemId === item.id">
+            <base-spinner root-classes="!w-6 !h-6" />
+          </template>
+
+          <template v-else>
+            <template v-if="item.is_selected">
+              <base-iconify :icon="StarBoldIcon" class="text-warning-500" />
+            </template>
+
+            <template v-else>
+              <base-iconify :icon="StarLinearIcon" class="text-greyscale-300" />
+            </template>
+          </template>
+        </button>
       </div>
     </template>
-  </div>
+</div>
 </template>
 
 <style scoped>

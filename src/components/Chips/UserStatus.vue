@@ -86,7 +86,7 @@ const statement = computed(() => {
 
 <template>
   <span
-    class="px-3 py-[6px] text-xs font-semibold rounded-lg"
+    class="px-2 py-1 text-xs font-semibold rounded-lg"
     :class="[
       statement,
       {

@@ -24,6 +24,10 @@ const handleEmitUp = (value, totalCountPage) => {
   data.value = value
   totalCount.value = totalCountPage
 }
+const handleSearch = (value) => {
+  isSearch.value = value
+  componentType.value = 'CardType'
+}
 // Watch
 watch(
   () => componentType.value,
@@ -43,7 +47,7 @@ watch(
     <div class="handbook-view w-full p-10 pt-7">
       <header-toolbar
         @emit:up="handleEmitUp"
-        @emit:search="(value) => isSearch = value"
+        @emit:search="(value) => handleSearch(value)"
       >
         <template #title-after>
           <div class="flex gap-2">
