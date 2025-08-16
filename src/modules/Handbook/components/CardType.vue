@@ -129,7 +129,7 @@ function collectUsers(department) {
             <base-avatar
               :label="item?.full_name"
               :color="item?.color ?? '#635AFF'"
-              image="https://d2v5dzhdg4zhx3.cloudfront.net/web-assets/images/storypages/primary/ProductShowcasesampleimages/JPEG/Product+Showcase-1.jpg"
+              :image="item?.avatar?.url"
               :meta="item"
               shape="circle"
               detail-dialog
@@ -139,7 +139,7 @@ function collectUsers(department) {
             </base-avatar>
 
             <div
-              class="absolute bottom-[1px] border-[3px] border-greyscale-50 right-0 min-w-[14px] min-h-[14px] w-[14px] h-[14px] rounded-full bg-greyscale-300"
+              class="absolute bottom-0 border-[3px] border-greyscale-50 right-0 min-w-4 min-h-4 w-4 h-4 rounded-full bg-greyscale-300"
               :class="{'!bg-success-500': item.is_user_online}"
             />
           </div>
