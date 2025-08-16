@@ -129,7 +129,7 @@ function collectUsers(department) {
             <base-avatar
               :label="item?.full_name"
               :color="item?.color ?? '#635AFF'"
-              :image="item?.avatar?.url"
+              image="https://d2v5dzhdg4zhx3.cloudfront.net/web-assets/images/storypages/primary/ProductShowcasesampleimages/JPEG/Product+Showcase-1.jpg"
               :meta="item"
               shape="circle"
               detail-dialog
@@ -232,7 +232,11 @@ function collectUsers(department) {
             <span class="font-medium text-greyscale-900 text-sm">{{ item.cisco ?? '-' }}</span>
           </div>
 
-          <a :href="`mailto:${item.email}`" class="flex items-center gap-[10px]">
+          <a
+            :href="`mailto:${item.email}`"
+            class="flex items-center gap-[10px]"
+            :class="item.email ? 'underline underline-offset-2' : ''"
+          >
             <base-iconify :icon="LetterBoldIcon" class="text-greyscale-400" />
             <span class="font-medium text-greyscale-900 text-sm">{{ item.email ?? '-' }}</span>
           </a>

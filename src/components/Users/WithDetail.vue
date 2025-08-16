@@ -133,11 +133,15 @@ const props = defineProps({
             <span class="text-sm font-medium text-greyscale-900">{{ props.meta?.phone_2 ?? '-' }}</span>
           </div>
 
-          <div class="flex items-center gap-[10px]">
+          <a
+            :href="`mailto:${props.meta?.email}`"
+            class="flex items-center gap-[10px]"
+            :class="props.meta?.email ? 'underline underline-offset-2' : ''"
+          >
             <base-iconify :icon="LetterBoldIcon" class="text-greyscale-400" />
 
             <span class="text-sm font-medium text-greyscale-900">{{ props.meta?.email ?? '-' }}</span>
-          </div>
+          </a>
         </div>
       </div>
     </div>
