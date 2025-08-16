@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router'
 // Components
 import TheToolbar from '@/components/Toolbar/TheToolbar.vue'
 import TheNetwork from '@/components/TheNetwork.vue'
-import SessionEndMessageBar from '@/components/SessionEndMessageBar.vue'
+import { ModalInactivityLogout } from '@/components/Modal'
 // Store
 import { useCommonStore } from '@/stores/common'
 import { useCountStore } from '@/stores/count.store'
@@ -53,30 +53,32 @@ const isNewsShowPage = computed(() => expectionPages.includes(router.currentRout
 </script>
 
 <template>
-  <template v-if="appLoading">
-    <div class="h-screen">
-      <base-spinner content />
-    </div>
-  </template>
-
-	<div
-    v-else
-    class="main-layout-view h-screen"
-  >
-		<the-toolbar />
-
-		<div class="main-layout-content flex" :class="{'overflow-auto w-full flex-col': isNewsShowPage, 'overflow-hidden': !isNewsShowPage}">
-      <router-view class="bg-primary-50" />
-		</div>
-	</div>
-
-  <Transition>
-    <template v-if="authStore.sessionEnd">
-      <session-end-message-bar />
+  <modal-inactivity-logout>
+    <template v-if="appLoading">
+      <div class="h-screen">
+        <base-spinner content />
+      </div>
     </template>
-  </Transition>
 
-  <the-network />
+    <div
+      v-else
+      class="main-layout-view h-screen"
+    >
+      <the-toolbar />
+
+      <div class="main-layout-content flex" :class="{'overflow-auto w-full flex-col': isNewsShowPage, 'overflow-hidden': !isNewsShowPage}">
+        <router-view class="bg-primary-50" />
+      </div>
+    </div>
+
+<!--    <Transition>-->
+<!--      <template v-if="authStore.sessionEnd">-->
+<!--        <modal-session-end-message-bar />-->
+<!--      </template>-->
+<!--    </Transition>-->
+
+    <the-network />
+  </modal-inactivity-logout>
 </template>
 
 <style scoped>
