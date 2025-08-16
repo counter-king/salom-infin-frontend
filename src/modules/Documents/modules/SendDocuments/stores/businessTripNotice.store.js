@@ -19,7 +19,7 @@ import {COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL} from "@/enu
 // Store
 import { useAuthStore } from '@/modules/Auth/stores'
 
-export const useSDBTNoticeStore = defineStore("sd-notice-store", {
+export const useSDBTNoticeStore = defineStore("sd-notice-stores", {
   state: () => {
     const authStore = useAuthStore()
 

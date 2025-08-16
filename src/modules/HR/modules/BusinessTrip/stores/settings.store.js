@@ -2,7 +2,7 @@
 import { defineStore } from 'pinia'
 // Services
 import { fetchGetCountryList, fetchGetRegionList, fetchGetTagList } from '../services'
-export const useSettingsStore = defineStore("settings-trip-store", {
+export const useSettingsStore = defineStore("settings-trip-stores", {
   state: () => ({
     countryListLoading: false,
     countryListMoreLoading: false,

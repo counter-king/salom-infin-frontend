@@ -9,7 +9,7 @@ import {
 import { fetchBlobFile } from "@/services/file.service";
 import Props from "@/components/Users/props";
 
-export const useBusinessTripStore = defineStore("business-trip-store", {
+export const useBusinessTripStore = defineStore("business-trip-stores", {
   state: () => ({
     filterState: {
       page: 1,

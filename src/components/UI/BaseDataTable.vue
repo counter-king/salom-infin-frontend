@@ -12,7 +12,7 @@ import FieldGroups from '@/components/FieldGroups.vue'
 import { formatDateHour } from "@/utils/formatDate";
 import { getStorageItem } from "@/utils/storage";
 // Store
-// import { usePaginationStore } from "@/stores/pagination.store";
+// import { usePaginationStore } from "@/stores/pagination.stores";
 // constants
 import { pagination } from "@/constants/constants";
 // Composable

@@ -20,7 +20,7 @@ import {COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL} from "@/enu
 import { useAuthStore } from '@/modules/Auth/stores'
 
 
-export const useSDBTDecreeStore = defineStore("sd-decree-store", {
+export const useSDBTDecreeStore = defineStore("sd-decree-stores", {
   state: () => ({
     buttonLoading: false,
     detailLoading: false,

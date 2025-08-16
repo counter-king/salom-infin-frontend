@@ -11,7 +11,7 @@ import { dispatchNotify } from '@/utils/notify';
 // enums
 import { COLOR_TYPES } from '@/enums';
 import { fetchBlobFile } from '@/services/file.service';
-// store
+// stores
 import { useChatStore } from '../../stores';
 import { MESSAGE_TYPES } from '../../constatns';
 import { PenBoldIcon } from '@/components/Icons';
@@ -50,7 +50,7 @@ const props = defineProps({
     default: false
   },
   classNames: {
-    type: [String , Array, Object] 
+    type: [String , Array, Object]
   }
 })
 
@@ -72,7 +72,7 @@ onMounted(async() => {
       const { blobUrl } = await fetchBlobFile(props.message?.attachments?.file?.id);
       if(chatStore.messageListByChatId[props.index] && chatStore.messageListByChatId[props.index].attachments){
         chatStore.messageListByChatId[props.index].attachments.file.url = blobUrl
-      }  
+      }
     } catch (error) {
       dispatchNotify(null, error, COLOR_TYPES.ERROR)
     }
@@ -83,13 +83,13 @@ onMounted(async() => {
 })
 </script>
 <template>
- <div 
+ <div
   v-bind="attrs"
   ref="forwardedRef"
   class="flex gap-2"
   :class="classNames"
   >
-  <base-avatar 
+  <base-avatar
     :image="props.message?.sender?.avatar?.url"
     :label="props.message?.sender?.full_name"
     :color="props.message?.sender?.color"
@@ -101,12 +101,12 @@ onMounted(async() => {
    <div class="flex flex-col gap-2">
     <div class="flex gap-3">
       <!-- images -->
-      <div 
+      <div
         @contextmenu.prevent="(e)=>props.onShowContextMenu(e, props.message)"
         class="flex flex-col gap-2 p-2 cursor-pointer rounded-xl max-w-[300px] min-w-[200px] bg-white"
         >
          <!-- replay to message -->
-         <div 
+         <div
             v-if="!!props.message.replied_to"
             @click="props.handleClickReplayMessage(props.message)"
             class="flex flex-col gap-1 pl-2 border-l-[2px] border-warning-500"
@@ -119,9 +119,9 @@ onMounted(async() => {
         <div
           @click="props.handleClickImage(props.message)"
           >
-          <BaseSpinner 
+          <BaseSpinner
             v-if="loading"
-            class="!w-4 !h-4 text-greyscale-500" 
+            class="!w-4 !h-4 text-greyscale-500"
           />
           <img
             v-else
@@ -136,18 +136,18 @@ onMounted(async() => {
             class="!w-3 !h-3"
           />
           <span>{{ t('edited') }}</span>
-        </div>   
+        </div>
       </div>
       <p  class="text-xs font-medium text-greyscale-500 self-end">{{ formatHour(props.message?.created_date) }}</p>
     </div>
     <!-- reactions -->
     <div v-if="props.message?.reactions && Object.keys(props.message.reactions).length" class="flex gap-1">
       <template v-for="reaction in Object.keys(props.message.reactions)" :key="reaction">
-        <ClickedStiker 
+        <ClickedStiker
           @click="props.handleClickEmoji(reaction, message.message_id)"
-          :onContextMenuClick="(e)=>props.onShowEmojiContextMenu(e, props.message.reactions[reaction])" 
+          :onContextMenuClick="(e)=>props.onShowEmojiContextMenu(e, props.message.reactions[reaction])"
           :emoji="reaction"
-          :userReactionList="props.message.reactions[reaction]" 
+          :userReactionList="props.message.reactions[reaction]"
           />
       </template>
     </div>

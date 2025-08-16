@@ -14,7 +14,7 @@ import {fetchUserDetail} from "@/services/users.service";
 import {SIGNER_TYPES} from "@/enums";
 import {useAuthStore} from "@/modules/Auth/stores";
 
-export const useSDStoreApplication = defineStore("sd-store-application", {
+export const useSDStoreApplication = defineStore("sd-stores-application", {
   state: () => ({
     buttonLoading: false,
     detailLoading: false,

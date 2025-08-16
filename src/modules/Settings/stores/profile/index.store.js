@@ -7,7 +7,7 @@ import {
   UserIcon,
   UserSpeakRoundedIcon
 } from '@/components/Icons'
-export const profileStore = defineStore('profile-store', {
+export const profileStore = defineStore('profile-stores', {
   state: () => ({
     routes: {
       title: 'Профиль',

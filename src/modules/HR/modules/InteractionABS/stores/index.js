@@ -48,7 +48,7 @@ import { HEADERS, HEADERS_TITLE } from '../enums'
 //     ]
 //   }
 // }
-export const useInteractionABSStore = defineStore('interaction-abs-store', {
+export const useInteractionABSStore = defineStore('interaction-abs-stores', {
     state: () => ({
       iabsActionListLoading: false,
       iabsActionList: [],
@@ -192,7 +192,7 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
         },
       ]
     }),
-    actions: {   
+    actions: {
       async actionGetIabsActionList(params) {
         this.iabsActionListLoading = true
         try {
@@ -213,7 +213,7 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
             iabsId: item.iabs_id,
             requestId: item?.request_id
           }))
-          
+
           this.iabsActionListTotalCount = response.data?.count
           return response
         } catch (error) {
@@ -226,7 +226,7 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
         try {
           if(resetList){
             this.companyListLoading = true
-          } 
+          }
           const response = await getCompanyList(params)
           if(resetList){
             this.companyList = response.data.results
@@ -244,7 +244,7 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
         try {
           if(resetList){
             this.topDepartmentsListLoading = true
-          } 
+          }
           const response = await getTopDepartmentsList(params)
           if(resetList){
             this.topDepartmentsList = response.data.results
@@ -262,7 +262,7 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
         try {
           if(resetList){
             this.documentTypeListLoading = true
-          } 
+          }
           const response = await getDocumentTypeList(params)
           if(resetList){
             this.documentTypeList = response.data.results
@@ -280,7 +280,7 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
         try {
           if(resetList){
             this.documentSubTypeListLoading = true
-          } 
+          }
           const response = await getDocumentSubTypeList(params)
           if(resetList){
             this.documentSubTypeList = response.data.results
@@ -298,7 +298,7 @@ export const useInteractionABSStore = defineStore('interaction-abs-store', {
         try {
           if(resetList){
             this.usersListLoading = true
-          } 
+          }
           const response = await fetchGetUsersList(params)
           if(resetList){
             this.usersList = response.data.results

@@ -193,6 +193,8 @@ export { default as PlainBoldIcon } from  '~icons/solar/plain-bold'
 export { default as NoteBookBoldDuotoneIcon } from  '~icons/solar/notebook-bold-duotone'
 export { default as CaseRoundBoldDuotoneIcon } from  '~icons/solar/case-round-bold-duotone'
 export { default as UserSpeakBoldDuotoneIcon } from  '~icons/solar/user-speak-bold-duotone'
+export { default as CheckCircleBoldDuotoneIcon } from  '~icons/solar/check-circle-bold-duotone'
+export { default as StopWatchBoldDuotoneIcon } from  '~icons/solar/stopwatch-bold-duotone'
 // Solar (Bold Broken)
 export { default as UserCheckRoundedBrokenIcon } from  '~icons/solar/user-check-rounded-broken'
 // Fluent

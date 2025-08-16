@@ -1,5 +1,5 @@
 <script setup>
-// core 
+// core
 import { computed, onMounted, reactive, ref, useModel } from 'vue';
 import { helpers, required } from '@vuelidate/validators';
 import useVuelidate from '@vuelidate/core';
@@ -18,7 +18,7 @@ import { dispatchNotify } from '@/utils/notify';
 import axiosConfig from '@/services/axios.config';
 import { fetchAddMemberToGroupChat, fetchCreateGroupChat, fetchDeleteMemberFromGroupChat, fetchEditGroupChat } from '../services';
 import { fetchBlobFile } from '@/services/file.service';
-// store
+// stores
 import { useChatStore } from '../stores';
 import { useAuthStore } from '@/modules/Auth/stores';
 // constants
@@ -90,7 +90,7 @@ const onSubmit = async () => {
     isSubmitting.value = false;
    }
   } else if(props.type === 'edit') {
-    try { 
+    try {
       isSubmitting.value = true;
       const newMembers = formModal.users.map(user => user.id).filter(id => !memebers.value.some(member => member.id === id))
       const deleteMembers = memebers.value.filter(member => !formModal.users.some(user => user.id === member.id)).map(member => member.id)
@@ -125,20 +125,20 @@ const resetForm = () => {
 }
 
 const onShowContextMenu = (event) => {
-  if (refContextMenu.value && refContextMenu.value.menu) {    
+  if (refContextMenu.value && refContextMenu.value.menu) {
     refContextMenu.value.menu.show(event);
   }
 }
 
 const menuItems = computed(() => [
-   { 
+   {
      label: 'select-image',
      iconName: PenIcon,
      command: () => {
       refFileInput.value.click();
-     } 
+     }
    },
-   { 
+   {
      label: 'delete',
      iconName: TrashBinTrashIcon,
      command: () => {
@@ -148,7 +148,7 @@ const menuItems = computed(() => [
    }
 ]);
 
-const handleFileInputChange = (event) => {  
+const handleFileInputChange = (event) => {
   uploadFiles(event.target.files);
 };
 
@@ -178,7 +178,7 @@ const uploadFiles = async (files) => {
       .then(async({ data }) => {
         item.id = data.id;
         item.uploaded = true;
-        const { blobUrl } = await fetchBlobFile(data.id) 
+        const { blobUrl } = await fetchBlobFile(data.id)
         item.blobUrl = blobUrl
         item.url = data.url
       })
@@ -224,9 +224,9 @@ onMounted(() => {
                :icon="CameraBoldIcon"
                 class="!w-9 !h-9 text-white"
               />
-            </base-avatar> 
+            </base-avatar>
             <div
-              @contextmenu.prevent="onShowContextMenu" 
+              @contextmenu.prevent="onShowContextMenu"
               @click="onShowContextMenu"
               class="absolute bottom-0 right-0 border-[2px] border-white bg-primary-500 rounded-full p-1 cursor-pointer">
               <base-iconify
@@ -246,7 +246,7 @@ onMounted(() => {
          <div>
           <base-multi-select
               v-model="$v.users.$model"
-              :error="$v.users" 
+              :error="$v.users"
               api-url="users"
               label="select-employees"
               display="chip"
@@ -302,17 +302,17 @@ onMounted(() => {
       </div>
     </template>
   </base-dialog>
-  <input 
-    type="file" 
-    ref="refFileInput" 
+  <input
+    type="file"
+    ref="refFileInput"
     class="hidden"
     :multiple="false"
-    @change="handleFileInputChange" 
+    @change="handleFileInputChange"
   />
   <ContextMenu ref="refContextMenu" :menu-items="menuItems" />
   <DeleteDialog
-   v-model="deleteDialog" 
-   :onDelete="onDeleteAvatar" 
+   v-model="deleteDialog"
+   :onDelete="onDeleteAvatar"
    :onClose="() => deleteDialog = false"
    conetentText="delete-chat-avatar-dialog-content"
   />

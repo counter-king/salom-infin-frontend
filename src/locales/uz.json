@@ -2,6 +2,8 @@
   "tests-surveys": "Test va so'rovnoma",
   "tests": "Testlar",
   "surveys": "So'rovnomalar",
+  "test-constructor": "Test konstruktori",
+  "survey-constructor": "So'rovnoma konstruktori",
   "division": "Bo'lim",
   "context-uz": "Tavsif (UZ)",
   "context-ru": "Tavsif (РУ)",

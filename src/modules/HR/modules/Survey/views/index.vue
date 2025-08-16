@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { CalendarLinearIcon, SettingsIcon} from "@/components/Icons";
+import { CalendarLinearIcon, FileTextIcon } from '@/components/Icons'
 import TheNavigation from '@/components/TheNavigation.vue'
 
 const navs = ref([
@@ -11,9 +11,19 @@ const navs = ref([
   },
   {
     title: 'surveys',
-    icon: SettingsIcon,
-    link: 'SurveyIndex',
-  }
+    icon: FileTextIcon,
+    link: 'SurveysIndex',
+  },
+  {
+    title: 'test-constructor',
+    icon: FileTextIcon,
+    link: 'TestConstructorIndex',
+  },
+  {
+    title: 'survey-constructor',
+    icon: FileTextIcon,
+    link: 'SurveyConstructorIndex',
+  },
 ])
 </script>
 

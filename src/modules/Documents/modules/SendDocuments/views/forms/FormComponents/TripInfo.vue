@@ -104,7 +104,7 @@ const stepClick = async (step) => {
   }
 
   nextButtonLoading.value = false
-  // await store.actionStepClick(router, route, step)
+  // await stores.actionStepClick(router, route, step)
 }
 const onSenderCompanyChange = (val, index) => {
   store.model.__groups[index].__regions = []

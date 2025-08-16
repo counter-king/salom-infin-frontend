@@ -33,7 +33,7 @@ const chatStore = useChatStore()
 const route = useRoute();
 // reactives
 const message = ref("");
-const refInput = inject("inputSendMessasgeRef"); 
+const refInput = inject("inputSendMessasgeRef");
 const refFileInput = ref(null);
 const showSendIcon = ref(false);
 const isSimleStikerHovered = ref(false);
@@ -52,18 +52,18 @@ const isPrivateChat = computed(()=> route.name == CHAT_ROUTE_NAMES.PRIVATE)
 const urlRegex = /(^|\s)(https?:\/\/[^\s]+)/g;
 // methods
 const sendNewMessageEvent = (data)=> {
-  const payload = { command: 'new_message', chat_type: isPrivateChat.value ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: isPrivateChat.value ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id, text: data?.text, message_type: data.message_type } 
-  send(JSON.stringify(payload))  
+  const payload = { command: 'new_message', chat_type: isPrivateChat.value ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: isPrivateChat.value ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id, text: data?.text, message_type: data.message_type }
+  send(JSON.stringify(payload))
 }
 
 const sendReplayNewMessageEvent = (data)=> {
-  const payload = { command: 'new_message', chat_type: isPrivateChat.value ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: isPrivateChat.value ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id, text: data?.text, message_type: data.message_type, replied_to_id: chatStore.contextMenu?.message?.message_id } 
-  send(JSON.stringify(payload))  
+  const payload = { command: 'new_message', chat_type: isPrivateChat.value ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: isPrivateChat.value ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id, text: data?.text, message_type: data.message_type, replied_to_id: chatStore.contextMenu?.message?.message_id }
+  send(JSON.stringify(payload))
 }
 
 const sendMessageIsTyping = useDebounceFn(()=>{
-  const payload = { command: 'typing', chat_type: isPrivateChat.value ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: isPrivateChat.value ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id } 
-  send(JSON.stringify(payload))  
+  const payload = { command: 'typing', chat_type: isPrivateChat.value ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, chat_id: isPrivateChat.value ? chatStore.selectedUser?.chat_id : chatStore.selectedGroup?.chat_id }
+  send(JSON.stringify(payload))
 }, 100);
 
 const sendChatHandshake = ()=> {
@@ -116,13 +116,13 @@ const handleSendMessage = async (event) => {
             sendNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.LINK })
           } else {
             sendNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.TEXT })
-          } 
+          }
         }
         // reset values
         resetInputProperties(event)
         // replay or edit reset, not show them in ui
         chatStore.contextMenu = {}
-        // 
+        //
         if(chatStore.replayedMessageClicked){
           modelValue.value = 1
           chatStore.replayedMessageClicked = false
@@ -130,7 +130,7 @@ const handleSendMessage = async (event) => {
           refChatArea.value.scrollTop = refChatArea.value.scrollHeight
         }
     }
- } 
+ }
 
  // when ctrl + all is pressed, that works
  else if (event.ctrlKey && (event.key === 'A' || event.key === 'a')){
@@ -138,12 +138,12 @@ const handleSendMessage = async (event) => {
  }
  else if(event.key == "Backspace" && rows.value > 1) {
     rows.value -= 1;
-    // if ctrl + all is pressed, reset    
+    // if ctrl + all is pressed, reset
     if(isCtrlAllPressed.value){
       rows.value = 1
       isCtrlAllPressed.value = false
     }
- } 
+ }
 }
 
 const handleMessageByIcon = () => {
@@ -171,7 +171,7 @@ const handleMessageByIcon = () => {
             sendNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.LINK })
           } else {
             sendNewMessageEvent({ text: message.value, message_type: MESSAGE_TYPES.TEXT })
-          } 
+          }
         }
         // reset values
         message.value = '';
@@ -217,7 +217,7 @@ const onClickSendMessage = () => {
 }
 
 // const handlePaste = async() => {
-//   await nextTick(); 
+//   await nextTick();
 //   setTimeout(() => {
 //     rows.value = message.value.split("\n").length
 //   }, 10);
@@ -245,21 +245,21 @@ watch(message, (val) => {
  }
 })
 
-// when edit, set message value from store
+// when edit, set message value from stores
 watch(() => chatStore.contextMenu.edit, (val) => {
     if(chatStore.contextMenu?.edit){
       message.value = chatStore.contextMenu?.message?.text
       rows.value = chatStore.contextMenu?.message?.text.split("\n").length
     }
 })
-// when replay, set message value from store
+// when replay, set message value from stores
 watch(() => chatStore.contextMenu.replay, (val) => {
     if(chatStore.contextMenu?.replay){
       resetInputProperties()
     }
 })
 
-// tracking input focues when context menu is open 
+// tracking input focues when context menu is open
 watch([()=> chatStore.contextMenu], () => {
   refInput.value.$el.focus()
 }, { deep: true })
@@ -288,19 +288,19 @@ onUnmounted(() => {
 
 </script>
 <template>
- <div 
+ <div
   @click="onClickSendMessage"
   class="relative pt-1"
   ref="InputSendMessageWrapperRef"
   :class="{'pt-[36px]': chatStore.contextMenu?.edit || chatStore.contextMenu?.replay}"
   >
   <!-- chat replay and edit -->
-  <div 
+  <div
     v-if="chatStore.contextMenu?.edit || chatStore.contextMenu?.replay"
     class="flex justify-between absolute gap-2 items-center px-2 pt-2 pb-10 top-[0px] bg-white w-full rounded-t-xl select-none"
     >
     <div class="flex items-center gap-2 w-[95%]">
-      <base-iconify 
+      <base-iconify
         :icon="chatStore.contextMenu?.edit ? PenIcon : ForwardIcon"
         class="!h-4 !w-4 rotate-y-180 text-primary-500"
       />
@@ -312,7 +312,7 @@ onUnmounted(() => {
       </div>
     </div>
     <div class="p-1 cursor-pointer">
-      <base-iconify 
+      <base-iconify
         @click="onCancelIconReplay"
         :icon="XMarkSolidIcon"
         class="!h-4 !w-4"
@@ -320,10 +320,10 @@ onUnmounted(() => {
     </div>
   </div>
   <!-- seding input -->
-  <div 
+  <div
     class="relative w-full border flex items-center min-h-[52px] max-h-[150px] p-[6px] pl-5 pr-[130px] bg-white rounded-xl"
     :class="{'border-primary-500': isFocused }"
-    > 
+    >
     <Textarea
       v-model="message"
       @input="onChangeInput"
@@ -345,17 +345,17 @@ onUnmounted(() => {
     ></Textarea>
     <div class="flex gap-3 items-center absolute right-[10px] top-[6px]" :class="{'!top-auto bottom-[6px]': rows > 1}">
       <div
-        @mouseover="isSimleStikerHovered = true" 
+        @mouseover="isSimleStikerHovered = true"
         @mouseleave="isSimleStikerHovered = false"
         >
         <base-iconify
           :icon="SmileCircleLinearIcon"
           class="!h-5 !w-5 text-greyscale-300 cursor-pointer"
         />
-        <EmojiStikers 
+        <EmojiStikers
           :select-emoji="handleSelectEmoji"
           @mouseleave="isSimleStikerHovered = false"
-          v-if="isSimleStikerHovered"  
+          v-if="isSimleStikerHovered"
         />
       </div>
       <base-iconify
@@ -375,12 +375,12 @@ onUnmounted(() => {
       </div>
     </div>
     <!-- input file upload hidden -->
-    <input 
-      type="file" 
-      ref="refFileInput" 
-      class="hidden" 
+    <input
+      type="file"
+      ref="refFileInput"
+      class="hidden"
       :multiple="true"
-      @change="handleFileInputChange" 
+      @change="handleFileInputChange"
     />
   </div>
 </div>

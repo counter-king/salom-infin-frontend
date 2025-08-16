@@ -26,7 +26,7 @@ import {
 import { dispatchNotify } from "@/utils/notify";
 import { COLOR_TYPES } from "@/enums";
 
-export const useExtendBusinessTripStore = defineStore("sd-extend-business-trip-store", {
+export const useExtendBusinessTripStore = defineStore("sd-extend-business-trip-stores", {
   state: () => ({
     buttonLoading: false,
     userTripUpdateButtonLoading: false,

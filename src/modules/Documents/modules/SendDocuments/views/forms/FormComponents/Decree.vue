@@ -84,7 +84,7 @@ const preview = async () => {
   store.decreeModel.journal = JOURNAL.ORDERS_PROTOCOLS
   store.decreeModel.company = authStore.currentUser.company.id
   store.decreeModel.sender = authStore?.currentUser?.top_level_department?.id
-  // store.decreeModel.files = store.decreeModel.__files.map(item => { return { id: item.id } })
+  // stores.decreeModel.files = stores.decreeModel.__files.map(item => { return { id: item.id } })
   store.decreeModel.document_type = COMPOSE_DOCUMENT_TYPES.DECREE
   store.decreeModel.document_sub_type = route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE
     ? COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_DECREE
@@ -158,7 +158,7 @@ const manage = async () => {
   // if (props.formType === FORM_TYPE_CREATE) {
   //   create(notice_id, null)
   // } else {
-  //   update(notice_id, store.decreeModel?.id)
+  //   update(notice_id, stores.decreeModel?.id)
   // }
 }
 

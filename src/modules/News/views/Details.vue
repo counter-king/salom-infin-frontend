@@ -25,7 +25,7 @@ import { EyeBoldIcon, HeartBoldIcon } from '@/components/Icons';
 // services
 import { fetchCreateNewsComment, fetchCreateNewsLike, fetchCreateNewsModerationHistory, fetchGetMyNews, fetchGetNewsCommentList, fetchGetNewsModerationHistoryList, fetchModerationApproveNews,fetchGetPendingNews } from '../services/news.service';
 import { fetchBlobFile } from '../../../services/file.service';
-// store
+// stores
 import { useCountStore } from '@/stores/count.store'
 // utils
 import { formatToK } from '@/utils';
@@ -40,7 +40,7 @@ const  route = useRoute()
 const  router = useRouter()
 // composibles
 const countStore = useCountStore()
-// reactive 
+// reactive
 const loading = ref(false)
 const newsOne = ref({})
 const viewHeartIsLike = ref(false)
@@ -63,7 +63,7 @@ const fetchOneNews = async() => {
    loading.value = true
    try {
 
-       const { data }  = await fetchGetMyNews(route.params.id)   
+       const { data }  = await fetchGetMyNews(route.params.id)
        const { blobUrl } = await fetchBlobFile(data.image.id)
        data.image.blobUrl = blobUrl
 
@@ -85,7 +85,7 @@ const fetchOneNews = async() => {
 
        newsOne.value = data
        viewHeartIsLike.value = data.is_liked
-       viewHeartLikeCounts.value = data.like_counts 
+       viewHeartLikeCounts.value = data.like_counts
 
    } catch(e) {
     dispatchNotify(null, e?.message, COLOR_TYPES.ERROR)
@@ -98,7 +98,7 @@ const fetchOnePendingNews = async() => {
    loading.value = true
    try {
 
-       const { data }  = await fetchGetPendingNews(route.params.id)   
+       const { data }  = await fetchGetPendingNews(route.params.id)
        const { blobUrl } = await fetchBlobFile(data.image.id)
        data.image.blobUrl = blobUrl
 
@@ -120,7 +120,7 @@ const fetchOnePendingNews = async() => {
 
        newsOne.value = data
        viewHeartIsLike.value = data.is_liked
-       viewHeartLikeCounts.value = data.like_counts 
+       viewHeartLikeCounts.value = data.like_counts
 
    } catch(e) {
     dispatchNotify(null, e?.message, COLOR_TYPES.ERROR)
@@ -131,7 +131,7 @@ const fetchOnePendingNews = async() => {
 
  /* user click like, dislike operation */
 const handleClickLike = async() => {
-    // user click like, optimitic update 
+    // user click like, optimitic update
     viewHeartIsLike.value = !viewHeartIsLike.value
     viewHeartLikeCounts.value = viewHeartIsLike.value ? viewHeartLikeCounts.value + 1 : viewHeartLikeCounts.value - 1
     debunceTrackinLike.value = viewHeartIsLike.value
@@ -144,7 +144,7 @@ watch(debouncedUserClickLike, async() => {
     await fetchCreateNewsLike({news: route.params.id, emoji:viewHeartIsLike.value ? EOMOJI_TYPES.LIKE : null})
     } catch(e){
         dispatchNotify(null, e?.message, COLOR_TYPES.ERROR)
-    }   
+    }
 })
 /* user click like, dislike operation */
 
@@ -201,7 +201,7 @@ const handleRejectModeration = async (reason) => {
     await fetchCreateNewsModerationHistory({ news: newsId.value, status: NEWS_STATUS.DECLINED, description: reason })
     await fetchModerationApproveNews(newsId.value, {cancelled_reason: reason, status: NEWS_STATUS.DECLINED})
     countStore.actionCountList()
-  } 
+  }
   catch(e){
     dispatchNotify(null, e?.message, COLOR_TYPES.ERROR)
   }
@@ -228,7 +228,7 @@ const fetchAllApi = async () => {
 
 watch(() => route.params.id, async(newsId) => {
     if(newsId){
-        await fetchAllApi() 
+        await fetchAllApi()
     }
 })
 
@@ -253,21 +253,21 @@ onMounted( async () => {
                 <base-spinner/>
             </template>
             <!-- container -->
-            <div  
+            <div
                 v-else
                 class="bg-white h-full  mt-5 rounded-[20px] p-8 pb-10 flex flex-col"
                 :class="{ 'rounded-b-none pb-0': type === 'moderation' }"
                 >
                 <div
                 :style="{ '--dynamic-src': `url(${newsOne.image?.url ? newsOne.image?.url : newsOne.image?.blobUrl})` }"
-                class="aspect-ratio-box rounded-2xl overflow-hidden relative" 
+                class="aspect-ratio-box rounded-2xl overflow-hidden relative"
                 >
                     <img :src="newsOne.image?.url ? newsOne.image?.url : newsOne.image?.blobUrl" alt="rasm" class="w-full h-full object-contain absolute z-2">
                 </div>
                 <!-- info -->
                 <div class="mt-4 flex justify-between">
                     <!-- author -->
-                    <user-card 
+                    <user-card
                         :name="newsOne.created_by?.full_name"
                         :category="newsOne.category"
                         :created-date="newsOne.created_date"
@@ -287,7 +287,7 @@ onMounted( async () => {
                             </div>
                         </circle-wrapper>
                         <!-- heart -->
-                        <circle-wrapper @click="handleClickLike" :class="`min-w-fit ${viewHeartIsLike && '!bg-critic-30'}`">   
+                        <circle-wrapper @click="handleClickLike" :class="`min-w-fit ${viewHeartIsLike && '!bg-critic-30'}`">
                             <div class="flex gap-1 items-center">
                                 <div class="text-greyscale-400" :class="`${viewHeartIsLike && '!text-critic-500'}`">
                                     <base-iconify :icon="HeartBoldIcon" />
@@ -309,7 +309,7 @@ onMounted( async () => {
                                 <base-iconify :icon="ForwardBoldIcon" />
                             </div>
                         </circle-wrapper> -->
-                    </div>  
+                    </div>
                 </div>
                 <!-- contents -->
                 <title-component :title="newsOne.title" class="mt-4 mb-5"/>
@@ -324,32 +324,32 @@ onMounted( async () => {
                     </div>
                 </template>
                 <Swiper v-if="!!newsOne.galleries?.length" :images="newsOne.galleries" />
-                <Tag v-if="!!newsOne.tags?.length" :tags="newsOne.tags" class="pointer-events-none"/> 
+                <Tag v-if="!!newsOne.tags?.length" :tags="newsOne.tags" class="pointer-events-none"/>
                 <!-- conments and history -->
                 <div class="">
                     <!-- activeTabPanel titles -->
                     <div class="flex gap-8">
                         <div @click="activeTabPanel = 'comment'" class="mt-10 mb-5 flex items-center gap-2 cursor-pointer">
-                            <h2 
+                            <h2
                                 class="font-semibold text-2xl text-greyscale-300"
                                 :class="{'text-greyscale-900': activeTabPanel === 'comment'}"
                             >{{ t("comments") }}</h2>
-                            <div 
+                            <div
                                 class="w-8 h-8 min-w-8 min-h-8 text-base text-greyscale-300 bg-greyscale-50 rounded-full flex justify-center items-center font-semibold"
                                 :class="{'!text-critic-500 !bg-critic-30': activeTabPanel === 'comment'}"
 
                             >{{ newCommentList.length}}</div>
                         </div>
                         <div @click="activeTabPanel = 'history'" class="mt-10 mb-5 flex items-center gap-2 cursor-pointer">
-                            <h2 
+                            <h2
                                 class="font-semibold text-2xl text-greyscale-300"
-                                :class="{'text-greyscale-900': activeTabPanel === 'history'}" 
+                                :class="{'text-greyscale-900': activeTabPanel === 'history'}"
                                 >{{ t("history") }}</h2>
-                            <div 
+                            <div
                                 class="w-8 h-8 min-w-8 min-h-8 text-base text-greyscale-300 bg-greyscale-50 rounded-full flex justify-center items-center font-semibold"
                                 :class="{'!text-critic-500 !bg-critic-30': activeTabPanel === 'history'}"
                                 >{{ newsModerationHistoryList.length}}</div>
-                        </div>    
+                        </div>
                     </div>
                     <!-- comment enter -->
                     <template v-if="activeTabPanel === 'comment'">
@@ -357,10 +357,10 @@ onMounted( async () => {
                             <base-spinner/>
                         </template>
                         <template v-else>
-                            <view-replay-comment 
+                            <view-replay-comment
                                 v-for="(comment,index) in newCommentList" :key="comment.id"
                                 :replay-button-visible="false"
-                                @emit:replay-comment="handleReplayComment" 
+                                @emit:replay-comment="handleReplayComment"
                                 :data="comment"
                                 :isDiveiderVisible="newCommentList.length != index + 1"
                             />
@@ -371,14 +371,14 @@ onMounted( async () => {
                             <base-spinner/>
                         </template>
                         <template v-else>
-                            <NewsModerationHistory 
+                            <NewsModerationHistory
                                 v-for="(history, index) in newsModerationHistoryList"
                                 :key="history.id"
                                 :data="history"
                                 :isDividerVisible="newsModerationHistoryList.length != index + 1"
                             />
                         </template>
-                       
+
                     </template>
                 </div>
             </div>
@@ -409,7 +409,7 @@ onMounted( async () => {
     <div class="mt-6 mx-auto w-[904px]">
         <the-footer/>
     </div>
-    <reject-news-dialog  
+    <reject-news-dialog
       header-lable="reject-news-reason"
       v-model="isRejectModalVisible"
       :createButtonFn="handleRejectModeration"
@@ -428,13 +428,13 @@ onMounted( async () => {
   content: '';
   position: absolute;
   top: 0;
-  left: 0;  
+  left: 0;
   width: 100%;
   height: 100%;
   background-image: var(--dynamic-src);
   background-size: cover;
   filter: blur(10px);
-  background-position: center; 
+  background-position: center;
   z-index: 0;
 }
 .news-details {

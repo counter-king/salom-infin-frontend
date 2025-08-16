@@ -10,7 +10,7 @@ import { formatHour } from '@/utils/formatDate';
 // contants
 import { downloadFile } from '../../services/file.service';
 import { fileTypes } from '../../constatns';
-// store
+// stores
 import { useChatStore } from '../../stores';
 // composables
 import { useTextSelection } from '../../composables/useTextSelection';
@@ -36,7 +36,7 @@ const props = defineProps({
     default: false
   },
   classNames: {
-    type: [String , Array, Object] 
+    type: [String , Array, Object]
   }
 })
 
@@ -53,14 +53,14 @@ defineExpose({
 
 </script>
 <template>
- <div 
+ <div
     v-bind="attrs"
     ref="forwardedRef"
     class="flex gap-2"
     :class="classNames"
     >
     <!-- avatat -->
-    <base-avatar 
+    <base-avatar
       :image="props.message?.sender?.avatar?.url"
       :label="props.message?.sender?.full_name"
       :color="props.message?.sender?.color"
@@ -79,7 +79,7 @@ defineExpose({
           :class="[{'!p-0': !props.message.replied_to }]"
         >
           <!-- reply to message -->
-          <div 
+          <div
             v-if="!!props.message.replied_to"
             @click="props.handleClickReplayMessage(props.message)"
             class="flex flex-col gap-1 pl-2 border-l-[2px] border-warning-500"
@@ -89,38 +89,38 @@ defineExpose({
           </div>
           <!-- file info -->
           <p v-if="props.avatarVisible" class="text-sm font-bold text-blue-700" >{{ props.message.sender.first_name }} {{ props.message.sender.last_name }}</p>
-          <div 
+          <div
             class="flex gap-4 rounded-xl items-center w-full bg-white-400/[40%]"
             >
               <div
-                 @click="downloadFile(props.message)" 
+                 @click="downloadFile(props.message)"
                  class="p-[10px] bg-greyscale-50 rounded-lg group cursor-pointer">
-                <base-iconify 
+                <base-iconify
                   :icon="fileTypes[props.message?.message_type]?.icon"
-                  class="!h-5 !w-5" 
+                  class="!h-5 !w-5"
                   :class="fileTypes[props.message?.message_type]?.class"
                 />
               </div>
               <div class="grow flex flex-col gap-1">
-                <h3   
+                <h3
                   class="text-sm font-semibold text-greyscale-900 capitalize"
                   >{{ props.message?.text }}
                 </h3>
-                <p 
+                <p
                   class="text-xs text-greyscale-500"
                 >{{ props.message?.size }}
                 </p>
               </div>
-              <base-iconify 
-                @click="downloadFile(props.message)" 
+              <base-iconify
+                @click="downloadFile(props.message)"
                 v-if="props.message?.uploaded"
                 :icon="DownloadMinimalisticIcon"
-                class="!h-5 !w-5 text-greyscale-500 cursor-pointer" 
+                class="!h-5 !w-5 text-greyscale-500 cursor-pointer"
               />
-              <BaseSpinner 
+              <BaseSpinner
                 v-else
-                class="!w-4 !h-4 text-greyscale-500 animate-spin" 
-                :style="{'--spinner-stroke-color': 'var(--success-500)'}" 
+                class="!w-4 !h-4 text-greyscale-500 animate-spin"
+                :style="{'--spinner-stroke-color': 'var(--success-500)'}"
               />
           </div>
           <!-- edit -->
@@ -130,7 +130,7 @@ defineExpose({
               class="!w-3 !h-3"
             />
             <span>{{ t('edited') }}</span>
-          </div>   
+          </div>
         </div>
         <!-- time -->
         <p  class="text-xs font-medium text-greyscale-500 self-end">{{ formatHour(props.message?.created_date) }}</p>
@@ -138,9 +138,9 @@ defineExpose({
       <!-- reactions -->
       <div v-if="props.message?.reactions && Object.keys(props.message?.reactions).length" class="flex gap-1">
         <template v-for="reaction in Object.keys(props.message?.reactions)" :key="reaction">
-          <ClickedStiker 
+          <ClickedStiker
             @click="props.handleClickEmoji(reaction, message.message_id)"
-            :onContextMenuClick="(e)=>props.onShowEmojiContextMenu(e, props.message.reactions[reaction])" 
+            :onContextMenuClick="(e)=>props.onShowEmojiContextMenu(e, props.message.reactions[reaction])"
             :emoji="reaction"
             :userReactionList="props.message.reactions[reaction]" />
         </template>
