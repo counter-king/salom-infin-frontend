@@ -88,8 +88,8 @@ function collectUsers(department) {
             </base-avatar>
           </div>
 
-          <div class="flex-1">
-            <h1 class="font-semibold text-greyscale-900 mb-1">{{ item.full_name }}</h1>
+          <div class="flex-1 min-w-0">
+            <h1 class="font-semibold text-greyscale-900 text-lg truncate mb-1 pr-6">{{ item.full_name }}</h1>
 
             <user-status-chip
               :name="item.status.name"
@@ -99,7 +99,7 @@ function collectUsers(department) {
             />
 
             <h2 class="font-medium text-greyscale-500 line-clamp-1 mt-2">{{ item.position?.name }}</h2>
-            <h2 class="font-medium text-greyscale-400 line-clamp-1 mt-1">{{ item.department?.name }}</h2>
+            <h2 class="font-medium text-greyscale-400 text-sm line-clamp-1 mt-1">{{ item.department?.name }}</h2>
           </div>
         </div>
 

@@ -36,10 +36,10 @@ const statement = computed(() => {
     case USER_STATUS_CODES.BANK_COUNCIL:                                            // ON_HOLD
     case USER_STATUS_CODES.INTERNS:                                      // FOR_SIGNATURE
     case USER_STATUS_CODES.SICK_LEAVES:                                          // ON_REVIEW
-      return 'bg-warning-50 text-warning-500 border-warning-500'
+    case USER_STATUS_CODES.BUSINESS_TRIP:
+      return 'bg-warning-50 text-warning-500 border-warning-100'
     case USER_STATUS_CODES.WORKERS:                                               // DONE
-    case USER_STATUS_CODES.BUSINESS_TRIP:                                               // DONE
-      return 'bg-success-50 text-success-500 border-success-500'
+      return 'bg-success-50 text-success-500 border-success-100'
     case USER_STATUS_CODES.TRANSFER_TO_ANOTHER_BRANCH:                                               // DONE
       return
     case USER_STATUS_CODES.SUSPENDED_NOT_STAFF:                                               // DONE
@@ -53,7 +53,7 @@ const statement = computed(() => {
     case USER_STATUS_CODES.NO_CONTENT:                                               // DONE
       return
     case USER_STATUS_CODES.LABOR_LEAVE:                                               // DONE
-      return 'bg-critic-50 text-critic-500 border-critic-500'
+      return 'bg-critic-50 text-critic-500 border-critic-100'
     case USER_STATUS_CODES.MILITARY_SERVICE:                                               // DONE
       return
     case USER_STATUS_CODES.ACADEMICIAN_VACATION:                                               // DONE
