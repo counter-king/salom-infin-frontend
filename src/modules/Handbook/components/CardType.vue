@@ -38,7 +38,7 @@ const props = defineProps({
 
 const itemId = ref(0)
 const itemChatId = ref(0)
-const itemShowTooltip = ref(0)
+const itemShowTooltip = ref(-1)
 
 const flatDeepItems = computed(() => props.isSearch ? props.value : collectUsersFromArray(props.value))
 
@@ -149,7 +149,7 @@ function collectUsers(department) {
               ref="fullName"
               class="min-w-0 font-semibold text-greyscale-900 text-lg truncate mb-1 pr-6"
               @mouseenter="checkTruncate(index, fullNameRefs)"
-              @mouseleave="() => itemShowTooltip = 0"
+              @mouseleave="() => itemShowTooltip = -1"
             >
               <template v-if="itemShowTooltip === index">
                 <span
@@ -180,7 +180,7 @@ function collectUsers(department) {
               ref="position"
               class="min-w-0 font-medium text-greyscale-500 truncate mt-2"
               @mouseenter="checkTruncate(index, positionRefs)"
-              @mouseleave="() => itemShowTooltip = 0"
+              @mouseleave="() => itemShowTooltip = -1"
             >
               <template v-if="itemShowTooltip === index">
                 <span
@@ -204,7 +204,7 @@ function collectUsers(department) {
               ref="department"
               class="min-w-0 font-medium text-greyscale-400 text-sm truncate mt-1"
               @mouseenter="checkTruncate(index, departmentRefs)"
-              @mouseleave="() => itemShowTooltip = 0"
+              @mouseleave="() => itemShowTooltip = -1"
             >
               <template v-if="itemShowTooltip === index">
                 <span
