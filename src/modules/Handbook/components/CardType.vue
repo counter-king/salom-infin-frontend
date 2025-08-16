@@ -123,7 +123,7 @@ function collectUsers(department) {
 <template>
   <div class="grid grid-cols-4 gap-5">
     <template v-for="(item, index) in flatDeepItems" :key="item.id">
-      <div class="flex flex-col bg-white shadow-button rounded-[20px] overflow-hidden relative">
+      <div class="group flex flex-col bg-white shadow-button hover:shadow-button-hover rounded-[20px] overflow-hidden relative transition-shadow">
         <div class="flex flex-1 gap-4 p-5">
           <div class="w-14 h-14 relative">
             <base-avatar
@@ -226,7 +226,7 @@ function collectUsers(department) {
           </div>
         </div>
 
-        <div class="flex items-center gap-6 bg-greyscale-50 border-t border-t-greyscale-100 py-3 px-6">
+        <div class="flex items-center gap-6 bg-greyscale-50 group-hover:bg-primary-10 transition-colors border-t border-t-greyscale-100 py-3 px-6">
           <div class="flex items-center gap-[10px]">
             <base-iconify :icon="CallMedicineRoundedBoldIcon" class="text-greyscale-400" />
             <span class="font-medium text-greyscale-900 text-sm">{{ item.cisco ?? '-' }}</span>
