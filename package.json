@@ -37,7 +37,7 @@
     "socket.io-client": "^4.8.1",
     "swiper": "^11.1.14",
     "vite-svg-loader": "^4.0.0",
-    "vue": "^3.3.4",
+    "vue": "^3.5.18",
     "vue-draggable-plus": "^0.5.3",
     "vue-froala-wysiwyg": "^4.1.4",
     "vue-i18n": "^9.5.0",
