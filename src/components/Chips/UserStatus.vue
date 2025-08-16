@@ -6,12 +6,15 @@ import { USER_STATUS_CODES } from '@/enums'
 // Macros
 const props = defineProps({
   code: {
-    type: String,
-    required: true
+    type: String
   },
   name: {
     type: String,
     required: true
+  },
+  status: {
+    type: Object,
+    default: () => {}
   },
   border: {
     type: Boolean
@@ -34,6 +37,7 @@ const statement = computed(() => {
     case USER_STATUS_CODES.INTERNS:                                      // FOR_SIGNATURE
     case USER_STATUS_CODES.SICK_LEAVES:                                          // ON_REVIEW
       return 'bg-warning-50 text-warning-500 border-warning-500'
+    case USER_STATUS_CODES.WORKERS:                                               // DONE
     case USER_STATUS_CODES.BUSINESS_TRIP:                                               // DONE
       return 'bg-success-50 text-success-500 border-success-500'
     case USER_STATUS_CODES.TRANSFER_TO_ANOTHER_BRANCH:                                               // DONE
@@ -49,7 +53,7 @@ const statement = computed(() => {
     case USER_STATUS_CODES.NO_CONTENT:                                               // DONE
       return
     case USER_STATUS_CODES.LABOR_LEAVE:                                               // DONE
-      return
+      return 'bg-critic-50 text-critic-500 border-critic-500'
     case USER_STATUS_CODES.MILITARY_SERVICE:                                               // DONE
       return
     case USER_STATUS_CODES.ACADEMICIAN_VACATION:                                               // DONE
@@ -68,8 +72,6 @@ const statement = computed(() => {
       return
     case USER_STATUS_CODES.PART_TIMERS:                                               // DONE
       return
-    case USER_STATUS_CODES.WORKERS:                                               // DONE
-      return
     case USER_STATUS_CODES.REJECTED:                                               // DONE
       return
     case USER_STATUS_CODES.ON_THE_STATEMENTS:                                               // DONE
@@ -77,19 +79,19 @@ const statement = computed(() => {
     case USER_STATUS_CODES.INTRODUCED:                                               // DONE                                            // DONE
       return
     default:                                                              // APPROVED
-      return "bg-critic-50 text-critic-500 border-critic-500"
+      return ''
   }
 })
 </script>
 
 <template>
   <span
-    class="px-2 py-1 text-xs font-semibold rounded-lg"
+    class="px-3 py-[6px] text-xs font-semibold rounded-lg"
     :class="[
       statement,
       {
         'border': props.border,
-        'rounded-[80px]': props.circle
+        '!rounded-[80px]': props.circle
       },
       props.rootClass
     ]"
