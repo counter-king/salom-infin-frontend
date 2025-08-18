@@ -12,7 +12,6 @@ import { isObject } from '@/utils'
 // Enums
 import { USER_STATUS_CODES } from '@/enums'
 // Composable
-const modelValue = useModel(props, 'modelValue')
 const { t } = useI18n()
 // Macros
 const emit = defineEmits(['update:modelValue', 'emit:select-item', 'emit:change'])
@@ -142,6 +141,7 @@ const props = defineProps({
     default: false
   }
 })
+const modelValue = useModel(props, 'modelValue')
 // Reactive
 const menuRef = ref(null)
 const inputRef = ref(null)
