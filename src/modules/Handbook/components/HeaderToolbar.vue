@@ -34,6 +34,7 @@ const departmentSelect = ref(null)
 const departmentUsers = ref([])
 const isSearch = ref(false);
 const mainBarnch = ref(false)
+const isFirstLoad = ref(true)
 
 // methods
 const paginationQuery = computed(() => ({
@@ -47,6 +48,10 @@ const departmentAllOption = {id: "all", name:t('all'),name_uz:t('all'),name_ru:t
 const debouncedSearch = useDebounce(search, 750)
 
 watch(debouncedSearch, async (value) => {
+  if (isFirstLoad.value) {
+    isFirstLoad.value = false
+    return
+  }
   // if value is empty if works
   if (!value) {
     if(departmentSelect.value != departmentAllOption.id){

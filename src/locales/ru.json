@@ -956,5 +956,6 @@
   "return-enforcement-document": "Возврат исполнительного документа",
   "basis": "Основа",
   "enter-basis": "Введите основу",
-  "mediation-agreement": "Посредническое соглашение"
+  "mediation-agreement": "Посредническое соглашение",
+  "successfully-deleted": "Успешно удалено"
 }

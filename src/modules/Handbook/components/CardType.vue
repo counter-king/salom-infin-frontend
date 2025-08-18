@@ -14,6 +14,7 @@ import {
 } from '@/components/Icons'
 import { UserStatusChip } from '@/components/Chips'
 import { CHAT_ROUTE_NAMES } from '@/modules/Chat/constatns'
+import { useDashboardContactStore } from "@/modules/Dashboard/stores/contact.store"
 
 const router = useRouter()
 const { t } = useI18n()
@@ -22,6 +23,7 @@ const chatStore = useChatStore()
 const fullNameRefs = useTemplateRef('fullName')
 const positionRefs = useTemplateRef('position')
 const departmentRefs = useTemplateRef('department')
+const contactStore = useDashboardContactStore()
 
 const props = defineProps({
   value: {
@@ -42,11 +44,21 @@ const itemShowTooltip = ref(-1)
 
 const flatDeepItems = computed(() => props.isSearch ? props.value : collectUsersFromArray(props.value))
 
-const addToFavourite = async (id) => {
-  itemId.value = id
+const handleFavouriteClick = async (item) => {
+  itemId.value = item.id
   try {
-    await axiosConfig.post(`my-selected-contacts/`, { user: id })
-    toast.add({ severity: 'success', summary: t('successfully-added'), life: 3000 })
+    if (item.is_selected && item.favourite_id) {
+      await contactStore.actionDeleteContactFromFavourites(item.favourite_id)
+      item.favourite_id = null
+      item.is_selected = false
+      toast.add({severity: 'success', summary: t('successfully-deleted'), life: 3000})
+    } else {
+      const { data } = await contactStore.actionAddContactToFavourites({user: item.id})
+      item.is_selected = true
+      item.favourite_id = data.id
+      item.private_chat_id = data.private_chat_id
+      toast.add({severity: 'success', summary: t('successfully-added'), life: 3000})
+    }
   }
   catch (error) {
 
@@ -246,11 +258,11 @@ function collectUsers(department) {
           <button
             type="button"
             v-tooltip.top="{
-              value: `<h4 class='text-xs text-white text-center -my-1'>${t('add-to-favourites')}</h4>`,
+              value: `<h4 class='text-xs text-white -my-1'>${item.is_selected && item.favourite_id ? t('remove-from-favourites') : item.is_selected ? t('favourites') : t('add-to-favourites')}</h4>`,
               escape: true,
               autoHide: false
             }"
-            @click="addToFavourite(item.id)"
+            @click="handleFavouriteClick(item)"
           >
             <template v-if="itemId === item.id">
               <base-spinner root-classes="!w-6 !h-6" />

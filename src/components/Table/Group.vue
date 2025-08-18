@@ -200,7 +200,7 @@ const pageChange = async (val) => {
               <span>-</span>
             </template>
           </handbook-table>
-          
+
           <template v-if="data.children && data.children.length > 0">
               <template v-for="children in data.children">
                 <template v-if="children.condition === CONDITION.A" >
@@ -212,7 +212,7 @@ const pageChange = async (val) => {
               </template>
               </template>
 
-           
+
           </template>
         </template>
 

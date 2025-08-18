@@ -71,7 +71,7 @@ const handleFavouriteClick = async (item) => {
 
 const createChat = async (user) => {
   try {
-    const data = await chatStore.actionCreatePrivateChat({ member_id: user?.id });  
+    const data = await chatStore.actionCreatePrivateChat({ member_id: user?.id });
     router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: data.chat_uid }, query: { tab: undefined} })
   } catch(err) {
       dispatchNotify(null, `error happned: ${err}`, COLOR_TYPES.ERROR)
