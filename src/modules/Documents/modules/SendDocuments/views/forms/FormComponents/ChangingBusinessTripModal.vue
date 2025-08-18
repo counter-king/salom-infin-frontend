@@ -128,7 +128,7 @@ const onRegionsChange = (regions) => {
               />
             </div>
 
-            <!--          <pre>{{ store.changingBTModel }}</pre>-->
+            <!--          <pre>{{ stores.changingBTModel }}</pre>-->
           </div>
         </template>
         <template v-else>

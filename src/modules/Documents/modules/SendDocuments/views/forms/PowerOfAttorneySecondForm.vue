@@ -254,7 +254,7 @@ onUnmounted(() => {
               />
             </base-col>
           </base-row>
-          <!--          <pre>{{ store.model }}</pre>-->
+          <!--          <pre>{{ stores.model }}</pre>-->
         </form-container>
       </template>
     </layout-with-tabs-compose>

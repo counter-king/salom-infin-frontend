@@ -94,7 +94,7 @@ const handleMouseEnter = async (event) => {
       :pt="{
         root: {
           style: {
-            backgroundColor: `${props.color}`
+            backgroundColor: `${props.image ? null : props.color}`
           },
           class: [
             props.avatarClasses,

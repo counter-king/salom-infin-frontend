@@ -18,7 +18,7 @@ let model = {
   is_active: true
 }
 
-export const useRolesStore = defineStore('roles-store', {
+export const useRolesStore = defineStore('roles-stores', {
   state: () => ({
     list: [],
     headers: [

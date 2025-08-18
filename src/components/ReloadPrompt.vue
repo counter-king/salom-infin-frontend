@@ -36,9 +36,9 @@
 //       return
 //
 //     const resp = await fetch(swUrl, {
-//       cache: 'no-store',
+//       cache: 'no-stores',
 //       headers: {
-//         'cache': 'no-store',
+//         'cache': 'no-stores',
 //         'cache-control': 'no-cache',
 //       },
 //     })

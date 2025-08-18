@@ -10,7 +10,7 @@ import LinkMessage from './LinkMessage.vue';
 import { formatHour } from '@/utils/formatDate';
 // contants
 import { MESSAGE_TYPES } from '../../constatns';
-// store
+// stores
 import { useChatStore } from '../../stores';
 // composables
 import { useTextSelection } from '../../composables/useTextSelection';
@@ -37,7 +37,7 @@ const props = defineProps({
     type: Function
   },
   classNames: {
-    type: [String , Array, Object] 
+    type: [String , Array, Object]
   }
 })
 
@@ -55,10 +55,10 @@ defineExpose({
 <template>
   <div
      v-bind="attrs"
-     ref="forwardedRef"  
+     ref="forwardedRef"
      >
     <div class="flex gap-2" :class="classNames">
-      <base-avatar 
+      <base-avatar
         :image="props.message?.sender?.avatar?.url"
         :label="props.message?.sender?.full_name"
         :color="props.message?.sender?.color"
@@ -71,24 +71,24 @@ defineExpose({
       <div class="flex flex-col gap-2">
         <!-- message -->
         <div class="flex gap-3">
-          <div 
+          <div
             @click="handleMessageClick"
             @contextmenu.prevent="onShowContextMenu($event, props.message, props.index)"
             class="friend-text flex flex-col gap-1 bg-white rounded-xl px-4 py-2 cursor-pointer w-fit  max-w-[400px]"
             :class="[
               {
-                '!rounded-xl !rounded-bl-[4px]': props.avatarVisible, 
+                '!rounded-xl !rounded-bl-[4px]': props.avatarVisible,
                 '!rounded-tl-[4px]': !props.avatarVisible,
                 '!rounde-2xl' : !!props.message.replied_to
               }
             ]"
             >
             <!-- replay to message -->
-            <div 
+            <div
               v-if="!!props.message.replied_to"
               @click="props.handleClickReplayMessage(props.message)"
               class="flex flex-col gap-1 pl-2 border-l-[2px] border-warning-500"
-              > 
+              >
               <span class="text-xs font-semibold text-warning-500 truncate">{{ props.message.replied_to?.sender?.first_name }} {{ props.message.replied_to?.sender?.last_name }}</span>
               <span class="text-xs font-medium text-greyscale-500 truncate">{{ props.message.replied_to?.text }}</span>
             </div>
@@ -105,16 +105,16 @@ defineExpose({
                 class="!w-3 !h-3"
               />
               <span>{{ t('edited') }}</span>
-            </div>   
+            </div>
           </div>
           <p class="text-xs font-medium text-greyscale-500 self-end">{{ formatHour(props.message?.created_date) }}</p>
         </div>
         <!-- reactions -->
         <div v-if="props.message.reactions && Object.keys(props.message.reactions).length" class="flex gap-1">
           <template v-for="reaction in Object.keys(props.message.reactions)" :key="reaction">
-            <ClickedStiker 
+            <ClickedStiker
               @click="props.handleClickEmoji(reaction, message.message_id)"
-              :onContextMenuClick="(e)=>props.onShowEmojiContextMenu(e, props.message.reactions[reaction])" 
+              :onContextMenuClick="(e)=>props.onShowEmojiContextMenu(e, props.message.reactions[reaction])"
               :emoji="reaction"
               :userReactionList="props.message.reactions[reaction]" />
           </template>
@@ -126,6 +126,6 @@ defineExpose({
 </template>
 <style scoped>
 .friend-text {
- box-shadow: 0px 2px 4px 0px rgba(47, 61, 87, 0.03), 0px 1px 1px 0px rgba(95, 110, 169, 0.03); 
+ box-shadow: 0px 2px 4px 0px rgba(47, 61, 87, 0.03), 0px 1px 1px 0px rgba(95, 110, 169, 0.03);
 }
 </style>

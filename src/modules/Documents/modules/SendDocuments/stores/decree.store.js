@@ -10,7 +10,7 @@ import {
   fetchGetDocumentDetail, fetchUpdateDocument
 } from "@/modules/Documents/modules/SendDocuments/services/index.service"
 
-export const useDecreeStore = defineStore("decree-store", {
+export const useDecreeStore = defineStore("decree-stores", {
   state: () => ({
     buttonLoading: false,
     detailLoading: false,

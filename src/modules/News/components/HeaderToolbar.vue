@@ -10,7 +10,7 @@ import BaseInput from '@/components/UI/BaseInput.vue'
 // Icons
 import { AddPlusIcon } from '@/components/Icons'
 import { MagniferIcon } from '@/components/Icons'
-// store
+// stores
 import { useAuthStore } from '@/modules/Auth/stores'
 import { useNewsHeaderStore } from '../stores/news.header.store'
 import { useNewsCountStore } from '../stores/news.count.store'
@@ -53,7 +53,7 @@ watch(searchQuery, (newValue) => {
   }
 })
 
-const handleClickMenu=(item)=>{  
+const handleClickMenu=(item)=>{
   if(!!tagPramId.value){
     router.push({ name:item.link, query: { activeMenu: item.title, tag: undefined}})
   } else {
@@ -110,7 +110,7 @@ onMounted(() => {
         </template>
       </div>
       <div
-        v-if="tagPramId" 
+        v-if="tagPramId"
           @click="router.replace({query: {...router.currentRoute.value.query, tag: undefined}})"
         class="py-1 px-4 !bg-primary-500 rounded-[32px] text-sm font-medium text-white cursor-pointer"
       >

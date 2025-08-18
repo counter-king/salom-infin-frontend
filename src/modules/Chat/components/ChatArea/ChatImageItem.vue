@@ -11,7 +11,7 @@ import { formatHour } from '@/utils/formatDate';
 import { dispatchNotify } from '@/utils/notify';
 // enums
 import { COLOR_TYPES } from '@/enums';
-// store
+// stores
 import { useChatStore } from '../../stores';
 // services
 import { fetchBlobFile } from '@/services/file.service';
@@ -45,7 +45,7 @@ const props = defineProps({
     type : Number
   },
   classNames: {
-    type: [String , Array, Object] 
+    type: [String , Array, Object]
   }
 })
 const { t } = useI18n();
@@ -55,13 +55,13 @@ const forwardedRef = ref(null);
 const attrs = useAttrs();
 
 onMounted(async() => {
-  if(props.message?.attachments?.file?.id){    
+  if(props.message?.attachments?.file?.id){
     try {
       loading.value = true;
       const { blobUrl } = await fetchBlobFile(props.message?.attachments?.file?.id);
       if(chatStore.messageListByChatId[props.index] && chatStore.messageListByChatId[props.index].attachments){
         chatStore.messageListByChatId[props.index].attachments.file.url = blobUrl
-      }  
+      }
     } catch (error) {
       dispatchNotify(null, error, COLOR_TYPES.ERROR)
     }
@@ -77,7 +77,7 @@ defineExpose({
 
 </script>
 <template>
- <div 
+ <div
   class="flex flex-col gap-2 items-end"
   :class="classNames"
   v-bind="attrs"
@@ -112,7 +112,7 @@ defineExpose({
         ]"
         >
         <!-- reply to message -->
-        <div 
+        <div
           v-if="!!props.message.replied_to"
            @click="props.handleClickReplayMessage(props.message)"
           class="flex flex-col gap-1 pl-2 border-l-[2px] border-warning-500"
@@ -121,9 +121,9 @@ defineExpose({
           <span class="text-xs font-medium text-greyscale-500 truncate">{{ props.message.replied_to?.text }} </span>
         </div>
         <!-- image loading -->
-        <BaseSpinner 
+        <BaseSpinner
           v-if="loading"
-          class="!w-4 !h-4 text-greyscale-500" 
+          class="!w-4 !h-4 text-greyscale-500"
         />
         <!-- image -->
         <img
@@ -138,17 +138,17 @@ defineExpose({
             class="!w-3 !h-3"
           />
           <span>{{ t('edited') }}</span>
-        </div>   
+        </div>
       </div>
    </div>
     <!-- reactions -->
    <div v-if="props.message?.reactions && Object.keys(props.message.reactions).length" class="flex gap-1">
     <template v-for="reaction in Object.keys(props.message.reactions)" :key="reaction">
-      <ClickedStiker 
+      <ClickedStiker
         @click="props.handleClickEmoji(reaction, message.message_id)"
-        :onContextMenuClick="(e)=>props.onShowEmojiContextMenu(e, props.message.reactions[reaction])" 
+        :onContextMenuClick="(e)=>props.onShowEmojiContextMenu(e, props.message.reactions[reaction])"
         :emoji="reaction"
-        :userReactionList="props.message.reactions[reaction]" 
+        :userReactionList="props.message.reactions[reaction]"
         />
     </template>
    </div>

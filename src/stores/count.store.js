@@ -8,7 +8,7 @@ import { useAgreementsRoutesStore } from '@/modules/HR/modules/Agreements/stores
 import { fetchDocumentCountList } from '@/services/count.service'
 import { fetchGetNewsPendingCount } from '@/modules/News/services/news.service'
 
-export const useCountStore = defineStore('count-store', {
+export const useCountStore = defineStore('count-stores', {
   state: () => ({}),
   actions: {
     async actionCountList(){

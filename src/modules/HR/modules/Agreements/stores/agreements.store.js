@@ -20,7 +20,7 @@ let negotiationModel = {
   content: null
 }
 
-export const useAgreementsStore = defineStore('agreements-store', {
+export const useAgreementsStore = defineStore('agreements-stores', {
   state: () => ({
     headers: [
       {

@@ -1,7 +1,10 @@
 {
+  "successfully-added": "Успешно добавлен",
   "tests-surveys": "Тесты и опросы",
   "tests": "Тесты",
   "surveys": "Опросы",
+  "test-constructor": "Конструктор тестов",
+  "survey-constructor": "Конструктор опросов",
   "division": "Отдел",
   "context-uz": "Описание (UZ)",
   "context-ru": "Описание (РУ)",

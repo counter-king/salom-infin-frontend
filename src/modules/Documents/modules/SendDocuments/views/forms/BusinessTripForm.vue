@@ -134,7 +134,7 @@ const validateAndSendNotice = async () => {
   store.model.document_type = route.params.document_type
   store.model.document_sub_type = route.params.document_sub_type
 
-  // store.model.bookings = store.booking_model.bookings.map(item => ({
+  // stores.model.bookings = stores.booking_model.bookings.map(item => ({
   //   ...item,
   //   segments: item.segments.map(segment => ({
   //     departure_city: segment.departure_city.id,
@@ -148,7 +148,7 @@ const validateAndSendNotice = async () => {
   //   passengers: item.passengers.map(passenger => ({ user: passenger.id }))
   // }))
   //
-  // store.model.trip_plans = store.trip_plan_model.trip_plans.map(plan => ({
+  // stores.model.trip_plans = stores.trip_plan_model.trip_plans.map(plan => ({
   //   users: plan.users.map(user => ({ id: user.id })),
   //   text: plan.text
   // }))

@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 // Service
 import { fetchAllUrls } from '@/services/all-urls.service'
 
-export const useAllUrlStore = defineStore('all-url-store', {
+export const useAllUrlStore = defineStore('all-url-stores', {
   state: () => ({
     list: []
   }),

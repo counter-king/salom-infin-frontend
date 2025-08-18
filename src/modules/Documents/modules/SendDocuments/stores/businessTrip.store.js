@@ -46,7 +46,7 @@ import { adjustBTDateToTimeArray } from "@/modules/Documents/modules/SendDocumen
 import { useCountStore } from "@/stores/count.store";
 import { useCommonStore } from "@/stores/common";
 
-export const useBusinessTripStore = defineStore("sd-business-trip-store", {
+export const useBusinessTripStore = defineStore("sd-business-trip-stores", {
   state: () => ({
     buttonLoading: false,
     detailLoading: false,

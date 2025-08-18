@@ -219,10 +219,12 @@ const filterValueChildren = computed(()=> props.value[0]?.children.filter((child
               <span>-</span>
             </template>
           </handbook-table>
+
           <template v-if="data.children && data.children.length > 0">
             <rescursive-handbook-table v-for="child in filterValueChildren" :item="child" :top-level="data.name"/>
           </template>
         </template>
+
         <template v-else>
           <template v-for="item in props.value" :key="item.id">
             <handbook-search-table :item="item" :top-level="item?.department?.name">
@@ -236,7 +238,9 @@ const filterValueChildren = computed(()=> props.value[0]?.children.filter((child
           </template>
         </template>
       </template>
+
       <Column v-if="false"></Column>
+
       <template #empty>
         <empty class="h-[calc(100vh-650px)]" />
       </template>

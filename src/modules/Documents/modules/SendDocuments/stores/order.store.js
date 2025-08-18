@@ -16,7 +16,7 @@ import {
 import { useAuthStore } from '@/modules/Auth/stores'
 import {fetchUserDetail} from "@/services/users.service";
 
-export const useSDOrderStore = defineStore("order-store", {
+export const useSDOrderStore = defineStore("order-stores", {
   state: () => {
     const authStore = useAuthStore()
 

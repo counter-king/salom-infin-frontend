@@ -9,7 +9,6 @@ import { AltArrowDownIcon, MagniferIcon, XMarkSolidIcon } from '@/components/Ico
 // Services
 import axiosConfig from '@/services/axios.config'
 // Composable
-const modelValue = useModel(props, 'modelValue')
 const { t } = useI18n()
 // Macros
 const props = defineProps({
@@ -113,6 +112,7 @@ const props = defineProps({
   }
 })
 const emit = defineEmits(['update:modelValue', 'update:options', 'emit:change'])
+const modelValue = useModel(props, 'modelValue')
 // Reactive
 const inputRef = ref(null)
 const search = ref(null)

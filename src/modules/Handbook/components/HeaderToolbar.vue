@@ -122,12 +122,14 @@ onMounted(async () => {
   mainBarnch.value = branches.value.find((item)=> item.is_main == true )
   branchSelect.value = data.results[0].id
 })
-
-
 </script>
 
 <template>
   <action-toolbar :title="t('handbook')">
+    <template #title-after>
+      <slot name="title-after" />
+    </template>
+
     <template #filters>
       <div class="w-full max-w-[316px]">
         <base-input

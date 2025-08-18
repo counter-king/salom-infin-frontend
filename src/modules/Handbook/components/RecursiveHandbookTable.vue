@@ -29,6 +29,7 @@ const itemChildren = props.item.children.filter((child)=> child.condition === CO
         {{ props.topLevel }}
       </template>
     </handbook-table>
+
     <template v-if="item.children && item.children.length > 0">
       <recursive-handbook-table
         v-for="child in itemChildren"

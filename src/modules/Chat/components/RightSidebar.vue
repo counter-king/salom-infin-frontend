@@ -12,14 +12,14 @@ import FileTypeImage from "./FileTypeImage.vue";
 import GroupUserList from "./GroupUserList.vue";
 // icons
 import { ChevronUp20SolidIcon, FolderFavouriteStarBoldIcon, PaperclipRoundedBoldIcon, UsersGroupTwoRoundedBoldIcon, XMarkSolidIcon } from '@/components/Icons'
-// constants 
+// constants
 import { CHAT_ROUTE_NAMES, COMPONENT_TYPES, MESSAGE_TYPES } from "../constatns";
-// store
+// stores
 import { useChatStore } from "../stores";
 
 const chatStore = useChatStore();
 const route = useRoute();
-const { t } = useI18n(); 
+const { t } = useI18n();
 const inputSendMessasgeRef = inject("inputSendMessasgeRef");
 
 const components = {
@@ -58,7 +58,7 @@ const handleClickGroupUsers = () => {
   }
 }
 
-const handleClickWrapper = () => {  
+const handleClickWrapper = () => {
   inputSendMessasgeRef.value.$el.focus()
 }
 
@@ -125,7 +125,7 @@ watch(()=> chatStore.chatFilesCount, (value, oldValue) => {
             <p class="text-sm font-medium select-none text-greyscale-500 min-h-[20px]">{{ isGroupDetail ? t('members', { count: chatStore.selectedGroup?.members?.length}) : chatStore.selectedUser?.position}}</p>
           </div>
           <!-- users  -->
-          <div 
+          <div
             v-if="isGroupDetail"
             @click="handleClickGroupUsers"
             class="flex items-center gap-[10px] select-none p-6 py-0 cursor-pointer"
@@ -135,14 +135,14 @@ watch(()=> chatStore.chatFilesCount, (value, oldValue) => {
               class="text-greyscale-300 !h-5 !w-5"
               :class="{ 'order-2': componentType === COMPONENT_TYPES.GROUP_USERS }"
             />
-            <span 
+            <span
               class="grow text-base font-medium text-greyscale-900"
               :class="{ 'order-3': componentType === COMPONENT_TYPES.GROUP_USERS }"
               >
               {{ t('members') }}
             </span>
-            <div 
-              class="p-1 rounded-full bg-none" 
+            <div
+              class="p-1 rounded-full bg-none"
               :class="{ 'order-1 bg-greyscale-200': componentType === COMPONENT_TYPES.GROUP_USERS }"
               >
               <base-iconify
@@ -154,12 +154,12 @@ watch(()=> chatStore.chatFilesCount, (value, oldValue) => {
           </div>
           <!-- menu files -->
           <div
-            v-if="componentType !== COMPONENT_TYPES.GROUP_USERS" 
+            v-if="componentType !== COMPONENT_TYPES.GROUP_USERS"
             class="flex gap-3 px-6 mt-6"
             >
-            <div 
+            <div
               class="flex flex-col gap-3 py-3 px-3 pr-5 pb-2 relative bg-greyscale-50 rounded-xl cursor-pointer"
-              :class="{ '!bg-primary-100': activeFileMenu }" 
+              :class="{ '!bg-primary-100': activeFileMenu }"
               @click="componentType = COMPONENT_TYPES.FILES"
               >
               <div class="flex items-center gap-2">
@@ -168,7 +168,7 @@ watch(()=> chatStore.chatFilesCount, (value, oldValue) => {
                   class="text-primary-300 !h-5 !w-5"
                   :class="{ '!text-primary-500': activeFileMenu }"
                 />
-                <span 
+                <span
                   class="text-xs font-medium select-none text-greyscale-500"
                   :class="{ 'text-greyscale-900': activeFileMenu }"
                   >
@@ -180,9 +180,9 @@ watch(()=> chatStore.chatFilesCount, (value, oldValue) => {
                 <div v-if="activeFileMenu" class="absolute right-3 border-[6px] border-white bg-primary-500 w-4 h-4 rounded-full shadow-md"></div>
               </div>
             </div>
-            <div 
+            <div
               class="flex flex-col gap-3 py-3 px-3 pr-5 pb-2 relative bg-greyscale-50 rounded-xl cursor-pointer"
-              :class="{ '!bg-primary-100': !activeFileMenu }" 
+              :class="{ '!bg-primary-100': !activeFileMenu }"
               @click="componentType = COMPONENT_TYPES.LINKS"
               >
               <div class="flex items-center gap-2">
@@ -191,10 +191,10 @@ watch(()=> chatStore.chatFilesCount, (value, oldValue) => {
                   class="text-primary-300 !h-5 !w-5"
                   :class="{ '!text-primary-500': !activeFileMenu }"
                 />
-                <span 
+                <span
                   class="text-xs font-medium select-none text-greyscale-500"
                   :class="{ 'text-greyscale-900': !activeFileMenu }"
-                  > 
+                  >
                   {{ t('total-links') }}
                 </span>
               </div>

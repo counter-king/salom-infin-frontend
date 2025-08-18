@@ -15,7 +15,7 @@ import { socket } from "@/services/socket";
 import { CHAT_ROUTE_NAMES, CHAT_TYPES, MESSAGE_TYPES } from "../constatns";
 // services
 import { downloadFile } from "../services/file.service";
-// store
+// stores
 import { useAuthStore } from "@/modules/Auth/stores";
 
 const chatStore = useChatStore()
@@ -28,67 +28,67 @@ const refContextMenu = ref(null);
 
 const sendReactionEvent = (type) => {
   const isPrivateChat = route.name == CHAT_ROUTE_NAMES.PRIVATE
-  const chat_id = isPrivateChat ? chatStore.selectedUser.chat_id : chatStore.selectedGroup.chat_id 
+  const chat_id = isPrivateChat ? chatStore.selectedUser.chat_id : chatStore.selectedGroup.chat_id
   const payload = { command: "message_reaction", chat_id, chat_type: isPrivateChat ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP, message_id: chatStore.contextMenu?.tempMessage?.message_id, emoji: type }
   send(JSON.stringify(payload))
 }
 
 const handleClickStiker = (value, type)=> {
-  sendReactionEvent(type)  
+  sendReactionEvent(type)
 }
 
 const menuItems = computed(()=> ([
-   { 
+   {
      label: '',
      action: (value, type)=>{
       handleClickStiker(value, type)
      },
      command: () => {
 
-     }  
+     }
    },
-   { 
+   {
      label: 'answer',
      iconName: ForwardIcon,
-     iconClass:"rotate-y-180 transform rotate-y-180", 
+     iconClass:"rotate-y-180 transform rotate-y-180",
      command: () => {
       chatStore.contextMenu = { ...chatStore.contextMenu, message: chatStore.contextMenu.tempMessage, replay: true, edit: false }
-     } 
+     }
    },
-   ...(chatStore.contextMenu?.tempMessage?.sender?.id == authStore.currentUser?.id ? [{ 
+   ...(chatStore.contextMenu?.tempMessage?.sender?.id == authStore.currentUser?.id ? [{
       label: 'update',
       iconName: PenIcon,
       command: () => {
         chatStore.contextMenu = { ...chatStore.contextMenu, message: chatStore.contextMenu.tempMessage, replay: false, edit: true }
-      } 
+      }
     }] : []),
    ...(
     [MESSAGE_TYPES.FILE, MESSAGE_TYPES.IMAGE, MESSAGE_TYPES.VIDEO, MESSAGE_TYPES.AUDIO].includes(chatStore.contextMenu?.tempMessage?.message_type) ? [
-     { 
+     {
      label: 'save-as',
      iconName: DownloadMinimalisticIcon,
-     command: () => {      
+     command: () => {
       downloadFile(chatStore.contextMenu.tempMessage)
       }
-     } 
+     }
     ] : []
     ),
-   { 
+   {
      label: 'copy',
      iconName: CopyIcon,
-     command: async () => {   
-      chatStore.contextMenu = { ...chatStore.contextMenu, message: chatStore.contextMenu.tempMessage, replay: false, edit: false }   
+     command: async () => {
+      chatStore.contextMenu = { ...chatStore.contextMenu, message: chatStore.contextMenu.tempMessage, replay: false, edit: false }
       try {
         await navigator.clipboard.writeText(chatStore.contextMenu.tempMessage?.text);
       } catch (err) {
         dispatchNotify(null, err, COLOR_TYPES.ERROR)
       }
-     } 
+     }
    },
-   ...(chatStore.contextMenu?.tempMessage?.sender?.id == authStore.currentUser?.id ? [{ 
+   ...(chatStore.contextMenu?.tempMessage?.sender?.id == authStore.currentUser?.id ? [{
      label: 'delete',
      iconName: TrashBinTrashIcon,
-     command: () => {      
+     command: () => {
       chatStore.contextMenu = { ...chatStore.contextMenu, message: chatStore.contextMenu.tempMessage, replay: false, edit: false }
       chatStore.contextMenu = { message: chatStore.contextMenu.tempMessage, replay: false, edit: false, deleteDialog: true }
      },

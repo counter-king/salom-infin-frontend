@@ -1279,7 +1279,7 @@ define(['exports'], (function (exports) { 'use strict';
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    // Name of the search parameter used to store revision info.
+    // Name of the search parameter used to stores revision info.
     const REVISION_SEARCH_PARAM = '__WB_REVISION__';
     /**
      * Converts a manifest entry into a versioned URL suitable for precaching.
@@ -2235,7 +2235,7 @@ define(['exports'], (function (exports) { 'use strict';
        * constructor.
        *
        * @param {Object} [options]
-       * @param {string} [options.cacheName] Cache name to store and retrieve
+       * @param {string} [options.cacheName] Cache name to stores and retrieve
        * requests. Defaults to the cache names provided by
        * {@link workbox-core.cacheNames}.
        * @param {Array<Object>} [options.plugins] [Plugins]{@link https://developers.google.com/web/tools/workbox/guides/using-plugins}
@@ -2250,7 +2250,7 @@ define(['exports'], (function (exports) { 'use strict';
        */
       constructor(options = {}) {
         /**
-         * Cache name to store and retrieve
+         * Cache name to stores and retrieve
          * requests. Defaults to the cache names provided by
          * {@link workbox-core.cacheNames}.
          *
@@ -2467,7 +2467,7 @@ define(['exports'], (function (exports) { 'use strict';
       /**
        *
        * @param {Object} [options]
-       * @param {string} [options.cacheName] Cache name to store and retrieve
+       * @param {string} [options.cacheName] Cache name to stores and retrieve
        * requests. Defaults to the cache names provided by
        * {@link workbox-core.cacheNames}.
        * @param {Array<Object>} [options.plugins] {@link https://developers.google.com/web/tools/workbox/guides/using-plugins|Plugins}

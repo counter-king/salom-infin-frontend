@@ -26,7 +26,7 @@ const model = {
   doc_sub_type: null
 }
 
-export const usePermissionStore = defineStore('permission-store', {
+export const usePermissionStore = defineStore('permission-stores', {
   state: () => ({
     list: [],
     createModel: Object.assign({}, model)

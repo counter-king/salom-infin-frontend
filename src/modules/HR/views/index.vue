@@ -45,7 +45,7 @@ const menus = ref([
   // {
   //   title: 'tests-surveys',
   //   icon: ArchiveDownMinimlisticOutlineIcon,
-  //   link: 'SurveyIndex',
+  //   link: 'TestsSurveyIndex',
   //   children: [],
   // },
 ])

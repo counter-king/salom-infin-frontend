@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 // Service
 import { fetchEquipment } from '../services/equipments.service'
 
-export const useEquipmentStore = defineStore('equipment-store', {
+export const useEquipmentStore = defineStore('equipment-stores', {
   state: () => ({
     list: [],
     headers: [

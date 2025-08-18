@@ -9,7 +9,7 @@ import { ChatAreWrapper, LeftSidebar, RightSidebar } from "@/modules/Chat/compon
 import { socket } from "@/services/socket";
 // contants
 import { CHAT_ROUTE_NAMES, CHAT_TYPES, MESSAGE_TYPES, WEBCOCKET_EVENTS } from "../constatns";
-// store
+// stores
 import { useChatStore } from "../stores";
 import { useAuthStore } from "@/modules/Auth/stores";
 // composibles
@@ -33,7 +33,7 @@ const chatHandshakeChatIds = ref([])
 
 let typingTimeouts = {};
 // privder
-provide("inputSendMessasgeRef", inputSendMessasgeRef) 
+provide("inputSendMessasgeRef", inputSendMessasgeRef)
 provide('refChatArea', refChatArea)
 // method
 const sendUserHandshake = ()=> {
@@ -67,8 +67,8 @@ watch(data, (newData) => {
     }
   }
 
-  else if(newData.type == WEBCOCKET_EVENTS.NEW_MESSAGE) {  
-    const chatList = isPrivate ? chatStore.privateChatList : chatStore.groupChatList 
+  else if(newData.type == WEBCOCKET_EVENTS.NEW_MESSAGE) {
+    const chatList = isPrivate ? chatStore.privateChatList : chatStore.groupChatList
     // if chat not found, add it
     if(!chatList.some(item=> item.chat_id == newData.chat_id) && newData.chat_type == (isPrivate ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP)){
           chatList.unshift({
@@ -84,7 +84,7 @@ watch(data, (newData) => {
           last_message_type: newData.message_type,
           last_message_id: newData?.message_id,
           type: newData.chat_type,
-          unread_count: newData.unread_count  
+          unread_count: newData.unread_count
         })
       }
 
@@ -113,7 +113,7 @@ watch(data, (newData) => {
           reactions: [],
         });
       }
-      
+
       // get chat files count, when current user send a file message
       if(newData.message_type != MESSAGE_TYPES.TEXT && chat_id == (chatStore.selectedUser?.chat_id || chatStore.selectedGroup?.chat_id)) {
         chatStore.actionGetChatFilesCount(chat_id)
@@ -126,7 +126,7 @@ watch(data, (newData) => {
         chat.last_message_id = newData?.message_id
         // unread_countni 1 ga oshirish
         if(newData.sender?.id != authStore.currentUser?.id) {
-          chat.unread_count += 1; 
+          chat.unread_count += 1;
         }
       }
       if (chat && !isPrivate) {
@@ -134,18 +134,18 @@ watch(data, (newData) => {
         chat.last_message_id = newData?.message_id
         // unread_countni 1 ga oshirish
         if(newData.sender?.id != authStore.currentUser?.id) {
-          chat.unread_count += 1; 
+          chat.unread_count += 1;
         }
       }
 
-      // if user current then make scroll push untill bottom 
+      // if user current then make scroll push untill bottom
       if(authStore.currentUser?.id == newData.sender?.id){
         setTimeout(handleScrollDownSmooth,1);
       }
       // if user not current, but if scroll stand at bottom, then make scroll push untill bottom
       else if(isSrollStayDown){ setTimeout(handleScrollDownSmooth, 1)}
   }
-  else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_DELETED) {  
+  else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_DELETED) {
     chatStore.messageListByChatId = chatStore.messageListByChatId.filter(item=> item.message_id != newData?.content?.message_id)
     chatStore.contextMenu.deleteDialog = false
 
@@ -175,7 +175,7 @@ watch(data, (newData) => {
     }
   }
   else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_UPDATE) {
-    // if a message is related to current messageListByChatId, update it 
+    // if a message is related to current messageListByChatId, update it
     let message = chatStore.messageListByChatId.find(item=> item.message_id == newData?.content?.message_id)
     if(message) {
       message.text = newData?.content?.text
@@ -259,14 +259,14 @@ watch(data, (newData) => {
     }, 1000);
   }
   else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_READ) {
-    
+
     const message = chatStore.messageListByChatId.find(item=> item.message_id == newData?.message_id)
     if(message?.sender?.id != newData?.user?.id){
       if(message && !message.is_read){
         message.is_read = true
         // when messags are readed, then decrease count of unread message count from chat list
-        const chatPrivate = chatStore.privateChatList.find(item=> item.chat_id == message?.chat_id) 
-        const chatGroup = chatStore.groupChatList.find(item=> item.chat_id == message?.chat_id) 
+        const chatPrivate = chatStore.privateChatList.find(item=> item.chat_id == message?.chat_id)
+        const chatGroup = chatStore.groupChatList.find(item=> item.chat_id == message?.chat_id)
         if(chatPrivate?.unread_count > 0){
           chatPrivate.unread_count -= 1
         }
@@ -339,7 +339,7 @@ watch(data, (newData) => {
     }
     else if(newData.content.chat_type == CHAT_TYPES.GROUP){
       const groupChat = chatStore.groupChatList.find(item=> item.chat_id == newData?.content.chat_id)
-      
+
       if(groupChat){
         groupChat.last_message = { sender: newData.content.sender, text: newData.content.text}
         groupChat.last_message_id = newData?.content?.message_id

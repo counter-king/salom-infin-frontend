@@ -80,6 +80,7 @@ export default {
       },
       boxShadow: {
         'button': '0 1px 1px 0 rgba(95, 110, 169, 0.03), 0 2px 4px 0 rgba(47, 61, 87, 0.03)',
+        'button-hover': '0 2px 4px 0 rgba(0, 0, 0, 0.06), 0 4px 12px 0 rgba(0, 0, 0, 0.12)',
         'menu': '0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 2px 60px 0 rgba(0, 0, 0, 0.1)',
         'calendar': '0 16px 56px 0 rgba(0, 0, 0, 0.15)',
         'overlay': '0 20px 82px 0 rgba(0, 0, 0, 0.15)',

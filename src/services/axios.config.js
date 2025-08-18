@@ -1,5 +1,6 @@
 // Core
 import axios from 'axios'
+import router from '../router'
 // Stores
 import { useAuthStore } from '@/modules/Auth/stores'
 // Utils
@@ -60,7 +61,8 @@ axiosInstance.interceptors.response.use(
       removeStorageItem(REFRESH)
       removeStorageItem(EXPIRES)
       removeStorageItem(CURRENT_ROUTE)
-      authStore.actionSessionEnd(true)
+      await router.push({ name: 'Login' })
+      // authStore.actionSessionEnd(true)
     }
     // Проверка если это объект
     // if(response.data instanceof Object) {

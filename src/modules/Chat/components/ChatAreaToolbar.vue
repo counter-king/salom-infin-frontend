@@ -10,7 +10,7 @@ import DeleteDialog from './DeleteDialog.vue';
 import BaseMenu from '@/components/UI/BaseMenu.vue';
 // services
 import { fetchDeleteGroupChatById, fetchDeletePrivateChatById } from '../services';
-// store
+// stores
 import { useChatStore } from "@/modules/Chat/stores";
 import { useAuthStore } from '@/modules/Auth/stores';
 // constatns
@@ -31,14 +31,14 @@ const menu = ref();
 const isGroupDetail = computed(() => route.name == CHAT_ROUTE_NAMES.GROUP)
 const isAllowedToDelete = computed(() => chatStore.selectedGroup?.members?.find((item) => item?.id == authStore.currentUser.id)?.role == 'owner' || chatStore.selectedUser?.members?.find((item) => item.user?.id == authStore.currentUser?.id)?.role == 'owner')
 const menuItems = computed(() => [
-  ...(route.name == CHAT_ROUTE_NAMES.GROUP ? [{ 
+  ...(route.name == CHAT_ROUTE_NAMES.GROUP ? [{
     label: 'edit',
     icon: PenIcon,
     command: () => {
       createGroupDialogVisible.value = true
     },
     iconClass: "!text-greyscale-500 !w-4 !h-4"
-  }] : []),  
+  }] : []),
   {
     label: 'delete',
     class: ['pointer-events-none', '!text-critic-200', {'!text-critic-500 !pointer-events-auto': isAllowedToDelete.value}],
@@ -80,19 +80,19 @@ function focussed() {
 
 const onDeleteChat = async () => {
   isDeleteLoading.value = true
-  
+
   if(route.name == CHAT_ROUTE_NAMES.GROUP){
     await fetchDeleteGroupChatById(chatStore.selectedGroup?.chat_uid)
     chatStore.selectedGroup = null
     router.push({name: CHAT_ROUTE_NAMES.CHAT_INDEX, query :{ tab: "group" } })
-    chatStore.actionGetGroupChatList()  
+    chatStore.actionGetGroupChatList()
   } else if(route.name == CHAT_ROUTE_NAMES.PRIVATE){
     await fetchDeletePrivateChatById(chatStore.selectedUser?.chat_uid)
     chatStore.selectedUser = null
     router.push({name: CHAT_ROUTE_NAMES.CHAT_INDEX, query :{ tab: undefined} })
     chatStore.actionGetPrivateChatList()
   }
-  
+
   isDeleteLoading.value = false
   deleteDialogVisible.value = false
 }
@@ -121,8 +121,8 @@ watch(createGroupDialogVisible, () => {
             :image="isGroupDetail ? chatStore.selectedGroup?.image?.blobUrl : chatStore.selectedUser?.avatar?.url"
             avatar-classes="w-11 h-11"
             label-classes="text-lg font-semibold select-none text-greyscale-900"
-          />  
-          <div 
+          />
+          <div
             v-if="!isGroupDetail"
             class="absolute w-4 h-4 rounded-lg right-[-2px] bottom-[-2px] bg-greyscale-300 border-[3px] border-white"
             :class="{ '!bg-success-500': chatStore.selectedUser?.is_user_online }"
@@ -144,7 +144,7 @@ watch(createGroupDialogVisible, () => {
         <div @click.stop="toggle"   class="relative flex justify-center">
           <base-iconify
           :icon="MenuDotsBoldIcon"
-          class="!w-6 !h-6 text-greyscale-300 cursor-pointer transform rotate-90"    
+          class="!w-6 !h-6 text-greyscale-300 cursor-pointer transform rotate-90"
           />
         </div>
         <BaseMenu ref="menu" :items="menuItems"  width="w-[171px]" @focus="focussed" menu-class="rounded-xl p-1"  label-class="!text-sm font-medium" >
@@ -159,14 +159,14 @@ watch(createGroupDialogVisible, () => {
               </slot>
           </div>
           </template>
-        </BaseMenu>         
+        </BaseMenu>
       </div>
     </div>
   </div>
   <create-edit-group-dialog v-if="createGroupDialogVisible" modal-label="edit-group" v-model="createGroupDialogVisible" type="edit" />
   <DeleteDialog
-   v-model="deleteDialogVisible" 
-   :onDelete="onDeleteChat" 
+   v-model="deleteDialogVisible"
+   :onDelete="onDeleteChat"
    :onClose="() => deleteDialogVisible = false"
    :conetentText="route.name == CHAT_ROUTE_NAMES.GROUP ? 'delete-chat-group-dialog-content' : 'delete-chat-private-dialog-content'"
    :isDeleteLoading="isDeleteLoading"

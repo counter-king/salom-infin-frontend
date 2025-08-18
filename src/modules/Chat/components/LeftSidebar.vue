@@ -11,7 +11,7 @@ import UserItemSearch from "@/modules/Chat/components/UserItemSearch.vue";
 import CreateEditGroupDialog from "./CreateEditGroupDialog.vue";
 // icons
 import { AltArrowRightIcon, MagniferIcon, Plus20SolidIcon, UserRoundedBoldIcon, UsersGroupTwoRoundedBoldIcon, VolumeMuteLineIcon, VolumeUpLineIcon } from '@/components/Icons'
-// store
+// stores
 import { useChatStore } from "@/modules/Chat/stores";
 // constatns
 import { CHAT_ROUTE_NAMES, CHAT_TYPES } from "../constatns";
@@ -35,7 +35,7 @@ const refContextMenu = ref(null);
 const searchInput = ref(null);
 const createGroupDialogVisible = ref(false);
 const activeTabIndex= computed({
-  get: () => !route.query.tab ? 0 : route.query.tab == "group" ? 1 : 0, 
+  get: () => !route.query.tab ? 0 : route.query.tab == "group" ? 1 : 0,
   set: () => {}
 });
 
@@ -121,22 +121,22 @@ const onTabChange = async (val) => {
 
 const onCreateChat = async (user) => {
   try {
-    const data = await chatStore.actionCreatePrivateChat({ member_id: user?.id });  
+    const data = await chatStore.actionCreatePrivateChat({ member_id: user?.id });
     chatStore.selectedUser = data
     // if user don't exist in the list then add it
     if(!chatStore.privateChatList.some(item => item.chat_id == data.chat_id)){
       chatStore.privateChatList.unshift(data)
     }
     router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: data.chat_uid }, query: { tab: undefined} })
-    searchInput.value = null;  
+    searchInput.value = null;
   } catch(err) {
       dispatchNotify(null, `error happned: ${err}`, COLOR_TYPES.ERROR)
   }
 }
 
 // when searched privete chat is clicked, that works
-// addlist is ture, when user hasn't chat with this user 
-const onClickSearchedUserByMessage = (item, addlist=true) => {  
+// addlist is ture, when user hasn't chat with this user
+const onClickSearchedUserByMessage = (item, addlist=true) => {
     router.push({ name: CHAT_ROUTE_NAMES.PRIVATE, params: { id: item.chat_uid }, query: { tab: undefined} })
     // if user don't exist in the list then add it
     if(!chatStore.privateChatList.some(user => user.chat_id == item.chat_id) && addlist){
@@ -148,13 +148,13 @@ const onClickSearchedUserByMessage = (item, addlist=true) => {
     searchInput.value = null;
 }
 
-const onClickSearchedGroupByMessage = (item, addlist=true) => {  
+const onClickSearchedGroupByMessage = (item, addlist=true) => {
     router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: item.chat_uid }, query :{ tab: "group"} })
     // if user don't exist in the list then add it
     if(!chatStore.groupChatList.some(group => group.chat_id == item.chat_id) && addlist){
       chatStore.groupChatList.unshift(item)
       chatStore.selectedGroup = item
-    }    
+    }
     chatStore.userSearching = false;
     searchInput.value = null;
 }
@@ -181,7 +181,7 @@ const onClickChatPrivateUser = async (user) => {
 const onClickChatGroup = (group) => {
   try {
     // if group is already selected then don't do anything, becouse no full data, just it is getting from  api id
-    if(route.params?.id != group.chat_uid){    
+    if(route.params?.id != group.chat_uid){
       router.push({ name: CHAT_ROUTE_NAMES.GROUP, params: { id: group.chat_uid }, query :{ tab: 'group'} })
       // if group don't exist in the list then add it
       if(!chatStore.groupChatList.some(item => item.chat_id == group.chat_id)){
@@ -249,7 +249,7 @@ watch(createGroupDialogVisible, () => {
             <template v-if="item.type === 'private'">
               <user-item
               @click="onClickSearchedUserByMessage(item)"
-              :user="item" 
+              :user="item"
               />
             </template>
             <template v-else>
@@ -274,7 +274,7 @@ watch(createGroupDialogVisible, () => {
             <template v-if="item.type === 'private'">
               <user-item
               @click="onClickSearchedUserByMessage(item)"
-              :user="item" 
+              :user="item"
               />
             </template>
             <template v-else>
@@ -312,13 +312,13 @@ watch(createGroupDialogVisible, () => {
                   <span class="text-sm font-semibold block mt-5">{{ t('find-users') }}</span>
                   <span class="text-xs font-medium text-greyscale-500 block mt-1">{{ t('find-users-start-chat') }}</span>
                 </div>
-              </template> 
+              </template>
               <template v-else>
                 <template v-for="item in chatStore.privateChatList" :key="item?.id">
                   <user-item
                     @contextmenu.prevent="onShowContextMenu($event, item)"
                     @click="onClickChatPrivateUser(item)"
-                    :user="item" 
+                    :user="item"
                     :active="item?.chat_uid == route.params?.id"
                   />
                 </template>
@@ -339,7 +339,7 @@ watch(createGroupDialogVisible, () => {
                   <span class="text-sm font-semibold block mt-5">{{ t('find-users') }}</span>
                   <span class="text-xs font-medium text-greyscale-500 block mt-1">{{ t('find-users-start-chat') }}</span>
                 </div>
-              </template> 
+              </template>
               <template v-else>
                 <template v-for="group in chatStore.groupChatList" :key="group?.id">
                   <group-item

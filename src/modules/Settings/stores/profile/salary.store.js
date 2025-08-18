@@ -44,7 +44,7 @@ const defaultStore = {
   }
 }
 
-export const useSalaryStore = defineStore('salary-store', {
+export const useSalaryStore = defineStore('salary-stores', {
   state: () => ({
     ...defaultStore
   }),

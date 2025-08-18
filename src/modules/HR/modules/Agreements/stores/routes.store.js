@@ -5,7 +5,7 @@ import { NotebookIcon, DangerCircleIcon, CheckCircleIcon } from '@/components/Ic
 // Stores
 import { useThemeStore } from '@/stores/theme.store'
 import { useAgreementsStore } from './agreements.store'
-export const useAgreementsRoutesStore = defineStore('agreements-routes-store', {
+export const useAgreementsRoutesStore = defineStore('agreements-routes-stores', {
   state: () => ({
     routes: {
       title: 'agreements',

@@ -7,7 +7,7 @@ let model = {
   permissions: []
 }
 
-export const useEmployeeStore = defineStore('employees-store', {
+export const useEmployeeStore = defineStore('employees-stores', {
   state: () => ({
     createModel: Object.assign({}, model),
     userOne: {}
