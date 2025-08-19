@@ -585,6 +585,16 @@ export const numberToUzbekWords = (num) => {
   return words.trim()
 }
 
+export const isDateGreaterOrEqualToday = (dateString) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0) // normalize today to 00:00:00
+
+  const givenDate = new Date(dateString)
+  givenDate.setHours(0, 0, 0, 0)// normalize given date
+
+  return givenDate >= today
+}
+
 // Format number to k
 export function formatToK(number) {
   if (number >= 1000) {

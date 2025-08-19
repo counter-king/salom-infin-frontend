@@ -2,9 +2,7 @@
 import { ref, useTemplateRef, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useToast } from 'primevue/usetoast'
 import { useChatStore } from '@/modules/Chat/stores'
-import axiosConfig from '@/services/axios.config'
 import {
   CallMedicineRoundedBoldIcon,
   LetterBoldIcon,
@@ -15,10 +13,13 @@ import {
 import { UserStatusChip } from '@/components/Chips'
 import { CHAT_ROUTE_NAMES } from '@/modules/Chat/constatns'
 import { useDashboardContactStore } from "@/modules/Dashboard/stores/contact.store"
+import { dispatchNotify } from "@/utils/notify";
+import { COLOR_TYPES } from "@/enums";
+import { formatDate } from "../../../utils/formatDate";
+import { isDateGreaterOrEqualToday } from "@/utils";
 
 const router = useRouter()
-const { t } = useI18n()
-const toast = useToast()
+const { t, locale } = useI18n()
 const chatStore = useChatStore()
 const fullNameRefs = useTemplateRef('fullName')
 const positionRefs = useTemplateRef('position')
@@ -51,22 +52,20 @@ const handleFavouriteClick = async (item) => {
       await contactStore.actionDeleteContactFromFavourites(item.favourite_id)
       item.favourite_id = null
       item.is_selected = false
-      toast.add({severity: 'success', summary: t('successfully-deleted'), life: 3000})
+      dispatchNotify(null, t('successfully-deleted'), COLOR_TYPES.SUCCESS)
     } else {
       const { data } = await contactStore.actionAddContactToFavourites({user: item.id})
       item.is_selected = true
       item.favourite_id = data.id
       item.private_chat_id = data.private_chat_id
-      toast.add({severity: 'success', summary: t('successfully-added'), life: 3000})
+      dispatchNotify(null, t('successfully-added'), COLOR_TYPES.SUCCESS)
     }
   }
   catch (error) {
 
   }
   finally {
-    setTimeout(() => {
-      itemId.value = 0
-    }, 500)
+    itemId.value = 0
   }
 }
 const moveToChat = async (item) => {
@@ -89,12 +88,10 @@ const createChat = async (user) => {
       query: { tab: undefined }
     })
   } catch(err) {
-    toast.add({ severity: 'error', summary: t('error'), life: 3000 })
+    dispatchNotify(null, t('error'), COLOR_TYPES.ERROR)
   }
   finally {
-    setTimeout(() => {
-      itemChatId.value = 0
-    }, 500)
+    itemChatId.value = 0
   }
 }
 const checkTruncate = (index, refs) => {
@@ -181,12 +178,21 @@ function collectUsers(department) {
               </template>
             </h1>
 
-            <user-status-chip
-              :name="item.status.name"
-              :status="{ id: item.status.code }"
-              border
-              circle
-            />
+            <div class="flex gap-x-2">
+              <user-status-chip
+                :name="item.status.name"
+                :status="{ id: item.status.code }"
+                border
+                circle
+              />
+
+              <div
+                v-if="item.leave_end_date && item.status?.code !== 'A' && isDateGreaterOrEqualToday(item.leave_end_date)"
+                class="bg-greyscale-50 border border-greyscale-200 rounded-[6px] px-2 text-sm text-greyscale-500"
+              >
+                <span v-if="locale === 'ru'">до</span> {{ formatDate(item.leave_end_date) }} <span v-if="locale === 'uz'">gacha</span>
+              </div>
+            </div>
 
             <h2
               ref="position"
