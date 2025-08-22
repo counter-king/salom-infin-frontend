@@ -3,6 +3,7 @@ import { ref, useTemplateRef, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useChatStore } from '@/modules/Chat/stores'
+import { useDashboardContactStore } from "@/modules/Dashboard/stores/contact.store"
 import {
   CallMedicineRoundedBoldIcon,
   LetterBoldIcon,
@@ -12,19 +13,18 @@ import {
 } from '@/components/Icons'
 import { UserStatusChip } from '@/components/Chips'
 import { CHAT_ROUTE_NAMES } from '@/modules/Chat/constatns'
-import { useDashboardContactStore } from "@/modules/Dashboard/stores/contact.store"
-import { dispatchNotify } from "@/utils/notify";
-import { COLOR_TYPES } from "@/enums";
-import { formatDate } from "../../../utils/formatDate";
-import { isDateGreaterOrEqualToday } from "@/utils";
+import { isDateGreaterOrEqualToday } from '@/utils'
+import { dispatchNotify } from '@/utils/notify'
+import { formatDate } from '@/utils/formatDate'
+import { COLOR_TYPES } from '@/enums'
 
 const router = useRouter()
 const { t, locale } = useI18n()
 const chatStore = useChatStore()
+const contactStore = useDashboardContactStore()
 const fullNameRefs = useTemplateRef('fullName')
 const positionRefs = useTemplateRef('position')
 const departmentRefs = useTemplateRef('department')
-const contactStore = useDashboardContactStore()
 
 const props = defineProps({
   value: {
@@ -190,7 +190,7 @@ function collectUsers(department) {
                 v-if="item.leave_end_date && item.status?.code !== 'A' && isDateGreaterOrEqualToday(item.leave_end_date)"
                 class="bg-greyscale-50 border border-greyscale-200 rounded-[6px] px-2 text-sm text-greyscale-500"
               >
-                <span v-if="locale === 'ru'">до</span> {{ formatDate(item.leave_end_date) }} <span v-if="locale === 'uz'">gacha</span>
+                {{ t('to', { count: formatDate(item.leave_end_date) }) }}
               </div>
             </div>
 
