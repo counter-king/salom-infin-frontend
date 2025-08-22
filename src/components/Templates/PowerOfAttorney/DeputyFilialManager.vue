@@ -65,11 +65,11 @@ const route = useRoute()
       <div class="text-base font-semibold text-center">ISHONCHNOMA</div>
 
       <div class="mt-4">
-        Ushbu ishonchnoma orqali “O‘zbekiston sanoat-qurilish banki” aksiyadorlik tijorat banki (“O‘zsanoatqurilishbank” ATB) (keyingi o‘rinlarda – Bank) nomidan uning Ustavi asosida ish yurituvchi
-        <span class="font-semibold">
-          {{ props.curatorPosition }} {{ props.curatorFullName }}
-        </span>
-        O‘zbekiston Respublikasi Fuqarolik kodeksining 134-144-moddalariga amal qilgan holda Bankning
+        Ushbu ishonchnoma orqali “O‘zbekiston sanoat-qurilish banki” aksiyadorlik tijorat banki (“O‘zsanoatqurilishbank”
+        ATB) (keyingi o‘rinlarda – Bank) nomidan 2024-yil 18-noyabrdagi
+        04-07/250-sonli ishonchnoma asosida ish yurituvchi
+        {{ props.curatorPosition }} {{ props.curatorFullName }}
+        O‘zbekiston Respublikasi Fuqarolik kodeksining 134, 135, 138, 139 va 144-moddalariga amal qilgan holda Bankning
         {{ props.emp?.company?.name }}
         {{ props.emp?.position?.name }} (biznes bo'yicha)
         <span class="font-semibold">{{ props.empFullName }}</span>
@@ -82,7 +82,6 @@ const route = useRoute()
         vakolatli kollegial organ qarori asosida ularga o‘zgartirish va qo‘shimchalar kiritish, bekor qilish haqidagi
         kelishuvlarni imzolash, shartnomalar ijrosini qabul qilish, notarial idora/notariuslarda Bank vakili sifatida
         qatnashish.
-
       </div>
 
       <div>

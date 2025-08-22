@@ -946,13 +946,15 @@
   "bxo-manager": "BXO boshqaruvchisi",
   "bxo-deputy-manager-business": "BXO boshqaruvchisi o'rinbosari (biznes)",
   "bxo-deputy-manager-retail": "BXO boshqaruvchisi o'rinbosari (chakana)",
-  "client-manager": "Mijoz menejeri",
-  "eimzo": "Elektron raqamli imzo",
+  "client-manager": "Mijoz menejeri (BXO)",
+  "eimzo": "Elektron raqamli imzo (BXO)",
   "operative-group-head": "Operatsion guruh nazoratchisi",
   "employer-representative": "Ish beruvchi vakili",
   "return-enforcement-document": "Ijro hujjatini qaytarib olish",
   "basis": "Asos",
   "enter-basis": "Asosni kiriting",
   "mediation-agreement": "Mediativ kelishuv",
-  "successfully-deleted": "Muvaffaqiyatli o'chirildi"
+  "successfully-deleted": "Muvaffaqiyatli o'chirildi",
+  "client-manager-bxm": "Mijoz menejeri (BXM)",
+  "eimzo-bxm": "Elektron raqamli imzo (BXM)"
 }

@@ -64,11 +64,10 @@ const props = defineProps({
 
       <div class="mt-4">
         Ushbu ishonchnoma orqali “O‘zbekiston sanoat-qurilish banki” aksiyadorlik tijorat banki (“O‘zsanoatqurilishbank”
-        ATB) (keyingi o‘rinlarda – Bank) nomidan uning Ustavi asosida ish yurituvchi
-        <span class="font-semibold">
-          {{ props.curatorPosition }} {{ props.curatorFullName }}
-        </span>
-        O‘zbekiston Respublikasi Fuqarolik kodeksining 134-144-moddalariga amal qilgan holda Bankning
+        ATB) (keyingi o‘rinlarda – Bank) nomidan 2024-yil 18-noyabrdagi
+        04-07/250-sonli ishonchnoma asosida ish yurituvchi
+        {{ props.curatorPosition }} {{ props.curatorFullName }}
+        O‘zbekiston Respublikasi Fuqarolik kodeksining 134, 135, 138, 139 va 144-moddalariga amal qilgan holda Bankning
         {{ props.emp?.company?.name }}
         (keyingi o‘rinlarda – Ofis)
         {{ props.emp?.position?.name }}
@@ -99,7 +98,7 @@ const props = defineProps({
       </div>
 
       <div>
-        Bunda Bankda garovda turgan mulklarni taqiqdan qisman yoki to‘liq chiqarish, garov mulkini boshqa mulk bilan
+        Bunda Bankda garovda turgan mulklarni taqiqdan chiqarish, garov mulkini boshqa mulk bilan
         almashtirish, garov mulki egasini o‘zgartirish <span class="font-semibold">taqiqlanadi</span>;
       </div>
 

@@ -69,7 +69,8 @@ const props = defineProps({
         asosida ish yurituvchi
         {{ props.curatorPosition }} {{ props.curatorFullName }}
         {{ props.emp?.position?.name }} {{ props.empFullName }}ga
-        O‘zbekiston Respublikasi Fuqarolik kodeksining 134-144-moddalariga asosan quyidagi vakolatlarni beradi:
+        O‘zbekiston Respublikasi Fuqarolik kodeksining 134, 135, 138, 139, 144-moddalariga asosan quyidagi vakolatlarni
+        beradi:
       </div>
 
       <div>

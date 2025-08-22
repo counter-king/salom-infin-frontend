@@ -57,12 +57,15 @@ const props = defineProps({
       <div class="text-base font-semibold text-center mt-8">ISHONCHNOMA</div>
 
       <div class="mt-4">
-        Мazkur ishonchnoma orqali Toshkent shahri, Shahrisabz ko‘chasi, 3-uyda joylashgan “O‘zbekiston sanoat-qurilish banki” aksiyadorlik tijorat banki (keyingi o‘rinlarda – Bank) nomidan uning Ustavi asosida ish yurituvchi
+        Мazkur ishonchnoma orqali Toshkent shahri, Shahrisabz ko‘chasi, 3-uyda joylashgan “O‘zbekiston sanoat-qurilish
+        banki” aksiyadorlik tijorat banki (keyingi o‘rinlarda – Bank) nomidan
+        2024-yil 18-noyabrdagi 04-07/250-sonli ishonchnoma asosida ish yurituvchi
+        {{ props.curatorPosition }} {{ props.curatorFullName }}
         <span class="font-semibold">
-          {{ props.curatorPosition }} {{ props.curatorFullName }}
           {{ props.empPositionFull }} {{ props.empFullName }}
         </span>ga
-        O‘zbekiston Respublikasi Fuqarolik kodeksining 134-144-moddalariga asosan quyidagi vakolatlarni beradi:
+        O‘zbekiston Respublikasi Fuqarolik kodeksining 134, 135, 138, 139 va 144-moddalariga asosan quyidagi
+        vakolatlarni beradi:
       </div>
 
       <div>
@@ -74,12 +77,12 @@ const props = defineProps({
       </div>
 
       <div>
-        Ijro xatlarini rasmiylashtirish uchun notariuslarga barcha zarur hujjatlarni taqdim etish va ijro xatlarini
+        ijro xatlarini rasmiylashtirish uchun notariuslarga barcha zarur hujjatlarni taqdim etish va ijro xatlarini
         ulardan olish;
       </div>
 
       <div>
-        Sudlarda Bank nomidan barcha protsessual harakatlarni amalga oshirish, xususan da’vo ariza, ariza, iltimos va
+        sudlarda Bank nomidan barcha protsessual harakatlarni amalga oshirish, xususan da’vo ariza, ariza, iltimos va
         shikoyatni imzolash, sud hujjati ustidan apellyatsiya, kassatsiya, taftish va boshqa shikoyatlarni hamda
         qarzdorga nisbatan to‘lovga qobiliyatsizlik to‘g‘risida ish qo‘zg‘atish haqidagi arizani imzolash, shuningdek
         sud hujjatini yangi ochilgan holatlar bo‘yicha qayta ko‘rib chiqish to‘g‘risidagi arizani imzolash, ishni

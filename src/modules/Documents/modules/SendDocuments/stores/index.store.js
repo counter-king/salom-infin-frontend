@@ -474,12 +474,28 @@ export const useSDStore = defineStore("sd-stores", {
             documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_BSO_CLIENT_MANAGER
           },
           {
+            label: 'client-manager-bxm',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_BSC_CLIENT_MANAGER
+          },
+          {
             label: 'eimzo',
             type: 'submenu',
             hasRouterLink: true,
             routerLinkName: ROUTE_SD_CREATE,
             documentType: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
             documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_ELECTRON_DIGITAL_SIGNATURE
+          },
+          {
+            label: 'eimzo-bxm',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_BSC_ELECTRON_DIGITAL_SIGNATURE
           },
           {
             label: 'operative-group-head',

@@ -172,7 +172,7 @@ const closeHistoryDetail = () => {
                 <div
                   v-for="item in SDStore.versionHistoryList"
                   v-tooltip.top="{
-                    value: `<h4 class='text-xs text-white -my-1 !w-[250px]'> ${t('change-history')} <br> ${t('author')}: ${item.created_by.full_name} <br> ${t('change-time')}: ${formatDateHour(item.created_date)}</h4>`,
+                    value: `<h4 class='text-xs text-white -my-1 !w-[250px]'> ${t('change-history')} <br> ${t('author')}: ${item.created_by?.full_name} <br> ${t('change-time')}: ${formatDateHour(item.created_date)}</h4>`,
                     escape: true,
                     autoHide: false
                   }"

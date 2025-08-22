@@ -68,9 +68,10 @@ const route = useRoute()
 
       <div class="mt-4">
         Ushbu ishonchnoma orqali “O‘zbekiston sanoat-qurilish banki” aksiyadorlik tijorat banki (“O‘zsanoatqurilishbank”
-        ATB) (keyingi o‘rinlarda – Bank) nomidan uning Ustavi asosida ish yurituvchi
+        ATB) (keyingi o‘rinlarda – Bank) nomidan 2024-yil
+        18-noyabrdagi 04-07/250-sonli ishonchnoma asosida ish yurituvchi
         {{ props.curatorPosition }} {{ props.curatorFullName }}
-        O‘zbekiston Respublikasi Fuqarolik kodeksining 134-144-moddalariga amal qilgan holda Bankning
+        O‘zbekiston Respublikasi Fuqarolik kodeksining 134, 135, 138, 139, 144-moddalariga amal qilgan holda Bankning
         {{ props.emp?.company?.name }}
         {{ props.emp?.position?.name }}
         <span class="font-semibold">{{ props.empFullName }}</span>ga <span v-html="composeModel?.content"></span>

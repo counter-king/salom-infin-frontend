@@ -101,12 +101,14 @@ export const COMPOSE_DOCUMENT_SUB_TYPES = {
   POA_BSO_MANAGER:                     '44', // Управляющий ОБУ
   POA_BSO_DEPUTY_MANAGER_BUSINESS:     '45', // Заместитель управляющего ОБУ (бизнес)
   POA_BSO_DEPUTY_MANAGER_RETAIL:       '46', // Заместитель управляющего ОБУ (розничная)
-  POA_BSO_CLIENT_MANAGER:              '47', // Клиент менеджер
+  POA_BSO_CLIENT_MANAGER:              '47', // Клиент менеджер ОБУ
   POA_ELECTRON_DIGITAL_SIGNATURE:      '48', // Электронная цифровая подпись
   POA_OPERATIVE_GROUP_HEAD:            '49', // Руководитель оперативной группы
   POA_EMPLOYER_REPRESENTATIVE:         '50', // Представитель работодателя
   POA_RETURN_ENFORCEMENT_DOCUMENT:     '51', // Возврат исполнительного документа
   POA_MEDIATION_AGREEMENT:             '52', // Посредническое соглашение
+  POA_BSC_CLIENT_MANAGER:              '53', // Клиент менеджер ЦБУ
+  POA_BSC_ELECTRON_DIGITAL_SIGNATURE:  '54', // Электронная цифровая подпись (ЦБУ)
 }
 export const COLOR_TYPES = {
   PRIMARY: "primary",

@@ -4,6 +4,9 @@ import { BaseHeaderTemplate, BasePerformer } from "@/components/Templates/compon
 import { BaseCurator, BaseFooter } from "@/components/Templates/PowerOfAttorney/index"
 import { formatDate } from "@vueuse/shared";
 import { calculateYearsAndMonths } from "../../../utils";
+import { useRoute } from "vue-router";
+import { computed } from "vue";
+import { COMPOSE_DOCUMENT_SUB_TYPES } from "@/enums";
 
 const props = defineProps({
   composeModel: {
@@ -54,6 +57,10 @@ const props = defineProps({
     default: null
   }
 })
+const route = useRoute()
+const office = computed(() => {
+  return route.params.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.POA_ELECTRON_DIGITAL_SIGNATURE ? "Ofis" : "Markaz"
+})
 </script>
 
 <template>
@@ -66,16 +73,15 @@ const props = defineProps({
 
       <div class="mt-4">
         Ushbu ishonchnoma orqali “O‘zbekiston sanoat-qurilish banki” aksiyadorlik tijorat banki (“O‘zsanoatqurilishbank”
-        ATB) (keyingi o‘rinlarda – Bank) nomidan uning Ustavi asosida ish yurituvchi
-        <span class="font-semibold">
-          {{ props.curatorPosition }} {{ props.curatorFullName }}
-        </span>
-        O‘zbekiston Respublikasi Fuqarolik kodeksining 134-144-moddalariga amal qilgan holda Bankning
+        ATB) (keyingi o‘rinlarda – Bank) nomidan 2024-yil 18-noyabrdagi
+        04-07/250-sonli ishonchnoma asosida ish yurituvchi
+        {{ props.curatorPosition }} {{ props.curatorFullName }}
+        O‘zbekiston Respublikasi Fuqarolik kodeksining 134, 135, 138, 139 va 144-moddalariga amal qilgan holda Bankning
         {{ props.emp?.company?.name }}
-        (keyingi o‘rinlarda – Ofis)
+        (keyingi o‘rinlarda – "{{ office }}")
         {{ props.emp?.position?.name }}
         <span class="font-semibold">{{ props.empFullName }}</span>ga
-        Ofis tomonidan Bank nomidan Bank Ustavi, Bankka berilgan litsenziyada ko‘zda tutilgan operatsiyalarni Bank
+        {{ office }} tomonidan Bank nomidan Bank Ustavi, Bankka berilgan litsenziyada ko‘zda tutilgan operatsiyalarni Bank
         tomonidan o‘rnatilgan limit va vakolatlar doirasida amalga oshirish hamda uni amalga oshirish bilan bog‘liq
         bo‘lgan hujjatlarni imzolash, shuningdek elektron hujjatlarni imzolash va ushbu hujjatlarni imzolash uchun
         davlat xizmatlari markazidan yuridik shaxs uchun beriladigan elektron raqamli imzo olishga ishonch bildiradi.
