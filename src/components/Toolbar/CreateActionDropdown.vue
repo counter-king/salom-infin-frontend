@@ -128,7 +128,7 @@ const onHover = (item) => {
           </div>
         </div>
 
-        <div class="flex py-3 px-4 bg-white rounded-xl shadow flex-1 ml-1">
+        <div class="flex py-3 px-4 bg-white rounded-xl shadow flex-1 ml-1 pr-0">
           <component
             :is="selectedComponent"
             @emit:select="toggle"

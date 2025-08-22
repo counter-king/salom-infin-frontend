@@ -55,7 +55,7 @@ const onShow = () => {
           class: 'flex flex-col p-1 gap-y-1 rounded-[8px] w-[224px]'
         },
         submenu: {
-          class: 'left-[-104%] p-1 rounded-[8px]'
+          class: 'left-[-104%] p-1 rounded-[8px] max-h-[450px] overflow-y-auto'
         },
         menuitem: ({ context }) => ({
           class: 'bg-white hover:text-primary-dark hover:bg-greyscale-50 transition-all duration-[400ms] rounded-[8px]'

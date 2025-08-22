@@ -529,6 +529,38 @@ export const useSDStore = defineStore("sd-stores", {
             documentType: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
             documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_MEDIATION_AGREEMENT
           },
+          {
+            label: 'chairman-deputies',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_EMPLOYER_REPRESENTATIVE_CHAIRMAN_DEPUTIES
+          },
+          {
+            label: 'employer-representative-general',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_EMPLOYER_REPRESENTATIVE_GENERAL
+          },
+          {
+            label: 'employer-representative-first',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_EMPLOYER_REPRESENTATIVE_FIRST
+          },
+          {
+            label: 'employer-representative-second',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_EMPLOYER_REPRESENTATIVE_SECOND
+          },
         ],
       },
     ]

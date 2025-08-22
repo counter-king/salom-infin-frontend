@@ -960,5 +960,9 @@
   "mediation-agreement": "Посредническое соглашение",
   "successfully-deleted": "Успешно удалено",
   "client-manager-bxm": "Клиент менеджер (ЦБУ)",
-  "eimzo-bxm": "Электронная цифровая подпись (ЦБУ)"
+  "eimzo-bxm": "Электронная цифровая подпись (ЦБУ)",
+  "chairman-deputies": "Представитель работодателя при заместителях председателя",
+  "employer-representative-first": "Ish beruvchi vakili (Sh. Yakubov)",
+  "employer-representative-second": "Rais o'rinbosari (F. Abduraxmanov)",
+  "employer-representative-general": "Заместителям Председателя (общим)"
 }

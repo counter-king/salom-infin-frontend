@@ -72,7 +72,7 @@ const emit = defineEmits(['emit:select'])
 
     <div class="h-full border"></div>
 
-    <div class="flex flex-col gap-y-1 w-[267px]">
+    <div class="flex flex-col gap-y-1 w-[267px] max-h-[calc(100vh-220px)] overflow-y-auto pr-4">
       <div
         v-for="submenu in subMenuList"
         class="flex justify-between hover:bg-greyscale-50 p-3 cursor-pointer transition-all duration-[200ms] rounded-lg"

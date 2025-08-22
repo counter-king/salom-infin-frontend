@@ -957,5 +957,9 @@
   "mediation-agreement": "Mediativ kelishuv",
   "successfully-deleted": "Muvaffaqiyatli o'chirildi",
   "client-manager-bxm": "Mijoz menejeri (BXM)",
-  "eimzo-bxm": "Elektron raqamli imzo (BXM)"
+  "eimzo-bxm": "Elektron raqamli imzo (BXM)",
+  "chairman-deputies": "Ish beruvchi vakili rais o'rinbosarlariga",
+  "employer-representative-first": "Ish beruvchi vakili (Sh. Yakubov)",
+  "employer-representative-second": "Rais o'rinbosari (F. Abduraxmanov)",
+  "employer-representative-general": "Rais o'rinbosarlariga (umumiy)"
 }

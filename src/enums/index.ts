@@ -70,45 +70,49 @@ export const COMPOSE_DOCUMENT_TYPES = {
   POWER_OF_ATTORNEY:             '8'  // Доверенность
 }
 export const COMPOSE_DOCUMENT_SUB_TYPES = {
-  LABOR_LEAVE:                         '1', // Трудовой отпуск
-  BUSINESS_TRIP:                       '2', // Командировочный рапорт
-  SERVICE_LETTER:                      '3', // Служебное письмо
-  BUSINESS_TRIP_ORDER:                 '4', // Командировочный приказ
-  MATERIAL_SUPPORT:                    '5', // Материалка
-  EDUCATIONAL_LEAVE:                   '6', // Учебный отпуск
-  VACATION_OWN_EXPENSE:                '7', // Отпуск за свой счет
-  CHILD_CARE_LEAVE:                    '8', // Отпуск по уходу за ребенком
-  ORDINARY_NOTICE:                     '9', // Рапорт
-  // BUSINESS_TRIP_DECREE_FOREIGN:     '10', // Командировочный распоряжение (зарубежный)
-  ORDERS_BANK_MANAGEMENT:              '18', // Приказ правления банка
-  APPLICATION:                         '27', // Заявление
-  BUSINESS_TRIP_DECREE_LOCAL:          '28', // Командировочный распоряжение (локальный)
-  BUSINESS_TRIP_ORDER_LOCAL:           '29', // Командировочный приказ (локальный)
-  NOTICE_FOR_EMPLOYMENT:               '30', // Рапорт на приеме на работу
-  ORDER_FOR_EMPLOYMENT:                '31', // Приказ на приеме на работу
-  POA_FOR_LEGAL_SERVICES:              '32', // Для юридических услуг
-  POA_ACTING_FILIAL_MANAGER:           '33', // Исполняющий обязанности управляющего ЦБУ (бизнес)
-  POA_DEPUTY_FILIAL_MANAGER_BUSINESS:  '34', // Заместитель управляющего ЦБУ
-  BUSINESS_TRIP_NOTICE_V2:             '35', // Командировка 2
-  BUSINESS_TRIP_DECREE_V2:             '36', // Командировочная распоряжения
-  EXTEND_BUSINESS_TRIP_NOTICE:         '37', // Продлить командировку
-  EXTEND_BUSINESS_TRIP_DECREE:         '38', // Продлить командировку распоряжения
-  EXPLANATION_LETTER:                  '39', // Пояснительное письмо
-  BUSINESS_TRIP_NOTICE_FOREIGN:        '40', // Командировка (зарубежная)
-  BUSINESS_TRIP_DECREE_FOREIGN:        '41', // Командировочная распоряжения (зарубежная)
-  POA_SECOND_TYPE_BSC_MANAGER:         '42', // Управление ЦБУ типа 2
-  POA_DEPUTY_FILIAL_MANAGER_RETAIL:    '43', // Исполняющий обязанности управляющего ЦБУ (розничная)
-  POA_BSO_MANAGER:                     '44', // Управляющий ОБУ
-  POA_BSO_DEPUTY_MANAGER_BUSINESS:     '45', // Заместитель управляющего ОБУ (бизнес)
-  POA_BSO_DEPUTY_MANAGER_RETAIL:       '46', // Заместитель управляющего ОБУ (розничная)
-  POA_BSO_CLIENT_MANAGER:              '47', // Клиент менеджер ОБУ
-  POA_ELECTRON_DIGITAL_SIGNATURE:      '48', // Электронная цифровая подпись
-  POA_OPERATIVE_GROUP_HEAD:            '49', // Руководитель оперативной группы
-  POA_EMPLOYER_REPRESENTATIVE:         '50', // Представитель работодателя
-  POA_RETURN_ENFORCEMENT_DOCUMENT:     '51', // Возврат исполнительного документа
-  POA_MEDIATION_AGREEMENT:             '52', // Посредническое соглашение
-  POA_BSC_CLIENT_MANAGER:              '53', // Клиент менеджер ЦБУ
-  POA_BSC_ELECTRON_DIGITAL_SIGNATURE:  '54', // Электронная цифровая подпись (ЦБУ)
+  LABOR_LEAVE:                                    '1', // Трудовой отпуск
+  BUSINESS_TRIP:                                  '2', // Командировочный рапорт
+  SERVICE_LETTER:                                 '3', // Служебное письмо
+  BUSINESS_TRIP_ORDER:                            '4', // Командировочный приказ
+  MATERIAL_SUPPORT:                               '5', // Материалка
+  EDUCATIONAL_LEAVE:                              '6', // Учебный отпуск
+  VACATION_OWN_EXPENSE:                           '7', // Отпуск за свой счет
+  CHILD_CARE_LEAVE:                               '8', // Отпуск по уходу за ребенком
+  ORDINARY_NOTICE:                                '9', // Рапорт
+  // BUSINESS_TRIP_DECREE_FOREIGN:                '10', // Командировочный распоряжение (зарубежный)
+  ORDERS_BANK_MANAGEMENT:                         '18', // Приказ правления банка
+  APPLICATION:                                    '27', // Заявление
+  BUSINESS_TRIP_DECREE_LOCAL:                     '28', // Командировочный распоряжение (локальный)
+  BUSINESS_TRIP_ORDER_LOCAL:                      '29', // Командировочный приказ (локальный)
+  NOTICE_FOR_EMPLOYMENT:                          '30', // Рапорт на приеме на работу
+  ORDER_FOR_EMPLOYMENT:                           '31', // Приказ на приеме на работу
+  POA_FOR_LEGAL_SERVICES:                         '32', // Для юридических услуг
+  POA_ACTING_FILIAL_MANAGER:                      '33', // Исполняющий обязанности управляющего ЦБУ (бизнес)
+  POA_DEPUTY_FILIAL_MANAGER_BUSINESS:             '34', // Заместитель управляющего ЦБУ
+  BUSINESS_TRIP_NOTICE_V2:                        '35', // Командировка 2
+  BUSINESS_TRIP_DECREE_V2:                        '36', // Командировочная распоряжения
+  EXTEND_BUSINESS_TRIP_NOTICE:                    '37', // Продлить командировку
+  EXTEND_BUSINESS_TRIP_DECREE:                    '38', // Продлить командировку распоряжения
+  EXPLANATION_LETTER:                             '39', // Пояснительное письмо
+  BUSINESS_TRIP_NOTICE_FOREIGN:                   '40', // Командировка (зарубежная)
+  BUSINESS_TRIP_DECREE_FOREIGN:                   '41', // Командировочная распоряжения (зарубежная)
+  POA_SECOND_TYPE_BSC_MANAGER:                    '42', // Управление ЦБУ типа 2
+  POA_DEPUTY_FILIAL_MANAGER_RETAIL:               '43', // Исполняющий обязанности управляющего ЦБУ (розничная)
+  POA_BSO_MANAGER:                                '44', // Управляющий ОБУ
+  POA_BSO_DEPUTY_MANAGER_BUSINESS:                '45', // Заместитель управляющего ОБУ (бизнес)
+  POA_BSO_DEPUTY_MANAGER_RETAIL:                  '46', // Заместитель управляющего ОБУ (розничная)
+  POA_BSO_CLIENT_MANAGER:                         '47', // Клиент менеджер ОБУ
+  POA_ELECTRON_DIGITAL_SIGNATURE:                 '48', // Электронная цифровая подпись
+  POA_OPERATIVE_GROUP_HEAD:                       '49', // Руководитель оперативной группы
+  POA_EMPLOYER_REPRESENTATIVE:                    '50', // Представитель работодателя
+  POA_RETURN_ENFORCEMENT_DOCUMENT:                '51', // Возврат исполнительного документа
+  POA_MEDIATION_AGREEMENT:                        '52', // Посредническое соглашение
+  POA_BSC_CLIENT_MANAGER:                         '53', // Клиент менеджер ЦБУ
+  POA_BSC_ELECTRON_DIGITAL_SIGNATURE:             '54', // Электронная цифровая подпись (ЦБУ)
+  POA_EMPLOYER_REPRESENTATIVE_CHAIRMAN_DEPUTIES:  '55', // Представитель работодателя при заместителях председателя
+  POA_EMPLOYER_REPRESENTATIVE_FIRST:              '56', // Ish beruvchi vakili (Sh. Yakubov)
+  POA_EMPLOYER_REPRESENTATIVE_GENERAL:            '57', // Заместителям Председателя (общим)
+  POA_EMPLOYER_REPRESENTATIVE_SECOND:             '58', // Rais o'rinbosari (F. Abduraxmanov)
 }
 export const COLOR_TYPES = {
   PRIMARY: "primary",
