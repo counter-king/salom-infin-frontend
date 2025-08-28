@@ -19,6 +19,7 @@ export const JOURNAL = {
   ORDERS_PROTOCOLS:     5, // Приказы и распоряжения
   APPLICATION:          7, // Заявления
   POWER_OF_ATTORNEY:    19, // Заявления
+  ACT:                  20, // Акт
 }
 export const JOURNAL_CODES = {
   INCOMING:               '100', // Входящий
@@ -30,6 +31,7 @@ export const JOURNAL_CODES = {
   PROTOCOL:               '107', // Протокол
   DECISION:               '108', // Указ
   POWER_OF_ATTORNEY:      '109', // Доверенность
+  ACT:                    '110', // Акт
 }
 export const USER_STATUS_CODES = {
   OTHERS:                        'PR', // Прочие
@@ -67,7 +69,8 @@ export const COMPOSE_DOCUMENT_TYPES = {
   INNER:                         '3', // Внутренний
   DECREE:                        '4', // Распоряжение
   APPLICATION:                   '5', // Заявление
-  POWER_OF_ATTORNEY:             '8'  // Доверенность
+  POWER_OF_ATTORNEY:             '8', // Доверенность
+  ACT:                           '9'  // Акт
 }
 export const COMPOSE_DOCUMENT_SUB_TYPES = {
   LABOR_LEAVE:                                    '1', // Трудовой отпуск
@@ -113,6 +116,7 @@ export const COMPOSE_DOCUMENT_SUB_TYPES = {
   POA_EMPLOYER_REPRESENTATIVE_FIRST:              '56', // Ish beruvchi vakili (Sh. Yakubov)
   POA_EMPLOYER_REPRESENTATIVE_GENERAL:            '57', // Заместителям Председателя (общим)
   POA_EMPLOYER_REPRESENTATIVE_SECOND:             '58', // Rais o'rinbosari (F. Abduraxmanov)
+  ACT_SERVICE_CONTRACT_WORKS:                     '59', // Работы по договору услуг
 }
 export const COLOR_TYPES = {
   PRIMARY: "primary",

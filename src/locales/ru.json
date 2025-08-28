@@ -964,5 +964,10 @@
   "chairman-deputies": "Представитель работодателя при заместителях председателя",
   "employer-representative-first": "Ish beruvchi vakili (Sh. Yakubov)",
   "employer-representative-second": "Rais o'rinbosari (F. Abduraxmanov)",
-  "employer-representative-general": "Заместителям Председателя (общим)"
+  "employer-representative-general": "Заместителям Председателя (общим)",
+  "create-act": "Создать акт",
+  "update-act": "Изменить акт",
+  "act": "Акт",
+  "service-contract-works": "Работы по договору услуг",
+  "add-signers": "Добавить еще подписантов"
 }

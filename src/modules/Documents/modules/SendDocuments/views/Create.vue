@@ -13,11 +13,11 @@ import {
   PowerOfAttorneyForm,
   BusinessTripForm,
   BusinessTripDecreeForm,
-  ExtendBusinessTripForm, PowerOfAttorneySecondForm
+  ExtendBusinessTripForm, PowerOfAttorneySecondForm, ActForm
 } from "@/modules/Documents/modules/SendDocuments/views/forms/index"
 // Constants
 import {FORM_TYPE_CREATE} from "@/constants/constants"
-import {COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES} from "@/enums"
+import {COMPOSE_DOCUMENT_SUB_TYPES} from "@/enums"
 
 const route = useRoute()
 const formMap = {
@@ -34,6 +34,7 @@ const formMap = {
     [COMPOSE_DOCUMENT_SUB_TYPES.EXTEND_BUSINESS_TRIP_NOTICE]: ExtendBusinessTripForm,
     [COMPOSE_DOCUMENT_SUB_TYPES.POA_RETURN_ENFORCEMENT_DOCUMENT]: PowerOfAttorneySecondForm,
     [COMPOSE_DOCUMENT_SUB_TYPES.POA_MEDIATION_AGREEMENT]: PowerOfAttorneySecondForm,
+    [COMPOSE_DOCUMENT_SUB_TYPES.ACT_SERVICE_CONTRACT_WORKS]: ActForm,
   },
   APPLICATION: [
     COMPOSE_DOCUMENT_SUB_TYPES.LABOR_LEAVE,

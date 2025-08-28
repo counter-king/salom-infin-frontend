@@ -99,6 +99,18 @@ export const useSDStore = defineStore("sd-stores", {
         document_type: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
         permission: 'sending-documents-poa-list'
       },
+      // Акт
+      {
+        label: "act",
+        icon: "DocumentIcon",
+        type: "act",
+        sub_type: "act",
+        active: false,
+        selected: true,
+        disabled: false,
+        document_type: COMPOSE_DOCUMENT_TYPES.ACT,
+        permission: 'sending-documents-poa-list'
+      },
       // // Заключение
       // {
       //   label: "summary",
@@ -563,6 +575,24 @@ export const useSDStore = defineStore("sd-stores", {
           },
         ],
       },
+      {
+        id: 7,
+        label: 'act',
+        icon: DocumentIcon,
+        type: 'menu',
+        hasRouterLink: false,
+        active: false,
+        items: [
+          {
+            label: 'service-contract-works',
+            type: 'submenu',
+            hasRouterLink: true,
+            routerLinkName: ROUTE_SD_CREATE,
+            documentType: COMPOSE_DOCUMENT_TYPES.ACT,
+            documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.ACT_SERVICE_CONTRACT_WORKS
+          },
+        ]
+      }
     ]
   }),
   actions: {
@@ -677,6 +707,18 @@ export const useSDStore = defineStore("sd-stores", {
           selected: true,
           disabled: false,
           document_type: COMPOSE_DOCUMENT_TYPES.POWER_OF_ATTORNEY,
+          permission: 'sending-documents-poa-list'
+        },
+        // Акт
+        {
+          label: "act",
+          icon: "DocumentIcon",
+          type: "act",
+          sub_type: "act",
+          active: false,
+          selected: true,
+          disabled: false,
+          document_type: COMPOSE_DOCUMENT_TYPES.ACT,
           permission: 'sending-documents-poa-list'
         },
         // // Рапорт

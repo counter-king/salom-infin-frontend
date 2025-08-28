@@ -614,3 +614,28 @@ export const extractCountryAndCity = (address) => {
 
   return parts[0] || ''
 }
+// --------------------------------------------------------------------------------------------------------
+export const formatUzbekDate = (dateString) => {
+  const months = {
+    1: "yanvar",
+    2: "fevral",
+    3: "mart",
+    4: "aprel",
+    5: "may",
+    6: "iyun",
+    7: "iyul",
+    8: "avgust",
+    9: "sentyabr",
+    10: "oktyabr",
+    11: "noyabr",
+    12: "dekabr"
+  }
+
+  const date = new Date(dateString)
+
+  const day = date.getDate()
+  const month = months[date.getMonth() + 1]
+  const year = date.getFullYear()
+
+  return `“${day}” ${month} ${year}-yil`
+}

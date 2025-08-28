@@ -961,5 +961,10 @@
   "chairman-deputies": "Ish beruvchi vakili rais o'rinbosarlariga",
   "employer-representative-first": "Ish beruvchi vakili (Sh. Yakubov)",
   "employer-representative-second": "Rais o'rinbosari (F. Abduraxmanov)",
-  "employer-representative-general": "Rais o'rinbosarlariga (umumiy)"
+  "employer-representative-general": "Rais o'rinbosarlariga (umumiy)",
+  "create-act": "Dalolatnoma yaratish",
+  "update-act": "Dalolatnomani o'zgartirish",
+  "act": "Dalolatnoma",
+  "service-contract-works": "Xizmat shartnomasi ishlari",
+  "add-signers": "Yana imzolovchi qo'shing"
 }

@@ -11,6 +11,7 @@ import { AltArrowDownIcon, MagniferIcon, TrashBinTrashIcon, XMarkSolidIcon } fro
 import { isObject } from '@/utils'
 // Enums
 import { USER_STATUS_CODES } from '@/enums'
+import { useAuthStore } from "@/modules/Auth/stores"
 // Composable
 const { t } = useI18n()
 // Macros
@@ -139,6 +140,10 @@ const props = defineProps({
   allSelectable: {
     type: Boolean,
     default: false
+  },
+  authorClearable: {
+    type: Boolean,
+    default: true
   }
 })
 const modelValue = useModel(props, 'modelValue')
@@ -197,12 +202,14 @@ const loadList = async (params) => {
 }
 const removeItem = (event, value) => {
   event.stopImmediatePropagation()
-  modelValue.value = modelValue.value.filter(item => isObject(value.user)
-    ? item.user?.id !== value.user?.id
-    : isObject(item.user)
-      ? item.user?.id !== value.id
-      : item.id !== value.id
-  )
+  if (props.authorClearable || value?.id !== useAuthStore()?.currentUser?.id) {
+    modelValue.value = modelValue.value.filter(item => isObject(value.user)
+      ? item.user?.id !== value.user?.id
+      : isObject(item.user)
+        ? item.user?.id !== value.id
+        : item.id !== value.id
+    )
+  }
 }
 const selectItem = (event, value) => {
   // Если это статус не Рабочие

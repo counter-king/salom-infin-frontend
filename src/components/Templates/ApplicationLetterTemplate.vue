@@ -2,8 +2,7 @@
 // Core
 import { computed } from "vue"
 // Utils
-import { formatUserFullName, hostName, returnFirstLetter } from "@/utils"
-import { formatDateHour } from "@/utils/formatDate"
+import { formatUserFullName, hostName } from "@/utils"
 // Components
 import { BasePerformer, BaseSignersTemplate } from "@/components/Templates/components"
 import {useSDStore} from "@/modules/Documents/modules/SendDocuments/stores/index.store"
