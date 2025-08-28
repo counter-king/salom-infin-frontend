@@ -129,7 +129,7 @@ const author = computed(() => {
             {{ signer?.top_level_department?.name }} - {{ signer?.position?.name }}
           </div>
           <div>
-            {{ signer?.full_name }}
+            {{ formatUserFullName(signer) }}
           </div>
           <div class="my-1">
             <qrcode-vue
@@ -144,7 +144,7 @@ const author = computed(() => {
 
         <td v-if="index === 0" :rowspan="signers.length" class="align-top">
           <div class="font-semibold">Ijrochi</div>
-          <div>{{ author?.full_name }}</div>
+          <div>{{ formatUserFullName(author) }}</div>
           <div class="my-1">
             <qrcode-vue
               v-if="author?.is_signed"
