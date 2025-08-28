@@ -45,7 +45,6 @@ export const useActStore = defineStore("act-store", {
         required: helpers.withMessage(`Поле не должен быть пустым`, required)
       }
     },
-    defaultText: '\n <p style="font-size: 14px;">&nbsp; &nbsp; &ldquo;Oʼzsanoatqurilishbank&rdquo; АTB (keyingi oʼrinlarda Buyurtmachi) va fuqaro ___________________________ (keyingi oʼrinlarda Ijrochi) oʼrtasida 2025-yil _________ kuni imzolangan №__-sonli &ldquo;Haq evaziga xizmat koʼrsatish shartnomasi&rdquo;ga asosan Ijrochi tomonidan 2025-yil _______ oyi uchun quyidagi ishlar amalga oshirildi va Buyurtmachi tomonidan qabul qilindi:</p> <p style="font-size: 14px;">Amalga oshirilgan ishlar hajmi:</p> <p style="font-size: 14px;">1.&nbsp;</p>'
   }),
   actions: {
     async actionCreateDocument(body) {
