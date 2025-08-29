@@ -95,7 +95,7 @@ const author = computed(() => {
       Haq evaziga xizmat koʼrsatish shartnomasi boʼyicha amalga oshirilgan ishlar toʼgʼrisida
     </div>
 
-    <div class="text-sm font-semibold text-center mt-2">DALOLATNOMA</div>
+    <div class="text-sm font-semibold text-center mt-2">DALOLATNOMA № {{ composeModel?.register_number || '__' }}</div>
 
     <div class="flex justify-between my-4 text-sm">
       <div>{{ preview ? author?.company?.region?.name : author?.company_region_name }}</div>

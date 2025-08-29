@@ -1,12 +1,15 @@
 <script setup>
 // Core
 import { computed } from 'vue'
+import { useI18n } from "vue-i18n"
 // Components
-import { CheckCircleBoldIcon } from '@/components/Icons'
+import { CheckCircleBoldIcon, StarBoldIcon, StarLinearIcon } from '@/components/Icons'
 // Props
 import avatarProps from './props'
 // Utils
 import {isObject, returnStatusColor} from '@/utils'
+// Composable
+const { t } = useI18n()
 // Macros
 const props = defineProps({
   ...avatarProps,
@@ -68,6 +71,9 @@ const handleSelect = (item) => {
 const handleAvatarClick = (event, item) => {
   event.stopPropagation()
 }
+const handleFavouriteClick = (item) => {
+  console.log(item)
+}
 </script>
 
 <template>
@@ -111,7 +117,7 @@ const handleAvatarClick = (event, item) => {
         </div>
       </div>
 
-      <div class="w-[22px] h-[22px]">
+      <div class="w-5 h-5">
         <template v-if="props.selectType === 'checked'">
           <base-iconify
             :icon="CheckCircleBoldIcon"
@@ -142,6 +148,22 @@ const handleAvatarClick = (event, item) => {
           />
         </template>
       </div>
+
+<!--      <div-->
+<!--        v-tooltip.top="{-->
+<!--          value: `<h4 class='text-xs text-white -my-1'>${item.is_selected && item.favourite_id ? t('remove-from-favourites') : item.is_selected ? t('favourites') : t('add-to-favourites')}</h4>`,-->
+<!--          escape: true,-->
+<!--          autoHide: false-->
+<!--        }"-->
+<!--        class="h-5 z-10"-->
+<!--        @click.stop="handleFavouriteClick(item)"-->
+<!--      >-->
+<!--        <base-iconify-->
+<!--          :icon="item.is_selected ? StarBoldIcon : StarLinearIcon"-->
+<!--          class="cursor-pointer hover:text-primary-500 !w-5 !h-5"-->
+<!--          :class="item.is_selected ? 'text-warning-500' : 'text-greyscale-300'"-->
+<!--        />-->
+<!--      </div>-->
     </div>
   </div>
 </template>

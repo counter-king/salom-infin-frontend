@@ -135,7 +135,7 @@ const props = defineProps({
   },
   selectableStatuses: {
     type: Array,
-    default: () => [USER_STATUS_CODES.WORKERS]
+    default: () => [USER_STATUS_CODES.WORKERS, USER_STATUS_CODES.WORKERS_NOT_STAFF]
   },
   allSelectable: {
     type: Boolean,
