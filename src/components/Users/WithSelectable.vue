@@ -8,6 +8,7 @@ import { CheckCircleBoldIcon, StarBoldIcon, StarLinearIcon } from '@/components/
 import avatarProps from './props'
 // Utils
 import {isObject, returnStatusColor} from '@/utils'
+import { fetchAddUserToFavorites, fetchRemoveUserFromFavorites } from "@/services/users.service";
 // Composable
 const { t } = useI18n()
 // Macros
@@ -71,8 +72,20 @@ const handleSelect = (item) => {
 const handleAvatarClick = (event, item) => {
   event.stopPropagation()
 }
-const handleFavouriteClick = (item) => {
-  console.log(item)
+const handleFavouriteClick = async (item) => {
+  item.loading = true
+  try {
+    if (item.is_favourite) {
+      await fetchRemoveUserFromFavorites(item.id)
+      item.is_favourite = false
+    } else {
+      await fetchAddUserToFavorites(item.id)
+      item.is_favourite = true
+    }
+  } catch (error) {}
+  finally {
+    item.loading = false
+  }
 }
 </script>
 
@@ -149,21 +162,27 @@ const handleFavouriteClick = (item) => {
         </template>
       </div>
 
-<!--      <div-->
-<!--        v-tooltip.top="{-->
-<!--          value: `<h4 class='text-xs text-white -my-1'>${item.is_selected && item.favourite_id ? t('remove-from-favourites') : item.is_selected ? t('favourites') : t('add-to-favourites')}</h4>`,-->
-<!--          escape: true,-->
-<!--          autoHide: false-->
-<!--        }"-->
-<!--        class="h-5 z-10"-->
-<!--        @click.stop="handleFavouriteClick(item)"-->
-<!--      >-->
-<!--        <base-iconify-->
-<!--          :icon="item.is_selected ? StarBoldIcon : StarLinearIcon"-->
-<!--          class="cursor-pointer hover:text-primary-500 !w-5 !h-5"-->
-<!--          :class="item.is_selected ? 'text-warning-500' : 'text-greyscale-300'"-->
-<!--        />-->
-<!--      </div>-->
+      <div
+        v-tooltip.top="{
+          value: `<h4 class='text-xs text-white -my-1'>${item.is_favourite ? t('remove-from-favourites') : t('add-to-favourites')}</h4>`,
+          escape: true,
+          autoHide: false
+        }"
+        class="h-5 z-10"
+        @click.stop="handleFavouriteClick(item)"
+      >
+        <base-iconify
+          v-if="!item.loading"
+          :icon="item.is_favourite ? StarBoldIcon : StarLinearIcon"
+          class="cursor-pointer hover:text-primary-500 !w-5 !h-5"
+          :class="item.is_favourite ? 'text-warning-500' : 'text-greyscale-300'"
+        />
+
+        <base-spinner
+          v-else
+          root-classes="!w-5 !h-5"
+        />
+      </div>
     </div>
   </div>
 </template>

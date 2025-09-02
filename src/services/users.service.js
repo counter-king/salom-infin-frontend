@@ -50,3 +50,11 @@ export const fetchEmployeeGroupsList = (params) => {
 export const fetchEmployeeGroupsCreate = async (body) => {
   return await axiosConfig.post(`${URLS.employeeGroups}/`, body)
 }
+/** **/
+export const fetchAddUserToFavorites = async (id) => {
+  return await axiosConfig.post(`${URLS.users}/${id}/add-to-favourites/`)
+}
+/** **/
+export const fetchRemoveUserFromFavorites = async (id) => {
+  return await axiosConfig.post(`${URLS.users}/${id}/remove-from-favourites/`)
+}
