@@ -615,7 +615,7 @@ export const extractCountryAndCity = (address) => {
   return parts[0] || ''
 }
 // --------------------------------------------------------------------------------------------------------
-export const formatUzbekDate = (dateString) => {
+export const formatUzbekDate = (dateString, monthNameOnly = false) => {
   const months = {
     1: "yanvar",
     2: "fevral",
@@ -637,5 +637,9 @@ export const formatUzbekDate = (dateString) => {
   const month = months[date.getMonth() + 1]
   const year = date.getFullYear()
 
-  return `“${day}” ${month} ${year}-yil`
+  if (monthNameOnly) {
+    return `${month}`
+  } else {
+    return `“${day}” ${month} ${year}-yil`
+  }
 }

@@ -78,7 +78,7 @@ export const useActStore = defineStore("act-store", {
     async actionUpdateDocument({id, body}) {
       try {
         this.buttonLoading = true
-        const {data} = await fetchUpdateDocument({id, body})
+        const { data } = await fetchUpdateDocument({id, body})
         return Promise.resolve(data)
       } catch (err) {
         return Promise.reject(err)

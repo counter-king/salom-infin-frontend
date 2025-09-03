@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { computed, onBeforeMount, onUnmounted, ref } from "vue"
+import { computed, nextTick, onBeforeMount, onUnmounted, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useVuelidate } from "@vuelidate/core"
 import { useI18n } from "vue-i18n"
@@ -14,7 +14,7 @@ import { FORM_TYPE_CREATE } from "@/constants/constants"
 import { COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL, ROUTES_TYPE } from "@/enums"
 import { ROUTE_SD_DETAIL, ROUTE_SD_LIST } from "@/modules/Documents/modules/SendDocuments/constants"
 // Utils
-import { adjustUserObjectToArray, adjustUsersToArray, resetModel } from "@/utils"
+import { adjustUserObjectToArray, adjustUsersToArray, formatUzbekDate, resetModel } from "@/utils"
 import { dispatchNotify } from "@/utils/notify"
 // Components
 import FormContainer from "@/modules/Documents/modules/SendDocuments/components/FormContainer.vue"
@@ -24,6 +24,7 @@ import UserSelect from "@/components/Select/UserSelect.vue"
 import { LayoutWithTabsCompose } from "@/components/DetailLayout"
 import EditorWithTabs from "@/components/Composed/EditorWithTabs.vue"
 import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue"
+import { ROUTE_SIGN_SHOW } from "@/modules/Documents/modules/Boxes/constants";
 
 // Composable
 const route = useRoute()
@@ -81,38 +82,49 @@ const clearForm = () => {
 }
 const create = async () => {
   try {
-    await store.actionCreateDocument(store.model)
+    const { data } = await store.actionCreateDocument(store.model)
+    const signerId = data.signers.find(s => s.user?.id === authStore.currentUser?.id )?.id
     await countStore.actionCountList()
     dialog.value = false
     dispatchNotify(null, t('document-sent'), COLOR_TYPES.SUCCESS)
-    await router.replace({
-      name: ROUTE_SD_LIST,
-      query: {
-        document_type: COMPOSE_DOCUMENT_TYPES.ACT
-      }
-    })
+    if (signerId) {
+      await openSignRoute(signerId, data.id)
+    }
+    else {
+      await router.replace({
+        name: ROUTE_SD_LIST,
+        query: {
+          document_type: COMPOSE_DOCUMENT_TYPES.ACT
+        }
+      })
+    }
   } catch (e) {
     dispatchNotify(null, t('error-occurred'), COLOR_TYPES.ERROR)
   }
 }
 const update = async () => {
   try {
-    await store.actionUpdateDocument(
+    const data = await store.actionUpdateDocument(
       {
         id: route.params.id,
         body: store.model
       }
-    );
+    )
+    const signerId = data.signers.find(s => s.user?.id === authStore.currentUser?.id)?.id
     await countStore.actionCountList()
     dispatchNotify(null, t('changed'), COLOR_TYPES.SUCCESS);
-    await router.replace({
-      name: ROUTE_SD_DETAIL,
-      params: {
-        id: route.params.id,
-        document_type: route.params.document_type,
-        document_sub_type: route.params.document_sub_type
-      }
-    })
+    if (signerId) {
+      await openSignRoute(signerId, data.id)
+    } else {
+      await router.replace({
+        name: ROUTE_SD_DETAIL,
+        params: {
+          id: route.params.id,
+          document_type: route.params.document_type,
+          document_sub_type: route.params.document_sub_type
+        }
+      })
+    }
   } catch (e) {}
 }
 const manage = () => {
@@ -130,8 +142,32 @@ const onFileUpload = (files) => {
 }
 const init = async () => {
   if (props.formType === FORM_TYPE_CREATE) {
-    store.model.content = `\n <p style="font-size: 14px;">&nbsp; &nbsp; &ldquo;Oʼzsanoatqurilishbank&rdquo; АTB (keyingi oʼrinlarda Buyurtmachi) va fuqaro ${authStore.currentUser?.full_name} (keyingi oʼrinlarda Ijrochi) oʼrtasida 2025-yil _________ kuni imzolangan №__-sonli &ldquo;Haq evaziga xizmat koʼrsatish shartnomasi&rdquo;ga asosan Ijrochi tomonidan 2025-yil _______ oyi uchun quyidagi ishlar amalga oshirildi va Buyurtmachi tomonidan qabul qilindi:</p> <p style="font-size: 14px;">Amalga oshirilgan ishlar hajmi:</p> <p style="font-size: 14px;">1.&nbsp;</p>`
+    store.model.content = `\n <p style="font-size: 14px;">&nbsp; &nbsp; &ldquo;Oʼzsanoatqurilishbank&rdquo; АTB (keyingi oʼrinlarda Buyurtmachi) va fuqaro ${authStore.currentUser?.full_name} (keyingi oʼrinlarda Ijrochi) oʼrtasida 2025-yil _________ kuni imzolangan №__-sonli &ldquo;Haq evaziga xizmat koʼrsatish shartnomasi&rdquo;ga asosan Ijrochi tomonidan 2025-yil __-__ ${formatUzbekDate(new Date(), true)} kunlari quyidagi ishlar amalga oshirildi va Buyurtmachi tomonidan qabul qilindi:</p> <p style="font-size: 14px;">Amalga oshirilgan ishlar hajmi:</p> <p style="font-size: 14px;">1.&nbsp;</p>`
     store.model.__signers = await adjustUserObjectToArray([{ id: authStore.currentUser?.id }])
+  }
+}
+const openSignRoute = async (signerId, compose_id) => {
+  await router.push({
+    name: ROUTE_SIGN_SHOW,
+    params: {
+      id: signerId,
+      document_type: route.params.document_type,
+      document_sub_type: route.params.document_sub_type
+    },
+    query: {
+      compose_id
+    }
+  })
+  await scrollUp()
+}
+const scrollUp = async () => {
+  await nextTick()
+  const element = document.querySelector('.send-document-main-layout')
+  if (element) {
+    element.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
   }
 }
 // Hooks
