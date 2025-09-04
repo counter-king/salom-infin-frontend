@@ -66,7 +66,7 @@ onMounted(() => {
       >
         <base-button
           v-if="isHostVercel || useAuthStore().currentUser.id === 1"
-          label="sign"
+          label="sign-and-send"
           :loading="sendButtonLoading"
           rounded
           shadow
