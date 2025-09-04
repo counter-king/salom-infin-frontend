@@ -25,6 +25,7 @@ import { LayoutWithTabsCompose } from "@/components/DetailLayout"
 import EditorWithTabs from "@/components/Composed/EditorWithTabs.vue"
 import BaseTemplate from "@/modules/Documents/components/BaseTemplate.vue"
 import { ROUTE_SIGN_SHOW } from "@/modules/Documents/modules/Boxes/constants";
+import { fetchSignDocument } from "@/modules/Documents/modules/Boxes/services/sign.service";
 
 // Composable
 const route = useRoute()
@@ -80,7 +81,7 @@ const preview = async () => {
 const clearForm = () => {
 
 }
-const create = async () => {
+const create = async (pkcs7) => {
   try {
     const { data } = await store.actionCreateDocument(store.model)
     const signerId = data.signers.find(s => s.user?.id === authStore.currentUser?.id )?.id
@@ -88,21 +89,14 @@ const create = async () => {
     dialog.value = false
     dispatchNotify(null, t('document-sent'), COLOR_TYPES.SUCCESS)
     if (signerId) {
-      await openSignRoute(signerId, data.id)
+      await fetchSignDocument({ id: signerId, body: { pkcs7 } })
     }
-    else {
-      await router.replace({
-        name: ROUTE_SD_LIST,
-        query: {
-          document_type: COMPOSE_DOCUMENT_TYPES.ACT
-        }
-      })
-    }
+    await openRoute(data.id)
   } catch (e) {
     dispatchNotify(null, t('error-occurred'), COLOR_TYPES.ERROR)
   }
 }
-const update = async () => {
+const update = async (pkcs7) => {
   try {
     const data = await store.actionUpdateDocument(
       {
@@ -110,28 +104,20 @@ const update = async () => {
         body: store.model
       }
     )
-    const signerId = data.signers.find(s => s.user?.id === authStore.currentUser?.id)?.id
+    const signer = data.signers.find(s => s.user?.id === authStore.currentUser?.id)
     await countStore.actionCountList()
     dispatchNotify(null, t('changed'), COLOR_TYPES.SUCCESS);
-    if (signerId) {
-      await openSignRoute(signerId, data.id)
-    } else {
-      await router.replace({
-        name: ROUTE_SD_DETAIL,
-        params: {
-          id: route.params.id,
-          document_type: route.params.document_type,
-          document_sub_type: route.params.document_sub_type
-        }
-      })
+    if (signer && !signer.is_signed) {
+      await fetchSignDocument({ id: signer.id, body: { pkcs7 }})
     }
+    await openRoute(data.id)
   } catch (e) {}
 }
-const manage = () => {
+const manage = (pkcs7) => {
   if (props.formType === FORM_TYPE_CREATE) {
-    create()
+    create(pkcs7)
   } else {
-    update()
+    update(pkcs7)
   }
 }
 const onFileUpload = (files) => {
@@ -146,16 +132,13 @@ const init = async () => {
     store.model.__signers = await adjustUserObjectToArray([{ id: authStore.currentUser?.id }])
   }
 }
-const openSignRoute = async (signerId, compose_id) => {
-  await router.push({
-    name: ROUTE_SIGN_SHOW,
+const openRoute = async (compose_id) => {
+  await router.replace({
+    name: ROUTE_SD_DETAIL,
     params: {
-      id: signerId,
+      id: compose_id,
       document_type: route.params.document_type,
       document_sub_type: route.params.document_sub_type
-    },
-    query: {
-      compose_id
     }
   })
   await scrollUp()
@@ -255,6 +238,7 @@ onUnmounted(() => {
     <preview-dialog
       v-model="dialog"
       :send-button-loading="store.buttonLoading"
+      with-sign
       @emit:send="manage"
     >
       <template #content>

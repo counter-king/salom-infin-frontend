@@ -2,7 +2,9 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/ru' // Ruscha lokalni qo'shish
 import 'dayjs/locale/uz-latn'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 dayjs.extend(customParseFormat)
+dayjs.extend(isSameOrBefore)
 
 /**
 * Проверяет являться ли строка date
@@ -38,4 +40,10 @@ export function formatDateMonthWithDay(date, locale = 'ru') {
 }
 export function formatDay(date) {
   return date ? dayjs(date).format("DD") : "Не верный формат даты"
+}
+export const isStartBeforeOrEqualEnd = (startDate, endDate) => {
+  return dayjs(startDate).isSameOrBefore(dayjs(endDate), "day")
+}
+export const isDateRangeWithinLimit = (startDate, endDate, limitDays = 31) => {
+  return dayjs(endDate).diff(dayjs(startDate), "day") <= limitDays
 }

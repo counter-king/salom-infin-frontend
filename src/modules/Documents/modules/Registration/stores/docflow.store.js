@@ -18,6 +18,7 @@ import { clearModel, setValuesToKeys } from '@/utils'
 import { dispatchNotify } from '@/utils/notify'
 import { COLOR_TYPES, JOURNAL, JOURNAL_CODES } from '@/enums'
 import { useBlobFileStore } from "@/stores/file.store";
+import { helpers, required } from "@vuelidate/validators";
 export const useDocFlowStore = defineStore("docFlowStore", {
   state: () => ({
     routes: {
@@ -248,7 +249,21 @@ export const useDocFlowStore = defineStore("docFlowStore", {
       journalId: JOURNAL_CODES.INCOMING,
       __journalId: JOURNAL.INCOMING
     },
-    totalCount: 0
+    totalCount: 0,
+
+    downloadFilesModel: {
+      register_start_date: null,
+      register_end_date: null,
+      journal: JOURNAL.ACT
+    },
+    downloadFileRules: {
+      register_start_date: {
+        required: helpers.withMessage(`Поле не должен быть пустым`, required)
+      },
+      register_end_date: {
+        required: helpers.withMessage(`Поле не должен быть пустым`, required)
+      }
+    }
   }),
   actions: {
     /**

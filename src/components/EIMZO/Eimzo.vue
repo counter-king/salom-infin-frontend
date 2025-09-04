@@ -42,6 +42,10 @@ const props = defineProps({
   validationFunc: {
     type: Function,
     default: () => void 0
+  },
+  signButtonLabel: {
+    type: String,
+    default: "sign"
   }
 })
 
@@ -274,7 +278,7 @@ const emit = defineEmits(['emit:onGetPkcs7'])
     <base-button
       v-if="props.type === 'sign'"
       border-color="border-transparent"
-      label="sign"
+      :label="signButtonLabel"
       :icon-left="CheckCircleIcon"
       icon-height="!w-4"
       icon-width="!h-4"

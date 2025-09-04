@@ -34,3 +34,7 @@ export const fetchUpdateDocument = (payload) => {
 export const fetchGetTree = (id) => {
   return axiosConfig.get(`${URLS.docflow}/${id}/${URLS.resolutionTree}/`)
 }
+/** **/
+export const fetchDownloadFilesAsZip = (params) => {
+  return axiosConfig.get(`${URLS.docflow}/download-zip/`, params)
+}

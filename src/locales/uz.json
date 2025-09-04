@@ -966,5 +966,12 @@
   "update-act": "Dalolatnomani o'zgartirish",
   "act": "Dalolatnoma",
   "service-contract-works": "Xizmat shartnomasi ishlari FHH",
-  "add-signers": "Yana imzolovchi qo'shing"
+  "add-signers": "Yana imzolovchi qo'shing",
+  "download-files": "Xujjatlarni yuklash",
+  "download-zip-files": "Xujjatlarni .zip formatida yuklab oling",
+  "register-start-date": "Ro‘yxatga olingan sana (dan)",
+  "register-end-date": "Ro‘yxatga olingan sana (gacha)",
+  "start-date-after-end-date": "Boshlanish sanasi tugash sanasidan keyin bo‘lishi mumkin emas",
+  "date-range-too-large": "Sana oralig‘i 31 kundan oshmasligi kerak",
+  "sign-and-send": "Imzolash va yuborish"
 }

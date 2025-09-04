@@ -969,5 +969,12 @@
   "update-act": "Изменить акт",
   "act": "Акт",
   "service-contract-works": "Работы по договору услуг ГПХ",
-  "add-signers": "Добавить еще подписантов"
+  "add-signers": "Добавить еще подписантов",
+  "download-files": "Скачать файлы",
+  "download-zip-files": "Скачать файлы в формате .zip",
+  "register-start-date": "Дата регистрации (с)",
+  "register-end-date": "Дата регистрации (по)",
+  "start-date-after-end-date": "Дата начала не может быть позже даты окончания",
+  "date-range-too-large": "Период не должен превышать 31 день",
+  "sign-and-send": "Подписать и отправить"
 }

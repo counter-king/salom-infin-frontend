@@ -8,6 +8,8 @@ import { useRoute, useRouter } from "vue-router"
 import { CalendarMenu, ColumnMenu, ExportButton, FilterMenu} from "./index"
 import { MagniferIcon } from "@/components/Icons"
 import BaseInput from "@/components/UI/BaseInput.vue"
+import DownloadFiles from "@/components/Actions/DownloadFiles.vue";
+import { JOURNAL } from "@/enums";
 
 const props = defineProps({
   title: {
@@ -149,6 +151,10 @@ const emits = defineEmits(['emit:resetHeaders'])
           :action-list="props.actionList"
           :filter-keys="props.filterKeys"
           :keys-to-include-on-clear-filter="props.keysToIncludeOnClearFilter"
+        />
+
+        <download-files
+          v-if="Number(route.query?.journal_id) === JOURNAL.ACT"
         />
 
         <column-menu
