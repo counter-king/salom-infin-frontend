@@ -12,7 +12,14 @@ const baseURL = url.replace(/^https?:\/\//, '').replace(/\/api\/v1\/?/, '');
 
 let socketInstance = null
 export const socket = ()=> {
-  if(!socketInstance) {
+  const isToken = getStorageItem(ACCESS)
+  if(!isToken) {
+    return {
+      send: () => {},
+      data: ()=> {},
+    }
+  }
+  if(!socketInstance ) {
     socketInstance = useWebSocket(`wss://${baseURL}/ws/?token=${getStorageItem(ACCESS)}`, {
       autoReconnect: {
         retries: 3,
@@ -21,8 +28,20 @@ export const socket = ()=> {
           dispatchNotify(null, `socket error happened ${err}`, COLOR_TYPES.ERROR)
         },
       },
-      onError(ws, event) {
-        dispatchNotify(null, `socket ws-error-${ws}, event-error-${event}`, COLOR_TYPES.ERROR);
+      onError(ws) {
+
+      // WebSocket holatini tekshirish
+      let errorMessage = 'socket error: WebSocket connection error'
+      
+      if (ws.readyState === 3) {
+        errorMessage = 'socket error: Server bilan connection uzildi'
+      } else if (ws.readyState === 2) {
+        errorMessage = 'socket error: connection uzilmoqda'
+      } else if (ws.readyState === 0) {
+        errorMessage = 'socket error: connection o\'rnatilmoqda'
+      }
+
+        dispatchNotify(null, errorMessage, COLOR_TYPES.ERROR);
       },
     })
   }
