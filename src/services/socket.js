@@ -16,7 +16,7 @@ export const socket = ()=> {
   if(!isToken) {
     return {
       send: () => {},
-      data: {},
+      data: ()=> {},
     }
   }
   if(!socketInstance ) {
