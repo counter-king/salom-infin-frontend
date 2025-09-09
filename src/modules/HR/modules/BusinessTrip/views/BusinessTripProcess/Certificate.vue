@@ -8,7 +8,7 @@ import { useBusinessTripStore } from "@/modules/HR/modules/BusinessTrip/stores/b
 import { formatDate, formatDateHour } from "@/utils/formatDate"
 // Components
 import QrcodeVue from "qrcode.vue"
-import { formatUserFullName } from "@/utils";
+import { formatUserFullName, returnDaysDifference } from "@/utils";
 import { AltArrowDownIcon, DownloadMinimalisticIcon } from "@/components/Icons"
 import axiosConfig from "@/services/axios.config";
 
@@ -22,21 +22,13 @@ const author = computed(() => {
   return BTStore.detailModel?.user
 })
 const numberOfDays = computed(() => {
-  let startDate = new Date(BTStore.detailModel?.start_date)
-  let endDate = new Date(BTStore.detailModel?.end_date)
-
-  if (startDate && endDate) {
-    // Calculate the difference in milliseconds
-    let difference = endDate.getTime() - startDate.getTime();
-
-    // Convert the difference from milliseconds to days
-    let daysDifference = difference / (1000 * 3600 * 24);
-
-    // Round the result to get an integer number of days
-    daysDifference = Math.round(daysDifference);
-    return daysDifference + 1
+  return returnDaysDifference(BTStore.detailModel?.start_date, isTripChanged.value ? BTStore.detailModel?.end_date_2 : BTStore.detailModel?.end_date)
+})
+const numberOfDaysForExtended = computed(() => {
+  if (isTripChanged.value) {
+    return returnDaysDifference(BTStore.detailModel?.start_date, BTStore.detailModel?.end_date)
   } else {
-    return null
+    return ''
   }
 })
 
@@ -137,6 +129,7 @@ const generatePdf = async () => {
     end_date: formatDate(BTStore.detailModel?.end_date),
     end_date_2: formatDate(BTStore.detailModel?.end_date_2),
     numberOfDays: numberOfDays.value,
+    numberOfDaysForExtended: numberOfDaysForExtended.value,
     locations: BTStore.detailModel?.locations,
     addedRegions: addedRegions.value,
     orderRegisteredDate: orderRegisteredDate.value ? formatDate(orderRegisteredDate.value) : null,
@@ -207,7 +200,7 @@ const generatePdf = async () => {
 
           <div>
             <span class="font-semibold">Xizmat safari muddati: </span> {{ formatDate(BTStore.detailModel?.start_date) }}
-            dan {{ isTripChanged ? formatDate(BTStore.detailModel?.end_date_2) : formatDate(BTStore.detailModel?.end_date) }} gacha ({{ numberOfDays }} kun)<template v-if="isTripChanged">, {{ formatDate(BTStore.detailModel?.start_date) }} dan {{ formatDate(BTStore.detailModel?.end_date) }} gacha</template>
+            dan {{ isTripChanged ? formatDate(BTStore.detailModel?.end_date_2) : formatDate(BTStore.detailModel?.end_date) }} gacha ({{ numberOfDays }} kun)<template v-if="isTripChanged">, {{ formatDate(BTStore.detailModel?.start_date) }} dan {{ formatDate(BTStore.detailModel?.end_date) }} gacha ({{ numberOfDaysForExtended }} kun)</template>
           </div>
 
           <div>

@@ -643,3 +643,22 @@ export const formatUzbekDate = (dateString, monthNameOnly = false) => {
     return `“${day}” ${month} ${year}-yil`
   }
 }
+
+export const returnDaysDifference = (start_date, end_date) => {
+  let startDate = new Date(start_date)
+  let endDate = new Date(end_date)
+
+  if (startDate && endDate) {
+    // Calculate the difference in milliseconds
+    let difference = endDate.getTime() - startDate.getTime();
+
+    // Convert the difference from milliseconds to days
+    let daysDifference = difference / (1000 * 3600 * 24);
+
+    // Round the result to get an integer number of days
+    daysDifference = Math.round(daysDifference);
+    return daysDifference + 1
+  } else {
+    return null
+  }
+}
