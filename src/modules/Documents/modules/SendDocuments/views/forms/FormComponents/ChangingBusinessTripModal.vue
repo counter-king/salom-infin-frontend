@@ -146,26 +146,28 @@ const onRegionsChange = (regions) => {
       </template>
     </template>
 
-    <template v-if="!store.changingBTLoading" #footer>
-      <base-button
-        color="bg-white hover:bg-greyscale-100 text-primary-dark"
-        border-color="border-transparent"
-        label="cancel"
-        rounded
-        shadow
-        type="button"
-        @click="onCancel"
-      />
+    <template #footer>
+      <template v-if="!store.changingBTLoading">
+        <base-button
+          color="bg-white hover:bg-greyscale-100 text-primary-dark"
+          border-color="border-transparent"
+          label="cancel"
+          rounded
+          shadow
+          type="button"
+          @click="onCancel"
+        />
 
-      <base-button
-        v-if="!isTripFinished"
-        :loading="store.userTripUpdateButtonLoading"
-        label="update"
-        rounded
-        shadow
-        type="button"
-        @click="onChangeClick"
-      />
+        <base-button
+          v-if="!isTripFinished"
+          :loading="store.userTripUpdateButtonLoading"
+          label="update"
+          rounded
+          shadow
+          type="button"
+          @click="onChangeClick"
+        />
+      </template>
     </template>
   </base-dialog>
 </template>

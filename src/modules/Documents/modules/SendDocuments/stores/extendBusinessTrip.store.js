@@ -150,6 +150,13 @@ export const useExtendBusinessTripStore = defineStore("sd-extend-business-trip-s
         return
       }
 
+      const res = await fetchBusinessTripDetail(item.id)
+
+      this.tempVerifications = res?.data?.verifications.filter(v => !v.is_sender).map(v => ({
+        ...v,
+        is_visited: v.arrived_at || v.left_at,
+      }))
+
       this.changingBTModel = item
       this.tempGroupIndex = groupIndex
       this.changingBTLoading = true
@@ -158,13 +165,6 @@ export const useExtendBusinessTripStore = defineStore("sd-extend-business-trip-s
       setTimeout(() => {
         this.changingBTLoading = false
       }, 2000)
-
-      const res = await fetchBusinessTripDetail(item.id)
-
-      this.tempVerifications = res?.data?.verifications.filter(item => !item.is_sender).map(item => ({
-        ...item,
-        is_visited: item.arrived_at || item.left_at,
-      }))
     },
     /** **/
     actionDeleteNoticeToChange(item, itemIndex, groupIndex) {
