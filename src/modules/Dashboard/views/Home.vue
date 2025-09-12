@@ -10,7 +10,8 @@ import {
   WidgetApplications,
   WidgetSlider,
   WidgetSurvey,
-  WidgetNewsList
+  WidgetNewsList,
+  EmployeeAttendance
 } from '../components/widgets'
 import { onMounted } from "vue";
 import axios from "axios";
@@ -25,7 +26,11 @@ const { t } = useI18n()
 
       <div class="dashboard-grid flex h-[calc(100%-52px)] gap-5">
         <div class="flex flex-col flex-1">
-          <widget-doc-flow class="h-[272px] mb-5" />
+          <div class="flex gap-5 h-[272px] mb-5">
+            <widget-doc-flow class="flex-1" />
+
+<!--            <employee-attendance class="w-[356px]" />-->
+          </div>
 
           <div class="flex flex-1 gap-5 overflow-y-auto min-h-[calc(100vh-480px)]">
             <widget-news-list class="flex-1" />

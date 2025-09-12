@@ -573,7 +573,7 @@
   "enter-amount": "Summani tanlang",
   "total-expenses": "Umumiy xarajatlar",
   "service-memo": "Xizmat xati",
-  "certificate": "Govohnoma",
+  "certificate": "Guvohnoma",
   "download": "Yuklash",
   "change-history": "O'zgarish tarixi",
   "change-time": "O'zgartirilgan sana",
@@ -973,5 +973,10 @@
   "register-end-date": "Ro‘yxatga olingan sana (gacha)",
   "start-date-after-end-date": "Boshlanish sanasi tugash sanasidan keyin bo‘lishi mumkin emas",
   "date-range-too-large": "Sana oralig‘i 31 kundan oshmasligi kerak",
-  "sign-and-send": "Imzolash va yuborish"
+  "sign-and-send": "Imzolash va yuborish",
+  "late-days": "Kechikkan kunlar",
+  "not-come-days": "Kelmagan kunlar",
+  "working-days": "Ish kunlari",
+  "excused": "Sababli",
+  "unexcused": "Sababsiz"
 }

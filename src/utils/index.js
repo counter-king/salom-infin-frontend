@@ -625,8 +625,8 @@ export const formatUzbekDate = (dateString, monthNameOnly = false) => {
     6: "iyun",
     7: "iyul",
     8: "avgust",
-    9: "sentyabr",
-    10: "oktyabr",
+    9: "sentabr",
+    10: "oktabr",
     11: "noyabr",
     12: "dekabr"
   }
