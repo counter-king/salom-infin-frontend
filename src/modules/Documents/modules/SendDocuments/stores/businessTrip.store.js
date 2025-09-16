@@ -17,7 +17,7 @@ import {
 
 import {
   BY_CAR,
-  BY_PLANE,
+  BY_PLANE, BY_SERVICE_CAR,
   BY_TRAIN,
   MULTI_CITY,
   ONE_WAY,
@@ -254,24 +254,32 @@ export const useBusinessTripStore = defineStore("sd-business-trip-stores", {
         title: 'airplane',
         icon: PlaneIcon,
         value: BY_PLANE,
-        name_uz: 'Samolyot',
-        name_ru: 'Самолёт'
+        name_uz: 'Havo transporti',
+        name_ru: 'Воздушный транспорт'
       },
       {
         id: 2,
         title: 'train',
         icon: TrainIcon,
         value: BY_TRAIN,
-        name_uz: 'Poyezd',
-        name_ru: 'Поезд'
+        name_uz: 'Temir yo‘l transporti',
+        name_ru: 'Железнодорожный транспорт'
       },
       {
         id: 3,
         title: 'taxi',
         icon: LocalTaxiIcon,
         value: BY_CAR,
-        name_uz: 'Taksi',
-        name_ru: 'Такси'
+        name_uz: 'Yo‘lovchi avtomobili (taksi)',
+        name_ru: 'Легковой автомобиль (такси)'
+      },
+      {
+        id: 4,
+        title: 'service_car',
+        icon: LocalTaxiIcon,
+        value: BY_SERVICE_CAR,
+        name_uz: 'Bankning xizmat avtomobili',
+        name_ru: 'Служебный автомобиль банка'
       }
     ],
     routeTypeTabItems: [
