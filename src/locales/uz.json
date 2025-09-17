@@ -979,5 +979,14 @@
   "not-come-days": "Kelmagan kunlar",
   "working-days": "Ish kunlari",
   "excused": "Sababli",
-  "unexcused": "Sababsiz"
+  "unexcused": "Sababsiz",
+  "attendance": "Davomat",
+  "arrival-time": "Kelgan vaqti",
+  "departure-time": "Ketgan vaqti",
+  "delay-duration": "Kechikish davomiyligi",
+  "on-time-arrivals": "Vaqtida kelganlar",
+  "late-arrivals": "Kechikkanlar",
+  "absentees": "Kelmaganlar",
+  "early-leavers": "Erta ketkanlar",
+  "not-registered-face-id": "Face ID da ro'yxatdan o'tmaganlar"
 }

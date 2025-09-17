@@ -10,7 +10,7 @@ import {
 } from "@/modules/Documents/modules/SendDocuments/services/index.service"
 import { adjustTopSignerObjectToArray, adjustUserObjectToArray, setValuesToKeys } from "@/utils"
 
-export const useActStore = defineStore("act-store", {
+export const useActStore = defineStore("act-stores", {
   state: () => ({
     buttonLoading: false,
     detailLoading: false,

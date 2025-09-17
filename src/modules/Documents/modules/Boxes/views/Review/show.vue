@@ -36,7 +36,7 @@ const isDone = computed(() => {
 onMounted(async () => {
   loading.value = true
   await reviewStore.actionReviewById({ id: route.params.id })
-  await docflowStore.actionGetTree(reviewStore.detailModel.document.id)
+  await docflowStore.actionGetTree(reviewStore.detailModel?.document?.id)
   setTimeout(() => {
     loading.value = false
   }, 500)
@@ -63,7 +63,7 @@ const acquaintDocument = async () => {
 }
 const handleDocumentStatus = async () => {
   // Изменить исполнение
-  if(reviewStore.detailModel?.status.id === STATUS_TYPES.DONE) {
+  if(reviewStore.detailModel?.status?.id === STATUS_TYPES.DONE) {
     console.log('change')
     await reviewStore.actionPerformDocument({ id: route.params.id, performed: false })
   }
@@ -86,7 +86,7 @@ const handleDocumentStatus = async () => {
       <layout-with-tabs
         :title="reviewStore.detailModel.document?.title"
         :preview-detail="reviewStore.detailModel"
-        :object-id="reviewStore.detailModel.document.id"
+        :object-id="reviewStore.detailModel?.document?.id"
         :headers="reviewStore.headers"
         :tree-items="docflowStore.tree"
         :files="reviewStore.detailModel.document.__files"
@@ -121,7 +121,7 @@ const handleDocumentStatus = async () => {
           <template v-if="!isDone">
             <create-menu
               v-if="createMenuVisible"
-              :compose-id="reviewStore.detailModel?.document?.compose.id"
+              :compose-id="reviewStore.detailModel?.document?.compose?.id"
               :document="reviewStore.detailModel?.document"
             />
             <!-- /Create order button -->
@@ -139,9 +139,9 @@ const handleDocumentStatus = async () => {
             <!-- Если документ ознакомлен -->
             <template v-if="reviewStore.isDocumentAcquainted">
               <resolution-dropdown
-                :review-id="reviewStore.detailModel.id"
+                :review-id="reviewStore?.detailModel?.id"
                 :parent-id="null"
-                :resolution-list-id="reviewStore.detailModel.document.id"
+                :resolution-list-id="reviewStore.detailModel?.document?.id"
                 :is-resolution-signed="reviewStore.isReviewSigned"
                 :register-date="new Date(reviewStore.detailModel.document.register_date)"
               />
@@ -170,7 +170,7 @@ const handleDocumentStatus = async () => {
               v-model:files="reviewStore.performModel.files"
               :has-resolution="boxesCommonStore.getCreatedResolutionsList"
               :is-document-signed="reviewStore.isReviewSigned"
-              :is-done-document="reviewStore.detailModel.status.id === STATUS_TYPES.DONE"
+              :is-done-document="reviewStore.detailModel?.status?.id === STATUS_TYPES.DONE"
               :create-button-fn="handleDocumentStatus"
             />
           </template>

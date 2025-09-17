@@ -1,7 +1,7 @@
 // Core
 import { defineStore } from 'pinia'
 
-export const useAttendanceStore = defineStore('dashboard-attendance-store', {
+export const useAttendanceStore = defineStore('dashboard-attendance-stores', {
   state: () => ({
     tabItems: [
       {

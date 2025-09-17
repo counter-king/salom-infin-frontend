@@ -37,6 +37,7 @@ export { default as ClapperboardPlayLinearIcon } from  '~icons/solar/clapperboar
 export { default as PaperclipLinearIcon } from  '~icons/solar/paperclip-linear'
 export { default as SmileCircleLinearIcon } from  '~icons/solar/smile-circle-linear'
 export { default as ReplyLinearIcon } from  '~icons/solar/reply-linear'
+export { default as CheckCircleLinearIcon } from  '~icons/solar/check-circle-linear'
 // Solar (Outline)
 export { default as CheckCircleIcon } from  '~icons/solar/check-circle-outline'
 export { default as AltArrowUpIcon } from  '~icons/solar/alt-arrow-up-outline'
@@ -183,6 +184,8 @@ export { default as Flag2BoldIcon } from  '~icons/solar/flag-2-bold'
 export { default as WidgetBoldIcon } from  '~icons/solar/widget-bold'
 export { default as ServerBoldIcon } from  '~icons/solar/server-bold'
 export { default as AlignTopBoldIcon } from  '~icons/solar/align-top-bold'
+export { default as AlarmTurnOffBoldIcon } from  '~icons/solar/alarm-turn-off-bold'
+export { default as CalendarSearchBoldIcon } from  '~icons/solar/calendar-search-bold'
 // Solar (Bold Duotone)
 export { default as ArchiveUpBoldDuotoneIcon } from  '~icons/solar/archive-up-bold-duotone'
 export { default as StarBoldDuotoneIcon } from  '~icons/solar/star-bold-duotone'

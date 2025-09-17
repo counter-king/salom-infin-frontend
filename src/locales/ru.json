@@ -982,5 +982,14 @@
   "not-come-days": "Дни отсутствия",
   "working-days": "Рабочие дни",
   "excused": "Уважительная",
-  "unexcused": "Неуважительная"
+  "unexcused": "Неуважительная",
+  "attendance": "Посещаемость",
+  "arrival-time": "Время прихода",
+  "departure-time": "Время ухода",
+  "delay-duration": "Продолжительность опоздания",
+  "on-time-arrivals": "Пришедшие вовремя",
+  "late-arrivals": "Опоздавшие",
+  "absentees": "Отсутствующие",
+  "early-leavers": "Ушедшие раньше",
+  "not-registered-face-id": "Не зарегистрированные в Face ID"
 }
