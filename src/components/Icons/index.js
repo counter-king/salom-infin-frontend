@@ -184,6 +184,7 @@ export { default as Flag2BoldIcon } from  '~icons/solar/flag-2-bold'
 export { default as WidgetBoldIcon } from  '~icons/solar/widget-bold'
 export { default as ServerBoldIcon } from  '~icons/solar/server-bold'
 export { default as AlignTopBoldIcon } from  '~icons/solar/align-top-bold'
+export { default as Buildings2BoldIcon } from  '~icons/solar/buildings-2-bold'
 export { default as AlarmTurnOffBoldIcon } from  '~icons/solar/alarm-turn-off-bold'
 export { default as CalendarSearchBoldIcon } from  '~icons/solar/calendar-search-bold'
 // Solar (Bold Duotone)
