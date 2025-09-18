@@ -32,10 +32,10 @@ onMounted(async () => {
 
     <template v-else>
       <template v-if="dashboardStore.userChose">
-<!--        <div class="flex items-center p-1 gap-x-1 rounded-lg bg-success-10">-->
-<!--          <base-iconify :icon="CheckCircleBoldIcon" class="text-success-500" />-->
-<!--          <span class="text-greyscale-900 font-medium text-sm">{{ t('thanks-for-participation') }}</span>-->
-<!--        </div>-->
+        <div class="flex items-center p-1 gap-x-1 rounded-lg bg-success-10">
+          <base-iconify :icon="CheckCircleBoldIcon" class="text-success-500" />
+          <span class="text-greyscale-900 font-medium text-sm">{{ t('thanks-for-participation') }}</span>
+        </div>
 
         <div class="flex justify-around items-center mt-4">
           <div
@@ -55,7 +55,7 @@ onMounted(async () => {
       </template>
 
       <template v-else>
-<!--        <div class="text-greyscale-500 text-sm font-medium">{{ t('survey') }}</div>-->
+        <div class="text-greyscale-500 text-sm font-medium">{{ t('survey') }}</div>
         <div class="text-greyscale-900 text-lg font-semibold mt-1">{{ t('how-mood-today') }}</div>
 
         <div class="flex justify-around align-center mt-4">

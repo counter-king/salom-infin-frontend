@@ -33,13 +33,13 @@ const { t } = useI18n()
             <widget-doc-flow class="flex-1" />
           </div>
 
-          <div class="flex flex-1 gap-5 overflow-y-auto min-h-[calc(100vh-480px)]">
+          <div class="flex gap-5 overflow-y-auto h-[calc(100vh-400px)]">
             <widget-news-list class="flex-1" />
 
             <widget-contacts class="w-[356px]" />
 
-            <div class="flex flex-col w-[325px]">
-              <widget-survey class="h-[124px] mb-5"/>
+            <div class="flex flex-col w-[345px]">
+              <widget-survey class="h-[156px] mb-5"/>
 
               <widget-birthday class="overflow-y-auto mb-5"/>
             </div>

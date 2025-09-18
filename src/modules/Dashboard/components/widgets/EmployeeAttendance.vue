@@ -5,7 +5,7 @@ import { useI18n } from "vue-i18n"
 // Store
 import { useAttendanceStore } from "@/modules/Dashboard/stores/attendance.store"
 // Components
-import { AltArrowRightIcon, InfoCircleBoldIcon } from "@/components/Icons";
+import { AltArrowRightIcon, ClockCircleBoldIcon, InfoCircleBoldIcon } from "@/components/Icons";
 import { getUzbekMonthName } from "@/utils";
 import { formatHour } from "../../../../utils/formatDate";
 import AttendanceStatus from "@/modules/HR/modules/Attendance/components/AttendanceStatus.vue";
@@ -24,7 +24,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex flex-col shadow-button rounded-2xl bg-white p-5 pr-2 gap-y-2">
+  <div class="relative flex flex-col shadow-button rounded-2xl bg-white p-5 pr-2 gap-y-2">
     <div class="flex items-center justify-between">
       <div class="text-base text-greyscale-900 font-semibold">{{ t('attendance') }}</div>
     </div>
@@ -72,6 +72,19 @@ onMounted(async () => {
             </div>
           </div>
         </template>
+      </div>
+    </div>
+
+    <div class="flex justify-center items-center absolute inset-0 rounded-2xl backdrop-blur-[2px] bg-white/30">
+      <div class="flex gap-x-3 items-center">
+        <div class="flex justify-center items-center w-10 h-10 rounded-full bg-warning-50">
+          <base-iconify
+            :icon="ClockCircleBoldIcon"
+            class="text-warning-500"
+          />
+        </div>
+
+        <div class="text-sm font-medium text-greyscale-900">{{ t('soon') }}</div>
       </div>
     </div>
   </div>
