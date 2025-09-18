@@ -78,18 +78,18 @@ watch(
               @click="componentType = 'TableType'"
             />
 
-<!--            <base-button-->
-<!--              label="Дерево"-->
-<!--              rounded-->
-<!--              :outlined="componentType !== 'TreeType'"-->
-<!--              shadow-->
-<!--              color="text-primary-900"-->
-<!--              border-color="border-transparent"-->
-<!--              :button-class="componentType === 'TreeType' ? 'text-white' : ''"-->
-<!--              :icon-left="componentType === 'TreeType' ? AlignTopBoldIcon : AlignTopOutlineIcon"-->
-<!--              icon-width="mr-2"-->
-<!--              @click="componentType = 'TreeType'"-->
-<!--            />-->
+            <base-button
+              label="Дерево"
+              rounded
+              :outlined="componentType !== 'TreeType'"
+              shadow
+              color="text-primary-900"
+              border-color="border-transparent"
+              :button-class="componentType === 'TreeType' ? 'text-white' : ''"
+              :icon-left="componentType === 'TreeType' ? AlignTopBoldIcon : AlignTopOutlineIcon"
+              icon-width="mr-2"
+              @click="componentType = 'TreeType'"
+            />
           </div>
         </template>
       </header-toolbar>
