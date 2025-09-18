@@ -144,28 +144,28 @@ watch(
         },
         order: 5
       },
-      {
-        name: 'not-fulfilled',
-        icon: CloseCircleBoldIcon,
-        avatarColor: 'bg-critic-50',
-        iconColor: 'text-critic-500',
-        status: true,
-        key: null,
-        route: {
-          name: 'AssignmentIndex',
-          new: {
-            query: {
-              signed: 'none'
-            }
-          },
-          inProgress: {
-            query: {
-              signed: false
-            }
-          }
-        },
-        order: 6
-      },
+      // {
+      //   name: 'not-fulfilled',
+      //   icon: CloseCircleBoldIcon,
+      //   avatarColor: 'bg-critic-50',
+      //   iconColor: 'text-critic-500',
+      //   status: true,
+      //   key: null,
+      //   route: {
+      //     name: 'AssignmentIndex',
+      //     new: {
+      //       query: {
+      //         signed: 'none'
+      //       }
+      //     },
+      //     inProgress: {
+      //       query: {
+      //         signed: false
+      //       }
+      //     }
+      //   },
+      //   order: 6
+      // },
       {
         name: 'expired',
         icon: CalendarDateBoldIcon,
@@ -188,28 +188,28 @@ watch(
         },
         order: 7
       },
-      {
-        name: 'to-confirm',
-        icon: FolderFavouriteStarBoldIcon,
-        avatarColor: 'bg-success-50',
-        iconColor: 'text-success-500',
-        status: true,
-        key: null,
-        route: {
-          name: 'AssignmentIndex',
-          new: {
-            query: {
-              signed: 'none'
-            }
-          },
-          inProgress: {
-            query: {
-              signed: false
-            }
-          }
-        },
-        order: 8
-      },
+      // {
+      //   name: 'to-confirm',
+      //   icon: FolderFavouriteStarBoldIcon,
+      //   avatarColor: 'bg-success-50',
+      //   iconColor: 'text-success-500',
+      //   status: true,
+      //   key: null,
+      //   route: {
+      //     name: 'AssignmentIndex',
+      //     new: {
+      //       query: {
+      //         signed: 'none'
+      //       }
+      //     },
+      //     inProgress: {
+      //       query: {
+      //         signed: false
+      //       }
+      //     }
+      //   },
+      //   order: 8
+      // },
     ]
   },
   {

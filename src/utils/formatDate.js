@@ -24,7 +24,7 @@ export function formatDateMonth(date, locale = 'ru', index) {
   return date ? dayjs(date).set('month', index).startOf('month').locale(locale).format('MMMM') : 'Не верный формат даты'
 }
 export function formatHour(date) {
-  return date ? dayjs(date).format("HH:mm") : "Не верный формат даты"
+  return date ? dayjs(date).format("HH:mm") : "-"
 }
 export function formatDate(date) {
   return date ? dayjs(date).format("DD.MM.YYYY") : "Не верный формат даты"

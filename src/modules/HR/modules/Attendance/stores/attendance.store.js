@@ -26,11 +26,11 @@ export const useHRAttendanceStore = defineStore("attendance-store", {
         field: "position",
         active: true
       },
-      {
-        header: "branch",
-        field: "company",
-        active: true
-      },
+      // {
+      //   header: "branch",
+      //   field: "company",
+      //   active: true
+      // },
       {
         header: "department",
         field: "department",
@@ -127,11 +127,11 @@ export const useHRAttendanceStore = defineStore("attendance-store", {
           field: "position",
           active: true
         },
-        {
-          header: "branch",
-          field: "company",
-          active: true
-        },
+        // {
+        //   header: "branch",
+        //   field: "company",
+        //   active: true
+        // },
         {
           header: "department",
           field: "department",

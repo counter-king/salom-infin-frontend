@@ -31,7 +31,7 @@ const props = defineProps({
           name: item.route.name,
           query: props.type === 'new' ? item.route.new.query : props.type === 'in-progress' ? item.route.inProgress.query : null
         }"
-        class="flex gap-3 bg-white shadow-button rounded-[10px] p-4"
+        class="flex gap-3 bg-white shadow-button rounded-2xl p-4"
       >
         <div class="flex items-center justify-center w-10 h-10 rounded-full" :class="item.avatarColor">
           <base-iconify
@@ -42,8 +42,8 @@ const props = defineProps({
         </div>
 
         <div class="flex-1">
-          <h1 class="text-sm text-greyscale-900 font-semibold">{{ t(item.name) }}</h1>
-          <p class="text-greyscale-500 font-medium">{{ counts[item.key] }}</p>
+          <h1 class="text-sm text-greyscale-900 font-medium">{{ t(item.name) }}</h1>
+          <p class="text-greyscale-900 font-semibold text-[20px]">{{ counts[item.key] }}</p>
         </div>
       </router-link>
     </template>

@@ -11,10 +11,9 @@ import {
   WidgetSlider,
   WidgetSurvey,
   WidgetNewsList,
-  EmployeeAttendance
+  EmployeeAttendance,
+  Notifications
 } from '../components/widgets'
-import { onMounted } from "vue";
-import axios from "axios";
 // Composable
 const { t } = useI18n()
 </script>
@@ -26,28 +25,36 @@ const { t } = useI18n()
 
       <div class="dashboard-grid flex h-[calc(100%-52px)] gap-5">
         <div class="flex flex-col flex-1">
-          <div class="flex gap-5 h-[272px] mb-5">
-            <widget-doc-flow class="flex-1" />
+          <div class="flex gap-5 h-[368px] mb-5">
+            <employee-attendance class="w-[535px]" />
 
-<!--            <employee-attendance class="w-[356px]" />-->
+            <notifications class="w-[535px]" />
+
+            <widget-doc-flow class="flex-1" />
           </div>
 
           <div class="flex flex-1 gap-5 overflow-y-auto min-h-[calc(100vh-480px)]">
             <widget-news-list class="flex-1" />
 
             <widget-contacts class="w-[356px]" />
+
+            <div class="flex flex-col w-[325px]">
+              <widget-survey class="h-[124px] mb-5"/>
+
+              <widget-birthday class="overflow-y-auto mb-5"/>
+            </div>
           </div>
         </div>
 
-        <div class="flex flex-col max-w-[350px] w-full">
-          <widget-slider class="h-[155px]" />
+<!--        <div class="flex flex-col max-w-[350px] w-full">-->
+<!--          <widget-slider class="h-[155px]" />-->
 
-          <widget-survey class="h-[156px] mb-5" />
+<!--          <widget-survey class="h-[156px] mb-5" />-->
 
-          <widget-birthday class="overflow-y-auto mb-5" />
+<!--          <widget-birthday class="overflow-y-auto mb-5" />-->
 
-  <!--        <widget-applications class="flex-1 overflow-y-auto" />-->
-        </div>
+<!--          <widget-applications class="flex-1 overflow-y-auto" />-->
+<!--        </div>-->
       </div>
     </div>
     <div class="pl-10 pb-2">

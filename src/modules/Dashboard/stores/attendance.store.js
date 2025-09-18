@@ -1,24 +1,23 @@
 // Core
 import { defineStore } from 'pinia'
+// Service
+import { fetchDashboardAttendanceList } from "@/modules/Dashboard/services/index.service"
 
 export const useAttendanceStore = defineStore('dashboard-attendance-stores', {
   state: () => ({
-    tabItems: [
-      {
-        id: 1,
-        label: 'late-days',
-        active: true
-      },
-      {
-        id: 2,
-        label: 'not-come-days',
-        active: false
-      },
-      {
-        id: 3,
-        label: 'working-days',
-        active: false
+    listLoading: false,
+    attendanceList: [],
+  }),
+  actions: {
+    async actionDashboardAttendanceList() {
+      try {
+        this.listLoading = true
+        const res = await fetchDashboardAttendanceList()
+        this.attendanceList = res?.data?.results
+      } catch (error) {}
+      finally {
+        this.listLoading = false
       }
-    ]
-  })
+    }
+  }
 })

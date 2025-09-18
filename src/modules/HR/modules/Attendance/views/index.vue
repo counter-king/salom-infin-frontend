@@ -10,6 +10,7 @@ import { HR_ATTENDANCE_COLUMNS } from "@/modules/HR/constants"
 import { ActionToolbar } from "@/components/Actions"
 import DataTable from "@/modules/HR/modules/InteractionABS/components/DataTable.vue"
 import { InfoCircleBoldIcon } from "@/components/Icons"
+import { formatDate, formatHour } from "../../../../../utils/formatDate";
 
 // Composable
 const { t } = useI18n()
@@ -79,7 +80,46 @@ onMounted(async () => {
         @emit:onSort="onSort"
         @emit:set-store-headers="(val) => store.headers = val"
       >
+        <template #employee="{ data }">
+          <div class="flex items-center gap-3">
+<!--            <pre>{{ data.user }}</pre>-->
+            <base-avatar
+              :label="data.user?.full_name"
+              :image="null"
+              :color="data.user?.full_name"
+              detail-dialog
+              :meta="data.user"
+              avatarClasses="w-7 h-7"
+            >
+              <span class="text-xs font-semibold text-white">{{ data.user?.full_name[0] }}</span>
+            </base-avatar>
+            <div class="text-sm font-medium text-greyscale-900">{{ data.user?.full_name }}</div>
+          </div>
+        </template>
 
+        <template #position="{ data }">
+          <div class="text-sm font-medium text-greyscale-900">{{ data.user?.position?.name }}</div>
+        </template>
+
+        <template #department="{ data }">
+          <div class="text-sm font-medium text-greyscale-900">{{ data.user?.top_level_department?.name }}</div>
+        </template>
+
+        <template #date="{ data }">
+          <div class="text-sm font-medium text-greyscale-900">{{ formatDate(data.date) }}</div>
+        </template>
+
+        <template #arrival_time="{ data }">
+          <div class="text-sm font-medium text-greyscale-900">
+            {{ data.first_check_in ? formatHour(data.first_check_in) : '-' }}
+          </div>
+        </template>
+
+        <template #departure_time="{ data }">
+          <div class="text-sm font-medium text-greyscale-900">
+            {{ data.first_check_in ? formatHour(data.last_check_out) : '-' }}
+          </div>
+        </template>
       </DataTable>
     </div>
   </div>

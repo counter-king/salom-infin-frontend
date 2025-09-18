@@ -45,10 +45,10 @@ onMounted(() => {
       <div class="bg-greyscale-50 h-[calc(100%-32px)] p-3 rounded-xl">
         <div class="flex flex-col gap-2 h-full pr-2 pb-2 overflow-y-auto">
           <template v-if="loading">
-            <base-spinner />  
+            <base-spinner />
           </template>
           <template v-else-if="!newsList.length">
-            <empty 
+            <empty
               title="there-is-no-news-data"
               label-classes="text-greyscale-800 !text-base font-semibold"
               wrapper-class="w-full h-full shadow-none"
@@ -59,7 +59,7 @@ onMounted(() => {
               <NewsCard :item="item" />
             </RouterLink>
           </template>
-          
+
         </div>
       </div>
       <router-link :to="{name: 'NewsList'}" class="flex items-center justify-center gap-1 h-6 text-sm mt-2">

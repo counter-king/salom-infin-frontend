@@ -57,6 +57,7 @@ export default {
           500: "#FFC352",
         },
         "info": {
+          30: "#EDF8FC",
           50: "#E5F8FF",
           100: "#BCECFE",
           200: "#81DAFC",

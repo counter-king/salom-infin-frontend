@@ -662,3 +662,49 @@ export const returnDaysDifference = (start_date, end_date) => {
     return null
   }
 }
+
+export const getUzbekMonthName = (dateInput) => {
+  const uzMonths = [
+    "YAN", "FEV", "MAR", "APR", "MAY", "IYN",
+    "IYL", "AVG", "SEN", "OKT", "NOY", "DEK"
+  ]
+
+  if (!dateInput) return "-" // null, undefined, empty string
+
+  const date = new Date(dateInput)
+  if (isNaN(date)) return "-" // invalid date
+
+  return uzMonths[date.getMonth()]
+}
+
+export const getWorkdayStatus = (arrival_time, departure_time) => {
+  // if both are null/undefined/invalid
+  if (!arrival_time && !departure_time) return "not-came"
+
+  const arrival = arrival_time ? new Date(arrival_time) : null
+  const departure = departure_time ? new Date(departure_time) : null
+
+  const isArrivalValid = arrival instanceof Date && !isNaN(arrival)
+  const isDepartureValid = departure instanceof Date && !isNaN(departure)
+
+  // if both invalid
+  if (!isArrivalValid && !isDepartureValid) return "not-came"
+  // if one is invalid
+  if (!isArrivalValid || !isDepartureValid) return "-"
+
+  // define thresholds
+  const nineAM = new Date(arrival)
+  nineAM.setHours(9, 0, 0, 0)
+
+  const sixPM = new Date(departure)
+  sixPM.setHours(18, 0, 0, 0)
+
+  // check conditions
+  const isLate = arrival > nineAM
+  const isEarly = departure < sixPM
+
+  if (isLate && isEarly) return "late-arrival-early-departure"
+  if (isLate) return "late-arrival"
+  if (isEarly) return "early-departure"
+  return "came-on-time"
+}

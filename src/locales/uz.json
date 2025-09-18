@@ -988,5 +988,12 @@
   "late-arrivals": "Kechikkanlar",
   "absentees": "Kelmaganlar",
   "early-leavers": "Erta ketkanlar",
-  "not-registered-face-id": "Face ID da ro'yxatdan o'tmaganlar"
+  "not-registered-face-id": "Face ID da ro'yxatdan o'tmaganlar",
+  "late-arrival-early-departure": "Kechikdi, erta ketdi",
+  "late-arrival": "Kechikdi",
+  "early-departure": "Erta ketdi",
+  "not-came": "Kelmadi",
+  "duties": "Vazifalar",
+  "soon": "Tez kunda",
+  "came-on-time": "Vaqtida keldi"
 }

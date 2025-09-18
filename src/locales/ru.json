@@ -991,5 +991,12 @@
   "late-arrivals": "Опоздавшие",
   "absentees": "Отсутствующие",
   "early-leavers": "Ушедшие раньше",
-  "not-registered-face-id": "Не зарегистрированные в Face ID"
+  "not-registered-face-id": "Не зарегистрированные в Face ID",
+  "late-arrival-early-departure": "Опоздал, ушёл рано",
+  "late-arrival": "Опоздал",
+  "early-departure": "Ушёл рано",
+  "not-came": "Не пришёл",
+  "duties": "Задачи",
+  "soon": "Скоро",
+  "came-on-time": "Пришёл вовремя"
 }
