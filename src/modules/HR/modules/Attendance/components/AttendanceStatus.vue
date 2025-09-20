@@ -17,7 +17,7 @@ const props = defineProps({
 
 // Computed
 const statusValue = computed(() => {
-  return getWorkdayStatus(props.item.first_check_in, props.item.last_check_out)
+  return getWorkdayStatus(props.item.date, props.item.first_check_in, props.item.last_check_out)
 })
 const statusIcon = computed(() => {
   switch (statusValue.value) {
@@ -45,7 +45,7 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <div class="attendance-status flex gap-x-1">
+  <div class="attendance-status flex gap-x-1 items-center">
     <base-iconify
       :icon="statusIcon"
       :class="statusClass"

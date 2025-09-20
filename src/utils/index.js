@@ -677,9 +677,20 @@ export const getUzbekMonthName = (dateInput) => {
   return uzMonths[date.getMonth()]
 }
 
-export const getWorkdayStatus = (arrival_time, departure_time) => {
+export const getWorkdayStatus = (attendanceDate, arrival_time, departure_time) => {
+  const today = new Date()
+  const inputDate = new Date(attendanceDate)
+
+  const isToday =
+    inputDate.getFullYear() === today.getFullYear() &&
+    inputDate.getMonth() === today.getMonth() &&
+    inputDate.getDate() === today.getDate()
+
   // if both are null/undefined/invalid
-  if (!arrival_time && !departure_time) return "not-came"
+  if (!arrival_time && !departure_time) {
+    if (isToday) return "waiting-info"
+    return "not-came"
+  }
 
   const arrival = arrival_time ? new Date(arrival_time) : null
   const departure = departure_time ? new Date(departure_time) : null
@@ -688,9 +699,10 @@ export const getWorkdayStatus = (arrival_time, departure_time) => {
   const isDepartureValid = departure instanceof Date && !isNaN(departure)
 
   // if both invalid
-  if (!isArrivalValid && !isDepartureValid) return "not-came"
-  // if one is invalid
-  if (!isArrivalValid || !isDepartureValid) return "-"
+  if (!isArrivalValid && !isDepartureValid) {
+    if (isToday) return "waiting-info"
+    return "not-came"
+  }
 
   // define thresholds
   const nineAM = new Date(arrival)
@@ -699,7 +711,13 @@ export const getWorkdayStatus = (arrival_time, departure_time) => {
   const sixPM = new Date(departure)
   sixPM.setHours(18, 0, 0, 0)
 
-  // check conditions
+  // ✅ special checks for today
+  if (isToday) {
+    if (arrival <= nineAM) return "came-on-time"
+    if (arrival > nineAM) return "late-arrival"
+  }
+
+  // general checks
   const isLate = arrival > nineAM
   const isEarly = departure < sixPM
 
@@ -708,3 +726,5 @@ export const getWorkdayStatus = (arrival_time, departure_time) => {
   if (isEarly) return "early-departure"
   return "came-on-time"
 }
+
+

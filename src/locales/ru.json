@@ -998,5 +998,7 @@
   "not-came": "Не пришёл",
   "duties": "Задачи",
   "soon": "Скоро",
-  "came-on-time": "Пришёл вовремя"
+  "came-on-time": "Пришёл вовремя",
+  "waiting-info": "Ожидание данных",
+  "not-connected-face-id": "Вы не подключены к системе FaceID!"
 }

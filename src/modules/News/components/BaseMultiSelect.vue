@@ -9,9 +9,6 @@ import axiosConfig from "@/services/axios.config"
 import { AltArrowDownIcon, MagniferIcon, XMarkSolidIcon } from '@/components/Icons'
 // Utils
 import { isObject } from '@/utils'
-// Composable
-const modelValue = useModel(props, 'modelValue')
-const { t, locale } = useI18n()
 // Macros
 const emit = defineEmits(['update:modelValue', 'emit:select-item'])
 
@@ -125,6 +122,9 @@ const props = defineProps({
     type: String
   }
 })
+// Composable
+const modelValue = useModel(props, 'modelValue')
+const {t, locale} = useI18n()
 // Reactive
 const menuRef = ref(null)
 const inputRef = ref(null)
@@ -268,14 +268,14 @@ const handleEnterPress = () => {
     modelValue.value.push({name: search.value, id: search.value})
     search.value = ''
   }
-} 
+}
 
 </script>
 
 <template>
   <div class="app-multiselect" :class="props.wrapperClass">
     <base-label :label="props.label" :required="props.required" />
-    
+
     <MultiSelect
       v-model="modelValue"
       :options="options"

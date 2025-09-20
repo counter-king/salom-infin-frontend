@@ -995,5 +995,7 @@
   "not-came": "Kelmadi",
   "duties": "Vazifalar",
   "soon": "Tez kunda",
-  "came-on-time": "Vaqtida keldi"
+  "came-on-time": "Vaqtida keldi",
+  "waiting-info": "Ma'lumot kutilmoqda",
+  "not-connected-face-id": "Siz FaceID tizimiga ulanmagansiz!"
 }
