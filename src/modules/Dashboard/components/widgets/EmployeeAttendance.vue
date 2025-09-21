@@ -4,16 +4,19 @@ import { onMounted, ref } from "vue"
 import { useI18n } from "vue-i18n"
 // Store
 import { useAttendanceStore } from "@/modules/Dashboard/stores/attendance.store"
+import { useAuthStore } from "@/modules/Auth/stores"
+// Utils
+import { formatHour } from "@/utils/formatDate"
+import { getUzbekMonthName } from "@/utils"
 // Components
-import { AltArrowRightIcon, ClockCircleBoldIcon, InfoCircleBoldIcon } from "@/components/Icons";
-import { getUzbekMonthName } from "@/utils";
-import { formatHour } from "../../../../utils/formatDate";
-import AttendanceStatus from "@/modules/HR/modules/Attendance/components/AttendanceStatus.vue";
-import Empty from "@/components/Empty.vue";
+import { AltArrowRightIcon } from "@/components/Icons"
+import AttendanceStatus from "@/modules/HR/modules/Attendance/components/AttendanceStatus.vue"
+import Empty from "@/components/Empty.vue"
 
 // Composable
 const { t } = useI18n()
 const store = useAttendanceStore()
+const currentUser = useAuthStore().currentUser
 
 // Hooks
 onMounted(async () => {
@@ -45,7 +48,7 @@ onMounted(async () => {
         </template>
 
         <template v-else>
-          <template v-if="store.attendanceList?.length">
+          <template v-if="store.attendanceList?.length && currentUser?.hik_person_code">
             <div class="flex flex-col overflow-y-auto h-[255px]">
               <div
                 v-for="item in store.attendanceList"
