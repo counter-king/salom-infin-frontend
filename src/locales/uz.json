@@ -997,5 +997,11 @@
   "soon": "Tez kunda",
   "came-on-time": "Vaqtida keldi",
   "waiting-info": "Ma'lumot kutilmoqda",
-  "not-connected-face-id": "Siz FaceID tizimiga ulanmagansiz!"
+  "not-connected-face-id": "Siz FaceID tizimiga ulanmagansiz!",
+  "no-entry-marked": "Kirish belgilanmagan",
+  "no-exit-marked": "Chiqish belgilanmagan",
+  "enter-reason": "Sababni kiriting",
+  "late-came-reason": "Kech qolish sababi",
+  "select-reason": "Sababni tanlang",
+  "traffic-jam": "Tirbandlik"
 }

@@ -23,12 +23,12 @@ const menus = ref([
     link: 'ProfileIndex',
     children: [],
   },
-  // {
-  //   title: "attendance",
-  //   icon: CheckCircleIcon,
-  //   link: "AttendanceIndex",
-  //   children: [],
-  // },
+  {
+    title: "attendance",
+    icon: CheckCircleIcon,
+    link: "AttendanceIndex",
+    children: [],
+  },
   {
     title: "business-trip",
     icon: CaseIcon,

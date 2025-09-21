@@ -1,5 +1,7 @@
 // Core
 import { defineStore } from 'pinia'
+import { PlaneIcon } from "@/components/Icons";
+import { BY_PLANE } from "@/modules/Documents/modules/SendDocuments/constants";
 
 export const useNotificationStore = defineStore('dashboard-notification-stores', {
   state: () => ({
@@ -7,38 +9,72 @@ export const useNotificationStore = defineStore('dashboard-notification-stores',
       {
         id: 1,
         title: 'Bugun ishga kech qoldingiz',
-        time: '09:56, 23-sentyabr',
+        time: new Date(),
         buttonLabel: 'Sababini ko\'rsating',
         icon: '/images/dashboard/alarm-clock.svg'
       },
       {
         id: 2,
         title: 'Sizda imzolash uchun xat bor',
-        time: '09:56, 23-sentyabr',
+        time: new Date(),
         buttonLabel: 'Imzolash',
-        icon: '/images/dashboard/bookmark-tabs.svg'
+        icon: '/images/dashboard/bookmark-tabs.svg',
+        route: {
+          name: 'SignIndex',
+          query: {
+            approved: 'none'
+          }
+        }
       },
       {
         id: 3,
-        title: 'Otpusk vaqtini belgilang',
-        time: '09:56, 23-sentyabr',
-        buttonLabel: 'Belgilash',
-        icon: '/images/dashboard/palm-tree.svg'
+        title: 'Sizda kelishish uchun xat bor',
+        time: new Date(),
+        buttonLabel: 'Tekshirish',
+        icon: '/images/dashboard/bookmark-tabs.svg',
+        route: {
+          name: 'ApprovalIndex',
+          query: {
+            signed: 'none'
+          }
+        }
       },
       {
         id: 4,
-        title: 'Bugun ishga kech qoldingiz',
-        time: '09:56, 23-sentyabr',
-        buttonLabel: 'Sababini ko\'rsating',
-        icon: '/images/dashboard/alarm-clock.svg'
+        title: 'Sizda ko\'rib chiqish uchun xat bor',
+        time: new Date(),
+        buttonLabel: 'Ko\'rib chiqish',
+        icon: '/images/dashboard/bookmark-tabs.svg',
+        route: {
+          name: 'ReviewIndex',
+          query: {
+            is_read: 'False'
+          }
+        }
       },
       {
         id: 5,
-        title: 'Bugun ishga kech qoldingiz',
-        time: '09:56, 23-sentyabr',
-        buttonLabel: 'Sababini ko\'rsating',
-        icon: '/images/dashboard/alarm-clock.svg'
+        title: 'Sizda topshiriq bor',
+        time: new Date(),
+        buttonLabel: 'Bajarish',
+        icon: '/images/dashboard/bookmark-tabs.svg',
+        route: {
+          name: 'AssignmentIndex',
+          query: {
+            is_read: 'False'
+          }
+        }
       }
+    ],
+    reasonList: [
+      {
+        id: 1,
+        title: 'traffic-jam',
+        icon: PlaneIcon,
+        value: BY_PLANE,
+        name_uz: 'Tirbandlik',
+        name_ru: 'Пробка (дорожная пробка)'
+      },
     ]
   }),
 })

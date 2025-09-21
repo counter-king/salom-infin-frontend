@@ -51,11 +51,11 @@ export const useHRAttendanceStore = defineStore("attendance-store", {
         field: "departure_time",
         active: true
       },
-      {
-        header: "delay-duration",
-        field: "delay_duration",
-        active: true
-      },
+      // {
+      //   header: "delay-duration",
+      //   field: "delay_duration",
+      //   active: true
+      // },
       {
         header: "status",
         field: "status",
@@ -152,11 +152,11 @@ export const useHRAttendanceStore = defineStore("attendance-store", {
           field: "departure_time",
           active: true
         },
-        {
-          header: "delay-duration",
-          field: "delay_duration",
-          active: true
-        },
+        // {
+        //   header: "delay-duration",
+        //   field: "delay_duration",
+        //   active: true
+        // },
         {
           header: "status",
           field: "status",

@@ -1000,5 +1000,11 @@
   "soon": "Скоро",
   "came-on-time": "Пришёл вовремя",
   "waiting-info": "Ожидание данных",
-  "not-connected-face-id": "Вы не подключены к системе FaceID!"
+  "not-connected-face-id": "Вы не подключены к системе FaceID!",
+  "no-entry-marked": "Не отмечен вход",
+  "no-exit-marked": "Не отмечен выход",
+  "enter-reason": "Введите причину",
+  "late-came-reason": "Причина опоздания",
+  "select-reason": "Выберите причину",
+  "traffic-jam": "Пробка (дорожная пробка)"
 }

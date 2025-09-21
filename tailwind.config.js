@@ -50,6 +50,7 @@ export default {
           600: "#2DB06A",
         },
         "warning": {
+          30: "#FFFAF1",
           50: "#FFF7E8",
           100: "#FFECC8",
           200: "#FFE1A9",

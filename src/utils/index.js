@@ -717,6 +717,11 @@ export const getWorkdayStatus = (attendanceDate, arrival_time, departure_time) =
     if (arrival > nineAM) return "late-arrival"
   }
 
+  if (!isToday) {
+    if (!arrival_time && departure_time) return "no-entry-marked"
+    if (arrival_time && !departure_time) return "no-exit-marked"
+  }
+
   // general checks
   const isLate = arrival > nineAM
   const isEarly = departure < sixPM
