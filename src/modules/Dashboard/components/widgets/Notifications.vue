@@ -26,7 +26,7 @@ const onItemClick = async (item) => {
   } else {
     await router.push({
       name: item.route.name,
-      query: item.query
+      query: item.route.query
     })
   }
 }

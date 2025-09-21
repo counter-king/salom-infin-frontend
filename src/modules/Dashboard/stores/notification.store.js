@@ -22,7 +22,7 @@ export const useNotificationStore = defineStore('dashboard-notification-stores',
         route: {
           name: 'SignIndex',
           query: {
-            approved: 'none'
+            signed: 'none'
           }
         }
       },
@@ -35,7 +35,7 @@ export const useNotificationStore = defineStore('dashboard-notification-stores',
         route: {
           name: 'ApprovalIndex',
           query: {
-            signed: 'none'
+            approved: 'none'
           }
         }
       },
