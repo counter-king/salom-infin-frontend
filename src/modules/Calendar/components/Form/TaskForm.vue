@@ -62,15 +62,15 @@ const rules = {
   start_date: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
-  __start_time: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
-  end_date: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
-  __end_time: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
+  // __start_time: {
+  //   required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  // },
+  // end_date: {
+  //   required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  // },
+  // __end_time: {
+  //   required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  // },
   priority: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
@@ -103,8 +103,8 @@ const { date } = inject('calendar')
         v-model="$v.start_date.$model"
         :error="$v.start_date"
         required
-        label="start-date"
-        placeholder="start-date"
+        label="deadline"
+        placeholder="deadline"
         @update:modelValue="(value) => {
           props.model.start_date = formatDateReverse(value)
           props.model.end_date = formatDateReverse(value)
@@ -112,55 +112,55 @@ const { date } = inject('calendar')
       />
     </base-col>
 
-    <base-col col-class="w-1/2">
-      <base-calendar
-        v-model="$v.end_date.$model"
-        :error="$v.end_date"
-        required
-        label="end-date"
-        placeholder="end-date"
-        @update:modelValue="(value) => {
-          props.model.end_date = formatDateReverse(value)
-        }"
-      />
-    </base-col>
+<!--    <base-col col-class="w-1/2">-->
+<!--      <base-calendar-->
+<!--        v-model="$v.end_date.$model"-->
+<!--        :error="$v.end_date"-->
+<!--        required-->
+<!--        label="end-date"-->
+<!--        placeholder="end-date"-->
+<!--        @update:modelValue="(value) => {-->
+<!--          props.model.end_date = formatDateReverse(value)-->
+<!--        }"-->
+<!--      />-->
+<!--    </base-col>-->
+
+<!--    <base-col col-class="w-1/2">-->
+<!--      <base-dropdown-->
+<!--        v-model="$v.__start_time.$model"-->
+<!--        :error="$v.__start_time"-->
+<!--        :options="times"-->
+<!--        required-->
+<!--        option-value="time"-->
+<!--        option-label="time"-->
+<!--        label="start-time"-->
+<!--        placeholder="choose-start-time"-->
+<!--      >-->
+<!--        <template #dropdownicon>-->
+<!--          <base-iconify :icon="ClockCircleLinearIcon" />-->
+<!--        </template>-->
+<!--      </base-dropdown>-->
+<!--    </base-col>-->
+
+<!--    <base-col col-class="w-1/2">-->
+<!--      <base-dropdown-->
+<!--        v-model="$v.__end_time.$model"-->
+<!--        :error="$v.__end_time"-->
+<!--        :options="endTimes"-->
+<!--        :option-disabled="isOptionDisabled"-->
+<!--        required-->
+<!--        option-value="time"-->
+<!--        option-label="time"-->
+<!--        label="end-time"-->
+<!--        placeholder="choose-end-time"-->
+<!--      >-->
+<!--        <template #dropdownicon>-->
+<!--	        <base-iconify :icon="ClockCircleLinearIcon" />-->
+<!--        </template>-->
+<!--      </base-dropdown>-->
+<!--    </base-col>-->
 
     <base-col col-class="w-1/2">
-      <base-dropdown
-        v-model="$v.__start_time.$model"
-        :error="$v.__start_time"
-        :options="times"
-        required
-        option-value="time"
-        option-label="time"
-        label="start-time"
-        placeholder="choose-start-time"
-      >
-        <template #dropdownicon>
-          <base-iconify :icon="ClockCircleLinearIcon" />
-        </template>
-      </base-dropdown>
-    </base-col>
-
-    <base-col col-class="w-1/2">
-      <base-dropdown
-        v-model="$v.__end_time.$model"
-        :error="$v.__end_time"
-        :options="endTimes"
-        :option-disabled="isOptionDisabled"
-        required
-        option-value="time"
-        option-label="time"
-        label="end-time"
-        placeholder="choose-end-time"
-      >
-        <template #dropdownicon>
-	        <base-iconify :icon="ClockCircleLinearIcon" />
-        </template>
-      </base-dropdown>
-    </base-col>
-
-    <base-col col-class="w-full">
       <base-dropdown
         v-model="$v.priority.$model"
         :error="$v.priority"

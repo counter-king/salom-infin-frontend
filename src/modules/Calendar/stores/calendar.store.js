@@ -66,8 +66,6 @@ export const useCalendarStore = defineStore('calendar', {
       try {
         let model = {
           ...this.eventModel,
-          start_date: `${formatDateReverse(this.eventModel.start_date)}T${this.eventModel.__start_time}:00+05:00`, // 2023-09-28T09:35:00+05:00
-          end_date: `${formatDateReverse(this.eventModel.end_date)}T${this.eventModel.__end_time}:00+05:00`, // 2023-09-28T09:35:00+05:00
           participants: type === EVENT_TYPES.EVENT
             ? this.eventModel.__participants.map(participant => ({ user: participant.id }))
             : [],
@@ -79,6 +77,21 @@ export const useCalendarStore = defineStore('calendar', {
             : null,
           type,
           link: this.eventModel.source === 'zoom' ? this.eventModel.__zoomLink : this.eventModel.__ciscoLink
+        }
+
+        if(type === EVENT_TYPES.EVENT) {
+          model = {
+            ...model,
+            start_date: `${formatDateReverse(this.eventModel.start_date)}T${this.eventModel.__start_time}:00+05:00`, // 2023-09-28T09:35:00+05:00
+            end_date: `${formatDateReverse(this.eventModel.end_date)}T${this.eventModel.__end_time}:00+05:00`, // 2023-09-28T09:35:00+05:00
+          }
+        }
+        else {
+          model = {
+            ...model,
+            start_date: `${formatDateReverse(this.eventModel.start_date)}T18:00:00+05:00`, // 2023-09-28T09:35:00+05:00
+            end_date: `${formatDateReverse(this.eventModel.start_date)}T18:00:00+05:00`, // 2023-09-28T09:35:00+05:00
+          }
         }
 
         let { data } = await fetchCreateEvent(model)
