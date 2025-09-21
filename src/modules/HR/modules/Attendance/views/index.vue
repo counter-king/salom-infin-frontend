@@ -32,7 +32,8 @@ const branches = ref([])
 watch( () => route.query, async () => {
   const params = {
     page: 1,
-    page_size: 15, ...router.currentRoute.value.query,
+    page_size: 15,
+    ...router.currentRoute.value.query,
     status: route.query.status || undefined,
     start_date: route.query.created_start_date || formatDateReverse(getFirstDateOfCurrentMonth()),
     end_date: route.query.created_end_date || formatDateReverse(new Date())
@@ -46,6 +47,7 @@ const apiParams = computed(() => {
   return {
     start_date: formatDateReverse(getFirstDateOfCurrentMonth()),
     end_date: formatDateReverse(new Date()),
+    company_id: branchSelect.value || undefined,
     page_size: 15
   }
 })
@@ -60,6 +62,7 @@ const onSort = () => {
 const init = async () => {
   let {data} = await fetchCompaniesList({page_size: 100})
   branches.value = data.results
+  branchSelect.value = data.results[0]?.id
 
   if (Object.keys(route.query).length > 0) {
     const params = {
@@ -69,10 +72,21 @@ const init = async () => {
     }
     await store.actionGetAttendanceCountByStatus(params)
     await store.actionGetAttendanceList(params)
+    if (route.query?.company_id) {
+      branchSelect.value = Number(route.query?.company_id)
+    }
   } else {
     await store.actionGetAttendanceCountByStatus(apiParams.value)
     await store.actionGetAttendanceList(apiParams.value)
   }
+}
+const onBranchChange = async (val) => {
+  await router.replace({
+    query: {
+      ...route.query,
+      company_id: val
+    }
+  })
 }
 
 // Hooks
@@ -95,7 +109,14 @@ onMounted(async () => {
       </template>
 
       <template #filter-before>
-<!--        <dropdown v-model="branchSelect" v-model:options="branches" api-url="companies" placeholder="Филиал" />-->
+        <dropdown
+          v-model="branchSelect"
+          v-model:options="branches"
+          api-url="companies"
+          placeholder="Филиал"
+          class="min-w-[300px]"
+          @emit:change="val => onBranchChange(val)"
+        />
       </template>
     </action-toolbar>
 
