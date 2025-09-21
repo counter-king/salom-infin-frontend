@@ -36,7 +36,8 @@ watch( () => route.query, async () => {
     ...router.currentRoute.value.query,
     status: route.query.status || undefined,
     start_date: route.query.created_start_date || formatDateReverse(getFirstDateOfCurrentMonth()),
-    end_date: route.query.created_end_date || formatDateReverse(new Date())
+    end_date: route.query.created_end_date || formatDateReverse(new Date()),
+    company: route.query.company || branchSelect.value
   }
   await store.actionGetAttendanceCountByStatus(params)
   await store.actionGetAttendanceList(params)
@@ -47,7 +48,7 @@ const apiParams = computed(() => {
   return {
     start_date: formatDateReverse(getFirstDateOfCurrentMonth()),
     end_date: formatDateReverse(new Date()),
-    company_id: branchSelect.value || undefined,
+    company: branchSelect.value || undefined,
     page_size: 15
   }
 })
@@ -72,8 +73,8 @@ const init = async () => {
     }
     await store.actionGetAttendanceCountByStatus(params)
     await store.actionGetAttendanceList(params)
-    if (route.query?.company_id) {
-      branchSelect.value = Number(route.query?.company_id)
+    if (route.query?.company) {
+      branchSelect.value = Number(route.query?.company)
     }
   } else {
     await store.actionGetAttendanceCountByStatus(apiParams.value)
@@ -84,7 +85,7 @@ const onBranchChange = async (val) => {
   await router.replace({
     query: {
       ...route.query,
-      company_id: val
+      company: val
     }
   })
 }
