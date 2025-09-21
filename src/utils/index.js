@@ -732,4 +732,34 @@ export const getWorkdayStatus = (attendanceDate, arrival_time, departure_time) =
   return "came-on-time"
 }
 
+export const getFirstDateOfCurrentMonth = () => {
+  const now = new Date()
+  return new Date(now.getFullYear(), now.getMonth(), 1)
+}
+
+export const returnDateRange = (start_date, end_date) => {
+  const startDate = new Date(start_date)
+  const endDate = new Date(end_date)
+
+  // Format helper
+  const formatDate = (date) => {
+    const day = date.getDate()
+    const month = formatUzbekDate(date, true)
+    const year = date.getFullYear()
+    return `${day}-${month} ${year}-yil`
+  }
+
+  // If same date
+  if (
+    startDate.getFullYear() === endDate.getFullYear() &&
+    startDate.getMonth() === endDate.getMonth() &&
+    startDate.getDate() === endDate.getDate()
+  ) {
+    return formatDate(startDate)
+  }
+
+  return `${formatDate(startDate)}dan, ${formatDate(endDate)}gacha`
+}
+
+
 

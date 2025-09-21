@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 // Services
-import { fetchGetAttendanceList } from "@/modules/HR/modules/Attendance/services"
+import { fetchGetAttendanceCountByStatus, fetchGetAttendanceList } from "@/modules/HR/modules/Attendance/services"
 // Components
 import {
   AlarmTurnOffBoldIcon,
@@ -15,6 +15,7 @@ export const useHRAttendanceStore = defineStore("attendance-store", {
     listLoading: false,
     totalCount: 0,
     attendanceList: [],
+    countsLoading: false,
     headers: [
       {
         header: "employee",
@@ -67,45 +68,49 @@ export const useHRAttendanceStore = defineStore("attendance-store", {
         id: 1,
         color: "bg-success-600",
         icon: CheckCircleBoldIcon,
-        count: 1864,
-        title: "on-time-arrivals"
+        count: null,
+        title: "on-time-arrivals",
+        value: "on_time"
       },
       {
         id: 2,
         color: "bg-warning-500",
         icon: InfoCircleBoldIcon,
-        count: 154,
-        title: "late-arrivals"
+        count: null,
+        title: "late-arrivals",
+        value: "lateness"
       },
       {
         id: 3,
         color: "bg-critic-300",
         icon: CloseCircleBoldIcon,
-        count: 24,
-        title: "absentees"
+        count: null,
+        title: "absentees",
+        value: "absent"
       },
       {
         id: 4,
         color: "bg-info-300",
         icon: AlarmTurnOffBoldIcon,
-        count: 38,
-        title: "early-leavers"
+        count: null,
+        title: "early-leavers",
+        value: "early_leaves"
       },
       {
         id: 5,
         color: "bg-critic-300",
         icon: CalendarSearchBoldIcon,
-        count: 20,
-        title: "not-registered-face-id"
+        count: null,
+        title: "not-registered-face-id",
+        value: "not_registered_on_faceid"
       }
     ]
   }),
   actions: {
-    async actionGetAttendanceList() {
+    async actionGetAttendanceList(params) {
       this.listLoading = true
       try {
-        const res = await fetchGetAttendanceList()
-        console.log(res)
+        const res = await fetchGetAttendanceList(params)
         this.totalCount = res?.data?.count
         this.attendanceList = res?.data?.results
         return Promise.resolve(res)
@@ -115,6 +120,22 @@ export const useHRAttendanceStore = defineStore("attendance-store", {
         this.listLoading = false
       }
     },
+    /** **/
+    async actionGetAttendanceCountByStatus(params = {}) {
+      this.countsLoading = true
+      try {
+        const res = await fetchGetAttendanceCountByStatus(params)
+        this.statusItems = this.statusItems.map(item => ({
+          ...item,
+          count: res.data[0][item.value] ?? 0
+        }))
+      }catch(error) {
+        return Promise.reject(error)
+      }finally {
+        this.countsLoading = false
+      }
+    },
+    /** **/
     resetHeaders() {
       this.headers = [
         {

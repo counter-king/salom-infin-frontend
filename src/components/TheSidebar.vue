@@ -79,7 +79,7 @@ console.log(route.fullPath)
         </template>
 
         <template v-else>
-          <template v-if="userPermissionStore.canAccess(menu.permission)">
+          <template v-if="!menu.roles || userStore?.currentUser?.roles.some(userRole => menu.roles.includes(userRole.name))">
             <router-link
               :to="{ name: menu.link }"
               class="sidebar-link group flex items-center text-sm font-medium text-gray-1 rounded-xl p-3 pr-4 mb-1 border-b-2 border-transparent transition-all duration-[400ms] hover:text-primary-500 hover:border-gray-3 hover:bg-primary-50"

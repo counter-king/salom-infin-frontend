@@ -1,41 +1,102 @@
 <script setup>
 // Core
-import { onMounted } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
+import { useRoute, useRouter } from "vue-router"
 // Store
 import { useHRAttendanceStore } from "@/modules/HR/modules/Attendance/stores/attendance.store"
 // Enums
 import { HR_ATTENDANCE_COLUMNS } from "@/modules/HR/constants"
+// Utils
+import { formatDate, formatDateReverse, formatHour } from "@/utils/formatDate"
+import { getFirstDateOfCurrentMonth, returnDateRange } from "@/utils"
 // Components
 import { ActionToolbar } from "@/components/Actions"
 import DataTable from "@/modules/HR/modules/InteractionABS/components/DataTable.vue"
 import { InfoCircleBoldIcon } from "@/components/Icons"
-import { formatDate, formatHour } from "../../../../../utils/formatDate";
+import AttendanceStatus from "@/modules/HR/modules/Attendance/components/AttendanceStatus.vue"
+import Dropdown from "@/modules/Handbook/components/Dropdown.vue"
+import { fetchCompaniesList } from "@/services/common.service";
 
 // Composable
 const { t } = useI18n()
 const store = useHRAttendanceStore()
+const router = useRouter()
+const route = useRoute()
+
+// Reactive
+const branchSelect = ref(null)
+const branches = ref([])
+
+// Watch
+watch( () => route.query, async () => {
+  const params = {
+    page: 1,
+    page_size: 15, ...router.currentRoute.value.query,
+    status: route.query.status || undefined,
+    start_date: route.query.created_start_date || formatDateReverse(getFirstDateOfCurrentMonth()),
+    end_date: route.query.created_end_date || formatDateReverse(new Date())
+  }
+  await store.actionGetAttendanceCountByStatus(params)
+  await store.actionGetAttendanceList(params)
+}, {deep: true})
+
+// Computed
+const apiParams = computed(() => {
+  return {
+    start_date: formatDateReverse(getFirstDateOfCurrentMonth()),
+    end_date: formatDateReverse(new Date()),
+    page_size: 15
+  }
+})
+const dateRange = computed(() => {
+  return returnDateRange(route.query.created_start_date || apiParams.value.start_date, route.query.created_end_date || apiParams.value.end_date)
+})
 
 // Methods
 const onSort = () => {
 
 }
+const init = async () => {
+  let {data} = await fetchCompaniesList({page_size: 100})
+  branches.value = data.results
+
+  if (Object.keys(route.query).length > 0) {
+    const params = {
+      ...route.query,
+      start_date: route.query.created_start_date || formatDateReverse(getFirstDateOfCurrentMonth()),
+      end_date: route.query.created_end_date || formatDateReverse(new Date())
+    }
+    await store.actionGetAttendanceCountByStatus(params)
+    await store.actionGetAttendanceList(params)
+  } else {
+    await store.actionGetAttendanceCountByStatus(apiParams.value)
+    await store.actionGetAttendanceList(apiParams.value)
+  }
+}
 
 // Hooks
 onMounted(async () => {
-  await store.actionGetAttendanceList()
+  await init()
 })
 </script>
 
 <template>
   <div class="attendance-list-view">
     <action-toolbar
-      :action-buttons="['export', 'filter']"
+      :action-buttons="['calendar']"
       title="attendance"
       :column-menu-items="store.headers"
       :storage-columns-name="HR_ATTENDANCE_COLUMNS"
       @emit:reset-headers="store.resetHeaders"
     >
+      <template #title-after>
+        <div class="text-2xl font-semibold text-greyscale-500">{{ dateRange }}</div>
+      </template>
+
+      <template #filter-before>
+<!--        <dropdown v-model="branchSelect" v-model:options="branches" api-url="companies" placeholder="Филиал" />-->
+      </template>
     </action-toolbar>
 
     <div class="flex gap-x-2 mb-4">
@@ -55,7 +116,14 @@ onMounted(async () => {
                 class="text-white !w-5 !h-5"
               />
             </div>
-            <div class="text-[20px] font-semibold text-greyscale-900">{{ item.count }}</div>
+            <template v-if="store.countsLoading">
+              <div>
+                <base-spinner rootClasses="!w-6 !h-6"/>
+              </div>
+            </template>
+            <template v-else>
+              <div class="text-[20px] font-semibold text-greyscale-900">{{ item.count }}</div>
+            </template>
           </div>
           <base-iconify
             :icon="InfoCircleBoldIcon"
@@ -77,6 +145,7 @@ onMounted(async () => {
         :total-count="store.totalCount"
         :storage-columns-name="HR_ATTENDANCE_COLUMNS"
         :pageSize="15"
+        :api-params="apiParams"
         @emit:onSort="onSort"
         @emit:set-store-headers="(val) => store.headers = val"
       >
@@ -86,7 +155,7 @@ onMounted(async () => {
             <base-avatar
               :label="data.user?.full_name"
               :image="null"
-              :color="data.user?.full_name"
+              :color="data.user?.color"
               detail-dialog
               :meta="data.user"
               avatarClasses="w-7 h-7"
@@ -119,6 +188,10 @@ onMounted(async () => {
           <div class="text-sm font-medium text-greyscale-900">
             {{ data.first_check_in ? formatHour(data.last_check_out) : '-' }}
           </div>
+        </template>
+
+        <template #status="{ data }">
+          <attendance-status :item="data" />
         </template>
       </DataTable>
     </div>

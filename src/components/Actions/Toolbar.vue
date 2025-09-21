@@ -117,6 +117,8 @@ const emits = defineEmits(['emit:resetHeaders'])
     </div>
 
     <div class="flex items-center justify-end flex-1 gap-2">
+      <slot name="filter-before" />
+
       <slot name="filters">
 
         <div

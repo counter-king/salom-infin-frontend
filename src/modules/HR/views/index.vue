@@ -28,6 +28,7 @@ const menus = ref([
     icon: CheckCircleIcon,
     link: "AttendanceIndex",
     children: [],
+    roles: ["hr"]
   },
   {
     title: "business-trip",
