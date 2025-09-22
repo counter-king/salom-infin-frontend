@@ -111,15 +111,28 @@ const onBranchChange = async (val) => {
 }
 const onStatusClick = async (item) => {
   if (item.value !== 'not_registered_on_faceid') {
+    const params = {
+      page: 1,
+      page_size: 15,
+      ...router.currentRoute.value.query,
+      status: route.query.status || undefined,
+      start_date: route.query.created_start_date || formatDateReverse(getFirstDateOfCurrentMonth()),
+      end_date: route.query.created_end_date || formatDateReverse(new Date()),
+      company: route.query.company || branchSelect.value
+    }
+
     await router.replace({
       query: {
-        ...route.query,
+        ...params,
         status: item.value
       }
     })
 
     if (item.value === 'all') {
-      await store.actionGetAttendanceList(apiParams.value)
+      await store.actionGetAttendanceList({
+        ...route.query,
+        status: undefined
+      })
     } else {
       await store.actionGetAttendanceList({
         ...route.query,
