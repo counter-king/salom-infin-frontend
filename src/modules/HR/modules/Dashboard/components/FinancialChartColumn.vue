@@ -193,7 +193,7 @@ onMounted(async () => {
                     >
                       <div class="bg-[#000] text-white text-[10px] space-y-2 rounded py-2 px-3">
                         <div class="flex items-center gap-2">
-                          <div class="w-4 h-4 bg-info-200 rounded"></div>
+                          <div class="w-4 h-4 bg-[#3996D1] rounded"></div>
 
                           <span class="font-medium">{{ numberFormat(parseInt(item.current_amount/1e6)) }}</span>
                         </div>
@@ -202,7 +202,7 @@ onMounted(async () => {
                           <div class="flex items-center gap-2">
                             <div
                               class="w-4 h-4 rounded"
-                              style="background: repeating-linear-gradient(-45deg, #66c2ff, #66c2ff 4px, #4da6ff 4px, #4da6ff 8px)"
+                              style="background: repeating-linear-gradient(-45deg, #063C60, #063C60 15px, #0C6AA0 15px, #0C6AA0 30px)"
                             ></div>
 
                             <span class="font-medium">{{ numberFormat(parseInt(item.comparison_amount/1e6)) }}</span>
@@ -210,7 +210,7 @@ onMounted(async () => {
                         </template>
 
                         <div class="flex items-center gap-2">
-                          <div class="w-4 h-4 bg-warning-200 rounded"></div>
+                          <div class="w-4 h-4 bg-[#FB5C5C] rounded"></div>
 
                           <span class="font-medium">{{ numberFormat(parseInt(dashboardStore.comparison.data.branches[index]?.current_amount/1e6 ?? 0)) }}</span>
                         </div>
@@ -219,7 +219,7 @@ onMounted(async () => {
                           <div class="flex items-center gap-2">
                             <div
                               class="w-4 h-4 rounded"
-                              style="background: repeating-linear-gradient(-45deg, #FFECC8, #FFECC8 4px, #FFA803 4px, #FFA803 8px)"
+                              style="background: repeating-linear-gradient(-45deg, #D91F24, #D91F24 15px, #FB5C5C 15px, #FB5C5C 30px)"
                             ></div>
 
                             <span class="font-medium">{{ numberFormat(parseInt(dashboardStore.comparison.data.branches[index]?.comparison_amount/1e6 ?? 0)) }}</span>
@@ -234,7 +234,7 @@ onMounted(async () => {
                     class="w-14 h-0 relative rounded-lg overflow-hidden transition-all duration-700"
                   >
                     <div
-                      class="bg-[#3996D1] hover:bg-info-100 transition-colors absolute w-full h-[70%] bottom-0 left-0 border-t-[3px] border-t-[#15679C] cursor-pointer"
+                      class="bg-[#3996D1] hover:bg-[#78C6F8] transition-colors absolute w-full h-[70%] bottom-0 left-0 border-t-[3px] border-t-[#15679C] cursor-pointer"
                       :class="[item.comparison_amount_percent > item.current_amount_percent ? 'z-[1]': '']"
                       :style="{
 												'height': item.current_amount_percent
