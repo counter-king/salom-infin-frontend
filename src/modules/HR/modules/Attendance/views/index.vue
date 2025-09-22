@@ -29,19 +29,34 @@ const branchSelect = ref(null)
 const branches = ref([])
 
 // Watch
-watch( () => route.query, async () => {
-  const params = {
-    page: 1,
-    page_size: 15,
-    ...router.currentRoute.value.query,
-    status: route.query.status || undefined,
-    start_date: route.query.created_start_date || formatDateReverse(getFirstDateOfCurrentMonth()),
-    end_date: route.query.created_end_date || formatDateReverse(new Date()),
-    company: route.query.company || branchSelect.value
-  }
-  await store.actionGetAttendanceCountByStatus(params)
-  await store.actionGetAttendanceList(params)
-}, {deep: true})
+watch(
+  () => route.query,
+  async (newQuery, oldQuery) => {
+    const params = {
+      page: 1,
+      page_size: 15,
+      ...router.currentRoute.value.query,
+      status: newQuery.status || undefined,
+      start_date: newQuery.created_start_date || formatDateReverse(getFirstDateOfCurrentMonth()),
+      end_date: newQuery.created_end_date || formatDateReverse(new Date()),
+      company: newQuery.company || branchSelect.value
+    }
+
+    // If "status" is the only thing that changed, skip count request
+    const onlyStatusChanged =
+      Object.keys(newQuery).length === Object.keys(oldQuery || {}).length &&
+      Object.keys(newQuery).every(
+        key => key === "status" ? newQuery[key] !== oldQuery?.[key] : newQuery[key] === oldQuery?.[key]
+      )
+
+    if (!onlyStatusChanged) {
+      await store.actionGetAttendanceCountByStatus(params)
+    }
+
+    await store.actionGetAttendanceList(params)
+  },
+  {deep: true}
+)
 
 // Computed
 const apiParams = computed(() => {
@@ -49,6 +64,7 @@ const apiParams = computed(() => {
     start_date: formatDateReverse(getFirstDateOfCurrentMonth()),
     end_date: formatDateReverse(new Date()),
     company: branchSelect.value || undefined,
+    page: 1,
     page_size: 15
   }
 })
@@ -69,7 +85,8 @@ const init = async () => {
     const params = {
       ...route.query,
       start_date: route.query.created_start_date || formatDateReverse(getFirstDateOfCurrentMonth()),
-      end_date: route.query.created_end_date || formatDateReverse(new Date())
+      end_date: route.query.created_end_date || formatDateReverse(new Date()),
+      company: route.query.company || branchSelect.value
     }
     await store.actionGetAttendanceCountByStatus(params)
     await store.actionGetAttendanceList(params)
@@ -85,9 +102,29 @@ const onBranchChange = async (val) => {
   await router.replace({
     query: {
       ...route.query,
+      page: 1,
       company: val
     }
   })
+}
+const onStatusClick = async (item) => {
+  if (item.value !== 'not_registered_on_faceid') {
+    await router.replace({
+      query: {
+        ...route.query,
+        status: item.value
+      }
+    })
+
+    if (item.value === 'all') {
+      await store.actionGetAttendanceList(apiParams.value)
+    } else {
+      await store.actionGetAttendanceList({
+        ...route.query,
+        status: item.value
+      })
+    }
+  }
 }
 
 // Hooks
@@ -125,7 +162,8 @@ onMounted(async () => {
       <div
         v-for="item in store.statusItems"
         :key="item.id"
-        class="flex flex-col rounded-[20px] h-24 bg-white w-full p-4 gap-y-3"
+        class="flex flex-col rounded-[20px] h-24 bg-white w-full p-4 gap-y-3 cursor-pointer"
+        @click="onStatusClick(item)"
       >
         <div class="flex justify-between items-start">
           <div class="flex gap-x-3 items-center">

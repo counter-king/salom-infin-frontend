@@ -187,6 +187,7 @@ export { default as AlignTopBoldIcon } from  '~icons/solar/align-top-bold'
 export { default as Buildings2BoldIcon } from  '~icons/solar/buildings-2-bold'
 export { default as AlarmTurnOffBoldIcon } from  '~icons/solar/alarm-turn-off-bold'
 export { default as CalendarSearchBoldIcon } from  '~icons/solar/calendar-search-bold'
+export { default as SettingsMinimalisticBoldIcon } from  '~icons/solar/settings-minimalistic-bold'
 // Solar (Bold Duotone)
 export { default as ArchiveUpBoldDuotoneIcon } from  '~icons/solar/archive-up-bold-duotone'
 export { default as StarBoldDuotoneIcon } from  '~icons/solar/star-bold-duotone'

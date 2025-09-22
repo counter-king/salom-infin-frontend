@@ -7,7 +7,7 @@ import {
   CalendarSearchBoldIcon,
   CheckCircleBoldIcon,
   CloseCircleBoldIcon,
-  InfoCircleBoldIcon
+  InfoCircleBoldIcon, SettingsMinimalisticBoldIcon
 } from "@/components/Icons"
 
 export const useHRAttendanceStore = defineStore("attendance-store", {
@@ -66,6 +66,14 @@ export const useHRAttendanceStore = defineStore("attendance-store", {
     statusItems: [
       {
         id: 1,
+        color: "bg-primary-400",
+        icon: SettingsMinimalisticBoldIcon,
+        count: null,
+        title: "total",
+        value: "all"
+      },
+      {
+        id: 2,
         color: "bg-success-600",
         icon: CheckCircleBoldIcon,
         count: null,
@@ -73,7 +81,7 @@ export const useHRAttendanceStore = defineStore("attendance-store", {
         value: "on_time"
       },
       {
-        id: 2,
+        id: 3,
         color: "bg-warning-500",
         icon: InfoCircleBoldIcon,
         count: null,
@@ -81,7 +89,7 @@ export const useHRAttendanceStore = defineStore("attendance-store", {
         value: "lateness"
       },
       {
-        id: 3,
+        id: 4,
         color: "bg-critic-300",
         icon: CloseCircleBoldIcon,
         count: null,
@@ -89,7 +97,7 @@ export const useHRAttendanceStore = defineStore("attendance-store", {
         value: "absent"
       },
       {
-        id: 4,
+        id: 5,
         color: "bg-info-300",
         icon: AlarmTurnOffBoldIcon,
         count: null,
@@ -97,7 +105,7 @@ export const useHRAttendanceStore = defineStore("attendance-store", {
         value: "early_leaves"
       },
       {
-        id: 5,
+        id: 6,
         color: "bg-critic-300",
         icon: CalendarSearchBoldIcon,
         count: null,
@@ -127,7 +135,7 @@ export const useHRAttendanceStore = defineStore("attendance-store", {
         const res = await fetchGetAttendanceCountByStatus(params)
         this.statusItems = this.statusItems.map(item => ({
           ...item,
-          count: res.data[0][item.value] ?? 0
+          count: item.value === 'all' ? res.data[0].absent + res.data[0].early_leaves + res.data[0].lateness + res.data[0].on_time : res.data[0][item.value] ?? 0
         }))
       }catch(error) {
         return Promise.reject(error)
