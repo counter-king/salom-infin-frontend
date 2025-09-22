@@ -49,10 +49,12 @@ watch(
         key => key === "status" ? newQuery[key] !== oldQuery?.[key] : newQuery[key] === oldQuery?.[key]
       )
 
-    if (!onlyStatusChanged) {
-      await store.actionGetAttendanceCountByStatus(params)
+    if (onlyStatusChanged) {
+      // Skip both API calls
+      return
     }
 
+    await store.actionGetAttendanceCountByStatus(params)
     await store.actionGetAttendanceList(params)
   },
   {deep: true}
