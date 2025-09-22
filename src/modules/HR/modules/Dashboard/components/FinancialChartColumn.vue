@@ -127,7 +127,7 @@ onMounted(async () => {
               <div class="flex items-center gap-2">
                 <div
                   class="w-4 h-4 rounded"
-                  style="background: repeating-linear-gradient(-45deg, #66c2ff, #66c2ff 4px, #4da6ff 4px, #4da6ff 8px)"
+                  style="background: repeating-linear-gradient(-45deg, #063C60, #063C60 15px, #0C6AA0 15px, #0C6AA0 30px)"
                 ></div>
 
                 <span class="text-[13px] font-medium text-greyscale-900">{{ t('comparison-with-head-bank') }}</span>
@@ -136,7 +136,7 @@ onMounted(async () => {
               <div class="flex items-center gap-2">
                 <div
                   class="w-4 h-4 rounded"
-                  style="background: repeating-linear-gradient(-45deg, #FFECC8, #FFECC8 4px, #FFA803 4px, #FFA803 8px)"
+                  style="background: repeating-linear-gradient(-45deg, #D91F24, #D91F24 15px, #FB5C5C 15px, #FB5C5C 30px)"
                 ></div>
 
                 <span class="text-[13px] font-medium text-greyscale-900">{{ t('comparison-with-branch') }}</span>
@@ -144,13 +144,13 @@ onMounted(async () => {
             </template>
 
             <div class="flex items-center gap-2">
-              <div class="w-4 h-4 rounded bg-info-500"></div>
+              <div class="w-4 h-4 rounded bg-[#3996D1]"></div>
 
               <span class="text-[13px] font-medium text-greyscale-900">{{ t('head-office') }}</span>
             </div>
 
             <div class="flex items-center gap-2">
-              <div class="w-4 h-4 rounded bg-warning-500"></div>
+              <div class="w-4 h-4 rounded bg-[#FB5C5C]"></div>
 
               <span class="text-[13px] font-medium text-greyscale-900">{{ t('branch') }}</span>
             </div>
@@ -234,7 +234,7 @@ onMounted(async () => {
                     class="w-14 h-0 relative rounded-lg overflow-hidden transition-all duration-700"
                   >
                     <div
-                      class="bg-info-50 hover:bg-info-100 transition-colors absolute w-full h-[70%] bottom-0 left-0 border-t-[3px] border-t-info-500 cursor-pointer"
+                      class="bg-[#3996D1] hover:bg-info-100 transition-colors absolute w-full h-[70%] bottom-0 left-0 border-t-[3px] border-t-[#15679C] cursor-pointer"
                       :class="[item.comparison_amount_percent > item.current_amount_percent ? 'z-[1]': '']"
                       :style="{
 												'height': item.current_amount_percent
@@ -249,7 +249,7 @@ onMounted(async () => {
 
                     <div
                       v-if="isCompare"
-                      class="gradient-info-diagonal absolute w-full h-[50%] bottom-0 left-0 border-t-[3px] border-t-info-300 cursor-pointer"
+                      class="gradient-info-diagonal absolute w-full h-[50%] bottom-0 left-0 border-t-[3px] border-t-[#15679C] cursor-pointer"
                       :style="{
 												'height': item.comparison_amount_percent,
 											}"
@@ -264,7 +264,7 @@ onMounted(async () => {
 
                   <div ref="warningBarRef" class="w-14 h-0 relative rounded-lg overflow-hidden transition-all duration-700">
                     <div
-                      class="bg-warning-50 hover:bg-warning-100 transition-colors absolute w-full h-[70%] bottom-0 left-0 border-t-[3px] border-t-warning-500 cursor-pointer"
+                      class="bg-[#FB5C5C] hover:bg-[#FFB8B8] transition-colors absolute w-full h-[70%] bottom-0 left-0 border-t-[3px] border-t-[#EF3535] cursor-pointer"
                       :class="[
 												dashboardStore.comparison.data.branches[index]?.comparison_amount_percent > dashboardStore.comparison.data.branches[index]?.current_amount_percent
 													? 'z-[1]'
@@ -283,7 +283,7 @@ onMounted(async () => {
 
                     <div
                       v-if="isCompare"
-                      class="gradient-warning-diagonal absolute w-full h-[50%] bottom-0 left-0 border-t-[3px] border-t-warning-300 cursor-pointer"
+                      class="gradient-warning-diagonal absolute w-full h-[50%] bottom-0 left-0 border-t-[3px] border-t-[#EF3535] cursor-pointer"
                       :style="{
 												'height': dashboardStore.comparison.data.branches[index]?.comparison_amount_percent ?? 0,
 											}"
@@ -334,37 +334,42 @@ onMounted(async () => {
 .gradient-info-diagonal {
   background: repeating-linear-gradient(
     -45deg,
-    #e0f5ff,
-    #e0f5ff 15px,
-    #d0efff 15px,
-    #d0efff 30px
+    #063C60,
+    #063C60 15px,
+    #0C6AA0 15px,
+    #0C6AA0 30px
   );
   transition: background 0.4s ease;
 }
 
 .gradient-info-diagonal:hover {
-  background: repeating-linear-gradient(-45deg, #c9eafc, #c9eafc 15px, #b3e2fc 15px, #b3e2fc 30px);
+  background: repeating-linear-gradient(
+    -45deg,
+    #c9eafc,
+    #c9eafc 15px,
+    #b3e2fc 15px,
+    #b3e2fc 30px
+  );
 }
 
 .gradient-warning-diagonal {
-  background:
-    repeating-linear-gradient(
-      -45deg,
-      #fff8eb,
-      #fff8eb 15px,
-      #fde7b0 15px,
-      #fde7b0 30px
-    );
+  background: repeating-linear-gradient(
+    -45deg,
+    #D91F24,
+    #D91F24 15px,
+    #FB5C5C 15px,
+    #FB5C5C 30px
+  );
   transition: background 0.4s ease;
 }
 
 .gradient-warning-diagonal:hover {
   background: repeating-linear-gradient(
     -45deg,
-    #fcebcf,
-    #fcebcf 15px,
-    #fcd98e 15px,
-    #fcd98e 30px
-  )
+    #F95357,
+    #F95357 15px,
+    #FFB8B8 15px,
+    #FFB8B8 30px
+  );
 }
 </style>
