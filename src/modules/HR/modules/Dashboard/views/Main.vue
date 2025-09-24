@@ -160,7 +160,7 @@ const getGenderList = async () => {
       return {
         title: item['GENDER'] === 'F' ? 'Женщины' : 'Мужчины',
         number: item['COUNT'],
-        class: item['GENDER'] === 'F' ? 'bg-[#FF7290]' : 'bg-[#5EC1E7]'
+        class: item['GENDER'] === 'F' ? '#FF7290' : '#5EC1E7'
       }
     })
 
