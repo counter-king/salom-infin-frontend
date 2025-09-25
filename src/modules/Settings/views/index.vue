@@ -63,6 +63,12 @@ const changeLanguage = () => {
       permission: 'settings-roles-list'
     },
     {
+      icon: UserSpeakRoundedIcon,
+      link: 'RoleAssignmentIndex',
+      title: 'role-assignment',
+      permission: 'settings-roles-list'
+    },
+    {
       icon: CheckCircleIcon,
       link: 'PermissionsIndex',
       title: 'access-rights',

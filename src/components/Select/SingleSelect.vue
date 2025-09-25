@@ -74,7 +74,6 @@ onMounted(async () => {
     :required="props.required"
     searchable
   >
-
   </base-dropdown>
 </template>
 

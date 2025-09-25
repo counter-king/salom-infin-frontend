@@ -37,12 +37,12 @@ const menus = ref([
     children: [],
   },
   agreementsRoutesStore.routes,
-  {
-    title: "agreement-settings",
-    icon: SettingsMinimalisticIcon,
-    link: "AgreementSettingsIndex",
-    children: [],
-  },
+  // {
+  //   title: "agreement-settings",
+  //   icon: SettingsMinimalisticIcon,
+  //   link: "AgreementSettingsIndex",
+  //   children: [],
+  // },
   // {
   //   title: "dashboard",
   //   icon: HomeSmileAngleIcon,
@@ -57,12 +57,19 @@ const menus = ref([
   // },
 ])
 
- if(authStore.currentUser.is_superuser || authStore.currentUser.id == 3104) {
+if(authStore.currentUser.is_superuser || authStore.currentUser.id == 3104) {
   menus.value.push({
     title: "interaction-with-abs2",
     icon: DocumentAddIcon,
     link: "InteractionABSIndex",
     children: []
+  })
+
+  menus.value.push({
+    title: "agreement-settings",
+    icon: SettingsMinimalisticIcon,
+    link: "AgreementSettingsIndex",
+    children: [],
   })
 }
 

@@ -24,7 +24,15 @@ const Roles = [
         component: () => import('../views/Roles/Content.vue'),
       }
     ]
-  }
+  },
+  {
+    path: 'role-assignment',
+    name: 'RoleAssignmentIndex',
+    meta: {
+      isAuthRequired: true
+    },
+    component: () => import('../views/RoleAssignment/index.vue'),
+  },
 ]
 
 export default Roles

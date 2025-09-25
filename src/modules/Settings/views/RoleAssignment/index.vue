@@ -1,29 +1,24 @@
 <script setup>
-// Core
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-// Components
 import { ActionToolbar } from '@/components/Actions'
 import { LinkableCell } from '@/components/Table'
 import { Plus20SolidIcon, Pen2Icon } from '@/components/Icons'
-import RoleDialog from './components/Dialog.vue'
-// Stores
-import { useRolesStore } from '../../stores/roles.store'
-// Utils
+import RoleAssignmentDialog from './components/Dialog.vue'
+import { useAssignmentRolesStore } from '../../stores/assignment-roles.store'
 import { formatDateHour } from '@/utils/formatDate'
-// Const
 import { FORM_TYPE_CREATE, FORM_TYPE_UPDATE } from '@/constants/constants'
-// Composable
+
 const route = useRoute()
-const rolesStore = useRolesStore()
+const assignmentRolesStore = useAssignmentRolesStore()
 const { t } = useI18n()
-// Reactive
+
 const modal = ref(false)
 const modalType = ref(FORM_TYPE_CREATE)
-// Methods
+
 const edit = (data, id, type = FORM_TYPE_CREATE) => {
-  rolesStore.setRole({ id, ... data })
+  assignmentRolesStore.setRole({ id, ... data })
   modalType.value = type
   modal.value = true
 }
@@ -39,7 +34,7 @@ const link = (data) => {
 
 <template>
   <div class="roles-view h-full">
-    <action-toolbar title="roles">
+    <action-toolbar title="role-assignment">
       <template #filters>
         <base-button
           label="create"
@@ -52,11 +47,11 @@ const link = (data) => {
     </action-toolbar>
 
     <base-data-table
-      :action-list="rolesStore.getRoleList"
+      :action-list="assignmentRolesStore.getAssignmentRoleList"
       :api-params="route.query"
-      :headers="rolesStore.headers"
-      :value="rolesStore.list"
-      :total-count="rolesStore.totalCount"
+      :headers="assignmentRolesStore.headers"
+      :value="assignmentRolesStore.list"
+      :total-count="assignmentRolesStore.totalCount"
       scroll-height="calc(100vh - 295px)"
     >
       <template #name="{ data }">
@@ -89,6 +84,6 @@ const link = (data) => {
       </template>
     </base-data-table>
 
-    <role-dialog v-model="modal" :type="modalType" />
+    <role-assignment-dialog v-model="modal" :type="modalType" />
   </div>
 </template>

@@ -123,6 +123,7 @@
   "department-name": "Departament nomi",
   "structure": "Tuzilma",
   "roles": "Rollar",
+  "role-assignment": "Rollarni bog'lash",
   "access-rights": "Kirish huquqlari",
   "choose-access-right-from-list": "Kirish huquqlarini ro'yxatdan tanlang",
   "headers": "Sarlavhalar",
