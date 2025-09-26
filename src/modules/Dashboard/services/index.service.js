@@ -57,6 +57,6 @@ export const fetchDashboardAttendanceList = (params) => {
   return axiosConfig.get(`${URLS.dashboardAttendance}/`, params)
 }
 export const fetchUpdateDashboardAttendance = (id, body) => {
-  return axiosConfig.put(`${URLS.dashboardAttendance}/${id}/`, body)
+  return axiosConfig.patch(`${URLS.dashboardAttendance}/${id}/has-reason/`, body)
 }
 
