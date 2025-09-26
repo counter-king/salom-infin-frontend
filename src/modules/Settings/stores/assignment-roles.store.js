@@ -1,24 +1,28 @@
-// Core
 import { defineStore } from 'pinia'
-// Service
 import {
-  fetchRoleList,
   fetchRoleById,
-  fetchCreateRole,
-  fetchUpdateRole,
   fetchDeleteRole
 } from '../services/role.service'
-// Utils
+import {
+  fetchAssignmentRoleCreate,
+  fetchAssignmentRoleList,
+  fetchAssignmentRoleUpdate
+} from '../services/assignment-roles.service'
 import { setValuesToKeys } from '@/utils'
 
 let model = {
   id: null,
-  name: null,
-  permissions: [],
-  is_active: true
+  role: null,
+  __role: null,
+  user: [],
+  __user: [],
+  org_key: '',
+  valid_from: null,
+  valid_until: null,
+  enabled: true,
 }
 
-export const useRolesStore = defineStore('roles-stores', {
+export const useAssignmentRolesStore = defineStore('assignment-roles-stores', {
   state: () => ({
     list: [],
     headers: [
@@ -45,26 +49,32 @@ export const useRolesStore = defineStore('roles-stores', {
     selected: []
   }),
   actions: {
-    async getRoleList(params = {}) {
-      let { data } = await fetchRoleList(params)
+    async getAssignmentRoleList(params = {}) {
+      let { data } = await fetchAssignmentRoleList(params)
       this.list = data.results
       this.totalCount = data.count
     },
     /**
      *
      *
-    */
-   async getRoleById(id) {
+     */
+    async getRoleById(id) {
       let { data } = await fetchRoleById(id)
       this.setRole(data)
-   },
+    },
     /**
      *
      *
-    */
-    async createRole() {
+     */
+    async createAssignmentRole() {
+      let model = {
+        ...this.createModel,
+        role: this.createModel.__role.id,
+        user: this.createModel.__user.map(user => user.id),
+      }
+
       try {
-        await fetchCreateRole(this.createModel)
+        await fetchAssignmentRoleCreate(model)
         return Promise.resolve()
       }
       catch(error) {
@@ -74,10 +84,10 @@ export const useRolesStore = defineStore('roles-stores', {
     /**
      *
      *
-    */
-    async updateRole() {
+     */
+    async updateAssignmentRole() {
       try {
-        await fetchUpdateRole(this.createModel.id, this.createModel)
+        await fetchAssignmentRoleUpdate(this.createModel.id, this.createModel)
         return Promise.resolve()
       }
       catch(error) {
@@ -87,7 +97,7 @@ export const useRolesStore = defineStore('roles-stores', {
     /**
      *
      *
-    */
+     */
     async deleteRole() {
       try {
         await fetchDeleteRole(this.createModel)
@@ -99,7 +109,7 @@ export const useRolesStore = defineStore('roles-stores', {
     /**
      *
      *
-    */
+     */
     setRole(payload) {
       setValuesToKeys(this.createModel, payload)
     }
