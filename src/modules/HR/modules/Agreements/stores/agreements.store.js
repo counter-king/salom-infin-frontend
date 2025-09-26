@@ -200,9 +200,9 @@ export const useAgreementsStore = defineStore('agreements-stores', {
     /**
      *
      */
-    async signNegotiatorsNotSigned(value) {
+    async signNegotiatorsNotSigned(value, pkcs7) {
       try {
-        await fetchSignNegotiators({ ids: value })
+        await fetchSignNegotiators({ ids: value, pkcs7 })
         return Promise.resolve()
       }
       catch(error) {

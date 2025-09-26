@@ -26,9 +26,9 @@ const { t } = useI18n()
       <div class="dashboard-grid flex h-[calc(100%-52px)] gap-5">
         <div class="flex flex-col flex-1">
           <div class="flex gap-5 h-[368px] mb-5">
-            <employee-attendance class="w-[535px]" />
+            <employee-attendance class="w-[645px]" />
 
-            <notifications class="w-[535px]" />
+            <notifications class="w-[485px]" />
 
             <widget-doc-flow class="flex-1" />
           </div>

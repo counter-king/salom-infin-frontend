@@ -677,7 +677,7 @@ export const getUzbekMonthName = (dateInput) => {
   return uzMonths[date.getMonth()]
 }
 
-export const getWorkdayStatus = (attendanceDate, arrival_time, departure_time) => {
+  export const getWorkdayStatus = (attendanceDate, arrival_time, departure_time) => {
   const today = new Date()
   const inputDate = new Date(attendanceDate)
 
@@ -760,6 +760,144 @@ export const returnDateRange = (start_date, end_date) => {
 
   return `${formatDate(startDate)}dan, ${formatDate(endDate)}gacha`
 }
+
+export const getAttendanceEntryStatus = (date, start_date, end_date, absent = false) => {
+  const today = new Date()
+  const checkDate = new Date(date)
+
+  // Normalize dates (compare only date parts)
+  const isToday =
+    checkDate.getFullYear() === today.getFullYear() &&
+    checkDate.getMonth() === today.getMonth() &&
+    checkDate.getDate() === today.getDate()
+
+  // 1. If date is today and start_date is null → waiting-info
+  if (isToday && !start_date) {
+    return "waiting-info"
+  }
+
+  // 2. If start_date and end_date are null → not-came
+  if (!start_date && !end_date) {
+    return "not-came"
+  }
+
+  // 3. If start_date is null but end_date exists → no-entry-marked
+  if (!start_date && end_date) {
+    return "no-entry-marked"
+  }
+
+  if (start_date) {
+    const startTime = new Date(start_date)
+    const nineAM = new Date(startTime)
+    nineAM.setHours(9, 0, 0, 0)
+
+    // 4. If start_date before 09:00 → came-on-time
+    if (startTime <= nineAM) {
+      return "came-on-time"
+    }
+
+    // 5. If start_date after 09:00 → late-arrival
+    if (startTime > nineAM) {
+      return "late-arrival"
+    }
+  }
+
+  // Fallback
+  return "unknown"
+}
+
+export const getAttendanceExitStatus = (date, start_date, end_date, absent = false) => {
+  const today = new Date()
+  const checkDate = new Date(date)
+
+  // Normalize dates (compare only date parts)
+  const isToday =
+    checkDate.getFullYear() === today.getFullYear() &&
+    checkDate.getMonth() === today.getMonth() &&
+    checkDate.getDate() === today.getDate()
+
+  // 1. If date is today and end_date is null → waiting-info
+  if (isToday && !end_date) {
+    return "waiting-info"
+  }
+
+  // 2. If start_date and end_date are null → not-came
+  if (!start_date && !end_date) {
+    return "not-came"
+  }
+
+  // 3. If start_date exists but end_date is null → no-exit-marked
+  if (start_date && !end_date) {
+    return "no-exit-marked"
+  }
+
+  if (end_date) {
+    const endTime = new Date(end_date)
+    const sixPM = new Date(endTime)
+    sixPM.setHours(18, 0, 0, 0)
+
+    // 4. If end_date before 18:00 → early-departure
+    if (endTime < sixPM) {
+      return "early-departure"
+    }
+
+    // 5. If end_date at or after 18:00 → normal-exit
+    if (endTime >= sixPM) {
+      return "normal-exit"
+    }
+  }
+
+  // Fallback
+  return "unknown"
+}
+
+export const returnLateTime = (start_time, end_time, locale = "uz", type = "entry") => {
+  let diffMinutes = null
+
+  if (type === "entry") {
+    if (!start_time) return null
+
+    const startTime = new Date(start_time)
+    const nineAM = new Date(startTime)
+    nineAM.setHours(9, 0, 0, 0)
+
+    diffMinutes = Math.floor((startTime - nineAM) / (1000 * 60))
+  }
+
+  if (type === "exit") {
+    if (!end_time) return null
+
+    const endTime = new Date(end_time)
+    const sixPM = new Date(endTime)
+    sixPM.setHours(18, 0, 0, 0)
+
+    diffMinutes = Math.floor((sixPM - endTime) / (1000 * 60)) + 1
+  }
+
+  // If not late or left early → return null
+  if (!diffMinutes || diffMinutes <= 0) return null
+
+  const hours = Math.floor(diffMinutes / 60)
+  const minutes = diffMinutes % 60
+
+  if (locale === "uz") {
+    if (hours > 0 && minutes > 0) return `-${hours} s. ${minutes} daq.`
+    if (hours > 0) return `-${hours} s.`
+    return `-${minutes} daq.`
+  }
+
+  if (locale === "ru") {
+    if (hours > 0 && minutes > 0) return `+${hours} ч. ${minutes} мин.`
+    if (hours > 0) return `-${hours} ч.`
+    return `-${minutes} мин.`
+  }
+
+  // fallback
+  return `${diffMinutes} min`
+}
+
+
+
 
 
 

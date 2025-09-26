@@ -1,20 +1,23 @@
 <script setup>
 // Core
-import { ref, useModel } from "vue"
+import { computed, ref, useModel } from "vue"
 import { useI18n } from "vue-i18n"
 import useVuelidate from "@vuelidate/core"
 import { helpers, required } from "@vuelidate/validators"
 // Utils
 import { formatDate } from "@/utils/formatDate"
+import { returnLateTime } from "@/utils"
+import { dispatchNotify } from "@/utils/notify"
+// Services
+import { fetchUpdateDashboardAttendance } from "@/modules/Dashboard/services/index.service"
+// Enums
+import { COLOR_TYPES } from "@/enums"
 // Store
 import { useNotificationStore } from "@/modules/Dashboard/stores/notification.store"
+import { useAttendanceStore } from "@/modules/Dashboard/stores/attendance.store"
 // Components
 import { UserWithRadio } from "@/components/Users"
-import { CONTENT_TYPES } from "@/modules/News/constants";
-import BaseTextarea from "@/components/UI/BaseTextarea.vue";
-import { dispatchNotify } from "@/utils/notify";
-import { COLOR_TYPES } from "@/enums";
-import { resetModel } from "@/utils";
+import BaseTextarea from "@/components/UI/BaseTextarea.vue"
 
 // Props
 const props = defineProps({
@@ -40,23 +43,37 @@ const rules = {
 const modelValue = useModel(props, 'modelValue')
 const {t, locale} = useI18n()
 const store = useNotificationStore()
+const dashboardAttendanceStore = useAttendanceStore()
 const $v = useVuelidate(rules, testModel)
+
+// Computed
+const lateTime = computed(() => {
+  const { first_check_in, last_check_out } = store.attendanceModel
+
+  return returnLateTime(first_check_in, last_check_out, locale.value, 'entry')
+})
 
 // Methods
 const send = async () => {
   const valid = await $v.value.$validate()
   if (!valid) return
 
-  sendButtonLoading.value = true
-  setTimeout(() => {
-    dispatchNotify(null, t('successfully-send'), COLOR_TYPES.SUCCESS)
-    sendButtonLoading.value = false
-    modelValue.value = false
-    testModel.value.reason = null
-    testModel.value.comment = null
-    testModel.value__files = null
-    $v.value.$reset()
-  }, 2000)
+ try {
+   sendButtonLoading.value = true
+   await fetchUpdateDashboardAttendance(store.attendanceModel.id, {
+     has_reason: true,
+   })
+   dispatchNotify(null, t('successfully-send'), COLOR_TYPES.SUCCESS)
+   await dashboardAttendanceStore.actionDashboardNotificationAttendanceList({status: 'lateness', has_reason: false})
+   modelValue.value = false
+   testModel.value.reason = null
+   testModel.value.comment = null
+   testModel.value__files = null
+   $v.value.$reset()
+ } catch (e) {}
+  finally {
+   sendButtonLoading.value = false
+ }
 }
 
 // Emits
@@ -79,8 +96,8 @@ const send = async () => {
           <img src="/images/dashboard/alarm-clock.svg" alt="alarm clock">
 
           <div class="text-sm text-greyscale-500 font-medium">
-            <span class="text-primary-900">{{ formatDate(new Date()) }}</span> sanasida
-            <span class="text-critic-500">+32 daq.</span> kech qolgansiz
+            <span class="text-primary-900">{{ formatDate(store.attendanceModel?.date) }}</span> sanasida
+            <span class="text-critic-500">{{ lateTime }}</span> kech qolgansiz
           </div>
         </div>
 

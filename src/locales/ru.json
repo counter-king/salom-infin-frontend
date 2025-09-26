@@ -923,7 +923,7 @@
   "sent": "Успешно",
   "failed": "Неуспешно",
   "prolong": "Продлить",
-  "modify-business-trip": "Продлить командировку",
+  "modify-business-trip": "Изменение служебной командировки (место или срок)",
   "employees-in-business-trip": "Сотрудники в командировках",
   "select-employees-in-business-trip": "Выбрать сотрудников в командировке",
   "add-location": "Добавить место",
@@ -1001,10 +1001,15 @@
   "came-on-time": "Пришёл вовремя",
   "waiting-info": "Ожидание данных",
   "not-connected-face-id": "Вы не подключены к системе FaceID!",
-  "no-entry-marked": "Не отмечен вход",
-  "no-exit-marked": "Не отмечен выход",
+  "no-entry-marked": "Не отмечен",
+  "no-exit-marked": "Не отмечен",
   "enter-reason": "Введите причину",
   "late-came-reason": "Причина опоздания",
   "select-reason": "Выберите причину",
-  "traffic-jam": "Пробка (дорожная пробка)"
+  "traffic-jam": "Пробка (дорожная пробка)",
+  "today-you-are-late": "Сегодня вы опоздали на работу",
+  "minute": "мин.",
+  "you-are-late": "Вы опоздали на работу",
+  "normal-exit": "Ушел вовремя",
+  "other": "Другое"
 }

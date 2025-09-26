@@ -4,7 +4,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 // Components
 import { ActionToolbar, ActionBackButton, EriKeysMenu } from '@/components/Actions'
-import { EyeIcon } from '@/components/Icons'
+import { CheckCircleIcon, EyeIcon } from '@/components/Icons'
 import { LinkableCell } from '@/components/Table'
 // Stores
 import { useCountStore } from '@/stores/count.store'
@@ -15,6 +15,8 @@ import { dispatchNotify } from '@/utils/notify'
 import { formatDateHour } from '@/utils/formatDate'
 // Enums
 import { COLOR_TYPES } from '@/enums'
+import { useAuthStore } from "@/modules/Auth/stores";
+import Eimzo from "@/components/EIMZO/Eimzo.vue";
 // Composable
 const route = useRoute()
 const router = useRouter()
@@ -26,14 +28,19 @@ const checkedValues = ref([])
 const dialog = ref(false)
 const selected = ref({})
 const loading = ref(false)
+const isHostVercel = ref(null)
+const buttonLoading = ref(false)
 // Methods
-const signDocument = async () => {
-  if(!checkedValues.value.length) {
+const validateForm = async () => {
+  if (!checkedValues.value.length) {
     dispatchNotify(null, 'Сначала выберите документ для подписания', 'warn')
-    return
+    return Promise.reject()
+  } else {
+    return Promise.resolve()
   }
-
-  await agreementsStore.signNegotiatorsNotSigned(checkedValues.value)
+}
+const signDocument = async (pkcs7) => {
+  await agreementsStore.signNegotiatorsNotSigned(checkedValues.value, pkcs7)
   await countStore.actionCountList()
   dispatchNotify(null, 'Документ успешно подписан', COLOR_TYPES.SUCCESS)
   await agreementsStore.getNegotiatorsNotSigned({
@@ -73,6 +80,7 @@ const link = (data) => {
 }
 // Hooks
 onMounted(async () => {
+  isHostVercel.value = window.location.host === 'app.itco.uz' || window.location.host === 'new-side-project.vercel.app' || window.location.host.startsWith('localhost')
   await agreementsStore.getNegotiatorsNotSigned({
     doc_type: route.params.item,
     unchecked: 'none'
@@ -90,7 +98,30 @@ onMounted(async () => {
     </template>
 
     <template #filters>
-      <eri-keys-menu @emit:sign="signDocument" />
+      <base-button
+        v-if="isHostVercel || useAuthStore().currentUser.id === 1"
+        border-color="border-transparent"
+        label="sign"
+        :icon-left="CheckCircleIcon"
+        icon-height="!w-4"
+        icon-width="!h-4"
+        rounded
+        shadow
+        type="button"
+        :loading="buttonLoading"
+        @click="signDocument('test')"
+      />
+
+      <eimzo
+        v-else
+        type="sign"
+        data="sign-in-basic"
+        input-classes="bg-white !rounded-3xl min-w-[200px]"
+        with-validation
+        :validationFunc="validateForm"
+        :button-loading="buttonLoading"
+        @emit:onGetPkcs7="(pkcs7) => signDocument(pkcs7)"
+      />
     </template>
   </action-toolbar>
 

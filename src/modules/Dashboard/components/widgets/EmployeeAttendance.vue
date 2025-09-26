@@ -12,6 +12,7 @@ import { getUzbekMonthName } from "@/utils"
 import { AltArrowRightIcon } from "@/components/Icons"
 import AttendanceStatus from "@/modules/HR/modules/Attendance/components/AttendanceStatus.vue"
 import Empty from "@/components/Empty.vue"
+import AttendanceEntryHours from "@/modules/HR/modules/Attendance/components/AttendanceEntryHours.vue";
 
 // Composable
 const { t } = useI18n()
@@ -35,10 +36,10 @@ onMounted(async () => {
 
     <div class="flex flex-col h-full">
       <div class="flex p-2 items-center text-greyscale-500 text-xs font-medium">
-        <div class="w-1/5">{{ t('date') }}</div>
-        <div class="w-1/5">{{ t('arrival-time') }}</div>
-        <div class="w-1/5">{{ t('departure-time') }}</div>
-        <div class="w-[35%]">{{ t('status') }}</div>
+        <div class="w-[10%]">{{ t('date') }}</div>
+        <div class="w-[15%]">{{ t('arrival-time') }}</div>
+        <div class="w-[15%]">{{ t('departure-time') }}</div>
+        <div class="w-[55%]">{{ t('status') }}</div>
         <div class="w-[5%]"></div>
       </div>
 
@@ -55,7 +56,7 @@ onMounted(async () => {
                 :key="item.id"
                 class="flex p-2 items-center"
               >
-                <div class="w-1/5">
+                <div class="w-[10%]">
                   <div class="flex flex-col w-10 h-10 rounded-lg border border-info-200 overflow-hidden">
                     <div class="flex justify-center items-center bg-info-30 h-[14px]">
                       <span class="text-[9px] text-info-500 font-semibold">{{ getUzbekMonthName(item.date) }}</span>
@@ -65,15 +66,15 @@ onMounted(async () => {
                     </div>
                   </div>
                 </div>
-                <div class="text-sm text-greyscale-900 font-medium w-1/5 pl-[2px]">
+                <div class="text-sm text-greyscale-900 font-medium w-[15%] pl-[2px]">
                   {{ formatHour(item.first_check_in) }}
                 </div>
-                <div class="text-sm text-greyscale-900 font-medium w-1/5 pl-[2px]">
+                <div class="text-sm text-greyscale-900 font-medium w-[15%] pl-[2px]">
                   {{ formatHour(item.last_check_out) }}
                 </div>
                 <attendance-status
                   :item="item"
-                  class="w-[35%] pl-[2px]"
+                  class="w-[55%] pl-[2px]"
                 />
                 <div class="flex flex-1 justify-end pr-2">
                   <base-iconify

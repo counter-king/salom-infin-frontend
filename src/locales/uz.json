@@ -919,7 +919,7 @@
   "my-assignments": "Mening vazifalarim",
   "published-date": "Nashr etilgan sana",
   "business-trip-dashboard": "Xizmat safari dashbord",
-  "modify-business-trip": "Xizmat safarini uzaytirish",
+  "modify-business-trip": "Xizmat safarini o’zgartirish (hudud yoki muddati)",
   "employees-in-business-trip": "Xizmat safaridagi xodimlar",
   "select-employees-in-business-trip": "Xizmat safaridagi xodimlarni tanlang",
   "add-location": "Hudud qo'shish",
@@ -998,10 +998,15 @@
   "came-on-time": "Vaqtida keldi",
   "waiting-info": "Ma'lumot kutilmoqda",
   "not-connected-face-id": "Siz FaceID tizimiga ulanmagansiz!",
-  "no-entry-marked": "Kirish belgilanmagan",
-  "no-exit-marked": "Chiqish belgilanmagan",
+  "no-entry-marked": "Qayd etilmagan",
+  "no-exit-marked": "Qayd etilmagan",
   "enter-reason": "Sababni kiriting",
   "late-came-reason": "Kech qolish sababi",
   "select-reason": "Sababni tanlang",
-  "traffic-jam": "Tirbandlik"
+  "traffic-jam": "Tirbandlik",
+  "today-you-are-late": "Bugun ishga kech qoldingiz",
+  "minute": "daq.",
+  "you-are-late": "Ishga kech qoldingiz",
+  "normal-exit": "Vaqtida ketdi",
+  "other": "Boshqa"
 }

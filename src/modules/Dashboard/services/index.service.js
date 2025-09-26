@@ -56,4 +56,7 @@ export const fetchDeleteContactFromFavourites = (id) => {
 export const fetchDashboardAttendanceList = (params) => {
   return axiosConfig.get(`${URLS.dashboardAttendance}/`, params)
 }
+export const fetchUpdateDashboardAttendance = (id, body) => {
+  return axiosConfig.put(`${URLS.dashboardAttendance}/${id}/`, body)
+}
 

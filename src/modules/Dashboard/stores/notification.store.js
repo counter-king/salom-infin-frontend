@@ -1,18 +1,16 @@
 // Core
 import { defineStore } from 'pinia'
-import { PlaneIcon } from "@/components/Icons";
-import { BY_PLANE } from "@/modules/Documents/modules/SendDocuments/constants";
 
 export const useNotificationStore = defineStore('dashboard-notification-stores', {
   state: () => ({
     tempData: [
-      {
-        id: 1,
-        title: 'Bugun ishga kech qoldingiz',
-        time: new Date(),
-        buttonLabel: 'Sababini ko\'rsating',
-        icon: '/images/dashboard/alarm-clock.svg'
-      },
+      // {
+      //   id: 1,
+      //   title: 'Bugun ishga kech qoldingiz',
+      //   time: new Date(),
+      //   buttonLabel: 'Sababini ko\'rsating',
+      //   icon: '/images/dashboard/alarm-clock.svg'
+      // },
       {
         id: 2,
         title: 'Sizda imzolash uchun xat bor',
@@ -70,11 +68,18 @@ export const useNotificationStore = defineStore('dashboard-notification-stores',
       {
         id: 1,
         title: 'traffic-jam',
-        icon: PlaneIcon,
-        value: BY_PLANE,
         name_uz: 'Tirbandlik',
-        name_ru: 'Пробка (дорожная пробка)'
+        name_ru: 'Пробка (дорожная пробка)',
+        value: 'traffic_jam'
       },
-    ]
+      {
+        id: 2,
+        title: 'other',
+        name_uz: 'Boshqa',
+        name_ru: 'Другое',
+        value: 'other'
+      },
+    ],
+    attendanceModel: {}
   }),
 })

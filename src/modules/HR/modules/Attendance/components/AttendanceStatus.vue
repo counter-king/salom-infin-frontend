@@ -6,6 +6,8 @@ import { getWorkdayStatus } from "@/utils"
 // Components
 import { InfoCircleBoldIcon, CloseCircleBoldIcon, CheckCircleBoldIcon } from "@/components/Icons"
 import { computed } from "vue";
+import AttendanceEntryHours from "@/modules/HR/modules/Attendance/components/AttendanceEntryHours.vue";
+import AttendanceExitHours from "@/modules/HR/modules/Attendance/components/AttendanceExitHours.vue";
 
 const props = defineProps({
   item: {
@@ -46,15 +48,11 @@ const { t } = useI18n()
 
 <template>
   <div class="attendance-status flex gap-x-1 items-center">
-    <base-iconify
-      :icon="statusIcon"
-      :class="statusClass"
-    />
-    <div
-      class=" text-sm font-medium"
-      :class="statusClass"
-    >
-      {{ t(statusValue) }}
+    <div class="w-1/2 border-r border-r-greyscale-300">
+      <attendance-entry-hours :item="item" />
+    </div>
+    <div class="w-1/2">
+      <attendance-exit-hours :item="item"/>
     </div>
   </div>
 </template>
