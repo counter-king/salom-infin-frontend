@@ -887,7 +887,7 @@ export const returnLateTime = (start_time, end_time, locale = "uz", type = "entr
   }
 
   if (locale === "ru") {
-    if (hours > 0 && minutes > 0) return `+${hours} ч. ${minutes} мин.`
+    if (hours > 0 && minutes > 0) return `-${hours} ч. ${minutes} мин.`
     if (hours > 0) return `-${hours} ч.`
     return `-${minutes} мин.`
   }
