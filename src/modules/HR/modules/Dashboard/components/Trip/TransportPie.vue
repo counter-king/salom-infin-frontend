@@ -8,7 +8,6 @@ const { t } = useI18n()
 const dashboardStore = useHRDashboardStore()
 
 const series = computed(() => {
-  console.log("SERIES ", Object.values(dashboardStore.byRoute.data))
   return Object.values(dashboardStore.byRoute.data)
 })
 const totalCount = computed(() => {
