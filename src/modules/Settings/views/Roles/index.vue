@@ -1,31 +1,42 @@
 <script setup>
-// Core
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-// Components
 import { ActionToolbar } from '@/components/Actions'
 import { LinkableCell } from '@/components/Table'
-import { Plus20SolidIcon, Pen2Icon } from '@/components/Icons'
+import { Plus20SolidIcon, Pen2Icon, TrashBinTrashIcon } from '@/components/Icons'
 import RoleDialog from './components/Dialog.vue'
-// Stores
 import { useRolesStore } from '../../stores/roles.store'
-// Utils
 import { formatDateHour } from '@/utils/formatDate'
-// Const
 import { FORM_TYPE_CREATE, FORM_TYPE_UPDATE } from '@/constants/constants'
-// Composable
+import { dispatchNotify } from '@/utils/notify'
+import { COLOR_TYPES } from '@/enums'
+
 const route = useRoute()
 const rolesStore = useRolesStore()
 const { t } = useI18n()
-// Reactive
+
 const modal = ref(false)
 const modalType = ref(FORM_TYPE_CREATE)
-// Methods
+
 const edit = (data, id, type = FORM_TYPE_CREATE) => {
-  rolesStore.setRole({ id, ... data })
+  rolesStore.setRole({ id, ...data })
   modalType.value = type
   modal.value = true
+}
+const deleteRole = async (id) => {
+  if(!confirm(t('really-want-delete'))) {
+    return
+  }
+
+  try {
+    await rolesStore.deleteRole(id)
+    dispatchNotify(null, t('role-deleted'), COLOR_TYPES.SUCCESS)
+    await rolesStore.getRoleList()
+  }
+  catch(error) {
+
+  }
 }
 const link = (data) => {
   return {
@@ -84,6 +95,21 @@ const link = (data) => {
             value: `<h4 class='text-xs text-white -my-1'>${ t('update') }</h4>`
           }"
           @click="edit(data, data.id, FORM_TYPE_UPDATE)"
+        >
+        </base-button>
+
+        <base-button
+          :icon-left="TrashBinTrashIcon"
+          only-icon
+          severity="danger"
+          text
+          class="shadow-none py-[7px] px-2 text-xs bg-greyscale-50 mr-2 rounded-[8px]"
+          v-tooltip.top="{
+            autoHide: false,
+            escape: true,
+            value: `<h4 class='text-xs text-white -my-1'>${ t('delete') }</h4>`
+          }"
+          @click="deleteRole(data.id)"
         >
         </base-button>
       </template>
