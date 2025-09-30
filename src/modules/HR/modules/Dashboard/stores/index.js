@@ -1253,6 +1253,14 @@ export const useHRDashboardStore = defineStore('useHRDashboardStore', {
 
         const { data } = await fetchByRoute(params)
         this.byRoute.data = data
+        console.log("DATA ", this.byRoute.data)
+
+        // this.byRoute.data = {
+        //   by_car: 33,
+        //   by_plane: 55,
+        //   by_service_car: 12,
+        //   by_train: 88
+        // }
 
         return Promise.resolve()
       }

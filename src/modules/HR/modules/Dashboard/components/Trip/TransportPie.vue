@@ -8,6 +8,7 @@ const { t } = useI18n()
 const dashboardStore = useHRDashboardStore()
 
 const series = computed(() => {
+  console.log("SERIES ", Object.values(dashboardStore.byRoute.data))
   return Object.values(dashboardStore.byRoute.data)
 })
 const totalCount = computed(() => {
@@ -32,8 +33,8 @@ const options = ref({
     colors: [
       '#29CD74',
       '#5EC1E7',
-      '#ab7a84',
       '#FF7290',
+      '#ab7a84',
     ],
   },
   stroke: {
@@ -104,7 +105,7 @@ onMounted(async () => {
                 :style="{ backgroundColor: item === 'by_car' ? '#29CD74' : item === 'by_plane' ? '#5EC1E7' : item === 'by_train' ? '#ab7a84' : '#FF7290' }"
               ></div>
 
-              <h1 class="flex-1 text-[13px] group-hover:text-greyscale-900">{{ item === 'by_train' ? t('train') : item === 'by_plane' ? t('airplane') : item === 'by_service_car' ? t('service-car') : t('taxi') }}</h1>
+              <h1 class="flex-1 text-[13px] group-hover:text-greyscale-900">{{ item === 'by_car' ? t('taxi') : item === 'by_plane' ? t('airplane') : item === 'by_train' ? t('train') : t('service-car') }}</h1>
 
               <span class="text-greyscale-900 text-sm font-semibold">{{ dashboardStore.byRoute.data[item] }}</span>
 
