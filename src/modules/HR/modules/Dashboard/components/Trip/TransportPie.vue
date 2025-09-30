@@ -32,6 +32,7 @@ const options = ref({
     colors: [
       '#29CD74',
       '#5EC1E7',
+      '#ab7a84',
       '#FF7290',
     ],
   },
@@ -100,10 +101,10 @@ onMounted(async () => {
             >
               <div
                 class="w-[10px] h-[10px] rounded"
-                :style="{ backgroundColor: item === 'by_car' ? '#29CD74' : item === 'by_plane' ? '#5EC1E7' : '#FF7290' }"
+                :style="{ backgroundColor: item === 'by_car' ? '#29CD74' : item === 'by_plane' ? '#5EC1E7' : item === 'by_train' ? '#ab7a84' : '#FF7290' }"
               ></div>
 
-              <h1 class="flex-1 text-[13px] group-hover:text-greyscale-900">{{ item === 'by_car' ? t('airplane') : item === 'by_plane' ? t('train') : t('taxi') }}</h1>
+              <h1 class="flex-1 text-[13px] group-hover:text-greyscale-900">{{ item === 'by_train' ? t('train') : item === 'by_plane' ? t('airplane') : item === 'by_service_car' ? t('service-car') : t('taxi') }}</h1>
 
               <span class="text-greyscale-900 text-sm font-semibold">{{ dashboardStore.byRoute.data[item] }}</span>
 
