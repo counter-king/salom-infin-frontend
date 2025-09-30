@@ -789,7 +789,7 @@ export const getAttendanceEntryStatus = (date, start_date, end_date, absent = fa
   if (start_date) {
     const startTime = new Date(start_date)
     const nineAM = new Date(startTime)
-    nineAM.setHours(9, 0, 0, 0)
+    nineAM.setHours(9, 1, 0, 0)
 
     // 4. If start_date before 09:00 → came-on-time
     if (startTime <= nineAM) {

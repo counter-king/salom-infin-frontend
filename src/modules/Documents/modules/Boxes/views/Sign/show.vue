@@ -194,8 +194,8 @@ onMounted( async () => {
 
         <template v-if="signed === null">
           <template v-if="signStore.detailModel.type !== SIGNER_TYPES.BASIC_SIGNER">
+<!--            v-if="isHostVercel || useAuthStore().currentUser.id === 1"-->
             <base-button
-              v-if="isHostVercel || useAuthStore().currentUser.id === 1"
               border-color="border-transparent"
               label="sign"
               :icon-left="CheckCircleIcon"
@@ -210,14 +210,14 @@ onMounted( async () => {
 
             <!--          <send-for-approval />-->
 
-            <eimzo
-              v-else
-              type="sign"
-              data="sign-in-basic"
-              input-classes="bg-white !rounded-3xl min-w-[200px]"
-              :button-loading="buttonLoading"
-              @emit:onGetPkcs7="(pkcs7) => sign(pkcs7)"
-            />
+<!--            <eimzo-->
+<!--              v-else-->
+<!--              type="sign"-->
+<!--              data="sign-in-basic"-->
+<!--              input-classes="bg-white !rounded-3xl min-w-[200px]"-->
+<!--              :button-loading="buttonLoading"-->
+<!--              @emit:onGetPkcs7="(pkcs7) => sign(pkcs7)"-->
+<!--            />-->
           </template>
 
           <resolution-performers-modal
