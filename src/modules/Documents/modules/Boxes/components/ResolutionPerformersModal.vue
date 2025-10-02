@@ -250,8 +250,9 @@ defineExpose({ buttonLoading, dialog })
           type="button"
           @click="dialog = false"
         />
-<!--        v-if="isHostVercel || useAuthStore().currentUser.id === 1"-->
+
         <base-button
+          v-if="isHostVercel || useAuthStore().currentUser.id === 1"
           label="sign"
           :loading="buttonLoading"
           rounded
@@ -260,16 +261,16 @@ defineExpose({ buttonLoading, dialog })
           @click="onSign('test')"
         />
 
-<!--        <eimzo-->
-<!--          v-else-->
-<!--          type="sign"-->
-<!--          data="resolution-performer"-->
-<!--          input-classes="bg-white !rounded-3xl min-w-[200px]"-->
-<!--          with-validation-->
-<!--          :validationFunc="validateForm"-->
-<!--          :button-loading="buttonLoading"-->
-<!--          @emit:onGetPkcs7="(pkcs7) => onSign(pkcs7)"-->
-<!--        />-->
+        <eimzo
+          v-else
+          type="sign"
+          data="resolution-performer"
+          input-classes="bg-white !rounded-3xl min-w-[200px]"
+          with-validation
+          :validationFunc="validateForm"
+          :button-loading="buttonLoading"
+          @emit:onGetPkcs7="(pkcs7) => onSign(pkcs7)"
+        />
       </div>
     </template>
   </base-dialog>
