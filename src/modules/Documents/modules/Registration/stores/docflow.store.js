@@ -26,7 +26,8 @@ export const useDocFlowStore = defineStore("docFlowStore", {
       icon: ClipboardAddIcon,
       link: 'RegistrationIndex',
       children: [],
-      permission: 'registration'
+      permission: 'registration',
+      roles: ['hr']
     },
     headers: [
       {
