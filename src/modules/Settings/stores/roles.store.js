@@ -88,9 +88,9 @@ export const useRolesStore = defineStore('roles-stores', {
      *
      *
     */
-    async deleteRole() {
+    async deleteRole(id) {
       try {
-        await fetchDeleteRole(this.createModel)
+        await fetchDeleteRole(id)
       }
       finally {
 

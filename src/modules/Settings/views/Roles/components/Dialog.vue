@@ -66,15 +66,15 @@ const submit = async () => {
 }
 const create = async () => {
   await rolesStore.createRole()
-  await rolesStore.actionGetList()
+  await rolesStore.getRoleList()
   modelValue.value = false
-  dispatchNotify(null, t('created-permission'), COLOR_TYPES.SUCCESS)
+  dispatchNotify(null, t('role-created'), COLOR_TYPES.SUCCESS)
 }
 const update = async () => {
   await rolesStore.updateRole()
-  await rolesStore.actionGetList()
+  await rolesStore.getRoleList()
   modelValue.value = false
-  dispatchNotify(null, t('edited-permission'), COLOR_TYPES.SUCCESS)
+  dispatchNotify(null, t('role-updated'), COLOR_TYPES.SUCCESS)
 }
 const afterHide = () => {
   clearModel(rolesStore.createModel, ['is_active'])
