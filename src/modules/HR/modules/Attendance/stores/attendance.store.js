@@ -43,6 +43,11 @@ export const useHRAttendanceStore = defineStore("attendance-store", {
         active: true
       },
       {
+        header: "user-status",
+        field: "user_status",
+        active: true
+      },
+      {
         header: "arrival-time",
         field: "arrival_time",
         active: true
@@ -70,7 +75,8 @@ export const useHRAttendanceStore = defineStore("attendance-store", {
         icon: SettingsMinimalisticBoldIcon,
         count: null,
         title: "total",
-        value: "all"
+        value: "all",
+        active: true
       },
       {
         id: 2,
@@ -78,7 +84,8 @@ export const useHRAttendanceStore = defineStore("attendance-store", {
         icon: CheckCircleBoldIcon,
         count: null,
         title: "on-time-arrivals",
-        value: "on_time"
+        value: "on_time",
+        active: false
       },
       {
         id: 3,
@@ -86,7 +93,8 @@ export const useHRAttendanceStore = defineStore("attendance-store", {
         icon: InfoCircleBoldIcon,
         count: null,
         title: "late-arrivals",
-        value: "lateness"
+        value: "lateness",
+        active: false
       },
       {
         id: 4,
@@ -94,7 +102,8 @@ export const useHRAttendanceStore = defineStore("attendance-store", {
         icon: CloseCircleBoldIcon,
         count: null,
         title: "absentees",
-        value: "absent"
+        value: "absent",
+        active: false
       },
       {
         id: 5,
@@ -102,7 +111,8 @@ export const useHRAttendanceStore = defineStore("attendance-store", {
         icon: AlarmTurnOffBoldIcon,
         count: null,
         title: "early-leavers",
-        value: "early_leaves"
+        value: "early_leaves",
+        active: false
       },
       {
         id: 6,
@@ -169,6 +179,11 @@ export const useHRAttendanceStore = defineStore("attendance-store", {
         {
           header: "date",
           field: "date",
+          active: true
+        },
+        {
+          header: "user-status",
+          field: "user_status",
           active: true
         },
         {

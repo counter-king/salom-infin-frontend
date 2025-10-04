@@ -28,17 +28,17 @@ const Registration = [
           navigation: true
         },
         component: () => import("../views/List.vue"),
-      },
-      {
-        path: ":code/:id/show",
-        name: "RegistrationShow",
-        meta: {
-          isAuthRequired: true,
-          miniSidebar: true
-        },
-        component: () => import("../views/Show.vue"),
       }
     ]
+  },
+  {
+    path: "registration/:code/:id/show",
+    name: "RegistrationShow",
+    meta: {
+      isAuthRequired: true,
+      miniSidebar: true
+    },
+    component: () => import("../views/Show.vue"),
   }
 ]
 

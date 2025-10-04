@@ -144,41 +144,36 @@ const uiCreateItem = (itmkey, vo) => {
   return itm
 }
 const uiFillCombo = (items) => {
-  const { pinfl: currentUserPinfl } = useAuthStore()?.currentUser || {}
+  const { last_name: currentUserLastName } = useAuthStore()?.currentUser || {}
+  pfxKeys.value = [] // reset before filling
 
-  if (items.length) {
-    items.forEach(item => {
-      const itemVo = JSON.parse(item?.getAttribute('vo'))
-      const expired = itemVo?.expired
-      const pinfl = itemVo?.PINFL
+  if (!items?.length) return
 
-      pfxKeys.value.push({
-        name: item.text,
-        value: item.value,
-        option: item,
-        expired
-      })
+  items.forEach(item => {
+    const itemVo = JSON.parse(item?.getAttribute('vo') || '{}')
+    const expired = itemVo?.expired
+    const lastName = itemVo?.CN?.split(' ')[0] || ''
 
-      // const shouldAdd =
-      //   (props.type === 'sign' && pinfl && currentUserPinfl && pinfl === currentUserPinfl) ||
-      //   (props.type === 'login')
-      //
-      // if (shouldAdd) {
-      //   pfxKeys.value.push({
-      //     name: item.text,
-      //     value: item.value,
-      //     option: item,
-      //     expired
-      //   })
-      // }
+    pfxKeys.value.push({
+      name: item.text,
+      value: item.value,
+      option: item,
+      expired,
+      isCurrentUser: currentUserLastName && lastName.toLowerCase() === currentUserLastName.toLowerCase()
     })
+  })
 
-    pfxKeys.value = pfxKeys.value.sort((a, b) => a.expired - b.expired)
+  // Sort so current user's certs come first, then by expired
+  pfxKeys.value.sort((a, b) => {
+    if (a.isCurrentUser && !b.isCurrentUser) return -1
+    if (!a.isCurrentUser && b.isCurrentUser) return 1
+    return a.expired - b.expired
+  })
 
-    if (pfxKeys.value.length) {
-      model.value.selectedKey = pfxKeys.value[0]
-      keyValue.value = pfxKeys.value[0].option
-    }
+  // Select first by default
+  if (pfxKeys.value.length) {
+    model.value.selectedKey = pfxKeys.value[0]
+    keyValue.value = pfxKeys.value[0].option
   }
 }
 const uiLoaded = () => {

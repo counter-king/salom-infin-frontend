@@ -17,6 +17,7 @@ import { InfoCircleBoldIcon } from "@/components/Icons"
 import AttendanceStatus from "@/modules/HR/modules/Attendance/components/AttendanceStatus.vue"
 import Dropdown from "@/modules/Handbook/components/Dropdown.vue"
 import { fetchCompaniesList } from "@/services/common.service";
+import { StatusChip } from "@/components/Chips";
 
 // Composable
 const { t } = useI18n()
@@ -63,7 +64,7 @@ watch(
 // Computed
 const apiParams = computed(() => {
   return {
-    start_date: formatDateReverse(getFirstDateOfCurrentMonth()),
+    start_date: formatDateReverse(new Date()),
     end_date: formatDateReverse(new Date()),
     company: branchSelect.value || undefined,
     page: 1,
@@ -81,12 +82,18 @@ const onSort = () => {
 const init = async () => {
   let {data} = await fetchCompaniesList({page_size: 100})
   branches.value = data.results
-  branchSelect.value = data.results[0]?.id
+  // branchSelect.value = data.results[0]?.id
+
+  if (route.query?.status) {
+    store.statusItems.forEach(item => item.active = item.value === route.query.status)
+  } else {
+    store.statusItems.forEach(item => item.active = item.value === 'all')
+  }
 
   if (Object.keys(route.query).length > 0) {
     const params = {
       ...route.query,
-      start_date: route.query.created_start_date || formatDateReverse(getFirstDateOfCurrentMonth()),
+      start_date: route.query.created_start_date || formatDateReverse(new Date()),
       end_date: route.query.created_end_date || formatDateReverse(new Date()),
       company: route.query.company || branchSelect.value
     }
@@ -112,9 +119,9 @@ const onBranchChange = async (val) => {
 const onStatusClick = async (item) => {
   if (item.value !== 'not_registered_on_faceid') {
     const params = {
+      ...router.currentRoute.value.query,
       page: 1,
       page_size: 15,
-      ...router.currentRoute.value.query,
       status: route.query.status || undefined,
       start_date: route.query.created_start_date || formatDateReverse(getFirstDateOfCurrentMonth()),
       end_date: route.query.created_end_date || formatDateReverse(new Date()),
@@ -139,6 +146,8 @@ const onStatusClick = async (item) => {
         status: item.value
       })
     }
+
+    store.statusItems.forEach(i => i.active = i.id === item.id)
   }
 }
 
@@ -177,7 +186,8 @@ onMounted(async () => {
       <div
         v-for="item in store.statusItems"
         :key="item.id"
-        class="flex flex-col rounded-[20px] h-24 bg-white w-full p-4 gap-y-3 cursor-pointer"
+        class="flex flex-col rounded-[20px] h-24  w-full p-4 gap-y-3 cursor-pointer border-2"
+        :class="item.active ? 'border-primary-500 bg-primary-30' : 'bg-white'"
         @click="onStatusClick(item)"
       >
         <div class="flex justify-between items-start">
@@ -202,7 +212,8 @@ onMounted(async () => {
           </div>
           <base-iconify
             :icon="InfoCircleBoldIcon"
-            class="text-greyscale-200 !w-5 !h-5"
+            class="!w-5 !h-5"
+            :class="item.active ? 'text-greyscale-300' : 'text-greyscale-200'"
           />
         </div>
 
@@ -251,6 +262,12 @@ onMounted(async () => {
 
         <template #date="{ data }">
           <div class="text-sm font-medium text-greyscale-900">{{ formatDate(data.date) }}</div>
+        </template>
+
+        <template #user_status="{ data }">
+          <status-chip type="handbook" :status="data.user.status">
+            {{ data.user.status.name }}
+          </status-chip>
         </template>
 
         <template #arrival_time="{ data }">
