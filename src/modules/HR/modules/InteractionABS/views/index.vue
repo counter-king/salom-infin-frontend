@@ -206,7 +206,7 @@ const onSendAgain = async(item) => {
   try {
     const response = await getRetryIabsAction(item.id, { order_id })
     if(response.status == 200 || response.status == 201){
-      interactionABSStore.actionGetIabsActionList({ page: 1, page_size: 15 })
+      interactionABSStore.actionGetIabsActionList({ page: route.query.page || 1, page_size: route.query.page_size || 15 })
     }
   } catch (error) {
     console.log(error)
