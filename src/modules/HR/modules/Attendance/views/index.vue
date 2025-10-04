@@ -9,7 +9,7 @@ import { useHRAttendanceStore } from "@/modules/HR/modules/Attendance/stores/att
 import { HR_ATTENDANCE_COLUMNS } from "@/modules/HR/constants"
 // Utils
 import { formatDate, formatDateReverse, formatHour } from "@/utils/formatDate"
-import { getFirstDateOfCurrentMonth, returnDateRange } from "@/utils"
+import { returnDateRange } from "@/utils"
 // Components
 import { ActionToolbar } from "@/components/Actions"
 import DataTable from "@/modules/HR/modules/InteractionABS/components/DataTable.vue"
@@ -38,7 +38,7 @@ watch(
       page_size: 15,
       ...router.currentRoute.value.query,
       status: newQuery.status || undefined,
-      start_date: newQuery.created_start_date || formatDateReverse(getFirstDateOfCurrentMonth()),
+      start_date: newQuery.created_start_date || formatDateReverse(new Date()),
       end_date: newQuery.created_end_date || formatDateReverse(new Date()),
       company: newQuery.company || branchSelect.value
     }
@@ -123,7 +123,7 @@ const onStatusClick = async (item) => {
       page: 1,
       page_size: 15,
       status: route.query.status || undefined,
-      start_date: route.query.created_start_date || formatDateReverse(getFirstDateOfCurrentMonth()),
+      start_date: route.query.created_start_date || formatDateReverse(new Date()),
       end_date: route.query.created_end_date || formatDateReverse(new Date()),
       company: route.query.company || branchSelect.value
     }
