@@ -36,7 +36,6 @@ import { useFileUploadDrop } from '../composables/useFileUploadDrop';
 import { useScrollReachUpGetNextMessageList } from '../composables/useScrollReachUpGetNextMessageList';
 import { useScrollReachDownGetNextMessageList } from '../composables/useScrollReachDownGetNextMessageList';
 import { useReadMessageObserver } from '../composables/useReadMessageObserver';
-// services
 
 const { menuItems, refContextMenu } = useContextMenu();
 const { onDragOver, onDragLeave, onDrop } = useFileUploadDrop();
