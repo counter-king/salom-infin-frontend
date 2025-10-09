@@ -93,7 +93,7 @@ defineExpose({
               <span class="text-xs font-medium text-greyscale-500 truncate">{{ props.message.replied_to?.text }}</span>
             </div>
             <!-- text -->
-            <p v-if="props.avatarVisible" class="text-sm font-bold text-blue-900" >{{ props.message.sender.first_name }} {{ props.message.sender.last_name }}</p>
+            <p v-if="props.avatarVisible" class="text-sm font-bold text-blue-900" >{{ props.message?.sender?.first_name }} {{ props.message?.sender?.last_name }}</p>
             <p class="text-sm font-medium text-greyscale-900 whitespace-pre-line break-all">
               <LinkMessage v-if="props.message?.message_type == MESSAGE_TYPES.LINK" type="friend" :message="props.message" />
               <span v-else>{{ props.message?.text }}</span>

@@ -16,13 +16,14 @@ import { useFileUpload } from '../../composables/useFileUpload';
 import { useChatStore } from '../../stores';
 // utils
 import { CHAT_ROUTE_NAMES, CHAT_TYPES, MESSAGE_TYPES } from '../../constatns';
+import { extractPaginationCursors } from '../../utlis';
 // webocket
 import { socket } from "@/services/socket";
 
 // props
 const props = defineProps({
   modelValue: {
-    type: Number
+    type: [Number, String],
   }
 })
 
@@ -122,11 +123,12 @@ const handleSendMessage = async (event) => {
         resetInputProperties(event)
         // replay or edit reset, not show them in ui
         chatStore.contextMenu = {}
-        //
+        // replayedMessageClicked is ture, then get messages from end
         if(chatStore.replayedMessageClicked){
-          modelValue.value = 1
           chatStore.replayedMessageClicked = false
-          await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id, page: 1, page_size: 20 }, true);
+          const response = await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id,  page_size: 20 }, true);
+          const { next } = extractPaginationCursors(response)
+          modelValue.value = next
           refChatArea.value.scrollTop = refChatArea.value.scrollHeight
         }
     }

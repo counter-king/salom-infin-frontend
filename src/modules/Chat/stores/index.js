@@ -211,6 +211,7 @@ export const useChatStore = defineStore("chat-stores", {
       try {
         const response = await fetchGetPrivateChatList(params);
         const results = response.data.results?.map((item) => ({
+          first_unread_id: item?.first_unread_id,
           first_name: item?.title,
           full_name: item?.title,
           position: item?.position?.name,
@@ -270,6 +271,7 @@ export const useChatStore = defineStore("chat-stores", {
         this.privateChatByIdLoading = true;
         const { data } = await fetchGetPrivateChatById(id);
         return {
+          first_unread_id: data?.first_unread_id || this.selectedUser?.first_unread_id || null,
           first_name: data?.title,
           full_name: data?.title,
           position: data.members?.find((item) => item.user?.id !== authStore.currentUser.id)?.user?.position?.name,
@@ -315,6 +317,7 @@ export const useChatStore = defineStore("chat-stores", {
             }
           }
           return ({
+            first_unread_id: item?.first_unread_id,
             last_message: item.last_message,
             title: item.title,
             image: item.image,
@@ -356,6 +359,7 @@ export const useChatStore = defineStore("chat-stores", {
         data.images[0].image.blobUrl = blobUrl
         }
         return {
+          first_unread_id: data?.first_unread_id || this.selectedGroup?.first_unread_id || null,
           title: data?.title,
           image: data?.images[0]?.image,
           chat_id: data.id,
@@ -426,17 +430,17 @@ export const useChatStore = defineStore("chat-stores", {
     },
     /** */
     /** */
-    async actionGetMessageListByChatId(params, resetList = true, addingFront = true, addingScrollDown = false) {
+    async actionGetMessageListByChatId(params, resetList = true, addingFront = true, addingEnd = false, stayLoading = false ) {
       try {
         if(resetList){
           this.messageListByChatIdLoading = true;
         } else if(addingFront){
           this.messageListByChatIdAddMoreLoading = true;
-        } else if(addingScrollDown) {
+        } else if(addingEnd) {
           this.messageListByChatIdAddScrollDownLoading = true;
         }
         
-        const { data } = await fetchGetMessagesByChatId({ ordering: "-created_date", ...params });
+        const { data } = await fetchGetMessagesByChatId({...params });
         const messageList =  await Promise.all(data?.results?.reverse()?.map( async (item) => {
           // reactions grouping
           const groupedReactions = {};
@@ -482,7 +486,9 @@ export const useChatStore = defineStore("chat-stores", {
       } catch(e){
         console.log(e)
       } finally{
-        this.messageListByChatIdLoading = false;
+        if(!stayLoading){
+          this.messageListByChatIdLoading = false;
+        }
         this.messageListByChatIdAddMoreLoading = false;
         this.messageListByChatIdAddScrollDownLoading = false;
       }

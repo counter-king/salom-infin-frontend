@@ -276,6 +276,17 @@ watch(data, (newData) => {
       }
     }
   }
+  // else if(newData.type == WEBCOCKET_EVENTS.NOTIFY_MESSAGE_READ) {
+  //     // when messags are readed, then decrease count of unread message count from chat list
+  //     const chatPrivate = chatStore.privateChatList.find(item=> item.chat_id == newData?.content?.chat_id)
+  //     const chatGroup = chatStore.groupChatList.find(item=> item.chat_id == newData?.content?.chat_id)
+  //     if(chatPrivate?.unread_count > 0){
+  //       chatPrivate.unread_count -= 1
+  //     }
+  //     if(chatGroup?.unread_count > 0){
+  //       chatGroup.unread_count -= 1
+  //     }
+  // }
   else if(newData.type == WEBCOCKET_EVENTS.CHAT_DELETED) {
     const isPrivate = newData.content?.chat_type == CHAT_TYPES.PRIVATE
     if(isPrivate) {

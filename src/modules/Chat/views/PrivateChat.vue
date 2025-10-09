@@ -24,6 +24,7 @@ import { CHAT_ROUTE_NAMES, CHAT_TYPES, MESSAGE_TYPES } from '../constatns';
 // utils
 import { formatDay } from '@/utils/formatDate';
 import { dispatchNotify } from '@/utils/notify';
+import { extractPaginationCursors } from '../utlis';
 // stores
 import { useChatStore } from '../stores';
 import { useAuthStore } from '@/modules/Auth/stores';
@@ -36,12 +37,11 @@ import { useScrollReachUpGetNextMessageList } from '../composables/useScrollReac
 import { useScrollReachDownGetNextMessageList } from '../composables/useScrollReachDownGetNextMessageList';
 import { useReadMessageObserver } from '../composables/useReadMessageObserver';
 // services
-import { fetchGetMessagePage } from '../services';
 
 const { menuItems, refContextMenu } = useContextMenu();
 const { onDragOver, onDragLeave, onDrop } = useFileUploadDrop();
-const { handleScrollReachUp, hasNext, page, pageSize } = useScrollReachUpGetNextMessageList();
-const { handleScrollReachDown, page: pageDown } = useScrollReachDownGetNextMessageList();
+const { handleScrollReachUp, nextCursor, pageSize } = useScrollReachUpGetNextMessageList();
+const { handleScrollReachDown, previousCursor } = useScrollReachDownGetNextMessageList();
 const { refMessagesContainer, refMessageElements, initializeReadMessageObserver } = useReadMessageObserver();
 
 const { t } = useI18n();
@@ -283,38 +283,36 @@ const handleClickReplayMessage = useDebounceFn(async (message) => {
       putScrollReplayedMessagePalce(message.replied_to?.id)
       chatStore.replayedMessageClicked = false
     }
+    
     else {
-        const  data = await fetchGetMessagePage({
-          page_size: 20,
-          message_id: message.replied_to?.id,
-          chat_id: chatStore.selectedUser?.chat_id
-        })
-        page.value = data?.data?.page || 1;
-        pageDown.value = data?.data?.page - 1
-        await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id, page: page.value, page_size: pageSize.value }, true);
-        page.value +=1
-        putScrollReplayedMessagePalce(message.replied_to?.id)
-        chatStore.replayedMessageClicked = true
+       const response = await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id, around: message.replied_to?.id, ctx_above: 15, ctx_below: 15 }, true);
+       const { next, previous } = extractPaginationCursors(response)
+       nextCursor.value = next
+       previousCursor.value = previous
+       putScrollReplayedMessagePalce(message.replied_to?.id)
+       chatStore.replayedMessageClicked = true
     }
   }
 }, 300)
 
-const getMessageListByCondition = async ()=>{
-    pageDown.value = chatStore.selectedUser.unread_count > 20 ? Math.ceil(chatStore.selectedUser.unread_count / 20) : 1
-    page.value = pageDown.value
+
+const getMessageListByCondition = async ()=> {
+    const isUnreadCountLessThan20 = chatStore.selectedUser.unread_count < 20 
     let response = null
-    if(chatStore.selectedUser.unread_count > 0){
-      response = await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id, page: pageDown.value, page_size: 20 }, true, false);
-      pageDown.value -= 1
-      if(pageDown.value >= 1){
-        response = await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id, page: pageDown.value, page_size: 20 }, false, false, true);
-        pageDown.value -= 1
+    if(chatStore.selectedUser?.unread_count > 0){
+      if(isUnreadCountLessThan20){
+        response = await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id, around: chatStore.selectedUser?.first_unread_id, ctx_below: 15, ctx_above: chatStore.selectedUser?.unread_count });
+      } else {
+        response = await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id, around: chatStore.selectedUser?.first_unread_id, ctx_below: 5, ctx_above: 15 });
       }
     } else {
-      response =  await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id, page: page.value, page_size: 20 });
-      hasNext.value = response?.count > page.value * pageSize.value
+      response =  await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id, page_size: 20 });
     }
-    page.value +=1 
+
+    const { next, previous } = extractPaginationCursors(response)
+    nextCursor.value = next
+    previousCursor.value = previous
+    // specific scroll where to put scroll
     if(chatStore.selectedUser.unread_count > 0){
       putScrollFirstUnreadMessagePalce()
     } else {
@@ -469,7 +467,7 @@ onMounted(() => {
     </template>
   </div>
   <div class="px-6 mt-2">
-      <SendMessage ref="refSendMessage" v-model="pageDown" />
+      <SendMessage ref="refSendMessage" v-model="nextCursor" />
   </div>
   <ContextMenu :menu-items="menuItems" ref="refContextMenu" />
   <!-- emoji context menu -->
