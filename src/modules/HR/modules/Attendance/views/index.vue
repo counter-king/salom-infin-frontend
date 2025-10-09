@@ -266,7 +266,7 @@ onMounted(async () => {
 
         <template #user_status="{ data }">
           <status-chip type="handbook" :status="data.user_status">
-            {{ data.user_status }}
+            {{ data.user_status?.name }}
           </status-chip>
         </template>
 
