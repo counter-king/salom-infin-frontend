@@ -436,7 +436,7 @@ export const useChatStore = defineStore("chat-stores", {
           this.messageListByChatIdAddScrollDownLoading = true;
         }
         
-        const { data } = await fetchGetMessagesByChatId(params);
+        const { data } = await fetchGetMessagesByChatId({ ordering: "-created_date", ...params });
         const messageList =  await Promise.all(data?.results?.reverse()?.map( async (item) => {
           // reactions grouping
           const groupedReactions = {};
