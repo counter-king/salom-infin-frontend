@@ -265,7 +265,7 @@ const putScrollReplayedMessagePalce = (messageId)=>{
         item.style.paddingLeft= "24px"
         item.style.paddingY="10px"
         item.style.width = "calc(100% + 48px)"
-        item.scrollIntoView({ block: "nearest", behavior: "instant"});
+        item.scrollIntoView({ block: "center", behavior: "instant"});
         count++
       }
       setTimeout(() => {
@@ -467,7 +467,7 @@ onMounted(() => {
     </template>
   </div>
   <div class="px-6 mt-2">
-      <SendMessage ref="refSendMessage" v-model="nextCursor" />
+      <SendMessage ref="refSendMessage" v-model="previousCursor" />
   </div>
   <ContextMenu :menu-items="menuItems" ref="refContextMenu" />
   <!-- emoji context menu -->
