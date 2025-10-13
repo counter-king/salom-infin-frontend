@@ -1,0 +1,350 @@
+<script setup>
+// core
+import { reactive, computed, onMounted, nextTick } from 'vue';
+import { useI18n } from 'vue-i18n'
+import { useRoute, useRouter } from 'vue-router'
+// components
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+// Utils
+import { getStorageItem } from "@/utils/storage";
+// constants
+import { pagination } from "@/constants/constants";
+
+// composibles
+const { t } = useI18n()
+const route = useRoute()
+const router = useRouter()
+// props
+const props = defineProps({
+  value: {
+    type: Array,
+    default: () => []
+  },
+  headers: {
+    type: Array,
+    default: () => []
+  },
+  scrollHeight: {
+    type: String,
+    default: () => 'calc(100vh - 295px)'
+  },
+  totalCount: {
+    type: Number,
+    default: () => 0
+  },
+  storageColumnsName: {
+    type: String,
+    default: ""
+  },
+  loading: {
+    type: Boolean,
+    default: () => false
+  },
+  apiParams: {
+    type: Object,
+    default: () => {}
+  },
+  actionList: {
+    type: Function,
+    default: () => void 0
+  },
+  bodyCellClass: {
+    type: [String, Array, Object],
+    default: () => ''
+  },
+  bodyCellContentClass: {
+    type: [String, Array, Object],
+    default: () => ''
+  },
+  headerCellClass: {
+    type: [String, Array, Object],
+    default: () => ''
+  },
+  headerCellContentClass: {
+    type: [String, Array, Object],
+    default: () => ''
+  },
+  pageSize: {
+    type: Number,
+    default: () => 10
+  },
+  sortable: {
+    type: Boolean,
+    default: () => false
+  }
+})
+// emits
+const emit = defineEmits([
+  'emit:setStoreHeaders',
+  'emit:rowClick',
+  'emit:onPageChange',
+  'update:selection',
+  'emit:onSort'
+]);
+
+// reactives
+const paginationStore = reactive({
+  page: pagination.page || route.query.page,
+  pageSize: props.pageSize || pagination.pageSize || route.query.page_size,
+  firstRow: pagination.firstRow || +route.query.firstRow,
+});
+
+// Computed
+const headersComputed = computed(() => {
+  return props.headers.filter(header => header.active);
+});
+
+const valueComputed = computed(() => {
+  return props.value.map((item, index) => {
+    return {
+      index: index + 1,
+      ...item
+    }
+  })
+});
+
+// Methods
+const onPageChange = async (val) => {
+  paginationStore.page = val.page + 1;
+  paginationStore.pageSize = val.rows;
+  paginationStore.firstRow = val.first;
+
+  await router.replace({
+      ...route,
+      query: {
+        ...route.query,
+        page: paginationStore.page,
+        page_size: paginationStore.pageSize,
+        first_row: paginationStore.firstRow
+      }
+    });
+
+  await props.actionList({ ...route.query, page: paginationStore.page, page_size: paginationStore.pageSize });
+
+  emit('emit:onPageChange', paginationStore.page)
+}
+
+const initializeTable = async () => {
+  if (route.query && route.query.page && route.query.page_size && route.query.first_row) {
+    paginationStore.page = Number(route.query.page);
+    paginationStore.pageSize = Number(route.query.page_size);
+    paginationStore.firstRow = Number(route.query.first_row);
+    await props.actionList({ ...route.query, page: paginationStore.page, page_size: paginationStore.pageSize });
+  } else if (route.query && props.apiParams) {
+    await props.actionList({ ...props.apiParams, ...route.query });
+  } else if (props.apiParams){
+    await props.actionList({...props.apiParams});
+  } else {
+    await props.actionList({ page: paginationStore.page, page_size: paginationStore.pageSize });
+  }
+  if (getStorageItem(props.storageColumnsName)){
+    emit('emit:setStoreHeaders', JSON.parse(getStorageItem(props.storageColumnsName)))
+  }
+}
+
+// Hooks
+onMounted( async () => {
+  await initializeTable();
+})
+
+onMounted(() => {
+  nextTick(() => {
+    const table = document.querySelector('.p-datatable-table');
+    const cells = table.querySelectorAll('tbody td');
+
+    cells.forEach(cell => {
+      cell.addEventListener('mouseenter', (e) => {
+        const allCells = table.querySelectorAll('tbody td');
+        const currentCell = e.target;
+        const currentRow = currentCell.parentElement;
+        const colIndex = Array.from(currentRow.children).indexOf(currentCell);
+        const rowIndex = Array.from(currentRow.parentElement.children).indexOf(currentRow);
+
+        // Tozalash
+        allCells.forEach(c => c.classList.remove('bg-highlight'));
+
+        // 1. Ustun bo‘yicha yuqoridan pastgacha highlight (shu katakkacha)
+        const rows = table.querySelectorAll('tbody tr');
+        rows.forEach((row, rIdx) => {
+          if (rIdx <= rowIndex) {
+            const td = row.children[colIndex];
+            if (td) td.classList.add('bg-highlight');
+          }
+        });
+
+        // 2. Qator bo‘yicha chapdan shu katakkacha highlight
+        currentRow.querySelectorAll('td').forEach((td, cIdx) => {
+          if (cIdx <= colIndex) {
+            td.classList.add('bg-highlight');
+          }
+        });
+      });
+    });
+
+    // Optional: mouse chiqib ketsa tozalash
+    table.addEventListener('mouseleave', () => {
+      table.querySelectorAll('tbody td').forEach(c => c.classList.remove('bg-highlight'));
+    });
+  });
+});
+
+</script>
+<template>
+  <DataTable 
+    :value="valueComputed" 
+    :headers="headersComputed"
+    :first="paginationStore.firstRow || 0"
+    :page-link-size="5"
+    paginator
+    lazy
+    paginator-position="bottom"
+    :rows-per-page-options="[10, 15, 30, 50, 100]"
+    paginatorTemplate="RowsPerPageDropdown CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+    currentPageReportTemplate="{first}-{last} из {totalRecords}"
+    :rows="paginationStore.pageSize"
+    :scroll-height="props.scrollHeight"
+    :total-records="props.totalCount"
+    :loading="props.loading"
+    scrollable
+    @sort="(event) => emit('emit:onSort', event)"
+    @row-click="event => emit('emit:rowClick', event.data)"
+    @page="onPageChange"
+    :pt="
+    {
+      table: {
+        class: [
+          {
+            // 'border-separate border-spacing-y-1 -mt-1': true
+          }
+        ]
+      },
+      
+      thead: { class: ['bg-inherit'] },
+      bodyRow: { class: ['cursor-pointer text-sm font-medium greyscale-900', 'hover:bg-white','last:border-b last:border-b-greyscale-100'] },
+      loadingoverlay: { class: ['bg-transparent overflow-hidden', 'h-[calc(100%-56px)]'] },
+      paginator: {
+        rowPerPageDropdown: {
+          root: { class: ['h-6', 'rounded-2'] },
+          paginatorWrapper: ['flex', 'justify-between', 'border', 'border-solid'],
+          input: { class: ['flex', 'items-center', 'text-xs', 'font-semibold'] },
+          dropdownicon: { class: ['w-3', 'h-3'] },
+          trigger: { class: ['w-[30px]'] },
+          item: { class: ['h-8', 'text-xs', 'flex', 'items-center'] },
+          list: { class: ['p-0'] },
+        },
+        root: { class: ['h-14 rounded-none bg-white rounded-br-[12px] rounded-bl-[12px]  bg-greyscale-50'] },
+        paginatorWrapper: { class: ['h-10', 'border-0'] },
+        current: { class: ['text-xs text-greyscale-300 mr-auto h-full' ]},
+        firstPageButton: { class: ['rounded-[6px]', 'h-7', 'w-7', 'min-w-[28px]', 'border greyscale-100', 'border-solid', 'border-border-1'] },
+        lastPageButton: { class: ['rounded-[6px]', 'h-7', 'w-7', 'min-w-[28px]', 'border greyscale-100', 'border-solid', 'border-border-1'] },
+        previousPageButton: { class: ['rounded-[6px]', 'h-7', 'w-7', 'min-w-[28px]', 'border greyscale-100', 'border-solid', 'border-border-1 '] },
+        pageButton: ({ context }) => ({
+            class:  [ context.active ? ['bg-white', 'text-greyscale-900'] : undefined, 'rounded-[6px] font-medium greyscale-400', 'h-6', 'w-6', 'min-w-[24px]', 'text-[13px]']
+        }),
+        pages: { class: ['flex items-center gap-[2px] bg-greyscale-50 rounded-[6px] p-[2px]'] },
+        nextPageButton: { class: ['rounded-[6px]', 'h-7', 'w-7', 'min-w-[28px]', 'border greyscale-100', 'border-solid', 'border-border-1'] }
+      },
+    }"
+    >
+    <Column
+      header="№"
+      frozen
+      :pt="{
+        headerCell: {
+          class: ['bg-greyscale-50 py-2 px-3 border-0 border-r border-greyscale-200 frozen-header-cell', props.headerCellClass]
+        },
+        headerContent: {
+          class: ['text-sm font-semibold text-greyscale-500', props.headerCellContentClass]
+        },
+        bodyCell: {
+          class: ['border-greyscale-100 py-2 px-3 border-0 border-t border-r', props.bodyCellClass],
+        },
+        bodyCellContent: {
+          class: ['text-sm font-medium text-greyscale-900', props.bodyCellContentClass]
+        },
+      }"
+      >
+        <template #body="{ index, data }">
+          <slot
+            name="count"
+            :index="index"
+            :data="data"
+          >
+            <span class="text-sm font-medium text-greyscale-500">{{ (paginationStore.pageSize * paginationStore.page + 1) - (paginationStore.pageSize - index) }}</span>
+          </slot>
+        </template>
+      </Column>
+    <template v-for="(header, index) in headersComputed" :key="header.field">
+      <Column
+        :sortable="props.sortable"
+        :frozen="header.frozen"
+        :field="header.field"
+        :header="t(header.header)"
+        :style="{ width: header.width }"
+        :pt="{
+          headerCell: { 
+            class: ['bg-greyscale-50 py-2 px-3 border-0 border-r greyscale-200 last:border-r-0',
+             header.frozen ? 'border-l bg-none' : 'border-r',
+             props.headerCellClass]
+          },
+          headerContent: {
+            class: ['gap-1 text-sm font-semibold text-greyscale-500', props.headerCellContentClass]
+          },
+          bodyCell: {
+            class: ['border-greyscale-100 py-2 px-3 border-0 border-t border-r last:border-r-0', props.bodyCellClass],
+          },
+          bodyCellContent: {
+            class: ['text-sm font-medium text-greyscale-900', props.bodyCellContentClass]
+          },
+      }"
+      >
+      <template #header>
+        <slot :name="'header' + header.field" :data="header"></slot>
+      </template>
+      <template #sorticon>
+        <slot :name="'headerIcon' + header.field" :data="header"></slot>
+      </template>
+        <template #body="{ field, data }" >
+         <slot :name="field" :data="data"  :field="field" class="order-1">
+            <span>{{ data[field] }}</span>
+         </slot>
+        </template>       
+      </Column>
+    </template>
+    <template #loading>
+      <base-skeleton
+        :columns="props.headers"
+      />
+    </template>
+    <template #empty>
+      <slot name="empty">
+        <div
+          class="w-full flex justify-center items-center rounded-lg"
+          style="height: calc(100vh - 390px)"
+        >
+          <img class="w-[200px] h-[170px]" src="@/assets/img/empty-img-gray.png" alt="EmptyFolder">
+        </div>
+      </slot>
+    </template>
+  </DataTable>
+</template>
+<style scoped>
+::v-deep(.bg-highlight) {
+  background-color: var(--greyscale-50);
+}
+
+::v-deep(.p-frozen-column) {
+  z-index: 100;
+}
+::v-deep(.frozen-header-cell) {
+  background-color: rgb(249 250 251) !important; 
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  border-right: 1px solid var(--greyscale-200) !important;
+  background-clip: padding-box;
+  box-shadow: inset 0 0 0 1000px rgb(249 250 251);
+}
+
+</style>

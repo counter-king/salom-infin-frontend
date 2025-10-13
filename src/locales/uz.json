@@ -821,6 +821,15 @@
   "on-trip": "Xizmat safarida",
   "reporting": "Hisobot topshrish",
   "closed": "Yakunlangan",
+  "my-activities": "Mening faoliyatim",
+  "my-attendance": "Mening ishtirokim",
+  "my-applications": "Mening bayonotlarim",
+  "next-month": "Keyingi oy",
+  "prev-month": "Avvalgi oy",
+  "current-month": "Joriy oy",
+  "sick-leave": "Kasallik ta'tillari",
+  "without-content": "Без содержания",
+  "additional-day-off": "Qo'shimcha dam olish kuni",
   "main-dashboard": "Umumiy dashbord",
   "financial-dashboard": "Moliyaviy dashbord",
   "mobile-number": "Mobil raqam",
@@ -1019,5 +1028,11 @@
   "normal-exit": "Vaqtida ketdi",
   "other": "Boshqa",
   "service-car": "Bankning xizmat avtomobili",
-  "user-status": "Xodim holati"
+  "user-status": "Xodim holati",
+  "timesheet-system": "Vaqt jadvali tizimi",
+  "state": "Shtat",
+  "timesheet": "Vaqt jadvali",
+  "helloSQB": "Salom SQB",
+  "general":"Umumiy",
+  "faceId": "Face ID"
 }

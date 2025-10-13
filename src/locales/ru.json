@@ -825,6 +825,15 @@
   "on-trip": "В командировке",
   "reporting": "Предоставление отчета",
   "closed": "Закрыто",
+  "my-activities": "Мои активности",
+  "my-attendance": "Моя посещаемость",
+  "my-applications": "Мои заявления",
+  "next-month": "Следующий месяц",
+  "prev-month": "Предыдущий месяц",
+  "current-month": "Текущий месяц",
+  "sick-leave": "Больничный отпуск",
+  "without-content": "без содержания",
+  "additional-day-off": "Дополнительный выходной день",
   "main-dashboard": "Общий дашбоард",
   "financial-dashboard": "Финансовый дашбоард",
   "mobile-number": "Мобильный номер",
@@ -1022,5 +1031,11 @@
   "normal-exit": "Ушел вовремя",
   "other": "Другое",
   "service-car": "Служебный автомобиль банка",
-  "user-status": "Статус сотрудника"
+  "user-status": "Статус сотрудника",
+  "timesheet-system": "Система табел",
+  "state": "Штат",
+  "timesheet": "Табель",
+  "helloSQB": "Salom SQB",
+  "general":"Общей",
+  "faceId": "Face ID"
 }

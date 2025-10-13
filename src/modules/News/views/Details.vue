@@ -415,7 +415,7 @@ onMounted( async () => {
       :createButtonFn="handleRejectModeration"
       :loading="isLoadingRejectModeration"
        max-width="max-w-[700px]"
-      />
+    />
   </div>
 </template>
 
