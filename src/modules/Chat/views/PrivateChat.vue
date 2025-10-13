@@ -266,6 +266,7 @@ const putScrollReplayedMessagePalce = (messageId)=>{
         item.style.paddingY="10px"
         item.style.width = "calc(100% + 48px)"
         item.scrollIntoView({ block: "center", behavior: "instant"});
+        
         count++
       }
       setTimeout(() => {
