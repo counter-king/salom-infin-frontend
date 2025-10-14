@@ -822,8 +822,8 @@
   "reporting": "Hisobot topshrish",
   "closed": "Yakunlangan",
   "my-activities": "Mening faoliyatim",
-  "my-attendance": "Mening ishtirokim",
-  "my-applications": "Mening Arizalarim",
+  "my-attendance": "Davomatim",
+  "my-applications": "Arizalarim",
   "next-month": "Keyingi oy",
   "prev-month": "Avvalgi oy",
   "current-month": "Joriy oy",
@@ -1038,5 +1038,8 @@
   "days-of-the-week": "Hafta kunlari",
   "worked-time":"Ishlagan vaqti",
   "current": "Joriy",
-  "archive": "Arxiv"
+  "archive": "Arxiv",
+  "reason-for-explanation":"Tushuntirish sababi",
+  "reason-entered-time":"Sabab kiritilgan vaqt",
+  "current-status":"Hozirgi holati"
 }

@@ -44,7 +44,21 @@ const MyActivities = [
         meta: {
           isAuthRequired: true
         },
-        component: () => import('../views/MyApplications/index.vue')
+        component: () => import('../views/MyApplications/index.vue'),
+        redirect: { name: 'MyApplicationsCurrent' },
+        children: [
+          {
+            path: 'current',
+            name: 'MyApplicationsCurrent',
+
+            component: () => import('../views/MyApplications/CurrentTable.vue')
+          },
+          {
+            path: 'archive',
+            name: 'MyApplicationsArchive',
+            component: () => import('../views/MyApplications/ArchiveTable.vue')
+          }
+        ]
       }
     ]
   }

@@ -1041,5 +1041,8 @@
   "days-of-the-week": "Дни недели",
   "worked-time":"Проработанное время",
   "current": "Текущие", 
-  "archive": "Архив"
+  "archive": "Архив",
+  "reason-for-explanation":"Причина объяснения",
+  "reason-entered-time":"Время ввода причины",
+  "current-status":"Текущий статус"
 }

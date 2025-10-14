@@ -5,10 +5,7 @@ import { useRoute} from 'vue-router'
 // components
 import Status from '../../components/MyAttendance/Status.vue'
 // store
-// constants
-// utils
-// store
-import { useMyAttendanceStore } from '../../stores/myAttendance.store.js'
+import { useMyAttendanceStore } from '../../store/myAttendence.store'
 // composibles
 const attendanceStore = useMyAttendanceStore()
 // inject

@@ -31,10 +31,10 @@ const toolTipFun = (data)=> (
       <div class="flex items-center gap-3 relative overflow-visible">
         <!-- icon wrapper -->
         <div 
-            class="w-12 h-12 min-w-12 min-h-12 rounded-full flex items-center justify-center"
-            :class="props.data.iconClass"
-            >
-            <base-iconify :icon="props.data.icon" class="!w-[22px] !h-[22px]" />
+          class="w-9 h-9 min-w-9 min-h-9 rounded-full flex items-center justify-center"
+          :class="props.data.iconClass"
+          >
+          <base-iconify :icon="props.data.icon" class="!w-5 !h-5" />
         </div>
         <div class="text-xl font-semibold text-greyscale-900">
             {{ props.data.title }}
