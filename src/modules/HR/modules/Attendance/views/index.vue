@@ -117,38 +117,36 @@ const onBranchChange = async (val) => {
   })
 }
 const onStatusClick = async (item) => {
-  if (item.value !== 'not_registered_on_faceid') {
-    const params = {
-      ...router.currentRoute.value.query,
-      page: 1,
-      page_size: 15,
-      status: route.query.status || undefined,
-      start_date: route.query.created_start_date || formatDateReverse(new Date()),
-      end_date: route.query.created_end_date || formatDateReverse(new Date()),
-      company: route.query.company || branchSelect.value
-    }
-
-    await router.replace({
-      query: {
-        ...params,
-        status: item.value
-      }
-    })
-
-    if (item.value === 'all') {
-      await store.actionGetAttendanceList({
-        ...route.query,
-        status: undefined
-      })
-    } else {
-      await store.actionGetAttendanceList({
-        ...route.query,
-        status: item.value
-      })
-    }
-
-    store.statusItems.forEach(i => i.active = i.id === item.id)
+  const params = {
+    ...router.currentRoute.value.query,
+    page: 1,
+    page_size: 15,
+    status: route.query.status || undefined,
+    start_date: route.query.created_start_date || formatDateReverse(new Date()),
+    end_date: route.query.created_end_date || formatDateReverse(new Date()),
+    company: route.query.company || branchSelect.value
   }
+
+  await router.replace({
+    query: {
+      ...params,
+      status: item.value
+    }
+  })
+
+  if (item.value === 'all') {
+    await store.actionGetAttendanceList({
+      ...route.query,
+      status: undefined
+    })
+  } else {
+    await store.actionGetAttendanceList({
+      ...route.query,
+      status: item.value
+    })
+  }
+
+  store.statusItems.forEach(i => i.active = i.id === item.id)
 }
 
 // Hooks
