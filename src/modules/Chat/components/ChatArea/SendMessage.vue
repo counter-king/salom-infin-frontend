@@ -127,8 +127,8 @@ const handleSendMessage = async (event) => {
         if(chatStore.replayedMessageClicked){
           chatStore.replayedMessageClicked = false
           const response = await chatStore.actionGetMessageListByChatId({ chat: chatStore.selectedUser?.chat_id,  page_size: 20 }, true);
-          const { next } = extractPaginationCursors(response)
-          modelValue.value = next
+          const { previous } = extractPaginationCursors(response)
+          modelValue.value = previous
           refChatArea.value.scrollTop = refChatArea.value.scrollHeight
         }
     }

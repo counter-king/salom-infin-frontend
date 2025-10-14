@@ -25,7 +25,7 @@ const debouncedHandleScrollUp = useDebounceFn(async(event, handleScrollUp) => {
         const { next } = extractPaginationCursors(response)
         nextCursor.value = next
         handleScrollUp()
-      } catch (error) {
+      } catch (error) { 
         console.log(error)
       } finally {
         isLoading.value = false

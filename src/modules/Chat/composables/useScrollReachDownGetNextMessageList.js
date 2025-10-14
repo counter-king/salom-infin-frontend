@@ -26,7 +26,7 @@ const debouncedHandleScrollDown = useDebounceFn(async(event) => {
     if(previousCursor.value && !isLoading.value){
       isLoading.value = true
       try {
-       const response = await chatStore.actionGetMessageListByChatId({ chat: chat.chat_id, cursor: previousCursor.value, page_size:pageSize.value }, false, false, true)
+        const response = await chatStore.actionGetMessageListByChatId({ chat: chat.chat_id, cursor: previousCursor.value, page_size:pageSize.value }, false, false, true)
         const { previous } = extractPaginationCursors(response)
         previousCursor.value = previous
 
