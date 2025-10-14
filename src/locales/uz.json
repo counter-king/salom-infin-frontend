@@ -823,7 +823,7 @@
   "closed": "Yakunlangan",
   "my-activities": "Mening faoliyatim",
   "my-attendance": "Mening ishtirokim",
-  "my-applications": "Mening bayonotlarim",
+  "my-applications": "Mening Arizalarim",
   "next-month": "Keyingi oy",
   "prev-month": "Avvalgi oy",
   "current-month": "Joriy oy",
@@ -1034,5 +1034,9 @@
   "timesheet": "Vaqt jadvali",
   "helloSQB": "Salom SQB",
   "general":"Umumiy",
-  "faceId": "Face ID"
+  "faceId": "Face ID",
+  "days-of-the-week": "Hafta kunlari",
+  "worked-time":"Ishlagan vaqti",
+  "current": "Joriy",
+  "archive": "Arxiv"
 }

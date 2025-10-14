@@ -13,7 +13,6 @@ import CalendarButton from '@/components/Actions/CalendarButton.vue';
 const { t } = useI18n()
 const route = useRouter()
 // reactive
-// injects
 const currentDate = inject('currentDate')
 const handleMonthChange = inject('handleMonthChange')
 const goToPrevMonth = inject('goToPrevMonth')

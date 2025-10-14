@@ -10,12 +10,12 @@ const { t } = useI18n()
 // Reactive
 const navsMenu = ref([
   {
-    title: t('my-attendance'),
+    title: 'my-attendance',
     icon: CalendarLinearIcon,
     link: 'MyAttendanceIndex',
   },
   {
-    title: t('my-applications'),
+    title: 'my-applications',
     icon: FileTextIcon,
     link: 'MyApplicationsIndex',
   },

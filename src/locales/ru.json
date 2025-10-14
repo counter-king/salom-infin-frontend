@@ -1037,5 +1037,9 @@
   "timesheet": "Табель",
   "helloSQB": "Salom SQB",
   "general":"Общей",
-  "faceId": "Face ID"
+  "faceId": "Face ID",
+  "days-of-the-week": "Дни недели",
+  "worked-time":"Проработанное время",
+  "current": "Текущие", 
+  "archive": "Архив"
 }

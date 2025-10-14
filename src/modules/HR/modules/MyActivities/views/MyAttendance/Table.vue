@@ -8,7 +8,7 @@ import Status from '../../components/MyAttendance/Status.vue'
 // constants
 // utils
 // store
-import { useMyAttendanceStore } from '../../stores/index.js'
+import { useMyAttendanceStore } from '../../stores/myAttendance.store.js'
 // composibles
 const attendanceStore = useMyAttendanceStore()
 // inject

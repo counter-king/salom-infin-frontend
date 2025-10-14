@@ -30,12 +30,12 @@ const menus = ref([
     children: [],
     roles: ["hr"]
   },
-  {
-    title: "timesheet-system",
-    icon: ChecklistMinimalisticLinearIcon,
-    link: "TimesheetSystemIndex",
-    children: []
-  },
+  // {
+  //   title: "timesheet-system",
+  //   icon: ChecklistMinimalisticLinearIcon,
+  //   link: "TimesheetSystemIndex",
+  //   children: []
+  // },
   {
     title: "my-activities",
     icon: BoltLinearIcon,
