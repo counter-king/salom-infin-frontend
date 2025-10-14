@@ -896,6 +896,28 @@ export const returnLateTime = (start_time, end_time, locale = "uz", type = "entr
   return `${diffMinutes} min`
 }
 
+export const formatLateTime = (minutes, locale = "uz") => {
+  if (!minutes || minutes <= 0) return null
+
+  const hours = Math.floor(minutes / 60)
+  const remainingMinutes = minutes % 60
+
+  if (locale === "uz") {
+    if (hours > 0 && remainingMinutes > 0) return `-${hours} s. ${remainingMinutes} daq.`
+    if (hours > 0) return `-${hours} s.`
+    return `-${remainingMinutes} daq.`
+  }
+
+  if (locale === "ru") {
+    if (hours > 0 && remainingMinutes > 0) return `-${hours} ч. ${remainingMinutes} мин.`
+    if (hours > 0) return `-${hours} ч.`
+    return `-${remainingMinutes} мин.`
+  }
+
+  // fallback
+  return `-${minutes} min`
+}
+
 
 
 
