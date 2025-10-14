@@ -295,7 +295,7 @@ const handleClickReplayMessage = useDebounceFn(async (message) => {
 }, 300)
 
 const getMessageListByCondition = async ()=> {
-    const isUnreadCountLessThan20 = chatStore.selectedGroup.unread_count < 20 
+    const isUnreadCountLessThan20 = chatStore.selectedGroup?.unread_count < 20 
     let response = null
     if(chatStore.selectedGroup?.unread_count > 0){
       if(isUnreadCountLessThan20){
@@ -311,7 +311,7 @@ const getMessageListByCondition = async ()=> {
     nextCursor.value = next
     previousCursor.value = previous
     // specific scroll where to put scroll
-    if(chatStore.selectedGroup.unread_count > 0){
+    if(chatStore.selectedGroup?.unread_count > 0){
       putScrollFirstUnreadMessagePalce()
     } else {
       handleScrollDown()
