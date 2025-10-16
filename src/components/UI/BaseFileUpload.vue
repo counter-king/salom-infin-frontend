@@ -116,7 +116,7 @@ const setFiles = () => {
       uploadingFiles.value.push({
         id: file.id,
         name: returnShortFileName(file.name),
-        size: file.file_size > 1 ? file.file_size + ' MB' : (file.file_size * 1024).toFixed(2) + ' KB',
+        size: file?.size_,
         progress: 0,
         uploaded: true
       })

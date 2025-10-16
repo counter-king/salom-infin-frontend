@@ -199,7 +199,7 @@ const Settings = [
       // Profile
       // ...Profile,
       // {
-      //   component: () => import("../views/Profile/index.vue"),
+      //   component: () => import("../views/Profile/List.vue"),
       //   meta: { isAuthRequired: true },
       //   name: "ProfileIndex",
       //   path: "profile",

@@ -4,8 +4,28 @@ const Attendance = [
     name: 'AttendanceIndex',
     meta: {
       isAuthRequired: true,
+      navigation: true
     },
-    component: () => import('../views/index.vue')
+    redirect: { name: 'EmployeesAttendanceList' },
+    component: () => import('../views/index.vue'),
+    children: [
+      {
+        path: 'employees-attendance',
+        name: 'EmployeesAttendanceList',
+        meta: {
+          isAuthRequired: true,
+        },
+        component: () => import('../views/List.vue'),
+      },
+      {
+        path: 'work-schedule-settings',
+        name: 'WorkScheduleSettings',
+        meta: {
+          isAuthRequired: true,
+        },
+        component: () => import('../views/WorkScheduleSettings/index.vue'),
+      }
+    ]
   }
 ]
 

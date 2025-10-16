@@ -63,7 +63,7 @@ const props = defineProps({
   })},
   allowedFileTypes: {
    type: Array,
-   default: ()=> []  
+   default: ()=> []
   },
   allowedFileInfo: {
    type: String,
@@ -103,11 +103,11 @@ const returnShortFileName = (fileName) => {
 const uploadFiles = async (files) => {
   if (files.length === 0) return;
 
-  
+
   for (let i = 0; i < files.length; i++) {
     // Fayl formatini tekshirish
     if (!props.allowedFileTypes.includes(files[i].type)) {
-      
+
       dispatchNotify(null,
       `Faqat ${props.allowedFileTypes.reduce((acc,type) => acc + type.split("/")[1]?.toUpperCase() + ", ", "")} formatdagi fayllarga ruxsat beriladi.`,
         COLOR_TYPES.ERROR);
@@ -119,7 +119,7 @@ const uploadFiles = async (files) => {
       dispatchNotify(null, `Fayl maksimal ${props.allowedUploadSize} MB hajmdan oshib ketdi.`, COLOR_TYPES.ERROR);
       continue;
     }
-    
+
     let fileName = returnShortFileName(files[i].name);
     let size = files[i].size;
     let fileSize = (size > 1048576) ? (size / 1048576).toFixed(2) + ' MB' : (size <= 1048576 && size > 1024) ? (size / 1024).toFixed(2) + ' KB' : size + ' B'
@@ -158,7 +158,7 @@ const setFiles = () => {
       uploadingFiles.value.push({
         id: file.id,
         name: returnShortFileName(file.name),
-        size: file.file_size > 1 ? file.file_size + ' MB' : (file.file_size * 1024).toFixed(2) + ' KB',
+        size: file?.size_,
         progress: 0,
         uploaded: true,
         url: file?.url,

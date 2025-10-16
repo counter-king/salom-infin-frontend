@@ -50,9 +50,17 @@ onMounted(async () => {
         props.files.map(async (file) => {
           if (!file.url) {
             const blobFile = await store.actionGetBlobFile(file.id)
+            const sizeInBytes = blobFile.blob.size
+
+            const sizeText =
+              sizeInBytes < 1024 * 1024
+                ? `${(sizeInBytes / 1024).toFixed(2)} KB`
+                : `${(sizeInBytes / (1024 * 1024)).toFixed(2)} MB`
+
             return {
               ...file,
               ...blobFile,
+              file_size: sizeText
             }
           } else {
             return file
@@ -97,7 +105,7 @@ onMounted(async () => {
                 <h1 class="text-sm text-primary-900">{{ data.name }}</h1>
 
                 <div class="flex items-center gap-2">
-                  <span class="text-xs text-greyscale-500 font-medium">{{ data.file_size }} MB</span>
+                  <span class="text-xs text-greyscale-500 font-medium">{{ data.file_size }}</span>
 
                   <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-full"></div>
 
