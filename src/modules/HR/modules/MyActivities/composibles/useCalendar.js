@@ -41,10 +41,12 @@ watch(()=> currentDate.value, () => {
         const date = new Date(currentYear.value, currentMonth.value - 1, prevMonthLastDay.value - firstDayOfWeek.value + i + 1)
         const dayOfWeek = date.getDay()
         calendarDays.value.push({
-        day: prevMonthLastDay.value - firstDayOfWeek.value + i + 1,
+        // day: prevMonthLastDay.value - firstDayOfWeek.value + i + 1,
+        day: null,
         currentMonth: false,
         date: new Date(currentYear.value, currentMonth.value - 1, prevMonthLastDay.value - firstDayOfWeek.value + i + 1),
-        workDay: dayOfWeek !== 0 && dayOfWeek !== 6
+        // workDay: dayOfWeek !== 0 && dayOfWeek !== 6
+        workDay: false,
         })
     }
 

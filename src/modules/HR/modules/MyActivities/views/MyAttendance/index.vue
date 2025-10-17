@@ -1,12 +1,15 @@
 <script setup>
 // core
-import { provide, ref } from 'vue';
+import { provide, ref, watch } from 'vue';
 // components
 import HeaderToolbar from '../../components/MyAttendance/HeaderToolbar.vue';
 import ActivityCard from '../../components/ActivityCard.vue';
 import { AlarmBoldIcon, AlarmTurnOffBoldIcon, CalendarDateBoldIcon, CalendarSearchBoldIcon, CheckCircleBoldIcon, TreePalmIcon } from '@/components/Icons';
 // composibles
 import { useCalendar } from '../../composibles/useCalendar';
+// store
+import { useMyAttendanceStore } from '../../store/myAttendence.store';
+const attendanceStore = useMyAttendanceStore()
 
 const { goToPrevMonth, goToNextMonth, handleMonthChange, currentDate, currentMonth, calendarDays, handleClickCurrentMonth } = useCalendar()
 provide('goToPrevMonth', goToPrevMonth)
@@ -17,71 +20,74 @@ provide('currentMonth', currentMonth)
 provide('calendarDays', calendarDays)
 provide('handleClickCurrentMonth', handleClickCurrentMonth)
 
-
 const activityData = ref([
     {
         id: 1,
         icon: CalendarDateBoldIcon,
         iconClass: "bg-success-500 text-white",
         title: '23 д.',
-        description: 'Рабочие дни',
+        description: 'working-days',
         toolTipInfo: {
-            value: "Количество рабочих дней в месяце."
+            value: 'attendance-tooltip.working-days'
         }
     },
     {
         id: 2,
         icon: AlarmBoldIcon,
         iconClass: "bg-primary-500 text-white",
-        title: '23 д.',
-        description: 'Рабочие часы',
+        title: '160 ч.',
+        description: 'working-hours',
         toolTipInfo: {
-            value: "Общее количество часов, запланированных для работы."
+            value: 'attendance-tooltip.working-hours'
         }
     },
     {
         id: 3,
         icon: TreePalmIcon,
         iconClass: "bg-critic-300 text-white",
-        title: '23 д.',
-        description: 'Выходные дни',
+        title: '8 д.',
+        description: 'weekend-days',
         toolTipInfo: {
-            value: "Дни недели, когда работа не требуется."
+            value: 'attendance-tooltip.weekend-days'
         }
     },
     {
         id: 4,
         icon: CheckCircleBoldIcon,
         iconClass: "bg-primary-500 text-white",
-        title: '23 д.',
-        description: 'Отработанные часы',
+        title: '56 ч.',
+        description: 'worked-hours',
         toolTipInfo: {
-            value: "Количество фактически отработанных часов."
+            value: 'attendance-tooltip.worked-hours'
         }
     },
     {
         id: 5,
         icon: AlarmTurnOffBoldIcon,
         iconClass: "bg-warning-500 text-white",
-        title: '23 д.',
-        description: 'Часы отсутствий',
+        title: '48 ч.',
+        description: 'absence-hours',
         toolTipInfo: {
-            value: "Общее время отсутствия на рабочем месте."
+            value: 'attendance-tooltip.absence-hours'
         }
     },
     {
         id: 6,
         icon: CalendarSearchBoldIcon,
         iconClass: "bg-critic-300 text-white",
-        title: '23 д.',
-        description: 'Остаток часов',
+        title: '-83 ч.',
+        description: 'remaining-hours',
         toolTipInfo: {
-            value: "Разница между планом и фактически отработанными часами.",
+            value: 'attendance-tooltip.remaining-hours',
             placement: "left"
         }
     }
 ])
 
+
+watch(()=>calendarDays.value, () => {
+  attendanceStore.getMyAttendanceList()
+},{ immediate: true })
 
 </script>           
 <template>

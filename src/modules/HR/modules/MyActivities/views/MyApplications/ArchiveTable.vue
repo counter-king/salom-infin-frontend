@@ -21,8 +21,8 @@ const route = useRoute()
       :value="applicationStore.archiveApplicationList"
       scroll-height="calc(100vh - 295px)"
     >
-      <template #status="{ data }">
-        <status :status="data.status"/>
+      <template #current_status="{ data }">
+        <status :status="data.current_status"/>
       </template>
     </base-data-table> 
   </div>

@@ -4,6 +4,7 @@ import { ref, inject, watch } from 'vue'
 import { useRoute} from 'vue-router'
 // components
 import Status from '../../components/MyAttendance/Status.vue'
+import AttendanceStatus from '../../components/AttendanceStatus.vue'
 // store
 import { useMyAttendanceStore } from '../../store/myAttendence.store'
 // composibles
@@ -20,7 +21,7 @@ const route = useRoute()
 <template>
   <div class="mt-4">
     <base-data-table
-      :action-list="attendanceStore.actionGetMyAttendanceList"
+      :action-list="attendanceStore.getMyAttendanceList"
       :api-params="{ ...route.query, page_size: 15 } ?? null"
       :headers="attendanceStore.headers"
       :loading="attendanceStore.myAttendanceListLoading"
@@ -62,6 +63,9 @@ const route = useRoute()
     >
       <template #status="{ data }">
         <status :status="data.status"/>
+      </template>
+      <template #status2="{ data }">
+        <AttendanceStatus :status="data.status"/>
       </template>
     </base-data-table> 
   </div>

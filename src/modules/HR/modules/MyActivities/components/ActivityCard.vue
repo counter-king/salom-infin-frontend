@@ -1,8 +1,9 @@
 <script setup>
 // core
+import { useI18n } from 'vue-i18n';
 // components
 import { InfoCircleBoldIcon } from '@/components/Icons';
-
+const { t } = useI18n()
 //props
 const props = defineProps({
     data: {
@@ -13,7 +14,7 @@ const props = defineProps({
 
 const toolTipFun = (data)=> (
 {
-  value: data?.value,
+  value:t(data?.value),
   pt: {
       arrow: {
           class: '!text-greyscale-900'
@@ -37,7 +38,7 @@ const toolTipFun = (data)=> (
           <base-iconify :icon="props.data.icon" class="!w-5 !h-5" />
         </div>
         <div class="text-xl font-semibold text-greyscale-900">
-            {{ props.data.title }}
+            {{ t(props.data.title) }}
         </div>
         <!-- warning icon -->
         <div  
@@ -61,7 +62,7 @@ const toolTipFun = (data)=> (
       </div>
       <!-- bottom -->
       <div class="text-sm font-medium text-greyscale-900">
-          {{ props.data.description }}
+          {{ t(props.data.description) }}
       </div>
     </div>
 </template>

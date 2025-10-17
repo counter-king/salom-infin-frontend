@@ -1041,5 +1041,19 @@
   "archive": "Arxiv",
   "reason-for-explanation":"Tushuntirish sababi",
   "reason-entered-time":"Sabab kiritilgan vaqt",
-  "current-status":"Hozirgi holati"
+  "current-status":"Hozirgi holati",
+  "hour":"soat",
+  "working-hours": "Ish soatlari",
+  "weekend-days": "Dam olish kunlari",
+  "worked-hours": "Ishlangan soatlar",
+  "absence-hours": "Yo‘qlik soatlari",
+  "remaining-hours": "Soatlar qoldig‘i",
+  "attendance-tooltip": {
+    "working-days": "Oy ichidagi ish kunlari soni.",
+    "working-hours": "Ish uchun rejalashtirilgan umumiy soatlar.",
+    "weekend-days": "Ish talab qilinmaydigan haftalik dam olish kunlari.",
+    "worked-hours": "Amalda ishlangan soatlar soni.",
+    "absence-hours": "Ish joyida yo‘qlikning umumiy vaqti.",
+    "remaining-hours": "Reja va amalda ishlangan soatlar orasidagi farq."
+  }
 }
