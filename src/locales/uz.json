@@ -1021,5 +1021,7 @@
   "service-car": "Bankning xizmat avtomobili",
   "user-status": "Xodim holati",
   "emp-attendance": "Xodimlarning davomati",
-  "schedule-settings": "Grafik sozlamalari"
+  "schedule-settings": "Grafik sozlamalari",
+  "default": "Asosiy",
+  "make-schedule-default": "Grafikni asosiy qilish"
 }

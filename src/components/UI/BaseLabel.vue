@@ -12,13 +12,17 @@ const props = defineProps({
   required: {
     type: Boolean
   },
+  labelEnd: {
+    type: String,
+    default: ''
+  }
 })
 </script>
 
 
 <template>
   <p v-if="props.label" class="text-sm text-greyscale-500 font-medium mb-1">
-    {{ t(props.label) }}
+    {{ t(props.label) }} {{ labelEnd }}
     <span v-if="required" class="text-red-500">*</span>
   </p>
 </template>

@@ -235,10 +235,10 @@ onUnmounted(() => {
     </layout-with-tabs-compose>
 
     <!-- PREVIEW -->
-<!--    with-sign-->
     <preview-dialog
       v-model="dialog"
       :send-button-loading="store.buttonLoading"
+      with-sign
       @emit:send="manage"
     >
       <template #content>

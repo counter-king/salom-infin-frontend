@@ -50,6 +50,9 @@ const props = defineProps({
   maxlength: {
     type: Number,
   },
+  labelEnd: {
+    type: String,
+  },
   error: {
     type: Object,
     default: () => ({
@@ -66,7 +69,7 @@ const { t } = useI18n()
 
 <template>
   <div class="app-input">
-    <base-label :label="props.label" :required="props.required" />
+    <base-label :label="props.label" :label-end="labelEnd" :required="props.required" />
 
     <slot
       v-if="slots['input-icon-left'] || props.iconLeft"

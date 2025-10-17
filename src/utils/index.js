@@ -918,6 +918,20 @@ export const formatLateTime = (minutes, locale = "uz") => {
   return `-${minutes} min`
 }
 
+export const adjustStringTimeToInput = (time) => {
+  if (!time || typeof time !== 'string') {
+    return {hours: 0, minutes: 0, seconds: 0}
+  }
+
+  const [hours, minutes, seconds] = time.split(':').map(Number)
+
+  return {
+    hours: hours || 0,
+    minutes: minutes || 0,
+    seconds: seconds || 0,
+  }
+}
+
 
 
 

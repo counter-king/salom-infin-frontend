@@ -50,3 +50,6 @@ export const isStartBeforeOrEqualEnd = (startDate, endDate) => {
 export const isDateRangeWithinLimit = (startDate, endDate, limitDays = 31) => {
   return dayjs(endDate).diff(dayjs(startDate), "day") <= limitDays
 }
+export const formatTime = (time) => {
+  return dayjs(time, "HH:mm:ss").format('HH:mm')
+}

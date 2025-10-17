@@ -1024,5 +1024,9 @@
   "service-car": "Служебный автомобиль банка",
   "user-status": "Статус сотрудника",
   "emp-attendance": "Посещаемость сотрудников",
-  "schedule-settings": "Настройки графики"
+  "schedule-settings": "Настройки графики",
+  "default": "По умолчанию",
+  "create-schedule": "Создать график",
+  "update-schedule": "Изменить график",
+  "make-schedule-default": "Сделать график по умолчанию"
 }
