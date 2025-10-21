@@ -8,6 +8,7 @@ import HourStatus from '../../components/HourStatus.vue';
 import AttendanceStatus from '../../components/AttendanceStatus.vue';
 import AttendanceProccessStatus from '../../components/AttendanceProccessStatus.vue';
 import { ReasonProcessModal } from '../../components/ReasonProcessModal';
+import LateCameReasonModal from '@/modules/Dashboard/components/Attendance/LateCameReasonModal.vue';
 // enums../../components/ReasonProcessModal
 import { WEEK_DAYS_RU, WEEK_DAYS_UZ } from '../../enums';
 // constants
@@ -22,6 +23,7 @@ const attendanceStore = useMyAttendanceStore()
 const calendarDays = inject('calendarDays')
 // reactives
 const reasonProcessModalOpen = ref(false)
+const lateCameReasonModalOpen = ref(false)
 const hoveredBadgeIndex = ref(null)
 const selectedDate = ref("")
 const weekDays = computed(() => locale.value === 'ru' ? WEEK_DAYS_RU : WEEK_DAYS_UZ)
@@ -426,6 +428,9 @@ const onHandleBodyCell = (day) => {
   }
 }
 
+const onHandleLateCameReasonModal = (day) => {
+  lateCameReasonModalOpen.value = true
+}
 </script>
 <template>
     <div class="flex flex-col bg-white  rounded-2xl overflow-hidden shadow-button mt-4">
@@ -483,6 +488,7 @@ const onHandleBodyCell = (day) => {
             <div 
               v-else-if="day.attendance.type == ATTENDANCE_TYPE.LATE"
               class="flex flex-col justify-between hover:bg-greyscale-50 cursor-pointer items-center text-center p-4 h-[120px] border-t [&:not(:nth-child(7n))]:border-r font-medium"
+              @click="onHandleLateCameReasonModal(day)"
             >
               <h2 class="text-critic-500">{{ day.day }}</h2>
               <div class="flex flex-col gap-[10px]">
@@ -504,4 +510,5 @@ const onHandleBodyCell = (day) => {
         </div>
     </div>
     <ReasonProcessModal v-model="reasonProcessModalOpen" :label="selectedDate" />
+    <LateCameReasonModal v-model="lateCameReasonModalOpen" />
 </template>

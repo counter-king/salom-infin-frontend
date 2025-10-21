@@ -13,14 +13,14 @@ import UserCard from './UserCard.vue';
 const { t } = useI18n()
 // props
 const props = defineProps({
-    modelValue: {
-        type: Boolean,
-        default: false
-    },
-    label: {
-        type: String,
-        default: 'reason-process'
-    }
+  modelValue: {
+      type: Boolean,
+      default: false
+  },
+  label: {
+      type: String,
+      default: 'reason-process'
+  }
 })
 
 // emits
@@ -35,7 +35,7 @@ const modelValue = useModel(props, 'modelValue')
 	<base-dialog
 		v-model="modelValue"
 		:label="label"
-		max-width="max-w-[648px] h-full"
+		max-width="reason-process-modal max-w-[648px] h-full"
 		contentClasses="py-5 px-6 pb-10 flex flex-col !rounded-none"
     header-classes="!rounded-none"
     position="topright"
@@ -74,18 +74,17 @@ const modelValue = useModel(props, 'modelValue')
 </div>
 </template>
 <style scoped>
-:global(.p-component-overlay-enter) {
-  /* height: 111% !important; */
-}
-:global(.p-dialog){
+ 
+:global(.reason-process-modal.p-dialog){
   margin:0;
   min-height: 100%;
 }
-:global(.p-dialog-content){
+
+:global(reason-process-modal .p-dialog-content){
   height: 100%;
 }
 
-:global(.dialog-content){
+:global(.reason-process-modal .dialog-content){
   display: flex;
   flex-direction: column;
   height: 100%;
