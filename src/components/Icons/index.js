@@ -194,6 +194,8 @@ export { default as AlarmTurnOffBoldIcon } from  '~icons/solar/alarm-turn-off-bo
 export { default as SettingsMinimalisticBoldIcon } from  '~icons/solar/settings-minimalistic-bold'
 export { default as MinusCircleBoldIcon } from  '~icons/solar/minus-circle-bold'
 export { default as FaceScanSquareBoldIcon } from  '~icons/solar/face-scan-square-bold'
+export { default as StopWatchBoldIcon } from  '~icons/solar/stopwatch-bold'
+
 // Solar (Bold Duotone)
 export { default as ArchiveUpBoldDuotoneIcon } from  '~icons/solar/archive-up-bold-duotone'
 export { default as StarBoldDuotoneIcon } from  '~icons/solar/star-bold-duotone'

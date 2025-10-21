@@ -7,7 +7,8 @@ import dayjs from 'dayjs';
 import HourStatus from '../../components/HourStatus.vue';
 import AttendanceStatus from '../../components/AttendanceStatus.vue';
 import AttendanceProccessStatus from '../../components/AttendanceProccessStatus.vue';
-// enums
+import { ReasonProcessModal } from '../../components/ReasonProcessModal';
+// enums../../components/ReasonProcessModal
 import { WEEK_DAYS_RU, WEEK_DAYS_UZ } from '../../enums';
 // constants
 import { ATTENDANCE_TYPE, ATTENDANCE_TYPE_TITLES } from '../../enums';
@@ -20,7 +21,9 @@ const attendanceStore = useMyAttendanceStore()
 // injects
 const calendarDays = inject('calendarDays')
 // reactives
+const reasonProcessModalOpen = ref(false)
 const hoveredBadgeIndex = ref(null)
+const selectedDate = ref("")
 const weekDays = computed(() => locale.value === 'ru' ? WEEK_DAYS_RU : WEEK_DAYS_UZ)
 const calendarDaysWithAttendance = computed(() => calendarDays.value.map(item => {
   item.attendance = attendanceStore.myAttendanceListMap.get(dayjs(item.date).format('DD-MM-YYYY')) || { type: "NO_DATA", hours: 0 }
@@ -383,7 +386,6 @@ const getToltipText = (type, index) => {
   }
 }
 
-
 const toolTipFun = (data) => {
   return {
     value: `<div class="flex flex-col gap-1">
@@ -417,6 +419,13 @@ const isBadgeHovered = (index) => {
   return hoveredBadgeIndex.value === index
 }
 
+const onHandleBodyCell = (day) => {
+  if(day.workDay){
+    selectedDate.value = dayjs(day.date).format('D-MMMM, YYYY [г.]')
+    reasonProcessModalOpen.value = true
+  }
+}
+
 </script>
 <template>
     <div class="flex flex-col bg-white  rounded-2xl overflow-hidden shadow-button mt-4">
@@ -433,10 +442,12 @@ const isBadgeHovered = (index) => {
             <!-- body cell -->   
             <div
               v-if="day.attendance.type != ATTENDANCE_TYPE.ADDITIONAL_DAY_OFF && day.attendance.type != ATTENDANCE_TYPE.LATE || !day.workDay"
+              @click="onHandleBodyCell(day)"
               class="select-none cursor-pointer flex flex-col justify-between items-center p-4 h-[120px] border-t [&:not(:nth-child(7n))]:border-r border-greyscale-200"
               :class="{'!bg-primary-10': isCurrentDate(day.day),
                 'hover:bg-greyscale-50': !isBadgeHovered(index)
               }"
+             
             >
                 <!-- number area -->
                 <div 
@@ -492,4 +503,5 @@ const isBadgeHovered = (index) => {
           </template>
         </div>
     </div>
+    <ReasonProcessModal v-model="reasonProcessModalOpen" :label="selectedDate" />
 </template>

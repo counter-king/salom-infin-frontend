@@ -1058,5 +1058,14 @@
     "worked-hours": "Количество фактически отработанных часов.",
     "absence-hours": "Общее время отсутствия на рабочем месте.",
     "remaining-hours": "Разница между планом и фактически отработанными часами."
-  }
+  },
+  "my-arrival-and-departure-time": "Моё время прибытия и убытия",
+  "my-worked-time-per-day": "Моё время работы за день",
+  "late-reason-accepted-hours-written": "Причина опоздания принята и записана в табеле {hours} часов",
+  "late-reason-rejected-by-director": "Причина опоздания отклонена директором",
+  "late-reason-rejected-and-hours-written-by-hr": "Причина опоздания отклонена директором, и сотрудником HR в ваш табель внесено {hours} часов",
+  "no-attendance-issues": "Проблем с посещаемостью нет",
+  "no-attendance-records-on-time": "Поскольку ваше время прихода и ухода в норме, записи здесь не отображаются."
+
+
 }

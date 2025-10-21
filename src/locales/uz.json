@@ -1055,5 +1055,13 @@
     "worked-hours": "Amalda ishlangan soatlar soni.",
     "absence-hours": "Ish joyida yo‘qlikning umumiy vaqti.",
     "remaining-hours": "Reja va amalda ishlangan soatlar orasidagi farq."
-  }
+  },
+  "my-arrival-and-departure-time": "Kelgan va ketgan vaqtim",
+  "my-worked-time-per-day": "Kun davomida ishlangan soatim",
+  "late-reason-accepted-hours-written": "Kechikish uchun kiritgan sababingiz muvaffaqiyatli qabul qilindi va ish tabeliga {hours} soat qayd etildi",
+  "late-reason-rejected-by-director": "Kechikish uchun kiritgan sababingiz direktor tomonidan rad etildi",
+  "late-reason-rejected-and-hours-written-by-hr": "Kechikish uchun kiritgan sababingiz direktor tomonidan rad etildi va HR xodimi tomonidan sizning ish tabelingizga {hours} soat qayd etildi",
+  "no-attendance-issues": "Davomat bo‘yicha muammo yo‘q",
+  "no-attendance-records-on-time": "Sizning kelish-ketish vaqtlaringiz me’yorida bo‘lgani uchun bu yerda qaydlar ko‘rsatilmaydi"
+
 }
