@@ -6,7 +6,7 @@ import { ActionToolbar } from '@/components/Actions'
 import Empty from '@/components/Empty.vue'
 import PermissionAside from './components/Aside.vue'
 // Stores
-import { usePermissionStore } from '../../stores/permissions.store'
+import { usePermissionStore } from '../../stores/permissions_copy.store'
 // Composable
 const route = useRoute()
 const permissionStore = usePermissionStore()

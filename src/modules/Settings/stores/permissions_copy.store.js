@@ -6,7 +6,7 @@ import {
   fetchCreatePermission,
   fetchUpdatePermission,
   fetchDeletePermission
-} from '../services/permissions.service'
+} from '../services/permissions_copy.service'
 // Utils
 import { setValuesToKeys } from '../../../utils'
 

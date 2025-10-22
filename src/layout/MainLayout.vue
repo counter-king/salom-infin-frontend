@@ -49,7 +49,6 @@ const getCurrentUser = async () => {
 
 const expectionPages = ['NewsShow', 'NewsDetails', 'NewsEdit', "ChatPrivate"]
 const isNewsShowPage = computed(() => expectionPages.includes(router.currentRoute.value.name))
-
 </script>
 
 <template>

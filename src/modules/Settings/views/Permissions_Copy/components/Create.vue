@@ -9,7 +9,7 @@ import { AddCircleBoldIcon, PenBoldIcon } from '@/components/Icons'
 // Stores
 import { useCommonStore } from '@/stores/common'
 import { useAllUrlStore } from '@/stores/all-urls.store'
-import { usePermissionStore } from '../../../stores/permissions.store'
+import { usePermissionStore } from '../../../stores/permissions_copy.store'
 // Utils
 import { clearModel } from '@/utils'
 import { dispatchNotify } from '@/utils/notify'

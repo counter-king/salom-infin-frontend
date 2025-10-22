@@ -7,7 +7,7 @@ import PermissionCreate from './Create.vue'
 import PermissionItems from './Items.vue'
 import PermissionItem from './Item.vue'
 // Stores
-import { usePermissionStore } from '../../../stores/permissions.store'
+import { usePermissionStore } from '../../../stores/permissions_copy.store'
 // Composable
 const router = useRouter()
 const permissionStore = usePermissionStore()

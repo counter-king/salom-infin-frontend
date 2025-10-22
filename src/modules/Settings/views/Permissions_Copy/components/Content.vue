@@ -4,9 +4,9 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 // Components
 import Empty from '@/components/Empty.vue'
-import RolesItems from './Items.vue'
+import PermissionItems from './Items.vue'
 // Stores
-import { usePermissionStore } from '../../../../stores/permissions_copy.store'
+import { usePermissionStore } from '../../../stores/permissions_copy.store'
 // Composable
 const route = useRoute()
 const permissionStore = usePermissionStore()
@@ -16,7 +16,7 @@ const items = ref([])
 // Hooks
 onMounted(() => {
   contentLoading.value = true
-  items.value = permissionStore.getContentPermission(Number(route.params.permissionId))
+  items.value = permissionStore.getContentPermission(Number(route.params.id))
   setTimeout(() => {
     contentLoading.value = false
   }, 500)
@@ -24,14 +24,14 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="relative h-full overflow-y-auto py-5 px-6">
+  <div class="relative h-full py-5 px-6">
     <template v-if="contentLoading">
       <base-spinner absolute />
     </template>
 
     <template v-else>
       <template v-if="items.children?.length">
-        <roles-items :items="items.children" />
+        <permission-items :items="items.children" />
       </template>
 
       <template v-else>

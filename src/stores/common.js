@@ -14,7 +14,7 @@ import { useCorrespondentStore } from './correspondent'
 import { useUsersStore } from './users.store'
 import { useAllUrlStore } from './all-urls.store'
 import { useCollectRequestsStore } from '@/stores/collect-requests.store'
-import { usePermissionStore } from '@/modules/Settings/stores/permissions.store'
+import { usePermissionStore } from '@/modules/Settings/stores/permissions_copy.store'
 // Services
 import {
   fetchComposeStatusList,

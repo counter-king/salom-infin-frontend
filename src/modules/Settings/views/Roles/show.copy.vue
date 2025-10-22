@@ -7,7 +7,7 @@ import { LayoutWithTabs } from '@/components/DetailLayout'
 import Empty from '@/components/Empty.vue'
 import RoleAside from './components/Aside.vue'
 // Stores
-import { usePermissionStore } from '../../stores/permissions.store'
+import { usePermissionStore } from '../../stores/permissions_copy.store'
 import { useRolesStore } from '../../stores/roles.store'
 // Utils
 import { dispatchNotify } from '@/utils/notify'

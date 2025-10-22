@@ -1,6 +1,7 @@
 // Routes
 import Permissions from './permissions.route'
 import Roles from './roles.routes'
+import Policies from './policies.route'
 // import Profile from './profile.route'
 
 const Settings = [
@@ -35,7 +36,7 @@ const Settings = [
             component: () => import("../views/DocumentFlow/Magazines/index.vue"),
             meta: { isAuthRequired: true },
             name: "MagazinesIndex",
-            path: "magazines",
+            path: "journals",
           },
           {
             component: () => import("../views/DocumentFlow/DocumentTitles/index.vue"),
@@ -185,10 +186,12 @@ const Settings = [
           },
         ]
       },
-      // Permissions
+      // Permissions_Copy
       ...Permissions,
       // Roles
       ...Roles,
+      // Policies
+      ...Policies,
       // ShortDescription
       {
         component: () => import("../views/ShortDescriptions/index.vue"),

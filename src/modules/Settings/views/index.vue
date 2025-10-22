@@ -70,10 +70,16 @@ const changeLanguage = () => {
     },
     {
       icon: CheckCircleIcon,
-      link: 'PermissionsIndex',
+      link: 'PoliciesIndex',
       title: 'access-rights',
       permission: 'settings-project-permission-list'
     },
+    // {
+    //   icon: CheckCircleIcon,
+    //   link: 'PermissionsIndex',
+    //   title: 'access-rights',
+    //   permission: 'settings-project-permission-list'
+    // },
     {
       icon: DocumentTextIcon,
       link: 'ShortDescriptionsIndex',

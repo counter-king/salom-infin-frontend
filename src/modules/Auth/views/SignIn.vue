@@ -39,17 +39,6 @@ const filesList = ref([
 ])
 const loading = ref(false)
 const activeTab = ref(null)
-const selectedCity = ref()
-const cities = ref([
-  {
-    name: "Everybody's Got Something to Hide Except Me and My Monkey",
-    value: 'song0',
-  },
-  {
-    name: 'Drive My Car',
-    value: 'song1'
-  },
-])
 const formModel = reactive({
   username: '+998',
   password: null

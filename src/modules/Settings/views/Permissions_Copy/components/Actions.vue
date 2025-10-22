@@ -5,7 +5,7 @@ import { useI18n } from 'vue-i18n'
 import { TrashBinTrashIcon } from '@/components/Icons'
 import PermissionCreate from './Create.vue'
 // Stores
-import { usePermissionStore } from '../../../stores/permissions.store'
+import { usePermissionStore } from '../../../stores/permissions_copy.store'
 // Constants
 import { FORM_TYPE_UPDATE } from '@/constants/constants'
 // Composable

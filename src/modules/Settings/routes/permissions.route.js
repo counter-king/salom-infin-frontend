@@ -5,7 +5,7 @@ const Permissions = [
     meta: {
       isAuthRequired: true
     },
-    component: () => import('../views/Permissions/index.vue'),
+    component: () => import('../views/Permissions_Copy/index.vue'),
     children: [
       {
         path: ':id',
@@ -13,7 +13,7 @@ const Permissions = [
         meta: {
           isAuthRequired: true
         },
-        component: () => import('../views/Permissions/Content.vue'),
+        component: () => import('../views/Permissions_Copy/Content.vue'),
       }
     ]
   },

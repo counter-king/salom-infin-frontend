@@ -285,3 +285,37 @@ export const TRIP_STATUSES = [
   }
 ]
 
+export const SETTINGS_RESOURCE_NAMES = {
+  settings: 'settings',
+
+  settings__document_flow: 'settings__document_flow',
+  settings__document_flow__document_types: 'settings__document_flow__document_types',
+  settings__document_flow__delivery_types: 'settings__document_flow__delivery_types',
+  settings__document_flow__journals: 'settings__document_flow__journals',
+  settings__document_flow__document_titles: 'settings__document_flow__document_titles',
+
+  settings__correspondents: 'settings__correspondents',
+  settings__correspondents__physical: 'settings__correspondents__physical',
+  settings__correspondents__entrepreneur: 'settings__correspondents__entrepreneur',
+  settings__correspondents__legal: 'settings__correspondents__legal',
+  settings__correspondents__regions: 'settings__correspondents__regions',
+  settings__correspondents__districts: 'settings__correspondents__districts',
+
+  settings__structure: 'settings__structure',
+  settings__structure__departments: 'settings__structure__departments',
+  settings__structure__branches: 'settings__structure__branches',
+  settings__structure__positions: 'settings__structure__positions',
+
+  settings__users: 'settings__users',
+  settings__users__employees: 'settings__users__employees',
+  settings__users__assistants: 'settings__users__assistants',
+  settings__users__top_signers: 'settings__users__top_signers',
+
+  settings__roles: 'settings__roles',
+
+  settings__role_assignment: 'settings__role_assignment',
+
+  settings__policies: 'settings__policies',
+
+  settings__short_descriptions: 'settings__short_descriptions',
+}
