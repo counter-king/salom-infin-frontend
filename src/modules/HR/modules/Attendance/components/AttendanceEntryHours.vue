@@ -29,7 +29,7 @@ const { t, locale } = useI18n()
 // Computed
 const entryStatus = computed(() => {
   // return getAttendanceEntryStatus(props.item?.date, props.item?.first_check_in, props.item?.last_check_out)
-  return props.item?.check_in_status
+  return props.item?.check_in_status || 'no-data'
 })
 
 const entryStatusIcon = computed(() => {

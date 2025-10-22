@@ -50,6 +50,9 @@ const props = defineProps({
   showNestedError: {
     type: Boolean,
     default: true
+  },
+  labelEnd: {
+    type: String,
   }
 })
 // Composable
@@ -59,7 +62,7 @@ const { t } = useI18n()
 
 <template>
   <div class="app-input">
-    <base-label :label="props.label" :required="props.required" />
+    <base-label :label="props.label" :label-end="labelEnd" :required="props.required" />
 
     <div class="relative">
       <Textarea

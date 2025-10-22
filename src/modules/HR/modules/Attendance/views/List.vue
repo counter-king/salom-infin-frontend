@@ -264,9 +264,14 @@ onMounted(async () => {
         </template>
 
         <template #user_status="{ data }">
-          <status-chip type="handbook" :status="data.user_status">
+          <status-chip
+            v-if="data.user_status"
+            type="handbook"
+            :status="data.user_status || {}"
+          >
             {{ data.user_status?.name }}
           </status-chip>
+          <span v-else>-</span>
         </template>
 
         <template #arrival_time="{ data }">
@@ -282,7 +287,9 @@ onMounted(async () => {
         </template>
 
         <template #status="{ data }">
-          <attendance-status :item="data" />
+          <attendance-status
+            :item="data"
+          />
         </template>
       </DataTable>
     </div>

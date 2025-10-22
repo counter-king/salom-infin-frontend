@@ -1,6 +1,6 @@
 <script setup>
 // Components
-import { CalendarLinearIcon, SettingsIcon } from "@/components/Icons"
+import { CalendarLinearIcon, FileTextIcon, NotebookIcon, SettingsIcon } from "@/components/Icons"
 import TheNavigation from "@/components/TheNavigation.vue"
 
 const navs = [
@@ -13,6 +13,16 @@ const navs = [
   //   title: 'schedule-settings',
   //   icon: SettingsIcon,
   //   link: 'WorkScheduleSettings'
+  // },
+  // {
+  //   title: 'assign-work-schedule',
+  //   icon: FileTextIcon,
+  //   link: 'AssignWorkSchedule'
+  // },
+  // {
+  //   title: 'reasons-reference',
+  //   icon: NotebookIcon,
+  //   link: 'AttendanceReasonsReference'
   // }
 ]
 </script>

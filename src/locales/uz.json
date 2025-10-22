@@ -1023,5 +1023,11 @@
   "emp-attendance": "Xodimlarning davomati",
   "schedule-settings": "Grafik sozlamalari",
   "default": "Asosiy",
-  "make-schedule-default": "Grafikni asosiy qilish"
+  "make-schedule-default": "Grafikni asosiy qilish",
+  "assign-work-schedule": "Grafikni bog'lash",
+  "schedule": "Grafik",
+  "reasons-reference": "Sabablar (ma'lumotnoma)",
+  "create-reason": "Sabab yaratish",
+  "update-reason": "Sababni o'zgartirish",
+  "attendance-code": "Kod - 2 ta harfdan ko'p bo'lmagan eg: 'AC'"
 }

@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia'
 import {
-  fetchCreateWorkSchedule, fetchDeleteWorkSchedule,
-  fetchGetWorkScheduleList,
-  fetchUpdateWorkSchedule
+  fetchGetAttendanceReasonsList,
+  fetchCreateAttendanceReason,
+  fetchUpdateAttendanceReason,
+  fetchDeleteAttendanceReason,
 } from "@/modules/HR/modules/Attendance/services"
 
-export const useWorkScheduleSettingStore = defineStore('workSchedule-store', {
+export const useAttendanceReasonStore = defineStore("attendance-reasons-store", {
   state:() => ({
     filterState: {
       page: 1,
@@ -14,29 +15,24 @@ export const useWorkScheduleSettingStore = defineStore('workSchedule-store', {
     totalCount: 0,
     listLoading: false,
     buttonLoading: false,
-    workScheduleList: [],
+    attendanceReasonList: [],
     updatingId: null,
     deletingId: null,
     deleteButtonLoading: false,
     headers: [
       {
-        header: "name",
-        field: "name",
+        header: "name-uz",
+        field: "name_uz",
         active: true
       },
       {
-        header: "start-time",
-        field: "start_time",
-        active: true
-      },
-      {
-        header: "end-time",
-        field: "end_time",
+        header: "name-ru",
+        field: "name_ru",
         active: true
       },
       {
         header: "status",
-        field: "is_default",
+        field: "is_active",
         active: true
       },
       {
@@ -47,22 +43,22 @@ export const useWorkScheduleSettingStore = defineStore('workSchedule-store', {
     ],
   }),
   actions: {
-    async actionGetWorkScheduleList(params) {
+    async actionGetAttendanceReasonList(params) {
       try {
         this.listLoading = true
-        const { data } = await fetchGetWorkScheduleList(params)
-        this.workScheduleList = data.results
+        const { data } = await fetchGetAttendanceReasonsList(params)
+        this.attendanceReasonList = data.results
         this.totalCount = data.count
-      } catch (error) {}
-      finally {
+      } catch (error) {
+      } finally {
         this.listLoading = false
       }
     },
     /** **/
-    async actionCreateWorkSchedule(model) {
+    async actionCreateAttendanceReason(model) {
       this.buttonLoading = true
       try {
-        await fetchCreateWorkSchedule(model)
+        await fetchCreateAttendanceReason(model)
         return Promise.resolve()
       } catch (error) {
         return Promise.reject(error)
@@ -71,22 +67,22 @@ export const useWorkScheduleSettingStore = defineStore('workSchedule-store', {
       }
     },
     /** **/
-    async actionUpdateWorkSchedule(model) {
+    async actionUpdateAttendanceReason(model) {
       this.buttonLoading = true
       try {
-        await fetchUpdateWorkSchedule(model)
+        await fetchUpdateAttendanceReason(model)
         return Promise.resolve()
-      }  catch (error) {
+      } catch (error) {
         return Promise.reject(error)
       } finally {
         this.buttonLoading = false
       }
     },
     /** **/
-    async actionDeleteWorkSchedule() {
+    async actionDeleteAttendanceReason() {
       this.deleteButtonLoading = true
       try {
-        await fetchDeleteWorkSchedule(this.deletingId)
+        await fetchDeleteAttendanceReason(this.deletingId)
         return Promise.resolve()
       } catch (error) {
         return Promise.reject(error)
@@ -98,23 +94,18 @@ export const useWorkScheduleSettingStore = defineStore('workSchedule-store', {
     resetHeaders() {
       this.headers = [
         {
-          header: "name",
-          field: "name",
+          header: "name-uz",
+          field: "name_uz",
           active: true
         },
         {
-          header: "start-time",
-          field: "start_time",
-          active: true
-        },
-        {
-          header: "end-time",
-          field: "end_time",
+          header: "name-ru",
+          field: "name_ru",
           active: true
         },
         {
           header: "status",
-          field: "is_default",
+          field: "is_active",
           active: true
         },
         {

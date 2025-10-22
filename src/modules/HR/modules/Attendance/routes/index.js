@@ -24,6 +24,22 @@ const Attendance = [
           isAuthRequired: true,
         },
         component: () => import('../views/WorkScheduleSettings/index.vue'),
+      },
+      {
+        path: 'assign-work-schedule',
+        name: 'AssignWorkSchedule',
+        meta: {
+          isAuthRequired: true,
+        },
+        component: () => import('../views/AssignWorkSchedule/index.vue'),
+      },
+      {
+        path: 'attendance-reasons-reference',
+        name: 'AttendanceReasonsReference',
+        meta: {
+          isAuthRequired: true,
+        },
+        component: () => import('../views/Reasons/index.vue'),
       }
     ]
   }

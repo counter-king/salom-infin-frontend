@@ -1028,5 +1028,11 @@
   "default": "По умолчанию",
   "create-schedule": "Создать график",
   "update-schedule": "Изменить график",
-  "make-schedule-default": "Сделать график по умолчанию"
+  "make-schedule-default": "Сделать график по умолчанию",
+  "assign-work-schedule": "Привязать график",
+  "schedule": " График",
+  "reasons-reference": "Причины (справочник)",
+  "create-reason": "Создать причина",
+  "update-reason": "Изменить причина",
+  "attendance-code": "Код - не более 2 символов eg: 'AC'"
 }

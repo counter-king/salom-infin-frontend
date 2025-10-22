@@ -30,7 +30,7 @@ const { t, locale } = useI18n()
 // Computed
 const exitStatus = computed(() => {
   // return getAttendanceExitStatus(props.item?.date, props.item?.first_check_in, props.item?.last_check_out)
-  return props.item?.check_out_status
+  return props.item?.check_out_status || 'no-data'
 })
 
 const exitStatusIcon = computed(() => {
