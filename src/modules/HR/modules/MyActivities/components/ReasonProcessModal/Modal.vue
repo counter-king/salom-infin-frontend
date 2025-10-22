@@ -80,7 +80,7 @@ const modelValue = useModel(props, 'modelValue')
   min-height: 100%;
 }
 
-:global(reason-process-modal .p-dialog-content){
+:global(.reason-process-modal .p-dialog-content){
   height: 100%;
 }
 

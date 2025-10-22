@@ -1065,7 +1065,10 @@
   "late-reason-rejected-by-director": "Причина опоздания отклонена директором",
   "late-reason-rejected-and-hours-written-by-hr": "Причина опоздания отклонена директором, и сотрудником HR в ваш табель внесено {hours} часов",
   "no-attendance-issues": "Проблем с посещаемостью нет",
-  "no-attendance-records-on-time": "Поскольку ваше время прихода и ухода в норме, записи здесь не отображаются."
+  "no-attendance-records-on-time": "Поскольку ваше время прихода и ухода в норме, записи здесь не отображаются.",
+  "separate-reason-for-each": "Отдельная причина для каждого",
+  "one-reason-for-all": "Одна причина для всех",
+  "fill-in-all-required-fields": "Заполните все обязательные поля"
 
 
 }

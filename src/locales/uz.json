@@ -1062,6 +1062,8 @@
   "late-reason-rejected-by-director": "Kechikish uchun kiritgan sababingiz direktor tomonidan rad etildi",
   "late-reason-rejected-and-hours-written-by-hr": "Kechikish uchun kiritgan sababingiz direktor tomonidan rad etildi va HR xodimi tomonidan sizning ish tabelingizga {hours} soat qayd etildi",
   "no-attendance-issues": "Davomat bo‘yicha muammo yo‘q",
-  "no-attendance-records-on-time": "Sizning kelish-ketish vaqtlaringiz me’yorida bo‘lgani uchun bu yerda qaydlar ko‘rsatilmaydi"
-
+  "no-attendance-records-on-time": "Sizning kelish-ketish vaqtlaringiz me’yorida bo‘lgani uchun bu yerda qaydlar ko‘rsatilmaydi",
+  "separate-reason-for-each": "Har biriga alohida sabab",
+  "one-reason-for-all": "Hammasiga bitta sabab",
+  "fill-in-all-required-fields": "barcha talab qilingan maydonlarni to‘ldiring"
 }
