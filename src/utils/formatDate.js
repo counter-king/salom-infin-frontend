@@ -55,3 +55,6 @@ export function formatMonthAndYear(date) {
   return date ? dayjs(date).locale('ru').format("MMMM, YYYY") : "Не верный формат даты"
 }
 
+export const formatTime = (time) => {
+  return dayjs(time, "HH:mm:ss").format('HH:mm')
+}

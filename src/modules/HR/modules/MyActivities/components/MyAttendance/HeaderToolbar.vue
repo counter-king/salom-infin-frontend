@@ -13,7 +13,7 @@ import CalendarButton from '@/components/Actions/CalendarButton.vue';
 const { t } = useI18n()
 const route = useRouter()
 // reactive
-const currentDate = inject('currentDate')
+const currentMonthFirstDate = inject('currentMonthFirstDate')
 const handleMonthChange = inject('handleMonthChange')
 const goToPrevMonth = inject('goToPrevMonth')
 const goToNextMonth = inject('goToNextMonth')
@@ -36,7 +36,7 @@ const onSelectedTabViewChange = (view) => {
     <template #filters>
       <div class="flex items-center gap-2">
         <calendar-button 
-          :date="currentDate"
+          :date="currentMonthFirstDate"
           @click:submit="handleMonthChange"
           :onRightArrowClick="goToNextMonth"
           :onLeftArrowClick="goToPrevMonth"

@@ -46,14 +46,14 @@ const statement = computed(() => {
         return "bg-critic-50 text-critic-500 border-critic-500"
     }
   } else if (props.type === 'handbook') {
-    switch (props.status.code) {
+    switch (props.status?.code) {
       case USER_STATUS_CODES.WORKERS:
         return 'bg-success-50 text-success-500 border-success-500'
       default:
         return 'bg-warning-50 text-warning-500 border-warning-500'
     }
   } else if (props.type === 'news') {
-    switch (props.status.code) {
+    switch (props.status?.code) {
       case NEWS_STATUS_TYPES.NEW:
         return 'bg-info-30 text-info-500 border-info-500'
       case NEWS_STATUS_TYPES.BLOG:

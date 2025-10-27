@@ -11,7 +11,6 @@ const URLS = {
   moodReactions: `mood-reactions`,
   dashboardContacts: `dashboard/users`,
   dashboardFavouriteContacts: `my-selected-contacts`,
-  dashboardAttendance: 'my-attendance',
 }
 
 export const fetchGetBirthdayList = (params) => {

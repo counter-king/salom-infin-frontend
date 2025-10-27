@@ -3,11 +3,11 @@
 import { computed } from 'vue'
 // Components
 import TheNavigation from '@/components/TheNavigation.vue'
-import { Buildings2OutlineIcon, ClipboardCheckIcon, SettingsIcon } from '@/components/Icons'
+import { Buildings2OutlineIcon, SettingsIcon } from '@/components/Icons'
 // stores
-import { useAuthStore } from '@/modules/Auth/stores';
+import { useAuthStore } from '@/modules/Auth/stores'
 
-// composables
+// Composable
 const authStore = useAuthStore()
 
 const navs = [

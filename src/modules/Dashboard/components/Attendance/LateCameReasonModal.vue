@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { computed, ref, reactive, useModel } from "vue"
+import { computed, ref, reactive, useModel, onMounted } from "vue"
 import { useI18n } from "vue-i18n"
 import useVuelidate from "@vuelidate/core"
 import { helpers, required } from "@vuelidate/validators"
@@ -15,6 +15,7 @@ import { COLOR_TYPES } from "@/enums"
 // Store
 import { useNotificationStore } from "@/modules/Dashboard/stores/notification.store"
 import { useAttendanceStore } from "@/modules/Dashboard/stores/attendance.store"
+import { useAttendanceReasonStore } from "@/modules/HR/modules/Attendance/stores/attendanceReason.store"
 // Components
 import { UserWithRadio } from "@/components/Users"
 import BaseTextarea from "@/components/UI/BaseTextarea.vue"
@@ -65,6 +66,7 @@ const modelValue = useModel(props, 'modelValue')
 const {t, locale } = useI18n()
 const store = useNotificationStore()
 const dashboardAttendanceStore = useAttendanceStore()
+const attendanceReasonStore = useAttendanceReasonStore()
 const $v = useVuelidate(rules, testModel)
 const $vList = useVuelidate(formModelListRules, formModelList, { $lazy: true, })
 
@@ -168,6 +170,10 @@ const tabPanelList = [
 const onTabChange = (value) => {
   activeTabIndex.value = value.index
 }
+
+onMounted(async () => {
+    attendanceReasonStore.actionGetAttendanceReasonList()
+})
 </script>
 
 <template>
@@ -209,16 +215,16 @@ const onTabChange = (value) => {
               <base-dropdown
                 v-model="$v.reason.$model"
                 :error="$v.reason"
-                v-model:options="store.reasonList"
+                v-model:options="attendanceReasonStore.attendanceReasonList"
                 required
                 label="late-came-reason"
                 placeholder="select-reason"
                 :option-label="locale === 'uz' ? 'name_uz' : 'name_ru'"
-                option-value="value"
+                option-value="id"
               >
                 <template #option="{ option }">
                   <user-with-radio
-                    :title="t(option.title)"
+                    :title="locale === 'uz' ? option.name_uz : option.name_ru"
                     :text-truncate="false"
                   >
                   </user-with-radio>
@@ -251,17 +257,17 @@ const onTabChange = (value) => {
                   </div>
                   <base-dropdown
                     v-model="item.reason"
-                    v-model:options="store.reasonList"
+                    v-model:options="attendanceReasonStore.attendanceReasonList"
                     :error="$vList.$each.$response?.$data[index]?.reason"
                     required
                     label="late-came-reason"
                     placeholder="select-reason"
                     :option-label="locale === 'uz' ? 'name_uz' : 'name_ru'"
-                    option-value="value"
+                    option-value="id"
                   >
                     <template #option="{ option }">
                       <user-with-radio
-                        :title="t(option.title)"
+                        :title="locale === 'uz' ? option.name_uz : option.name_ru"
                         :text-truncate="false"
                       >
                       </user-with-radio>
@@ -298,16 +304,16 @@ const onTabChange = (value) => {
         <base-dropdown
           v-model="$v.reason.$model"
           :error="$v.reason"
-          v-model:options="store.reasonList"
+          v-model:options="attendanceReasonStore.attendanceReasonList"
           required
           label="late-came-reason"
           placeholder="select-reason"
           :option-label="locale === 'uz' ? 'name_uz' : 'name_ru'"
-          option-value="value"
+          option-value="id"
         >
           <template #option="{ option }">
-            <user-with-radio
-              :title="t(option.title)"
+            <user-with-radio 
+              :title="locale === 'uz' ? option.name_uz : option.name_ru"
               :text-truncate="false"
             >
             </user-with-radio>

@@ -3,7 +3,7 @@
 import { computed } from "vue"
 import { useI18n } from "vue-i18n"
 //Utils
-import { getAttendanceEntryStatus, returnLateTime } from "@/utils"
+import { formatLateTime, getAttendanceEntryStatus, returnLateTime } from "@/utils"
 import { formatHour } from "@/utils/formatDate"
 // Components
 import {
@@ -28,7 +28,8 @@ const { t, locale } = useI18n()
 
 // Computed
 const entryStatus = computed(() => {
-  return getAttendanceEntryStatus(props.item?.date, props.item?.first_check_in, props.item?.last_check_out)
+  // return getAttendanceEntryStatus(props.item?.date, props.item?.first_check_in, props.item?.last_check_out)
+  return props.item?.check_in_status || 'no-data'
 })
 
 const entryStatusIcon = computed(() => {
@@ -62,8 +63,11 @@ const entryStatusClass = computed(() => {
 })
 
 const lateMinutes = computed(() => {
-  return entryStatus.value === 'late-arrival' ?
-    returnLateTime(props.item?.first_check_in, props.item?.last_check_out, locale.value, 'entry') : null
+  // return entryStatus.value === 'late-arrival' ?
+  //   returnLateTime(props.item?.first_check_in, props.item?.last_check_out, locale.value, 'entry') : null
+
+  return props.item?.late_minutes > 0 ?
+    formatLateTime(props.item?.late_minutes, locale.value) : null
 })
 </script>
 

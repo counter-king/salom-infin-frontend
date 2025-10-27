@@ -1,6 +1,7 @@
 <script setup>
 // core
-import { provide, ref, watch } from 'vue';
+import { provide, ref, watch, computed } from 'vue';
+import dayjs from 'dayjs';
 // components
 import HeaderToolbar from '../../components/MyAttendance/HeaderToolbar.vue';
 import ActivityCard from '../../components/ActivityCard.vue';
@@ -11,14 +12,21 @@ import { useCalendar } from '../../composibles/useCalendar';
 import { useMyAttendanceStore } from '../../store/myAttendence.store';
 const attendanceStore = useMyAttendanceStore()
 
-const { goToPrevMonth, goToNextMonth, handleMonthChange, currentDate, currentMonth, calendarDays, handleClickCurrentMonth } = useCalendar()
+const { goToPrevMonth, goToNextMonth, handleMonthChange, currentMonthFirstDate, currentMonth, calendarDays, handleClickCurrentMonth } = useCalendar()
 provide('goToPrevMonth', goToPrevMonth)
 provide('goToNextMonth', goToNextMonth)
 provide('handleMonthChange', handleMonthChange)
-provide('currentDate', currentDate)
+provide('currentMonthFirstDate', currentMonthFirstDate)
 provide('currentMonth', currentMonth)
 provide('calendarDays', calendarDays)
 provide('handleClickCurrentMonth', handleClickCurrentMonth)
+
+
+const calendarDaysWithAttendance = computed(() => calendarDays.value.map(item => {
+  item.attendance = attendanceStore.myAttendanceListMap.get(dayjs(item.date).format('YYYY-MM-DD'))
+  return item
+}))
+provide('calendarDaysWithAttendance', calendarDaysWithAttendance)
 
 const activityData = ref([
     {
@@ -84,10 +92,10 @@ const activityData = ref([
     }
 ])
 
-
-watch(()=>calendarDays.value, () => {
-  attendanceStore.getMyAttendanceList()
-},{ immediate: true })
+watch(()=>currentMonthFirstDate.value, async () => {
+  attendanceStore.getMyAttendanceSummary({ start_date: dayjs(currentMonthFirstDate.value).format('YYYY-MM-DD'), end_date: dayjs(currentMonthFirstDate.value).endOf('month').format('YYYY-MM-DD') })
+  attendanceStore.getMyAttendanceList({ start_date: dayjs(currentMonthFirstDate.value).format('YYYY-MM-DD'), end_date: dayjs(currentMonthFirstDate.value).endOf('month').format('YYYY-MM-DD') })
+}, { immediate: true })
 
 </script>           
 <template>

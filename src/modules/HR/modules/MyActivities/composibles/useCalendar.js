@@ -3,12 +3,13 @@ import { ref, watch, computed  } from "vue"
 
 export const useCalendar = () => {
 
-const currentDate = ref(new Date())
+const today = new Date()
+const currentMonthFirstDate = ref(new Date(today.getFullYear(), today.getMonth() - 1, 1))
 // Get current year and month 
 // return 2025
-const currentYear = computed(() => currentDate.value.getFullYear())
+const currentYear = computed(() => currentMonthFirstDate.value.getFullYear())
 // return 1 or 2
-const currentMonth = computed(() => currentDate.value.getMonth())
+const currentMonth = computed(() => currentMonthFirstDate.value.getMonth())
 
 // Get the first day of the month  // return 14 2025 16:26:14 GMT+0500
 const firstDayOfMonth = computed(() => new Date(currentYear.value, currentMonth.value, 1)) 
@@ -34,7 +35,7 @@ const prevMonthLastDay = computed(() => new Date(currentYear.value, currentMonth
 
 // Create an array of days to display in the calendar
 const calendarDays = ref([])
-watch(()=> currentDate.value, () => {
+watch(()=> currentMonthFirstDate.value, () => {
     calendarDays.value = []
    // Add days from the previous month
     for (let i = 0; i < firstDayOfWeek.value; i++) {
@@ -76,23 +77,23 @@ watch(()=> currentDate.value, () => {
 
 // Function to go to the previous month
 const goToPrevMonth = () => {
-    currentDate.value = new Date(currentYear.value, currentMonth.value - 1, 1)
+    currentMonthFirstDate.value = new Date(currentYear.value, currentMonth.value - 1, 1)
 }
 
 // Function to go to the next month
 const goToNextMonth = () => {
-    currentDate.value = new Date(currentYear.value, currentMonth.value + 1, 1)
+    currentMonthFirstDate.value = new Date(currentYear.value, currentMonth.value + 1, 1)
 }
 
 const handleClickCurrentMonth = () => {
-    currentDate.value = new Date()
+    currentMonthFirstDate.value = new Date(today.getFullYear(), today.getMonth(), 1)
 }
 
 // Function to handle month selection
 const handleMonthChange = (data) => {
   const month = MONTH_NAMES.find((month) => month.id === data?.month?.id)
   if (month) {
-    currentDate.value = new Date(data?.year, month.id - 1, 1)
+    currentMonthFirstDate.value = new Date(data?.year, month.id - 1, 1)
   }
 }
 
@@ -100,7 +101,7 @@ return {
         goToPrevMonth,
         goToNextMonth,
         handleMonthChange,
-        currentDate,
+        currentMonthFirstDate,
         currentMonth,
         calendarDays,
         handleClickCurrentMonth

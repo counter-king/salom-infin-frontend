@@ -69,7 +69,7 @@ const menus = ref([
   // },
 ])
 
-if(authStore.currentUser.is_superuser || authStore.currentUser.id == 3104) {
+if(authStore.currentUser.is_superuser || authStore.currentUser.id == 3104 || authStore.currentUser?.roles?.some(role => role.name === "hr")) {
   menus.value.push({
     title: "interaction-with-abs2",
     icon: DocumentAddIcon,

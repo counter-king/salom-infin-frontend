@@ -1065,5 +1065,19 @@
   "no-attendance-records-on-time": "Sizning kelish-ketish vaqtlaringiz me’yorida bo‘lgani uchun bu yerda qaydlar ko‘rsatilmaydi",
   "separate-reason-for-each": "Har biriga alohida sabab",
   "one-reason-for-all": "Hammasiga bitta sabab",
-  "fill-in-all-required-fields": "barcha talab qilingan maydonlarni to‘ldiring"
+  "fill-in-all-required-fields": "barcha talab qilingan maydonlarni to‘ldiring",
+  "emp-attendance": "Xodimlarning davomati",
+  "schedule-settings": "Grafik sozlamalari",
+  "default": "Asosiy",
+  "make-schedule-default": "Grafikni asosiy qilish",
+  "assign-work-schedule": "Grafikni bog'lash",
+  "schedule": "Grafik",
+  "reasons-reference": "Sabablar (ma'lumotnoma)",
+  "create-reason": "Sabab yaratish",
+  "update-reason": "Sababni o'zgartirish",
+  "attendance-code": "Kod - 2 ta harfdan ko'p bo'lmagan eg: 'AC'",
+  "you-do-not-come": "Kelmadingiz",
+  "you-are-late2": "Kechikdingiz",
+  "you-left-early": "Erta ketdingiz",
+  "not-recorded": "Qayd etilmadi"
 }

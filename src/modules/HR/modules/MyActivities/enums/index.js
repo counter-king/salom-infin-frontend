@@ -37,6 +37,7 @@ export const ATTENDANCE_TYPE = {
   LATE: "LATE",
   NO_DATA: "NO_DATA"
 }
+
 export const ATTENDANCE_TYPE_TITLES = {
   [ATTENDANCE_TYPE.LABOR_LEAVE]: "labor-leave",
   [ATTENDANCE_TYPE.SICK_LEAVE]: "sick-leave",
@@ -46,4 +47,20 @@ export const ATTENDANCE_TYPE_TITLES = {
   [ATTENDANCE_TYPE.LATE]: "late",
   [ATTENDANCE_TYPE.WORK_DAY]: "work-day",
   [ATTENDANCE_TYPE.NO_DATA]: "no-data"
+}
+
+export const CHECK_IN_STATUS = {
+  CAME_ON_TIME: "came-on-time",
+  EXCUSED: "excused",
+  NO_ENTRY_MARKED: "no-entry-marked",
+  LATE_ARRIVAL: "late-arrival",
+  NOT_CAME: "not-came"
+}
+
+export const CHECK_OUT_STATUS = {
+  EARLY_DEPARTURE: "early-departure",
+  EXCUSED: "excused",
+  NORMAL_EXIT: "normal-exit",
+  NO_EXIT_MARKED: "no-exit-marked",
+  NOT_CAME: "not-came"
 }

@@ -43,6 +43,12 @@ const props = defineProps({
 // Composable
 const modelValue = useModel(props, 'modelValue')
 const { t } = useI18n()
+
+const onUpdate = (value) => {
+  emits('update:modelValue', value)
+}
+
+const emits = defineEmits(['update:modelValue'])
 </script>
 
 <template>
@@ -56,8 +62,10 @@ const { t } = useI18n()
       :cancel-text="t('cancel')"
       :select-text="t('select')"
       :placeholder="t(placeholder)"
+      :teleport="true"
       ref="datePicker"
       :class="{ 'input-error': error?.$error && showNestedError }"
+      @update:model-value="onUpdate"
     >
       <template #input-icon>
         <base-iconify :icon="ClockCircleLinearIcon" class="text-greyscale-500 ml-3" />
@@ -75,7 +83,6 @@ const { t } = useI18n()
   color: var(--greyscale-900)!important;
   font-weight: 500!important;
   font-size: 14px!important;
-  margin-left: 4px;
 }
 
 .input-error input {

@@ -3,7 +3,11 @@
 import { useI18n } from 'vue-i18n';
 // components
 import { InfoCircleBoldIcon } from '@/components/Icons';
+// store
+import { useMyAttendanceStore } from '../store/myAttendence.store';
+// composables
 const { t } = useI18n()
+const attendanceStore = useMyAttendanceStore()
 //props
 const props = defineProps({
     data: {
@@ -37,7 +41,10 @@ const toolTipFun = (data)=> (
           >
           <base-iconify :icon="props.data.icon" class="!w-5 !h-5" />
         </div>
-        <div class="text-xl font-semibold text-greyscale-900">
+        <div v-if="attendanceStore.myAttendanceSummaryLoading">
+          <base-spinner  rootClasses="!w-6 !h-6" />
+        </div>
+        <div v-else class="text-xl font-semibold text-greyscale-900">
             {{ t(props.data.title) }}
         </div>
         <!-- warning icon -->

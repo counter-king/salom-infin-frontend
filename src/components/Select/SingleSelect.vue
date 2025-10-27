@@ -37,6 +37,10 @@ const props = defineProps({
   optionLabel: {
     type: String,
     default: "name"
+  },
+  fillFirstItem: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -54,6 +58,13 @@ const loadList = async (params) => {
   }else {
     list.value = data
   }
+  if (props.fillFirstItem && list.value && list.value.length > 0) {
+    fillFirstItem(list.value)
+  }
+}
+
+const fillFirstItem = (list) => {
+  modelValue.value = list[0]
 }
 // Hooks
 onMounted(async () => {

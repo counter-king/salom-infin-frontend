@@ -25,8 +25,8 @@ const statusClass = (id)=> {
 <template>
   <div 
     class="flex items-center w-fit justify-center py-[6px] px-[8px] rounded-lg text-xs font-medium"
-    :class="statusClass(props.status.id)"
+    :class="statusClass(props?.status?.id)"
     >
-    {{ props.status.name }}
+    {{ props.status?.name }}
   </div>
 </template>

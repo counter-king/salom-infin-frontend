@@ -4,68 +4,35 @@ import { ref, inject, watch } from 'vue'
 import { useRoute} from 'vue-router'
 // components
 import Status from '../../components/MyAttendance/Status.vue'
-import AttendanceStatus from '../../components/AttendanceStatus.vue'
+import AttendanceStatus from '../../components/AttendanceReasonCellStatus.vue'
 // store
 import { useMyAttendanceStore } from '../../store/myAttendence.store'
+// utils
+import { formatDateCalendar } from '@/utils/formatDate'
 // composibles
 const attendanceStore = useMyAttendanceStore()
 // inject
-const calendarDays = inject('calendarDays')
-
-watch(()=>calendarDays.value, () => {
-    // console.log(calendarDays.value)
-},{ immediate: true })
+const calendarDaysWithAttendance = inject('calendarDaysWithAttendance')
 
 const route = useRoute()
 </script>
 <template>
   <div class="mt-4">
     <base-data-table
-      :action-list="attendanceStore.getMyAttendanceList"
-      :api-params="{ ...route.query, page_size: 15 } ?? null"
       :headers="attendanceStore.headers"
       :loading="attendanceStore.myAttendanceListLoading"
-      :total-count="attendanceStore.myAttendanceTotalCount"
-      :value="[{
-        date: '2025-05-15',
-        week_days: 'Понедельник',
-        status: {
-          id: 1,
-          name: 'Трудовой отпуск'
-        }
-      },
-      {
-        date: '2025-05-15',
-        week_days: 'Понедельник',
-        status: {
-          id: 2,
-          name: 'Трудовой отпуск'
-        }
-      },
-      {
-        date: '2025-05-15',
-        week_days: 'Понедельник',
-        status: {
-          id: 3,
-          name: 'Трудовой отпуск'
-        }
-      },
-      {
-        date: '2025-05-15',
-        week_days: 'Понедельник',
-        status: {
-          id: 4,
-          name: '8 час'
-        }
-      },
-      ]"
-      scroll-height="calc(100vh - 295px)"
+      :total-count="attendanceStore.myAttendanceListTotalCount"
+      :value="calendarDaysWithAttendance"
+      scroll-height="calc(100vh - 495px)"
     >
+      <template #date="{ data }">
+        {{ formatDateCalendar(data?.attendance?.date) }}
+      </template>
       <template #status="{ data }">
-        <status :status="data.status"/>
+        <status :status="data?.attendance?.status"/>
       </template>
       <template #status2="{ data }">
-        <AttendanceStatus :status="data.status"/>
+        <AttendanceStatus :status="data?.attendance?.status"/>
       </template>
     </base-data-table> 
   </div>

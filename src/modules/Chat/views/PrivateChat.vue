@@ -252,7 +252,7 @@ const putScrollFirstUnreadMessagePalce = ()=>{
     })
 }
 
-const putScrollReplayedMessagePalce = (messageId)=>{
+const putScrollReplayedMessagePalce = (messageId, nearest = false)=>{
   const data = document.querySelectorAll("[data-message-id]")
     let count = 0
     data.forEach(item=>{
@@ -265,7 +265,7 @@ const putScrollReplayedMessagePalce = (messageId)=>{
         item.style.paddingLeft= "24px"
         item.style.paddingY="10px"
         item.style.width = "calc(100% + 48px)"
-        item.scrollIntoView({ block: "center", behavior: "instant"});
+        item.scrollIntoView({ block: nearest ? "nearest" : "center", behavior: "instant"});
         
         count++
       }
@@ -281,7 +281,7 @@ const handleClickReplayMessage = useDebounceFn(async (message) => {
   if(message.replied_to){
     const isMessageExistOnCurrentMessageList = chatStore.messageListByChatId.some(item => item.message_id == message.replied_to?.id)
     if(isMessageExistOnCurrentMessageList){
-      putScrollReplayedMessagePalce(message.replied_to?.id)
+      putScrollReplayedMessagePalce(message.replied_to?.id, true)
       chatStore.replayedMessageClicked = false
     }
     
@@ -298,7 +298,7 @@ const handleClickReplayMessage = useDebounceFn(async (message) => {
 
 
 const getMessageListByCondition = async ()=> {
-    const isUnreadCountLessThan20 = chatStore.selectedUser.unread_count < 20 
+    const isUnreadCountLessThan20 = chatStore.selectedUser?.unread_count < 20 
     let response = null
     if(chatStore.selectedUser?.unread_count > 0){
       if(isUnreadCountLessThan20){
@@ -314,7 +314,7 @@ const getMessageListByCondition = async ()=> {
     nextCursor.value = next
     previousCursor.value = previous
     // specific scroll where to put scroll
-    if(chatStore.selectedUser.unread_count > 0){
+    if(chatStore.selectedUser?.unread_count > 0){
       putScrollFirstUnreadMessagePalce()
     } else {
       handleScrollDown()
