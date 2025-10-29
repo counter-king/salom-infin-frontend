@@ -58,3 +58,7 @@ export function formatMonthAndYear(date) {
 export const formatTime = (time) => {
   return dayjs(time, "HH:mm:ss").format('HH:mm')
 }
+
+export function formatTimeDate(date) {
+  return date ? dayjs(date).format("HH:mm, DD.MM.YY") : "-"
+}

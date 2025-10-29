@@ -1,16 +1,25 @@
 <script setup>
 // core
 import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
 import { PaperclipLinearIcon, ClipboardCheckBoldIcon, AltArrowLeftIcon, AltArrowRightIcon, FileTextBoldIcon, CloseCircleBoldIcon, DocumentTextBoldIcon, CheckCircleBoldIcon, StopWatchBoldIcon } from '@/components/Icons';
 import AttendanceProccessStatus from '../AttendanceProccessStatus.vue';
+// constants
+import { ROUTE_SD_CREATE } from '@/modules/Documents/modules/SendDocuments/constants';
+// enums
+import { COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES } from '@/enums';
+// utils
+import { formatTimeDate } from '@/utils/formatDate';
 // components
 const { t } = useI18n()
+const router = useRouter()
 // props
 const props = defineProps({
   data: {
     type: Object,
     required: true
-  }
+  },
+
 })
 
 const getMatchStatusIcon = () => {
@@ -64,6 +73,21 @@ const getMatchCardClass = () => {
       return null
   }
 }
+
+const onClickWriteExplanationLetter = () => {
+  router.push({
+    name: ROUTE_SD_CREATE,
+    params: {
+      document_type: COMPOSE_DOCUMENT_TYPES.APPLICATION,
+      document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.EXPLANATION_LETTER
+    },
+    query: {
+      attendance: props.data?.attendance?.id,
+      kind: "late"
+    }
+  })
+}
+
 </script>
 <template>
   <div class="flex items-start gap-4">
@@ -100,7 +124,7 @@ const getMatchCardClass = () => {
           />
           <div class="flex flex-col gap-1">
             <span class="text-[13px] text-greyscale-900 font-semibold">Maxmudov Botir Orifjon o’g’li</span>
-            <span class="text-xs text-greyscale-400 font-medium">12:34, 23.09.25</span>
+            <span class="text-xs text-greyscale-400 font-medium">{{ formatTimeDate(new Date()) }}</span>
           </div>
         </div>
         <!-- right -->
@@ -108,11 +132,11 @@ const getMatchCardClass = () => {
           <AttendanceProccessStatus/>
         </div>
       </div>
-      <!-- footer -->
+      <!-- process status -->
        <div class="px-3 py-2">
           <!-- employee ender reason  -->
-          <div v-if="true" class="w-fit flex gap-1 cursor-pointer px-[6px] py-1 text-xs text-primary-500 font-medium rounded-[6px] bg-greyscale-50">
-            <span>Sabab kiritish</span>
+          <div v-if="false" class="w-fit flex gap-1 cursor-pointer px-[6px] py-1 text-xs text-primary-500 font-medium rounded-[6px] bg-greyscale-50">
+            <span>{{ t('enter-reason') }}</span>
             <base-iconify :icon="AltArrowRightIcon" class="!w-4 !h-4" />
           </div>
            <!-- employee endered reason and attached file -->
@@ -126,26 +150,26 @@ const getMatchCardClass = () => {
             </div>
           </div>
           <!-- employee are wating and will write explanation letter -->
-          <div v-if="false" class="w-fit flex gap-1 cursor-pointer px-[6px] py-1 text-xs text-primary-500 font-medium rounded-[6px] bg-greyscale-50">
-            <span>Tushuntirish xati yozish</span>
+          <div v-if="true" @click="onClickWriteExplanationLetter" class="w-fit flex gap-1 cursor-pointer px-[6px] py-1 text-xs text-primary-500 font-medium rounded-[6px] bg-greyscale-50">
+            <span>{{ t('write-explanation-letter') }}</span>
             <base-iconify :icon="AltArrowRightIcon" class="!w-4 !h-4" />
           </div>
           <!-- employee writed explanation letter -->
           <div v-if="false" class="w-fit flex gap-[6px] cursor-pointer px-[6px] py-1 text-xs text-primary-500 font-medium rounded-[6px] bg-greyscale-50">
             <base-iconify :icon="FileTextBoldIcon" class="!w-4 !h-4" />
-            <span class="text-greyscale-800">Tushuntirish xati</span>
+            <span class="text-greyscale-800">{{ t('explanation-letter') }}</span>
             <base-iconify :icon="AltArrowRightIcon" class="!w-4 !h-4" />
           </div>
           <!-- director waiting   --> <!-- no ui -->
           <!-- director accepted   --> <!-- no ui --> 
           <!-- director declined   -->
           <div v-if="false"  class="w-fit px-[6px] py-1 text-xs text-greyscale-500 font-medium rounded-[6px] bg-greyscale-50">
-            Rahbardan ruxsat olinmagan
+            {{ t('no-manager-permission') }}
           </div>
            <!-- hr waiting   --> <!-- no ui -->
            <!-- hr accepted  -->
            <div v-if="false"  class="w-fit px-[6px] py-1 text-xs text-greyscale-500 font-medium rounded-[6px] bg-greyscale-50">
-            <span>Kiritilgan vaqt: </span>
+            <span>{{ t('entered-time') }}: </span>
             <span class="text-greyscale-800">6 soat</span>
            </div>
        </div>

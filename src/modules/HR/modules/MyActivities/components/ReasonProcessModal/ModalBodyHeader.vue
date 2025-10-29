@@ -1,13 +1,27 @@
 <script setup>
 // core
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 // components
 import { AlarmBoldIcon } from '@/components/Icons';
 import ReasonCard from './ReasonCard.vue';
+// utils
+import { formatSecondsToHoursMinutes } from '@/utils';
+import { formatHour } from '@/utils/formatDate';
+// enums
+import { CHECK_IN_STATUS, CHECK_OUT_STATUS } from '../../enums';
 // composable
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
+// props
+const props = defineProps({
+  data: {
+    type: Object,
+  }
+})
+
+
+// reactives
 const reasonData1 = ref({
     title: 'title',
 		icon: AlarmBoldIcon,
@@ -17,6 +31,7 @@ const reasonData1 = ref({
         value: 'my-worked-time-per-day'
     }
 })
+
 const reasonData2 = ref({
     title: 'title',
 		icon: AlarmBoldIcon,
@@ -27,10 +42,13 @@ const reasonData2 = ref({
     }
 })
 
+const isWorkedTimeLessThan8Hours = computed(() => props.data?.attendance?.worked_seconds / 60 / 60 > 8 ? true : false )
+const workedTime = computed(() => formatSecondsToHoursMinutes(props.data?.attendance?.worked_seconds))
+const prsentageOfWorkedTime = computed(() => props.data?.attendance?.worked_seconds / 60 / 60 / 8 * 100)
 const toolTipFun = () => {
   return {
     value: `<div class="flex flex-col gap-1">
-              <p class="text-sm text-white">6 ч.</p>
+              <p class="text-sm text-white">${ workedTime.value }</p>
             </div>`,
     pt: {
       arrow: {
@@ -43,12 +61,14 @@ const toolTipFun = () => {
   }
 }
 
+
+
 </script>
 <template>
   <div class="flex gap-5">
     <ReasonCard :data="reasonData1">
       <template #title>
-        <div class="text-xl font-semibold text-greyscale-900">6 ч. 35 м.</div>
+        <div class="text-xl font-semibold text-greyscale-900">{{ workedTime }}</div>
       </template>
       <template #description>
         <div 
@@ -56,7 +76,9 @@ const toolTipFun = () => {
           class="h-1 w-full bg-greyscale-70 rounded-full overflow-hidden">
           <div 
             class="h-1 w-full rounded-full"
-            :class="{'w-[60%] bg-warning-500': false,'w-[100%] bg-success-500': true}">
+            :class="{'bg-warning-500': !isWorkedTimeLessThan8Hours,'w-[100%] bg-success-500': isWorkedTimeLessThan8Hours}"
+            :style="{width: `${prsentageOfWorkedTime}%`}"
+            >
             </div>
         </div>
       </template>
@@ -65,16 +87,19 @@ const toolTipFun = () => {
       <template #title>
         <div class="text-xl font-semibold text-greyscale-900">
           <span 
-            :class="{'text-critic-500': true}"
-            >09:37</span>
+            :class="{'text-critic-500': props.data?.attendance?.check_in_status == CHECK_IN_STATUS.LATE_ARRIVAL}"
+            >{{ formatHour(props.data?.attendance?.first_check_in) }}</span>
           <span class=""> - </span>
-          <span :class="{'text-critic-500': false}">18:45</span>
-        </div>
+          <span :class="{'text-critic-500': props.data?.attendance?.check_out_status == CHECK_OUT_STATUS.EARLY_DEPARTURE}">{{ formatHour(props.data?.attendance?.last_check_out) }}</span>
+        </div>  
       </template>
       <template #description>
         <div class="text-sm text-greyscale-900">{{t('my-arrival-and-departure-time')}}</div>
         </template>
     </ReasonCard>
+    
   </div>
+  <!-- <pre>{{ props.data }}</pre> -->
+
 
 </template>

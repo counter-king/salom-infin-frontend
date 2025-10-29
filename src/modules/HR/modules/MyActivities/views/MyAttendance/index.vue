@@ -2,14 +2,16 @@
 // core
 import { provide, ref, watch, computed } from 'vue';
 import dayjs from 'dayjs';
+import { useI18n } from 'vue-i18n';
 // components
 import HeaderToolbar from '../../components/MyAttendance/HeaderToolbar.vue';
 import ActivityCard from '../../components/ActivityCard.vue';
-import { AlarmBoldIcon, AlarmTurnOffBoldIcon, CalendarDateBoldIcon, CalendarSearchBoldIcon, CheckCircleBoldIcon, TreePalmIcon } from '@/components/Icons';
 // composibles
 import { useCalendar } from '../../composibles/useCalendar';
 // store
 import { useMyAttendanceStore } from '../../store/myAttendence.store';
+// composables
+const { t } = useI18n()
 const attendanceStore = useMyAttendanceStore()
 
 const { goToPrevMonth, goToNextMonth, handleMonthChange, currentMonthFirstDate, currentMonth, calendarDays, handleClickCurrentMonth } = useCalendar()
@@ -21,80 +23,16 @@ provide('currentMonth', currentMonth)
 provide('calendarDays', calendarDays)
 provide('handleClickCurrentMonth', handleClickCurrentMonth)
 
-
 const calendarDaysWithAttendance = computed(() => calendarDays.value.map(item => {
   item.attendance = attendanceStore.myAttendanceListMap.get(dayjs(item.date).format('YYYY-MM-DD'))
   return item
 }))
 provide('calendarDaysWithAttendance', calendarDaysWithAttendance)
 
-const activityData = ref([
-    {
-        id: 1,
-        icon: CalendarDateBoldIcon,
-        iconClass: "bg-success-500 text-white",
-        title: '23 д.',
-        description: 'working-days',
-        toolTipInfo: {
-            value: 'attendance-tooltip.working-days'
-        }
-    },
-    {
-        id: 2,
-        icon: AlarmBoldIcon,
-        iconClass: "bg-primary-500 text-white",
-        title: '160 ч.',
-        description: 'working-hours',
-        toolTipInfo: {
-            value: 'attendance-tooltip.working-hours'
-        }
-    },
-    {
-        id: 3,
-        icon: TreePalmIcon,
-        iconClass: "bg-critic-300 text-white",
-        title: '8 д.',
-        description: 'weekend-days',
-        toolTipInfo: {
-            value: 'attendance-tooltip.weekend-days'
-        }
-    },
-    {
-        id: 4,
-        icon: CheckCircleBoldIcon,
-        iconClass: "bg-primary-500 text-white",
-        title: '56 ч.',
-        description: 'worked-hours',
-        toolTipInfo: {
-            value: 'attendance-tooltip.worked-hours'
-        }
-    },
-    {
-        id: 5,
-        icon: AlarmTurnOffBoldIcon,
-        iconClass: "bg-warning-500 text-white",
-        title: '48 ч.',
-        description: 'absence-hours',
-        toolTipInfo: {
-            value: 'attendance-tooltip.absence-hours'
-        }
-    },
-    {
-        id: 6,
-        icon: CalendarSearchBoldIcon,
-        iconClass: "bg-critic-300 text-white",
-        title: '-83 ч.',
-        description: 'remaining-hours',
-        toolTipInfo: {
-            value: 'attendance-tooltip.remaining-hours',
-            placement: "left"
-        }
-    }
-])
 
 watch(()=>currentMonthFirstDate.value, async () => {
-  attendanceStore.getMyAttendanceSummary({ start_date: dayjs(currentMonthFirstDate.value).format('YYYY-MM-DD'), end_date: dayjs(currentMonthFirstDate.value).endOf('month').format('YYYY-MM-DD') })
-  attendanceStore.getMyAttendanceList({ start_date: dayjs(currentMonthFirstDate.value).format('YYYY-MM-DD'), end_date: dayjs(currentMonthFirstDate.value).endOf('month').format('YYYY-MM-DD') })
+    attendanceStore.getMyAttendanceList({ start_date: dayjs(currentMonthFirstDate.value).format('YYYY-MM-DD'), end_date: dayjs(currentMonthFirstDate.value).endOf('month').format('YYYY-MM-DD') })
+    attendanceStore.getMyAttendanceSummary({ start_date: dayjs(currentMonthFirstDate.value).format('YYYY-MM-DD'), end_date: dayjs(currentMonthFirstDate.value).endOf('month').format('YYYY-MM-DD') })
 }, { immediate: true })
 
 </script>           
@@ -104,7 +42,7 @@ watch(()=>currentMonthFirstDate.value, async () => {
     <HeaderToolbar />
     <!-- activity cards -->
     <div class="flex items-center gap-2">
-        <ActivityCard v-for="activity in activityData" :key="activity.id" :data="activity" />
+        <ActivityCard v-for="statistic in attendanceStore.myStatistics" :key="statistic.id" :data="statistic" />
     </div>
     <!-- components -->
     <router-view />

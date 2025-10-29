@@ -45,7 +45,7 @@ const toolTipFun = (data)=> (
           <base-spinner  rootClasses="!w-6 !h-6" />
         </div>
         <div v-else class="text-xl font-semibold text-greyscale-900">
-            {{ t(props.data.title) }}
+            {{ t(props.data.title, { count: props.data.count }) }}
         </div>
         <!-- warning icon -->
         <div  

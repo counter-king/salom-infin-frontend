@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { computed, ref, reactive, useModel, onMounted } from "vue"
+import { computed, ref, reactive, useModel, onMounted, watch, nextTick} from "vue"
 import { useI18n } from "vue-i18n"
 import useVuelidate from "@vuelidate/core"
 import { helpers, required } from "@vuelidate/validators"
@@ -8,45 +8,53 @@ import { helpers, required } from "@vuelidate/validators"
 import { formatDate } from "@/utils/formatDate"
 import { returnLateTime } from "@/utils"
 import { dispatchNotify } from "@/utils/notify"
-// Services
-import { fetchUpdateDashboardAttendance } from "@/modules/Dashboard/services/index.service"
 // Enums
 import { COLOR_TYPES } from "@/enums"
 // Store
 import { useNotificationStore } from "@/modules/Dashboard/stores/notification.store"
-import { useAttendanceStore } from "@/modules/Dashboard/stores/attendance.store"
 import { useAttendanceReasonStore } from "@/modules/HR/modules/Attendance/stores/attendanceReason.store"
+import { useAttendanceExpectionsStore } from "@/modules/HR/modules/MyActivities/store/attendanceExpections.store"
+
 // Components
 import { UserWithRadio } from "@/components/Users"
 import BaseTextarea from "@/components/UI/BaseTextarea.vue"
+import AttendanceViolationAlert from "@/modules/Dashboard/components/Attendance/AttendanceViolationAlert.vue"
 
 // Props
 const props = defineProps({
   modelValue: {
     type: Boolean,
     default: false
+  },
+  reasonList: {
+    type: Array,
+  },
+  apiCallAfterSubmit: {
+    type: Function,
+    default: () => void 0
   }
 })
 
+// composables
+const {t, locale } = useI18n()
+const modelValue = useModel(props, 'modelValue')
+const reasonList = useModel(props, 'reasonList')
+const attendanceReasonStore = useAttendanceReasonStore()
+const reasonStore = useAttendanceExpectionsStore()
+
 // Reactive
-const testModel = ref({
+const formModel = reactive({
   reason: "",
-  comment: "",
-  __files: []
+  note: "",
+  __attachments: []
 })
-const formModelList = reactive([{
-  reason: "",
-  comment: "",
-  __files: []
-},{
-  reason: "",
-  comment: "",
-  __files: []
-}
-])
+
+const formModelList = ref([])
+
 const activeTabIndex = ref(0)
 
 const sendButtonLoading = ref(false)
+
 const rules = {
   reason: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
@@ -61,24 +69,11 @@ const formModelListRules = {
   })
 }
 
-// Composable
-const modelValue = useModel(props, 'modelValue')
-const {t, locale } = useI18n()
-const store = useNotificationStore()
-const dashboardAttendanceStore = useAttendanceStore()
-const attendanceReasonStore = useAttendanceReasonStore()
-const $v = useVuelidate(rules, testModel)
+const $v = useVuelidate(rules, formModel)
 const $vList = useVuelidate(formModelListRules, formModelList, { $lazy: true, })
 
-// Computed
-const lateTime = computed(() => {
-  const { first_check_in, last_check_out } = store.attendanceModel
-
-  return returnLateTime(first_check_in, last_check_out, locale.value, 'entry')
-})
-
 const isShowMoreReasoneTabPanel = computed(() => {
-  return false
+  return reasonList.value?.length > 1 
 })
 
 // Methods
@@ -92,29 +87,25 @@ const send = async () => {
 
 const sendTabPanel = async () => {
   if(activeTabIndex.value === 1) {
-    console.log("sendSeparateReasoneForEach", activeTabIndex.value)
     await sendSeparateReasoneForEach()
   } else {
-    console.log("sendOneReasonForAll")
     await sendOneReasonForAll()
   }
 }
 
 const sendReason = async () => {
-  console.log("sendReason")
+
   const valid = await $v.value.$validate()
   if (!valid) return
   try {
+
    sendButtonLoading.value = true
-   await fetchUpdateDashboardAttendance(store.attendanceModel.id, {
-     has_reason: true,
-   })
+   const body = { ...formModel, attendance: reasonList.value[0].attendance, attachments: formModel.__attachments.map(item => ({ id: item.id })) }
+
+   reasonStore.createAttendanceReason(body)
+   props.apiCallAfterSubmit && props.apiCallAfterSubmit()
    dispatchNotify(null, t('successfully-send'), COLOR_TYPES.SUCCESS)
-   await dashboardAttendanceStore.actionDashboardNotificationAttendanceList({status: 'lateness', has_reason: false})
    modelValue.value = false
-   testModel.value.reason = null
-   testModel.value.comment = null
-   testModel.value__files = null
    $v.value.$reset()
  } catch (e) {
 
@@ -127,9 +118,16 @@ const sendReason = async () => {
 const sendOneReasonForAll = async () => {
   const valid = await $v.value.$validate()
   if (!valid) return
-  console.log("valid", testModel.value)
   try {
     sendButtonLoading.value = true
+    const body = reasonList.value.map(item => {
+      return { attendance: item.attendance, kind: item.kind, reason: formModel.reason, note: formModel.note, attachments: formModel.__attachments.map(item => ({ id: item.id })) }
+    })
+    await reasonStore.createAttendanceReason(body)
+    props.apiCallAfterSubmit && props.apiCallAfterSubmit()
+    dispatchNotify(null, t('successfully-send'), COLOR_TYPES.SUCCESS)
+    modelValue.value = false
+    $v.value.$reset()
   }
   catch (e) {
     console.log("error", e)
@@ -148,6 +146,15 @@ const sendSeparateReasoneForEach = async () => {
 
   try {
     sendButtonLoading.value = true
+    const body = formModelList.value.map(item => {
+      return ({ attendance: item.attendance, kind: item.kind, reason: item.reason, note: item.note, attachments: item.__attachments.map(item => ({ id: item.id }))})
+    })
+
+    await reasonStore.createAttendanceReason(body)
+    props.apiCallAfterSubmit && props.apiCallAfterSubmit()
+    dispatchNotify(null, t('successfully-send'), COLOR_TYPES.SUCCESS)
+    modelValue.value = false
+    $vList.value.$reset()
   } catch (e) {
     console.log("error", e)
   }
@@ -172,8 +179,25 @@ const onTabChange = (value) => {
 }
 
 onMounted(async () => {
-    attendanceReasonStore.actionGetAttendanceReasonList()
+  attendanceReasonStore.actionGetAttendanceReasonList()
+  if(reasonList.value?.length > 0) {
+    setTimeout(() => {
+      formModelList.value = reasonList.value.map(item => ({
+        attendance: item.attendance,
+        kind: item.kind,
+        reason: "",
+        note: "",
+        date: item.date,
+        first_check_in: item.first_check_in,
+        last_check_out: item.last_check_out,
+        late_minutes: item.late_minutes,
+        early_leave_minutes: item.early_leave_minutes,
+        __attachments: []
+      }))
+    }, 300)
+  }
 })
+
 </script>
 
 <template>
@@ -202,14 +226,8 @@ onMounted(async () => {
           <template #oneReasonForAll>
             <div class="flex flex-col gap-y-6">
               <div class="flex flex-col gap-2">
-                <template v-for="item in [1, 2, 3]" :key="item" >
-                  <div class="flex gap-x-4 items-center px-4 py-2 rounded-xl bg-warning-30 border border-warning-100">
-                    <img src="/images/dashboard/alarm-clock.svg" alt="alarm clock">
-                    <div class="text-sm text-greyscale-500 font-medium">
-                      <span class="text-primary-900">{{ formatDate(store.attendanceModel?.date) }}</span> sanasida
-                      <span class="text-critic-500">{{ lateTime }}</span> kech qolgansiz
-                    </div>
-                  </div>
+                <template v-for="item in reasonList" :key="item" >
+                  <AttendanceViolationAlert :data="item" />
                 </template>
               </div>
               <base-dropdown
@@ -232,14 +250,14 @@ onMounted(async () => {
               </base-dropdown>
 
               <base-file-upload
-                :files="testModel.__files"
+                :files="formModel.__attachments"
                 label="attach-file"
-                @emit:file-upload="(files) => testModel.__files = files"
+                @emit:file-upload="(files) => formModel.__attachments = files"
               />
               <base-textarea
-                v-model="testModel.comment"
-                :label="t('comment')"
-                :placeholder="t('enter-comment')"
+                v-model="formModel.note"
+                :label="t('note')"
+                :placeholder="t('enter-note')"
               />
             </div>
           </template>
@@ -247,14 +265,7 @@ onMounted(async () => {
             <template v-for="(item, index) in formModelList" :key="item.id">
               <div class="shadow border border-greyscale-100 rounded-2xl bg-white p-4 mb-4">
                 <div class="flex flex-col gap-y-6">
-                  <div class="flex gap-x-4 items-center px-4 py-2 rounded-xl bg-warning-30 border border-warning-100">
-                    <img src="/images/dashboard/alarm-clock.svg" alt="alarm clock">
-
-                    <div class="text-sm text-greyscale-500 font-medium">
-                      <span class="text-primary-900">{{ formatDate(store.attendanceModel?.date) }}</span> sanasida
-                      <span class="text-critic-500">{{ lateTime }}</span> kech qolgansiz
-                    </div>
-                  </div>
+                  <AttendanceViolationAlert :data="item" />
                   <base-dropdown
                     v-model="item.reason"
                     v-model:options="attendanceReasonStore.attendanceReasonList"
@@ -268,21 +279,21 @@ onMounted(async () => {
                     <template #option="{ option }">
                       <user-with-radio
                         :title="locale === 'uz' ? option.name_uz : option.name_ru"
-                        :text-truncate="false"
+                        :text-truncate="false"  
                       >
                       </user-with-radio>
                     </template>
                   </base-dropdown>
 
                   <base-file-upload
-                    :files="item.__files"
+                    :files="item.__attachments"
                     label="attach-file"
-                    @emit:file-upload="(files) => item.__files = files"
+                    @emit:file-upload="(files) => item.__attachments = files"
                   />
                   <base-textarea
-                    v-model="item.comment"
-                    :label="t('comment')"
-                    :placeholder="t('enter-comment')"
+                    v-model="item.note"
+                    :label="t('note')"
+                    :placeholder="t('enter-note')"
                   />
                 </div>
               </div>
@@ -292,14 +303,7 @@ onMounted(async () => {
       </div>
       <!-- if there are only one reason, show this -->
       <div v-else class="flex flex-col gap-y-6">
-        <div class="flex gap-x-4 items-center px-4 py-2 rounded-xl bg-warning-30 border border-warning-100">
-          <img src="/images/dashboard/alarm-clock.svg" alt="alarm clock">
-
-          <div class="text-sm text-greyscale-500 font-medium">
-            <span class="text-primary-900">{{ formatDate(store.attendanceModel?.date) }}</span> sanasida
-            <span class="text-critic-500">{{ lateTime }}</span> kech qolgansiz
-          </div>
-        </div>
+        <AttendanceViolationAlert :data="reasonList[0]" />
 
         <base-dropdown
           v-model="$v.reason.$model"
@@ -321,15 +325,15 @@ onMounted(async () => {
         </base-dropdown>
 
         <base-file-upload
-          :files="testModel.__files"
+          :files="formModel.__attachments"
           label="attach-file"
-          @emit:file-upload="(files) => testModel.__files = files"
+          @emit:file-upload="(files) => formModel.__attachments = files"
         />
 
         <base-textarea
-          v-model="testModel.comment"
-          :label="t('comment')"
-          :placeholder="t('enter-comment')"
+          v-model="formModel.note"
+          :label="t('note')"
+          :placeholder="t('enter-note')"
         />
       </div>  
     </template>

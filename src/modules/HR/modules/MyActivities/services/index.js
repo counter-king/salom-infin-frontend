@@ -2,6 +2,7 @@ import axiosConfig from "@/services/axios.config"
 
 const URLS = {
     myAttendance: "my-attendance",
+    attendanceExceptions: "attendance-exceptions",
 }
 
 export const fetchGetMyAttendanceList = (params) => {
@@ -18,4 +19,13 @@ export const fetchGetMyAttendanceById = (id) => {
 
 export const fetchUpdateMyAttendanceByIdHasReason = (id, body) => {
     return axiosConfig.patch(`${URLS.myAttendance}/${id}/has-reason/`, body)
+}
+
+// create attendance exception
+export const fetchCreateAttendanceExceptions = (body) => {
+    return axiosConfig.post(`${URLS.attendanceExceptions}/`, body)
+}
+
+export const fetchGetAttendanceExceptionsList = (params) => {
+    return axiosConfig.get(`${URLS.attendanceExceptions}/`, {page:1, page_size: 30, ...params})
 }

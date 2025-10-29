@@ -1084,5 +1084,22 @@
   "you-do-not-come": "Вы не пришли",
   "you-are-late2": "Вы опоздали",
   "you-left-early": "Вы ушли рано",
-  "not-recorded": "Не зарегистрировано"
+  "not-recorded": "Не зарегистрировано",
+  "short-day": " {count} д.",
+  "short-hour": " {count} ч.",
+  "on-date": "дата",
+  "late": "опоздали",
+  "early-leave": "ушли рано",
+  "minute-long": "минут",
+  "absent": "не пришли",
+  "missed-checkout": "Face ID на выходе не зарегистрирован",
+  "missed-checkin": "Face ID на входе не зарегистрирован",
+  "write-explanation-letter": "Написать пояснительное письмо",
+  "no-manager-permission":"Нет разрешения от руководителя",
+  "entered-time":"Введенное время",
+  "reason-entered": "Причина введена",
+  "letter-written": "Письмо написано",
+  "not-confirmed": "Не подтверждено",
+  "entered-to-timesheet": "Добавлено в таблицу",
+  "no-reason-provided": "Причина не указана"
 }

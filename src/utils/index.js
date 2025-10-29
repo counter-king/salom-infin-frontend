@@ -896,26 +896,26 @@ export const returnLateTime = (start_time, end_time, locale = "uz", type = "entr
   return `${diffMinutes} min`
 }
 
-export const formatLateTime = (minutes, locale = "uz") => {
+export const formatLateTime = (minutes, locale = "uz", fullText = false) => {
   if (!minutes || minutes <= 0) return null
 
   const hours = Math.floor(minutes / 60)
   const remainingMinutes = minutes % 60
 
   if (locale === "uz") {
-    if (hours > 0 && remainingMinutes > 0) return `-${hours} s. ${remainingMinutes} daq.`
-    if (hours > 0) return `-${hours} s.`
-    return `-${remainingMinutes} daq.`
+    if (hours > 0 && remainingMinutes > 0) return `-${hours} ${ fullText ? 'soat' : 's.'} ${remainingMinutes} ${ fullText ? 'daqiqa' : 'daq.'}`
+    if (hours > 0) return `-${hours} ${ fullText ? 'soat' : 's.'}`
+    return `-${remainingMinutes} ${ fullText ? 'daqiqa' : 'daq.'}`
   }
 
   if (locale === "ru") {
-    if (hours > 0 && remainingMinutes > 0) return `-${hours} ч. ${remainingMinutes} мин.`
-    if (hours > 0) return `-${hours} ч.`
-    return `-${remainingMinutes} мин.`
+    if (hours > 0 && remainingMinutes > 0) return `-${hours} ${ fullText ? 'час' : 'ч.'} ${remainingMinutes} ${ fullText ? 'минута' : 'мин.'}`
+    if (hours > 0) return `-${hours} ${ fullText ? 'час' : 'ч.'}`
+    return `-${remainingMinutes} ${ fullText ? 'минута' : 'мин.'}`
   }
 
   // fallback
-  return `-${minutes} min`
+  return `-${minutes} ${ fullText ? 'минута' : 'мин.'}`
 }
 
 export const adjustStringTimeToInput = (time) => {
@@ -932,8 +932,25 @@ export const adjustStringTimeToInput = (time) => {
   }
 }
 
-
-
+export const formatSecondsToHoursMinutes = (seconds, locale = "ru") => {
+  if (!seconds || seconds === 0) return `${locale === "ru" ? "—" : "—"}`
+  
+  const hours = Math.floor(seconds / 3600)
+  const minutes = Math.floor((seconds % 3600) / 60)
+  
+  if (locale === "ru") {
+    if(minutes > 0) {
+      return `${hours} ч. ${minutes} мин.`
+    } else {
+      return `${hours} ч.`
+    }
+  }
+  if(minutes > 0) {
+    return `${hours} s. ${minutes} daq.`
+  } else {
+    return `${hours} s.`
+  }
+}
 
 
 

@@ -1,22 +1,3 @@
-export const WEEK_DAYS_RU = [
-  'Понедельник',
-  'Вторник',
-  'Среда',
-  'Четверг',
-  'Пятница',
-  'Суббота',
-  'Воскресенье'
-]
-
-export const WEEK_DAYS_UZ = [
-  'Dushanba',
-  'Seshanba',
-  'Chorshanba',
-  'Payshanba',
-  'Juma',
-  'Shanba',
-  'Yankshanba'
-]
 
 export const STATUS = {
   PANDING: "pending",
@@ -25,7 +6,6 @@ export const STATUS = {
   ARCHIVED: "archived", 
   DECLINED: "declined"
 }
-
 
 export const ATTENDANCE_TYPE = {
   WORK_DAY: "WORK_DAY",          // ish kuni
@@ -36,6 +16,14 @@ export const ATTENDANCE_TYPE = {
   ADDITIONAL_DAY_OFF: "ADDITIONAL_DAY_OFF",  // дополнительный выходной,
   LATE: "LATE",
   NO_DATA: "NO_DATA"
+}
+
+export const KIND = {
+  LATE: "late",
+  EARLY_LEAVE: "early_leave",
+  ABSENT: "absent",
+  MISSED_CHECKIN: "missed_checkin",
+  MISSED_CHECKOUT: "missed_checkout",
 }
 
 export const ATTENDANCE_TYPE_TITLES = {
@@ -64,3 +52,4 @@ export const CHECK_OUT_STATUS = {
   NO_EXIT_MARKED: "no-exit-marked",
   NOT_CAME: "not-came"
 }
+

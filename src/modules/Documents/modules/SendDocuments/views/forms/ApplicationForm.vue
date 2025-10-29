@@ -69,7 +69,12 @@ const preview = async () => {
   applicationStore.model.document_type = route.params.document_type
   applicationStore.model.document_sub_type = route.params.document_sub_type
   applicationStore.model.approvers = adjustUsersToArray(applicationStore.model.__approvers)
-
+  if(route.params?.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.EXPLANATION_LETTER && route.params?.document_type === COMPOSE_DOCUMENT_TYPES.APPLICATION && route.query?.attendance && route.query?.kind) {
+    applicationStore.model.additional_data = {
+      attendance: route.query?.attendance,
+      kind: route.query?.kind
+    }
+  }
 }
 const clearForm = async () => {
 
@@ -130,6 +135,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   resetModel(applicationStore.model)
+  applicationStore.resetModel()
 })
 </script>
 

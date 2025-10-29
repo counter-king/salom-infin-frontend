@@ -48,6 +48,7 @@ watch(()=> currentMonthFirstDate.value, () => {
         date: new Date(currentYear.value, currentMonth.value - 1, prevMonthLastDay.value - firstDayOfWeek.value + i + 1),
         // workDay: dayOfWeek !== 0 && dayOfWeek !== 6
         workDay: false,
+        dayOfWeek: dayOfWeek
         })
     }
 
@@ -59,17 +60,21 @@ watch(()=> currentMonthFirstDate.value, () => {
             day: i,
             currentMonth: true,
             date: new Date(currentYear.value, currentMonth.value, i),
-            workDay: dayOfWeek !== 0 && dayOfWeek !== 6
+            workDay: dayOfWeek !== 0 && dayOfWeek !== 6,
+            dayOfWeek: dayOfWeek
         })
     }
     // Add days from the next month
     const remainingDays = 35 - calendarDays.value.length // 6 rows of 7 days
     for (let i = 1; i <= remainingDays; i++) {
+        const date = new Date(currentYear.value, currentMonth.value + 1, i)
+        const dayOfWeek = date.getDay()
         calendarDays.value.push({
         day: "",
         currentMonth: false,
         date: new Date(currentYear.value, currentMonth.value + 1, i),
-        workDay: false   
+        workDay: false,
+        dayOfWeek: dayOfWeek
         })
     }
 
