@@ -50,12 +50,14 @@ const handleScrollDownSmooth = ()=> {
 
 // websocketdan, kelgan ma'lumotlarni kuzatish
 watch(data, (newData) => {
+
   if(!newData) return
   newData = JSON.parse(newData);
   // console.log("user hand",newData);
-  // isPrivate is realted to which chatType, isPrivate is not current route chat
-  const isPrivate = (newData?.chat_type || newData?.content?.chat_type) == CHAT_TYPES.PRIVATE
-  const chat_id = [chatStore.selectedUser, chatStore.selectedGroup].find(item=> item?.chat_uid == route.params?.id)?.chat_id
+
+  const incomingChatTypeIsPrivate = (newData?.chat_type || newData?.content?.chat_type) == CHAT_TYPES.PRIVATE
+  // chat_id is the chat id of the current active chat, it can be private or group chat
+  const currentActiveChatId = [chatStore.selectedUser, chatStore.selectedGroup].find(item=> item?.chat_uid == route.params?.id)?.chat_id
 
   if(newData.command == WEBCOCKET_EVENTS.USER_HANDSHAKE) {
     // console.log("user hand",newData);
@@ -68,9 +70,12 @@ watch(data, (newData) => {
   }
 
   else if(newData.type == WEBCOCKET_EVENTS.NEW_MESSAGE) {
-    const chatList = isPrivate ? chatStore.privateChatList : chatStore.groupChatList
-    // if chat not found, add it
-    if(!chatList.some(item=> item.chat_id == newData.chat_id) && newData.chat_type == (isPrivate ? CHAT_TYPES.PRIVATE : CHAT_TYPES.GROUP)){
+      // there is no contnent propery field in newDate when new message event come
+
+      const chatList = incomingChatTypeIsPrivate ? chatStore.privateChatList : chatStore.groupChatList
+
+      // if chat not found current private or group chat, add it to private or group chat list when current user is not sender
+      if(!chatList.some(item=> item.chat_id == newData?.chat_id) && authStore.currentUser?.id != newData?.sender?.id){
           chatList.unshift({
           first_name: newData.sender?.first_name,
           full_name: newData.sender?.full_name,
@@ -88,14 +93,14 @@ watch(data, (newData) => {
         })
       }
 
-       // Yuborilgan fayllarni olib tashlash
+      // remove uploaded files from uploadingFiles which is used as loading list when sended message come successfully
       chatStore.uploadingFiles = chatStore.uploadingFiles.filter(
         item => item?.attachments?.file?.id !== newData?.files[0]?.id
       );
 
       const isSrollStayDown = refChatArea.value?.scrollHeight - refChatArea.value?.clientHeight <= Math.floor(refChatArea.value?.scrollTop) + 100;
-      // add a new message to messageList
-      if(chat_id == newData.chat_id){
+      // add a new message to messageList when current active chat id is the same chat id of the new message
+      if(currentActiveChatId == newData.chat_id){
           chatStore.messageListByChatId.push({
           attachments: { file: newData?.files[0] },
           chat_id: newData.chat_id,
@@ -119,9 +124,9 @@ watch(data, (newData) => {
         chatStore.actionGetChatFilesCount(chat_id)
       }
 
-       // Oxirgi xabarni yangilash
+      // agar kelgan habar private chat yoki group chat listda olib kelgandan ko'rinadigan bo'lsa , Oxirgi xabarni yangilash 
       const chat = chatList.find(item => item.chat_id == newData.chat_id);
-      if (chat && isPrivate) {
+      if (chat && incomingChatTypeIsPrivate) {
         chat.last_message = newData.text;
         chat.last_message_id = newData?.message_id
         // unread_countni 1 ga oshirish
@@ -129,7 +134,7 @@ watch(data, (newData) => {
           chat.unread_count += 1;
         }
       }
-      if (chat && !isPrivate) {
+      if (chat && !incomingChatTypeIsPrivate) {
         chat.last_message = { sender: newData.sender, text: newData.text}
         chat.last_message_id = newData?.message_id
         // unread_countni 1 ga oshirish
@@ -149,20 +154,25 @@ watch(data, (newData) => {
     chatStore.messageListByChatId = chatStore.messageListByChatId.filter(item=> item.message_id != newData?.content?.message_id)
     chatStore.contextMenu.deleteDialog = false
 
-    const chatList = newData?.content?.chat_type == CHAT_TYPES.PRIVATE ? chatStore.privateChatList : chatStore.groupChatList
+    const incomingChatTypeIsPrivate = newData?.content?.chat_type == CHAT_TYPES.PRIVATE
+
+    // get chat list from private chat list or group chat list based on incoming chat type
+    const chatList = incomingChatTypeIsPrivate ? chatStore.privateChatList : chatStore.groupChatList
+
     const chat = chatList.find(item=> item.chat_id == newData?.content?.chat_id)
     if(chat) {
-      // decrement unread count of chat
+      // decrement unread count of chat private or group chat list
       if(chat?.unread_count > 0) {
         chat.unread_count -= 1
       }
-      // update last message of chat
-      if(chat && newData?.content?.chat_type == CHAT_TYPES.PRIVATE) {
+      // update last message of chat in private chat list. 
+      if(chat && incomingChatTypeIsPrivate) {
           if(newData?.content?.message_id == chat.last_message_id){
             chat.last_message = newData?.content?.last_message_text
           }
       }
-      else if(chat && newData?.content?.chat_type == CHAT_TYPES.GROUP) {
+      // update last message of chat in group chat list. 
+      else if(chat && !incomingChatTypeIsPrivate) {
         if(newData?.content?.message_id == chat.last_message_id){
             chat.last_message.text = newData?.content?.last_message_text
             chat.last_message.sender.first_name = newData?.content?.last_message_sender?.split(" ")[1]
@@ -175,26 +185,29 @@ watch(data, (newData) => {
     }
   }
   else if(newData.type == WEBCOCKET_EVENTS.MESSAGE_UPDATE) {
+
+    const incomingChatTypeIsPrivate = newData?.content?.chat_type == CHAT_TYPES.PRIVATE
     // if a message is related to current messageListByChatId, update it
     let message = chatStore.messageListByChatId.find(item=> item.message_id == newData?.content?.message_id)
     if(message) {
       message.text = newData?.content?.text
       message.edited = true
     }
-    // update last message of chat
-    const chatList = newData?.content?.chat_type == CHAT_TYPES.PRIVATE ? chatStore.privateChatList : chatStore.groupChatList
+    // update last message of chat in private chat list or group chat list based on incoming chat type
+    const chatList = incomingChatTypeIsPrivate ? chatStore.privateChatList : chatStore.groupChatList
     const chat = chatList.find(item=> item.chat_id == newData?.content?.chat_id)
-    if(chat && newData?.content?.chat_type == CHAT_TYPES.PRIVATE) {
+    if(chat && incomingChatTypeIsPrivate) {
         if(newData?.content?.message_id == chat.last_message_id){
           chat.last_message = newData?.content?.text
         }
     }
-    else if(chat && newData?.content?.chat_type == CHAT_TYPES.GROUP) {
+    else if(chat && !incomingChatTypeIsPrivate) {
       if(newData?.content?.message_id == chat.last_message_id){
           chat.last_message.text = newData?.content?.text
       }
     }
   }
+
   else if(newData.type == WEBCOCKET_EVENTS.NEW_GROUP_CHAT) {
     if(!chatStore.groupChatList.find(item=> item.chat_id == newData?.content?.chat_id)){
       chatStore.groupChatList.unshift({
@@ -288,14 +301,14 @@ watch(data, (newData) => {
   //     }
   // }
   else if(newData.type == WEBCOCKET_EVENTS.CHAT_DELETED) {
-    const isPrivate = newData.content?.chat_type == CHAT_TYPES.PRIVATE
-    if(isPrivate) {
+    const incomingChatTypeIsPrivate = newData.content?.chat_type == CHAT_TYPES.PRIVATE
+    if(incomingChatTypeIsPrivate) {
       chatStore.privateChatList = chatStore.privateChatList.filter(item => item.chat_id != newData?.content.chat_id)
     } else  {
       chatStore.groupChatList = chatStore.groupChatList.filter(item => item.chat_id != newData?.content.chat_id)
     }
     // if current chat is active, then redirect to chat index
-    if(chat_id == newData?.content.chat_id){
+    if(currentActiveChatId == newData?.content.chat_id){
       router.push({ name: CHAT_ROUTE_NAMES.CHAT_INDEX, query : { tab: newData?.content.chat_type == CHAT_TYPES.GROUP ? 'group' : undefined } })
     }
   }
@@ -308,9 +321,9 @@ watch(data, (newData) => {
       }
     }
   }
-  // mew_message and new_chat_message are different events, but when mew_message comes, new_chat_message also comes
-  else if(newData.type == WEBCOCKET_EVENTS.NEW_CHAT_MESSAGE && chat_id != newData?.content?.chat_id) {
-
+  // new chat message event work when user don't chat handshake new message sender
+  // new_message and new_chat_message are different events, but when mew_message comes, new_chat_message also comes
+  else if(newData.type == WEBCOCKET_EVENTS.NEW_CHAT_MESSAGE && currentActiveChatId != newData?.content?.chat_id) {
     if(newData.content.chat_type == CHAT_TYPES.PRIVATE){
       const privateChat = chatStore.privateChatList.find(item=> item.chat_id == newData?.content.chat_id)
       if(privateChat){

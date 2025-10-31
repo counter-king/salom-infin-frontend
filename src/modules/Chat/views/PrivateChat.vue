@@ -63,7 +63,7 @@ const isGalleriaVisible = ref(false);
 // computed
 const getImageListByFilter = computed(()=> chatStore.messageListByChatId?.filter(item=>item?.message_type == MESSAGE_TYPES.IMAGE))
 const imageGalleriaValues = computed(() => getImageListByFilter?.value?.map(item=>item?.attachments?.file?.url))
-
+const currentChatId = computed(()=> route.params?.id)
 // inject
 const refChatArea = inject("refChatArea");
 // methods
@@ -317,7 +317,10 @@ const getMessageListByCondition = async ()=> {
     if(chatStore.selectedUser?.unread_count > 0){
       putScrollFirstUnreadMessagePalce()
     } else {
-      handleScrollDown()
+      // we need to wait ui mounted fully then scroll down otherwise it will not work
+      setTimeout(() => {
+        handleScrollDown()
+      }, 50);
     }
 }
 
@@ -432,6 +435,7 @@ onMounted(() => {
         </template>
         <template v-for="(message, index) in chatStore.uploadingFiles" :key="index"> 
           <ChatFileItem 
+            v-if="message.chat_uid == currentChatId"
             :message="message"
             :handleClickEmoji="handleClickEmoji"
             :onShowContextMenu="onShowContextMenu" 
@@ -439,9 +443,11 @@ onMounted(() => {
           />
         </template>
         <!-- file uploads progress -->
-        <div class="sticky bottom-0 flex flex-col gap-1 mt-auto">
+        <div class="sticky bottom-0 flex flex-col gap-1 mt-auto"  >
           <template  v-for="(message, index) in chatStore.uploadingFiles" :key="index">
-            <FileUploadProgress :progress="message.progress" :file="message?.attachments?.file" :index="index" />
+            <template v-if="message.chat_uid == currentChatId">
+              <FileUploadProgress :progress="message.progress" :file="message?.attachments?.file" :index="index" />
+            </template>
           </template>
         </div>
         <!-- scroll down button -->
