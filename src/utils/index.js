@@ -933,7 +933,7 @@ export const adjustStringTimeToInput = (time) => {
 }
 
 export const formatSecondsToHoursMinutes = (seconds, locale = "ru") => {
-  if (!seconds || seconds === 0) return `${locale === "ru" ? "—" : "—"}`
+  if (!seconds || seconds === 0) return `${locale === "ru" ? "-" : "-"}`
   
   const hours = Math.floor(seconds / 3600)
   const minutes = Math.floor((seconds % 3600) / 60)

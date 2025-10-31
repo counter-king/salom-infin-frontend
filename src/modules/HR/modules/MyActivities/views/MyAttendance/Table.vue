@@ -18,34 +18,35 @@ import { formatSecondsToHoursMinutes } from '@/utils'
 import { WEEK_DAYS_LIST } from '../../constants'
 // enums
 import { CHECK_IN_STATUS, CHECK_OUT_STATUS } from '../../enums'
+import { USER_STATUS_CODES } from '@/enums'
 // composibles
 const attendanceStore = useMyAttendanceStore()
 const  { t, locale } = useI18n()
 const route = useRoute()
 // inject
 const calendarDaysWithAttendance = inject('calendarDaysWithAttendance')
-
+const reasonListForSubmit = inject('reasonListForSubmit')
 // reactives
 const reasonProcessModalOpen = ref(false)
 const lateCameReasonModalOpen = ref(false)
-const selectedDate = ref("")
+const selectedDay = ref("")
 
 const isEnterReason = (day) => {
-  if(!!day?.attendance && day?.attendance?.violations?.length > 0 && day?.attendance?.violations?.some(violation => !violation.has_appeal)) return true
+  if(day?.attendance?.type == USER_STATUS_CODES.WORKERS && day?.attendance?.violations?.length > 0 && day?.attendance?.violations?.some(violation => !violation.has_appeal)) return true
   else {
     return false
   }
 }
 
 const onClickRow = (day) => {
-  selectedDate.value = formatDate(day?.date)
+  
   if(isEnterReason(day)) {
     lateCameReasonModalOpen.value = true
   } else {
     const today = new Date()
     const isTheDayLargeFromToday = dayjs(day.date).isAfter(dayjs(today))
-    if(day.workDay && !isTheDayLargeFromToday){
-      selectedDate.value = dayjs(day.date).format(locale.value === 'ru' ? 'D-MMMM, YYYY [г.]' : 'D-MMMM, YYYY [y.]')
+    if(day?.attendance?.type == USER_STATUS_CODES.WORKERS && !isTheDayLargeFromToday){
+      selectedDay.value = day
       reasonProcessModalOpen.value = true
    }
   }
@@ -96,6 +97,6 @@ const onClickRow = (day) => {
       </template>
     </base-data-table> 
   </div>
-  <ReasonProcessModal v-model="reasonProcessModalOpen" :label="selectedDate" />
-  <LateCameReasonModal v-model="lateCameReasonModalOpen" />
+  <ReasonProcessModal v-if="reasonProcessModalOpen" v-model="reasonProcessModalOpen" :data="selectedDay" />
+  <LateCameReasonModal :key="lateCameReasonModalOpen" v-model="lateCameReasonModalOpen" :reasonList="reasonListForSubmit" />
 </template>

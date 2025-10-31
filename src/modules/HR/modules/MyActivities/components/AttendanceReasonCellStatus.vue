@@ -24,7 +24,7 @@ const statusIcon = (data) => {
   }
 
   // No entry marked or no exit marked
-  else if((data?.check_in_status == CHECK_IN_STATUS.NO_ENTRY_MARKED || data?.check_out_status == CHECK_OUT_STATUS.NO_EXIT_MARKED)&& data?.violations?.some(violation => !violation.has_appeal)) {
+  else if((data?.check_in_status == CHECK_IN_STATUS.NO_ENTRY_MARKED || data?.check_out_status == CHECK_OUT_STATUS.NO_EXIT_MARKED) && data?.violations?.some(violation => !violation.has_appeal)) {
     return MinusCircleBoldIcon
   }
   // not come 
@@ -71,7 +71,7 @@ const statusIconClass = (data) => {
   return false
 }
 
-const getMatchStatus = (data) => {
+const getMatchText = (data) => {
   if(data?.check_in_status == CHECK_IN_STATUS.LATE_ARRIVAL && data?.violations?.some(violation => violation.kind == KIND.LATE && !violation.has_appeal)) {
     return 'you-are-late2'
   }
@@ -94,7 +94,7 @@ const getMatchStatus = (data) => {
   <div v-if="!!wrapperClass(props.data)" class="attendance-status flex gap-x-1 items-center" :class="wrapperClass(props.data)">
     <base-iconify :icon="statusIcon(props.data)"  :class="statusIconClass(props.data)" />
     <div class="text-sm font-medium">
-      {{ t(getMatchStatus(props.data)) }}
+      {{ t(getMatchText(props.data)) }}
     </div>
   </div>
 </template>

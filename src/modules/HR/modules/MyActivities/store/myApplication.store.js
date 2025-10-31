@@ -1,26 +1,13 @@
 // Core
 import { defineStore } from 'pinia'
+// services
+import { fetchGetAttendanceExceptionsList } from '../services'
 
 export const useMyApplicationStore = defineStore("my-application-store", {
   state: () => ({
-    currentApplicationList: [{
-      date: '2025-05-15',
-      reason_for_explanation: 'Tushuntirish sababi',
-      reason: 'Sabab',
-      reason_entered_time: 'Sabab kiritilgan vaqt',
-      current_status: 'Hozirgi holati'
-    }],
-    currentApplicationTotalCount: 0,
-    currentApplicationListLoading: false,
-    archiveApplicationList: [{
-      date: '2025-05-15',
-      reason_for_explanation: 'Tushuntirish sababi',
-      reason: 'Sabab',
-      reason_entered_time: 'Sabab kiritilgan vaqt',
-      current_status: 'Hozirgi holati'
-    }],
-    archiveApplicationTotalCount: 0,
-    archiveApplicationListLoading: false,
+    attendanceExpectionsList: [],
+    attendanceExpectionsListTotalCount: 0,
+    attendanceExpectionsListLoading: false,
     currentHeaders: [
       {
         header: "date",
@@ -29,7 +16,7 @@ export const useMyApplicationStore = defineStore("my-application-store", {
       },
       {
         header: "reason-for-explanation",
-        field: "reason_for_explanation",
+        field: "kind",
         active: true
       },
       {
@@ -39,12 +26,12 @@ export const useMyApplicationStore = defineStore("my-application-store", {
       },
       {
         header: "reason-entered-time",
-        field: "reason_entered_time",
+        field: "created_date",
         active: true
       },
       {
         header: "current-status",
-        field: "current_status",
+        field: "status",
         active: true
       }
     ],
@@ -56,7 +43,7 @@ export const useMyApplicationStore = defineStore("my-application-store", {
       },
       {
         header: "reason-for-explanation",
-        field: "reason_for_explanation",
+        field: "kind",
         active: true
       },
       {
@@ -66,20 +53,31 @@ export const useMyApplicationStore = defineStore("my-application-store", {
       },
       {
         header: "reason-entered-time",
-        field: "reason_entered_time",
+        field: "created_date",
         active: true
       },
       {
         header: "current-status",
-        field: "current_status",
+        field: "status",
         active: true
       }
     ]
   }),
   actions: {
     /** **/
-    async getMyApplicationList(params) {},
-    async getArchiveApplicationList(params) {},
+    async getAttendanceExceptionsList(params) {
+      try {
+        this.attendanceExpectionsListLoading = true
+        const res = await fetchGetAttendanceExceptionsList(params)
+        this.attendanceExpectionsList = res.data.results
+        this.attendanceExpectionsListTotalCount = res.data.count
+        return res
+      } catch (error) {
+        return Promise.reject(error)
+      } finally {
+        this.attendanceExpectionsListLoading = false
+      }
+    }
 
   }
 })

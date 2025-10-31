@@ -1080,6 +1080,10 @@
   "you-are-late2": "Kechikdingiz",
   "you-left-early": "Erta ketdingiz",
   "not-recorded": "Qayd etilmadi",
+  "not-come-noun": "Kelmaslik",
+  "late-noun": "Kechikish",
+  "early-leave-noun": "Erta ketish",
+  "not-recorded-noun": "Qayd etilmaslik",
   "short-day": " {count} kun",
   "short-hour": " {count} soat",
   "on-date": "sanasida",
@@ -1096,5 +1100,16 @@
   "letter-written": "Xat yozilgan",
   "not-confirmed": "Tasdiqlanmagan",
   "entered-to-timesheet": "Tabelga kiritilgan",
-  "no-reason-provided": "Sabab kiritilmagan"
-}
+  "no-reason-provided": "Sabab kiritilmagan",
+  "agreed": "Kelishilgan",
+  "in-the-process-of-agreement": "Kelishish jarayonida",
+  "note": "Izoh",
+  "confirmed": "Qabul qilingan",
+  "leader-panel": "Rahbar paneli",
+  "with-reason": "sababini ko‘rsatganlar",
+  "without-reason": "Sababsiz",
+  "employees-timesheet": "Xodimlar tabeli",
+  "action-history": "Harakatlar tarixi",
+  "employee-attendance": "Xodimlar davomati",
+  "application-status": "Arizaning holati"
+  }

@@ -53,3 +53,8 @@ export const CHECK_OUT_STATUS = {
   NOT_CAME: "not-came"
 }
 
+export const ATTENDANCE_EXCEPTION_STATUS = {
+  PENDING: "pending",
+  APPROVED: "approved",
+  REJECTED: "rejected"
+}

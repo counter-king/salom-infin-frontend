@@ -22,6 +22,7 @@ const { t, locale } = useI18n()
 const attendanceStore = useMyAttendanceStore()
 // injects
 const calendarDaysWithAttendance = inject('calendarDaysWithAttendance')
+const reasonListForSubmit = inject('reasonListForSubmit')
 // reactives
 const reasonProcessModalOpen = ref(false)
 const lateCameReasonModalOpen = ref(false)
@@ -29,54 +30,7 @@ const hoveredBadgeIndex = ref(null)
 const selectedDay = ref("")
 // computed
 const weekDays = computed(() => locale.value === 'ru' ? WEEK_DAYS_RU : WEEK_DAYS_UZ)
-const reasonListForSubmit = computed(() => {
-  return calendarDaysWithAttendance.value
-    // 1. Faqat violations bor va has_appeal: false bo'lganlarni olish
-    .filter(item => 
-      item.attendance?.violations?.some(violation => !violation.has_appeal)
-    )
-    // 2. Har bir kun uchun violations arrayini ochish
-    .flatMap(item => {
-      const attendance = item.attendance
-      
-      // Faqat has_appeal: false bo'lgan violationslarni olish
-      return attendance.violations
-        .filter(violation => !violation.has_appeal)
-        .map(violation => {
-          // Base obyekt
-          const result = {
-            kind: violation.kind,
-            has_appeal: violation.has_appeal,
-            attendance: attendance.id, // ← attendance ID
-            date: attendance.date,
-          }
-          
-          // Kind ga qarab tegishli minutlarni qo'shish
-          if (violation.kind === KIND.LATE) {
-            result.late_minutes = attendance.late_minutes || 0
-            result.first_check_in = attendance.first_check_in
-          }
 
-          else if (violation.kind === KIND.EARLY_LEAVE) {
-            result.early_leave_minutes = attendance.early_leave_minutes || 0
-            result.last_check_out = attendance.last_check_out
-          }
-
-          else if (violation.kind === KIND.MISSED_CHECKOUT) {
-            result.first_check_in = attendance.first_check_in
-          }
-
-          else if (violation.kind === KIND.MISSED_CHECKIN) {
-            result.last_check_out = attendance.last_check_out
-          }
-          else if (violation.kind === KIND.ABSENT) {
-            result.date = attendance.date
-          }
-          
-          return result
-        })
-    })
-})
 
 // Composable'dan funksiyalarni olish
 const { 
@@ -103,7 +57,7 @@ const isAdditionalDayOffCell = (day) => {
 }
 
 const isEnterReasonCell = (day) => {
-  if(!!day?.attendance && day?.attendance?.violations?.length > 0 && day?.attendance?.violations?.some(violation => !violation.has_appeal)) return true
+  if(day?.attendance?.type == USER_STATUS_CODES.WORKERS && day?.attendance?.violations?.length > 0 && day?.attendance?.violations?.some(violation => !violation.has_appeal)) return true
   else {
     return false
   }
@@ -112,8 +66,7 @@ const isEnterReasonCell = (day) => {
 const onHandleBodyCell = (day) => {
   const today = new Date()
   const isTheDayLargeFromToday = dayjs(day.date).isAfter(dayjs(today))
-  if(day.workDay && !isTheDayLargeFromToday){
-    // selectedDate.value = dayjs(day.date).format(locale.value === 'ru' ? 'D-MMMM, YYYY [г.]' : 'D-MMMM, YYYY [y.]')
+  if(day?.attendance?.type == USER_STATUS_CODES.WORKERS && !isEnterReasonCell(day) && !isTheDayLargeFromToday){
     selectedDay.value = day
     reasonProcessModalOpen.value = true
   }
@@ -139,7 +92,6 @@ const onHandleLateCameReasonModal = (day) => {
             <!-- cell line-through; -->
             <div
               v-if="isCellLineThrough(day)"
-              @click="onHandleBodyCell(day)"
               class="select-none cursor-pointer flex flex-col justify-between items-center p-4 h-[120px] border-t [&:not(:nth-child(7n))]:border-r border-greyscale-200"
               :class="{'!bg-primary-10': isCurrentDate(day),
                 'hover:bg-greyscale-50': !isBadgeHovered(index)
@@ -168,7 +120,7 @@ const onHandleLateCameReasonModal = (day) => {
             </div>
             <!-- enter reason cell -->
             <div 
-              v-else-if="!!day.attendance && isEnterReasonCell(day)"
+              v-else-if="isEnterReasonCell(day)"
               class="flex flex-col justify-between items-center hover:bg-greyscale-50 cursor-pointer text-center p-4 h-[120px] border-t [&:not(:nth-child(7n))]:border-r font-medium"
               @click="onHandleLateCameReasonModal(day)"
             >
@@ -198,7 +150,7 @@ const onHandleLateCameReasonModal = (day) => {
             <div
               v-else
               @click="onHandleBodyCell(day)"
-              class="select-none cursor-pointer flex flex-col justify-between items-center p-4 h-[120px] border-t [&:not(:nth-child(7n))]:border-r border-greyscale-200"
+              class="select-none cursor-pointer hover:bg-greyscale-50 flex flex-col justify-between items-center p-4 h-[120px] border-t [&:not(:nth-child(7n))]:border-r border-greyscale-200"
               :class="{'!bg-primary-10': isCurrentDate(day)}" 
             >
                 <!-- number area -->
@@ -219,6 +171,6 @@ const onHandleLateCameReasonModal = (day) => {
           </template>
         </div>
     </div>
-    <ReasonProcessModal :key="reasonProcessModalOpen" v-model="reasonProcessModalOpen" :data="selectedDay" />
+    <ReasonProcessModal  v-if="reasonProcessModalOpen" v-model="reasonProcessModalOpen" :data="selectedDay" />
     <LateCameReasonModal :key="lateCameReasonModalOpen"  v-model="lateCameReasonModalOpen" :reasonList="reasonListForSubmit" :apiCallAfterSubmit="attendanceStore.getMyAttendanceList"/>
 </template>

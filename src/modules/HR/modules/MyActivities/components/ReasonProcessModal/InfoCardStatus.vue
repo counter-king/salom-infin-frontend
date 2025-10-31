@@ -16,17 +16,9 @@ const props = defineProps({
 	}
 })
 
-const statusIcon = computed(() => {
-	switch(props.data?.status) {
-		case 'success':
-			return InfoCircleBoldIcon
-		case 'warning':
-			return InfoCircleBoldIcon
-	}
-})
 
-const getMathText = () => {
-	switch('late-reason-rejected-and-hours-written-by-hr') {
+const getMathText = computed(() => {
+	switch(props.data) {
 		case 'success':
 			return t('')
 		case 'warning':
@@ -35,50 +27,55 @@ const getMathText = () => {
 			return t('late-reason-rejected-by-director')
 		case 'late-reason-rejected-and-hours-written-by-hr':
 			return t('late-reason-rejected-and-hours-written-by-hr', { hours: props.data?.hours || 0 })
+    default:
+      return ''
 	}
-}
-const statusClass = () => {
-	switch('declined') {
+})
+
+const statusClass = computed(() => {
+	switch(props.data) {
 		case 'success':
 			return 'bg-success-50 border-success-100 text-greyscale-900'
 		case 'warning':
 			return 'bg-success-50 border-success-100 text-greyscale-900'
 		case 'declined':
 			return 'bg-warning-30 border-warning-100 text-greyscale-900'
+    default:
+      return ''
 	}
-}
+})
 
-const renderIcon = () => {
-  switch ('declined') {
+const renderIcon = computed(() => {
+  switch (props.data) {
     case 'success': return h(CheckMarkIcon, { width: 26, height: 24 })
     case 'warning': return h(CheckMarkIcon, { width: 26, height: 24 })
     case 'declined': return h(LedgerIcon, { width: 30, height: 24 })
-    default: return null
+    default: return h(CheckMarkIcon, { width: 30, height: 24 })
   }
-}
+})
 
 </script>
 <template>
 	<div 
 		class="flex items-center gap-2 py-3 px-4 border rounded-[12px]"
-		:class="statusClass()"
+		:class="statusClass"
 	>
-		<component :is="renderIcon()" />
+		<component :is="renderIcon" />
 		<slot name="text">
-			<p v-if="true" 
+			<div v-if="getMathText" 
 			class="text-sm font-medium"
 			>
-				{{ getMathText() }}
-			</p>
+				{{ getMathText }}
+			</div>
 			<div v-else class="flex flex-col">
 				<span 
 					class="text-sm font-medium text-greyscale-900"
-					:class="statusClass()"
+					:class="statusClass"
 					>
 					{{ t('no-attendance-issues') }}
 				</span>
 				<span class="text-[13px] font-medium text-greyscale-500">
-							{{ t('no-attendance-records-on-time') }}
+					{{ t('no-attendance-records-on-time') }}
 				</span>
 			</div>
 		</slot>

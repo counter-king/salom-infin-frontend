@@ -40,6 +40,7 @@ export { default as ReplyLinearIcon } from  '~icons/solar/reply-linear'
 export { default as CheckCircleLinearIcon } from  '~icons/solar/check-circle-linear'
 export { default as ChecklistMinimalisticLinearIcon } from  '~icons/solar/checklist-minimalistic-linear'
 export { default as BoltLinearIcon } from  '~icons/solar/bolt-linear'
+export { default as UserSpeakRoundedLinearIcon } from  '~icons/solar/user-speak-rounded-linear'
 // Solar (Outline)
 export { default as CheckCircleIcon } from  '~icons/solar/check-circle-outline'
 export { default as AltArrowUpIcon } from  '~icons/solar/alt-arrow-up-outline'

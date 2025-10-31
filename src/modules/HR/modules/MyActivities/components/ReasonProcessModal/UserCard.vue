@@ -11,8 +11,11 @@ import { COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES } from '@/enums';
 // utils
 import { formatTimeDate } from '@/utils/formatDate';
 // components
+import { useBlobFileStore } from '@/stores/file.store';
+// composables
 const { t } = useI18n()
 const router = useRouter()
+const blobFileStore = useBlobFileStore()
 // props
 const props = defineProps({
   data: {
@@ -21,6 +24,12 @@ const props = defineProps({
   },
 
 })
+
+const emit = defineEmits(['show-note'])
+
+const showNote = (note) => {
+  emit('show-note', note)
+}
 
 const getMatchStatusIcon = () => {
   switch('success') {
@@ -82,12 +91,18 @@ const onClickWriteExplanationLetter = () => {
       document_sub_type: COMPOSE_DOCUMENT_SUB_TYPES.EXPLANATION_LETTER
     },
     query: {
-      attendance: props.data?.attendance?.id,
-      kind: "late"
+      attendanceId: props.data?.attendance?.id,
+      kind: "late",
+      date: props.data?.date,
+      exceptionId: props.data?.id
     }
   })
 }
 
+const onClickAttachedFile = async () => {
+ const { blobUrl } = await blobFileStore.actionGetBlobFile(3425)
+ window.open(blobUrl, '_blank')
+}
 </script>
 <template>
   <div class="flex items-start gap-4">
@@ -134,19 +149,26 @@ const onClickWriteExplanationLetter = () => {
       </div>
       <!-- process status -->
        <div class="px-3 py-2">
-          <!-- employee ender reason  -->
+          <!-- employee enter reason  -->
           <div v-if="false" class="w-fit flex gap-1 cursor-pointer px-[6px] py-1 text-xs text-primary-500 font-medium rounded-[6px] bg-greyscale-50">
             <span>{{ t('enter-reason') }}</span>
             <base-iconify :icon="AltArrowRightIcon" class="!w-4 !h-4" />
           </div>
            <!-- employee endered reason and attached file -->
           <div v-if="false" class="flex items-center gap-1">
+            <!-- reason -->
             <div  class="w-fit px-[6px] py-1 text-xs text-greyscale-500 font-medium rounded-[6px] bg-greyscale-50">
               Oilaviy sabablar tufayli
             </div>
-            <div class="w-fit flex gap-1 items-center px-[6px] py-1 text-xs text-greyscale-500 font-medium rounded-[6px] bg-greyscale-50">
+            <!-- attached file -->
+            <div @click="onClickAttachedFile" class="w-fit flex gap-1 items-center px-[6px] py-1 text-xs text-greyscale-500 font-medium rounded-[6px] bg-greyscale-50">
               <base-iconify :icon="PaperclipLinearIcon" class="!w-4 !h-4 text-primary-500" />
               <span class="cursor-pointer text-primary-500">Kasallik varaqasi.pdf</span>
+            </div>
+            <!-- note -->
+            <div @click="showNote('note')" class="w-fit flex gap-1 items-center px-[6px] py-1 text-xs text-greyscale-900 font-medium rounded-[6px] bg-greyscale-50">
+              <span class="cursor-pointer text-primary-500 max-w-[104px] truncate">Kaasalxonaga bor 123</span>
+              <base-iconify :icon="AltArrowRightIcon" class="!w-4 !h-4 text-primary-500" />
             </div>
           </div>
           <!-- employee are wating and will write explanation letter -->
@@ -174,6 +196,7 @@ const onClickWriteExplanationLetter = () => {
            </div>
        </div>
     </div>
+
   </div>
 </template>
 <style scoped>

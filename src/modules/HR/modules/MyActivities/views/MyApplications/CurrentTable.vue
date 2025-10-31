@@ -1,23 +1,31 @@
 <script setup>
 // core
-import { ref, inject, watch } from 'vue'
+import { ref, inject, watch, onMounted } from 'vue'
 import { useRoute} from 'vue-router'
+import dayjs from 'dayjs'
 // components
 import Status from '../../components/MyAttendance/Status.vue'
 import { ReasonProcessModal } from '../../components/ReasonProcessModal'
+import ExplanationReasonStatus from '../../components/ExplanationReasonStatus.vue'
+import AttendanceExceptionsStatus from '../../components/AttendanceExceptionsStatus.vue'
+
 // utils
-import { formatDate } from '@/utils/formatDate'
+import { formatDate, formatTimeDate } from '@/utils/formatDate'
 // store
+import { useAttendanceExpectionsStore } from '../../store/attendanceExceptions.store.js'
 import { useMyApplicationStore } from '../../store/myApplication.store.js'
+// enums
+import { ATTENDANCE_EXCEPTION_STATUS } from '../../enums'
+
 // composibles
-const applicationStore = useMyApplicationStore()
+const myApplicationStore = useMyApplicationStore()
+
 const route = useRoute()
 // reactives
 const reasonProcessModalOpen = ref(false)
-const selectedDate = ref("")
-
+const selectedDay = ref({})
 const onClickRow = (day) => {
-  selectedDate.value = dayjs(day.date).format(locale.value === 'ru' ? 'D-MMMM, YYYY [г.]' : 'D-MMMM, YYYY [y.]')
+  selectedDay.value = day
   reasonProcessModalOpen.value = true
 }
 
@@ -25,19 +33,33 @@ const onClickRow = (day) => {
 <template>
   <div class="mt-4">
     <base-data-table
-      :action-list="applicationStore.getCurrentApplicationList"
-      :api-params="{ ...route.query, page_size: 15 } ?? null"
-      :headers="applicationStore.currentHeaders"
-      :loading="applicationStore.currentApplicationListLoading"
-      :total-count="applicationStore.currentApplicationTotalCount"
-      :value="applicationStore.currentApplicationList"
+      :action-list="myApplicationStore.getAttendanceExceptionsList"
+      :api-params="{ ...route.query, status: ATTENDANCE_EXCEPTION_STATUS.PENDING }"
+      :headers="myApplicationStore.currentHeaders"
+      :loading="myApplicationStore.attendanceExpectionsListLoading"
+      :total-count="myApplicationStore.attendanceExpectionsListTotalCount"
+      :value="myApplicationStore.attendanceExpectionsList"
       scroll-height="calc(100vh - 295px)"
       @emit:row-click="onClickRow"
     >
+      <template #date="{ data }">
+        <div class="text-sm font-medium text-greyscale-900">
+          {{ formatDate(data?.attendance?.date) }}
+        </div>
+      </template>
+      <template #kind="{ data }">
+        <ExplanationReasonStatus :status="data.kind"/>
+      </template>
+      <template #reason="{ data }">
+        <div class="text-sm font-medium text-greyscale-900"> {{ data.reason.name }}</div>
+      </template>
+      <template #created_date="{ data }">
+        <div class="text-sm font-medium text-greyscale-900"> {{ formatTimeDate(data.created_date) }}</div>
+      </template>
       <template #status="{ data }">
-        <status :status="data.status"/>
+        <AttendanceExceptionsStatus :status="data.status"/>
       </template>
     </base-data-table> 
   </div>
-  <ReasonProcessModal v-model="reasonProcessModalOpen" :label="selectedDate" />
+  <ReasonProcessModal v-model="reasonProcessModalOpen" :key="reasonProcessModalOpen" :data="selectedDay" />
 </template>

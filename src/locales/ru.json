@@ -1085,6 +1085,10 @@
   "you-are-late2": "Вы опоздали",
   "you-left-early": "Вы ушли рано",
   "not-recorded": "Не зарегистрировано",
+  "not-come-noun": "Отсутствие",
+  "late-noun": "Опоздание",
+  "early-leave-noun": "Ранний уход",
+  "not-recorded-noun": "Не отмечено",
   "short-day": " {count} д.",
   "short-hour": " {count} ч.",
   "on-date": "дата",
@@ -1101,5 +1105,16 @@
   "letter-written": "Письмо написано",
   "not-confirmed": "Не подтверждено",
   "entered-to-timesheet": "Добавлено в таблицу",
-  "no-reason-provided": "Причина не указана"
+  "no-reason-provided": "Причина не указана",
+  "agreed": "Согласованный",
+  "in-the-process-of-agreement": "В процессе согласования",
+  "note": "Примечание",
+  "confirmed": "Принято",
+  "leader-panel": "Панель руководителя",
+  "with-reason": "Указавшие причину",
+  "without-reason": "Без причины",
+  "employees-timesheet": "Табель сотрудников",
+  "action-history": "История действий",
+  "employee-attendance": "Посещаемость сотрудников",
+  "application-status": "Статус заявления"
 }

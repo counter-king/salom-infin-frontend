@@ -13,7 +13,7 @@ import { COLOR_TYPES } from "@/enums"
 // Store
 import { useNotificationStore } from "@/modules/Dashboard/stores/notification.store"
 import { useAttendanceReasonStore } from "@/modules/HR/modules/Attendance/stores/attendanceReason.store"
-import { useAttendanceExpectionsStore } from "@/modules/HR/modules/MyActivities/store/attendanceExpections.store"
+import { useAttendanceExpectionsStore } from "@/modules/HR/modules/MyActivities/store/attendanceExceptions.store"
 
 // Components
 import { UserWithRadio } from "@/components/Users"
@@ -100,7 +100,7 @@ const sendReason = async () => {
   try {
 
    sendButtonLoading.value = true
-   const body = { ...formModel, attendance: reasonList.value[0].attendance, attachments: formModel.__attachments.map(item => ({ id: item.id })) }
+   const body = { ...formModel, kind: reasonList.value[0]?.kind, attendance: reasonList.value[0].attendance, attachments: formModel.__attachments.map(item => ({ id: item.id })) }
 
    reasonStore.createAttendanceReason(body)
    props.apiCallAfterSubmit && props.apiCallAfterSubmit()

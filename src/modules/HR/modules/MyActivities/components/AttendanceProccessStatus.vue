@@ -28,6 +28,9 @@ const wrapperClass = computed(() => {
   else if(5){
     return 'bg-success-50 border border-success-100 text-success-500'
   }
+  else if(7){
+    return 'bg-info-50 border border-info-100 text-info-500'
+  }
 })
 
 const getMatchText = () => {
@@ -48,6 +51,9 @@ const getMatchText = () => {
   }
   else if(6){
     return t('no-reason-provided')
+  }
+  else if(7){
+    return t('confirmed')
   }
 }
 </script>

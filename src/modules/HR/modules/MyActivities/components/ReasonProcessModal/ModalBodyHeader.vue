@@ -45,6 +45,7 @@ const reasonData2 = ref({
 const isWorkedTimeLessThan8Hours = computed(() => props.data?.attendance?.worked_seconds / 60 / 60 > 8 ? true : false )
 const workedTime = computed(() => formatSecondsToHoursMinutes(props.data?.attendance?.worked_seconds))
 const prsentageOfWorkedTime = computed(() => props.data?.attendance?.worked_seconds / 60 / 60 / 8 * 100)
+
 const toolTipFun = () => {
   return {
     value: `<div class="flex flex-col gap-1">

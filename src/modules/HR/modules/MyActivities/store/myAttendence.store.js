@@ -176,7 +176,6 @@ export const useMyAttendanceStore = defineStore("my-attendance-store", {
               check_out_status: "normal-exit",
               has_reason: false,
               user_status: { id: 1, name: "LABOR_LEAVE", code: "OT", code_type: "LABOR_LEAVE" },
-              violations: []
             },
             {
               id: 2,

@@ -8,6 +8,7 @@ import InteractionABS from '../modules/InteractionABS/routes'
 import Survey from '../modules/Survey/routes'
 import MyActivities from '../modules/MyActivities/routes'
 import TimesheetSystem from '../modules/TimesheetSystem/routes'
+import LeaderPanel from '../modules/LeaderPanel/routes'
 
 const HR = [
   {
@@ -38,7 +39,9 @@ const HR = [
       // MyActivities
       ...MyActivities,
       // TimesheetSystem
-      ...TimesheetSystem
+      ...TimesheetSystem,
+      // LeaderPanel
+      ...LeaderPanel,
     ]
   }
 ]

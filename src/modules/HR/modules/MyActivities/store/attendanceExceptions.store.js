@@ -7,12 +7,8 @@ export const useAttendanceExpectionsStore = defineStore("attendance-expections-s
   state: () => ({
     attendanceExpectionsList: [],
     createAttendanceExpectionsLoading: false,
-    formModelList: [],
-    formModel: {
-      reason: "",
-      note: "",
-      __attachments: []
-    }
+    attendanceExpectionsListLoading: false,
+    attendanceExpectionsListTotalCount: 0,
   }),
   actions: {
     /** **/
@@ -32,6 +28,7 @@ export const useAttendanceExpectionsStore = defineStore("attendance-expections-s
         this.attendanceExpectionsListLoading = true
         const res = await fetchGetAttendanceExceptionsList(params)
         this.attendanceExpectionsList = res.data.results
+        this.attendanceExpectionsListTotalCount = res.data.count
         return res
       } catch (error) {
         return Promise.reject(error)

@@ -69,10 +69,12 @@ const preview = async () => {
   applicationStore.model.document_type = route.params.document_type
   applicationStore.model.document_sub_type = route.params.document_sub_type
   applicationStore.model.approvers = adjustUsersToArray(applicationStore.model.__approvers)
-  if(route.params?.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.EXPLANATION_LETTER && route.params?.document_type === COMPOSE_DOCUMENT_TYPES.APPLICATION && route.query?.attendance && route.query?.kind) {
+  if(route.params?.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.EXPLANATION_LETTER && route.params?.document_type === COMPOSE_DOCUMENT_TYPES.APPLICATION) {
     applicationStore.model.additional_data = {
-      attendance: route.query?.attendance,
-      kind: route.query?.kind
+      attendance_id: route.query?.attendanceId,
+      kind: route.query?.kind,
+      exception_id: route.query.exceptionId,
+      date: route.query.date
     }
   }
 }

@@ -2,7 +2,7 @@
 // Core
 import { ref } from 'vue'
 // Components
-import { CaseIcon, UserIcon, SettingsMinimalisticIcon, DocumentAddIcon, CheckCircleIcon, HomeSmileAngleIcon, BoltLinearIcon, ChecklistMinimalisticLinearIcon } from '@/components/Icons'
+import { CaseIcon, UserIcon, SettingsMinimalisticIcon, DocumentAddIcon, CheckCircleIcon, HomeSmileAngleIcon, BoltLinearIcon, ChecklistMinimalisticLinearIcon, UserSpeakRoundedLinearIcon } from '@/components/Icons'
 import TheSidebar from '@/components/TheSidebar.vue'
 import TheFooter from '@/components/TheFooter.vue';
 // Stores
@@ -30,6 +30,12 @@ const menus = ref([
     children: [],
     roles: ["hr"]
   },
+  {
+    title: "leader-panel",
+    icon: UserSpeakRoundedLinearIcon,
+    link: "LeaderPanelIndex",
+    children: [],
+  },
   // {
   //   title: "timesheet-system",
   //   icon: ChecklistMinimalisticLinearIcon,
@@ -40,7 +46,6 @@ const menus = ref([
     title: "my-activities",
     icon: BoltLinearIcon,
     link: "MyActivitiesIndex",
-    children: []
   },
   {
     title: "business-trip",
