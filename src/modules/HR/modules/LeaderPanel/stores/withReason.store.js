@@ -8,63 +8,43 @@ export const useWithReasonStore = defineStore('with-reason-stores', {
         {
           field: 'employee',
           header: 'employee',
-          width: '13%',
           active: true,
           filter: false,
         },
         {
           field: 'position',
           header: 'position',
-          width: '9%',
           active: true,
           filter: false,
         },
         {
           field: 'date',
           header: 'company',
-          width: '9%',
           active: true,
           filter: false,
         },
         {
           field: 'arrivalTime',
           header: 'arrival_time',
-          width: '10%',
           active: true,
           filter: false,
         },
         {
           field:  'departureTime',
           header: 'departure_time',
-          width: '9%',
           active: true,
           filter: false,
         },
         {
           field: 'status',
           header: 'status',
-          width: '9%',
           active: true,
           filter: false,
-        },
-        {
-          field: 'operation_type',
-          header: 'operation_type',
-          width: '9%',
-          active: true,
-          filter: false
-        },
-        {
-          field: 'actions',
-          header: 'actions',
-          width: '15%',
-          active: true,
-          filter: false
         }
       ]
     }),
     actions: {
-      async actionGetIabsActionList(params) {
+      async getAttendanceExceptionsWithReasonList(params) {
         this.withReasonListLoading = true
         try {
         } catch (error) {
