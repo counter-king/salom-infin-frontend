@@ -57,6 +57,7 @@ export const useWithReasonStore = defineStore('with-reason-stores', {
         this.headers = this.headers.map(header => ({
           ...header,
           active: true
+          
         }))
       }
     }
