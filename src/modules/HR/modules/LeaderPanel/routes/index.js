@@ -24,7 +24,7 @@ const LeaderPanel = [
             meta: {
               isAuthRequired: true,
             },
-            component: () => import('../views/AttendanceEmployee/WithReason.vue'),
+            component: () => import('../views/AttendanceEmployee/WithReasonList.vue'),
           },
           {
             path: 'absence',
@@ -32,7 +32,7 @@ const LeaderPanel = [
             meta: {
               isAuthRequired: true,
             },
-            component: () => import('../views/AttendanceEmployee/WithoutReason.vue'),
+            component: () => import('../views/AttendanceEmployee/NoReasonList.vue'),
           }
         ]
       },
@@ -42,7 +42,7 @@ const LeaderPanel = [
         meta: {
           isAuthRequired: true,
         },
-        component: () => import('../views/EmployeesTimesheet/index.vue'),
+        component: () => import('../views/EmployeesTimesheet/List.vue'),
         children:[]
       },
       {

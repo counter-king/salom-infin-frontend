@@ -952,5 +952,3 @@ export const formatSecondsToHoursMinutes = (seconds, locale = "ru") => {
   }
 }
 
-
-

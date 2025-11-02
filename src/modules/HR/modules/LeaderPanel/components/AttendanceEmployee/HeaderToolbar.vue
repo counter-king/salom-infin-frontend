@@ -20,7 +20,7 @@ const goToNextMonth = inject('goToNextMonth')
 const handleClickCurrentMonth = inject('handleClickCurrentMonth')
 
 // methods
-const activeTab = ref('with-reason')
+const activeTab = ref(route.name == 'AttendanceEmployee' ? 'with-reason' : 'without-reason')
 // methods
 const handleWithReason = () => {
   activeTab.value = 'with-reason'

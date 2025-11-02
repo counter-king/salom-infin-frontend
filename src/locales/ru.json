@@ -1109,12 +1109,19 @@
   "agreed": "Согласованный",
   "in-the-process-of-agreement": "В процессе согласования",
   "note": "Примечание",
-  "confirmed": "Принято",
+  "confirmed": "Подтверждено",
   "leader-panel": "Панель руководителя",
   "with-reason": "Указавшие причину",
   "without-reason": "Без причины",
   "employees-timesheet": "Табель сотрудников",
   "action-history": "История действий",
   "employee-attendance": "Посещаемость сотрудников",
-  "application-status": "Статус заявления"
+  "application-status": "Статус заявления",
+  "waiting": "Ожидание",
+  "send-notification": "Отправить уведомление",
+  "timesheet-date": "Tabel sanasi",
+  "employees-count": "Xodimlar soni",
+  "hr-employee": "HR xodimi",
+  "need-to-confirm": "Tasdiqlashingiz kerak",
+  "approve": "Утвердить"
 }

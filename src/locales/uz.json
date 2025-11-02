@@ -1104,12 +1104,20 @@
   "agreed": "Kelishilgan",
   "in-the-process-of-agreement": "Kelishish jarayonida",
   "note": "Izoh",
-  "confirmed": "Qabul qilingan",
+  "confirmed": "Tasdiqlangan",
   "leader-panel": "Rahbar paneli",
   "with-reason": "sababini ko‘rsatganlar",
   "without-reason": "Sababsiz",
   "employees-timesheet": "Xodimlar tabeli",
   "action-history": "Harakatlar tarixi",
   "employee-attendance": "Xodimlar davomati",
-  "application-status": "Arizaning holati"
+  "application-status": "Arizaning holati",
+  "waiting":"Kutilmoqda",
+  "send-notification": "Bildirishnoma yuborish",
+  "timesheet-date": "Дата табеля",
+  "employees-count": "Количество сотрудников",
+  "hr-employee": "HR‑сотрудник",
+  "need-to-confirm": "Нужно подтвердить",
+  "approve": "Tasdiqlash"
+
   }

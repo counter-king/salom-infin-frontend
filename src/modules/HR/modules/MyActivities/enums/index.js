@@ -58,3 +58,9 @@ export const ATTENDANCE_EXCEPTION_STATUS = {
   APPROVED: "approved",
   REJECTED: "rejected"
 }
+
+export const USER_TYPE = {
+  HR: "hr",
+  MANAGER: "manager",
+  EMPLOYEE: "employee"
+}
