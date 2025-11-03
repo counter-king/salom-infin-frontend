@@ -29,3 +29,7 @@ export const fetchCreateAttendanceExceptions = (body) => {
 export const fetchGetAttendanceExceptionsList = (params) => {
     return axiosConfig.get(`${URLS.attendanceExceptions}/`, {page:1, page_size: 10, ...params})
 }
+
+export const fetchGetAttendanceExceptionsById = (id) => {
+    return axiosConfig.get(`${URLS.attendanceExceptions}/${id}/`)
+}

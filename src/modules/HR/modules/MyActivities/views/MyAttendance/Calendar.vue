@@ -171,6 +171,6 @@ const onHandleLateCameReasonModal = (day) => {
           </template>
         </div>
     </div>
-    <ReasonProcessModal  v-if="reasonProcessModalOpen" v-model="reasonProcessModalOpen" :data="selectedDay" />
+    <ReasonProcessModal  v-if="reasonProcessModalOpen" v-model="reasonProcessModalOpen" :data="selectedDay" type="double" />
     <LateCameReasonModal :key="lateCameReasonModalOpen"  v-model="lateCameReasonModalOpen" :reasonList="reasonListForSubmit" :apiCallAfterSubmit="attendanceStore.getMyAttendanceList"/>
 </template>

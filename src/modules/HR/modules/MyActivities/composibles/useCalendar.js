@@ -4,7 +4,7 @@ import { ref, watch, computed  } from "vue"
 export const useCalendar = () => {
 
 const today = new Date()
-const currentMonthFirstDate = ref(new Date(today.getFullYear(), today.getMonth(), 1))
+const currentMonthFirstDate = ref(new Date(today.getFullYear(), today.getMonth() - 2, 1))
 // Get current year and month 
 // return 2025
 const currentYear = computed(() => currentMonthFirstDate.value.getFullYear())

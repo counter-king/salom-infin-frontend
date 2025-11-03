@@ -1123,5 +1123,8 @@
   "employees-count": "Xodimlar soni",
   "hr-employee": "HR xodimi",
   "need-to-confirm": "Tasdiqlashingiz kerak",
-  "approve": "Утвердить"
+  "approve": "Утвердить",
+  "come": "Приход",
+  "leave": "Уход",
+  "head-of-the-structural-unit": "Руководитель структурного подразделения"
 }

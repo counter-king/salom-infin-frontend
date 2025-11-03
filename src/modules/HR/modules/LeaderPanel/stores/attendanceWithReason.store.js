@@ -30,11 +30,17 @@ export const useAttendanceWithReasonStore = defineStore('attendance-with-reason-
         header: "departure-time",
         field: "departure_time",
         active: true
-      },{
+      },
+      {
         header: "status",
         field: "status",
         active: true
       },
+      // {
+      //   header: "status",
+      //   field: "reason_status",
+      //   active: true
+      // },
       {
         header: "application-status",
         field: "application_status",

@@ -64,3 +64,12 @@ export const USER_TYPE = {
   MANAGER: "manager",
   EMPLOYEE: "employee"
 }
+
+export const REASON_PROCESS_STATUS = {
+  REASON_ENTERED: 'reason-entered',          // Sabab kiritilgan
+  LETTER_WRITTEN: 'letter-written',          // Xat yozilgan
+  REJECTED: 'rejected',                      // Rad etilgan
+  CONFIRMED: 'confirmed',                    // Tasdiqlangan
+  ENTERED_TO_TIMESHEET: 'entered-to-timesheet', // Tabelga kiritilgan
+  WAITING: 'waiting'                         // Kutilmoqda (optional)
+}

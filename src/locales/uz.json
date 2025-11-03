@@ -1118,6 +1118,8 @@
   "employees-count": "Количество сотрудников",
   "hr-employee": "HR‑сотрудник",
   "need-to-confirm": "Нужно подтвердить",
-  "approve": "Tasdiqlash"
-
+  "approve": "Tasdiqlash",
+  "come": "Kelish",
+  "leave": "Ketish",
+  "head-of-the-structural-unit": "Tarkibiy tuzilma rahbari"
   }

@@ -1,7 +1,7 @@
 // Core
 import { defineStore } from 'pinia'
 // services
-import { fetchCreateAttendanceExceptions, fetchGetAttendanceExceptionsList } from '../services'
+import { fetchCreateAttendanceExceptions, fetchGetAttendanceExceptionsById, fetchGetAttendanceExceptionsList } from '../services'
 
 export const useAttendanceExpectionsStore = defineStore("attendance-expections-store", {
   state: () => ({
@@ -9,6 +9,8 @@ export const useAttendanceExpectionsStore = defineStore("attendance-expections-s
     createAttendanceExpectionsLoading: false,
     attendanceExpectionsListLoading: false,
     attendanceExpectionsListTotalCount: 0,
+    attendanceExpectionsById: null,
+    attendanceExpectionsByIdLoading: false,
   }),
   actions: {
     /** **/
@@ -34,6 +36,18 @@ export const useAttendanceExpectionsStore = defineStore("attendance-expections-s
         return Promise.reject(error)
       } finally {
         this.attendanceExpectionsListLoading = false
+      }
+    },
+    async getAttendanceExceptionsById(id) {
+      try {
+        this.attendanceExpectionsByIdLoading = true
+        const res = await fetchGetAttendanceExceptionsById(id)
+        this.attendanceExpectionsById = res.data
+        return res
+      } catch (error) {
+        return Promise.reject(error)
+      } finally {
+        this.attendanceExpectionsByIdLoading = false
       }
     }
   }

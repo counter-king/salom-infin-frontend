@@ -5,8 +5,7 @@ import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 // components
 import DataTable from '../../../InteractionABS/components/DataTable.vue';
-import ApplicationStatus from '@/modules/HR/modules/LeaderPanel/components/ApplicationStatus.vue';
-import AttendanceStatus from '@/modules/HR/modules/LeaderPanel/components/AttendanceStatus.vue';
+import AttendanceReasonStatus from '@/modules/HR/modules/LeaderPanel/components/AttendanceReasonStatus.vue';
 // stores
 import { useAttendanceNoReasonStore } from '../../stores/attendanceNoReason.js';
 // utils
@@ -70,10 +69,7 @@ const sendNotification = (data) => {
             </div>
           </template>
           <template #status="{ data }">
-            <AttendanceStatus :status="data?.kind" />
-            <!-- <attendance-status
-              :item="data?.attendance"
-            /> -->
+            <AttendanceReasonStatus :status="data?.kind" />
           </template>
           <template #actions="{ data }">
             <base-button

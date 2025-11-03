@@ -7,6 +7,7 @@ import { useRoute } from 'vue-router';
 // components
 import DataTable from '../../../InteractionABS/components/DataTable.vue';
 import ApplicationStatus from '@/modules/HR/modules/LeaderPanel/components/ApplicationStatus.vue';
+import AttendanceReasonStatus from '@/modules/HR/modules/LeaderPanel/components/AttendanceReasonStatus.vue';
 import AttendanceStatus from '@/modules/HR/modules/LeaderPanel/components/AttendanceStatus.vue';
 import { ReasonProcessModal } from '../../components/ReasonProcessModal';
 // stores
@@ -75,8 +76,9 @@ const onClickRow = (data) => {
               <p class="text-sm font-medium text-warning-500">{{ formatLateTime(data?.attendance.early_leave_minutes, locale) }}</p>
             </div>
           </template>
+
           <template #status="{ data }">
-            <AttendanceStatus :status="data?.kind" />
+            <AttendanceReasonStatus :status="data?.kind" />
             <!-- <attendance-status
               :item="data?.attendance"
             /> -->

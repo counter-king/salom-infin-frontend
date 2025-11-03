@@ -7,11 +7,13 @@ import dayjs from 'dayjs';
 import BaseDialog from '@/components/UI/BaseDialog.vue';
 import ModalBodyHeader from './ModalBodyHeader.vue';
 import InfoCardStatus from './InfoCardStatus.vue';
-import UserCard from './UserCard.vue';
 import ExplanationReasonStatus from '../ExplanationReasonStatus.vue';
+import ModalBodyContent from './ModalBodyContent.vue';
 // store
 import { useAttendanceExpectionsStore } from '../../store/attendanceExceptions.store';
-import NoteModal from './noteModal.vue';
+import NoteModal from './NoteModal.vue';
+// enums
+import { USER_TYPE, KIND } from '../../enums';
 // composable
 const { t, locale } = useI18n()
 const attendanceExpectionsStore = useAttendanceExpectionsStore()
@@ -23,28 +25,51 @@ const props = defineProps({
   },
   data: {
     type: Object,
+  },
+  type: {
+    type: String,
+    default: 'single',
+    validator: (value) => ['single', 'double'].includes(value)
   }
 })
 
 // reactive
 const noteModalVisible = ref(false)
 const note = ref('')
+const proccessList = ref([])
 // emits
 const emit = defineEmits(['update:modelValue'])
 const modelValue = useModel(props, 'modelValue')
-
+const activeTabIndex = ref(0)
 const label = computed(() => dayjs(props.data?.date).format(locale.value === 'ru' ? 'D-MMMM, YYYY [г.]' : 'D-MMMM, YYYY [y.]'))
 
-const showNote = (value) => {
-  note.value = value
-  noteModalVisible.value = true
+const showtablePanel = computed(()=> attendanceExpectionsStore.attendanceExpectionsList.length > 1)
+const come = computed(()=> attendanceExpectionsStore.attendanceExpectionsList.find(item => [KIND.LATE, KIND.MISSED_CHECKIN].includes(item.kind)))
+const leave = computed(()=> attendanceExpectionsStore.attendanceExpectionsList.find(item => [KIND.MISSED_CHECKOUT, KIND.EARLY_LEAVE].includes(item.kind)))
+
+const tabPanelList = [
+  {
+    title: 'come',
+    slot: 'come',
+  },
+  {
+    title: 'leave',
+    slot: 'leave',
+  }
+];
+
+const onTabChange = (value) => {
+  activeTabIndex.value = value.index
 }
 
-onMounted(() => {
-  if(props.data?.attendance?.id){
+onMounted(async () => {
+  if(props.data?.attendance?.id && props.type == 'double'){
     attendanceExpectionsStore.getAttendanceExceptionsList({
       attendance: props.data?.attendance?.id,
     })
+  } else if(props.data?.attendance?.id && props.type == 'single'){
+    await attendanceExpectionsStore.getAttendanceExceptionsById(props.data?.id)
+    attendanceExpectionsStore.attendanceExpectionsList = attendanceExpectionsStore.attendanceExpectionsById
   }
 })
 
@@ -66,39 +91,45 @@ onMounted(() => {
           </div>
         </template>
         <template v-else>
-          <div class="flex flex-col gap-4">
           <!-- body header -->
+          <div class="flex flex-col gap-4">
             <ModalBodyHeader :data="props.data" />
           </div>
           <!-- body content -->
-          <div class="flex flex-col gap-5 mt-4">
+          <div v-if="false" class="flex flex-col gap-5 mt-4">
             <InfoCardStatus :data="!!attendanceExpectionsStore.attendanceExpectionsList.length && attendanceExpectionsStore.attendanceExpectionsList[0]" />
           </div>
-          <template v-if="true">
-            <!-- reason for explanation -->
-            <div class="mt-3">
-              <div class="flex items-center gap-2">
-                <span class="text-sm font-semibold text-greyscale-900">{{ t('reason-for-explanation') }}:</span>
-                <ExplanationReasonStatus :status="props.data.kind"/>
-              </div>
-            </div>  
-            <!-- reason process list -->
-            <div class="mt-2 p-5 bg-greyscale-50 rounded-[16px] flex flex-col gap-4 overflow-y-auto h-full">
-              <UserCard :data="props.data" @show-note="showNote" />
-              <UserCard  :data="props.data" @show-note="showNote" />
-            </div>
+          <!-- tab panel -->
+          <base-brick-tab
+            v-if="showtablePanel"
+            :active-index="activeTabIndex"
+            :tab-panel-list="tabPanelList"
+            panel-container-class="px-0 py-0"
+            header-classes="h-[28px] w-full"
+            nav-classes="w-full !p-1 !rounded-[8px] mt-4"
+            nav-container-classes="mx-0"
+            :on-tab-change="onTabChange"
+          >
+          <template #come>
+            <ModalBodyContent :data="come"  />
+          </template>
+          <template #leave>
+            <ModalBodyContent :data="leave"  />
+          </template>
+          </base-brick-tab>
+          <template v-else>
+            <ModalBodyContent :data="attendanceExpectionsStore.attendanceExpectionsList[0]" />
           </template>
         </template>
       </template>
     </base-dialog>
   </div>
-  <NoteModal 
-    v-model="noteModalVisible" 
-    :note="note" 
-  />
 </template>
 <style scoped>
- 
+
+ :deep(.tab-active){
+  border-radius: 8px !important;
+}
 :global(.reason-process-modal.p-dialog){
   margin:0;
   min-height: 100%;

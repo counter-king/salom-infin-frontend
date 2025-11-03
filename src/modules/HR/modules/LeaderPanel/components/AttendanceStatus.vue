@@ -3,101 +3,101 @@
 import { useI18n } from "vue-i18n"
 import { computed } from "vue";
 // Components
-import { InfoCircleBoldIcon, CloseCircleBoldIcon, MinusCircleBoldIcon } from "@/components/Icons"
+import { InfoCircleBoldIcon, CloseCircleBoldIcon, MinusCircleBoldIcon, CheckCircleBoldDuotoneIcon, CheckCircleBoldIcon } from "@/components/Icons"
 // enums
 import { KIND } from '@/modules/HR/modules/MyActivities/enums';
 // Composable
 const { t } = useI18n()
 
 const props = defineProps({
-  status: {
+  item: {
     type: String,
   }
 })
 
-const statusIcon = computed(() => {
-  switch(props.status) {
-    case KIND.LATE:
-    case KIND.EARLY_LEAVE:
-      return InfoCircleBoldIcon
-    
-    case KIND.MISSED_CHECKIN:
-    case KIND.MISSED_CHECKOUT:
-      return MinusCircleBoldIcon
-    
-    case KIND.ABSENT:
+const exitStatus = computed(() => {
+  return props.item?.check_out_status || 'no-data'
+})
+const entryStatus = computed(() => {
+  return props.item?.check_in_status || 'no-data'
+})
+
+const entryStatusIcon = computed(() => {
+  switch (entryStatus.value) {
+    case 'not-came':
       return CloseCircleBoldIcon
-    
+    case 'came-on-time':
+      return CheckCircleBoldIcon
+    case 'late-arrival':
+      return AlarmTurnOffBoldIcon
+    case 'no-entry-marked':
+      return MinusCircleBoldIcon
     default:
-      return false
+      return InfoCircleBoldIcon
   }
 })
 
-const wrapperClass = computed(() => {
-  switch(props.status) {
-    case KIND.LATE:
-    case KIND.EARLY_LEAVE:
-      return 'text-warning-500'
-    
-    case KIND.MISSED_CHECKIN:
-    case KIND.MISSED_CHECKOUT:
-      return 'text-greyscale-900'
-    
-    case KIND.ABSENT:
+const entryStatusClass = computed(() => {
+  switch (entryStatus.value) {
+    case 'not-came':
       return 'text-critic-500'
-    
-    default:
-      return false
-  }
-})
-
-const statusIconClass = computed(() => {
-  switch(props.status) {
-    case KIND.LATE:
-    case KIND.EARLY_LEAVE:
+    case 'came-on-time':
+      return 'text-success-500'
+    case 'late-arrival':
       return 'text-warning-500'
-    
-    case KIND.MISSED_CHECKIN:
-    case KIND.MISSED_CHECKOUT:
+    case 'no-entry-marked':
       return 'text-greyscale-400'
-    
-    case KIND.ABSENT:
-      return 'text-critic-500'
-    
     default:
-      return false
+      return 'text-warning-500'
   }
 })
 
-const getMatchText = computed(() => {
-  switch(props.status) {
-    case KIND.LATE:
-      return 'late-noun'
-    
-    case KIND.EARLY_LEAVE:
-      return 'early-leave-noun'
-    
-    case KIND.MISSED_CHECKIN:
-    case KIND.MISSED_CHECKOUT:
-      return 'not-recorded-noun'
-    
-    case KIND.ABSENT:
-      return 'not-come-noun'
-    
+const exitStatusIcon = computed(() => {
+  switch (exitStatus.value) {
+    case 'not-came':
+      return CloseCircleBoldIcon
+    case 'normal-exit':
+      return CheckCircleBoldIcon
     default:
-      return ''
+      return InfoCircleBoldIcon
   }
 })
+
+
+const exitStatusClass = computed(() => {
+  switch (exitStatus.value) {
+    case 'not-came':
+      return 'text-critic-500'
+    case 'normal-exit':
+      return 'text-success-500'
+    default:
+      return 'text-warning-500'
+  }
+})
+
+
+
 
 </script>
 
 <template>
-  <div v-if="!!wrapperClass" class="attendance-status flex gap-x-1 items-center" :class="wrapperClass">
-    <base-iconify :icon="statusIcon"  :class="statusIconClass" />
-    <div class="text-sm font-medium">
-      {{ t(getMatchText) }}
+  <div>
+    <!-- left -->
+    <div class="flex gap-x-1 items-center border-r border-r-greyscale-300" :class="entryStatusClass">
+      <base-iconify :icon="entryStatusIcon"   />
+      <div class="text-sm font-medium">
+        {{ t(entryStatus) }}
+      </div>
     </div>
-  </div>
+    <!-- right -->
+    <div class="flex gap-x-1 items-center" :class="exitStatusClass">
+      <base-iconify :icon="exitStatusIcon"   />
+      <div class="text-sm font-medium">
+        {{ t(exitStatus) }}
+      </div>
+    </div>
+
+</div>
 </template>
 
 <style scoped>
