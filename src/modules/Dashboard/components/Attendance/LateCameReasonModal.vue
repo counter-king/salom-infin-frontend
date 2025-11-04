@@ -5,13 +5,10 @@ import { useI18n } from "vue-i18n"
 import useVuelidate from "@vuelidate/core"
 import { helpers, required } from "@vuelidate/validators"
 // Utils
-import { formatDate } from "@/utils/formatDate"
-import { returnLateTime } from "@/utils"
 import { dispatchNotify } from "@/utils/notify"
 // Enums
 import { COLOR_TYPES } from "@/enums"
 // Store
-import { useNotificationStore } from "@/modules/Dashboard/stores/notification.store"
 import { useAttendanceReasonStore } from "@/modules/HR/modules/Attendance/stores/attendanceReason.store"
 import { useAttendanceExpectionsStore } from "@/modules/HR/modules/MyActivities/store/attendanceExceptions.store"
 
@@ -42,24 +39,9 @@ const reasonList = useModel(props, 'reasonList')
 const attendanceReasonStore = useAttendanceReasonStore()
 const reasonStore = useAttendanceExpectionsStore()
 
-// Reactive
-const formModel = reactive({
-  reason: "",
-  note: "",
-  __attachments: []
-})
-
 const formModelList = ref([])
 
-const activeTabIndex = ref(0)
-
 const sendButtonLoading = ref(false)
-
-const rules = {
-  reason: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  }
-}
 
 const formModelListRules = {
   $each: helpers.forEach({
@@ -69,72 +51,11 @@ const formModelListRules = {
   })
 }
 
-const $v = useVuelidate(rules, formModel)
 const $vList = useVuelidate(formModelListRules, formModelList, { $lazy: true, })
-
-const isShowMoreReasoneTabPanel = computed(() => {
-  return reasonList.value?.length > 1 
-})
 
 // Methods
 const send = async () => {
-  if(isShowMoreReasoneTabPanel.value) {
-    await sendTabPanel()
-  } else {
-    await sendReason()
-  }
-}
-
-const sendTabPanel = async () => {
-  if(activeTabIndex.value === 1) {
-    await sendSeparateReasoneForEach()
-  } else {
-    await sendOneReasonForAll()
-  }
-}
-
-const sendReason = async () => {
-
-  const valid = await $v.value.$validate()
-  if (!valid) return
-  try {
-
-   sendButtonLoading.value = true
-   const body = { ...formModel, kind: reasonList.value[0]?.kind, attendance: reasonList.value[0].attendance, attachments: formModel.__attachments.map(item => ({ id: item.id })) }
-
-   reasonStore.createAttendanceReason(body)
-   props.apiCallAfterSubmit && props.apiCallAfterSubmit()
-   dispatchNotify(null, t('successfully-send'), COLOR_TYPES.SUCCESS)
-   modelValue.value = false
-   $v.value.$reset()
- } catch (e) {
-
- }
-  finally {
-    sendButtonLoading.value = false
-  }
-}
-
-const sendOneReasonForAll = async () => {
-  const valid = await $v.value.$validate()
-  if (!valid) return
-  try {
-    sendButtonLoading.value = true
-    const body = reasonList.value.map(item => {
-      return { attendance: item.attendance, kind: item.kind, reason: formModel.reason, note: formModel.note, attachments: formModel.__attachments.map(item => ({ id: item.id })) }
-    })
-    await reasonStore.createAttendanceReason(body)
-    props.apiCallAfterSubmit && props.apiCallAfterSubmit()
-    dispatchNotify(null, t('successfully-send'), COLOR_TYPES.SUCCESS)
-    modelValue.value = false
-    $v.value.$reset()
-  }
-  catch (e) {
-    console.log("error", e)
-  }
-  finally {
-    sendButtonLoading.value = false
-  }
+  await sendSeparateReasoneForEach()
 }
 
 const sendSeparateReasoneForEach = async () => {
@@ -143,16 +64,15 @@ const sendSeparateReasoneForEach = async () => {
     dispatchNotify(null, t('fill-in-all-required-fields'), COLOR_TYPES.ERROR)
     return
   }
-
   try {
     sendButtonLoading.value = true
     const body = formModelList.value.map(item => {
       return ({ attendance: item.attendance, kind: item.kind, reason: item.reason, note: item.note, attachments: item.__attachments.map(item => ({ id: item.id }))})
     })
-
+    console.log("body", body)
     await reasonStore.createAttendanceReason(body)
     props.apiCallAfterSubmit && props.apiCallAfterSubmit()
-    dispatchNotify(null, t('successfully-send'), COLOR_TYPES.SUCCESS)
+    formModelList.length > 1 && dispatchNotify(null, t('successfully-send'), COLOR_TYPES.SUCCESS)
     modelValue.value = false
     $vList.value.$reset()
   } catch (e) {
@@ -163,39 +83,20 @@ const sendSeparateReasoneForEach = async () => {
   }
 }
 
-const tabPanelList = [
-  {
-    title: 'one-reason-for-all',
-    slot: 'oneReasonForAll',
-  },
-  {
-    title: 'separate-reason-for-each',
-    slot: 'separateReasonForEach',
-  }
-];
-// Emits
-const onTabChange = (value) => {
-  activeTabIndex.value = value.index
-}
-
 onMounted(async () => {
   attendanceReasonStore.actionGetAttendanceReasonList()
-  if(reasonList.value?.length > 0) {
-    setTimeout(() => {
-      formModelList.value = reasonList.value.map(item => ({
-        attendance: item.attendance,
-        kind: item.kind,
-        reason: "",
-        note: "",
-        date: item.date,
-        first_check_in: item.first_check_in,
-        last_check_out: item.last_check_out,
-        late_minutes: item.late_minutes,
-        early_leave_minutes: item.early_leave_minutes,
-        __attachments: []
-      }))
-    }, 300)
-  }
+  formModelList.value = reasonList.value?.map(item => ({
+    attendance: item.attendance,
+    kind: item.kind,
+    reason: "",
+    note: "",
+    date: item.date,
+    first_check_in: item.first_check_in,
+    last_check_out: item.last_check_out,
+    late_minutes: item.late_minutes,
+    early_leave_minutes: item.early_leave_minutes,
+    __attachments: []
+  }))
 })
 
 </script>
@@ -212,130 +113,45 @@ onMounted(async () => {
     </template>
 
     <template #content>
-      <!-- if there are more then one reasons, show tab panel -->
-      <div v-if="isShowMoreReasoneTabPanel" class="">
-        <base-brick-tab
-          :active-index="activeTabIndex"
-          :tab-panel-list="tabPanelList"
-          panel-container-class="px-0"
-          header-classes="h-[28px] w-full"
-          nav-classes="w-full !p-1 !rounded-[8px]"
-          nav-container-classes="mx-0"
-          :on-tab-change="onTabChange"
+      <template v-for="(item, index) in formModelList" :key="item.id">
+        <div 
+          class="rounded-2xl bg-white p-2 mb-4" 
+          :class="props.reasonList?.length > 1 ? 'shadow border border-greyscale-100 p-4' : ''"
         >
-          <template #oneReasonForAll>
-            <div class="flex flex-col gap-y-6">
-              <div class="flex flex-col gap-2">
-                <template v-for="item in reasonList" :key="item" >
-                  <AttendanceViolationAlert :data="item" />
-                </template>
-              </div>
-              <base-dropdown
-                v-model="$v.reason.$model"
-                :error="$v.reason"
-                v-model:options="attendanceReasonStore.attendanceReasonList"
-                required
-                label="late-came-reason"
-                placeholder="select-reason"
-                :option-label="locale === 'uz' ? 'name_uz' : 'name_ru'"
-                option-value="id"
-              >
-                <template #option="{ option }">
-                  <user-with-radio
-                    :title="locale === 'uz' ? option.name_uz : option.name_ru"
-                    :text-truncate="false"
-                  >
-                  </user-with-radio>
-                </template>
-              </base-dropdown>
-
-              <base-file-upload
-                :files="formModel.__attachments"
-                label="attach-file"
-                @emit:file-upload="(files) => formModel.__attachments = files"
-              />
-              <base-textarea
-                v-model="formModel.note"
-                :label="t('note')"
-                :placeholder="t('enter-note')"
-              />
-            </div>
-          </template>
-          <template #separateReasonForEach>
-            <template v-for="(item, index) in formModelList" :key="item.id">
-              <div class="shadow border border-greyscale-100 rounded-2xl bg-white p-4 mb-4">
-                <div class="flex flex-col gap-y-6">
-                  <AttendanceViolationAlert :data="item" />
-                  <base-dropdown
-                    v-model="item.reason"
-                    v-model:options="attendanceReasonStore.attendanceReasonList"
-                    :error="$vList.$each.$response?.$data[index]?.reason"
-                    required
-                    label="late-came-reason"
-                    placeholder="select-reason"
-                    :option-label="locale === 'uz' ? 'name_uz' : 'name_ru'"
-                    option-value="id"
-                  >
-                    <template #option="{ option }">
-                      <user-with-radio
-                        :title="locale === 'uz' ? option.name_uz : option.name_ru"
-                        :text-truncate="false"  
-                      >
-                      </user-with-radio>
-                    </template>
-                  </base-dropdown>
-
-                  <base-file-upload
-                    :files="item.__attachments"
-                    label="attach-file"
-                    @emit:file-upload="(files) => item.__attachments = files"
-                  />
-                  <base-textarea
-                    v-model="item.note"
-                    :label="t('note')"
-                    :placeholder="t('enter-note')"
-                  />
-                </div>
-              </div>
-            </template>
-          </template>
-        </base-brick-tab>
-      </div>
-      <!-- if there are only one reason, show this -->
-      <div v-else class="flex flex-col gap-y-6">
-        <AttendanceViolationAlert :data="reasonList[0]" />
-
-        <base-dropdown
-          v-model="$v.reason.$model"
-          :error="$v.reason"
-          v-model:options="attendanceReasonStore.attendanceReasonList"
-          required
-          label="late-came-reason"
-          placeholder="select-reason"
-          :option-label="locale === 'uz' ? 'name_uz' : 'name_ru'"
-          option-value="id"
-        >
-          <template #option="{ option }">
-            <user-with-radio 
-              :title="locale === 'uz' ? option.name_uz : option.name_ru"
-              :text-truncate="false"
+          <div class="flex flex-col gap-y-6">
+            <AttendanceViolationAlert :data="item" />
+            <base-dropdown
+              v-model="item.reason"
+              v-model:options="attendanceReasonStore.attendanceReasonList"
+              :error="$vList.$each.$response?.$data[index]?.reason"
+              required
+              label="late-came-reason"
+              placeholder="select-reason"
+              :option-label="locale === 'uz' ? 'name_uz' : 'name_ru'"
+              option-value="id"
             >
-            </user-with-radio>
-          </template>
-        </base-dropdown>
+              <template #option="{ option }">
+                <user-with-radio
+                  :title="locale === 'uz' ? option.name_uz : option.name_ru"
+                  :text-truncate="false"  
+                >
+                </user-with-radio>
+              </template>
+            </base-dropdown>
 
-        <base-file-upload
-          :files="formModel.__attachments"
-          label="attach-file"
-          @emit:file-upload="(files) => formModel.__attachments = files"
-        />
-
-        <base-textarea
-          v-model="formModel.note"
-          :label="t('note')"
-          :placeholder="t('enter-note')"
-        />
-      </div>  
+            <base-file-upload
+              :files="item.__attachments"
+              label="attach-file"
+              @emit:file-upload="(files) => item.__attachments = files"
+            />
+            <base-textarea
+              v-model="item.note"
+              :label="t('note')"
+              :placeholder="t('enter-note')"
+            />
+          </div>
+        </div>
+      </template>
     </template>
 
     <template #footer>

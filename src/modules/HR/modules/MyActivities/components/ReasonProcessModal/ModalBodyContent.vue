@@ -19,8 +19,6 @@ const props = defineProps({
     required: true
   }
 })
-
-
 // reactives
 const noteModalVisible = ref(false)
 const note = ref('')

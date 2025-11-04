@@ -40,7 +40,7 @@ export const useAttendanceNoReasonStore = defineStore('attendance-no-reason-stor
         header: "actions",
         field: "actions",
         active: true,
-        width: '220px'
+        width: '250px'
       }
     ]
     }),

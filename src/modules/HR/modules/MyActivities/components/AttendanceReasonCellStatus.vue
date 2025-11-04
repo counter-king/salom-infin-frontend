@@ -11,90 +11,77 @@ import { CHECK_IN_STATUS, CHECK_OUT_STATUS, KIND } from "../enums";
 const { t } = useI18n()
 
 const props = defineProps({
-  data: {
+  item: {
     type: Object,
     default: () => ({})
   }
 })
 
-const statusIcon = (data) => {
-  // Late arrival or early departure
-  if((data?.check_in_status == CHECK_IN_STATUS.LATE_ARRIVAL || data?.check_out_status == CHECK_OUT_STATUS.EARLY_DEPARTURE) && data?.violations?.some(violation => !violation.has_appeal)) {
-    return InfoCircleBoldIcon
+const statusIcon = computed(() => {
+  switch(props.item.kind) {
+    case KIND.LATE:
+    case KIND.EARLY_LEAVE:
+      return InfoCircleBoldIcon
+    case KIND.MISSED_CHECKIN:
+    case KIND.MISSED_CHECKOUT:
+      return MinusCircleBoldIcon
+    case KIND.ABSENT:
+      return CloseCircleBoldIcon
+    default:
+      return InfoCircleBoldIcon
   }
+})
 
-  // No entry marked or no exit marked
-  else if((data?.check_in_status == CHECK_IN_STATUS.NO_ENTRY_MARKED || data?.check_out_status == CHECK_OUT_STATUS.NO_EXIT_MARKED) && data?.violations?.some(violation => !violation.has_appeal)) {
-    return MinusCircleBoldIcon
-  }
-  // not come 
-  else if((data?.check_in_status == CHECK_IN_STATUS.NOT_CAME || data?.check_out_status == CHECK_OUT_STATUS.NOT_CAME) && data?.violations?.some(violation => !violation.has_appeal)) {
-    return CloseCircleBoldIcon 
-  }
-  return false
-}
+const wrapperClass = computed(() => {
 
-const wrapperClass = (data) => {
+  switch(props.item?.kind) {
+    case KIND.LATE:
+    case KIND.EARLY_LEAVE:
+      return 'text-warning-500'
+    case KIND.MISSED_CHECKIN:
+    case KIND.MISSED_CHECKOUT:
+      return 'text-greyscale-900'
+    case KIND.ABSENT:
+      return 'text-critic-500'
+  }
+})
+
+const statusIconClass = computed(() => {
   
-  if(data?.check_in_status == CHECK_IN_STATUS.LATE_ARRIVAL || data?.check_out_status == CHECK_OUT_STATUS.EARLY_DEPARTURE) {
-    return 'text-warning-500'
+  switch(props.item?.kind) {
+    case KIND.LATE:
+    case KIND.EARLY_LEAVE:
+      return 'text-warning-500'
+    case KIND.MISSED_CHECKIN:
+    case KIND.MISSED_CHECKOUT:
+      return 'text-greyscale-400'
+    case KIND.ABSENT:
+      return 'text-critic-500'
   }
+})
 
-  // No entry marked or no exit marked
-  else if(data?.check_in_status == CHECK_IN_STATUS.NO_ENTRY_MARKED || data?.check_out_status == CHECK_OUT_STATUS.NO_EXIT_MARKED) {
-    return 'text-greyscale-900'
+const getMatchText = computed(() => {
+  switch(props.item?.kind) {
+    case KIND.LATE:
+      return 'you-are-late2'
+    case KIND.EARLY_LEAVE:
+      return 'you-left-early'
+    case KIND.MISSED_CHECKIN:
+    case KIND.MISSED_CHECKOUT:
+      return 'not-recorded'
+    case KIND.ABSENT:
+      return 'you-do-not-come'
+    default:
+      return ''
   }
-
-  // not come 
-  else if(data?.check_in_status == CHECK_IN_STATUS.NOT_CAME || data?.check_out_status == CHECK_OUT_STATUS.NOT_CAME) {
-    return 'text-critic-500'
-  }
-  return false
-}
-
-const statusIconClass = (data) => {
-  
-  if(data?.check_in_status == CHECK_IN_STATUS.LATE_ARRIVAL || data?.check_out_status == CHECK_OUT_STATUS.EARLY_DEPARTURE) {
-    return 'text-warning-500'
-  }
-
-  // No entry marked or no exit marked
-  else if(data?.check_in_status == CHECK_IN_STATUS.NO_ENTRY_MARKED || data?.check_out_status == CHECK_OUT_STATUS.NO_EXIT_MARKED) {
-    return 'text-greyscale-400'
-  }
-
-  // not come 
-  else if(data?.check_in_status == CHECK_IN_STATUS.NOT_CAME || data?.check_out_status == CHECK_OUT_STATUS.NOT_CAME) {
-    return 'text-critic-500'
-  }
-
-  return false
-}
-
-const getMatchText = (data) => {
-  if(data?.check_in_status == CHECK_IN_STATUS.LATE_ARRIVAL && data?.violations?.some(violation => violation.kind == KIND.LATE && !violation.has_appeal)) {
-    return 'you-are-late2'
-  }
-  else if(data?.check_out_status == CHECK_OUT_STATUS.EARLY_DEPARTURE && data?.violations?.some(violation => violation.kind == KIND.EARLY_LEAVE && !violation.has_appeal)) {
-    return 'you-left-early'
-  }
-  // No entry marked or no exit marked
-  else if((data?.check_in_status == CHECK_IN_STATUS.NO_ENTRY_MARKED || data?.check_out_status == CHECK_OUT_STATUS.NO_EXIT_MARKED) && data?.violations?.some(violation => !violation.has_appeal)) {
-    return 'not-recorded'
-  }
-  // not come 
-  else if((data?.check_in_status == CHECK_IN_STATUS.NOT_CAME || data?.check_out_status == CHECK_OUT_STATUS.NOT_CAME) && data?.violations?.some(violation => !violation.has_appeal)) {
-    return 'you-do-not-come'
-  }
-  return ''
-}
+})
 </script>
 
 <template>
-  <div v-if="!!wrapperClass(props.data)" class="attendance-status flex gap-x-1 items-center" :class="wrapperClass(props.data)">
-    <base-iconify :icon="statusIcon(props.data)"  :class="statusIconClass(props.data)" />
+  <div class="attendance-status flex gap-x-1 items-center" :class="wrapperClass">
+    <base-iconify :icon="statusIcon"  :class="statusIconClass" />
     <div class="text-sm font-medium">
-      {{ t(getMatchText(props.data)) }}
+      {{ t(getMatchText) }}
     </div>
   </div>
 </template>

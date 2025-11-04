@@ -31,7 +31,6 @@ const selectedDay = ref("")
 // computed
 const weekDays = computed(() => locale.value === 'ru' ? WEEK_DAYS_RU : WEEK_DAYS_UZ)
 
-
 // Composable'dan funksiyalarni olish
 const { 
   getCellMergeRangeClass, 
@@ -124,10 +123,11 @@ const onHandleLateCameReasonModal = (day) => {
               class="flex flex-col justify-between items-center hover:bg-greyscale-50 cursor-pointer text-center p-4 h-[120px] border-t [&:not(:nth-child(7n))]:border-r font-medium"
               @click="onHandleLateCameReasonModal(day)"
             >
-              <h2 class="text-critic-500 mb-1">{{ day.day }}</h2>
-              <div class="flex flex-col gap-[10px] items-center">
-                <AttendanceReasonCellStatus :data="day.attendance" />
-                <!-- <AttendanceProccessStatus :status="day.attendance.type" /> -->
+              <h2 class="text-critic-500">{{ day.day }}</h2>
+              <div class="flex flex-col gap-[2px] items-center">
+                <template v-for="violation in day.attendance.violations" :key="violation.id">
+                  <AttendanceReasonCellStatus :item="violation" />
+                </template>
                 <div 
                   class="flex justify-center items-center px-3 py-[6px] text-xs font-semibold rounded-[8px] w-fit"
                   :class="'bg-critic-30 border border-critic-100 text-critic-500'"

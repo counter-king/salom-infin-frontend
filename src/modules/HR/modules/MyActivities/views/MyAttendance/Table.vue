@@ -17,7 +17,6 @@ import { formatSecondsToHoursMinutes } from '@/utils'
 // constants
 import { WEEK_DAYS_LIST } from '../../constants'
 // enums
-import { CHECK_IN_STATUS, CHECK_OUT_STATUS } from '../../enums'
 import { USER_STATUS_CODES } from '@/enums'
 // composibles
 const attendanceStore = useMyAttendanceStore()
@@ -93,7 +92,11 @@ const onClickRow = (day) => {
         </div>
       </template>
       <template #status2="{ data }">
-        <AttendanceReasonCellStatus :data="data?.attendance"/>
+        <div class="flex gap-2">
+          <template v-for="violation in data?.attendance?.violations" :key="violation.id">
+            <AttendanceReasonCellStatus :item="violation"/>
+          </template>
+        </div>
       </template>
     </base-data-table> 
   </div>
