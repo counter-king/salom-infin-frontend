@@ -31,6 +31,10 @@ const props = defineProps({
   },
   dismissableMask: {
     type: Boolean,
+  },
+  showHeader: {
+    type: Boolean,
+    default: true
   }
 })
 const emit = defineEmits(['update:modelValue', 'emit:after-hide'])
@@ -53,6 +57,7 @@ const rootClasses = computed(() => {
     :dismissableMask="props.dismissableMask"
     modal
     :header="t(props.label)"
+    :show-header="showHeader"
     :pt="{
       root: {
         class: rootClasses

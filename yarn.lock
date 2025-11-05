@@ -1505,6 +1505,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@iconify-json/ri@npm:^1.2.6":
+  version: 1.2.6
+  resolution: "@iconify-json/ri@npm:1.2.6"
+  dependencies:
+    "@iconify/types": "npm:*"
+  checksum: 10c0/28fc9b0f4eae654d4a1e3dacd39dc88fc172cfe3aca2c8cf25d5bba41ed06e06c16ffbab472d59d0c9fba7345257a76c00ae9a2e7d5dee735a3791aa34e51faa
+  languageName: node
+  linkType: hard
+
 "@iconify-json/solar@npm:^1.1.10":
   version: 1.1.10
   resolution: "@iconify-json/solar@npm:1.1.10"
@@ -9854,6 +9863,7 @@ __metadata:
     "@iconify-json/iconamoon": "npm:^1.2.1"
     "@iconify-json/mage": "npm:^1.2.1"
     "@iconify-json/material-symbols": "npm:^1.2.12"
+    "@iconify-json/ri": "npm:^1.2.6"
     "@iconify-json/solar": "npm:^1.1.10"
     "@iconify-json/typcn": "npm:^1.2.1"
     "@iconify/vue": "npm:^4.1.2"

@@ -22,12 +22,20 @@ const props = defineProps({
   content: {
     type: Object,
     default: () => ({
-      title: '',  
+      title: '',
     })
   },
   loading: {
     type: Boolean,
     default: () => false
+  },
+  confirmButtonLabel: {
+    type: String,
+    default: 'delete',
+  },
+  iconVisible: {
+    type: Boolean,
+    default: true
   }
 })
 const modelValue = useModel(props, 'modelValue')
@@ -48,19 +56,21 @@ const handleClickDelete = () => {
     v-model="modelValue"
     :label="t(props.label)"
     :max-width="props.maxWidth"
-    content-classes="py-12 px-14"
+    content-classes="py-12"
   >
     <template #content>
       <div class="flex flex-col gap-6 items-center">
-        <div class="flex justify-center items-center p-6 bg-critic-50 rounded-full">
+        <div v-if="iconVisible" class="flex justify-center items-center p-6 bg-critic-50 rounded-full">
           <base-iconify :icon="TrashBinBoldIcon" class="!w-12 !h-12 text-critic-500" />
         </div>
-        <div class="flex flex-col">       
+        <div class="flex flex-col">
           <p class="text-center text-2xl font-semibold text-greyscale-900">
             {{ t(props.content.title) }}
           </p>
+        </div>
       </div>
-      </div>
+
+      <slot name="additional-content"/>
     </template>
     <template #footer>
       <div>
@@ -75,7 +85,7 @@ const handleClickDelete = () => {
         />
         <base-button
           :loading="props.loading"
-          label="delete"
+          :label="confirmButtonLabel"
           button-class="!py-[14px] !px-8 !rounded-[120px]"
           @click="handleClickDelete"
         />

@@ -205,3 +205,6 @@ body {
 .tree-connector.last-approver::after {
   height: 62%;
 }
+.bg-telegram {
+  background: #229ED9;
+}

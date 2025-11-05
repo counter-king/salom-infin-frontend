@@ -2,7 +2,7 @@
 // Core
 import { ref } from 'vue'
 // Components
-import { CaseIcon, UserIcon, SettingsMinimalisticIcon, DocumentAddIcon, CheckCircleIcon } from '@/components/Icons'
+import { CaseIcon, UserIcon, SettingsMinimalisticIcon, DocumentAddIcon, CheckCircleIcon, CheckListMinimalisticLinearIcon } from '@/components/Icons'
 import TheSidebar from '@/components/TheSidebar.vue'
 import TheFooter from '@/components/TheFooter.vue';
 // Stores
@@ -23,6 +23,12 @@ const menus = ref([
     link: 'ProfileIndex',
     children: [],
   },
+  // {
+  //   title: 'timesheet-system',
+  //   icon: CheckListMinimalisticLinearIcon,
+  //   link: 'TimesheetSystemIndex',
+  //   children: [],
+  // },
   {
     title: "attendance",
     icon: CheckCircleIcon,

@@ -51,5 +51,6 @@ export const isDateRangeWithinLimit = (startDate, endDate, limitDays = 31) => {
   return dayjs(endDate).diff(dayjs(startDate), "day") <= limitDays
 }
 export const formatTime = (time) => {
-  return dayjs(time, "HH:mm:ss").format('HH:mm')
+  const parsed = dayjs(time, 'HH:mm:ss', true) // strict parsing
+  return parsed.isValid() ? parsed.format('HH:mm') : '-'
 }

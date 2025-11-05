@@ -40,6 +40,14 @@ const Attendance = [
           isAuthRequired: true,
         },
         component: () => import('../views/Reasons/index.vue'),
+      },
+      {
+        path: 'exception-employees',
+        name: 'ExceptionEmployees',
+        meta: {
+          isAuthRequired: true,
+        },
+        component: () => import('../views/ExceptionEmployees/index.vue'),
       }
     ]
   }

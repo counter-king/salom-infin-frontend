@@ -35,6 +35,16 @@ export const useWorkScheduleSettingStore = defineStore('workSchedule-store', {
         active: true
       },
       {
+        header: "lunch-start-time",
+        field: "lunch_start_time",
+        active: true
+      },
+      {
+        header: "lunch-end-time",
+        field: "lunch_end_time",
+        active: true
+      },
+      {
         header: "status",
         field: "is_default",
         active: true
@@ -110,6 +120,16 @@ export const useWorkScheduleSettingStore = defineStore('workSchedule-store', {
         {
           header: "end-time",
           field: "end_time",
+          active: true
+        },
+        {
+          header: "lunch-start-time",
+          field: "lunch_start_time",
+          active: true
+        },
+        {
+          header: "lunch-end-time",
+          field: "lunch_end_time",
           active: true
         },
         {

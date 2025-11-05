@@ -21,7 +21,7 @@ const { t } = useI18n()
 <template>
   <div class="flex flex-col flex-1 overflow-y-auto">
     <div class="dashboard-home w-full p-10 pt-6 pb-0">
-      <h1 class="text-2xl text-primary-900 font-bold mb-5">{{ t('dashboard') }}</h1>
+<!--      <h1 class="text-2xl text-primary-900 font-bold mb-5">{{ t('dashboard') }}</h1>-->
 
       <div class="dashboard-grid flex h-[calc(100%-52px)] gap-5">
         <div class="flex flex-col flex-1">

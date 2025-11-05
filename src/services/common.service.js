@@ -165,3 +165,6 @@ export const fetchTagList = (params) => {
 export const fetchCreateRatePage = (body) => {
   return axiosConfig.post(`${URLS.ratePage}/`, body)
 }
+export const fetchGetTelegramProfileList = () => {
+  return axiosConfig.get(`telegram/profiles/`)
+}

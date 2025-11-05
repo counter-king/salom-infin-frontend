@@ -36,6 +36,7 @@ const emit = defineEmits(['update:modelValue'])
     :label="props.label"
     :required="props.required"
     type="department"
+    placeholder="enter-department"
   >
     <template #chip="{ value }">
       {{ value.name }}

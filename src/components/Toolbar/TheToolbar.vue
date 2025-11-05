@@ -17,7 +17,8 @@ import Notifications from './Notifications.vue'
 import LanguageDropdown from './LanguageDropdown.vue'
 import UserDropdown from './UserDropdown.vue'
 import RefreshButton from "@/components/Toolbar/RefreshButton.vue"
-import { hostName } from "@/utils";
+import { hostName } from "@/utils"
+import TelegramButton from "@/components/Toolbar/Telegram/TelegramButton.vue"
 // Composable
 const { t } = useI18n()
 const themeStore = useThemeStore()
@@ -107,6 +108,8 @@ onMounted(() => {
 
       <template #end>
         <div class="flex items-center gap-4">
+<!--          <telegram-button />-->
+
           <create-action-dropdown v-if="openModal" />
 
           <div v-if="openModal" class="bg-greyscale-800 w-[1px] h-[28px]"></div>
