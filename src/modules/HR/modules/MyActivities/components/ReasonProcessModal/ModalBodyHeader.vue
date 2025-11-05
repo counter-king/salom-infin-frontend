@@ -9,15 +9,15 @@ import ReasonCard from './ReasonCard.vue';
 import { formatSecondsToHoursMinutes } from '@/utils';
 import { formatHour } from '@/utils/formatDate';
 // enums
-import { CHECK_IN_STATUS, CHECK_OUT_STATUS } from '../../enums';
+import { CHECK_IN_STATUS, CHECK_OUT_STATUS } from '@/modules/HR/modules/MyActivities/enums';
 // composable
 const { t, locale } = useI18n()
 
 // props
 const props = defineProps({
-  data: {
+  attendance: {
     type: Object,
-  }
+  },
 })
 
 
@@ -42,9 +42,9 @@ const reasonData2 = ref({
     }
 })
 
-const isWorkedTimeLessThan8Hours = computed(() => props.data?.attendance?.worked_seconds / 60 / 60 > 8 ? true : false )
-const workedTime = computed(() => formatSecondsToHoursMinutes(props.data?.attendance?.worked_seconds))
-const prsentageOfWorkedTime = computed(() => props.data?.attendance?.worked_seconds / 60 / 60 / 8 * 100)
+const isWorkedTimeLessThan8Hours = computed(() => props.attendance?.worked_seconds / 60 / 60 > 8 ? true : false )
+const workedTime = computed(() => formatSecondsToHoursMinutes(props.attendance?.worked_seconds))
+const prsentageOfWorkedTime = computed(() => props.attendance?.worked_seconds / 60 / 60 / 8 * 100)
 
 const toolTipFun = () => {
   return {
@@ -88,10 +88,10 @@ const toolTipFun = () => {
       <template #title>
         <div class="text-xl font-semibold text-greyscale-900">
           <span 
-            :class="{'text-critic-500': props.data?.attendance?.check_in_status == CHECK_IN_STATUS.LATE_ARRIVAL}"
-            >{{ formatHour(props.data?.attendance?.first_check_in) }}</span>
+            :class="{'text-critic-500': props.attendance?.check_in_status == CHECK_IN_STATUS.LATE_ARRIVAL}"
+            >{{ formatHour(props.attendance?.first_check_in) }}</span>
           <span class=""> - </span>
-          <span :class="{'text-critic-500': props.data?.attendance?.check_out_status == CHECK_OUT_STATUS.EARLY_DEPARTURE}">{{ formatHour(props.data?.attendance?.last_check_out) }}</span>
+          <span :class="{'text-critic-500': props.attendance?.check_out_status == CHECK_OUT_STATUS.EARLY_DEPARTURE}">{{ formatHour(props.attendance?.last_check_out) }}</span>
         </div>  
       </template>
       <template #description>

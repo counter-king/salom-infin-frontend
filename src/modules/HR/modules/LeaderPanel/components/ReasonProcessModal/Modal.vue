@@ -5,16 +5,23 @@ import { useI18n } from 'vue-i18n';
 import dayjs from 'dayjs';
 // components
 import BaseDialog from '@/components/UI/BaseDialog.vue';
-import ModalBodyHeader from './ModalBodyHeader.vue';
-import ExplanationReasonStatus from '@/modules/HR/modules/MyActivities/components/ExplanationReasonStatus.vue';
 import RejectReasonModal from './RejectReasonModal.vue';
+import ModalBodyContent from "@/modules/HR/modules/MyActivities/components/ReasonProcessModal/ModalBodyContent.vue";
+import NoteModal from "@/modules/HR/modules/MyActivities/components/ReasonProcessModal/NoteModal.vue";
+import ModalBodyHeader from "@/modules/HR/modules/MyActivities/components/ReasonProcessModal/ModalBodyHeader.vue";
+
 // store
-import NoteModal from './NoteModal.vue';
 import { useAttendanceExpectionsStore } from '@/modules/HR/modules/MyActivities/store/attendanceExceptions.store';
+import { useAttendanceWithReasonStore } from '../../stores/attendanceWithReason.store';
+// utils
+import { dispatchNotify } from '@/utils/notify';
+
 // composable
 const { t, locale } = useI18n()
 const attendanceExpectionsStore = useAttendanceExpectionsStore()
-// props
+const attendanceWithReasonStore = useAttendanceWithReasonStore()
+
+// props  
 const props = defineProps({
   modelValue: {
       type: Boolean,
@@ -36,13 +43,23 @@ const modelValue = useModel(props, 'modelValue')
 
 const label = computed(() => dayjs(props.data?.date).format(locale.value === 'ru' ? 'D-MMMM, YYYY [г.]' : 'D-MMMM, YYYY [y.]'))
 
-const showNote = (value) => {
-  note.value = value
-  noteModalVisible.value = true
-}
-
 const onClickReject = () => {
   rejectReasonModalVisible.value = true
+
+}
+
+const afterSubmitTriggerFun = () => {
+  modelValue.value = false
+  attendanceWithReasonStore.getAttendanceExceptionsWithReasonList()
+
+}
+
+const onClickApprove = () => {
+  try {
+    attendanceExpectionsStore.createAttendanceExceptionsApproveById(props.data?.attendance?.id)
+    dispatchNotify(null, t('successfully-send'), COLOR_TYPES.SUCCESS)
+  } catch (error) {
+  }
 }
 
 onMounted(() => {
@@ -72,23 +89,12 @@ onMounted(() => {
         </template>
         <template v-else>
           <div class="flex flex-col gap-4">
-          <!-- body header -->
-            <ModalBodyHeader :data="props.data" />
+          <!-- body header -->  
+            <ModalBodyHeader :attendance="props.data?.attendance" />
           </div>
           <!-- body content -->
-          <template v-if="true">
-            <!-- reason for explanation -->
-            <div class="mt-3">
-              <div class="flex items-center gap-2">
-                <span class="text-sm font-semibold text-greyscale-900">{{ t('reason-for-explanation') }}:</span>
-                <ExplanationReasonStatus :status="props.data.kind"/>
-              </div>
-            </div>  
-            <!-- reason process list -->
-            <div class="mt-2 p-5 bg-greyscale-50 rounded-[16px] flex flex-col gap-4 overflow-y-auto">
-              <!-- <UserCard :data="props.data" @show-note="showNote" />
-              <UserCard  :data="props.data" @show-note="showNote" /> -->
-            </div>
+          <template v-if="!!attendanceExpectionsStore.attendanceExpectionsList.length">
+              <ModalBodyContent :data="attendanceExpectionsStore.attendanceExpectionsList[0]" />
           </template>
         </template>
       </template>
@@ -109,6 +115,7 @@ onMounted(() => {
             rounded
             shadow
             type="button"
+            @click="onClickApprove"
             class="!px-8 !py-[14px] !text-sm"
           />
         </div>
@@ -121,6 +128,7 @@ onMounted(() => {
   />
   <RejectReasonModal 
     v-model="rejectReasonModalVisible"
+    :afterSubmitTriggerFun="afterSubmitTriggerFun"
   />
 </template>
 <style scoped>

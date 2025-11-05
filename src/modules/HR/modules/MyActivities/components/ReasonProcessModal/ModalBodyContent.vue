@@ -35,13 +35,11 @@ const proccessList = computed(() => {
       user: item.user,
       is_approved: item.is_approved,
       reason_status:  item.is_approved == null ? REASON_PROCESS_STATUS.WAITING : item.is_approved ? REASON_PROCESS_STATUS.CONFIRMED : REASON_PROCESS_STATUS.REJECTED,
-      // reason_status: REASON_PROCESS_STATUS.REJECTED,
-      // is_approved: false,
       decision_note: item.decision_note,
       action_time: item.action_time,
     }));
 
-    const hr = (data.value.approvals || []).filter(item => item.type == USER_TYPE.HR).map(item => ({
+    const hr = (data.value?.approvals || []).filter(item => item.type == USER_TYPE.HR).map(item => ({
       id: item.id,
       type: item.type,
       user: item.user,
@@ -53,17 +51,17 @@ const proccessList = computed(() => {
 
     // employee (har doim bitta bo‘ladi)
     const employee = {
-      id: props.data.employee?.id || null,
+      id: props.data?.employee?.id || null,
       type: USER_TYPE.EMPLOYEE,
       user: {
-        id:props.data.employee?.id || null,
-        full_name:props.data.employee?.full_name || "",
-        position:props.data.employee?.position
+        id:props.data?.employee?.id || null,
+        full_name:props?.data.employee?.full_name || "",
+        position:props?.data.employee?.position
       },
-      status:props.data.status,
+      status:props.data?.status,
       reason_status: REASON_PROCESS_STATUS.REASON_ENTERED,
-      note:props.data.note,
-      action_time:props.data.created_date,
+      note:props.data?.note,
+      action_time:props.data?.created_date,
       reason:props.data.reason,
       attachments: props.data?.attachments || [],
       application:props.data?.application || [],

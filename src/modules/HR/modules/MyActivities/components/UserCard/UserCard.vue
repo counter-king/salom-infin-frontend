@@ -34,7 +34,7 @@ const props = defineProps({
 const emit = defineEmits(['show-note'])
 
 const showNote = () => {
-  emit('show-note', props.item.note)
+  emit('show-note', props.item?.note)
 }
 
 const userType = computed(() => {
@@ -246,12 +246,12 @@ const shouldShowHREntered = computed(() =>
           <!-- director accepted   --> <!-- no ui --> 
           <!-- director declined   -->
           <div v-if="shouldShowManagerRejected"  class="w-fit px-[6px] py-1 text-xs text-greyscale-500 font-medium rounded-[6px] bg-greyscale-50">
-            {{ props.item.decision_note }}
+            {{ props.item?.decision_note }}
           </div>
           <!-- hr accepted   --> <!-- no ui --> 
           <!-- hr declined   --> <!-- no ui -->
           <div v-if="shouldShowHRRejected"  class="w-fit px-[6px] py-1 text-xs text-greyscale-500 font-medium rounded-[6px] bg-greyscale-50">
-            {{ props.item.decision_note }}
+            {{ props.item?.decision_note }}
           </div>
           <!-- hr entered to timesheet -->
            <div v-if="shouldShowHREntered"  class="w-fit px-[6px] py-1 text-xs text-greyscale-500 font-medium rounded-[6px] bg-greyscale-50">

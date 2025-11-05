@@ -24,9 +24,10 @@ const reasonProcessModalOpen = ref(false)
 const selectedDay = ref({})
 
 const onClickRow = (data) => {
-  selectedDay.value = data?.id
+  selectedDay.value = data
   reasonProcessModalOpen.value = true
 }
+
 </script>
 <template>
     <div class="flex flex-col h-full">

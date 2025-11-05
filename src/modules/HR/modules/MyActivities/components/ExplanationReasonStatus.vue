@@ -16,7 +16,7 @@ const props = defineProps({
   }
 })
 
-const statusIcon = (status) => {
+const statusIcon = () => {
   switch(props.status) {
     case KIND.LATE:
     case KIND.EARLY_LEAVE:

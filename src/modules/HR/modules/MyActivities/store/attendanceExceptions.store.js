@@ -1,7 +1,7 @@
 // Core
 import { defineStore } from 'pinia'
 // services
-import { fetchCreateAttendanceExceptions, fetchGetAttendanceExceptionsById, fetchGetAttendanceExceptionsList } from '../services'
+import { fetchCreateAttendanceExceptions, fetchGetAttendanceExceptionsById, fetchGetAttendanceExceptionsList, fetchCreateAttendanceExceptionsApproveById, fetchCreateAttendanceExceptionsRejectById } from '../services'
 
 export const useAttendanceExpectionsStore = defineStore("attendance-expections-store", {
   state: () => ({
@@ -11,6 +11,8 @@ export const useAttendanceExpectionsStore = defineStore("attendance-expections-s
     attendanceExpectionsListTotalCount: 0,
     attendanceExpectionsById: [],
     attendanceExpectionsByIdLoading: false,
+    attendanceExceptionsApproveLoading: false,
+    attendanceExceptionsRejectLoading: false,
   }),
   actions: {
     /** **/
@@ -42,7 +44,6 @@ export const useAttendanceExpectionsStore = defineStore("attendance-expections-s
       try {
         this.attendanceExpectionsByIdLoading = true
         const res = await fetchGetAttendanceExceptionsById(id)
-        console.log(res.data)
         this.attendanceExpectionsById = res.data
         return res
       } catch (error) {
@@ -50,6 +51,29 @@ export const useAttendanceExpectionsStore = defineStore("attendance-expections-s
       } finally {
         this.attendanceExpectionsByIdLoading = false
       }
+    },
+    async createAttendanceExceptionsApproveById(id) {
+      try {
+        this.attendanceExceptionsApproveLoading = true
+        const res = await fetchCreateAttendanceExceptionsApproveById(id)
+        return res
+      } catch (error) {
+        return Promise.reject(error)
+      } finally {
+        this.attendanceExceptionsApproveLoading = false
+      }
+    },
+    async createAttendanceExceptionsRejectById(id, body) {
+      try {
+        this.attendanceExceptionsRejectLoading = true
+        const res = await fetchCreateAttendanceExceptionsRejectById(id, body)
+        return res
+      } catch (error) {
+        return Promise.reject(error)
+      } finally {
+        this.attendanceExceptionsRejectLoading = false
+      }
     }
+
   }
 })

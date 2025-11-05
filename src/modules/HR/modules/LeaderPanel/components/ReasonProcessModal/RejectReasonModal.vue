@@ -1,20 +1,28 @@
 <script setup>
 // core
-import { ref, useModel, onMounted, computed  } from 'vue';
+import { ref, useModel } from 'vue';
 import { useI18n } from 'vue-i18n';
 // components
 import BaseDialog from '@/components/UI/BaseDialog.vue';
 // store
+import { useAttendanceExpectionsStore } from '@/modules/HR/modules/MyActivities/store/attendanceExceptions.store';
 // composable
 const { t, locale } = useI18n()
+const attendanceExpectionsStore = useAttendanceExpectionsStore()
 // props
 const props = defineProps({
   modelValue: {
       type: Boolean,
       default: false
   },
+  afterSubmitTriggerFun: {
+    type: Function,
+    required: true
+  }
 })
 
+// reactive
+const reason = ref('')
 // emits
 const emit = defineEmits(['update:modelValue'])
 const modelValue = useModel(props, 'modelValue')
@@ -24,8 +32,13 @@ const onCancel = () => {
 }
 
 const onSubmit = () => {
-  console.log('submit')
-  modelValue.value = false
+  try {
+    // attendanceExpectionsStore.createAttendanceExceptionsRejectById(props.data?.id, { note: reason.value })
+    console.log(reason.value)
+    props.afterSubmitTriggerFun()
+    modelValue.value = false
+  } catch (error) {
+  }
 }
 
 </script>
@@ -50,6 +63,7 @@ const onSubmit = () => {
       <div class="flex items-center justify-end gap-2"> 
         <base-button
           label="cancel"
+          :disabled="attendanceExpectionsStore.attendanceExceptionsRejectLoading"
           rounded
           outlined
           shadow
@@ -59,6 +73,7 @@ const onSubmit = () => {
         />
         <base-button
           label="reject"
+          :loading="attendanceExpectionsStore.attendanceExceptionsRejectLoading"
           rounded
           shadow
           type="button"

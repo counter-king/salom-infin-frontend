@@ -5,10 +5,10 @@ import { useRoute} from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import dayjs from 'dayjs'
 // components
-import AttendanceReasonCellStatus from '../../components/AttendanceReasonCellStatus.vue'
 import AttendanceWorkStatus from '../../components/AttendanceWorkStatus.vue'
 import { ReasonProcessModal } from '../../components/ReasonProcessModal'
 import LateCameReasonModal from '@/modules/Dashboard/components/Attendance/LateCameReasonModal.vue'
+import AttendanceStatus from '../../components/AttendanceStatus.vue'
 // store
 import { useMyAttendanceStore } from '../../store/myAttendence.store'
 // utils
@@ -18,6 +18,7 @@ import { formatSecondsToHoursMinutes } from '@/utils'
 import { WEEK_DAYS_LIST } from '../../constants'
 // enums
 import { USER_STATUS_CODES } from '@/enums'
+
 // composibles
 const attendanceStore = useMyAttendanceStore()
 const  { t, locale } = useI18n()
@@ -92,14 +93,10 @@ const onClickRow = (day) => {
         </div>
       </template>
       <template #status2="{ data }">
-        <div class="flex gap-2">
-          <template v-for="violation in data?.attendance?.violations" :key="violation.id">
-            <AttendanceReasonCellStatus :item="violation"/>
-          </template>
-        </div>
+          <AttendanceStatus :item="data?.attendance"/>
       </template>
     </base-data-table> 
   </div>
-  <ReasonProcessModal v-if="reasonProcessModalOpen" v-model="reasonProcessModalOpen" :data="selectedDay" />
-  <LateCameReasonModal :key="lateCameReasonModalOpen" v-model="lateCameReasonModalOpen" :reasonList="reasonListForSubmit" />
+  <ReasonProcessModal type="double" v-if="reasonProcessModalOpen" v-model="reasonProcessModalOpen" :data="selectedDay" />
+  <LateCameReasonModal  :key="lateCameReasonModalOpen" v-model="lateCameReasonModalOpen" :reasonList="reasonListForSubmit" />
 </template>

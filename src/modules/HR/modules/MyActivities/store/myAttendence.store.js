@@ -48,7 +48,7 @@ export const useMyAttendanceStore = defineStore("my-attendance-store", {
         header: "status",
         field: "status2",
         active: true,
-        width: '320px'
+        width: '350px'
       }
     ],
     myStatistics: [

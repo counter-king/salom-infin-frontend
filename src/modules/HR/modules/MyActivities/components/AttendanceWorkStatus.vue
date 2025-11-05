@@ -43,7 +43,7 @@ const getMatchText = () => {
   else if(props.data?.attendance?.type) {
     return props.data?.attendance?.user_status?.name
   } else if(!props.data.workDay && props.data.currentMonth) {
-    return t("weekend-days")
+    return t("weekend-day")
   }
   return "-"
 }

@@ -33,3 +33,11 @@ export const fetchGetAttendanceExceptionsList = (params) => {
 export const fetchGetAttendanceExceptionsById = (id) => {
     return axiosConfig.get(`${URLS.attendanceExceptions}/${id}/`)
 }
+
+export const fetchCreateAttendanceExceptionsApproveById = (id, body) => {
+    return axiosConfig.post(`${URLS.attendanceExceptions}/${id}/approve/`, body)
+}
+
+export const fetchCreateAttendanceExceptionsRejectById = (id, body) => {
+    return axiosConfig.post(`${URLS.attendanceExceptions}/${id}/reject/`, body)
+}   

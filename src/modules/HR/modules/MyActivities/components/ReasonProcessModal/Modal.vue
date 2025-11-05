@@ -37,14 +37,14 @@ const props = defineProps({
 
 // reactive
 const attendanceExceptionsList = ref([])
-const loading = ref(false)
+const loading = ref(true)
 // emits
 const emit = defineEmits(['update:modelValue'])
 const modelValue = useModel(props, 'modelValue')
 const activeTabIndex = ref(0)
 const label = computed(() => dayjs(props.data?.date).format(locale.value === 'ru' ? 'D-MMMM, YYYY [г.]' : 'D-MMMM, YYYY [y.]'))
 
-const showtablePanel = computed(()=> attendanceExpectionsStore.attendanceExpectionsList.length > 1)
+const showtablePanel = computed(()=> attendanceExceptionsList.value?.length > 1)
 const come = computed(()=> attendanceExceptionsList.value?.find(item => [KIND.LATE, KIND.MISSED_CHECKIN].includes(item?.kind)))
 const leave = computed(()=> attendanceExceptionsList.value?.find(item => [KIND.MISSED_CHECKOUT, KIND.EARLY_LEAVE].includes(item?.kind)))
 
@@ -83,8 +83,16 @@ onMounted(async () => {
   if(props.data?.attendance?.id && props.type == 'double'){
     await getAttendanceExceptionsList()
   } else if(props.data?.attendance?.id && props.type == 'single'){
-    await attendanceExpectionsStore.getAttendanceExceptionsById(props.data?.id)
-    attendanceExceptionsList.value = [attendanceExpectionsStore.attendanceExpectionsById]
+    try {
+      loading.value = true
+      await attendanceExpectionsStore.getAttendanceExceptionsById(props.data?.id)
+      attendanceExceptionsList.value = [attendanceExpectionsStore.attendanceExpectionsById]
+    }
+    catch (error) {
+      console.log(error)
+    } finally {
+      loading.value = false
+    }
   }
 })
 
@@ -100,7 +108,7 @@ onMounted(async () => {
       position="topright"
     >
       <template #content>
-        <template v-if="loading || attendanceExpectionsStore.attendanceExpectionsByIdLoading">
+        <template v-if="loading">
           <div class="flex items-center justify-center h-full">
             <base-spinner />
           </div>
@@ -108,11 +116,7 @@ onMounted(async () => {
         <template v-else>
           <!-- body header -->
           <div class="flex flex-col gap-4">
-            <ModalBodyHeader :data="props.data" />
-          </div>
-          <!-- body content -->
-          <div v-if="false" class="flex flex-col gap-5 mt-4">
-            <InfoCardStatus :data="!!attendanceExceptionsList.length && attendanceExceptionsList[0]" />
+            <ModalBodyHeader :attendance="props.data?.attendance" />
           </div>
           <!-- there more tab panel -->
           <base-brick-tab
@@ -126,15 +130,23 @@ onMounted(async () => {
             :on-tab-change="onTabChange"
           >
           <template #come>
-            <ModalBodyContent :data="come"  />
+            <div v-if="true" class="flex flex-col gap-5 mt-4">
+              <InfoCardStatus :data="come" />
+            </div>
+            <ModalBodyContent v-if="!!attendanceExceptionsList.length" :data="come"  />
           </template>
           <template #leave>
-            <ModalBodyContent :data="leave"  />
+            <div v-if="true" class="flex flex-col gap-5 mt-4">
+              <InfoCardStatus :data="leave" />
+            </div>
+            <ModalBodyContent v-if="!!attendanceExceptionsList.length" :data="leave"  />
           </template>
           </base-brick-tab>
           <template v-else>
-            <pre>{{ attendanceExceptionsList[0] }}</pre>
-            <ModalBodyContent :data="attendanceExceptionsList[0]" />
+            <div v-if="true" class="flex flex-col gap-5 mt-4">
+              <InfoCardStatus :data="attendanceExceptionsList[0]" />
+            </div>  
+            <ModalBodyContent v-if="!!attendanceExceptionsList.length" :data="attendanceExceptionsList[0]" />
           </template>
         </template>
       </template>
@@ -143,9 +155,10 @@ onMounted(async () => {
 </template>
 <style scoped>
 
- :deep(.tab-active){
+:deep(.tab-active){
   border-radius: 8px !important;
 }
+
 :global(.reason-process-modal.p-dialog){
   margin:0;
   min-height: 100%;
