@@ -43,6 +43,7 @@ export const useAssignExecutivesDepartmentStore = defineStore("assignExecutivesD
         active: true
       },
     ],
+    departmentId: null,
     model: {
       __department: null,
       __users: null
@@ -70,6 +71,7 @@ export const useAssignExecutivesDepartmentStore = defineStore("assignExecutivesD
     },
     /** **/
     async actionManage(row) {
+      this.departmentId = row.department?.id
       this.detailLoading = true
       this.dialog = true
 

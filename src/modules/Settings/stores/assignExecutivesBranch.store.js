@@ -21,6 +21,7 @@ export const useAssignExecutivesBranchStore = defineStore("assignExecutivesBranc
     detailLoading: false,
     assignExecutiveList: [],
     responsibleIndex: null,
+    branchId: null,
     headers: [
       {
         header: "branch",
@@ -70,6 +71,7 @@ export const useAssignExecutivesBranchStore = defineStore("assignExecutivesBranc
     },
     /** **/
     async actionManage(row) {
+      this.branchId = row.branch?.id
       this.detailLoading = true
       this.dialog = true
 

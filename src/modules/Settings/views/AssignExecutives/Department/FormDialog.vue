@@ -63,6 +63,7 @@ const resetFormModel = () => {
             v-model="$v.__department.$model"
             :error="$v.__department"
             api-url="departments/top-level-departments"
+            :api-params="{ ids: store.departmentId }"
             required
             label="department"
             placeholder="enter-department"

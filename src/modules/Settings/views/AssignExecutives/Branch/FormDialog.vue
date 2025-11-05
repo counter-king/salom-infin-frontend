@@ -62,6 +62,7 @@ const resetFormModel = () => {
             v-model="$v.__branch.$model"
             :error="$v.__branch"
             api-url="companies"
+            :api-params="{ ids: store.branchId }"
             required
             label="branch"
             placeholder="enter-branch"
