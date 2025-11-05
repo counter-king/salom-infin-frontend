@@ -24,8 +24,6 @@ onMounted(async () => {
   await store.actionDashboardAttendanceList()
 })
 
-
-
 </script>
 
 <template>

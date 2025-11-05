@@ -1,82 +1,104 @@
 <script setup>
 // Core
-import { computed, ref, useModel } from "vue"
+import { computed, ref, reactive, useModel, onMounted, watch, nextTick} from "vue"
 import { useI18n } from "vue-i18n"
 import useVuelidate from "@vuelidate/core"
 import { helpers, required } from "@vuelidate/validators"
 // Utils
-import { formatDate } from "@/utils/formatDate"
-import { returnLateTime } from "@/utils"
 import { dispatchNotify } from "@/utils/notify"
-// Services
-import { fetchUpdateDashboardAttendance } from "@/modules/Dashboard/services/index.service"
 // Enums
 import { COLOR_TYPES } from "@/enums"
 // Store
-import { useNotificationStore } from "@/modules/Dashboard/stores/notification.store"
-import { useAttendanceStore } from "@/modules/Dashboard/stores/attendance.store"
+import { useAttendanceReasonStore } from "@/modules/HR/modules/Attendance/stores/attendanceReason.store"
+import { useAttendanceExpectionsStore } from "@/modules/HR/modules/MyActivities/store/attendanceExceptions.store"
+
 // Components
 import { UserWithRadio } from "@/components/Users"
 import BaseTextarea from "@/components/UI/BaseTextarea.vue"
+import AttendanceViolationAlert from "@/modules/Dashboard/components/Attendance/AttendanceViolationAlert.vue"
 
 // Props
 const props = defineProps({
   modelValue: {
     type: Boolean,
     default: false
+  },
+  reasonList: {
+    type: Array,
+  },
+  apiCallAfterSubmit: {
+    type: Function,
+    default: () => void 0
   }
 })
 
-// Reactive
-const testModel = ref({
-  reason: "",
-  comment: "",
-  __files: []
-})
-const sendButtonLoading = ref(false)
-const rules = {
-  reason: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  }
-}
-// Composable
+// composables
+const {t, locale } = useI18n()
 const modelValue = useModel(props, 'modelValue')
-const {t, locale} = useI18n()
-const store = useNotificationStore()
-const dashboardAttendanceStore = useAttendanceStore()
-const $v = useVuelidate(rules, testModel)
+const reasonList = useModel(props, 'reasonList')
+const attendanceReasonStore = useAttendanceReasonStore()
+const reasonStore = useAttendanceExpectionsStore()
 
-// Computed
-const lateTime = computed(() => {
-  const { first_check_in, last_check_out } = store.attendanceModel
+const formModelList = ref([])
 
-  return returnLateTime(first_check_in, last_check_out, locale.value, 'entry')
-})
+const sendButtonLoading = ref(false)
+
+const formModelListRules = {
+  $each: helpers.forEach({
+    reason: {
+      required: helpers.withMessage(`Поле не должен быть пустым`, required)
+    }
+  })
+}
+
+const $vList = useVuelidate(formModelListRules, formModelList, { $lazy: true, })
 
 // Methods
 const send = async () => {
-  const valid = await $v.value.$validate()
-  if (!valid) return
-
- try {
-   sendButtonLoading.value = true
-   await fetchUpdateDashboardAttendance(store.attendanceModel.id, {
-     has_reason: true,
-   })
-   dispatchNotify(null, t('successfully-send'), COLOR_TYPES.SUCCESS)
-   await dashboardAttendanceStore.actionDashboardNotificationAttendanceList({status: 'lateness', has_reason: false})
-   modelValue.value = false
-   testModel.value.reason = null
-   testModel.value.comment = null
-   testModel.value__files = null
-   $v.value.$reset()
- } catch (e) {}
-  finally {
-   sendButtonLoading.value = false
- }
+  await sendSeparateReasoneForEach()
 }
 
-// Emits
+const sendSeparateReasoneForEach = async () => {
+  const validList = await $vList.value.$validate()
+  if (!validList) {
+    dispatchNotify(null, t('fill-in-all-required-fields'), COLOR_TYPES.ERROR)
+    return
+  }
+  try {
+    sendButtonLoading.value = true
+    const body = formModelList.value.map(item => {
+      return ({ attendance: item.attendance, kind: item.kind, reason: item.reason, note: item.note, attachments: item.__attachments.map(item => ({ id: item.id }))})
+    })
+    console.log("body", body)
+    await reasonStore.createAttendanceReason(body)
+    props.apiCallAfterSubmit && props.apiCallAfterSubmit()
+    formModelList.length > 1 && dispatchNotify(null, t('successfully-send'), COLOR_TYPES.SUCCESS)
+    modelValue.value = false
+    $vList.value.$reset()
+  } catch (e) {
+    console.log("error", e)
+  }
+  finally {
+    sendButtonLoading.value = false
+  }
+}
+
+onMounted(async () => {
+  attendanceReasonStore.actionGetAttendanceReasonList()
+  formModelList.value = reasonList.value?.map(item => ({
+    attendance: item.attendance,
+    kind: item.kind,
+    reason: "",
+    note: "",
+    date: item.date,
+    first_check_in: item.first_check_in,
+    last_check_out: item.last_check_out,
+    late_minutes: item.late_minutes,
+    early_leave_minutes: item.early_leave_minutes,
+    __attachments: []
+  }))
+})
+
 </script>
 
 <template>
@@ -91,57 +113,64 @@ const send = async () => {
     </template>
 
     <template #content>
-      <div class="flex flex-col gap-y-6">
-        <div class="flex gap-x-4 items-center px-4 py-2 rounded-xl bg-warning-30 border border-warning-100">
-          <img src="/images/dashboard/alarm-clock.svg" alt="alarm clock">
+      <template v-for="(item, index) in formModelList" :key="item.id">
+        <div 
+          class="rounded-2xl bg-white p-2 mb-4" 
+          :class="props.reasonList?.length > 1 ? 'shadow border border-greyscale-100 p-4' : ''"
+        >
+          <div class="flex flex-col gap-y-6">
+            <AttendanceViolationAlert :data="item" />
+            <base-dropdown
+              v-model="item.reason"
+              v-model:options="attendanceReasonStore.attendanceReasonList"
+              :error="$vList.$each.$response?.$data[index]?.reason"
+              required
+              label="late-came-reason"
+              placeholder="select-reason"
+              :option-label="locale === 'uz' ? 'name_uz' : 'name_ru'"
+              option-value="id"
+            >
+              <template #option="{ option }">
+                <user-with-radio
+                  :title="locale === 'uz' ? option.name_uz : option.name_ru"
+                  :text-truncate="false"  
+                >
+                </user-with-radio>
+              </template>
+            </base-dropdown>
 
-          <div class="text-sm text-greyscale-500 font-medium">
-            <span class="text-primary-900">{{ formatDate(store.attendanceModel?.date) }}</span> sanasida
-            <span class="text-critic-500">{{ lateTime }}</span> kech qolgansiz
+            <base-file-upload
+              :files="item.__attachments"
+              label="attach-file"
+              @emit:file-upload="(files) => item.__attachments = files"
+            />
+            <base-textarea
+              v-model="item.note"
+              :label="t('note')"
+              :placeholder="t('enter-note')"
+            />
           </div>
         </div>
-
-        <base-dropdown
-          v-model="$v.reason.$model"
-          :error="$v.reason"
-          v-model:options="store.reasonList"
-          required
-          label="late-came-reason"
-          placeholder="select-reason"
-          :option-label="locale === 'uz' ? 'name_uz' : 'name_ru'"
-          option-value="value"
-        >
-          <template #option="{ option }">
-            <user-with-radio
-              :title="t(option.title)"
-              :text-truncate="false"
-            >
-            </user-with-radio>
-          </template>
-        </base-dropdown>
-
-        <base-file-upload
-          :files="testModel.__files"
-          label="attach-file"
-          @emit:file-upload="(files) => testModel.__files = files"
-        />
-
-        <base-textarea
-          v-model="testModel.comment"
-          :label="t('comment')"
-          :placeholder="t('enter-comment')"
-        />
-      </div>
+      </template>
     </template>
 
     <template #footer>
       <div class="flex justify-end">
         <base-button
+          label="cancel"
+          rounded
+          shadow
+          border-color="border-transparent"
+          outlined
+          class="mr-3"
+          :loading="sendButtonLoading"
+          @click="modelValue = false"
+        />
+        <base-button
           label="send"
           rounded
           shadow
           border-color="border-transparent"
-          class="ml-2"
           :loading="sendButtonLoading"
           @click="send"
         />
@@ -152,5 +181,10 @@ const send = async () => {
 </template>
 
 <style scoped>
-
+:deep(.tab-active){
+  border-radius: 8px !important;
+}
+.shadow {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04), 0 4px 6px 0 rgba(53, 61, 73, 0.05)
+}
 </style>

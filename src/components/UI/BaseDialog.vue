@@ -31,6 +31,10 @@ const props = defineProps({
   },
   dismissableMask: {
     type: Boolean,
+  },
+  position: {
+    type: String,
+    default: undefined
   }
 })
 const emit = defineEmits(['update:modelValue', 'emit:after-hide'])
@@ -52,6 +56,7 @@ const rootClasses = computed(() => {
     v-model:visible="modelValue"
     :dismissableMask="props.dismissableMask"
     modal
+   :position="props.position"
     :header="t(props.label)"
     :pt="{
       root: {

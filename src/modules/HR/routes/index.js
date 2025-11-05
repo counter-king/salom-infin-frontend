@@ -6,6 +6,8 @@ import AgreementSettings from '../modules/AgreementSettings/routes'
 import Dashboard from '../modules/Dashboard/routes'
 import InteractionABS from '../modules/InteractionABS/routes'
 import Survey from '../modules/Survey/routes'
+import MyActivities from '../modules/MyActivities/routes'
+import LeaderPanel from '../modules/LeaderPanel/routes'
 
 const HR = [
   {
@@ -32,7 +34,11 @@ const HR = [
       // InteractionABS
       ...InteractionABS,
       // Survey
-      ...Survey
+      ...Survey,
+      // MyActivities
+      ...MyActivities,
+      // LeaderPanel
+      ...LeaderPanel,
     ]
   }
 ]

@@ -32,7 +32,11 @@ const props = defineProps({
   activeIndex : {
     type: Number,
     default: 0
-  }
+  },
+  tabClasses: {
+    type: String,
+    default: ""
+  },
 });
 
 // Methods
@@ -67,7 +71,7 @@ const { t } = useI18n()
       :pt="{
         header: { class: [props.headerClasses] },
         headeraction: ({ props, parent }) => ({
-          class: [panelClass(props, parent, index), 'h-full', 'border-0', 'rounded-[90px]', 'py-2', 'px-4']
+          class: [panelClass(props, parent, index), 'h-full', 'border-0', 'rounded-[90px]', 'py-2', 'px-4',]
         }),
       }"
     >

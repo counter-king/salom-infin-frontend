@@ -319,3 +319,65 @@ export const SETTINGS_RESOURCE_NAMES = {
 
   settings__short_descriptions: 'settings__short_descriptions',
 }
+export const MONTH_NAMES = [
+  {
+    uz: 'Yanvar',
+    ru: 'Январь',
+    id: 1,
+  },
+  {
+    uz: 'Fevral',
+    ru: 'Февраль',
+    id: 2,
+  },
+  {
+    uz: 'Mart',
+    ru: 'Март',
+    id: 3,
+  },
+  {
+    uz: 'Aprel',
+    ru: 'Апрель',
+    id: 4,
+  },
+  {
+    uz: 'May',
+    ru: 'Май', 
+    id: 5,
+  },
+  {
+    uz: 'Iyun',
+    ru: 'Июнь', 
+    id: 6,
+  },
+  {
+    uz: 'Iyul',
+    ru: 'Июль', 
+    id: 7,
+  },
+  {
+    uz: 'Avgust',
+    ru: 'Август', 
+    id: 8,
+  },
+  {
+    uz: 'Sentyabr',
+    ru: 'Сентябрь', 
+    id: 9,
+  },
+  {
+    uz: 'Oktober',
+    ru: 'Октябрь', 
+    id: 10,
+  },
+  {
+    uz: 'Noyabr',
+    ru: 'Ноябрь', 
+    id: 11,
+  },
+  {
+    uz: 'Dekabr',
+    ru: 'Декабрь', 
+    id: 12,
+  },
+]
