@@ -11,6 +11,7 @@ import {
   fetchAssignExecutivesDepartmentList,
   fetchCreateAssignExecutivesDepartment
 } from "@/modules/Settings/services/assignExecutives.service"
+import { useAuthStore } from "@/modules/Auth/stores";
 
 export const useAssignExecutivesDepartmentStore = defineStore("assignExecutivesDepartment", {
   state:() => ({
@@ -59,9 +60,13 @@ export const useAssignExecutivesDepartmentStore = defineStore("assignExecutivesD
   }),
   actions: {
     async actionGetAssignExecutivesList(params = {}) {
+      const currentUser = useAuthStore().currentUser
       this.listLoading = true
       try {
-        const { data } = await fetchAssignExecutivesDepartmentList(params)
+        const { data } = await fetchAssignExecutivesDepartmentList({
+          ...params,
+          company: currentUser.company?.id
+        })
         this.assignExecutiveList = data.results
         this.totalCount = data.count
       }catch (error) {}
