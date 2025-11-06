@@ -13,12 +13,11 @@ import {
   BuildingsIcon,
   DocumentTextIcon,
   FolderWithFilesIcon,
-  LaptopMinimalisticIcon,
-  MouseIcon,
+  CheckListMinimalisticLinearIcon,
   SettingsMinimalisticIcon,
   CheckCircleIcon,
   UsersGroupTwoRoundedIcon,
-  UserSpeakRoundedIcon
+  UserSpeakRoundedIcon, WidgetAddLinearIcon
 } from '@/components/Icons'
 // Composable
 const { locale } = useI18n()
@@ -49,6 +48,18 @@ const changeLanguage = () => {
       link: 'StructureIndex',
       title: 'structure',
       permission: 'settings-structure'
+    },
+    {
+      icon: WidgetAddLinearIcon,
+      link: 'DepartmentAssignment',
+      title: 'department-assignment',
+      permission: 'department-assignment'
+    },
+    {
+      icon: CheckListMinimalisticLinearIcon,
+      link: 'AssignExecutivesIndex',
+      title: 'assign-executives',
+      permission: 'assign-executives'
     },
     {
       icon: UsersGroupTwoRoundedIcon,

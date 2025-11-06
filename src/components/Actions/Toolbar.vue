@@ -160,6 +160,7 @@ const emits = defineEmits(['emit:resetHeaders'])
         />
 
         <column-menu
+          v-if="columnMenuItems?.length"
           :items="props.columnMenuItems"
           :storage-columns-name="props.storageColumnsName"
           @emit:reset-headers="emits('emit:resetHeaders')"

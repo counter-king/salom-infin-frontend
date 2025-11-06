@@ -6,6 +6,10 @@ const props = defineProps({
   digitCount: {
     type: [Number, String],
     default: 4
+  },
+  inputClasses: {
+    type: String,
+    default: ''
   }
 })
 const emit = defineEmits(['emit:up'])
@@ -69,6 +73,7 @@ const handleKeyDown = (event, index) => {
         v-model="digits[index]"
         maxlength="1"
         class="w-[64px] h-[64px] outline-none ring-2 ring-[#E6E6F0] rounded-lg text-center flex items-center justify-center focus:ring-primary-500"
+        :class="inputClasses"
         @keydown="handleKeyDown($event, index)"
       />
     </template>

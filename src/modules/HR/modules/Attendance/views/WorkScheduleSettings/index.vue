@@ -11,7 +11,7 @@ import { COLOR_TYPES } from "@/enums"
 import { formatTime } from "@/utils/formatDate"
 import { dispatchNotify } from "@/utils/notify"
 import { adjustStringTimeToInput } from "@/utils"
-import { helpers, required } from "@vuelidate/validators"
+import { helpers, required, requiredIf } from "@vuelidate/validators"
 // Store
 import { useWorkScheduleSettingStore } from "@/modules/HR/modules/Attendance/stores/workSchedule.store"
 // Components
@@ -29,6 +29,7 @@ const { t } = useI18n()
 const dialog = ref(false)
 const formType = ref(FORM_TYPE_CREATE)
 const deleteDialogVisible = ref(false)
+const showLunchTime = ref(false)
 const model = ref({
   name_uz: null,
   name_ru: null,
@@ -36,6 +37,8 @@ const model = ref({
   end_time: null,
   __start_time: {hours: 0, minutes: 0, seconds: 0},
   __end_time: {hours: 0, minutes: 0, seconds: 0},
+  __lunch_start_time: {hours: 0, minutes: 0, seconds: 0},
+  __lunch_end_time: {hours: 0, minutes: 0, seconds: 0},
   is_default: false,
 })
 const rules = {
@@ -50,6 +53,18 @@ const rules = {
   },
   __end_time: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  },
+  __lunch_start_time: {
+    required: helpers.withMessage(
+      'Поле не должно быть пустым',
+      requiredIf(() => showLunchTime.value)
+    )
+  },
+  __lunch_end_time: {
+    required: helpers.withMessage(
+      'Поле не должно быть пустым',
+      requiredIf(() => showLunchTime.value)
+    )
   }
 }
 
@@ -74,11 +89,17 @@ const onDelete = async () => {
 const openForm = (val, data) => {
   formType.value = val
   if (val === FORM_TYPE_UPDATE) {
+    if (data.lunch_start_time && data.lunch_end_time) {
+      showLunchTime.value = true
+    }
+
     store.updatingId = data.id
     model.value.name_uz = data.name_uz
     model.value.name_ru = data.name_ru
     model.value.__start_time = {...adjustStringTimeToInput(data.start_time)}
     model.value.__end_time = {...adjustStringTimeToInput(data.end_time)}
+    model.value.__lunch_start_time = data.lunch_start_time ? {...adjustStringTimeToInput(data.lunch_start_time)} : {hours: 0, minutes: 0, seconds: 0}
+    model.value.__lunch_end_time = data.lunch_end_time ? {...adjustStringTimeToInput(data.lunch_end_time)} : {hours: 0, minutes: 0, seconds: 0}
     model.value.is_default = data.is_default
   }
   dialog.value = true
@@ -107,19 +128,23 @@ const resetStoreModel = () => {
   model.value.end_time = null
   model.value.__start_time = {hours: 0, minutes: 0, seconds: 0}
   model.value.__end_time = {hours: 0, minutes: 0, seconds: 0}
+  model.value.__lunch_start_time = {hours: 0, minutes: 0, seconds: 0}
+  model.value.__lunch_end_time = {hours: 0, minutes: 0, seconds: 0}
   model.value.is_default = false
   $v.value.$reset()
 }
 const manage = async () => {
   const valid = await $v.value.$validate()
   if (!valid) return
-  const { __start_time, __end_time } = model.value
+  const { __start_time, __end_time, __lunch_start_time, __lunch_end_time } = model.value
   const tempModel = {
     name: model.value.name_uz,
     name_uz: model.value.name_uz,
     name_ru: model.value.name_ru,
     start_time: `${__start_time.hours}:${__start_time.minutes}:00`,
     end_time: `${__end_time.hours}:${__end_time.minutes}:00`,
+    lunch_start_time: showLunchTime.value ? `${__lunch_start_time.hours}:${__lunch_start_time.minutes}:00` : null,
+    lunch_end_time: showLunchTime.value ? `${__lunch_end_time.hours}:${__lunch_end_time.minutes}:00` : null,
     is_default: model.value.is_default,
   }
   formType.value === FORM_TYPE_CREATE ? create(tempModel) : update({ id: store.updatingId, body: tempModel })
@@ -169,6 +194,14 @@ const manage = async () => {
 
       <template #end_time="{ data }">
         <div class="text-sm text-greyscale-900 font-medium">{{ formatTime(data.end_time) }}</div>
+      </template>
+
+      <template #lunch_start_time="{ data }">
+        <div class="text-sm text-greyscale-900 font-medium">{{ formatTime(data.lunch_start_time) }}</div>
+      </template>
+
+      <template #lunch_end_time="{ data }">
+        <div class="text-sm text-greyscale-900 font-medium">{{ formatTime(data.lunch_end_time) }}</div>
       </template>
 
       <template #is_default="{ data }">
@@ -247,6 +280,29 @@ const manage = async () => {
           label="end-time"
           required
         />
+
+        <base-checkbox
+          v-model="showLunchTime"
+          label="show-lunch-time"
+          binary
+          class="my-2"
+        />
+
+        <template v-if="showLunchTime">
+          <base-time-picker
+            v-model="$v.__lunch_start_time.$model"
+            :error="$v.__lunch_start_time"
+            label="lunch-start-time"
+            required
+          />
+
+          <base-time-picker
+            v-model="$v.__lunch_end_time.$model"
+            :error="$v.__lunch_end_time"
+            label="lunch-end-time"
+            required
+          />
+        </template>
 
         <div class="flex items-center justify-between my-4">
           <base-label label="make-schedule-default" />

@@ -35,6 +35,10 @@ const props = defineProps({
   position: {
     type: String,
     default: undefined
+  },
+  showHeader: {
+    type: Boolean,
+    default: true
   }
 })
 const emit = defineEmits(['update:modelValue', 'emit:after-hide'])
@@ -58,6 +62,7 @@ const rootClasses = computed(() => {
     modal
    :position="props.position"
     :header="t(props.label)"
+    :show-header="showHeader"
     :pt="{
       root: {
         class: rootClasses

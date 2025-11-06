@@ -28,7 +28,8 @@ import {
   fetchRegionsList,
   fetchShortDescriptionList,
   fetchStatusList,
-  fetchDocumentTitlesList, fetchDocumentSubTypesList, fetchCompaniesList, fetchExpenseTypeList
+  fetchDocumentTitlesList, fetchDocumentSubTypesList, fetchCompaniesList, fetchExpenseTypeList,
+  fetchGetTelegramProfileList
 } from '@/services/common.service'
 // Enums
 import { CORRESPONDENT, JOURNAL_CODES } from '@/enums'
@@ -49,7 +50,8 @@ export const useCommonStore = defineStore("common", {
     composeStatusList: [],
     documentTitleList: [],
     expenseTypeList: [],
-    filialList: []
+    filialList: [],
+    telegramProfiles: []
 	}),
 	getters: {
 		getStatusList: (state) => state.statusList,
@@ -72,6 +74,7 @@ export const useCommonStore = defineStore("common", {
       await users.actionEmployeeGroupList()
       await allUrlStore.getAllUrls()
       await permissionStore.listPermission()
+      this.actionTelegramProfileList()
       this.actionDeliveryTypesList()
       this.actionDepartmentList()
       this.actionDistrictList()
@@ -352,6 +355,20 @@ export const useCommonStore = defineStore("common", {
       collectStore.actionAddRequests({
         id: 'actionExpenseTypeList',
         fn: this.actionExpenseTypeList,
+        params: null
+      })
+    },
+    /** **/
+    actionTelegramProfileList() {
+      const collectStore = useCollectRequestsStore()
+
+      fetchGetTelegramProfileList().then(({data}) => {
+        this.telegramProfiles = data.results
+      })
+      // Добавляем запрос в коллекцию
+      collectStore.actionAddRequests({
+        id: 'actionTelegramProfileList',
+        fn: this.actionTelegramProfileList,
         params: null
       })
     },

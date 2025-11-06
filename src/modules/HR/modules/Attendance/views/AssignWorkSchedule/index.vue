@@ -179,7 +179,6 @@ const onCancelFilter = async (type) => {
 
 const toggleFilterDropdown = (event) => {
   const headerRect = event.originalEvent.currentTarget.getBoundingClientRect()
-  // Filter menyusi pozitsiyasini o'rnatish
   filterDropdownRef.value.style.display = filterDropdownRef.value.style.display === "block" ? "none" : "block"
   filterDropdownRef.value.style.top = `${headerRect.bottom}px`
   filterDropdownRef.value.style.left = `${headerRect.left}px`

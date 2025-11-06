@@ -41,6 +41,8 @@ export { default as CheckCircleLinearIcon } from  '~icons/solar/check-circle-lin
 export { default as ChecklistMinimalisticLinearIcon } from  '~icons/solar/checklist-minimalistic-linear'
 export { default as BoltLinearIcon } from  '~icons/solar/bolt-linear'
 export { default as UserSpeakRoundedLinearIcon } from  '~icons/solar/user-speak-rounded-linear'
+export { default as WidgetAddLinearIcon } from  '~icons/solar/widget-add-linear'
+export { default as CheckListMinimalisticLinearIcon } from  '~icons/solar/checklist-minimalistic-linear'
 // Solar (Outline)
 export { default as CheckCircleIcon } from  '~icons/solar/check-circle-outline'
 export { default as AltArrowUpIcon } from  '~icons/solar/alt-arrow-up-outline'
@@ -197,6 +199,7 @@ export { default as MinusCircleBoldIcon } from  '~icons/solar/minus-circle-bold'
 export { default as FaceScanSquareBoldIcon } from  '~icons/solar/face-scan-square-bold'
 export { default as StopWatchBoldIcon } from  '~icons/solar/stopwatch-bold'
 
+export { default as WidgetAddBoldIcon } from  '~icons/solar/widget-add-bold'
 // Solar (Bold Duotone)
 export { default as ArchiveUpBoldDuotoneIcon } from  '~icons/solar/archive-up-bold-duotone'
 export { default as StarBoldDuotoneIcon } from  '~icons/solar/star-bold-duotone'
@@ -241,3 +244,9 @@ export { default as CheckIcon } from '~icons/material-symbols/check'
 export { default as PersonIcon } from '~icons/material-symbols/person'
 // Lucide
 export { default as TreePalmIcon } from '~icons/lucide/tree-palm'
+// Remix
+export { default as CalendarScheduleFillIcon } from '~icons/ri/calendar-schedule-fill'
+export { default as MailUnreadFillIcon } from '~icons/ri/mail-unread-fill'
+export { default as CloudFillIcon } from '~icons/ri/cloud-fill'
+export { default as Telegram2FillIcon } from '~icons/ri/telegram-2-fill'
+    

@@ -2,6 +2,10 @@
 import Permissions from './permissions.route'
 import Roles from './roles.routes'
 import Policies from './policies.route'
+import {
+  DepartmentAssignmentRoutes,
+} from "@/modules/Settings/routes/departmentAssignment.routes"
+import { AssignExecutivesRoutes } from "@/modules/Settings/routes/assignExecutives.route"
 // import Profile from './profile.route'
 
 const Settings = [
@@ -192,6 +196,10 @@ const Settings = [
       ...Roles,
       // Policies
       ...Policies,
+      // Department Assignment
+      ...DepartmentAssignmentRoutes,
+      // AssignExecutives
+      ...AssignExecutivesRoutes,
       // ShortDescription
       {
         component: () => import("../views/ShortDescriptions/index.vue"),

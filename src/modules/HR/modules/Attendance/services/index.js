@@ -44,3 +44,17 @@ export const fetchUpdateAttendanceReason = ({ id, body }) => {
 export const fetchDeleteAttendanceReason = (id) => {
   return axiosConfig.delete(`attendance-reasons/${id}/`)
 }
+
+// Exception Employees
+export const fetchGetExceptionEmployeesList = (params) => {
+  return axiosConfig.get("exception-employees/", params)
+}
+export const fetchCreateExceptionEmployees = (body) => {
+  return axiosConfig.post("exception-employees/", body)
+}
+export const fetchMakeExceptionEmployeesActive = (ids) => {
+  return axiosConfig.patch("exception-employees/make-active/", ids)
+}
+export const fetchMakeExceptionEmployeesInactive = (ids) => {
+  return axiosConfig.patch("exception-employees/make-inactive/", ids)
+}

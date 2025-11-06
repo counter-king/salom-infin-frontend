@@ -3,7 +3,7 @@
 import { ref } from 'vue'
 // Components
 import TheNavigation from '@/components/TheNavigation.vue'
-import { BuildingsIcon, UserSpeakRoundedIcon } from '@/components/Icons'
+import { BuildingsIcon, UserSpeakRoundedIcon, CheckListMinimalisticLinearIcon } from '@/components/Icons'
 // Reactive
 const navs = ref([
   {
@@ -23,6 +23,12 @@ const navs = ref([
     icon: UserSpeakRoundedIcon,
     link: "PositionsIndex",
     permission: 'settings-structure-positions'
+  },
+  {
+    title: "assign-executives",
+    icon: CheckListMinimalisticLinearIcon,
+    link: "AssignExecutivesIndex",
+    permission: 'settings-structure-assign-executives'
   }
 ])
 </script>

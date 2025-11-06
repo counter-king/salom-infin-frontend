@@ -15,6 +15,7 @@ import { getStorageItem } from "@/utils/storage";
 // import { usePaginationStore } from "@/stores/pagination.stores";
 // constants
 import { pagination } from "@/constants/constants";
+import { PenIcon, TrashBinTrashIcon } from "@/components/Icons";
 // Composable
 const { t } = useI18n()
 // Macros
@@ -63,13 +64,22 @@ const props = defineProps({
   },
   borderable: {
     type: Boolean,
-  }
+  },
+  actions: {
+    type: Array,
+    default: () => []
+  },
+  actionButtonClasses: {
+    type: String,
+  },
 });
 const emit = defineEmits([
   'emit:setStoreHeaders',
   'emit:rowClick',
   'emit:onPageChange',
-  'update:selection'
+  'update:selection',
+  'emit:onEdit',
+  'emit:onDelete'
 ]);
 const router = useRouter();
 const route = useRoute();
@@ -137,6 +147,14 @@ const initializeTable = async () => {
 }
 const updateSelection = (value) => {
   emit('update:selection', value)
+}
+const onEdit = (event, row) => {
+  event.stopImmediatePropagation()
+  emit('emit:onEdit', row)
+}
+const onDelete = (event, row) => {
+  event.stopImmediatePropagation()
+  emit('emit:onDelete', row)
 }
 // Hooks
 onMounted( async () => {
@@ -251,6 +269,29 @@ onMounted( async () => {
           <slot :name="field" :data="data">
             <span v-if="['created_date', 'modified_date'].includes(field)" class="text-sm font-medium text-greyscale-500">{{ formatDateHour(data[field]) }}</span>
             <span v-else class="text-sm font-medium text-greyscale-500">{{ data[field] }}</span>
+
+            <div
+              v-if="field === 'actions'"
+              class="flex items-center gap-x-2"
+            >
+              <div
+                v-if="actions.includes('edit')"
+                class="flex justify-center items-center w-8 h-8 rounded-lg bg-greyscale-50"
+                :class="actionButtonClasses"
+                @click.prevent="onEdit($event, data)"
+              >
+                <base-iconify :icon="PenIcon" class="text-greyscale-500"/>
+              </div>
+
+              <div
+                v-if="actions.includes('delete')"
+                class="flex justify-center items-center w-8 h-8 rounded-lg bg-greyscale-50"
+                :class="actionButtonClasses"
+                @click.prevent="onDelete($event, data)"
+              >
+                <base-iconify :icon="TrashBinTrashIcon" class="text-critic-500"/>
+              </div>
+            </div>
           </slot>
         </template>
       </Column>
