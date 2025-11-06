@@ -114,7 +114,7 @@ const onHandleLateCameReasonModal = (day) => {
                   @mouseover="hoveredBadgeIndex = index"
                   @mouseout="hoveredBadgeIndex = null"
                 >
-                  {{ getCellMergeRangeText(day.attendance, index)}}
+                  {{ getCellMergeRangeText(day?.attendance, index)}}
                 </div>
             </div>
             <!-- enter reason cell -->
@@ -123,7 +123,7 @@ const onHandleLateCameReasonModal = (day) => {
               class="flex flex-col justify-between items-center hover:bg-greyscale-50 cursor-pointer text-center p-4 h-[120px] border-t [&:not(:nth-child(7n))]:border-r font-medium"
               @click="onHandleLateCameReasonModal(day)"
             >
-              <h2 class="text-critic-500">{{ day.day }}</h2>
+              <h2 class="text-critic-500">{{ day?.day }}</h2>
               <div class="flex flex-col gap-[2px] items-center">
                 <template v-for="violation in day.attendance.violations" :key="violation.id">
                   <AttendanceReasonCellStatus :item="violation" />
@@ -138,7 +138,7 @@ const onHandleLateCameReasonModal = (day) => {
             </div>
             <!-- additional day off cell -->
             <div 
-              v-else-if="!!day.attendance && isAdditionalDayOffCell(day)"
+              v-else-if="!!day?.attendance && isAdditionalDayOffCell(day)"
               class="flex cursor-pointer flex-col justify-between items-center text-center p-4 h-[120px] border-t [&:not(:nth-child(7n))]:border-r text-critic-500 bg-critic-50 font-medium"
             >
               <h2>{{ day.day }}</h2>
