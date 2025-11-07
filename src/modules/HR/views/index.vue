@@ -23,12 +23,12 @@ const menus = ref([
     link: 'ProfileIndex',
     children: [],
   },
-  {
-    title: 'timesheet-system',
-    icon: CheckListMinimalisticLinearIcon,
-    link: 'TimesheetSystemIndex',
-    children: [],
-  },
+  // {
+  //   title: 'timesheet-system',
+  //   icon: CheckListMinimalisticLinearIcon,
+  //   link: 'TimesheetSystemIndex',
+  //   children: [],
+  // },
   {
     title: "attendance",
     icon: CheckCircleIcon,
