@@ -10,6 +10,8 @@ import {useCommonStore} from "@/stores/common"
 import { useCountStore } from '@/stores/count.store'
 import {useSDStoreApplication} from "@/modules/Documents/modules/SendDocuments/stores/application.store"
 import { useSDOrderStore } from "@/modules/Documents/modules/SendDocuments/stores/order.store"
+import { useAssignExecutivesDepartmentStore } from "@/modules/Settings/stores/assignExecutivesDepartment.store"
+import { useDepartmentAssignmentStore } from "@/modules/Settings/stores/departmentAssignment.store"
 // Components
 import EditorWithTabs from "@/components/Composed/EditorWithTabs.vue"
 import FormContainer from "@/modules/Documents/modules/SendDocuments/components/FormContainer.vue"
@@ -22,7 +24,7 @@ import PreviewDialog from "@/modules/Documents/modules/SendDocuments/components/
 import {adjustUsersToArray, resetModel} from "@/utils";
 import {dispatchNotify} from "@/utils/notify";
 // Constants
-import {COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL} from "@/enums";
+import {COLOR_TYPES, COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, JOURNAL, USER_STATUS_CODES} from "@/enums";
 import {ROUTE_SD_DETAIL, ROUTE_SD_LIST, SD_TYPE_INNER} from "@/modules/Documents/modules/SendDocuments/constants";
 
 const props = defineProps({
@@ -37,6 +39,8 @@ const applicationStore = useSDStoreApplication()
 const commonStore = useCommonStore()
 const countStore = useCountStore()
 const orderStore = useSDOrderStore()
+const assignExecutivesDepartmentStore = useAssignExecutivesDepartmentStore()
+const departmentAssignmentStore = useDepartmentAssignmentStore()
 
 const dialog = ref(false)
 const formRef = ref(null)
@@ -69,7 +73,14 @@ const preview = async () => {
   applicationStore.model.document_type = route.params.document_type
   applicationStore.model.document_sub_type = route.params.document_sub_type
   applicationStore.model.approvers = adjustUsersToArray(applicationStore.model.__approvers)
-
+  if(route.params?.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.EXPLANATION_LETTER && route.params?.document_type === COMPOSE_DOCUMENT_TYPES.APPLICATION && route.query?.attendanceId && route.query?.kind && route.query?.exceptionId && route.query?.date) {
+    applicationStore.model.additional_data = {
+      attendance_id: route.query?.attendanceId,
+      kind: route.query?.kind,
+      exception_id: route.query?.exceptionId,
+      date: route.query?.date
+    }
+  }
 }
 const clearForm = async () => {
 
@@ -126,10 +137,50 @@ onMounted(async () => {
   if (route.params.id) {
     await applicationStore.actionGetDocumentDetailForUpdate(route.params.id)
   }
+
+  if(!route.params.id && route.params?.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.EXPLANATION_LETTER && route.params?.document_type === COMPOSE_DOCUMENT_TYPES.APPLICATION && route.query?.attendanceId && route.query?.kind && route.query?.exceptionId && route.query?.date) {
+    await assignExecutivesDepartmentStore.actionGetAssignExecutivesList({department: authStore.currentUser?.department?.id})
+    const assignedDepList = await departmentAssignmentStore.actionGetAssignedDepList({department: authStore.currentUser?.department?.id})
+    const leader = assignExecutivesDepartmentStore.assignExecutiveList[0]?.leader 
+    const leaderAssistantsList = assignExecutivesDepartmentStore.assignExecutiveList[0]?.assistants || []
+
+    const hrList = assignedDepList.map(item => item.hr_user) || []
+
+    if (!!hrList.length && hrList.some(item => item.status?.code == USER_STATUS_CODES.WORKERS)) {
+      const activeHr = hrList.find(item => item.status.code == USER_STATUS_CODES.WORKERS)
+        applicationStore.model.__approvers.push({
+          ...activeHr,
+          first_name: activeHr.full_name?.split(' ')[0],
+          last_name: activeHr.full_name?.split(' ')[1],
+        })
+    } else {
+        dispatchNotify(null, t('department-connected-hr-not-found'), COLOR_TYPES.ERROR);
+        if (window.history.length > 1) {
+          router.back()
+        } else {
+          router.push({ name: 'MyCalendar'})
+        }
+    }
+
+    if (leader?.status?.code == USER_STATUS_CODES.WORKERS) {
+      applicationStore.model.__approvers.push(leader)
+    } else if (!!leaderAssistantsList.length && leaderAssistantsList.some(item => item.status?.code == USER_STATUS_CODES.WORKERS)) {
+      const activeLeader = leaderAssistantsList.find(item => item.status.code == USER_STATUS_CODES.WORKERS)
+      applicationStore.model.__approvers.push(activeLeader)
+    } else {
+      dispatchNotify(null, t('department-connected-ledear-not-found'), COLOR_TYPES.ERROR);
+      if (window.history.length > 1) {
+        router.back()
+      } else {
+        router.push({ name: 'MyCalendar'})
+      }
+    }
+  }
 })
 
 onUnmounted(() => {
   resetModel(applicationStore.model)
+  applicationStore.resetModel()
 })
 </script>
 

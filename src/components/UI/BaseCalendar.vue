@@ -86,6 +86,10 @@ const props = defineProps({
   },
   dropdownButtonClass: {
     type: String,
+  },
+  showIcon: {
+    type: Boolean,
+    default: true
   }
 })
 const emit = defineEmits(['update:modelValue', 'emit:month-change', 'emit:day-select', 'emit:clear'])
@@ -152,7 +156,7 @@ const clear = () => {
       :placeholder="t(props.placeholder)"
       :date-format="props.dateFormat"
       :selection-mode="props.selectionMode"
-      show-icon
+      :show-icon="props.showIcon"
       @month-change="monthChange"
       @date-select="daySelect"
       :pt="{

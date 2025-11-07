@@ -42,6 +42,7 @@ export default {
         },
         "success": {
           10: "#EFF9F3",
+          30: "#F2FAEE",
           50: "#EEFFE7",
           100: "#E6F6DF",
           200: "#CDE7C2",

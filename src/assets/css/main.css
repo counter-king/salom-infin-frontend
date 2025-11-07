@@ -27,6 +27,13 @@
   --greyscale-800: #2B2D4C;
   --greyscale-900: #191F3F;
   --success-500: #63BA3D;
+  --info-100: #BCECFE;
+  --info-200: #81DAFC;
+  --warning-100: #FFECC8;
+  --warning-200: #FFE1A9;
+  --critic-30: #FAEEF1;
+  --critic-100: #FFDAE2;
+  --critic-200: #FFB8C7;
   --dp-cell-size: 35px!important;
   --dp-font-size: 12px!important;
   --dp-cell-border-radius: 200px!important;

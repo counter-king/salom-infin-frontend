@@ -6,6 +6,7 @@ import AgreementSettings from '../modules/AgreementSettings/routes'
 import Dashboard from '../modules/Dashboard/routes'
 import InteractionABS from '../modules/InteractionABS/routes'
 import Survey from '../modules/Survey/routes'
+import MyActivities from '../modules/MyActivities/routes'
 import { TimesheetSystemRoutes } from "@/modules/HR/modules/TimesheetSystem/routes"
 
 const HR = [
@@ -35,7 +36,9 @@ const HR = [
       // InteractionABS
       ...InteractionABS,
       // Survey
-      ...Survey
+      ...Survey,
+      // MyActivities
+      ...MyActivities,  
     ]
   }
 ]

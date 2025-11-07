@@ -32,6 +32,10 @@ const props = defineProps({
   dismissableMask: {
     type: Boolean,
   },
+  position: {
+    type: String,
+    default: undefined
+  },
   showHeader: {
     type: Boolean,
     default: true
@@ -56,6 +60,7 @@ const rootClasses = computed(() => {
     v-model:visible="modelValue"
     :dismissableMask="props.dismissableMask"
     modal
+   :position="props.position"
     :header="t(props.label)"
     :show-header="showHeader"
     :pt="{

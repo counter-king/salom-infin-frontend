@@ -14,29 +14,31 @@ import {fetchUserDetail} from "@/services/users.service";
 import {SIGNER_TYPES} from "@/enums";
 import {useAuthStore} from "@/modules/Auth/stores";
 
+const defaultModel = {
+  company: useAuthStore().currentUser?.company?.id,
+  content: null,
+  curator: null,
+  document_type: null,
+  approvers: [],
+  journal: null,
+  sender: null,
+  signers: [],
+  document_sub_type: null,
+  files: [],
+  __files: [],
+  __approvers: [],
+  __approvers_copy: [],
+  __curator: null,
+  __departments: [],
+  __signers: [],
+  __signers_copy: []
+}
+
 export const useSDStoreApplication = defineStore("sd-stores-application", {
   state: () => ({
     buttonLoading: false,
     detailLoading: false,
-    model: {
-      company: useAuthStore().currentUser?.company?.id,
-      content: null,
-      curator: null,
-      document_type: null,
-      approvers: [],
-      journal: null,
-      sender: null,
-      signers: [],
-      document_sub_type: null,
-      files: [],
-      __files: [],
-      __approvers: [],
-      __approvers_copy: [],
-      __curator: null,
-      __departments: [],
-      __signers: [],
-      __signers_copy: []
-    },
+    model: { ...defaultModel },
     rules: {
       content: {
         required: helpers.withMessage(`Поле не должен быть пустым`, required)
@@ -92,12 +94,18 @@ export const useSDStoreApplication = defineStore("sd-stores-application", {
         this.model.__signers = await adjustUserObjectToArray(data.signers.filter(item => item.type === SIGNER_TYPES.SIGNER))
         this.model.__curator = await adjustTopSignerObjectToArray([], data.curator.id, false)
         this.model.__files = data.files
+        this.model.additional_data = data.additional_data
       }
       catch (error) {
 
       }
       finally {
         this.detailLoading = false;
+      }
+    },
+    resetModel() {
+      this.model = {
+        ...defaultModel,
       }
     }
   }
