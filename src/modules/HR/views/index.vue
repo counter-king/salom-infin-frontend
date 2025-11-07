@@ -36,17 +36,11 @@ const menus = ref([
     children: [],
     roles: ["hr"]
   },
-  {
-    title: "leader-panel",
-    icon: UserSpeakRoundedLinearIcon,
-    link: "LeaderPanelIndex",
-    children: [],
-  },
-  {
-    title: "my-activities",
-    icon: BoltLinearIcon,
-    link: "MyActivitiesIndex",
-  },
+  // {
+  //   title: "my-activities",
+  //   icon: BoltLinearIcon,
+  //   link: "MyActivitiesIndex",
+  // },
   {
     title: "business-trip",
     icon: CaseIcon,

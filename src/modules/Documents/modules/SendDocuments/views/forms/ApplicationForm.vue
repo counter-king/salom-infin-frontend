@@ -138,17 +138,6 @@ onMounted(async () => {
     await applicationStore.actionGetDocumentDetailForUpdate(route.params.id)
   }
 
-  //   This code retrieves the HR and leader lists that belong
-  //   to the current user's department, and selects only those users
-  //   whose `status.code == USER_STATUS_CODES.WORKERS`.
-  //
-  //   Process:
-  //   1. HR and Manager lists are fetched from the server.
-  //   2. Each list is checked as follows:
-  //      - If there is only one user and their status is WORKERS, they are added to approvers.
-  //      - If there are multiple users, the first one with `status.code == WORKERS` is added.
-  //      - If no user has WORKERS status, router.back() and show a toast warning.
-  
   if(!route.params.id && route.params?.document_sub_type === COMPOSE_DOCUMENT_SUB_TYPES.EXPLANATION_LETTER && route.params?.document_type === COMPOSE_DOCUMENT_TYPES.APPLICATION && route.query?.attendanceId && route.query?.kind && route.query?.exceptionId && route.query?.date) {
     await assignExecutivesDepartmentStore.actionGetAssignExecutivesList({department: authStore.currentUser?.department?.id})
     const assignedDepList = await departmentAssignmentStore.actionGetAssignedDepList({department: authStore.currentUser?.department?.id})

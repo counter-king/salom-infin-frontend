@@ -7,7 +7,6 @@ import Dashboard from '../modules/Dashboard/routes'
 import InteractionABS from '../modules/InteractionABS/routes'
 import Survey from '../modules/Survey/routes'
 import MyActivities from '../modules/MyActivities/routes'
-import LeaderPanel from '../modules/LeaderPanel/routes'
 import { TimesheetSystemRoutes } from "@/modules/HR/modules/TimesheetSystem/routes"
 
 const HR = [
@@ -39,9 +38,7 @@ const HR = [
       // Survey
       ...Survey,
       // MyActivities
-      ...MyActivities,
-      // LeaderPanel
-      ...LeaderPanel,
+      ...MyActivities,  
     ]
   }
 ]
