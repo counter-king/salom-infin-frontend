@@ -249,6 +249,14 @@ export const useDepartmentAssignmentStore = defineStore("departmentAssignmentSto
         this.deleteButtonLoading = false
       }
     },
+    async actionGetAssignedDepList(params) {
+      try {
+        const { data } = await fetchGetAssignedDepList(params)
+        return data.results
+      } catch (error) {
+        await Promise.reject(error)
+      }
+    },
     /** **/
     actionResetModel() {
       const m = this.model

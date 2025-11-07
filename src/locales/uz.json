@@ -1170,5 +1170,7 @@
   "branch-assignment": "Filiallarni biriktirish",
   "lunch-start-time": "Tushlik boshlanish vaqti",
   "lunch-end-time": "Tushlik tugash vaqti",
-  "show-lunch-time": "Tushlik vaqtini ko‘rsatish"
+  "show-lunch-time": "Tushlik vaqtini ko‘rsatish",
+  "department-connected-hr-not-found": "Departmentga biriktirilgan HR xodimi topilmadi. Iltimos, HR xodimini departmentga biriktirib, qayta urinib ko‘ring.",
+  "department-connected-ledear-not-found": "Departmentga biriktirilgan Rahbar topilmadi. Iltimos, Rahbarni departmentga biriktirib, qayta urinib ko‘ring."
 }
