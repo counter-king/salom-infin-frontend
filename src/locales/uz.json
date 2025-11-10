@@ -86,7 +86,7 @@
   "year": "yil",
   "document": "Hujjat",
   "boxes": "Kiruvchi hujjatlar",
-  "for-review": "Ko‘rib chiqishga",
+  "for-review": "Ko‘rib chiqish uchun",
   "registration": "Ro‘yxatga olish",
   "letter-type": "Xat turi",
   "first-cancel-sign": "Avval imzoni bekor qiling",
@@ -1071,7 +1071,7 @@
   "entered-reason-rejected-by-director": "Kiritgan sababingiz direktor tomonidan rad etildi",
   "entered-reason-accepted-by-director": "Kiritgan sababingiz muvvafaqiyatli qabul qilindi va ish tabeliga 8 soat yozildi",
   "entered-reason-accepted-by-hr-director": "Kiritgan sababingiz HR va Tarkibiy tuzilma rahbari tomonidan muvvafaqiyatli qabul qilindi",
-  "no-attendance-issues": "Davomat bo‘yicha muammo yo‘q", 
+  "no-attendance-issues": "Davomat bo‘yicha muammo yo‘q",
   "no-attendance-records-on-time": "Sizning kelish-ketish vaqtlaringiz me’yorida bo‘lgani uchun bu yerda qaydlar ko‘rsatilmaydi",
   "separate-reason-for-each": "Har biriga alohida sabab",
   "one-reason-for-all": "Hammasiga bitta sabab",
@@ -1130,7 +1130,7 @@
   "need-to-confirm": "Нужно подтвердить",
   "approve": "Tasdiqlash",
   "come": "Kelish",
-  "leave": "Ketish",  
+  "leave": "Ketish",
   "head-of-the-structural-unit": "Tarkibiy tuzilma rahbari",
   "enter-note": "Izohni kiriting",
   "you-come-on-time": "Vaqtida keldingiz",
@@ -1172,5 +1172,9 @@
   "lunch-end-time": "Tushlik tugash vaqti",
   "show-lunch-time": "Tushlik vaqtini ko‘rsatish",
   "department-connected-hr-not-found": "Departmentga biriktirilgan HR xodimi topilmadi. Iltimos, HR xodimini departmentga biriktirib, qayta urinib ko‘ring.",
-  "department-connected-ledear-not-found": "Departmentga biriktirilgan Rahbar topilmadi. Iltimos, Rahbarni departmentga biriktirib, qayta urinib ko‘ring."
+  "department-connected-ledear-not-found": "Departmentga biriktirilgan Rahbar topilmadi. Iltimos, Rahbarni departmentga biriktirib, qayta urinib ko‘ring.",
+  "table-date": "Tabel sanasi",
+  "approved-leader": "Tasdiqlagan raxbar",
+  "approved-date": "Tasdiqlangan sana",
+  "table-status": "Tabel holati"
 }

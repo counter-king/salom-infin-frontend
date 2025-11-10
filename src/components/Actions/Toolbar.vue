@@ -54,6 +54,10 @@ const props = defineProps({
   exportButtonLoading: {
     type: Boolean,
     default: false
+  },
+  filterItems: {
+    type: Array,
+    default: () => []
   }
 })
 
@@ -103,7 +107,7 @@ onMounted(() => {
   }
 })
 
-const emits = defineEmits(['emit:resetHeaders'])
+const emits = defineEmits(['emit:resetHeaders', 'emit:onFilterChange'])
 </script>
 
 <template>
@@ -112,6 +116,28 @@ const emits = defineEmits(['emit:resetHeaders'])
       <slot name="title-before" />
 
       <h1 class="text-2xl font-bold text-primary-900">{{ t(props.title) }}</h1>
+
+      <div
+        v-if="filterItems && filterItems.length"
+        class="flex items-center gap-x-2"
+      >
+        <div
+          v-for="item in filterItems"
+          :key="item.id"
+          class="py-2 px-4 rounded-[32px] text-sm font-semibold cursor-pointer flex gap-x-[6px]"
+          :class="item.active ? 'bg-primary-500 text-white' : 'bg-white text-greyscale-900'"
+          @click="emits('emit:onFilterChange', item)"
+        >
+          <span>{{ t(item.title) }}</span>
+
+          <div
+            v-if="item.count"
+            class="w-5 h-5 rounded-full flex items-center justify-center bg-primary-400  text-white text-[10px]"
+          >
+            {{ item.count }}
+          </div>
+        </div>
+      </div>
 
       <slot name="title-after" />
     </div>

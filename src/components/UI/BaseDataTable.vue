@@ -72,6 +72,10 @@ const props = defineProps({
   actionButtonClasses: {
     type: String,
   },
+  selective: {
+    type: Boolean,
+    default: false
+  }
 });
 const emit = defineEmits([
   'emit:setStoreHeaders',
@@ -87,13 +91,17 @@ const route = useRoute();
 
 // Reactive
 const expandedRowGroups = ref()
-const selection = ref()
 // reactive
 const paginationStore = reactive({
   page: pagination.page || route.query.page,
   pageSize: pagination.pageSize || route.query.page_size,
   firstRow: pagination.firstRow || +route.query.firstRow,
-});
+})
+
+const selection = defineModel('selection', {
+  type: [String, Array, Object, null],
+  default: null
+})
 
 // Computed
 const headersComputed = computed(() => {
@@ -155,6 +163,18 @@ const onEdit = (event, row) => {
 const onDelete = (event, row) => {
   event.stopImmediatePropagation()
   emit('emit:onDelete', row)
+}
+const onRowClick = (event) => {
+  const target = event.originalEvent?.target
+  // Ignore clicks inside any checkbox area
+  if (
+    target?.closest('.p-checkbox') ||
+    target?.closest('.p-checkbox-box') ||
+    target?.closest('.p-checkbox-icon')
+  ) {
+    return
+  }
+  emit('emit:rowClick', event.data)
 }
 // Hooks
 onMounted( async () => {
@@ -223,7 +243,7 @@ onMounted( async () => {
       'base-data-table--roundable': props.roundable,
       'base-data-table--borderable': props.borderable,
     }"
-    @row-click="event => emit('emit:rowClick', event.data)"
+    @row-click="onRowClick"
     @page="onPageChange"
     @update:selection="updateSelection"
   >
@@ -236,6 +256,13 @@ onMounted( async () => {
     </template>
 
     <Column
+      v-if="selective"
+      selectionMode="multiple"
+      headerStyle="width: 3rem; background: white"
+    />
+
+    <Column
+      v-else
       header="№"
       header-class="w-[60px] bg-white text-sm font-semibold text-greyscale-500"
       body-class="relative"

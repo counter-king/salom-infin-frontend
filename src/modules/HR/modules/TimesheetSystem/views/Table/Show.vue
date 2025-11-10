@@ -3,7 +3,9 @@
 </script>
 
 <template>
-  <router-view />
+  <div class="table-show-view">
+sdsdsdsds
+  </div>
 </template>
 
 <style scoped>
