@@ -57,6 +57,10 @@ const props = defineProps({
   loading: {
     type: Boolean,
     default: false
+  },
+  twoStepConfirmation: {
+    type: Boolean,
+    default: true
   }
 })
 const emit = defineEmits(['update:modelValue'])
@@ -86,8 +90,9 @@ const create = async () => {
 
   try {
     await props.createButtonFn(text.value.message)
-    text.value.message = null
-    emit('update:modelValue', false)
+    if (props.twoStepConfirmation) {
+      emit('update:modelValue', false)
+    }
   }
   finally {
 
@@ -99,11 +104,20 @@ watch(modelValue, newVal => {
     text.value.message = props.editorValue;
   }
 })
-
-// Methods
 const toggle = (event) => {
   const _menuRef = unref(menuRef)
   _menuRef.opRef.toggle(event)
+}
+const manage = (event) => {
+  if (props.twoStepConfirmation) {
+    toggle(event)
+  } else {
+    create()
+  }
+}
+const resetModel = () => {
+  text.value.message = null
+  $v.value.$reset()
 }
 </script>
 
@@ -114,6 +128,7 @@ const toggle = (event) => {
     :label="props.headerText ? props.headerText : props.label"
     :max-width="props.maxWidth"
     :draggable="false"
+    @emit:after-hide="resetModel"
   >
     <template #content>
 <!--      <base-froala-editor-->
@@ -147,8 +162,9 @@ const toggle = (event) => {
       <base-button
         :severity="props.createButtonColor"
         :label="props.label"
+        :loading="props.loading"
         rounded
-        @click="toggle"
+        @click="manage"
       />
 
       <base-overlay-panel

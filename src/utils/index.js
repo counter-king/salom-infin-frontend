@@ -934,10 +934,10 @@ export const adjustStringTimeToInput = (time) => {
 
 export const formatSecondsToHoursMinutes = (seconds, locale = "ru") => {
   if (!seconds || seconds === 0) return `${locale === "ru" ? "-" : "-"}`
-  
+
   const hours = Math.floor(seconds / 3600)
   const minutes = Math.floor((seconds % 3600) / 60)
-  
+
   if (locale === "ru") {
     if(minutes > 0) {
       return `${hours} ч. ${minutes} мин.`
@@ -949,6 +949,14 @@ export const formatSecondsToHoursMinutes = (seconds, locale = "ru") => {
     return `${hours} s. ${minutes} daq.`
   } else {
     return `${hours} s.`
+  }
+}
+
+export const formatMonthYear = (month, year) => {
+  if (month && year) {
+    return `${month < 10 ? '0' + month : month}/${year}`
+  } else {
+    return `-`
   }
 }
 

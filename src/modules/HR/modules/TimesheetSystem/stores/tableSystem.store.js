@@ -1,7 +1,7 @@
 // Core
 import { defineStore } from 'pinia'
 // Services
-import { fetchGetTableListByMonth } from "@/modules/HR/modules/TimesheetSystem/services"
+import { fetchGetTableListByMonth, fetchGetTimesheetDetail } from "@/modules/HR/modules/TimesheetSystem/services"
 
 export const useTableSystemStore = defineStore("tableSystem", {
   state:() => ({
@@ -11,6 +11,9 @@ export const useTableSystemStore = defineStore("tableSystem", {
     buttonLoading: false,
     tableListByMonth: [],
     selectedItems: [],
+    rejectModal: false,
+    rejectLoading: false,
+    detail: null,
     headers: [
       {
         header: "table-date",
@@ -66,10 +69,7 @@ export const useTableSystemStore = defineStore("tableSystem", {
     async actionGetTableListByMonth(params = {}) {
       this.listLoading = true
       try {
-        const { data } = await fetchGetTableListByMonth({
-          year: 2025,
-          month: 11
-        })
+        const { data } = await fetchGetTableListByMonth(params)
         this.tableListByMonth = data.results
       } catch (error) {}
       finally {
@@ -77,6 +77,18 @@ export const useTableSystemStore = defineStore("tableSystem", {
       }
     },
     /** **/
-
+    async actionGetTableDetail(id) {
+      const { data } = await fetchGetTimesheetDetail(id)
+      this.detail = data
+    },
+    /** **/
+    async actionRejectTable(text) {
+      try {
+        this.rejectLoading = true
+      } catch (error) {}
+      finally {
+        this.rejectLoading = false
+      }
+    }
   }
 })
