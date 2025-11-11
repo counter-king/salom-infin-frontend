@@ -80,7 +80,7 @@ const author = computed(() => {
         <div class="flex flex-col items-end">
           <div class="text-sm font-bold text-end">“TАSDIQLАYMАN”</div>
           <div class="text-sm font-bold text-end">
-            Markaziy Bank
+            Markaziy bank
           </div>
           <div class="text-sm font-bold text-end">{{ curator?.position?.name }}</div>
           <div class="text-sm font-bold text-end">
