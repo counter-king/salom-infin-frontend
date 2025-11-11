@@ -17,14 +17,7 @@ onMounted(() => {
     <header class="relative border-b border-greyscale-200 px-5 py-4">
       <div class="flex items-center justify-between max-w-[545px] w-full m-auto">
         <router-link :to="{ name: 'Login' }" class="flex items-center">
-          <template v-if="isHostVercel">
-            <img src="/images/logo.svg" alt="Logo" />
-            <img src="/images/logo-text-dark.svg" alt="Logo text" class="ml-2" />
-          </template>
-
-          <template v-else>
-            <img src="/images/sqb-logo.svg" alt="Logo" />
-          </template>
+          <img src="/images/cb-logo-black.svg" class="w-[220px]" alt="Logo"/>
         </router-link>
 
         <language-dropdown

@@ -164,8 +164,8 @@ const handleSave = async (key) => {
   }
 
   if(key === 'email') {
-    if(!editValue.value.includes('@sqb.uz')) {
-      dispatchNotify(null, 'В почте должен содержать @sqb.uz', COLOR_TYPES.ERROR)
+    if(!editValue.value.includes('@cb.uz')) {
+      dispatchNotify(null, 'В почте должен содержать @cb.uz', COLOR_TYPES.ERROR)
       return
     }
   }

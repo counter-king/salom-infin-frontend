@@ -405,7 +405,7 @@ export const useSDStore = defineStore("sd-stores", {
           }
         ],
       },
-      {
+     /* {
         id: 6,
         label: 'power-of-attorney',
         icon: DocumentIcon,
@@ -574,7 +574,7 @@ export const useSDStore = defineStore("sd-stores", {
             documentSubType: COMPOSE_DOCUMENT_SUB_TYPES.POA_EMPLOYER_REPRESENTATIVE_SECOND
           },
         ],
-      },
+      },*/
       {
         id: 7,
         label: 'act',

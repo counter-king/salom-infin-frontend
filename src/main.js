@@ -33,25 +33,4 @@ app.directive('badge', BadgeDirective)
 app.directive('tooltip', Tooltip)
 app.directive('focustrap', FocusTrap)
 
-// Wait for the DOM to be ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', loadCustomScripts)
-} else {
-  loadCustomScripts()
-}
-
 app.mount('#app')
-
-function loadCustomScripts() {
-  if (window.location.hostname.includes('sqb.uz')) {
-    const script1 = document.createElement('script')
-    script1.src = '/libs/jquery.js'
-    script1.defer = true
-    document.body.appendChild(script1)
-
-    const script2 = document.createElement('script')
-    script2.src = 'https://jira.sqb.uz/plugins/servlet/issueCollectorBootstrap.js?collectorId=687ddb3c&locale=ru_RU'
-    script2.defer = true
-    document.body.appendChild(script2)
-  }
-}

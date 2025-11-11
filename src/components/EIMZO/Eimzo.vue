@@ -78,7 +78,6 @@ const AppLoad = () => {
   EIMZOClient.API_KEYS = [
     'localhost', '96D0C1491615C82B9A54D9989779DF825B690748224C2B04F500F370D51827CE2644D8D4A82C18184D73AB8530BB8ED537269603F61DB0D03D2104ABF789970B',
     '127.0.0.1', 'A7BCFA5D490B351BE0754130DF03A068F855DB4333D43921125B9CF2670EF6A40370C646B90401955E1F7BC9CDBF59CE0B2C5467D820BE189C845D0B79CFC96F',
-    'salom.sqb.uz', '850FF0E4A84282419377FDC21B0F81F8F89D45F6313AE806531472908CF201629C1DDA93CDC03339F2E530ADF9CDE851BD92ED0256C3D47BD6E1DAEC49D7A833'
   ]
 
   EIMZOClient.checkVersion((major, minor) => {
@@ -188,7 +187,7 @@ const getPkcs7 = () => {
     const itm = keyValue.value
     if (itm) {
       const vo = JSON.parse(itm.getAttribute('vo'))
-      const data = props.data || 'salom.sqb.uz'
+      const data = props.data || 'cb.uz'
       const keyId = keyIdTemp.value
       if (keyId) {
         EIMZOClient.createPkcs7(keyId, data, null, (pkcs7) => {

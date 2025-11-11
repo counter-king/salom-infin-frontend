@@ -193,7 +193,7 @@ const generatePdf = async () => {
 
         <div class="flex flex-col text-sm mt-4 gap-y-4">
           <div>
-            <span class="font-semibold">Berildi: </span> "Sanoat-Qurilish banki" ATB {{
+            <span class="font-semibold">Berildi: </span> "Markaziy Bank" {{
               author?.top_level_department?.name
             }} {{ author?.position?.name }} <span class="font-semibold">{{ author?.full_name }}</span>ga
           </div>
@@ -225,7 +225,7 @@ const generatePdf = async () => {
 
         <div class="flex flex-col mt-4 gap-y-2">
           <qrcode-vue
-            :value="'salom.sqb.uz'"
+            :value="'cb.uz'"
             :size="50"
             level="L"
             render-as="svg"
@@ -256,7 +256,7 @@ const generatePdf = async () => {
                 </div>
                 <div class="mt-3">
                   <qrcode-vue
-                    :value="'salom.sqb.uz'"
+                    :value="'cb.uz'"
                     :size="50"
                     level="L"
                     render-as="svg"

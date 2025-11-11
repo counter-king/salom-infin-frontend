@@ -23,7 +23,7 @@ const props = defineProps({
         <base-col col-class="w-1/3">
           <qrcode-vue
             v-if="item.is_signed"
-            :value="'salom.sqb.uz'"
+            :value="'cb.uz'"
             :size="50"
             level="L"
             render-as="svg"

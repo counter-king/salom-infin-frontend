@@ -27,14 +27,7 @@ onMounted(() => {
 <template>
   <div class="flex mb-4">
     <div class="flex items-center flex-1">
-      <template v-if="isHostVercel">
-        <img src="/images/logo.svg" alt="Logo" />
-        <img src="/images/logo-text.svg" alt="Logo text" class="ml-2" />
-      </template>
-
-      <template v-else>
-        <img src="/images/sqb-logo.svg" alt="Logo" />
-      </template>
+      <img src="/images/cb-logo-black.svg" class="max-w-[114px]" alt="Logo"/>
     </div>
   </div>
 

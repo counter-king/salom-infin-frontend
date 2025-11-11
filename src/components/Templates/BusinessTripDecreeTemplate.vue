@@ -142,7 +142,7 @@ const signers = computed(() => {
       </div>
 
       <div>
-        “O‘zsanoatqurilishbank” ATB xodimlarini xizmat safariga yuborish to‘g‘risidagi Tartib;
+        Markaziy bank xodimlarini xizmat safariga yuborish to‘g‘risidagi Tartib;
       </div>
 
       <div>

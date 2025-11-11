@@ -128,7 +128,7 @@ const onFileUpload = (files) => {
 }
 const init = async () => {
   if (props.formType === FORM_TYPE_CREATE) {
-    store.model.content = `\n <p style="font-size: 14px;">&nbsp; &nbsp; &ldquo;Oʼzsanoatqurilishbank&rdquo; АTB (keyingi oʼrinlarda Buyurtmachi) va fuqaro ${authStore.currentUser?.full_name} (keyingi oʼrinlarda Ijrochi) oʼrtasida 2025-yil _________ kuni imzolangan №__-sonli &ldquo;Haq evaziga xizmat koʼrsatish shartnomasi&rdquo;ga asosan Ijrochi tomonidan 2025-yil __-__ ${formatUzbekDate(new Date(), true)} kunlari quyidagi ishlar amalga oshirildi va Buyurtmachi tomonidan qabul qilindi:</p> <p style="font-size: 14px;">Amalga oshirilgan ishlar hajmi:</p> <p style="font-size: 14px;">1.&nbsp;</p>`
+    store.model.content = `\n <p style="font-size: 14px;">&nbsp; &nbsp; &ldquo;Markaziy bank (keyingi oʼrinlarda Buyurtmachi) va fuqaro ${authStore.currentUser?.full_name} (keyingi oʼrinlarda Ijrochi) oʼrtasida 2025-yil _________ kuni imzolangan №__-sonli &ldquo;Haq evaziga xizmat koʼrsatish shartnomasi&rdquo;ga asosan Ijrochi tomonidan 2025-yil __-__ ${formatUzbekDate(new Date(), true)} kunlari quyidagi ishlar amalga oshirildi va Buyurtmachi tomonidan qabul qilindi:</p> <p style="font-size: 14px;">Amalga oshirilgan ishlar hajmi:</p> <p style="font-size: 14px;">1.&nbsp;</p>`
     store.model.__signers = await adjustUserObjectToArray([{ id: authStore.currentUser?.id }])
   }
 }

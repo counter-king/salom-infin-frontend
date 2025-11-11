@@ -3,13 +3,12 @@
 import { computed } from "vue"
 // Enums
 import { SIGNER_TYPES } from "@/enums"
-import { formatUserFullName, formatUzbekDate, hostName } from "@/utils"
+import { formatUserFullName, formatUzbekDate } from "@/utils"
 import QrcodeVue from "qrcode.vue"
 // Store
 import { useSDStore } from "@/modules/Documents/modules/SendDocuments/stores/index.store"
 import { useAuthStore } from "@/modules/Auth/stores"
 import { BasePerformer } from "@/components/Templates/components";
-import { formatDate } from "../../utils/formatDate";
 
 // Props
 const props = defineProps({
@@ -81,7 +80,7 @@ const author = computed(() => {
         <div class="flex flex-col items-end">
           <div class="text-sm font-bold text-end">“TАSDIQLАYMАN”</div>
           <div class="text-sm font-bold text-end">
-            {{ hostName() === 'vercel' ? '"Hamkorbank" ATB' : '“O‘zsanoatqurilishbank” ATB' }}
+            Markaziy Bank
           </div>
           <div class="text-sm font-bold text-end">{{ curator?.position?.name }}</div>
           <div class="text-sm font-bold text-end">

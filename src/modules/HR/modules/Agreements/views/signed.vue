@@ -119,7 +119,7 @@ onMounted(async () => {
 
             <base-col col-class="w-1/4">
               <qr-code-vue
-                :value="'SQB Bank'"
+                :value="'Central Bank'"
                 :size="50"
                 level="L"
                 render-as="svg"

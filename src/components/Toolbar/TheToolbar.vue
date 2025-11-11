@@ -54,18 +54,7 @@ onMounted(() => {
     >
       <template #start>
         <router-link to="/" class="flex items-center mr-4">
-          <template v-if="hostName() === 'localhost'">
-            <img src="/images/logo.svg" alt="Logo" />
-            <img src="/images/logo-text.svg" alt="Logo text" class="ml-2" />
-          </template>
-
-          <template v-else-if="hostName() === 'vercel'">
-            <img src="/images/hamkorbank_logo.svg" alt="Logo" />
-          </template>
-
-          <template v-else>
-            <img src="/images/sqb-logo.svg" alt="Logo" />
-          </template>
+          <img src="/images/cb-logo-white.svg" class="max-w-[200px]" alt="Logo"/>
         </router-link>
 
         <template v-if="openModal">

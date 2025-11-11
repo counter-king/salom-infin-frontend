@@ -20,8 +20,7 @@ const props = defineProps({
 <template>
   <div class="resolution-deputy-chairman-view">
     <h1 class="text-center text-sm font-semibold uppercase text-primary-dark">
-      <span v-if="hostName() === 'localhost'" class="block">"HAMKORBANK" ATB</span>
-      <span v-else class="block">"O'ZBEKISTON SANOAT-QURILISH BANKI" ATB</span>
+      <span class="block">"O'ZBEKISTON RESPUBLIKASI MARKAZIY BANKI"</span>
       <span class="block">{{ props.resolution?.reviewer?.position?.name }}</span>
     </h1>
 

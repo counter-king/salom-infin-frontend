@@ -494,7 +494,7 @@ export const adjustObjectToArray = async (api = '', items = [], multiple = true,
 }
 
 export const hostName = () => {
-  return  window.location.host === 'new-side-project.vercel.app' ? 'vercel' : window.location.host.startsWith('localhost') ? 'localhost' : 'sqb'
+  return  window.location.host === 'new-side-project.vercel.app' ? 'vercel' : window.location.host.startsWith('localhost') ? 'localhost' : 'cb'
 }
 
 export const isToday = (date) => {
