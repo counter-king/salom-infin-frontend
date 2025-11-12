@@ -29,3 +29,4 @@ coverage
 
 # jsconfig.json
 jsconfig.json
+.env
