@@ -19,6 +19,7 @@ export const socket = ()=> {
       data: ()=> {},
     }
   }
+
   if(!socketInstance ) {
     socketInstance = useWebSocket(`ws://${baseURL}/ws/?token=${getStorageItem(ACCESS)}`, {
       autoReconnect: {
