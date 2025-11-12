@@ -20,7 +20,7 @@ export const socket = ()=> {
     }
   }
   if(!socketInstance ) {
-    socketInstance = useWebSocket(`wss://${baseURL}/ws/?token=${getStorageItem(ACCESS)}`, {
+    socketInstance = useWebSocket(`ws://${baseURL}/ws/?token=${getStorageItem(ACCESS)}`, {
       autoReconnect: {
         retries: 3,
         delay:500,
@@ -32,7 +32,7 @@ export const socket = ()=> {
 
       // WebSocket holatini tekshirish
       let errorMessage = 'socket error: WebSocket connection error'
-      
+
       if (ws.readyState === 3) {
         errorMessage = 'socket error: Server bilan connection uzildi'
       } else if (ws.readyState === 2) {
