@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { computed, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 // Store
 import { useCommonStore } from '@/stores/common'
@@ -14,7 +14,8 @@ import RegisterDocumentDialog from '../components/RegisterDocumentDialog.vue'
 // Constants
 import { R_INCOMING_COLUMNS } from '../constants'
 // Utils
-import { formatDate } from '@/utils/formatDate'
+import { formatDate, formatDateMonth } from '@/utils/formatDate'
+import { firstLetterCapitalize } from "@/utils"
 // Enums
 import { JOURNAL } from '@/enums'
 // Composable
@@ -27,6 +28,11 @@ const filterKeys = ['approvers', 'author', 'curator', 'signers', 'departments', 
 const keysToIncludeOnClearFilter = ['type', 'journal_id']
 // Computed
 const journal = computed(() => commonStore.getJournalByCode(route.params.code))
+// Reactive
+const date = ref(firstLetterCapitalize(formatDateMonth(new Date(), 'ru', new Date().getMonth())))
+const year = ref()
+const month = ref(new Date().getMonth() + 1)
+const monthName = ref()
 // Watch
 watch(
   () => route.params.code,
@@ -57,6 +63,19 @@ const link = (data) => {
     }
   }
 }
+const dateSelect = async () => {
+  const currentDate = new Date(date.value)
+  const monthIndex = currentDate.getMonth()
+  const yearValue = currentDate.getFullYear().toString()
+
+  monthName.value = firstLetterCapitalize(
+    formatDateMonth(currentDate, 'ru', monthIndex)
+  )
+
+  date.value = monthIndex.toString()
+  year.value = yearValue
+  month.value = monthIndex + 1
+}
 </script>
 
 <template>
@@ -70,6 +89,19 @@ const link = (data) => {
       :keys-to-include-on-clear-filter="keysToIncludeOnClearFilter"
       @emit:reset-headers="docFlowStore.resetHeaders"
     >
+<!--      <template #filter-before>-->
+<!--        <base-calendar-button-->
+<!--          v-model="date"-->
+<!--          view="month"-->
+<!--          date-format="mm"-->
+<!--          primary-->
+<!--          root-class="!bg-primary-500 !text-white !border !border-greyscale-70 !shadow-none"-->
+<!--          :parsed-text="monthName"-->
+<!--          :clearable="false"-->
+<!--          @emit:date-select="dateSelect"-->
+<!--        />-->
+<!--      </template>-->
+
       <template #end>
         <base-button
           label="create"
@@ -80,6 +112,10 @@ const link = (data) => {
         />
       </template>
     </action-toolbar>
+
+<!--    <base-day-picker-->
+<!--      class="mb-1"-->
+<!--    />-->
 
     <base-data-table
       :action-list="docFlowStore.actionGetList"

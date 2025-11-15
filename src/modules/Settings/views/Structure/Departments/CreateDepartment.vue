@@ -101,7 +101,7 @@ const searchCompanies = ({ search, page }) => {
                <div class="flex items-center h-11 px-3 text-base">{{ option.name }}</div>
             </template>
          </base-auto-complete>
-         <p class="text-sm text-greyscale-500 font-medium mb-1 mt-6">{{ t('name-u') }}<span class="text-red-500 ml-1">*</span></p>
+         <p class="text-sm text-greyscale-500 font-medium mb-1 mt-6">{{ t('name-uz') }}<span class="text-red-500 ml-1">*</span></p>
          <InputText
             :modelValue="department.name_uz"
             :pt="{root: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']}}"

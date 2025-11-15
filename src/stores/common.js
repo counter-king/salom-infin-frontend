@@ -69,7 +69,7 @@ export const useCommonStore = defineStore("common", {
       const permissionStore = usePermissionStore()
 
       await userPermissionStore.getUserPermission()
-      // await correspondent.actionGetList({})
+      await correspondent.actionGetList({type: CORRESPONDENT.ALL})
 			await users.actionUsersList()
       await users.actionEmployeeGroupList()
       await allUrlStore.getAllUrls()
@@ -85,7 +85,7 @@ export const useCommonStore = defineStore("common", {
       this.actionPrioryList()
       this.actionRegionsList()
       this.actionShortDescriptionList()
-      // this.actionStatusList()
+      this.actionStatusList()
       this.actionComposeStatusList()
       this.actionDocumentTitlesList()
       this.actionCompaniesList()

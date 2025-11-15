@@ -26,6 +26,14 @@ const props = defineProps({
   },
   rootClass: {
     type: String
+  },
+  clearable: {
+    type: Boolean,
+    default: true
+  },
+  primary: {
+    type: Boolean,
+    default: false
   }
 })
 const emit = defineEmits(['update:modelValue', 'emit:date-select', 'emit:clear'])
@@ -72,14 +80,19 @@ const clear = (event) => {
 
     <span>{{ parsedText ?? modelValue }}</span>
 
-    <template v-if="!modelValue">
-      <base-iconify :icon="AltArrowDownLinearIcon" class="text-greyscale-500 ml-1" />
+    <template v-if="!modelValue || !clearable">
+      <base-iconify
+        :icon="AltArrowDownLinearIcon"
+        class="ml-1"
+        :class="primary ? 'text-white' : 'text-greyscale-500'"
+      />
     </template>
 
     <template v-else>
       <base-iconify
         :icon="CloseCircleBoldIcon"
-        class="text-greyscale-500 ml-1"
+        class="ml-1"
+        :class="primary ? 'text-white' : 'text-greyscale-500'"
         @click="clear"
       />
     </template>
@@ -95,6 +108,7 @@ const clear = (event) => {
       inline
       :view="props.view"
       :date-format="props.dateFormat"
+      :clearable="clearable"
       @emit:day-select="dateSelect"
     />
   </base-overlay-panel>

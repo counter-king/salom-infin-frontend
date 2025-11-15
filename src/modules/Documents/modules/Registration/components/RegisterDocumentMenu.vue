@@ -36,6 +36,7 @@ const documentType = (journalCode) => {
       option-value="code"
       root-class="bg-greyscale-90 !border-greyscale-200"
       class="!mb-0"
+      :show-clear="false"
       @emit:change="documentType"
     >
       <template #value>

@@ -198,6 +198,7 @@ export { default as SettingsMinimalisticBoldIcon } from  '~icons/solar/settings-
 export { default as MinusCircleBoldIcon } from  '~icons/solar/minus-circle-bold'
 export { default as FaceScanSquareBoldIcon } from  '~icons/solar/face-scan-square-bold'
 export { default as StopWatchBoldIcon } from  '~icons/solar/stopwatch-bold'
+export { default as AltArrowDownBoldIcon } from  '~icons/solar/alt-arrow-down-bold'
 
 export { default as WidgetAddBoldIcon } from  '~icons/solar/widget-add-bold'
 // Solar (Bold Duotone)
@@ -249,4 +250,3 @@ export { default as CalendarScheduleFillIcon } from '~icons/ri/calendar-schedule
 export { default as MailUnreadFillIcon } from '~icons/ri/mail-unread-fill'
 export { default as CloudFillIcon } from '~icons/ri/cloud-fill'
 export { default as Telegram2FillIcon } from '~icons/ri/telegram-2-fill'
-    

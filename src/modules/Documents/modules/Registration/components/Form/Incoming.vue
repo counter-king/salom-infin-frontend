@@ -50,9 +50,9 @@ const rules = {
   priority: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
-  title: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
+  // title: {
+  //   required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  // },
   __reviewers: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
@@ -122,21 +122,21 @@ defineExpose({ $v })
             />
           </base-col>
 
-          <base-col col-class="w-1/2">
-            <base-dropdown
-              v-model="$v.title.$model"
-              v-model:options="commonStore.documentTitleList"
-              :error="$v.title"
-              api-url="document-titles"
-              option-label="name"
-              option-value="id"
-              label="title-document"
-              placeholder="enter-document"
-              required
-              searchable
-            >
-            </base-dropdown>
-          </base-col>
+<!--          <base-col col-class="w-1/2">-->
+<!--            <base-dropdown-->
+<!--              v-model="$v.title.$model"-->
+<!--              v-model:options="commonStore.documentTitleList"-->
+<!--              :error="$v.title"-->
+<!--              api-url="document-titles"-->
+<!--              option-label="name"-->
+<!--              option-value="id"-->
+<!--              label="title-document"-->
+<!--              placeholder="enter-document"-->
+<!--              required-->
+<!--              searchable-->
+<!--            >-->
+<!--            </base-dropdown>-->
+<!--          </base-col>-->
 
           <base-col col-class="w-1/2">
             <base-dropdown

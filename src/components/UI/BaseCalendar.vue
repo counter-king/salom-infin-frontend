@@ -90,6 +90,10 @@ const props = defineProps({
   showIcon: {
     type: Boolean,
     default: true
+  },
+  clearable: {
+    type: Boolean,
+    default: true
   }
 })
 const emit = defineEmits(['update:modelValue', 'emit:month-change', 'emit:day-select', 'emit:clear'])

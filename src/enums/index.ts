@@ -132,9 +132,9 @@ export const SIZE_TYPES = {
   XS: "xs"
 }
 export const PRIORITY_TYPES = {
-  HIGH: 4,    // Высокий
-  MIDDLE: 5,  // Средний
-  LOW: 6      // Низкий
+  HIGH: 3,    // Высокий
+  MIDDLE: 2,  // Средний
+  LOW: 1      // Низкий
 }
 export const PRIORITY_COLORS = {
   HIGH: COLOR_TYPES.ERROR,        // Высокий
@@ -342,42 +342,42 @@ export const MONTH_NAMES = [
   },
   {
     uz: 'May',
-    ru: 'Май', 
+    ru: 'Май',
     id: 5,
   },
   {
     uz: 'Iyun',
-    ru: 'Июнь', 
+    ru: 'Июнь',
     id: 6,
   },
   {
     uz: 'Iyul',
-    ru: 'Июль', 
+    ru: 'Июль',
     id: 7,
   },
   {
     uz: 'Avgust',
-    ru: 'Август', 
+    ru: 'Август',
     id: 8,
   },
   {
     uz: 'Sentyabr',
-    ru: 'Сентябрь', 
+    ru: 'Сентябрь',
     id: 9,
   },
   {
     uz: 'Oktober',
-    ru: 'Октябрь', 
+    ru: 'Октябрь',
     id: 10,
   },
   {
     uz: 'Noyabr',
-    ru: 'Ноябрь', 
+    ru: 'Ноябрь',
     id: 11,
   },
   {
     uz: 'Dekabr',
-    ru: 'Декабрь', 
+    ru: 'Декабрь',
     id: 12,
   },
 ]
