@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { ref, useModel, shallowRef, watch, defineAsyncComponent, unref } from 'vue'
+import { ref, useModel, shallowRef, watch, defineAsyncComponent, unref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 // Stores
@@ -11,9 +11,11 @@ import BaseSpinner from '@/components/UI/BaseSpinner.vue'
 import RegisterDocumentMenu from './RegisterDocumentMenu.vue'
 import { CloudUploadIcon } from '@/components/Icons'
 // Utils
-import { clearModel } from '@/utils'
+import { clearModel, formatUzbekDate } from '@/utils'
 // Enums
 import { JOURNAL_CODES } from '@/enums'
+import { fetchCorrespondentById } from "@/services/correspondent.service";
+import { formatDateReverse } from "@/utils/formatDate";
 // Composable
 const route = useRoute()
 const router = useRouter()
@@ -33,6 +35,7 @@ const documentTypeRef = ref(null)
 const documentTypeComponent = shallowRef(null)
 const formModel = ref(null)
 const buttonLoading = ref(false)
+const correspondentName = ref(null)
 // Methods
 const createDocument = async () => {
   let model = null
@@ -155,6 +158,36 @@ watch(() => docFlowStore.documentMenuType.name, (value) => {
     delay: 200
   })
 }, { immediate: true })
+
+watch(() => docFlowStore.createDocumentModel?.correspondent,  async (value) => {
+  if (value) {
+    const {data} = await fetchCorrespondentById({id: value})
+    correspondentName.value = data?.name
+  }
+})
+
+// Computed
+const computedShortDescription = computed(() => {
+  const name = correspondentName.value ? `${correspondentName.value}ning ` : ''
+  const date = docFlowStore.createDocumentModel.outgoing_date
+    ? `${formatDateReverse(docFlowStore.createDocumentModel.outgoing_date)} dagi `
+    : ''
+  const number = docFlowStore.createDocumentModel.outgoing_number
+    ? `${docFlowStore.createDocumentModel.outgoing_number}-sonli xati`
+    : ''
+  return `${name}${date}${number}`.trim()
+})
+
+// Watch the computed
+watch(
+  computedShortDescription,
+  (value, oldValue) => {
+    if (value !== oldValue) {
+      docFlowStore.createDocumentModel.description = value
+    }
+  },
+  { immediate: true }
+)
 </script>
 
 <template>

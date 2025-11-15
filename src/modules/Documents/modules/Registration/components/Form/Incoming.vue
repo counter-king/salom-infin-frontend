@@ -96,6 +96,56 @@ defineExpose({ $v })
   <div class="incoming-form-view space-y-4">
     <div class="shadow-block border-[0.095rem] border-greyscale-200 rounded-2xl overflow-hidden">
       <div class="bg-greyscale-50 border-b px-5 py-3">
+        <h1 class="text-base font-semibold text-greyscale-900">{{ t('from-whom') }}</h1>
+      </div>
+
+      <div class="px-5 py-3">
+        <base-row class="gap-y-1">
+          <base-col col-class="w-full">
+            <base-dropdown
+              v-model="$v.correspondent.$model"
+              v-model:options="correspondentStore.allList"
+              :error="$v.correspondent"
+              api-url="correspondents"
+              option-value="id"
+              label="correspondent"
+              placeholder="choose-correspondent"
+              menu-placeholder="enter-correspondent"
+              searchable
+              required
+            />
+          </base-col>
+
+          <base-col col-class="w-1/2">
+            <base-calendar
+              v-model="$v.outgoing_date.$model"
+              :error="$v.outgoing_date"
+              :max-date="new Date()"
+              required
+              label="out-date"
+              placeholder="enter-out-date"
+              @update:modelValue="(value) => {
+                $v.register_date.$model = formatDateReverse(value)
+                $v.outgoing_date.$model = formatDateReverse(value)
+              }"
+            />
+          </base-col>
+
+          <base-col col-class="w-1/2">
+            <base-input
+              v-model="$v.outgoing_number.$model"
+              :error="$v.outgoing_number"
+              required
+              label="out-number"
+              placeholder="enter-out-number"
+            />
+          </base-col>
+        </base-row>
+      </div>
+    </div>
+
+    <div class="shadow-block border-[0.095rem] border-greyscale-200 rounded-2xl overflow-hidden">
+      <div class="bg-greyscale-50 border-b px-5 py-3">
         <h1 class="text-base font-semibold text-greyscale-900">{{ t('commons') }}</h1>
       </div>
 
@@ -187,56 +237,6 @@ defineExpose({ $v })
               :error="$v.description"
               required
               label="content"
-            />
-          </base-col>
-        </base-row>
-      </div>
-    </div>
-
-    <div class="shadow-block border-[0.095rem] border-greyscale-200 rounded-2xl overflow-hidden">
-      <div class="bg-greyscale-50 border-b px-5 py-3">
-        <h1 class="text-base font-semibold text-greyscale-900">{{ t('from-whom') }}</h1>
-      </div>
-
-      <div class="px-5 py-3">
-        <base-row class="gap-y-1">
-          <base-col col-class="w-full">
-            <base-dropdown
-              v-model="$v.correspondent.$model"
-              v-model:options="correspondentStore.allList"
-              :error="$v.correspondent"
-              api-url="correspondents"
-              option-value="id"
-              label="correspondent"
-              placeholder="choose-correspondent"
-              menu-placeholder="enter-correspondent"
-              searchable
-              required
-            />
-          </base-col>
-
-          <base-col col-class="w-1/2">
-            <base-calendar
-              v-model="$v.outgoing_date.$model"
-              :error="$v.outgoing_date"
-              :max-date="new Date()"
-              required
-              label="out-date"
-              placeholder="enter-out-date"
-              @update:modelValue="(value) => {
-                $v.register_date.$model = formatDateReverse(value)
-                $v.outgoing_date.$model = formatDateReverse(value)
-              }"
-            />
-          </base-col>
-
-          <base-col col-class="w-1/2">
-            <base-input
-              v-model="$v.outgoing_number.$model"
-              :error="$v.outgoing_number"
-              required
-              label="out-number"
-              placeholder="enter-out-number"
             />
           </base-col>
         </base-row>

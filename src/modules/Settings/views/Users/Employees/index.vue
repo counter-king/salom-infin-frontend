@@ -248,7 +248,7 @@ onMounted(() => {
             :setEmployees="setEmployees"
             />
             <template v-if="field === 'synchronization'">
-              <div 
+              <div
                 @click="onSyncEmployee(data.id)"
                 class="flex items-center justify-center w-10 h-10 bg-success-300 hover:bg-success-500 rounded-full text-white"
                 :class="{ '!pointer-events-none': syncEmployeeLoading }"

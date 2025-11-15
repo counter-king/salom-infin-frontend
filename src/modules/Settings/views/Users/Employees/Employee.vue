@@ -5,7 +5,7 @@ import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import ProgressSpinner from 'primevue/progressspinner';
 import Skeleton from 'primevue/skeleton';
-import { Pen2Icon } from '@/components/Icons'
+import { Pen2Icon, SettingsIcon } from '@/components/Icons'
 import Department from './Department.vue';
 import axiosConfig from "@/services/axios.config";
 import { dialogConfig, menuConfig } from './config';
@@ -62,12 +62,11 @@ const employeeEdit = () => {
    const positionId = position.value?.id;
    const statusId = status.value?.id;
    const top_level_department = topLevelDepartment.value?.id;
-   console.log(editEmployee.value, last_name)
-   if(first_name && last_name && String(pinfl || '')?.length === 14 && phone?.length === 12 && companyId && positionId && statusId && top_level_department) {
+   if(first_name && last_name && phone?.length === 12 && companyId && positionId && statusId && top_level_department) {
       editLoading.value = true;
       const data = { phone, first_name, last_name, father_name, pinfl, company: companyId, top_level_department, department, position: positionId, status: statusId, department_ids };
       axiosConfig
-         .put(`users/${employeeId}/`, data)
+         .patch(`users/${employeeId}/`, data)
          .then(response => {
             if(response?.status === 200) {
                dispatchNotify(null, t('updated-employee'), 'success');
@@ -83,9 +82,11 @@ const employeeEdit = () => {
       dispatchNotify(null, t('enter-first-name'), 'error');
    } else if(!last_name) {
       dispatchNotify(null, t('enter-last-name'), 'error');
-   } else if(String(pinfl || '')?.length !== 14) {
-      dispatchNotify(null, t('enter-pinfl'), 'error');
-   } else if(phone?.length !== 12) {
+   }
+   // else if(String(pinfl || '')?.length !== 14) {
+   //    dispatchNotify(null, t('enter-pinfl'), 'error');
+   // }
+   else if(phone?.length !== 12) {
       dispatchNotify(null, t('enter-phone-number'), 'error');
    } else if(!companyId) {
       dispatchNotify(null, t('enter-branch'), 'error');
@@ -233,17 +234,17 @@ const toggle = event => {
    menu.value.toggle(event);
 };
 const openEditModal = () => {
-   const data = props.data;
-   const newDepartments = parseArray(data?.department_ids, data?.top_level_department?.children);
-   const phone = Number(String(data.phone || '').slice(2));
-   const pinfl = Number(data.pinfl);
-   company.value = data?.company || '';
-   departments.value = newDepartments;
-   editEmployee.value = { ...data, phone, pinfl };
-   editVisible.value = true;
-   position.value = data?.position || '';
-   status.value = data?.status || '';
-   topLevelDepartment.value = data?.top_level_department || '';
+  const data = props.data;
+  const newDepartments = parseArray(data?.department_ids, data?.top_level_department?.children);
+  const phone = Number(String(data.phone || '').slice(2)) || 8
+  const pinfl = Number(data?.pinfl);
+  company.value = data?.company || '';
+  departments.value = newDepartments;
+  editEmployee.value = {...data, phone, pinfl};
+  position.value = data?.position || '';
+  status.value = data?.status || '';
+  topLevelDepartment.value = data?.top_level_department || '';
+  editVisible.value = true;
 };
 const parseArray = (list1, list2) => {
    const rest = departments => {
@@ -302,11 +303,28 @@ onMounted(() => {
       </template>
    </template>
     <template v-else-if="field === 'action'">
+      <base-button
+        icon
+        only-icon
+        :icon-left="Pen2Icon"
+        severity="secondary"
+        text
+        class="bg-greyscale-50 mr-2"
+        v-tooltip.top="{
+            autoHide: false,
+            escape: true,
+            value: `<h4 class='text-xs text-white -my-1'>${ t('update') }</h4>`
+          }"
+        @click="() => openEditModal(data)"
+      >
+
+      </base-button>
+
       <router-link :to="{ name: 'EmployeesID', params: { id: data.id } }">
         <base-button
           icon
           only-icon
-          :icon-left="Pen2Icon"
+          :icon-left="SettingsIcon"
           severity="secondary"
           text
           class="bg-greyscale-50"
@@ -387,18 +405,18 @@ onMounted(() => {
                editEmployee = { ...editEmployee, father_name: replaceSpecChars(value) };
             }"
             />
-         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('pinfl') }}<span class="text-red-500 ml-1">*</span></p>
-         <InputNumber
-            :maxFractionDigits="0"
-            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"
-            :useGrouping="false"
-            :placeholder="t('enter-pinfl')"
-            v-model="editEmployee.pinfl"
-            @input="({ value }) => {
-               const pinfl = +value.toString().slice(0, 14)
-               editEmployee = { ...editEmployee, pinfl }
-            }"
-            />
+<!--         <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('pinfl') }}<span class="text-red-500 ml-1">*</span></p>-->
+<!--         <InputNumber-->
+<!--            :maxFractionDigits="0"-->
+<!--            :pt="{ root: {class:['h-[44px] w-[500px] rounded-[12px] bg-greyscale-50 mb-6 text-sm']}, input: {class:['h-[44px] w-[500px] border-transparent focus:border-primary-500 rounded-[12px] bg-greyscale-50 mb-6 text-sm']} }"-->
+<!--            :useGrouping="false"-->
+<!--            :placeholder="t('enter-pinfl')"-->
+<!--            v-model="editEmployee.pinfl"-->
+<!--            @input="({ value }) => {-->
+<!--               const pinfl = +value.toString().slice(0, 14)-->
+<!--               editEmployee = { ...editEmployee, pinfl }-->
+<!--            }"-->
+<!--            />-->
          <p class="text-sm text-greyscale-500 font-medium mb-1">{{ t('phone-number') }}<span class="text-red-500 ml-1">*</span></p>
          <InputNumber
             :maxFractionDigits="0"
