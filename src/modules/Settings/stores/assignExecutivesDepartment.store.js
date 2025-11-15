@@ -26,6 +26,7 @@ export const useAssignExecutivesDepartmentStore = defineStore("assignExecutivesD
       {
         header: "department",
         field: "department",
+        width: "40%",
         active: true
       },
       {
@@ -34,7 +35,7 @@ export const useAssignExecutivesDepartmentStore = defineStore("assignExecutivesD
         active: true
       },
       {
-        header: "assistants",
+        header: "deputy",
         field: "assistants",
         active: true
       },
@@ -131,6 +132,7 @@ export const useAssignExecutivesDepartmentStore = defineStore("assignExecutivesD
         {
           header: "department",
           field: "department",
+          width: "40%",
           active: true
         },
         {
@@ -139,7 +141,7 @@ export const useAssignExecutivesDepartmentStore = defineStore("assignExecutivesD
           active: true
         },
         {
-          header: "assistants",
+          header: "deputy",
           field: "assistants",
           active: true
         },

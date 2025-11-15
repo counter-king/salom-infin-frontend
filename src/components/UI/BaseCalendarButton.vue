@@ -109,6 +109,7 @@ const clear = (event) => {
       :view="props.view"
       :date-format="props.dateFormat"
       :clearable="clearable"
+      :primary="primary"
       @emit:day-select="dateSelect"
     />
   </base-overlay-panel>

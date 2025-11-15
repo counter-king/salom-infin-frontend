@@ -94,6 +94,10 @@ const props = defineProps({
   clearable: {
     type: Boolean,
     default: true
+  },
+  primary: {
+    type: Boolean,
+    default: false
   }
 })
 const emit = defineEmits(['update:modelValue', 'emit:month-change', 'emit:day-select', 'emit:clear'])

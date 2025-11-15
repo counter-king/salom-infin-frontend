@@ -98,7 +98,7 @@ const resetFormModel = () => {
                   </template>
 
                   <template v-else>
-                    <div class="text-primary-500 text-sm font-medium">{{ t('assistant') }}</div>
+                    <div class="text-primary-500 text-sm font-medium">{{ t('deputy') }}</div>
                   </template>
 
                   <div class="w-[6px] h-[6px] bg-greyscale-300 rounded-full"></div>

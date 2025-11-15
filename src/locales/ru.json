@@ -1181,5 +1181,6 @@
   "table-date": "Дата табеля",
   "approved-leader": "Утвердивший руководитель",
   "approved-date": "Дата утверждения",
-  "table-status": "Статус табеля"
+  "table-status": "Статус табеля",
+  "deputy": "Заместитель"
 }
