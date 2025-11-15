@@ -21,7 +21,7 @@ export const socket = ()=> {
   }
 
   if(!socketInstance ) {
-    socketInstance = useWebSocket(`ws://${baseURL}/ws/?token=${getStorageItem(ACCESS)}`, {
+    socketInstance = useWebSocket(`wss://${baseURL}/ws/?token=${getStorageItem(ACCESS)}`, {
       autoReconnect: {
         retries: 3,
         delay:500,
