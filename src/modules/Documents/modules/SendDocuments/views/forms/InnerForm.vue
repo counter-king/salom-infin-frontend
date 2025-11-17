@@ -38,6 +38,7 @@ const countStore = useCountStore();
 
 const dialog = ref(false);
 const formRef = ref(null);
+const showNestedError = ref(false)
 const {t} = useI18n();
 const router = useRouter();
 const route = useRoute();
@@ -47,8 +48,12 @@ const $v = useVuelidate(SDStoreInner.rules, SDStoreInner.model);
 // Methods
 const preview = async () => {
   const valid = await $v.value.$validate();
+  showNestedError.value = true
 
-  if (!valid) return;
+  if (!valid) {
+    dispatchNotify(null, t('fill-required-fields'), COLOR_TYPES.WARNING)
+    return
+  }
 
   dialog.value = true;
   SDStoreInner.model.approvers = [];
@@ -130,6 +135,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   resetModel(SDStoreInner.model);
+  showNestedError.value = false
 })
 
 </script>
@@ -210,13 +216,18 @@ onUnmounted(() => {
             </base-col>
 
             <base-col col-class="w-full">
-              <editor-with-tabs
-                v-model="$v.content.$model"
-                :error="$v.content"
-                file-upload-container-classes="w-1/2 pr-2"
-                :files="SDStoreInner.model.__files"
-                @emit:file-upload="onFileUpload"
-              />
+              <div
+                class="border-[1.5px] rounded-2xl px-5 py-4"
+                :class="showNestedError && !SDStoreInner.model.content ? 'border-critic-500' : 'border-greyscale-200'"
+              >
+                <editor-with-tabs
+                  v-model="$v.content.$model"
+                  :error="$v.content"
+                  file-upload-container-classes="w-1/2 pr-2"
+                  :files="SDStoreInner.model.__files"
+                  @emit:file-upload="onFileUpload"
+                />
+              </div>
             </base-col>
           </base-row>
         </form-container>

@@ -1,6 +1,6 @@
 <script setup>
 // Core
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 // Store
@@ -15,8 +15,8 @@ import RegisterDocumentDialog from '../components/RegisterDocumentDialog.vue'
 // Constants
 import { R_INCOMING_COLUMNS } from '../constants'
 // Utils
-import { formatDate, formatDateMonth } from '@/utils/formatDate'
-import { firstLetterCapitalize } from "@/utils"
+import { formatDate, formatDateMonth, formatDateReverse } from '@/utils/formatDate'
+import { firstLetterCapitalize, isCurrentMonth, returnDaysList } from "@/utils"
 // Enums
 import { JOURNAL } from '@/enums'
 // Composable
@@ -36,27 +36,12 @@ const month = ref(new Date().getMonth() + 1)
 const monthName = ref()
 
 // Computed
-const computedDaysList = computed(() => {
-  const list = []
-  const year = route.query?.created_start_date ? new Date(route.query.created_start_date).getFullYear() : new Date().getFullYear()
-  const month = route.query?.created_start_date ? new Date(route.query.created_start_date).getMonth() + 1 : new Date().getMonth() + 1
-  const daysInMonth = year && month ? dayjs(`${year}-${month}-01`).daysInMonth() : 0
-
-  if (daysInMonth && year && month) {
-    for (let d = 1; d <= daysInMonth; d++) {
-      const date = dayjs()
-        .set('year', year)
-        .set('month', month - 1)
-        .set('date', d)
-
-      list.push({
-        date: date.format("YYYY-MM-DD"),
-        dayNumber: d,
-        dayName: date.format("dd")
-      })
-    }
+const apiParams = computed(() => {
+  return {
+    ...route.query,
+    created_start_date: route.query.created_start_date || formatDateReverse(new Date()),
+    created_end_date: route.query.created_end_date || formatDateReverse(new Date()),
   }
-  return list
 })
 
 // Watch
@@ -75,16 +60,6 @@ watch(
     }
   },
 )
-
-watch(() => computedDaysList.value, (value, oldValue) => {
-  docFlowStore.daysList = value.map((item, index) => ({
-    ...item,
-    active: index === 0
-  }))
-  console.log("111111")
-}, {
-  immediate: true,
-})
 
 // Methods
 const openModal = () => {
@@ -112,7 +87,28 @@ const dateSelect = async () => {
   date.value = monthIndex.toString()
   year.value = yearValue
   month.value = monthIndex + 1
+
+  const selectedDate = isCurrentMonth(currentDate) ? new Date() : currentDate
+
+  await router.replace({
+    query: {
+      ...route.query,
+      created_start_date: formatDateReverse(selectedDate),
+      created_end_date: formatDateReverse(selectedDate),
+    }
+  })
+
+  docFlowStore.daysList = returnDaysList(selectedDate)
+  await docFlowStore.actionGetList(route.query)
 }
+const init = () => {
+  docFlowStore.daysList = returnDaysList(route.query.created_start_date || new Date())
+}
+
+// Hooks
+onMounted(() => {
+  init()
+})
 </script>
 
 <template>
@@ -124,20 +120,22 @@ const dateSelect = async () => {
       :action-list="docFlowStore.actionGetList"
       :filter-keys="filterKeys"
       :keys-to-include-on-clear-filter="keysToIncludeOnClearFilter"
+      :action-buttons="['filter']"
       @emit:reset-headers="docFlowStore.resetHeaders"
     >
-<!--      <template #filter-before>-->
-<!--        <base-calendar-button-->
-<!--          v-model="date"-->
-<!--          view="month"-->
-<!--          date-format="mm"-->
-<!--          primary-->
-<!--          root-class="!bg-primary-500 !text-white !border !border-greyscale-70 !shadow-none"-->
-<!--          :parsed-text="monthName"-->
-<!--          :clearable="false"-->
-<!--          @emit:date-select="dateSelect"-->
-<!--        />-->
-<!--      </template>-->
+      <template #filter-before>
+        <base-calendar-button
+          v-model="date"
+          view="month"
+          date-format="mm"
+          primary
+          root-class="!bg-primary-500 !text-white !border !border-greyscale-70 !shadow-none"
+          :parsed-text="monthName"
+          :clearable="false"
+          :max-date="new Date()"
+          @emit:date-select="dateSelect"
+        />
+      </template>
 
       <template #end>
         <base-button
@@ -150,16 +148,18 @@ const dateSelect = async () => {
       </template>
     </action-toolbar>
 
-<!--    <base-day-picker-->
-<!--      :daysList="docFlowStore.daysList"-->
-<!--      class="mb-1"-->
-<!--    />-->
+    <base-day-picker
+      :daysList="docFlowStore.daysList"
+      :action-list="docFlowStore.actionGetList"
+      class="mb-1"
+    />
 
     <base-data-table
       :action-list="docFlowStore.actionGetList"
       :api-params="{
         journal_id: route.query.journal_id ?? JOURNAL.INCOMING,
-        page_size: 15
+        page_size: 15,
+        ...apiParams
       }"
       :headers="docFlowStore.headers"
       :value="docFlowStore.list"

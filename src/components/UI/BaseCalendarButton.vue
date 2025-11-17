@@ -34,6 +34,9 @@ const props = defineProps({
   primary: {
     type: Boolean,
     default: false
+  },
+  maxDate: {
+    type: Date,
   }
 })
 const emit = defineEmits(['update:modelValue', 'emit:date-select', 'emit:clear'])
@@ -114,6 +117,7 @@ const clear = (event) => {
       :date-format="props.dateFormat"
       :clearable="clearable"
       :primary="primary"
+      :max-date="maxDate"
       @emit:day-select="dateSelect"
     />
   </base-overlay-panel>

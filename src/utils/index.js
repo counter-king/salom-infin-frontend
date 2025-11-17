@@ -1,5 +1,6 @@
 // Core
 import dayjs from 'dayjs'
+import 'dayjs/locale/uz'
 import {diffWords} from "diff"
 // Services
 import {fetchTopSignersList, fetchUsersList} from "@/services/users.service"
@@ -959,4 +960,48 @@ export const formatMonthYear = (month, year) => {
     return `-`
   }
 }
+
+export const returnDaysList = (inputDate) => {
+  if (inputDate) {
+    const list = []
+
+    const input = dayjs(inputDate)
+    const year = input.year()
+    const month = input.month() + 1
+
+    const isSameYear = input.year() === dayjs().year()
+    const isSameMonth = input.month() === dayjs().month()
+
+    // If same month & year → only show days until today
+    let daysInMonth = isSameYear && isSameMonth
+      ? dayjs().date() // today's date
+      : input.daysInMonth() // full month normally
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const date = dayjs()
+        .set('year', year)
+        .set('month', month - 1)
+        .set('date', d)
+
+      list.push({
+        date: date.format("YYYY-MM-DD"),
+        dayNumber: d,
+        dayName: date.format("dd"),
+        monthName: date.locale('uz').format("MMM").toUpperCase(),
+        active: d === input.date()
+      })
+    }
+
+    return list
+  }
+}
+
+export const isCurrentMonth = (inputDate) => {
+  const input = dayjs(inputDate)
+  const isSameYear = input.year() === dayjs().year()
+  const isSameMonth = input.month() === dayjs().month()
+
+  return isSameYear && isSameMonth
+}
+
 

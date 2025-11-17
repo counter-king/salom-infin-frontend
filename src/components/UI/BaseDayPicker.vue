@@ -9,6 +9,10 @@ const props = defineProps({
   daysList: {
     type: Array,
     default: () => [],
+  },
+  actionList: {
+    type: Function,
+    default: () => void 0
   }
 })
 
@@ -17,8 +21,19 @@ const route = useRoute()
 const router = useRouter()
 
 // Methods
-const init = async () => {
-
+const onDayChange = async (item) => {
+  const createdDay = new Date(route.query.created_start_date || new Date()).getDate()
+  if (createdDay !== item.dayNumber) {
+    await router.replace({
+      query: {
+        ...route.query,
+        created_start_date: item.date,
+        created_end_date: item.date,
+      }
+    })
+    props.daysList.forEach(day => day.active = day.date === item.date)
+    await props.actionList(route.query)
+  }
 }
 </script>
 
@@ -27,6 +42,7 @@ const init = async () => {
     <div
       v-for="item in daysList"
       class="flex flex-col items-center w-10 cursor-pointer"
+      @click="onDayChange(item)"
     >
       <base-iconify v-if="item.active" :icon="AltArrowDownBoldIcon" class="!w-3 !h-3 text-critic-500" />
 
@@ -38,7 +54,7 @@ const init = async () => {
           class="flex items-center justify-center w-full h-[14px]"
           :class="item.active ? 'bg-info-30' : 'bg-transparent'"
         >
-          <span v-if="item.active" class="text-info-500 text-[9px] font-semibold">SEP</span>
+          <span v-if="item.active" class="text-info-500 text-[9px] font-semibold">{{ item.monthName }}</span>
         </div>
 
         <div
