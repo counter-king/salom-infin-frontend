@@ -76,7 +76,11 @@ const clear = (event) => {
     :class="props.rootClass"
     @click="toggle"
   >
-    <base-iconify :icon="CalendarIcon" class="text-greyscale-500 mr-2" />
+    <base-iconify
+      :icon="CalendarIcon"
+      class="mr-2"
+      :class="primary ? 'text-white' : 'text-greyscale-500'"
+    />
 
     <span>{{ parsedText ?? modelValue }}</span>
 

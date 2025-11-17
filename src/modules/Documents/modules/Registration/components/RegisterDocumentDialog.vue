@@ -15,7 +15,7 @@ import { clearModel, formatUzbekDate } from '@/utils'
 // Enums
 import { JOURNAL_CODES } from '@/enums'
 import { fetchCorrespondentById } from "@/services/correspondent.service";
-import { formatDateReverse } from "@/utils/formatDate";
+import { formatDate } from "@/utils/formatDate"
 // Composable
 const route = useRoute()
 const router = useRouter()
@@ -170,7 +170,7 @@ watch(() => docFlowStore.createDocumentModel?.correspondent,  async (value) => {
 const computedShortDescription = computed(() => {
   const name = correspondentName.value ? `${correspondentName.value}ning ` : ''
   const date = docFlowStore.createDocumentModel.outgoing_date
-    ? `${formatDateReverse(docFlowStore.createDocumentModel.outgoing_date)} dagi `
+    ? `${formatDate(docFlowStore.createDocumentModel.outgoing_date)} dagi `
     : ''
   const number = docFlowStore.createDocumentModel.outgoing_number
     ? `${docFlowStore.createDocumentModel.outgoing_number}-sonli xati`

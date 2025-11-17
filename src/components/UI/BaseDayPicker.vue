@@ -1,39 +1,31 @@
 <script setup>
-import BaseIconify from "@/components/UI/BaseIconify.vue"
+// Core
+import { useRoute, useRouter } from "vue-router"
+// Components
 import { AltArrowDownBoldIcon } from "@/components/Icons"
 
-const date = [
-  {
-    day: 1,
-    active: false,
-  },
-  {
-    day: 2,
-    active: false,
-  },
-  {
-    day: 3,
-    active: false,
-  },
-  {
-    day: 4,
-    active: true,
-  },
-  {
-    day: 5,
-    active: false,
-  },
-  {
-    day: 6,
-    active: false,
+// Props
+const props = defineProps({
+  daysList: {
+    type: Array,
+    default: () => [],
   }
-]
+})
+
+// Composable
+const route = useRoute()
+const router = useRouter()
+
+// Methods
+const init = async () => {
+
+}
 </script>
 
 <template>
   <div class="flex items-end px-2 pb-2 pt-0 bg-white shadow-button rounded-xl select-none">
     <div
-      v-for="item in date"
+      v-for="item in daysList"
       class="flex flex-col items-center w-10 cursor-pointer"
     >
       <base-iconify v-if="item.active" :icon="AltArrowDownBoldIcon" class="!w-3 !h-3 text-critic-500" />
@@ -56,7 +48,7 @@ const date = [
           <div
             :class="item.active ? '' : '-mt-1'"
           >
-            {{ item.day }}
+            {{ item.dayNumber }}
           </div>
         </div>
       </div>

@@ -47,9 +47,9 @@ const rules = {
   delivery_type: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
-  priority: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
+  // priority: {
+  //   required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  // },
   // title: {
   //   required: helpers.withMessage(`Поле не должен быть пустым`, required)
   // },
@@ -146,7 +146,7 @@ defineExpose({ $v })
 
     <div class="shadow-block border-[0.095rem] border-greyscale-200 rounded-2xl overflow-hidden">
       <div class="bg-greyscale-50 border-b px-5 py-3">
-        <h1 class="text-base font-semibold text-greyscale-900">{{ t('commons') }}</h1>
+        <h1 class="text-base font-semibold text-greyscale-900">{{ t('register-props') }}</h1>
       </div>
 
       <div class="px-5 py-3">
@@ -290,12 +290,10 @@ defineExpose({ $v })
 
           <base-col col-class="w-1/2">
             <base-dropdown
-              v-model="$v.priority.$model"
-              :error="$v.priority"
+              v-model="formModel.priority"
               :options="commonStore.prioryList"
               option-value="id"
               label="priority-document"
-              required
             >
               <template #option="{ option }">
                 <priority-chip :id="option?.id" />

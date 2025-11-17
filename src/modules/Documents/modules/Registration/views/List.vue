@@ -2,6 +2,7 @@
 // Core
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import dayjs from 'dayjs'
 // Store
 import { useCommonStore } from '@/stores/common'
 import { useDocFlowStore } from '../stores/docflow.store'
@@ -33,22 +34,58 @@ const date = ref(firstLetterCapitalize(formatDateMonth(new Date(), 'ru', new Dat
 const year = ref()
 const month = ref(new Date().getMonth() + 1)
 const monthName = ref()
+
+// Computed
+const computedDaysList = computed(() => {
+  const list = []
+  const year = route.query?.created_start_date ? new Date(route.query.created_start_date).getFullYear() : new Date().getFullYear()
+  const month = route.query?.created_start_date ? new Date(route.query.created_start_date).getMonth() + 1 : new Date().getMonth() + 1
+  const daysInMonth = year && month ? dayjs(`${year}-${month}-01`).daysInMonth() : 0
+
+  if (daysInMonth && year && month) {
+    for (let d = 1; d <= daysInMonth; d++) {
+      const date = dayjs()
+        .set('year', year)
+        .set('month', month - 1)
+        .set('date', d)
+
+      list.push({
+        date: date.format("YYYY-MM-DD"),
+        dayNumber: d,
+        dayName: date.format("dd")
+      })
+    }
+  }
+  return list
+})
+
 // Watch
 watch(
   () => route.params.code,
   async (_route) => {
-		if(route.params.code) {
-			await router.replace({
-				query: {
-					...route.query,
-					journal_id: journal.value.id,
+    if (route.params.code) {
+      await router.replace({
+        query: {
+          ...route.query,
+          journal_id: journal.value.id,
           page_size: 15
-				}
-			})
-			_route && await docFlowStore.actionGetList(route.query)
-		}
+        }
+      })
+      _route && await docFlowStore.actionGetList(route.query)
+    }
   },
 )
+
+watch(() => computedDaysList.value, (value, oldValue) => {
+  docFlowStore.daysList = value.map((item, index) => ({
+    ...item,
+    active: index === 0
+  }))
+  console.log("111111")
+}, {
+  immediate: true,
+})
+
 // Methods
 const openModal = () => {
   docFlowStore.actionLoadFormCreateDocument({ journalCode: route.params.code })
@@ -114,6 +151,7 @@ const dateSelect = async () => {
     </action-toolbar>
 
 <!--    <base-day-picker-->
+<!--      :daysList="docFlowStore.daysList"-->
 <!--      class="mb-1"-->
 <!--    />-->
 

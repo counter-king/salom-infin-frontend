@@ -264,7 +264,8 @@ export const useDocFlowStore = defineStore("docFlowStore", {
       register_end_date: {
         required: helpers.withMessage(`Поле не должен быть пустым`, required)
       }
-    }
+    },
+    daysList: []
   }),
   actions: {
     /**
