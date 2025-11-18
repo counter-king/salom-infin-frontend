@@ -16,6 +16,8 @@ import { ModalForwardDocument, ModalDoneDocument, ModalCancelSign } from '@/comp
 import {COMPOSE_DOCUMENT_SUB_TYPES, COMPOSE_DOCUMENT_TYPES, STATUS_TYPES} from '@/enums'
 import {CheckCircleIcon} from "@/components/Icons";
 import {ROUTE_SD_CREATE} from "@/modules/Documents/modules/SendDocuments/constants";
+import Eimzo from "@/components/EIMZO/Eimzo.vue"
+import { useAuthStore } from "@/modules/Auth/stores";
 // Composable
 const route = useRoute()
 const router = useRouter()
@@ -25,6 +27,7 @@ const boxesCommonStore = useBoxesCommonStore()
 const reviewStore = useReviewStore()
 // Reactive
 const loading = ref(true)
+const buttonLoading = ref(false)
 // Computed
 const createMenuVisible = computed(() => {
   return [COMPOSE_DOCUMENT_TYPES.NOTICE, COMPOSE_DOCUMENT_TYPES.APPLICATION].includes(String(reviewStore.detailModel?.document?.document_type?.id)) && Number(reviewStore.detailModel?.status?.id) !== Number(STATUS_TYPES.DONE)
@@ -42,11 +45,13 @@ onMounted(async () => {
   }, 500)
 })
 // Methods
-const signDocument = async () => {
+const signDocument = async (pkcs7) => {
+  buttonLoading.value = true
   await reviewStore.actionSignOrCancel({
     is_verified: true,
-    pkcs7: null
+    pkcs7
   })
+  buttonLoading.value = false
   boxesCommonStore.actionRerenderComponent()
 }
 const cancelSign = async (text) => {
@@ -150,7 +155,22 @@ const handleDocumentStatus = async () => {
               <template v-if="boxesCommonStore.getCreatedResolutionsList">
                 <!-- Если резолюция не подписан -->
                 <template v-if="!reviewStore.isReviewSigned">
-                  <eri-keys-menu @emit:sign="signDocument" />
+                  <base-button
+                    label="sign"
+                    :loading="buttonLoading"
+                    rounded
+                    shadow
+                    type="button"
+                    @click="signDocument('test')"
+                  />
+
+<!--                  <eimzo-->
+<!--                    type="sign"-->
+<!--                    data="sign-in-basic"-->
+<!--                    input-classes="bg-white !rounded-3xl min-w-[200px]"-->
+<!--                    :button-loading="buttonLoading"-->
+<!--                    @emit:onGetPkcs7="(pkcs7) => signDocument(pkcs7)"-->
+<!--                  />-->
                 </template>
 
                 <!-- Если резолюция подписан -->

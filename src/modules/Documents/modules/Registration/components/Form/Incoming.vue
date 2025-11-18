@@ -17,9 +17,9 @@ import { formatDateReverse } from '@/utils/formatDate'
 const { t } = useI18n()
 // Non-reactive
 const rules = {
-  register_number: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
+  // register_number: {
+  //   required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  // },
   outgoing_number: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
@@ -41,9 +41,9 @@ const rules = {
   correspondent: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
-  document_type: {
-    required: helpers.withMessage(`Поле не должен быть пустым`, required)
-  },
+  // document_type: {
+  //   required: helpers.withMessage(`Поле не должен быть пустым`, required)
+  // },
   delivery_type: {
     required: helpers.withMessage(`Поле не должен быть пустым`, required)
   },
@@ -67,6 +67,7 @@ const props = defineProps({
     default: () => ({
       correspondent: null,
       delivery_type: null,
+      short_description: null,
       description: null,
       document_type: null,
       files: [],
@@ -140,6 +141,14 @@ defineExpose({ $v })
               placeholder="enter-out-number"
             />
           </base-col>
+
+          <base-col col-class="w-full">
+            <base-input
+              v-model="formModel.short_description"
+              label="short-description"
+              placeholder="enter-short-description"
+            />
+          </base-col>
         </base-row>
       </div>
     </div>
@@ -163,14 +172,14 @@ defineExpose({ $v })
             />
           </base-col>
 
-          <base-col col-class="w-1/2">
-            <base-input
-              v-model="$v.register_number.$model"
-              :error="$v.register_number"
-              required
-              label="reg-number"
-            />
-          </base-col>
+<!--          <base-col col-class="w-1/2">-->
+<!--            <base-input-->
+<!--              v-model="$v.register_number.$model"-->
+<!--              :error="$v.register_number"-->
+<!--              required-->
+<!--              label="reg-number"-->
+<!--            />-->
+<!--          </base-col>-->
 
 <!--          <base-col col-class="w-1/2">-->
 <!--            <base-dropdown-->
@@ -188,20 +197,20 @@ defineExpose({ $v })
 <!--            </base-dropdown>-->
 <!--          </base-col>-->
 
-          <base-col col-class="w-1/2">
-            <base-dropdown
-              v-model="$v.document_type.$model"
-              v-model:options="commonStore.documentTypesList"
-              :error="$v.document_type"
-              api-url="document-types"
-              option-value="id"
-              label="document-type"
-              placeholder="choose-document-type"
-              menu-placeholder="enter-document-type"
-              searchable
-              required
-            />
-          </base-col>
+<!--          <base-col col-class="w-1/2">-->
+<!--            <base-dropdown-->
+<!--              v-model="$v.document_type.$model"-->
+<!--              v-model:options="commonStore.documentTypesList"-->
+<!--              :error="$v.document_type"-->
+<!--              api-url="document-types"-->
+<!--              option-value="id"-->
+<!--              label="document-type"-->
+<!--              placeholder="choose-document-type"-->
+<!--              menu-placeholder="enter-document-type"-->
+<!--              searchable-->
+<!--              required-->
+<!--            />-->
+<!--          </base-col>-->
 
           <base-col col-class="w-1/2">
             <base-dropdown
@@ -260,6 +269,7 @@ defineExpose({ $v })
               placeholder="search-users"
               menu-placeholder="search-users"
               required
+              hide-on-change
             >
               <template #chip="{ value }">
                 <user-with-label

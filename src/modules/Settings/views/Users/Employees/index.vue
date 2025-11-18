@@ -211,7 +211,7 @@ onMounted(() => {
         <base-iconify class="mr-2" color="#767994" height="20" :icon="SettingsMinimalisticIcon" width="20"/>
         <span>{{ t('customize-columns') }}</span>
       </Button>
-      <!-- <Button
+       <Button
         @click="visible = true"
         class="p-button p-component font-medium text-sm !rounded-full py-[9px] px-4"
         rounded
@@ -219,7 +219,7 @@ onMounted(() => {
       >
         <base-icon class="mr-2" height="20" name="AddIcon" width="20"/>
         <span>{{ t('create') }}</span>
-      </Button> -->
+      </Button>
     </div>
   </div>
   <div class="employees-table">

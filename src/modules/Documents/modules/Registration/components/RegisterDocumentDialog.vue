@@ -173,9 +173,12 @@ const computedShortDescription = computed(() => {
     ? `${formatDate(docFlowStore.createDocumentModel.outgoing_date)} dagi `
     : ''
   const number = docFlowStore.createDocumentModel.outgoing_number
-    ? `${docFlowStore.createDocumentModel.outgoing_number}-sonli xati`
+    ? `${docFlowStore.createDocumentModel.outgoing_number}-sonli `
     : ''
-  return `${name}${date}${number}`.trim()
+  const shortDescription = docFlowStore.createDocumentModel.short_description
+    ? `${docFlowStore.createDocumentModel.short_description} xati`
+    : ''
+  return `${name}${date}${number}${shortDescription}`.trim()
 })
 
 // Watch the computed

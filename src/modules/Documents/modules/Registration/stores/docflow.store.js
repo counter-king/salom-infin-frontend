@@ -222,6 +222,7 @@ export const useDocFlowStore = defineStore("docFlowStore", {
       created_by: null,
       created_date: null,
       delivery_type: null,
+      short_description: null,
       description: null,
       document_type: null,
       files: [],
