@@ -27,7 +27,7 @@ onMounted(() => {
 <template>
   <div class="flex mb-4">
     <div class="flex items-center flex-1">
-      <img src="/images/cb-logo-dark-blue.svg" class="max-w-[114px]" alt="Logo"/>
+      <img src="/images/infin-logo-dark.svg" class="max-w-[114px]" alt="Logo"/>
     </div>
   </div>
 

@@ -17,7 +17,7 @@ onMounted(() => {
     <header class="relative border-b border-greyscale-200 px-5 py-4">
       <div class="flex items-center justify-between max-w-[545px] w-full m-auto">
         <router-link :to="{ name: 'Login' }" class="flex items-center">
-          <img src="/images/cb-logo-dark-blue.svg" class="w-[220px]" alt="Logo"/>
+          <img src="/images/infin-logo-dark.svg" class="w-[220px]" alt="Logo"/>
         </router-link>
 
         <language-dropdown

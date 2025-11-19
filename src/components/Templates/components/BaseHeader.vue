@@ -5,7 +5,7 @@
 <template>
   <div class="mb-[10px]">
     <div class="flex items-center">
-      <img src="/images/cb-logo-dark-blue.svg" alt="Logo" class="w-[280px] h-full" />
+      <img src="/images/infin-logo-dark.svg" alt="Logo" class="w-[280px] h-full" />
     </div>
   </div>
 </template>

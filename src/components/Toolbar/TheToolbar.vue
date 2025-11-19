@@ -54,7 +54,7 @@ onMounted(() => {
     >
       <template #start>
         <router-link to="/" class="flex items-center mr-4">
-          <img src="/images/cb-logo-white.svg" class="max-w-[200px]" alt="Logo"/>
+          <img src="/images/infin-logo-light-dark.svg" class="max-w-[200px]" alt="Logo"/>
         </router-link>
 
         <template v-if="openModal">
