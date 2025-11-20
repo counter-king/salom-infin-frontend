@@ -15,6 +15,7 @@ import InputSwitch from 'primevue/inputswitch';
 import { tableConfig, columnConfig, dropdownConfig, paginationConfig, dropdownOptions, overlayConfig } from './config';
 import { useI18n } from "vue-i18n";
 import { RefreshIcon, SettingsMinimalisticIcon } from '@/components/Icons'
+import { DocumentAddIcon } from "../../../../../components/Icons";
 const { locale, t } = useI18n();
 const defaultFilter = { page: 1, page_size: 15, search: '' };
 const count = ref(1);
@@ -217,7 +218,7 @@ onMounted(() => {
         rounded
         type="button"
       >
-        <base-icon class="mr-2" height="20" name="AddIcon" width="20"/>
+        <base-iconify class="mr-2" :name="DocumentAddIcon"/>
         <span>{{ t('create') }}</span>
       </Button>
     </div>
