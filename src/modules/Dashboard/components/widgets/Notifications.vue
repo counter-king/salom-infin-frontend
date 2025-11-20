@@ -42,7 +42,7 @@ onMounted( async() => {
 <template>
   <div class="relative flex flex-col shadow-button rounded-2xl bg-white p-5 pr-2 gap-y-2">
     <div class="flex items-center justify-between">
-      <div class="text-base text-greyscale-900 font-semibold">{{ t('notifications') }}</div>
+      <div class="text-base text-greyscale-900 font-semibold">{{ t('my-tasks-2') }}</div>
     </div>
 
     <div class="flex flex-col overflow-y-auto h-full">
