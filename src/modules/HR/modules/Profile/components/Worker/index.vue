@@ -163,12 +163,12 @@ const handleSave = async (key) => {
     }
   }
 
-  if(key === 'email') {
-    if(!editValue.value.includes('@cb.uz')) {
-      dispatchNotify(null, 'В почте должен содержать @cb.uz', COLOR_TYPES.ERROR)
-      return
-    }
-  }
+  // if(key === 'email') {
+  //   if(!editValue.value.includes('@infinbank.uz')) {
+  //     dispatchNotify(null, 'В почте должен содержать @infinbank.uz', COLOR_TYPES.ERROR)
+  //     return
+  //   }
+  // }
 
   try {
     let model = {

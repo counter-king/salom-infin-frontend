@@ -64,18 +64,17 @@ onMounted(() => {
         v-if="withSign"
         class="flex justify-end"
       >
-        <base-button
-          v-if="isHostVercel || useAuthStore().currentUser.id === 1"
-          label="sign-and-send"
-          :loading="sendButtonLoading"
-          rounded
-          shadow
-          type="button"
-          @click="emit('emit:send', 'test')"
-        />
+<!--        <base-button-->
+<!--          v-if="isHostVercel || useAuthStore().currentUser.id === 1"-->
+<!--          label="sign-and-send"-->
+<!--          :loading="sendButtonLoading"-->
+<!--          rounded-->
+<!--          shadow-->
+<!--          type="button"-->
+<!--          @click="emit('emit:send', 'test')"-->
+<!--        />-->
 
         <eimzo
-          v-else
           type="sign"
           data="resolution-performer"
           input-classes="bg-white !rounded-3xl !w-[330px]"

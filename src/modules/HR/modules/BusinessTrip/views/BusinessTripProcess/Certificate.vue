@@ -225,7 +225,7 @@ const generatePdf = async () => {
 
         <div class="flex flex-col mt-4 gap-y-2">
           <qrcode-vue
-            :value="'cb.uz'"
+            :value="'infinbank.uz'"
             :size="50"
             level="L"
             render-as="svg"
@@ -256,7 +256,7 @@ const generatePdf = async () => {
                 </div>
                 <div class="mt-3">
                   <qrcode-vue
-                    :value="'cb.uz'"
+                    :value="'infinbank.uz'"
                     :size="50"
                     level="L"
                     render-as="svg"

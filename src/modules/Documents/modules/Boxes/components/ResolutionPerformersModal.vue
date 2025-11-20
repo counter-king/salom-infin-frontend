@@ -251,18 +251,17 @@ defineExpose({ buttonLoading, dialog })
           @click="dialog = false"
         />
 
-        <base-button
-          v-if="isHostVercel || useAuthStore().currentUser.id === 1"
-          label="sign"
-          :loading="buttonLoading"
-          rounded
-          shadow
-          type="button"
-          @click="onSign('test')"
-        />
+<!--        <base-button-->
+<!--          v-if="isHostVercel || useAuthStore().currentUser.id === 1"-->
+<!--          label="sign"-->
+<!--          :loading="buttonLoading"-->
+<!--          rounded-->
+<!--          shadow-->
+<!--          type="button"-->
+<!--          @click="onSign('test')"-->
+<!--        />-->
 
         <eimzo
-          v-else
           type="sign"
           data="resolution-performer"
           input-classes="bg-white !rounded-3xl min-w-[200px]"

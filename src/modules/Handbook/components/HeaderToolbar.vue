@@ -84,7 +84,7 @@ watchEffect(async () => {
     if (branchSelect.value !== mainBarnch.value.id) {
       departments.value = [departmentAllOption,...data.results]
     } else {
-      departments.value = data.results
+      departments.value = [departmentAllOption, ...data.results]
     }
     departmentSelect.value = departments.value[0]?.id
   }

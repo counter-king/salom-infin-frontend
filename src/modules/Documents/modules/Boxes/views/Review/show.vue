@@ -155,22 +155,22 @@ const handleDocumentStatus = async () => {
               <template v-if="boxesCommonStore.getCreatedResolutionsList">
                 <!-- Если резолюция не подписан -->
                 <template v-if="!reviewStore.isReviewSigned">
-                  <base-button
-                    label="sign"
-                    :loading="buttonLoading"
-                    rounded
-                    shadow
-                    type="button"
-                    @click="signDocument('test')"
-                  />
-
-<!--                  <eimzo-->
-<!--                    type="sign"-->
-<!--                    data="sign-in-basic"-->
-<!--                    input-classes="bg-white !rounded-3xl min-w-[200px]"-->
-<!--                    :button-loading="buttonLoading"-->
-<!--                    @emit:onGetPkcs7="(pkcs7) => signDocument(pkcs7)"-->
+<!--                  <base-button-->
+<!--                    label="sign"-->
+<!--                    :loading="buttonLoading"-->
+<!--                    rounded-->
+<!--                    shadow-->
+<!--                    type="button"-->
+<!--                    @click="signDocument('test')"-->
 <!--                  />-->
+
+                  <eimzo
+                    type="sign"
+                    data="sign-in-basic"
+                    input-classes="bg-white !rounded-3xl min-w-[200px]"
+                    :button-loading="buttonLoading"
+                    @emit:onGetPkcs7="(pkcs7) => signDocument(pkcs7)"
+                  />
                 </template>
 
                 <!-- Если резолюция подписан -->
