@@ -20,7 +20,7 @@ const props = defineProps({
           <span class="text-sm font-semibold block">{{ item.user ? item.user.position.name : item.position.name }}</span>
         </base-col>
 
-        <base-col col-class="w-1/3">
+        <base-col col-class="w-1/3 flex justify-center">
           <qrcode-vue
             v-if="item.is_signed"
             :value="'infinbank.uz'"
