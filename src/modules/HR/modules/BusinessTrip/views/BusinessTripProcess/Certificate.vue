@@ -193,7 +193,7 @@ const generatePdf = async () => {
 
         <div class="flex flex-col text-sm mt-4 gap-y-4">
           <div>
-            <span class="font-semibold">Berildi: </span> Markaziy bank {{
+            <span class="font-semibold">Berildi: </span> Tijorat bank {{
               author?.top_level_department?.name
             }} {{ author?.position?.name }} <span class="font-semibold">{{ author?.full_name }}</span>ga
           </div>

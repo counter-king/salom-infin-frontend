@@ -114,8 +114,8 @@ onMounted(async () => {
 
     <template #content>
       <template v-for="(item, index) in formModelList" :key="item.id">
-        <div 
-          class="rounded-2xl bg-white p-2 mb-4" 
+        <div
+          class="rounded-2xl bg-white p-2 mb-4"
           :class="props.reasonList?.length > 1 ? 'shadow border border-greyscale-100 p-4' : ''"
         >
           <div class="flex flex-col gap-y-6">
@@ -133,7 +133,7 @@ onMounted(async () => {
               <template #option="{ option }">
                 <user-with-radio
                   :title="locale === 'uz' ? option.name_uz : option.name_ru"
-                  :text-truncate="false"  
+                  :text-truncate="false"
                 >
                 </user-with-radio>
               </template>

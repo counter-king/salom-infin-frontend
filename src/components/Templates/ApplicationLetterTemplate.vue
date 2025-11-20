@@ -70,7 +70,7 @@ const signers = computed(() => {
       <div class="flex flex-col items-end text-sm font-semibold text-right">
         <div class="flex flex-col items-end">
           <div class="text-sm font-bold text-end">
-            Markaziy bank
+            Tijorat bank
           </div>
           <div class="text-sm font-bold text-end">{{ curator?.position?.name }}</div>
           <div class="text-sm font-bold text-end">

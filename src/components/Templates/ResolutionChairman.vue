@@ -20,7 +20,7 @@ const props = defineProps({
 <template>
   <div class="resolution-deputy-chairman-view">
     <h1 class="text-center text-sm font-semibold uppercase text-primary-dark">
-      <span class="block">"O'ZBEKISTON RESPUBLIKASI MARKAZIY BANKI"</span>
+      <span class="block">"TIJORAT BANK"</span>
       <span class="block">{{ props.resolution?.reviewer?.position?.name }}</span>
     </h1>
 
