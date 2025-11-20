@@ -47,7 +47,7 @@ onMounted(async () => {
         </template>
 
         <template v-else>
-          <template v-if="store.attendanceList?.length && currentUser?.hik_person_code">
+          <template v-if="store.attendanceList?.length">
             <div class="flex flex-col overflow-y-auto h-[255px]">
               <div
                 v-for="item in store.attendanceList"
