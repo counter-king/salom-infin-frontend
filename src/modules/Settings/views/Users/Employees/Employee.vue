@@ -66,7 +66,7 @@ const employeeEdit = () => {
       editLoading.value = true;
       const data = { phone, first_name, last_name, father_name, pinfl, company: companyId, top_level_department, department, position: positionId, status: statusId, department_ids };
       axiosConfig
-         .patch(`users/${employeeId}/`, data)
+         .put(`users/${employeeId}/`, data)
          .then(response => {
             if(response?.status === 200) {
                dispatchNotify(null, t('updated-employee'), 'success');
